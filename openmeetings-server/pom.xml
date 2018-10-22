@@ -230,7 +230,7 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>unpack-css-js</id>
+						<id>unpack-css-js-site</id>
 						<phase>pre-site</phase>
 						<goals>
 							<goal>unpack</goal>
@@ -247,6 +247,28 @@
 								</artifactItem>
 							</artifactItems>
 							<outputDirectory>${project.build.directory}/site</outputDirectory>
+							<skip>${om.quick.build}</skip>
+						</configuration>
+					</execution>
+					<execution>
+						<id>unpack-css-js</id>
+						<phase>package</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>io.github.devacfr.maven.skins</groupId>
+									<artifactId>reflow-default-webdeps</artifactId>
+									<version>${reflow-maven-skin.version}</version>
+									<type>jar</type>
+									<overWrite>false</overWrite>
+									<includes>**/css/*.css,**/css/themes/${reflow-theme}/*.css,**/css/fontawesome/**,**/js/*.js</includes>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/site</outputDirectory>
+							<skip>${om.quick.build}</skip>
 						</configuration>
 					</execution>
 				</executions>

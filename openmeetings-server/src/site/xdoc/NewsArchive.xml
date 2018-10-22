@@ -20,9 +20,9 @@
 	</properties>
 
 	<body>
-		<section name="News">
+		<section name="Release 4.0.5">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 4.0.5 released!</h4>
+				<div class="h4">Version 4.0.5 released!</div>
 				<div>Release 4.0.5, provides following improvements:<br/>
 					Room:<br/>
 					<ul>
@@ -45,11 +45,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2018-09-04)</span>
 			</div>
+		</section>
+		<section name="Release 4.0.4">
 			<div class="bd-callout bd-callout-info">
-				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
-			</div>
-			<div class="bd-callout bd-callout-info">
-				<h4>Version 4.0.4 released!</h4>
+				<div class="h4">Version 4.0.4 released!</div>
 				<div>Release 4.0.4, provides following improvements:<br/>
 					<div class="bd-callout bd-callout-danger">The purpose of this release is to provide GDPR compatible version of OpenMeetings</div>
 					<br/>
@@ -73,8 +72,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2018-05-25)</span>
 			</div>
+		</section>
+		<section name="Release 4.0.3">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 4.0.3 released!</h4>
+				<div class="h4">Version 4.0.3 released!</div>
 				<div>Release 4.0.3, provides following improvements:<br/>
 					<div class="bd-callout bd-callout-danger">Security fix in Calendar</div>
 					<br/>
@@ -100,8 +101,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2018-04-13)</span>
 			</div>
+		</section>
+		<section name="Release 4.0.2">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 4.0.2 released!</h4>
+				<div class="h4">Version 4.0.2 released!</div>
 				<div>Release 4.0.2, provides following improvements:<br/>
 					<div class="bd-callout bd-callout-danger">Security fixes in Chat</div>
 					<br/>
@@ -138,8 +141,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2018-02-24)</span>
 			</div>
+		</section>
+		<section name="Release 4.0.1">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 4.0.1 released!</h4>
+				<div class="h4">Version 4.0.1 released!</div>
 				<div>Release 4.0.1, provides following improvements:<br/>
 					<ul>
 						<li>Openlaszlo code is removed</li>
@@ -163,8 +168,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2017-12-09)</span>
 			</div>
+		</section>
+		<section name="Release 4.0.0">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 4.0.0 released!</h4>
+				<div class="h4">Version 4.0.0 released!</div>
 				<div>Release 4.0.0, provides following improvements:<br/>
 					<ul>
 						<li>Room White board is rewritten to use HTML5 instead of Flash</li>
@@ -197,8 +204,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2017-11-04)</span>
 			</div>
+		</section>
+		<section name="Release 3.3.2">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.3.2 released!</h4>
+				<div class="h4">Version 3.3.2 released!</div>
 				<div>Release 3.3.2, provides following improvements:<br/>
 					<ul>
 						<li>Audio/Video in conference room is fixed</li>
@@ -220,8 +229,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2017-09-18)</span>
 			</div>
+		</section>
+		<section name="Release 3.3.1">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.3.1 released!</h4>
+				<div class="h4">Version 3.3.1 released!</div>
 				<div>Release 3.3.1, provides following improvements:<br/>
 					<ul>
 						<li>Clustering works as expected</li>
@@ -244,8 +255,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2017-09-07)</span>
 			</div>
+		</section>
+		<section name="Release 3.3.0">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.3.0 released!</h4>
+				<div class="h4">Version 3.3.0 released!</div>
 				<div>Release 3.3.0, provides following improvements:<br/>
 					Security fixes in<br/>
 					<ul>
@@ -278,8 +291,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2017-06-27)</span>
 			</div>
+		</section>
+		<section name="Release 3.2.1">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.2.1 released!</h4>
+				<div class="h4">Version 3.2.1 released!</div>
 				<div>Service release 1 for 3.2.0, provides following improvements:<br/>
 					Room<br/>
 					<ul>
@@ -316,8 +331,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2017-03-21)</span>
 			</div>
+		</section>
+		<section name="Release 3.2.0">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.2.0 released!</h4>
+				<div class="h4">Version 3.2.0 released!</div>
 				<div>Release 3.2.0, provides Partial HTML5 room:<br/>
 					Room is partially moved to HTML5<br/>
 					<ul>
@@ -341,8 +358,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2017-02-12)</span>
 			</div>
+		</section>
+		<section name="Release 3.1.5">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.1.5 released!</h4>
+				<div class="h4">Version 3.1.5 released!</div>
 				<div>Service release 5 for 3.1.0, provides following improvements:<br/>
 					REST/SOAP<br/>
 					<ul>
@@ -362,8 +381,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2017-01-30)</span>
 			</div>
+		</section>
+		<section name="Release 3.1.4">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.1.4 released!</h4>
+				<div class="h4">Version 3.1.4 released!</div>
 				<div>Service release 4 for 3.1.0, provides following improvements:<br/>
 					Room<br/>
 					<ul>
@@ -395,8 +416,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2017-01-11)</span>
 			</div>
+		</section>
+		<section name="Release 3.1.3">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.1.3 released!</h4>
+				<div class="h4">Version 3.1.3 released!</div>
 				<div>Service release 3 for 3.1.0, provides security improvements:<br/>
 					Other fixes<br/>
 					<ul>
@@ -418,8 +441,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2016-09-27)</span>
 			</div>
+		</section>
+		<section name="Release 3.1.2">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.1.2 released!</h4>
+				<div class="h4">Version 3.1.2 released!</div>
 				<div>Service release 2 for 3.1.0 contains following improvements and bug fixes:<br/>
 					<br/>
 					<div class="bd-callout bd-callout-danger">
@@ -446,8 +471,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2016-08-12)</span>
 			</div>
+		</section>
+		<section name="Release 3.1.1">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.1.1 released!</h4>
+				<div class="h4">Version 3.1.1 released!</div>
 				<div>Service release 1 for 3.1.0 contains following improvements and bug fixes:<br/>
 					<br/>
 					<div class="bd-callout bd-callout-danger">
@@ -468,8 +495,10 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2016-03-24)</span>
 			</div>
+		</section>
+		<section name="Release 3.1.0">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.1.0 released!</h4>
+				<div class="h4">Version 3.1.0 released!</div>
 				<div>SOAP/REST API was implemented using CXF (Axis2 was removed from the stack)<br/>
 					Build system is now maven (not ant), SWF client is improved
 					<br/>
@@ -500,8 +529,10 @@
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.0">Archived download</a>.</span>
 				<span class="date">(2016-03-06)</span>
 			</div>
+		</section>
+		<section name="Release 3.0.7">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.0.7 released!</h4>
+				<div class="h4">Version 3.0.7 released!</div>
 				<div>Service release 7 for 3.0.0 contains following improvements and bug fixes:<br/>
 					<br/>
 					<ul>
@@ -522,8 +553,10 @@
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.7">Archived download</a>.</span>
 				<span class="date">(2015-09-29)</span>
 			</div>
+		</section>
+		<section name="Release 3.0.6">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.0.6 released!</h4>
+				<div class="h4">Version 3.0.6 released!</div>
 				<div>Service release 6 for 3.0.0 contains following improvements and bug fixes:<br/>
 					<br/>
 					Invitation:<br/>
@@ -540,8 +573,10 @@
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.6">Archived download</a>.</span>
 				<span class="date">(2015-05-25)</span>
 			</div>
+		</section>
+		<section name="Release 3.0.5">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.0.5 released!</h4>
+				<div class="h4">Version 3.0.5 released!</div>
 				<div>Service release 5 for 3.0.0 contains following improvements and bug fixes:<br/>
 					<br/>
 					Installer:<br/>
@@ -565,8 +600,10 @@
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.5">Archived download</a>.</span>
 				<span class="date">(2015-04-26)</span>
 			</div>
+		</section>
+		<section name="Release 3.0.4">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.0.4 released!</h4>
+				<div class="h4">Version 3.0.4 released!</div>
 				<div>Service release 4 for 3.0.0 contains following improvements and bug fixes:<br/>
 					<br/>
 					Screen-Sharing:<br/>
@@ -596,8 +633,10 @@
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.4">Archived download</a>.</span>
 				<span class="date">(2015-02-15)</span>
 			</div>
+		</section>
+		<section name="Release 3.0.3">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.0.3 released!</h4>
+				<div class="h4">Version 3.0.3 released!</div>
 				<span>Service release 3 for 3.0.0, no new features were added, <br/>
 					More than 60 issues are fixed, recordings stability is improved, LDAP support is enhanced<br/>
 					please check <a href="https://archive.apache.org/dist/openmeetings/3.0.3/CHANGELOG">CHANGELOG</a> for details
@@ -606,55 +645,67 @@
 				<span class="alert alert-error">please <b>NOTE</b> Java7 is required on both client and server from now on</span>
 				<span class="date">(2014-09-05)</span>
 			</div>
+		</section>
+		<section name="Release 3.0.2">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.0.2 released!</h4>
+				<div class="h4">Version 3.0.2 released!</div>
 				<span>See <a href="https://archive.apache.org/dist/openmeetings/3.0.2">Archived download</a>.</span>
 				<span class="date">(2014-06-04)</span>
 			</div>
+		</section>
+		<section name="Release 3.0.1">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.0.1 released!</h4>
+				<div class="h4">Version 3.0.1 released!</div>
 				<span>See <a href="https://archive.apache.org/dist/openmeetings/3.0.1">Archived download</a>.</span>
 				<span class="date">(2014-04-18)</span>
 			</div>
+		</section>
+		<section name="Release 3.0.0">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 3.0.0 released!</h4>
+				<div class="h4">Version 3.0.0 released!</div>
 				<span>See <a href="https://archive.apache.org/dist/openmeetings/3.0.0">Archived download</a>.</span>
 				<span class="date">(2014-03-07)</span>
 			</div>
+		</section>
+		<section name="Release 2.2.0">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 2.2.0 released!</h4>
+				<div class="h4">Version 2.2.0 released!</div>
 				<span>See <a href="https://archive.apache.org/dist/openmeetings/2.2.0">Archived download</a>.</span>
 				<span class="date">(2013-12-12)</span>
 			</div>
+		</section>
+		<section name="Release 2.1.1">
 			<div class="bd-callout bd-callout-info">
-				<h4>Version 2.1.1 released!</h4>
+				<div class="h4">Version 2.1.1 released!</div>
 				<span>See <a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_1_11" target="_blank">Project Blog</a>
 					or <a href="https://archive.apache.org/dist/openmeetings/2.1.1">Archived download</a>.</span>
 				<span class="date">(2013-07-06)</span>
 			</div>
+		</section>
+		<section name="Release 2.1.0">
 			<div class="bd-callout bd-callout-info">
-				<h4>OpenMeetings 2.1.0 is released!</h4>
+				<div class="h4">OpenMeetings 2.1.0 is released!</div>
 				<span>Please check <a href="https://archive.apache.org/dist/openmeetings/2.1.0">Archived download</a>.</span>
 				<span class="date">(2013-04-01)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
-				<h4>OpenMeetings new URL, update your filters!</h4>
+				<div class="h4">OpenMeetings new URL, update your filters!</div>
 				<span><a href="https://openmeetings.apache.org">openmeetings.apache.org</a> is the new home.</span>
 				<span class="date">(2013-01-28)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
-				<h4>OpenMeetings on the road to graduate from the Incubator</h4>
+				<div class="h4">OpenMeetings on the road to graduate from the Incubator</div>
 				<span><a href="https://blogs.apache.org/openmeetings/entry/openmeetings_on_the_road_to" target="_blank" rel="nofollow">at our blog</a></span>
 				<span class="date">(2012-12-07)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
-				<h4>Some slides from our Fast Feather Track at the ApacheCon Europe 2012</h4>
+				<div class="h4">Some slides from our Fast Feather Track at the ApacheCon Europe 2012</div>
 				<span><a href="https://blogs.apache.org/openmeetings/entry/openmeetings_apachecon_presentation_slide" target="_blank"
 						rel="nofollow">at our blog</a></span>
 				<span class="date">(2012-11-18)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
-				<h4>Update: Builds are available at</h4>
+				<div class="h4">Update: Builds are available at</div>
 				<span><a href="https://builds.apache.org/view/M-R/view/OpenMeetings/" target="_blank" rel="nofollow">builds.apache.org</a></span>
 				<span class="date">(2012-08-03)</span>
 			</div>
@@ -666,7 +717,7 @@
 				<span class="date">(2012-07-26)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
-				<h4>New committer: Timur Tleukenov</h4>
+				<div class="h4">New committer: Timur Tleukenov</div>
 				<span class="date">(2012-03-06)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
@@ -677,11 +728,11 @@
 				<span class="date">(2012-01-26)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
-				<h4>New committer: German Grekhov</h4>
+				<div class="h4">New committer: German Grekhov</div>
 				<span class="date">(2011-12-26)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
-				<h4>OpenMeetings has been accepted into the Apache Incubator.</h4>
+				<div class="h4">OpenMeetings has been accepted into the Apache Incubator.</div>
 				<span class="date">(2011-11-12)</span>
 			</div>
 		</section>
