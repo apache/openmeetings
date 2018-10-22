@@ -81,7 +81,8 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 		p.setCreator(u);
 		p.setRoom(roomDao.get(roomId));
 		p.setType(RoomPoll.Type.yesNo);
-		form.setModelObject(p);
+		setModelObject(p);
+		form.setModelObject(getModelObject());
 		target.add(form);
 	}
 
@@ -112,7 +113,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 		sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollCreated));
 	}
 
-	private class PollForm extends Form<RoomPoll> {
+	class PollForm extends Form<RoomPoll> {
 		private static final long serialVersionUID = 1L;
 
 		public PollForm(String id, IModel<RoomPoll> model) {

@@ -96,7 +96,7 @@ public class PollsSubMenu implements Serializable {
 		this.mp = mp;
 		mp.add(createPoll = new CreatePollDialog("createPoll", room.getRoom().getId()));
 		mp.add(vote = new VoteDialog("vote"));
-		mp.add(pollResults = new PollResultsDialog("pollResults", room.getRoom().getId()));
+		mp.add(pollResults = new PollResultsDialog("pollResults", createPoll, room.getRoom().getId()));
 		visible = !room.getRoom().isHidden(RoomElement.PollMenu);
 	}
 
