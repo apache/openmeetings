@@ -238,7 +238,7 @@
 					</execution>
 					<execution>
 						<id>unpack-css-js</id>
-						<phase>generate-resources</phase>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>unpack</goal>
 						</goals>
