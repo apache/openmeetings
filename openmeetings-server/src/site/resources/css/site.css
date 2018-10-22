@@ -74,6 +74,7 @@ iframe {
 // https://github.com/twbs/bootstrap/blob/6589408a4b91c0f58fa4ac1508d69e3e9e4345e1/site/docs/4.1/assets/scss/_callouts.scss
 */
 .bd-callout {
+	position: relative;
 	padding: 1.25rem;
 	margin-top: 1.25rem;
 	margin-bottom: 1.25rem;
@@ -100,3 +101,14 @@ iframe {
 .bd-callout-warning h4 { color: var(--warning); }
 .bd-callout-danger { border-left-color: var(--danger); }
 .bd-callout-danger h4 { color: var(--danger); }
+
+/*DATE*/
+.bd-callout .date {
+	font-size: smaller;
+	display: inline-block;
+	position: absolute;
+	top: 10px;
+	right: 20px;
+	font-weight: bold;
+	color: var(--info);
+}
