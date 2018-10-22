@@ -18,6 +18,13 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
+import static org.apache.openmeetings.db.entity.room.Invitation.BY_ALL;
+import static org.apache.openmeetings.db.entity.room.Invitation.BY_GROUP;
+import static org.apache.openmeetings.db.entity.room.Invitation.BY_USER;
+import static org.apache.openmeetings.db.entity.room.Invitation.SELECT_COUNT;
+import static org.apache.openmeetings.db.entity.room.Invitation.SELECT_I;
+import static org.apache.openmeetings.db.util.DaoHelper.appendSort;
+import static org.apache.openmeetings.db.util.DaoHelper.appendWhereClause;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.CalendarHelper.getZoneId;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
@@ -49,6 +56,67 @@ public class InvitationDao implements IDataProviderDao<Invitation> {
 	@PersistenceContext
 	private EntityManager em;
 
+	@Override
+	public Invitation get(Long invId) {
+		List<Invitation> list = em.createNamedQuery("getInvitationbyId", Invitation.class)
+				.setParameter("id", invId).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
+	}
+
+	@Override
+	public List<Invitation> get(long start, long count) {
+		return get(null, start, count, null);
+	}
+
+	private static String getQuery(String head, String tail, String search) {
+		return getQuery(head, tail, search, null);
+	}
+
+	private static String getQuery(String head, String tail, String search, String sort) {
+		StringBuilder sb = new StringBuilder(head);
+		sb.append(tail);
+		appendWhereClause(sb, search, "i", "invitee.firstname", "invitee.lastname", "invitee.login");
+		return appendSort(sb, "i", sort).toString();
+	}
+
+	@Override
+	public List<Invitation> get(String search, long start, long count, String order) {
+		return setLimits(em.createQuery(getQuery(SELECT_I, BY_ALL, search, order), Invitation.class)
+				, start, count).getResultList();
+	}
+
+	@Override
+	public long count() {
+		return count(null);
+	}
+
+	@Override
+	public long count(String search) {
+		return em.createQuery(getQuery(SELECT_COUNT, BY_ALL, search), Long.class).getSingleResult();
+	}
+
+	public List<Invitation> getGroup(String search, long start, long count, Long userId, String order) {
+		return setLimits(em.createQuery(getQuery(SELECT_I, BY_GROUP, search, order), Invitation.class)
+					.setParameter(PARAM_USER_ID, userId)
+				, start, count).getResultList();
+	}
+
+	public long countGroup(String search, Long userId) {
+		return em.createQuery(getQuery(SELECT_COUNT, BY_GROUP, search), Long.class)
+				.setParameter(PARAM_USER_ID, userId).getSingleResult();
+	}
+
+	public List<Invitation> getUser(String search, long start, long count, Long userId, String order) {
+		return setLimits(em.createQuery(getQuery(SELECT_I, BY_USER, search, order), Invitation.class)
+					.setParameter(PARAM_USER_ID, userId)
+				, start, count).getResultList();
+	}
+
+	public long countUser(String search, Long userId) {
+		return em.createQuery(getQuery(SELECT_COUNT, BY_USER, search), Long.class)
+				.setParameter(PARAM_USER_ID, userId).getSingleResult();
+	}
+
 	public Invitation update(Invitation invitation) {
 		if (invitation.getId() == null) {
 			invitation.setInserted(new Date());
@@ -61,60 +129,8 @@ public class InvitationDao implements IDataProviderDao<Invitation> {
 	}
 
 	@Override
-	public Invitation get(Long invId) {
-		List<Invitation> list = em.createNamedQuery("getInvitationbyId", Invitation.class)
-				.setParameter("id", invId).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
-	}
-
-	@Override
-	public List<Invitation> get(long start, long count) {
-		return setLimits(em.createNamedQuery("getInvitationsAll", Invitation.class)
-				, start, count).getResultList();
-	}
-
-	@Override
-	public long count() {
-		return em.createNamedQuery("countInvitationsAll", Long.class).getSingleResult();
-	}
-
-	public List<Invitation> getGroup(long start, long count, Long userId) {
-		return setLimits(em.createNamedQuery("getInvitationsGroup", Invitation.class)
-					.setParameter(PARAM_USER_ID, userId)
-				, start, count).getResultList();
-	}
-
-	public long countGroup(Long userId) {
-		return em.createNamedQuery("countInvitationsGroup", Long.class)
-				.setParameter(PARAM_USER_ID, userId).getSingleResult();
-	}
-
-	public List<Invitation> getUser(long start, long count, Long userId) {
-		return setLimits(em.createNamedQuery("getInvitationsUser", Invitation.class)
-					.setParameter(PARAM_USER_ID, userId)
-				, start, count).getResultList();
-	}
-
-	public long countUser(Long userId) {
-		return em.createNamedQuery("countInvitationsUser", Long.class)
-				.setParameter(PARAM_USER_ID, userId).getSingleResult();
-	}
-
-	@Override
-	public List<Invitation> get(String search, long start, long count, String order) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public long count(String search) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public Invitation update(Invitation entity, Long userId) {
-		return update(entity, null);
+		return update(entity);
 	}
 
 	@Override

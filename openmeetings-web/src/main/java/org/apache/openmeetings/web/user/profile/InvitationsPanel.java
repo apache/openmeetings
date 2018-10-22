@@ -20,8 +20,9 @@ package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.db.util.FormatHelper.formatUser;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -29,7 +30,6 @@ import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
@@ -45,7 +45,8 @@ import org.apache.wicket.markup.repeater.Item;
 public class InvitationsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer list = new WebMarkupContainer("list");
-	private final Set<Long> selected = new HashSet<>();
+	private Long selected = null;
+	private final InvitationDetails form;
 
 	public InvitationsPanel(String id) {
 		super(id);
@@ -67,12 +68,13 @@ public class InvitationsPanel extends UserBasePanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						if (selected.contains(i.getId())) {
-							selected.remove(i.getId());
+						if (i.getId().equals(selected)) {
+							selected = null;
 						} else {
-							selected.add(i.getId());
+							selected = i.getId();
 						}
-						target.add(list);
+						form.setModelObject(i);
+						target.add(form, list);
 					}
 				});
 				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(i)));
@@ -93,12 +95,15 @@ public class InvitationsPanel extends UserBasePanel {
 				.addLink(new OmOrderByBorder<>("orderByInvitee", "invitee", container));
 		add(container.getLinks());
 		add(navigator);
+
+		form = new InvitationDetails("form", list, new Invitation());
+		add(form);
 	}
 
 	protected StringBuilder getRowClass(Invitation i) {
 		Long id = i.getId();
 		StringBuilder sb = new StringBuilder(ROW_CLASS);
-		if (id != null && selected.contains(id)) {
+		if (id != null && id.equals(selected)) {
 			sb.append(" ui-state-default");
 		}
 		return sb;
@@ -110,8 +115,8 @@ public class InvitationsPanel extends UserBasePanel {
 		private final Long userId;
 		public InvitationProvider() {
 			super(InvitationDao.class);
-			rights = WebSession.getRights();
-			userId = WebSession.getUserId();
+			rights = getRights();
+			userId = getUserId();
 		}
 
 		@Override
@@ -121,44 +126,24 @@ public class InvitationsPanel extends UserBasePanel {
 
 		@Override
 		public Iterator<? extends Invitation> iterator(long first, long count) {
-			/*if (search == null && getSort() == null) */{
-				if (rights.contains(Right.Admin)) {
-					return getDao().get(first, count).iterator();
-				} else if (rights.contains(Right.GroupAdmin)) {
-					return getDao().getGroup(first, count, userId).iterator();
-				} else {
-					return getDao().getUser(first, count, userId).iterator();
-				}
-			}/* else {
-				if (rights.contains(Right.Admin)) {
-					return super.iterator(first, count);
-				} else if (rights.contains(Right.GroupAdmin)) {
-					getDao().
-				} else {
-
-				}
-			}*/
+			if (rights.contains(Right.Admin)) {
+				return getDao().get(search, first, count, getSortStr()).iterator();
+			} else if (rights.contains(Right.GroupAdmin)) {
+				return getDao().getGroup(search, first, count, userId, getSortStr()).iterator();
+			} else {
+				return getDao().getUser(search, first, count, userId, getSortStr()).iterator();
+			}
 		}
 
 		@Override
 		public long size() {
-			/*if (search == null && getSort() == null) */{
-				if (rights.contains(Right.Admin)) {
-					return getDao().count();
-				} else if (rights.contains(Right.GroupAdmin)) {
-					return getDao().countGroup(userId);
-				} else {
-					return getDao().countUser(userId);
-				}
-			}/* else {
-				if (rights.contains(Right.Admin)) {
-					return super.iterator(first, count);
-				} else if (rights.contains(Right.GroupAdmin)) {
-					getDao().
-				} else {
-
-				}
-			}*/
+			if (rights.contains(Right.Admin)) {
+				return getDao().count(search);
+			} else if (rights.contains(Right.GroupAdmin)) {
+				return getDao().countGroup(search, userId);
+			} else {
+				return getDao().countUser(search, userId);
+			}
 		}
 	}
 }

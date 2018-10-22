@@ -27,13 +27,23 @@ import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
 
 public class DateLabel extends Label {
 	private static final long serialVersionUID = 1L;
-	private final FastDateFormat fmt;
+	private FastDateFormat fmt;
 
 	public DateLabel(String id) {
 		super(id);
+		initFmt();
+	}
+
+	public DateLabel(String id, IModel<?> model) {
+		super(id, model);
+		initFmt();
+	}
+
+	private void initFmt() {
 		fmt = FastDateFormat.getDateTimeInstance(MEDIUM, MEDIUM, getLocale());
 	}
 
