@@ -3,8 +3,9 @@ var Wb = function() {
 	const ACTIVE = 'active', BUMPER = 100, wb = {id: -1, name: ''}, canvases = []
 		, area = $('.room.wb.area .wb-area .tabs.ui-tabs'), bar = area.find('.wb-tabbar')
 		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src', 'formula']
-		, arrowImg = new Image();
+		, arrowImg = new Image(), delImg = new Image();
 	arrowImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAICAYAAADqSp8ZAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAygAAAMoBawMUsgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFsSURBVCiRrdI/SEJRFMfx37lPGxqKoGwxKJoaImhpCf8NEUFL9WgLUrPnIyEIa6reVEPQn0GeWDS4NDQETQ2JT4waojUoHBqCoJKWINB3720yIhGl+q7ncj5nuIQ6jWiaq1xmU4IwBACQ5GCAU5D8IECRAkUQzt8V++wmlSrX20e1BoFIrFdwHidIIQhH5O68sgzD/vnOF4m0QyijJGgMQIHZtJdJJ4oNg6qqNr20dKwBaOWKvZFPpZ7qXV3JH4wNSMbjJHGZ7XIlYRiiFkiBsL4CphwLwbck5E7uwMw3ClXD2iRImYYUq9lD886nLXZbyd2HL9AbXpglySOQeFVstpRJJ+5/i1UajkbbHCXahMS1ZAiS2+W1DMNmqqoqBLFMYIME1uxkvPRXDAAuTPMNhCwIGiT62eOzAQDkD+nbAjQDxudy+8mT/8C+FwjNjwuwdQnqY7b0kCesT7DC7allWVU/8D/zh3SdC/R8Aq9QhRc3h8LfAAAAAElFTkSuQmCC';
+	delImg.src = arrowImg.src;
 	let a, t, z, s, f, mode, slide = 0, width = 0, height = 0
 			, zoom = 1., zoomMode = 'pageWidth', role = null;
 
@@ -653,6 +654,11 @@ var Wb = function() {
 					const x = left + (size - arrowImg.width) / 2
 						, y = top + (size - arrowImg.height) / 2;
 					ctx.drawImage(arrowImg, x, y);
+				}
+				, tr: function trControlCallback (ctx, left, top, size) {
+					const x = left + (size - delImg.width) / 2
+						, y = top + (size - delImg.height) / 2;
+					ctx.drawImage(delImg, x, y);
 				}
 			}
 		});
