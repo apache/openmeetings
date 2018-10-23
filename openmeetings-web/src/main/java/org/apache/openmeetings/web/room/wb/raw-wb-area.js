@@ -2,8 +2,52 @@
 var PRESENTER = 'presenter';
 var WHITEBOARD = 'whiteBoard';
 var DrawWbArea = function() {
-	const self = BaseWbArea();;
+	const self = BaseWbArea()
+		, arrowImg = new Image(), delImg = new Image();
+	arrowImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAICAYAAADqSp8ZAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAygAAAMoBawMUsgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFsSURBVCiRrdI/SEJRFMfx37lPGxqKoGwxKJoaImhpCf8NEUFL9WgLUrPnIyEIa6reVEPQn0GeWDS4NDQETQ2JT4waojUoHBqCoJKWINB3720yIhGl+q7ncj5nuIQ6jWiaq1xmU4IwBACQ5GCAU5D8IECRAkUQzt8V++wmlSrX20e1BoFIrFdwHidIIQhH5O68sgzD/vnOF4m0QyijJGgMQIHZtJdJJ4oNg6qqNr20dKwBaOWKvZFPpZ7qXV3JH4wNSMbjJHGZ7XIlYRiiFkiBsL4CphwLwbck5E7uwMw3ClXD2iRImYYUq9lD886nLXZbyd2HL9AbXpglySOQeFVstpRJJ+5/i1UajkbbHCXahMS1ZAiS2+W1DMNmqqoqBLFMYIME1uxkvPRXDAAuTPMNhCwIGiT62eOzAQDkD+nbAjQDxudy+8mT/8C+FwjNjwuwdQnqY7b0kCesT7DC7allWVU/8D/zh3SdC/R8Aq9QhRc3h8LfAAAAAElFTkSuQmCC';
+	delImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAAGgrv1cAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADNQTFRFAAAA4j094j094j094j094j094j094j094j094j094j094j094j094j094j094j094j09hIdAxgAAABB0Uk5TABAgMEBQYHCAj5+vv8/f7yMagooAAADXSURBVBgZBcEBYoQgDACw1DJETmz//9olwGn6AAAbBxoiSACTpCTtJd02smg+MPoef7UgnpPQeVM42Vg02kl+qAPeE2B19wYAgO83xi6ggRMoBfuvsUSxp+vPjag98VqwC8oI9ozC5rMnUVbw5ITID94Fo4D4umsAwN/+urvfOwDg6d8FiFUnALPnkwCs6zvg+UKcSmD3ZBWyL4hTye4J3s16AXG6J+D+uD/A7vtUAutFT9g9EacSURNX33ZPQJzKqAW8lQCIXyWAVfUM5Hz7vQAAMcZIAP9DvgiOL2K6DwAAAABJRU5ErkJggg==';
 	let container, area, tabs, scroll, role = NONE, _inited = false;
+
+	// Fabric overrides (should be kept up-to-date on fabric.js updates)
+	if ('function' !== typeof(window.originalDrawControl)) {
+		window.originalDrawControl = fabric.Object.prototype._drawControl;
+		window.originalGetRotatedCornerCursor = fabric.Canvas.prototype._getRotatedCornerCursor;
+		window.originalGetActionFromCorner = fabric.Canvas.prototype._getActionFromCorner;
+		fabric.Object.prototype._drawControl = function(control, ctx, methodName, left, top, styleOverride) {
+			switch (control) {
+				case 'mtr':
+				{
+					const x = left + (this.cornerSize - arrowImg.width) / 2
+						, y = top + (this.cornerSize - arrowImg.height) / 2;
+					ctx.drawImage(arrowImg, x, y);
+				}
+					break;
+				case 'tr':
+				{
+					const x = left + (this.cornerSize - delImg.width) / 2
+						, y = top + (this.cornerSize - delImg.height) / 2;
+					ctx.drawImage(delImg, x, y);
+				}
+					break;
+				default:
+					window.originalDrawControl.call(this, control, ctx, methodName, left, top, styleOverride);
+					break;
+			}
+		};
+		fabric.Canvas.prototype._getRotatedCornerCursor = function(corner, target, e) {
+			if (role === PRESENTER && 'tr' === corner) {
+				return 'pointer';
+			}
+			return window.originalGetRotatedCornerCursor.call(this, corner, target, e);
+		};
+		fabric.Canvas.prototype._getActionFromCorner = function(target, corner, e) {
+			if (role === PRESENTER && 'tr' === corner) {
+				_performDelete([target]);
+				return 'none';
+			}
+			return window.originalGetActionFromCorner.call(this, target, corner, e);
+		};
+	}
 
 	function refreshTabs() {
 		tabs.tabs('refresh').find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
@@ -18,13 +62,13 @@ var DrawWbArea = function() {
 		}
 		return null;
 	}
-	function _performDelete() {
+	function _performDelete(objects) {
 		const wb = getActive().data()
 			, canvas = wb.getCanvas();
 		if (role !== PRESENTER || !canvas) {
 			return true;
 		}
-		const arr = [], objs = canvas.getActiveObjects();
+		const arr = [], objs = objects || canvas.getActiveObjects();
 		for (let i = 0; i < objs.length; ++i) {
 			arr.push({
 				uid: objs[i].uid
@@ -349,14 +393,3 @@ var DrawWbArea = function() {
 	self.updateAreaClass = function() {};
 	return self;
 };
-if ('function' !== window.originalDrawControl) {
-	window.originalDrawControl = fabric.Object.prototype._drawControl;
-	fabric.Object.prototype._drawControl = function(control, ctx, methodName, left, top) {
-		const size = this.cornerSize;
-		if (this.canvas.controlCallback && 'function' === typeof(this.canvas.controlCallback[control])) {
-			this.canvas.controlCallback[control](ctx, left, top, size);
-		} else {
-			window.originalDrawControl.call(this, control, ctx, methodName, left, top);
-		}
-	};
-}
