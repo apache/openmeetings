@@ -20,14 +20,17 @@ package org.apache.openmeetings.web.room.poll;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.PollDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -202,6 +205,8 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		} else if (moderator && clone.equals(button)) {
 			RoomPoll rp = dispForm.getModelObject();
 			RoomPoll nrp = new RoomPoll();
+			User u = getBean(UserDao.class).get(getUserId());
+			nrp.setCreator(u);
 			nrp.setName(rp.getName());
 			nrp.setQuestion(rp.getQuestion());
 			nrp.setType(rp.getType());
