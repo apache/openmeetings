@@ -86,6 +86,8 @@ var DrawWbArea = function() {
 			switch (e.which) {
 				case 8:  // backspace
 				case 46: // delete
+					e.preventDefault();
+					e.stopImmediatePropagation();
 					return _performDelete();
 			}
 		}
