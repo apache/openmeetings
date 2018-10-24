@@ -426,6 +426,10 @@ public class MainPanel extends Panel {
 		return chat;
 	}
 
+	public MessageDialog getMessageDialog() {
+		return newMessage;
+	}
+
 	public String getUid() {
 		return uid;
 	}
