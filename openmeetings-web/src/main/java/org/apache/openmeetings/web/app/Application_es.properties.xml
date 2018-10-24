@@ -985,4 +985,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="profile.invitations"><![CDATA[Invitations]]></entry>
 	<entry key="profile.invitation"><![CDATA[Invitation]]></entry>
 	<entry key="poll.clone"><![CDATA[Clone]]></entry>
+	<entry key="messages.btn.reply"><![CDATA[Reply]]></entry>
+	<entry key="messages.subject.re"><![CDATA[Re:]]></entry>
 </properties>
