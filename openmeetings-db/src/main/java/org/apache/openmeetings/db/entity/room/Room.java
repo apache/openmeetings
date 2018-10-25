@@ -40,7 +40,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -294,9 +293,6 @@ public class Room extends HistoricalEntity {
 	@org.simpleframework.xml.Transient
 	private List<RoomFile> files = new ArrayList<>();
 
-	@Transient
-	private List<StreamClient> currentusers;
-
 	public String getComment() {
 		return comment;
 	}
@@ -337,14 +333,6 @@ public class Room extends HistoricalEntity {
 
 	public void setIspublic(boolean ispublic) {
 		this.ispublic = ispublic;
-	}
-
-	public List<StreamClient> getCurrentusers() {
-		return currentusers;
-	}
-
-	public void setCurrentusers(List<StreamClient> currentusers) {
-		this.currentusers = currentusers;
 	}
 
 	public long getCapacity() {

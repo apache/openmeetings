@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.web;
 
+import static java.util.UUID.randomUUID;
 import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -67,7 +67,7 @@ public class TestCalendar extends AbstractWicketTester {
 			tester.executeBehavior((AbstractAjaxBehavior)cal.get("form:calendar").getBehaviorById(0)); //select-event
 			FormTester appTester = tester.newFormTester(PATH_APPOINTMENT_DLG_FRM);
 			//check inviteeType:groupContainer:groups is invisible for regular user
-			String title = String.format("title%s", UUID.randomUUID());
+			String title = String.format("title%s", randomUUID());
 			appTester.setValue("title", title);
 			ButtonAjaxBehavior save = getButtonBehavior(PATH_APPOINTMENT_DLG, "save");
 			tester.executeBehavior(save);

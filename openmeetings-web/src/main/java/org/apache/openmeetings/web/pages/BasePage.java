@@ -27,7 +27,6 @@ import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.HeaderPanel;
 import org.apache.openmeetings.web.pages.install.InstallWizardPage;
@@ -46,6 +45,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.urlfragment.AsyncUrlFragmentAwarePage;
 
 public abstract class BasePage extends AsyncUrlFragmentAwarePage {

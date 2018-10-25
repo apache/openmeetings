@@ -314,6 +314,16 @@ html, body {
 	-webkit-border-radius: 8px;
 	border-radius: 8px;
 }
+.private.message.body {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+.private.message.body .quote {
+	border-left: 1px solid #cccccc;
+	margin-left: 10px;
+	padding-left: 10px;
+}
 .ui-progressbar div {
 	text-align: center;
 	padding-top: 7px;
@@ -442,8 +452,9 @@ select.messages.selector {
 	min-width: 400px;
 }
 .room-list .room-row {
+	border: 1px solid transparent;
 	background-color: rgb(248, 248, 248);
-	border-bottom: 5px solid white;
+	margin-bottom: 4px;
 	padding: 5px;
 	position: relative;
 }

@@ -18,12 +18,12 @@
  */
 package org.apache.openmeetings.user;
 
+import static java.util.UUID.randomUUID;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
@@ -75,7 +75,7 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 
 	@Test
 	public void addUserWithoutGroup() throws Exception {
-		String uuid = UUID.randomUUID().toString();
+		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
 		u = userDao.update(u, null);
 		assertNotNull("User successfully created", u.getId());

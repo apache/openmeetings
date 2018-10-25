@@ -38,17 +38,18 @@
 			<div class="alert alert-success">
 				<i>JODConverter is bundled into OpenMeetings since 3.1.4</i>
 			</div>
-			<p>
-				Installation of JODConverter means: You download the ZIP binary from
-				their
-				<a href="https://code.google.com/archive/p/jodconverter/downloads" target="_blank" rel="nofollow">website</a>
-				and then configure in Apache OpenMeetings Administration >
-				Configuration (or during installation) the config key
-				<tt>jod.path</tt>
-				to point to the "lib" directory of the unpacked JODConverter binary.
-				There is no restart of OpenMeetings required.
-			</p>
 			<p>You should use an OpenOffice version greater 3</p>
+			<div>
+				<tt>officeHome</tt> configuration need to remain blank<br/>
+				In case document conversion will NOT work you need to
+				<ol>
+					<li>locate <tt>soffice.bin</tt> on your system</li>
+					<li>
+						set <tt>officeHome</tt> to <tt>/usr/lib/libreoffice</tt>
+						(in case soffice.bin is located in <tt>/usr/lib/libreoffice/program</tt>)
+					</li>
+				</ol>
+			</div>
 		</section>
 	</body>
 </document>

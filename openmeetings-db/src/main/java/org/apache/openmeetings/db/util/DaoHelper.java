@@ -16,7 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.util;
+package org.apache.openmeetings.db.util;
+
+import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.util.string.Strings;
@@ -58,28 +60,17 @@ public class DaoHelper {
 		if (filterDeleted) {
 			sb.append("AND ").append(alias).append(".deleted = false ");
 		}
-		StringBuilder where = getWhereClause(search, alias, fields);
-		if (!Strings.isEmpty(where)) {
-			sb.append("AND ").append(where);
-		}
+		appendWhereClause(sb, search, alias, fields);
 		if (!Strings.isEmpty(additionalWhere)) {
 			sb.append("AND ").append(additionalWhere);
 		}
-		if (!Strings.isEmpty(sort)) {
-			sb.append(" ORDER BY ").append(alias).append(".").append(sort);
-		}
-		return sb.toString();
+		return appendSort(sb, alias, sort).toString();
 	}
 
-	public static StringBuilder getWhereClause(String search, String alias, String... fields) {
-		StringBuilder sb = new StringBuilder();
-		getWhereClause(sb, search, alias, fields);
-		return sb;
-	}
-
-	public static void getWhereClause(StringBuilder sb, String search, String alias, String... fields) {
-		if (search != null) {
+	public static StringBuilder appendWhereClause(StringBuilder _sb, String search, String alias, String... fields) {
+		if (!Strings.isEmpty(search) && fields != null) {
 			boolean notEmpty = false;
+			StringBuilder sb = new StringBuilder();
 			String[] searchItems = search.replace("\'", "").replace("\"", "").split(" ");
 			for (int i = 0; i < searchItems.length; ++i) {
 				if (searchItems[i].isEmpty()) {
@@ -105,11 +96,30 @@ public class DaoHelper {
 			}
 			if (notEmpty) {
 				sb.append(") ");
+				_sb.append(" AND").append(sb);
 			}
 		}
+		return _sb;
+	}
+
+	public static StringBuilder appendSort(StringBuilder sb, String alias, String sort) {
+		if (!Strings.isEmpty(sort)) {
+			sb.append(" ORDER BY ").append(alias).append(".").append(sort);
+		}
+		return sb;
 	}
 
 	public static String getStringParam(String param) {
 		return param == null ? "%" : "%" + StringUtils.lowerCase(param) + "%";
+	}
+
+	public static <T> TypedQuery<T> setLimits(TypedQuery<T> q, Long first, Long max) {
+		if (first != null) {
+			q.setFirstResult(first.intValue());
+		}
+		if (max != null) {
+			q.setMaxResults(max.intValue());
+		}
+		return q;
 	}
 }

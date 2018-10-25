@@ -48,7 +48,7 @@ var Room = (function() {
 		const vw = $('#video' + Room.getOptions().uid);
 		if (vw.length > 0) {
 			const v = vw.data();
-			if (VideoUtil.hasAudio(v.client())) {
+			if (VideoUtil.hasAudio(v.stream())) {
 				return v;
 			}
 		}
@@ -258,6 +258,9 @@ var Room = (function() {
 	self.setRights = function(_r) {
 		options.rights = _r;
 		_setQuickPollRights();
+	};
+	self.setActivities = function(_a) {
+		options.activities = _a;
 	};
 	self.setSize = _setSize;
 	self.load = _load;

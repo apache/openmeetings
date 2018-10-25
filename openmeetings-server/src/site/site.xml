@@ -18,7 +18,7 @@
 	<body>
 		<menu name="General">
 			<item name="Home" href="/index.html"/>
-			<item name="License" href="http://www.apache.org/licenses/"/>
+			<item name="License" href="https://www.apache.org/licenses/"/>
 			<item name="ASF" href="https://www.apache.org/"/>
 			<item name="Sponsorship" href="https://www.apache.org/foundation/sponsorship" />
 			<item name="Thanks" href="https://www.apache.org/foundation/thanks" />
@@ -30,6 +30,7 @@
 		<menu name="Installation">
 			<item name="Installation" href="/installation.html" />
 			<item name="Upgrade" href="/Upgrade.html" />
+			<item name="Media Server Installation" href="/InstallMediaServer.html" />
 			<item name="Tutorials" href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools" />
 			<item name="Command Line Admin" href="/CommandLineAdmin.html" />
 		</menu>
@@ -38,7 +39,7 @@
 			<item name="Committers" href="/team.html" />
 			<item name="Our Users" href="/OurUsers.html" />
 			<item name="Mailing Lists" href="/mailing-lists.html" />
-			<item name="Wiki" href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/" />
+			<item name="Wiki" href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/" />
 		</menu>
 		<menu name="Configuration">
 			<item name="Integration" href="#integration">

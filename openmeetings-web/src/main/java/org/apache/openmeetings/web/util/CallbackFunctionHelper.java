@@ -16,8 +16,9 @@
  */
 package org.apache.openmeetings.web.util;
 
+import static java.util.UUID.randomUUID;
+
 import java.io.Serializable;
-import java.util.UUID;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -54,7 +55,7 @@ public class CallbackFunctionHelper {
 	}
 
 	public static JavaScriptHeaderItem getNamedFunction(String name, AbstractDefaultAjaxBehavior b, CallbackParameter... extraParameters) {
-		String uid = UUID.randomUUID().toString();
+		String uid = randomUUID().toString();
 		return JavaScriptHeaderItem.forScript(getNamedFunctionStr(name, b, extraParameters), String.format("%s-%s", name, uid));
 	}
 

@@ -20,11 +20,37 @@
 	</properties>
 
 	<body>
-		<section name="News">
-			<div class="bs-callout bs-callout-info">
-				<b>Version 4.0.4 released!</b>
+		<section name="Release 4.0.5">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 4.0.5 released!</div>
+				<div>Release 4.0.5, provides following improvements:<br/>
+					Room:<br/>
+					<ul>
+						<li>Interview room is improved: re-designed, multiple video windows are supported</li>
+						<li>Multiple improvements in Admin</li>
+						<li>File tree is improved</li>
+						<li>Multiple improvements in white boards</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
+				</div>
+				<br/>
+
+				<span>
+					24 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.5/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343344">Detailed list</a>
+				</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.5">Archived download</a>.</span>
+				<span class="date">(2018-09-04)</span>
+			</div>
+		</section>
+		<section name="Release 4.0.4">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 4.0.4 released!</div>
 				<div>Release 4.0.4, provides following improvements:<br/>
-					<div class="bs-callout bs-callout-danger">The purpose of this release is to provide GDPR compatible version of OpenMeetings</div>
+					<div class="bd-callout bd-callout-danger">The purpose of this release is to provide GDPR compatible version of OpenMeetings</div>
 					<br/>
 					Room:<br/>
 					<ul>
@@ -34,7 +60,7 @@
 					</ul>
 					<br/>
 					Other fixes and improvements
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 
@@ -43,13 +69,15 @@
 					<a href="https://www.apache.org/dist/openmeetings/4.0.4/CHANGELOG.md">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343045">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.4">Archived download</a>.</span>
 				<span class="date">(2018-05-25)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 4.0.3 released!</b>
+		</section>
+		<section name="Release 4.0.3">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 4.0.3 released!</div>
 				<div>Release 4.0.3, provides following improvements:<br/>
-					<div class="bs-callout bs-callout-danger">Security fix in Calendar</div>
+					<div class="bd-callout bd-callout-danger">Security fix in Calendar</div>
 					<br/>
 					Room:<br/>
 					<ul>
@@ -61,7 +89,7 @@
 					Multiple improvements in web services
 					<br/>
 					Other fixes and improvements
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 
@@ -70,13 +98,15 @@
 					<a href="https://www.apache.org/dist/openmeetings/4.0.3/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342829">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.3">Archived download</a>.</span>
 				<span class="date">(2018-04-13)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 4.0.2 released!</b>
+		</section>
+		<section name="Release 4.0.2">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 4.0.2 released!</div>
 				<div>Release 4.0.2, provides following improvements:<br/>
-					<div class="bs-callout bs-callout-danger">Security fixes in Chat</div>
+					<div class="bd-callout bd-callout-danger">Security fixes in Chat</div>
 					<br/>
 					Chat:<br/>
 					<ul>
@@ -99,7 +129,7 @@
 					</ul>
 					<br/>
 					Other fixes and improvements
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 
@@ -108,11 +138,13 @@
 					<a href="https://www.apache.org/dist/openmeetings/4.0.2/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342276">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.2">Archived download</a>.</span>
 				<span class="date">(2018-02-24)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 4.0.1 released!</b>
+		</section>
+		<section name="Release 4.0.1">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 4.0.1 released!</div>
 				<div>Release 4.0.1, provides following improvements:<br/>
 					<ul>
 						<li>Openlaszlo code is removed</li>
@@ -124,7 +156,7 @@
 						<li>Overall stability is improved</li>
 					</ul>
 					Other fixes and improvements
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 
@@ -133,11 +165,13 @@
 					<a href="https://www.apache.org/dist/openmeetings/4.0.1/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342042">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.1">Archived download</a>.</span>
 				<span class="date">(2017-12-09)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 4.0.0 released!</b>
+		</section>
+		<section name="Release 4.0.0">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 4.0.0 released!</div>
 				<div>Release 4.0.0, provides following improvements:<br/>
 					<ul>
 						<li>Room White board is rewritten to use HTML5 instead of Flash</li>
@@ -158,7 +192,7 @@
 						<li>config types are introduced</li>
 					</ul>
 					Other fixes and improvements
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 
@@ -167,11 +201,13 @@
 					<a href="https://www.apache.org/dist/openmeetings/4.0.0/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12324572">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.0">Archived download</a>.</span>
 				<span class="date">(2017-11-04)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.3.2 released!</b>
+		</section>
+		<section name="Release 3.3.2">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.3.2 released!</div>
 				<div>Release 3.3.2, provides following improvements:<br/>
 					<ul>
 						<li>Audio/Video in conference room is fixed</li>
@@ -182,7 +218,7 @@
 					<br/>
 					Other fixes and improvements
 					<br/>
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 				<span>
@@ -190,11 +226,13 @@
 					<a href="https://www.apache.org/dist/openmeetings/3.3.2/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12341445">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.3.2">Archived download</a>.</span>
 				<span class="date">(2017-09-18)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.3.1 released!</b>
+		</section>
+		<section name="Release 3.3.1">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.3.1 released!</div>
 				<div>Release 3.3.1, provides following improvements:<br/>
 					<ul>
 						<li>Clustering works as expected</li>
@@ -206,7 +244,7 @@
 					<br/>
 					Other fixes and improvements
 					<br/>
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 				<span>
@@ -214,11 +252,13 @@
 					<a href="https://www.apache.org/dist/openmeetings/3.3.1/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12340997">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.3.1">Archived download</a>.</span>
 				<span class="date">(2017-09-07)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.3.0 released!</b>
+		</section>
+		<section name="Release 3.3.0">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.3.0 released!</div>
 				<div>Release 3.3.0, provides following improvements:<br/>
 					Security fixes in<br/>
 					<ul>
@@ -240,7 +280,7 @@
 					<br/>
 					Other fixes and improvements
 					<br/>
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 				<span>
@@ -248,11 +288,13 @@
 					<a href="https://www.apache.org/dist/openmeetings/3.3.0/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12339849">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.3.0">Archived download</a>.</span>
 				<span class="date">(2017-06-27)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.2.1 released!</b>
+		</section>
+		<section name="Release 3.2.1">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.2.1 released!</div>
 				<div>Service release 1 for 3.2.0, provides following improvements:<br/>
 					Room<br/>
 					<ul>
@@ -278,7 +320,7 @@
 					<br/>
 					Other fixes and improvements
 					<br/>
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 				<span>
@@ -286,11 +328,13 @@
 					<a href="https://www.apache.org/dist/openmeetings/3.2.1/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12339215">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.2.1">Archived download</a>.</span>
 				<span class="date">(2017-03-21)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.2.0 released!</b>
+		</section>
+		<section name="Release 3.2.0">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.2.0 released!</div>
 				<div>Release 3.2.0, provides Partial HTML5 room:<br/>
 					Room is partially moved to HTML5<br/>
 					<ul>
@@ -303,7 +347,7 @@
 					<br/>
 					Other fixes and improvements in all components
 					<br/>
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 				<span>
@@ -311,11 +355,13 @@
 					<a href="https://www.apache.org/dist/openmeetings/3.2.0/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12335565">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.2.0">Archived download</a>.</span>
 				<span class="date">(2017-02-12)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.1.5 released!</b>
+		</section>
+		<section name="Release 3.1.5">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.1.5 released!</div>
 				<div>Service release 5 for 3.1.0, provides following improvements:<br/>
 					REST/SOAP<br/>
 					<ul>
@@ -325,18 +371,20 @@
 					<br/>
 					Other fixes in Import/Export and email templates
 					<br/>
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<div>
 					11 issues are fixed please check <br/>
 					<a href="https://www.apache.org/dist/openmeetings/3.1.5/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12338819">Detailed list</a>
 				</div>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.5">Archived download</a>.</span>
 				<span class="date">(2017-01-30)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.1.4 released!</b>
+		</section>
+		<section name="Release 3.1.4">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.1.4 released!</div>
 				<div>Service release 4 for 3.1.0, provides following improvements:<br/>
 					Room<br/>
 					<ul>
@@ -357,7 +405,7 @@
 					Other fixes in LDAP, groups, recordings, screen-sharing, calendar and installer<br/>
 					Italian and Ukrainian translations are improved
 					<br/>
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 				<span>
@@ -365,11 +413,13 @@
 					<a href="https://www.apache.org/dist/openmeetings/3.1.4/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12338183">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.4">Archived download</a>.</span>
 				<span class="date">(2017-01-11)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.1.3 released!</b>
+		</section>
+		<section name="Release 3.1.3">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.1.3 released!</div>
 				<div>Service release 3 for 3.1.0, provides security improvements:<br/>
 					Other fixes<br/>
 					<ul>
@@ -377,10 +427,10 @@
 						<li>Other fixes in localization, backup/restore, screen-sharing, invitations etc.</li>
 					</ul>
 					<br/>
-					<div class="bs-callout bs-callout-danger">
+					<div class="bd-callout bd-callout-danger">
 						NOTE java8 is required starting from this version<br/>
 					</div>
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 				<span>
@@ -388,14 +438,16 @@
 					<a href="https://www.apache.org/dist/openmeetings/3.1.3/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12337950">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.3">Archived download</a>.</span>
 				<span class="date">(2016-09-27)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.1.2 released!</b>
+		</section>
+		<section name="Release 3.1.2">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.1.2 released!</div>
 				<div>Service release 2 for 3.1.0 contains following improvements and bug fixes:<br/>
 					<br/>
-					<div class="bs-callout bs-callout-danger">
+					<div class="bd-callout bd-callout-danger">
 						Security vulnerability <b>CVE-2016-3089 - Apache OpenMeetings XSS in SWF panel</b> was fixed,
 						please check <a href="security.html">Security Page</a><br/>
 					</div>
@@ -408,7 +460,7 @@
 						<li>Private recording files were available to all users</li>
 						<li>Other fixes in admin, localization, installer, invitations, room etc.</li>
 					</ul>
-					<div class="bs-callout bs-callout-info">Additionally signed Screen-Sharing application is available since this release</div>
+					<div class="bd-callout bd-callout-info">Additionally signed Screen-Sharing application is available since this release</div>
 				</div>
 				<br/>
 				<span>
@@ -416,14 +468,16 @@
 					<a href="https://www.apache.org/dist/openmeetings/3.1.2/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12335347">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.2">Archived download</a>.</span>
 				<span class="date">(2016-08-12)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.1.1 released!</b>
+		</section>
+		<section name="Release 3.1.1">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.1.1 released!</div>
 				<div>Service release 1 for 3.1.0 contains following improvements and bug fixes:<br/>
 					<br/>
-					<div class="bs-callout bs-callout-danger">
+					<div class="bd-callout bd-callout-danger">
 						Multiple security vulnerabilities (CVE-2016-0783, CVE-2016-0784, CVE-2016-2163, CVE-2016-2164) were fixed,
 						please check <a href="security.html">Security Page</a><br/>
 					</div>
@@ -435,14 +489,16 @@
 					<a href="https://www.apache.org/dist/openmeetings/3.1.1/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12334656">Detailed list</a>
 				</span>
-				<div class="bs-callout bs-callout-danger">please NOTE this release contains screen-sharing application signed be self-signed certificate due to <a href="https://issues.apache.org/jira/browse/INFRA-11384">INFRA-11384</a>.
+				<div class="bd-callout bd-callout-danger">please NOTE this release contains screen-sharing application signed be self-signed certificate due to <a href="https://issues.apache.org/jira/browse/INFRA-11384">INFRA-11384</a>.
 						to use screen-sharing application with modern Java, please add OM site to the list of java security exceptions by running $JAVA_HOME/bin/ControlPanel.
 				</div>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.1">Archived download</a>.</span>
 				<span class="date">(2016-03-24)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.1.0 released!</b>
+		</section>
+		<section name="Release 3.1.0">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.1.0 released!</div>
 				<div>SOAP/REST API was implemented using CXF (Axis2 was removed from the stack)<br/>
 					Build system is now maven (not ant), SWF client is improved
 					<br/>
@@ -467,14 +523,16 @@
 					<a href="https://archive.apache.org/dist/openmeetings/3.1.0/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12333397">Detailed list</a>
 				</span>
-				<div class="bs-callout bs-callout-danger">please NOTE this release contains screen-sharing application signed be self-signed certificate due to <a href="https://issues.apache.org/jira/browse/INFRA-11384">INFRA-11384</a>.
+				<div class="bd-callout bd-callout-danger">please NOTE this release contains screen-sharing application signed be self-signed certificate due to <a href="https://issues.apache.org/jira/browse/INFRA-11384">INFRA-11384</a>.
 						to use screen-sharing application with modern Java, please add OM site to the list of java security exceptions by running $JAVA_HOME/bin/ControlPanel.
 				</div>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.0">Archived download</a>.</span>
 				<span class="date">(2016-03-06)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.0.7 released!</b>
+		</section>
+		<section name="Release 3.0.7">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.0.7 released!</div>
 				<div>Service release 7 for 3.0.0 contains following improvements and bug fixes:<br/>
 					<br/>
 					<ul>
@@ -495,8 +553,10 @@
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.7">Archived download</a>.</span>
 				<span class="date">(2015-09-29)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.0.6 released!</b>
+		</section>
+		<section name="Release 3.0.6">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.0.6 released!</div>
 				<div>Service release 6 for 3.0.0 contains following improvements and bug fixes:<br/>
 					<br/>
 					Invitation:<br/>
@@ -513,8 +573,10 @@
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.6">Archived download</a>.</span>
 				<span class="date">(2015-05-25)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.0.5 released!</b>
+		</section>
+		<section name="Release 3.0.5">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.0.5 released!</div>
 				<div>Service release 5 for 3.0.0 contains following improvements and bug fixes:<br/>
 					<br/>
 					Installer:<br/>
@@ -538,8 +600,10 @@
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.5">Archived download</a>.</span>
 				<span class="date">(2015-04-26)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.0.4 released!</b>
+		</section>
+		<section name="Release 3.0.4">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.0.4 released!</div>
 				<div>Service release 4 for 3.0.0 contains following improvements and bug fixes:<br/>
 					<br/>
 					Screen-Sharing:<br/>
@@ -569,8 +633,10 @@
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.4">Archived download</a>.</span>
 				<span class="date">(2015-02-15)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.0.3 released!</b>
+		</section>
+		<section name="Release 3.0.3">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.0.3 released!</div>
 				<span>Service release 3 for 3.0.0, no new features were added, <br/>
 					More than 60 issues are fixed, recordings stability is improved, LDAP support is enhanced<br/>
 					please check <a href="https://archive.apache.org/dist/openmeetings/3.0.3/CHANGELOG">CHANGELOG</a> for details
@@ -579,82 +645,94 @@
 				<span class="alert alert-error">please <b>NOTE</b> Java7 is required on both client and server from now on</span>
 				<span class="date">(2014-09-05)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.0.2 released!</b>
+		</section>
+		<section name="Release 3.0.2">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.0.2 released!</div>
 				<span>See <a href="https://archive.apache.org/dist/openmeetings/3.0.2">Archived download</a>.</span>
 				<span class="date">(2014-06-04)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.0.1 released!</b>
+		</section>
+		<section name="Release 3.0.1">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.0.1 released!</div>
 				<span>See <a href="https://archive.apache.org/dist/openmeetings/3.0.1">Archived download</a>.</span>
 				<span class="date">(2014-04-18)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 3.0.0 released!</b>
+		</section>
+		<section name="Release 3.0.0">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 3.0.0 released!</div>
 				<span>See <a href="https://archive.apache.org/dist/openmeetings/3.0.0">Archived download</a>.</span>
 				<span class="date">(2014-03-07)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 2.2.0 released!</b>
+		</section>
+		<section name="Release 2.2.0">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 2.2.0 released!</div>
 				<span>See <a href="https://archive.apache.org/dist/openmeetings/2.2.0">Archived download</a>.</span>
 				<span class="date">(2013-12-12)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Version 2.1.1 released!</b>
+		</section>
+		<section name="Release 2.1.1">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 2.1.1 released!</div>
 				<span>See <a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_1_11" target="_blank">Project Blog</a>
 					or <a href="https://archive.apache.org/dist/openmeetings/2.1.1">Archived download</a>.</span>
 				<span class="date">(2013-07-06)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>OpenMeetings 2.1.0 is released!</b>
+		</section>
+		<section name="Release 2.1.0">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">OpenMeetings 2.1.0 is released!</div>
 				<span>Please check <a href="https://archive.apache.org/dist/openmeetings/2.1.0">Archived download</a>.</span>
 				<span class="date">(2013-04-01)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>OpenMeetings new URL, update your filters!</b>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">OpenMeetings new URL, update your filters!</div>
 				<span><a href="https://openmeetings.apache.org">openmeetings.apache.org</a> is the new home.</span>
 				<span class="date">(2013-01-28)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>OpenMeetings on the road to graduate from the Incubator</b>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">OpenMeetings on the road to graduate from the Incubator</div>
 				<span><a href="https://blogs.apache.org/openmeetings/entry/openmeetings_on_the_road_to" target="_blank" rel="nofollow">at our blog</a></span>
 				<span class="date">(2012-12-07)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Some slides from our Fast Feather Track at the ApacheCon Europe 2012</b>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Some slides from our Fast Feather Track at the ApacheCon Europe 2012</div>
 				<span><a href="https://blogs.apache.org/openmeetings/entry/openmeetings_apachecon_presentation_slide" target="_blank"
 						rel="nofollow">at our blog</a></span>
 				<span class="date">(2012-11-18)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Update: Builds are available at</b>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Update: Builds are available at</div>
 				<span><a href="https://builds.apache.org/view/M-R/view/OpenMeetings/" target="_blank" rel="nofollow">builds.apache.org</a></span>
 				<span class="date">(2012-08-03)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
+			<div class="bd-callout bd-callout-info">
 				<b>
 					<a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_0_incubating" target="_blank" rel="nofollow">Version
 						2.0 released</a>
 				</b>
 				<span class="date">(2012-07-26)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>New committer: Timur Tleukenov</b>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">New committer: Timur Tleukenov</div>
 				<span class="date">(2012-03-06)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
+			<div class="bd-callout bd-callout-info">
 				<b>
 					<a href="https://demo-openmeetings.apache.org/openmeetings" target="_blank" rel="nofollow">Demo server</a>
 					updated to r1236172
 				</b>
 				<span class="date">(2012-01-26)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>New committer: German Grekhov</b>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">New committer: German Grekhov</div>
 				<span class="date">(2011-12-26)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>OpenMeetings has been accepted into the Apache Incubator.</b>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">OpenMeetings has been accepted into the Apache Incubator.</div>
 				<span class="date">(2011-11-12)</span>
 			</div>
 		</section>

@@ -45,7 +45,7 @@ var MicLevel = (function() {
 					return;
 				}
 				t = Date.now();
-				_micActivity(140 * vol); // magic number
+				_micActivity(vol);
 			};
 		} catch (err) {
 			_error(err);
@@ -53,9 +53,12 @@ var MicLevel = (function() {
 	}
 	function _dispose() {
 		if (!!ctx) {
-			mic.disconnect(script);
-			script.disconnect(ctx.destination);
+			VideoUtil.cleanStream(mic.mediaStream);
+			mic.disconnect();
+			ctx.destination.disconnect();
+			script.disconnect();
 			script.onaudioprocess = null;
+			ctx.close();
 			ctx = null;
 		}
 	}
@@ -65,14 +68,21 @@ var MicLevel = (function() {
 	};
 });
 var VideoSettings = (function() {
-	let vs, lm, s, cam, mic, res, o, rtcPeer, offerSdp, timer
+	const DEV_AUDIO = 'audioinput', DEV_VIDEO = 'videoinput';
+	let vs, lm, s, cam, mic, res, o, rtcPeer, timer
 		, vidScroll, vid, recBtn, playBtn, recAllowed = false
 		, level;
 	const MsgBase = {type: 'kurento', mode: 'test'};
 	function _load() {
 		s = Settings.load();
 		if (!s.video) {
-			s.video = {};
+			const _res = $('#video-settings .cam-resolution option:selected').data();
+			s.video = {
+				cam: 0
+				, mic: 0
+				, width: _res.width
+				, height: _res.height
+			};
 		}
 		return s;
 	}
@@ -81,33 +91,22 @@ var VideoSettings = (function() {
 		if (typeof(avSettings) === 'function') {
 			avSettings(_s);
 		}
-		if (refr && typeof(VideoManager) !== 'undefined' && o.uid) {
-			VideoManager.refresh(o.uid, s.video);
+		if (refr && typeof(VideoManager) === 'object' && o.uid) {
+			VideoManager.refresh(o.uid);
 		}
 	}
 	function _clear(_ms) {
 		const ms = _ms || (vid.length === 1 ? vid[0].srcObject : null);
-		if (ms !== null && 'function' === typeof(ms.getAudioTracks)) {
-			ms.getAudioTracks().forEach(function(track) {
-				track.stop();
-			});
-			ms.getVideoTracks().forEach(function(track) {
-				track.stop();
-			});
-			if (vid.length === 1) {
-				vid[0].srcObject = null;
-			}
+		VideoUtil.cleanStream(ms);
+		if (vid.length === 1) {
+			vid[0].srcObject = null;
 		}
-		if (!!rtcPeer) {
-			rtcPeer.dispose();
-			rtcPeer = null;
-		}
+		VideoUtil.cleanPeer(rtcPeer);
 		if (!!level) {
 			level.dispose();
 			level = null;
 		}
 		_micActivity(0);
-		offerSdp = null;
 	}
 	function _close() {
 		_clear();
@@ -139,23 +138,20 @@ var VideoSettings = (function() {
 		lm = vs.find('.level-meter');
 		cam = vs.find('select.cam').iconselectmenu({
 			appendTo: '.cam-row'
-			, change: function(event, ui) {
+			, change: function() {
 				_readValues();
-				swf.camChanged(s.video.cam);
 			}
 		});
 		mic = vs.find('select.mic').iconselectmenu({
 			appendTo: '.mic-row'
-			, change: function(event, ui) {
+			, change: function() {
 				_readValues();
-				swf.micChanged(s.video.mic);
 			}
 		});
 		res = vs.find('select.cam-resolution').iconselectmenu({
 			appendTo: '.res-row'
-			, change: function(event, ui) {
+			, change: function() {
 				_readValues();
-				swf.resChanged(s.video.width, s.video.height);
 			}
 		});
 		vidScroll = vs.find('.vid-block .video-conainer');
@@ -166,46 +162,18 @@ var VideoSettings = (function() {
 			.click(function() {
 				recBtn.prop('disabled', true).button('refresh');
 				_setEnabled(true);
-
-				OmUtil.info('Invoking SDP offer callback function');
-				const cnts = _constraints();
 				OmUtil.sendMessage({
-					id : 'start'
-					, sdpOffer: offerSdp
-					, video: cnts.video !== false
-					, audio: cnts.audio !== false
+					id : 'wannaRecord'
 				}, MsgBase);
-				rtcPeer.on('icecandidate', _onIceCandidate);
 			});
 		playBtn = vs.find('.play')
 			.button({icon: "ui-icon-play"})
 			.click(function() {
 				recBtn.prop('disabled', true).button('refresh');
 				_setEnabled(true);
-				_clear();
-				rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
-					{
-						remoteVideo: vid[0]
-						, mediaConstraints: {
-							audio: true
-							, video: true
-						}
-						, onicecandidate: _onIceCandidate
-					}
-					, function(error) {
-						if (error) {
-							return OmUtil.error(error);
-						}
-						rtcPeer.generateOffer(function(error, offerSdp) {
-							if (error) {
-								return OmUtil.error('Error generating the offer');
-							}
-							OmUtil.sendMessage({
-								id : 'play'
-								, sdpOffer: offerSdp
-							}, MsgBase);
-						});
-					});
+				OmUtil.sendMessage({
+					id : 'wannaPlay'
+				}, MsgBase);
 			});
 		vs.dialog({
 			classes: {
@@ -237,7 +205,7 @@ var VideoSettings = (function() {
 				_close();
 			}
 		});
-		lm.progressbar({ value: 0 });
+		lm.kendoProgressBar({ value: 0, showStatus: false });
 		o.width = 300;
 		o.height = 200;
 		o.mode = 'settings';
@@ -256,66 +224,86 @@ var VideoSettings = (function() {
 	function _updateRec() {
 		recBtn.prop('disabled', !recAllowed || (s.video.cam < 0 && s.video.mic < 0)).button('refresh');
 	}
-	function _constraints() {
-		const cnts = {}
-			, v = cam.find('option:selected')
-			, m = mic.find('option:selected');
-		//TODO add check if constraint is supported
-		if (s.video.cam > -1) {
-			cnts.video = {
-				width: s.video.width
-				, height: s.video.height
-				, deviceId: { exact: v.data('device-id')  }
-				, frameRate: { max: 30 }
-			};
-		} else {
-			cnts.video = false;
-		}
-		if (s.video.mic > -1) {
-			//TODO remove hardcodings
-			cnts.audio = {
-				sampleSize: 22
-				, deviceId: { exact: m.data('device-id')  }
-				, echoCancellation: true
-			};
-		} else {
-			cnts.audio = false;
-		}
-		return cnts;
+	//each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
+	// min/ideal/max/exact/mandatory can also be used
+	function _constraints(sd, callback) {
+		_getDevConstraints(function(devCnts){
+			const cnts = {};
+			if (devCnts.video && false === o.audioOnly && VideoUtil.hasVideo(sd) && s.video.cam > -1) {
+				cnts.video = {
+					width: s.video.width
+					, height: s.video.height
+					, frameRate: o.camera.fps
+				};
+				if (!!s.video.camDevice) {
+					cnts.video.deviceId = {
+						ideal: s.video.camDevice
+					};
+				}
+			} else {
+				cnts.video = false;
+			}
+			if (devCnts.audio && VideoUtil.hasAudio(sd) && s.video.mic > -1) {
+				cnts.audio = {
+					sampleRate: o.microphone.rate
+					, echoCancellation: o.microphone.echo
+					, noiseSuppression: o.microphone.noise
+				};
+				if (!!s.video.micDevice) {
+					cnts.audio.deviceId = {
+						ideal: s.video.micDevice
+					};
+				}
+			} else {
+				cnts.audio = false;
+			}
+			callback(cnts);
+		});
 	}
-	function _readValues() {
+	function _readValues(msg, func) {
 		const v = cam.find('option:selected')
 			, m = mic.find('option:selected')
 			, o = res.find('option:selected').data();
 		s.video.cam = 1 * cam.val();
+		s.video.camDevice = v.data('device-id');
 		s.video.mic = 1 * mic.val();
+		s.video.micDevice = m.data('device-id');
 		s.video.width = o.width;
 		s.video.height = o.height;
 		vid.width(o.width).height(o.height);
 		vidScroll.scrollLeft(Math.max(0, s.video.width / 2 - 150))
 			.scrollTop(Math.max(0, s.video.height / 2 - 110));
 		_clear();
-		const cnts = _constraints();
-		if (cnts.video !== false || cnts.audio !== false) {
-			rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
-				{
-					localVideo: vid[0], mediaConstraints: cnts
-				}, function(error) {
-					if (error) {
-						return OmUtil.error(error);
-					}
-					level = MicLevel();
-					level.meter(rtcPeer, _micActivity, OmUtil.error);
-					rtcPeer.generateOffer(function(error, _offerSdp) {
+		_constraints(null, function(cnts) {
+			if (cnts.video !== false || cnts.audio !== false) {
+				const options = VideoUtil.addIceServers({
+					localVideo: vid[0]
+					, mediaConstraints: cnts
+				}, msg);
+				rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
+					options
+					, function(error) {
 						if (error) {
-							return OmUtil.error('Error generating the offer');
+							return OmUtil.error(error);
 						}
-						offerSdp = _offerSdp;
-						_allowRec(true);
+						level = MicLevel();
+						level.meter(rtcPeer, _micActivity, OmUtil.error);
+						rtcPeer.generateOffer(function(error, _offerSdp) {
+							if (error) {
+								return OmUtil.error('Error generating the offer');
+							}
+							if (typeof(func) === 'function') {
+								func(_offerSdp, cnts);
+							} else {
+								_allowRec(true);
+							}
+						});
 					});
-				});
-		}
-		_updateRec();
+			}
+			if (!msg) {
+				_updateRec();
+			}
+		});
 	}
 
 	function _allowRec(allow) {
@@ -327,12 +315,44 @@ var VideoSettings = (function() {
 		playBtn.prop('disabled', false).button('refresh');
 	}
 	function _micActivity(level) {
-		lm.progressbar("value", Math.max(0, level));
+		lm.getKendoProgressBar().value(140 * level); // magic number
 	}
 	function _setLoading(el) {
 		el.find('option').remove();
-		el.append(OmUtil.tmpl('#settings-option-loading'));//!settings-option-disabled
+		el.append(OmUtil.tmpl('#settings-option-loading'));
 		el.iconselectmenu('refresh');
+	}
+	function _setDisabled(els) {
+		els.forEach(function(el) {
+			el.find('option').remove();
+			el.append(OmUtil.tmpl('#settings-option-disabled'));
+			el.iconselectmenu('refresh');
+		});
+	}
+	function _setSelectedDevice(dev, devIdx) {
+		let o = dev.find('option[value="' + devIdx + '"]');
+		if (o.length === 0 && devIdx !== -1) {
+			o = dev.find('option[value="0"]');
+		}
+		o.prop('selected', true);
+	}
+	function _getDevConstraints(callback) {
+		const devCnts = {audio: false, video: false};
+		navigator.mediaDevices.enumerateDevices()
+			.then(function(devices) {
+				devices.forEach(function(device) {
+					if (DEV_AUDIO === device.kind) {
+						devCnts.audio = true;
+					} else if (DEV_VIDEO === device.kind) {
+						devCnts.video = true;
+					}
+				});
+				callback(devCnts);
+			})
+			.catch(function() {
+				OmUtil.error('Unable to get the list of multimedia devices');
+				callback(devCnts);
+			});
 	}
 	function _initDevices() {
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
@@ -341,59 +361,59 @@ var VideoSettings = (function() {
 		}
 		_setLoading(cam);
 		_setLoading(mic);
-		navigator.mediaDevices.getUserMedia({video:true, audio:true})
-			.then(function(stream) {
-				const devices = navigator.mediaDevices.enumerateDevices()
-					.then(function(devices) {
-						_clear(stream);
-						return devices;
-					})
-					.catch(function(err) {
-						_clear(stream);
-						throw err;
+		_getDevConstraints(function(devCnts) {
+			if (!devCnts.audio && !devCnts.video) {
+				_setDisabled([cam, mic]);
+				return;
+			}
+			navigator.mediaDevices.getUserMedia(devCnts)
+				.then(function(stream) {
+					const devices = navigator.mediaDevices.enumerateDevices()
+						.then(function(devices) {
+							_clear(stream);
+							return devices;
+						})
+						.catch(function(err) {
+							_clear(stream);
+							throw err;
+						});
+					return devices;
+				})
+				.then(function(devices) {
+					let cCount = 0, mCount = 0;
+					_load();
+					_setDisabled([cam, mic]);
+					devices.forEach(function(device) {
+						if (DEV_AUDIO === device.kind) {
+							const o = $('<option></option>').attr('value', mCount).text(device.label)
+								.data('device-id', device.deviceId);
+							mic.append(o);
+							mCount++;
+						} else if (DEV_VIDEO === device.kind) {
+							const o = $('<option></option>').attr('value', cCount).text(device.label)
+								.data('device-id', device.deviceId);
+							cam.append(o);
+							cCount++;
+						}
 					});
-				return devices;
-			})
-			.then(function(devices) {
-				let cCount = 0, mCount = 0;
-				_load();
-				cam.find('option').remove();
-				cam.append(OmUtil.tmpl('#settings-option-disabled'));
-				mic.find('option').remove();
-				mic.append(OmUtil.tmpl('#settings-option-disabled'));
-				devices.forEach(function(device) {
-					if ('audioinput' === device.kind) {
-						const o = $('<option></option>').attr('value', mCount).text(device.label)
-							.data('device-id', device.deviceId);
-						if (mCount === s.video.mic) {
-							o.prop('selected', true);
+					_setSelectedDevice(cam, s.video.cam);
+					_setSelectedDevice(mic, s.video.mic);
+					cam.iconselectmenu('refresh');
+					mic.iconselectmenu('refresh');
+					res.find('option').each(function() {
+						const o = $(this).data();
+						if (o.width === s.video.width && o.height === s.video.height) {
+							$(this).prop('selected', true);
+							return false;
 						}
-						mic.append(o);
-						mCount++;
-					} else if ('videoinput' === device.kind) {
-						const o = $('<option></option>').attr('value', cCount).text(device.label)
-							.data('device-id', device.deviceId);
-						if (cCount === s.video.cam) {
-							o.prop('selected', true);
-						}
-						cam.append(o);
-						cCount++;
-					}
+					});
+					_readValues();
+				})
+				.catch(function(err) {
+					_setDisabled([cam, mic]);
+					OmUtil.error(err);
 				});
-				cam.iconselectmenu('refresh');
-				mic.iconselectmenu('refresh');
-				res.find('option').each(function() {
-					const o = $(this).data();
-					if (o.width === s.video.width && o.height === s.video.height) {
-						$(this).prop('selected', true);
-						return false;
-					}
-				});
-				_readValues();
-			})
-			.catch(function(err) {
-				OmUtil.error(err);
-			});
+		});
 	}
 	function _open() {
 		Wicket.Event.subscribe('/websocket/message', _onWsMessage);
@@ -414,7 +434,6 @@ var VideoSettings = (function() {
 		_updateRec();
 		_setEnabled(false);
 	}
-	//FIXME TODO, try to unify this
 	function _onWsMessage(jqEvent, msg) {
 		try {
 			if (msg instanceof Blob) {
@@ -425,6 +444,44 @@ var VideoSettings = (function() {
 				if ('test' === m.mode) {
 					OmUtil.info('Received message: ', m);
 					switch (m.id) {
+						case 'canRecord':
+							_readValues(m, function(_offerSdp, cnts) {
+								OmUtil.info('Invoking SDP offer callback function');
+								OmUtil.sendMessage({
+									id : 'record'
+									, sdpOffer: _offerSdp
+									, video: cnts.video !== false
+									, audio: cnts.audio !== false
+								}, MsgBase);
+								rtcPeer.on('icecandidate', _onIceCandidate);
+							});
+							break;
+						case 'canPlay':
+							{
+								const options = VideoUtil.addIceServers({
+									remoteVideo: vid[0]
+									, mediaConstraints: {audio: true, video: true}
+									, onicecandidate: _onIceCandidate
+								}, m);
+								_clear();
+								rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
+									options
+									, function(error) {
+										if (error) {
+											return OmUtil.error(error);
+										}
+										rtcPeer.generateOffer(function(error, offerSdp) {
+											if (error) {
+												return OmUtil.error('Error generating the offer');
+											}
+											OmUtil.sendMessage({
+												id : 'play'
+												, sdpOffer: offerSdp
+											}, MsgBase);
+										});
+									});
+								}
+							break;
 						case 'playResponse':
 						case 'startResponse':
 							OmUtil.log('SDP answer received from server. Processing ...');
@@ -474,5 +531,6 @@ var VideoSettings = (function() {
 		, close: function() { _close(); vs.dialog('close'); }
 		, load: _load
 		, save: _save
+		, constraints: _constraints
 	};
 })();

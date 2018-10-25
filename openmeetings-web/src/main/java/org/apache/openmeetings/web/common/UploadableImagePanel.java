@@ -68,7 +68,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 		form.addOrReplace(getImage());
 		if (delayed) {
 			add(new WebMarkupContainer("remove").add(AttributeModifier.append("onclick"
-					, String.format("$(this).parent().find('.fileinput').fileinput('clear');", form.getMarkupId()))));
+					, "$(this).parent().find('.fileinput').fileinput('clear');")));
 		} else {
 			add(new ConfirmableAjaxBorder("remove", getString("80"), getString("833")) {
 				private static final long serialVersionUID = 1L;

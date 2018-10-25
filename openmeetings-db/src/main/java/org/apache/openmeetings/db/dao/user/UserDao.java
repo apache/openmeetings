@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.db.util.DaoHelper.getStringParam;
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
-import static org.apache.openmeetings.util.DaoHelper.getStringParam;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
@@ -36,7 +38,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -55,7 +56,7 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.db.util.DaoHelper;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
@@ -114,11 +115,10 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	@Override
-	public List<User> get(int first, int count) {
-		TypedQuery<User> q = em.createNamedQuery("getNondeletedUsers", User.class);
-		q.setFirstResult(first);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<User> get(long first, long count) {
+		return setLimits(
+				em.createNamedQuery("getNondeletedUsers", User.class)
+				, first, count).getResultList();
 	}
 
 	private static String getAdditionalJoin(boolean filterContacts) {
@@ -149,28 +149,20 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 	}
 
-	private List<User> get(String search, Integer start, Integer count, String order, boolean filterContacts, Long currentUserId, boolean filterDeleted) {
+	private List<User> get(String search, Long start, Long count, String order, boolean filterContacts, Long currentUserId, boolean filterDeleted) {
 		Map<String, Object> params = new HashMap<>();
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, filterDeleted, false
 				, getAdditionalWhere(filterContacts, currentUserId, params), order, searchFields), User.class);
-		if (start != null) {
-			q.setFirstResult(start);
-		}
-		if (count != null) {
-			q.setMaxResults(count);
-		}
-		setAdditionalParams(q, params);
+		setAdditionalParams(setLimits(q, start, count), params);
 		return q.getResultList();
 	}
 
 	//This is AdminDao method
-	public List<User> get(String search, boolean excludeContacts, int first, int count) {
+	public List<User> get(String search, boolean excludeContacts, long first, long count) {
 		Map<String, Object> params = new HashMap<>();
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", null, search, true, true, false
 				, getAdditionalWhere(excludeContacts, params), null, searchFields), User.class);
-		setAdditionalParams(q, params);
-		q.setFirstResult(first);
-		q.setMaxResults(count);
+		setAdditionalParams(setLimits(q, first, count), params);
 		return q.getResultList();
 	}
 
@@ -178,23 +170,21 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return get(search, null, null, null, filterContacts, currentUserId, true);
 	}
 
-	public List<User> get(String search, int start, int count, String sort, boolean filterContacts, Long currentUserId) {
+	public List<User> get(String search, long start, long count, String sort, boolean filterContacts, Long currentUserId) {
 		return get(search, start, count, sort, filterContacts, currentUserId, true);
 	}
 
 	@Override
-	public List<User> adminGet(String search, int start, int count, String order) {
+	public List<User> adminGet(String search, long start, long count, String order) {
 		return get(search, start, count, order, false, null, false);
 	}
 
 	@Override
-	public List<User> adminGet(String search, Long adminId, int start, int count, String order) {
+	public List<User> adminGet(String search, Long adminId, long start, long count, String order) {
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, false, false
 				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", order, searchFields), User.class);
 		q.setParameter("adminId", adminId);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+		return setLimits(q, start, count).getResultList();
 	}
 
 	private long count(String search, boolean filterContacts, Long currentUserId, boolean filterDeleted) {
@@ -283,11 +273,6 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return get(id, false);
 	}
 
-	@Override
-	public User get(long id) {
-		return get(Long.valueOf(id), false);
-	}
-
 	private User get(Long id, boolean force) {
 		User u = null;
 		if (id != null && id.longValue() > 0) {
@@ -350,15 +335,15 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			u.setAddress(new Address());
 			u.setAge(new Date());
 			u.setExternalId(null);
-			final String purged = String.format("Purged %s", UUID.randomUUID());
+			final String purged = String.format("Purged %s", randomUUID());
 			u.setFirstname(purged);
 			u.setLastname(purged);
 			u.setLogin(purged);
 			u.setGroupUsers(new ArrayList<>());
 			u.setRights(new HashSet<>());
 			u.setTimeZoneId(getDefaultTimezone());
-			File pic = OmFileHelper.getUserProfilePicture(u.getId(), u.getPictureuri(), null);
-			u.setPictureuri(null);
+			File pic = OmFileHelper.getUserProfilePicture(u.getId(), u.getPictureUri(), null);
+			u.setPictureUri(null);
 			ICrypt crypt = CryptProvider.get();
 			try {
 				u.updatePassword(crypt.randomPassword(25));
@@ -542,7 +527,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			User to = new User();
 			to.setType(Type.contact);
 			String login = owner.getId() + "_" + email; //UserId prefix is used to ensure unique login
-			to.setLogin(login.length() < getMinLoginLength() ? UUID.randomUUID().toString() : login);
+			to.setLogin(login.length() < getMinLoginLength() ? randomUUID().toString() : login);
 			to.setFirstname(firstName);
 			to.setLastname(lastName);
 			to.setLanguageId(null == langId || null == LabelDao.getLocale(langId) ? owner.getLanguageId() : langId.longValue());
@@ -597,8 +582,9 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return query;
 	}
 
-	public List<User> searchUserProfile(Long userId, String text, String offers, String search, String orderBy, int start, int max, boolean asc) {
-		return getUserProfileQuery(User.class, userId, text, offers, search, orderBy, asc).setFirstResult(start).setMaxResults(max).getResultList();
+	public List<User> searchUserProfile(Long userId, String text, String offers, String search, String orderBy, long start, long max, boolean asc) {
+		return setLimits(getUserProfileQuery(User.class, userId, text, offers, search, orderBy, asc)
+				, start, max).getResultList();
 	}
 
 	public Long searchCountUserProfile(Long userId, String text, String offers, String search) {
@@ -613,7 +599,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	@Override
-	public List<User> get(String search, int start, int count, String order) {
+	public List<User> get(String search, long start, long count, String order) {
 		return get(search, start, count, order, false, Long.valueOf(-1));
 	}
 

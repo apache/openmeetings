@@ -18,13 +18,13 @@
  */
 package org.apache.openmeetings.db.util.ws;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 
 import java.util.Date;
-import java.util.UUID;
 
-import org.apache.openmeetings.db.entity.basic.IClient;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
 
@@ -36,10 +36,8 @@ public class RoomMessage implements IWebSocketPushMessage {
 		, roomClosed
 		, pollCreated
 		, pollUpdated
-		, recordingStarted
-		, recordingStoped
-		, sharingStarted
-		, sharingStoped
+		, recordingToggled
+		, sharingToggled
 		, rightUpdated
 		, activityRemove
 		, requestRightModerator
@@ -52,8 +50,6 @@ public class RoomMessage implements IWebSocketPushMessage {
 		, requestRightExclusive
 		, haveQuestion
 		, kick
-		, newStream
-		, closeStream
 		, mute
 		, exclusive
 		, quickPollUpdated
@@ -65,8 +61,8 @@ public class RoomMessage implements IWebSocketPushMessage {
 	private final String name;
 	private final Type type;
 
-	public RoomMessage(Long roomId, IClient c, Type type) {
-		this(roomId, c.getUserId(), c.getFirstname(), c.getLastname(), type);
+	public RoomMessage(Long roomId, Client c, Type type) {
+		this(roomId, c.getUser(), type);
 	}
 
 	public RoomMessage(Long roomId, User u, Type type) {
@@ -83,7 +79,7 @@ public class RoomMessage implements IWebSocketPushMessage {
 		}
 		this.userId = userId;
 		this.type = type;
-		this.uid = UUID.randomUUID().toString();
+		this.uid = randomUUID().toString();
 	}
 
 	public Date getTimestamp() {

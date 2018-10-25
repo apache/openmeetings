@@ -2,24 +2,21 @@
 const WB_AREA_SEL = '.room.wb.area';
 const WBA_WB_SEL = '.room.wb.area .ui-tabs-panel.ui-corner-bottom.ui-widget-content:visible';
 const VID_SEL = '.video.user-video';
+const CAM_ACTIVITY = 'VIDEO';
+const MIC_ACTIVITY = 'AUDIO';
 var VideoUtil = (function() {
 	const self = {};
 	function _getVid(uid) {
 		return 'video' + uid;
 	}
-	function _isSharing(c) {
-		return 'sharing' === c.type && c.screenActivities.includes('sharing');
+	function _isSharing(sd) {
+		return 'SCREEN' === sd.type;
 	}
-	function _isRecording(c) {
-		return 'sharing' === c.type
-			&& c.screenActivities.includes('recording')
-			&& !c.screenActivities.includes('sharing');
+	function _hasAudio(sd) {
+		return !sd || sd.activities.includes(MIC_ACTIVITY);
 	}
-	function _hasAudio(c) {
-		return c.activities.includes('broadcastA');
-	}
-	function _hasVideo(c) {
-		return c.activities.includes('broadcastV');
+	function _hasVideo(sd) {
+		return !sd || sd.activities.includes(CAM_ACTIVITY);
 	}
 	function _getRects(sel, excl) {
 		const list = [], elems = $(sel);
@@ -102,15 +99,55 @@ var VideoUtil = (function() {
 			list.push(_getRect(v));
 		}
 	}
+	function _cleanStream(stream) {
+		if (!!stream) {
+			stream.getTracks().forEach(function(track) {
+				track.stop();
+			});
+		}
+	}
+	function _cleanPeer(peer) {
+		if (!!peer) {
+			peer.cleaned = true;
+			const pc = peer.peerConnection;
+			try {
+				if (!!pc && !!pc.getLocalStreams()) {
+					pc.getLocalStreams().forEach(function(stream) {
+						_cleanStream(stream);
+					});
+				}
+			} catch(e) {
+				OmUtil.log('Failed to clean peer' + e);
+			}
+			peer.dispose();
+			peer = null;
+		}
+	}
+	function _isEdge() {
+		const b = kurentoUtils.WebRtcPeer.browser;
+		return b.name === 'Edge';
+	}
+	function _setPos(v, pos) {
+		v.dialog('widget').css(pos);
+	}
 
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
-	self.isRecording = _isRecording;
 	self.hasAudio = _hasAudio;
 	self.hasVideo = _hasVideo;
 	self.getRects = _getRects;
 	self.getPos = _getPos;
 	self.container = _container;
 	self.arrange = _arrange;
+	self.cleanStream = _cleanStream;
+	self.cleanPeer = _cleanPeer;
+	self.addIceServers = function(opts, m) {
+		if (m && m.iceServers && m.iceServers.length > 0) {
+			opts.configuration = {iceServers: m.iceServers};
+		}
+		return opts;
+	};
+	self.isEdge = _isEdge;
+	self.setPos = _setPos;
 	return self;
 })();

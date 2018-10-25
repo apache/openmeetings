@@ -18,13 +18,13 @@
  */
 package org.apache.openmeetings.backup;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.CSS_DIR;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
@@ -44,6 +44,7 @@ import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir
 import static org.apache.openmeetings.util.OmFileHelper.getUploadRoomDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
@@ -58,18 +59,15 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_MIC_RATE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_EXCLUSIVE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_ECHO;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_NOISE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
@@ -110,7 +108,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -155,7 +152,7 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData;
+import org.apache.openmeetings.db.entity.record.RecordingChunk;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
@@ -239,7 +236,6 @@ public class BackupImport {
 		configTypes.put(CONFIG_DASHBOARD_SHOW_RSS, Configuration.Type.bool);
 		configTypes.put(CONFIG_REPLY_TO_ORGANIZER, Configuration.Type.bool);
 		configTypes.put(CONFIG_IGNORE_BAD_SSL, Configuration.Type.bool);
-		configTypes.put(CONFIG_FLASH_SECURE, Configuration.Type.bool);
 		configTypes.put(CONFIG_MYROOMS_ENABLED, Configuration.Type.bool);
 		configTypes.put(CONFIG_DEFAULT_GROUP_ID, Configuration.Type.number);
 		configTypes.put(CONFIG_SMTP_PORT, Configuration.Type.number);
@@ -259,11 +255,10 @@ public class BackupImport {
 		configTypes.put(CONFIG_KEYCODE_EXCLUSIVE, Configuration.Type.number);
 		configTypes.put(CONFIG_KEYCODE_MUTE, Configuration.Type.number);
 		configTypes.put(CONFIG_DEFAULT_LDAP_ID, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_VIDEO_FPS, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_VIDEO_BANDWIDTH, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_CAM_QUALITY, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_MIC_RATE, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_ECHO_PATH, Configuration.Type.number);
+		configTypes.put(CONFIG_CAM_FPS, Configuration.Type.number);
+		configTypes.put(CONFIG_MIC_RATE, Configuration.Type.number);
+		configTypes.put(CONFIG_MIC_ECHO, Configuration.Type.bool);
+		configTypes.put(CONFIG_MIC_NOISE, Configuration.Type.bool);
 		configTypes.put(CONFIG_EXT_PROCESS_TTL, Configuration.Type.number);
 	}
 
@@ -552,21 +547,21 @@ public class BackupImport {
 		List<User> list = readList(ser, f, "users.xml", "users", User.class);
 		int minLoginLength = getMinLoginLength();
 		for (User u : list) {
-			if (u.getLogin() == null) {
+			if (u.getLogin() == null || u.isDeleted()) {
 				continue;
 			}
 			// check that email is unique
 			if (u.getAddress() != null && u.getAddress().getEmail() != null && User.Type.user == u.getType()) {
 				if (userEmailMap.containsKey(u.getAddress().getEmail())) {
 					log.warn("Email is duplicated for user " + u.toString());
-					String updateEmail = String.format("modified_by_import_<%s>%s", UUID.randomUUID(), u.getAddress().getEmail());
+					String updateEmail = String.format("modified_by_import_<%s>%s", randomUUID(), u.getAddress().getEmail());
 					u.getAddress().setEmail(updateEmail);
 				}
 				userEmailMap.put(u.getAddress().getEmail(), Integer.valueOf(userEmailMap.size()));
 			}
 			if (userLoginMap.containsKey(u.getLogin())) {
 				log.warn("Login is duplicated for user " + u.toString());
-				String updateLogin = String.format("modified_by_import_<%s>%s", UUID.randomUUID(), u.getLogin());
+				String updateLogin = String.format("modified_by_import_<%s>%s", randomUUID(), u.getLogin());
 				u.setLogin(updateLogin);
 			}
 			userLoginMap.put(u.getLogin(), Integer.valueOf(userLoginMap.size()));
@@ -576,7 +571,7 @@ public class BackupImport {
 				}
 			}
 			if (u.getType() == User.Type.contact && u.getLogin().length() < minLoginLength) {
-				u.setLogin(UUID.randomUUID().toString());
+				u.setLogin(randomUUID().toString());
 			}
 
 			String tz = u.getTimeZoneId();
@@ -795,20 +790,20 @@ public class BackupImport {
 			if (r.getOwnerId() != null) {
 				r.setOwnerId(userMap.get(r.getOwnerId()));
 			}
-			if (r.getMetaData() != null) {
-				for (RecordingMetaData meta : r.getMetaData()) {
-					meta.setId(null);
-					meta.setRecording(r);
+			if (r.getChunks() != null) {
+				for (RecordingChunk chunk : r.getChunks()) {
+					chunk.setId(null);
+					chunk.setRecording(r);
 				}
 			}
 			if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(RECORDING_FILE_NAME)) {
 				String name = getFileName(r.getHash());
-				r.setHash(UUID.randomUUID().toString());
+				r.setHash(randomUUID().toString());
 				fileMap.put(String.format(FILE_NAME_FMT, name, EXTENSION_JPG), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_PNG));
-				fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
+				fileMap.put(String.format("%s.%s.%s", name, "flv", EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
 			}
 			if (Strings.isEmpty(r.getHash())) {
-				r.setHash(UUID.randomUUID().toString());
+				r.setHash(randomUUID().toString());
 			}
 			r = recordingDao.update(r);
 			fileItemMap.put(recId, r.getId());
@@ -935,7 +930,7 @@ public class BackupImport {
 				file.setParentId(null);
 			}
 			if (Strings.isEmpty(file.getHash())) {
-				file.setHash(UUID.randomUUID().toString());
+				file.setHash(randomUUID().toString());
 			}
 			file = fileItemDao.update(file);
 			result.add(file);

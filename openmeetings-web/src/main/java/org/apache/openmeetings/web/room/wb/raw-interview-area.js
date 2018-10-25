@@ -30,8 +30,10 @@ var InterviewWbArea = function() {
 					ui.draggable.remove();
 				} else {
 					cvid.dialog('option', 'appendTo', ui.draggable);
+					cvid.data().reattachStream();
 					vid.dialog('option', 'appendTo', big);
 				}
+				vid.data().reattachStream();
 				pArea.find('.ui-sortable-placeholder.pod').hide();
 				_updateAreaClass();
 			}
@@ -39,8 +41,11 @@ var InterviewWbArea = function() {
 		pArea.sortable({
 			items: '.pod'
 			, handle: '.ui-dialog-titlebar'
-			, change: function(event, ui) {
-				console.log('changed');
+			, stop: function(event, ui) {
+				const vid = ui.item.find('.ui-dialog-content');
+				if (vid.length === 1) {
+					vid.data().reattachStream();
+				}
 			}
 		});
 		_updateAreaClass();
@@ -78,7 +83,7 @@ var InterviewWbArea = function() {
 		const count = pArea.find('.pod:not(.ui-helper,.ui-sortable-placeholder)').length
 			, empt = pArea.find('.empty');
 		if (count < 2) {
-			empt.length == 0 && pArea.append($('<div class="empty"></div>'));
+			empt.length === 0 && pArea.append($('<div class="empty"></div>'));
 		} else {
 			empt.remove();
 		}

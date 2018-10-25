@@ -20,11 +20,11 @@ package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterFrontend;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterOauth;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendVerificationEmail;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,10 +33,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.UUID;
 
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.openmeetings.core.service.MainService;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -47,10 +45,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -60,7 +55,7 @@ import org.springframework.stereotype.Service;
 
 @Service("mobile.service")
 public class MobileService {
-	private static final Logger log = LoggerFactory.getLogger(MainService.class);
+	private static final Logger log = LoggerFactory.getLogger(MobileService.class);
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
@@ -70,13 +65,9 @@ public class MobileService {
 	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
-	private IStreamClientManager streamClientManager;
-	@Autowired
 	private RoomDao roomDao;
 	@Autowired
 	private ChatDao chatDao;
-	@Autowired
-	private ScopeApplicationAdapter scopeAdapter;
 
 	private static void add(Map<String, Object> m, String key, Object v) {
 		m.put(key, v == null ? "" : v);
@@ -104,8 +95,8 @@ public class MobileService {
 
 	public Map<String, Object> checkServer() {
 		Map<String, Object> result = new HashMap<>();
-		result.put("allowSelfRegister",  cfgDao.getBool(CONFIG_REGISTER_FRONTEND, false));
-		result.put("allowOauthRegister",  cfgDao.getBool(CONFIG_REGISTER_OAUTH, false));
+		result.put("allowSelfRegister", isAllowRegisterFrontend());
+		result.put("allowOauthRegister", isAllowRegisterOauth());
 		return result;
 	}
 
@@ -124,7 +115,7 @@ public class MobileService {
 	public Map<String, Object> loginGoogle(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
-			if (cfgDao.getBool(CONFIG_REGISTER_OAUTH, false)) {
+			if (isAllowRegisterOauth()) {
 				User u = userManager.loginOAuth(new OAuthUser(umap), 2); //TODO hardcoded
 				result = login(u, result);
 			}
@@ -137,7 +128,7 @@ public class MobileService {
 	public Map<String, Object> registerUser(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
-			if (cfgDao.getBool(CONFIG_REGISTER_FRONTEND, false)) {
+			if (isAllowRegisterFrontend()) {
 				String login = umap.get("login");
 				String email = umap.get("email");
 				String lastname = umap.get("lastname");
@@ -160,8 +151,7 @@ public class MobileService {
 				} else if (user instanceof User) {
 					User u = (User)user;
 					String baseURL = getBaseUrl();
-					boolean sendConfirmation = !Strings.isEmpty(baseURL)
-							&& cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
+					boolean sendConfirmation = !Strings.isEmpty(baseURL) && isSendVerificationEmail();
 					if (sendConfirmation) {
 						add(result, PARAM_STATUS, -666L);
 					} else {
@@ -194,28 +184,6 @@ public class MobileService {
 		Map<String, Object> result = new HashMap<>();
 		result.put(PARAM_STATUS, UNKNOWN.getKey());
 		return result;
-	}
-
-	public StreamClient create(User u, Sessiondata sd) {
-		StreamClient c = new StreamClient();
-		c.setType(StreamClient.Type.mobile);
-		c.setSid(sd.getSessionId());
-		c.setUid(UUID.randomUUID().toString());
-		return create(c, u);
-	}
-
-	public StreamClient create(StreamClient c, User u) {
-		c.setUserId(u.getId());
-		c.setFirstname(u.getFirstname());
-		c.setLastname(u.getLastname());
-		if (c.getUserId() != null) {
-			c.setLogin(u.getLogin());
-			c.setFirstname(u.getFirstname());
-			c.setLastname(u.getLastname());
-			c.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
-		}
-		c.setBroadcastId(UUID.randomUUID().toString());
-		return c;
 	}
 
 	private Map<String, Object> login(User u, Map<String, Object> result) {
@@ -283,7 +251,7 @@ public class MobileService {
 			room.put("org", org);
 		}
 		room.put("first", first);
-		room.put("users", streamClientManager.list(r.getId()).size());
+		// room.put("users", streamClientManager.list(r.getId()).size());
 		room.put("total", r.getCapacity());
 		room.put("audioOnly", r.isAudioOnly());
 		result.add(room);
@@ -389,11 +357,10 @@ public class MobileService {
 	}
 
 	public void sendChatMessage(String uid, ChatMessage m, FastDateFormat fmt) {
-		sendChatMessage(streamClientManager.get(uid), m, fmt);
+		/*sendChatMessage(streamClientManager.get(uid), m, fmt);
 	}
 
 	public void sendChatMessage(StreamClient c, ChatMessage m, FastDateFormat fmt) {
-		/*
 		if (c == null) {
 			return;
 		}
@@ -411,11 +378,11 @@ public class MobileService {
 						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId);
 			}
 		}.start();
-		*/
 	}
 
 	private static boolean isModerator(StreamClient c) {
 		return c.isMod() || c.isSuperMod();
+		*/
 	}
 
 	private static Map<String, Object> encodeChatMessage(ChatMessage m, FastDateFormat fmt) {

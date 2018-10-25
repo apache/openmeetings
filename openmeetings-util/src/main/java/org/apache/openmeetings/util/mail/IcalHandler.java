@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.util.mail;
 
+import static java.util.UUID.randomUUID;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.net.URI;
@@ -26,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -136,7 +137,7 @@ public class IcalHandler {
 		// generate unique identifier (if not submitted)
 		Uid ui;
 		if (Strings.isEmpty(uid)) {
-			ui = new Uid(UUID.randomUUID().toString());
+			ui = new Uid(randomUUID().toString());
 			log.debug("Generating Meeting UID : " + ui.getValue());
 		} else {
 			ui = new Uid(uid);

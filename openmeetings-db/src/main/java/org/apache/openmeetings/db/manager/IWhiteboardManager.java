@@ -22,4 +22,5 @@ import org.apache.openmeetings.db.dto.room.Whiteboards;
 
 public interface IWhiteboardManager {
 	Whiteboards get(Long roomId);
+	void remove(Long roomId);
 }

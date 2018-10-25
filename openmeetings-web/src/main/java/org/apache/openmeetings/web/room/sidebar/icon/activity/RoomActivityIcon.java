@@ -18,8 +18,7 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon.activity;
 
-import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_TOGGLE_ACTIVITY;
-import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.activityAllowed;
+import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed;
 
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -38,7 +37,7 @@ public abstract class RoomActivityIcon extends ClientIcon {
 
 	@Override
 	protected String getScript() {
-		return String.format("%s('%s', '%s');", FUNC_TOGGLE_ACTIVITY, activity.name(), uid);
+		return String.format("VideoManager.toggleActivity('%s');", activity.name());
 	}
 
 	protected boolean visible() {

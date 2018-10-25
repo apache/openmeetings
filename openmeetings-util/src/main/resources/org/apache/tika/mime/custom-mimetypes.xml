@@ -17,12 +17,6 @@
 -->
 <mime-info>
 	<mime-type type="image/other">
-		<glob pattern="*.dpx"/>
-	</mime-type>
-	<mime-type type="image/other">
-		<glob pattern="*.exr"/>
-	</mime-type>
-	<mime-type type="image/other">
 		<glob pattern="*.pcd"/>
 	</mime-type>
 	<mime-type type="image/other">

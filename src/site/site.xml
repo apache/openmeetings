@@ -12,8 +12,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/DECORATION/1.7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://maven.apache.org/DECORATION/1.7.0 http://maven.apache.org/xsd/decoration-1.7.0.xsd"
+<project xmlns="http://maven.apache.org/DECORATION/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd"
 		name="Apache OpenMeetings Project">
 	<bannerLeft>
 		<name>Apache OpenMeetings</name>
@@ -29,7 +29,7 @@
 	<skin>
 		<groupId>io.github.devacfr.maven.skins</groupId>
 		<artifactId>reflow-maven-skin</artifactId>
-		<version>${reflow-skin.version}</version>
+		<version>${reflow-maven-skin.version}</version>
 	</skin>
 
 	<version position="none"/>
@@ -63,14 +63,15 @@
 			<absoluteResourceURL>https://openmeetings.apache.org</absoluteResourceURL>
 			<protocolRelativeURLs>true</protocolRelativeURLs>
 			<localResources>true</localResources>
-			<theme>site</theme><!-- http://bootswatch.com/2/cerulean offline -->
+			<theme>bootswatch-${reflow-theme}</theme>
 			<bottomNav maxSpan="12">
 				<column>General</column>
 				<column>Installation</column>
 				<column>Community</column>
 				<column>Development</column>
 			</bottomNav>
-			<toc type="fixed">sidebar</toc>
+			<toc position="fixed">sidebar</toc>
+			<navbar cssClass="navbar-dark bg-primary"/>
 			<skinAttribution>false</skinAttribution>
 			<endContent>
 				<script type="text/javascript" src="$resourcePath/js/site.js"></script>

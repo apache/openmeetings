@@ -37,7 +37,7 @@ import com.github.openjson.JSONStringer;
 
 public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
-	private static final int PAGE_SIZE = 10;
+	private static final long PAGE_SIZE = 10;
 	private final Map<String, User> newContacts = new HashMap<>();
 	@SpringBean
 	private UserDao userDao;

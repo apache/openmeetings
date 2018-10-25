@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICAT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHAT_SEND_ON_ENTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
@@ -40,14 +41,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_MIC_RATE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE_PROXY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
@@ -59,6 +52,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_ECHO;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_NOISE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_BITRATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_VIDEO_PRESET;
@@ -138,7 +134,7 @@ public class ImportInitvalues {
 	private static final String VER_3_0 = "3.0.x";
 	private static final String VER_3_0_3 = "3.0.3";
 	private static final String VER_3_3_0 = "3.3.0";
-	private static final String VER_4_0_0 = "4.0.0";
+	private static final String VER_5_0_0 = "5.0.0";
 	private static final String CLIENT_PLACEHOLDER = "<put your client_id>";
 	private static final String SECRET_PLACEHOLDER = "<put your client_secret>";
 	private static final String EMAIL_PARAM = "email";
@@ -189,7 +185,7 @@ public class ImportInitvalues {
 				"This Class is used for Authentification-Crypting. "
 						+ "Be carefull what you do here! If you change it while "
 						+ "running previous Pass of users will not be workign anymore! "
-						+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html"
+						+ "for more Information see https://openmeetings.apache.org/CustomCryptMechanism.html"
 				, VER_1_9);
 
 		addCfg(list, CONFIG_REGISTER_FRONTEND, String.valueOf(cfg.isAllowFrontendRegister()), Configuration.Type.bool
@@ -327,14 +323,6 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_REDIRECT_URL_FOR_EXTERNAL, "", Configuration.Type.string,
 				"Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost", VER_3_0);
 		addCfg(list, CONFIG_GOOGLE_ANALYTICS_CODE, null, Configuration.Type.string, "Code for Google Analytics", "3.1.0");
-		addCfg(list, CONFIG_FLASH_SECURE, String.valueOf(false), Configuration.Type.bool, "Wether it should try to connect to rtmps first or not", VER_4_0_0);
-		addCfg(list, CONFIG_FLASH_SECURE_PROXY, "none", Configuration.Type.string, "The setting for the NetConnection default settings is 'none'\n set to value 'best' if you are trying to use rtmp over native SSL", VER_4_0_0);
-		addCfg(list, CONFIG_FLASH_VIDEO_CODEC, "h263", Configuration.Type.string, "Camera codecType, possible values: 'h263', 'h264'", VER_4_0_0);
-		addCfg(list, CONFIG_FLASH_VIDEO_FPS, "30", Configuration.Type.number, "Camera FPS, should be positive number in range (0, 60]", VER_4_0_0);
-		addCfg(list, CONFIG_FLASH_VIDEO_BANDWIDTH, "0", Configuration.Type.number, "An integer that specifies the maximum amount of bandwidth that the current outgoing video feed can use, in bytes per second. To specify that Flash video can use as much bandwidth as needed to maintain the value of frameQuality, pass 0 for bandwidth.", VER_4_0_0);
-		addCfg(list, CONFIG_FLASH_CAM_QUALITY, "90", Configuration.Type.number, "An integer that specifies the required level of picture quality, as determined by the amount of compression being applied to each video frame. Acceptable values range from 1 (lowest quality, maximum compression) to 100 (highest quality, no compression). To specify that picture quality can vary as needed to avoid exceeding bandwidth, pass 0 for quality.", VER_4_0_0);
-		addCfg(list, CONFIG_FLASH_MIC_RATE, "22", Configuration.Type.number, "The rate at which the microphone should capture sound, in kHz. Acceptable values are 5, 8, 11, 22, and 44. The default value is 22 kHz if your sound capture device supports this value.", VER_4_0_0);
-		addCfg(list, CONFIG_FLASH_ECHO_PATH, "128", Configuration.Type.number, "Specifies the echo path length (in milliseconds). A longer echo path means better echo cancellation but also introduces longer delays and requires more processing power. The default value is 128; the only other possible value is 256. To disable AEC please specify 0.", VER_4_0_0);
 		addCfg(list, CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN, Configuration.Type.string, "Value for 'X-Frame-Options' header (default: DENY), more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options", VER_3_3_0);
 		addCfg(list, CONFIG_HEADER_CSP, HEADER_CSP_SELF, Configuration.Type.string, String.format("Value for 'Content-Security-Policy' header (default: %s), have to be modified to enable Google analytics site: https://content-security-policy.com/", HEADER_CSP_SELF), VER_3_3_0);
 		addCfg(list, CONFIG_EXT_PROCESS_TTL, String.valueOf(getExtProcessTtl()), Configuration.Type.number, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", getExtProcessTtl()), VER_3_3_0);
@@ -352,6 +340,10 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_MP4_VIDEO_PRESET, "medium", Configuration.Type.bool,
 				"Preset (encoder optimization settings) to be used while performing mp4 conversion."
 				+ "Valid values are: ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow", "4.0.5");
+		addCfg(list, CONFIG_CAM_FPS, "30", Configuration.Type.number, "Camera FPS, should be positive number in range (0, 60]", VER_5_0_0);
+		addCfg(list, CONFIG_MIC_RATE, "22", Configuration.Type.number, "The rate at which the microphone should capture sound, in kHz. The default value is 22 kHz.", VER_5_0_0);
+		addCfg(list, CONFIG_MIC_ECHO, String.valueOf(true), Configuration.Type.bool, "Whether or not echo cancellation is preferred and/or required.", VER_5_0_0);
+		addCfg(list, CONFIG_MIC_NOISE, String.valueOf(true), Configuration.Type.bool, "Whether noise suppression is preferred and/or required.", VER_5_0_0);
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {

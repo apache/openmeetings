@@ -68,43 +68,44 @@
 			</p>
 		</section>
 		<section name="News">
-			<div class="bs-callout bs-callout-danger">
-				<b>Version 4.0.5 released!</b>
-				<div>Release 4.0.5, provides following improvements:<br/>
-					Room:<br/>
+			<div class="bd-callout bd-callout-danger">
+				<h4>Version 4.0.6 released!</h4>
+				<div>Release 4.0.6, provides following improvements:<br/>
 					<ul>
-						<li>Interview room is improved: re-designed, multiple video windows are supported</li>
-						<li>Multiple improvements in Admin</li>
-						<li>File tree is improved</li>
-						<li>Multiple improvements in white boards</li>
+						<li>Multiple issues with device list retrieval in Settings dialog</li>
+						<li>Web services were improved</li>
+						<li>Multiple issues with room recording</li>
+						<li>Frontend self registering</li>
 					</ul>
 					<br/>
 					Other fixes and improvements
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 
 				<span>
-					24 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.4/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343344">Detailed list</a>
+					16 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.6/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343986">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2018-09-04)</span>
+				<span class="date">(2018-10-18)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
+			<div class="bd-callout bd-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
 			</div>
 		</section>
 
 		<section name="Community">
-			<div class="bs-callout bs-callout-info">
-				<b>Who we are</b>
-				<span><a href="team-list.html">List of committers</a>.</span>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Who we are</div>
+				<div>
+					<a href="team.html">Here</a> is the list of our commiters. Contributions are welcome :)
+				</div>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Users!</b>
-				<span>We'd love to have you involved. Check out the <a href="get-involved.html">Get involved</a>.</span>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Users!</div>
+				<div>We'd love to have you involved. Check out the <a href="get-involved.html">Get involved</a>.</div>
 			</div>
 		</section>
 

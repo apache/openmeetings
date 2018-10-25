@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static java.util.UUID.randomUUID;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
 import static org.apache.openmeetings.AbstractJUnitDefaults.ensureSchema;
@@ -37,7 +38,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
@@ -113,7 +113,7 @@ public class AbstractWebServiceTest {
 		connector.setPort(0);
 		tomcat.getService().addConnector(connector);
 		tomcat.setConnector(connector);
-		File wd = Files.createTempDirectory("om" + UUID.randomUUID().toString()).toFile();
+		File wd = Files.createTempDirectory("om" + randomUUID().toString()).toFile();
 		tomcat.setBaseDir(wd.getCanonicalPath());
 		tomcat.getHost().setAppBase(wd.getCanonicalPath());
 		tomcat.getHost().setAutoDeploy(false);
@@ -187,7 +187,7 @@ public class AbstractWebServiceTest {
 		try (InputStream is = new FileInputStream(fsFile)) {
 			FileItemDTO file = new FileItemDTO()
 					.setName(name)
-					.setHash(UUID.randomUUID().toString())
+					.setHash(randomUUID().toString())
 					.setType(type);
 			List<Attachment> atts = new ArrayList<>();
 			atts.add(new Attachment("file", MediaType.APPLICATION_JSON, file));

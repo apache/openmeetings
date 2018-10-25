@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
@@ -46,14 +47,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboard.ZoomMode;
@@ -85,6 +84,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -550,7 +550,7 @@ public class WbPanel extends AbstractWbPanel {
 	public void sendFileToWb(final BaseFileItem fi, boolean clean) {
 		if (isVisible() && fi.getId() != null) {
 			Whiteboards wbs = wbm.get(roomId);
-			String wuid = UUID.randomUUID().toString();
+			String wuid = randomUUID().toString();
 			Whiteboard wb = wbs.get(wbs.getActiveWb());
 			if (wb == null) {
 				return;
@@ -662,7 +662,7 @@ public class WbPanel extends AbstractWbPanel {
 		FileItem f = new FileItem();
 		f.setType(BaseFileItem.Type.WmlFile);
 		f.setRoomId(roomId);
-		f.setHash(UUID.randomUUID().toString());
+		f.setHash(randomUUID().toString());
 		f.setName(name);
 		f = fileDao.update(f);
 		return wb.save(f.getFile().toPath());

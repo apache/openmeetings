@@ -26,9 +26,11 @@ import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -57,6 +59,7 @@ import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
+import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
 public class RoomMenuPanel extends Panel {
@@ -98,6 +101,8 @@ public class RoomMenuPanel extends Panel {
 	private ClientManager cm;
 	@SpringBean
 	private ConfigurationDao cfgDao;
+	@SpringBean
+	private KurentoHandler kHandler;
 
 	public RoomMenuPanel(String id, final RoomPanel room) {
 		super(id);
@@ -108,8 +113,7 @@ public class RoomMenuPanel extends Panel {
 		add((roomName = new Label("roomName", r.getName())).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		String tag = getGroup().getTag();
 		add(logo, new Label("tag", tag).setVisible(!Strings.isEmpty(tag)));
-		add((shareBtn = new StartSharingButton("share", room.getUid()))
-				.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
+		add(shareBtn = new StartSharingButton("share"));
 		pollsSubMenu = new PollsSubMenu(room, this);
 		actionsSubMenu = new ActionsSubMenu(room, this, shareBtn);
 	}
@@ -204,20 +208,11 @@ public class RoomMenuPanel extends Panel {
 		menuPanel.update(handler);
 		StringBuilder roomClass = new StringBuilder("room name");
 		StringBuilder roomTitle = new StringBuilder();
-		if (room.getRecordingUser() != null) {
-			Client recClient = cm.getBySid(room.getRecordingUser());
-			if (recClient != null) {
+		if (kHandler.isRecording(r.getId())) {
+			JSONObject ru = kHandler.getRecordingUser(r.getId());
+			if (!Strings.isEmpty(ru.optString("login"))) {
 				roomTitle.append(String.format("%s %s %s %s %s", getString("419")
-						, recClient.getUser().getLogin(), recClient.getUser().getFirstname(), recClient.getUser().getLastname(), df.format(recClient.getConnectedSince())));
-				roomClass.append(" screen");
-			}
-			Client pubClient = cm.getBySid(room.getPublishingUser());
-			if (pubClient != null) {
-				if (recClient != null) {
-					roomTitle.append('\n');
-				}
-				roomTitle.append(String.format("%s %s %s %s %s", getString("1504")
-						, pubClient.getUser().getLogin(), pubClient.getUser().getFirstname(), pubClient.getUser().getLastname(), "URL"));
+						, ru.getString("login"), ru.getString("firstName"), ru.getString("lastName"), df.format(new Date(ru.getLong("started")))));
 				roomClass.append(" screen");
 			}
 		}

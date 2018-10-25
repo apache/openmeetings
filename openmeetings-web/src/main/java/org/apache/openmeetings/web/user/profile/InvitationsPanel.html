@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<div class="adminPanelColumnTable">
+		<span wicket:id="navigator">[dataview navigator]</span>
+		<table class="adminListTable">
+			<thead>
+				<tr>
+					<th class="three_column_layout_column1 ui-widget-header"><span wicket:id="orderById"></span><wicket:message key="188" /></th>
+					<th class="three_column_layout_column2 ui-widget-header"><span wicket:id="orderByValid"></span><wicket:message key="526" /></th>
+					<th class="three_column_layout_column3 ui-widget-header"><span wicket:id="orderByInvitee"></span><wicket:message key="216" /></th>
+				</tr>
+			</thead>
+		</table>
+		<div class="tableWrapper" id="adminTable">
+			<table class="adminListTable">
+				<tbody wicket:id="list">
+					<tr wicket:id="invitations">
+						<td class="three_column_layout_column1"><div class="three_column_layout_divcolumn1"><span wicket:id="id"></span></div></td>
+						<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="valid"></span></div></td>
+						<td class="three_column_layout_column3"><div class="three_column_layout_divcolumn3"><span wicket:id="invitee"></span></div></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="adminPanelColumnForm">
+		<form wicket:id="form" class="adminForm">
+			<div class="formSaveBar ui-widget-header">
+				<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="ajax-cancel-button" wicket:message="title:157">
+					<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+				</div>
+			</div>
+			<div class="scrollcontent" id="adminForm">
+				<fieldset class="ui-widget-content">
+					<legend class="ui-widget-header"><wicket:message key="profile.invitation" /></legend>
+					<div class="formelement">
+						<label><wicket:message key="188" /></label><span class="input" wicket:id="id"></span>
+						<label><wicket:message key="526" /></label><span class="input" wicket:id="valid"></span>
+						<label><wicket:message key="216" /></label><span class="input" wicket:id="invitee"></span>
+						<label><wicket:message key="530" /></label><span class="input" wicket:id="validFrom"></span>
+						<label><wicket:message key="531" /></label><span class="input" wicket:id="validTo"></span>
+					</div>
+				</fieldset>
+			</div>
+		</form>
+	</div>
+</wicket:panel>
+</html>

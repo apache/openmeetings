@@ -33,11 +33,13 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -56,7 +58,6 @@ import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.QuickPollManager;
-import org.apache.openmeetings.web.app.StreamClientManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.pages.BasePage;
@@ -92,6 +93,7 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -133,6 +135,7 @@ public class RoomPanel extends BasePanel {
 					.put("uid", _c.getUid())
 					.put("rights", _c.toJson(true).getJSONArray("rights"))
 					.put("interview", interview)
+					.put("audioOnly", r.isAudioOnly())
 					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus))
 					.put("exclusiveTitle", getString("1386"));
 			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
@@ -162,16 +165,17 @@ public class RoomPanel extends BasePanel {
 
 		private void initVideos(AjaxRequestTarget target) {
 			StringBuilder sb = new StringBuilder();
-			boolean hasStreams = false;
 			Client _c = getClient();
+			JSONArray streams = new JSONArray();
 			for (Client c: cm.listByRoom(getRoom().getId())) {
-				for (String uid : c.getStreams()) {
-					JSONObject jo = videoJson(c, c.getSid(), uid);
-					sb.append(String.format("VideoManager.play(%s);", jo));
-					hasStreams = true;
+				for (StreamDesc sd : c.getStreams()) {
+					streams.put(sd.toJson());
+				}
+				if (streams.length() > 0) {
+					sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers()).append(");");
 				}
 			}
-			if (interview && recordingUser == null && hasStreams && _c.hasRight(Right.moderator)) {
+			if (interview && !kHandler.isRecording(r.getId()) && streams.length() > 0 && _c.hasRight(Right.moderator)) {
 				sb.append("WbArea.setRecEnabled(true);");
 			}
 			if (!Strings.isEmpty(sb)) {
@@ -185,8 +189,6 @@ public class RoomPanel extends BasePanel {
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
 	private final AbstractWbPanel wb;
-	private String sharingUser = null;
-	private String recordingUser = null;
 	private byte[] pdfWb;
 	private final AjaxDownloadBehavior download = new AjaxDownloadBehavior(new ResourceStreamResource() {
 		private static final long serialVersionUID = 1L;
@@ -226,8 +228,6 @@ public class RoomPanel extends BasePanel {
 	@SpringBean
 	private ClientManager cm;
 	@SpringBean
-	private StreamClientManager scm;
-	@SpringBean
 	private ConferenceLogDao confLogDao;
 	@SpringBean
 	private UserDao userDao;
@@ -235,6 +235,8 @@ public class RoomPanel extends BasePanel {
 	private AppointmentDao apptDao;
 	@SpringBean
 	private QuickPollManager qpollManager;
+	@SpringBean
+	private KurentoHandler kHandler;
 
 	public RoomPanel(String id, Room r) {
 		super(id);
@@ -419,62 +421,12 @@ public class RoomPanel extends BasePanel {
 					case pollUpdated:
 						menu.updatePoll(handler, null);
 						break;
-					case recordingStoped:
-						{
-							String uid = ((TextRoomMessage)m).getText();
-							Client c = cm.getBySid(uid);
-							if (c == null) {
-								log.error("Not existing/BAD user has stopped recording {} != {} !!!!", uid);
-								return;
-							}
-							recordingUser = null;
-							cm.update(c.remove(Client.Activity.record));
-							menu.update(handler);
-							updateInterviewRecordingButtons(handler);
-						}
+					case recordingToggled:
+						menu.update(handler);
+						updateInterviewRecordingButtons(handler);
 						break;
-					case recordingStarted:
-						{
-							JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-							String sid = obj.getString("sid");
-							Client c = cm.getBySid(sid);
-							if (c == null) {
-								log.error("Not existing user has started recording {} !!!!", sid);
-								return;
-							}
-							recordingUser = sid;
-							cm.update(c.set(Client.Activity.record));
-							menu.update(handler);
-							updateInterviewRecordingButtons(handler);
-						}
-						break;
-					case sharingStoped:
-						{
-							JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-							String uid = obj.getString("uid");
-							Client c = cm.getBySid(obj.getString("sid"));
-							if (c == null) {
-								log.error("Not existing user has started sharing {} !!!!", obj);
-								return;
-							}
-							handler.appendJavaScript(String.format("VideoManager.close('%s', true);", uid));
-							sharingUser = null;
-							cm.update(c.removeStream(uid).remove(Client.Activity.share));
-							menu.update(handler);
-						}
-						break;
-					case sharingStarted:
-						{
-							String uid = ((TextRoomMessage)m).getText();
-							Client c = cm.get(uid);
-							if (c == null) {
-								log.error("Not existing user has started sharing {} !!!!", uid);
-								return;
-							}
-							sharingUser = uid;
-							cm.update(c.set(Client.Activity.share));
-							menu.update(handler);
-						}
+					case sharingToggled:
+						menu.update(handler);
 						break;
 					case rightUpdated:
 						{
@@ -485,53 +437,12 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							boolean self = _c.getUid().equals(c.getUid());
-							handler.appendJavaScript(String.format("VideoManager.update(%s);"
-									, c.streamJson(_c.getSid(), self, scm).toString(new NullStringer())
-									));
+							handler.appendJavaScript(String.format("VideoManager.update(%s);", c.toJson(self)));
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);
 							updateInterviewRecordingButtons(handler);
 						}
-						break;
-					case newStream:
-					{
-						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-						String uid = obj.getString("uid");
-						Client c = cm.get(uid);
-						if (c == null) {
-							// screen client, ext video stream
-							c = cm.getBySid(obj.getString("sid"));
-						}
-						if (c == null) {
-							log.error("Not existing user in newStream {} !!!!", uid);
-							return;
-						}
-						boolean self = _c.getSid().equals(c.getSid());
-						if (!self || Client.Type.room != scm.get(uid).getType()) { // stream from others or self external video
-							JSONObject jo = videoJson(c, _c.getSid(), uid);
-							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
-						}
-						if (self) {
-							cm.update(c.addStream(uid));
-						}
-						updateInterviewRecordingButtons(handler);
-					}
-						break;
-					case closeStream:
-					{
-						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-						String uid = obj.getString("uid");
-						Client c = cm.getBySid(obj.getString("sid"));
-						if (c != null) {
-							//c == null means client exits the room
-							if (_c.getUid().equals(c.getUid())) {
-								cm.update(c.removeStream(uid));
-							}
-						}
-						handler.appendJavaScript(String.format("VideoManager.close('%s');", uid));
-						updateInterviewRecordingButtons(handler);
-					}
 						break;
 					case roomEnter:
 						sidebar.update(handler);
@@ -632,7 +543,9 @@ public class RoomPanel extends BasePanel {
 	private void updateInterviewRecordingButtons(IPartialPageRequestHandler handler) {
 		Client _c = getClient();
 		if (interview && _c.hasRight(Right.moderator)) {
-			if (recordingUser == null) {
+			if (kHandler.isRecording(r.getId())) {
+				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
+			} else {
 				boolean hasStreams = false;
 				for (Client cl : cm.listByRoom(r.getId())) {
 					if (!cl.getStreams().isEmpty()) {
@@ -641,8 +554,6 @@ public class RoomPanel extends BasePanel {
 					}
 				}
 				handler.appendJavaScript(String.format("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(false);WbArea.setRecEnabled(%s);}", hasStreams));
-			} else {
-				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
 			}
 		}
 	}
@@ -783,26 +694,24 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void allowRight(Client client, Right... rights) {
-		cm.update(client.allow(rights));
-		broadcast(client);
+		broadcast(client.allow(rights));
 	}
 
 	public void denyRight(Client client, Right... rights) {
 		for (Right right : rights) {
 			client.deny(right);
 		}
-		if (client.hasActivity(Client.Activity.broadcastA) && !client.hasRight(Right.audio)) {
-			client.remove(Client.Activity.broadcastA);
+		if (client.hasActivity(Client.Activity.AUDIO) && !client.hasRight(Right.audio)) {
+			client.remove(Client.Activity.AUDIO);
 		}
-		if (client.hasActivity(Client.Activity.broadcastV) && !client.hasRight(Right.video)) {
-			client.remove(Client.Activity.broadcastV);
+		if (client.hasActivity(Client.Activity.VIDEO) && !client.hasRight(Right.video)) {
+			client.remove(Client.Activity.VIDEO);
 		}
-		cm.update(client);
 		broadcast(client);
 	}
 
 	public void broadcast(Client client) {
-		RoomBroadcaster.sendUpdatedClient(client);
+		cm.update(client);
 		WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getClient(), RoomMessage.Type.rightUpdated, client.getUid()));
 	}
 
@@ -831,7 +740,7 @@ public class RoomPanel extends BasePanel {
 	public boolean screenShareAllowed() {
 		return !interview && !r.isHidden(RoomElement.ScreenSharing)
 				&& r.isAllowRecording() && getClient().hasRight(Right.share)
-				&& sharingUser == null;
+				&& !kHandler.isSharing(r.getId());
 	}
 
 	public RoomSidebar getSidebar() {
@@ -842,42 +751,11 @@ public class RoomPanel extends BasePanel {
 		return wb;
 	}
 
-	public String getSharingUser() {
-		return sharingUser;
-	}
-
-	public String getRecordingUser() {
-		return recordingUser;
-	}
-
 	public String getPublishingUser() {
 		return null;
 	}
 
 	public boolean isInterview() {
 		return interview;
-	}
-
-	public JSONObject videoJson(Client c, String sid, String uid) {
-		/*
-		TODO streams
-		StreamClient sc = mgr.get(uid);
-		if (sc == null) {
-			return new JSONObject();
-		}
-		*/
-		JSONObject o = c.toJson(getUid().equals(c.getUid()))
-				.put("sid", sid)
-				.put("uid", c.getUid())
-				 /*TODO
-				 .put("uid", sc.getUid())
-				.put("broadcastId", sc.getBroadcastId())
-				.put("width", sc.getWidth())
-				.put("height", sc.getHeight())
-				.put("type", sc.getType());
-		return addScreenActivities(o, sc);
-		*/
-				;
-		return o;
 	}
 }

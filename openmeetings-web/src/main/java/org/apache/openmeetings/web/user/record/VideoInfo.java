@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
+import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.util.time.Duration.NONE;
 
@@ -27,16 +27,17 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.openmeetings.core.converter.IRecordingConverter;
 import org.apache.openmeetings.core.converter.InterviewConverter;
 import org.apache.openmeetings.core.converter.RecordingConverter;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
+import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData;
+import org.apache.openmeetings.db.entity.record.RecordingChunk;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.common.InvitationDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -75,7 +76,7 @@ public class VideoInfo extends Panel {
 			new Thread() {
 				@Override
 				public void run() {
-					converter.startConversion(rm.getObject().getId());
+					converter.startConversion(rm.getObject());
 				}
 			}.start();
 		}
@@ -120,7 +121,7 @@ public class VideoInfo extends Panel {
 	@SpringBean
 	private RoomDao roomDao;
 	@SpringBean
-	private RecordingMetaDataDao metaDao;
+	private RecordingChunkDao chunkDao;
 
 	public VideoInfo(String id) {
 		this(id, null);
@@ -162,13 +163,11 @@ public class VideoInfo extends Panel {
 			}
 
 			if (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()) && r.getStatus() != Status.RECORDING && r.getStatus() != Status.CONVERTING) {
-				List<RecordingMetaData> metas = metaDao.getByRecording(r.getId());
-				for (RecordingMetaData meta : metas) {
-					if (r.getRoomId() == null || !getRecordingMetaData(r.getRoomId(), meta.getStreamName()).exists()) {
-						break;
-					}
-				}
-				reConvEnabled = !metas.isEmpty();
+				List<RecordingChunk> chunks = chunkDao.getByRecording(r.getId())
+						.stream()
+						.filter(chunk -> r.getRoomId() == null || !getRecordingChunk(r.getRoomId(), chunk.getStreamName()).exists())
+						.collect(Collectors.toList());
+				reConvEnabled = !chunks.isEmpty();
 			}
 		}
 		reConvert.setEnabled(reConvEnabled);

@@ -104,7 +104,7 @@ public class NetTestWebService {
 			return;
 		}
 		byte[] b = new byte[1024];
-		int totalCount = 0, count = 0;
+		int totalCount = 0, count;
 		while ((count = stream.read(b)) > -1) {
 			totalCount += count;
 		};

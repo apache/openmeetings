@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.file;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
 import static org.apache.openmeetings.util.OmFileHelper.getDefaultProfilePicture;
 import static org.junit.Assert.assertEquals;
@@ -25,7 +26,6 @@ import static org.junit.Assert.assertFalse;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.UUID;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.core.data.file.FileProcessor;
@@ -47,7 +47,7 @@ public class TestFileProcessor extends AbstractJUnitDefaults {
 		for (String ext : new String[] {null, "txt", "jpg"}) {
 			FileItem f = new FileItemDTO()
 					.setName(String.format(FILE_NAME_FMT, FILE_NAME, ext))
-					.setHash(UUID.randomUUID().toString())
+					.setHash(randomUUID().toString())
 					.setType(BaseFileItem.Type.Recording).get();
 			try (InputStream is = new FileInputStream(getDefaultProfilePicture())) {
 				ProcessResultList result = processor.processFile(f, is);

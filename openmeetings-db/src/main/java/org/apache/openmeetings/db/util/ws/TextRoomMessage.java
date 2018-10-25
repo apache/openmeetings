@@ -18,14 +18,14 @@
  */
 package org.apache.openmeetings.db.util.ws;
 
-import org.apache.openmeetings.db.entity.basic.IClient;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.user.User;
 
 public class TextRoomMessage extends RoomMessage {
 	private static final long serialVersionUID = 1L;
 	private final String text;
 
-	public TextRoomMessage(Long roomId, IClient client, Type type, String text) {
+	public TextRoomMessage(Long roomId, Client client, Type type, String text) {
 		super(roomId, client, type);
 		this.text = text;
 	}

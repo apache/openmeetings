@@ -49,6 +49,8 @@ public class VideoSettings extends Panel {
 
 	public static JSONObject getInitJson(String sid) {
 		return new JSONObject(getRoomSettings().toString())
+				.put("interview", false)
+				.put("audioOnly", false)
 				.put("sid", sid);
 	}
 }

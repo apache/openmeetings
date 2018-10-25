@@ -21,6 +21,7 @@ package org.apache.openmeetings.webservice;
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterSoap;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAME;
@@ -58,7 +59,6 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.wicket.util.string.Strings;
@@ -89,8 +89,6 @@ public class UserWebService extends BaseWebService {
 
 	@Autowired
 	private IUserManager userManager;
-	@Autowired
-	private IClientManager clientManager;
 	@Autowired
 	private SOAPLoginDao soapDao;
 	@Autowired
@@ -162,6 +160,9 @@ public class UserWebService extends BaseWebService {
 			)
 	{
 		return performCall(sid, User.Right.Soap, sd -> {
+			if (!isAllowRegisterSoap()) {
+				throw new ServiceException("Soap register is denied in Settings");
+			}
 			User testUser = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
 
 			if (testUser != null) {
@@ -301,6 +302,9 @@ public class UserWebService extends BaseWebService {
 			)
 	{
 		return performCall(sid, User.Right.Soap, sd -> {
+			if (Strings.isEmpty(user.getExternalId()) || Strings.isEmpty(user.getExternalType())) {
+				return new ServiceResult("externalId and/or externalType are not set", Type.ERROR);
+			}
 			RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 					user.getLogin(), user.getFirstname(), user.getLastname()
 					, user.getProfilePictureUrl(), user.getEmail()
@@ -310,7 +314,7 @@ public class UserWebService extends BaseWebService {
 
 			String xmlString = remoteSessionObject.toXml();
 
-			log.debug("xmlString " + xmlString);
+			log.debug("xmlString {}", xmlString);
 
 			String hash = soapDao.addSOAPLogin(sid, options.getRoomId(),
 					options.isModerator(), options.isShowAudioVideoTest(), options.isAllowSameURLMultipleTimes(),
@@ -323,44 +327,10 @@ public class UserWebService extends BaseWebService {
 					sd.setPermanent(true);
 				}
 				sd.setXml(xmlString);
-				sessionDao.update(sd);
+				sd = sessionDao.update(sd);
 				return new ServiceResult(hash, Type.SUCCESS);
 			}
 			return UNKNOWN;
 		});
-	}
-
-	/**
-	 * Kick a user by its public SID
-	 *
-	 * @param sid
-	 *            The SID from getSession
-	 * @param uid the uid of the client
-	 * @return - <code>true</code> if user was kicked
-	 */
-	@WebMethod
-	@POST
-	@Path("/kick/{uid}")
-	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="uid") @PathParam("uid") String uid) {
-		return performCall(sid, User.Right.Soap, sd -> {
-			boolean success = userManager.kickById(uid);
-
-			return new ServiceResult(Boolean.TRUE.equals(success) ? "kicked" : "not kicked", Type.SUCCESS);
-		});
-	}
-
-	/**
-	 * Returns the count of users currently in the Room with given id
-	 * No admin rights are necessary for this call
-	 *
-	 * @param sid The SID from UserService.getSession
-	 * @param roomId id of the room to get users
-	 * @return number of users as int
-	 */
-	@WebMethod
-	@GET
-	@Path("/count/{roomid}")
-	public ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
-		return performCall(sid, User.Right.Soap, sd -> new ServiceResult(String.valueOf(clientManager.listByRoom(roomId).size()), Type.SUCCESS));
 	}
 }

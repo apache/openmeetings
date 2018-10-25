@@ -34,7 +34,7 @@
 				This page is designed to test all proposed logo and choose the best one
 			</p>
 			<p>
-				Please send your logos and opinions to <a href="mail-lists.html">user@ mail list</a> (you need to subscribe first)<br/>
+				Please send your logos and opinions to <a href="mailing-lists.html">user@ mail list</a> (you need to subscribe first)<br/>
 				Thanks in advance :)
 			</p>
 		</section>
@@ -47,7 +47,7 @@
 			//<![CDATA[
 				function applyLogoBig(e) {
 					var ib = e.closest('table').find('.logo-big');
-					var bi = $('#bannerLeft img');
+					var bi = $('.bannerLeft img');
 					bi.attr('src', ib.attr('src'));
 					$('.subhead')[0].scrollIntoView()
 				}

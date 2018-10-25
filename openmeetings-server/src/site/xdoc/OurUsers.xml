@@ -23,7 +23,7 @@
 
 	<body>
 		<section name="List companies/institutions using OpenMeetings">
-			<p>If you also want to get listed, please write to <a href="mail-lists.html">user@/dev@ mailing list</a> (you need to subscribe first)<br/>
+			<p>If you also want to get listed, please write to <a href="mailing-lists.html">user@/dev@ mailing list</a> (you need to subscribe first)<br/>
 			 with subject "Add entry in 'Our Users' list". <br/>
 			 And following information in the body: company/institution|city|country|type.'</p>
 			<table>

@@ -282,19 +282,30 @@ ul.settings-menu {
 	min-width: 300px;
 	padding-left: 305px;
 }
-.ui-dialog.video .level-meter {
+#video-settings .level-meter {
 	height: 16px;
 }
 .ui-dialog.video .warn {
 	float: right;
 	margin-right: .3em;
 }
-.ui-dialog.video .level-meter .ui-progressbar-value {
+.level-meter.k-progressbar .k-state-selected {
 	background: greenyellow;
+	border-color: #d5d5d5;
+}
+.ui-dialog.video .level-meter {
+	background: transparent;
+}
+.ui-dialog.user-video .level-meter {
+	display: inline-block;
+	width: 10px;
+	position: absolute;
+	bottom: 5px;
+	left: 5px;
 }
 .ui-dialog.video .sett-container {
 	position: relative;
-	min-height: 200px;
+	min-height: 250px;
 }
 .ui-dialog.video .sett-row {
 	padding-top: 10px;
@@ -311,7 +322,7 @@ ul.settings-menu {
 	float: left;
 	padding: 2px 4px;
 }
-.ui-dialog.video .sett-row select, .ui-dialog.video .level-meter {
+.ui-dialog.video .sett-row select, #video-settings .level-meter {
 	width: 250px;
 }
 .ui-dialog.video .ui-dialog-titlebar-collapse span
@@ -419,6 +430,12 @@ ul.settings-menu {
 	min-width: 40px;
 	min-height: 30px;
 	overflow: hidden;
+	position: relative;
+}
+.room.box .user-video .video.audio-only {
+	background-repeat: no-repeat;
+	background-size: auto 100%;
+	background-position: center;
 }
 .pod-area {
 	display: inline-grid;

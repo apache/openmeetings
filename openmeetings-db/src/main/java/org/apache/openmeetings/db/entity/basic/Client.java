@@ -18,42 +18,48 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
+import static java.util.UUID.randomUUID;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
-import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.mina.util.ConcurrentHashSet;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.manager.IStreamClientManager;
-import org.apache.openmeetings.db.util.RoomHelper;
+import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 /**
- * Temporary class, later will be merged with {@link org.apache.openmeetings.db.entity.room.StreamClient}
  * @author solomax
  *
  */
-public class Client implements IClient, IWsClient {
+public class Client implements IDataProviderEntity, IWsClient {
 	private static final long serialVersionUID = 1L;
 
 	public enum Activity {
-		broadcastA //sends Audio to the room
-		, broadcastV //sends Video to the room
-		, broadcastAV //sends Audio+Video to the room
-		, share
-		, record
-		, publish //sends A/V to external server
+		AUDIO //sends Audio to the room
+		, VIDEO //sends Video to the room
+		, AUDIO_VIDEO //sends Audio+Video to the room
+		, SCREEN //screen is shared
+		, RECORD //record in non-interview room
+	}
+	public enum StreamType {
+		WEBCAM //sends Audio/Video to the room
+		, SCREEN //send screen sharing
 	}
 	private final String sessionId;
 	private final int pageId;
@@ -64,32 +70,21 @@ public class Client implements IClient, IWsClient {
 	private String remoteAddress;
 	private final Set<Right> rights = new ConcurrentHashSet<>();
 	private final Set<Activity> activities = new ConcurrentHashSet<>();
-	private final Set<String> streams = new ConcurrentHashSet<>();
+	private final Map<String, StreamDesc> streams = new ConcurrentHashMap<>();
 	private final Date connectedSince;
 	private int cam = -1;
 	private int mic = -1;
 	private int width = 0;
 	private int height = 0;
 	private String serverId = null;
-	private Long recordingId;
 
 	public Client(String sessionId, int pageId, Long userId, UserDao dao) {
 		this.sessionId = sessionId;
 		this.pageId = pageId;
 		this.user = dao.get(userId);
 		this.connectedSince = new Date();
-		uid = UUID.randomUUID().toString();
-		sid = UUID.randomUUID().toString();
-	}
-
-	public Client(StreamClient rcl, User user) {
-		this.sessionId = UUID.randomUUID().toString();
-		this.pageId = 0;
-		this.user = user;
-		this.connectedSince = new Date();
-		uid = rcl.getUid();
-		sid = rcl.getSid();
-		this.remoteAddress = rcl.getRemoteAddress();
+		uid = randomUUID().toString();
+		sid = randomUUID().toString();
 	}
 
 	@Override
@@ -111,24 +106,8 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	@Override
 	public Long getUserId() {
 		return user.getId();
-	}
-
-	@Override
-	public String getLogin() {
-		return user.getLogin();
-	}
-
-	@Override
-	public String getFirstname() {
-		return user.getFirstname();
-	}
-
-	@Override
-	public String getLastname() {
-		return user.getLastname();
 	}
 
 	@Override
@@ -136,7 +115,6 @@ public class Client implements IClient, IWsClient {
 		return uid;
 	}
 
-	@Override
 	public String getSid() {
 		return sid;
 	}
@@ -191,26 +169,27 @@ public class Client implements IClient, IWsClient {
 		return activities.contains(a);
 	}
 
-	public void toggle(Activity a) {
+	public Client toggle(Activity a) {
 		if (hasActivity(a)) {
 			remove(a);
 		} else {
 			set(a);
 		}
+		return this;
 	}
 
 	public Client set(Activity a) {
 		activities.add(a);
 		switch (a) {
-			case broadcastV:
-			case broadcastA:
-				if (hasActivity(Activity.broadcastA) && hasActivity(Activity.broadcastV)) {
-					activities.add(Activity.broadcastAV);
+			case VIDEO:
+			case AUDIO:
+				if (hasActivity(Activity.AUDIO) && hasActivity(Activity.VIDEO)) {
+					activities.add(Activity.AUDIO_VIDEO);
 				}
 				break;
-			case broadcastAV:
-				activities.add(Activity.broadcastA);
-				activities.add(Activity.broadcastV);
+			case AUDIO_VIDEO:
+				activities.add(Activity.AUDIO);
+				activities.add(Activity.VIDEO);
 				break;
 			default:
 		}
@@ -220,22 +199,23 @@ public class Client implements IClient, IWsClient {
 	public Client remove(Activity a) {
 		activities.remove(a);
 		switch (a) {
-			case broadcastV:
-			case broadcastA:
-				activities.remove(Activity.broadcastAV);
+			case VIDEO:
+			case AUDIO:
+				activities.remove(Activity.AUDIO_VIDEO);
 				break;
-			case broadcastAV:
-				activities.remove(Activity.broadcastA);
-				activities.remove(Activity.broadcastV);
+			case AUDIO_VIDEO:
+				activities.remove(Activity.AUDIO);
+				activities.remove(Activity.VIDEO);
 				break;
 			default:
 		}
 		return this;
 	}
 
-	public Client addStream(String _uid) {
-		streams.add(_uid);
-		return this;
+	public StreamDesc addStream(StreamType stype) {
+		StreamDesc sd = new StreamDesc(stype);
+		streams.put(sd.getUid(), sd);
+		return sd;
 	}
 
 	public Client removeStream(String _uid) {
@@ -243,8 +223,12 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	public List<String> getStreams() {
-		return new ArrayList<>(streams);
+	public List<StreamDesc> getStreams() {
+		return new ArrayList<>(streams.values());
+	}
+
+	public StreamDesc getStream(String _uid) {
+		return streams.get(_uid);
 	}
 
 	public Date getConnectedSince() {
@@ -296,7 +280,6 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	@Override
 	public int getWidth() {
 		return width;
 	}
@@ -306,7 +289,6 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	@Override
 	public int getHeight() {
 		return height;
 	}
@@ -316,7 +298,6 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	@Override
 	public String getRemoteAddress() {
 		return remoteAddress;
 	}
@@ -326,7 +307,6 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	@Override
 	public String getServerId() {
 		return serverId;
 	}
@@ -335,33 +315,8 @@ public class Client implements IClient, IWsClient {
 		this.serverId = serverId;
 	}
 
-	@Override
-	public void setRecordingStarted(boolean recordingStarted) {
-		if (recordingStarted) {
-			activities.add(Activity.record);
-		} else {
-			activities.remove(Activity.record);
-		}
-	}
-
-	@Override
-	public Long getRecordingId() {
-		return recordingId;
-	}
-
-	@Override
-	public void setRecordingId(Long recordingId) {
-		this.recordingId = recordingId;
-	}
-
-	@Override
 	public Long getRoomId() {
 		return room == null ? null : room.getId();
-	}
-
-	@Override
-	public Room.Type getRoomType() {
-		return room == null ? null : room.getType();
 	}
 
 	public JSONObject toJson(boolean self) {
@@ -379,12 +334,17 @@ public class Client implements IClient, IWsClient {
 				a.put("country", user.getAddress().getCountry());
 			}
 		}
+		JSONArray streamArr = new JSONArray();
+		for (Entry<String, StreamDesc> e : streams.entrySet()) {
+			streamArr.put(e.getValue().toJson());
+		}
 		JSONObject json = new JSONObject()
 				.put("user", u)
 				.put("cuid", uid)
 				.put("uid", uid)
 				.put("rights", new JSONArray(rights))
 				.put("activities", new JSONArray(activities))
+				.put("streams", streamArr)
 				.put("width", width)
 				.put("height", height)
 				.put("self", self);
@@ -392,43 +352,6 @@ public class Client implements IClient, IWsClient {
 			json.put("cam", cam).put("mic", mic);
 		}
 		return json;
-	}
-
-	public JSONObject streamJson(String _sid, boolean self, IStreamClientManager mgr) {
-		JSONArray _streams = new JSONArray();
-		boolean avFound = false;
-		for (String _uid : streams) {
-			StreamClient rc = mgr.get(_uid);
-			if (rc == null) {
-				continue;
-			}
-			Type t = rc.getType();
-			if (Type.room == t) {
-				avFound = true;
-			}
-			_streams.put(RoomHelper.addScreenActivities(
-					new JSONObject()
-						.put("type", t.name())
-						// stream `uid` is unknown at the time of self stream creation
-						// so we will replace stream `uid` with client `uid` for self
-						.put("uid", self && Type.room == t ? uid : rc.getUid())
-						.put("broadcastId", rc.getBroadcastId())
-						.put("width", rc.getWidth())
-						.put("height", rc.getHeight())
-					, rc
-				));
-		}
-		if (self && !avFound && hasAnyActivity(Activity.broadcastA, Activity.broadcastV)) {
-			_streams.put(new JSONObject()
-					.put("type", Type.room.name())
-					// stream `uid` is unknown at the time of self stream creation
-					// so we will replace stream `uid` with client `uid` for self
-					.put("uid", uid)
-					.put("width", width)
-					.put("height", height)
-					);
-		}
-		return toJson(self).put("sid", _sid).put("streams", _streams);
 	}
 
 	public void merge(Client c) {
@@ -444,16 +367,17 @@ public class Client implements IClient, IWsClient {
 			activities.clear();
 			activities.addAll(aa);
 		}
-		Set<String> ss = new HashSet<>(c.streams);
+		Map<String, StreamDesc> ss = new HashMap<>(c.streams);
 		synchronized (streams) {
 			streams.clear();
-			streams.addAll(ss);
+			for (Entry<String, StreamDesc> e : ss.entrySet()) {
+				streams.put(e.getKey(), new StreamDesc(e.getValue()));
+			}
 		}
 		cam = c.cam;
 		mic = c.mic;
 		width = c.width;
 		height = c.height;
-		recordingId = c.recordingId;
 	}
 
 	@Override
@@ -489,6 +413,111 @@ public class Client implements IClient, IWsClient {
 	@Override
 	public String toString() {
 		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + user.getId() + ", room=" + (room == null ? null : room.getId())
-				+ ", rights=" + rights + ", activities=" + activities + ", connectedSince=" + connectedSince + "]";
+				+ ", rights=" + rights + ", sactivities=" + activities + ", connectedSince=" + connectedSince + "]";
+	}
+
+	public class StreamDesc implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private final Set<Activity> sactivities = new ConcurrentHashSet<>();
+		private final String uuid;
+		private final StreamType type;
+		private int swidth;
+		private int sheight;
+
+		public StreamDesc(StreamDesc sd) {
+			this.uuid = sd.uuid;
+			this.type = sd.type;
+			this.swidth = sd.swidth;
+			this.sheight = sd.sheight;
+			sactivities.addAll(sd.sactivities);
+		}
+
+		public StreamDesc(StreamType type) {
+			this.uuid = randomUUID().toString();
+			this.type = type;
+			setActivities();
+			if (StreamType.WEBCAM == type) {
+				boolean interview = room != null && Room.Type.interview == room.getType();
+				this.swidth = interview ? 320 : width;
+				this.sheight = interview ? 260 : height;
+			}
+			if (StreamType.SCREEN == type) {
+				this.swidth = 800;
+				this.sheight = 600;
+			}
+		}
+
+		public String getSid() {
+			return sid;
+		}
+
+		public String getUid() {
+			return uuid;
+		}
+
+		public StreamType getType() {
+			return type;
+		}
+
+		public int getWidth() {
+			return swidth;
+		}
+
+		public StreamDesc setWidth(int width) {
+			this.swidth = width;
+			return this;
+		}
+
+		public int getHeight() {
+			return sheight;
+		}
+
+		public StreamDesc setHeight(int height) {
+			this.sheight = height;
+			return this;
+		}
+
+		public StreamDesc setActivities() {
+			sactivities.clear();
+			if (StreamType.WEBCAM == type) {
+				if (Client.this.hasActivity(Activity.AUDIO)) {
+					sactivities.add(Activity.AUDIO);
+				}
+				if (Client.this.hasActivity(Activity.VIDEO)) {
+					sactivities.add(Activity.VIDEO);
+				}
+			}
+			if (StreamType.SCREEN == type) {
+				sactivities.add(Activity.SCREEN);
+			}
+			return this;
+		}
+
+		public boolean hasActivity(Activity a) {
+			return sactivities.contains(a);
+		}
+
+		public Client getClient() {
+			return Client.this;
+		}
+
+		private JSONArray getActivities() {
+			return new JSONArray(new ArrayList<>(sactivities));
+		}
+
+		public JSONObject toJson() {
+			return new JSONObject()
+					.put("uid", uuid)
+					.put("type", type.name())
+					.put("width", swidth)
+					.put("height", sheight)
+					.put("activities", getActivities())
+					.put("cuid", uid)
+					.put("user", new JSONObject()
+							.put("id", user.getId())
+							.put("firstName", user.getFirstname())
+							.put("lastName", user.getLastname())
+							);
+		}
 	}
 }

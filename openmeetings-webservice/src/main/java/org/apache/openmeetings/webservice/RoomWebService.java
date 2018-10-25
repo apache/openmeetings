@@ -43,14 +43,16 @@ import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.InvitationDTO;
-import org.apache.openmeetings.db.dto.room.RoomCountDTO;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
+import org.apache.openmeetings.db.dto.user.UserDTO;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
+import org.apache.openmeetings.db.manager.IWhiteboardManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -78,6 +80,8 @@ public class RoomWebService extends BaseWebService {
 	private IUserManager userManager;
 	@Autowired
 	private IClientManager clientManager;
+	@Autowired
+	private IWhiteboardManager wbManager;
 	@Autowired
 	private InvitationDao inviteDao;
 	@Autowired
@@ -297,7 +301,7 @@ public class RoomWebService extends BaseWebService {
 	@WebMethod
 	@GET
 	@Path("/kick/{id}")
-	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
+	public ServiceResult kickAll(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
 		return performCall(sid, User.Right.Soap, sd -> {
 			boolean result = userManager.kickUsersByRoomId(id);
 			return new ServiceResult(result ? "Kicked" : "Not kicked", Type.SUCCESS);
@@ -305,30 +309,65 @@ public class RoomWebService extends BaseWebService {
 	}
 
 	/**
-	 * Returns current users for rooms ids
+	 * kick external user from given room
 	 *
-	 * @param sid - The SID of the User. This SID must be marked as Loggedin
-	 * @param ids - id of the room you need counters for
-	 * @return - current users for rooms ids
+	 * @param sid
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 *            _Admin
+	 * @param id
+	 *            the room id
+	 * @param externalType
+	 *            external type of user to kick
+	 * @param externalId
+	 *            external id of user to kick
+	 *
+	 * @return - true if user was kicked, false otherwise
 	 */
 	@WebMethod
 	@GET
-	@Path("/counters")
-	public List<RoomCountDTO> counters(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @QueryParam("id") List<Long> ids) {
+	@Path("/kick/{id}/{externalType}/{externalId}")
+	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="id") @PathParam("id") long id
+			, @WebParam(name="externalType") @PathParam("externalType") String externalType
+			, @WebParam(name="externalId") @PathParam("externalId") String externalId)
+	{
 		return performCall(sid, User.Right.Soap, sd -> {
-			List<RoomCountDTO> roomBeans = new ArrayList<>();
-			List<Room> rooms = roomDao.get(ids);
+			boolean result = userManager.kickExternal(id, externalType, externalId);
+			return new ServiceResult(result ? "Kicked" : "Not kicked", Type.SUCCESS);
+		});
+	}
 
-			for (Room room : rooms) {
-				RoomCountDTO rCountBean = new RoomCountDTO();
-				rCountBean.setRoomId(room.getId());
-				rCountBean.setRoomName(room.getName());
-				rCountBean.setMaxUser(room.getCapacity());
-				rCountBean.setRoomCount(clientManager.listByRoom(room.getId()).size());
+	/**
+	 * Returns the count of users currently in the Room with given id
+	 *
+	 * @param sid The SID from UserService.getSession
+	 * @param roomId id of the room to get users
+	 * @return number of users as int
+	 */
+	@WebMethod
+	@GET
+	@Path("/count/{roomid}")
+	public ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
+		return performCall(sid, User.Right.Soap, sd -> new ServiceResult(String.valueOf(clientManager.listByRoom(roomId).size()), Type.SUCCESS));
+	}
 
-				roomBeans.add(rCountBean);
+	/**
+	 * Returns list of users currently in the Room with given id
+	 *
+	 * @param sid The SID from UserService.getSession
+	 * @param roomId id of the room to get users
+	 * @return {@link List} of users in the room
+	 */
+	@WebMethod
+	@GET
+	@Path("/users/{roomid}")
+	public List<UserDTO> users(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
+		return performCall(sid, User.Right.Soap, sd -> {
+			List<UserDTO> result = new ArrayList<>();
+			for (Client c : clientManager.listByRoom(roomId)) {
+				result.add(new UserDTO(c.getUser()));
 			}
-			return roomBeans;
+			return result;
 		});
 	}
 
@@ -365,6 +404,27 @@ public class RoomWebService extends BaseWebService {
 			} else {
 				return new ServiceResult("error.unknown", Type.ERROR);
 			}
+		});
+	}
+
+	/**
+	 * Method to clean room white board (all objects will be purged)
+	 *
+	 * @param sid - The SID of the User. This SID must be marked as Loggedin
+	 * @param id - id of the room to clean
+	 * @return - serviceResult object with the result
+	 */
+	@WebMethod
+	@GET
+	@Path("/cleanwb/{id}")
+	public ServiceResult cleanWb(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="id") @PathParam("id") long id
+			)
+	{
+		log.debug("[cleanwb] room id {}", id);
+		return performCall(sid, User.Right.Soap, sd -> {
+			wbManager.remove(id);
+			return new ServiceResult("", Type.SUCCESS);
 		});
 	}
 }

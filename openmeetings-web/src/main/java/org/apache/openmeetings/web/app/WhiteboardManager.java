@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
@@ -83,7 +84,26 @@ public class WhiteboardManager implements IWhiteboardManager {
 	}
 
 	public boolean contains(Long roomId) {
-		return map().containsKey(roomId);
+		return onlineWbs.containsKey(roomId);
+	}
+
+	@Override
+	public void remove(Long roomId) {
+		if (roomId == null) {
+			return;
+		}
+		try {
+			if (contains(roomId) && map().tryLock(roomId, 1, TimeUnit.SECONDS)) {
+				try {
+					onlineWbs.remove(roomId);
+					map().delete(roomId);
+				} finally {
+					map().unlock(roomId);
+				}
+			}
+		} catch (InterruptedException e) {
+			log.warn("Unexpected exception while map clean-up", e);
+		}
 	}
 
 	@Override

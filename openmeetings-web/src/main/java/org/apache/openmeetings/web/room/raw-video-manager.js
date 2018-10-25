@@ -3,8 +3,7 @@ var VideoManager = (function() {
 	const self = {};
 	let share, inited = false;
 
-/*FIXME TODO*/
-	function onVideoResponse(m) {
+	function _onVideoResponse(m) {
 		const w = $('#' + VideoUtil.getVid(m.uid))
 			, v = w.data()
 
@@ -14,58 +13,22 @@ var VideoManager = (function() {
 			}
 		});
 	}
-
-	function onBroadcast(msg) {
-		const uid = Room.getOptions().uid;
-		const w = $('#' + VideoUtil.getVid(uid))
-			, v = w.data()
-			, cl = v.client();
-		OmUtil.log(uid + " registered in room");
-
-		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
-			{
-				localVideo: v.video()
-				, mediaConstraints:
-					{ //each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
-						audio : VideoUtil.hasAudio(cl)
-						, video : VideoUtil.hasVideo(cl)
-						/* TODO FIXME {
-							mandatory : {
-								maxWidth : cl.width,
-								maxFrameRate : cl.height,
-								minFrameRate : 15
-							}
-						}*/
-					}
-				, onicecandidate: v.onIceCandidate
-			}
-			, function (error) {
-				if (error) {
-					return OmUtil.error(error);
-				}
-				this.generateOffer(v.offerToReceiveVideo);
-			}));
+	function _onBroadcast(msg) {
+		const sd = msg.stream
+			, uid = sd.uid;
+		$('#' + VideoUtil.getVid(uid)).remove();
+		if (sd.self && VideoUtil.isSharing(sd)) {
+			return;
+		}
+		Video().init(msg);
+		OmUtil.log(uid + ' registered in room');
 	}
-
-	function receiveVideo(uid) {
-		const w = $('#' + VideoUtil.getVid(uid))
-			, v = w.data()
-			, cl = v.client();
-		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
-			{
-				remoteVideo: v.video()
-				, onicecandidate: v.onIceCandidate
-			}
-			, function (error) {
-				if(error) {
-					return OmUtil.error(error);
-				}
-				this.generateOffer(v.offerToReceiveVideo);
-			}
-		));
+	function _onReceive(msg) {
+		const uid = msg.stream.uid;
+		$('#' + VideoUtil.getVid(uid)).remove();
+		Video().init(msg);
+		OmUtil.log(uid + ' receiving video');
 	}
-	/*FIXME TODO*/
-
 	function _onWsMessage(jqEvent, msg) {
 		try {
 			if (msg instanceof Blob) {
@@ -76,13 +39,24 @@ var VideoManager = (function() {
 				return;
 			}
 			if ('kurento' === m.type && 'test' !== m.mode) {
-				OmUtil.info('Received message: ' + m);
+				OmUtil.info('Received message: ' + msg);
 				switch (m.id) {
+					case 'clientLeave':
+						$(VID_SEL + ' div[data-client-uid="' + m.uid + '"]').each(function() {
+							_closeV($(this));
+						});
+						if (share.data('cuid') === m.uid) {
+							share.off('click').hide();
+						}
+						break;
+					case 'broadcastStopped':
+						_closeV($('#' + VideoUtil.getVid(m.uid)));
+						break;
 					case 'broadcast':
-						onBroadcast(m);
+						_onBroadcast(m);
 						break;
 					case 'videoResponse':
-						onVideoResponse(m);
+						_onVideoResponse(m);
 						break;
 					case 'iceCandidate':
 						{
@@ -91,11 +65,17 @@ var VideoManager = (function() {
 
 							v.getPeer().addIceCandidate(m.candidate, function (error) {
 								if (error) {
-									OmUtil.error("Error adding candidate: " + error);
+									OmUtil.error('Error adding candidate: ' + error);
 									return;
 								}
 							});
 						}
+						break;
+					case 'newStream':
+						_play([m.stream], m.iceServers);
+						break;
+					case 'error':
+						OmUtil.error(m.message);
 						break;
 					default:
 						//no-op
@@ -103,8 +83,7 @@ var VideoManager = (function() {
 			} else if ('mic' === m.type) {
 				switch (m.id) {
 					case 'activity':
-						_micActivity(m.uid, m.active);
-						onBroadcast(m);
+						_userSpeaks(m.uid, m.active);
 						break;
 					default:
 						//no-op
@@ -124,36 +103,28 @@ var VideoManager = (function() {
 		if (!inited) {
 			return;
 		}
-		for (let i = 0; i < c.streams.length; ++i) {
-			const cl = JSON.parse(JSON.stringify(c)), s = c.streams[i];
-			delete cl.streams;
-			$.extend(cl, s);
-			if (cl.self && VideoUtil.isSharing(cl) || VideoUtil.isRecording(cl)) {
-				continue;
+		c.streams.forEach(function(sd) {
+			sd.self = c.self;
+			if (VideoUtil.isSharing(sd)) {
+				return;
 			}
-			const _id = VideoUtil.getVid(cl.uid)
-				, av = VideoUtil.hasAudio(cl) || VideoUtil.hasVideo(cl)
+			const _id = VideoUtil.getVid(sd.uid)
+				, av = VideoUtil.hasAudio(sd) || VideoUtil.hasVideo(sd)
 				, v = $('#' + _id);
-			if (av && v.length !== 1 && !!cl.self) {
-				VideoManager.sendMessage({
-					id: 'joinRoom' //TODO stream uid
-				});
-
-				Video().init(cl, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), cl.width, cl.height + 25));
-			} else if (av && v.length === 1) {
-				v.data().update(cl);
+			if (av && v.length === 1) {
+				v.data().update(sd);
 			} else if (!av && v.length === 1) {
 				_closeV(v);
 			}
-		}
+		});
 		if (c.uid === Room.getOptions().uid) {
 			Room.setRights(c.rights);
+			Room.setActivities(c.activities);
 			const windows = $(VID_SEL + ' .ui-dialog-content');
 			for (let i = 0; i < windows.length; ++i) {
 				const w = $(windows[i]);
 				w.data().setRights(c.rights);
 			}
-
 		}
 		if (c.streams.length === 0) {
 			// check for non inited video window
@@ -171,27 +142,30 @@ var VideoManager = (function() {
 		v.remove();
 		WbArea.updateAreaClass();
 	}
-	function _play(c) {
+	function _play(streams, iceServers) {
 		if (!inited) {
 			return;
 		}
-		if (VideoUtil.isSharing(c)) {
-			_highlight(share
-					.attr('title', share.data('user') + ' ' + c.user.firstName + ' ' + c.user.lastName + ' ' + share.data('text'))
-					.data('uid', c.uid)
-					.show(), 10);
-			share.tooltip().off('click').click(function() {
-				const v = $('#' + VideoUtil.getVid(c.uid))
-				if (v.length !== 1) {
-					Video().init(c, VideoUtil.container().offset());
-				} else {
-					v.dialog('open');
-				}
-			});
-		} else if ('sharing' !== c.type) {
-			Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
-			receiveVideo(c.uid);
-		}
+		streams.forEach(function(sd) {
+			const m = {stream: sd, iceServers: iceServers};
+			if (VideoUtil.isSharing(sd)) {
+				_highlight(share
+						.attr('title', share.data('user') + ' ' + sd.user.firstName + ' ' + sd.user.lastName + ' ' + share.data('text'))
+						.data('uid', sd.uid)
+						.data('cuid', sd.cuid)
+						.show(), 10);
+				share.tooltip().off('click').click(function() {
+					let v = $('#' + VideoUtil.getVid(sd.uid))
+					if (v.length === 1) {
+						v.remove();
+					}
+					v = Video().init(m);
+					VideoUtil.setPos(v, {left: 0, top: 35});
+				});
+			} else {
+				_onReceive(m);
+			}
+		});
 	}
 	function _close(uid, showShareBtn) {
 		const _id = VideoUtil.getVid(uid), v = $('#' + _id);
@@ -213,9 +187,9 @@ var VideoManager = (function() {
 		});
 	}
 	function _find(uid) {
-		return $(VID_SEL + ' div[data-client-uid="room' + uid + '"]');
+		return $(VID_SEL + ' div[data-client-uid="' + uid + '"][data-client-type="WEBCAM"]');
 	}
-	function _micActivity(uid, active) {
+	function _userSpeaks(uid, active) {
 		const u = $('#user' + uid + ' .audio-activity.ui-icon')
 			, v = _find(uid).parent();
 		if (active) {
@@ -270,6 +244,12 @@ var VideoManager = (function() {
 			w.data().mute('room' + uid !== w.data('client-uid'));
 		}
 	}
+	function _toggleActivity(activity) {
+		self.sendMessage({
+			id: 'toggleActivity'
+			, activity: activity
+		});
+	}
 
 	self.init = _init;
 	self.update = _update;
@@ -279,6 +259,7 @@ var VideoManager = (function() {
 	self.mute = _mute;
 	self.clickExclusive = _clickExclusive;
 	self.exclusive = _exclusive;
+	self.toggleActivity = _toggleActivity;
 	self.sendMessage = function(_m) {
 		OmUtil.sendMessage(_m, {type: 'kurento'});
 	}

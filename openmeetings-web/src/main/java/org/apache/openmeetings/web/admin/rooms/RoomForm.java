@@ -96,9 +96,9 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 		@Override
 		protected void populateItem(final ListItem<Client> item) {
-			Client client = item.getModelObject();
-			item.add(new Label("clientId", "" + client.getUserId()))
-				.add(new Label("clientLogin", "" + client.getLogin()))
+			Client c = item.getModelObject();
+			item.add(new Label("clientId", "" + c.getUserId()))
+				.add(new Label("clientLogin", "" + c.getUser().getLogin()))
 				.add(new ConfirmableAjaxBorder("clientDelete", getString("80"), getString("833")) {
 					private static final long serialVersionUID = 1L;
 

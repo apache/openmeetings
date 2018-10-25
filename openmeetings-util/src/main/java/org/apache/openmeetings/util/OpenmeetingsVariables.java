@@ -71,14 +71,10 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_PATH_OFFICE = "path.office";
 	public static final String CONFIG_DOCUMENT_DPI = "document.dpi";
 	public static final String CONFIG_DOCUMENT_QUALITY = "document.quality";
-	public static final String CONFIG_FLASH_SECURE = "flash.secure";
-	public static final String CONFIG_FLASH_SECURE_PROXY = "flash.secure.proxy";
-	public static final String CONFIG_FLASH_VIDEO_CODEC = "flash.video.codec";
-	public static final String CONFIG_FLASH_VIDEO_FPS = "flash.video.fps";
-	public static final String CONFIG_FLASH_VIDEO_BANDWIDTH = "flash.video.bandwidth";
-	public static final String CONFIG_FLASH_CAM_QUALITY = "flash.cam.quality";
-	public static final String CONFIG_FLASH_MIC_RATE = "flash.mic.rate";
-	public static final String CONFIG_FLASH_ECHO_PATH = "flash.echoPath";
+	public static final String CONFIG_CAM_FPS = "cam.fps";
+	public static final String CONFIG_MIC_RATE = "mic.rate";
+	public static final String CONFIG_MIC_ECHO = "mic.echo.cancellation";
+	public static final String CONFIG_MIC_NOISE = "mic.noise.suppression";
 	public static final String CONFIG_HEADER_XFRAME = "header.x.frame.options";
 	public static final String CONFIG_EXT_PROCESS_TTL = "external.process.ttl";
 	public static final String CONFIG_HEADER_CSP = "header.content.security.policy";
@@ -145,6 +141,11 @@ public class OpenmeetingsVariables {
 	private static int minFnameLength = USER_LOGIN_MINIMUM_LENGTH;
 	private static int minLnameLength = USER_LOGIN_MINIMUM_LENGTH;
 	private static boolean chatSendOnEnter = false;
+	private static boolean allowRegisterFrontend = false;
+	private static boolean allowRegisterSoap = false;
+	private static boolean allowRegisterOauth = false;
+	private static boolean sendVerificationEmail = false;
+	private static boolean sendRegisterEmail = false;
 
 	private OpenmeetingsVariables() {}
 
@@ -342,5 +343,45 @@ public class OpenmeetingsVariables {
 
 	public static void setChatSenndOnEnter(boolean sendOnEnter) {
 		chatSendOnEnter = sendOnEnter;
+	}
+
+	public static boolean isAllowRegisterFrontend() {
+		return allowRegisterFrontend;
+	}
+
+	public static void setAllowRegisterFrontend(boolean allow) {
+		allowRegisterFrontend = allow;
+	}
+
+	public static boolean isAllowRegisterSoap() {
+		return allowRegisterSoap;
+	}
+
+	public static void setAllowRegisterSoap(boolean allow) {
+		allowRegisterSoap = allow;
+	}
+
+	public static boolean isAllowRegisterOauth() {
+		return allowRegisterOauth;
+	}
+
+	public static void setAllowRegisterOauth(boolean allow) {
+		allowRegisterOauth = allow;
+	}
+
+	public static boolean isSendVerificationEmail() {
+		return sendVerificationEmail;
+	}
+
+	public static void setSendVerificationEmail(boolean send) {
+		sendVerificationEmail = send;
+	}
+
+	public static boolean isSendRegisterEmail() {
+		return sendRegisterEmail;
+	}
+
+	public static void setSendRegisterEmail(boolean send) {
+		sendRegisterEmail = send;
 	}
 }

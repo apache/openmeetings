@@ -41,7 +41,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
- * contains meta data about each stream, for example if it is a screen sharing or
+ * contains data about each stream, for example if it is a screen sharing or
  * audio/video stream. There is also a {@link Status} value
  * {@link #streamStatus}, as long as this variable is not set
  * to {@link Status#STOPPED}, the recording process will not proceed and start to convert all
@@ -51,23 +51,29 @@ import org.simpleframework.xml.Root;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getMetaById", query = "SELECT c FROM RecordingMetaData c WHERE c.id = :id")
-	, @NamedQuery(name = "getMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId AND c.deleted = false")
-	, @NamedQuery(name = "getAudioMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId "
-			+ "AND c.screenData = false AND c.streamStatus <> :none AND (c.audioOnly = true OR (c.audioOnly = false AND c.videoOnly = false))")
-	, @NamedQuery(name = "getScreenMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId"
-			+ " AND c.screenData = true")
+	@NamedQuery(name = "getChunkById", query = "SELECT c FROM RecordingChunk c WHERE c.id = :id")
+	, @NamedQuery(name = "getChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.deleted = false")
+	, @NamedQuery(name = "getNotScreenChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.deleted = false "
+			+ "AND c.type <> :screen AND c.streamStatus <> :none")
+	, @NamedQuery(name = "getScreenChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.type = :screen")
 })
-@Table(name = "recording_metadata")
+@Table(name = "recording_chunk")
 @Root(name = "flvrecordingmetadata")
-public class RecordingMetaData extends HistoricalEntity {
+public class RecordingChunk extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
-	@XmlType(namespace="org.apache.openmeetings.record.meta")
+	@XmlType(namespace="org.apache.openmeetings.record.chunk")
 	public enum Status {
 		NONE
 		, STARTED
 		, STOPPING
 		, STOPPED
+	}
+	@XmlType(namespace="org.apache.openmeetings.record.chunk")
+	public enum Type {
+		AUDIO_ONLY
+		, VIDEO_ONLY
+		, AUDIO_VIDEO
+		, SCREEN
 	}
 
 	@Id
@@ -81,13 +87,13 @@ public class RecordingMetaData extends HistoricalEntity {
 	@ForeignKey(enabled = true)
 	private Recording recording;
 
-	@Column(name = "record_start")
-	@Element(data = true)
-	private Date recordStart;
+	@Column(name = "start")
+	@Element(name = "recordStart", data = true)
+	private Date start;
 
-	@Column(name = "record_end")
-	@Element(data = true, required = false)
-	private Date recordEnd;
+	@Column(name = "end")
+	@Element(name = "recordEnd", data = true, required = false)
+	private Date end;
 
 	@Column(name = "stream_name")
 	@Element(data = true)
@@ -97,30 +103,16 @@ public class RecordingMetaData extends HistoricalEntity {
 	@Element(data = true, required = false)
 	private String sid;
 
-	@Column(name = "is_audio_only", nullable = false)
-	@Element(name = "isAudioOnly", data = true)
-	private boolean audioOnly;
-
-	@Column(name = "is_video_only", nullable = false)
-	@Element(name = "isVideoOnly", data = true)
-	private boolean videoOnly;
-
-	@Column(name = "is_screen_data", nullable = false)
-	@Element(name = "isScreenData", data = true)
-	private boolean screenData;
-
-	@Column(name = "full_wav_audio_data")
+	@Column(name = "type")
 	@Element(data = true, required = false)
-	private String fullWavAudioData;
-
-	@Column(name = "audio_is_valid", nullable = false)
-	@Element(name="audioIsValid", data = true, required = false)
-	private boolean audioValid;
+	@Enumerated(EnumType.STRING)
+	private Type type;
 
 	/**
 	 * this is only STOPPED when the asynchronous stream writer's have completed to write packets to the file.
 	 */
 	@Column(name = "stream_status")
+	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
 	private Status streamStatus = Status.NONE;
 
@@ -142,44 +134,32 @@ public class RecordingMetaData extends HistoricalEntity {
 		this.recording = recording;
 	}
 
-	public Date getRecordStart() {
-		return recordStart;
+	public Date getStart() {
+		return start;
 	}
 
-	public void setRecordStart(Date recordStart) {
-		this.recordStart = recordStart;
+	public void setStart(Date start) {
+		this.start = start;
 	}
 
-	public Date getRecordEnd() {
-		return recordEnd;
+	public Date getEnd() {
+		return end;
 	}
 
-	public void setRecordEnd(Date recordEnd) {
-		this.recordEnd = recordEnd;
+	public void setEnd(Date end) {
+		this.end = end;
+	}
+
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 	public boolean isAudioOnly() {
-		return audioOnly;
-	}
-
-	public void setAudioOnly(boolean audioOnly) {
-		this.audioOnly = audioOnly;
-	}
-
-	public boolean isVideoOnly() {
-		return videoOnly;
-	}
-
-	public void setVideoOnly(boolean videoOnly) {
-		this.videoOnly = videoOnly;
-	}
-
-	public boolean isScreenData() {
-		return screenData;
-	}
-
-	public void setScreenData(boolean screenData) {
-		this.screenData = screenData;
+		return Type.AUDIO_ONLY == type;
 	}
 
 	public String getStreamName() {
@@ -196,22 +176,6 @@ public class RecordingMetaData extends HistoricalEntity {
 
 	public void setSid(String sid) {
 		this.sid = sid;
-	}
-
-	public String getFullWavAudioData() {
-		return fullWavAudioData;
-	}
-
-	public void setFullWavAudioData(String fullWavAudioData) {
-		this.fullWavAudioData = fullWavAudioData;
-	}
-
-	public boolean isAudioValid() {
-		return audioValid;
-	}
-
-	public void setAudioValid(boolean audioValid) {
-		this.audioValid = audioValid;
 	}
 
 	public Status getStreamStatus() {

@@ -19,13 +19,17 @@
 package org.apache.openmeetings.db.dao.basic;
 
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHAT_SEND_ON_ENTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
@@ -37,10 +41,16 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_ECHO;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_NOISE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_BITRATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_VIDEO_PRESET;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REST_ALLOW_ORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_EXTEN_CONTEXT;
@@ -52,6 +62,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setAllowRegisterFrontend;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setAllowRegisterOauth;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setAllowRegisterSoap;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioBitrate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioRate;
@@ -69,6 +82,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinLoginLeng
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRestAllowOrigin;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRoomSettings;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSendRegisterEmail;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSendVerificationEmail;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipContext;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipEnabled;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setVideoPreset;
@@ -93,7 +108,7 @@ import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
-import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.db.util.DaoHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.Application;
@@ -227,11 +242,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	@Override
-	public Configuration get(long id) {
-		return get(Long.valueOf(id));
-	}
-
-	@Override
 	public Configuration get(Long id) {
 		if (id == null) {
 			return null;
@@ -241,17 +251,15 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	@Override
-	public List<Configuration> get(int start, int count) {
-		return em.createNamedQuery("getNondeletedConfiguration", Configuration.class)
-				.setFirstResult(start).setMaxResults(count).getResultList();
+	public List<Configuration> get(long start, long count) {
+		return setLimits(em.createNamedQuery("getNondeletedConfiguration", Configuration.class)
+				, start, count).getResultList();
 	}
 
 	@Override
-	public List<Configuration> get(String search, int start, int count, String sort) {
-		TypedQuery<Configuration> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, false, sort, searchFields), Configuration.class);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<Configuration> get(String search, long start, long count, String sort) {
+		return setLimits(em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, false, sort, searchFields), Configuration.class)
+				, start, count).getResultList();
 	}
 
 	@Override
@@ -284,6 +292,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			entity = em.merge(entity);
 		}
 		switch (key) {
+			case CONFIG_CAM_FPS:
+			case CONFIG_MIC_ECHO:
+			case CONFIG_MIC_NOISE:
+			case CONFIG_MIC_RATE:
 			case CONFIG_KEYCODE_ARRANGE:
 			case CONFIG_KEYCODE_EXCLUSIVE:
 			case CONFIG_KEYCODE_MUTE:
@@ -364,6 +376,21 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				break;
 			case CONFIG_CHAT_SEND_ON_ENTER:
 				reloadChatSendOnEnter();
+				break;
+			case CONFIG_REGISTER_FRONTEND:
+				reloadAllowRegisterFront();
+				break;
+			case CONFIG_REGISTER_SOAP:
+				reloadAllowRegisterSoap();
+				break;
+			case CONFIG_REGISTER_OAUTH:
+				reloadAllowRegisterOauth();
+				break;
+			case CONFIG_EMAIL_VERIFICATION:
+				reloadSendVerificationEmail();
+				break;
+			case CONFIG_EMAIL_AT_REGISTER:
+				reloadSendRegisterEmail();
 				break;
 		}
 		return entity;
@@ -468,6 +495,26 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setChatSenndOnEnter(getBool(CONFIG_CHAT_SEND_ON_ENTER, false));
 	}
 
+	private void reloadAllowRegisterFront() {
+		setAllowRegisterFrontend(getBool(CONFIG_REGISTER_FRONTEND, false));
+	}
+
+	private void reloadAllowRegisterSoap() {
+		setAllowRegisterSoap(getBool(CONFIG_REGISTER_SOAP, false));
+	}
+
+	private void reloadAllowRegisterOauth() {
+		setAllowRegisterOauth(getBool(CONFIG_REGISTER_OAUTH, false));
+	}
+
+	private void reloadSendVerificationEmail() {
+		setSendVerificationEmail(getBool(CONFIG_EMAIL_VERIFICATION, false));
+	}
+
+	private void reloadSendRegisterEmail() {
+		setSendRegisterEmail(getBool(CONFIG_EMAIL_AT_REGISTER, false));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -489,15 +536,26 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadFnameMinLength();
 		reloadLnameMinLength();
 		reloadChatSendOnEnter();
+		reloadAllowRegisterFront();
+		reloadAllowRegisterSoap();
+		reloadAllowRegisterOauth();
+		reloadSendVerificationEmail();
+		reloadSendRegisterEmail();
 	}
 
 	private JSONObject reloadRoomSettings() {
 		try {
 			setRoomSettings(new JSONObject()
-				.put("keycode", new JSONObject()
-						.put("arrange", getLong(CONFIG_KEYCODE_ARRANGE, 119L))
-						.put("exclusive", getLong(CONFIG_KEYCODE_EXCLUSIVE, 123L))
-						.put("mute", getLong(CONFIG_KEYCODE_MUTE, 118L))
+					.put("keycode", new JSONObject()
+							.put("arrange", getLong(CONFIG_KEYCODE_ARRANGE, 119L))
+							.put("exclusive", getLong(CONFIG_KEYCODE_EXCLUSIVE, 123L))
+							.put("mute", getLong(CONFIG_KEYCODE_MUTE, 118L))
+							)
+					.put("camera", new JSONObject().put("fps", getLong(CONFIG_CAM_FPS, 30L)))
+					.put("microphone", new JSONObject()
+							.put("rate", getLong(CONFIG_MIC_RATE, 30L))
+							.put("echo", getBool(CONFIG_MIC_ECHO, true))
+							.put("noise", getBool(CONFIG_MIC_NOISE, true))
 						)
 				);
 		} catch (Exception e) {

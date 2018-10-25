@@ -101,7 +101,7 @@ var Activities = function() {
 				, disabled: isClosed()
 				, alsoResize: '#activities .area'
 				, minHeight: 195
-				, resize: function(event, ui) {
+				, resize: function() {
 					activities.css({'top': ''});
 				}
 				, stop: function(event, ui) {

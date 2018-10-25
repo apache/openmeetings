@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.AbstractJUnitDefaults.ONE_HOUR;
 import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
 import static org.apache.openmeetings.AbstractJUnitDefaults.createUser;
@@ -32,7 +33,6 @@ import static org.junit.Assert.assertNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
@@ -62,7 +62,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 	public static final String CALENDAR_SERVICE_MOUNT = "calendar";
 
 	private void actualTest(Room r) throws Exception {
-		String uuid = UUID.randomUUID().toString();
+		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
 		u.getGroupUsers().add(new GroupUser(getBean(GroupDao.class).get(1L), u));
 		webCreateUser(u);
@@ -125,7 +125,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 	}
 
 	private String loginNewUser() throws Exception {
-		String uuid = UUID.randomUUID().toString();
+		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
 		u.getGroupUsers().add(new GroupUser(getBean(GroupDao.class).get(1L), u));
 		webCreateUser(u);
@@ -175,7 +175,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 						.put(new JSONObject().put("user", new JSONObject()
 								.put("id", 1))));
 
-		String uuid = UUID.randomUUID().toString();
+		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
 		u.getGroupUsers().add(new GroupUser(getBean(GroupDao.class).get(1L), u));
 		u = createUser(getBean(UserDao.class), u);
@@ -284,7 +284,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 
 	@Test
 	public void testGetByTitle() throws Exception {
-		String title = "title" + UUID.randomUUID().toString();
+		String title = "title" + randomUUID().toString();
 		String sid = createApp(title);
 		@SuppressWarnings("unchecked")
 		List<AppointmentDTO> list = (List<AppointmentDTO>)getClient(getCalendarUrl())
@@ -295,7 +295,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		assertEquals("List of one item should be returned", 1, list.size());
 		assertEquals("Title should match", title, list.get(0).getTitle());
 
-		title = UUID.randomUUID().toString();
+		title = randomUUID().toString();
 		@SuppressWarnings("unchecked")
 		List<AppointmentDTO> list1 = (List<AppointmentDTO>)getClient(getCalendarUrl())
 			.path(String.format("/title/%s", title))

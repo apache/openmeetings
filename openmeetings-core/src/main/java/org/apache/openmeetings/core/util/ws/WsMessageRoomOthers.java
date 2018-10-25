@@ -16,30 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.db.util;
+package org.apache.openmeetings.core.util.ws;
 
-import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.room.StreamClient;
-
-import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
-public class RoomHelper {
-	private RoomHelper() {}
+public class WsMessageRoomOthers extends WsMessageRoom {
+	private static final long serialVersionUID = 1L;
+	private final String uid;
 
-	public static JSONObject addScreenActivities(JSONObject o, StreamClient sc) {
-		JSONArray a = new JSONArray();
-		if (Client.Type.sharing == sc.getType()) {
-			if (sc.isSharingStarted()) {
-				a.put("sharing");
-			}
-			if (sc.isRecordingStarted()) {
-				a.put("recording");
-			}
-			if (sc.isPublishStarted()) {
-				a.put("publish");
-			}
-		}
-		return o.put("screenActivities", a);
+	public WsMessageRoomOthers(Long roomId, String uid, JSONObject msg) {
+		super(roomId, msg);
+		this.uid = uid;
+	}
+
+	public String getUid() {
+		return uid;
 	}
 }

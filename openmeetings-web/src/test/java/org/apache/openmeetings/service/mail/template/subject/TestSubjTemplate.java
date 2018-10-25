@@ -27,11 +27,11 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.function.Consumer;
 
-import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.wicket.util.string.Strings;
 import org.junit.Test;
 
 public class TestSubjTemplate extends AbstractWicketTester {

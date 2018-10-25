@@ -23,8 +23,11 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OmFileHelper {
+	private static final Logger log = LoggerFactory.getLogger(OmFileHelper.class);
 	/**
 	 * This variable needs to point to the openmeetings webapp directory
 	 */
@@ -63,7 +66,7 @@ public class OmFileHelper {
 	public static final String TEST_SETUP_PREFIX = "TEST_SETUP_";
 	public static final String DASHBOARD_FILE = "dashboard.xml";
 	public static final String EXTENSION_WML = "wml";
-	public static final String EXTENSION_FLV = "flv";
+	public static final String EXTENSION_WEBM = "webm";
 	public static final String EXTENSION_MP4 = "mp4";
 	public static final String EXTENSION_JPG = "jpg";
 	public static final String EXTENSION_PNG = "png";
@@ -180,8 +183,7 @@ public class OmFileHelper {
 	}
 
 	public static File getStreamsDir() {
-		//FIXME TODO return getDir(OmFileHelper.omHome, STREAMS_DIR);
-		return new File(System.getProperty("java.io.tmpdir"), STREAMS_DIR);
+		return getDir(OmFileHelper.omHome, STREAMS_DIR);
 	}
 
 	public static File getStreamsHibernateDir() {
@@ -200,12 +202,24 @@ public class OmFileHelper {
 		return getDir(getStreamsDir(), name);
 	}
 
+	public static String getRecUri(File f) {
+		String furi = f.getAbsolutePath();
+		try {
+			furi = f.getCanonicalPath();
+		} catch (IOException e) {
+			log.error("Unexpected error while getting canonical path", e);
+		}
+		String uri = String.format("file://%s", furi);
+		log.info("Configured to record to {}", uri);
+		return uri;
+	}
+
 	public static String getName(String name, String ext) {
 		return String.format(FILE_NAME_FMT, name, ext);
 	}
 
-	public static File getRecordingMetaData(Long roomId, String name) {
-		return new File(getStreamsSubDir(roomId), getName(name, EXTENSION_FLV));
+	public static File getRecordingChunk(Long roomId, String name) {
+		return new File(getStreamsSubDir(roomId), getName(name, EXTENSION_WEBM));
 	}
 
 	public static File getLanguagesDir() {

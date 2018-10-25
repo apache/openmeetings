@@ -117,7 +117,7 @@
 			<id>prepare-web-server</id>
 			<activation>
 				<file>
-					<missing>web-server/apache-tomcat-9.0.11.tar.gz</missing> <!-- TODO should be in-sync with global property -->
+					<missing>web-server/apache-tomcat-9.0.12.tar.gz</missing> <!-- TODO should be in-sync with global property -->
 				</file>
 			</activation>
 			<build>
@@ -222,6 +222,40 @@
 							<outputDir>${project.build.directory}/generated-site/xdoc</outputDir>
 						</transformationSet>
 					</transformationSets>
+					<skip>${om.quick.build}</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-css-js-site</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>unpack-css-js</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<artifactItems>
+						<artifactItem>
+							<groupId>io.github.devacfr.maven.skins</groupId>
+							<artifactId>reflow-default-webdeps</artifactId>
+							<version>${reflow-maven-skin.version}</version>
+							<type>jar</type>
+							<overWrite>false</overWrite>
+							<includes>**/css/*.css,**/css/themes/${reflow-theme}/*.css,**/css/fontawesome/**,**/js/*.js</includes>
+						</artifactItem>
+					</artifactItems>
+					<outputDirectory>${project.build.directory}/site</outputDirectory>
 					<skip>${om.quick.build}</skip>
 				</configuration>
 			</plugin>

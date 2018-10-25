@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.basic;
 
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
 import java.util.Date;
@@ -43,44 +44,34 @@ public class ChatDao {
 	}
 
 	//for export
-	public List<ChatMessage> get(int start, int count) {
-		return em.createNamedQuery("getChatMessages", ChatMessage.class)
-				.setFirstResult(start)
-				.setMaxResults(count)
-				.getResultList();
+	public List<ChatMessage> get(long start, long count) {
+		return setLimits(em.createNamedQuery("getChatMessages", ChatMessage.class)
+				, start, count).getResultList();
 	}
 
-	public List<ChatMessage> getGlobal(int start, int count) {
-		return em.createNamedQuery("getGlobalChatMessages", ChatMessage.class)
-				.setFirstResult(start)
-				.setMaxResults(count)
-				.getResultList();
+	public List<ChatMessage> getGlobal(long start, long count) {
+		return setLimits(em.createNamedQuery("getGlobalChatMessages", ChatMessage.class)
+				, start, count).getResultList();
 	}
 
-	public List<ChatMessage> getRoom(long roomId, int start, int count, boolean all) {
-		return em.createNamedQuery("getChatMessagesByRoom", ChatMessage.class)
-				.setParameter("roomId", roomId)
-				.setParameter("all", all)
-				.setFirstResult(start)
-				.setMaxResults(count)
-				.getResultList();
+	public List<ChatMessage> getRoom(long roomId, long start, long count, boolean all) {
+		return setLimits(em.createNamedQuery("getChatMessagesByRoom", ChatMessage.class)
+					.setParameter("roomId", roomId)
+					.setParameter("all", all)
+				, start, count).getResultList();
 	}
 
-	public List<ChatMessage> getUser(long userId, int start, int count) {
-		return em.createNamedQuery("getChatMessagesByUser", ChatMessage.class)
-				.setParameter(PARAM_USER_ID, userId)
-				.setFirstResult(start)
-				.setMaxResults(count)
-				.getResultList();
+	public List<ChatMessage> getUser(long userId, long start, long count) {
+		return setLimits(em.createNamedQuery("getChatMessagesByUser", ChatMessage.class)
+					.setParameter(PARAM_USER_ID, userId)
+				, start, count).getResultList();
 	}
 
-	public List<ChatMessage> getUserRecent(long userId, Date date, int start, int count) {
-		return em.createNamedQuery("getChatMessagesByUserTime", ChatMessage.class)
-				.setParameter(PARAM_USER_ID, userId)
-				.setParameter("date", date)
-				.setFirstResult(start)
-				.setMaxResults(count)
-				.getResultList();
+	public List<ChatMessage> getUserRecent(long userId, Date date, long start, long count) {
+		return setLimits(em.createNamedQuery("getChatMessagesByUserTime", ChatMessage.class)
+					.setParameter(PARAM_USER_ID, userId)
+					.setParameter("date", date)
+				, start, count).getResultList();
 	}
 
 	public ChatMessage update(ChatMessage entity) {

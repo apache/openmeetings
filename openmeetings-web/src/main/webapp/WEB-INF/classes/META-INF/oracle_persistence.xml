@@ -36,8 +36,7 @@
 		<class>org.apache.openmeetings.db.entity.file.FileItemLog</class>
 		<class>org.apache.openmeetings.db.entity.log.ConferenceLog</class>
 		<class>org.apache.openmeetings.db.entity.record.Recording</class>
-		<class>org.apache.openmeetings.db.entity.record.RecordingMetaData</class>
-		<class>org.apache.openmeetings.db.entity.record.RecordingMetaDelta</class>
+		<class>org.apache.openmeetings.db.entity.record.RecordingChunk</class>
 		<class>org.apache.openmeetings.db.entity.room.Invitation</class>
 		<class>org.apache.openmeetings.db.entity.room.Room</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomFile</class>

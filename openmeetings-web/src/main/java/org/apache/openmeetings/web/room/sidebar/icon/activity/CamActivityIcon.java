@@ -24,13 +24,13 @@ public class CamActivityIcon extends RoomActivityIcon {
 	private static final long serialVersionUID = 1L;
 
 	public CamActivityIcon(String id, String uid) {
-		super(id, uid, Activity.broadcastV);
+		super(id, uid, Activity.VIDEO);
 		mainCssClass = "activity cam ";
 	}
 
 	@Override
 	protected String getTitle() {
-		return getString(getClient().hasActivity(Activity.broadcastV) ? "camera.off" : "camera.on");
+		return getString(getClient().hasActivity(Activity.VIDEO) ? "camera.off" : "camera.on");
 	}
 
 	@Override

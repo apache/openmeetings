@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.core.util;
 
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
 import static org.apache.openmeetings.db.util.FormatHelper.getDisplayName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -36,6 +36,7 @@ import org.apache.openmeetings.core.util.ws.WsMessageAll;
 import org.apache.openmeetings.core.util.ws.WsMessageChat;
 import org.apache.openmeetings.core.util.ws.WsMessageRoom;
 import org.apache.openmeetings.core.util.ws.WsMessageRoomMsg;
+import org.apache.openmeetings.core.util.ws.WsMessageRoomOthers;
 import org.apache.openmeetings.core.util.ws.WsMessageUser;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -135,11 +136,15 @@ public class WebSocketHelper {
 		}
 	}
 
+	public static IApplication getApp() {
+		return (IApplication)Application.get(getWicketApplicationName());
+	}
+
 	private static void sendClient(IWsClient client, Consumer<IWebSocketConnection> wsc) {
 		Application app = (Application)getApp();
 		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-		Executor executor = settings.getWebSocketPushMessageExecutor(); //FIXME TODO
+		Executor executor = settings.getWebSocketPushMessageExecutor();
 		final IWebSocketConnection wc = reg.getConnection(app, client.getSessionId(), new PageIdKey(client.getPageId()));
 		if (wc != null && wc.isOpen()) {
 			executor.run(() -> {
@@ -151,6 +156,9 @@ public class WebSocketHelper {
 	public static void send(IClusterWsMessage _m) {
 		if (_m instanceof WsMessageRoomMsg) {
 			sendRoom(((WsMessageRoomMsg)_m).getMsg(), false);
+		} else if (_m instanceof WsMessageRoomOthers) {
+			WsMessageRoomOthers m = (WsMessageRoomOthers)_m;
+			sendRoomOthers(m.getRoomId(), m.getUid(), m.getMsg(), false);
 		} else if (_m instanceof WsMessageRoom) {
 			WsMessageRoom m = (WsMessageRoom)_m;
 			sendRoom(m.getRoomId(), m.getMsg(), false);
@@ -188,6 +196,17 @@ public class WebSocketHelper {
 		sendRoom(roomId, m, null, null);
 	}
 
+	public static void sendRoomOthers(final Long roomId, final String uid, final JSONObject m) {
+		sendRoomOthers(roomId, uid, m, true);
+	}
+
+	private static void sendRoomOthers(final Long roomId, final String uid, final JSONObject m, boolean publish) {
+		if (publish) {
+			publish(new WsMessageRoomOthers(roomId, uid, m));
+		}
+		sendRoom(roomId, m, c -> !uid.equals(c.getUid()), null);
+	}
+
 	public static void sendRoom(ChatMessage m, JSONObject msg) {
 		sendRoom(m, msg, true);
 	}
@@ -212,7 +231,7 @@ public class WebSocketHelper {
 		send(a -> ((IApplication)a).getBean(IClientManager.class).listByUser(userId), (t, c) -> {
 			try {
 				t.sendMessage(m);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				log.error("Error while sending message to user", e);
 			}
 		}, null);
@@ -235,7 +254,7 @@ public class WebSocketHelper {
 				executor.run(() -> {
 					try {
 						c.sendMessage(m);
-					} catch (IOException e) {
+					} catch (Exception e) {
 						log.error("Error while sending message to ALL", e);
 					}
 				});
@@ -255,7 +274,7 @@ public class WebSocketHelper {
 		sendRoom(roomId, (t, c) -> {
 			try {
 				t.sendMessage(func == null ? m.toString() : func.apply(m, c));
-			} catch (IOException e) {
+			} catch (Exception e) {
 				log.error("Error while broadcasting message to room", e);
 			}
 		}, check);

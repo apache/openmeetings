@@ -18,21 +18,19 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import static java.util.UUID.randomUUID;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,14 +46,11 @@ public class SessiondataDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	@Autowired
-	private IStreamClientManager streamClientManager;
-
 	private static Sessiondata newInstance() {
 		log.debug("startsession :: startsession");
 
 		Sessiondata sd = new Sessiondata();
-		sd.setSessionId(UUID.randomUUID().toString());
+		sd.setSessionId(randomUUID().toString());
 		sd.setCreated(new Date());
 		sd.setUserId(null);
 
@@ -161,31 +156,6 @@ public class SessiondataDao {
 			}
 		} catch (Exception err) {
 			log.error("clearSessionTable", err);
-		}
-	}
-
-	/**
-	 * @param roomId - room to clear sessions
-	 */
-	public void clearSessionByRoomId(Long roomId) {
-		try {
-			for (StreamClient rcl : streamClientManager.list(roomId)) {
-				String aux = rcl.getSwfurl();
-
-				int start = aux.indexOf("sid=") + 4;
-				int end = start + 32;
-				if (end > aux.length()) {
-					end = aux.length();
-				}
-				String sid = aux.substring(start, end);
-
-				Sessiondata sData = check(sid);
-				if (sData != null) {
-					em.remove(sData);
-				}
-			}
-		} catch (Exception err) {
-			log.error("clearSessionByRoomId", err);
 		}
 	}
 

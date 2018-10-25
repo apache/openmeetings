@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.file;
 
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
+
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
@@ -119,6 +121,14 @@ public class FileItemDao extends BaseFileItemDao {
 		return em.createNamedQuery("getAllFiles", FileItem.class).getResultList();
 	}
 
+	public List<FileItem> getExternal(String externalType) {
+		log.debug("get external started");
+
+		return em.createNamedQuery("getFileAllExternal", FileItem.class)
+				.setParameter("externalType", externalType)
+				.getResultList();
+	}
+
 	public void delete(String externalId, String externalType) {
 		log.debug("delete started");
 
@@ -194,15 +204,13 @@ public class FileItemDao extends BaseFileItemDao {
 		return update(f);
 	}
 
-	public List<BaseFileItem> getAllRoomFiles(String search, int start, int count, Long roomId/*, Long ownerId*/, List<Group> groups) {
-		return em.createNamedQuery("getAllFileItemsForRoom", BaseFileItem.class)
-				.setParameter("folder", Type.Folder)
-				.setParameter("roomId", roomId)
-				.setParameter("groups", groups.parallelStream().map(Group::getId).collect(Collectors.toList()))
-				.setParameter("name", String.format("%%%s%%", search == null ? "" : search))
-				.setFirstResult(start)
-				.setMaxResults(count)
-				.getResultList();
+	public List<BaseFileItem> getAllRoomFiles(String search, long start, long count, Long roomId/*, Long ownerId*/, List<Group> groups) {
+		return setLimits(em.createNamedQuery("getAllFileItemsForRoom", BaseFileItem.class)
+					.setParameter("folder", Type.Folder)
+					.setParameter("roomId", roomId)
+					.setParameter("groups", groups.parallelStream().map(Group::getId).collect(Collectors.toList()))
+					.setParameter("name", String.format("%%%s%%", search == null ? "" : search))
+				, start, count).getResultList();
 	}
 
 	public List<BaseFileItem> get(Collection<String> ids) {

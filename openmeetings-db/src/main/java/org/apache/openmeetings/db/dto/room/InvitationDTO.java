@@ -18,10 +18,11 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
+import static java.util.UUID.randomUUID;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -158,6 +159,8 @@ public class InvitationDTO implements Serializable {
 	 *
 	 * @param validFrom
 	 *            date-time in format YYYY-MM-dd HH:mm:ss
+	 *
+	 * @return this for chaining
 	 */
 	public InvitationDTO setValidFrom(String validFrom) {
 		this.validFrom = validFrom;
@@ -178,6 +181,8 @@ public class InvitationDTO implements Serializable {
 	 *
 	 * @param validTo
 	 *            date-time in format YYYY-MM-dd HH:mm:ss
+	 *
+	 * @return this for chaining
 	 */
 	public InvitationDTO setValidTo(String validTo) {
 		this.validTo = validTo;
@@ -194,7 +199,7 @@ public class InvitationDTO implements Serializable {
 
 	public Invitation get(Long userId, UserDao userDao, RoomDao roomDao) {
 		Invitation i = new Invitation();
-		i.setHash(UUID.randomUUID().toString());
+		i.setHash(randomUUID().toString());
 		i.setPasswordProtected(passwordProtected);
 		if (passwordProtected) {
 			i.setPassword(CryptProvider.get().hash(password));

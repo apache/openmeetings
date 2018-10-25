@@ -44,13 +44,21 @@ import org.apache.openmeetings.db.entity.user.User;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getInvitationbyId", query = "SELECT i FROM Invitation i WHERE i.deleted = false AND i.id = :id"),
-	@NamedQuery(name = "getInvitationByHashCode", query = "SELECT i FROM Invitation i where i.hash LIKE :hashCode AND i.deleted = false"),
-	@NamedQuery(name = "getInvitationByAppointment", query = "SELECT i FROM Invitation i WHERE i.appointment.id = :appointmentId  ")
+	@NamedQuery(name = "getInvitationbyId", query = "SELECT i FROM Invitation i WHERE i.deleted = false AND i.id = :id")
+	, @NamedQuery(name = "getInvitationByHashCode", query = "SELECT i FROM Invitation i where i.hash LIKE :hashCode AND i.deleted = false")
+	, @NamedQuery(name = "getInvitationByAppointment", query = "SELECT i FROM Invitation i WHERE i.appointment.id = :appointmentId")
 })
 @Table(name = "invitation")
 public class Invitation extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
+	public static final String SELECT_I = "SELECT i ";
+	public static final String SELECT_COUNT = "SELECT COUNT(i) ";
+	public static final String BY_ALL = " FROM Invitation i WHERE i.deleted = false";
+	public static final String BY_GROUP = BY_ALL + " AND i.invitedBy.id IN "
+			+ "(SELECT gu1.user.id FROM GroupUser gu1 WHERE gu1.group.id IN "
+			+ "		(SELECT gu.group.id FROM GroupUser gu WHERE gu.moderator = true AND gu.user.id = :userId)"
+			+ ")";
+	public static final String BY_USER = BY_ALL + " AND i.invitedBy.id = :userId";
 
 	public enum MessageType {
 		Create

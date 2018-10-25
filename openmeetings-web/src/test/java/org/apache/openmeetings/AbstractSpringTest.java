@@ -22,6 +22,7 @@ import static org.junit.Assert.fail;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.tomcat.util.scan.Constants;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -33,11 +34,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @TestExecutionListeners({})
 @ContextConfiguration(locations={"classpath:applicationContext.xml"}, inheritLocations = true)
 public abstract class AbstractSpringTest extends AbstractJUnit4SpringContextTests {
-
 	@BeforeClass
 	public static void init() {
 		setOmHome();
-		//FIXME TODO System.setProperty(Constants.SKIP_JARS_PROPERTY, "*");
+		System.setProperty(Constants.SKIP_JARS_PROPERTY, "*");
 		LabelDao.initLanguageMap();
 		if (LabelDao.getLanguages().isEmpty()) {
 			fail("Failed to set languages");

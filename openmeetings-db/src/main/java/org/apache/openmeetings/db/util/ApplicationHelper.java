@@ -134,7 +134,7 @@ public class ApplicationHelper {
 		WebApplicationContext ctx = getWebApplicationContext(app.getServletContext());
 		app.internalDestroy(); //need to be called too
 		if (ctx != null) {
-			((XmlWebApplicationContext)ctx).destroy();
+			((XmlWebApplicationContext)ctx).close();
 		}
 		ThreadContext.setApplication(null);
 		ThreadContext.setRequestCycle(null);

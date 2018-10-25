@@ -18,21 +18,20 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
+import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
-import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.db.entity.record.RecordingChunk;
+import org.apache.openmeetings.db.entity.record.RecordingChunk.Status;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -48,13 +47,12 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 	@Autowired
 	private RecordingDao recordingDao;
 	@Autowired
-	private RecordingMetaDataDao metaDataDao;
+	private RecordingChunkDao chunkDao;
 
 	@Override
-	public void startConversion(Long id) {
-		Recording r = recordingDao.get(id);
+	public void startConversion(Recording r) {
 		if (r == null) {
-			log.warn("Conversion is NOT started. Recording with ID {} is not found", id);
+			log.warn("Conversion is NOT started. Recording passed is NULL");
 			return;
 		}
 		ProcessResultList logs = new ProcessResultList();
@@ -64,34 +62,33 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 
 			File streamFolder = getStreamFolder(r);
 
-			RecordingMetaData screenMetaData = metaDataDao.getScreenByRecording(r.getId());
+			RecordingChunk screenChunk = chunkDao.getScreenByRecording(r.getId());
 
-			if (screenMetaData == null) {
+			if (screenChunk == null) {
 				throw new ConversionException("screenMetaData is Null recordingId " + r.getId());
 			}
 
-			if (screenMetaData.getStreamStatus() == Status.NONE) {
-				printMetaInfo(screenMetaData, "StartConversion");
+			if (screenChunk.getStreamStatus() == Status.NONE) {
+				printChunkInfo(screenChunk, "StartConversion");
 				throw new ConversionException("Stream has not been started, error in recording");
 			}
 			if (Strings.isEmpty(r.getHash())) {
-				r.setHash(UUID.randomUUID().toString());
+				r.setHash(randomUUID().toString());
 			}
 			r.setStatus(Recording.Status.CONVERTING);
 			r = recordingDao.update(r);
 
-			screenMetaData = waitForTheStream(screenMetaData.getId());
+			screenChunk = waitForTheStream(screenChunk.getId());
 
 			// Merge Wave to Full Length
-			File wav = new File(streamFolder, screenMetaData.getStreamName() + "_FINAL_WAVE.wav");
+			File wav = new File(streamFolder, screenChunk.getStreamName() + "_FINAL_WAVE.wav");
 			createWav(r, logs, streamFolder, waveFiles, wav, null);
 
-			screenMetaData.setFullWavAudioData(wav.getName());
-			metaDataDao.update(screenMetaData);
+			chunkDao.update(screenChunk);
 
 			// Merge Audio with Video / Calculate resulting FLV
 
-			String inputScreenFullFlv = new File(streamFolder, OmFileHelper.getName(screenMetaData.getStreamName(), EXTENSION_FLV)).getCanonicalPath();
+			String inputScreenFullFlv = getRecordingChunk(r.getRoomId(), screenChunk.getStreamName()).getCanonicalPath();
 
 			// ffmpeg -vcodec flv -qscale 9.5 -r 25 -ar 22050 -ab 32k -s 320x240
 			// -i 65318fb5c54b1bc1b1bca077b493a914_28_12_2009_23_38_17_FINAL_WAVE.wav
@@ -114,11 +111,11 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			r.setHeight(flvHeight);
 
 			String mp4path = convertToMp4(r, Arrays.asList(
-					"-itsoffset", formatMillis(diff(screenMetaData.getRecordStart(), r.getRecordStart())),
+					"-itsoffset", formatMillis(diff(screenChunk.getStart(), r.getRecordStart())),
 					"-i", inputScreenFullFlv, "-i", wav.getCanonicalPath()
 					), logs);
 
-			finalize(r, mp4path, logs);
+			finalizeRec(r, mp4path, logs);
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
 			r.setStatus(Recording.Status.ERROR);

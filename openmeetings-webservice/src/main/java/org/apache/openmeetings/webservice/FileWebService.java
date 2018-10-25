@@ -173,6 +173,28 @@ public class FileWebService extends BaseWebService {
 	}
 
 	/**
+	 * Get all files by external type
+	 *
+	 * @param sid
+	 *            The SID of the User. This SID must be marked as logged in
+	 * @param externalType
+	 *            External type for file listing
+	 * @return - the list of file for given external type
+	 */
+	@WebMethod
+	@GET
+	@Path("/{externaltype}")
+	public List<FileItemDTO> getAllExternal(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="externaltype") @PathParam("externaltype") String externalType
+			)
+	{
+		log.debug("getAllExternal::externalType {}", externalType);
+		return performCall(sid, User.Right.Soap, sd -> {
+			return FileItemDTO.list(fileDao.getExternal(externalType));
+		});
+	}
+
+	/**
 	 * Get a File Explorer Object by a given Room
 	 *
 	 * @param sid

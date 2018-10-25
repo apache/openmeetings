@@ -19,6 +19,7 @@
 package org.apache.openmeetings.screenshare;
 
 import static java.lang.Boolean.TRUE;
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.screenshare.util.Util.getQurtzProps;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -29,7 +30,6 @@ import java.net.ConnectException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.openmeetings.screenshare.gui.ScreenDimensions;
@@ -542,7 +542,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 						}
 						capture.setStreamId((Number)o);
 					}
-					final String broadcastId = UUID.randomUUID().toString();
+					final String broadcastId = randomUUID().toString();
 					log.debug("createPublishStream result stream id: {}; name: {}", capture.getStreamId(), broadcastId);
 					instance.publish(capture.getStreamId(), broadcastId, "live", this);
 

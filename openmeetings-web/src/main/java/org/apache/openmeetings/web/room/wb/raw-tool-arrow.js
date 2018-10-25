@@ -2,7 +2,7 @@
 var Arrow = function(wb, s) {
 	const arrow = Line(wb, s);
 	arrow.stroke.width = 20;
-	arrow.createShape = function(canvas) {
+	arrow.createShape = function() {
 		arrow.obj = new fabric.Polygon([
 			{x: 0, y: 0},
 			{x: 0, y: 0},

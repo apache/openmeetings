@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
-import static org.apache.openmeetings.util.DaoHelper.UNSUPPORTED;
+import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 
 import java.util.Date;
 import java.util.List;
@@ -63,11 +64,6 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 	}
 
 	@Override
-	public PrivateMessageFolder get(long id) {
-		return get(Long.valueOf(id));
-	}
-
-	@Override
 	public PrivateMessageFolder get(Long id) {
 		final String hql = "select c from PrivateMessageFolder c where c.id = :id ";
 
@@ -77,9 +73,10 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 	}
 
 	@Override
-	public List<PrivateMessageFolder> get(int start, int count) {
-		return em.createQuery("SELECT c FROM PrivateMessageFolder c ORDER BY c.id", PrivateMessageFolder.class)
-				.setFirstResult(start).setMaxResults(count)
+	public List<PrivateMessageFolder> get(long start, long count) {
+		return setLimits(
+				em.createQuery("SELECT c FROM PrivateMessageFolder c ORDER BY c.id", PrivateMessageFolder.class)
+				, start, count)
 				.getResultList();
 	}
 
@@ -100,7 +97,7 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 	}
 
 	@Override
-	public List<PrivateMessageFolder> get(String search, int start, int count, String order) {
+	public List<PrivateMessageFolder> get(String search, long start, long count, String order) {
 		throw UNSUPPORTED;
 	}
 
