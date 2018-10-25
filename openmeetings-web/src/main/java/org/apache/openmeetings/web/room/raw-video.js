@@ -60,7 +60,10 @@ var Video = (function() {
 			// https://mozilla.github.io/webrtc-landing/gum_test.html
 			const cnts = {
 				video: {
-					mediaSource: 'screen' // 'window'/'application' //FIXME TODO different behavior
+					mediaSource: sd.shareType
+					, frameRate: sd.fps //TODO ideal
+					 //TODO ideal width
+					 //TODO ideal height
 				}};
 			navigator.mediaDevices.getUserMedia(cnts).then(function(stream) {
 				callback(msg, cnts, stream);

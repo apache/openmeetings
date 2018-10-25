@@ -78,7 +78,7 @@ public class ActionsSubMenu implements Serializable {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				shareBtn.onClick(target);
+				target.appendJavaScript(String.format("$('#%s').click()", shareBtn.getMarkupId()));
 			}
 		};
 		applyModerMenuItem = new RoomMenuItem(mp.getString("784"), mp.getString("1481"), false) {

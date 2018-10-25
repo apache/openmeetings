@@ -572,6 +572,13 @@ ul.settings-menu {
 	display: inline-block;
 	float: right;
 }
+#sharer .label {
+	width: 215px;
+	display: inline-block;
+}
+#sharer input {
+	width: 75px;
+}
 @media screen and (max-width: 1280px) {
 	.room.sidebar {
 		width: 155px;

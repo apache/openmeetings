@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Room = (function() {
 	const self = {}, sbSide = Settings.isRtl ? 'right' : 'left';
-	let options, menuHeight, chat, sb, dock, activities;
+	let options, menuHeight, chat, sb, dock, activities, sharer;
 
 	function _init(_options) {
 		options = _options;
@@ -43,6 +43,30 @@ var Room = (function() {
 		if (typeof(Activities) !== 'undefined') {
 			Activities.init();
 		}
+		sharer = $('#sharer').dialog({
+			width: 450
+			, autoOpen: false
+		});
+		const type = sharer.find('select.type').selectmenu({
+			width: 150
+		}), fps = sharer.find('select.fps').selectmenu({
+			width: 120
+		}), sbtn = sharer.find('.share-start-stop').button({
+			icon: 'ui-icon-image'
+		});
+		sbtn.click(function() {
+			sbtn.button('disable');
+			VideoManager.sendMessage({
+				id: 'wannaShare'
+				, shareType: type.val()
+				, fps: fps.val()
+				, width: sharer.find('.width').val()
+				, height: sharer.find('.height').val()
+			});
+		});
+		sharer.find('.record-start-stop').button({
+			icon: 'ui-icon-bullet'
+		});
 	}
 	function _getSelfAudioClient() {
 		const vw = $('#video' + Room.getOptions().uid);
@@ -187,6 +211,9 @@ var Room = (function() {
 		$(window).off('keyup', _keyHandler);
 		$(document).off('click', _mouseHandler);
 		sb = undefined;
+		if (sharer && sharer.dialog('instance')) {
+			sharer.dialog('close');
+		}
 	}
 	function _showClipboard(txt) {
 		const dlg = $('#clipboard-dialog');
@@ -251,6 +278,9 @@ var Room = (function() {
 		}
 		OmUtil.tmpl('#quick-vote-template', 'quick-vote');
 	}
+	function _share() {
+		sharer.dialog('open');
+	}
 
 	self.init = _init;
 	self.getMenuHeight = function() { return menuHeight; };
@@ -267,6 +297,7 @@ var Room = (function() {
 	self.unload = _unload;
 	self.showClipboard = _showClipboard;
 	self.quickPoll = _quickPoll;
+	self.share = _share;
 	return self;
 })();
 function startPrivateChat(el) {
