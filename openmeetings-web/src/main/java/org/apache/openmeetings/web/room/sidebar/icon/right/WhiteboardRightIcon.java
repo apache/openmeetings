@@ -33,7 +33,7 @@ public class WhiteboardRightIcon extends RoomRightIcon {
 
 	@Override
 	protected String getTitle() {
-		return getString(String.format("ulist.right.wb.%s", (isSelf() ? "request" : (hasRight() ? "revoke" : "grant"))));
+		return getString(String.format("ulist.right.wb.%s", isSelf() ? "request" : (hasRight() ? "revoke" : "grant")));
 	}
 
 	@Override

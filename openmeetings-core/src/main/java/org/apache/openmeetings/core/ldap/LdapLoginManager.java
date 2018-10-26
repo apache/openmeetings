@@ -33,8 +33,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.directory.api.ldap.model.cursor.CursorException;
@@ -187,41 +189,9 @@ public class LdapLoginManager {
 			Entry entry = null;
 			switch (w.options.type) {
 				case SEARCHANDBIND:
-				{
-					bindAdmin(w.conn, w.options);
-					Dn baseDn = new Dn(w.options.searchBase);
-					String searchQ = String.format(w.options.searchQuery, login);
-
-					try (EntryCursor cursor = new EntryCursorImpl(w.conn.search(
-							new SearchRequestImpl()
-								.setBase(baseDn)
-								.setFilter(searchQ)
-								.setScope(w.options.scope)
-								.addAttributes("*")
-								.setDerefAliases(w.options.derefMode))))
-					{
-						while (cursor.next()) {
-							try {
-								Entry e = cursor.get();
-								if (userDn != null) {
-									log.error("more than 1 user found in LDAP");
-									throw UNKNOWN;
-								}
-								userDn = e.getDn();
-								if (w.options.useAdminForAttrs) {
-									entry = e;
-								}
-							} catch (CursorLdapReferralException cle) {
-								log.warn("Referral LDAP entry found, ignore it");
-							}
-						}
-					}
-					if (userDn == null) {
-						log.error("NONE users found in LDAP");
-						throw BAD_CREDENTIALS;
-					}
-					w.conn.bind(userDn, passwd);
-				}
+					Map.Entry<Dn, Entry> search = searchAndBind(w, login, passwd);
+					userDn = search.getKey();
+					entry = search.getValue();
 					break;
 				case SIMPLEBIND:
 					userDn = new Dn(String.format(w.options.userDn, login));
@@ -269,6 +239,45 @@ public class LdapLoginManager {
 		return u;
 	}
 
+	private static Map.Entry<Dn, Entry> searchAndBind(LdapWorker w, String login, String passwd) throws LdapException, CursorException, OmException, IOException {
+		Dn userDn = null;
+		Entry entry = null;
+		bindAdmin(w.conn, w.options);
+		Dn baseDn = new Dn(w.options.searchBase);
+		String searchQ = String.format(w.options.searchQuery, login);
+
+		try (EntryCursor cursor = new EntryCursorImpl(w.conn.search(
+				new SearchRequestImpl()
+					.setBase(baseDn)
+					.setFilter(searchQ)
+					.setScope(w.options.scope)
+					.addAttributes("*")
+					.setDerefAliases(w.options.derefMode))))
+		{
+			while (cursor.next()) {
+				try {
+					Entry e = cursor.get();
+					if (userDn != null) {
+						log.error("more than 1 user found in LDAP");
+						throw UNKNOWN;
+					}
+					userDn = e.getDn();
+					if (w.options.useAdminForAttrs) {
+						entry = e;
+					}
+				} catch (CursorLdapReferralException cle) {
+					log.warn("Referral LDAP entry found, ignore it");
+				}
+			}
+		}
+		if (userDn == null) {
+			log.error("NONE users found in LDAP");
+			throw BAD_CREDENTIALS;
+		}
+		w.conn.bind(userDn, passwd);
+		return new AbstractMap.SimpleEntry<>(userDn, entry);
+	}
+
 	public void importUsers(Long domainId, boolean print) throws OmException {
 		try (LdapWorker w = new LdapWorker(domainId)) {
 			bindAdmin(w.conn, w.options);
@@ -282,21 +291,7 @@ public class LdapLoginManager {
 						.addAttributes("*")
 						.setDerefAliases(w.options.derefMode))))
 			{
-				while (cursor.next()) {
-					try {
-						Entry e = cursor.get();
-						User u = userDao.getByLogin(getLogin(w.config, e), Type.ldap, domainId);
-						u = w.getUser(e, u);
-						if (print) {
-							log.info("Going to import user: {}", u);
-						} else {
-							userDao.update(u, null);
-							log.info("User {}, was imported", u);
-						}
-					} catch (CursorLdapReferralException cle) {
-						log.warn("Referral LDAP entry found, ignore it");
-					}
-				}
+				importUsers(w, cursor, domainId, print);
 			}
 		} catch (LdapAuthenticationException ae) {
 			log.error("Not authenticated.", ae);
@@ -306,6 +301,24 @@ public class LdapLoginManager {
 		} catch (Exception e) {
 			log.error("Unexpected exception.", e);
 			throw new OmException(e);
+		}
+	}
+
+	private void importUsers(LdapWorker w, EntryCursor cursor, Long domainId, boolean print) throws LdapInvalidAttributeValueException, LdapException, CursorException, OmException, IOException {
+		while (cursor.next()) {
+			try {
+				Entry e = cursor.get();
+				User u = userDao.getByLogin(getLogin(w.config, e), Type.ldap, domainId);
+				u = w.getUser(e, u);
+				if (print) {
+					log.info("Going to import user: {}", u);
+				} else {
+					userDao.update(u, null);
+					log.info("User {}, was imported", u);
+				}
+			} catch (CursorLdapReferralException cle) {
+				log.warn("Referral LDAP entry found, ignore it");
+			}
 		}
 	}
 
@@ -391,24 +404,7 @@ public class LdapLoginManager {
 			} else if (GroupMode.QUERY == options.groupMode) {
 				Dn baseDn = new Dn(options.searchBase);
 				String searchQ = String.format(options.groupQuery, u.getLogin());
-
-				try (EntryCursor cursor = new EntryCursorImpl(conn.search(
-						new SearchRequestImpl()
-							.setBase(baseDn)
-							.setFilter(searchQ)
-							.setScope(SearchScope.SUBTREE)
-							.addAttributes("*")
-							.setDerefAliases(AliasDerefMode.DEREF_ALWAYS))))
-				{
-					while (cursor.next()) {
-						try {
-							Entry e = cursor.get();
-							groups.add(e.getDn());
-						} catch (CursorLdapReferralException cle) {
-							log.warn("Referral LDAP entry found, ignore it");
-						}
-					}
-				}
+				fillGroups(baseDn, searchQ, groups);
 			}
 			for (Dn g : groups) {
 				String name = g.getRdn().getValue();
@@ -434,6 +430,26 @@ public class LdapLoginManager {
 				}
 			}
 			return u;
+		}
+
+		private void fillGroups(Dn baseDn, String searchQ, List<Dn> groups) throws IOException, LdapException, CursorException {
+			try (EntryCursor cursor = new EntryCursorImpl(conn.search(
+					new SearchRequestImpl()
+						.setBase(baseDn)
+						.setFilter(searchQ)
+						.setScope(SearchScope.SUBTREE)
+						.addAttributes("*")
+						.setDerefAliases(AliasDerefMode.DEREF_ALWAYS))))
+			{
+				while (cursor.next()) {
+					try {
+						Entry e = cursor.get();
+						groups.add(e.getDn());
+					} catch (CursorLdapReferralException cle) {
+						log.warn("Referral LDAP entry found, ignore it");
+					}
+				}
+			}
 		}
 
 		@Override

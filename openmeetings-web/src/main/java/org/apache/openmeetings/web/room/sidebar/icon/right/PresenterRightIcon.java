@@ -32,7 +32,7 @@ public class PresenterRightIcon extends RoomRightIcon {
 
 	@Override
 	protected String getTitle() {
-		return getString(String.format("ulist.right.presenter.%s", (isSelf() ? "request" : (hasRight() ? "revoke" : "grant"))));
+		return getString(String.format("ulist.right.presenter.%s", isSelf() ? "request" : (hasRight() ? "revoke" : "grant")));
 	}
 
 	@Override
