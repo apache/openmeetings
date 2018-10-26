@@ -70,7 +70,9 @@ var Activities = function() {
 		}
 	}
 	function _hightlight() {
-		if (!inited) return;
+		if (!inited) {
+			return;
+		}
 		if (isClosed()) {
 			$('.control.block', activities).addClass('ui-state-highlight');
 		}
@@ -121,7 +123,9 @@ var Activities = function() {
 			inited = true;
 		}
 		, toggle: function() {
-			if (!inited) return;
+			if (!inited) {
+				return;
+			}
 			if (isClosed()) {
 				_open();
 			} else {
@@ -130,7 +134,9 @@ var Activities = function() {
 		}
 		, findUser: _findUser
 		, add: function(obj) {
-			if (!inited) return;
+			if (!inited) {
+				return;
+			}
 			const _id = _getId(obj.id);
 			area.append(OmUtil.tmpl('#activity-stub', _id).data(obj));
 			const a = $('#' + _id).addClass(obj.cssClass);
@@ -153,7 +159,10 @@ var Activities = function() {
 			} else {
 				fnd.hide();
 			}
-			a.find('.activity-close').click(function() { a.remove(); _action('close', obj.id); });
+			a.find('.activity-close').click(function() {
+				a.remove();
+				_action('close', obj.id);
+			});
 			a.find('.activity-text').text(obj.text);
 			_hightlight();
 			if (aclean.prop('checked') && a.hasClass('auto-clean')) {

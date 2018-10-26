@@ -528,7 +528,10 @@ var VideoSettings = (function() {
 	return {
 		init: _init
 		, open: _open
-		, close: function() { _close(); vs.dialog('close'); }
+		, close: function() {
+			_close();
+			vs.dialog('close');
+		}
 		, load: _load
 		, save: _save
 		, constraints: _constraints

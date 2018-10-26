@@ -1,8 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var InterviewWbArea = function() {
 	const self = BaseWbArea();;
-	let container, area, pArea, role = NONE, choose
-		, _inited = false, rec;
+	let container, area, pArea, role = NONE, choose, _inited = false, rec;
 
 	function _init() {
 		Wicket.Event.subscribe("/websocket/message", self.wbWsHandler);
@@ -52,7 +51,9 @@ var InterviewWbArea = function() {
 		_inited = true;
 	}
 	function _setRole(_role) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		role = _role;
 	}
 	function _resizePod() {
@@ -61,7 +62,9 @@ var InterviewWbArea = function() {
 		});
 	}
 	function _resize(sbW, chW, w, h) {
-		if (!container || !_inited) return;
+		if (!container || !_inited) {
+			return;
+		}
 		const hh = h - 5 - 40;//rec button height
 		container.width(w).height(h).css('left', (Settings.isRtl ? chW : sbW) + 'px');
 		area.width(w).height(hh);
@@ -70,11 +73,15 @@ var InterviewWbArea = function() {
 		_resizePod();
 	}
 	function _setRecEnabled(en) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		rec.data('mode', 'rec').button('option', {disabled: !en, icon: 'record'});
 	}
 	function _setRecStarted(started) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		rec.data('mode', started ? 'stop' : 'rec')
 			.attr('title', rec.data(started ? 'title-stop' : 'title-start'))
 			.button('option', {icon: started ? 'stop' : 'record'});

@@ -495,8 +495,9 @@ var Wb = function() {
 	}
 	//events
 	function objCreatedHandler(o) {
-		if (role === NONE && o.type !== 'pointer') return;
-
+		if (role === NONE && o.type !== 'pointer') {
+			return;
+		}
 		let json;
 		switch(o.type) {
 			case 'pointer':
@@ -514,7 +515,9 @@ var Wb = function() {
 	};
 	function objAddedHandler(e) {
 		const o = e.target;
-		if (!!o.loaded) return;
+		if (!!o.loaded) {
+			return;
+		}
 		switch(o.type) {
 			case 'textbox':
 			case 'i-text':
@@ -529,8 +532,9 @@ var Wb = function() {
 	};
 	function objModifiedHandler(e) {
 		const o = e.target, items = [];
-		if (role === NONE && o.type !== 'pointer') return;
-
+		if (role === NONE && o.type !== 'pointer') {
+			return;
+		}
 		o.includeDefaultValues = false;
 		if ('activeSelection' === o.type) {
 			o.clone(function(_o) {

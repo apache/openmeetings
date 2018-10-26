@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
-import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingChunk;
 import org.apache.openmeetings.db.entity.record.RecordingChunk.Status;
@@ -36,18 +34,11 @@ import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RecordingConverter extends BaseConverter implements IRecordingConverter {
 	private static final Logger log = LoggerFactory.getLogger(RecordingConverter.class);
-
-	// Spring loaded Beans
-	@Autowired
-	private RecordingDao recordingDao;
-	@Autowired
-	private RecordingChunkDao chunkDao;
 
 	@Override
 	public void startConversion(Recording r) {

@@ -55,7 +55,10 @@ var ToolUtil = (function() {
 			}
 		}
 		, filter: function(_o, props) {
-			return props.reduce(function(result, key) { result[key] = _o[key]; return result; }, {});
+			return props.reduce(function(result, key) {
+				result[key] = _o[key];
+				return result;
+			}, {});
 		}
 	};
 })();

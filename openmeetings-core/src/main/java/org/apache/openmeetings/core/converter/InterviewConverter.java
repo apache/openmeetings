@@ -33,8 +33,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
-import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingChunk;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -44,18 +42,11 @@ import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class InterviewConverter extends BaseConverter implements IRecordingConverter {
 	private static final Logger log = LoggerFactory.getLogger(InterviewConverter.class);
-
-	// Spring loaded Beans
-	@Autowired
-	private RecordingDao recordingDao;
-	@Autowired
-	private RecordingChunkDao chunkDao;
 
 	@Override
 	public void startConversion(Recording r) {
@@ -117,7 +108,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 						logs.add(res);
 						if (!res.isWarn()) {
 							long diff = diff(chunk.isAudioOnly() ? chunk.getEnd() : chunk.getStart(), pStart);
-							//createBlankPod(id, streamFolder, interviewCam, diff, logs, pods, parts);
 							PodPart.add(parts, diff);
 							if (!chunk.isAudioOnly()) {
 								parts.add(new PodPart(path, diff(chunk.getEnd(), chunk.getStart())));
@@ -131,8 +121,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				if (!parts.isEmpty()) {
 					String podX = new File(streamFolder, String.format("rec_%s_pod_%s.%s", r.getId(), N, EXTENSION_MP4)).getCanonicalPath();
 					long diff = diff(r.getRecordEnd(), pStart);
-					// add blank pod till the end
-					//createBlankPod(id, streamFolder, interviewCam, diff, logs, pods, parts);
 					PodPart.add(parts, diff);
 					/* create continuous pod
 					 * ffmpeg \
