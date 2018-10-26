@@ -38,7 +38,6 @@ public class ActionsSubMenu implements Serializable {
 	private final SipDialerDialog sipDialer;
 	private final RoomPanel room;
 	private final RoomMenuPanel mp;
-	private final StartSharingButton shareBtn;
 	private RoomMenuItem actionsMenu;
 	private RoomMenuItem inviteMenuItem;
 	private RoomMenuItem shareMenuItem;
@@ -51,10 +50,9 @@ public class ActionsSubMenu implements Serializable {
 	private RoomMenuItem downloadPdfMenuItem;
 	private final boolean visible;
 
-	public ActionsSubMenu(final RoomPanel room, final RoomMenuPanel mp, final StartSharingButton shareBtn) {
+	public ActionsSubMenu(final RoomPanel room, final RoomMenuPanel mp) {
 		this.room = room;
 		this.mp = mp;
-		this.shareBtn = shareBtn;
 		RoomInvitationForm rif = new RoomInvitationForm("form", room.getRoom().getId());
 		mp.add(invite = new InvitationDialog("invite", rif));
 		rif.setDialog(invite);
@@ -78,7 +76,7 @@ public class ActionsSubMenu implements Serializable {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.appendJavaScript(String.format("$('#%s').click()", shareBtn.getMarkupId()));
+				target.appendJavaScript("Sharer.open();");
 			}
 		};
 		applyModerMenuItem = new RoomMenuItem(mp.getString("784"), mp.getString("1481"), false) {
