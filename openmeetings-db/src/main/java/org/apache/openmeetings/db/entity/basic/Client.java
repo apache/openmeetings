@@ -218,9 +218,8 @@ public class Client implements IDataProviderEntity, IWsClient {
 		return sd;
 	}
 
-	public Client removeStream(String _uid) {
-		streams.remove(_uid);
-		return this;
+	public StreamDesc removeStream(String _uid) {
+		return streams.remove(_uid);
 	}
 
 	public List<StreamDesc> getStreams() {

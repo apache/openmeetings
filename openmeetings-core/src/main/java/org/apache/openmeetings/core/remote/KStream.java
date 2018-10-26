@@ -40,6 +40,7 @@ import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.Continuation;
 import org.kurento.client.IceCandidate;
+import org.kurento.client.MediaFlowState;
 import org.kurento.client.MediaProfileSpecType;
 import org.kurento.client.MediaType;
 import org.kurento.client.RecorderEndpoint;
@@ -112,7 +113,15 @@ public class KStream implements IKStream {
 			log.warn("Media stream terminated");
 		});
 		outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
-			log.warn("Media FlowOut :: {}", evt.getState());
+			if (MediaFlowState.NOT_FLOWING == evt.getState()) {
+				log.warn("Media FlowOut :: {}", evt.getState());
+				if (StreamType.SCREEN == sd.getType()) {
+					h.stopSharing(sid, uid);
+				} else {
+					//TODO remove stream ?
+				}
+				stopBroadcast(h);
+			}
 		});
 		outgoingMedia.addMediaFlowInStateChangeListener(evt -> {
 			log.warn("Media FlowIn :: {}", evt);

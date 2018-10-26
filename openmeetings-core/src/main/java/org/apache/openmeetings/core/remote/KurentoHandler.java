@@ -235,6 +235,7 @@ public class KurentoHandler {
 				return;
 			}
 			KStream sender;
+			StreamDesc sd;
 			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
 			switch (cmdId) {
 				case "devicesAltered":
@@ -251,7 +252,7 @@ public class KurentoHandler {
 					toggleActivity(c, Activity.valueOf(msg.getString("activity")));
 					break;
 				case "broadcastStarted":
-					StreamDesc sd = c.getStream(uid);
+					sd = c.getStream(uid);
 					sender = getByUid(uid);
 					if (sender == null) {
 						KRoom room = getRoom(c.getRoomId());
@@ -279,6 +280,13 @@ public class KurentoHandler {
 				case "wannaShare":
 					if (screenShareAllowed(c)) {
 						startSharing(c, msg);
+					}
+					break;
+				case "stopSharing":
+					sender = getByUid(uid);
+					sd = stopSharing(c.getSid(), uid);
+					if (sender != null && sd != null) {
+						sender.stopBroadcast(this);
 					}
 					break;
 			}
@@ -425,7 +433,24 @@ public class KurentoHandler {
 	}
 
 	private void startSharing(Client c, JSONObject msg) {
-		getRoom(c.getRoomId()).startSharing(this, cm, c, msg);
+		if (c.getRoomId() != null) {
+			getRoom(c.getRoomId()).startSharing(this, cm, c, msg);
+		}
+	}
+
+	StreamDesc stopSharing(String sid, String uid) {
+		StreamDesc sd = null;
+		Client c = getBySid(sid);
+		if (c.getRoomId() != null) {
+			sd = c.getStream(uid);
+			if (sd != null && StreamType.SCREEN == sd.getType()) {
+				c.removeStream(uid);
+				cm.update(c);
+				checkStreams(c.getRoomId());
+				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+			}
+		}
+		return sd;
 	}
 
 	public boolean isSharing(Long roomId) {

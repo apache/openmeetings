@@ -1,7 +1,10 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+var SHARE_STARTING = 'starting';
+var SHARE_STARTED = 'started';
+var SHARE_STOPED = 'stoped';
 var Sharer = (function() {
 	const self = {};
-	let sharer, type, fps, sbtn, rbtn, width, height;
+	let sharer, type, fps, sbtn, rbtn, width, height, shareState = SHARE_STOPED;
 
 	function _init() {
 		sharer = $('#sharer').dialog({
@@ -22,29 +25,46 @@ var Sharer = (function() {
 		width = sharer.find('.width');
 		height = sharer.find('.height');
 		sbtn.click(function() {
-			_setShareState(true);
-			VideoManager.sendMessage({
-				id: 'wannaShare'
-				, shareType: type.val()
-				, fps: fps.val()
-				, width: width.val()
-				, height: height.val()
-			});
+			if (shareState === SHARE_STOPED) {
+				_setShareState(SHARE_STARTING);
+				VideoManager.sendMessage({
+					id: 'wannaShare'
+					, shareType: type.val()
+					, fps: fps.val()
+					, width: width.val()
+					, height: height.val()
+				});
+			} else {
+				const cuid = Room.getOptions().uid
+					, v = $('div[data-client-uid="' + cuid + '"][data-client-type="SCREEN"]')
+					, uid = v.data().stream().uid;
+				VideoManager.sendMessage({
+					id: 'stopSharing'
+					, uid: uid
+				});
+				VideoManager.close(uid, false);
+				_setShareState(SHARE_STOPED);
+			}
 		});
 		rbtn = sharer.find('.record-start-stop').button({
 			icon: 'ui-icon-bullet'
 		});
 	}
 	function _setShareState(state) {
-		type.selectmenu('option', 'disabled', state || VideoUtil.isEdge());
-		fps.selectmenu('option', 'disabled', state || VideoUtil.isEdge());
-		width.prop('disabled', state);
-		height.prop('disabled', state);
-		sbtn.button('option', 'icon', state ? 'ui-icon-stop' : 'ui-icon-image');
-		if (state) {
+		shareState = state;
+		const dis = SHARE_STOPED !== state;
+		type.selectmenu('option', 'disabled', dis || VideoUtil.isEdge());
+		fps.selectmenu('option', 'disabled', dis || VideoUtil.isEdge());
+		width.prop('disabled', dis);
+		height.prop('disabled', dis);
+		sbtn.text(sbtn.data(dis ? 'stop' : 'start'));
+		sbtn.button('option', 'icon', dis ? 'ui-icon-stop' : 'ui-icon-image');
+		if (state === SHARE_STARTING) {
 			sbtn.button('disable');
+			rbtn.button('disable');
 		} else {
 			sbtn.button('enable');
+			rbtn.button('enable');
 		}
 	}
 

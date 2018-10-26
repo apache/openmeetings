@@ -53,7 +53,7 @@ var Video = (function() {
 			navigator.getDisplayMedia(cnts).then(function(stream) {
 				callback(msg, cnts, stream);
 			}).catch(function(err) {
-				Sharer.setShareState(false);
+				Sharer.setShareState(SHARE_STOPED);
 				OmUtil.error(err);
 			});
 		} else if (b.name === 'Firefox') {
@@ -68,7 +68,7 @@ var Video = (function() {
 			navigator.mediaDevices.getUserMedia(cnts).then(function(stream) {
 				callback(msg, cnts, stream);
 			}).catch(function(err) {
-				Sharer.setShareState(false);
+				Sharer.setShareState(SHARE_STOPED);
 				OmUtil.error(err);
 			});
 		} else {
@@ -149,6 +149,9 @@ var Video = (function() {
 						, uid: sd.uid
 						, sdpOffer: offerSdp
 					});
+					if (VideoUtil.isSharing(sd)) {
+						Sharer.setShareState(SHARE_STARTED);
+					}
 				});
 			});
 	}
