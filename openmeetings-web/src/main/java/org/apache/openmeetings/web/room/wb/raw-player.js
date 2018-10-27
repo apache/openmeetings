@@ -1,6 +1,8 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Player = (function() {
 	const player = {}, mainColor = '#ff6600', rad = 20;
+	let trg, rectPause1, rectPause2, play, cProgress, progress;
+
 	function _sendStatus(g, _paused, _pos) {
 		g.status.paused = _paused;
 		g.status.pos = _pos;
@@ -12,6 +14,72 @@ var Player = (function() {
 				, pos: _pos
 			}
 		}));
+	}
+	function _initControls(_o) {
+		trg = new fabric.Triangle({
+			left: 2.7 * rad
+			, top: _o.height - 2.5 * rad
+			, visible: _o.status.paused
+			, angle: 90
+			, width: rad
+			, height: rad
+			, stroke: mainColor
+			, fill: mainColor
+		});
+		rectPause1 = new fabric.Rect({
+			left: 1.6 * rad
+			, top: _o.height - 2.5 * rad
+			, visible: !_o.status.paused
+			, width: rad / 3
+			, height: rad
+			, stroke: mainColor
+			, fill: mainColor
+		});
+		rectPause2 = new fabric.Rect({
+			left: 2.1 * rad
+			, top: _o.height - 2.5 * rad
+			, visible: !_o.status.paused
+			, width: rad / 3
+			, height: rad
+			, stroke: mainColor
+			, fill: mainColor
+		});
+		play = new fabric.Group([
+				new fabric.Circle({
+					left: rad
+					, top: _o.height - 3 * rad
+					, radius: rad
+					, stroke: mainColor
+					, strokeWidth: 2
+					, fill: null
+				})
+				, trg, rectPause1, rectPause2]
+			, {
+				objectCaching: false
+				, visible: false
+			});
+		cProgress = new fabric.Rect({
+			left: 3.5 * rad
+			, top: _o.height - 1.5 * rad
+			, visible: false
+			, width: _o.width - 5 * rad
+			, height: rad / 2
+			, stroke: mainColor
+			, fill: null
+			, rx: 5
+			, ry: 5
+		});
+		progress = new fabric.Rect({
+			left: 3.5 * rad
+			, top: _o.height - 1.5 * rad
+			, visible: false
+			, width: 0
+			, height: rad / 2
+			, stroke: mainColor
+			, fill: mainColor
+			, rx: 5
+			, ry: 5
+		});
 	}
 
 	player.create = function(canvas, _o, wb) {
@@ -26,59 +94,7 @@ var Player = (function() {
 				_o.status = {paused: true};
 			}
 			let playable = false;
-			const trg = new fabric.Triangle({
-				left: 2.7 * rad
-				, top: _o.height - 2.5 * rad
-				, visible: _o.status.paused
-				, angle: 90
-				, width: rad
-				, height: rad
-				, stroke: mainColor
-				, fill: mainColor
-			});
-			const rectPause1 = new fabric.Rect({
-				left: 1.6 * rad
-				, top: _o.height - 2.5 * rad
-				, visible: !_o.status.paused
-				, width: rad / 3
-				, height: rad
-				, stroke: mainColor
-				, fill: mainColor
-			});
-			const rectPause2 = new fabric.Rect({
-				left: 2.1 * rad
-				, top: _o.height - 2.5 * rad
-				, visible: !_o.status.paused
-				, width: rad / 3
-				, height: rad
-				, stroke: mainColor
-				, fill: mainColor
-			});
-			const play = new fabric.Group([
-					new fabric.Circle({
-						left: rad
-						, top: _o.height - 3 * rad
-						, radius: rad
-						, stroke: mainColor
-						, strokeWidth: 2
-						, fill: null
-					})
-					, trg, rectPause1, rectPause2]
-				, {
-					objectCaching: false
-					, visible: false
-				});
-			const cProgress = new fabric.Rect({
-				left: 3.5 * rad
-				, top: _o.height - 1.5 * rad
-				, visible: false
-				, width: _o.width - 5 * rad
-				, height: rad / 2
-				, stroke: mainColor
-				, fill: null
-				, rx: 5
-				, ry: 5
-			});
+			_initControls(_o);
 			const isDone = function() {
 				return video.getElement().currentTime === video.getElement().duration;
 			};
@@ -86,17 +102,6 @@ var Player = (function() {
 				progress.set('width', (video.getElement().currentTime * cProgress.width) / video.getElement().duration);
 				canvas.requestRenderAll();
 			};
-			const progress = new fabric.Rect({
-				left: 3.5 * rad
-				, top: _o.height - 1.5 * rad
-				, visible: false
-				, width: 0
-				, height: rad / 2
-				, stroke: mainColor
-				, fill: mainColor
-				, rx: 5
-				, ry: 5
-			});
 			let request;
 
 			const opts = $.extend({
