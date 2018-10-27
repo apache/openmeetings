@@ -22,6 +22,9 @@ var Player = (function() {
 		fabric.Image.fromURL(_o._poster, function(poster) {
 			poster.scaleX = poster.scaleY = _o.width / poster.getOriginalSize().width;
 			const video = new fabric.Image(vid[0], {visible: false, objectCaching: false});
+			vid[0].onseeked = function() {
+				canvas.requestRenderAll();
+			};
 			if (typeof(_o.status) === 'undefined') {
 				_o.status = {paused: true};
 			}
