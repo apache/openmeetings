@@ -45,7 +45,6 @@ var Video = (function() {
 		}
 	}
 	function _getScreenStream(msg, callback) {
-		//FIXME TODO frameRate
 		const b = kurentoUtils.WebRtcPeer.browser;
 		if (VideoUtil.isEdge() && b.major > 16) {
 			const cnts = {
@@ -54,20 +53,26 @@ var Video = (function() {
 			navigator.getDisplayMedia(cnts).then(function(stream) {
 				callback(msg, cnts, stream);
 			}).catch(function(err) {
+				Sharer.setShareState(SHARE_STOPED);
 				OmUtil.error(err);
 			});
 		} else if (b.name === 'Firefox') {
 			// https://mozilla.github.io/webrtc-landing/gum_test.html
 			const cnts = {
 				video: {
-					mediaSource: 'screen' // 'window'/'application' //FIXME TODO different behavior
+					mediaSource: sd.shareType
+					, frameRate: sd.fps //TODO ideal
+					 //TODO ideal width
+					 //TODO ideal height
 				}};
 			navigator.mediaDevices.getUserMedia(cnts).then(function(stream) {
 				callback(msg, cnts, stream);
 			}).catch(function(err) {
+				Sharer.setShareState(SHARE_STOPED);
 				OmUtil.error(err);
 			});
 		} else {
+			Sharer.close();
 			OmUtil.error('Screen-sharing is not supported in ' + b.name + '[' + b.major + ']');
 		}
 	}
@@ -144,6 +149,9 @@ var Video = (function() {
 						, uid: sd.uid
 						, sdpOffer: offerSdp
 					});
+					if (VideoUtil.isSharing(sd)) {
+						Sharer.setShareState(SHARE_STARTED);
+					}
 				});
 			});
 	}
@@ -297,6 +305,9 @@ var Video = (function() {
 		v = $('#' + _id);
 		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
 		f = v.find('.footer');
+		if (!sd.self && isSharing) {
+			Sharer.close();
+		}
 		if (sd.self && isSharing) {
 			v.hide();
 		} else {

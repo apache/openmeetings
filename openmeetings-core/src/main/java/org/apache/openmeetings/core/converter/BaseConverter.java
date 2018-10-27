@@ -44,6 +44,7 @@ import java.util.regex.Pattern;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingChunk;
@@ -66,9 +67,11 @@ public abstract class BaseConverter {
 	@Autowired
 	protected ConfigurationDao cfgDao;
 	@Autowired
-	private RecordingChunkDao chunkDao;
+	protected RecordingChunkDao chunkDao;
 	@Autowired
 	protected FileItemLogDao logDao;
+	@Autowired
+	protected RecordingDao recordingDao;
 
 	protected static class Dimension {
 		private final int width;
@@ -267,43 +270,6 @@ public abstract class BaseConverter {
 				if (outputWav.exists() && outputWav.length() != 0) {
 					// Strip Wave to Full Length
 					File outputGapFullWav = outputWav;
-
-					/* FIXME TODO
-					// Fix Start/End in Audio
-					List<RecordingMetaDelta> metaDeltas = metaDeltaDao.getByMetaId(metaId);
-
-					int counter = 0;
-
-					for (RecordingMetaDelta metaDelta : metaDeltas) {
-						File inputFile = outputGapFullWav;
-
-						// Strip Wave to Full Length
-						String hashFileGapsFullName = metaData.getStreamName() + "_GAP_FULL_WAVE_" + counter + ".wav";
-						outputGapFullWav = new File(streamFolder, hashFileGapsFullName);
-
-						metaDelta.setWaveOutPutName(hashFileGapsFullName);
-
-						String[] soxArgs = null;
-
-						if (metaDelta.getDeltaTime() != null) {
-							double gapSeconds = diffSeconds(metaDelta.getDeltaTime());
-							if (metaDelta.isStartPadding()) {
-								soxArgs = addSoxPad(logs, "fillGap", gapSeconds, 0, inputFile, outputGapFullWav);
-							} else if (metaDelta.isEndPadding()) {
-								soxArgs = addSoxPad(logs, "fillGap", 0, gapSeconds, inputFile, outputGapFullWav);
-							}
-						}
-
-						if (soxArgs != null) {
-							log.debug("START fillGap ################# Delta-ID :: {}", metaDelta.getId());
-
-							metaDeltaDao.update(metaDelta);
-							counter++;
-						} else {
-							outputGapFullWav = inputFile;
-						}
-					}
-					*/
 
 					// Strip Wave to Full Length
 					String hashFileFullName = chunk.getStreamName() + "_FULL_WAVE.wav";

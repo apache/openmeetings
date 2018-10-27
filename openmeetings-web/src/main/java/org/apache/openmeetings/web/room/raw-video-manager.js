@@ -50,7 +50,7 @@ var VideoManager = (function() {
 						}
 						break;
 					case 'broadcastStopped':
-						_closeV($('#' + VideoUtil.getVid(m.uid)));
+						_close(m.uid, false);
 						break;
 					case 'broadcast':
 						_onBroadcast(m);
@@ -168,7 +168,7 @@ var VideoManager = (function() {
 		});
 	}
 	function _close(uid, showShareBtn) {
-		const _id = VideoUtil.getVid(uid), v = $('#' + _id);
+		const v = $('#' + VideoUtil.getVid(uid));
 		if (v.length === 1) {
 			_closeV(v);
 		}

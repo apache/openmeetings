@@ -249,7 +249,7 @@ public class WebSocketHelper {
 			Application app = (Application)getApp();
 			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-			Executor executor = settings.getWebSocketPushMessageExecutor(); // new NewThreadExecutor();
+			Executor executor = settings.getWebSocketPushMessageExecutor();
 			for (IWebSocketConnection c : reg.getConnections(app)) {
 				executor.run(() -> {
 					try {
@@ -293,7 +293,7 @@ public class WebSocketHelper {
 			Application app = (Application)getApp();
 			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-			Executor executor = settings.getWebSocketPushMessageExecutor(); //new NewThreadExecutor();
+			Executor executor = settings.getWebSocketPushMessageExecutor();
 			for (Client c : func.apply(app)) {
 				if (check == null || check.test(c)) {
 					final IWebSocketConnection wc = reg.getConnection(app, c.getSessionId(), new PageIdKey(c.getPageId()));

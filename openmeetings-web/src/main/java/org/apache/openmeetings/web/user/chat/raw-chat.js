@@ -367,7 +367,9 @@ var Chat = function() {
 		});
 	}
 	function _setHeight(h) {
-		if (!isInited()) return;
+		if (!isInited()) {
+			return;
+		}
 		pp.height(h);
 		if (isClosed()) {
 			ctrl.height(h);

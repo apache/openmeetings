@@ -22,7 +22,6 @@ import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.db.util.FormatHelper.getDisplayName;
-import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 
@@ -31,7 +30,6 @@ import java.util.Date;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 
-import org.apache.openmeetings.core.remote.MobileService;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -72,8 +70,6 @@ public class ChatForm extends Form<Void> {
 	private UserDao userDao;
 	@SpringBean
 	private RoomDao roomDao;
-	@SpringBean
-	private MobileService mobileService;
 
 	public ChatForm(String id) {
 		super(id);
@@ -139,7 +135,6 @@ public class ChatForm extends Form<Void> {
 					chatDao.update(m);
 					JSONObject msg = getChat().getMessage(Arrays.asList(m));
 					if (m.getToRoom() != null) {
-						mobileService.sendChatMessage(getUid(), m, getDateFormat()); //let's send to mobile users
 						WebSocketHelper.sendRoom(m, msg);
 					} else if (m.getToUser() != null) {
 						WebSocketHelper.sendUser(getUserId(), msg.toString());
@@ -156,10 +151,6 @@ public class ChatForm extends Form<Void> {
 
 	private Client getClient() {
 		return findParent(MainPanel.class).getClient();
-	}
-
-	private String getUid() {
-		return getClient().getUid();
 	}
 
 	public String getScope() {

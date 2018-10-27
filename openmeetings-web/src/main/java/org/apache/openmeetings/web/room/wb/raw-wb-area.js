@@ -160,7 +160,9 @@ var DrawWbArea = function() {
 		return self.getWb(id).getCanvas();
 	};
 	self.setRole = function(_role) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		role = _role;
 		const tabsNav = tabs.find('.ui-tabs-nav');
 		tabsNav.sortable(role === PRESENTER ? 'enable' : 'disable');
@@ -205,7 +207,9 @@ var DrawWbArea = function() {
 		Wicket.Event.subscribe('/websocket/message', self.wbWsHandler);
 		container = $('.room.wb.area');
 		tabs = container.find('.tabs');
-		if (tabs.length === 0) return;
+		if (tabs.length === 0) {
+			return;
+		}
 		tabs.tabs({
 			beforeActivate: function(e) {
 				let res = true;
@@ -240,7 +244,9 @@ var DrawWbArea = function() {
 		Wicket.Event.unsubscribe('/websocket/message', self.wbWsHandler);
 	};
 	self.create = function(obj) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		const tid = self.getWbTabId(obj.wbId)
 			, wb = OmUtil.tmpl('#wb-area', tid)
 			, li = OmUtil.tmpl('#wb-area-tab').data('wb-id', obj.wbId).attr('data-wb-id', obj.wbId)
@@ -281,21 +287,29 @@ var DrawWbArea = function() {
 		_resizeWbs();
 	}
 	self.createWb = function(obj) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		self.create(obj);
 		_activateTab(obj.wbId);
 		_actionActivateWb(obj.wbId);
 	};
 	self.activateWb = function(obj) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		_activateTab(obj.wbId);
 	}
 	self.renameWb = function(obj) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		_renameTab(obj);
 	}
 	self.removeWb = function(obj) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		const tabId = self.getWbTabId(obj.wbId);
 		_getWbTab(obj.wbId).remove();
 		$('#' + tabId).remove();
@@ -303,38 +317,54 @@ var DrawWbArea = function() {
 		_actionActivateWb(getActive().data().id);
 	};
 	self.load = function(json) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		self.getWb(json.wbId).load(json.obj);
 	};
 	self.setSlide = function(json) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		self.getWb(json.wbId).setSlide(json.slide);
 	};
 	self.createObj = function(json) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		self.getWb(json.wbId).createObj(json.obj);
 	};
 	self.modifyObj = function(json) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		self.getWb(json.wbId).modifyObj(json.obj);
 	};
 	self.deleteObj = function(json) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		self.getWb(json.wbId).removeObj(json.obj);
 	};
 	self.clearAll = function(json) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		self.getWb(json.wbId).clearAll();
 		Room.setSize();
 	};
 	self.clearSlide = function(json) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		self.getWb(json.wbId).clearSlide(json.slide);
 	};
 	self.resize = function(sbW, chW, w, h) {
 		const hh = h - 5;
 		container.width(w).height(h).css('left', (Settings.isRtl ? chW : sbW) + 'px');
-		if (!container || !_inited) return;
+		if (!container || !_inited) {
+			return;
+		}
 		area.width(w).height(hh);
 
 		const wbTabs = area.find('.tabs.ui-tabs');
@@ -342,11 +372,15 @@ var DrawWbArea = function() {
 		_resizeWbs();
 	}
 	self.setSize = function(json) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		self.getWb(json.wbId).setSize(json);
 	}
 	self.download = function(fmt) {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		const wb = getActive().data();
 		if ('pdf' === fmt) {
 			const arr = [];
@@ -380,7 +414,9 @@ var DrawWbArea = function() {
 	}
 	self.videoStatus = _videoStatus;
 	self.loadVideos = function() {
-		if (!_inited) return;
+		if (!_inited) {
+			return;
+		}
 		wbAction('loadVideos');
 	};
 	self.initVideos = _initVideos;

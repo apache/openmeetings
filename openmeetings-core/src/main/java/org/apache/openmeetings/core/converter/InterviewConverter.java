@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -33,8 +34,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
-import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingChunk;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -44,18 +43,11 @@ import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class InterviewConverter extends BaseConverter implements IRecordingConverter {
 	private static final Logger log = LoggerFactory.getLogger(InterviewConverter.class);
-
-	// Spring loaded Beans
-	@Autowired
-	private RecordingDao recordingDao;
-	@Autowired
-	private RecordingChunkDao chunkDao;
 
 	@Override
 	public void startConversion(Recording r) {
@@ -101,38 +93,10 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			for (Entry<String, List<RecordingChunk>> e : cunksBySid.entrySet()) {
 				Date pStart = r.getRecordStart();
 				List<PodPart> parts = new ArrayList<>();
-				for (RecordingChunk chunk : e.getValue()) {
-					File chunkStream = getRecordingChunk(r.getRoomId(), chunk.getStreamName());
-					if (chunkStream.exists()) {
-						String path = chunkStream.getCanonicalPath();
-						/* CHECK FILE:
-						 * ffmpeg -i rec_316_stream_567_2013_08_28_11_51_45.webm -v error -f null file.null
-						 */
-						String[] args = new String[] {getPathToFFMPEG(), "-y"
-								, "-i", path
-								, "-v", "error"
-								, "-f", "null"
-								, "file.null"};
-						ProcessResult res = ProcessHelper.executeScript(String.format("Check chunk pod video_%s_%s", N, parts.size()), args, true);
-						logs.add(res);
-						if (!res.isWarn()) {
-							long diff = diff(chunk.isAudioOnly() ? chunk.getEnd() : chunk.getStart(), pStart);
-							//createBlankPod(id, streamFolder, interviewCam, diff, logs, pods, parts);
-							PodPart.add(parts, diff);
-							if (!chunk.isAudioOnly()) {
-								parts.add(new PodPart(path, diff(chunk.getEnd(), chunk.getStart())));
-							}
-							pStart = chunk.getEnd();
-						}
-					} else {
-						log.debug("Chunk stream doesn't exist: {}", chunkStream);
-					}
-				}
+				pStart = processParts(r.getRoomId(), e.getValue(), logs, N, parts, pStart);
 				if (!parts.isEmpty()) {
 					String podX = new File(streamFolder, String.format("rec_%s_pod_%s.%s", r.getId(), N, EXTENSION_MP4)).getCanonicalPath();
 					long diff = diff(r.getRecordEnd(), pStart);
-					// add blank pod till the end
-					//createBlankPod(id, streamFolder, interviewCam, diff, logs, pods, parts);
 					PodPart.add(parts, diff);
 					/* create continuous pod
 					 * ffmpeg \
@@ -191,60 +155,11 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			double ratio = Math.sqrt(N / Math.sqrt(2));
 			int w = ratio < 1 ? N : (int)Math.round(ratio);
 			w = Math.max(w, (int)Math.round(1. * N / w));
-			List<String> args = new ArrayList<>();
-			if (N == 1) {
-				args.add("-i");
-				args.add(pods.get(0));
-				args.add("-i");
-				args.add(wav.getCanonicalPath());
-				args.add("-map");
-				args.add("0:v");
-			} else {
-				/* Creating grid
-				 * ffmpeg -i top_l.mp4 -i top_r.mp4 -i bottom_l.mp4 -i bottom_r.mp4 -i audio.mp4 \
-				 *	-filter_complex "[0:v][1:v]hstack=inputs=2[t];[2:v][3:v]hstack=inputs=2[b];[t][b]vstack=inputs=2[v]" \
-				 *	-map "[v]" -map 4:a -c:a copy -shortest output.mp4
-				 */
-				StringBuilder cols = new StringBuilder();
-				StringBuilder rows = new StringBuilder();
-				for (int i = 0, j = 0; i < N; ++i) {
-					args.add("-i");
-					args.add(pods.get(i));
-					cols.append('[').append(i).append(":v]");
-					if (i != 0 && (i + 1) % w == 0) {
-						cols.append("hstack=inputs=").append(w);
-						if (j == 0 && i == N - 1) {
-							cols.append("[v]");
-						} else {
-							cols.append("[c").append(j).append("];");
-						}
-						rows.append("[c").append(j).append(']');
-						j++;
-					}
-					if (i == N - 1) {
-						if (j > 1) {
-							rows.append("vstack=inputs=").append(j).append("[v]");
-						} else {
-							rows.setLength(0);
-						}
-					}
-				}
-				args.add("-i");
-				args.add(wav.getCanonicalPath());
-				args.add("-filter_complex");
-				args.add(cols.append(rows).toString());
-				args.add("-map");
-				args.add("[v]");
-			}
-			args.add("-map");
-			args.add(String.format("%s:a", N));
-			args.add("-qmax"); args.add("1");
-			args.add("-qmin"); args.add("1");
 
 			r.setWidth(w * width);
 			r.setHeight((N / w) * height);
 
-			String mp4path = convertToMp4(r, args, logs);
+			String mp4path = convertToMp4(r, getFinalArgs(N, pods, wav, w), logs);
 
 			finalizeRec(r, mp4path, logs);
 		} catch (Exception err) {
@@ -258,6 +173,89 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			postProcess(waveFiles);
 			recordingDao.update(r);
 		}
+	}
+
+	private Date processParts(Long roomId, List<RecordingChunk> chunks, ProcessResultList logs, int N, List<PodPart> parts, Date pStart) throws IOException {
+		for (RecordingChunk chunk : chunks) {
+			File chunkStream = getRecordingChunk(roomId, chunk.getStreamName());
+			if (chunkStream.exists()) {
+				String path = chunkStream.getCanonicalPath();
+				/* CHECK FILE:
+				 * ffmpeg -i rec_316_stream_567_2013_08_28_11_51_45.webm -v error -f null file.null
+				 */
+				String[] args = new String[] {getPathToFFMPEG(), "-y"
+						, "-i", path
+						, "-v", "error"
+						, "-f", "null"
+						, "file.null"};
+				ProcessResult res = ProcessHelper.executeScript(String.format("Check chunk pod video_%s_%s", N, parts.size()), args, true);
+				logs.add(res);
+				if (!res.isWarn()) {
+					long diff = diff(chunk.isAudioOnly() ? chunk.getEnd() : chunk.getStart(), pStart);
+					PodPart.add(parts, diff);
+					if (!chunk.isAudioOnly()) {
+						parts.add(new PodPart(path, diff(chunk.getEnd(), chunk.getStart())));
+					}
+					pStart = chunk.getEnd();
+				}
+			} else {
+				log.debug("Chunk stream doesn't exist: {}", chunkStream);
+			}
+		}
+		return pStart;
+	}
+
+	private static List<String> getFinalArgs(int N, List<String> pods, File wav, int w) throws IOException {
+		List<String> args = new ArrayList<>();
+		if (N == 1) {
+			args.add("-i");
+			args.add(pods.get(0));
+			args.add("-i");
+			args.add(wav.getCanonicalPath());
+			args.add("-map");
+			args.add("0:v");
+		} else {
+			/* Creating grid
+			 * ffmpeg -i top_l.mp4 -i top_r.mp4 -i bottom_l.mp4 -i bottom_r.mp4 -i audio.mp4 \
+			 *	-filter_complex "[0:v][1:v]hstack=inputs=2[t];[2:v][3:v]hstack=inputs=2[b];[t][b]vstack=inputs=2[v]" \
+			 *	-map "[v]" -map 4:a -c:a copy -shortest output.mp4
+			 */
+			StringBuilder cols = new StringBuilder();
+			StringBuilder rows = new StringBuilder();
+			for (int i = 0, j = 0; i < N; ++i) {
+				args.add("-i");
+				args.add(pods.get(i));
+				cols.append('[').append(i).append(":v]");
+				if (i != 0 && (i + 1) % w == 0) {
+					cols.append("hstack=inputs=").append(w);
+					if (j == 0 && i == N - 1) {
+						cols.append("[v]");
+					} else {
+						cols.append("[c").append(j).append("];");
+					}
+					rows.append("[c").append(j).append(']');
+					j++;
+				}
+				if (i == N - 1) {
+					if (j > 1) {
+						rows.append("vstack=inputs=").append(j).append("[v]");
+					} else {
+						rows.setLength(0);
+					}
+				}
+			}
+			args.add("-i");
+			args.add(wav.getCanonicalPath());
+			args.add("-filter_complex");
+			args.add(cols.append(rows).toString());
+			args.add("-map");
+			args.add("[v]");
+		}
+		args.add("-map");
+		args.add(String.format("%s:a", N));
+		args.add("-qmax"); args.add("1");
+		args.add("-qmin"); args.add("1");
+		return args;
 	}
 
 	private static class PodPart {

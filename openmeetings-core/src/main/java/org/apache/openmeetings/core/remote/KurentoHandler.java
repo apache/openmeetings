@@ -52,6 +52,7 @@ import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
@@ -234,6 +235,7 @@ public class KurentoHandler {
 				return;
 			}
 			KStream sender;
+			StreamDesc sd;
 			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
 			switch (cmdId) {
 				case "devicesAltered":
@@ -250,7 +252,7 @@ public class KurentoHandler {
 					toggleActivity(c, Activity.valueOf(msg.getString("activity")));
 					break;
 				case "broadcastStarted":
-					StreamDesc sd = c.getStream(uid);
+					sd = c.getStream(uid);
 					sender = getByUid(uid);
 					if (sender == null) {
 						KRoom room = getRoom(c.getRoomId());
@@ -273,6 +275,18 @@ public class KurentoHandler {
 					sender = getByUid(msg.getString("sender"));
 					if (sender != null) {
 						sender.addListener(this, c.getSid(), c.getUid(), msg.getString("sdpOffer"));
+					}
+					break;
+				case "wannaShare":
+					if (screenShareAllowed(c)) {
+						startSharing(c, msg);
+					}
+					break;
+				case "stopSharing":
+					sender = getByUid(uid);
+					sd = stopSharing(c.getSid(), uid);
+					if (sender != null && sd != null) {
+						sender.stopBroadcast(this);
 					}
 					break;
 			}
@@ -299,7 +313,7 @@ public class KurentoHandler {
 		if (room.isSharing()) {
 			List<StreamDesc> streams = cm.listByRoom(roomId).parallelStream()
 					.flatMap(c -> c.getStreams().stream())
-					.filter(sd -> StreamType.SCREEN != sd.getType()).collect(Collectors.toList());
+					.filter(sd -> StreamType.SCREEN == sd.getType()).collect(Collectors.toList());
 			if (streams.isEmpty()) {
 				log.info("No more screen streams in the room, stopping sharing");
 				room.stopSharing();
@@ -335,10 +349,12 @@ public class KurentoHandler {
 				boolean changed = false;
 				for (StreamDesc sd : c.getStreams()) {
 					KStream s = getByUid(sd.getUid());
-					if (s != null) {
+					if (StreamType.WEBCAM == sd.getType()) {
+						if (s != null) {
+							s.stopBroadcast(this);
+						}
 						c.removeStream(sd.getUid());
 						changed = true;
-						s.stopBroadcast(this);
 					}
 				}
 				if (changed) {
@@ -408,8 +424,33 @@ public class KurentoHandler {
 		return getRoom(roomId).getRecordingUser();
 	}
 
-	public void startSharing(Client c) {
-		getRoom(c.getRoomId()).startSharing(this, cm, c);
+	public boolean screenShareAllowed(Client c) {
+		Room r = c.getRoom();
+		return r != null && Room.Type.interview != r.getType()
+				&& !r.isHidden(RoomElement.ScreenSharing)
+				&& r.isAllowRecording() && c.hasRight(Right.share)
+				&& !isSharing(r.getId());
+	}
+
+	private void startSharing(Client c, JSONObject msg) {
+		if (c.getRoomId() != null) {
+			getRoom(c.getRoomId()).startSharing(this, cm, c, msg);
+		}
+	}
+
+	StreamDesc stopSharing(String sid, String uid) {
+		StreamDesc sd = null;
+		Client c = getBySid(sid);
+		if (c.getRoomId() != null) {
+			sd = c.getStream(uid);
+			if (sd != null && StreamType.SCREEN == sd.getType()) {
+				c.removeStream(uid);
+				cm.update(c);
+				checkStreams(c.getRoomId());
+				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+			}
+		}
+		return sd;
 	}
 
 	public boolean isSharing(Long roomId) {

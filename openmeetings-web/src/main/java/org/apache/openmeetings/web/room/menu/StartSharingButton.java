@@ -18,27 +18,13 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
-import org.apache.openmeetings.core.remote.KurentoHandler;
-import org.apache.openmeetings.web.common.OmButton;
-import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import com.googlecode.wicket.jquery.ui.form.button.Button;
 
-public class StartSharingButton extends OmButton {
+public class StartSharingButton extends Button {
 	private static final long serialVersionUID = 1L;
-	@SpringBean
-	private KurentoHandler kHandler;
 
 	public StartSharingButton(String id) {
 		super(id);
 		setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
-	}
-
-	@Override
-	public void onClick(AjaxRequestTarget target) {
-		RoomPanel rp = findParent(RoomPanel.class);
-		if (rp.screenShareAllowed()) {
-			kHandler.startSharing(rp.getClient());
-		}
 	}
 }

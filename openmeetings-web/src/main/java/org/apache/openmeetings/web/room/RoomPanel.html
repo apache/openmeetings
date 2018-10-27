@@ -86,6 +86,39 @@
 				<span class="badge">0</span>
 			</div>
 		</div>
+		<div id="sharer" wicket:message="title:730">
+			<div>
+				<span class="label"><wicket:message key="734"/></span>
+				<select name="type" class="type">
+					<option value="screen">Screen</option>
+					<option value="window">Window</option>
+					<option value="application">Application</option>
+				</select>
+			</div>
+			<div>
+				<span class="label"><wicket:message key="740"/></span>
+				<input class="width" type="number" value="800"/>
+			</div>
+			<div>
+				<span class="label"><wicket:message key="741"/></span>
+				<input class="height" type="number" value="600"/>
+			</div>
+			<div>
+				<span class="label"><wicket:message key="1089"/></span>
+				<select name="fps" class="fps">
+					<option value="2">2 FPS</option>
+					<option value="5">5 FPS</option>
+					<option value="10" selected>10 FPS</option>
+					<option value="15">15 FPS</option>
+					<option value="20">20 FPS</option>
+					<option value="25">25 FPS</option>
+					<option value="30">30 FPS</option>
+				</select>
+			</div>
+			<hr/>
+			<button class="share-start-stop" wicket:message="data-start:732, data-stop:733"><wicket:message key="732"/></button>
+			<button class="record-start-stop ui-state-error" wicket:message="data-start:871, data-stop:872"><wicket:message key="871"/></button>
+		</div>
 	</div>
 </wicket:panel>
 </html>

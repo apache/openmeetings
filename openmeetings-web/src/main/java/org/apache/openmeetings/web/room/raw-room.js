@@ -43,6 +43,7 @@ var Room = (function() {
 		if (typeof(Activities) !== 'undefined') {
 			Activities.init();
 		}
+		Sharer.init();
 	}
 	function _getSelfAudioClient() {
 		const vw = $('#video' + Room.getOptions().uid);
@@ -187,6 +188,7 @@ var Room = (function() {
 		$(window).off('keyup', _keyHandler);
 		$(document).off('click', _mouseHandler);
 		sb = undefined;
+		Sharer.close();
 	}
 	function _showClipboard(txt) {
 		const dlg = $('#clipboard-dialog');

@@ -18,7 +18,9 @@ var Shape = function(wb) {
 	};
 	shape.mouseMove = function(o) {
 		const canvas = this;
-		if (!shape.isDown) return;
+		if (!shape.isDown) {
+			return;
+		}
 		const pointer = canvas.getPointer(o.e);
 		shape.updateShape(pointer);
 		canvas.requestRenderAll();

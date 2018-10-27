@@ -81,7 +81,11 @@ var OmUtil = (function() {
 	self.confirmDlg = _confirmDlg;
 	self.tmpl = _tmpl;
 	self.debugEnabled = _debugEnabled;
-	self.enableDebug = function() { if (!!options) { options.debug = true; } };
+	self.enableDebug = function() {
+		if (!!options) {
+			options.debug = true;
+		}
+	};
 	self.sendMessage = function(_m, _base) {
 		const base = _base || {}
 			, m = _m || {}

@@ -55,7 +55,6 @@ public class OMContextListener implements ServletContextListener {
 			// StatusPrinter will handle this
 		}
 		StatusPrinter.printInCaseOfErrorsOrWarnings(context);
-		//System.setProperty("logback.configurationFile", "logback-config.xml");
 	}
 
 	private static String pathToName(ServletContextEvent event) {

@@ -738,9 +738,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public boolean screenShareAllowed() {
-		return !interview && !r.isHidden(RoomElement.ScreenSharing)
-				&& r.isAllowRecording() && getClient().hasRight(Right.share)
-				&& !kHandler.isSharing(r.getId());
+		return kHandler.screenShareAllowed(getClient());
 	}
 
 	public RoomSidebar getSidebar() {

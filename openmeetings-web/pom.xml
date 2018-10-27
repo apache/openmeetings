@@ -212,6 +212,7 @@
 								<jsSourceFile>jquery.dialogextend.js</jsSourceFile>
 								<jsSourceFile>raw-video.js</jsSourceFile>
 								<jsSourceFile>raw-video-manager.js</jsSourceFile>
+								<jsSourceFile>raw-sharer.js</jsSourceFile>
 								<jsSourceFile>raw-room.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>room.js</jsFinalFile>

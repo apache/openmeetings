@@ -182,28 +182,32 @@ public class BackupExport {
 			exportChat(zos, progressHolder);
 
 			if (includeFiles) {
-				//##################### Backup Room Files
-				for (File file : getUploadDir().listFiles()) {
-					String fName = file.getName();
-					if (file.isDirectory() && !IMPORT_DIR.equals(fName) && !BACKUP_DIR.equals(fName)) {
-						log.debug("### " + file.getName());
-						writeZipDir(BCKP_ROOM_FILES, file.getParentFile().toURI(), file, zos);
-					}
-				}
-
-				//##################### Backup Recording Files
-				final File recDir = getStreamsHibernateDir();
-				writeZipDir(BCKP_RECORD_FILES, recDir.toURI(), recDir, zos);
-				progressHolder.setProgress(90);
-
-				final File customCss = getCustomCss();
-				if (customCss != null && customCss.exists() && customCss.isFile()) {
-					writeZip(CSS_DIR, customCss.getParentFile().toURI(), customCss, zos);
-				}
+				exportFiles(progressHolder, zos);
 			}
 		}
 		progressHolder.setProgress(100);
 		log.debug("---Done");
+	}
+
+	private void exportFiles(ProgressHolder progressHolder, ZipOutputStream zos) throws IOException {
+		//##################### Backup Room Files
+		for (File file : getUploadDir().listFiles()) {
+			String fName = file.getName();
+			if (file.isDirectory() && !IMPORT_DIR.equals(fName) && !BACKUP_DIR.equals(fName)) {
+				log.debug("### " + file.getName());
+				writeZipDir(BCKP_ROOM_FILES, file.getParentFile().toURI(), file, zos);
+			}
+		}
+
+		//##################### Backup Recording Files
+		final File recDir = getStreamsHibernateDir();
+		writeZipDir(BCKP_RECORD_FILES, recDir.toURI(), recDir, zos);
+		progressHolder.setProgress(90);
+
+		final File customCss = getCustomCss();
+		if (customCss != null && customCss.exists() && customCss.isFile()) {
+			writeZip(CSS_DIR, customCss.getParentFile().toURI(), customCss, zos);
+		}
 	}
 
 	private static <T extends HistoricalEntity> void bindDate(Registry registry, List<T> list) throws Exception {
@@ -545,6 +549,12 @@ public class BackupExport {
 		}
 	}
 
+	/**
+	 * Required during build `generate-configs-xml` goal
+	 *
+	 * @param args - path to GeneralConfiguration.xml
+	 * @throws Exception - in case of any error
+	 */
 	public static void main(String[] args) throws Exception {
 		List<Configuration> list = ImportInitvalues.initialCfgs(new InstallationConfig());
 		Serializer ser = getConfigSerializer(list);

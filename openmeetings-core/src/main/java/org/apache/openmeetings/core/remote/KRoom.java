@@ -177,14 +177,17 @@ public class KRoom {
 		return sharingStarted.get();
 	}
 
-	public void startSharing(KurentoHandler h, IClientManager cm, Client c) {
+	public void startSharing(KurentoHandler h, IClientManager cm, Client c, JSONObject msg) {
 		if (sharingStarted.compareAndSet(false, true)) {
 			StreamDesc sd = c.addStream(StreamType.SCREEN);
+			sd.setWidth(msg.getInt("width")).setHeight(msg.getInt("height"));
 			cm.update(c);
 			log.debug("User {}: has started broadcast", sd.getUid());
 			h.sendClient(sd.getSid(), newKurentoMsg()
 					.put("id", "broadcast")
-					.put("stream", sd.toJson())
+					.put("stream", sd.toJson()
+							.put("shareType", msg.getString("shareType"))
+							.put("fps", msg.getString("fps")))
 					.put("iceServers", h.getTurnServers()));
 		}
 	}

@@ -115,7 +115,7 @@ public class RoomMenuPanel extends Panel {
 		add(logo, new Label("tag", tag).setVisible(!Strings.isEmpty(tag)));
 		add(shareBtn = new StartSharingButton("share"));
 		pollsSubMenu = new PollsSubMenu(room, this);
-		actionsSubMenu = new ActionsSubMenu(room, this, shareBtn);
+		actionsSubMenu = new ActionsSubMenu(room, this);
 	}
 
 	private Group getGroup() {
