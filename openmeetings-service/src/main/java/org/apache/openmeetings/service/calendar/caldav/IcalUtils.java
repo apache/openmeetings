@@ -250,7 +250,8 @@ public class IcalUtils {
 				if ("mailto".equals(uri.getScheme())) {
 					String email = uri.getSchemeSpecificPart();
 
-					if(attendee.getParameter(Role.CHAIR.getName()) != null
+					Role role = attendee.getParameter(Role.CHAIR.getName());
+					if(role != null && role.getValue().equals(Role.CHAIR.getValue())
 							&& email.equals(organizerEmail))
 						continue;
 
