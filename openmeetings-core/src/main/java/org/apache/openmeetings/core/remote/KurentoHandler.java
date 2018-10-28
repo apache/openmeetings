@@ -118,28 +118,7 @@ public class KurentoHandler {
 	public void init() {
 		check = () -> {
 			try {
-				client = KurentoClient.create(kurentoWsUrl, new KurentoConnectionListener() {
-					@Override
-					public void reconnected(boolean sameServer) {
-						log.info("Kurento reconnected ? {}", sameServer);
-					}
-
-					@Override
-					public void disconnected() {
-						log.warn("Disconnected, will re-try in {} ms", checkTimeout);
-						recheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
-					}
-
-					@Override
-					public void connectionFailed() {
-						log.info("Kurento connectionFailed");
-					}
-
-					@Override
-					public void connected() {
-						log.info("Kurento connected");
-					}
-				});
+				client = KurentoClient.create(kurentoWsUrl, new KConnectionListener());
 				kuid = randomUUID().toString();
 				client.getServerManager().addObjectCreatedListener(new KWatchDog());
 			} catch (Exception e) {
@@ -627,6 +606,29 @@ public class KurentoHandler {
 		this.turnTtl = turnTtl;
 	}
 
+	private class KConnectionListener implements KurentoConnectionListener {
+		@Override
+		public void reconnected(boolean sameServer) {
+			log.info("Kurento reconnected ? {}", sameServer);
+		}
+
+		@Override
+		public void disconnected() {
+			log.warn("Disconnected, will re-try in {} ms", checkTimeout);
+			recheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
+		}
+
+		@Override
+		public void connectionFailed() {
+			log.info("Kurento connectionFailed");
+		}
+
+		@Override
+		public void connected() {
+			log.info("Kurento connected");
+		}
+	}
+
 	private class KWatchDog implements EventListener<ObjectCreatedEvent> {
 		private ScheduledExecutorService scheduler;
 
@@ -647,21 +649,17 @@ public class KurentoHandler {
 					// still alive
 					MediaPipeline pipe = client.getById(roid, MediaPipeline.class);
 					Map<String, String> tags = tagsAsMap(pipe);
-					try {
-						if (validTestPipeline(tags)) {
+					if (validTestPipeline(tags)) {
+						return;
+					}
+					if (kuid.equals(tags.get(TAG_KUID))) {
+						KRoom r = rooms.get(Long.valueOf(tags.get(TAG_ROOM)));
+						if (r.getPipelineId().equals(pipe.getId())) {
 							return;
+						} else if (r != null) {
+							rooms.remove(r.getRoomId());
+							r.close(KurentoHandler.this);
 						}
-						if (kuid.equals(tags.get(TAG_KUID))) {
-							KRoom r = rooms.get(Long.valueOf(tags.get(TAG_ROOM)));
-							if (r.getPipelineId().equals(pipe.getId())) {
-								return;
-							} else if (r != null) {
-								rooms.remove(r.getRoomId());
-								r.close(KurentoHandler.this);
-							}
-						}
-					} catch(Exception e) {
-						//no-op, connect will be dropped
 					}
 					log.warn("Invalid MediaPipeline {} detected, will be dropped, tags: {}", pipe.getId(), tags);
 					pipe.release();
