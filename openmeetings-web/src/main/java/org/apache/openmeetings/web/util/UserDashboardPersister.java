@@ -29,12 +29,16 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.wicketstuff.dashboard.Dashboard;
 import org.wicketstuff.dashboard.DashboardPersister;
 import org.wicketstuff.dashboard.WidgetComparator;
+import com.thoughtworks.xstream.security.NoTypePermission;
+import com.thoughtworks.xstream.security.NullPermission;
+import com.thoughtworks.xstream.security.PrimitiveTypePermission;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -61,6 +65,11 @@ public class UserDashboardPersister implements DashboardPersister {
 
 			xstream = new XStream(new DomDriver(UTF_8.name()));
 			xstream.setMode(XStream.NO_REFERENCES);
+			xstream.addPermission(NoTypePermission.NONE);
+			xstream.addPermission(NullPermission.NULL);
+			xstream.addPermission(PrimitiveTypePermission.PRIMITIVES);
+			xstream.allowTypesByWildcard(new String[] {"org.apache.openmeetings.web.**"});
+			xstream.allowTypeHierarchy(ArrayList.class);
 			xstream.alias("dashboard", UserDashboard.class);
 		}
 
