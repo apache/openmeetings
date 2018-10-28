@@ -18,7 +18,17 @@
  */
 package org.apache.openmeetings.service.calendar.caldav;
 
-import com.github.caldav4j.CalDAVConstants;
+import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PreDestroy;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
@@ -51,15 +61,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
 
-import javax.annotation.PreDestroy;
-import java.io.IOException;
-import java.net.URI;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import com.github.caldav4j.CalDAVConstants;
 
-import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
-import static javax.servlet.http.HttpServletResponse.SC_OK;
+import net.fortuna.ical4j.util.MapTimeZoneCache;
 
 /**
  * Class which does syncing and provides respective API's required for performing CalDAV Operations.
@@ -76,6 +80,11 @@ public class AppointmentManager {
 	private static final int CONNECTION_MANAGER_TIMEOUT = 1000; // Waits for 1 sec if no empty connection exists
 
 	private PoolingHttpClientConnectionManager connmanager = null;
+
+	static {
+		// Disable TimeZone caching through JCache
+		System.setProperty("net.fortuna.ical4j.timezone.cache.impl", MapTimeZoneCache.class.getName());
+	}
 
 	@Autowired
 	private OmCalendarDao calendarDao;

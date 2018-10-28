@@ -310,7 +310,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	private boolean setCalendarList(IPartialPageRequestHandler target) {
 		type = DIALOG_TYPE.SYNC_CALENDAR;
 		cals = apptManager.getCalendars(getUserId());
-		apptManager.createHttpClient();
+		calendarPanel.getHttpClient();
 		calIndex = 0;
 		setButtons(target);
 		return setFormModelObject();
@@ -591,7 +591,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 								return;
 							}
 						} catch (Exception e) {
-							log.error("Error executing the TestConnection");
+							log.error("Error executing the TestConnection", e);
 						}
 
 						error(getString("calendar.error"));

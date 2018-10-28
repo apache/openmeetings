@@ -18,14 +18,12 @@
  */
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
-import com.github.caldav4j.CalDAVConstants;
-import com.github.caldav4j.methods.HttpCalDAVReportMethod;
-import com.github.caldav4j.model.request.CalendarData;
-import com.github.caldav4j.model.request.CalendarMultiget;
-import com.github.caldav4j.model.request.CompFilter;
-import com.github.caldav4j.model.response.CalendarDataProperty;
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -42,11 +40,15 @@ import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import com.github.caldav4j.CalDAVConstants;
+import com.github.caldav4j.methods.HttpCalDAVReportMethod;
+import com.github.caldav4j.model.request.CalendarData;
+import com.github.caldav4j.model.request.CalendarMultiget;
+import com.github.caldav4j.model.request.CompFilter;
+import com.github.caldav4j.model.response.CalendarDataProperty;
 
-import static javax.servlet.http.HttpServletResponse.SC_OK;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Component;
 
 /**
  * Class used to sync a given list of hrefs and update or add new Appointments,
@@ -102,8 +104,7 @@ public class MultigetHandler extends AbstractCalendarHandler {
 			HttpResponse httpResponse = client.execute(method, context);
 			if (method.succeeded(httpResponse)) {
 				//Map for each Href as key and Appointment as Value.
-				Map<String, Appointment> map = listToMap(appointmentDao.getHrefsbyCalendar(calendar.getId()),
-						appointmentDao.getbyCalendar(calendar.getId()));
+				Map<String, Appointment> map = listToMap(appointmentDao.getbyCalendar(calendar.getId()));
 
 				for (MultiStatusResponse response : method.getResponseBodyAsMultiStatus(httpResponse).getResponses()) {
 					if (response.getStatus()[0].getStatusCode() == SC_OK) {

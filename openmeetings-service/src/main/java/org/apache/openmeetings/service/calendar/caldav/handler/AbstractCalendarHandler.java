@@ -18,6 +18,11 @@
  */
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -29,11 +34,6 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Abstract Class which contains all the common code for all Handlers.
@@ -62,15 +62,14 @@ public abstract class AbstractCalendarHandler implements CalendarHandler {
 	}
 
 	/**
-	 * Converts a list of keys and corresponding values to a {@link HashMap}
-	 * @param keys Keys in Map
-	 * @param values Corresponding Values in the Map
-	 * @return {@link HashMap} object
+	 * Converts a list of appointments to a {@link HashMap} with the Href as the key
+	 * @param appointments Appointments to map
+	 * @return Map of Hrefs to Appointments
 	 */
-	static Map<String, Appointment> listToMap(List<String> keys, List<Appointment> values) {
+	static Map<String, Appointment> listToMap(List<Appointment> appointments) {
 		Map<String, Appointment> map = new HashMap<>();
-		for (int i = 0; i < keys.size(); ++i) {
-			map.put(keys.get(i), values.get(i));
+		for(Appointment a : appointments) {
+			map.put(a.getHref(), a);
 		}
 		return map;
 	}

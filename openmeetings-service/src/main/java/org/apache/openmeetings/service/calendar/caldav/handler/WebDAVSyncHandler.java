@@ -19,7 +19,15 @@
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
 
-import com.github.caldav4j.model.response.CalendarDataProperty;
+import static com.github.caldav4j.util.CalDAVStatus.SC_INSUFFICIENT_SPACE_ON_RESOURCE;
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static javax.servlet.http.HttpServletResponse.SC_PRECONDITION_FAILED;
+
+import java.io.IOException;
+import java.util.Map;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -37,13 +45,10 @@ import org.apache.openmeetings.service.calendar.caldav.methods.SyncReportInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.github.caldav4j.CalDAVConstants;
+import com.github.caldav4j.model.response.CalendarDataProperty;
 
-import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.jackrabbit.webdav.DavServletResponse.SC_INSUFFICIENT_SPACE_ON_RESOURCE;
+import net.fortuna.ical4j.model.Calendar;
 
 /**
  * Class used to sync events using WebDAV-Sync defined in RFC 6578.
@@ -70,10 +75,12 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 	 */
 	@Override
 	BaseDavRequest internalSyncItems() throws IOException, DavException {
+		Long ownerId = this.calendar.getOwner().getId();
 		boolean additionalSyncNeeded = false;
 
 		DavPropertyNameSet properties = new DavPropertyNameSet();
 		properties.add(DavPropertyName.GETETAG);
+		properties.add(CalDAVConstants.DNAME_CALENDAR_DATA); // To return Calendar Data.
 
 		//Create report to get
 		SyncReportInfo reportInfo = new SyncReportInfo(calendar.getToken(), properties, SyncReportInfo.SYNC_LEVEL_1);
@@ -81,11 +88,9 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 		HttpResponse httpResponse = client.execute(method, context);
 
 		if (method.succeeded(httpResponse)) {
-			List<String> currenthrefs = new ArrayList<>();
 
 			//Map of Href and the Appointments, belonging to it.
-			Map<String, Appointment> map = listToMap(appointmentDao.getHrefsbyCalendar(calendar.getId()),
-					appointmentDao.getbyCalendar(calendar.getId()));
+			Map<String, Appointment> map = listToMap(appointmentDao.getbyCalendar(calendar.getId()));
 
 			for (MultiStatusResponse response : method.getResponseBodyAsMultiStatus(httpResponse).getResponses()) {
 				int status = response.getStatus()[0].getStatusCode();
@@ -100,11 +105,17 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 
 						//If event modified, only then get it.
 						if (!currentetag.equals(origetag)) {
-							currenthrefs.add(response.getHref());
+							Calendar calendar = CalendarDataProperty.getCalendarfromResponse(response);
+							a = utils.parseCalendartoAppointment(a, calendar, currentetag);
+							appointmentDao.update(a, ownerId);
 						}
 					} else {
 						//New Event, to get
-						currenthrefs.add(response.getHref());
+						String etag = CalendarDataProperty.getEtagfromResponse(response);
+						Calendar ical = CalendarDataProperty.getCalendarfromResponse(response);
+						Appointment appointments = utils.parseCalendartoAppointment(
+								ical, response.getHref(), etag, calendar);
+						appointmentDao.update(appointments, ownerId);
 					}
 				} else if (status == SC_NOT_FOUND) {
 					//Delete the Appointments not found on the server.
@@ -118,11 +129,6 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 					additionalSyncNeeded = true;
 				}
 			}
-
-
-			MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
-					calendar, client, context, appointmentDao, utils);
-			multigetHandler.syncItems();
 
 			//Set the new token
 			calendar.setToken(method.getResponseSynctoken(httpResponse));
