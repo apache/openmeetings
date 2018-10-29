@@ -57,6 +57,7 @@ public class KStream implements IKStream {
 	private final String sid;
 	private final String uid;
 	private final KRoom room;
+	private final StreamType streamType;
 	private MediaProfileSpecType profile;
 	private RecorderEndpoint recorder;
 	private WebRtcEndpoint outgoingMedia = null;
@@ -68,6 +69,7 @@ public class KStream implements IKStream {
 		this.room = room;
 		this.sid = sd.getSid();
 		this.uid = sd.getUid();
+		streamType = sd.getType();
 		//TODO Min/MaxVideoSendBandwidth
 		//TODO Min/Max Audio/Video RecvBandwidth
 	}
@@ -79,12 +81,12 @@ public class KStream implements IKStream {
 		final boolean hasAudio = sd.hasActivity(Activity.AUDIO);
 		final boolean hasVideo = sd.hasActivity(Activity.VIDEO);
 		if ((sdpOffer.indexOf("m=audio") > -1 && !hasAudio)
-				|| (sdpOffer.indexOf("m=video") > -1 && !hasVideo && StreamType.SCREEN != sd.getType()))
+				|| (sdpOffer.indexOf("m=video") > -1 && !hasVideo && StreamType.SCREEN != streamType))
 		{
 			log.warn("Broadcast started without enough rights");
 			return this;
 		}
-		if (StreamType.SCREEN == sd.getType()) {
+		if (StreamType.SCREEN == streamType) {
 			type = Type.SCREEN;
 		} else {
 			if (hasAudio && hasVideo) {
@@ -115,7 +117,7 @@ public class KStream implements IKStream {
 		outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
 			if (MediaFlowState.NOT_FLOWING == evt.getState()) {
 				log.warn("Media FlowOut :: {}", evt.getState());
-				if (StreamType.SCREEN == sd.getType()) {
+				if (StreamType.SCREEN == streamType) {
 					h.stopSharing(sid, uid);
 				} else {
 					//TODO remove stream ?
@@ -189,7 +191,7 @@ public class KStream implements IKStream {
 				if (sd.hasActivity(Activity.AUDIO)) {
 					outgoingMedia.connect(listener, MediaType.AUDIO);
 				}
-				if (StreamType.SCREEN == sd.getType() || sd.hasActivity(Activity.VIDEO)) {
+				if (StreamType.SCREEN == streamType || sd.hasActivity(Activity.VIDEO)) {
 					outgoingMedia.connect(listener, MediaType.VIDEO);
 				}
 			}
