@@ -347,11 +347,14 @@ public class OmFileHelper {
 		if (dir.isFile()) {
 			size = dir.length();
 		} else {
-			for (File file : dir.listFiles()) {
-				if (file.isFile()) {
-					size += file.length();
-				} else {
-					size += getSize(file);
+			File[] files = dir.listFiles();
+			if (files != null) {
+				for (File file : dir.listFiles()) {
+					if (file.isFile()) {
+						size += file.length();
+					} else {
+						size += getSize(file);
+					}
 				}
 			}
 		}

@@ -123,4 +123,13 @@ public class TestAdmin {
 		//backup to file
 		a.process("-b", Files.createTempFile("omtempbackup", null).toFile().getCanonicalPath());
 	}
+
+
+	@Test
+	public void testFiles() throws Exception {
+		Admin a = getAdmin(null);
+		performInstall(a);
+		//clean-up report
+		a.process("-f");
+	}
 }
