@@ -33,20 +33,20 @@ import org.slf4j.LoggerFactory;
 public class LdapOptions {
 	private static final Logger log = LoggerFactory.getLogger(LdapOptions.class);
 	private static final String EMPTY_FORMAT = "%s";
-	private static final String CONFIGKEY_LDAP_HOST = "ldap_conn_host";
-	private static final String CONFIGKEY_LDAP_PORT = "ldap_conn_port";
+	public static final String CONFIGKEY_LDAP_HOST = "ldap_conn_host";
+	public static final String CONFIGKEY_LDAP_PORT = "ldap_conn_port";
 	private static final String CONFIGKEY_LDAP_SECURE = "ldap_conn_secure";
-	private static final String CONFIGKEY_LDAP_ADMIN_DN = "ldap_admin_dn";
-	private static final String CONFIGKEY_LDAP_ADMIN_PASSWD = "ldap_passwd";
-	private static final String CONFIGKEY_LDAP_AUTH_TYPE = "ldap_auth_type";
+	public static final String CONFIGKEY_LDAP_ADMIN_DN = "ldap_admin_dn";
+	public static final String CONFIGKEY_LDAP_ADMIN_PASSWD = "ldap_passwd";
+	public static final String CONFIGKEY_LDAP_AUTH_TYPE = "ldap_auth_type";
 	private static final String CONFIGKEY_LDAP_PROV_TYPE = "ldap_provisionning";
 	private static final String CONFIGKEY_LDAP_USE_LOWER_CASE = "ldap_use_lower_case";
 	private static final String CONFIGKEY_LDAP_USE_ADMIN_4ATTRS = "ldap_use_admin_to_get_attrs";
 	private static final String CONFIGKEY_LDAP_DEREF_MODE = "ldap_deref_mode";
 	private static final String CONFIGKEY_LDAP_GROUP_MODE = "ldap_group_mode";
-	private static final String CONFIGKEY_LDAP_SEARCH_BASE = "ldap_search_base";
+	public static final String CONFIGKEY_LDAP_SEARCH_BASE = "ldap_search_base";
 	private static final String CONFIGKEY_LDAP_SEARCH_QUERY = "ldap_search_query";
-	private static final String CONFIGKEY_LDAP_SEARCH_SCOPE = "ldap_search_scope";
+	public static final String CONFIGKEY_LDAP_SEARCH_SCOPE = "ldap_search_scope";
 	private static final String CONFIGKEY_LDAP_SYNC_PASSWD_OM = "ldap_sync_password_to_om"; // 'true' or 'false'
 	static final String CONFIGKEY_LDAP_TIMEZONE_NAME = "ldap_user_timezone";
 	private static final String CONFIGKEY_LDAP_USERDN_FORMAT = "ldap_userdn_format";

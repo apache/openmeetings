@@ -18,9 +18,16 @@
  */
 package org.apache.openmeetings.util;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.text.DecimalFormat;
+import java.util.Properties;
 
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
 import org.slf4j.Logger;
@@ -254,8 +261,22 @@ public class OmFileHelper {
 		return new File(OmFileHelper.getWebinfDir(), dbType == null ? PERSISTENCE_NAME : String.format(DB_PERSISTENCE_NAME, dbType));
 	}
 
-	public static File getConfDir() {
-		return new File(OmFileHelper.omHome, CONF_DIR);
+	public static File getLdapConf(String name) {
+		return new File(new File(OmFileHelper.omHome, CONF_DIR), name);
+	}
+
+	public static void loadLdapConf(String name, Properties config) {
+		try (InputStream is = new FileInputStream(getLdapConf(name));
+				Reader r = new InputStreamReader(is, UTF_8))
+		{
+			config.load(r);
+			if (config.isEmpty()) {
+				throw new RuntimeException("Error on LdapLogin : Configurationdata couldnt be retrieved!");
+			}
+		} catch (IOException e) {
+			log.error("Error on LdapLogin : Configurationdata couldn't be retrieved!");
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static File getScreenSharingDir() {

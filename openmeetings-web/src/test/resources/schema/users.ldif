@@ -1,0 +1,46 @@
+# Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+version: 1
+dn: dc=test,dc=openmeetings,dc=apache,dc=org
+objectClass: domain
+objectClass: top
+dc: test
+
+dn: ou=Users,dc=test,dc=openmeetings,dc=apache,dc=org
+objectClass: organizationalUnit
+objectClass: top
+ou: Users
+
+dn: ou=Groups,dc=test,dc=openmeetings,dc=apache,dc=org
+objectClass: organizationalUnit
+objectClass: top
+ou: Groups
+
+dn: cn=Test1 Ldap,ou=Users,dc=test,dc=openmeetings,dc=apache,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Test1 Ldap
+sn: Ldap
+uid: ldaptest1
+userPassword: Q!w2e3r4t5
+
+dn: cn=Test2 Ldap,ou=Users,dc=test,dc=openmeetings,dc=apache,dc=org
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Test2 Ldap
+sn: Ldap
+uid: ldaptest2
+userPassword: Q!w2e3r4t5
+
+dn: cn=Test3 Ldap,ou=Users,dc=test,dc=openmeetings,dc=apache,dc=org
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Test3 Ldap
+sn: Ldap
+uid: ldaptest3
+userPassword: Q!w2e3r4t5
