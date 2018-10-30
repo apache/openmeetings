@@ -323,7 +323,7 @@ public class LdapLoginManager {
 		Long domainId = null;
 		LdapConfig ldapCfg = null;
 
-		public LdapWorker(Long domainId) throws Exception {
+		public LdapWorker(Long domainId) {
 			this.domainId = domainId;
 			ldapCfg = ldapConfigDao.get(domainId);
 			loadLdapConf(ldapCfg.getConfigFileName(), config);

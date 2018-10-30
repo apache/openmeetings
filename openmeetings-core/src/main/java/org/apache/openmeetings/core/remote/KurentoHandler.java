@@ -404,6 +404,10 @@ public class KurentoHandler {
 	}
 
 	public boolean screenShareAllowed(Client c) {
+		if (client == null) {
+			log.warn("Media Server is not accessible");
+			return false;
+		}
 		Room r = c.getRoom();
 		return r != null && Room.Type.interview != r.getType()
 				&& !r.isHidden(RoomElement.ScreenSharing)
@@ -412,7 +416,7 @@ public class KurentoHandler {
 	}
 
 	private void startSharing(Client c, JSONObject msg) {
-		if (c.getRoomId() != null) {
+		if (client != null && c.getRoomId() != null) {
 			getRoom(c.getRoomId()).startSharing(this, cm, c, msg);
 		}
 	}
@@ -433,6 +437,10 @@ public class KurentoHandler {
 	}
 
 	public boolean isSharing(Long roomId) {
+		if (client == null) {
+			log.warn("Media Server is not accessible");
+			return false;
+		}
 		return getRoom(roomId).isSharing();
 	}
 

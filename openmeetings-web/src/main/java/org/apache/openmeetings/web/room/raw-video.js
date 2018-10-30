@@ -108,6 +108,7 @@ var Video = (function() {
 						} else {
 							aDest = aCtx.createMediaStreamDestination();
 							gainNode.connect(aDest);
+							aSrc.origStream = stream;
 							_stream = aDest.stream;
 							stream.getVideoTracks().forEach(function(track) {
 								_stream.addTrack(track);
@@ -438,6 +439,7 @@ var Video = (function() {
 		}
 		if (!!aSrc) {
 			VideoUtil.cleanStream(aSrc.mediaStream);
+			VideoUtil.cleanStream(aSrc.origStream);
 			aSrc.disconnect();
 			aSrc = null;
 		}
