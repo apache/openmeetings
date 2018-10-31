@@ -38,6 +38,8 @@ import static org.junit.Assert.assertNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
@@ -68,9 +70,23 @@ public class TestInstall {
 
 	public static void setDerbyHome(File f) throws IOException {
 		System.setProperty(DERBY_HOME, f.getCanonicalPath());
+		try {
+			Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			log.error("Fail to re-init Derby", e);
+		}
 	}
 
 	public static void resetDerbyHome() {
+		try {
+			DriverManager.getConnection("jdbc:derby:;shutdown=true");
+		} catch (SQLException e) {
+			if ("XJ015".equals(e.getSQLState()) && 50000 == e.getErrorCode()) {
+				log.info("Derby shutdown successfully");
+			} else {
+				log.error("Fail to shutdown Derby", e);
+			}
+		}
 		System.getProperties().remove(DERBY_HOME);
 	}
 

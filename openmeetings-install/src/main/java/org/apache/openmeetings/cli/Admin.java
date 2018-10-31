@@ -111,7 +111,9 @@ public class Admin {
 		String ctxName = System.getProperty("context", DEFAULT_CONTEXT_NAME);
 		setWicketApplicationName(ctxName);
 		home = new File(System.getProperty(RED5_HOME));
-		OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));
+		if (OmFileHelper.getOmHome() == null) {
+			OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));
+		}
 	}
 
 	private static void log(CharSequence msg) {

@@ -23,6 +23,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
+import java.util.UUID;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
@@ -60,7 +62,7 @@ public class ApplicationHelper {
 			// This is the case for non-web-app applications (command line admin)
 			try {
 				app = (WebApplication)OpenmeetingsVariables.getAppClass().newInstance();
-				app.setName("--dumb--"); //temporary name for temporary application
+				app.setName(String.format("--%s--", UUID.randomUUID())); //temporary name for temporary application
 				ServletContext sc = new MockServletContext(app, null);
 				XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();
 				xmlContext.setConfigLocation("classpath:applicationContext.xml");
