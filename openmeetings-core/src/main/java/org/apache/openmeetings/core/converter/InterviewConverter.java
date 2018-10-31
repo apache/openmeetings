@@ -86,7 +86,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			// group by sid first to get all pods
 			Map<String, List<RecordingChunk>> cunksBySid = chunks.stream().collect(
 					Collectors.groupingBy(RecordingChunk::getSid
-					, () -> new LinkedHashMap<>()
+					, LinkedHashMap::new
 					, Collectors.collectingAndThen(Collectors.toList(), l -> l.stream().sorted(Comparator.comparing(RecordingChunk::getStart)).collect(Collectors.toList()))));
 			List<String> pods = new ArrayList<>();
 			int N = pods.size();

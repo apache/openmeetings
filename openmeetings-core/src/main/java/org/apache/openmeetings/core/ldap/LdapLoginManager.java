@@ -298,7 +298,7 @@ public class LdapLoginManager {
 		}
 	}
 
-	private void importUsers(LdapWorker w, EntryCursor cursor, Long domainId, boolean print) throws LdapInvalidAttributeValueException, LdapException, CursorException, OmException, IOException {
+	private void importUsers(LdapWorker w, EntryCursor cursor, Long domainId, boolean print) throws LdapException, CursorException, OmException, IOException {
 		while (cursor.next()) {
 			try {
 				Entry e = cursor.get();
@@ -317,11 +317,11 @@ public class LdapLoginManager {
 	}
 
 	private class LdapWorker implements Closeable {
-		LdapConnection conn = null;
-		Properties config = new Properties();
-		LdapOptions options = null;
-		Long domainId = null;
-		LdapConfig ldapCfg = null;
+		final LdapConnection conn;
+		final Properties config = new Properties();
+		final LdapOptions options;
+		final Long domainId;
+		final LdapConfig ldapCfg;
 
 		public LdapWorker(Long domainId) {
 			this.domainId = domainId;

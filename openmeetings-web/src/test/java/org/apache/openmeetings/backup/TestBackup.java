@@ -43,8 +43,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestOldBackups extends AbstractJUnitDefaults {
-	private static final Logger log = LoggerFactory.getLogger(TestOldBackups.class);
+public class TestBackup extends AbstractJUnitDefaults {
+	private static final Logger log = LoggerFactory.getLogger(TestBackup.class);
 	private String cryptClass = null;
 
 	@Autowired
@@ -120,5 +120,10 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 			}
 			log.debug("... Done.");
 		}
+	}
+
+	@Test
+	public void exportMain() throws Exception {
+		BackupExport.main(new String[] {File.createTempFile("gereral", "cfg").getCanonicalPath()});
 	}
 }

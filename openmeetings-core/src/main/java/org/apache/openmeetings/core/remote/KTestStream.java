@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONObject;
 
 public class KTestStream implements IKStream {
-	private final static Logger log = LoggerFactory.getLogger(KTestStream.class);
+	private static final Logger log = LoggerFactory.getLogger(KTestStream.class);
 	private MediaPipeline pipeline;
 	private WebRtcEndpoint webRtcEndpoint;
 	private PlayerEndpoint player;
@@ -178,7 +178,8 @@ public class KTestStream implements IKStream {
 	}
 
 	private static MediaProfileSpecType getProfile(JSONObject msg) {
-		boolean a  = msg.getBoolean("audio"), v = msg.getBoolean("video");
+		boolean a  = msg.getBoolean("audio")
+				, v = msg.getBoolean("video");
 		if (a && v) {
 			return MediaProfileSpecType.WEBM;
 		} else if (v) {

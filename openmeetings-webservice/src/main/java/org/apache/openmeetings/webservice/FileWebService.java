@@ -189,9 +189,7 @@ public class FileWebService extends BaseWebService {
 			)
 	{
 		log.debug("getAllExternal::externalType {}", externalType);
-		return performCall(sid, User.Right.Soap, sd -> {
-			return FileItemDTO.list(fileDao.getExternal(externalType));
-		});
+		return performCall(sid, User.Right.Soap, sd -> FileItemDTO.list(fileDao.getExternal(externalType)));
 	}
 
 	/**

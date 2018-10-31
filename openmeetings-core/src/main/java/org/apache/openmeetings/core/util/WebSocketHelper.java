@@ -147,9 +147,7 @@ public class WebSocketHelper {
 		Executor executor = settings.getWebSocketPushMessageExecutor();
 		final IWebSocketConnection wc = reg.getConnection(app, client.getSessionId(), new PageIdKey(client.getPageId()));
 		if (wc != null && wc.isOpen()) {
-			executor.run(() -> {
-				wsc.accept(wc);
-			});
+			executor.run(() -> wsc.accept(wc));
 		}
 	}
 
@@ -264,9 +262,7 @@ public class WebSocketHelper {
 
 	protected static void publish(IClusterWsMessage m) {
 		IApplication app = getApp();
-		new Thread(() -> {
-			app.publishWsTopic(m);
-		}).start();
+		new Thread(() -> app.publishWsTopic(m)).start();
 	}
 
 	protected static void sendRoom(final Long roomId, final JSONObject m, Predicate<Client> check, BiFunction<JSONObject, Client, String> func) {
@@ -303,14 +299,5 @@ public class WebSocketHelper {
 				}
 			}
 		}).start();
-	}
-
-	public static class NewThreadExecutor implements Executor {
-		@Override
-		public void run(Runnable command) {
-			new Thread(() -> {
-				command.run();
-			}).start();
-		}
 	}
 }

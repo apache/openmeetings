@@ -163,7 +163,8 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 
 	private void onClick(AjaxRequestTarget target, BaseFileItem f) {
 		String mod = getRequest().getRequestParameters().getParameterValue(PARAM_MOD).toOptionalString();
-		boolean shift = false, ctrl = false;
+		boolean shift = false
+				, ctrl = false;
 		if (!Strings.isEmpty(mod)) {
 			JSONObject o = new JSONObject(mod);
 			shift = o.optBoolean(PARAM_SHIFT);
