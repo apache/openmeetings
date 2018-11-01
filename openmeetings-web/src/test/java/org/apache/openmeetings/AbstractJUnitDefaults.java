@@ -59,7 +59,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	public static final Random rnd = new Random();
 
 	@Autowired
-	private AppointmentDao appointmentDao;
+	protected AppointmentDao appointmentDao;
 	@Autowired
 	protected UserDao userDao;
 	@Autowired

@@ -70,8 +70,8 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	public static final String SWF = "swf";
 	public static final String PANEL_MAIN = "panel-main";
 	public static final String INVITATION_HASH = "invitation";
-	private static final String HASH = "secure";
-	private static final String LANG = "language";
+	static final String HASH = "secure";
+	static final String LANG = "language";
 	private final WebMarkupContainer recContainer = new WebMarkupContainer("panel-recording");
 	private final VideoInfo vi = new VideoInfo("info", null);
 	private final VideoPlayer vp = new VideoPlayer("player");
