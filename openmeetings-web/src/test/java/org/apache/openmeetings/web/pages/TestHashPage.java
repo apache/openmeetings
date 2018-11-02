@@ -140,7 +140,7 @@ public class TestHashPage extends AbstractWicketTester {
 	@Test
 	public void testBadSecure() {
 		log.debug("bad secure");
-		checkAccessDenied(new PageParameters().add(HASH, "bbb").add(HashPage.LANG, 7));
+		checkAccessDenied(new PageParameters().add(HASH, "bbb").add(HashPage.LANG, 3));
 	}
 
 	@Test

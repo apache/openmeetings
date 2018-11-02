@@ -59,7 +59,8 @@ public class LocaleHelper {
 	}
 
 	public static Locale getLocale(Long langId) {
-		return langId == 3 ? Locale.GERMANY : LabelDao.getLocale(langId);
+		Locale l = langId == 3 ? Locale.GERMANY : LabelDao.getLocale(langId);
+		return l == null ? Locale.ENGLISH : l;
 	}
 
 	public static Locale getLocale(User u) {
