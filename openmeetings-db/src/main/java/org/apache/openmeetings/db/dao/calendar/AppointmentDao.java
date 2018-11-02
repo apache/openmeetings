@@ -51,6 +51,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AppointmentDao {
 	private static final Logger log = LoggerFactory.getLogger(AppointmentDao.class);
+	private static final String PARAM_START = "start";
+	private static final String PARAM_CALID = "calId";
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
@@ -157,13 +159,13 @@ public class AppointmentDao {
 		log.debug("Start " + start + " End " + end);
 
 		TypedQuery<Appointment> query = em.createNamedQuery("appointmentsInRange", Appointment.class);
-		query.setParameter("start", start);
+		query.setParameter(PARAM_START, start);
 		query.setParameter("end", end);
 		query.setParameter(PARAM_USER_ID, userId);
 
 		List<Appointment> listAppoints = new ArrayList<>(query.getResultList());
 		TypedQuery<Appointment> q1 = em.createNamedQuery("joinedAppointmentsInRange", Appointment.class);
-		q1.setParameter("start", start);
+		q1.setParameter(PARAM_START, start);
 		q1.setParameter("end", end);
 		q1.setParameter(PARAM_USER_ID, userId);
 		for (Appointment a : q1.getResultList()) {
@@ -177,7 +179,7 @@ public class AppointmentDao {
 	public List<Appointment> getInRange(Calendar start, Calendar end) {
 		TypedQuery<Appointment> q = em.createNamedQuery("appointmentsInRangeRemind", Appointment.class);
 		q.setParameter("none", Reminder.none);
-		q.setParameter("start", start.getTime());
+		q.setParameter(PARAM_START, start.getTime());
 		q.setParameter("end", end.getTime());
 		return q.getResultList();
 	}
@@ -185,7 +187,7 @@ public class AppointmentDao {
 	// next appointment to select date
 	public Appointment getNext(Long userId, Date start) {
 		List<Appointment> list = em.createNamedQuery("getNextAppointment", Appointment.class)
-				.setParameter("start", start).setParameter(PARAM_USER_ID, userId).getResultList();
+				.setParameter(PARAM_START, start).setParameter(PARAM_USER_ID, userId).getResultList();
 		return list == null || list.isEmpty() ? null : list.get(0);
 	}
 
@@ -232,7 +234,7 @@ public class AppointmentDao {
 	 */
 	public List<String> getHrefsbyCalendar(Long calId) {
 		return em.createNamedQuery("getHrefsforAppointmentsinCalendar", String.class)
-				.setParameter("calId", calId)
+				.setParameter(PARAM_CALID, calId)
 				.getResultList();
 	}
 
@@ -244,7 +246,7 @@ public class AppointmentDao {
 	 */
 	public List<Appointment> getbyCalendar(Long calId) {
 		return em.createNamedQuery("getAppointmentsbyCalendar", Appointment.class)
-				.setParameter("calId", calId)
+				.setParameter(PARAM_CALID, calId)
 				.getResultList();
 	}
 
@@ -263,7 +265,7 @@ public class AppointmentDao {
 	 */
 	public int deletebyCalendar(Long calId) {
 		return em.createNamedQuery("deleteAppointmentsbyCalendar", Appointment.class)
-				.setParameter("calId", calId)
+				.setParameter(PARAM_CALID, calId)
 				.executeUpdate();
 	}
 }

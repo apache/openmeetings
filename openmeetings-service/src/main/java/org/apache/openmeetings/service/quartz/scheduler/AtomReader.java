@@ -47,7 +47,9 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class AtomReader {
-	private static Logger log = LoggerFactory.getLogger(AtomReader.class);
+	private static final Logger log = LoggerFactory.getLogger(AtomReader.class);
+	private static final String ATTR_CONTENT = "content";
+	private static final String ATTR_PUBLISHED = "published";
 	private static final int MAX_ITEM_COUNT = 5;
 	private static final Map<String, Spec> specs = new HashMap<>();
 	private static final XMLInputFactory inputFactory;
@@ -60,15 +62,15 @@ public class AtomReader {
 		add("item")
 			.add(new Field("title"))
 			.add(new Field("link"))
-			.add(new Field("description", "content", true))
-			.add(new Field("pubDate", "published"))
+			.add(new Field("description", ATTR_CONTENT, true))
+			.add(new Field("pubDate", ATTR_PUBLISHED))
 			.add(new Field("author"));
 		add("entry")
 			.add(new Field("title"))
 			.add(new Field("link", "link", "href", false))
-			.add(new Field("content", "content", true))
-			.add(new Field("updated", "published"))
-			.add(new Field("published"))
+			.add(new Field(ATTR_CONTENT, ATTR_CONTENT, true))
+			.add(new Field("updated", ATTR_PUBLISHED))
+			.add(new Field(ATTR_PUBLISHED))
 			.add(new Field("author"));
 	}
 

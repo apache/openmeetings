@@ -39,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserContactDao {
 	private static final Logger log = LoggerFactory.getLogger(UserContactDao.class);
+	private static final String PARAM_OWNERID = "ownerId";
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
@@ -73,13 +74,13 @@ public class UserContactDao {
 	 * @return rowcount of update
 	 */
 	public Integer deleteAllUserContacts(Long ownerId) {
-		return em.createNamedQuery("deleteAllUserContacts").setParameter("ownerId",ownerId).executeUpdate();
+		return em.createNamedQuery("deleteAllUserContacts").setParameter(PARAM_OWNERID,ownerId).executeUpdate();
 	}
 
 	public UserContact get(Long userId, Long ownerId) {
 		List<UserContact> ll = em.createNamedQuery("getContactByUserOwner", UserContact.class)
 				.setParameter(PARAM_USER_ID, userId)
-				.setParameter("ownerId", ownerId)
+				.setParameter(PARAM_OWNERID, ownerId)
 				.getResultList();
 		log.info("number of contacts:: " + (ll == null ? null : ll.size()));
 		return ll != null && ll.size() == 1 ? ll.get(0) : null;
@@ -104,7 +105,7 @@ public class UserContactDao {
 
 	public List<UserContact> getContactsByUserAndStatus(Long ownerId, boolean pending) {
 		return em.createNamedQuery("getContactsByUserAndStatus", UserContact.class)
-				.setParameter("ownerId", ownerId)
+				.setParameter(PARAM_OWNERID, ownerId)
 				.setParameter("pending", pending)
 				.getResultList();
 	}

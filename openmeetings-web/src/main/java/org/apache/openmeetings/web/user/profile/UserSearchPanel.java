@@ -46,7 +46,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.Options;
@@ -56,9 +56,9 @@ import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTable
 public class UserSearchPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final List<Integer> itemsPerPage = Arrays.asList(10, 25, 50, 75, 100, 200, 500, 1000, 2500, 5000);
-	private String text;
-	private String search;
-	private String offer;
+	private final TextField<String> text = new TextField<>("text", Model.of(""));
+	private final TextField<String> search = new TextField<>("search", Model.of(""));
+	private final TextField<String> offer = new TextField<>("offer", Model.of(""));
 	private String orderBy = "u.firstname";
 	private boolean asc = true;
 	private boolean searched = false;
@@ -80,9 +80,7 @@ public class UserSearchPanel extends UserBasePanel {
 			@Override
 			protected void onInitialize() {
 				super.onInitialize();
-				add(new TextField<>("text", new PropertyModel<String>(UserSearchPanel.this, "text")));
-				add(new TextField<>("offer", new PropertyModel<String>(UserSearchPanel.this, "offer")));
-				add(new TextField<>("search", new PropertyModel<String>(UserSearchPanel.this, "search")));
+				add(text, offer, search);
 				add(new AjaxButton("submit") {
 					private static final long serialVersionUID = 1L;
 
@@ -99,13 +97,13 @@ public class UserSearchPanel extends UserBasePanel {
 
 			@Override
 			public Iterator<? extends User> iterator(long first, long count) {
-				return searched ? userDao.searchUserProfile(getUserId(), text, offer, search, orderBy, first, count, asc).iterator()
+				return searched ? userDao.searchUserProfile(getUserId(), text.getModelObject(), offer.getModelObject(), search.getModelObject(), orderBy, first, count, asc).iterator()
 						: new ArrayList<User>().iterator();
 			}
 
 			@Override
 			public long size() {
-				return searched ? userDao.searchCountUserProfile(getUserId(), text, offer, search) : 0;
+				return searched ? userDao.searchCountUserProfile(getUserId(), text.getModelObject(), offer.getModelObject(), search.getModelObject()) : 0;
 			}
 
 			@Override

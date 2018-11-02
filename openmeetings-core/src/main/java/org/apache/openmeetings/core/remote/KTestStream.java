@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.remote;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newTestKurentoMsg;
 import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WEBM;
@@ -165,8 +166,8 @@ public class KTestStream implements IKStream {
 				IceCandidate cand = evt.getCandidate();
 				WebSocketHelper.sendClient(_c, newTestKurentoMsg()
 						.put("id", "iceCandidate")
-						.put("candidate", new JSONObject()
-								.put("candidate", cand.getCandidate())
+						.put(PARAM_CANDIDATE, new JSONObject()
+								.put(PARAM_CANDIDATE, cand.getCandidate())
 								.put("sdpMid", cand.getSdpMid())
 								.put("sdpMLineIndex", cand.getSdpMLineIndex())));
 			});

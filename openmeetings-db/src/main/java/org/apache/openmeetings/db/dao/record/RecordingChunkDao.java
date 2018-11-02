@@ -37,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RecordingChunkDao {
 	private static final Logger log = LoggerFactory.getLogger(RecordingChunkDao.class);
+	private static final String PARAM_RECID = "recordingId";
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
@@ -50,13 +51,13 @@ public class RecordingChunkDao {
 
 	public List<RecordingChunk> getByRecording(Long recordingId) {
 		return em.createNamedQuery("getChunkByRecording", RecordingChunk.class)
-				.setParameter("recordingId", recordingId)
+				.setParameter(PARAM_RECID, recordingId)
 				.getResultList();
 	}
 
 	public List<RecordingChunk> getNotScreenChunksByRecording(Long recordingId) {
 		return em.createNamedQuery("getNotScreenChunkByRecording", RecordingChunk.class)
-				.setParameter("recordingId", recordingId)
+				.setParameter(PARAM_RECID, recordingId)
 				.setParameter("screen", Type.SCREEN)
 				.setParameter("none", Status.NONE)
 				.getResultList();
@@ -65,7 +66,7 @@ public class RecordingChunkDao {
 	public RecordingChunk getScreenByRecording(Long recordingId) {
 		List<RecordingChunk> list = em.createNamedQuery("getScreenChunkByRecording", RecordingChunk.class)
 				.setParameter("screen", Type.SCREEN)
-				.setParameter("recordingId", recordingId)
+				.setParameter(PARAM_RECID, recordingId)
 				.getResultList();
 		return list.isEmpty() ? null : list.get(0);
 	}

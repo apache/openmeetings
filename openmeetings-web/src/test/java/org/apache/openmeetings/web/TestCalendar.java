@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.openmeetings.AbstractWicketTester;
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
@@ -34,7 +33,6 @@ import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.util.tester.FormTester;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
 import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
@@ -43,8 +41,6 @@ import com.googlecode.wicket.jquery.ui.widget.menu.Menu;
 public class TestCalendar extends AbstractWicketTester {
 	private static final String PATH_APPOINTMENT_DLG = String.format("%s:appointment", PATH_CHILD);
 	private static final String PATH_APPOINTMENT_DLG_FRM = String.format("%s:appForm", PATH_APPOINTMENT_DLG);
-	@Autowired
-	private AppointmentDao appointmentDao;
 
 	@Test
 	public void testEventCreate() throws OmException {

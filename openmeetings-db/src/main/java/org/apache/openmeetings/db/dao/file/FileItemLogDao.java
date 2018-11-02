@@ -36,21 +36,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class FileItemLogDao {
 	private static final Logger log = LoggerFactory.getLogger(FileItemLogDao.class);
+	private static final String PARAM_FILEID = "fileId";
 	@PersistenceContext
 	private EntityManager em;
 
 	public long countErrors(BaseFileItem f) {
-		return em.createNamedQuery("countErrorFileLogsByFile", Long.class).setParameter("fileId", f.getId())
+		return em.createNamedQuery("countErrorFileLogsByFile", Long.class).setParameter(PARAM_FILEID, f.getId())
 				.getSingleResult();
 	}
 
 	public List<FileItemLog> get(BaseFileItem f) {
-		return em.createNamedQuery("getFileLogsByFile", FileItemLog.class).setParameter("fileId", f.getId())
+		return em.createNamedQuery("getFileLogsByFile", FileItemLog.class).setParameter(PARAM_FILEID, f.getId())
 				.getResultList();
 	}
 
 	public void delete(BaseFileItem f) {
-		em.createNamedQuery("deleteErrorFileLogsByFile").setParameter("fileId", f.getId())
+		em.createNamedQuery("deleteErrorFileLogsByFile").setParameter(PARAM_FILEID, f.getId())
 				.executeUpdate();
 	}
 

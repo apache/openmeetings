@@ -22,6 +22,7 @@ import static org.apache.openmeetings.web.app.Application.getHazelcast;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -92,7 +93,7 @@ public class QuickPollManager {
 		if (started) {
 			Map<Long, Boolean> votes = map().get(roomId);
 			o.put("voted", votes.containsKey(getUserId()));
-			o.put("pros", votes.entrySet().stream().filter(e -> e.getValue()).count())
+			o.put("pros", votes.entrySet().stream().filter(Entry::getValue).count())
 				.put("cons", votes.entrySet().stream().filter(e -> !e.getValue()).count());
 		}
 		return o;

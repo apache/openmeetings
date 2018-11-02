@@ -89,6 +89,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 public class MessagesContactsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Long MOVE_CHOOSE = Long.valueOf(-1);
+	private static final String CSS_UNREAD = "unread";
 	private static final String SELECT_CHOOSE = "1252";
 	private static final String SELECT_ALL = "1239";
 	private static final String SELECT_NONE = "1240";
@@ -305,7 +306,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 						target.add(container);
 					}
 				});
-				StringBuilder cssClass = new StringBuilder(m.getIsRead() ? "" : "unread");
+				StringBuilder cssClass = new StringBuilder(m.getIsRead() ? "" : CSS_UNREAD);
 				if (selectedMessages.contains(id)) {
 					if (cssClass.length() > 0) {
 						cssClass.append(" ");
@@ -469,7 +470,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				final Long contactId = uc.getId();
 				final Long userId = uc.getOwner().getId();
 				if (uc.isPending()) {
-					item.add(AttributeModifier.append(ATTR_CLASS, "unread"));
+					item.add(AttributeModifier.append(ATTR_CLASS, CSS_UNREAD));
 				}
 				item.add(new Label("name", getName(uc)));
 				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior(EVT_CLICK) {

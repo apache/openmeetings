@@ -62,8 +62,8 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
  * during the Creation and Deletion of Appointments.
  */
 public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
-	private static final Logger log = LoggerFactory.getLogger(CalendarDialog.class);
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(CalendarDialog.class);
 	private CalendarPanel calendarPanel;
 
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
@@ -534,7 +534,6 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 				//Google Calendar ID
 				urlLabel.setDefaultModelObject(getString("calendar.googleID"));
 				url.setEnabled(true);
-				url.setLabel(Model.<String>of(getString("calendar.googleID")));
 
 				//Google API Key
 				userLabel.setDefaultModelObject(getString("calendar.googleKey"));
@@ -548,8 +547,8 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 				username.setModelObject(null);
 
 				urlLabel.setDefaultModelObject(getString("calendar.url"));
-				url.setLabel(Model.of(getString("calendar.url")));
 			}
+			url.setLabel(Model.of((String)urlLabel.getDefaultModelObject()));
 
 			//Add new AttributeModifier to change the type of URLTextField, to text for
 			//Google Calendar and to URL for a normal CalDAV calendar

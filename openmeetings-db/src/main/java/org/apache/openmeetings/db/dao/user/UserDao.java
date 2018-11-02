@@ -77,6 +77,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserDao implements IGroupAdminDataProviderDao<User> {
 	private static final Logger log = LoggerFactory.getLogger(UserDao.class);
+	private static final String PARAM_EMAIL = "email";
 	private static final String[] searchFields = {"lastname", "firstname", "login", "address.email", "address.town"};
 
 	@PersistenceContext
@@ -325,7 +326,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				.executeUpdate();
 			if (!Strings.isEmpty(u.getAddress().getEmail())) {
 				em.createNamedQuery("purgeMailMessages")
-					.setParameter("email", String.format("%%%s%%", u.getAddress().getEmail()))
+					.setParameter(PARAM_EMAIL, String.format("%%%s%%", u.getAddress().getEmail()))
 					.executeUpdate();
 			}
 			u.setActivatehash(null);
@@ -438,7 +439,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	public User getByEmail(String email, User.Type type, Long domainId) {
 		return getSingle(em.createNamedQuery("getUserByEmail", User.class)
-				.setParameter("email", email)
+				.setParameter(PARAM_EMAIL, email)
 				.setParameter("type", type)
 				.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
 				.getResultList());
@@ -521,7 +522,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	public User getContact(String email, String firstName, String lastName, Long langId, String tzId, User owner) {
 		List<User> list = em.createNamedQuery("getContactByEmailAndUser", User.class)
-				.setParameter("email", email).setParameter("type", User.Type.contact).setParameter("ownerId", owner.getId())
+				.setParameter(PARAM_EMAIL, email).setParameter("type", User.Type.contact).setParameter("ownerId", owner.getId())
 				.getResultList();
 		if (list.isEmpty()) {
 			User to = new User();

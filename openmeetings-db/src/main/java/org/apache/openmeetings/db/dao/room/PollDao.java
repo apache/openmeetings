@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PollDao {
 	private static final Logger log = LoggerFactory.getLogger(PollDao.class);
+	private static final String PARAM_ROOMID = "roomId";
 
 	@PersistenceContext
 	private EntityManager em;
@@ -56,7 +57,7 @@ public class PollDao {
 		try {
 			log.debug(" :: close :: ");
 			Query q = em.createNamedQuery("closePoll");
-			q.setParameter("roomId", roomId);
+			q.setParameter(PARAM_ROOMID, roomId);
 			q.setParameter("archived", true);
 			return q.executeUpdate() > 0;
 		} catch (Exception err) {
@@ -85,7 +86,7 @@ public class PollDao {
 	public RoomPoll getByRoom(Long roomId) {
 		log.debug(" :: getPoll :: {}", roomId);
 		List<RoomPoll> list = em.createNamedQuery("getPoll", RoomPoll.class)
-				.setParameter("roomId", roomId).getResultList();
+				.setParameter(PARAM_ROOMID, roomId).getResultList();
 		return list.size() == 1 ? list.get(0) : null;
 	}
 
@@ -96,20 +97,20 @@ public class PollDao {
 	public List<RoomPoll> getArchived(Long roomId) {
 		log.debug(" :: getArchived :: {}", roomId);
 		return em.createNamedQuery("getArchivedPollList",RoomPoll.class)
-				.setParameter("roomId", roomId).getResultList();
+				.setParameter(PARAM_ROOMID, roomId).getResultList();
 	}
 
 	public boolean hasPoll(Long roomId) {
 		log.debug(" :: hasPoll :: " + roomId);
 		return em.createNamedQuery("hasPoll", Long.class)
-				.setParameter("roomId", roomId)
+				.setParameter(PARAM_ROOMID, roomId)
 				.setParameter("archived", false)
 				.getSingleResult() > 0;
 	}
 
 	public boolean hasVoted(Long roomId, Long userId) {
 		return !em.createNamedQuery("hasVoted", RoomPollAnswer.class)
-				.setParameter("roomId", roomId)
+				.setParameter(PARAM_ROOMID, roomId)
 				.setParameter(PARAM_USER_ID, userId)
 				.getResultList().isEmpty();
 	}

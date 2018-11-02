@@ -42,6 +42,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DocumentConverter {
 	private static final Logger log = LoggerFactory.getLogger(DocumentConverter.class);
+	private static final String JOD_JOD_NAME = "doJodConvert";
 
 	@Autowired
 	protected ConfigurationDao cfgDao;
@@ -102,10 +103,10 @@ public class DocumentConverter {
 						converter.convert(in, out);
 					});
 		} catch (Exception ex) {
-			log.error("doJodConvert", ex);
-			return new ProcessResult("doJodConvert", ex.getMessage(), ex);
+			log.error(JOD_JOD_NAME, ex);
+			return new ProcessResult(JOD_JOD_NAME, ex.getMessage(), ex);
 		}
-		return new ProcessResult("doJodConvert", "Document converted successfully", null)
+		return new ProcessResult(JOD_JOD_NAME, "Document converted successfully", null)
 				.setExitCode(0);
 	}
 }

@@ -45,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 	private static final Logger log = LoggerFactory.getLogger(PrivateMessageDao.class);
+	private static final String PARAM_FLDRID = "folderId";
 	@PersistenceContext
 	private EntityManager em;
 
@@ -129,14 +130,14 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		TypedQuery<Long> query = em.createQuery(getQuery(true, search, null, true), Long.class);
 		query.setParameter("ownerId", ownerId);
 		setSearch(query, search);
-		query.setParameter("folderId", folderId);
+		query.setParameter(PARAM_FLDRID, folderId);
 		return query.getSingleResult();
 	}
 
 	public List<PrivateMessage> get(Long ownerId, Long folderId, String search, String orderBy, boolean asc, long start, long max) {
 		TypedQuery<PrivateMessage> query = em.createQuery(getQuery(false, search, orderBy, asc), PrivateMessage.class);
 		query.setParameter("ownerId", ownerId);
-		query.setParameter("folderId", folderId);
+		query.setParameter(PARAM_FLDRID, folderId);
 		setSearch(query, search);
 		return setLimits(query, start, max).getResultList();
 	}
@@ -150,7 +151,7 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 
 	public int moveMailsToFolder(Collection<Long> ids, Long folderId) {
 		Query query = em.createNamedQuery("moveMailsToFolder");
-		query.setParameter("folderId", folderId);
+		query.setParameter(PARAM_FLDRID, folderId);
 		query.setParameter("ids", ids);
 		return query.executeUpdate();
 	}

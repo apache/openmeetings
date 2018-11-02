@@ -38,7 +38,7 @@ var Video = (function() {
 	}
 	function _micActivity(level) {
 		lm.getKendoProgressBar().value(140 * level); // magic number
-		let speaks = level > .02;
+		const speaks = level > .02;
 		if (speaks !== userSpeaks) {
 			userSpeaks = speaks;
 			OmUtil.sendMessage({type: 'mic', id: 'activity', active: speaks});

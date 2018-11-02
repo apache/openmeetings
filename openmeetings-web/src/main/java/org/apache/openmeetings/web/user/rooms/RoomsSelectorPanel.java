@@ -29,6 +29,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class RoomsSelectorPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
+	private static final String PANEL_ID = "rooms";
 	private String title;
 	private String desc;
 	@SpringBean
@@ -41,18 +42,18 @@ public class RoomsSelectorPanel extends UserBasePanel {
 			case myTabButton:
 				title = "781";
 				desc = "782";
-				add(new RoomsPanel("rooms", roomDao.getMyRooms(getUserId(), Application.getString("my.room.conference"), Application.getString("my.room.presentation"))));
+				add(new RoomsPanel(PANEL_ID, roomDao.getMyRooms(getUserId(), Application.getString("my.room.conference"), Application.getString("my.room.presentation"))));
 				break;
 			case privateTabButton:
 				title = "779";
 				desc = "780";
-				add(new RoomsTabbedPanel("rooms"));
+				add(new RoomsTabbedPanel(PANEL_ID));
 				break;
 			case publicTabButton:
 			default:
 				title = "777";
 				desc = "778";
-				add(new RoomsPanel("rooms", roomDao.getPublicRooms()));
+				add(new RoomsPanel(PANEL_ID, roomDao.getPublicRooms()));
 				break;
 		}
 	}

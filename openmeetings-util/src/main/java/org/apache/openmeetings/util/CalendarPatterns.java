@@ -70,7 +70,6 @@ public class CalendarPatterns {
 
 	public static Date parseImportDate(String dateString) {
 		try {
-
 			Date resultDate = validDate(dateFormat__ddMMyyyyHHmmss, dateString);
 
 			if (resultDate != null) {
@@ -89,9 +88,9 @@ public class CalendarPatterns {
 				return resultDate;
 			}
 
-			log.error("parseDate:: Could not parse date string {}", dateString);
+			log.error("parseImportDate:: Could not parse date string {}", dateString);
 		} catch (Exception e) {
-			log.error("parseDate", e);
+			log.error("parseImportDate", e);
 		}
 		return null;
 	}
@@ -147,7 +146,7 @@ public class CalendarPatterns {
 		try {
 			return dateFormat__ddMMyyyyBySeparator.parse(dateString);
 		} catch (Exception e) {
-			log.error("parseDate", e);
+			log.error("parseDateBySeparator", e);
 		}
 		return null;
 	}
@@ -160,7 +159,7 @@ public class CalendarPatterns {
 			}
 			return dateFormat__ddMMyyyyHHmmss.parse(dateString);
 		} catch (Exception e) {
-			log.error("parseDate", e);
+			log.error("parseDateWithHour", e);
 		}
 		return null;
 	}

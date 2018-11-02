@@ -79,6 +79,9 @@ import com.github.openjson.JSONObject;
 
 public class KurentoHandler {
 	private static final Logger log = LoggerFactory.getLogger(KurentoHandler.class);
+	public static final String PARAM_ICE = "iceServers";
+	public static final String PARAM_CANDIDATE = "candidate";
+	private static final String WARN_NO_KURENTO = "Media Server is not accessible";
 	private static final String MODE_TEST = "test";
 	private static final String TAG_KUID = "kuid";
 	private static final String TAG_MODE = "mode";
@@ -178,7 +181,7 @@ public class KurentoHandler {
 				case "wannaRecord":
 					WebSocketHelper.sendClient(_c, newTestKurentoMsg()
 							.put("id", "canRecord")
-							.put("iceServers", getTurnServers(true))
+							.put(PARAM_ICE, getTurnServers(true))
 							);
 					break;
 				case "record":
@@ -186,9 +189,9 @@ public class KurentoHandler {
 					testsByUid.put(_c.getUid(), user);
 					break;
 				case "iceCandidate":
-					JSONObject candidate = msg.getJSONObject("candidate");
+					JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
 					if (user != null) {
-						IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
+						IceCandidate cand = new IceCandidate(candidate.getString(PARAM_CANDIDATE),
 								candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
 						user.addCandidate(cand);
 					}
@@ -196,7 +199,7 @@ public class KurentoHandler {
 				case "wannaPlay":
 					WebSocketHelper.sendClient(_c, newTestKurentoMsg()
 							.put("id", "canPlay")
-							.put("iceServers", getTurnServers(true))
+							.put(PARAM_ICE, getTurnServers(true))
 							);
 					break;
 				case "play":
@@ -242,9 +245,9 @@ public class KurentoHandler {
 				case "onIceCandidate":
 					sender = getByUid(uid);
 					if (sender != null) {
-						JSONObject candidate = msg.getJSONObject("candidate");
+						JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
 						IceCandidate cand = new IceCandidate(
-								candidate.getString("candidate")
+								candidate.getString(PARAM_CANDIDATE)
 								, candidate.getString("sdpMid")
 								, candidate.getInt("sdpMLineIndex"));
 						sender.addCandidate(cand, msg.getString("luid"));
@@ -278,7 +281,7 @@ public class KurentoHandler {
 
 	private void checkStreams(Long roomId) {
 		if (client == null) {
-			log.warn("Media Server is not accessible");
+			log.warn(WARN_NO_KURENTO);
 			return;
 		}
 		KRoom room = getRoom(roomId);
@@ -350,7 +353,7 @@ public class KurentoHandler {
 				sendClient(sd.getSid(), newKurentoMsg()
 						.put("id", "broadcast")
 						.put("stream", sd.toJson())
-						.put("iceServers", getTurnServers(false)));
+						.put(PARAM_ICE, getTurnServers(false)));
 				//FIXME TODO update interview buttons
 			} else {
 				//constraints were changed
@@ -368,7 +371,7 @@ public class KurentoHandler {
 
 	public void startRecording(Client c) {
 		if (client == null) {
-			log.warn("Media Server is not accessible");
+			log.warn(WARN_NO_KURENTO);
 			return;
 		}
 		getRoom(c.getRoomId()).startRecording(c, recDao);
@@ -376,7 +379,7 @@ public class KurentoHandler {
 
 	public void stopRecording(Client c) {
 		if (client == null) {
-			log.warn("Media Server is not accessible");
+			log.warn(WARN_NO_KURENTO);
 			return;
 		}
 		getRoom(c.getRoomId()).stopRecording(this, c, recDao);
@@ -389,7 +392,7 @@ public class KurentoHandler {
 
 	public boolean isRecording(Long roomId) {
 		if (client == null) {
-			log.warn("Media Server is not accessible");
+			log.warn(WARN_NO_KURENTO);
 			return false;
 		}
 		return getRoom(roomId).isRecording();
@@ -397,7 +400,7 @@ public class KurentoHandler {
 
 	public JSONObject getRecordingUser(Long roomId) {
 		if (client == null) {
-			log.warn("Media Server is not accessible");
+			log.warn(WARN_NO_KURENTO);
 			return new JSONObject();
 		}
 		return getRoom(roomId).getRecordingUser();
@@ -405,7 +408,7 @@ public class KurentoHandler {
 
 	public boolean screenShareAllowed(Client c) {
 		if (client == null) {
-			log.warn("Media Server is not accessible");
+			log.warn(WARN_NO_KURENTO);
 			return false;
 		}
 		Room r = c.getRoom();
@@ -438,7 +441,7 @@ public class KurentoHandler {
 
 	public boolean isSharing(Long roomId) {
 		if (client == null) {
-			log.warn("Media Server is not accessible");
+			log.warn(WARN_NO_KURENTO);
 			return false;
 		}
 		return getRoom(roomId).isSharing();

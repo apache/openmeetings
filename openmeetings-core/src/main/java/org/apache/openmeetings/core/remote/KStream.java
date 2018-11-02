@@ -22,6 +22,8 @@
 package org.apache.openmeetings.core.remote;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE;
+import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.util.OmFileHelper.getRecUri;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
@@ -137,7 +139,7 @@ public class KStream implements IKStream {
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 		WebSocketHelper.sendRoomOthers(room.roomId, c.getUid(), newKurentoMsg()
 				.put("id", "newStream")
-				.put("iceServers", h.getTurnServers())
+				.put(PARAM_ICE, h.getTurnServers())
 				.put("stream", sd.toJson()));
 		return this;
 	}
@@ -207,7 +209,7 @@ public class KStream implements IKStream {
 		endpoint.addIceCandidateFoundListener(evt -> h.sendClient(sid, newKurentoMsg()
 						.put("id", "iceCandidate")
 						.put("uid", KStream.this.uid)
-						.put("candidate", convert(JsonUtils.toJsonObject(evt.getCandidate()))))
+						.put(PARAM_CANDIDATE, convert(JsonUtils.toJsonObject(evt.getCandidate()))))
 				);
 		return endpoint;
 	}

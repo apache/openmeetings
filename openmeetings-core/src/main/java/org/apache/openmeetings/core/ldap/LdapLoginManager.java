@@ -76,6 +76,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LdapLoginManager {
 	private static final Logger log = LoggerFactory.getLogger(LdapLoginManager.class);
+	private static final String WARN_REFERRAL = "Referral LDAP entry found, ignore it";
 	// LDAP custom attribute mapping keys
 	private static final String CONFIGKEY_LDAP_KEY_LOGIN = "ldap_user_attr_login";
 	private static final String CONFIGKEY_LDAP_KEY_LASTNAME = "ldap_user_attr_lastname";
@@ -260,7 +261,7 @@ public class LdapLoginManager {
 						entry = e;
 					}
 				} catch (CursorLdapReferralException cle) {
-					log.warn("Referral LDAP entry found, ignore it");
+					log.warn(WARN_REFERRAL);
 				}
 			}
 		}
@@ -311,7 +312,7 @@ public class LdapLoginManager {
 					log.info("User {}, was imported", u);
 				}
 			} catch (CursorLdapReferralException cle) {
-				log.warn("Referral LDAP entry found, ignore it");
+				log.warn(WARN_REFERRAL);
 			}
 		}
 	}
@@ -430,7 +431,7 @@ public class LdapLoginManager {
 						Entry e = cursor.get();
 						groups.add(e.getDn());
 					} catch (CursorLdapReferralException cle) {
-						log.warn("Referral LDAP entry found, ignore it");
+						log.warn(WARN_REFERRAL);
 					}
 				}
 			}

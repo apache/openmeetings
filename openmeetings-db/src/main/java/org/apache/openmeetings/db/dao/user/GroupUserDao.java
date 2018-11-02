@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	private static final String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.address.email"};
+	private static final String PARAM_GROUPID = "groupId";
 	@PersistenceContext
 	private EntityManager em;
 
@@ -61,7 +62,7 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	public List<GroupUser> get(long groupId, String search, long start, long count, String sort) {
 		return setLimits(
 				em.createQuery(DaoHelper.getSearchQuery(GroupUser.class.getSimpleName(), "ou", null, search, false, false, "ou.group.id = :groupId", sort, searchFields), GroupUser.class)
-					.setParameter("groupId", groupId)
+					.setParameter(PARAM_GROUPID, groupId)
 				, start, count).getResultList();
 	}
 
@@ -73,13 +74,13 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 
 	public GroupUser getByGroupAndUser(Long groupId, Long userId) {
 		List<GroupUser> list = em.createNamedQuery("isUserInGroup", GroupUser.class)
-				.setParameter("groupId", groupId).setParameter(PARAM_USER_ID, userId).getResultList();
+				.setParameter(PARAM_GROUPID, groupId).setParameter(PARAM_USER_ID, userId).getResultList();
 		return list.isEmpty() ? null : list.get(0);
 	}
 
 	public boolean isUserInGroup(long groupId, long userId) {
 		return !em.createNamedQuery("isUserInGroup", GroupUser.class)
-				.setParameter("groupId", groupId).setParameter(PARAM_USER_ID, userId).getResultList().isEmpty();
+				.setParameter(PARAM_GROUPID, groupId).setParameter(PARAM_USER_ID, userId).getResultList().isEmpty();
 	}
 
 	@Override

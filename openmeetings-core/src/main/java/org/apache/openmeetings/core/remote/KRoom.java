@@ -22,6 +22,7 @@
 package org.apache.openmeetings.core.remote;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 
 import java.util.Collection;
@@ -188,7 +189,7 @@ public class KRoom {
 					.put("stream", sd.toJson()
 							.put("shareType", msg.getString("shareType"))
 							.put("fps", msg.getString("fps")))
-					.put("iceServers", h.getTurnServers()));
+					.put(PARAM_ICE, h.getTurnServers()));
 		}
 	}
 

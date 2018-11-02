@@ -96,6 +96,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 public class WbPanel extends AbstractWbPanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(WbPanel.class);
+	private static final String PARAM_UPDATED = "updated";
 	private static final int UPLOAD_WB_LEFT = 0;
 	private static final int UPLOAD_WB_TOP = 0;
 	private static final int DEFAULT_WIDTH = 640;
@@ -258,7 +259,7 @@ public class WbPanel extends AbstractWbPanel {
 								continue;
 							}
 							JSONObject sts = new JSONObject(_sts.toString()); //copy
-							sts.put("pos", sts.getDouble("pos") + (System.currentTimeMillis() - sts.getLong("updated")) * 1. / 1000);
+							sts.put("pos", sts.getDouble("pos") + (System.currentTimeMillis() - sts.getLong(PARAM_UPDATED)) * 1. / 1000);
 							arr.put(new JSONObject()
 									.put("wbId", wb.getId())
 									.put("uid", o.getString("uid"))
@@ -455,7 +456,7 @@ public class WbPanel extends AbstractWbPanel {
 					JSONObject po = wb.get(uid);
 					if (po != null && "video".equals(po.getString(ATTR_TYPE))) {
 						JSONObject ns = obj.getJSONObject(PARAM_STATUS);
-						po.put(PARAM_STATUS, ns.put("updated", System.currentTimeMillis()));
+						po.put(PARAM_STATUS, ns.put(PARAM_UPDATED, System.currentTimeMillis()));
 						wbm.update(roomId, wb.put(uid, po));
 						obj.put(ATTR_SLIDE, po.getInt(ATTR_SLIDE));
 						sendWbAll(WbAction.videoStatus, obj);
@@ -602,7 +603,7 @@ public class WbPanel extends AbstractWbPanel {
 						file.put(PARAM_STATUS, new JSONObject()
 								.put("paused", true)
 								.put("pos", 0.0)
-								.put("updated", System.currentTimeMillis()));
+								.put(PARAM_UPDATED, System.currentTimeMillis()));
 					}
 					final String ruid = wbs.getUid();
 					if (clean) {

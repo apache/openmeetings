@@ -128,7 +128,7 @@ var Wb = function() {
 		function setStyle(canvas, styleName, value) {
 			const o = canvas.getActiveObject();
 			if (o.setSelectionStyles && o.isEditing) {
-				let style = {};
+				const style = {};
 				style[styleName] = value;
 				o.setSelectionStyles(style);
 			} else {
