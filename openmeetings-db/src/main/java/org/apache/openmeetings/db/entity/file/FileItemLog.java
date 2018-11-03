@@ -18,10 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.file;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.process.ProcessResult.ZERO;
 
-import java.util.Arrays;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -61,7 +59,7 @@ public class FileItemLog implements IDataProviderEntity {
 
 	@Lob
 	@Column(name = "message", length = MAX_LOG_SIZE)
-	private byte[] bytes;
+	private String message;
 
 	@Column(name = "exit_code")
 	private Integer exitCode;
@@ -107,11 +105,11 @@ public class FileItemLog implements IDataProviderEntity {
 	}
 
 	public String getMessage() {
-		return bytes == null ? null : new String(bytes, UTF_8);
+		return message;
 	}
 
 	public FileItemLog setMessage(String message) {
-		setBytes(message.getBytes(UTF_8));
+		this.message = message == null || message.length() < MAX_LOG_SIZE ? message : message.substring(0, MAX_LOG_SIZE);
 		return this;
 	}
 
@@ -122,14 +120,6 @@ public class FileItemLog implements IDataProviderEntity {
 	public FileItemLog setExitCode(Integer exitCode) {
 		this.exitCode = exitCode;
 		return this;
-	}
-
-	public byte[] getBytes() {
-		return bytes;
-	}
-
-	public void setBytes(byte[] a) {
-		this.bytes = a == null || a.length < MAX_LOG_SIZE ? a : Arrays.copyOf(a, MAX_LOG_SIZE);
 	}
 
 	public boolean isOk() {
