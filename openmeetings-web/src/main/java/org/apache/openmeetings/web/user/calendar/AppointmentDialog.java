@@ -291,10 +291,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		a.setStart(getDate(form.start.getModelObject()));
 		a.setEnd(getDate(form.end.getModelObject()));
 		a.setCalendar(form.cals.getModelObject());
-		apptDao.update(a, getUserId());
 		if (a.getCalendar() != null) {
+			// Updates on the remote server and sets the href. Should be before dao update
 			calendarPanel.updatedeleteAppointment(target, CalendarDialog.DIALOG_TYPE.UPDATE_APPOINTMENT, a);
 		}
+		apptDao.update(a, getUserId());
 		target.add(feedback);
 		calendarPanel.refresh(target);
 	}

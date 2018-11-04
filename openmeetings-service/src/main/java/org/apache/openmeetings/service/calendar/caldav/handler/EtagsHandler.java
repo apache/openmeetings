@@ -18,22 +18,23 @@
  */
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
-import static javax.servlet.http.HttpServletResponse.SC_CREATED;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
-import org.apache.jackrabbit.webdav.client.methods.DavMethodBase;
+import org.apache.jackrabbit.webdav.client.methods.BaseDavRequest;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -42,17 +43,19 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar.SyncType;
 import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
 import org.apache.wicket.util.string.Strings;
-import org.osaf.caldav4j.CalDAVConstants;
-import org.osaf.caldav4j.methods.CalDAVReportMethod;
-import org.osaf.caldav4j.methods.DeleteMethod;
-import org.osaf.caldav4j.methods.PutMethod;
-import org.osaf.caldav4j.model.request.CalendarData;
-import org.osaf.caldav4j.model.request.CalendarQuery;
-import org.osaf.caldav4j.model.request.CompFilter;
-import org.osaf.caldav4j.model.response.CalendarDataProperty;
-import org.osaf.caldav4j.util.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.caldav4j.CalDAVConstants;
+import com.github.caldav4j.methods.HttpCalDAVReportMethod;
+import com.github.caldav4j.methods.HttpDeleteMethod;
+import com.github.caldav4j.methods.HttpPutMethod;
+import com.github.caldav4j.model.request.CalendarData;
+import com.github.caldav4j.model.request.CalendarQuery;
+import com.github.caldav4j.model.request.CalendarRequest;
+import com.github.caldav4j.model.request.CompFilter;
+import com.github.caldav4j.model.response.CalendarDataProperty;
+import com.github.caldav4j.util.UrlUtils;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
@@ -73,15 +76,27 @@ import net.fortuna.ical4j.model.Component;
 public class EtagsHandler extends AbstractCalendarHandler {
 	private static final Logger log = LoggerFactory.getLogger(EtagsHandler.class);
 
-	public EtagsHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao, IcalUtils utils) {
-		super(path, calendar, client, appointmentDao, utils);
+	/**
+	 * @param uri URI to provide the host and scheme
+	 * @param path Path to append to host
+	 * @return Returns the full path, based on the URI as host and the path provided
+	 */
+	private static String getFullPath(URI uri, String path) {
+		return uri.getScheme() + "://" + uri.getAuthority() + path;
 	}
 
+	public EtagsHandler(String path, OmCalendar calendar, HttpClient client,
+	                    HttpClientContext context, AppointmentDao appointmentDao, IcalUtils utils) {
+		super(path, calendar, client, context, appointmentDao, utils);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	DavMethodBase internalSyncItems() throws IOException, DavException {
+	BaseDavRequest internalSyncItems() throws IOException, DavException {
 		Long ownerId = this.calendar.getOwner().getId();
-		Map<String, Appointment> map = listToMap(appointmentDao.getHrefsbyCalendar(calendar.getId()),
-				appointmentDao.getbyCalendar(calendar.getId()));
+		Map<String, Appointment> map = listToMap(appointmentDao.getbyCalendar(calendar.getId()));
 
 		DavPropertyNameSet properties = new DavPropertyNameSet();
 		properties.add(DavPropertyName.GETETAG);
@@ -89,11 +104,11 @@ public class EtagsHandler extends AbstractCalendarHandler {
 		CompFilter vcalendar = new CompFilter(Calendar.VCALENDAR);
 		vcalendar.addCompFilter(new CompFilter(Component.VEVENT));
 
-		CalendarQuery query = new CalendarQuery(properties, vcalendar, map.isEmpty() ? new CalendarData() : null, false, false);
-		CalDAVReportMethod method = new CalDAVReportMethod(path, query, CalDAVConstants.DEPTH_1);
-		client.executeMethod(method);
-		if (method.succeeded()) {
-			MultiStatusResponse[] multiStatusResponses = method.getResponseBodyAsMultiStatus().getResponses();
+		CalendarQuery query = new CalendarQuery(properties, vcalendar, new CalendarData(), false, false);
+		HttpCalDAVReportMethod method = new HttpCalDAVReportMethod(path, query, CalDAVConstants.DEPTH_1);
+		HttpResponse httpResponse = client.execute(method, context);
+		if (method.succeeded(httpResponse)) {
+			MultiStatusResponse[] multiStatusResponses = method.getResponseBodyAsMultiStatus(httpResponse).getResponses();
 			if (map.isEmpty()) {
 				//Initializing the Calendar for the first time.
 
@@ -110,7 +125,6 @@ public class EtagsHandler extends AbstractCalendarHandler {
 				}
 			} else {
 				//Calendar has been inited before
-				List<String> currenthrefs = new ArrayList<>();
 
 				for (MultiStatusResponse response : multiStatusResponses) {
 					if (response.getStatus()[0].getStatusCode() == SC_OK) {
@@ -123,12 +137,19 @@ public class EtagsHandler extends AbstractCalendarHandler {
 
 							//If etag is modified
 							if (!currentetag.equals(origetag)) {
-								currenthrefs.add(appointment.getHref());
+								Calendar calendar = CalendarDataProperty.getCalendarfromResponse(response);
+								appointment = utils.parseCalendartoAppointment(appointment, calendar, currentetag);
+								appointmentDao.update(appointment, ownerId);
 							}
 							map.remove(response.getHref());
 						} else {
 							// The orig list of events doesn't contain this event.
-							currenthrefs.add(response.getHref());
+							String etag = CalendarDataProperty.getEtagfromResponse(response);
+							Calendar ical = CalendarDataProperty.getCalendarfromResponse(response);
+							Appointment appointments = utils.parseCalendartoAppointment(
+									ical, response.getHref(), etag, calendar);
+
+							appointmentDao.update(appointments, ownerId);
 						}
 					}
 				}
@@ -137,19 +158,16 @@ public class EtagsHandler extends AbstractCalendarHandler {
 				for (Map.Entry<String, Appointment> entry : map.entrySet()) {
 					appointmentDao.delete(entry.getValue(), ownerId);
 				}
-
-				//Get the rest of the events through a Multiget Handler.
-				MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
-						calendar, client, appointmentDao, utils);
-				releaseConnection(method);
-				return multigetHandler.internalSyncItems();
 			}
 		} else {
-			log.error("Report Method return Status: {} for calId {} ", method.getStatusCode(), calendar.getId());
+			log.error("Report Method return Status: {} for calId {} ", httpResponse.getStatusLine().getStatusCode(), calendar.getId());
 		}
 		return method;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean updateItem(Appointment appointment) {
 		OmCalendar calendar = appointment.getCalendar();
@@ -158,38 +176,36 @@ public class EtagsHandler extends AbstractCalendarHandler {
 		if (calendar != null && calendar.getSyncType() != SyncType.NONE) {
 
 			//Store new Appointment on the server
-			PutMethod putMethod = null;
+			HttpPutMethod putMethod = null;
 			try {
 				List<String> hrefs = null;
 				CalendarOutputter calendarOutputter = new CalendarOutputter();
 
+				String temp = null;
 				Calendar ical = utils.parseAppointmenttoCalendar(appointment);
-
-				putMethod = new PutMethod();
-				putMethod.setRequestBody(ical);
-				putMethod.setCalendarOutputter(calendarOutputter);
+				CalendarRequest cr = new CalendarRequest(ical);
 
 				if (Strings.isEmpty(appointment.getHref())) {
-					String temp = path + appointment.getIcalId() + ".ics";
+					temp = this.path + appointment.getIcalId() + ".ics";
 					temp = UrlUtils.removeDoubleSlashes(temp);
-					putMethod.setPath(temp);
-					putMethod.setIfNoneMatch(true);
-					putMethod.setAllEtags(true);
+					cr.setIfNoneMatch(true);
+					cr.setAllEtags(true);
 				} else {
-					putMethod.setPath(appointment.getHref());
-					putMethod.setIfMatch(true);
-					putMethod.addEtag(appointment.getEtag());
+					temp = getFullPath(URI.create(this.path), appointment.getHref());
+					cr.setIfMatch(true);
+					cr.addEtag(appointment.getEtag());
 				}
 
-				client.executeMethod(putMethod);
+				putMethod = new HttpPutMethod(temp, cr, calendarOutputter);
 
-				if (putMethod.getStatusCode() == SC_CREATED ||
-						putMethod.getStatusCode() == SC_NO_CONTENT) {
-					href = putMethod.getPath();
+				HttpResponse httpResponse =  client.execute(putMethod, context);
+
+				if (putMethod.succeeded(httpResponse)) {
+					href = putMethod.getURI().getPath(); // Set the href as the path
 					appointment.setHref(href);
 
 					//Check if the ETag header was returned.
-					Header etagh = putMethod.getResponseHeader("ETag");
+					Header etagh = putMethod.getFirstHeader("ETag");
 					if (etagh == null)
 						hrefs = Collections.singletonList(appointment.getHref());
 					else {
@@ -203,7 +219,7 @@ public class EtagsHandler extends AbstractCalendarHandler {
 
 				//Get new etags for the ones which didn't return an ETag header
 				MultigetHandler multigetHandler = new MultigetHandler(hrefs, true, path,
-						calendar, client, appointmentDao, utils);
+						calendar, client, context, appointmentDao, utils);
 				multigetHandler.syncItems();
 				return true;
 			} catch (IOException e) {
@@ -211,9 +227,7 @@ public class EtagsHandler extends AbstractCalendarHandler {
 			} catch (Exception e) {
 				log.error("Severe Error in executing OptionsMethod during testConnection.", e);
 			} finally {
-				if (putMethod != null) {
-					putMethod.releaseConnection();
-				}
+				releaseConnection(putMethod);
 			}
 		}
 
@@ -221,21 +235,30 @@ public class EtagsHandler extends AbstractCalendarHandler {
 	}
 
 	/**
-	 * @see CalendarHandler#deleteItem(Appointment)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean deleteItem(Appointment appointment) {
 
-		if (calendar != null && calendar.getSyncType() != SyncType.NONE && !Strings.isEmpty(appointment.getHref())) {
-			DeleteMethod deleteMethod = null;
+		if (calendar != null && calendar.getSyncType() != SyncType.NONE) {
+			HttpDeleteMethod deleteMethod = null;
 			try {
-				deleteMethod = new DeleteMethod(appointment.getHref(), appointment.getEtag());
 
-				log.info("Deleting at location: {} with ETag: {}", appointment.getHref(), appointment.getEtag());
+				String fullPath;
+				if (Strings.isEmpty(appointment.getHref())) {
+					// Make sure to set HREF just in case, if calendar exists but no href does.
+					fullPath = this.path + appointment.getIcalId() + ".ics";
+				} else {
+					fullPath = getFullPath(URI.create(this.path), appointment.getHref());
+				}
 
-				client.executeMethod(deleteMethod);
+				deleteMethod = new HttpDeleteMethod(fullPath, appointment.getEtag());
 
-				int status = deleteMethod.getStatusCode();
+				log.info("Deleting at location: {} with ETag: {}", fullPath, appointment.getEtag());
+
+				HttpResponse response = client.execute(deleteMethod, context);
+
+				int status = response.getStatusLine().getStatusCode();
 				if (status == SC_NO_CONTENT || status == SC_OK || status == SC_NOT_FOUND) {
 					log.info("Successfully deleted appointment with id: " + appointment.getId());
 					return true;
@@ -247,9 +270,7 @@ public class EtagsHandler extends AbstractCalendarHandler {
 			} catch (Exception e) {
 				log.error("Severe Error in executing OptionsMethod during testConnection.", e);
 			} finally {
-				if (deleteMethod != null) {
-					deleteMethod.releaseConnection();
-				}
+				releaseConnection(deleteMethod);
 			}
 		}
 		return false;

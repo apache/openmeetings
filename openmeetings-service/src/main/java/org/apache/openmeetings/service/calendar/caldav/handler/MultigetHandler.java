@@ -24,10 +24,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpClient;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
-import org.apache.jackrabbit.webdav.client.methods.DavMethodBase;
+import org.apache.jackrabbit.webdav.client.methods.BaseDavRequest;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -35,22 +37,24 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar.SyncType;
 import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
-import org.osaf.caldav4j.CalDAVConstants;
-import org.osaf.caldav4j.methods.CalDAVReportMethod;
-import org.osaf.caldav4j.model.request.CalendarData;
-import org.osaf.caldav4j.model.request.CalendarMultiget;
-import org.osaf.caldav4j.model.request.CompFilter;
-import org.osaf.caldav4j.model.response.CalendarDataProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.caldav4j.CalDAVConstants;
+import com.github.caldav4j.methods.HttpCalDAVReportMethod;
+import com.github.caldav4j.model.request.CalendarData;
+import com.github.caldav4j.model.request.CalendarMultiget;
+import com.github.caldav4j.model.request.CompFilter;
+import com.github.caldav4j.model.response.CalendarDataProperty;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 
 /**
- * Class used to sync a given list of hrefs and update or add new Appointments, whenever feasible.
- * This class cannot be used to update or delete Appointments, which are handled seperately.
- * We use the Calendar-Multiget Report Method to handle this type of query.
+ * Class used to sync a given list of hrefs and update or add new Appointments,
+ * whenever feasible. This class cannot be used to update or delete Appointments,
+ * which are handled seperately. We use the Calendar-Multiget Report Method to
+ * handle this type of query.
  *
  * @see CalendarHandler
  */
@@ -60,9 +64,11 @@ public class MultigetHandler extends AbstractCalendarHandler {
 	private CalendarMultiget query;
 	private boolean isMultigetDisabled = false, onlyEtag = false;
 
-	public MultigetHandler(List<String> hrefs, boolean onlyEtag, String path, OmCalendar calendar, HttpClient client,
-			AppointmentDao appointmentDao, IcalUtils utils) {
-		super(path, calendar, client, appointmentDao, utils);
+	public MultigetHandler(List<String> hrefs, boolean onlyEtag, String path,
+	                       OmCalendar calendar, HttpClient client,
+	                       HttpClientContext context, AppointmentDao appointmentDao,
+	                       IcalUtils utils) {
+		super(path, calendar, client, context, appointmentDao, utils);
 		this.onlyEtag = onlyEtag;
 
 		if (hrefs == null || hrefs.isEmpty() || calendar.getSyncType() == SyncType.NONE) {
@@ -82,25 +88,25 @@ public class MultigetHandler extends AbstractCalendarHandler {
 		}
 	}
 
-	public MultigetHandler(List<String> hrefs, String path, OmCalendar calendar, HttpClient client,
-			AppointmentDao appointmentDao, IcalUtils utils)
+	public MultigetHandler(List<String> hrefs, String path, OmCalendar calendar,
+	                       HttpClient client, HttpClientContext context,
+	                       AppointmentDao appointmentDao, IcalUtils utils)
 	{
-		this(hrefs, false, path, calendar, client, appointmentDao, utils);
+		this(hrefs, false, path, calendar, client, context, appointmentDao, utils);
 	}
 
 	@Override
-	DavMethodBase internalSyncItems() throws IOException, DavException {
+	BaseDavRequest internalSyncItems() throws IOException, DavException {
 		Long ownerId = this.calendar.getOwner().getId();
 		if (!isMultigetDisabled) {
-			CalDAVReportMethod method = new CalDAVReportMethod(path, query, CalDAVConstants.DEPTH_1);
+			HttpCalDAVReportMethod method = new HttpCalDAVReportMethod(path, query, CalDAVConstants.DEPTH_1);
 
-			client.executeMethod(method);
-			if (method.succeeded()) {
+			HttpResponse httpResponse = client.execute(method, context);
+			if (method.succeeded(httpResponse)) {
 				//Map for each Href as key and Appointment as Value.
-				Map<String, Appointment> map = listToMap(appointmentDao.getHrefsbyCalendar(calendar.getId()),
-						appointmentDao.getbyCalendar(calendar.getId()));
+				Map<String, Appointment> map = listToMap(appointmentDao.getbyCalendar(calendar.getId()));
 
-				for (MultiStatusResponse response : method.getResponseBodyAsMultiStatus().getResponses()) {
+				for (MultiStatusResponse response : method.getResponseBodyAsMultiStatus(httpResponse).getResponses()) {
 					if (response.getStatus()[0].getStatusCode() == SC_OK) {
 						Appointment a = map.get(response.getHref());
 
@@ -132,7 +138,7 @@ public class MultigetHandler extends AbstractCalendarHandler {
 					}
 				}
 			} else {
-				log.error("Report Method return Status: {} for calId {}", method.getStatusCode(), calendar.getId());
+				log.error("Report Method return Status: {} for calId {}", httpResponse.getStatusLine().getStatusCode(), calendar.getId());
 			}
 			return method;
 		}

@@ -23,9 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpClient;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.jackrabbit.webdav.DavException;
-import org.apache.jackrabbit.webdav.client.methods.DavMethodBase;
+import org.apache.jackrabbit.webdav.client.methods.BaseDavRequest;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
@@ -40,6 +42,7 @@ public abstract class AbstractCalendarHandler implements CalendarHandler {
 	private static final Logger log = LoggerFactory.getLogger(AbstractCalendarHandler.class);
 
 	protected HttpClient client;
+	protected HttpClientContext context;
 	protected OmCalendar calendar;
 	protected String path;
 	protected IcalUtils utils;
@@ -47,26 +50,36 @@ public abstract class AbstractCalendarHandler implements CalendarHandler {
 	protected AppointmentDao appointmentDao;
 
 	public AbstractCalendarHandler(String path, OmCalendar calendar, HttpClient client,
-			AppointmentDao appointmentDao, IcalUtils utils)
+	                               HttpClientContext context, AppointmentDao appointmentDao,
+	                               IcalUtils utils)
 	{
 		this.path = path;
 		this.calendar = calendar;
 		this.client = client;
+		this.context = context;
 		this.appointmentDao = appointmentDao;
 		this.utils = utils;
 	}
 
-	public static Map<String, Appointment> listToMap(List<String> keys, List<Appointment> values) {
+	/**
+	 * Converts a list of appointments to a {@link HashMap} with the Href as the key
+	 * @param appointments Appointments to map
+	 * @return Map of Hrefs to Appointments
+	 */
+	static Map<String, Appointment> listToMap(List<Appointment> appointments) {
 		Map<String, Appointment> map = new HashMap<>();
-		for (int i = 0; i < keys.size(); ++i) {
-			map.put(keys.get(i), values.get(i));
+		for(Appointment a : appointments) {
+			map.put(a.getHref(), a);
 		}
 		return map;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public OmCalendar syncItems() {
-		DavMethodBase method = null;
+		BaseDavRequest method = null;
 		try {
 			method = internalSyncItems();
 		} catch (IOException | DavException e) {
@@ -79,11 +92,22 @@ public abstract class AbstractCalendarHandler implements CalendarHandler {
 		return calendar;
 	}
 
-	void releaseConnection(DavMethodBase method) {
+	/**
+	 * Resets the Method for reusablility.
+	 * @param method Method to reset.
+	 */
+	void releaseConnection(HttpRequestBase method) {
 		if (method != null) {
-			method.releaseConnection();
+			method.reset();
 		}
 	}
 
-	abstract DavMethodBase internalSyncItems() throws IOException, DavException;
+	/**
+	 * Abstract method for syncing, this is implemented by subclasses to
+	 * perform the actual syncing.
+	 * @return Method which performed the execution.
+	 * @throws IOException on error
+	 * @throws DavException on error
+	 */
+	abstract BaseDavRequest internalSyncItems() throws IOException, DavException;
 }

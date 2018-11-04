@@ -19,21 +19,21 @@
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
 
+import static com.github.caldav4j.util.CalDAVStatus.SC_INSUFFICIENT_SPACE_ON_RESOURCE;
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 import static javax.servlet.http.HttpServletResponse.SC_PRECONDITION_FAILED;
-import static org.apache.jackrabbit.webdav.DavServletResponse.SC_INSUFFICIENT_SPACE_ON_RESOURCE;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpClient;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
-import org.apache.jackrabbit.webdav.client.methods.DavMethodBase;
+import org.apache.jackrabbit.webdav.client.methods.BaseDavRequest;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -42,9 +42,13 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
 import org.apache.openmeetings.service.calendar.caldav.methods.SyncMethod;
 import org.apache.openmeetings.service.calendar.caldav.methods.SyncReportInfo;
-import org.osaf.caldav4j.model.response.CalendarDataProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.caldav4j.CalDAVConstants;
+import com.github.caldav4j.model.response.CalendarDataProperty;
+
+import net.fortuna.ical4j.model.Calendar;
 
 /**
  * Class used to sync events using WebDAV-Sync defined in RFC 6578.
@@ -58,30 +62,37 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 	public static final DavPropertyName DNAME_SYNCTOKEN = DavPropertyName.create(SyncReportInfo.XML_SYNC_TOKEN,
 			SyncReportInfo.NAMESPACE);
 
-	public WebDAVSyncHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao, IcalUtils utils) {
-		super(path, calendar, client, appointmentDao, utils);
+	public WebDAVSyncHandler(String path, OmCalendar calendar, HttpClient client,
+	                         HttpClientContext context, AppointmentDao appointmentDao,
+	                         IcalUtils utils) {
+		super(path, calendar, client, context, appointmentDao, utils);
 	}
 
+	/**
+	 * Sync using WebDAV-Sync.
+	 * @throws IOException on error
+	 * @throws DavException on error
+	 */
 	@Override
-	DavMethodBase internalSyncItems() throws IOException, DavException {
+	BaseDavRequest internalSyncItems() throws IOException, DavException {
+		Long ownerId = this.calendar.getOwner().getId();
 		boolean additionalSyncNeeded = false;
 
 		DavPropertyNameSet properties = new DavPropertyNameSet();
 		properties.add(DavPropertyName.GETETAG);
+		properties.add(CalDAVConstants.DNAME_CALENDAR_DATA); // To return Calendar Data.
 
 		//Create report to get
 		SyncReportInfo reportInfo = new SyncReportInfo(calendar.getToken(), properties, SyncReportInfo.SYNC_LEVEL_1);
 		SyncMethod method = new SyncMethod(path, reportInfo);
-		client.executeMethod(method);
+		HttpResponse httpResponse = client.execute(method, context);
 
-		if (method.succeeded()) {
-			List<String> currenthrefs = new ArrayList<>();
+		if (method.succeeded(httpResponse)) {
 
 			//Map of Href and the Appointments, belonging to it.
-			Map<String, Appointment> map = listToMap(appointmentDao.getHrefsbyCalendar(calendar.getId()),
-					appointmentDao.getbyCalendar(calendar.getId()));
+			Map<String, Appointment> map = listToMap(appointmentDao.getbyCalendar(calendar.getId()));
 
-			for (MultiStatusResponse response : method.getResponseBodyAsMultiStatus().getResponses()) {
+			for (MultiStatusResponse response : method.getResponseBodyAsMultiStatus(httpResponse).getResponses()) {
 				int status = response.getStatus()[0].getStatusCode();
 				if (status == SC_OK) {
 					Appointment a = map.get(response.getHref());
@@ -89,15 +100,22 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 					if (a != null) {
 						//Old Event to get
 						String origetag = a.getEtag(),
-								currentetag = CalendarDataProperty.getEtagfromResponse(response);
+								currentetag = CalendarDataProperty
+										.getEtagfromResponse(response);
 
 						//If event modified, only then get it.
 						if (!currentetag.equals(origetag)) {
-							currenthrefs.add(response.getHref());
+							Calendar calendar = CalendarDataProperty.getCalendarfromResponse(response);
+							a = utils.parseCalendartoAppointment(a, calendar, currentetag);
+							appointmentDao.update(a, ownerId);
 						}
 					} else {
 						//New Event, to get
-						currenthrefs.add(response.getHref());
+						String etag = CalendarDataProperty.getEtagfromResponse(response);
+						Calendar ical = CalendarDataProperty.getCalendarfromResponse(response);
+						Appointment appointments = utils.parseCalendartoAppointment(
+								ical, response.getHref(), etag, calendar);
+						appointmentDao.update(appointments, ownerId);
 					}
 				} else if (status == SC_NOT_FOUND) {
 					//Delete the Appointments not found on the server.
@@ -112,14 +130,10 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 				}
 			}
 
-
-			MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
-					calendar, client, appointmentDao, utils);
-			multigetHandler.syncItems();
-
 			//Set the new token
-			calendar.setToken(method.getResponseSynctoken());
-		} else if (method.getStatusCode() == SC_FORBIDDEN || method.getStatusCode() == SC_PRECONDITION_FAILED) {
+			calendar.setToken(method.getResponseSynctoken(httpResponse));
+		} else if (httpResponse.getStatusLine().getStatusCode() == SC_FORBIDDEN
+				|| httpResponse.getStatusLine().getStatusCode() == SC_PRECONDITION_FAILED) {
 
 			//Specific case where a server might sometimes forget the sync token
 			//Thus requiring a full sync needed to be done.
@@ -127,7 +141,7 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 			calendar.setToken(null);
 			additionalSyncNeeded = true;
 		} else {
-			log.error("Error in Sync Method Response with status code {}", method.getStatusCode());
+			log.error("Error in Sync Method Response with status code {}", httpResponse.getStatusLine().getStatusCode());
 		}
 		if (additionalSyncNeeded) {
 			releaseConnection(method);
@@ -136,15 +150,27 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 		return method;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <br><br>
+	 * Note: This Uses EtagsHandler for Updating.
+	 */
 	@Override
 	public boolean updateItem(Appointment appointment) {
-		EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
+		EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, context,
+				appointmentDao, utils);
 		return etagsHandler.updateItem(appointment);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <br><br>
+	 * Note: This Uses EtagsHandler for Deleting.<br>
+	 */
 	@Override
 	public boolean deleteItem(Appointment appointment) {
-		EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
+		EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, context,
+				appointmentDao, utils);
 		return etagsHandler.deleteItem(appointment);
 	}
 }
