@@ -32,8 +32,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -92,7 +94,12 @@ public class CalendarPanel extends UserBasePanel {
 	private CalendarDialog calendarDialog;
 	private AppointmentDialog dialog;
 	private final WebMarkupContainer calendarListContainer = new WebMarkupContainer("calendarListContainer");
-	private transient HttpClient client = null; // Non-Serializable HttpClient.
+
+	// Non-Serializable HttpClient.
+	private transient HttpClient client = null;
+
+	// Context for the HttpClient. Mainly used for credentials.
+	private transient HttpClientContext context = null;
 
 	public CalendarPanel(String id) {
 		super(id);
@@ -311,7 +318,7 @@ public class CalendarPanel extends UserBasePanel {
 		syncTimer.stop(handler);
 		if (client != null) {
 			getAppointmentManager().cleanupIdleConnections();
-			client.getState().clear();
+			context.getCredentialsProvider().clear();
 		}
 	}
 
@@ -353,6 +360,15 @@ public class CalendarPanel extends UserBasePanel {
 		}
 
 		return client;
+	}
+
+	public HttpClientContext getHttpClientContext() {
+		if (context == null) {
+			context = HttpClientContext.create();
+			context.setCredentialsProvider(new BasicCredentialsProvider());
+		}
+
+		return context;
 	}
 
 	//Adds a new Event Source to the Calendar

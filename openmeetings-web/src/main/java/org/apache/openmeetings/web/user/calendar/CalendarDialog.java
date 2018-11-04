@@ -24,8 +24,9 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
@@ -208,9 +209,10 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 		switch (type) {
 			case UPDATE_CALENDAR:
 				OmCalendar c = form.getModelObject();
-				AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
+				AppointmentManager apptManager = calendarPanel.getAppointmentManager();
 				c.setHref(form.url.getModelObject());
 				HttpClient client = calendarPanel.getHttpClient();
+				HttpClientContext context = calendarPanel.getHttpClientContext();
 
 				if (form.gcal.getModelObject()) {
 					c.setSyncType(OmCalendar.SyncType.GOOGLE_CALENDAR);
@@ -219,11 +221,11 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 						calendarPanel.populateGoogleCalendar(c, target);
 					}
 				} else if (c.getId() == null && form.username.getModelObject() != null) {
-					appointmentManager.provideCredentials(client, c, new UsernamePasswordCredentials(form.username.getModelObject(),
+					apptManager.provideCredentials(context, c, new UsernamePasswordCredentials(form.username.getModelObject(),
 							form.pass.getModelObject()));
 				}
 
-				appointmentManager.createCalendar(client, c);
+				apptManager.createCalendar(client, context, c);
 				calendarPanel.refreshCalendars(target);
 				calendarPanel.refresh(target);
 				break;
@@ -255,13 +257,14 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	 * @param handler Handler used to update the CalendarPanel
 	 */
 	private void syncCalendar(OmCalendar c, IPartialPageRequestHandler handler) {
-		AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
+		AppointmentManager apptManager = calendarPanel.getAppointmentManager();
 		HttpClient client = calendarPanel.getHttpClient();
+		HttpClientContext context = calendarPanel.getHttpClientContext();
 		if (form.username.getModelObject() != null) {
-			appointmentManager.provideCredentials(client, c, new UsernamePasswordCredentials(form.username.getModelObject(),
+			apptManager.provideCredentials(context, c, new UsernamePasswordCredentials(form.username.getModelObject(),
 					form.pass.getModelObject()));
 		}
-		appointmentManager.syncItem(client, c);
+		apptManager.syncItem(client, context, c);
 		calendarPanel.refresh(handler);
 		log.trace("Calendar " + c.getTitle() + " Successfully synced.");
 	}
@@ -272,8 +275,8 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	 * @param a Appointment to delete
 	 */
 	private void deleteAppointment(Appointment a) {
-		AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
-		appointmentManager.deleteItem(calendarPanel.getHttpClient(), a);
+		AppointmentManager apptManager = calendarPanel.getAppointmentManager();
+		apptManager.deleteItem(calendarPanel.getHttpClient(), calendarPanel.getHttpClientContext(), a);
 		appointment = null;
 	}
 
@@ -283,8 +286,8 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	 * @param a Appointment to update
 	 */
 	private void updateAppointment(Appointment a) {
-		AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
-		appointmentManager.updateItem(calendarPanel.getHttpClient(), a);
+		AppointmentManager apptManager = calendarPanel.getAppointmentManager();
+		apptManager.updateItem(calendarPanel.getHttpClient(), calendarPanel.getHttpClientContext(), a);
 		appointment = null;
 	}
 
@@ -306,9 +309,9 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	 */
 	private boolean setCalendarList(IPartialPageRequestHandler target) {
 		type = DIALOG_TYPE.SYNC_CALENDAR;
-		AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
-		cals = appointmentManager.getCalendars(getUserId());
-		appointmentManager.createHttpClient();
+		AppointmentManager apptManager = calendarPanel.getAppointmentManager();
+		cals = apptManager.getCalendars(getUserId());
+		calendarPanel.getHttpClient();
 		calIndex = 0;
 		setButtons(target);
 		return setFormModelObject();
@@ -316,17 +319,18 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 
 	// Sets the form object when in need of syncing. Returns true if model is set
 	private boolean setFormModelObject() {
-		AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
+		AppointmentManager apptManager = calendarPanel.getAppointmentManager();
 
 		if (cals != null && !cals.isEmpty() && calIndex < cals.size()) {
 			OmCalendar calendar = cals.get(calIndex++);
 			HttpClient client = calendarPanel.getHttpClient();
-			if (!appointmentManager.testConnection(client, calendar)) {
+			HttpClientContext context = calendarPanel.getHttpClientContext();
+			if (!apptManager.testConnection(client, context, calendar)) {
 				form.setModelObject(calendar);
 				form.url.setModelObject(calendar.getHref());
 				return true;
 			} else {
-				appointmentManager.syncItem(client, calendar);
+				apptManager.syncItem(client, context, calendar);
 				return setFormModelObject();
 			}
 		}
@@ -338,7 +342,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	// Sets the form model object if the calendar cannot be reached. Returns true if model is set
 	private boolean setFormModelObject(Appointment a, IPartialPageRequestHandler target) {
 		OmCalendar c = a.getCalendar();
-		if (calendarPanel.getAppointmentManager().testConnection(calendarPanel.getHttpClient(), c)) {
+		if (calendarPanel.getAppointmentManager().testConnection(calendarPanel.getHttpClient(), calendarPanel.getHttpClientContext(), c)) {
 			return false;
 		}
 
@@ -576,20 +580,22 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 					case UPDATE_APPOINTMENT:
 					case DELETE_APPOINTMENT:
 					case SYNC_CALENDAR:
-						AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
+						AppointmentManager apptManager = calendarPanel.getAppointmentManager();
 						try {
 							OmCalendar calendar = getModelObject();
 							if (url.isEnabled()) {
 								calendar.setHref(url.getInput());
 							}
 							HttpClient client = calendarPanel.getHttpClient();
-							appointmentManager.provideCredentials(client, calendar,
+							HttpClientContext context = calendarPanel.getHttpClientContext();
+
+							apptManager.provideCredentials(context, calendar,
 									new UsernamePasswordCredentials(username.getInput(), pass.getInput()));
-							if (appointmentManager.testConnection(client, calendar)) {
+							if (apptManager.testConnection(client, context, calendar)) {
 								return;
 							}
 						} catch (Exception e) {
-							log.error("Error executing the TestConnection");
+							log.error("Error executing the TestConnection", e);
 						}
 
 						error(getString("calendar.error"));

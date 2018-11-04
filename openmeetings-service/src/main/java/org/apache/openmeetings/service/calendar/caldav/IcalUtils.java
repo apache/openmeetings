@@ -25,9 +25,11 @@ import java.net.URI;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -217,7 +219,9 @@ public class IcalUtils {
 			}
 		}
 
-		List<MeetingMember> attList = a.getMeetingMembers() == null ? new ArrayList<>() : a.getMeetingMembers();
+		Set<MeetingMember> attList = a.getMeetingMembers() == null ? new HashSet<>()
+				: new HashSet<>(a.getMeetingMembers());
+		String organizerEmail = null;
 
 		//Note this value can be repeated in attendees as well.
 		if (organizer != null) {
@@ -226,13 +230,17 @@ public class IcalUtils {
 			//If the value of the organizer is an email
 			if ("mailto".equals(uri.getScheme())) {
 				String email = uri.getSchemeSpecificPart();
-				//Contact or exist and owner
-				User org = userDao.getByEmail(email);
-				if (org == null) {
-					org = userDao.getContact(email, a.getOwner());
-					attList.add(createMeetingMember(a, org));
-				} else if (!org.getId().equals(a.getOwner().getId())) {
-					attList.add(createMeetingMember(a, org));
+
+				organizerEmail = email;
+				if (!email.equals(a.getOwner().getAddress().getEmail())) {
+					//Contact or exist and owner
+					User org = userDao.getByEmail(email);
+					if (org == null) {
+						org = userDao.getContact(email, a.getOwner());
+						attList.add(createMeetingMember(a, org));
+					} else if (!org.getId().equals(a.getOwner().getId())) {
+						attList.add(createMeetingMember(a, org));
+					}
 				}
 			}
 		}
@@ -242,16 +250,24 @@ public class IcalUtils {
 				URI uri = URI.create(attendee.getValue());
 				if ("mailto".equals(uri.getScheme())) {
 					String email = uri.getSchemeSpecificPart();
+
+					Role role = attendee.getParameter(Role.CHAIR.getName());
+					if (role != null && role.getValue().equals(Role.CHAIR.getValue())
+							&& email.equals(organizerEmail)) {
+						continue;
+					}
+
 					User u = userDao.getByEmail(email);
 					if (u == null) {
 						u = userDao.getContact(email, a.getOwner());
 					}
 					attList.add(createMeetingMember(a, u));
+
 				}
 			}
 		}
 
-		a.setMeetingMembers(attList.isEmpty() ? null : attList);
+		a.setMeetingMembers(attList.isEmpty() ? null : new ArrayList<>(attList));
 
 		return a;
 	}
