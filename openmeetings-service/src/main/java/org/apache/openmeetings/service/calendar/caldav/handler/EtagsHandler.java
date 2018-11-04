@@ -245,7 +245,7 @@ public class EtagsHandler extends AbstractCalendarHandler {
 			try {
 
 				String fullPath;
-				if(Strings.isEmpty(appointment.getHref())) {
+				if (Strings.isEmpty(appointment.getHref())) {
 					// Make sure to set HREF just in case, if calendar exists but no href does.
 					fullPath = this.path + appointment.getIcalId() + ".ics";
 				} else {

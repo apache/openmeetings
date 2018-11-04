@@ -101,7 +101,7 @@ public class SyncMethod extends BaseDavRequest {
 	}
 
 	public String getResponseSynctoken(HttpResponse response) {
-		if(!processedResponse)
+		if (!processedResponse)
 			processResponseBody(response);
 		return synctoken;
 	}
@@ -114,7 +114,7 @@ public class SyncMethod extends BaseDavRequest {
 	 */
 	@Override
 	public MultiStatus getResponseBodyAsMultiStatus(HttpResponse response) throws DavException {
-		if(!processedResponse)
+		if (!processedResponse)
 			processResponseBody(response);
 
 		if (multiStatus != null) {

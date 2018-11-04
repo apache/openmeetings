@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -218,7 +219,7 @@ public class IcalUtils {
 			}
 		}
 
-		HashSet<MeetingMember> attList = a.getMeetingMembers() == null ? new HashSet<>()
+		Set<MeetingMember> attList = a.getMeetingMembers() == null ? new HashSet<>()
 				: new HashSet<>(a.getMeetingMembers());
 		String organizerEmail = null;
 
@@ -231,7 +232,7 @@ public class IcalUtils {
 				String email = uri.getSchemeSpecificPart();
 
 				organizerEmail = email;
-				if(!email.equals(a.getOwner().getAddress().getEmail())) {
+				if (!email.equals(a.getOwner().getAddress().getEmail())) {
 					//Contact or exist and owner
 					User org = userDao.getByEmail(email);
 					if (org == null) {
@@ -251,9 +252,10 @@ public class IcalUtils {
 					String email = uri.getSchemeSpecificPart();
 
 					Role role = attendee.getParameter(Role.CHAIR.getName());
-					if(role != null && role.getValue().equals(Role.CHAIR.getValue())
-							&& email.equals(organizerEmail))
+					if (role != null && role.getValue().equals(Role.CHAIR.getValue())
+							&& email.equals(organizerEmail)) {
 						continue;
+					}
 
 					User u = userDao.getByEmail(email);
 					if (u == null) {

@@ -364,7 +364,7 @@ public class CalendarPanel extends UserBasePanel {
 	}
 
 	public HttpClientContext getHttpClientContext() {
-		if(context == null) {
+		if (context == null) {
 			context = HttpClientContext.create();
 			context.setCredentialsProvider(new BasicCredentialsProvider());
 		}
