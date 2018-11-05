@@ -25,7 +25,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.junit.Test;
@@ -36,8 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestGetAppointment extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(TestGetAppointment.class);
 
-	@Autowired
-	private AppointmentDao appointmentDao;
 	@Autowired
 	private RoomDao roomDao;
 

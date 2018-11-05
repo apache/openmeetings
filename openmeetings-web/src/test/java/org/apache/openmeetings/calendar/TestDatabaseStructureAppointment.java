@@ -25,18 +25,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestDatabaseStructureAppointment extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(TestDatabaseStructureAppointment.class);
-
-	@Autowired
-	private AppointmentDao appointmentDao;
 
 	@Test
 	public void testAddingGroup() {

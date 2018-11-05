@@ -30,7 +30,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.openmeetings.AbstractWicketTester;
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
@@ -51,8 +50,6 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 
 	@Autowired
 	private AppointmentLogic appointmentLogic;
-	@Autowired
-	private AppointmentDao appointmentDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 

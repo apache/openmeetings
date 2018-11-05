@@ -33,7 +33,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
@@ -51,8 +50,6 @@ public class TestBackup extends AbstractJUnitDefaults {
 	private BackupImport backupController;
 	@Autowired
 	private RoomDao roomDao;
-	@Autowired
-	private AppointmentDao appointmentDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 

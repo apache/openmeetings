@@ -24,19 +24,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(TestDatabaseStructureGetAppointmentByRange.class);
-
-	@Autowired
-	private AppointmentDao appointmentDao;
 
 	@Test
 	public void test() {
