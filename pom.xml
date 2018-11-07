@@ -67,7 +67,7 @@
 		<buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
 		<apache-rat-plugin.version>0.13</apache-rat-plugin.version>
 		<keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
-		<maven-jarsigner-plugin.version>1.4</maven-jarsigner-plugin.version>
+		<maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.versoin>0.8.2</jacoco-maven-plugin.versoin>
 		<!-- dependency versions -->
