@@ -25,7 +25,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHAT_SEND_ON_ENTER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHROME_EXT_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
@@ -44,7 +46,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROC
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_EXCLUSIVE;
@@ -87,9 +88,10 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CHROME_EXT_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SELF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate;
@@ -323,7 +325,6 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_REDIRECT_URL_FOR_EXTERNAL, "", Configuration.Type.string,
 				"Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost", VER_3_0);
 		addCfg(list, CONFIG_GOOGLE_ANALYTICS_CODE, null, Configuration.Type.string, "Code for Google Analytics", "3.1.0");
-		addCfg(list, CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN, Configuration.Type.string, "Value for 'X-Frame-Options' header (default: DENY), more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options", VER_3_3_0);
 		addCfg(list, CONFIG_HEADER_CSP, HEADER_CSP_SELF, Configuration.Type.string, String.format("Value for 'Content-Security-Policy' header (default: %s), have to be modified to enable Google analytics site: https://content-security-policy.com/", HEADER_CSP_SELF), VER_3_3_0);
 		addCfg(list, CONFIG_EXT_PROCESS_TTL, String.valueOf(getExtProcessTtl()), Configuration.Type.number, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", getExtProcessTtl()), VER_3_3_0);
 		addCfg(list, CONFIG_MYROOMS_ENABLED, String.valueOf(true), Configuration.Type.bool, "Users are allowed to create personal rooms", "3.3.2");
@@ -344,6 +345,8 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_MIC_RATE, "22", Configuration.Type.number, "The rate at which the microphone should capture sound, in kHz. The default value is 22 kHz.", VER_5_0_0);
 		addCfg(list, CONFIG_MIC_ECHO, String.valueOf(true), Configuration.Type.bool, "Whether or not echo cancellation is preferred and/or required.", VER_5_0_0);
 		addCfg(list, CONFIG_MIC_NOISE, String.valueOf(true), Configuration.Type.bool, "Whether noise suppression is preferred and/or required.", VER_5_0_0);
+		addCfg(list, CONFIG_CSP_XFRAME, HEADER_XFRAME_SELF, Configuration.Type.string, String.format("Value for 'frame-src' directive of 'Content-Security-Policy' header (default: %s), more info: https://w3c.github.io/webappsec-csp/", HEADER_XFRAME_SELF), VER_5_0_0);
+		addCfg(list, CONFIG_CHROME_EXT_URL, DEFAULT_CHROME_EXT_URL, Configuration.Type.string, String.format("URL to custom page with Chrome Extension logic (default %s).", DEFAULT_CHROME_EXT_URL), VER_5_0_0);
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {

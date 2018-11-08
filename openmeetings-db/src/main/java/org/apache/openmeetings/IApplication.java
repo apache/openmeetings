@@ -40,8 +40,6 @@ public interface IApplication {
 	String getOmContactsLink();
 	String getOmInvitationLink(Invitation i);
 	String urlForActivatePage(PageParameters pp);
-	void setXFrameOptions(String xFrameOptions);
-	void setContentSecurityPolicy(String contentSecurityPolicy);
 
 	String getServerId();
 

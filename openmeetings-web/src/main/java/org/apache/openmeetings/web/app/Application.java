@@ -19,14 +19,13 @@
 package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getChromeExtensionUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getContentSecurityPolicy;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getxFrameOptions;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
@@ -67,7 +66,6 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.Version;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
@@ -159,8 +157,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static final String SIGNIN_MAPPING = "/signin";
 	public static final String NOTINIT_MAPPING = "/notinited";
 	final HazelcastInstance hazelcast = Hazelcast.getOrCreateHazelcastInstance(new XmlConfigBuilder().build());
-	private String xFrameOptions = HEADER_XFRAME_SAMEORIGIN;
-	private String contentSecurityPolicy = OpenmeetingsVariables.HEADER_CSP_SELF;
 	private ITopic<IClusterWsMessage> hazelWsTopic;
 
 	@Autowired
@@ -245,10 +241,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					wresp.setHeader("X-XSS-Protection", "1; mode=block");
 					wresp.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
 					wresp.setHeader("X-Content-Type-Options", "nosniff");
-					wresp.setHeader("X-Frame-Options", xFrameOptions);
 					Url reqUrl = cycle.getRequest().getUrl();
 					wresp.setHeader("Content-Security-Policy"
-							, String.format("%s; connect-src 'self' %s;", contentSecurityPolicy, getWsUrl(reqUrl)));
+							, String.format("%s; connect-src 'self' %s; frame-src %s %s;"
+									, getContentSecurityPolicy(), getWsUrl(reqUrl)
+									, getxFrameOptions(), getChromeExtensionUrl()
+							));
 				}
 			}
 		});
@@ -299,8 +297,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			cfgDao.reinit();
 
 			// Init properties
-			setXFrameOptions(cfgDao.getString(CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN));
-			setContentSecurityPolicy(cfgDao.getString(CONFIG_HEADER_CSP, HEADER_CSP_SELF));
 			updateJpaAddresses();
 			setExtProcessTtl(cfgDao.getInt(CONFIG_EXT_PROCESS_TTL, getExtProcessTtl()));
 			Version.logOMStarted();
@@ -555,16 +551,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	public String getOmString(String key, final Locale loc, String... params) {
 		return getString(key, loc, params);
-	}
-
-	@Override
-	public void setXFrameOptions(String xFrameOptions) {
-		this.xFrameOptions = xFrameOptions;
-	}
-
-	@Override
-	public void setContentSecurityPolicy(String contentSecurityPolicy) {
-		this.contentSecurityPolicy = contentSecurityPolicy;
 	}
 
 	@Override

@@ -114,7 +114,7 @@
 		<!--  URL of the ASF SonarQube server  -->
 		<sonar.host.url>https://builds.apache.org/analysis</sonar.host.url>
 		<!--  Exclude all generated code  -->
-		<sonar.exclusions>file:**/generated-sources/**, file:**/fabric.js, file:**/cssemoticons.js, file:**/kurento-utils.js, file:**/fileinput*.js, file:**/MathJax.js, file:**/network.js, file:**/jquery.dialogextend.js</sonar.exclusions>
+		<sonar.exclusions>file:**/generated-sources/**, file:**/fabric.js, file:**/cssemoticons.js, file:**/kurento-utils.js, file:**/getScreenId.js, file:**/fileinput*.js, file:**/MathJax.js, file:**/network.js, file:**/jquery.dialogextend.js</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>

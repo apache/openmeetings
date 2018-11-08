@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getChromeExtensionUrl;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.wb.InterviewWbPanel.INTERVIEWWB_JS_REFERENCE;
@@ -141,7 +142,9 @@ public class RoomPanel extends BasePanel {
 			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
 				options.put("reloadUrl", r.getRedirectURL());
 			}
-			StringBuilder sb = new StringBuilder("Room.init(").append(options.toString(new NullStringer())).append(");")
+			StringBuilder sb = new StringBuilder()
+					.append("MuazKhan.init('").append(getChromeExtensionUrl()).append("');")
+					.append("Room.init(").append(options.toString(new NullStringer())).append(");")
 					.append(wb.getInitScript())
 					.append("Room.setSize();")
 					.append(getQuickPollJs());
