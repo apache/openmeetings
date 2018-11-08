@@ -4,7 +4,8 @@ var SHARE_STARTED = 'started';
 var SHARE_STOPED = 'stoped';
 var Sharer = (function() {
 	const self = {};
-	let sharer, type, fps, sbtn, rbtn, width, height, shareState = SHARE_STOPED;
+	let sharer, type, fps, sbtn, rbtn, width, height
+		, shareState = SHARE_STOPED, recState = SHARE_STOPED;
 
 	function _init() {
 		sharer = $('#sharer').dialog({
@@ -21,10 +22,7 @@ var Sharer = (function() {
 		});
 		sbtn = sharer.find('.share-start-stop').button({
 			icon: 'ui-icon-image'
-		});
-		width = sharer.find('.width');
-		height = sharer.find('.height');
-		sbtn.click(function() {
+		}).off().click(function() {
 			if (shareState === SHARE_STOPED) {
 				_setShareState(SHARE_STARTING);
 				VideoManager.sendMessage({
@@ -46,8 +44,31 @@ var Sharer = (function() {
 				_setShareState(SHARE_STOPED);
 			}
 		});
+		width = sharer.find('.width');
+		height = sharer.find('.height');
 		rbtn = sharer.find('.record-start-stop').button({
 			icon: 'ui-icon-bullet'
+		}).off().click(function() {
+			if (recState === SHARE_STOPED) {
+				_setRecState(SHARE_STARTING);
+				VideoManager.sendMessage({
+					id: 'wannaRecord'
+					, shareType: type.val()
+					, fps: fps.val()
+					, width: width.val()
+					, height: height.val()
+				});
+			} else {
+				const cuid = Room.getOptions().uid
+					, v = $('div[data-client-uid="' + cuid + '"][data-client-type="SCREEN"]')
+					, uid = v.data().stream().uid;
+				VideoManager.sendMessage({
+					id: 'stopRecord'
+					, uid: uid
+				});
+				VideoManager.close(uid, false);
+				_setRecState(SHARE_STOPED);
+			}
 		});
 	}
 	function _setShareState(state) {
@@ -59,6 +80,23 @@ var Sharer = (function() {
 		height.prop('disabled', dis);
 		sbtn.text(sbtn.data(dis ? 'stop' : 'start'));
 		sbtn.button('option', 'icon', dis ? 'ui-icon-stop' : 'ui-icon-image');
+		if (state === SHARE_STARTING) {
+			sbtn.button('disable');
+			rbtn.button('disable');
+		} else {
+			sbtn.button('enable');
+			rbtn.button('enable');
+		}
+	}
+	function _setRecState(state) {
+		recState = state;
+		const dis = SHARE_STOPED !== state;
+		type.selectmenu('option', 'disabled', dis || VideoUtil.isEdge());
+		fps.selectmenu('option', 'disabled', dis || VideoUtil.isEdge());
+		width.prop('disabled', dis);
+		height.prop('disabled', dis);
+		rbtn.text(rbtn.data(dis ? 'stop' : 'start'));
+		rbtn.button('option', 'icon', dis ? 'ui-icon-stop' : 'ui-icon-image');
 		if (state === SHARE_STARTING) {
 			sbtn.button('disable');
 			rbtn.button('disable');
@@ -80,5 +118,6 @@ var Sharer = (function() {
 		}
 	};
 	self.setShareState = _setShareState;
+	self.setRecState = _setRecState;
 	return self;
 })();

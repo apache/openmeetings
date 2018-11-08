@@ -55,7 +55,7 @@ public class InterviewWbPanel extends AbstractWbPanel {
 	@Override
 	protected void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException {
 		Client c = rp.getClient();
-		if (rp.getRoom().isAllowRecording() && c.hasRight(Right.moderator)) {
+		if (kurento.recordingAllowed(c)) {
 			switch (a) {
 				case startRecording:
 					kurento.startRecording(c);

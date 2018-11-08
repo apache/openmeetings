@@ -54,6 +54,7 @@ var Video = (function() {
 				callback(msg, cnts, stream);
 			}).catch(function(err) {
 				Sharer.setShareState(SHARE_STOPED);
+				Sharer.setRecState(SHARE_STOPED);
 				OmUtil.error(err);
 			});
 		} else if (b.name === 'Firefox') {
@@ -69,9 +70,12 @@ var Video = (function() {
 				callback(msg, cnts, stream);
 			}).catch(function(err) {
 				Sharer.setShareState(SHARE_STOPED);
+				Sharer.setRecState(SHARE_STOPED);
 				OmUtil.error(err);
 			});
 		} else {
+			Sharer.setShareState(SHARE_STOPED);
+			Sharer.setRecState(SHARE_STOPED);
 			Sharer.close();
 			OmUtil.error('Screen-sharing is not supported in ' + b.name + '[' + b.major + ']');
 		}
@@ -153,11 +157,14 @@ var Video = (function() {
 					if (VideoUtil.isSharing(sd)) {
 						Sharer.setShareState(SHARE_STARTED);
 					}
+					if (VideoUtil.isRecording(sd)) {
+						Sharer.setRecState(SHARE_STARTED);
+					}
 				});
 			});
 	}
 	function _createSendPeer(msg) {
-		if (VideoUtil.isSharing(sd)) {
+		if (VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd)) {
 			_getScreenStream(msg, __createSendPeer);
 		} else {
 			_getVideoStream(msg, __createSendPeer);
@@ -300,6 +307,7 @@ var Video = (function() {
 			, _w = sd.width
 			, _h = sd.height
 			, isSharing = VideoUtil.isSharing(sd)
+			, isRecording = VideoUtil.isRecording(sd)
 			, opts = Room.getOptions();
 		sd.self = sd.cuid === opts.uid;
 		const contSel = _initContainer(_id, name, opts);
@@ -309,7 +317,7 @@ var Video = (function() {
 		if (!sd.self && isSharing) {
 			Sharer.close();
 		}
-		if (sd.self && isSharing) {
+		if (sd.self && (isSharing || isRecording)) {
 			v.hide();
 		} else {
 			v.dialog({
@@ -326,7 +334,7 @@ var Video = (function() {
 			});
 			_initDialog(v, opts);
 		}
-		if (!isSharing) {
+		if (!isSharing && !isRecording) {
 			v.parent().find('.ui-dialog-titlebar-buttonpane')
 				.append($('#video-volume-btn').children().clone())
 				.append($('#video-refresh-btn').children().clone());
@@ -381,7 +389,7 @@ var Video = (function() {
 
 		_refresh(msg);
 
-		if (!isSharing) {
+		if (!isSharing && !isRecording) {
 			VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), sd.width, sd.height + 25));
 		}
 		return v;
@@ -401,7 +409,7 @@ var Video = (function() {
 	function _refresh(msg) {
 		_cleanup();
 		const _id = VideoUtil.getVid(sd.uid);
-		const hasVideo = VideoUtil.hasVideo(sd) || VideoUtil.isSharing(sd)
+		const hasVideo = VideoUtil.hasVideo(sd) || VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd)
 			, imgUrl = 'profile/' + sd.user.id + '?anti=' + new Date().getTime();  //TODO add normal URL ????
 		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 			.width(vc.width()).height(vc.height())

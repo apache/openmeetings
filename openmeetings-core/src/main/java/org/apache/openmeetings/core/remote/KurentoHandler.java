@@ -241,6 +241,9 @@ public class KurentoHandler {
 						sender = room.join(sd);
 					}
 					sender.startBroadcast(this, sd, msg.getString("sdpOffer"));
+					if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !isRecording(c.getRoomId())) {
+						startRecording(c);
+					}
 					break;
 				case "onIceCandidate":
 					sender = getByUid(uid);
@@ -262,6 +265,20 @@ public class KurentoHandler {
 				case "wannaShare":
 					if (screenShareAllowed(c)) {
 						startSharing(c, msg);
+					}
+					break;
+				case "wannaRecord":
+					if (recordingAllowed(c)) {
+						Room r = c.getRoom();
+						if (Room.Type.interview == r.getType()) {
+							log.warn("This shouldn't be called for interview room");
+							break;
+						}
+						if (isSharing(r.getId())) {
+							startRecording(c);
+						} else {
+							startSharing(c, msg, Activity.RECORD);
+						}
 					}
 					break;
 				case "stopSharing":
@@ -286,8 +303,10 @@ public class KurentoHandler {
 		}
 		KRoom room = getRoom(roomId);
 		if (room.isRecording()) {
-			List<Client> clients = cm.listByRoom(roomId).parallelStream().filter(c -> c.getStreams().isEmpty()).collect(Collectors.toList());
-			if (clients.isEmpty()) {
+			List<StreamDesc> streams = cm.listByRoom(roomId).parallelStream()
+					.flatMap(c -> c.getStreams().stream())
+					.collect(Collectors.toList());
+			if (streams.isEmpty()) {
 				log.info("No more streams in the room, stopping recording");
 				room.stopRecording(this, null, recDao);
 			}
@@ -369,6 +388,16 @@ public class KurentoHandler {
 		}
 	}
 
+	public boolean recordingAllowed(Client c) {
+		if (client == null) {
+			log.warn(WARN_NO_KURENTO);
+			return false;
+		}
+		Room r = c.getRoom();
+		return r != null && r.isAllowRecording() && c.hasRight(Right.moderator)
+				&& !isRecording(r.getId());
+	}
+
 	public void startRecording(Client c) {
 		if (client == null) {
 			log.warn(WARN_NO_KURENTO);
@@ -418,9 +447,9 @@ public class KurentoHandler {
 				&& !isSharing(r.getId());
 	}
 
-	private void startSharing(Client c, JSONObject msg) {
+	private void startSharing(Client c, JSONObject msg, Activity...activities) {
 		if (client != null && c.getRoomId() != null) {
-			getRoom(c.getRoomId()).startSharing(this, cm, c, msg);
+			getRoom(c.getRoomId()).startSharing(this, cm, c, msg, activities);
 		}
 	}
 

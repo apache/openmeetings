@@ -35,6 +35,7 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -145,6 +146,10 @@ public class KRoom {
 			log.debug("##REC:: recording created by USER: {}", ownerId);
 
 			for (final KStream stream : streams.values()) {
+				StreamDesc sd = c.getStream(stream.getUid());
+				if (StreamType.SCREEN == sd.getType()) {
+					sd.addActivity(Activity.RECORD);
+				}
 				stream.startRecord();
 			}
 
@@ -178,9 +183,9 @@ public class KRoom {
 		return sharingStarted.get();
 	}
 
-	public void startSharing(KurentoHandler h, IClientManager cm, Client c, JSONObject msg) {
+	public void startSharing(KurentoHandler h, IClientManager cm, Client c, JSONObject msg, Activity...activities) {
 		if (sharingStarted.compareAndSet(false, true)) {
-			StreamDesc sd = c.addStream(StreamType.SCREEN);
+			StreamDesc sd = c.addStream(StreamType.SCREEN, activities);
 			sd.setWidth(msg.getInt("width")).setHeight(msg.getInt("height"));
 			cm.update(c);
 			log.debug("User {}: has started broadcast", sd.getUid());

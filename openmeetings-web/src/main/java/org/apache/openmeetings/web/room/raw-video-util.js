@@ -4,13 +4,18 @@ const WBA_WB_SEL = '.room.wb.area .ui-tabs-panel.ui-corner-bottom.ui-widget-cont
 const VID_SEL = '.video.user-video';
 const CAM_ACTIVITY = 'VIDEO';
 const MIC_ACTIVITY = 'AUDIO';
+const SCREEN_ACTIVITY = 'SCREEN';
+const REC_ACTIVITY = 'RECORD';
 var VideoUtil = (function() {
 	const self = {};
 	function _getVid(uid) {
 		return 'video' + uid;
 	}
 	function _isSharing(sd) {
-		return 'SCREEN' === sd.type;
+		return !!sd && 'SCREEN' === sd.type && sd.activities.includes(SCREEN_ACTIVITY);
+	}
+	function _isRecording(sd) {
+		return !!sd && 'SCREEN' === sd.type && sd.activities.includes(REC_ACTIVITY);
 	}
 	function _hasAudio(sd) {
 		return !sd || sd.activities.includes(MIC_ACTIVITY);
@@ -133,6 +138,7 @@ var VideoUtil = (function() {
 
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
+	self.isRecording = _isRecording;
 	self.hasAudio = _hasAudio;
 	self.hasVideo = _hasVideo;
 	self.getRects = _getRects;

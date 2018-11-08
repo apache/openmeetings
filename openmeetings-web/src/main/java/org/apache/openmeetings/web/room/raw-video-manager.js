@@ -17,9 +17,6 @@ var VideoManager = (function() {
 		const sd = msg.stream
 			, uid = sd.uid;
 		$('#' + VideoUtil.getVid(uid)).remove();
-		if (sd.self && VideoUtil.isSharing(sd)) {
-			return;
-		}
 		Video().init(msg);
 		OmUtil.log(uid + ' registered in room');
 	}
@@ -105,7 +102,7 @@ var VideoManager = (function() {
 		}
 		c.streams.forEach(function(sd) {
 			sd.self = c.self;
-			if (VideoUtil.isSharing(sd)) {
+			if (VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd)) {
 				return;
 			}
 			const _id = VideoUtil.getVid(sd.uid)
@@ -147,6 +144,9 @@ var VideoManager = (function() {
 			return;
 		}
 		streams.forEach(function(sd) {
+			if (VideoUtil.isRecording(sd)) {
+				return;
+			}
 			const m = {stream: sd, iceServers: iceServers};
 			if (VideoUtil.isSharing(sd)) {
 				_highlight(share

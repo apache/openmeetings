@@ -212,8 +212,8 @@ public class Client implements IDataProviderEntity, IWsClient {
 		return this;
 	}
 
-	public StreamDesc addStream(StreamType stype) {
-		StreamDesc sd = new StreamDesc(stype);
+	public StreamDesc addStream(StreamType stype, Activity...activities) {
+		StreamDesc sd = new StreamDesc(stype, activities);
 		streams.put(sd.getUid(), sd);
 		return sd;
 	}
@@ -431,10 +431,14 @@ public class Client implements IDataProviderEntity, IWsClient {
 			sactivities.addAll(sd.sactivities);
 		}
 
-		public StreamDesc(StreamType type) {
+		public StreamDesc(StreamType type, Activity...activities) {
 			this.uuid = randomUUID().toString();
 			this.type = type;
-			setActivities();
+			if (activities == null) {
+				setActivities();
+			} else {
+				sactivities.addAll(Arrays.asList(activities));
+			}
 			if (StreamType.WEBCAM == type) {
 				boolean interview = room != null && Room.Type.interview == room.getType();
 				this.swidth = interview ? 320 : width;
@@ -496,6 +500,14 @@ public class Client implements IDataProviderEntity, IWsClient {
 			return sactivities.contains(a);
 		}
 
+		public void addActivity(Activity a) {
+			sactivities.add(a);
+		}
+
+		public void removeActivity(Activity a) {
+			sactivities.remove(a);
+		}
+
 		public Client getClient() {
 			return Client.this;
 		}
@@ -517,6 +529,11 @@ public class Client implements IDataProviderEntity, IWsClient {
 							.put("firstName", user.getFirstname())
 							.put("lastName", user.getLastname())
 							);
+		}
+
+		@Override
+		public String toString() {
+			return String.format("Stream[uid=%s,type=%s,activities=%s]", uid, type, sactivities);
 		}
 	}
 }
