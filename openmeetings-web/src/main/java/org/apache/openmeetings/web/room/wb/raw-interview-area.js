@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var InterviewWbArea = function() {
 	const self = BaseWbArea();;
-	let container, area, pArea, role = NONE, choose, _inited = false, rec;
+	let container, area, pArea, role = NONE, _inited = false, rec;
 
 	function _init() {
 		Wicket.Event.subscribe("/websocket/message", self.wbWsHandler);
@@ -94,24 +94,10 @@ var InterviewWbArea = function() {
 		} else {
 			empt.remove();
 		}
-		let cls = 'pod-area ';
-		if (count < 2) {
-			cls +='max2';
-		} else if (count < 3) {
-			cls +='max3';
-		} else if (count < 5) {
-			cls +='max5';
-		} else if (count < 9) {
-			cls +='max9';
-		} else if (count < 13) {
-			cls +='max13';
-		} else if (count < 17) {
-			cls +='max17';
-		} else if (count < 25) {
-			cls +='max25';
-		} else if (count < 33) {
-			cls +='max33';
-		}
+		const cls = 'pod-area max' +
+			[2, 3, 5, 9, 13, 17, 25, 33].find((el) => {
+				return count < el;
+			});
 		pArea.attr('class', cls);
 		_resizePod();
 	}

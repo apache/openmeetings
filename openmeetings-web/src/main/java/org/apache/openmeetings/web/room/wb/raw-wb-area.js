@@ -89,6 +89,8 @@ var DrawWbArea = function() {
 					e.preventDefault();
 					e.stopImmediatePropagation();
 					return _performDelete();
+				default:
+					//no-op
 			}
 		}
 	}

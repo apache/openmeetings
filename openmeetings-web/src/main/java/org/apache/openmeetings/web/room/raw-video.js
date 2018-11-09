@@ -11,11 +11,6 @@ var Video = (function() {
 	function _getExtra() {
 		return t.height() + 2 + (f.is(':visible') ? f.height() : 0);
 	}
-	function _resizeDlg(_w, _h) {
-		const h = _h + _getExtra();
-		_resizeDlgArea(_w, h);
-		return h;
-	}
 	function _resizeDlgArea(_w, _h) {
 		v.dialog('option', 'width', _w).dialog('option', 'height', _h);
 		const h = _h - _getExtra();
@@ -295,6 +290,55 @@ var Video = (function() {
 			});
 		}
 	}
+	function _initCamDialog() {
+		v.parent().find('.ui-dialog-titlebar-buttonpane')
+			.append($('#video-volume-btn').children().clone())
+			.append($('#video-refresh-btn').children().clone());
+		const volume = v.parent().find('.dropdown-menu.video.volume');
+		slider = v.parent().find('.slider');
+		vol = v.parent().find('.ui-dialog-titlebar-volume')
+			.on('mouseenter', function(e) {
+				e.stopImmediatePropagation();
+				volume.toggle();
+			})
+			.click(function(e) {
+				e.stopImmediatePropagation();
+				roomAction('mute', JSON.stringify({uid: sd.uid, mute: !muted}));
+				_mute(!muted);
+				volume.hide();
+				return false;
+			}).dblclick(function(e) {
+				e.stopImmediatePropagation();
+				return false;
+			});
+		v.parent().find('.ui-dialog-titlebar-refresh')
+			.click(function(e) {
+				e.stopImmediatePropagation();
+				_refresh();
+				return false;
+			}).dblclick(function(e) {
+				e.stopImmediatePropagation();
+				return false;
+			});
+		volume.on('mouseleave', function() {
+			$(this).hide();
+		});
+		handle = v.parent().find('.slider .handle');
+		slider.slider({
+			orientation: 'vertical'
+			, range: 'min'
+			, min: 0
+			, max: 100
+			, value: lastVolume
+			, create: function() {
+				handle.text($(this).slider('value'));
+			}
+			, slide: function(event, ui) {
+				_handleVolume(ui.value);
+			}
+		});
+		vol.hide();
+	}
 	function _init(msg) {
 		sd = msg.stream;
 		sd.activities = sd.activities.sort();
@@ -332,53 +376,7 @@ var Video = (function() {
 			_initDialog(v, opts);
 		}
 		if (!isSharing && !isRecording) {
-			v.parent().find('.ui-dialog-titlebar-buttonpane')
-				.append($('#video-volume-btn').children().clone())
-				.append($('#video-refresh-btn').children().clone());
-			const volume = v.parent().find('.dropdown-menu.video.volume');
-			slider = v.parent().find('.slider');
-			vol = v.parent().find('.ui-dialog-titlebar-volume')
-				.on('mouseenter', function(e) {
-					e.stopImmediatePropagation();
-					volume.toggle();
-				})
-				.click(function(e) {
-					e.stopImmediatePropagation();
-					roomAction('mute', JSON.stringify({uid: sd.uid, mute: !muted}));
-					_mute(!muted);
-					volume.hide();
-					return false;
-				}).dblclick(function(e) {
-					e.stopImmediatePropagation();
-					return false;
-				});
-			v.parent().find('.ui-dialog-titlebar-refresh')
-				.click(function(e) {
-					e.stopImmediatePropagation();
-					_refresh();
-					return false;
-				}).dblclick(function(e) {
-					e.stopImmediatePropagation();
-					return false;
-				});
-			volume.on('mouseleave', function() {
-				$(this).hide();
-			});
-			handle = v.parent().find('.slider .handle');
-			slider.slider({
-				orientation: 'vertical'
-				, range: 'min'
-				, min: 0
-				, max: 100
-				, value: lastVolume
-				, create: function() {
-					handle.text($(this).slider('value'));
-				}
-				, slide: function(event, ui) {
-					_handleVolume(ui.value);
-				}
-			});
-			vol.hide();
+			_initCamDialog();
 		}
 		v.on("remove", _cleanup);
 		vc = v.find('.video');

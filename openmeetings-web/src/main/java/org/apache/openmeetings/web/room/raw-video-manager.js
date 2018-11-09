@@ -26,6 +26,49 @@ var VideoManager = (function() {
 		Video().init(msg);
 		OmUtil.log(uid + ' receiving video');
 	}
+	function _onKMessage(m) {
+		OmUtil.info('Received message: ' + msg);
+		switch (m.id) {
+			case 'clientLeave':
+				$(VID_SEL + ' div[data-client-uid="' + m.uid + '"]').each(function() {
+					_closeV($(this));
+				});
+				if (share.data('cuid') === m.uid) {
+					share.off('click').hide();
+				}
+				break;
+			case 'broadcastStopped':
+				_close(m.uid, false);
+				break;
+			case 'broadcast':
+				_onBroadcast(m);
+				break;
+			case 'videoResponse':
+				_onVideoResponse(m);
+				break;
+			case 'iceCandidate':
+				{
+					const w = $('#' + VideoUtil.getVid(m.uid))
+						, v = w.data()
+
+					v.getPeer().addIceCandidate(m.candidate, function (error) {
+						if (error) {
+							OmUtil.error('Error adding candidate: ' + error);
+							return;
+						}
+					});
+				}
+				break;
+			case 'newStream':
+				_play([m.stream], m.iceServers);
+				break;
+			case 'error':
+				OmUtil.error(m.message);
+				break;
+			default:
+				//no-op
+		}
+	}
 	function _onWsMessage(jqEvent, msg) {
 		try {
 			if (msg instanceof Blob) {
@@ -36,47 +79,7 @@ var VideoManager = (function() {
 				return;
 			}
 			if ('kurento' === m.type && 'test' !== m.mode) {
-				OmUtil.info('Received message: ' + msg);
-				switch (m.id) {
-					case 'clientLeave':
-						$(VID_SEL + ' div[data-client-uid="' + m.uid + '"]').each(function() {
-							_closeV($(this));
-						});
-						if (share.data('cuid') === m.uid) {
-							share.off('click').hide();
-						}
-						break;
-					case 'broadcastStopped':
-						_close(m.uid, false);
-						break;
-					case 'broadcast':
-						_onBroadcast(m);
-						break;
-					case 'videoResponse':
-						_onVideoResponse(m);
-						break;
-					case 'iceCandidate':
-						{
-							const w = $('#' + VideoUtil.getVid(m.uid))
-								, v = w.data()
-
-							v.getPeer().addIceCandidate(m.candidate, function (error) {
-								if (error) {
-									OmUtil.error('Error adding candidate: ' + error);
-									return;
-								}
-							});
-						}
-						break;
-					case 'newStream':
-						_play([m.stream], m.iceServers);
-						break;
-					case 'error':
-						OmUtil.error(m.message);
-						break;
-					default:
-						//no-op
-				}
+				_onKMessage(m);
 			} else if ('mic' === m.type) {
 				switch (m.id) {
 					case 'activity':

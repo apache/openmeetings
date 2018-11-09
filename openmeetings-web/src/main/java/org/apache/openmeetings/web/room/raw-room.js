@@ -77,6 +77,8 @@ var Room = (function() {
 					}
 				}
 					break;
+				default:
+					// no-op
 			}
 		}
 		if (e.which === 27) {
@@ -230,7 +232,7 @@ var Room = (function() {
 				wbArea.append(qv);
 			}
 			const pro = qv.find('.control.pro')
-				con = qv.find('.control.con');
+				, con = qv.find('.control.con');
 			if (obj.voted) {
 				pro.removeClass('clickable').off();
 				con.removeClass('clickable').off();

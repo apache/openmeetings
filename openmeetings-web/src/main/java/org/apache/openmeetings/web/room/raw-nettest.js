@@ -43,6 +43,20 @@ var NetTest = (function() {
 			});
 
 		net = new Network();
+		_initTests()
+		// progress can be added
+		net.upload
+			.on('start', _start)
+			.on('restart', _restart)
+			.on('end', _end);
+		net.download
+			.on('start', _start)
+			.on('restart', _restart)
+			.on('end', _end);
+		net.latency.on('start', _start);
+		$('.nettest button[data-start="true"]').click()
+	}
+	function _initTests() {
 		tests = {
 			ping: {
 				start: function() {
@@ -99,17 +113,6 @@ var NetTest = (function() {
 				}
 			}
 		};
-		// progress can be added
-		net.upload
-			.on('start', _start)
-			.on('restart', _restart)
-			.on('end', _end);
-		net.download
-			.on('start', _start)
-			.on('restart', _restart)
-			.on('end', _end);
-		net.latency.on('start', _start);
-		$('.nettest button[data-start="true"]').click()
 	}
 	function __start(size, newSection) {
 		const msg = $('<span></span>').append(lbls['report.start']);

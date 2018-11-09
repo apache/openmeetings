@@ -370,6 +370,8 @@ var Wb = function() {
 							case 'custom':
 								zoom = 1. * $(this).data('custom-val');
 								break;
+							default:
+								//no-op
 						}
 					} else {
 						zoom = 1. * zzz;
@@ -383,6 +385,8 @@ var Wb = function() {
 				});
 				_setSize();
 				_initToolBtn('apointer', _firstToolItem, APointer(wb, s));
+			default:
+				//no-op
 		}
 	}
 	function _findObject(o) {
@@ -490,6 +494,8 @@ var Wb = function() {
 				r.type = 'math';
 				delete r.objects;
 				break;
+			default:
+				//no-op
 		}
 		return r;
 	}

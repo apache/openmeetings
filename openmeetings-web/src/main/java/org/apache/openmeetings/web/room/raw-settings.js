@@ -310,10 +310,6 @@ var VideoSettings = (function() {
 		recAllowed = allow;
 		_updateRec();
 	}
-	function _allowPlay() {
-		_updateRec();
-		playBtn.prop('disabled', false).button('refresh');
-	}
 	function _micActivity(level) {
 		lm.getKendoProgressBar().value(140 * level); // magic number
 	}
@@ -434,6 +430,78 @@ var VideoSettings = (function() {
 		_updateRec();
 		_setEnabled(false);
 	}
+	function _onKMessage(m) {
+		OmUtil.info('Received message: ', m);
+		switch (m.id) {
+			case 'canRecord':
+				_readValues(m, function(_offerSdp, cnts) {
+					OmUtil.info('Invoking SDP offer callback function');
+					OmUtil.sendMessage({
+						id : 'record'
+						, sdpOffer: _offerSdp
+						, video: cnts.video !== false
+						, audio: cnts.audio !== false
+					}, MsgBase);
+					rtcPeer.on('icecandidate', _onIceCandidate);
+				});
+				break;
+			case 'canPlay':
+				{
+					const options = VideoUtil.addIceServers({
+						remoteVideo: vid[0]
+						, mediaConstraints: {audio: true, video: true}
+						, onicecandidate: _onIceCandidate
+					}, m);
+					_clear();
+					rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
+						options
+						, function(error) {
+							if (error) {
+								return OmUtil.error(error);
+							}
+							rtcPeer.generateOffer(function(error, offerSdp) {
+								if (error) {
+									return OmUtil.error('Error generating the offer');
+								}
+								OmUtil.sendMessage({
+									id : 'play'
+									, sdpOffer: offerSdp
+								}, MsgBase);
+							});
+						});
+					}
+				break;
+			case 'playResponse':
+			case 'startResponse':
+				OmUtil.log('SDP answer received from server. Processing ...');
+				rtcPeer.processAnswer(m.sdpAnswer, function(error) {
+					if (error) {
+						return OmUtil.error(error);
+					}
+				});
+				break;
+			case 'iceCandidate':
+				rtcPeer.addIceCandidate(m.candidate, function(error) {
+					if (error) {
+						return OmUtil.error('Error adding candidate: ' + error);
+					}
+				});
+				break;
+			case 'recording':
+				timer.show().find('.time').text(m.time);
+				break;
+			case 'recStopped':
+				timer.hide();
+				_onStop()
+				break;
+			case 'playStopped':
+				_onStop();
+				_readValues();
+				break;
+			default:
+				// no-op
+		}
+	}
 	function _onWsMessage(jqEvent, msg) {
 		try {
 			if (msg instanceof Blob) {
@@ -442,76 +510,7 @@ var VideoSettings = (function() {
 			const m = jQuery.parseJSON(msg);
 			if (m && 'kurento' === m.type) {
 				if ('test' === m.mode) {
-					OmUtil.info('Received message: ', m);
-					switch (m.id) {
-						case 'canRecord':
-							_readValues(m, function(_offerSdp, cnts) {
-								OmUtil.info('Invoking SDP offer callback function');
-								OmUtil.sendMessage({
-									id : 'record'
-									, sdpOffer: _offerSdp
-									, video: cnts.video !== false
-									, audio: cnts.audio !== false
-								}, MsgBase);
-								rtcPeer.on('icecandidate', _onIceCandidate);
-							});
-							break;
-						case 'canPlay':
-							{
-								const options = VideoUtil.addIceServers({
-									remoteVideo: vid[0]
-									, mediaConstraints: {audio: true, video: true}
-									, onicecandidate: _onIceCandidate
-								}, m);
-								_clear();
-								rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
-									options
-									, function(error) {
-										if (error) {
-											return OmUtil.error(error);
-										}
-										rtcPeer.generateOffer(function(error, offerSdp) {
-											if (error) {
-												return OmUtil.error('Error generating the offer');
-											}
-											OmUtil.sendMessage({
-												id : 'play'
-												, sdpOffer: offerSdp
-											}, MsgBase);
-										});
-									});
-								}
-							break;
-						case 'playResponse':
-						case 'startResponse':
-							OmUtil.log('SDP answer received from server. Processing ...');
-							rtcPeer.processAnswer(m.sdpAnswer, function(error) {
-								if (error) {
-									return OmUtil.error(error);
-								}
-							});
-							break;
-						case 'iceCandidate':
-							rtcPeer.addIceCandidate(m.candidate, function(error) {
-								if (error) {
-									return OmUtil.error('Error adding candidate: ' + error);
-								}
-							});
-							break;
-						case 'recording':
-							timer.show().find('.time').text(m.time);
-							break;
-						case 'recStopped':
-							timer.hide();
-							_onStop()
-							break;
-						case 'playStopped':
-							_onStop();
-							_readValues();
-							break;
-						default:
-							// no-op
-					}
+					_onKMessage(m);
 				}
 				switch (m.id) {
 					case 'error':
