@@ -45,40 +45,37 @@ var Video = (function() {
 		}
 	}
 	function _getScreenStream(msg, callback) {
-		const b = kurentoUtils.WebRtcPeer.browser;
-		if (VideoUtil.isEdge() && b.major > 16) {
-			const cnts = {
-				video: true
-			};
-			navigator.getDisplayMedia(cnts).then(function(stream) {
-				callback(msg, cnts, stream);
-			}).catch(function(err) {
-				Sharer.setShareState(SHARE_STOPED);
-				Sharer.setRecState(SHARE_STOPED);
-				OmUtil.error(err);
-			});
-		} else if (b.name === 'Firefox') {
-			// https://mozilla.github.io/webrtc-landing/gum_test.html
-			const cnts = {
-				video: {
-					mediaSource: sd.shareType
-					, frameRate: sd.fps //TODO ideal
-					 //TODO ideal width
-					 //TODO ideal height
-				}};
-			navigator.mediaDevices.getUserMedia(cnts).then(function(stream) {
-				callback(msg, cnts, stream);
-			}).catch(function(err) {
-				Sharer.setShareState(SHARE_STOPED);
-				Sharer.setRecState(SHARE_STOPED);
-				OmUtil.error(err);
-			});
-		} else {
+		function __handleScreenError(err) {
 			Sharer.setShareState(SHARE_STOPED);
 			Sharer.setRecState(SHARE_STOPED);
-			Sharer.close();
-			OmUtil.error('Screen-sharing is not supported in ' + b.name + '[' + b.major + ']');
+			OmUtil.error(err);
 		}
+		const b = kurentoUtils.WebRtcPeer.browser;
+		let promise, cnts;
+		if (VideoUtil.isEdge() && b.major > 16) {
+			cnts = {
+				video: true
+			};
+			promise = navigator.getDisplayMedia(cnts);
+		} else if (b.name === 'Firefox') {
+			// https://mozilla.github.io/webrtc-landing/gum_test.html
+			cnts = Sharer.baseConstraints(sd);
+			cnts.video.mediaSource = sd.shareType;
+			promise = navigator.mediaDevices.getUserMedia(cnts);
+		} else if (b.name === 'Chrome') {
+			promise = Sharer.getChromeConstraints(sd).then((_cnts) => {
+				cnts = _cnts;
+				return navigator.mediaDevices.getUserMedia(_cnts);
+			});
+		} else {
+			promise = new Promise(() => {
+				Sharer.close();
+				throw 'Screen-sharing is not supported in ' + b.name + '[' + b.major + ']';
+			});
+		}
+		promise.then(function(stream) {
+			callback(msg, cnts, stream);
+		}).catch(__handleScreenError);
 	}
 	function _getVideoStream(msg, callback) {
 		VideoSettings.constraints(sd, function(cnts) {

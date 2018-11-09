@@ -264,7 +264,7 @@ public class KurentoHandler {
 					break;
 				case "wannaShare":
 					if (screenShareAllowed(c)) {
-						startSharing(c, msg);
+						startSharing(c, msg, Activity.SCREEN);
 					}
 					break;
 				case "wannaRecord":

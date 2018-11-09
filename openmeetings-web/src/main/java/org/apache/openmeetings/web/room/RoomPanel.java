@@ -138,12 +138,12 @@ public class RoomPanel extends BasePanel {
 					.put("interview", interview)
 					.put("audioOnly", r.isAudioOnly())
 					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus))
-					.put("exclusiveTitle", getString("1386"));
+					.put("exclusiveTitle", getString("1386"))
+					.put("chromeExtUrl", getChromeExtensionUrl());
 			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
 				options.put("reloadUrl", r.getRedirectURL());
 			}
 			StringBuilder sb = new StringBuilder()
-					.append("MuazKhan.init('").append(getChromeExtensionUrl()).append("');")
 					.append("Room.init(").append(options.toString(new NullStringer())).append(");")
 					.append(wb.getInitScript())
 					.append("Room.setSize();")
