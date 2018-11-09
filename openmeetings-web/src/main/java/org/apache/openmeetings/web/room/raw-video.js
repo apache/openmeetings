@@ -170,7 +170,7 @@ var Video = (function() {
 		rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
 			options
 			, function(error) {
-				if (error) {
+				if (!this.cleaned && error) {
 					return OmUtil.error(error);
 				}
 				this.generateOffer(function(error, offerSdp) {

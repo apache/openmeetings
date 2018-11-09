@@ -434,7 +434,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 		public StreamDesc(StreamType type, Activity...activities) {
 			this.uuid = randomUUID().toString();
 			this.type = type;
-			if (activities == null) {
+			if (activities == null || activities.length == 0) {
 				setActivities();
 			} else {
 				sactivities.addAll(Arrays.asList(activities));
