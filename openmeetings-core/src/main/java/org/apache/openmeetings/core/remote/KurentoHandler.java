@@ -179,7 +179,10 @@ public class KurentoHandler {
 						);
 				break;
 			case "record":
-				user = new KTestStream(this, _c, msg, createTestPipeline());
+				if (user != null) {
+					user.release(this);
+				}
+				user = new KTestStream(_c, msg, createTestPipeline());
 				testsByUid.put(_c.getUid(), user);
 				break;
 			case "iceCandidate":
@@ -198,7 +201,7 @@ public class KurentoHandler {
 				break;
 			case "play":
 				if (user != null) {
-					user.play(this, _c, msg, createTestPipeline());
+					user.play(_c, msg, createTestPipeline());
 				}
 				break;
 		}

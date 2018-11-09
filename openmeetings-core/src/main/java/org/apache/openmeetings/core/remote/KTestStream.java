@@ -60,7 +60,7 @@ public class KTestStream implements IKStream {
 	private ScheduledFuture<?> recHandle;
 	private int recTime;
 
-	public KTestStream(final KurentoHandler h, IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
+	public KTestStream(IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
 		this.pipeline = pipeline;
 		this.uid = _c.getUid();
 		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
@@ -84,7 +84,7 @@ public class KTestStream implements IKStream {
 			});
 		recorder.addStoppedListener(evt -> {
 				WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "recStopped"));
-				release(h);
+				releaseRecorder();
 			});
 		switch (profile) {
 			case WEBM:
@@ -125,7 +125,7 @@ public class KTestStream implements IKStream {
 		});
 	}
 
-	public void play(final KurentoHandler h, final IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
+	public void play(final IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
 		this.pipeline = pipeline;
 		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
 		player = new PlayerEndpoint.Builder(pipeline, recPath).build();
@@ -134,11 +134,11 @@ public class KTestStream implements IKStream {
 				log.info("Media session started {}", evt);
 				player.addErrorListener(event -> {
 						log.info("ErrorEvent for player with uid '{}': {}", _c.getUid(), event.getDescription());
-						sendPlayEnd(h, _c);
+						sendPlayEnd(_c);
 					});
 				player.addEndOfStreamListener(event -> {
 						log.info("EndOfStreamEvent for player with uid '{}'", _c.getUid());
-						sendPlayEnd(h, _c);
+						sendPlayEnd(_c);
 					});
 				player.play();
 			});
@@ -173,9 +173,9 @@ public class KTestStream implements IKStream {
 			});
 	}
 
-	private void sendPlayEnd(final KurentoHandler h, IWsClient _c) {
+	private void sendPlayEnd(IWsClient _c) {
 		WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "playStopped"));
-		release(h);
+		releasePlayer();
 	}
 
 	private static MediaProfileSpecType getProfile(JSONObject msg) {
@@ -195,24 +195,37 @@ public class KTestStream implements IKStream {
 		recPath = OmFileHelper.getRecUri(f);
 	}
 
+	private void releasePipeline() {
+		if (pipeline != null) {
+			pipeline.release();
+			pipeline = null;
+		}
+	}
+
+	private void releaseRecorder() {
+		releasePipeline();
+		if (recorder != null) {
+			recorder.release();
+			recorder = null;
+		}
+	}
+
+	private void releasePlayer() {
+		releasePipeline();
+		if (player != null) {
+			player.release();
+			player = null;
+		}
+	}
+
 	@Override
 	public void release(KurentoHandler h) {
 		if (webRtcEndpoint != null) {
 			webRtcEndpoint.release();
 			webRtcEndpoint = null;
 		}
-		if (pipeline != null) {
-			pipeline.release();
-			pipeline = null;
-		}
-		if (player != null) {
-			player.release();
-			player = null;
-		}
-		if (recorder != null) {
-			recorder.release();
-			recorder = null;
-		}
+		releasePlayer();
+		releaseRecorder();
 		h.testsByUid.remove(uid);
 	}
 }

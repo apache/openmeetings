@@ -456,11 +456,11 @@ var VideoSettings = (function() {
 					rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
 						options
 						, function(error) {
-							if (error) {
+							if (!this.cleaned && error) {
 								return OmUtil.error(error);
 							}
 							rtcPeer.generateOffer(function(error, offerSdp) {
-								if (error) {
+								if (!this.cleaned && error) {
 									return OmUtil.error('Error generating the offer');
 								}
 								OmUtil.sendMessage({
