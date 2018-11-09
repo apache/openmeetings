@@ -67,5 +67,6 @@ public class OMContextListener implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
+		//no-op by default
 	}
 }

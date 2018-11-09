@@ -76,8 +76,8 @@ public class PollsSubMenu implements Serializable {
 				if (ACTION_CLOSE.equals(action)) {
 					qpollManager.close(c);
 				} else if (PARAM_VOTE.equals(action)) {
-					boolean vote = mp.getRequest().getRequestParameters().getParameterValue(PARAM_VOTE).toBoolean();
-					qpollManager.vote(c, vote);
+					final boolean curVote = mp.getRequest().getRequestParameters().getParameterValue(PARAM_VOTE).toBoolean();
+					qpollManager.vote(c, curVote);
 				}
 			} catch (Exception e) {
 				log.error("Unexpected exception while toggle 'quickPollAction'", e);

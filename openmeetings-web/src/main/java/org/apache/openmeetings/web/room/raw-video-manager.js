@@ -27,7 +27,6 @@ var VideoManager = (function() {
 		OmUtil.log(uid + ' receiving video');
 	}
 	function _onKMessage(m) {
-		OmUtil.info('Received message: ' + msg);
 		switch (m.id) {
 			case 'clientLeave':
 				$(VID_SEL + ' div[data-client-uid="' + m.uid + '"]').each(function() {
@@ -79,6 +78,7 @@ var VideoManager = (function() {
 				return;
 			}
 			if ('kurento' === m.type && 'test' !== m.mode) {
+				OmUtil.info('Received message: ' + msg);
 				_onKMessage(m);
 			} else if ('mic' === m.type) {
 				switch (m.id) {

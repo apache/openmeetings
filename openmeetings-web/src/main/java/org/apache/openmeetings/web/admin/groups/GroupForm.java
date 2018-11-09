@@ -78,9 +78,9 @@ public class GroupForm extends AdminBaseForm<Group> {
 		@Override
 		protected void deleteImage() throws Exception {
 			Long groupId = GroupForm.this.getModelObject().getId();
-			File logo = new File(getGroupLogoDir(), String.format("logo%s.png", groupId));
-			if (groupId != null && logo.exists()) {
-				logo.delete();
+			File flogo = new File(getGroupLogoDir(), String.format("logo%s.png", groupId));
+			if (groupId != null && flogo.exists()) {
+				flogo.delete();
 			}
 		}
 

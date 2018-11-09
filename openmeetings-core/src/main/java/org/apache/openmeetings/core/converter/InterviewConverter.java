@@ -178,28 +178,28 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 	private Date processParts(Long roomId, List<RecordingChunk> chunks, ProcessResultList logs, int N, List<PodPart> parts, Date pStart) throws IOException {
 		for (RecordingChunk chunk : chunks) {
 			File chunkStream = getRecordingChunk(roomId, chunk.getStreamName());
-			if (chunkStream.exists()) {
-				String path = chunkStream.getCanonicalPath();
-				/* CHECK FILE:
-				 * ffmpeg -i rec_316_stream_567_2013_08_28_11_51_45.webm -v error -f null file.null
-				 */
-				String[] args = new String[] {getPathToFFMPEG(), "-y"
-						, "-i", path
-						, "-v", "error"
-						, "-f", "null"
-						, "file.null"};
-				ProcessResult res = ProcessHelper.executeScript(String.format("Check chunk pod video_%s_%s", N, parts.size()), args, true);
-				logs.add(res);
-				if (!res.isWarn()) {
-					long diff = diff(chunk.isAudioOnly() ? chunk.getEnd() : chunk.getStart(), pStart);
-					PodPart.add(parts, diff);
-					if (!chunk.isAudioOnly()) {
-						parts.add(new PodPart(path, diff(chunk.getEnd(), chunk.getStart())));
-					}
-					pStart = chunk.getEnd();
-				}
-			} else {
+			if (!chunkStream.exists()) {
 				log.debug("Chunk stream doesn't exist: {}", chunkStream);
+				continue;
+			}
+			String path = chunkStream.getCanonicalPath();
+			/* CHECK FILE:
+			 * ffmpeg -i rec_316_stream_567_2013_08_28_11_51_45.webm -v error -f null file.null
+			 */
+			String[] args = new String[] {getPathToFFMPEG(), "-y"
+					, "-i", path
+					, "-v", "error"
+					, "-f", "null"
+					, "file.null"};
+			ProcessResult res = ProcessHelper.executeScript(String.format("Check chunk pod video_%s_%s", N, parts.size()), args, true);
+			logs.add(res);
+			if (!res.isWarn()) {
+				long diff = diff(chunk.isAudioOnly() ? chunk.getEnd() : chunk.getStart(), pStart);
+				PodPart.add(parts, diff);
+				if (!chunk.isAudioOnly()) {
+					parts.add(new PodPart(path, diff(chunk.getEnd(), chunk.getStart())));
+				}
+				pStart = chunk.getEnd();
 			}
 		}
 		return pStart;

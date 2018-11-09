@@ -53,9 +53,6 @@ public class NetTestWebService {
 	private static final int JITTER_PACKET_SIZE = 1024;
 	private static final int MAX_UPLOAD_SIZE = 16 * 1024 * 1024;
 
-	public NetTestWebService() {
-	}
-
 	@GET
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/")

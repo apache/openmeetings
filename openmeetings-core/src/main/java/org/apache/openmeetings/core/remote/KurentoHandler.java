@@ -169,6 +169,118 @@ public class KurentoHandler {
 		return pipe;
 	}
 
+	private void onTestMessage(IWsClient _c, final String cmdId, JSONObject msg) {
+		KTestStream user = getTestByUid(_c.getUid());
+		switch (cmdId) {
+			case "wannaRecord":
+				WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+						.put("id", "canRecord")
+						.put(PARAM_ICE, getTurnServers(true))
+						);
+				break;
+			case "record":
+				user = new KTestStream(this, _c, msg, createTestPipeline());
+				testsByUid.put(_c.getUid(), user);
+				break;
+			case "iceCandidate":
+				JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
+				if (user != null) {
+					IceCandidate cand = new IceCandidate(candidate.getString(PARAM_CANDIDATE),
+							candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
+					user.addCandidate(cand);
+				}
+				break;
+			case "wannaPlay":
+				WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+						.put("id", "canPlay")
+						.put(PARAM_ICE, getTurnServers(true))
+						);
+				break;
+			case "play":
+				if (user != null) {
+					user.play(this, _c, msg, createTestPipeline());
+				}
+				break;
+		}
+	}
+
+	private void onMessage(Client c, final String cmdId, JSONObject msg) {
+		final String uid = msg.optString("uid");
+		KStream sender;
+		StreamDesc sd;
+		log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
+		switch (cmdId) {
+			case "devicesAltered":
+				if (!msg.getBoolean("audio") && c.hasActivity(Activity.AUDIO)) {
+					c.remove(Activity.AUDIO);
+				}
+				if (!msg.getBoolean("video") && c.hasActivity(Activity.VIDEO)) {
+					c.remove(Activity.VIDEO);
+				}
+				c.getStream(uid).setActivities();
+				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.rightUpdated, c.getUid()));
+				break;
+			case "toggleActivity":
+				toggleActivity(c, Activity.valueOf(msg.getString("activity")));
+				break;
+			case "broadcastStarted":
+				sd = c.getStream(uid);
+				sender = getByUid(uid);
+				if (sender == null) {
+					KRoom room = getRoom(c.getRoomId());
+					sender = room.join(sd);
+				}
+				sender.startBroadcast(this, sd, msg.getString("sdpOffer"));
+				if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !isRecording(c.getRoomId())) {
+					startRecording(c);
+				}
+				break;
+			case "onIceCandidate":
+				sender = getByUid(uid);
+				if (sender != null) {
+					JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
+					IceCandidate cand = new IceCandidate(
+							candidate.getString(PARAM_CANDIDATE)
+							, candidate.getString("sdpMid")
+							, candidate.getInt("sdpMLineIndex"));
+					sender.addCandidate(cand, msg.getString("luid"));
+				}
+				break;
+			case "addListener":
+				sender = getByUid(msg.getString("sender"));
+				if (sender != null) {
+					sender.addListener(this, c.getSid(), c.getUid(), msg.getString("sdpOffer"));
+				}
+				break;
+			case "wannaShare":
+				if (screenShareAllowed(c)) {
+					startSharing(c, msg, Activity.SCREEN);
+				}
+				break;
+			case "wannaRecord":
+				if (recordingAllowed(c)) {
+					Room r = c.getRoom();
+					if (Room.Type.interview == r.getType()) {
+						log.warn("This shouldn't be called for interview room");
+						break;
+					}
+					if (isSharing(r.getId())) {
+						startRecording(c);
+					} else {
+						startSharing(c, msg, Activity.RECORD);
+					}
+				}
+				break;
+			case "stopSharing":
+				sender = getByUid(uid);
+				sd = stopSharing(c.getSid(), uid);
+				if (sender != null && sd != null) {
+					sender.stopBroadcast(this);
+				}
+				break;
+		}
+	}
+
 	public void onMessage(IWsClient _c, JSONObject msg) {
 		if (client == null) {
 			sendError(_c, "Multimedia server is inaccessible");
@@ -176,119 +288,15 @@ public class KurentoHandler {
 		}
 		final String cmdId = msg.getString("id");
 		if (MODE_TEST.equals(msg.optString(TAG_MODE))) {
-			KTestStream user = getTestByUid(_c.getUid());
-			switch (cmdId) {
-				case "wannaRecord":
-					WebSocketHelper.sendClient(_c, newTestKurentoMsg()
-							.put("id", "canRecord")
-							.put(PARAM_ICE, getTurnServers(true))
-							);
-					break;
-				case "record":
-					user = new KTestStream(this, _c, msg, createTestPipeline());
-					testsByUid.put(_c.getUid(), user);
-					break;
-				case "iceCandidate":
-					JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
-					if (user != null) {
-						IceCandidate cand = new IceCandidate(candidate.getString(PARAM_CANDIDATE),
-								candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
-						user.addCandidate(cand);
-					}
-					break;
-				case "wannaPlay":
-					WebSocketHelper.sendClient(_c, newTestKurentoMsg()
-							.put("id", "canPlay")
-							.put(PARAM_ICE, getTurnServers(true))
-							);
-					break;
-				case "play":
-					if (user != null) {
-						user.play(this, _c, msg, createTestPipeline());
-					}
-					break;
-			}
+			onTestMessage(_c, cmdId, msg);
 		} else {
-			final String uid = msg.optString("uid");
 			final Client c = (Client)_c;
 
 			if (c == null || c.getRoomId() == null) {
 				log.warn("Incoming message from invalid user");
 				return;
 			}
-			KStream sender;
-			StreamDesc sd;
-			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
-			switch (cmdId) {
-				case "devicesAltered":
-					if (!msg.getBoolean("audio") && c.hasActivity(Activity.AUDIO)) {
-						c.remove(Activity.AUDIO);
-					}
-					if (!msg.getBoolean("video") && c.hasActivity(Activity.VIDEO)) {
-						c.remove(Activity.VIDEO);
-					}
-					c.getStream(uid).setActivities();
-					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.rightUpdated, c.getUid()));
-					break;
-				case "toggleActivity":
-					toggleActivity(c, Activity.valueOf(msg.getString("activity")));
-					break;
-				case "broadcastStarted":
-					sd = c.getStream(uid);
-					sender = getByUid(uid);
-					if (sender == null) {
-						KRoom room = getRoom(c.getRoomId());
-						sender = room.join(sd);
-					}
-					sender.startBroadcast(this, sd, msg.getString("sdpOffer"));
-					if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !isRecording(c.getRoomId())) {
-						startRecording(c);
-					}
-					break;
-				case "onIceCandidate":
-					sender = getByUid(uid);
-					if (sender != null) {
-						JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
-						IceCandidate cand = new IceCandidate(
-								candidate.getString(PARAM_CANDIDATE)
-								, candidate.getString("sdpMid")
-								, candidate.getInt("sdpMLineIndex"));
-						sender.addCandidate(cand, msg.getString("luid"));
-					}
-					break;
-				case "addListener":
-					sender = getByUid(msg.getString("sender"));
-					if (sender != null) {
-						sender.addListener(this, c.getSid(), c.getUid(), msg.getString("sdpOffer"));
-					}
-					break;
-				case "wannaShare":
-					if (screenShareAllowed(c)) {
-						startSharing(c, msg, Activity.SCREEN);
-					}
-					break;
-				case "wannaRecord":
-					if (recordingAllowed(c)) {
-						Room r = c.getRoom();
-						if (Room.Type.interview == r.getType()) {
-							log.warn("This shouldn't be called for interview room");
-							break;
-						}
-						if (isSharing(r.getId())) {
-							startRecording(c);
-						} else {
-							startSharing(c, msg, Activity.RECORD);
-						}
-					}
-					break;
-				case "stopSharing":
-					sender = getByUid(uid);
-					sd = stopSharing(c.getSid(), uid);
-					if (sender != null && sd != null) {
-						sender.stopBroadcast(this);
-					}
-					break;
-			}
+			onMessage(c, cmdId, msg);
 		}
 	}
 
