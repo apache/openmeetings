@@ -124,7 +124,7 @@ public class TestInstall {
 		assertNotNull("Model should NOT be null", wiz.getWizardModel().getActiveStep());
 
 		ButtonAjaxBehavior prev = getButtonBehavior(tester, WIZARD_PATH, "PREV");
-		 //check enabled, add check for other buttons on other steps
+		//check enabled, add check for other buttons on other steps
 		assertFalse("Prev button should be disabled", prev.getButton().isEnabled());
 		ButtonAjaxBehavior next = getButtonBehavior(tester, WIZARD_PATH, "NEXT");
 		ButtonAjaxBehavior finish = getButtonBehavior(tester, WIZARD_PATH, SUBMIT);

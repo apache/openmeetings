@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
@@ -46,7 +45,6 @@ public class ActionsSubMenu implements Serializable {
 	private RoomMenuItem applyAvMenuItem;
 	private RoomMenuItem sipDialerMenuItem;
 	private RoomMenuItem downloadPngMenuItem;
-	private RoomMenuItem downloadJpgMenuItem;
 	private RoomMenuItem downloadPdfMenuItem;
 	private final boolean visible;
 
@@ -119,14 +117,6 @@ public class ActionsSubMenu implements Serializable {
 				download(target, EXTENSION_PNG);
 			}
 		};
-		downloadJpgMenuItem = new RoomMenuItem(mp.getString("download.jpg"), mp.getString("download.jpg")) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				download(target, EXTENSION_JPG);
-			}
-		};
 		downloadPdfMenuItem = new RoomMenuItem(mp.getString("download.pdf"), mp.getString("download.pdf")) {
 			private static final long serialVersionUID = 1L;
 
@@ -146,7 +136,6 @@ public class ActionsSubMenu implements Serializable {
 		actionsMenu.getItems().add(applyAvMenuItem);
 		actionsMenu.getItems().add(sipDialerMenuItem);
 		actionsMenu.getItems().add(downloadPngMenuItem);
-		actionsMenu.getItems().add(downloadJpgMenuItem);
 		actionsMenu.getItems().add(downloadPdfMenuItem);
 		return actionsMenu;
 	}
@@ -157,7 +146,6 @@ public class ActionsSubMenu implements Serializable {
 		}
 		boolean isInterview = Room.Type.interview == r.getType();
 		downloadPngMenuItem.setEnabled(!isInterview);
-		downloadJpgMenuItem.setEnabled(!isInterview);
 		downloadPdfMenuItem.setEnabled(!isInterview);
 		actionsMenu.setEnabled(moder || r.isAllowUserQuestions());
 		inviteMenuItem.setEnabled(notExternalUser && moder);
