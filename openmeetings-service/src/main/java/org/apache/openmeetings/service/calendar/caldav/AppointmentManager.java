@@ -67,7 +67,7 @@ import net.fortuna.ical4j.util.MapTimeZoneCache;
 
 /**
  * Class which does syncing and provides respective API's required for performing CalDAV Operations.
- * @author Ankush Mishra <ankushmishra9@gmail.com>
+ * @author Ankush Mishra (ankushmishra9@gmail.com)
  */
 @Component
 public class AppointmentManager {
@@ -77,7 +77,6 @@ public class AppointmentManager {
 	private static final int IDLE_CONNECTION_TIMEOUT = 30; // 30 seconds
 	private static final int MAX_HOST_CONNECTIONS = 6; // Number of simultaneous connections to one host
 	private static final int MAX_TOTAL_CONNECTIONS = 10; // Max Connections, at one time in memory.
-	private static final int CONNECTION_MANAGER_TIMEOUT = 1000; // Waits for 1 sec if no empty connection exists
 
 	private PoolingHttpClientConnectionManager connmanager = null;
 
@@ -139,6 +138,7 @@ public class AppointmentManager {
 	 * Tests if the Calendar's URL can be accessed, or not.
 	 *
 	 * @param client   Client which makes the connection.
+	 * @param context http context
 	 * @param calendar Calendar whose URL is to be accessed.
 	 * @return Returns true for HTTP Status 200, or 204, else false.
 	 */
@@ -172,6 +172,7 @@ public class AppointmentManager {
 	 * Create or Update calendar on the database.
 	 *
 	 * @param client - {@link HttpClient} to discover calendar
+	 * @param context http context
 	 * @param calendar - calendar to be created
 	 * @return <code>true</code> if calendar was created/updated
 	 */
@@ -222,6 +223,7 @@ public class AppointmentManager {
 	 * Function which when called performs syncing based on the type of Syncing detected.
 	 *
 	 * @param client - {@link HttpClient} to discover calendar
+	 * @param context http context
 	 * @param calendar Calendar who's sync has to take place
 	 */
 	public void syncItem(HttpClient client, HttpClientContext context, OmCalendar calendar) {
@@ -253,6 +255,7 @@ public class AppointmentManager {
 	 * Syncs all the calendars currrently present on the DB.
 	 *
 	 * @param client - {@link HttpClient} to discover calendar
+	 * @param context http context
 	 * @param userId - id of the user
 	 */
 	public void syncItems(HttpClient client, HttpClientContext context, Long userId) {
@@ -266,6 +269,7 @@ public class AppointmentManager {
 	 * Function which finds all the calendars of the Principal URL of the calendar
 	 *
 	 * @param client - {@link HttpClient} to discover calendar
+	 * @param context http context
 	 * @param calendar - calendar to get principal URL from
 	 * @return - <code>true</code> in case calendar was discovered successfully
 	 */
@@ -456,6 +460,7 @@ public class AppointmentManager {
 	 * Function to initialize the Calendar on the type of syncing and whether it can be used or not.
 	 *
 	 * @param client - {@link HttpClient} to discover calendar
+	 * @param context http context
 	 * @param calendar - calendar to be inited
 	 * @return <code>true</code> in case calendar was inited
 	 */
@@ -525,6 +530,7 @@ public class AppointmentManager {
 	 * Performs modification alongside of creation new events on the server.
 	 *
 	 * @param client - {@link HttpClient} to discover calendar
+	 * @param context http context
 	 * @param appointment Appointment to create/update.
 	 * @return <code>true</code> in case item was updated
 	 */
@@ -557,6 +563,7 @@ public class AppointmentManager {
 	 * i.e. only if the Event hasn't changed on the Server.
 	 *
 	 * @param client - {@link HttpClient} to discover calendar
+	 * @param context http context
 	 * @param appointment Appointment to Delete
 	 * @return <code>true</code> in case item was deleted
 	 */

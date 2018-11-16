@@ -101,21 +101,24 @@ public class SyncMethod extends BaseDavRequest {
 	}
 
 	public String getResponseSynctoken(HttpResponse response) {
-		if (!processedResponse)
+		if (!processedResponse) {
 			processResponseBody(response);
+		}
 		return synctoken;
 	}
 
 	/**
 	 * Adapted from DavMethodBase to handle MultiStatus responses.
 	 *
+	 * @param response {@link HttpResponse} to be converted to {@link MultiStatus}
 	 * @return MultiStatus response
 	 * @throws DavException if the response body could not be parsed
 	 */
 	@Override
 	public MultiStatus getResponseBodyAsMultiStatus(HttpResponse response) throws DavException {
-		if (!processedResponse)
+		if (!processedResponse) {
 			processResponseBody(response);
+		}
 
 		if (multiStatus != null) {
 			return multiStatus;
