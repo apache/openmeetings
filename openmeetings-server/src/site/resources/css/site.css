@@ -68,7 +68,9 @@ iframe {
 	font-weight: bold;
 	text-align: center;
 }
-
+.copyright {
+	text-align: center;
+}
 /*
 // Callouts
 // https://github.com/twbs/bootstrap/blob/6589408a4b91c0f58fa4ac1508d69e3e9e4345e1/site/docs/4.1/assets/scss/_callouts.scss
