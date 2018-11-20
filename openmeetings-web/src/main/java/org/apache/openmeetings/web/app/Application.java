@@ -155,19 +155,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 
-		// FIXME TODO WICKET-6588
-		if (getServletContext().getSessionCookieConfig().getName() == null) {
-			getServletContext().getSessionCookieConfig().setName("OMSESSIONID");
-		}
 		hazelcast.getCluster().getLocalMember().setStringAttribute(NAME_ATTR_KEY, hazelcast.getName());
 		hazelWsTopic = hazelcast.getTopic("default");
 		hazelWsTopic.addMessageListener(msg -> {
-				String serverId = msg.getPublishingMember().getStringAttribute(NAME_ATTR_KEY);
-				if (serverId.equals(hazelcast.getName())) {
-					return;
-				}
-				WbWebSocketHelper.send(msg.getMessageObject());
-			});
+			String serverId = msg.getPublishingMember().getStringAttribute(NAME_ATTR_KEY);
+			if (serverId.equals(hazelcast.getName())) {
+				return;
+			}
+			WbWebSocketHelper.send(msg.getMessageObject());
+		});
 		hazelcast.getCluster().addMembershipListener(new MembershipListener() {
 			@Override
 			public void memberRemoved(MembershipEvent evt) {
@@ -539,9 +535,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			delim = "";
 		}
 		return String.format("%s://%s%s%s;"
-			, insecure ? "ws" : "wss"
-			, reqUrl.getHost()
-			, delim
-			, port);
+				, insecure ? "ws" : "wss"
+					, reqUrl.getHost()
+					, delim
+					, port);
 	}
 }
