@@ -44,13 +44,9 @@
 			<item name="Wiki" href="https://cwiki.apache.org/confluence/display/OPENMEETINGS"/>
 		</links>
 		<menu ref="modules" inherit="top"/>
-		<footer><![CDATA[
-			<p>Apache OpenMeetings, OpenMeetings, Apache, the Apache feather, and the Apache OpenMeetings project logo</p>
-			<p>are trademarks of the Apache Software Foundation.</p>
-		]]></footer>
 	</body>
 
-	<poweredBy></poweredBy>
+	<poweredBy/>
 
 	<custom>
 		<reflowSkin>
@@ -75,6 +71,8 @@
 			<skinAttribution>false</skinAttribution>
 			<endContent>
 				<script type="text/javascript" src="$resourcePath/js/site.js"></script>
+				<p class="text-center">Apache OpenMeetings, OpenMeetings, Apache, the Apache feather, and the Apache OpenMeetings project logo</p>
+				<p class="text-center">are trademarks of the Apache Software Foundation.</p>
 			</endContent>
 		</reflowSkin>
 	</custom>
