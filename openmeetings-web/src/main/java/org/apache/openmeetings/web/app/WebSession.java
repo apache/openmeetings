@@ -79,7 +79,6 @@ import org.apache.openmeetings.web.util.UserDashboard;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
-import org.apache.wicket.core.request.ClientInfo;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
@@ -261,31 +260,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	private void setUser(User u, Set<Right> rights) {
-		Long _recordingId = recordingId;
-		Long _roomId = roomId;
-		Invitation _i = i;
-		SOAPLogin _soap = soap;
-		ClientInfo _info = clientInfo;
-		ExtendedClientProperties _extProps = extProps;
-		replaceSession(); // required to prevent session fixation
-		if (_recordingId != null) {
-			recordingId = _recordingId;
-		}
-		if (_roomId != null) {
-			roomId = _roomId;
-		}
-		if (_i != null) {
-			i = _i;
-		}
-		if (_soap != null) {
-			soap = _soap;
-		}
-		if (_info != null) {
-			clientInfo = _info;
-		}
-		if (_extProps != null) {
-			extProps = _extProps;
-		}
+		changeSessionId(); // required to prevent session fixation
 		userId = u.getId();
 		if (rights == null || rights.isEmpty()) {
 			Set<Right> r = new HashSet<>(u.getRights());
