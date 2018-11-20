@@ -71,6 +71,9 @@
 						Docker image: <a href="https://github.com/openmeetings/openmeetings-docker/tree/4.0.6">https://github.com/openmeetings/openmeetings-docker/tree/4.0.6</a>
 					</li>
 					<li>
+						<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Live+iso+OpenMeetings+on+Ubuntu">Live OM iso images by Alvaro</a>
+					</li>
+					<li>
 						ISO: <a href="https://om.alteametasoft.com/om_4.0.6.qcow2">https://om.alteametasoft.com/om_4.0.6.qcow2</a> (QEMU qcow2 format)
 						<source>
 <![CDATA[
