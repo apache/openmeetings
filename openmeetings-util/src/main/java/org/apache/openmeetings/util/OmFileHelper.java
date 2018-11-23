@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.text.DecimalFormat;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
@@ -368,6 +369,6 @@ public class OmFileHelper {
 
 	public static String getFileExt(String name) {
 		int dotidx = name.lastIndexOf('.');
-		return dotidx < 0 ? "" : name.substring(dotidx + 1).toLowerCase();
+		return dotidx < 0 ? "" : name.substring(dotidx + 1).toLowerCase(Locale.ROOT);
 	}
 }

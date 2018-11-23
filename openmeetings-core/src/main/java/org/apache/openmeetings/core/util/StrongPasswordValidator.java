@@ -20,6 +20,7 @@ package org.apache.openmeetings.core.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinPasswdLength;
 
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -56,11 +57,11 @@ public class StrongPasswordValidator implements IValidator<String> {
 	}
 
 	private static boolean noUpperCase(String password) {
-		return password == null || password.equals(password.toLowerCase());
+		return password == null || password.equals(password.toLowerCase(Locale.ROOT));
 	}
 
 	private static boolean noLowerCase(String password) {
-		return password == null || password.equals(password.toUpperCase());
+		return password == null || password.equals(password.toUpperCase(Locale.ROOT));
 	}
 
 	private static boolean badLength(String password) {
@@ -72,8 +73,8 @@ public class StrongPasswordValidator implements IValidator<String> {
 			return false;
 		}
 		for (int i = 0; i < word.length() - 3; ++i) {
-			String substr = word.toLowerCase().substring(i, i + 3);
-			if (password.toLowerCase().indexOf(substr) > -1) {
+			String substr = word.toLowerCase(Locale.ROOT).substring(i, i + 3);
+			if (password.toLowerCase(Locale.ROOT).indexOf(substr) > -1) {
 				return true;
 			}
 		}
