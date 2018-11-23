@@ -32,6 +32,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.tika.config.TikaConfig;
@@ -111,7 +112,7 @@ public class StoredFile {
 			ext = getFileExt(_name);
 		} else {
 			name = _name;
-			ext = _ext.toLowerCase();
+			ext = _ext.toLowerCase(Locale.ROOT);
 		}
 		Metadata md = new Metadata();
 		md.add(RESOURCE_NAME_KEY, String.format(FILE_NAME_FMT, name, ext));

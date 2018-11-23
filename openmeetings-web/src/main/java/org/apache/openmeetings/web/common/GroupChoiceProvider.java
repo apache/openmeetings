@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -43,14 +44,14 @@ public class GroupChoiceProvider extends ChoiceProvider<Group> {
 		if (WebSession.getRights().contains(User.Right.Admin)) {
 			List<Group> groups = getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
 			for (Group g : groups) {
-				if (Strings.isEmpty(term) || g.getName().toLowerCase().contains(term.toLowerCase())) {
+				if (Strings.isEmpty(term) || g.getName().toLowerCase(Locale.ROOT).contains(term.toLowerCase(Locale.ROOT))) {
 					response.add(g);
 				}
 			}
 		} else {
 			User u = getBean(UserDao.class).get(getUserId());
 			for (GroupUser ou : u.getGroupUsers()) {
-				if (Strings.isEmpty(term) || ou.getGroup().getName().toLowerCase().contains(term.toLowerCase())) {
+				if (Strings.isEmpty(term) || ou.getGroup().getName().toLowerCase(Locale.ROOT).contains(term.toLowerCase(Locale.ROOT))) {
 					response.add(ou.getGroup());
 				}
 			}
