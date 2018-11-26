@@ -141,6 +141,7 @@ public class Chat extends Panel {
 	public CharSequence getReinit() {
 		StringBuilder sb = new StringBuilder("Chat.reinit(")
 				.append(new JSONObject()
+						.put("userId", getUserId())
 						.put("all", getString("1494"))
 						.put("room", getString("406"))
 						.put("sendOnEnter", OpenmeetingsVariables.getChatSenndOnEnter()).toString())

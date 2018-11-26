@@ -15,7 +15,8 @@ var Chat = function() {
 		;
 	let p, pp, ctrl, icon, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
 		, roomPrefix = "Room ", typingTimer, audio, roomMode = false, globalWidth = 600
-		, editor = $('#chatMessage .wysiwyg-editor'), muted = false, sendOn, DEF_SEND;
+		, editor = $('#chatMessage .wysiwyg-editor'), muted = false, sendOn, DEF_SEND
+		, userId;
 		;
 
 	try {
@@ -116,6 +117,7 @@ var Chat = function() {
 		return !!$("#chatTabs").data("ui-tabs");
 	}
 	function _reinit(opts) {
+		userId = opts.userId;
 		allPrefix = opts.all;
 		roomPrefix = opts.room;
 		DEF_SEND = opts.sendOnEnter === true ? SEND_ENTER : SEND_CTRL;
@@ -211,25 +213,12 @@ var Chat = function() {
 	}
 	function _addMessage(m) {
 		if ($('#chat').length > 0 && m && m.type === "chat") {
-			if (isClosed()) {
-				ctrl.addClass('ui-state-highlight');
-				if (p.is(':visible') && !muted) {
-					const playPromise = audio.play();
-
-					// In browsers that don’t yet support this functionality,
-					// playPromise won’t be defined.
-					if (playPromise !== undefined) {
-						playPromise.then(function() {
-							// Automatic playback started!
-						}).catch(function() {
-							// Automatic playback failed.
-						});
-					}
-				}
-			}
-			let msg, cm;
+			let msg, cm, notify = false;
 			while (!!(cm = m.msg.pop())) {
 				let area = $('#' + cm.scope);
+				if (cm.from.id !== userId) {
+					notify = true;
+				}
 				msg = OmUtil.tmpl('#chat-msg-template', msgIdPrefix + cm.id)
 				msg.find('.user-row').css('background-image', 'url(' + (!!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now()) + ')');
 				msg.find('.from').addClass(align).data('user-id', cm.from.id).html(cm.from.name || cm.from.displayName);
@@ -261,6 +250,22 @@ var Chat = function() {
 				msg.find('.msg').addClass(align).html(emoticon.emoticonize(!!cm.message ? cm.message : ""));
 				if (btm) {
 					_scrollDown(area);
+				}
+			}
+			if (notify) {
+				ctrl.addClass('ui-state-highlight');
+				if (p.is(':visible') && !muted) {
+					const playPromise = audio.play();
+
+					// In browsers that don’t yet support this functionality,
+					// playPromise won’t be defined.
+					if (playPromise !== undefined) {
+						playPromise.then(function() {
+							// Automatic playback started!
+						}).catch(function() {
+							// Automatic playback failed.
+						});
+					}
 				}
 			}
 			emoticon.animate();
@@ -353,7 +358,7 @@ var Chat = function() {
 	}
 	function _setRoomMode(_mode) {
 		roomMode = _mode;
-		_reinit({all: allPrefix, room: roomPrefix, sendOnEnter: sendOn === SEND_ENTER});
+		_reinit({userId: userId, all: allPrefix, room: roomPrefix, sendOnEnter: sendOn === SEND_ENTER});
 	}
 	function _scrollDown(area) {
 		area.animate({
