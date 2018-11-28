@@ -30,6 +30,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_XFRA
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DISPLAY_NAME_EDITABLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
@@ -78,6 +79,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setContentSecur
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultLang;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setDisplayNameEditable;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setGaCode;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setMaxUploadSize;
@@ -389,6 +391,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_CHROME_EXT_URL:
 				reloadChromeExtensionUrl();
 				break;
+			case CONFIG_DISPLAY_NAME_EDITABLE:
+				reloadDisplayNameEditable();
+				break;
 		}
 		return entity;
 	}
@@ -524,6 +529,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setContentSecurityPolicy(getString(CONFIG_HEADER_CSP, HEADER_CSP_SELF));
 	}
 
+	private void reloadDisplayNameEditable() {
+		setDisplayNameEditable(getBool(CONFIG_DISPLAY_NAME_EDITABLE, false));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -553,6 +562,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadXFrameOptions();
 		reloadContentSecurityPolicy();
 		reloadChromeExtensionUrl();
+		reloadDisplayNameEditable();
 	}
 
 	private JSONObject reloadRoomSettings() {

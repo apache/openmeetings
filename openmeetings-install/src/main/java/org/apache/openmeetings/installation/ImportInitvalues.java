@@ -38,6 +38,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DISPLAY_NAME_EDITABLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
@@ -347,6 +348,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_MIC_NOISE, String.valueOf(true), Configuration.Type.bool, "Whether noise suppression is preferred and/or required.", VER_5_0_0);
 		addCfg(list, CONFIG_CSP_XFRAME, HEADER_XFRAME_SELF, Configuration.Type.string, String.format("Value for 'frame-src' directive of 'Content-Security-Policy' header (default: %s), more info: https://w3c.github.io/webappsec-csp/", HEADER_XFRAME_SELF), VER_5_0_0);
 		addCfg(list, CONFIG_CHROME_EXT_URL, DEFAULT_CHROME_EXT_URL, Configuration.Type.string, String.format("URL to custom page with Chrome Extension logic (default %s).", DEFAULT_CHROME_EXT_URL), VER_5_0_0);
+		addCfg(list, CONFIG_DISPLAY_NAME_EDITABLE, String.valueOf(false), Configuration.Type.bool, "Is user will be able to edit his/her display name (default false).", "4.0.7");
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {

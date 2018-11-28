@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.user.chat;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_USER_PREFIX;
-import static org.apache.openmeetings.db.util.FormatHelper.getDisplayName;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 
@@ -113,7 +112,7 @@ public class ChatForm extends Form<Void> {
 					m.setMessage(txt);
 					m.setSent(new Date());
 					m.setFromUser(userDao.get(getUserId()));
-					m.setFromName(getDisplayName(getClient().getUser()));
+					m.setFromName(getClient().getUser().getDisplayName());
 					if (!process(
 							() -> getChat().isShowDashboardChat()
 							, r -> {

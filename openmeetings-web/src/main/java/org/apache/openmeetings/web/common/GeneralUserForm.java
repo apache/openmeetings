@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isDisplayNameEditable;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -100,6 +101,7 @@ public class GeneralUserForm extends Form<User> {
 				}));
 		add(new TextField<String>("firstname"));
 		add(new TextField<String>("lastname"));
+		add(new TextField<String>("displayName").setEnabled(isAdminForm || isDisplayNameEditable()));
 		add(new DropDownChoice<>("timeZoneId", AVAILABLE_TIMEZONES));
 		add(new LanguageDropDown("languageId"));
 		add(new TextField<String>("address.phone"));

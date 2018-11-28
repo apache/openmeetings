@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.core.util;
 
-import static org.apache.openmeetings.db.util.FormatHelper.getDisplayName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 
 import java.io.IOException;
@@ -72,7 +71,7 @@ public class WebSocketHelper {
 		if (m.getToUser() != null) {
 			User u = curUserId == m.getToUser().getId() ? m.getFromUser() : m.getToUser();
 			scope = ID_USER_PREFIX + u.getId();
-			scopeName = getDisplayName(u);
+			scopeName = u.getDisplayName();
 		} else if (m.getToRoom() != null) {
 			scope = ID_ROOM_PREFIX + m.getToRoom().getId();
 			o.put("needModeration", m.isNeedModeration());
@@ -93,7 +92,7 @@ public class WebSocketHelper {
 			JSONObject from = new JSONObject()
 					.put("id", m.getFromUser().getId())
 					.put("displayName", m.getFromName())
-					.put("name", getDisplayName(m.getFromUser()));
+					.put("name", m.getFromUser().getDisplayName());
 			if (uFmt != null) {
 				uFmt.accept(from, m.getFromUser());
 			}
