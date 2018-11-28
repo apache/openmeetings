@@ -20,6 +20,7 @@ package org.apache.openmeetings.db.entity.user;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getSipContext;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
+import static org.apache.wicket.util.string.Strings.escapeMarkup;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -56,10 +57,13 @@ import org.apache.openjpa.persistence.FetchGroup;
 import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.LoadFetchGroup;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
+import org.apache.openmeetings.db.entity.label.OmLanguage;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.crypt.MD5;
+import org.apache.wicket.util.string.Strings;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -193,6 +197,10 @@ public class User extends HistoricalEntity {
 	@Column(name = "lastname")
 	@Element(data = true, required = false)
 	private String lastname;
+
+	@Column(name = "displayName")
+	@Element(data = true, required = false)
+	private String displayName;
 
 	@Column(name = "login")
 	@Element(data = true, required = false)
@@ -358,6 +366,17 @@ public class User extends HistoricalEntity {
 
 	public User setLastname(String lastname) {
 		this.lastname = lastname;
+		return this;
+	}
+
+	public String getDisplayName() {
+		return Strings.isEmpty(displayName) ? generateDisplayName() : displayName;
+	}
+
+	public User setDisplayName(String displayName) {
+		if (!Strings.isEmpty(displayName)) {
+			this.displayName = escapeMarkup(displayName).toString();
+		}
 		return this;
 	}
 
@@ -586,5 +605,21 @@ public class User extends HistoricalEntity {
 				+ ", languageId=" + languageId + ", address=" + address
 				+ ", externalId=" + externalId + ", externalType=" + externalType
 				+ ", type=" + type + "]";
+	}
+
+	private String generateDisplayName() {
+		StringBuilder sb = new StringBuilder();
+		String delim = "";
+		OmLanguage l = LabelDao.getLanguage(languageId);
+		String first = l.isRtl() ? getLastname() : getFirstname();
+		String last = l.isRtl() ? getFirstname() : getLastname();
+		if (!Strings.isEmpty(first)) {
+			sb.append(first);
+			delim = " ";
+		}
+		if (!Strings.isEmpty(last)) {
+			sb.append(delim).append(last);
+		}
+		return escapeMarkup(sb).toString();
 	}
 }

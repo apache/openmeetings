@@ -18,6 +18,10 @@
  */
 package org.apache.openmeetings.db.dao.label;
 
+import static java.util.Locale.ENGLISH;
+import static java.util.Locale.ROOT;
+import static java.util.ResourceBundle.Control.FORMAT_PROPERTIES;
+import static java.util.ResourceBundle.Control.getControl;
 import static org.apache.openmeetings.db.util.ApplicationHelper._ensureApplication;
 import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
@@ -39,9 +43,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
+import org.apache.openmeetings.db.entity.label.OmLanguage;
 import org.apache.openmeetings.db.entity.label.StringLabel;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.XmlExport;
@@ -64,9 +70,9 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static final Logger log = Red5LoggerFactory.getLogger(LabelDao.class, getWebAppRootKey());
 	private static final String ENTRY_ELEMENT = "entry";
 	private static final String KEY_ATTR = "key";
-	public static final String APP_RESOURCES_EN = "Application.properties.xml";
-	public static final String APP_RESOURCES = "Application_%s.properties.xml";
-	private static final LinkedHashMap<Long, Locale> languages = new LinkedHashMap<>();
+	public static final String APP_RESOURCES_PREFIX = "Application";
+	public static final String APP_RESOURCES_SUFFIX = ".properties.xml";
+	private static final LinkedHashMap<Long, OmLanguage> languages = new LinkedHashMap<>();
 	private static final ConcurrentHashMap<Locale, List<StringLabel>> labelCache = new ConcurrentHashMap<>();
 	private static final Set<String> keys = new HashSet<>();
 	private static Class<?> appClass = null;
@@ -74,18 +80,18 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static void storeLanguages() throws Exception {
 		Document d = XmlExport.createDocument();
 		Element r = XmlExport.createRoot(d, "language");
-		for (Map.Entry<Long, Locale> e : languages.entrySet()) {
-			r.addElement("lang").addAttribute("id", "" + e.getKey()).addAttribute("code", e.getValue().toLanguageTag());
+		for (Map.Entry<Long, OmLanguage> e : languages.entrySet()) {
+			r.addElement("lang").addAttribute("id", "" + e.getKey()).addAttribute("code", e.getValue().getLocale().toLanguageTag());
 		}
 		XmlExport.toXml(getLangFile(), d);
 	}
 
 	public static void add(Locale l) throws Exception {
 		long id = 0L;
-		for (Map.Entry<Long, Locale> e : languages.entrySet()) {
+		for (Map.Entry<Long, OmLanguage> e : languages.entrySet()) {
 			id = e.getKey();
 		}
-		languages.put(id + 1, l);
+		languages.put(id + 1, new OmLanguage(l));
 		storeLanguages();
 		labelCache.put(l, new ArrayList<StringLabel>());
 	}
@@ -120,7 +126,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 				if (id == 3L) {
 					continue;
 				}
-				languages.put(id, Locale.forLanguageTag(code));
+				languages.put(id, new OmLanguage(Locale.forLanguageTag(code)));
 			}
 		} catch (Exception e) {
 			log.error("Error while building language map");
@@ -128,11 +134,8 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	public static String getLabelFileName(Locale l) {
-		String name = APP_RESOURCES_EN;
-		if (!Locale.ENGLISH.equals(l)) {
-			name = String.format(APP_RESOURCES, l.toLanguageTag().replace('-', '_'));
-		}
-		return name;
+		String name = getControl(FORMAT_PROPERTIES).toBundleName(APP_RESOURCES_PREFIX, ENGLISH.equals(l) ? ROOT : l);
+		return String.format("%s%s", name, APP_RESOURCES_SUFFIX);
 	}
 
 	private static void storeLabels(Locale l) throws Exception {
@@ -209,14 +212,19 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		throw UNSUPPORTED;
 	}
 
+	public static OmLanguage getLanguage(Long id) {
+		OmLanguage l = id == null ? null : languages.get(id);
+		return l == null ? languages.get(1L) : l;
+	}
+
 	public static Locale getLocale(Long id) {
-		return languages.get(id);
+		return getLanguage(id).getLocale();
 	}
 
 	public static Long getLanguage(Locale loc, Long def) {
 		if (loc != null) {
-			for (Map.Entry<Long, Locale> e : languages.entrySet()) {
-				if (loc.equals(e.getValue())) {
+			for (Map.Entry<Long, OmLanguage> e : languages.entrySet()) {
+				if (loc.equals(e.getValue().getLocale())) {
 					return e.getKey();
 				}
 			}
@@ -225,7 +233,8 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	public static Set<Map.Entry<Long, Locale>> getLanguages() {
-		return languages.entrySet();
+		return languages.entrySet().stream()
+				.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().getLocale())).entrySet();
 	}
 
 	public static List<StringLabel> get(Locale l, final String search, long start, long count, final SortParam<String> sort) {
@@ -280,8 +289,8 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	public static void delete(Locale l) {
-		for (Map.Entry<Long, Locale> e : languages.entrySet()) {
-			if (e.getValue().equals(l)) {
+		for (Map.Entry<Long, OmLanguage> e : languages.entrySet()) {
+			if (e.getValue().getLocale().equals(l)) {
 				languages.remove(e.getKey());
 				break;
 			}

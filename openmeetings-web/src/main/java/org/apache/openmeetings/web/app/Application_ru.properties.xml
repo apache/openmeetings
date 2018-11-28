@@ -988,4 +988,5 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.clone"><![CDATA[Клонировать]]></entry>
 	<entry key="messages.btn.reply"><![CDATA[Ответить]]></entry>
 	<entry key="messages.subject.re"><![CDATA[На:]]></entry>
+	<entry key="user.label.displayName"><![CDATA[Отображаемое имя]]></entry>
 </properties>
