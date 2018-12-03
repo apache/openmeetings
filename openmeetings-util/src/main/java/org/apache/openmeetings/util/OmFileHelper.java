@@ -21,6 +21,7 @@ package org.apache.openmeetings.util;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
 
@@ -329,6 +330,6 @@ public class OmFileHelper {
 
 	public static String getFileExt(String name) {
 		int dotidx = name.lastIndexOf('.');
-		return dotidx < 0 ? "" : name.substring(dotidx + 1).toLowerCase();
+		return dotidx < 0 ? "" : name.substring(dotidx + 1).toLowerCase(Locale.ROOT);
 	}
 }

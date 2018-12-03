@@ -36,6 +36,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.directory.api.ldap.model.cursor.CursorException;
@@ -181,7 +182,7 @@ public class LdapLoginManager {
 
 		User u = null;
 		try (LdapWorker w = new LdapWorker(domainId)) {
-			String login = w.options.useLowerCase ? _login.toLowerCase() : _login;
+			String login = w.options.useLowerCase ? _login.toLowerCase(Locale.ROOT) : _login;
 
 			boolean authenticated = true;
 			Dn userDn = null;
@@ -355,7 +356,7 @@ public class LdapLoginManager {
 					login = login + "@" + ldapCfg.getDomain();
 				}
 				if (options.useLowerCase) {
-					login = login.toLowerCase();
+					login = login.toLowerCase(Locale.ROOT);
 				}
 				u.setLogin(login);
 				u.setShowContactDataToContacts(true);

@@ -21,7 +21,6 @@ package org.apache.openmeetings.db.util;
 import static java.text.DateFormat.SHORT;
 import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
-import static org.apache.wicket.util.string.Strings.escapeMarkup;
 
 import java.util.regex.Pattern;
 
@@ -72,21 +71,6 @@ public class FormatHelper {
 
 	public static String formatUser(User u) {
 		return formatUser(u, false);
-	}
-
-	public static String getDisplayName(User u) {
-		StringBuilder sb = new StringBuilder();
-		String delim = "";
-		if (u != null) {
-			if (!Strings.isEmpty(u.getFirstname())) {
-				sb.append(u.getFirstname());
-				delim = " ";
-			}
-			if (!Strings.isEmpty(u.getLastname())) {
-				sb.append(delim).append(u.getLastname());
-			}
-		}
-		return escapeMarkup(sb).toString();
 	}
 
 	public static String formatUser(User u, boolean isHTMLEscape) {

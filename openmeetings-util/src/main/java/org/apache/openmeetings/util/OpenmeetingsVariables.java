@@ -98,6 +98,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_FNAME_MIN_LENGTH = "user.fname.minimum.length";
 	public static final String CONFIG_LNAME_MIN_LENGTH = "user.lname.minimum.length";
 	public static final String CONFIG_CHAT_SEND_ON_ENTER = "chat.send.on.enter";
+	public static final String CONFIG_DISPLAY_NAME_EDITABLE = "display.name.editable";
 
 	public static final String HEADER_XFRAME_SAMEORIGIN = "SAMEORIGIN";
 	public static final String HEADER_CSP_SELF = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:;";
@@ -150,6 +151,7 @@ public class OpenmeetingsVariables {
 	private static boolean allowRegisterOauth = false;
 	private static boolean sendVerificationEmail = false;
 	private static boolean sendRegisterEmail = false;
+	private static boolean displayNameEditable = false;
 
 	private OpenmeetingsVariables() {}
 
@@ -387,5 +389,13 @@ public class OpenmeetingsVariables {
 
 	public static void setSendRegisterEmail(boolean send) {
 		sendRegisterEmail = send;
+	}
+
+	public static boolean isDisplayNameEditable() {
+		return displayNameEditable;
+	}
+
+	public static void setDisplayNameEditable(boolean editable) {
+		displayNameEditable = editable;
 	}
 }
