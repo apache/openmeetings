@@ -147,7 +147,7 @@
 		<developer>
 			<id>sebawagner</id>
 			<name>Sebastian Wagner</name>
-			<email>seba.wagner@gmail.com</email>
+			<email>mailto:seba.wagner@gmail.com</email>
 			<url>https://twitter.com/#!/dead_lock</url>
 			<roles>
 				<role>architect</role>
@@ -158,7 +158,7 @@
 		<developer>
 			<id>solomax</id>
 			<name>Maxim Solodovnik</name>
-			<email>solomax666@gmail.com</email>
+			<email>mailto:solomax666@gmail.com</email>
 			<organization>Unipro</organization>
 			<organizationUrl>http://unipro.ru</organizationUrl>
 			<roles>
@@ -171,7 +171,7 @@
 		<developer>
 			<id>vdegtyarev</id>
 			<name>Vasiliy Degtyarev</name>
-			<email>vdegtyarev1964@gmail.com</email>
+			<email>mailto:vdegtyarev1964@gmail.com</email>
 			<organization>Unipro</organization>
 			<organizationUrl>http://unipro.ru</organizationUrl>
 			<roles>
@@ -183,7 +183,7 @@
 		<developer>
 			<id>iarkh</id>
 			<name>Irina Arkhipets</name>
-			<email>Irina.Arkhipets@gmail.com</email>
+			<email>mailto:Irina.Arkhipets@gmail.com</email>
 			<organization>Unipro</organization>
 			<organizationUrl>http://unipro.ru</organizationUrl>
 			<roles>
@@ -194,7 +194,7 @@
 		<developer>
 			<id>susheeljalali</id>
 			<name>Susheel Jalali</name>
-			<email>Susheel.Jalali@Coscend.com</email>
+			<email>mailto:Susheel.Jalali@Coscend.com</email>
 			<organization>Coscend</organization>
 			<organizationUrl>http://www.Coscend.com</organizationUrl>
 			<roles>
@@ -215,7 +215,7 @@
 		<developer>
 			<id>aaf</id>
 			<name>Alexei Fedotov</name>
-			<email>alexei.fedotov@gmail.com</email>
+			<email>mailto:alexei.fedotov@gmail.com</email>
 			<organizationUrl>http://dataved.ru</organizationUrl>
 			<roles>
 				<role>support</role>
@@ -258,7 +258,7 @@
 		<developer>
 			<id>albus</id>
 			<name>Alvaro Bustos</name>
-			<email>zurcamos@gmail.com</email>
+			<email>mailto:zurcamos@gmail.com</email>
 			<roles>
 				<role>pmc</role>
 			</roles>
@@ -292,7 +292,7 @@
 		<developer>
 			<id>coscend</id>
 			<name>Hemant Sabat</name>
-			<email>om.insights@coscend.com</email>
+			<email>mailto:om.insights@coscend.com</email>
 			<organization>Coscend</organization>
 			<organizationUrl>http://www.Coscend.com/</organizationUrl>
 			<roles>
@@ -319,9 +319,9 @@
 	<mailingLists>
 		<mailingList>
 			<name>User List</name>
-			<post>user@openmeetings.apache.org</post>
-			<subscribe>user-subscribe@openmeetings.apache.org</subscribe>
-			<unsubscribe>user-unsubscribe@openmeetings.apache.org</unsubscribe>
+			<post>mailto:user@openmeetings.apache.org</post>
+			<subscribe>mailto:user-subscribe@openmeetings.apache.org</subscribe>
+			<unsubscribe>mailto:user-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user</archive>
 			<otherArchives>
 				<otherArchive>http://openmeetings.markmail.org</otherArchive>
@@ -329,9 +329,9 @@
 		</mailingList>
 		<mailingList>
 			<name>Lista de usuarios en español</name>
-			<post>user-espanol@openmeetings.apache.org</post>
-			<subscribe>user-espanol-subscribe@openmeetings.apache.org</subscribe>
-			<unsubscribe>user-espanol-unsubscribe@openmeetings.apache.org</unsubscribe>
+			<post>mailto:user-espanol@openmeetings.apache.org</post>
+			<subscribe>mailto:user-espanol-subscribe@openmeetings.apache.org</subscribe>
+			<unsubscribe>mailto:user-espanol-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user-espanol</archive>
 			<otherArchives>
 				<otherArchive>http://openmeetings.markmail.org</otherArchive>
@@ -339,9 +339,9 @@
 		</mailingList>
 		<mailingList>
 			<name>Русский список рассылки</name>
-			<post>user-russian@openmeetings.apache.org</post>
-			<subscribe>user-russian-subscribe@openmeetings.apache.org</subscribe>
-			<unsubscribe>user-russian-unsubscribe@openmeetings.apache.org</unsubscribe>
+			<post>mailto:user-russian@openmeetings.apache.org</post>
+			<subscribe>mailto:user-russian-subscribe@openmeetings.apache.org</subscribe>
+			<unsubscribe>mailto:user-russian-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user-russian</archive>
 			<otherArchives>
 				<otherArchive>http://openmeetings.markmail.org</otherArchive>
@@ -349,9 +349,9 @@
 		</mailingList>
 		<mailingList>
 			<name>Development List</name>
-			<post>dev@openmeetings.apache.org</post>
-			<subscribe>dev-subscribe@openmeetings.apache.org</subscribe>
-			<unsubscribe>dev-unsubscribe@openmeetings.apache.org</unsubscribe>
+			<post>mailto:dev@openmeetings.apache.org</post>
+			<subscribe>mailto:dev-subscribe@openmeetings.apache.org</subscribe>
+			<unsubscribe>mailto:dev-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-dev</archive>
 			<otherArchives>
 				<otherArchive>http://openmeetings.markmail.org</otherArchive>
@@ -359,13 +359,13 @@
 		</mailingList>
 		<mailingList>
 			<name>Commits List</name>
-			<subscribe>commits-subscribe@openmeetings.apache.org</subscribe>
-			<unsubscribe>commits-unsubscribe@openmeetings.apache.org</unsubscribe>
+			<subscribe>mailto:commits-subscribe@openmeetings.apache.org</subscribe>
+			<unsubscribe>mailto:commits-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-commits/</archive>
 		</mailingList>
 		<mailingList>
 			<name>Security List</name>
-			<post>security@openmeetings.apache.org</post>
+			<post>mailto:security@openmeetings.apache.org</post>
 		</mailingList>
 	</mailingLists>
 	<repositories>
