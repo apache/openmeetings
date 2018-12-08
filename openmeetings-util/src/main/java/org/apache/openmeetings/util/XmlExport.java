@@ -22,6 +22,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -82,7 +83,7 @@ public class XmlExport {
 		return document.addElement(root);
 	}
 
-	public static void toXml(Writer out, Document doc) throws Exception {
+	public static void toXml(Writer out, Document doc) throws IOException {
 		OutputFormat outformat = OutputFormat.createPrettyPrint();
 		outformat.setIndentSize(1);
 		outformat.setIndent("\t");
@@ -98,7 +99,7 @@ public class XmlExport {
 		toXml(new FileOutputStream(f), doc);
 	}
 
-	public static void toXml(OutputStream out, Document doc) throws Exception {
-		toXml(new OutputStreamWriter(out, "UTF8"), doc);
+	public static void toXml(OutputStream out, Document doc) throws IOException {
+		toXml(new OutputStreamWriter(out, UTF_8), doc);
 	}
 }

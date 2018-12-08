@@ -120,7 +120,6 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 			script.append(getGaCode()).append("');").append(isMainPage() ? "initHash()" : "init()").append(';');
 			response.render(OnDomReadyHeaderItem.forScript(script));
 		}
-		response.render(CssHeaderItem.forUrl("css/custom.css"));
 	}
 
 	@Override
