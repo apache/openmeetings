@@ -39,7 +39,7 @@
 		<jdk.version>1.8</jdk.version>
 		<!-- plugin versions -->
 		<maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
-		<maven-surefire-plugin.version>3.0.0-M1</maven-surefire-plugin.version>
+		<maven-surefire-plugin.version>3.0.0-M2</maven-surefire-plugin.version>
 		<maven-site-plugin.version>3.7.1</maven-site-plugin.version>
 		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
@@ -147,7 +147,7 @@
 		<developer>
 			<id>sebawagner</id>
 			<name>Sebastian Wagner</name>
-			<email>mailto:seba.wagner@gmail.com</email>
+			<email>seba.wagner@gmail.com</email>
 			<url>https://twitter.com/#!/dead_lock</url>
 			<roles>
 				<role>architect</role>
@@ -158,7 +158,7 @@
 		<developer>
 			<id>solomax</id>
 			<name>Maxim Solodovnik</name>
-			<email>mailto:solomax666@gmail.com</email>
+			<email>solomax666@gmail.com</email>
 			<organization>Unipro</organization>
 			<organizationUrl>http://unipro.ru</organizationUrl>
 			<roles>
