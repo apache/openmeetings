@@ -573,10 +573,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1579"><![CDATA[Demander l'URL du jeton]]></entry>
 	<entry key="1580"><![CDATA[Demander l'URL d'infos]]></entry>
 	<entry key="1581"><![CDATA[Configuration d'OAuth2]]></entry>
-	<entry key="1582"><![CDATA[Nom du paramètre de l'identifiant]]></entry>
-	<entry key="1583"><![CDATA[Nom du paramètre du courriel]]></entry>
-	<entry key="1584"><![CDATA[Nom du paramètre du prénom]]></entry>
-	<entry key="1585"><![CDATA[Nom du paramètre du nom]]></entry>
 	<entry key="1586"><![CDATA[Demander les attributs du jeton]]></entry>
 	<entry key="1587"><![CDATA[Rediriger l'URI]]></entry>
 	<entry key="1588"><![CDATA[Vous pouvez entrer l'adresse du courriel au format: prenom1 nom1 <courriel1> ou "prenom2 nom2" <courriel2> ou 'prenom3 nom3' <courriel3> ou courriel]]></entry>
@@ -989,4 +985,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="messages.btn.reply"><![CDATA[Reply]]></entry>
 	<entry key="messages.subject.re"><![CDATA[Re:]]></entry>
 	<entry key="user.label.displayName"><![CDATA[Display name]]></entry>
+	<entry key="admin.oauth.req.token.method"><![CDATA[Request token method]]></entry>
+	<entry key="admin.oauth.req.info.method"><![CDATA[Request info method]]></entry>
+	<entry key="admin.oauth.user.mapping"><![CDATA[User mapping]]></entry>
+	<entry key="admin.oauth.attr.om"><![CDATA[OM User attribute]]></entry>
+	<entry key="admin.oauth.attr.oauth"><![CDATA[OAuth User attribute]]></entry>
 </properties>

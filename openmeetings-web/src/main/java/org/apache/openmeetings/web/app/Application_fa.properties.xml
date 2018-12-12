@@ -573,10 +573,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1579"><![CDATA[رمز درخواست URL]]></entry>
 	<entry key="1580"><![CDATA[اطلاعات درخواست URL]]></entry>
 	<entry key="1581"><![CDATA[پیکربندی OAuth2]]></entry>
-	<entry key="1582"><![CDATA[وارد کردن نام پارامتر]]></entry>
-	<entry key="1583"><![CDATA[نام پارامتر پست الکترونیک]]></entry>
-	<entry key="1584"><![CDATA[پارامتر نام]]></entry>
-	<entry key="1585"><![CDATA[پارامتر نام خانوادگی]]></entry>
 	<entry key="1586"><![CDATA[درخواست ویژگی های رمز]]></entry>
 	<entry key="1587"><![CDATA[تغییر مسیر uri]]></entry>
 	<entry key="1588"><![CDATA[شما می توانید آدرس پست الکترونیک را به این شکل وارد کنید: firstname1 lastname1 <email1> or "firstname2 lastname2" <email2> or 'firstname3 lastname3' <email3> or email]]></entry>
@@ -981,4 +977,9 @@ target="_blank">Custom Crypt Mechanism</a>
 	<entry key="messages.btn.reply"><![CDATA[Reply]]></entry>
 	<entry key="messages.subject.re"><![CDATA[Re:]]></entry>
 	<entry key="user.label.displayName"><![CDATA[Display name]]></entry>
+	<entry key="admin.oauth.req.token.method"><![CDATA[Request token method]]></entry>
+	<entry key="admin.oauth.req.info.method"><![CDATA[Request info method]]></entry>
+	<entry key="admin.oauth.user.mapping"><![CDATA[User mapping]]></entry>
+	<entry key="admin.oauth.attr.om"><![CDATA[OM User attribute]]></entry>
+	<entry key="admin.oauth.attr.oauth"><![CDATA[OAuth User attribute]]></entry>
 </properties>

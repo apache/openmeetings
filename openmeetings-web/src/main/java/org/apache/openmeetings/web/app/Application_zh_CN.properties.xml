@@ -573,10 +573,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1579"><![CDATA[请求令牌网址]]></entry>
 	<entry key="1580"><![CDATA[请求信息网址]]></entry>
 	<entry key="1581"><![CDATA[OAuth2配置]]></entry>
-	<entry key="1582"><![CDATA[登录参数名称]]></entry>
-	<entry key="1583"><![CDATA[电子邮件参数名称]]></entry>
-	<entry key="1584"><![CDATA[名参数名称]]></entry>
-	<entry key="1585"><![CDATA[姓参数名称]]></entry>
 	<entry key="1586"><![CDATA[请求令牌属性]]></entry>
 	<entry key="1587"><![CDATA[重定向URL]]></entry>
 	<entry key="1588"><![CDATA[您可以按照此格式中输入邮件地址: 名1 姓1 <email1> 或 "名2 姓2 "  <email2> 或'名3 姓3 ' <email3> 或 email]]></entry>
@@ -989,4 +985,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="messages.btn.reply"><![CDATA[Reply]]></entry>
 	<entry key="messages.subject.re"><![CDATA[Re:]]></entry>
 	<entry key="user.label.displayName"><![CDATA[Display name]]></entry>
+	<entry key="admin.oauth.req.token.method"><![CDATA[Request token method]]></entry>
+	<entry key="admin.oauth.req.info.method"><![CDATA[Request info method]]></entry>
+	<entry key="admin.oauth.user.mapping"><![CDATA[User mapping]]></entry>
+	<entry key="admin.oauth.attr.om"><![CDATA[OM User attribute]]></entry>
+	<entry key="admin.oauth.attr.oauth"><![CDATA[OAuth User attribute]]></entry>
 </properties>

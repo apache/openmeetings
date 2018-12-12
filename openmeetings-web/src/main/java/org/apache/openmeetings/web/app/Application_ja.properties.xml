@@ -573,10 +573,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1579"><![CDATA[リクエストトークンURL]]></entry>
 	<entry key="1580"><![CDATA[リクエスト情報URL]]></entry>
 	<entry key="1581"><![CDATA[OAuth2設定]]></entry>
-	<entry key="1582"><![CDATA[ログイン名]]></entry>
-	<entry key="1583"><![CDATA[電子メール]]></entry>
-	<entry key="1584"><![CDATA[姓]]></entry>
-	<entry key="1585"><![CDATA[名]]></entry>
 	<entry key="1586"><![CDATA[トークン属性値]]></entry>
 	<entry key="1587"><![CDATA[リダイレクトURI]]></entry>
 	<entry key="1588"><![CDATA[電子メール・アドレスを入力します: firstname1 lastname1 <email1>, "firstname2 lastname2" <email2>, 'firstname3 lastname3' <email3>, email]]></entry>
@@ -989,4 +985,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="messages.btn.reply"><![CDATA[Reply]]></entry>
 	<entry key="messages.subject.re"><![CDATA[Re:]]></entry>
 	<entry key="user.label.displayName"><![CDATA[Display name]]></entry>
+	<entry key="admin.oauth.req.token.method"><![CDATA[Request token method]]></entry>
+	<entry key="admin.oauth.req.info.method"><![CDATA[Request info method]]></entry>
+	<entry key="admin.oauth.user.mapping"><![CDATA[User mapping]]></entry>
+	<entry key="admin.oauth.attr.om"><![CDATA[OM User attribute]]></entry>
+	<entry key="admin.oauth.attr.oauth"><![CDATA[OAuth User attribute]]></entry>
 </properties>

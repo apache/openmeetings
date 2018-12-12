@@ -18,13 +18,21 @@
  */
 package org.apache.openmeetings.db.entity.server;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -36,10 +44,10 @@ import org.simpleframework.xml.Root;
 @Entity
 @Table(name = "oauth_server")
 @NamedQueries({
-		@NamedQuery(name = "getEnabledOAuthServers", query = "select s from OAuthServer as s where s.enabled = true and s.deleted = false"),
-		@NamedQuery(name = "getOAuthServerById", query = "select s from OAuthServer as s where s.id = :id"),
-		@NamedQuery(name = "getAllOAuthServers", query = "SELECT s FROM OAuthServer s WHERE s.deleted = false ORDER BY s.id"),
-		@NamedQuery(name = "countOAuthServers", query = "select count(s) from OAuthServer s WHERE s.deleted = false") })
+	@NamedQuery(name = "getEnabledOAuthServers", query = "select s from OAuthServer as s where s.enabled = true and s.deleted = false"),
+	@NamedQuery(name = "getOAuthServerById", query = "select s from OAuthServer as s where s.id = :id"),
+	@NamedQuery(name = "getAllOAuthServers", query = "SELECT s FROM OAuthServer s WHERE s.deleted = false ORDER BY s.id"),
+	@NamedQuery(name = "countOAuthServers", query = "select count(s) from OAuthServer s WHERE s.deleted = false") })
 @Root
 public class OAuthServer extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
@@ -70,42 +78,38 @@ public class OAuthServer extends HistoricalEntity {
 	@Element(data = true)
 	private String clientSecret;
 
-	@Column(name = "request_key_url")
+	@Column(name = "key_url")
 	@Element(data = true)
 	private String requestKeyUrl;
 
-	@Column(name = "request_token_url")
+	@Column(name = "token_url")
 	@Element(data = true)
 	private String requestTokenUrl;
 
-	@Column(name = "request_token_attributes")
+	@Column(name = "token_attributes")
 	@Element(data = true)
 	private String requestTokenAttributes;
 
-	@Column(name = "request_method")
+	@Column(name = "token_method")
 	@Element(data = true)
 	@Enumerated(EnumType.STRING)
-	private RequestMethod requestTokenMethod = RequestMethod.POST;
+	private RequestTokenMethod requestTokenMethod = RequestTokenMethod.POST;
 
-	@Column(name = "request_info_url")
+	@Column(name = "info_url")
 	@Element(data = true)
 	private String requestInfoUrl;
 
-	@Column(name = "login_param_name")
-	@Element(data = true)
-	private String loginParamName;
-
-	@Column(name = "email_param_name")
+	@Column(name = "info_method")
 	@Element(data = true, required = false)
-	private String emailParamName;
+	@Enumerated(EnumType.STRING)
+	private RequestInfoMethod requestInfoMethod = RequestInfoMethod.GET;
 
-	@Column(name = "firstname_param_name")
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Element(data = true, required = false)
-	private String firstnameParamName;
-
-	@Column(name = "lastname_param_name")
-	@Element(data = true, required = false)
-	private String lastnameParamName;
+	@MapKeyColumn(name = "name")
+	@Column(name = "value")
+	@CollectionTable(name = "oauth_mapping", joinColumns = @JoinColumn(name = "oauth_id"))
+	private Map<String, String> mapping = new LinkedHashMap<>();
 
 	@Override
 	public Long getId() {
@@ -121,136 +125,134 @@ public class OAuthServer extends HistoricalEntity {
 		return name;
 	}
 
-	public void setName(String name) {
+	public OAuthServer setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	public String getIconUrl() {
 		return iconUrl;
 	}
 
-	public void setIconUrl(String iconUrl) {
+	public OAuthServer setIconUrl(String iconUrl) {
 		this.iconUrl = iconUrl;
+		return this;
 	}
 
 	public boolean isEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public OAuthServer setEnabled(boolean enabled) {
 		this.enabled = enabled;
+		return this;
 	}
 
 	public String getClientId() {
 		return clientId;
 	}
 
-	public void setClientId(String clientId) {
+	public OAuthServer setClientId(String clientId) {
 		this.clientId = clientId;
+		return this;
 	}
 
 	public String getClientSecret() {
 		return clientSecret;
 	}
 
-	public void setClientSecret(String clientSecret) {
+	public OAuthServer setClientSecret(String clientSecret) {
 		this.clientSecret = clientSecret;
+		return this;
 	}
 
 	public String getRequestKeyUrl() {
 		return requestKeyUrl;
 	}
 
-	public void setRequestKeyUrl(String requestKeyUrl) {
+	public OAuthServer setRequestKeyUrl(String requestKeyUrl) {
 		this.requestKeyUrl = requestKeyUrl;
+		return this;
 	}
 
 	public String getRequestTokenUrl() {
 		return requestTokenUrl;
 	}
 
-	public void setRequestTokenUrl(String requestTokenUrl) {
+	public OAuthServer setRequestTokenUrl(String requestTokenUrl) {
 		this.requestTokenUrl = requestTokenUrl;
+		return this;
 	}
 
 	public String getRequestTokenAttributes() {
 		return requestTokenAttributes;
 	}
 
-	public void setRequestTokenAttributes(String requestTokenAttributes) {
+	public OAuthServer setRequestTokenAttributes(String requestTokenAttributes) {
 		this.requestTokenAttributes = requestTokenAttributes;
+		return this;
 	}
 
-	public RequestMethod getRequestTokenMethod() {
+	public RequestTokenMethod getRequestTokenMethod() {
 		return requestTokenMethod;
 	}
 
-	public void setRequestTokenMethod(RequestMethod requestTokenMethod) {
-		this.requestTokenMethod = requestTokenMethod;
+	public OAuthServer setRequestTokenMethod(RequestTokenMethod method) {
+		this.requestTokenMethod = method;
+		return this;
 	}
 
 	public String getRequestInfoUrl() {
 		return requestInfoUrl;
 	}
 
-	public void setRequestInfoUrl(String requestInfoUrl) {
+	public OAuthServer setRequestInfoUrl(String requestInfoUrl) {
 		this.requestInfoUrl = requestInfoUrl;
+		return this;
 	}
 
-	public String getLoginParamName() {
-		return loginParamName;
+	public RequestInfoMethod getRequestInfoMethod() {
+		return requestInfoMethod;
 	}
 
-	public void setLoginParamName(String loginParamName) {
-		this.loginParamName = loginParamName;
+	public OAuthServer setRequestInfoMethod(RequestInfoMethod method) {
+		this.requestInfoMethod = method;
+		return this;
 	}
 
-	public String getEmailParamName() {
-		return emailParamName;
+	public Map<String, String> getMapping() {
+		return mapping;
 	}
 
-	public void setEmailParamName(String emailParamName) {
-		this.emailParamName = emailParamName;
-	}
-
-	public String getFirstnameParamName() {
-		return firstnameParamName;
-	}
-
-	public void setFirstnameParamName(String firstnameParamName) {
-		this.firstnameParamName = firstnameParamName;
-	}
-
-	public String getLastnameParamName() {
-		return lastnameParamName;
-	}
-
-	public void setLastnameParamName(String lastnameParamName) {
-		this.lastnameParamName = lastnameParamName;
+	public OAuthServer addMapping(String name, String value) {
+		mapping.put(name, value);
+		return this;
 	}
 
 	@Override
 	public String toString() {
-		return "OAuthServer [id=" + id + ", name=" + name + ", iconUrl=" + iconUrl + ", enabled=" + enabled
-				+ ", clientId=" + clientId + ", clientSecret=" + clientSecret + ", requestKeyUrl=" + requestKeyUrl
-				+ ", requestTokenUrl=" + requestTokenUrl + ", requestTokenAttributes=" + requestTokenAttributes
-				+ ", requestTokenMethod=" + requestTokenMethod + ", requestInfoUrl=" + requestInfoUrl
-				+ ", loginParamName=" + loginParamName + ", emailParamName=" + emailParamName + ", firstnameParamName="
-				+ firstnameParamName + ", lastnameParamName=" + lastnameParamName + ", deleted=" + isDeleted() + "]";
+		return new StringBuilder()
+				.append("OAuthServer [id=").append(id)
+				.append(", name=").append(name)
+				.append(", iconUrl=").append(iconUrl)
+				.append(", enabled=").append(enabled)
+				.append(", clientId=").append(clientId)
+				.append(", clientSecret=").append(clientSecret)
+				.append(", requestKeyUrl=").append(requestKeyUrl)
+				.append(", requestTokenUrl=").append(requestTokenUrl)
+				.append(", requestTokenAttributes=").append(requestTokenAttributes)
+				.append(", requestTokenMethod=").append(requestTokenMethod)
+				.append(", requestInfoUrl=").append(requestInfoUrl)
+				.append(", mapping=").append(mapping)
+				.append(", isDeleted()=").append(isDeleted())
+				.append("]").toString();
 	}
 
-	public enum RequestMethod {
-		POST("post"), GET("get");
+	public enum RequestTokenMethod {
+		POST, GET;
+	}
 
-		private String name;
-
-		private RequestMethod(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String toString() {
-			return name;
-		}
+	public enum RequestInfoMethod {
+		POST, GET, HEADER;
 	}
 }
