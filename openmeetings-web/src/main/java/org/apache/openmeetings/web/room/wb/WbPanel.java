@@ -49,6 +49,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
@@ -144,7 +145,12 @@ public class WbPanel extends AbstractWbPanel {
 		if (rp.getRoom().isHidden(RoomElement.Whiteboard)) {
 			setVisible(false);
 		} else {
-			add(new ListView<String>("clipart", Arrays.asList(OmFileHelper.getPublicClipartsDir().list())) {
+			add(new ListView<String>("clipart"
+					, Arrays.asList(OmFileHelper.getPublicClipartsDir().list())
+						.stream()
+						.sorted()
+						.collect(Collectors.toList()))
+			{
 				private static final long serialVersionUID = 1L;
 
 				@Override
