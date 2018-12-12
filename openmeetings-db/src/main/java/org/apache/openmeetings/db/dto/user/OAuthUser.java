@@ -113,6 +113,11 @@ public class OAuthUser implements Serializable {
 						return jao;
 					}
 				}
+			} else if (o instanceof JSONObject) {
+				JSONObject jo = (JSONObject)o;
+				if (jo.has(prop)) {
+					return jo;
+				}
 			}
 		}
 		return new JSONObject();
