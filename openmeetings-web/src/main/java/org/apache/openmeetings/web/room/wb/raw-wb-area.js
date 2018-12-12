@@ -40,12 +40,12 @@ var DrawWbArea = function() {
 			}
 			return window.originalGetRotatedCornerCursor.call(this, corner, target, e);
 		};
-		fabric.Canvas.prototype._getActionFromCorner = function(target, corner, e) {
+		fabric.Canvas.prototype._getActionFromCorner = function(alreadySelected, corner, e) {
 			if (role === PRESENTER && 'tr' === corner) {
-				_performDelete([target]);
+				_performDelete();
 				return 'none';
 			}
-			return window.originalGetActionFromCorner.call(this, target, corner, e);
+			return window.originalGetActionFromCorner.call(this, alreadySelected, corner, e);
 		};
 	}
 
@@ -62,13 +62,13 @@ var DrawWbArea = function() {
 		}
 		return null;
 	}
-	function _performDelete(objects) {
+	function _performDelete() {
 		const wb = getActive().data()
 			, canvas = wb.getCanvas();
 		if (role !== PRESENTER || !canvas) {
 			return true;
 		}
-		const arr = [], objs = objects || canvas.getActiveObjects();
+		const arr = [], objs = canvas.getActiveObjects();
 		for (let i = 0; i < objs.length; ++i) {
 			arr.push({
 				uid: objs[i].uid
