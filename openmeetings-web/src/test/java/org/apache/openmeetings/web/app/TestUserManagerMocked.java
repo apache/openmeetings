@@ -29,8 +29,6 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.OAuthUser;
@@ -38,7 +36,6 @@ import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.manager.IClientManager;
-import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.SCryptImplementation;
@@ -53,17 +50,11 @@ import org.mockito.stubbing.Answer;
 @RunWith(MockitoJUnitRunner.class)
 public class TestUserManagerMocked {
 	@Mock
-	private SessiondataDao sessionDao;
-	@Mock
 	private GroupDao groupDao;
 	@Mock
 	private UserDao userDao;
 	@Mock
 	private EmailManager emailManager;
-	@Mock
-	private ScopeApplicationAdapter scopeAdapter;
-	@Mock
-	private IStreamClientManager streamClientManager;
 	@Mock
 	private IClientManager cm;
 	@InjectMocks
