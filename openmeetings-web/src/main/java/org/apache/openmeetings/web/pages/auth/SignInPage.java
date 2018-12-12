@@ -279,9 +279,10 @@ public class SignInPage extends BaseInitedPage {
 			connection.setRequestMethod(server.getRequestInfoMethod().name());
 		}
 		prepareConnection(connection);
-		String sourceResponse = IOUtils.toString(connection.getInputStream(), UTF_8);
+		String json = IOUtils.toString(connection.getInputStream(), UTF_8);
+		log.debug("User info={}", json);
 		// parse json result
-		return new OAuthUser(sourceResponse, server);
+		return new OAuthUser(json, server);
 	}
 
 	private void loginViaOAuth2(OAuthUser user, long serverId) throws IOException, NoSuchAlgorithmException {
