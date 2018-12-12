@@ -254,7 +254,7 @@ public class UserManager implements IUserManager {
 			fUser.getGroupUsers().add(new GroupUser(groupDao.get(getDefaultGroup()), fUser));
 			for (Map.Entry<String, String> entry : user.getUserData().entrySet()) {
 				final String expression = entry.getKey();
-				PropertyResolver.setValue(expression, fUser, entry.getKey(), new PropertyResolverConverter(null, null) {
+				PropertyResolver.setValue(expression, fUser, entry.getValue(), new PropertyResolverConverter(null, null) {
 					private static final long serialVersionUID = 1L;
 
 					@SuppressWarnings("unchecked")
