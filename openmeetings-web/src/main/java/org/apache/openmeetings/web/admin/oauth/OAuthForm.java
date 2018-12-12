@@ -20,61 +20,127 @@ package org.apache.openmeetings.web.admin.oauth;
 
 import static org.apache.openmeetings.web.pages.auth.SignInPage.getRedirectUri;
 
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
-import org.apache.openmeetings.db.entity.server.OAuthServer.RequestMethod;
+import org.apache.openmeetings.db.entity.server.OAuthServer.RequestInfoMethod;
+import org.apache.openmeetings.db.entity.server.OAuthServer.RequestTokenMethod;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.util.string.Strings;
+
+import com.googlecode.wicket.jquery.ui.JQueryIcon;
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 
 public class OAuthForm extends AdminBaseForm<OAuthServer> {
 	private static final long serialVersionUID = 1L;
 	private WebMarkupContainer listContainer;
+	private final WebMarkupContainer attrsContainer = new WebMarkupContainer("attrsContainer");
 	private TextField<String> redirectUriText;
+	private final ListView<Map.Entry<String, String>> mappingView = new ListView<Map.Entry<String, String>>("mapping", new ListModel<>(new ArrayList<>())) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void populateItem(final ListItem<Map.Entry<String, String>> item) {
+			final Map.Entry<String, String> entry = item.getModelObject();
+			item.add(new Label("key", Model.of(entry.getKey())))
+				.add(new Label("value", Model.of(entry.getValue())))
+				.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onSubmit(AjaxRequestTarget target) {
+						OAuthServer s = OAuthForm.this.getModelObject();
+						s.getMapping().remove(entry.getKey());
+						updateMapping();
+						target.add(attrsContainer);
+					}
+				});
+		}
+	};
 
 	public OAuthForm(String id, WebMarkupContainer listContainer, OAuthServer server) {
 		super(id, new CompoundPropertyModel<>(server));
 		this.listContainer = listContainer;
 		setOutputMarkupId(true);
-
-		add(new CheckBox("isEnabled"));
-		add(new DropDownChoice<>("requestTokenMethod", Arrays.asList(RequestMethod.values()), new ChoiceRenderer<RequestMethod>("name", "name")));
 	}
 
 	@Override
 	protected void onInitialize() {
+		add(new CheckBox("isEnabled"));
 		add(new RequiredTextField<String>("name").setLabel(Model.of(getString("165"))));
 		add(new TextField<String>("iconUrl").setLabel(Model.of(getString("1575"))));
 		add(new RequiredTextField<String>("clientId").setLabel(Model.of(getString("1576"))));
 		add(new RequiredTextField<String>("clientSecret").setLabel(Model.of(getString("1577"))));
 		add(redirectUriText = (TextField<String>) new TextField<>("redirectUri", Model.of("")).setLabel(Model.of(getString("1587"))));
 		add(new RequiredTextField<String>("requestKeyUrl").setLabel(Model.of(getString("1578"))));
+		add(new DropDownChoice<>("requestTokenMethod", Arrays.asList(RequestTokenMethod.values()), new ChoiceRenderer<RequestTokenMethod>("name", "name")));
 		add(new RequiredTextField<String>("requestTokenUrl").setLabel(Model.of(getString("1579"))));
 		add(new RequiredTextField<String>("requestTokenAttributes").setLabel(Model.of(getString("1586"))));
 		add(new RequiredTextField<String>("requestInfoUrl").setLabel(Model.of(getString("1580"))));
-		add(new RequiredTextField<String>("loginParamName").setLabel(Model.of(getString("1582"))));
-		add(new RequiredTextField<String>("emailParamName").setLabel(Model.of(getString("1583"))));
-		add(new TextField<String>("firstnameParamName").setLabel(Model.of(getString("1584"))));
-		add(new TextField<String>("lastnameParamName").setLabel(Model.of(getString("1585"))));
+		add(new DropDownChoice<>("requestInfoMethod", Arrays.asList(RequestInfoMethod.values()), new ChoiceRenderer<RequestInfoMethod>("name", "name")));
+		Form<Void> mappingForm = new Form<>("mappingForm");
+		final TextField<String> omAttr = new TextField<>("omAttr", Model.of(""));
+		final TextField<String> oauthAttr = new TextField<>("oauthAttr", Model.of(""));
+		add(mappingForm.add(omAttr, oauthAttr
+				, new AjaxButton("addMapping") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onSubmit(AjaxRequestTarget target) {
+						if (Strings.isEmpty(omAttr.getModelObject()) || Strings.isEmpty(oauthAttr.getModelObject())) {
+							return;
+						}
+						OAuthServer s = OAuthForm.this.getModelObject();
+						s.addMapping(omAttr.getModelObject(), oauthAttr.getModelObject());
+						updateMapping();
+						target.add(attrsContainer, mappingForm);
+					}
+
+					@Override
+					protected String getIcon() {
+						return JQueryIcon.PLUSTHICK;
+					}
+				}).setOutputMarkupId(true));
+		add(attrsContainer.add(updateMapping()).setOutputMarkupId(true));
 		super.onInitialize();
+	}
+
+	private Component updateMapping() {
+		mappingView.setModelObject(getModelObject().getMapping().entrySet()
+				.stream()
+				.map(SimpleEntry::new)
+				.collect(Collectors.toList()));
+		return mappingView;
 	}
 
 	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
 		redirectUriText.setModelObject(getRedirectUri(getModelObject()));
+		updateMapping();
 	}
 
 	@Override

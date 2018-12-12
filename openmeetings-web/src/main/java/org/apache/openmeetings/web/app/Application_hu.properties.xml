@@ -573,10 +573,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1579"><![CDATA[Request token URL]]></entry>
 	<entry key="1580"><![CDATA[Request info URL]]></entry>
 	<entry key="1581"><![CDATA[OAuth2 config]]></entry>
-	<entry key="1582"><![CDATA[Login param name]]></entry>
-	<entry key="1583"><![CDATA[Email param name]]></entry>
-	<entry key="1584"><![CDATA[Firstname param name]]></entry>
-	<entry key="1585"><![CDATA[Lastname param name]]></entry>
 	<entry key="1586"><![CDATA[Request token attributes]]></entry>
 	<entry key="1587"><![CDATA[Redirect uri]]></entry>
 	<entry key="1588"><![CDATA[You can enter email address in the format: firstname1 lastname1 <email1> or "firstname2 lastname2" <email2> or 'firstname3 lastname3' <email3> or email]]></entry>
@@ -977,4 +973,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="messages.btn.reply"><![CDATA[Reply]]></entry>
 	<entry key="messages.subject.re"><![CDATA[Re:]]></entry>
 	<entry key="user.label.displayName"><![CDATA[Display name]]></entry>
+	<entry key="admin.oauth.req.token.method"><![CDATA[Request token method]]></entry>
+	<entry key="admin.oauth.req.info.method"><![CDATA[Request info method]]></entry>
+	<entry key="admin.oauth.user.mapping"><![CDATA[User mapping]]></entry>
+	<entry key="admin.oauth.attr.om"><![CDATA[OM User attribute]]></entry>
+	<entry key="admin.oauth.attr.oauth"><![CDATA[OAuth User attribute]]></entry>
 </properties>

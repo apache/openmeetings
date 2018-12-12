@@ -23,25 +23,26 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.openmeetings.db.entity.server.OAuthServer;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 import com.github.openjson.JSONArray;
-import com.github.openjson.JSONException;
 import com.github.openjson.JSONObject;
 
 public class OAuthUser implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(OAuthUser.class, getWebAppRootKey());
-	private final String uid;
-	private String email;
-	private String firstName;
-	private String lastName;
-	private String picture;
-	private String locale;
+	public static final String PARAM_LOGIN = "login";
+	public static final String PARAM_EMAIL = "address.email";
+	public static final String PARAM_FNAME = "firstname";
+	public static final String PARAM_LNAME = "lastname";
+	private final Map<String, String> userData;
 
 	/**
 	 * OAuth constructor
@@ -51,29 +52,22 @@ public class OAuthUser implements Serializable {
 	 */
 	public OAuthUser(String jsonStr, OAuthServer server) {
 		// get attributes names
-		String pEmail = server.getEmailParamName();
-		String pFirstname = server.getFirstnameParamName();
-		String pLastname = server.getLastnameParamName();
-		String pLogin = server.getLoginParamName();
-		JSONObject json = getJSON(jsonStr, pLogin);
-		String login = json.getString(pLogin);
-
-		this.uid = login;
-		try {
-			this.email = json.has(pEmail)
-					? json.getString(pEmail)
-					: String.format("%s@%s", login, new URL(server.getIconUrl()).getHost());
-		} catch (JSONException | MalformedURLException e) {
-			this.email = null;
-			// no-op, bad user
-			log.error("Failed to get user from JSON: {}", json);
+		// we expect login mapping always in place
+		JSONObject json = getJSON(jsonStr, server.getMapping().get(PARAM_LOGIN));
+		Map<String, String> data = new HashMap<>();
+		for (Map.Entry<String, String> entry : server.getMapping().entrySet()) {
+			data.put(entry.getKey(), json.optString(entry.getValue()));
 		}
-		if (json.has(pFirstname)) {
-			this.firstName = json.getString(pFirstname);
+		String login = data.get(PARAM_LOGIN);
+		String email = data.get(PARAM_EMAIL);
+		if (Strings.isEmpty(email)) {
+			try {
+				data.put(PARAM_EMAIL, String.format("%s@%s", login, new URL(server.getIconUrl()).getHost()));
+			} catch (MalformedURLException e) {
+				log.error("Failed to get user email from JSON: {}", json);
+			}
 		}
-		if (json.has(pLastname)) {
-			this.lastName = json.getString(pLastname);
-		}
+		userData = Collections.unmodifiableMap(data);
 	}
 
 	/**
@@ -82,34 +76,24 @@ public class OAuthUser implements Serializable {
 	 * @param umap - google data
 	 */
 	public OAuthUser(Map<String, String> umap) {
-		this.uid = umap.get("login");
-		this.email = umap.get("email");
-		this.firstName = umap.get("firstname");
-		this.lastName = umap.get("lastname");
+		Map<String, String> data = new HashMap<>();
+		data.put(PARAM_LOGIN, umap.get("login"));
+		data.put(PARAM_EMAIL, umap.get("email"));
+		data.put(PARAM_FNAME, umap.get("firstname"));
+		data.put(PARAM_LNAME, umap.get("lastname"));
+		userData = Collections.unmodifiableMap(data);
 	}
 
-	public String getUid() {
-		return uid;
+	public Map<String, String> getUserData() {
+		return userData;
+	}
+
+	public String getLogin() {
+		return userData.get(PARAM_LOGIN);
 	}
 
 	public String getEmail() {
-		return email;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public String getPicture() {
-		return picture;
-	}
-
-	public String getLocale() {
-		return locale;
+		return userData.get(PARAM_EMAIL);
 	}
 
 	private static JSONObject getJSON(String str, String prop) {

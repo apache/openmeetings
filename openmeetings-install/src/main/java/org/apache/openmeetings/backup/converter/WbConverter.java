@@ -201,10 +201,10 @@ public class WbConverter {
 			src = String.format("./public/%s", src.substring(idx));
 		}
 		add(wb, init(wb, props)
-			.put(ATTR_TYPE, TYPE_IMAGE)
-			.put("omType", "Clipart")
-			.put(PARAM__SRC, src)
-			.put("angle", props.get(3)));
+				.put(ATTR_TYPE, TYPE_IMAGE)
+				.put("omType", "Clipart")
+				.put(PARAM__SRC, src)
+				.put("angle", props.get(3)));
 	}
 
 	private static long getFileId(String src) {
@@ -225,9 +225,9 @@ public class WbConverter {
 			return;
 		}
 		add(wb, init(wb, props)
-			.put(ATTR_TYPE, TYPE_IMAGE)
-			.put(ATTR_FILE_TYPE, BaseFileItem.Type.Image.name())
-			.put(ATTR_FILE_ID, fileId));
+				.put(ATTR_TYPE, TYPE_IMAGE)
+				.put(ATTR_FILE_TYPE, BaseFileItem.Type.Image.name())
+				.put(ATTR_FILE_ID, fileId));
 	}
 
 	private static void processDoc(Whiteboard wb, List<?> props) {
@@ -239,9 +239,9 @@ public class WbConverter {
 			return;
 		}
 		add(wb, init(wb, props, false)
-			.put(ATTR_TYPE, TYPE_IMAGE)
-			.put(ATTR_FILE_TYPE, BaseFileItem.Type.Presentation.name())
-			.put(ATTR_FILE_ID, fileId));
+				.put(ATTR_TYPE, TYPE_IMAGE)
+				.put(ATTR_FILE_TYPE, BaseFileItem.Type.Presentation.name())
+				.put(ATTR_FILE_ID, fileId));
 	}
 
 	private static void processVid(Whiteboard wb, List<?> props) {
@@ -249,9 +249,9 @@ public class WbConverter {
 			return;
 		}
 		add(wb, init(wb, props)
-			.put(ATTR_TYPE, TYPE_IMAGE)
-			.put(ATTR_FILE_TYPE, BaseFileItem.Type.Video.name())
-			.put(ATTR_FILE_ID, props.get(1)));
+				.put(ATTR_TYPE, TYPE_IMAGE)
+				.put(ATTR_FILE_TYPE, BaseFileItem.Type.Video.name())
+				.put(ATTR_FILE_ID, props.get(1)));
 	}
 
 	public static Whiteboard convert(FileItem fi) {
@@ -315,6 +315,7 @@ public class WbConverter {
 		xstream.addPermission(NullPermission.NULL);
 		xstream.addPermission(PrimitiveTypePermission.PRIMITIVES);
 		xstream.allowTypeHierarchy(List.class);
+		xstream.allowTypeHierarchy(String.class);
 		try (InputStream is = new FileInputStream(file); BufferedReader reader = new BufferedReader(new InputStreamReader(is, UTF_8))) {
 			return (List<?>) xstream.fromXML(reader);
 		} catch (Exception err) {

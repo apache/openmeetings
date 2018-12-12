@@ -116,6 +116,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -159,6 +160,7 @@ import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
+import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -177,6 +179,7 @@ import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
+import org.apache.openmeetings.db.entity.server.OAuthServer.RequestInfoMethod;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -332,11 +335,10 @@ public class BackupImport {
 	private final Map<Long, Long> userContactMap = new HashMap<>();
 	private final Map<String, String> fileMap = new HashMap<>();
 
-	private static File validate(String _ename, File intended) throws IOException {
+	private static File validate(String inEname, File intended) throws IOException {
 		final String intendedPath = intended.getCanonicalPath();
-		String ename = File.pathSeparatorChar != '\\' && _ename.indexOf('\\') > -1
-				? _ename.replace('\\', '/')
-				: _ename;
+		String ename = File.pathSeparatorChar != '\\' && inEname.indexOf('\\') > -1
+				? inEname.replace('\\', '/') : inEname;
 		// for each entry to be extracted
 		File fentry = new File(intended, ename);
 		final String canonicalPath = fentry.getCanonicalPath();
@@ -445,7 +447,7 @@ public class BackupImport {
 	}
 
 	private static BackupVersion getVersion(Serializer ser, File f) throws Exception {
-		List<BackupVersion> list = readList(ser, f, "version.xml", "version", BackupVersion.class, true);
+		List<BackupVersion> list = readList(ser, f, "version.xml", "version", BackupVersion.class, null, true);
 		return list.isEmpty() ? new BackupVersion() : list.get(0);
 	}
 
@@ -462,7 +464,7 @@ public class BackupImport {
 		registry.bind(Date.class, DateConverter.class);
 		registry.bind(User.class, new UserConverter(userDao, userMap));
 
-		List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
+		List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, null, true);
 		for (Configuration c : list) {
 			if (c.getKey() == null || c.isDeleted()) {
 				continue;
@@ -519,7 +521,7 @@ public class BackupImport {
 	private Long importLdap(File f, Serializer simpleSerializer) throws Exception {
 		log.info("Groups import complete, starting LDAP config import");
 		Long defaultLdapId = cfgDao.getLong(CONFIG_DEFAULT_LDAP_ID, null);
-		List<LdapConfig> list = readList(simpleSerializer, f, "ldapconfigs.xml", "ldapconfigs", LdapConfig.class, true);
+		List<LdapConfig> list = readList(simpleSerializer, f, "ldapconfigs.xml", "ldapconfigs", LdapConfig.class, null, true);
 		for (LdapConfig c : list) {
 			if (Strings.isEmpty(c.getName())) {
 				continue;
@@ -541,7 +543,38 @@ public class BackupImport {
 	 */
 	private void importOauth(File f, Serializer simpleSerializer) throws Exception {
 		log.info("Ldap config import complete, starting OAuth2 server import");
-		List<OAuthServer> list = readList(simpleSerializer, f, "oauth2servers.xml", "oauth2servers", OAuthServer.class, true);
+		List<OAuthServer> list = readList(simpleSerializer, f, "oauth2servers.xml", "oauth2servers", OAuthServer.class
+				, (node, s) -> {
+					try {
+						InputNode item = node.getNext();
+						do {
+							if (item == null) {
+								break;
+							}
+							String name = item.getName();
+							String val = item.getValue();
+							if ("loginParamName".equals(name) && !Strings.isEmpty(val)) {
+								s.addMapping(OAuthUser.PARAM_LOGIN, val);
+							}
+							if ("emailParamName".equals(name) && !Strings.isEmpty(val)) {
+								s.addMapping(OAuthUser.PARAM_EMAIL, val);
+							}
+							if ("firstnameParamName".equals(name) && !Strings.isEmpty(val)) {
+								s.addMapping(OAuthUser.PARAM_FNAME, val);
+							}
+							if ("lastnameParamName".equals(name) && !Strings.isEmpty(val)) {
+								s.addMapping(OAuthUser.PARAM_LNAME, val);
+							}
+							item = node.getNext(); //HACK to handle old mapping
+						} while (item != null && !"OAuthServer".equals(item.getName()));
+					} catch (Exception e) {
+						log.error("Unexpected error while patching OAuthServer", e);
+					}
+					if (s.getRequestInfoMethod() == null) {
+						s.setRequestInfoMethod(RequestInfoMethod.GET);
+					}
+				}
+				, true);
 		for (OAuthServer s : list) {
 			s.setId(null);
 			auth2Dao.update(s, null);
@@ -661,7 +694,7 @@ public class BackupImport {
 		registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
 		registry.bind(Date.class, DateConverter.class);
 
-		List<ChatMessage> list = readList(serializer, f, "chat_messages.xml", "chat_messages", ChatMessage.class, true);
+		List<ChatMessage> list = readList(serializer, f, "chat_messages.xml", "chat_messages", ChatMessage.class, null, true);
 		for (ChatMessage m : list) {
 			m.setId(null);
 			if (m.getFromUser() == null || m.getFromUser().getId() == null) {
@@ -680,7 +713,7 @@ public class BackupImport {
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
 		registry.bind(User.class, new UserConverter(userDao, userMap));
-		List<OmCalendar> list = readList(serializer, f, "calendars.xml", "calendars", OmCalendar.class, true);
+		List<OmCalendar> list = readList(serializer, f, "calendars.xml", "calendars", OmCalendar.class, null, true);
 		for (OmCalendar c : list) {
 			Long id = c.getId();
 			c.setId(null);
@@ -781,7 +814,7 @@ public class BackupImport {
 	private void importPrivateMsgFolders(File f, Serializer simpleSerializer) throws Exception {
 		log.info("Recording import complete, starting private message folder import");
 		List<PrivateMessageFolder> list = readList(simpleSerializer, f, "privateMessageFolder.xml"
-			, "privatemessagefolders", PrivateMessageFolder.class, true);
+				, "privatemessagefolders", PrivateMessageFolder.class, null, true);
 		for (PrivateMessageFolder p : list) {
 			Long folderId = p.getId();
 			PrivateMessageFolder storedFolder = privateMessageFolderDao.get(folderId);
@@ -804,7 +837,7 @@ public class BackupImport {
 
 		registry.bind(User.class, new UserConverter(userDao, userMap));
 
-		List<UserContact> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContact.class, true);
+		List<UserContact> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContact.class, null, true);
 		for (UserContact uc : list) {
 			Long ucId = uc.getId();
 			UserContact storedUC = userContactDao.get(ucId);
@@ -833,7 +866,7 @@ public class BackupImport {
 		registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
 		registry.bind(Date.class, DateConverter.class);
 
-		List<PrivateMessage> list = readList(serializer, f, "privateMessages.xml", "privatemessages", PrivateMessage.class, true);
+		List<PrivateMessage> list = readList(serializer, f, "privateMessages.xml", "privatemessages", PrivateMessage.class, null, true);
 		boolean oldBackup = true;
 		for (PrivateMessage p : list) {
 			if (p.getFolderId() == null || p.getFolderId().longValue() < 0) {
@@ -912,7 +945,7 @@ public class BackupImport {
 		registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
 		registry.bind(Date.class, DateConverter.class);
 
-		List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, true);
+		List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, null, true);
 		for (RoomPoll rp : list) {
 			rp.setId(null);
 			if (rp.getRoom() == null || rp.getRoom().getId() == null) {
@@ -942,7 +975,7 @@ public class BackupImport {
 
 		registry.bind(BaseFileItem.class, new BaseFileItemConverter(fileItemDao, fileItemMap));
 
-		List<RoomFile> list = readList(serializer, f, "roomFiles.xml", "RoomFiles", RoomFile.class, true);
+		List<RoomFile> list = readList(serializer, f, "roomFiles.xml", "RoomFiles", RoomFile.class, null, true);
 		for (RoomFile rf : list) {
 			Room r = roomDao.get(roomMap.get(rf.getRoomId()));
 			if (r == null || rf.getFile() == null || rf.getFile().getId() == null) {
@@ -959,10 +992,10 @@ public class BackupImport {
 	}
 
 	private static <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz) throws Exception {
-		return readList(ser, baseDir, fileName, listNodeName, clazz, false);
+		return readList(ser, baseDir, fileName, listNodeName, clazz, null, false);
 	}
 
-	private static <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz, boolean notThow) throws Exception {
+	private static <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz, BiConsumer<InputNode, T> consumer, boolean notThow) throws Exception {
 		List<T> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
 		if (!xml.exists()) {
@@ -974,15 +1007,20 @@ public class BackupImport {
 				throw new BackupException(msg);
 			}
 		}
-		try (InputStream rootIs = new FileInputStream(xml)) {
-			InputNode root = NodeBuilder.read(rootIs);
-			InputNode listNode = root.getNext();
-			if (listNodeName.equals(listNode.getName())) {
-				InputNode item = listNode.getNext();
-				while (item != null) {
-					T o = ser.read(clazz, item, false);
+		try (InputStream rootIs1 = new FileInputStream(xml); InputStream rootIs2 = new FileInputStream(xml)) {
+			InputNode root1 = NodeBuilder.read(rootIs1);
+			InputNode root2 = NodeBuilder.read(rootIs2); // for various hacks
+			InputNode listNode1 = root1.getNext();
+			InputNode listNode2 = root2.getNext(); // for various hacks
+			if (listNodeName.equals(listNode1.getName())) {
+				InputNode item1 = listNode1.getNext();
+				while (item1 != null) {
+					T o = ser.read(clazz, item1, false);;
+					if (consumer != null) {
+						consumer.accept(listNode2, o);
+					}
 					list.add(o);
-					item = listNode.getNext();
+					item1 = listNode1.getNext();
 				}
 			}
 		}

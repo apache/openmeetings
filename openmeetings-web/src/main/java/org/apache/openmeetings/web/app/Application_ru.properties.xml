@@ -573,10 +573,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1579"><![CDATA[URL запроса токена]]></entry>
 	<entry key="1580"><![CDATA[URL запроса данных]]></entry>
 	<entry key="1581"><![CDATA[Настройка OAuth2]]></entry>
-	<entry key="1582"><![CDATA[Имя пар-ра "логин"]]></entry>
-	<entry key="1583"><![CDATA[Имя пар-ра "email"]]></entry>
-	<entry key="1584"><![CDATA[Имя параметра "имя"]]></entry>
-	<entry key="1585"><![CDATA[Имя пар-ра "фамилия"]]></entry>
 	<entry key="1586"><![CDATA[Атрибуты запроса токена]]></entry>
 	<entry key="1587"><![CDATA[Uri возврата]]></entry>
 	<entry key="1588"><![CDATA[Вы можете ввести адрес в формате: Имя1 Фамилия1 <адрес1> или "Имя2 Фамилия2" <адрес2> или 'Имя3 Фамилия3' <адрес3> или адрес]]></entry>
@@ -989,4 +985,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="messages.btn.reply"><![CDATA[Ответить]]></entry>
 	<entry key="messages.subject.re"><![CDATA[На:]]></entry>
 	<entry key="user.label.displayName"><![CDATA[Отображаемое имя]]></entry>
+	<entry key="admin.oauth.req.token.method"><![CDATA[HTTP метод для токена]]></entry>
+	<entry key="admin.oauth.req.info.method"><![CDATA[HTTP метод для инфо]]></entry>
+	<entry key="admin.oauth.user.mapping"><![CDATA[Маппинг полей пользователя]]></entry>
+	<entry key="admin.oauth.attr.om"><![CDATA[Атрибут пользователя OM]]></entry>
+	<entry key="admin.oauth.attr.oauth"><![CDATA[Атрибут пользователя OAuth]]></entry>
 </properties>

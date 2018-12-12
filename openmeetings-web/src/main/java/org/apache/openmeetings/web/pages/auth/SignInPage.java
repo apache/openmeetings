@@ -49,6 +49,7 @@ import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
+import org.apache.openmeetings.db.entity.server.OAuthServer.RequestInfoMethod;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
@@ -229,19 +230,19 @@ public class SignInPage extends BaseInitedPage {
 		requestTokenParams = prepareUrlParams(requestTokenParams, server.getClientId(), getRedirectUri(server)
 				, server.getClientSecret(), null, code);
 		// request auth token
-		HttpURLConnection urlConnection = (HttpURLConnection) new URL(requestTokenBaseUrl).openConnection();
-		prepareConnection(urlConnection);
-		urlConnection.setRequestMethod("POST");
-		urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		urlConnection.setRequestProperty("charset", UTF_8.name());
-		urlConnection.setRequestProperty("Content-Length", String.valueOf(requestTokenParams.length()));
-		urlConnection.setDoInput(true);
-		urlConnection.setDoOutput(true);
-		urlConnection.setUseCaches(false);
-		DataOutputStream paramsOutputStream = new DataOutputStream(urlConnection.getOutputStream());
+		HttpURLConnection connection = (HttpURLConnection) new URL(requestTokenBaseUrl).openConnection();
+		prepareConnection(connection);
+		connection.setRequestMethod(server.getRequestTokenMethod().name());
+		connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		connection.setRequestProperty("charset", UTF_8.name());
+		connection.setRequestProperty("Content-Length", String.valueOf(requestTokenParams.length()));
+		connection.setDoInput(true);
+		connection.setDoOutput(true);
+		connection.setUseCaches(false);
+		DataOutputStream paramsOutputStream = new DataOutputStream(connection.getOutputStream());
 		paramsOutputStream.writeBytes(requestTokenParams);
 		paramsOutputStream.flush();
-		String sourceResponse = IOUtils.toString(urlConnection.getInputStream(), UTF_8);
+		String sourceResponse = IOUtils.toString(connection.getInputStream(), UTF_8);
 		// parse json result
 		AuthInfo result = new AuthInfo();
 		JSONObject json = new JSONObject(sourceResponse);
@@ -271,7 +272,12 @@ public class SignInPage extends BaseInitedPage {
 		requestInfoUrl = prepareUrlParams(requestInfoUrl, server.getClientId(), getRedirectUri(server)
 				, server.getClientSecret(), token, code);
 		// send request
-		URLConnection connection = new URL(requestInfoUrl).openConnection();
+		HttpURLConnection connection = (HttpURLConnection) new URL(requestInfoUrl).openConnection();
+		if (server.getRequestInfoMethod() == RequestInfoMethod.HEADER) {
+			connection.setRequestProperty("Authorization", String.format("bearer %s", token));
+		} else {
+			connection.setRequestMethod(server.getRequestInfoMethod().name());
+		}
 		prepareConnection(connection);
 		String sourceResponse = IOUtils.toString(connection.getInputStream(), UTF_8);
 		// parse json result
