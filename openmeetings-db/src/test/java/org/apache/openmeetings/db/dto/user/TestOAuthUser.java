@@ -45,7 +45,7 @@ public class TestOAuthUser {
 				"{'id': '11klahjsfwehf5', 'email': 'alsfkvslvmclqwkdsm@gmail.com', 'verified_email': true, 'name': 'John Doe', 'given_name': 'John', 'family_name': 'Doe', 'link': 'https://plus.google.com/+JohnDoe', 'picture': 'https://lh3.googleusercontent.com/somehash/photo.jpg', 'gender': 'male', 'locale': 'en'}"
 				, server
 				);
-		assertEquals("UID should be correct", "11klahjsfwehf5", user.getLogin());
+		assertEquals("Login should be correct", "11klahjsfwehf5", user.getLogin());
 		assertEquals("Email should be correct", "alsfkvslvmclqwkdsm@gmail.com", user.getEmail());
 		assertEquals("Firstname should be correct", "John", user.getUserData().get(PARAM_FNAME));
 		assertEquals("Lastname should be correct", "Doe", user.getUserData().get(PARAM_LNAME));
@@ -62,7 +62,7 @@ public class TestOAuthUser {
 				"{'response':[{'uid':4uidhere4,'first_name':'John','last_name':'Doe'}]}"
 				, server
 				);
-		assertEquals("UID should be correct", "4uidhere4", user.getLogin());
+		assertEquals("Login should be correct", "4uidhere4", user.getLogin());
 		assertTrue("Email should be empty", Strings.isEmpty(user.getEmail()));
 		assertEquals("Firstname should be correct", "John", user.getUserData().get(PARAM_FNAME));
 		assertEquals("Lastname should be correct", "Doe", user.getUserData().get(PARAM_LNAME));
@@ -76,12 +76,29 @@ public class TestOAuthUser {
 	}
 
 	@Test
+	public void secondLevel1() {
+		OAuthServer server = new OAuthServer()
+				.addMapping(PARAM_LOGIN, "username")
+				.addMapping(PARAM_EMAIL, "email")
+				.addMapping(PARAM_FNAME, "fname")
+				.addMapping(PARAM_LNAME, "lname");
+		OAuthUser user = new OAuthUser(
+				"{\"hasError\": false, \"result\": {\"username\": \"test\", \"email\": \"aaa@test.com\", \"fname\": \"first\", \"lname\":\"last\"}}"
+				, server
+				);
+		assertEquals("Login should be correct", "test", user.getLogin());
+		assertEquals("Email should be correct", "aaa@test.com", user.getEmail());
+		assertEquals("Firstname should be correct", "first", user.getUserData().get(PARAM_FNAME));
+		assertEquals("Lastname should be correct", "last", user.getUserData().get(PARAM_LNAME));
+	}
+
+	@Test
 	public void map() {
 		Map<String, String> umap = new HashMap<>();
 		umap.put("login", "abc");
 		umap.put("email", "abc@local");
 		OAuthUser user = new OAuthUser(umap);
-		assertEquals("UID should be correct", "abc", user.getLogin());
+		assertEquals("Login should be correct", "abc", user.getLogin());
 		assertEquals("Email should be correct", "abc@local", user.getEmail());
 		assertNull("First should be empty", user.getUserData().get(PARAM_FNAME));
 		assertNull("Lastname should be empty", user.getUserData().get(PARAM_LNAME));
