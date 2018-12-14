@@ -52,10 +52,7 @@
 				<exclude>lib/tagsoup*</exclude>
 				<exclude>lib/tika*</exclude>
 				<!-- end of Tika libs -->
-				<exclude>plugins/websocket*.jar</exclude>
-				<exclude>plugins/tomcat-embed*.jar</exclude> <!-- added for Red5 lib substitution -->
-				<exclude>plugins/tomcat-annotations*.jar</exclude> <!-- added for Red5 lib substitution -->
-				<exclude>plugins/tomcat-servlet-api*.jar</exclude> <!-- added for Red5 lib substitution -->
+				<exclude>plugins/tomcat-*.jar</exclude> <!-- added for Red5 lib substitution -->
 				<exclude>plugins/ecj*.jar</exclude> <!-- added for Red5 lib substitution -->
 				<exclude>*.sh</exclude>
 				<exclude>conf/jee-container.xml</exclude>

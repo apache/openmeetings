@@ -31,11 +31,12 @@
 	 -->
 	<!-- Tomcat without SSL enabled -->
 	<bean id="tomcat.server" class="org.red5.server.tomcat.TomcatLoader" depends-on="context.loader" lazy-init="true">
+		<property name="websocketEnabled" value="false" /> <!-- red5 WebSockets are disabled -->
 		<property name="webappFolder" value="${red5.root}/webapps" />
 		<property name="connectors">
 			<list>
 				<bean name="httpConnector" class="org.red5.server.tomcat.TomcatConnector">
-					<property name="protocol" value="org.apache.coyote.http11.Http11NioProtocol" />
+					<property name="protocol" value="org.apache.coyote.http11.Http11Nio2Protocol" />
 					<property name="address" value="${http.host}:${http.port}" />
 					<property name="redirectPort" value="${https.port}" />
 					<property name="connectionProperties">
@@ -73,17 +74,18 @@
 	<!-- Tomcat with SSL enabled -->
 <!--
 	<bean id="tomcat.server" class="org.red5.server.tomcat.TomcatLoader" depends-on="context.loader" lazy-init="true">
+		<property name="websocketEnabled" value="false" />
 		<property name="webappFolder" value="${red5.root}/webapps" />
 		<property name="connectors">
 			<list>
 				<bean name="httpConnector" class="org.red5.server.tomcat.TomcatConnector">
-					<property name="protocol" value="org.apache.coyote.http11.Http11NioProtocol" />
+					<property name="protocol" value="org.apache.coyote.http11.Http11Nio2Protocol" />
 					<property name="address" value="${http.host}:${http.port}" />
 					<property name="redirectPort" value="${https.port}" />
 				</bean>
 				<bean name="httpsConnector" class="org.red5.server.tomcat.TomcatConnector">
 					<property name="secure" value="true" />
-					<property name="protocol" value="org.apache.coyote.http11.Http11NioProtocol" />
+					<property name="protocol" value="org.apache.coyote.http11.Http11Nio2Protocol" />
 					<property name="address" value="${http.host}:${https.port}" />
 					<property name="redirectPort" value="${http.port}" />
 					<property name="connectionProperties">
