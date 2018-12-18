@@ -27,10 +27,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.basic.Health;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.apache.openmeetings.service.mail.template.subject.RecordingExpiringTemplate;
 import org.apache.openmeetings.service.mail.template.subject.SubjectEmailTemplate;
+import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,5 +102,19 @@ public class ReminderJob extends AbstractJob {
 		if (feed.length() > 0) {
 			setRss(feed);
 		}
+	}
+
+	public void checkHealth() {
+		log.trace("ReminderJob.checkHealth");
+		boolean dbOk = false;
+		try {
+			cfgDao.count();
+			dbOk = true;
+		} catch (Exception e) {
+			log.error("DB seems to be down");
+		}
+		Health.INSTANCE.setInited(isInitComplete())
+				.setInstalled(CryptProvider.get() != null)
+				.setDbOk(dbOk);
 	}
 }

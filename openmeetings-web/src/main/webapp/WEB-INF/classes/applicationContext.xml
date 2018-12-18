@@ -90,6 +90,10 @@
 			p:targetObject-ref="reminderJob" p:targetMethod="loadRss" p:concurrent="false" />
 	<bean id="triggerLoadRss" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
 			p:jobDetail-ref="loadRssJobDetail" p:startDelay="5000" p:repeatInterval="600000"/>
+	<bean id="checkHealthJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+			p:targetObject-ref="reminderJob" p:targetMethod="checkHealth" p:concurrent="false" />
+	<bean id="triggerCheckHealth" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
+			p:jobDetail-ref="checkHealthJobDetail" p:startDelay="5000" p:repeatInterval="15000"/>
 
 	<!-- Mail related jobs -->
 	<bean id="resetSendingMailStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
@@ -114,6 +118,7 @@
 				<ref bean="triggerResetSendingMailStatus" />
 				<ref bean="triggerSendMails" />
 				<ref bean="triggerLoadRss" />
+				<ref bean="triggerCheckHealth" />
 			</list>
 		</property>
 	</bean>
