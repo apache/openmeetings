@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 
 /**
  *
- * The Service contains methods to get localized errors
+ * The Service contains methods to get info about the system
  *
  * @author solomax
  *
