@@ -18,37 +18,51 @@
  */
 package org.apache.openmeetings.db.dto.basic;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
+
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.util.Version;
-
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Info implements Serializable {
+public class Health implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private final String version;
-	private final String revision;
-	private final String buildDate;
+	public static final Health INSTANCE = new Health();
+	private boolean inited;
+	private boolean installed;
+	private boolean dbOk;
 
-	public Info() {
-		version = Version.getVersion();
-		revision = Version.getRevision();
-		buildDate = Version.getBuildDate();
+	public Health() {
+		inited = isInitComplete();
 	}
 
-	public String getVersion() {
-		return version;
+	public boolean isInited() {
+		return inited;
 	}
 
-	public String getRevision() {
-		return revision;
+	public Health setInited(boolean inited) {
+		this.inited = inited;
+		return this;
 	}
 
-	public String getBuildDate() {
-		return buildDate;
+	public boolean isInstalled() {
+		return installed;
+	}
+
+	public Health setInstalled(boolean installed) {
+		this.installed = installed;
+		return this;
+	}
+
+	public boolean isDbOk() {
+		return dbOk;
+	}
+
+	public Health setDbOk(boolean dbOk) {
+		this.dbOk = dbOk;
+		return this;
 	}
 }
