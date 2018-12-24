@@ -45,7 +45,7 @@
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
 		<maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-		<checksum-maven-plugin.version>1.6</checksum-maven-plugin.version>
+		<checksum-maven-plugin.version>1.8</checksum-maven-plugin.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 		<license-maven-plugin.version>1.16</license-maven-plugin.version>
 		<reflow-maven-skin.version>2.0.0-beta2</reflow-maven-skin.version>
