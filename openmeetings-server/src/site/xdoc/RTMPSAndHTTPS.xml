@@ -255,6 +255,20 @@ jmx.keystorepass=changeit
 				</li>
 			</ol>
 		</section>
+		<section name="Setting up different set of allowed cithers">
+			<div>
+				In case you would like to specify different set of allowed cithers you need to
+				<ol>
+					<li>Open <tt>conf/jee-container.xml</tt> using your favorite text editor</li>
+					<li>Go to <tt>"Tomcat with SSL enabled" -> "tomcat.server" -> "connectors" -> "httpsConnector" -> "connectionProperties"</tt></li>
+					<li>
+						Add following entry
+						<source><![CDATA[<entry key="ciphers" value="TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_DHE_DSS_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_SHA256,TLS_ECDHE_RSA_WITH_AES_128_SHA,TLS_ECDHE_ECDSA_WITH_AES_128_SHA,TLS_ECDHE_RSA_WITH_AES_256_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_SHA384,TLS_ECDHE_RSA_WITH_AES_256_SHA,TLS_ECDHE_ECDSA_WITH_AES_256_SHA,TLS_DHE_RSA_WITH_AES_128_SHA256,TLS_DHE_RSA_WITH_AES_128_SHA,TLS_DHE_DSS_WITH_AES_128_SHA256,TLS_DHE_RSA_WITH_AES_256_SHA256,TLS_DHE_DSS_WITH_AES_256_SHA,TLS_DHE_RSA_WITH_AES_256_SHA" />]]></source>
+					</li>
+				</ol>
+				Please check <a href="https://issues.apache.org/jira/browse/OPENMEETINGS-1969?focusedCommentId=16721099&amp;page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-16721099">this JIRA issue</a> for more information
+			</div>
+		</section>
 		<section name="Credits">
 			<p>Thanks to Nexus, Holger Rabbach and Yakovlev Nick for their help and
 				contribution to configuration and documentation! </p>
