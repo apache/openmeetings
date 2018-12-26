@@ -69,6 +69,8 @@
 			<toc position="fixed">sidebar</toc>
 			<navbar cssClass="navbar-dark bg-primary"/>
 			<skinAttribution>false</skinAttribution>
+			<highlightJs>true</highlightJs>
+			<highlightJsTheme>github</highlightJsTheme>
 			<endContent>
 				<script type="text/javascript" src="$resourcePath/js/site.js"></script>
 				<p class="text-center">Apache OpenMeetings, OpenMeetings, Apache, the Apache feather, and the Apache OpenMeetings project logo</p>
