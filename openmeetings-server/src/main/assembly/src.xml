@@ -32,10 +32,10 @@
 			<useDefaultExcludes>true</useDefaultExcludes>
 			<includes>
 				<include>*.xml</include>
-				<include>CHANGELOG</include>
+				<include>CHANGELOG.md</include>
 				<include>LICENSE</include>
-				<include>NOTICE</include>
-				<include>README</include>
+				<include>NOTICE.md</include>
+				<include>README.md</include>
 				<include>openmeetings-*/**</include>
 			</includes>
 			<excludes>
