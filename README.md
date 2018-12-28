@@ -47,6 +47,26 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+4.0.7
+-----
+[Release 4.0.7](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.7), provides following improvements:
+
+* kick function in RoomWebService is fixed
+* Reply button is added to Private Message
+* Multiple issues are fixed in Room
+* Save white board as JPG is removed
+* HttpClient in AppointmentManager is updated 3.x to 4.x
+* "endless" invitations can now be invalidated
+* Ability to chose user display name is added
+* Delete white board object using mouse is now possible
+* Ability to duplicate room poll is added
+* Health check web service API is added
+* OAuth2 authorization can be done via HTTP header
+* cliparts can be in SVG format
+
+Other fixes and improvements, 18 issues were addressed
+
+
 4.0.6
 -----
 [Release 4.0.6](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.6), provides following improvements:

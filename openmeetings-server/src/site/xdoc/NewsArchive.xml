@@ -22,6 +22,29 @@
 	<body>
 		<section name="Release 4.0.5">
 			<div class="bd-callout bd-callout-info">
+				<h4>Version 4.0.6 released!</h4>
+				<div>Release 4.0.6, provides following improvements:<br/>
+					<ul>
+						<li>Multiple issues with device list retrieval in Settings dialog</li>
+						<li>Web services were improved</li>
+						<li>Multiple issues with room recording</li>
+						<li>Frontend self registering</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
+				</div>
+				<br/>
+
+				<span>
+					16 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.6/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343986">Detailed list</a>
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2018-10-18)</span>
+			</div>
+			<div class="bd-callout bd-callout-info">
 				<div class="h4">Version 4.0.5 released!</div>
 				<div>Release 4.0.5, provides following improvements:<br/>
 					Room:<br/>

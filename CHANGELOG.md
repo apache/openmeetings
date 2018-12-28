@@ -5,6 +5,37 @@ Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)  
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+
+Release Notes - Openmeetings - Version 4.0.7
+================================================================================================================
+
+* Sub-task
+    * [OPENMEETINGS-1931] - Hack with session cookie config need to be removed
+
+* Bug
+    * [OPENMEETINGS-1870] - use kick-funktion in roomWebService
+    * [OPENMEETINGS-1888] - No reply button to PM (Private Message)
+    * [OPENMEETINGS-1945] - When clic pause video button become white window only if mouse is over it
+    * [OPENMEETINGS-1957] - How to perform a logout process for an external user (student or teacher)
+    * [OPENMEETINGS-1963] - Menu User Cannot Work
+    * [OPENMEETINGS-1964] - Save as JPG should be removed from the menu
+
+* Improvement
+    * [OPENMEETINGS-1636] - Upgrade AppointmentManager from HttpClient 3.x to 4.x
+    * [OPENMEETINGS-1846] - Need a way to invalidate "endless" invatation
+    * [OPENMEETINGS-1851] - Ability to chose what is displayed in the User panel in conference rooms
+    * [OPENMEETINGS-1934] - Delete a single object
+    * [OPENMEETINGS-1950] - duplication of archived polls
+    * [OPENMEETINGS-1966] - Play chat notification sound anytime message is sent
+    * [OPENMEETINGS-1967] - Healthceck API to be added/enhanced
+    * [OPENMEETINGS-1970] - Use Authorization header for OAuth2 plugin
+    * [OPENMEETINGS-1971] - Accept nested profile object in OAuth2
+    * [OPENMEETINGS-1972] - Support SVG at whiteboard
+
+* Task
+    * [OPENMEETINGS-1954] - Library versions need to be updated (4.0.7)
+
+
 Release Notes - Openmeetings - Version 4.0.6
 ================================================================================================================
 

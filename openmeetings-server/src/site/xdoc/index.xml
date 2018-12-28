@@ -69,13 +69,21 @@
 		</section>
 		<section name="News">
 			<div class="bd-callout bd-callout-danger">
-				<h4>Version 4.0.6 released!</h4>
-				<div>Release 4.0.6, provides following improvements:<br/>
+				<h4>Version 4.0.7 released!</h4>
+				<div>Release 4.0.7, provides following improvements:<br/>
 					<ul>
-						<li>Multiple issues with device list retrieval in Settings dialog</li>
-						<li>Web services were improved</li>
-						<li>Multiple issues with room recording</li>
-						<li>Frontend self registering</li>
+						<li>kick function in RoomWebService is fixed</li>
+						<li>Reply button is added to Private Message</li>
+						<li>Multiple issues are fixed in Room</li>
+						<li>Save white board as JPG is removed</li>
+						<li>HttpClient in AppointmentManager is updated 3.x to 4.x</li>
+						<li>"endless" invitations can now be invalidated</li>
+						<li>Ability to chose user display name is added</li>
+						<li>Delete white board object using mouse is now possible</li>
+						<li>Ability to duplicate room poll is added</li>
+						<li>Health check web service API is added</li>
+						<li>OAuth2 authorization can be done via HTTP header</li>
+						<li>cliparts can be in SVG format</li>
 					</ul>
 					<br/>
 					Other fixes and improvements
@@ -84,12 +92,12 @@
 				<br/>
 
 				<span>
-					16 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.6/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343986">Detailed list</a>
+					18 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.7/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344283">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2018-10-18)</span>
+				<span class="date">(2019-01-01)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
