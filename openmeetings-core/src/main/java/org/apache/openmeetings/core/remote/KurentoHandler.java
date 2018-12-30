@@ -82,9 +82,9 @@ public class KurentoHandler {
 	public static final String PARAM_ICE = "iceServers";
 	public static final String PARAM_CANDIDATE = "candidate";
 	private static final String WARN_NO_KURENTO = "Media Server is not accessible";
-	private static final String MODE_TEST = "test";
+	public static final String MODE_TEST = "test";
 	private static final String TAG_KUID = "kuid";
-	private static final String TAG_MODE = "mode";
+	public static final String TAG_MODE = "mode";
 	private static final String TAG_ROOM = "roomId";
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 	private final ScheduledExecutorService recheckScheduler = Executors.newScheduledThreadPool(1);
@@ -129,7 +129,7 @@ public class KurentoHandler {
 				recheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
 			}
 		};
-		recheckScheduler.schedule(check, 50, MILLISECONDS);
+		check.run();
 	}
 
 	public void destroy() {

@@ -113,6 +113,7 @@
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
 		<mockito.version>2.23.4</mockito.version>
+		<powermock.version>2.0.0-RC.4</powermock.version>
 		<!--  URL of the ASF SonarQube server  -->
 		<sonar.host.url>https://builds.apache.org/analysis</sonar.host.url>
 		<!--  Exclude all generated code  -->
@@ -649,6 +650,18 @@
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-core</artifactId>
 				<version>${mockito.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-module-junit4</artifactId>
+				<version>${powermock.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-api-mockito2</artifactId>
+				<version>${powermock.version}</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
