@@ -69,7 +69,7 @@
 		<keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
-		<jacoco-maven-plugin.versoin>0.8.2</jacoco-maven-plugin.versoin>
+		<jacoco.version>0.8.2</jacoco.version>
 		<forbiddenapis.version>2.6</forbiddenapis.version>
 		<!-- dependency versions -->
 		<junit.version>4.12</junit.version>
@@ -664,6 +664,13 @@
 				<version>${powermock.version}</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.jacoco</groupId>
+				<artifactId>org.jacoco.agent</artifactId>
+				<version>${jacoco.version}</version>
+				<classifier>runtime</classifier>
+				<scope>test</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -682,6 +689,12 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>org.jacoco.agent</artifactId>
+			<classifier>runtime</classifier>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
@@ -751,9 +764,15 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>prepare-agent</id>
+						<id>jacoco-instrument</id>
 						<goals>
-							<goal>prepare-agent</goal>
+							<goal>instrument</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-restore-instrumented-classes</id>
+						<goals>
+							<goal>restore-instrumented-classes</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -977,7 +996,7 @@
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>${jacoco-maven-plugin.versoin}</version>
+					<version>${jacoco.version}</version>
 					<configuration>
 						<destFile>${sonar.jacoco.reportPath}</destFile>
 						<append>true</append>
