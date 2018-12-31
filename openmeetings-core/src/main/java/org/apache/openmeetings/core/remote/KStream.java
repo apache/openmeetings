@@ -202,7 +202,7 @@ public class KStream implements IKStream {
 	}
 
 	private WebRtcEndpoint createEndpoint(final KurentoHandler h, String sid, String uid) {
-		WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(room.pipeline).build();
+		WebRtcEndpoint endpoint = createWebRtcEndpoint(room.pipeline);
 		endpoint.addTag("outUid", this.uid);
 		endpoint.addTag("uid", uid);
 
@@ -216,9 +216,7 @@ public class KStream implements IKStream {
 
 	public void startRecord() {
 		final String chunkUid = String.format("rec_%s_%s", room.recordingId, randomUUID());
-		recorder = new RecorderEndpoint.Builder(room.pipeline, getRecUri(getRecordingChunk(room.roomId, chunkUid)))
-				.stopOnEndOfStream()
-				.withMediaProfile(profile).build();
+		recorder = createRecorderEndpoint(room.pipeline, getRecUri(getRecordingChunk(room.roomId, chunkUid)), profile);
 		recorder.addTag("outUid", uid);
 		recorder.addTag("uid", uid);
 

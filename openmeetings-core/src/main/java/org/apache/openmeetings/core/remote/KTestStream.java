@@ -63,14 +63,12 @@ public class KTestStream implements IKStream {
 	public KTestStream(IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
 		this.pipeline = pipeline;
 		this.uid = _c.getUid();
-		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
+		webRtcEndpoint = createWebRtcEndpoint(pipeline);
 		webRtcEndpoint.connect(webRtcEndpoint);
 
 		MediaProfileSpecType profile = getProfile(msg);
 		initRecPath();
-		recorder = new RecorderEndpoint.Builder(pipeline, recPath)
-				.stopOnEndOfStream()
-				.withMediaProfile(profile).build();
+		recorder = createRecorderEndpoint(pipeline, recPath, profile);
 
 		recorder.addRecordingListener(evt -> {
 				recTime = 0;

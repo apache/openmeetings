@@ -52,7 +52,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.github.openjson.JSONObject;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({KurentoClient.class, WebSocketHelper.class, KTestStream.class})
+@PrepareForTest({KurentoClient.class, WebSocketHelper.class, IKStream.class})
 public class TestKurentoHandlerMocked {
 	@Mock
 	private RomManager romManager;
