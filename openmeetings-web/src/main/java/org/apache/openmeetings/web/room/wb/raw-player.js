@@ -220,7 +220,7 @@ var Player = (function() {
 			, scaleY: 1
 			, top: 10
 		}, ToolUtil.filter(_o, ['angle', 'left', 'scaleX', 'scaleY', 'top']));
-		g.set(opts);
+		g.set(opts).setCoords();
 		g.canvas.requestRenderAll();
 	};
 	return player;
