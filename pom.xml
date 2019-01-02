@@ -53,7 +53,7 @@
 		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
 		<maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
-		<maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
+		<maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
 		<maven-bundle-plugin.version>4.1.0</maven-bundle-plugin.version>
 		<maven-war-plugin.version>3.2.2</maven-war-plugin.version>
