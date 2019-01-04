@@ -60,14 +60,6 @@ iframe {
 .install-steps .step.run {
 	background-image: url(../images/world.png);
 }
-.apachecon-banner img {
-	height: 62px !important;
-}
-.apachecon-banner div {
-	font-size: small;
-	font-weight: bold;
-	text-align: center;
-}
 .copyright {
 	text-align: center;
 }

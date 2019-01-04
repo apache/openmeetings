@@ -170,8 +170,8 @@ git push origin 4.0.0RC1
 4.0.0/rc1/bin/apache-openmeetings-4.0.0.tar.gz.sha
 4.0.0/rc1/bin/apache-openmeetings-4.0.0.tar.gz.asc
 4.0.0/rc1/CHANGELOG
-4.0.0/rc1/KEYS
 						</source>
+						<p><b>NOTE</b> KEYS file is located at https://www.apache.org/dist/openmeetings/KEYS and should be just updated</p>
 					</li>
 				</ul>
 			</subsection>
