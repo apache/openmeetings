@@ -103,7 +103,28 @@
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
 			</div>
 		</section>
-
+		<section name="Events">
+			<div>
+				<h4>Nearest ApacheCon:</h4>
+				<div class="row">
+					<div class="col-md-1"></div>
+					<div class="col-md-8">
+						<a href="https://www.apache.org/events/current-event">
+							<img alt="ASF Current Events" src="https://www.apache.org/events/current-event-234x60.png"/>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div>
+				<h4>Other Apache Events</h4>
+				<div class="row">
+					<div class="col-md-1"></div>
+					<div class="col-md-8">
+						For the many smaller Apache project-related events, see <a href="http://events.apache.org/">events.apache.org</a>.
+					</div>
+				</div>
+			</div>
+		</section>
 		<section name="Community">
 			<div class="bd-callout bd-callout-info">
 				<div class="h4">Who we are</div>

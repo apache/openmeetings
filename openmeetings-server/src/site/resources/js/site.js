@@ -26,8 +26,8 @@ $(document).ready(function() {
 	// "ACNA" banner on the right
 	$('.bannerRight').parent().parent().append(
 		$('<div class="float-right">')
-			.append($('<a href="https://www.apachecon.com" class="apachecon-banner bannerRight">')
-				.append($('<img src="https://www.apachecon.com/images/landingpage/events/acna19.png">'))
+			.append($('<a href="https://www.apache.org/events/current-event" class="apachecon-banner bannerRight">')
+				.append($('<img src="https://www.apache.org/events/current-event-234x60.png">'))
 				)
 		);
 })
