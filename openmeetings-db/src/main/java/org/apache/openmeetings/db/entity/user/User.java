@@ -620,6 +620,12 @@ public class User extends HistoricalEntity {
 		if (!Strings.isEmpty(last)) {
 			sb.append(delim).append(last);
 		}
+		if (Strings.isEmpty(sb) && address != null && !Strings.isEmpty(address.getEmail())) {
+			sb.append(delim).append(address.getEmail());
+		}
+		if (Strings.isEmpty(sb)) {
+			sb.append("N/A");
+		}
 		return escapeMarkup(sb).toString();
 	}
 }
