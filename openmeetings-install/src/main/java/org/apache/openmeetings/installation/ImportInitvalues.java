@@ -531,7 +531,7 @@ public class ImportInitvalues {
 				.setRequestTokenUrl("https://oauth.vk.com/access_token")
 				.setRequestTokenMethod(RequestTokenMethod.POST)
 				.setRequestTokenAttributes("client_id={$client_id}&client_secret={$client_secret}&code={$code}&redirect_uri={$redirect_uri}")
-				.setRequestInfoUrl("https://api.vk.com/method/users.get?user_ids=&access_token={$access_token}&fields=id,first_name,last_name,email&name_case=nom")
+				.setRequestInfoUrl("https://api.vk.com/method/users.get?&v=5.92&user_ids={$user_id}&access_token={$access_token}&fields=id,first_name,last_name,email&name_case=nom")
 				.setRequestInfoMethod(RequestInfoMethod.GET)
 				.addMapping(PARAM_LOGIN, "uid")
 				.addMapping(PARAM_EMAIL, EMAIL_PARAM)
