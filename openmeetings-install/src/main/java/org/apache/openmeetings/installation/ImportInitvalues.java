@@ -527,7 +527,7 @@ public class ImportInitvalues {
 				.setRequestTokenAttributes("client_id={$client_id}&client_secret={$client_secret}&code={$code}&redirect_uri={$redirect_uri}")
 				.setRequestInfoUrl("https://api.vk.com/method/users.get?&v=5.92&user_ids={$user_id}&access_token={$access_token}&fields=id,first_name,last_name,email&name_case=nom")
 				.setRequestInfoMethod(RequestInfoMethod.GET)
-				.addMapping(PARAM_LOGIN, "uid")
+				.addMapping(PARAM_LOGIN, "id")
 				.addMapping(PARAM_EMAIL, EMAIL_PARAM)
 				.addMapping(PARAM_FNAME, FNAME_PARAM)
 				.addMapping(PARAM_LNAME, LNAME_PARAM), null);
