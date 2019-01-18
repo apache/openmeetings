@@ -101,6 +101,9 @@
 						are up to date and refer to the right version.
 					</li>
 					<li>
+						Check site is <tt>green</tt> here <a href="https://whimsy.apache.org/site/project/openmeetings">https://whimsy.apache.org/site/project/openmeetings</a>
+					</li>
+					<li>
 						Update following files in OM documentation:<br/>
 						<tt>openmeetings-server/src/site/xdoc/index.xml</tt><br/>
 						<tt>openmeetings-server/src/site/xdoc/NewsArchive.xml</tt><br/>
