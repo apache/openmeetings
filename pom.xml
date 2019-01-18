@@ -172,7 +172,7 @@
 		<developer>
 			<id>vdegtyarev</id>
 			<name>Vasiliy Degtyarev</name>
-			<email>mailto:vdegtyarev1964@gmail.com</email>
+			<email>vdegtyarev1964@gmail.com</email>
 			<organization>Unipro</organization>
 			<organizationUrl>http://unipro.ru</organizationUrl>
 			<roles>
@@ -184,7 +184,7 @@
 		<developer>
 			<id>iarkh</id>
 			<name>Irina Arkhipets</name>
-			<email>mailto:Irina.Arkhipets@gmail.com</email>
+			<email>Irina.Arkhipets@gmail.com</email>
 			<organization>Unipro</organization>
 			<organizationUrl>http://unipro.ru</organizationUrl>
 			<roles>
@@ -195,7 +195,7 @@
 		<developer>
 			<id>susheeljalali</id>
 			<name>Susheel Jalali</name>
-			<email>mailto:Susheel.Jalali@Coscend.com</email>
+			<email>Susheel.Jalali@Coscend.com</email>
 			<organization>Coscend</organization>
 			<organizationUrl>http://www.Coscend.com</organizationUrl>
 			<roles>
@@ -216,7 +216,7 @@
 		<developer>
 			<id>aaf</id>
 			<name>Alexei Fedotov</name>
-			<email>mailto:alexei.fedotov@gmail.com</email>
+			<email>alexei.fedotov@gmail.com</email>
 			<organizationUrl>http://dataved.ru</organizationUrl>
 			<roles>
 				<role>support</role>
@@ -259,7 +259,7 @@
 		<developer>
 			<id>albus</id>
 			<name>Alvaro Bustos</name>
-			<email>mailto:zurcamos@gmail.com</email>
+			<email>zurcamos@gmail.com</email>
 			<roles>
 				<role>pmc</role>
 			</roles>
@@ -293,7 +293,7 @@
 		<developer>
 			<id>coscend</id>
 			<name>Hemant Sabat</name>
-			<email>mailto:om.insights@coscend.com</email>
+			<email>om.insights@coscend.com</email>
 			<organization>Coscend</organization>
 			<organizationUrl>http://www.Coscend.com/</organizationUrl>
 			<roles>
