@@ -44,7 +44,6 @@ public class OmFileHelper {
 	private static final String PUBLIC_DIR = "public";
 	private static final String CLIPARTS_DIR = "cliparts";
 	private static final String WEB_INF_DIR = "WEB-INF";
-	private static final String GROUP_LOGO_DIR = "grouplogo";
 	private static final String STREAMS_DIR = "streams";
 	private static final String EMOTIONS_DIR = "emoticons";
 	private static final String LANGUAGES_DIR = "languages";
@@ -52,6 +51,7 @@ public class OmFileHelper {
 	private static final String IMAGES_DIR = "images";
 	private static final String WML_DIR = "stored";
 
+	public static final String GROUP_LOGO_DIR = "grouplogo";
 	public static final String FILE_NAME_FMT = "%s.%s";
 	public static final String BACKUP_DIR = "backup";
 	public static final String IMPORT_DIR = "import";
@@ -64,6 +64,7 @@ public class OmFileHelper {
 	public static final String PERSISTENCE_NAME = "classes/META-INF/persistence.xml";
 	public static final String DB_PERSISTENCE_NAME = "classes/META-INF/%s_persistence.xml";
 	public static final String PROFILES_PREFIX = "profile_";
+	public static final String GROUP_LOGO_PREFIX = "logo";
 	public static final String LANG_FILE_NAME = "languages.xml";
 	public static final String LIBRARY_FILE_NAME = "library.xml";
 	public static final String PROFILE_IMG_NAME = "profile.png";
@@ -142,7 +143,7 @@ public class OmFileHelper {
 	}
 
 	public static File getGroupLogo(Long groupId, boolean check) {
-		File logo = new File(getGroupLogoDir(), String.format("logo%s.png", groupId));
+		File logo = new File(getGroupLogoDir(), String.format("%s%s.png", GROUP_LOGO_PREFIX, groupId));
 		if (groupId == null || (check && !logo.exists())) {
 			logo = new File(getImagesDir(), "blank.png");
 		}
