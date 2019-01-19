@@ -31,6 +31,8 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.FILES_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
+import static org.apache.openmeetings.util.OmFileHelper.GROUP_LOGO_DIR;
+import static org.apache.openmeetings.util.OmFileHelper.GROUP_LOGO_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.PROFILES_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.PROFILES_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.RECORDING_FILE_NAME;
@@ -352,7 +354,7 @@ public class BackupImport {
 
 	private static File unzip(InputStream is) throws IOException  {
 		File f = OmFileHelper.getNewDir(OmFileHelper.getUploadImportDir(), "import_" + CalendarPatterns.getTimeForStreamId(new Date()));
-		log.debug("##### EXTRACTING BACKUP TO: " + f);
+		log.debug("##### EXTRACTING BACKUP TO: {}", f);
 
 		try (ZipInputStream zis = new ZipInputStream(is)) {
 			ZipEntry zipentry = null;
@@ -1053,10 +1055,11 @@ public class BackupImport {
 		return readUserList(new InputSource(xml.toURI().toASCIIString()), listNodeName);
 	}
 
-	private static Long getProfileId(File f) {
+	private static Long getPrefixedId(String prefix, File f) {
 		String n = f.getName();
-		if (n.indexOf(PROFILES_PREFIX) > -1) {
-			return importLongType(n.substring(PROFILES_PREFIX.length()));
+		int dIdx = n.indexOf('.', prefix.length());
+		if (n.indexOf(prefix) > -1) {
+			return importLongType(n.substring(prefix.length(), dIdx > -1 ? dIdx : n.length()));
 		}
 		return null;
 	}
@@ -1067,7 +1070,7 @@ public class BackupImport {
 
 		File uploadDir = getUploadDir();
 
-		log.debug("roomFilesFolder PATH " + roomFilesFolder.getCanonicalPath());
+		log.debug("roomFilesFolder PATH {} ", roomFilesFolder.getCanonicalPath());
 
 		if (roomFilesFolder.exists()) {
 			for (File file : roomFilesFolder.listFiles()) {
@@ -1076,20 +1079,29 @@ public class BackupImport {
 					if (PROFILES_DIR.equals(fName)) {
 						// profile should correspond to the new user id
 						for (File profile : file.listFiles()) {
-							Long oldId = getProfileId(profile);
+							Long oldId = getPrefixedId(PROFILES_PREFIX, profile);
 							Long id = oldId != null ? userMap.get(oldId) : null;
 							if (id != null) {
 								FileUtils.copyDirectory(profile, getUploadProfilesUserDir(id));
 							}
 						}
 					} else if (FILES_DIR.equals(fName)) {
-						log.debug("Entered FILES folder ");
+						log.debug("Entered FILES folder");
 						for (File rf : file.listFiles()) {
 							// going to fix images
 							if (rf.isFile() && rf.getName().endsWith(EXTENSION_JPG)) {
 								FileUtils.copyFileToDirectory(rf, getImgDir(rf.getName()));
 							} else {
 								FileUtils.copyDirectory(rf, new File(getUploadFilesDir(), rf.getName()));
+							}
+						}
+					} else if (GROUP_LOGO_DIR.equals(fName)) {
+						log.debug("Entered group logo folder");
+						for (File logo : file.listFiles()) {
+							Long oldId = getPrefixedId(GROUP_LOGO_PREFIX, logo);
+							Long id = oldId != null ? groupMap.get(oldId) : null;
+							if (id != null) {
+								FileUtils.moveFile(logo, OmFileHelper.getGroupLogo(id, false));
 							}
 						}
 					} else {
@@ -1108,7 +1120,7 @@ public class BackupImport {
 
 		// Now check the recordings and import them
 		final File recDir = new File(importBaseDir, BCKP_RECORD_FILES);
-		log.debug("sourceDirRec PATH " + recDir.getCanonicalPath());
+		log.debug("sourceDirRec PATH {}", recDir.getCanonicalPath());
 		if (recDir.exists()) {
 			final File hiberDir = getStreamsHibernateDir();
 			for (File r : recDir.listFiles()) {
