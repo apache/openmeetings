@@ -125,8 +125,8 @@ public class KTestStream implements IKStream {
 
 	public void play(final IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
 		this.pipeline = pipeline;
-		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
-		player = new PlayerEndpoint.Builder(pipeline, recPath).build();
+		webRtcEndpoint = createWebRtcEndpoint(pipeline);
+		player = createPlayerEndpoint(pipeline, recPath);
 		player.connect(webRtcEndpoint);
 		webRtcEndpoint.addMediaSessionStartedListener(evt -> {
 				log.info("Media session started {}", evt);

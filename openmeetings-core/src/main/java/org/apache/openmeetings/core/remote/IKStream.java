@@ -20,6 +20,7 @@ package org.apache.openmeetings.core.remote;
 
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaProfileSpecType;
+import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.RecorderEndpoint;
 import org.kurento.client.WebRtcEndpoint;
 
@@ -34,5 +35,9 @@ public interface IKStream {
 		return new RecorderEndpoint.Builder(pipeline, path)
 				.stopOnEndOfStream()
 				.withMediaProfile(profile).build();
+	}
+
+	default PlayerEndpoint createPlayerEndpoint(MediaPipeline pipeline, String path) {
+		return new PlayerEndpoint.Builder(pipeline, path).build();
 	}
 }

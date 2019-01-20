@@ -20,6 +20,7 @@
 package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.core.remote.KurentoHandler.MODE_TEST;
+import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_MODE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -38,6 +39,7 @@ import org.kurento.client.KurentoClient;
 import org.kurento.client.KurentoConnectionListener;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaProfileSpecType;
+import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.RecorderEndpoint;
 import org.kurento.client.ServerManager;
 import org.kurento.client.Transaction;
@@ -105,5 +107,41 @@ public class TestKurentoHandlerMocked {
 				handler.onMessage(c, msg);
 			}
 		}
+		JSONObject iceMsg = new JSONObject(TEST_BASE.toString())
+				.put("id", "iceCandidate")
+				.put(PARAM_CANDIDATE, new JSONObject()
+						.put(PARAM_CANDIDATE, "candidate")
+						.put("sdpMid", "sdpMid")
+						.put("sdpMLineIndex", 1));
+		handler.onMessage(c, iceMsg);
+		PlayerEndpoint.Builder playBuilder = mock(PlayerEndpoint.Builder.class);
+		whenNew(PlayerEndpoint.Builder.class).withArguments(any(MediaPipeline.class), anyString()).thenReturn(playBuilder);
+		when(playBuilder.build()).thenReturn(mock(PlayerEndpoint.class));
+		handler.onMessage(c, new JSONObject(TEST_BASE.toString())
+				.put("id", "play")
+				.put("sdpOffer", "sdpOffer"));
+	}
+
+	@Test
+	public void testMsgTestIceCandidate() throws Exception {
+		JSONObject msg = new JSONObject(TEST_BASE.toString())
+				.put("id", "iceCandidate")
+				.put(KurentoHandler.PARAM_CANDIDATE, new JSONObject());
+		WsClient c = new WsClient("sessionId", 0);
+		handler.onMessage(c, msg);
+	}
+
+	@Test
+	public void testMsgTestWannaPlay() throws Exception {
+		JSONObject msg = new JSONObject(TEST_BASE.toString()).put("id", "wannaPlay");
+		WsClient c = new WsClient("sessionId", 0);
+		handler.onMessage(c, msg);
+	}
+
+	@Test
+	public void testMsgTestPlay() throws Exception {
+		JSONObject msg = new JSONObject(TEST_BASE.toString()).put("id", "play");
+		WsClient c = new WsClient("sessionId", 0);
+		handler.onMessage(c, msg);
 	}
 }
