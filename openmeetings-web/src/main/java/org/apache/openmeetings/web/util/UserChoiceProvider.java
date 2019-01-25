@@ -28,6 +28,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.Validatable;
@@ -41,6 +42,10 @@ public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 	private final Map<String, User> newContacts = new HashMap<>();
 	@SpringBean
 	private UserDao userDao;
+
+	public UserChoiceProvider() {
+		Injector.get().inject(this);
+	}
 
 	public User getUser(String value) {
 		User u = null;
