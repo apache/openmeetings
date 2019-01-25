@@ -38,4 +38,14 @@ public class TextRoomMessage extends RoomMessage {
 	public String getText() {
 		return text;
 	}
+
+	@Override
+	public String toString() {
+		return new StringBuilder()
+				.append("TextRoomMessage [text=").append(text)
+				.append(", getRoomId()=").append(getRoomId())
+				.append(", getUserId()=").append(getUserId())
+				.append(", getType()=").append(getType()).append("]")
+				.toString();
+	}
 }

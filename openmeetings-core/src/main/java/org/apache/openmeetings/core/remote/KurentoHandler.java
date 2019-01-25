@@ -53,6 +53,7 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
@@ -99,11 +100,12 @@ public class KurentoHandler {
 	private String turnMode;
 	private int turnTtl = 60; //minutes
 	private KurentoClient client;
+	private boolean connected = false;
 	private String kuid;
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
 	final Map<String, KStream> streamsByUid = new ConcurrentHashMap<>();
 	final Map<String, KTestStream> testsByUid = new ConcurrentHashMap<>();
-	private Runnable check = null;
+	private Runnable check;
 
 	@Autowired
 	private IClientManager cm;
@@ -118,11 +120,21 @@ public class KurentoHandler {
 	@Autowired
 	private InterviewConverter interviewConverter;
 
+	private boolean isConnected() {
+		boolean connctd = client != null && !client.isClosed() && connected;
+		if (!connctd) {
+			log.warn(WARN_NO_KURENTO);
+		}
+		return connctd;
+	}
+
 	public void init() {
+		log.warn("!!!!!!!!!!!!!!!! Init");
 		check = () -> {
+			log.warn("!!!!!!!!!!!!!!!! CHECK !!!!!!!!!!!!!!!!!!!!");
 			try {
-				client = KurentoClient.create(kurentoWsUrl, new KConnectionListener());
 				kuid = randomUUID().toString();
+				client = KurentoClient.create(kurentoWsUrl, new KConnectionListener(kuid));
 				client.getServerManager().addObjectCreatedListener(new KWatchDog());
 			} catch (Exception e) {
 				log.warn("Fail to create Kurento client, will re-try in {} ms", checkTimeout);
@@ -134,6 +146,8 @@ public class KurentoHandler {
 
 	public void destroy() {
 		if (client != null) {
+			kuid = randomUUID().toString(); // will be changed to prevent double events
+			client.destroy();
 			for (Entry<Long, KRoom> e : rooms.entrySet()) {
 				e.getValue().close(this);
 			}
@@ -143,7 +157,7 @@ public class KurentoHandler {
 			}
 			testsByUid.clear();
 			streamsByUid.clear();
-			client.destroy();
+			client = null;
 		}
 	}
 
@@ -285,7 +299,7 @@ public class KurentoHandler {
 	}
 
 	public void onMessage(IWsClient _c, JSONObject msg) {
-		if (client == null) {
+		if (!isConnected()) {
 			sendError(_c, "Multimedia server is inaccessible");
 			return;
 		}
@@ -308,8 +322,7 @@ public class KurentoHandler {
 	}
 
 	private void checkStreams(Long roomId) {
-		if (client == null) {
-			log.warn(WARN_NO_KURENTO);
+		if (!isConnected()) {
 			return;
 		}
 		KRoom room = getRoom(roomId);
@@ -400,8 +413,7 @@ public class KurentoHandler {
 	}
 
 	public boolean recordingAllowed(Client c) {
-		if (client == null) {
-			log.warn(WARN_NO_KURENTO);
+		if (!isConnected()) {
 			return false;
 		}
 		Room r = c.getRoom();
@@ -410,16 +422,14 @@ public class KurentoHandler {
 	}
 
 	public void startRecording(Client c) {
-		if (client == null) {
-			log.warn(WARN_NO_KURENTO);
+		if (!isConnected()) {
 			return;
 		}
 		getRoom(c.getRoomId()).startRecording(c, recDao);
 	}
 
 	public void stopRecording(Client c) {
-		if (client == null) {
-			log.warn(WARN_NO_KURENTO);
+		if (!isConnected()) {
 			return;
 		}
 		getRoom(c.getRoomId()).stopRecording(this, c, recDao);
@@ -431,24 +441,21 @@ public class KurentoHandler {
 	}
 
 	public boolean isRecording(Long roomId) {
-		if (client == null) {
-			log.warn(WARN_NO_KURENTO);
+		if (!isConnected()) {
 			return false;
 		}
 		return getRoom(roomId).isRecording();
 	}
 
 	public JSONObject getRecordingUser(Long roomId) {
-		if (client == null) {
-			log.warn(WARN_NO_KURENTO);
+		if (!isConnected()) {
 			return new JSONObject();
 		}
 		return getRoom(roomId).getRecordingUser();
 	}
 
 	public boolean screenShareAllowed(Client c) {
-		if (client == null) {
-			log.warn(WARN_NO_KURENTO);
+		if (!isConnected()) {
 			return false;
 		}
 		Room r = c.getRoom();
@@ -459,7 +466,7 @@ public class KurentoHandler {
 	}
 
 	private void startSharing(Client c, JSONObject msg, Activity...activities) {
-		if (client != null && c.getRoomId() != null) {
+		if (isConnected() && c.getRoomId() != null) {
 			getRoom(c.getRoomId()).startSharing(this, cm, c, msg, activities);
 		}
 	}
@@ -480,8 +487,7 @@ public class KurentoHandler {
 	}
 
 	public boolean isSharing(Long roomId) {
-		if (client == null) {
-			log.warn(WARN_NO_KURENTO);
+		if (!isConnected()) {
 			return false;
 		}
 		return getRoom(roomId).isSharing();
@@ -511,7 +517,7 @@ public class KurentoHandler {
 	}
 
 	public void remove(IWsClient _c) {
-		if (client == null ||_c == null) {
+		if (!isConnected() ||_c == null) {
 			return;
 		}
 		final String uid = _c.getUid();
@@ -658,25 +664,42 @@ public class KurentoHandler {
 	}
 
 	private class KConnectionListener implements KurentoConnectionListener {
+		final String lkuid;
+
+		private KConnectionListener(final String lkuid) {
+			this.lkuid = lkuid;
+		}
+
+		private void notifyRooms() {
+			WebSocketHelper.sendServer(new TextRoomMessage(null, new User(), RoomMessage.Type.kurentoStatus, new JSONObject().put("connected", isConnected()).toString()));
+		}
+
 		@Override
 		public void reconnected(boolean sameServer) {
-			log.info("Kurento reconnected ? {}", sameServer);
+			log.error("Kurento reconnected ? {}, this shouldn't happen", sameServer);
 		}
 
 		@Override
 		public void disconnected() {
-			log.warn("Disconnected, will re-try in {} ms", checkTimeout);
-			recheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
+			if (lkuid.equals(kuid)) {
+				log.warn("Disconnected, will re-try in {} ms", checkTimeout);
+				connected = false;
+				notifyRooms();
+				destroy();
+				recheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
+			}
 		}
 
 		@Override
 		public void connectionFailed() {
-			log.info("Kurento connectionFailed");
+			// this handled seems to be called multiple times
 		}
 
 		@Override
 		public void connected() {
 			log.info("Kurento connected");
+			connected = true;
+			notifyRooms();
 		}
 	}
 

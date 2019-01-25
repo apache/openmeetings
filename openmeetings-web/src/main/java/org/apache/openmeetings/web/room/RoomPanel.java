@@ -533,6 +533,9 @@ public class RoomPanel extends BasePanel {
 						handler.appendJavaScript(getQuickPollJs());
 					}
 						break;
+					case kurentoStatus:
+						menu.update(handler);
+						break;
 				}
 			}
 		}

@@ -140,18 +140,23 @@ public class KRoom {
 
 			rec.setOwnerId(ownerId);
 			rec.setStatus(Recording.Status.RECORDING);
-			rec = recDao.update(rec);
-			// Receive recordingId
-			recordingId = rec.getId();
 			log.debug("##REC:: recording created by USER: {}", ownerId);
 
 			for (final KStream stream : streams.values()) {
 				StreamDesc sd = c.getStream(stream.getUid());
+				if (sd == null) {
+					continue;
+				}
 				if (StreamType.SCREEN == sd.getType()) {
 					sd.addActivity(Activity.RECORD);
+					rec.setWidth(sd.getWidth());
+					rec.setHeight(sd.getWidth());
 				}
 				stream.startRecord();
 			}
+			rec = recDao.update(rec);
+			// Receive recordingId
+			recordingId = rec.getId();
 
 			// Send notification to all users that the recording has been started
 			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.recordingToggled));

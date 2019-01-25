@@ -182,6 +182,17 @@ public class WebSocketHelper {
 		sendRoom(m.getRoomId(), (t, c) -> t.sendMessage(m), null);
 	}
 
+	public static void sendServer(final RoomMessage m) {
+		log.debug("Sending WebSocket message: {}", m);
+		sendAll(c -> {
+			try {
+				c.sendMessage(m);
+			} catch (Exception e) {
+				log.error("Error while sending message to Server", e);
+			}
+		});
+	}
+
 	public static void sendRoom(final Long roomId, final JSONObject m) {
 		sendRoom(roomId, m, true);
 	}
@@ -242,19 +253,24 @@ public class WebSocketHelper {
 		if (publish) {
 			publish(new WsMessageAll(m));
 		}
+		log.debug("Sending WebSocket message: {}", m);
+		sendAll(c -> {
+			try {
+				c.sendMessage(m);
+			} catch (Exception e) {
+				log.error("Error while sending message to ALL", e);
+			}
+		});
+	}
+
+	private static void sendAll(Consumer<IWebSocketConnection> sender) {
 		new Thread(() -> {
 			Application app = (Application)getApp();
 			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
 			Executor executor = settings.getWebSocketPushMessageExecutor();
 			for (IWebSocketConnection c : reg.getConnections(app)) {
-				executor.run(() -> {
-					try {
-						c.sendMessage(m);
-					} catch (Exception e) {
-						log.error("Error while sending message to ALL", e);
-					}
-				});
+				executor.run(() -> sender.accept(c));
 			}
 		}).start();
 	}
