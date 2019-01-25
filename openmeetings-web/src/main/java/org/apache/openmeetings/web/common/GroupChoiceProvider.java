@@ -31,6 +31,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.ChoiceProvider;
@@ -42,6 +43,10 @@ public class GroupChoiceProvider extends ChoiceProvider<Group> {
 	private GroupDao groupDao;
 	@SpringBean
 	private UserDao userDao;
+
+	public GroupChoiceProvider() {
+		Injector.get().inject(this);
+	}
 
 	@Override
 	public void query(String term, int page, Response<Group> response) {
