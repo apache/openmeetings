@@ -56,6 +56,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
@@ -395,10 +396,10 @@ public class MobileService {
 	}
 
 	public void sendChatMessage(String uid, ChatMessage m, FastDateFormat fmt) {
-		sendChatMessage(streamClientManager.get(uid), m, fmt);
+		sendChatMessage(cm.get(uid), m, fmt);
 	}
 
-	public void sendChatMessage(StreamClient c, ChatMessage m, FastDateFormat fmt) {
+	public void sendChatMessage(IClient c, ChatMessage m, FastDateFormat fmt) {
 		if (c == null) {
 			return;
 		}
