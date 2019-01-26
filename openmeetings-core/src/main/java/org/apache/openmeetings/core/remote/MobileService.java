@@ -62,6 +62,7 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.util.OmException;
@@ -93,6 +94,8 @@ public class MobileService {
 	private ChatDao chatDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
+	@Autowired
+	private IClientManager cm;
 
 	private static void add(Map<String, Object> m, String key, Object v) {
 		m.put(key, v == null ? "" : v);
@@ -294,7 +297,7 @@ public class MobileService {
 			room.put("org", org);
 		}
 		room.put("first", first);
-		room.put("users", streamClientManager.list(r.getId()).size());
+		room.put("users", cm.listByRoom(r.getId()).size());
 		room.put("total", r.getCapacity());
 		room.put("audioOnly", r.isAudioOnly());
 		result.add(room);

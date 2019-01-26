@@ -502,7 +502,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			_log.debug("start streamPublishStart broadcast start: {}, CONN {}", streamName, current);
 			c.setBroadcastId(streamName);
 
-			if (Client.Type.sharing != c.getType() && Client.Type.mobile != c.getType()) {
+			if (Client.Type.mobile == c.getType()) {
+				Client cl = clientManager.getBySid(c.getSid());
+				cl.addStream(c.getUid());
+				clientManager.update(cl);
+			} else if (Client.Type.sharing != c.getType()) {
 				if (Strings.isEmpty(c.getAvsettings()) || "n".equals(c.getAvsettings())) {
 					c.setAvsettings("av");
 				}
@@ -614,6 +618,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			sendMessageToCurrentScope("closeStream", rcl, Client.Type.mobile == rcl.getType());
 			if (Client.Type.sharing == rcl.getType()) {
 				sendSharingStoped(rcl);
+			}
+			if (Client.Type.mobile == rcl.getType()) {
+				Client cl = clientManager.getBySid(rcl.getSid());
+				cl.removeStream(rcl.getUid());
+				clientManager.update(cl);
 			}
 		} catch (Exception e) {
 			_log.error("[streamBroadcastClose]", e);
