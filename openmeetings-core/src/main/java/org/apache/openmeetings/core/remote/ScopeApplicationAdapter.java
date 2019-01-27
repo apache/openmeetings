@@ -504,7 +504,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			if (Client.Type.mobile == c.getType()) {
 				Client cl = clientManager.getBySid(c.getSid());
-				cl.addStream(c.getUid());
+				cl.setActivities(c.getAvsettings()).addStream(c.getUid());
 				clientManager.update(cl);
 			} else if (Client.Type.sharing != c.getType()) {
 				if (Strings.isEmpty(c.getAvsettings()) || "n".equals(c.getAvsettings())) {

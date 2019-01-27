@@ -464,6 +464,19 @@ public class Client implements IClient {
 		recordingId = c.recordingId;
 	}
 
+	public Client setActivities(String avSettings) {
+		if (!Strings.isEmpty(avSettings)) {
+			clearActivities();
+			if (avSettings.indexOf('a') > -1) {
+				set(Activity.broadcastA);
+			}
+			if (avSettings.indexOf('v') > -1) {
+				set(Activity.broadcastV);
+			}
+		}
+		return this;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

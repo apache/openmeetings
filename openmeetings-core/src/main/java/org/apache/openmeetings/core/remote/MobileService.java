@@ -66,6 +66,8 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.db.util.FormatHelper;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -361,6 +363,11 @@ public class MobileService {
 		if (!"n".equals(avMode)) {
 			c.setBroadcastId(UUID.randomUUID().toString());
 			c.setBroadcasting(true);
+
+			Client cl = cm.getBySid(c.getSid());
+			cl.setActivities(c.getAvsettings()).addStream(c.getUid());
+			cm.update(cl);
+			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, cl.getUid()));
 		}
 		c.setWidth(Double.valueOf(width).intValue());
 		c.setHeight(Double.valueOf(height).intValue());
