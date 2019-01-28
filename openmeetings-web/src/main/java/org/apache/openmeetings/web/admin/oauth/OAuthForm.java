@@ -47,6 +47,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
@@ -93,16 +94,16 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 	@Override
 	protected void onInitialize() {
 		add(new CheckBox("isEnabled"));
-		add(new RequiredTextField<String>("name").setLabel(Model.of(getString("165"))));
-		add(new TextField<String>("iconUrl").setLabel(Model.of(getString("1575"))));
-		add(new RequiredTextField<String>("clientId").setLabel(Model.of(getString("1576"))));
-		add(new RequiredTextField<String>("clientSecret").setLabel(Model.of(getString("1577"))));
-		add(redirectUriText = (TextField<String>) new TextField<>("redirectUri", Model.of("")).setLabel(Model.of(getString("1587"))));
-		add(new RequiredTextField<String>("requestKeyUrl").setLabel(Model.of(getString("1578"))));
+		add(new RequiredTextField<String>("name").setLabel(new ResourceModel("165")));
+		add(new TextField<String>("iconUrl").setLabel(new ResourceModel("1575")));
+		add(new RequiredTextField<String>("clientId").setLabel(new ResourceModel("1576")));
+		add(new RequiredTextField<String>("clientSecret").setLabel(new ResourceModel("1577")));
+		add(redirectUriText = (TextField<String>) new TextField<>("redirectUri", Model.of("")).setLabel(new ResourceModel("1587")));
+		add(new RequiredTextField<String>("requestKeyUrl").setLabel(new ResourceModel("1578")));
 		add(new DropDownChoice<>("requestTokenMethod", Arrays.asList(RequestTokenMethod.values()), new ChoiceRenderer<RequestTokenMethod>("name", "name")));
-		add(new RequiredTextField<String>("requestTokenUrl").setLabel(Model.of(getString("1579"))));
-		add(new RequiredTextField<String>("requestTokenAttributes").setLabel(Model.of(getString("1586"))));
-		add(new RequiredTextField<String>("requestInfoUrl").setLabel(Model.of(getString("1580"))));
+		add(new RequiredTextField<String>("requestTokenUrl").setLabel(new ResourceModel("1579")));
+		add(new RequiredTextField<String>("requestTokenAttributes").setLabel(new ResourceModel("1586")));
+		add(new RequiredTextField<String>("requestInfoUrl").setLabel(new ResourceModel("1580")));
 		add(new DropDownChoice<>("requestInfoMethod", Arrays.asList(RequestInfoMethod.values()), new ChoiceRenderer<RequestInfoMethod>("name", "name")));
 		Form<Void> mappingForm = new Form<>("mappingForm");
 		final TextField<String> omAttr = new TextField<>("omAttr", Model.of(""));

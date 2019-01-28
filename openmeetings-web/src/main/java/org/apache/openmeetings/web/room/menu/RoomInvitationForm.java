@@ -41,6 +41,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
@@ -106,7 +107,7 @@ public class RoomInvitationForm extends InvitationForm {
 
 	@Override
 	protected void onInitialize() {
-		groups.setLabel(Model.of(getString("126")));
+		groups.setLabel(new ResourceModel("126"));
 		super.onInitialize();
 	}
 

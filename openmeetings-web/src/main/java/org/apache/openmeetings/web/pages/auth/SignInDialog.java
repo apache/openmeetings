@@ -61,6 +61,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
@@ -301,8 +302,8 @@ public class SignInDialog extends NonClosableDialog<String> {
 
 		@Override
 		protected void onInitialize() {
-			loginField.setLabel(Model.of(getString("114")));
-			passField.setLabel(Model.of(getString("110")));
+			loginField.setLabel(new ResourceModel("114"));
+			passField.setLabel(new ResourceModel("110"));
 			super.onInitialize();
 		}
 

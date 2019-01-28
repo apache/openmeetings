@@ -45,6 +45,7 @@ import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
@@ -144,7 +145,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onInitialize() {
-		setTitle(Model.of(getString("312")));
+		setTitle(new ResourceModel("312"));
 		send = new DialogButton("send", getString("317"));
 		cancel = new DialogButton("cancel", getString("lbl.cancel"));
 		add(form);

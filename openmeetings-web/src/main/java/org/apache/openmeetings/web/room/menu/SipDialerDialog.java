@@ -28,6 +28,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.Options;
@@ -68,7 +69,7 @@ public class SipDialerDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onInitialize() {
-		setTitle(Model.of(getString("1003")));
+		setTitle(new ResourceModel("1003"));
 		call = new DialogButton("call", getString("1448"));
 		close = new DialogButton("close", getString("85"));
 		super.onInitialize();

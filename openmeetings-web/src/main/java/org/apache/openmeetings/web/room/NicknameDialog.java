@@ -36,7 +36,7 @@ import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddres
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
@@ -66,9 +66,9 @@ public class NicknameDialog extends NonClosableDialog<User> {
 		getTitle().setObject(getString("1287"));
 		ok = new DialogButton("ok", getString("54"));
 		form.add(feedback);
-		form.add(new RequiredTextField<String>("firstname").setLabel(Model.of(getString("135"))).add(minimumLength(getMinFnameLength())));
-		form.add(new RequiredTextField<String>("lastname").setLabel(Model.of(getString("136"))).add(minimumLength(getMinLnameLength())));
-		form.add(new RequiredTextField<String>("address.email").setLabel(Model.of(getString("119"))).add(RfcCompliantEmailAddressValidator.getInstance()));
+		form.add(new RequiredTextField<String>("firstname").setLabel(new ResourceModel("135")).add(minimumLength(getMinFnameLength())));
+		form.add(new RequiredTextField<String>("lastname").setLabel(new ResourceModel("136")).add(minimumLength(getMinLnameLength())));
+		form.add(new RequiredTextField<String>("address.email").setLabel(new ResourceModel("119")).add(RfcCompliantEmailAddressValidator.getInstance()));
 		super.onInitialize();
 	}
 

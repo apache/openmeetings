@@ -37,7 +37,7 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.Options;
@@ -105,7 +105,7 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		setTitle(Model.of(getString("dashboard.widget.admin.cleanup.title")));
+		setTitle(new ResourceModel("dashboard.widget.admin.cleanup.title"));
 	}
 
 	@Override

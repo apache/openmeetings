@@ -32,6 +32,7 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -84,7 +85,7 @@ public class InvitationPasswordDialog extends NonClosableDialog<Invitation> {
 	@Override
 	protected void onInitialize() {
 		getTitle().setObject(getString("230"));
-		password.setLabel(Model.of(getString("110")));
+		password.setLabel(new ResourceModel("110"));
 		check = new DialogButton("check", getString("537"));
 		super.onInitialize();
 	}

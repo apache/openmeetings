@@ -34,6 +34,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
@@ -136,10 +137,10 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 			add(login = new TextField<>("login", Model.of(user.getLogin())));
 			login.setOutputMarkupId(true);
 			add(password = new PasswordTextField("password", new Model<String>()));
-			password.setLabel(Model.of(getString("328"))).setOutputMarkupId(true);
+			password.setLabel(new ResourceModel("328")).setOutputMarkupId(true);
 			password.setRequired(false).add(new StrongPasswordValidator(user));
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()));
-			confirmPassword.setLabel(Model.of(getString("116"))).setOutputMarkupId(true);
+			confirmPassword.setLabel(new ResourceModel("116")).setOutputMarkupId(true);
 
 			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;

@@ -34,6 +34,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
@@ -91,7 +92,7 @@ public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
 		BaseFileItem f = getModelObject();
-		setTitle(handler, Model.of(getString(f.getType() == BaseFileItem.Type.Recording ? "887" : "convert.errors.file")));
+		setTitle(handler, new ResourceModel(f.getType() == BaseFileItem.Type.Recording ? "887" : "convert.errors.file"));
 		List<FileItemLog> logs = fileLogDao.get(f);
 		if (f.getHash() == null) {
 			message.setVisible(true);

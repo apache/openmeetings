@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -77,7 +78,7 @@ public class Captcha extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(captchaText.setLabel(Model.of(getString("captcha.text"))).add(new IValidator<String>() {
+		add(captchaText.setLabel(new ResourceModel("captcha.text")).add(new IValidator<String>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -39,7 +39,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.Options;
@@ -122,7 +122,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 
 		@Override
 		protected void onInitialize() {
-			add(new RequiredTextField<String>("name").setLabel(Model.of(getString("1410"))));
+			add(new RequiredTextField<String>("name").setLabel(new ResourceModel("1410")));
 			add(new TextArea<String>("question"));
 			add(new DropDownChoice<>("type", Arrays.asList(RoomPoll.Type.values())
 					, new ChoiceRenderer<RoomPoll.Type>() {
@@ -138,7 +138,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 							return pt.name();
 						}
 					})
-					.setRequired(true).setLabel(Model.of(getString("21"))));
+					.setRequired(true).setLabel(new ResourceModel("21")));
 			add(feedback);
 			super.onInitialize();
 		}

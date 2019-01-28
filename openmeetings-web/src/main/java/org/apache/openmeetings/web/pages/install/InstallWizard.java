@@ -74,6 +74,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
@@ -421,12 +422,12 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();
-			add(new RequiredTextField<String>("username").setLabel(Model.of(getString("install.wizard.params.step1.username"))).add(minimumLength(USER_LOGIN_MINIMUM_LENGTH)));
+			add(new RequiredTextField<String>("username").setLabel(new ResourceModel("install.wizard.params.step1.username")).add(minimumLength(USER_LOGIN_MINIMUM_LENGTH)));
 			add(new PasswordTextField("password")
-					.setResetPassword(false).setLabel(Model.of(getString("install.wizard.params.step1.password")))
+					.setResetPassword(false).setLabel(new ResourceModel("install.wizard.params.step1.password"))
 					.add(new StrongPasswordValidator(new User())));
-			add(new RequiredTextField<String>("email").setLabel(Model.of(getString("install.wizard.params.step1.email"))).add(RfcCompliantEmailAddressValidator.getInstance()));
-			add(new RequiredTextField<String>("group").setLabel(Model.of(getString("install.wizard.params.step1.group"))));
+			add(new RequiredTextField<String>("email").setLabel(new ResourceModel("install.wizard.params.step1.email")).add(RfcCompliantEmailAddressValidator.getInstance()));
+			add(new RequiredTextField<String>("group").setLabel(new ResourceModel("install.wizard.params.step1.group")));
 		}
 
 		@Override

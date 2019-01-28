@@ -49,6 +49,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.select2.Select2Choice;
 
@@ -153,10 +154,10 @@ public class GroupForm extends AdminBaseForm<Group> {
 		final boolean isGroupAdmin = hasGroupAdminLevel(getRights());
 		setNewVisible(!isGroupAdmin);
 		userToadd.setEnabled(!isGroupAdmin);
-		add(new RequiredTextField<String>("name").setLabel(Model.of(getString("165"))));
+		add(new RequiredTextField<String>("name").setLabel(new ResourceModel("165")));
 		add(logo);
-		add(new TextField<String>("tag").setLabel(Model.of(getString("admin.group.form.tag"))));
-		add(new CheckBox("restricted").setLabel(Model.of(getString("restricted.group.files"))));
+		add(new TextField<String>("tag").setLabel(new ResourceModel("admin.group.form.tag")));
+		add(new CheckBox("restricted").setLabel(new ResourceModel("restricted.group.files")));
 		add(new AjaxCheckBox("limited") {
 			private static final long serialVersionUID = 1L;
 
@@ -170,12 +171,12 @@ public class GroupForm extends AdminBaseForm<Group> {
 					, reminderDays.setEnabled(getModelObject())
 				);
 			}
-		}.setLabel(Model.of(getString("admin.group.form.limited"))));
-		add(maxFilesSize.setLabel(Model.of(getString("admin.group.form.maxFilesSize"))).setEnabled(false).setOutputMarkupId(true));
-		add(maxRecordingsSize.setLabel(Model.of(getString("admin.group.form.maxRecordingsSize"))).setEnabled(false).setOutputMarkupId(true));
-		add(maxRooms.setLabel(Model.of(getString("admin.group.form.maxRooms"))).setEnabled(false).setOutputMarkupId(true));
-		add(recordingTtl.setLabel(Model.of(getString("admin.group.form.recordingTtl"))).setEnabled(false).setOutputMarkupId(true));
-		add(reminderDays.setLabel(Model.of(getString("admin.group.form.reminderDays"))).setEnabled(false).setOutputMarkupId(true));
+		}.setLabel(new ResourceModel("admin.group.form.limited")));
+		add(maxFilesSize.setLabel(new ResourceModel("admin.group.form.maxFilesSize")).setEnabled(false).setOutputMarkupId(true));
+		add(maxRecordingsSize.setLabel(new ResourceModel("admin.group.form.maxRecordingsSize")).setEnabled(false).setOutputMarkupId(true));
+		add(maxRooms.setLabel(new ResourceModel("admin.group.form.maxRooms")).setEnabled(false).setOutputMarkupId(true));
+		add(recordingTtl.setLabel(new ResourceModel("admin.group.form.recordingTtl")).setEnabled(false).setOutputMarkupId(true));
+		add(reminderDays.setLabel(new ResourceModel("admin.group.form.reminderDays")).setEnabled(false).setOutputMarkupId(true));
 	}
 
 	@Override

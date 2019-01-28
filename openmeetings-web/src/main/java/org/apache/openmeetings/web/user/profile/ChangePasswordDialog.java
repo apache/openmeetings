@@ -29,6 +29,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -81,7 +82,7 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 	@Override
 	protected void onInitialize() {
 		getTitle().setObject(getString("327"));
-		update = new DialogButton("update", Model.of(getString("327"))) {
+		update = new DialogButton("update", new ResourceModel("327")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -89,12 +90,12 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 				return true;
 			}
 		};
-		cancel = new DialogButton("cancel", Model.of(getString("lbl.cancel")));
+		cancel = new DialogButton("cancel", new ResourceModel("lbl.cancel"));
 		passValidator = new StrongPasswordValidator(userDao.get(getUserId()));
 		add(form.add(
-				current.setLabel(Model.of(getString("current.password"))).setRequired(true)
-				, pass.setLabel(Model.of(getString("328"))).add(passValidator)
-				, pass2.setLabel(Model.of(getString("116")))
+				current.setLabel(new ResourceModel("current.password")).setRequired(true)
+				, pass.setLabel(new ResourceModel("328")).add(passValidator)
+				, pass2.setLabel(new ResourceModel("116"))
 				, feedback.setOutputMarkupId(true)
 				));
 		super.onInitialize();

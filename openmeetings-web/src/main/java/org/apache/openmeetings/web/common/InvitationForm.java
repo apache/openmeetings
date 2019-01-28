@@ -54,6 +54,7 @@ import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
@@ -93,7 +94,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 	@Override
 	protected void onInitialize() {
 		add(subject, message);
-		recipients.setLabel(Model.of(getString("216"))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
+		recipients.setLabel(new ResourceModel("216")).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -127,7 +128,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 				, new Radio<>("endless", Model.of(Valid.Endless))));
 		add(passwd);
 		Invitation i = getModelObject();
-		passwd.setLabel(Model.of(getString("110"))).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
+		passwd.setLabel(new ResourceModel("110")).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
 		add(from.setOutputMarkupId(true), to.setOutputMarkupId(true), timeZoneId.setOutputMarkupId(true));
 		timeZoneId.add(new AjaxFormComponentUpdatingBehavior("change") {
 			private static final long serialVersionUID = 1L;
