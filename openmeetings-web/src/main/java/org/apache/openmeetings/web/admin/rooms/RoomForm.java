@@ -72,6 +72,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.ChoiceProvider;
@@ -141,7 +142,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					}
 				}));
 
-		add(new RoomTypeDropDown("type").setRequired(true).setLabel(Model.of(getString("45"))));
+		add(new RoomTypeDropDown("type").setRequired(true).setLabel(new ResourceModel("45")));
 
 		add(new TextArea<String>("comment"));
 
@@ -189,7 +190,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				Group g = getBean(GroupDao.class).get(id);
 				return new RoomGroup(g, RoomForm.this.getModelObject());
 			}
-		}).setLabel(Model.of(getString("828"))).setRequired(isGroupAdmin));
+		}).setLabel(new ResourceModel("828")).setRequired(isGroupAdmin));
 
 		add(new CheckBox("isDemoRoom"));
 		TextField<Integer> demoTime = new TextField<>("demoTime");
@@ -336,7 +337,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				public Collection<BaseFileItem> toChoices(Collection<String> ids) {
 					return getBean(FileItemDao.class).get(ids);
 				}
-			}).setLabel(Model.of(getString("245"))))
+			}).setLabel(new ResourceModel("245")))
 			.add(new TextField<Long>("wbidx", wbIdx) {
 				private static final long serialVersionUID = 1L;
 

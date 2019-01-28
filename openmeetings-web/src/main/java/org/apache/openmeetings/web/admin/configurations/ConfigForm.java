@@ -42,7 +42,7 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -126,7 +126,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 				}
 				return null;
 			}
-		}).setLabel(Model.of(getString("45"))).add(new AjaxFormComponentUpdatingBehavior("change") {
+		}).setLabel(new ResourceModel("45")).add(new AjaxFormComponentUpdatingBehavior("change") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -134,7 +134,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 				update(target);
 			}
 		}));
-		add(new RequiredTextField<String>("key").setLabel(Model.of(getString("265"))).add(new IValidator<String>(){
+		add(new RequiredTextField<String>("key").setLabel(new ResourceModel("265")).add(new IValidator<String>(){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -145,9 +145,9 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 				}
 			}
 		}));
-		add(valueS.setLabel(Model.of(getString("271"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
-		add(valueN.setLabel(Model.of(getString("271"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
-		add(valueB.setLabel(Model.of(getString("271"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
+		add(valueS.setLabel(new ResourceModel("271")).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
+		add(valueN.setLabel(new ResourceModel("271")).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
+		add(valueB.setLabel(new ResourceModel("271")).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 	}
 
 	@Override

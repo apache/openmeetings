@@ -43,6 +43,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.UrlTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
@@ -555,7 +556,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 				username.setModelObject(null);
 
 				urlLabel.setDefaultModelObject(getString("calendar.url"));
-				url.setLabel(Model.of(getString("calendar.url")));
+				url.setLabel(new ResourceModel("calendar.url"));
 			}
 
 			//Add new AttributeModifier to change the type of URLTextField, to text for

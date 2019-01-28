@@ -27,7 +27,7 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
@@ -43,7 +43,7 @@ public class EventDetailDialog extends AbstractDialog<Appointment> {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		setTitle(Model.of(getString("815")));
+		setTitle(new ResourceModel("815"));
 		add(new Label("title"));
 		add(new Label("description"));
 		add(new Label("owner.timeZoneId"));
@@ -67,6 +67,6 @@ public class EventDetailDialog extends AbstractDialog<Appointment> {
 
 	@Override
 	protected List<DialogButton> getButtons() {
-		return Arrays.asList(new DialogButton("cancel", Model.of(getString("lbl.cancel"))));
+		return Arrays.asList(new DialogButton("cancel", new ResourceModel("lbl.cancel")));
 	}
 }

@@ -30,6 +30,7 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
 
 import com.googlecode.wicket.jquery.core.Options;
@@ -56,10 +57,10 @@ public class PasswordDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onInitialize() {
-		setTitle(Model.of(getString("537")));
+		setTitle(new ResourceModel("537"));
 		ok = new DialogButton("ok", getString("54"));
 		cancel = new DialogButton("cancel", getString("lbl.cancel"));
-		add(form.add(feedback, pass.setRequired(false).setLabel(Model.of(getString("110"))).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true)));
+		add(form.add(feedback, pass.setRequired(false).setLabel(new ResourceModel("110")).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true)));
 		super.onInitialize();
 	}
 

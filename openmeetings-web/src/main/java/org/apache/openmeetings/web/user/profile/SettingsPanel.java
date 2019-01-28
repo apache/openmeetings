@@ -30,7 +30,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.tabs.AjaxTab;
@@ -54,7 +54,7 @@ public class SettingsPanel extends UserBasePanel {
 	@Override
 	protected void onInitialize() {
 		List<ITab> tabs = new ArrayList<>();
-		tabs.add(new AjaxTab(Model.of(getString("1170"))) {
+		tabs.add(new AjaxTab(new ResourceModel("1170")) {
 			private static final long serialVersionUID = 1L;
 			UserProfilePanel profilePanel = null;
 
@@ -76,7 +76,7 @@ public class SettingsPanel extends UserBasePanel {
 				return super.load(target);
 			}
 		});
-		tabs.add(new AjaxTab(Model.of(getString("1188"))) {
+		tabs.add(new AjaxTab(new ResourceModel("1188")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -84,7 +84,7 @@ public class SettingsPanel extends UserBasePanel {
 				return new MessagesContactsPanel(panelId);
 			}
 		});
-		tabs.add(new AbstractTab(Model.of(getString("1171"))) {
+		tabs.add(new AbstractTab(new ResourceModel("1171")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -92,7 +92,7 @@ public class SettingsPanel extends UserBasePanel {
 				return new ProfilePanel(panelId);
 			}
 		});
-		tabs.add(new AbstractTab(Model.of(getString("1172"))) {
+		tabs.add(new AbstractTab(new ResourceModel("1172")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -100,7 +100,7 @@ public class SettingsPanel extends UserBasePanel {
 				return new UserSearchPanel(panelId);
 			}
 		});
-		tabs.add(new AbstractTab(Model.of(getString("profile.invitations"))) {
+		tabs.add(new AbstractTab(new ResourceModel("profile.invitations")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -108,7 +108,7 @@ public class SettingsPanel extends UserBasePanel {
 				return new InvitationsPanel(panelId);
 			}
 		});
-		tabs.add(new AbstractTab(Model.of(getString("1548"))) {
+		tabs.add(new AbstractTab(new ResourceModel("1548")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

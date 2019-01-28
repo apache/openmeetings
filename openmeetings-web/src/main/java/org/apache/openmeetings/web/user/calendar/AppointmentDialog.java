@@ -80,6 +80,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.CollectionModel;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -486,11 +487,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 		@Override
 		protected void onInitialize() {
-			groups.setLabel(Model.of(getString("126")));
-			add(new RequiredTextField<String>("title").setLabel(Model.of(getString("572"))));
-			add(start.setLabel(Model.of(getString("570"))).setRequired(true)
-					, end.setLabel(Model.of(getString("571"))).setRequired(true)
-					, groom.setLabel(Model.of(getString("406"))));
+			groups.setLabel(new ResourceModel("126"));
+			add(new RequiredTextField<String>("title").setLabel(new ResourceModel("572")));
+			add(start.setLabel(new ResourceModel("570")).setRequired(true)
+					, end.setLabel(new ResourceModel("571")).setRequired(true)
+					, groom.setLabel(new ResourceModel("406")));
 			super.onInitialize();
 		}
 

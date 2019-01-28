@@ -52,8 +52,8 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
@@ -78,7 +78,7 @@ public class GeneralUserForm extends Form<User> {
 	protected void onInitialize() {
 		super.onInitialize();
 		add(email);
-		email.setLabel(Model.of(getString("119")));
+		email.setLabel(new ResourceModel("119"));
 		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new DropDownChoice<>("salutation"
 				, Arrays.asList(Salutation.values())
@@ -148,7 +148,7 @@ public class GeneralUserForm extends Form<User> {
 				int idx = grpUsers.indexOf(gu);
 				return idx < 0 ? gu : grpUsers.get(idx);
 			}
-		}).setLabel(Model.of(getString("161"))).setRequired(isAdminForm && hasGroupAdminLevel(getRights())).setEnabled(isAdminForm));
+		}).setLabel(new ResourceModel("161")).setRequired(isAdminForm && hasGroupAdminLevel(getRights())).setEnabled(isAdminForm));
 	}
 
 	public void updateModelObject(User u, boolean isAdminForm) {

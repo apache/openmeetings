@@ -67,6 +67,7 @@ import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.Strings;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.red5.logging.Red5LoggerFactory;
@@ -108,9 +109,9 @@ public class UserForm extends AdminBaseForm<User> {
 		super.onInitialize();
 		add(mainContainer);
 		mainContainer.add(generalForm = new GeneralUserForm("general", getModel(), true));
-		mainContainer.add(password.setResetPassword(false).setLabel(Model.of(getString("110"))).setRequired(false)
+		mainContainer.add(password.setResetPassword(false).setLabel(new ResourceModel("110")).setRequired(false)
 				.add(passValidator = new StrongPasswordValidator(getModelObject())));
-		login.setLabel(Model.of(getString("108")));
+		login.setLabel(new ResourceModel("108"));
 		mainContainer.add(login.add(minimumLength(getMinLoginLength())));
 
 		mainContainer.add(new DropDownChoice<>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {

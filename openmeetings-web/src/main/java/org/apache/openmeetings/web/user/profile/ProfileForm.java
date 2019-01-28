@@ -41,6 +41,7 @@ import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
@@ -67,7 +68,7 @@ public class ProfileForm extends Form<User> {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(passwd.setLabel(Model.of(getString("current.password"))).setRequired(true).setVisible(checkPassword));
+		add(passwd.setLabel(new ResourceModel("current.password")).setRequired(true).setVisible(checkPassword));
 
 		add(actions = new FormActionsPanel<User>("buttons", this) {
 			private static final long serialVersionUID = 1L;

@@ -34,7 +34,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 /**
  * Form components to insert/update/delete {@link LdapConfig}
@@ -63,8 +63,8 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 
 	@Override
 	protected void onInitialize() {
-		add(new RequiredTextField<String>("name").setLabel(Model.of(getString("165"))));
-		add(new RequiredTextField<String>("configFileName").setLabel(Model.of(getString("1115"))));
+		add(new RequiredTextField<String>("name").setLabel(new ResourceModel("165")));
+		add(new RequiredTextField<String>("configFileName").setLabel(new ResourceModel("1115")));
 		super.onInitialize();
 	}
 
