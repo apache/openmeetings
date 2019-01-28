@@ -53,7 +53,7 @@ import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
-import net.fortuna.ical4j.model.Recur;
+import net.fortuna.ical4j.model.Recur.Frequency;
 import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.CalendarComponent;
@@ -207,13 +207,13 @@ public class IcalUtils {
 		if (recur != null) {
 			Parameter freq = recur.getParameter("FREQ");
 			if (freq != null) {
-				if (freq.getValue().equals(Recur.DAILY)) {
+				if (freq.getValue().equals(Frequency.DAILY.name())) {
 					a.setIsDaily(true);
-				} else if (freq.getValue().equals(Recur.WEEKLY)) {
+				} else if (freq.getValue().equals(Frequency.WEEKLY.name())) {
 					a.setIsWeekly(true);
-				} else if (freq.getValue().equals(Recur.MONTHLY)) {
+				} else if (freq.getValue().equals(Frequency.MONTHLY.name())) {
 					a.setIsMonthly(true);
-				} else if (freq.getValue().equals(Recur.YEARLY)) {
+				} else if (freq.getValue().equals(Frequency.YEARLY.name())) {
 					a.setIsYearly(true);
 				}
 			}
