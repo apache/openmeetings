@@ -168,11 +168,18 @@ public class StoredFile {
 		return MIME_IMAGE.equals(mime.getType());
 	}
 
+	public boolean isAudio() {
+		if (mime == null) {
+			return false;
+		}
+		return MIME_AUDIO.equals(mime.getType());
+	}
+
 	public boolean isVideo() {
 		if (mime == null) {
 			return false;
 		}
-		return MIME_AUDIO.equals(mime.getType()) || MIME_VIDEO.equals(mime.getType());
+		return isAudio() || MIME_VIDEO.equals(mime.getType());
 	}
 
 	public boolean isChart() {

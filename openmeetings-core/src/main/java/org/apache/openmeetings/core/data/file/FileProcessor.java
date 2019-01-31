@@ -124,7 +124,7 @@ public class FileProcessor {
 					break;
 				case Video:
 					copyFile(temp, file);
-					videoConverter.convertVideo(f, sf.getExt(), logs);
+					videoConverter.convertVideo(f, sf, logs);
 					break;
 				default:
 					break;
