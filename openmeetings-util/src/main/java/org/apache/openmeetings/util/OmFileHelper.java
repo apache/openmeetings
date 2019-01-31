@@ -83,12 +83,12 @@ public class OmFileHelper {
 
 	private OmFileHelper() {}
 
-	public static void setOmHome(File omHome) {
-		OmFileHelper.omHome = omHome;
+	public static void setOmHome(File home) {
+		omHome = home;
 	}
 
-	public static void setOmHome(String omHome) {
-		OmFileHelper.omHome = new File(omHome);
+	public static void setOmHome(String home) {
+		omHome = new File(home);
 	}
 
 	public static File getRootDir() {
@@ -97,7 +97,7 @@ public class OmFileHelper {
 	}
 
 	public static File getOmHome() {
-		return OmFileHelper.omHome;
+		return omHome;
 	}
 
 	private static File getDir(File parent, String name) {
@@ -109,7 +109,7 @@ public class OmFileHelper {
 	}
 
 	public static File getUploadDir() {
-		return new File(OmFileHelper.omHome, UPLOAD_DIR);
+		return new File(omHome, UPLOAD_DIR);
 	}
 
 	public static File getUploadFilesDir() {
@@ -182,7 +182,7 @@ public class OmFileHelper {
 	}
 
 	public static File getStreamsDir() {
-		return getDir(OmFileHelper.omHome, STREAMS_DIR);
+		return getDir(omHome, STREAMS_DIR);
 	}
 
 	public static File getStreamsHibernateDir() {
@@ -210,11 +210,11 @@ public class OmFileHelper {
 	}
 
 	public static File getLanguagesDir() {
-		return new File(OmFileHelper.omHome, LANGUAGES_DIR);
+		return new File(omHome, LANGUAGES_DIR);
 	}
 
 	public static File getPublicDir() {
-		return new File(OmFileHelper.omHome, PUBLIC_DIR);
+		return new File(omHome, PUBLIC_DIR);
 	}
 
 	public static File getPublicClipartsDir() {
@@ -226,7 +226,7 @@ public class OmFileHelper {
 	}
 
 	public static File getWebinfDir() {
-		return new File(OmFileHelper.omHome, WEB_INF_DIR);
+		return new File(omHome, WEB_INF_DIR);
 	}
 
 	public static File getPersistence() {
@@ -238,23 +238,27 @@ public class OmFileHelper {
 	}
 
 	public static File getPersistence(DbType dbType) {
-		return new File(OmFileHelper.getWebinfDir(), dbType == null ? PERSISTENCE_NAME : String.format(DB_PERSISTENCE_NAME, dbType));
+		return new File(getWebinfDir(), dbType == null ? PERSISTENCE_NAME : String.format(DB_PERSISTENCE_NAME, dbType));
 	}
 
 	public static File getConfDir() {
-		return new File(OmFileHelper.omHome, CONF_DIR);
+		return new File(omHome, CONF_DIR);
 	}
 
 	public static File getScreenSharingDir() {
-		return new File(OmFileHelper.omHome, SCREENSHARING_DIR);
+		return new File(omHome, SCREENSHARING_DIR);
 	}
 
 	public static File getImagesDir() {
-		return new File(OmFileHelper.omHome, IMAGES_DIR);
+		return new File(omHome, IMAGES_DIR);
 	}
 
 	public static File getCssDir() {
-		return new File(OmFileHelper.omHome, CSS_DIR);
+		return new File(omHome, CSS_DIR);
+	}
+
+	public static File getCssImagesDir() {
+		return new File(getCssDir(), IMAGES_DIR);
 	}
 
 	public static File getCustomCss() {
