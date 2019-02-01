@@ -122,6 +122,9 @@
 .room.wb.area .tools .om-icon.big.arrow {
 	background-image: url(images/arrow.png);
 }
+.room.wb.area .tools .om-icon.big.eraser {
+	background-image: url(images/clear-icon.png);
+}
 .room.wb.area .tools .om-icon.big.clear-all {
 	background-image: url(images/cancel.png);
 }

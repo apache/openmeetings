@@ -990,4 +990,5 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.oauth.user.mapping"><![CDATA[Маппинг полей пользователя]]></entry>
 	<entry key="admin.oauth.attr.om"><![CDATA[Атрибут пользователя OM]]></entry>
 	<entry key="admin.oauth.attr.oauth"><![CDATA[Атрибут пользователя OAuth]]></entry>
+	<entry key="wb.tool.white-out"><![CDATA[Корректор]]></entry>
 </properties>

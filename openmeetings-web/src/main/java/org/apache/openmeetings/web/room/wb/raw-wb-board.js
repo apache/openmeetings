@@ -82,6 +82,7 @@ var Wb = function() {
 	}
 	function _initDrawings() {
 		const c = _initGroup('#wb-area-drawings', t.find('.texts'));
+		_initToolBtn('eraser', false, Whiteout(wb, s));
 		_initToolBtn('paint', false, Paint(wb, s));
 		_initToolBtn('line', false, Line(wb, s));
 		_initToolBtn('uline', false, ULine(wb, s));
