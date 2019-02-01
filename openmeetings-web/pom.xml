@@ -161,6 +161,7 @@
 								<jsSourceFile>raw-tool-apointer.js</jsSourceFile>
 								<jsSourceFile>raw-tool-shape-base.js</jsSourceFile>
 								<jsSourceFile>raw-tool-text.js</jsSourceFile>
+								<jsSourceFile>raw-tool-whiteout.js</jsSourceFile>
 								<jsSourceFile>raw-tool-textbox.js</jsSourceFile>
 								<jsSourceFile>raw-tool-math.js</jsSourceFile>
 								<jsSourceFile>raw-tool-paint.js</jsSourceFile>
