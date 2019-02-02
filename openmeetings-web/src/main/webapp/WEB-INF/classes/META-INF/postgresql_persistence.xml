@@ -65,6 +65,7 @@
 				value="DriverClassName=org.postgresql.Driver
 					, Url=jdbc:postgresql://localhost:5432/openmeetings
 					, MaxActive=100
+					, MaxIdle=100
 					, MaxWait=10000
 					, TestOnBorrow=true
 					, poolPreparedStatements=true

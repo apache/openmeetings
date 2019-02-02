@@ -65,6 +65,7 @@
 				value="DriverClassName=com.ibm.db2.jcc.DB2Driver
 					, Url=jdbc:db2://localhost:50000/openmeet
 					, MaxActive=100
+					, MaxIdle=100
 					, MaxWait=10000
 					, TestOnBorrow=true
 					, poolPreparedStatements=true

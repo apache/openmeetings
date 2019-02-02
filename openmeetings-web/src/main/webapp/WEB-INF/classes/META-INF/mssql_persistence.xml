@@ -64,6 +64,9 @@
 			<property name="openjpa.ConnectionProperties"
 				value="DriverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
 					, Url=jdbc:sqlserver://localhost:1433;databaseName=openmeetings
+					, MaxActive=100
+					, MaxIdle=100
+					, MaxWait=10000
 					, Username=${db_user}
 					, Password=${db_pass}" />
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />

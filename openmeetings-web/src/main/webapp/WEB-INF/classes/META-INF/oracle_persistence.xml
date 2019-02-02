@@ -66,6 +66,7 @@
 							, Url=jdbc:oracle:thin:@localhost:1521:openmeetings
 							, create=true
 							, MaxActive=100
+							, MaxIdle=100
 							, MaxWait=10000
 							, TestOnBorrow=true
 							, Username=${db_user}
