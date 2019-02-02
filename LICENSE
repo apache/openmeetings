@@ -340,7 +340,9 @@ conditions of the following licenses.
 For GlassFish components
 
 lib/activation-*.jar
-lib/javax.mail-1.6.2.jar
+lib/javax.mail-*.jar
+lib/jaxws-api*.jar
+lib/javax.jws-api*.jar
 
 
 COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0

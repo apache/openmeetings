@@ -113,6 +113,8 @@
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
 		<mockito.version>2.23.4</mockito.version>
+		<jaxws-api.version>2.3.1</jaxws-api.version>
+		<javax.jws-api.version>1.1</javax.jws-api.version>
 		<!--  URL of the ASF SonarQube server  -->
 		<sonar.host.url>https://builds.apache.org/analysis</sonar.host.url>
 		<!--  Exclude all generated code  -->
@@ -495,6 +497,16 @@
 				<groupId>org.mnode.ical4j</groupId>
 				<artifactId>ical4j</artifactId>
 				<version>${ical4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.xml.ws</groupId>
+				<artifactId>jaxws-api</artifactId>
+				<version>${jaxws-api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.jws</groupId>
+				<artifactId>javax.jws-api</artifactId>
+				<version>${javax.jws-api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.cxf</groupId>

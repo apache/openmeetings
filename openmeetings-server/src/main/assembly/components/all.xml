@@ -55,6 +55,7 @@
 				<exclude>plugins/tomcat-*.jar</exclude> <!-- added for Red5 lib substitution -->
 				<exclude>plugins/ecj*.jar</exclude> <!-- added for Red5 lib substitution -->
 				<exclude>*.sh</exclude>
+				<exclude>red5.bat</exclude>
 				<exclude>conf/jee-container.xml</exclude>
 			</excludes>
 		</fileSet>
@@ -65,6 +66,9 @@
 			<includes>
 				<include>*.sh</include>
 			</includes>
+			<excludes>
+				<exclude>red5.sh</exclude>
+			</excludes>
 		</fileSet>
 		<fileSet>
 			<directory>src/main/assembly/scripts</directory>
