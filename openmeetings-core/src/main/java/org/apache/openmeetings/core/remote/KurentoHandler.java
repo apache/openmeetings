@@ -120,7 +120,7 @@ public class KurentoHandler {
 	@Autowired
 	private InterviewConverter interviewConverter;
 
-	private boolean isConnected() {
+	boolean isConnected() {
 		boolean connctd = client != null && !client.isClosed() && connected;
 		if (!connctd) {
 			log.warn(WARN_NO_KURENTO);
@@ -129,9 +129,7 @@ public class KurentoHandler {
 	}
 
 	public void init() {
-		log.warn("!!!!!!!!!!!!!!!! Init");
 		check = () -> {
-			log.warn("!!!!!!!!!!!!!!!! CHECK !!!!!!!!!!!!!!!!!!!!");
 			try {
 				kuid = randomUUID().toString();
 				client = KurentoClient.create(kurentoWsUrl, new KConnectionListener(kuid));
