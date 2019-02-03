@@ -62,14 +62,15 @@
 			<property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp2.BasicDataSource" />
 			<property name="openjpa.ConnectionProperties"
 				value="DriverClassName=oracle.jdbc.driver.OracleDriver
-							, Url=jdbc:oracle:thin:@localhost:1521:openmeetings
-							, create=true
-							, MaxActive=100
-							, MaxIdle=100
-							, MaxWait=10000
-							, TestOnBorrow=true
-							, Username=${db_user}
-							, Password=${db_pass}" />
+					, Url=jdbc:oracle:thin:@localhost:1521:openmeetings
+					, create=true
+					, maxTotal=100
+					, maxIdle=100
+					, minIdle=0
+					, maxWaitMillis=10000
+					, TestOnBorrow=true
+					, Username=${db_user}
+					, Password=${db_pass}" />
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			<property name="openjpa.DataCache" value="true" />
