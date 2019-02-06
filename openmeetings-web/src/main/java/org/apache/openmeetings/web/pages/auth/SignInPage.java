@@ -283,7 +283,7 @@ public class SignInPage extends BaseInitedPage {
 		// send request
 		HttpURLConnection connection = (HttpURLConnection) new URL(requestInfoUrl).openConnection();
 		if (server.getRequestInfoMethod() == RequestInfoMethod.HEADER) {
-			connection.setRequestProperty("Authorization", String.format("bearer %s", authInfo.accessToken));
+			connection.setRequestProperty("Authorization", String.format("Bearer %s", authInfo.accessToken));
 		} else {
 			connection.setRequestMethod(server.getRequestInfoMethod().name());
 		}
