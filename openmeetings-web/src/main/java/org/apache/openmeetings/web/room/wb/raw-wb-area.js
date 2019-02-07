@@ -257,15 +257,22 @@ var DrawWbArea = function() {
 					return;
 				}
 				const editor = $('<input name="newName" type="text" style="color: black;"/>')
-					, name = $(this).hide().after(editor.val(obj.name));
-				editor.focus().blur(function() {
-					const newName = $(this).val();
-					if (newName !== '') {
-						wbAction('renameWb', JSON.stringify({wbId: obj.wbId, name: newName}));
-					}
-					$(this).remove();
-					name.show();
-				});
+					, name = $(this).hide().after(editor.val(obj.name))
+					, renameWbTab = function() {
+						const newName = editor.val();
+						if (newName !== '') {
+							wbAction('renameWb', JSON.stringify({wbId: obj.wbId, name: newName}));
+						}
+						editor.remove();
+						name.show();
+					};
+				editor.focus()
+					.blur(renameWbTab)
+					.keyup(function(evt) {
+						if (evt.which == 13) {
+							renameWbTab();
+						}
+					});
 			});
 
 		tabs.find('.ui-tabs-nav').append(li);
