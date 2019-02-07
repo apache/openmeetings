@@ -13,6 +13,7 @@ var DrawWbArea = function() {
 		window.originalDrawControl = fabric.Object.prototype._drawControl;
 		window.originalGetRotatedCornerCursor = fabric.Canvas.prototype._getRotatedCornerCursor;
 		window.originalGetActionFromCorner = fabric.Canvas.prototype._getActionFromCorner;
+		window.originalGetCornerCursor = fabric.Canvas.prototype.getCornerCursor;
 		fabric.Object.prototype._drawControl = function(control, ctx, methodName, left, top, styleOverride) {
 			switch (control) {
 				case 'mtr':
@@ -47,6 +48,11 @@ var DrawWbArea = function() {
 			}
 			return window.originalGetActionFromCorner.call(this, alreadySelected, corner, e);
 		};
+		fabric.Canvas.prototype.getCornerCursor = function(corner, target, e) {
+			return 'textbox' === target.type && 'tr' === corner
+				? this.defaultCursor
+				: window.originalGetCornerCursor.call(this, corner, target, e);
+		}
 	}
 
 	function refreshTabs() {
