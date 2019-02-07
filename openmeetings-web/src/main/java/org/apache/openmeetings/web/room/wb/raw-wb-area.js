@@ -50,7 +50,7 @@ var DrawWbArea = function() {
 		};
 		fabric.Canvas.prototype.getCornerCursor = function(corner, target, e) {
 			return 'textbox' === target.type && 'tr' === corner
-				? this.defaultCursor
+				? 'pointer'
 				: window.originalGetCornerCursor.call(this, corner, target, e);
 		}
 	}
