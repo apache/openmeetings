@@ -49,9 +49,10 @@ var DrawWbArea = function() {
 			return window.originalGetActionFromCorner.call(this, alreadySelected, corner, e);
 		};
 		fabric.Canvas.prototype.getCornerCursor = function(corner, target, e) {
-			return 'textbox' === target.type && 'tr' === corner
-				? 'pointer'
-				: window.originalGetCornerCursor.call(this, corner, target, e);
+			if (role === PRESENTER && 'tr' === corner) {
+				return 'pointer';
+			}
+			return window.originalGetCornerCursor.call(this, corner, target, e);
 		}
 	}
 
