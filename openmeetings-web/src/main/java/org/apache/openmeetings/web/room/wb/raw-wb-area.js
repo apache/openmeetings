@@ -276,7 +276,7 @@ var DrawWbArea = function() {
 				editor.focus()
 					.blur(renameWbTab)
 					.keyup(function(evt) {
-						if (evt.which == 13) {
+						if (evt.which === 13) {
 							renameWbTab();
 						}
 					});
