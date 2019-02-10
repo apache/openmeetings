@@ -33,7 +33,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplic
 import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
-import static org.apache.tomcat.websocket.server.Constants.SERVER_CONTAINER_SERVLET_CONTEXT_ATTRIBUTE;
 import static org.apache.wicket.resource.JQueryResourceReference.getV3;
 
 import java.io.File;
@@ -46,6 +45,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import javax.websocket.WebSocketContainer;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -92,7 +93,6 @@ import org.apache.openmeetings.web.user.record.PngRecordingResourceReference;
 import org.apache.openmeetings.web.util.GroupLogoResourceReference;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
-import org.apache.tomcat.websocket.server.WsServerContainer;
 import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.Localizer;
 import org.apache.wicket.Page;
@@ -146,6 +146,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
 	private static boolean isInstalled;
 	private static final String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
+	private static final String SERVER_CONTAINER_SERVLET_CONTEXT_ATTRIBUTE = "javax.websocket.server.ServerContainer";
 	public static final String NAME_ATTR_KEY = "name";
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
@@ -252,7 +253,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				}
 			}
 		});
-		final WsServerContainer sc = (WsServerContainer)getServletContext().getAttribute(SERVER_CONTAINER_SERVLET_CONTEXT_ATTRIBUTE);
+		final WebSocketContainer sc = (WebSocketContainer)getServletContext().getAttribute(SERVER_CONTAINER_SERVLET_CONTEXT_ATTRIBUTE);
 		if (sc != null) {
 			sc.setDefaultMaxSessionIdleTimeout(60 * 1000); // should be enough, should it be configurable?
 		}
