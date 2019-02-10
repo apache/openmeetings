@@ -33,6 +33,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplic
 import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
+import static org.apache.tomcat.websocket.server.Constants.SERVER_CONTAINER_SERVLET_CONTEXT_ATTRIBUTE;
 import static org.apache.wicket.resource.JQueryResourceReference.getV3;
 
 import java.io.File;
@@ -91,6 +92,7 @@ import org.apache.openmeetings.web.user.record.PngRecordingResourceReference;
 import org.apache.openmeetings.web.util.GroupLogoResourceReference;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
+import org.apache.tomcat.websocket.server.WsServerContainer;
 import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.Localizer;
 import org.apache.wicket.Page;
@@ -250,6 +252,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				}
 			}
 		});
+		final WsServerContainer sc = (WsServerContainer)getServletContext().getAttribute(SERVER_CONTAINER_SERVLET_CONTEXT_ATTRIBUTE);
+		if (sc != null) {
+			sc.setDefaultMaxSessionIdleTimeout(60 * 1000); // should be enough, should it be configurable?
+		}
 		super.init();
 
 		// register some widgets
