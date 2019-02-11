@@ -159,13 +159,20 @@ public class ActivitiesPanel extends Panel {
 		add(action);
 	}
 
+	private boolean shouldSkip(final boolean self, final Activity a) {
+		return !self && a.getType().isAction() && !room.getClient().hasRight(Right.moderator);
+	}
+
 	public void add(Activity a, IPartialPageRequestHandler handler) {
 		if (!isVisible()) {
 			return;
 		}
+		final boolean self = getUserId().equals(a.getSender());
+		if (shouldSkip(self, a)) {
+			return;
+		}
 		activities.put(a.getId(), a);
 		String text = "";
-		final boolean self = getUserId().equals(a.getSender());
 		final String name = self ? getString("1362") : a.getName();
 		final String fmt = ((BasePage)getPage()).isRtl() ? ACTIVITY_FMT_RTL : ACTIVITY_FMT;
 		switch (a.getType()) {
