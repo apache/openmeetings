@@ -464,7 +464,8 @@
 		}
 
 		private function addImage(_width:int, _height:int):void {
-			userImage.source = 'profile/' + userId + '?anti=' + new Date().time;
+			userImage.source = params.pictureUri ? params.pictureUri
+					: 'profile/' + userId + '?anti=' + new Date().time;
 			userImage.visible = true;
 		}
 

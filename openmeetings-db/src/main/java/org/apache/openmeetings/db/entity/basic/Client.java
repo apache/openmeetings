@@ -33,7 +33,6 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IStreamClientManager;
-import org.apache.openmeetings.db.util.RoomHelper;
 import org.apache.wicket.protocol.ws.api.registry.IKey;
 import org.apache.wicket.util.string.Strings;
 
@@ -414,7 +413,7 @@ public class Client implements IClient {
 			if (Type.room == t) {
 				avFound = true;
 			}
-			_streams.put(RoomHelper.addScreenActivities(
+			_streams.put(addScreenActivities(
 					new JSONObject()
 						.put("type", t.name())
 						// stream `uid` is unknown at the time of self stream creation
@@ -475,6 +474,22 @@ public class Client implements IClient {
 			}
 		}
 		return this;
+	}
+
+	public static JSONObject addScreenActivities(JSONObject o, StreamClient sc) {
+		JSONArray a = new JSONArray();
+		if (Client.Type.sharing == sc.getType()) {
+			if (sc.isSharingStarted()) {
+				a.put("sharing");
+			}
+			if (sc.isRecordingStarted()) {
+				a.put("recording");
+			}
+			if (sc.isPublishStarted()) {
+				a.put("publish");
+			}
+		}
+		return o.put("screenActivities", a);
 	}
 
 	@Override

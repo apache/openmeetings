@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.db.util.RoomHelper.videoJson;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -26,6 +25,7 @@ import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.wb.InterviewWbPanel.INTERVIEWWB_JS_REFERENCE;
 import static org.apache.openmeetings.web.room.wb.WbPanel.WB_JS_REFERENCE;
+import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 import static org.apache.wicket.util.time.Duration.NONE;
 
 import java.io.ByteArrayInputStream;
@@ -49,9 +49,11 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.RoomMessage.Type;
@@ -476,7 +478,8 @@ public class RoomPanel extends BasePanel {
 							}
 							boolean self = _c.getUid().equals(c.getUid());
 							handler.appendJavaScript(String.format("VideoManager.update(%s);"
-									, c.streamJson(_c.getSid(), self, getBean(StreamClientManager.class)).toString(new NullStringer())
+									, setPicture(c.streamJson(_c.getSid(), self, getBean(StreamClientManager.class)), c)
+										.toString(new NullStringer())
 									));
 							sidebar.update(handler);
 							menu.update(handler);
@@ -853,5 +856,27 @@ public class RoomPanel extends BasePanel {
 
 	public boolean isInterview() {
 		return interview;
+	}
+
+	private JSONObject videoJson(Client c, boolean self, String sid, IStreamClientManager mgr, String uid) {
+		StreamClient sc = mgr.get(uid);
+		if (sc == null) {
+			return new JSONObject();
+		}
+		JSONObject o = c.toJson(self)
+				.put("sid", sid)
+				.put("uid", sc.getUid())
+				.put("broadcastId", sc.getBroadcastId())
+				.put("width", sc.getWidth())
+				.put("height", sc.getHeight())
+				.put("type", sc.getType());
+		return Client.addScreenActivities(setPicture(o, c), sc);
+	}
+
+	private JSONObject setPicture(JSONObject o, Client c) {
+		if (c.getUser() != null) {
+			o.getJSONObject("user").put("pictureUri", getUrl(getRequestCycle(), c.getUser()));
+		}
+		return o;
 	}
 }

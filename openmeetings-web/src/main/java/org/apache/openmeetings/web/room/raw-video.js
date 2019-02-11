@@ -256,6 +256,7 @@ var Video = (function() {
 		o.uid = c.uid;
 		o.cuid = c.cuid;
 		o.userId = c.user.id;
+		o.pictureUri = c.user.pictureUri;
 		o.broadcastId = c.broadcastId;
 		o.type = c.type;
 		delete o.keycode;
