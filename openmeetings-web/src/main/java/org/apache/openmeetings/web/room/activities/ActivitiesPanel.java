@@ -214,6 +214,7 @@ public class ActivitiesPanel extends Panel {
 			.put("uid", a.getUid())
 			.put("cssClass", getClass(a))
 			.put("text", text)
+			.put("action", a.getType().isAction())
 			.put("find", false);
 
 		switch (a.getType()) {
