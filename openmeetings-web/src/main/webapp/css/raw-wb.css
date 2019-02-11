@@ -153,6 +153,9 @@
 	position: absolute;
 	z-index: 95;
 }
+.wb-settings, .wb-formula .latex-guide {
+	padding: 0 10px;
+}
 .room.wb.area .tools.vertical .dropdown-toggle {
 	width: 35px;
 	height: 28px;
