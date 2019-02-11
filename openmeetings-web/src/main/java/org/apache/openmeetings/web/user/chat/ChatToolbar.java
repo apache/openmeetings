@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.user.chat;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
+import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
@@ -201,7 +201,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 						return true;
 					}, u -> {
 						chatDao.deleteUser(u.getId());
-						WebSocketHelper.sendUser(u.getId(), cleanMsg(scope).toString());
+						WebSocketHelper.sendUser(u.getId(), cleanMsg(scope));
 						return true;
 					});
 			}

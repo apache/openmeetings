@@ -44,6 +44,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter.MessageSender;
 import org.apache.openmeetings.core.service.MainService;
+import org.apache.openmeetings.core.util.ChatWebSocketHelper;
 import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
@@ -399,7 +400,7 @@ public class MobileService {
 		chatDao.update(m);
 		FastDateFormat fmt = FormatHelper.getDateTimeFormat(u);
 		sendChatMessage(c, m, fmt);
-		WebSocketHelper.sendRoom(m, WebSocketHelper.getMessage(u, Arrays.asList(m), null));
+		ChatWebSocketHelper.sendRoom(m, ChatWebSocketHelper.getMessage(u, Arrays.asList(m), null));
 	}
 
 	public void sendChatMessage(String uid, ChatMessage m, FastDateFormat fmt) {
