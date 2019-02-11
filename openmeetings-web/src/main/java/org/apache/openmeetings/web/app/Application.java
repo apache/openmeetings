@@ -255,7 +255,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		});
 		final WebSocketContainer sc = (WebSocketContainer)getServletContext().getAttribute(SERVER_CONTAINER_SERVLET_CONTEXT_ATTRIBUTE);
 		if (sc != null) {
-			sc.setDefaultMaxSessionIdleTimeout(60 * 1000); // should be enough, should it be configurable?
+			sc.setDefaultMaxSessionIdleTimeout(60 * 1000L); // should be enough, should it be configurable?
 		}
 		super.init();
 
