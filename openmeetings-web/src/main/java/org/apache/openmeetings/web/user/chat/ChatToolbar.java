@@ -33,6 +33,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.user.User;
@@ -50,6 +51,7 @@ import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 
+import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.IJQueryWidget.JQueryWidget;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.IWysiwygToolbar;
 
@@ -180,26 +182,26 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				final ChatDao dao = getBean(ChatDao.class);
+				final ChatDao chatDao = getBean(ChatDao.class);
 				final String scope = chatForm.getScope();
 				final boolean admin = hasAdminLevel(getRights());
 				chatForm.process(
 					() -> {
 						if (admin) {
-							dao.deleteGlobal();
-							clean(target, ID_ALL);
+							chatDao.deleteGlobal();
+							WebSocketHelper.sendAll(cleanMsg(ID_ALL).toString());
 						}
 						return true;
 					}
 					, r -> {
 						if (admin || isModerator(getUserId(), r.getId())) {
-							dao.deleteRoom(r.getId());
-							clean(target, scope);
+							chatDao.deleteRoom(r.getId());
+							WebSocketHelper.sendRoom(r.getId(), cleanMsg(scope));
 						}
 						return true;
 					}, u -> {
-						dao.deleteUser(u.getId());
-						clean(target, scope);
+						chatDao.deleteUser(u.getId());
+						WebSocketHelper.sendUser(u.getId(), cleanMsg(scope).toString());
 						return true;
 					});
 			}
@@ -217,8 +219,8 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 				}));
 	}
 
-	private static void clean(AjaxRequestTarget target, String scope) {
-		target.appendJavaScript("$('#" + scope + "').html('')");
+	private static JSONObject cleanMsg(String scope) {
+		return new JSONObject().put("type", "chat").put("action", "clean").put("scope", scope);
 	}
 
 	void update(AjaxRequestTarget target) {
