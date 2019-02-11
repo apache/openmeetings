@@ -904,5 +904,8 @@ var Wb = function() {
 	wb.getFormula = function() {
 		return f;
 	};
+	wb.getZoom = function() {
+		return zoom;
+	}
 	return wb;
 };
