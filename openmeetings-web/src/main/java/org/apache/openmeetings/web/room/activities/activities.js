@@ -1,7 +1,8 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Activities = function() {
 	const closedHeight = 20, timeout = 10000;
-	let activities, aclean, area, openedHeight = 345, openedHeightPx = openedHeight + 'px', inited = false;
+	let activities, aclean, modArea, area, openedHeight = 345
+		, openedHeightPx = openedHeight + 'px', inited = false;
 
 	function _load() {
 		const s = Settings.load();
@@ -111,7 +112,8 @@ var Activities = function() {
 					openedHeightPx = openedHeight + 'px';
 				}
 			});
-			area = activities.find('.area');
+			modArea = activities.find('.area .actions');
+			area = activities.find('.area .activities');
 			aclean = $('#activity-auto-clean');
 			aclean.change(function() {
 				const s = _load();
@@ -138,7 +140,7 @@ var Activities = function() {
 				return;
 			}
 			const _id = _getId(obj.id);
-			area.append(OmUtil.tmpl('#activity-stub', _id).data(obj));
+			(obj.action ? modArea : area).append(OmUtil.tmpl('#activity-stub', _id).data(obj));
 			const a = $('#' + _id).addClass(obj.cssClass);
 			a.find('.activity-close,.activity-accept,.activity-decline,.activity-find').addClass(Settings.isRtl ? 'align-left' : 'align-right');
 			const acpt = a.find('.activity-accept');

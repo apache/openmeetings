@@ -39,7 +39,7 @@ public class Activity implements Serializable {
 		, reqRightExclusive(true)
 		, haveQuestion(true);
 
-		final boolean action;
+		private final boolean action;
 
 		private Type() {
 			this(false);
