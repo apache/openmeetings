@@ -217,6 +217,7 @@ public class ClientManager implements IClientManager {
 		return isUserOnline;
 	}
 
+	@Override
 	public List<Client> list() {
 		return new ArrayList<>(map().values());
 	}

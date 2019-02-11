@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.user.chat;
 
-import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
-import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
-import static org.apache.openmeetings.core.util.WebSocketHelper.ID_USER_PREFIX;
+import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_ALL;
+import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_ROOM_PREFIX;
+import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 
@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 
-import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.core.util.ChatWebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -134,13 +134,13 @@ public class ChatForm extends Form<Void> {
 					chatDao.update(m);
 					JSONObject msg = getChat().getMessage(Arrays.asList(m));
 					if (m.getToRoom() != null) {
-						WebSocketHelper.sendRoom(m, msg);
+						ChatWebSocketHelper.sendRoom(m, msg);
 					} else if (m.getToUser() != null) {
-						WebSocketHelper.sendUser(getUserId(), msg.toString());
+						ChatWebSocketHelper.sendUser(getUserId(), m, msg);
 						msg = Chat.getMessage(m.getToUser(), Arrays.asList(m));
-						WebSocketHelper.sendUser(m.getToUser().getId(), msg.toString());
+						ChatWebSocketHelper.sendUser(m.getToUser().getId(), m, msg);
 					} else {
-						WebSocketHelper.sendAll(msg.toString());
+						ChatWebSocketHelper.sendAll(m, msg);
 					}
 					chatMessage.setDefaultModelObject("");
 					target.appendJavaScript("Chat.clean();");

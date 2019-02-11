@@ -28,6 +28,7 @@ public interface IClientManager {
 	Client get(String uid);
 	Client getBySid(String sid);
 	String uidBySid(String sid);
+	List<Client> list();
 	List<Client> listByRoom(Long roomId);
 	Collection<Client> listByUser(Long userId);
 	Client update(Client c);
