@@ -79,7 +79,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 	}
 
 	private Client getClient() {
-		return new Client("sessionId", 0, USER_ID, userDao);
+		return new Client("sessionId", 0, userDao.get(USER_ID), "");
 	}
 
 	@Test

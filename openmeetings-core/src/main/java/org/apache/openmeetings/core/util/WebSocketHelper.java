@@ -266,6 +266,9 @@ public class WebSocketHelper {
 	private static void sendAll(Consumer<IWebSocketConnection> sender) {
 		new Thread(() -> {
 			Application app = (Application)getApp();
+			if (app == null) {
+				return; // Application is not ready
+			}
 			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
 			Executor executor = settings.getWebSocketPushMessageExecutor();

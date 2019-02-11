@@ -440,7 +440,8 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							boolean self = _c.getUid().equals(c.getUid());
-							handler.appendJavaScript(String.format("VideoManager.update(%s);", c.toJson(self)));
+							handler.appendJavaScript(String.format("VideoManager.update(%s);"
+									, c.toJson(self), c));
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);

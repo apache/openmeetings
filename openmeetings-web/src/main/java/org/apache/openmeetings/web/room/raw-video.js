@@ -404,15 +404,14 @@ var Video = (function() {
 	function _refresh(msg) {
 		_cleanup();
 		const _id = VideoUtil.getVid(sd.uid);
-		const hasVideo = VideoUtil.hasVideo(sd) || VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd)
-			, imgUrl = 'profile/' + sd.user.id + '?anti=' + new Date().getTime();  //TODO add normal URL ????
+		const hasVideo = VideoUtil.hasVideo(sd) || VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd);
 		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 			.width(vc.width()).height(vc.height())
 			.prop('autoplay', true).prop('controls', false);
 		if (hasVideo) {
-			video.attr('poster', imgUrl);
+			video.attr('poster', sd.user.pictureUri);
 		} else {
-			vc.addClass('audio-only').css('background-image', 'url(' + imgUrl + ')');
+			vc.addClass('audio-only').css('background-image', 'url(' + sd.user.pictureUri + ')');
 		}
 		vc.append(video);
 		const hasAudio = VideoUtil.hasAudio(sd);

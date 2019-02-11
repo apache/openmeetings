@@ -77,12 +77,14 @@ public class Client implements IDataProviderEntity, IWsClient {
 	private int width = 0;
 	private int height = 0;
 	private String serverId = null;
+	private final String pictureUri;
 
-	public Client(String sessionId, int pageId, Long userId, UserDao dao) {
+	public Client(String sessionId, int pageId, User u, String pictureUri) {
 		this.sessionId = sessionId;
 		this.pageId = pageId;
-		this.user = dao.get(userId);
+		this.user = u;
 		this.connectedSince = new Date();
+		this.pictureUri = pictureUri;
 		uid = randomUUID().toString();
 		sid = randomUUID().toString();
 	}
@@ -108,6 +110,10 @@ public class Client implements IDataProviderEntity, IWsClient {
 
 	public Long getUserId() {
 		return user.getId();
+	}
+
+	public String getPictureUri() {
+		return pictureUri;
 	}
 
 	@Override
@@ -318,14 +324,15 @@ public class Client implements IDataProviderEntity, IWsClient {
 		return room == null ? null : room.getId();
 	}
 
-	public JSONObject toJson(boolean self) {
+	private JSONObject addUserJson(JSONObject o) {
 		JSONObject u = new JSONObject();
 		if (user != null) {
 			JSONObject a = new JSONObject();
 			u.put("id", user.getId())
 				.put("firstName", user.getFirstname())
 				.put("lastName", user.getLastname())
-				.put("address", a);
+				.put("address", a)
+				.put("pictureUri", pictureUri);
 			if (user.getAddress() != null) {
 				if (Strings.isEmpty(user.getFirstname()) && Strings.isEmpty(user.getLastname())) {
 					a.put("email", user.getAddress().getEmail());
@@ -333,12 +340,15 @@ public class Client implements IDataProviderEntity, IWsClient {
 				a.put("country", user.getAddress().getCountry());
 			}
 		}
+		return o.put("user", u);
+	}
+
+	public JSONObject toJson(boolean self) {
 		JSONArray streamArr = new JSONArray();
 		for (Entry<String, StreamDesc> e : streams.entrySet()) {
 			streamArr.put(e.getValue().toJson());
 		}
 		JSONObject json = new JSONObject()
-				.put("user", u)
 				.put("cuid", uid)
 				.put("uid", uid)
 				.put("rights", new JSONArray(rights))
@@ -350,7 +360,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 		if (self) {
 			json.put("cam", cam).put("mic", mic);
 		}
-		return json;
+		return addUserJson(json);
 	}
 
 	public void merge(Client c) {
@@ -517,18 +527,13 @@ public class Client implements IDataProviderEntity, IWsClient {
 		}
 
 		public JSONObject toJson() {
-			return new JSONObject()
+			return addUserJson(new JSONObject()
 					.put("uid", uuid)
 					.put("type", type.name())
 					.put("width", swidth)
 					.put("height", sheight)
 					.put("activities", getActivities())
-					.put("cuid", uid)
-					.put("user", new JSONObject()
-							.put("id", user.getId())
-							.put("firstName", user.getFirstname())
-							.put("lastName", user.getLastname())
-							);
+					.put("cuid", uid));
 		}
 
 		@Override
