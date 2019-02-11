@@ -439,7 +439,11 @@ $(function() {
 			if (m) {
 				switch(m.type) {
 					case "chat":
-						Chat.addMessage(m);
+						if ('clean' === m.action) {
+							$('#' + m.scope).html('');
+						} else {
+							Chat.addMessage(m);
+						}
 						break;
 					case "typing":
 						if (typeof(typingActivity) === "function") {
