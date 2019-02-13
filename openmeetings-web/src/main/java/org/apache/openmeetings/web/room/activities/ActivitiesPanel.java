@@ -48,6 +48,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class ActivitiesPanel extends Panel {
@@ -87,7 +88,7 @@ public class ActivitiesPanel extends Panel {
 				}
 				switch (act) {
 					case close:
-						remove(id, target);
+						remove(target, id);
 						break;
 					case decline:
 						if (room.getClient().hasRight(Right.moderator)) {
@@ -171,6 +172,12 @@ public class ActivitiesPanel extends Panel {
 		if (shouldSkip(self, a)) {
 			return;
 		}
+		if (a.getType().isAction()) {
+			remove(handler, activities.entrySet().parallelStream()
+				.filter(e -> a.getSender().equals(e.getValue().getSender()) && a.getType() == e.getValue().getType())
+				.map(e -> e.getValue().getId())
+				.toArray(String[]::new));
+		}
 		activities.put(a.getId(), a);
 		String text = "";
 		final String name = self ? getString("1362") : a.getName();
@@ -241,9 +248,16 @@ public class ActivitiesPanel extends Panel {
 		handler.appendJavaScript(new StringBuilder("Activities.add(").append(aobj.toString()).append(");"));
 	}
 
-	public void remove(String uid, IPartialPageRequestHandler handler) {
-		activities.remove(uid);
-		handler.appendJavaScript(String.format("Activities.remove('%s');", uid));
+	public void remove(IPartialPageRequestHandler handler, String...ids) {
+		if (ids.length < 1) {
+			return;
+		}
+		JSONArray arr = new JSONArray();
+		for (String id : ids) {
+			arr.put(id);
+			activities.remove(id);
+		}
+		handler.appendJavaScript(String.format("Activities.remove(%s);", arr));
 	}
 
 	@Override
