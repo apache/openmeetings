@@ -31,7 +31,6 @@
 }
 #activities .control.block .label {
 	display: inline-block;
-	padding-left: 20px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }

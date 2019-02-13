@@ -21,7 +21,11 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<div class="ui-widget-header">
-		<div onclick="Activities.toggle();" class="clickable control block ui-widget-header ui-state-active"><div class="ui-icon ui-icon-carat-1-n sort-icon"></div><div class="label"><wicket:message key="1363"/></div></div>
+		<div onclick="Activities.toggle();" class="clickable control block ui-widget-header ui-state-active">
+			<div class="ui-icon ui-icon-carat-1-n sort-icon"></div>
+			<span class="badge">42</span>
+			<div class="label"><wicket:message key="1363"/></div>
+		</div>
 	</div>
 	<div class="ctrl ui-widget-content">
 		<div><input type="checkbox" id="activity-auto-clean"/><label for="activity-auto-clean"><wicket:message key="activities.autoclean"/></label></div>
