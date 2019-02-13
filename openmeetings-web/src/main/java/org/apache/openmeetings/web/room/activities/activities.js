@@ -84,11 +84,16 @@ var Activities = function() {
 	}
 	function _remove(id) {
 		$('#' + _getId(id)).remove();
+		_updateCount();
 	}
 	function _clearItem(id) {
 		if (aclean.prop('checked')) {
 			_remove(id);
 		}
+	}
+	function _updateCount() {
+		if (!inited) return;
+		$('.control.block .badge', activities).text(modArea.find('.activity').length);
 	}
 
 	return {
@@ -121,6 +126,7 @@ var Activities = function() {
 			});
 			_updateClean(_load(), aclean);
 			inited = true;
+			_updateCount();
 		}
 		, toggle: function() {
 			if (!inited) return;
@@ -155,12 +161,17 @@ var Activities = function() {
 			} else {
 				fnd.hide();
 			}
-			a.find('.activity-close').click(function() { a.remove(); _action('close', obj.id); });
+			a.find('.activity-close').click(function() {
+				a.remove();
+				_updateCount();
+				_action('close', obj.id);
+			});
 			a.find('.activity-text').text(obj.text);
 			_hightlight();
 			if (aclean.prop('checked') && a.hasClass('auto-clean')) {
 				setTimeout(_clearItem.bind(null, obj.id), timeout);
 			}
+			_updateCount();
 		}
 		, remove: _remove
 	};
