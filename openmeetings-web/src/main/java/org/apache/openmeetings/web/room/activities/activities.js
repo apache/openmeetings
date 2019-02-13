@@ -82,8 +82,10 @@ var Activities = function() {
 	function _action(name, val) {
 		activityAction($('.room.box').data('room-id'), name, val);
 	}
-	function _remove(id) {
-		$('#' + _getId(id)).remove();
+	function _remove(ids) {
+		for (let i = 0; i < ids.length; ++i) {
+			$('#' + _getId(ids[i])).remove();
+		}
 		_updateCount();
 	}
 	function _clearItem(id) {
@@ -162,8 +164,6 @@ var Activities = function() {
 				fnd.hide();
 			}
 			a.find('.activity-close').click(function() {
-				a.remove();
-				_updateCount();
 				_action('close', obj.id);
 			});
 			a.find('.activity-text').text(obj.text);
