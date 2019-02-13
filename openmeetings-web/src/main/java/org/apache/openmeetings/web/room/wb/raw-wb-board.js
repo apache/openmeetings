@@ -811,7 +811,7 @@ var Wb = function() {
 			}
 			switch(o.type) {
 				case 'pointer':
-					APointer().create(canvases[o.slide], o);
+					APointer(wb).create(canvases[o.slide], o);
 					break;
 				case 'video':
 					Player.create(canvases[o.slide], o, wb);
@@ -844,7 +844,7 @@ var Wb = function() {
 			const o = _arr[i];
 			switch(o.type) {
 				case 'pointer':
-					_modifyHandler(APointer().create(canvases[o.slide], o))
+					_modifyHandler(APointer(wb).create(canvases[o.slide], o))
 					break;
 				case 'video':
 				{
