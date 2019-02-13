@@ -303,6 +303,6 @@ public class RoomSidebar extends Panel {
 	}
 
 	public void removeActivity(String uid, IPartialPageRequestHandler handler) {
-		activities.remove(uid, handler);
+		activities.remove(handler, uid);
 	}
 }
