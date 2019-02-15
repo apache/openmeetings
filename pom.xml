@@ -77,7 +77,7 @@
 		<wicketju.version>8.1.0</wicketju.version>
 		<wickets.version>8.3.0</wickets.version>
 		<red5-client.version>1.0.10</red5-client.version>
-		<spring.version>5.1.4.RELEASE</spring.version>
+		<spring.version>5.1.5.RELEASE</spring.version>
 		<mina.version>2.0.19</mina.version>
 		<tomcat.version>9.0.16</tomcat.version>
 		<ical4j.version>3.0.6</ical4j.version>
@@ -93,15 +93,15 @@
 		<openjpa.version>3.0.1-SNAPSHOT</openjpa.version>
 		<asterisk-java.version>2.0.2</asterisk-java.version>
 		<commons-dbcp.version>2.5.0</commons-dbcp.version>
-		<commons-pool2.version>2.6.0</commons-pool2.version>
+		<commons-pool2.version>2.6.1</commons-pool2.version>
 		<postgresql.version>42.2.5</postgresql.version>
 		<commons-cli.version>1.4</commons-cli.version>
 		<dom4j.version>2.1.1</dom4j.version>
-		<commons-codec.version>1.11</commons-codec.version>
+		<commons-codec.version>1.12</commons-codec.version>
 		<commons-io.version>2.6</commons-io.version>
 		<mysql.version>8.0.11</mysql.version>
 		<mssql.version>6.2.1.jre8</mssql.version>
-		<commons-collections4.version>4.2</commons-collections4.version>
+		<commons-collections4.version>4.3</commons-collections4.version>
 		<xstream.version>1.4.11.1</xstream.version>
 		<api-all.version>2.0.0.AM2</api-all.version>
 		<caldav4j.version>1.0.0-rc.2</caldav4j.version>
@@ -111,8 +111,8 @@
 		<logback.version>1.2.3</logback.version>
 		<jetty9.version>9.4.12.v20180830</jetty9.version>
 		<license.excludedScopes>test</license.excludedScopes>
-		<bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
-		<mockito.version>2.23.4</mockito.version>
+		<bcprov-jdk15on.version>1.61</bcprov-jdk15on.version>
+		<mockito.version>2.24.0</mockito.version>
 		<powermock.version>2.0.0</powermock.version>
 		<!--  URL of the ASF SonarQube server  -->
 		<sonar.host.url>https://builds.apache.org/analysis</sonar.host.url>
@@ -551,6 +551,10 @@
 					<exclusion>
 						<groupId>org.apache.httpcomponents</groupId>
 						<artifactId>httpclient</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>net.bytebuddy</groupId>
+						<artifactId>byte-buddy</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
