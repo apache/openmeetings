@@ -186,6 +186,10 @@ var Room = (function() {
 		if (typeof(VideoManager) === 'object') {
 			VideoManager.destroy();
 		}
+		const _qconf = $('#quick-confirmation');
+		if (_qconf.dialog('instance')) {
+			_qconf.dialog('destroy');
+		}
 		$('.ui-dialog.user-video').remove();
 		$(window).off('keyup', _keyHandler);
 		$(document).off('click', _mouseHandler);
@@ -216,7 +220,28 @@ var Room = (function() {
 			close.off();
 			if (options.rights.includes('superModerator') || options.rights.includes('moderator') || options.rights.includes('presenter')) {
 				close.show().click(function() {
-					quickPollAction('close');
+					const _qconf = $('#quick-confirmation');
+					_qconf.dialog({
+						resizable: false
+						, height: "auto"
+						, width: 400
+						, modal: true
+						, buttons: [
+							{
+								text: _qconf.data('btn-ok')
+								, click: function() {
+									quickPollAction('close');
+									$(this).dialog('close');
+								}
+							}
+							, {
+								text: _qconf.data('btn-cancel')
+								, click: function() {
+									$(this).dialog('close');
+								}
+							}
+						]
+					});
 				});
 			} else {
 				close.hide();
