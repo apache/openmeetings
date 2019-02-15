@@ -596,3 +596,13 @@ div.formSaveBar {
 	width: 100%;
 	height: 100%;
 }
+.om-tbl {
+	display: table;
+	width: 100%;
+}
+.om-tbl .om-tbl-row {
+	display: table-row;
+}
+.om-tbl .om-tbl-row .om-tbl-cell {
+	display: table-cell;
+}

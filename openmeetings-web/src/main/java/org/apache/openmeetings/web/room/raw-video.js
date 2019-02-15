@@ -378,7 +378,7 @@ var Video = (function() {
 		if (!isSharing && !isRecording) {
 			_initCamDialog();
 		}
-		v.on("remove", _cleanup);
+		v.on('remove', _cleanup);
 		vc = v.find('.video');
 		vc.width(_w).height(_h);
 

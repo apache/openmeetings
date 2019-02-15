@@ -137,6 +137,7 @@ public class RoomPanel extends BasePanel {
 					.put("rights", _c.toJson(true).getJSONArray("rights"))
 					.put("interview", interview)
 					.put("audioOnly", r.isAudioOnly())
+					.put("questions", r.isAllowUserQuestions())
 					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus))
 					.put("exclusiveTitle", getString("1386"))
 					.put("chromeExtUrl", getChromeExtensionUrl());

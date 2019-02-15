@@ -299,6 +299,7 @@ var DrawWbArea = function() {
 
 		const wbo = Wb();
 		wbo.init(obj, tid, role);
+		wb.on('remove', wbo.destroy);
 		wb.data(wbo);
 		_resizeWbs();
 	}

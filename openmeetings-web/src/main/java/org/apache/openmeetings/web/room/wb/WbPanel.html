@@ -98,8 +98,12 @@
 			</div>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 			<div class="btn-group btn-group-xs block" role="group" aria-label="...">
-				<button type="button" class="btn btn-default zoom-out" wicket:message="title:259"><span class="ui-icon ui-icon-minusthick"></span></button>
-				<button type="button" class="btn btn-default zoom-in" wicket:message="title:260"><span class="ui-icon ui-icon-plusthick"></span></button>
+				<button type="button" class="btn btn-default zoom-out" wicket:message="title:259">
+					<span class="ui-icon ui-icon-minusthick"></span>
+				</button>
+				<button type="button" class="btn btn-default zoom-in" wicket:message="title:260">
+					<span class="ui-icon ui-icon-plusthick"></span>
+				</button>
 			</div>
 			<select class="zoom" data-custom-val="1.20">
 				<option value="fullFit"><wicket:message key="zoom.fullFit"/></option>
@@ -114,6 +118,11 @@
 				<option value="3.00">300%</option>
 				<option value="4.00">400%</option>
 			</select>
+			<div class="btn-group btn-group-xs block settings-group" role="group" aria-label="..." style="display: none;">
+				<button type="button" class="btn btn-default settings" wicket:message="title:4">
+					<span class="ui-icon ui-icon-gear"></span>
+				</button>
+			</div>
 		</div>
 		<div id="wb-tools" class="tools ui-state-active vertical clear">
 			<div class="bumper"></div>
@@ -131,7 +140,7 @@
 			<div class="bumper"></div>
 			<div wicket:message="title:557" class="ui-widget-header clickable om-icon big apointer"></div>
 		</div>
-		<div id="wb-settings" class="wb-settings ui-corner-all ui-widget-content">
+		<div id="wb-tool-settings" class="wb-tool-settings ui-corner-all ui-widget-content">
 			<div wicket:message="title:843" class="header ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle">
 				<span class="ui-dialog-title"><wicket:message key="843"/></span>
 				<button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" wicket:message="title:85">
@@ -187,6 +196,18 @@
 		</div>
 		<div id="wb-confirm-remove" wicket:message="title:832, data-btn-ok:54, data-btn-cancel:lbl.cancel">
 			<wicket:message key="1313"/>
+		</div>
+		<div id="wb-settings" class="wb-settings" wicket:message="title:4, data-btn-ok:54, data-btn-cancel:lbl.cancel">
+			<div class="om-tbl">
+				<div class="om-tbl-row">
+					<div class="om-tbl-cell"><wicket:message key="740"/></div>
+					<div class="om-tbl-cell"><input class="wbs-width" type="number" min="100" style="width: 100px;"/></div>
+				</div>
+				<div class="om-tbl-row">
+					<div class="om-tbl-cell"><wicket:message key="741"/></div>
+					<div class="om-tbl-cell"><input class="wbs-height" type="number" min="100" style="width: 100px;"/></div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<ul id="wb-rename-menu" style="position: absolute; display: none;">
