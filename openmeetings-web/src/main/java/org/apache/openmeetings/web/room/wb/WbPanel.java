@@ -334,6 +334,8 @@ public class WbPanel extends AbstractWbPanel {
 				case setSize:
 				{
 					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
+					wb.setWidth(obj.getInt("width"));
+					wb.setHeight(obj.getInt("height"));
 					wb.setZoom(obj.getDouble("zoom"));
 					wb.setZoomMode(ZoomMode.valueOf(obj.getString("zoomMode")));
 					wbm.update(roomId, wb);

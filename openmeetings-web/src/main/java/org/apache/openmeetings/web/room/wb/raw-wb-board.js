@@ -26,6 +26,9 @@ var Wb = function() {
 	}
 	function _initToolBtn(m, def, obj) {
 		const btn = _getBtn(m);
+		if (!btn || btn.length === 0) {
+			return;
+		}
 		btn.data({
 			obj: obj
 			, toolType: m
@@ -270,6 +273,36 @@ var Wb = function() {
 					_setSlide(1 * slide + 1);
 					showCurrentSlide();
 				});
+				z.find('.settings-group').show().find('.settings').click(function () {
+					const wbs = $('#wb-settings')
+						, wbsw = wbs.find('.wbs-width').val(width)
+						, wbsh = wbs.find('.wbs-height').val(height);
+					function isNumeric(n) {
+						return !isNaN(parseInt(n)) && isFinite(n);
+					}
+					wbs.dialog({
+						buttons: [
+							{
+								text: wbs.data('btn-ok')
+								, click: function() {
+									const __w = wbsw.val(), __h = wbsh.val();
+									if (isNumeric(__w) && isNumeric(__h)) {
+										width = parseInt(__w);
+										height = parseInt(__h);
+										_sendSetSize();
+									}
+									$(this).dialog("close");
+								}
+							}
+							, {
+								text: wbs.data('btn-cancel')
+								, click: function() {
+									$(this).dialog("close");
+								}
+							}
+						]
+					});
+				});
 			case WHITEBOARD:
 				if (role === WHITEBOARD) {
 					clearAll.addClass('disabled');
@@ -342,22 +375,12 @@ var Wb = function() {
 						zoom = .1;
 					}
 					zoomMode = 'zoom';
-					_setSize();
-					wbAction('setSize', JSON.stringify({
-						wbId: wb.id
-						, zoom: zoom
-						, zoomMode: zoomMode
-					}));
+					_sendSetSize();
 				});
 				z.find('.zoom-in').click(function() {
 					zoom += .2;
 					zoomMode = 'zoom';
-					_setSize();
-					wbAction('setSize', JSON.stringify({
-						wbId: wb.id
-						, zoom: zoom
-						, zoomMode: zoomMode
-					}));
+					_sendSetSize();
 				});
 				z.find('.zoom').change(function() {
 					const zzz = $(this).val();
@@ -375,16 +398,21 @@ var Wb = function() {
 					} else {
 						zoom = 1. * zzz;
 					}
-					_setSize();
-					wbAction('setSize', JSON.stringify({
-						wbId: wb.id
-						, zoom: zoom
-						, zoomMode: zoomMode
-					}));
+					_sendSetSize();
 				});
 				_setSize();
 				_initToolBtn('apointer', _firstToolItem, APointer(wb, s));
 		}
+	}
+	function _sendSetSize() {
+		_setSize();
+		wbAction('setSize', JSON.stringify({
+			wbId: wb.id
+			, zoom: zoom
+			, zoomMode: zoomMode
+			, width: width
+			, height: height
+		}));
 	}
 	function _findObject(o) {
 		let _o = null;
@@ -704,6 +732,12 @@ var Wb = function() {
 			e.remove();
 		}
 	}
+	function __destroySettings() {
+		const wbs = $('#wb-settings');
+		if (wbs.dialog('instance')) {
+			wbs.dialog('destroy');
+		}
+	}
 
 	wb.setRole = function(_role) {
 		if (role !== _role) {
@@ -712,7 +746,7 @@ var Wb = function() {
 				btn.data().deactivate();
 			}
 			a.find('.tools').remove();
-			a.find('.wb-settings').remove();
+			a.find('.wb-tool-settings').remove();
 			a.find('.wb-zoom').remove();
 			role = _role;
 			const sc = a.find('.scroll-container');
@@ -722,11 +756,12 @@ var Wb = function() {
 			__safeRemove(s);
 			__safeRemove(f);
 			if (role === NONE) {
-				t = OmUtil.tmpl('#wb-tools-readonly');
+				__destroySettings();
+				t = !!Room.getOptions().questions ? OmUtil.tmpl('#wb-tools-readonly') : a.find('invalid-wb-element');
 				sc.off('scroll', scrollHandler);
 			} else {
 				t = OmUtil.tmpl('#wb-tools');
-				s = OmUtil.tmpl('#wb-settings')
+				s = OmUtil.tmpl('#wb-tool-settings')
 					.attr('style', 'display: none; bottom: 100px; ' + (Settings.isRtl ? 'left' : 'right') + ': 100px;');
 				f = OmUtil.tmpl('#wb-formula')
 					.attr('style', 'display: none; bottom: 100px; ' + (Settings.isRtl ? 'left' : 'right') + ': 100px;');
@@ -736,7 +771,7 @@ var Wb = function() {
 			t.attr('style', 'position: absolute; top: 20px; ' + (Settings.isRtl ? 'left' : 'right') + ': 20px;');
 			a.append(t).append(z);
 			showCurrentSlide();
-			t = a.find('.tools'), s = a.find('.wb-settings');
+			t = a.find('.tools'), s = a.find('.wb-tool-settings');
 			wb.eachCanvas(function(canvas) {
 				setHandlers(canvas);
 				canvas.forEachObject(function(__o) { //TODO reduce iterations
@@ -767,7 +802,7 @@ var Wb = function() {
 		_setSize();
 	}
 	wb.resize = function() {
-		if (t.position().left + t.width() > a.width()) {
+		if (t.length === 1 && t.position().left + t.width() > a.width()) {
 			t.position({
 				my: (Settings.isRtl ? 'left' : 'right')
 				, at: (Settings.isRtl ? 'left' : 'right') + '-20'
@@ -906,6 +941,9 @@ var Wb = function() {
 	};
 	wb.getZoom = function() {
 		return zoom;
+	}
+	wb.destroy = function() {
+		__destroySettings();
 	}
 	return wb;
 };

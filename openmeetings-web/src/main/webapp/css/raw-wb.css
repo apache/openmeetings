@@ -149,11 +149,11 @@
 .room.wb.area .om-icon.big.prev {
 	background-image: url(images/prev.png);
 }
-.wb-settings, .wb-formula {
+.wb-tool-settings, .wb-formula {
 	position: absolute;
 	z-index: 95;
 }
-.wb-settings, .wb-formula .latex-guide {
+.wb-formula .latex-guide {
 	padding: 0 10px;
 }
 .room.wb.area .tools.vertical .dropdown-toggle {
@@ -182,11 +182,11 @@
 	border-left: 8px solid blue;
 	border-right: 8px solid transparent;
 }
-.wb-settings, .wb-settings .tab.props, .wb-formula {
+.wb-tool-settings, .wb-tool-settings .tab.props, .wb-formula {
 	display: inline-block;
 	width: 310px;
 }
-.wb-settings .ui-dialog-titlebar-close, .wb-formula .ui-dialog-titlebar-close {
+.wb-tool-settings .ui-dialog-titlebar-close, .wb-formula .ui-dialog-titlebar-close {
 	position: absolute;
 	right: .3em;
 	top: 5px;
@@ -194,56 +194,56 @@
 	padding: 1px;
 	height: 20px;
 }
-.wb-settings .header, .wb-formula .header {
+.wb-tool-settings .header, .wb-formula .header {
 	padding: 5px;
 }
-.wb-settings .header .ui-dialog-title, .wb-formula .header .ui-dialog-title {
+.wb-tool-settings .header .ui-dialog-title, .wb-formula .header .ui-dialog-title {
 	padding-left: 10px;
 }
-.wb-settings .tab.props {
+.wb-tool-settings .tab.props {
 	padding: 5px 10px;
 }
-.wb-settings .tab.props .prop-row {
+.wb-tool-settings .tab.props .prop-row {
 	padding-top: 5px;
 	margin: 0;
 	font-size: small;
 }
-.wb-settings .tab.props .block {
+.wb-tool-settings .tab.props .block {
 	display: inline;
 	padding-left: 5px;
 }
-.wb-settings .tab.props .block.lbl {
+.wb-tool-settings .tab.props .block.lbl {
 	width: 1em;
 }
-.wb-settings .tab.props .block.but {
+.wb-tool-settings .tab.props .block.but {
 	width: 2.5em;
 }
-.wb-settings .tab.props .block.input {
+.wb-tool-settings .tab.props .block.input {
 	width: 40px;
 }
-.wb-settings .tab.props .block.input input {
+.wb-tool-settings .tab.props .block.input input {
 	width: 30px;
 }
-.wb-settings .tab.props .block.input input[type=number] {
+.wb-tool-settings .tab.props .block.input input[type=number] {
 	width: 40px;
 }
-.wb-settings .tab.props .block.input input[type=color] {
+.wb-tool-settings .tab.props .block.input input[type=color] {
 	padding: 0;
 }
-.wb-settings .tab.props .block.input input[type=color]:disabled {
+.wb-tool-settings .tab.props .block.input input[type=color]:disabled {
 	opacity:.3;
 }
-.wb-settings .tab.props .block.but button {
+.wb-tool-settings .tab.props .block.but button {
 	width: 2.5em;
 }
-.wb-settings .tab.props  .wb-prop-i.selected {
+.wb-tool-settings .tab.props  .wb-prop-i.selected {
 	font-style: italic;
 }
-.wb-settings .tab.props .wb-prop-b.selected {
+.wb-tool-settings .tab.props .wb-prop-b.selected {
 	font-weight: bold;
 }
-.wb-settings .tab.props .block.but .wb-prop-i
-	, .wb-settings .tab.props .block.but .wb-prop-b
+.wb-tool-settings .tab.props .block.but .wb-prop-i
+	, .wb-tool-settings .tab.props .block.but .wb-prop-b
 {
 	width: 5px;
 }
