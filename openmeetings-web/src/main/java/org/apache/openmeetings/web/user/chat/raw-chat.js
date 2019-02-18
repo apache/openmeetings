@@ -358,12 +358,6 @@ var Chat = function() {
 	}
 	function _setRoomMode(_mode) {
 		roomMode = _mode;
-		if (isInited() && !roomMode) {
-			// remove all private chats on room exit
-			$('li[aria-controls^="chatTab-u"]').remove();
-			$('div[id^="chatTab-u"]').remove();
-			tabs.tabs("refresh");
-		}
 		_reinit({userId: userId, all: allPrefix, room: roomPrefix, sendOnEnter: sendOn === SEND_ENTER});
 	}
 	function _scrollDown(area) {
