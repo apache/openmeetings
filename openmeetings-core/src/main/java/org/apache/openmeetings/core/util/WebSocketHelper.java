@@ -229,7 +229,7 @@ public class WebSocketHelper {
 		new Thread(() -> {
 			Application app = (Application)getApp();
 			if (app == null) {
-				return;
+				return; // Application is not ready
 			}
 			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();

@@ -27,6 +27,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -47,6 +48,8 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 	private static final Long ROOM_ID = 5L;
 	@Mock
 	private UserDao userDao;
+	@Mock
+	private RoomDao roomDao;
 	@Mock
 	private RecordingDao recDao;
 	@Mock
@@ -97,6 +100,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 		c.getRoom().setAllowRecording(true);
 		assertFalse(handler.recordingAllowed(c));
 		c.allow(Room.Right.moderator);
+		when(roomDao.get(ROOM_ID)).thenReturn(c.getRoom());
 		assertTrue(handler.recordingAllowed(c));
 	}
 
@@ -125,6 +129,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 		JSONObject msg = new JSONObject(MSG_BASE.toString()).put("id", "wannaRecord");
 		Client c = getClientFull();
 		c.getRoom().setType(Room.Type.interview);
+		when(roomDao.get(ROOM_ID)).thenReturn(c.getRoom());
 		handler.onMessage(c, msg);
 	}
 
@@ -138,6 +143,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 				.put("fps", "fps")
 				;
 		Client c = getClientFull();
+		when(roomDao.get(ROOM_ID)).thenReturn(c.getRoom());
 		handler.onMessage(c, msg);
 		assertTrue(handler.isSharing(ROOM_ID));
 		handler.onMessage(c, msg);
