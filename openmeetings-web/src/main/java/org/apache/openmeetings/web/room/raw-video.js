@@ -41,6 +41,7 @@ var Video = (function() {
 	}
 	function _getScreenStream(msg, callback) {
 		function __handleScreenError(err) {
+			VideoManager.sendMessage({id: 'errorSharing'});
 			Sharer.setShareState(SHARE_STOPED);
 			Sharer.setRecState(SHARE_STOPED);
 			OmUtil.error(err);

@@ -65,6 +65,7 @@ public class KRoom {
 	private Long recordingId = null;
 	private final RecordingChunkDao chunkDao;
 	private JSONObject recordingUser = new JSONObject();
+	private JSONObject sharingUser = new JSONObject();
 
 	public KRoom(Room r, MediaPipeline pipeline, RecordingChunkDao chunkDao) {
 		this.roomId = r.getId();
@@ -213,9 +214,14 @@ public class KRoom {
 		return sharingStarted.get();
 	}
 
+	public JSONObject getSharingUser() {
+		return new JSONObject(sharingUser.toString());
+	}
+
 	public void startSharing(KurentoHandler h, IClientManager cm, Client c, Optional<StreamDesc> osd, JSONObject msg, Activity a) {
 		StreamDesc sd = null;
 		if (sharingStarted.compareAndSet(false, true)) {
+			sharingUser.put("sid", c.getSid());
 			sd = c.addStream(StreamType.SCREEN, a);
 			sd.setWidth(msg.getInt("width")).setHeight(msg.getInt("height"));
 			cm.update(c);
@@ -236,6 +242,7 @@ public class KRoom {
 
 	public void stopSharing() {
 		if (sharingStarted.compareAndSet(true, false)) {
+			sharingUser = new JSONObject();
 		}
 	}
 

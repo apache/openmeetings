@@ -294,14 +294,13 @@ public class KurentoHandler {
 				}
 				break;
 			case "stopSharing":
-				sender = getByUid(uid);
-				sd = stopSharing(c.getSid(), uid);
-				if (sender != null && sd != null) {
-					sender.stopBroadcast(this);
-				}
+				stopSharing(c, uid);
 				break;
 			case "stopRecord":
 				stopRecording(c);
+				break;
+			case "errorSharing":
+				errorSharing(c);
 				break;
 		}
 	}
@@ -485,9 +484,34 @@ public class KurentoHandler {
 		return hasRightsToShare(c) && !isSharing(r.getId());
 	}
 
+	private void errorSharing(Client c) {
+		if (!isConnected()) {
+			return;
+		}
+		KRoom room = getRoom(c.getRoomId());
+		if (!room.isSharing() || !c.getSid().equals(room.getSharingUser().getString("sid"))) {
+			return;
+		}
+		Optional<StreamDesc> osd = c.getScreenStream();
+		if (osd.isPresent()) {
+			stopSharing(c, osd.get().getUid());
+		} else {
+			room.stopSharing();
+		}
+		stopRecording(c);
+	}
+
 	private void startSharing(Client c, Optional<StreamDesc> osd, JSONObject msg, Activity a) {
 		if (isConnected() && c.getRoomId() != null) {
 			getRoom(c.getRoomId()).startSharing(this, cm, c, osd, msg, a);
+		}
+	}
+
+	private void stopSharing(Client c, String uid) {
+		KStream sender = getByUid(uid);
+		StreamDesc sd = stopSharing(c.getSid(), uid);
+		if (sender != null && sd != null) {
+			sender.stopBroadcast(this);
 		}
 	}
 
