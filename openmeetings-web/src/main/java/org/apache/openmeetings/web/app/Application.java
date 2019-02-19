@@ -32,6 +32,7 @@ import static org.apache.tomcat.websocket.server.Constants.SERVER_CONTAINER_SERV
 import static org.apache.wicket.resource.JQueryResourceReference.getV3;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
+import static org.wicketstuff.dashboard.DashboardContextInitializer.DASHBOARD_CONTEXT_KEY;
 
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
@@ -116,7 +117,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.wicketstuff.dashboard.WidgetRegistry;
 import org.wicketstuff.dashboard.web.DashboardContext;
-import org.wicketstuff.dashboard.web.DashboardContextInjector;
 import org.wicketstuff.dashboard.web.DashboardSettings;
 import org.wicketstuff.datastores.hazelcast.HazelcastDataStore;
 
@@ -136,7 +136,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private static final String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
 	public static final String NAME_ATTR_KEY = "name";
 	//additional maps for faster searching should be created
-	private DashboardContext dashboardContext;
 	private static final Set<String> STRINGS_WITH_APP = new HashSet<>();
 	private static String appName;
 	static {
@@ -234,7 +233,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		super.init();
 
 		// register some widgets
-		dashboardContext = new DashboardContext();
+		final DashboardContext dashboardContext = getDashboardContext();
 		dashboardContext.setDashboardPersister(new UserDashboardPersister());
 		WidgetRegistry widgetRegistry = dashboardContext.getWidgetRegistry();
 		widgetRegistry.registerWidget(new MyRoomsWidgetDescriptor());
@@ -243,8 +242,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		widgetRegistry.registerWidget(new StartWidgetDescriptor());
 		widgetRegistry.registerWidget(new RssWidgetDescriptor());
 		widgetRegistry.registerWidget(new AdminWidgetDescriptor());
-		// add dashboard context injector
-		getComponentInstantiationListeners().add(new DashboardContextInjector(dashboardContext));
 		DashboardSettings dashboardSettings = DashboardSettings.get();
 		dashboardSettings.setIncludeJQueryUI(false);
 
@@ -314,7 +311,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static DashboardContext getDashboardContext() {
-		return get().dashboardContext;
+		return get().getMetaData(DASHBOARD_CONTEXT_KEY);
 	}
 
 	//package private
