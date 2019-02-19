@@ -20,6 +20,15 @@ var VideoManager = (function() {
 		Video().init(msg);
 		OmUtil.log(uid + ' registered in room');
 	}
+	function _onShareUpdated(msg) {
+		const sd = msg.stream
+			, uid = sd.uid
+			, w = $('#' + VideoUtil.getVid(uid))
+			, v = w.data();
+		v.stream().activities = sd.activities;
+		Sharer.setShareState(VideoUtil.isSharing(sd) ? SHARE_STARTED : SHARE_STOPED);
+		Sharer.setRecState(VideoUtil.isRecording(sd) ? SHARE_STARTED : SHARE_STOPED);
+	}
 	function _onReceive(msg) {
 		const uid = msg.stream.uid;
 		$('#' + VideoUtil.getVid(uid)).remove();
@@ -60,6 +69,9 @@ var VideoManager = (function() {
 				break;
 			case 'newStream':
 				_play([m.stream], m.iceServers);
+				break;
+			case 'shareUpdated':
+				_onShareUpdated(m);
 				break;
 			case 'error':
 				OmUtil.error(m.message);

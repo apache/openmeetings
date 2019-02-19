@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.openmeetings.core.util.ChatWebSocketHelper;
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -86,7 +87,7 @@ public class Chat extends Panel {
 						log.error("It seems like we are being hacked!!!!");
 					}
 				} else if (type != null && type.indexOf("typing") > -1) {
-					ChatWebSocketHelper.sendRoom(roomId
+					WebSocketHelper.sendRoom(roomId
 							, new JSONObject().put(PARAM_TYPE, "typing")
 									.put("active", type.indexOf("start") > -1)
 									.put("uid", getUid()));

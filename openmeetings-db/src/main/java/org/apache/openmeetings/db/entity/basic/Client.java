@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -234,6 +235,12 @@ public class Client implements IDataProviderEntity, IWsClient {
 
 	public StreamDesc getStream(String _uid) {
 		return streams.get(_uid);
+	}
+
+	public Optional<StreamDesc> getScreenStream() {
+		return streams.values().stream()
+				.filter(sd -> StreamType.SCREEN == sd.getType())
+				.findFirst();
 	}
 
 	public Date getConnectedSince() {

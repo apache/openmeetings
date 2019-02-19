@@ -121,8 +121,6 @@ public class KStream implements IKStream {
 				log.warn("Media FlowOut :: {}", evt.getState());
 				if (StreamType.SCREEN == streamType) {
 					h.stopSharing(sid, uid);
-				} else {
-					//TODO remove stream ?
 				}
 				stopBroadcast(h);
 			}
@@ -137,7 +135,7 @@ public class KStream implements IKStream {
 		}
 		Client c = sd.getClient();
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
-		WebSocketHelper.sendRoomOthers(room.roomId, c.getUid(), newKurentoMsg()
+		WebSocketHelper.sendRoomOthers(room.getRoomId(), c.getUid(), newKurentoMsg()
 				.put("id", "newStream")
 				.put(PARAM_ICE, h.getTurnServers())
 				.put("stream", sd.toJson()));
@@ -146,7 +144,7 @@ public class KStream implements IKStream {
 
 	public void addListener(final KurentoHandler h, String sid, String uid, String sdpOffer) {
 		final boolean self = uid.equals(this.uid);
-		log.info("USER {}: have started {} in room {}", uid, self ? "broadcasting" : "receiving", room.roomId);
+		log.info("USER {}: have started {} in room {}", uid, self ? "broadcasting" : "receiving", room.getRoomId());
 		log.trace("USER {}: SdpOffer is {}", uid, sdpOffer);
 		if (!self && outgoingMedia == null) {
 			log.warn("Trying to add listener too early");
@@ -202,7 +200,7 @@ public class KStream implements IKStream {
 	}
 
 	private WebRtcEndpoint createEndpoint(final KurentoHandler h, String sid, String uid) {
-		WebRtcEndpoint endpoint = createWebRtcEndpoint(room.pipeline);
+		WebRtcEndpoint endpoint = createWebRtcEndpoint(room.getPipeline());
 		endpoint.addTag("outUid", this.uid);
 		endpoint.addTag("uid", uid);
 
@@ -215,13 +213,13 @@ public class KStream implements IKStream {
 	}
 
 	public void startRecord() {
-		final String chunkUid = String.format("rec_%s_%s", room.recordingId, randomUUID());
-		recorder = createRecorderEndpoint(room.pipeline, getRecUri(getRecordingChunk(room.roomId, chunkUid)), profile);
+		final String chunkUid = String.format("rec_%s_%s", room.getRecordingId(), randomUUID());
+		recorder = createRecorderEndpoint(room.getPipeline(), getRecUri(getRecordingChunk(room.getRoomId(), chunkUid)), profile);
 		recorder.addTag("outUid", uid);
 		recorder.addTag("uid", uid);
 
-		recorder.addRecordingListener(evt -> chunkId = room.chunkDao.start(room.recordingId, type, chunkUid, sid));
-		recorder.addStoppedListener(evt -> room.chunkDao.stop(chunkId));
+		recorder.addRecordingListener(evt -> chunkId = room.getChunkDao().start(room.getRecordingId(), type, chunkUid, sid));
+		recorder.addStoppedListener(evt -> room.getChunkDao().stop(chunkId));
 		switch (profile) {
 			case WEBM:
 				outgoingMedia.connect(recorder, MediaType.AUDIO);
@@ -261,14 +259,7 @@ public class KStream implements IKStream {
 	}
 
 	public void stopBroadcast(final KurentoHandler h) {
-		release(h);
-		WebSocketHelper.sendAll(newKurentoMsg()
-				.put("id", "broadcastStopped")
-				.put("uid", uid)
-				.toString()
-			);
-		//FIXME TODO check close on stop sharing
-		//FIXME TODO permission can be removed, some listener might be required
+		room.onStopBroadcast(this, h);
 	}
 
 	@Override

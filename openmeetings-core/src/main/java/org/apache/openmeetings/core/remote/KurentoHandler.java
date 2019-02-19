@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -44,6 +45,7 @@ import org.apache.openmeetings.core.converter.RecordingConverter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
@@ -109,6 +111,8 @@ public class KurentoHandler {
 
 	@Autowired
 	private IClientManager cm;
+	@Autowired
+	private RoomDao roomDao;
 	@Autowired
 	private RecordingDao recDao;
 	@Autowired
@@ -223,6 +227,7 @@ public class KurentoHandler {
 		final String uid = msg.optString("uid");
 		KStream sender;
 		StreamDesc sd;
+		Optional<StreamDesc> osd;
 		log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
 		switch (cmdId) {
 			case "devicesAltered":
@@ -268,21 +273,23 @@ public class KurentoHandler {
 				}
 				break;
 			case "wannaShare":
-				if (screenShareAllowed(c)) {
-					startSharing(c, msg, Activity.SCREEN);
+				osd = c.getScreenStream();
+				if (screenShareAllowed(c) || (osd.isPresent() && !osd.get().hasActivity(Activity.SCREEN))) {
+					startSharing(c, osd, msg, Activity.SCREEN);
 				}
 				break;
 			case "wannaRecord":
+				osd = c.getScreenStream();
 				if (recordingAllowed(c)) {
 					Room r = c.getRoom();
 					if (Room.Type.interview == r.getType()) {
 						log.warn("This shouldn't be called for interview room");
 						break;
 					}
-					if (isSharing(r.getId())) {
+					boolean sharing = isSharing(r.getId());
+					startSharing(c, osd, msg, Activity.RECORD);
+					if (sharing) {
 						startRecording(c);
-					} else {
-						startSharing(c, msg, Activity.RECORD);
 					}
 				}
 				break;
@@ -292,6 +299,9 @@ public class KurentoHandler {
 				if (sender != null && sd != null) {
 					sender.stopBroadcast(this);
 				}
+				break;
+			case "stopRecord":
+				stopRecording(c);
 				break;
 		}
 	}
@@ -324,15 +334,6 @@ public class KurentoHandler {
 			return;
 		}
 		KRoom room = getRoom(roomId);
-		if (room.isRecording()) {
-			List<StreamDesc> streams = cm.listByRoom(roomId).parallelStream()
-					.flatMap(c -> c.getStreams().stream())
-					.collect(Collectors.toList());
-			if (streams.isEmpty()) {
-				log.info("No more streams in the room, stopping recording");
-				room.stopRecording(this, null, recDao);
-			}
-		}
 		if (room.isSharing()) {
 			List<StreamDesc> streams = cm.listByRoom(roomId).parallelStream()
 					.flatMap(c -> c.getStreams().stream())
@@ -340,6 +341,19 @@ public class KurentoHandler {
 			if (streams.isEmpty()) {
 				log.info("No more screen streams in the room, stopping sharing");
 				room.stopSharing();
+				if (Room.Type.interview != room.getType() && room.isRecording()) {
+					log.info("No more screen streams in the non-interview room, stopping recording");
+					room.stopRecording(this, null, recDao);
+				}
+			}
+		}
+		if (room.isRecording()) {
+			List<StreamDesc> streams = cm.listByRoom(roomId).parallelStream()
+					.flatMap(c -> c.getStreams().stream())
+					.collect(Collectors.toList());
+			if (streams.isEmpty()) {
+				log.info("No more streams in the room, stopping recording");
+				room.stopRecording(this, null, recDao);
 			}
 		}
 	}
@@ -410,24 +424,28 @@ public class KurentoHandler {
 		}
 	}
 
+	public boolean hasRightsToRecord(Client c) {
+		Room r = c.getRoom();
+		return r != null && r.isAllowRecording() && c.hasRight(Right.moderator);
+	}
+
 	public boolean recordingAllowed(Client c) {
 		if (!isConnected()) {
 			return false;
 		}
 		Room r = c.getRoom();
-		return r != null && r.isAllowRecording() && c.hasRight(Right.moderator)
-				&& !isRecording(r.getId());
+		return hasRightsToRecord(c) && !isRecording(r.getId());
 	}
 
 	public void startRecording(Client c) {
-		if (!isConnected()) {
+		if (!isConnected() || !hasRightsToRecord(c)) {
 			return;
 		}
-		getRoom(c.getRoomId()).startRecording(c, recDao);
+		getRoom(c.getRoomId()).startRecording(cm, c, recDao);
 	}
 
 	public void stopRecording(Client c) {
-		if (!isConnected()) {
+		if (!isConnected() || !hasRightsToRecord(c)) {
 			return;
 		}
 		getRoom(c.getRoomId()).stopRecording(this, c, recDao);
@@ -452,20 +470,24 @@ public class KurentoHandler {
 		return getRoom(roomId).getRecordingUser();
 	}
 
+	public boolean hasRightsToShare(Client c) {
+		Room r = c.getRoom();
+		return r != null && Room.Type.interview != r.getType()
+				&& !r.isHidden(RoomElement.ScreenSharing)
+				&& r.isAllowRecording() && c.hasRight(Right.share);
+	}
+
 	public boolean screenShareAllowed(Client c) {
 		if (!isConnected()) {
 			return false;
 		}
 		Room r = c.getRoom();
-		return r != null && Room.Type.interview != r.getType()
-				&& !r.isHidden(RoomElement.ScreenSharing)
-				&& r.isAllowRecording() && c.hasRight(Right.share)
-				&& !isSharing(r.getId());
+		return hasRightsToShare(c) && !isSharing(r.getId());
 	}
 
-	private void startSharing(Client c, JSONObject msg, Activity...activities) {
+	private void startSharing(Client c, Optional<StreamDesc> osd, JSONObject msg, Activity a) {
 		if (isConnected() && c.getRoomId() != null) {
-			getRoom(c.getRoomId()).startSharing(this, cm, c, msg, activities);
+			getRoom(c.getRoomId()).startSharing(this, cm, c, osd, msg, a);
 		}
 	}
 
@@ -502,6 +524,13 @@ public class KurentoHandler {
 
 	Client getBySid(String sid) {
 		return cm.getBySid(sid);
+	}
+
+	void sendShareUpdated(StreamDesc sd) {
+		sendClient(sd.getSid(), newKurentoMsg()
+				.put("id", "shareUpdated")
+				.put("stream", sd.toJson())
+			);
 	}
 
 	public void sendClient(String sid, JSONObject msg) {
@@ -547,12 +576,13 @@ public class KurentoHandler {
 
 		if (room == null) {
 			log.debug("Room {} does not exist. Will create now!", roomId);
+			Room r = roomDao.get(roomId);
 			Transaction t = beginTransaction();
 			MediaPipeline pipe = client.createMediaPipeline(t);
 			pipe.addTag(t, TAG_KUID, kuid);
 			pipe.addTag(t, TAG_ROOM, String.valueOf(roomId));
 			t.commit();
-			room = new KRoom(roomId, pipe, chunkDao);
+			room = new KRoom(r, pipe, chunkDao);
 			rooms.put(roomId, room);
 		}
 		log.debug("Room {} found!", roomId);
@@ -726,7 +756,7 @@ public class KurentoHandler {
 					}
 					if (kuid.equals(tags.get(TAG_KUID))) {
 						KRoom r = rooms.get(Long.valueOf(tags.get(TAG_ROOM)));
-						if (r.getPipelineId().equals(pipe.getId())) {
+						if (r.getPipeline().getId().equals(pipe.getId())) {
 							return;
 						} else if (r != null) {
 							rooms.remove(r.getRoomId());
