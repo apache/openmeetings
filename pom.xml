@@ -92,7 +92,7 @@
 		<javax.mail.version>1.6.2</javax.mail.version>
 		<openjpa.version>3.0.1-SNAPSHOT</openjpa.version>
 		<asterisk-java.version>2.0.2</asterisk-java.version>
-		<commons-dbcp.version>2.5.0</commons-dbcp.version>
+		<commons-dbcp.version>2.6.0</commons-dbcp.version>
 		<commons-pool2.version>2.6.1</commons-pool2.version>
 		<postgresql.version>42.2.5</postgresql.version>
 		<commons-cli.version>1.4</commons-cli.version>
@@ -112,7 +112,7 @@
 		<jetty9.version>9.4.12.v20180830</jetty9.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.61</bcprov-jdk15on.version>
-		<mockito.version>2.24.0</mockito.version>
+		<mockito.version>2.24.5</mockito.version>
 		<powermock.version>2.0.0</powermock.version>
 		<!--  URL of the ASF SonarQube server  -->
 		<sonar.host.url>https://builds.apache.org/analysis</sonar.host.url>
@@ -800,6 +800,10 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+			</plugin>
 		</plugins>
  		<pluginManagement>
 			<plugins>
@@ -1015,6 +1019,30 @@
 					<artifactId>gmaven-plugin</artifactId>
 					<version>1.5</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>${maven-enforcer-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>enforce-versions</id>
+							<goals>
+								<goal>enforce</goal>
+							</goals>
+							<configuration>
+								<rules>
+									<requireJavaVersion>
+										<version>[${jdk.version}.0,)</version>
+									</requireJavaVersion>
+									<requireMavenVersion>
+										<version>3.5.0</version>
+									</requireMavenVersion>
+								</rules>
+								<failFast>true</failFast>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -1104,27 +1132,6 @@
 			<id>rc</id>
 			<build>
 				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-enforcer-plugin</artifactId>
-						<version>${maven-enforcer-plugin.version}</version>
-						<executions>
-							<execution>
-								<id>enforce-versions</id>
-								<goals>
-									<goal>enforce</goal>
-								</goals>
-								<configuration>
-									<rules>
-										<requireJavaVersion>
-											<version>[${jdk.version}.0,)</version>
-										</requireJavaVersion>
-									</rules>
-									<failFast>true</failFast>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
