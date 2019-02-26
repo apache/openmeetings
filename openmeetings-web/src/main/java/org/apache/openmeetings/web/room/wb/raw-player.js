@@ -15,9 +15,15 @@ var Player = (function() {
 	}
 
 	player.create = function(canvas, _o, wb) {
-		const vid = $('<video>').hide().attr('class', 'wb-video slide-' + canvas.slide).attr('id', 'wb-video-' + _o.uid)
-			.attr("width", _o.width).attr("height", _o.height)
-			.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src));
+		const vid = $('<video>').hide()
+			.attr('class', 'wb-video slide-' + canvas.slide)
+			.attr('id', 'wb-video-' + _o.uid)
+			.attr("width", _o.width)
+			.attr("height", _o.height)
+			.prop('controls', true)
+			.append($('<source>')
+				.attr('type', 'video/mp4')
+				.attr('src', _o._src));
 		$('#wb-tab-' + canvas.wbId).append(vid);
 		fabric.Image.fromURL(_o._poster, function(poster) {
 			poster.scaleX = poster.scaleY = _o.width / poster.getOriginalSize().width;
@@ -200,8 +206,26 @@ var Player = (function() {
 				if (group.status.paused) {
 					video.getElement().pause();
 				} else {
-					video.getElement().play();
-					fabric.util.requestAnimFrame(render);
+					const prom = video.getElement().play();
+					if (prom !== undefined) {
+						prom.then(function() {
+							fabric.util.requestAnimFrame(render);
+						}).catch(function(err) {
+							if ('NotAllowedError' === err.name) {
+								$('<div title="Ask permission">Ask permission</div>').dialog({
+									buttons: {
+										"OK": function() {
+											video.getElement().play();
+											fabric.util.requestAnimFrame(render);
+											$(this).dialog('close');
+										}
+									}
+								});
+							}
+						});
+					} else {
+						fabric.util.requestAnimFrame(render);
+					}
 				}
 			}
 			group.setPlayable(wb.getRole());
