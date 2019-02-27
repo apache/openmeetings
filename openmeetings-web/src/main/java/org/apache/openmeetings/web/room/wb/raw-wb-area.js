@@ -138,9 +138,9 @@ var DrawWbArea = function() {
 			OmUtil.confirmDlg('wb-confirm-remove', function() { wbAction('removeWb', JSON.stringify({wbId: li.data().wbId})); });
 		});
 	}
-	function _getImage(cnv, fmt) {
+	function _getImage(cnv) {
 		return cnv.toDataURL({
-			format: fmt
+			format: 'image/png'
 			, width: cnv.width
 			, height: cnv.height
 			, multiplier: 1. / cnv.getZoom()
@@ -364,30 +364,23 @@ var DrawWbArea = function() {
 		if ('pdf' === fmt) {
 			const arr = [];
 			wb.eachCanvas(function(cnv) {
-				arr.push(_getImage(cnv, 'image/png'));
+				arr.push(_getImage(cnv));
 			});
 			wbAction('downloadPdf', JSON.stringify({
 				slides: arr
 			}));
 		} else {
 			const cnv = wb.getCanvas()
-				, dataUri = _getImage(cnv, fmt)
-				, fName = wb.name + '.' + fmt;
-			if (typeof window.navigator.msSaveOrOpenBlob !== 'undefined') {
-				const byteStr = atob(dataUri.split(',')[1])
-					, mime = dataUri.split(',')[0].split(':')[1].split(';')[0]
-					, ab = new ArrayBuffer(byteStr.length)
-					, ia = new Uint8Array(ab);
-				for (let i = 0; i < byteStr.length; ++i) {
-					ia[i] = byteStr.charCodeAt(i);
-				}
-				window.navigator.msSaveOrOpenBlob(new Blob([ab], {type: mime}), fName);
-			} else {
-				const a = document.createElement('a');
-				a.setAttribute('target', '_blank')
-				a.setAttribute('download', fName);
-				a.setAttribute('href', dataUri);
-				a.dispatchEvent(new MouseEvent('click', {view: window, bubbles: false, cancelable: true}));
+				, dataUri = _getImage(cnv);
+			try {
+				const dlg = $('#download-png');
+				dlg.find('img').attr('src', dataUri);
+				dlg.dialog({
+					width: 350
+					, appendTo: '.room.wb.area'
+				});
+			} catch (e) {
+				console.error(e);
 			}
 		}
 	}
