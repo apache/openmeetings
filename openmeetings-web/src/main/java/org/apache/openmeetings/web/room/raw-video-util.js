@@ -135,6 +135,29 @@ var VideoUtil = (function() {
 	function _setPos(v, pos) {
 		v.dialog('widget').css(pos);
 	}
+	function _askPermission(callback) {
+		const perm = $('#ask-permission');
+		if (undefined === perm.dialog('instance')) {
+			perm.data('callbacks', [callback]).dialog({
+				appendTo: '.room.holder .room.box'
+				, autoOpen: true
+				, buttons: [
+					{
+						text: perm.data('btn-ok')
+						, click: function() {
+							while (perm.data('callbacks').length > 0) {
+								perm.data('callbacks').pop()();
+							}
+							$(this).dialog('close');
+						}
+					}
+				]
+			});
+		} else if (!perm.dialog('isOpen')) {
+			perm.dialog('open')
+		}
+		perm.data('callbacks').push(callback);
+	}
 
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
@@ -155,5 +178,6 @@ var VideoUtil = (function() {
 	};
 	self.isEdge = _isEdge;
 	self.setPos = _setPos;
+	self.askPermission = _askPermission;
 	return self;
 })();
