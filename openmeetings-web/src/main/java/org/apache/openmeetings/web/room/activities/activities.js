@@ -92,7 +92,7 @@ var Activities = function() {
 	}
 	function _clearItem(id) {
 		if (aclean.prop('checked')) {
-			_remove(id);
+			_remove([id]);
 		}
 	}
 	function _updateCount() {
