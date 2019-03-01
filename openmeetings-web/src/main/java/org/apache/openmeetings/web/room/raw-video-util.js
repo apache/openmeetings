@@ -138,7 +138,7 @@ var VideoUtil = (function() {
 	function _askPermission(callback) {
 		const perm = $('#ask-permission');
 		if (undefined === perm.dialog('instance')) {
-			perm.data('callbacks', [callback]).dialog({
+			perm.data('callbacks', []).dialog({
 				appendTo: '.room.holder .room.box'
 				, autoOpen: true
 				, buttons: [

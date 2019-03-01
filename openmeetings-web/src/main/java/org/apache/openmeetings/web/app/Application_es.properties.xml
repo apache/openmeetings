@@ -992,4 +992,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Guide to LaTeX Syntax]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>
 	<entry key="download.image.steps"><![CDATA[Please right click the image and choose "Save image as"]]></entry>
+	<entry key="video.permission.title"><![CDATA[Permission is required]]></entry>
+	<entry key="video.permission.text"><![CDATA[Extra permission is required to play video.<br/>Press OK to allow playing.]]></entry>
 </properties>
