@@ -35,6 +35,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.openmeetings.core.remote.KurentoHandler;
+import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
@@ -179,7 +180,7 @@ public class RoomPanel extends BasePanel {
 					sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers()).append(");");
 				}
 			}
-			if (interview && !kHandler.isRecording(r.getId()) && streams.length() > 0 && _c.hasRight(Right.moderator)) {
+			if (interview && !streamProcessor.isRecording(r.getId()) && streams.length() > 0 && _c.hasRight(Right.moderator)) {
 				sb.append("WbArea.setRecEnabled(true);");
 			}
 			if (!Strings.isEmpty(sb)) {
@@ -241,6 +242,8 @@ public class RoomPanel extends BasePanel {
 	private QuickPollManager qpollManager;
 	@SpringBean
 	private KurentoHandler kHandler;
+	@SpringBean
+	private StreamProcessor streamProcessor;
 
 	public RoomPanel(String id, Room r) {
 		super(id);
@@ -551,7 +554,7 @@ public class RoomPanel extends BasePanel {
 	private void updateInterviewRecordingButtons(IPartialPageRequestHandler handler) {
 		Client _c = getClient();
 		if (interview && _c.hasRight(Right.moderator)) {
-			if (kHandler.isRecording(r.getId())) {
+			if (streamProcessor.isRecording(r.getId())) {
 				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
 			} else {
 				boolean hasStreams = false;
@@ -746,7 +749,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public boolean screenShareAllowed() {
-		return kHandler.screenShareAllowed(getClient());
+		return streamProcessor.screenShareAllowed(getClient());
 	}
 
 	public RoomSidebar getSidebar() {

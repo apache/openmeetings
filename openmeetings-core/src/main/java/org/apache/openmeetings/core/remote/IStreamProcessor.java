@@ -1,5 +1,4 @@
 /*
-
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -19,41 +18,7 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import org.junit.Test;
-
-import com.github.openjson.JSONObject;
-
-public class TestNotConnectedMocked extends BaseMockedTest {
-	@Test
-	public void testNotConnected() {
-		handler.onMessage(null, MSG_BASE);
-	}
-
-	@Test
-	public void testRecordingAllowed() {
-		assertFalse(streamProcessor.recordingAllowed(null));
-	}
-
-	@Test
-	public void testStartRecording() {
-		streamProcessor.startRecording(null);
-	}
-
-	@Test
-	public void testStopRecording() {
-		streamProcessor.stopRecording(null);
-	}
-
-	@Test
-	public void testIsRecording() {
-		assertFalse(streamProcessor.isRecording(null));
-	}
-
-	@Test
-	public void testGetRecordingUser() {
-		assertEquals(new JSONObject().toString(), handler.getRecordingUser(null).toString());
-	}
+public interface IStreamProcessor {
+	void release(AbstractStream stream);
+	void destroy();
 }

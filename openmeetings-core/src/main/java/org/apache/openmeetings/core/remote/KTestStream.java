@@ -20,8 +20,8 @@ package org.apache.openmeetings.core.remote;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE;
-import static org.apache.openmeetings.core.remote.KurentoHandler.newTestKurentoMsg;
 import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
+import static org.apache.openmeetings.core.remote.TestStreamProcessor.newTestKurentoMsg;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WEBM;
 import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
-public class KTestStream implements IKStream {
+public class KTestStream extends AbstractStream {
 	private static final Logger log = LoggerFactory.getLogger(KTestStream.class);
 	private MediaPipeline pipeline;
 	private WebRtcEndpoint webRtcEndpoint;
@@ -56,13 +56,12 @@ public class KTestStream implements IKStream {
 	private RecorderEndpoint recorder;
 	private String recPath = null;
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-	private final String uid;
 	private ScheduledFuture<?> recHandle;
 	private int recTime;
 
-	public KTestStream(IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
+	public KTestStream(IWsClient c, JSONObject msg, MediaPipeline pipeline) {
+		super(null, c.getUid());
 		this.pipeline = pipeline;
-		this.uid = _c.getUid();
 		webRtcEndpoint = createWebRtcEndpoint(pipeline);
 		webRtcEndpoint.connect(webRtcEndpoint);
 
@@ -73,7 +72,7 @@ public class KTestStream implements IKStream {
 		recorder.addRecordingListener(evt -> {
 				recTime = 0;
 				recHandle = scheduler.scheduleAtFixedRate(
-						() -> WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "recording").put("time", recTime++))
+						() -> WebSocketHelper.sendClient(c, newTestKurentoMsg().put("id", "recording").put("time", recTime++))
 						, 0, 1, TimeUnit.SECONDS);
 				scheduler.schedule(() -> {
 						recorder.stop();
@@ -81,7 +80,7 @@ public class KTestStream implements IKStream {
 					}, 5, TimeUnit.SECONDS);
 			});
 		recorder.addStoppedListener(evt -> {
-				WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "recStopped"));
+				WebSocketHelper.sendClient(c, newTestKurentoMsg().put("id", "recStopped"));
 				releaseRecorder();
 			});
 		switch (profile) {
@@ -103,9 +102,9 @@ public class KTestStream implements IKStream {
 		String sdpOffer = msg.getString("sdpOffer");
 		String sdpAnswer = webRtcEndpoint.processOffer(sdpOffer);
 
-		addIceListener(_c);
+		addIceListener(c);
 
-		WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+		WebSocketHelper.sendClient(c, newTestKurentoMsg()
 				.put("id", "startResponse")
 				.put("sdpAnswer", sdpAnswer));
 		webRtcEndpoint.gatherCandidates();
@@ -117,7 +116,7 @@ public class KTestStream implements IKStream {
 
 			@Override
 			public void onError(Throwable cause) throws Exception {
-				sendError(_c, "Failed to start recording");
+				sendError(c, "Failed to start recording");
 				log.error("Failed to start recording", cause);
 			}
 		});
@@ -217,13 +216,13 @@ public class KTestStream implements IKStream {
 	}
 
 	@Override
-	public void release(KurentoHandler h) {
+	public void release(IStreamProcessor processor) {
 		if (webRtcEndpoint != null) {
 			webRtcEndpoint.release();
 			webRtcEndpoint = null;
 		}
 		releasePlayer();
 		releaseRecorder();
-		h.testsByUid.remove(uid);
+		processor.release(this);
 	}
 }

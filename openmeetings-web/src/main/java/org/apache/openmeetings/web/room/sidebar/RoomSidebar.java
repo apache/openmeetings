@@ -24,7 +24,7 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.util.ArrayList;
 
-import org.apache.openmeetings.core.remote.KurentoHandler;
+import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -193,7 +193,7 @@ public class RoomSidebar extends Panel {
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.conference == room.getRoom().getType()) {
-						kurento.toggleActivity(c, Client.Activity.AUDIO_VIDEO);
+						streamProcessor.toggleActivity(c, Client.Activity.AUDIO_VIDEO);
 					}
 				}
 				cm.update(c);
@@ -206,7 +206,7 @@ public class RoomSidebar extends Panel {
 	@SpringBean
 	private ClientManager cm;
 	@SpringBean
-	private KurentoHandler kurento;
+	private StreamProcessor streamProcessor;
 
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);

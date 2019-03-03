@@ -106,9 +106,9 @@ public class KRoom {
 		return streams.values();
 	}
 
-	public void onStopBroadcast(KStream stream, final KurentoHandler h) {
+	public void onStopBroadcast(KStream stream, final StreamProcessor processor) {
 		streams.remove(stream.getUid());
-		stream.release(h);
+		stream.release(processor);
 		WebSocketHelper.sendAll(newKurentoMsg()
 				.put("id", "broadcastStopped")
 				.put("uid", stream.getUid())
@@ -118,7 +118,7 @@ public class KRoom {
 		//FIXME TODO permission can be removed, some listener might be required
 	}
 
-	public void leave(final KurentoHandler h, final Client c) {
+	public void leave(final StreamProcessor processor, final Client c) {
 		for (Map.Entry<String, KStream> e : streams.entrySet()) {
 			e.getValue().remove(c);
 		}
@@ -128,7 +128,7 @@ public class KRoom {
 			}
 			KStream stream = streams.remove(sd.getUid());
 			if (stream != null) {
-				stream.release(h);
+				stream.release(processor);
 			}
 		}
 	}
@@ -190,21 +190,32 @@ public class KRoom {
 		}
 	}
 
-	public void stopRecording(KurentoHandler h, Client c, RecordingDao recDao) {
+	public void stopRecording(final StreamProcessor processor, Client c) {
 		if (recordingStarted.compareAndSet(true, false)) {
 			log.debug("##REC:: recording in room {} is stopping {} ::", roomId, recordingId);
 			for (final KStream stream : streams.values()) {
 				stream.stopRecord();
 			}
-			Recording rec = recDao.get(recordingId);
+			Recording rec = processor.getRecordingDao().get(recordingId);
 			rec.setRecordEnd(new Date());
-			rec = recDao.update(rec);
+			rec = processor.getRecordingDao().update(rec);
 			recordingUser = new JSONObject();
 			recordingId = null;
 
-			h.startConvertion(rec);
+			processor.startConvertion(rec);
+			User u;
+			if (c == null) {
+				u = new User();
+			} else {
+				u = c.getUser();
+				Optional<StreamDesc> osd = c.getScreenStream();
+				if (osd.isPresent()) {
+					osd.get().removeActivity(Activity.RECORD);
+					processor.getClientManager().update(c);
+					processor.getHandler().sendShareUpdated(osd.get());
+				}
+			}
 			// Send notification to all users that the recording has been started
-			User u = c == null ? new User() : c.getUser();
 			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.recordingToggled));
 			log.debug("##REC:: recording in room {} is stopped ::", roomId);
 		}
@@ -218,8 +229,9 @@ public class KRoom {
 		return new JSONObject(sharingUser.toString());
 	}
 
-	public void startSharing(KurentoHandler h, IClientManager cm, Client c, Optional<StreamDesc> osd, JSONObject msg, Activity a) {
+	public void startSharing(StreamProcessor processor, IClientManager cm, Client c, Optional<StreamDesc> osd, JSONObject msg, Activity a) {
 		StreamDesc sd = null;
+		KurentoHandler h = processor.getHandler();
 		if (sharingStarted.compareAndSet(false, true)) {
 			sharingUser.put("sid", c.getSid());
 			sd = c.addStream(StreamType.SCREEN, a);
@@ -246,9 +258,9 @@ public class KRoom {
 		}
 	}
 
-	public void close(final KurentoHandler h) {
+	public void close(final StreamProcessor processor) {
 		for (final KStream stream : streams.values()) {
-			stream.release(h);
+			stream.release(processor);
 		}
 		streams.clear();
 		pipeline.release(new Continuation<Void>() {

@@ -25,7 +25,11 @@ var VideoManager = (function() {
 			, uid = sd.uid
 			, w = $('#' + VideoUtil.getVid(uid))
 			, v = w.data();
-		v.stream().activities = sd.activities;
+		if (!VideoUtil.isSharing(sd) && !VideoUtil.isRecording(sd)) {
+			VideoManager.close(uid, false);
+		} else {
+			v.stream().activities = sd.activities;
+		}
 		Sharer.setShareState(VideoUtil.isSharing(sd) ? SHARE_STARTED : SHARE_STOPED);
 		Sharer.setRecState(VideoUtil.isRecording(sd) ? SHARE_STARTED : SHARE_STOPED);
 	}

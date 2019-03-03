@@ -93,15 +93,15 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 	@Test
 	public void testRecordingAllowed() {
 		Client c = getClient();
-		assertFalse(handler.recordingAllowed(c));
+		assertFalse(streamProcessor.recordingAllowed(c));
 		c.setRoom(new Room());
-		assertFalse(handler.recordingAllowed(c));
+		assertFalse(streamProcessor.recordingAllowed(c));
 		c.getRoom().setId(ROOM_ID);
 		c.getRoom().setAllowRecording(true);
-		assertFalse(handler.recordingAllowed(c));
+		assertFalse(streamProcessor.recordingAllowed(c));
 		c.allow(Room.Right.moderator);
 		when(roomDao.get(ROOM_ID)).thenReturn(c.getRoom());
-		assertTrue(handler.recordingAllowed(c));
+		assertTrue(streamProcessor.recordingAllowed(c));
 	}
 
 	private Client getClientWithRoom() {
@@ -145,7 +145,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 		Client c = getClientFull();
 		when(roomDao.get(ROOM_ID)).thenReturn(c.getRoom());
 		handler.onMessage(c, msg);
-		assertTrue(handler.isSharing(ROOM_ID));
+		assertTrue(streamProcessor.isSharing(ROOM_ID));
 		handler.onMessage(c, msg);
 	}
 }

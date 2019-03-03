@@ -38,15 +38,10 @@ var Sharer = (function() {
 					, height: height.val()
 				});
 			} else {
-				const cuid = Room.getOptions().uid
-					, v = $('div[data-client-uid="' + cuid + '"][data-client-type="SCREEN"]')
-					, uid = v.data().stream().uid;
 				VideoManager.sendMessage({
-					id: 'stopSharing'
-					, uid: uid
+					id: 'pauseSharing'
+					, uid: _getShareUid()
 				});
-				VideoManager.close(uid, false);
-				_setShareState(SHARE_STOPED);
 			}
 		});
 		width = sharer.find('.width');
@@ -64,15 +59,10 @@ var Sharer = (function() {
 					, height: height.val()
 				});
 			} else {
-				const cuid = Room.getOptions().uid
-					, v = $('div[data-client-uid="' + cuid + '"][data-client-type="SCREEN"]')
-					, uid = v.data().stream().uid;
 				VideoManager.sendMessage({
 					id: 'stopRecord'
-					, uid: uid
+					, uid: _getShareUid()
 				});
-				VideoManager.close(uid, false);
-				_setRecState(SHARE_STOPED);
 			}
 		});
 	}
@@ -176,6 +166,10 @@ var Sharer = (function() {
 			};
 		}
 		return cnts;
+	}
+	function _getShareUid() {
+		const v = $('div[data-client-uid="' + Room.getOptions().uid + '"][data-client-type="SCREEN"]');
+		return v && v.data() && v.data().stream() ? v.data().stream().uid : '';
 	}
 
 	self.init = _init;

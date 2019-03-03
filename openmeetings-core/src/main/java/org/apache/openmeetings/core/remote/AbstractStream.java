@@ -24,20 +24,36 @@ import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.RecorderEndpoint;
 import org.kurento.client.WebRtcEndpoint;
 
-public interface IKStream {
-	void release(KurentoHandler h);
+public abstract class AbstractStream {
+	protected final String sid;
+	protected final String uid;
 
-	default WebRtcEndpoint createWebRtcEndpoint(MediaPipeline pipeline) {
+	public AbstractStream(final String sid, final String uid) {
+		this.sid = sid;
+		this.uid = uid;
+	}
+
+	public String getSid() {
+		return sid;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public abstract void release(IStreamProcessor processor);
+
+	public WebRtcEndpoint createWebRtcEndpoint(MediaPipeline pipeline) {
 		return new WebRtcEndpoint.Builder(pipeline).build();
 	}
 
-	default RecorderEndpoint createRecorderEndpoint(MediaPipeline pipeline, String path, MediaProfileSpecType profile) {
+	public RecorderEndpoint createRecorderEndpoint(MediaPipeline pipeline, String path, MediaProfileSpecType profile) {
 		return new RecorderEndpoint.Builder(pipeline, path)
 				.stopOnEndOfStream()
 				.withMediaProfile(profile).build();
 	}
 
-	default PlayerEndpoint createPlayerEndpoint(MediaPipeline pipeline, String path) {
+	public PlayerEndpoint createPlayerEndpoint(MediaPipeline pipeline, String path) {
 		return new PlayerEndpoint.Builder(pipeline, path).build();
 	}
 }

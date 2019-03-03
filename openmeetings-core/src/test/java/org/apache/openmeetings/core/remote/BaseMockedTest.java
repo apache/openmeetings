@@ -34,6 +34,7 @@ import org.kurento.client.internal.TransactionImpl;
 import org.kurento.client.internal.client.RomManager;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -41,7 +42,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.github.openjson.JSONObject;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({KurentoClient.class, WebSocketHelper.class, IKStream.class})
+@PrepareForTest({KurentoClient.class, WebSocketHelper.class, AbstractStream.class})
 public class BaseMockedTest {
 	@Mock
 	protected RomManager romManager;
@@ -51,11 +52,19 @@ public class BaseMockedTest {
 	protected KurentoClient client;
 	@Spy
 	@InjectMocks
+	protected StreamProcessor streamProcessor;
+	@Spy
+	@InjectMocks
+	protected TestStreamProcessor testProcessor;
+	@Spy
+	@InjectMocks
 	protected KurentoHandler handler;
+
 	protected final static JSONObject MSG_BASE = new JSONObject();
 
 	@Before
 	public void setup() {
+		MockitoAnnotations.initMocks(this);
 		mockStatic(KurentoClient.class);
 		mockStatic(WebSocketHelper.class);
 		when(client.getServerManager()).thenReturn(kServerManager);

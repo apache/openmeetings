@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.room.wb;
 
 import java.io.IOException;
 
-import org.apache.openmeetings.core.remote.KurentoHandler;
+import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -36,7 +36,7 @@ public class InterviewWbPanel extends AbstractWbPanel {
 	private static final long serialVersionUID = 1L;
 	public static final ResourceReference INTERVIEWWB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "interviewwb.js");
 	@SpringBean
-	private KurentoHandler kurento;
+	private StreamProcessor streamProcessor;
 
 	public InterviewWbPanel(String id, RoomPanel rp) {
 		super(id, rp);
@@ -55,13 +55,13 @@ public class InterviewWbPanel extends AbstractWbPanel {
 	@Override
 	protected void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException {
 		Client c = rp.getClient();
-		if (kurento.recordingAllowed(c)) {
+		if (streamProcessor.recordingAllowed(c)) {
 			switch (a) {
 				case startRecording:
-					kurento.startRecording(c);
+					streamProcessor.startRecording(c);
 					break;
 				case stopRecording:
-					kurento.stopRecording(c);
+					streamProcessor.stopRecording(c);
 					break;
 				default:
 					//no-op
