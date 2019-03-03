@@ -354,7 +354,6 @@ var Video = (function() {
 		sd.self = sd.cuid === opts.uid;
 		const contSel = _initContainer(_id, name, opts);
 		v = $('#' + _id);
-		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
 		f = v.find('.footer');
 		if (!sd.self && isSharing) {
 			Sharer.close();
@@ -379,6 +378,7 @@ var Video = (function() {
 		if (!isSharing && !isRecording) {
 			_initCamDialog();
 		}
+		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
 		v.on('remove', _cleanup);
 		vc = v.find('.video');
 		vc.width(_w).height(_h);

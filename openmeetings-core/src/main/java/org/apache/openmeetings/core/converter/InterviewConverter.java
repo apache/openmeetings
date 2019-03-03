@@ -280,8 +280,10 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 		}
 
 		public static void add(List<PodPart> parts, long duration) {
-			if (duration != 0L) {
+			if (duration > 19L) { // ffmpeg ignores durations less than 19ms, can hang
 				parts.add(new PodPart(duration));
+			} else {
+				log.warn("PodPart with duration less than 19ms found: {}", duration);
 			}
 		}
 	}

@@ -170,7 +170,6 @@ public class RoomPanel extends BasePanel {
 
 		private void initVideos(AjaxRequestTarget target) {
 			StringBuilder sb = new StringBuilder();
-			Client _c = getClient();
 			JSONArray streams = new JSONArray();
 			for (Client c: cm.listByRoom(getRoom().getId())) {
 				for (StreamDesc sd : c.getStreams()) {
@@ -180,7 +179,7 @@ public class RoomPanel extends BasePanel {
 					sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers()).append(");");
 				}
 			}
-			if (interview && !streamProcessor.isRecording(r.getId()) && streams.length() > 0 && _c.hasRight(Right.moderator)) {
+			if (interview && streamProcessor.recordingAllowed(getClient())) {
 				sb.append("WbArea.setRecEnabled(true);");
 			}
 			if (!Strings.isEmpty(sb)) {
@@ -556,7 +555,7 @@ public class RoomPanel extends BasePanel {
 		if (interview && _c.hasRight(Right.moderator)) {
 			if (streamProcessor.isRecording(r.getId())) {
 				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
-			} else {
+			} else if (streamProcessor.recordingAllowed(getClient())) {
 				boolean hasStreams = false;
 				for (Client cl : cm.listByRoom(r.getId())) {
 					if (!cl.getStreams().isEmpty()) {

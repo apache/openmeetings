@@ -55,17 +55,15 @@ public class InterviewWbPanel extends AbstractWbPanel {
 	@Override
 	protected void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException {
 		Client c = rp.getClient();
-		if (streamProcessor.recordingAllowed(c)) {
-			switch (a) {
-				case startRecording:
-					streamProcessor.startRecording(c);
-					break;
-				case stopRecording:
-					streamProcessor.stopRecording(c);
-					break;
-				default:
-					//no-op
-			}
+		switch (a) {
+			case startRecording:
+				streamProcessor.startRecording(c);
+				break;
+			case stopRecording:
+				streamProcessor.stopRecording(c);
+				break;
+			default:
+				//no-op
 		}
 	}
 }
