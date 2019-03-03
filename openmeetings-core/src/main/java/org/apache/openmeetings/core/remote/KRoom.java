@@ -45,6 +45,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.kurento.client.Continuation;
 import org.kurento.client.MediaPipeline;
@@ -237,7 +238,7 @@ public class KRoom {
 			sd = c.addStream(StreamType.SCREEN, a);
 			sd.setWidth(msg.getInt("width")).setHeight(msg.getInt("height"));
 			cm.update(c);
-			log.debug("User {}: has started broadcast", sd.getUid());
+			log.debug("User {}: has started sharing", sd.getUid());
 			h.sendClient(sd.getSid(), newKurentoMsg()
 					.put("id", "broadcast")
 					.put("stream", sd.toJson()
@@ -249,6 +250,11 @@ public class KRoom {
 			sd.addActivity(a);
 			cm.update(c);
 			h.sendShareUpdated(sd);
+			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+			WebSocketHelper.sendRoomOthers(roomId, c.getUid(), newKurentoMsg()
+					.put("id", "newStream")
+					.put(PARAM_ICE, processor.getHandler().getTurnServers())
+					.put("stream", sd.toJson()));
 		}
 	}
 

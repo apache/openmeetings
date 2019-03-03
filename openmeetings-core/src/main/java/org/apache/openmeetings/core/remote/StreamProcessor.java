@@ -119,6 +119,11 @@ public class StreamProcessor implements IStreamProcessor {
 			case "addListener":
 				sender = getByUid(msg.getString("sender"));
 				if (sender != null) {
+					Client sendClient = cm.getBySid(sender.getSid());
+					sd = sendClient.getStream(sender.getUid());
+					if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !sd.hasActivity(Activity.SCREEN)) {
+						break;
+					}
 					sender.addListener(this, c.getSid(), c.getUid(), msg.getString("sdpOffer"));
 				}
 				break;
@@ -307,6 +312,10 @@ public class StreamProcessor implements IStreamProcessor {
 			KStream sender = getByUid(uid);
 			sender.pauseSharing();
 			kHandler.sendShareUpdated(sd);
+			WebSocketHelper.sendRoomOthers(c.getRoomId(), c.getUid(), newKurentoMsg()
+					.put("id", "broadcastStopped")
+					.put("uid", sd.getUid())
+				);
 		} else {
 			stopSharing(c, uid);
 		}
@@ -333,6 +342,9 @@ public class StreamProcessor implements IStreamProcessor {
 				cm.update(c);
 				checkStreams(c.getRoomId());
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+				kHandler.sendShareUpdated(sd
+						.removeActivity(Activity.SCREEN)
+						.removeActivity(Activity.RECORD));
 			}
 		}
 		return sd;

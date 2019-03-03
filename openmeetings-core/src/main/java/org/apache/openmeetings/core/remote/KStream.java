@@ -79,6 +79,7 @@ public class KStream extends AbstractStream {
 		}
 		final boolean hasAudio = sd.hasActivity(Activity.AUDIO);
 		final boolean hasVideo = sd.hasActivity(Activity.VIDEO);
+		final boolean hasScreen = sd.hasActivity(Activity.SCREEN);
 		if ((sdpOffer.indexOf("m=audio") > -1 && !hasAudio)
 				|| (sdpOffer.indexOf("m=video") > -1 && !hasVideo && StreamType.SCREEN != streamType))
 		{
@@ -132,10 +133,12 @@ public class KStream extends AbstractStream {
 		}
 		Client c = sd.getClient();
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
-		WebSocketHelper.sendRoomOthers(room.getRoomId(), c.getUid(), newKurentoMsg()
-				.put("id", "newStream")
-				.put(PARAM_ICE, processor.getHandler().getTurnServers())
-				.put("stream", sd.toJson()));
+		if (hasAudio || hasVideo || hasScreen) {
+			WebSocketHelper.sendRoomOthers(room.getRoomId(), c.getUid(), newKurentoMsg()
+					.put("id", "newStream")
+					.put(PARAM_ICE, processor.getHandler().getTurnServers())
+					.put("stream", sd.toJson()));
+		}
 		return this;
 	}
 

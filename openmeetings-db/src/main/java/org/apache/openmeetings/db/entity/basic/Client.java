@@ -521,8 +521,9 @@ public class Client implements IDataProviderEntity, IWsClient {
 			sactivities.add(a);
 		}
 
-		public void removeActivity(Activity a) {
+		public StreamDesc removeActivity(Activity a) {
 			sactivities.remove(a);
+			return this;
 		}
 
 		public Client getClient() {

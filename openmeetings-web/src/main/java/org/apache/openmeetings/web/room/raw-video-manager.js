@@ -163,9 +163,6 @@ var VideoManager = (function() {
 			return;
 		}
 		streams.forEach(function(sd) {
-			if (VideoUtil.isRecording(sd)) {
-				return;
-			}
 			const m = {stream: sd, iceServers: iceServers};
 			if (VideoUtil.isSharing(sd)) {
 				_highlight(share
