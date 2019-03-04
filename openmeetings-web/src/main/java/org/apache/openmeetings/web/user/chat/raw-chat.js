@@ -261,7 +261,6 @@ var Chat = function() {
 						}).catch(function() {
 							// Automatic playback failed.
 						});
-					}
 				}
 			}
 			emoticon.animate();
