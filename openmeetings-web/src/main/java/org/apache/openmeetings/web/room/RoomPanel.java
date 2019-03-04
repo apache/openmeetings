@@ -666,7 +666,7 @@ public class RoomPanel extends BasePanel {
 				return;
 			} else {
 				// we found no-one we can ask, allow right
-				broadcast(cm.update(getClient().allow(right)));
+				rightsUpdated(cm.update(getClient().allow(right)));
 			}
 		}
 		// ask
@@ -704,7 +704,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void allowRight(Client client, Right... rights) {
-		broadcast(client.allow(rights));
+		rightsUpdated(client.allow(rights));
 	}
 
 	public void denyRight(Client client, Right... rights) {
@@ -717,7 +717,12 @@ public class RoomPanel extends BasePanel {
 		if (client.hasActivity(Client.Activity.VIDEO) && !client.hasRight(Right.video)) {
 			client.remove(Client.Activity.VIDEO);
 		}
-		broadcast(client);
+		rightsUpdated(client);
+	}
+
+	public void rightsUpdated(Client c) {
+		cm.update(c);
+		streamProcessor.rightsUpdated(c);
 	}
 
 	public void broadcast(Client client) {

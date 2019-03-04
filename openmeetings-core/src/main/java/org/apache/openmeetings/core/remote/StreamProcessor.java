@@ -216,17 +216,42 @@ public class StreamProcessor implements IStreamProcessor {
 						.put("stream", sd.toJson())
 						.put(PARAM_ICE, kHandler.getTurnServers(false)));
 			} else {
-				//constraints were changed
-				c.getStreams().stream()
-					.filter(sd -> StreamType.WEBCAM == sd.getType())
-					.findFirst()
-					.ifPresent(sd -> {
-						sd.setActivities();
-						cm.update(c);
-					});
+				constraintsChanged(c);
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 			}
 		}
+	}
+
+	private void constraintsChanged(Client c) {
+		//constraints were changed
+		c.getStreams().stream()
+			.filter(sd -> StreamType.WEBCAM == sd.getType())
+			.findFirst()
+			.ifPresent(sd -> {
+				sd.setActivities();
+				cm.update(c);
+			});
+	}
+
+	public void rightsUpdated(Client c) {
+		Optional<StreamDesc> osd = c.getScreenStream();
+		if (osd.isPresent() && !hasRightsToShare(c)) {
+			stopSharing(c, osd.get().getUid());
+		}
+		if (isBroadcasting(c)) {
+			constraintsChanged(c);
+		} else {
+			c.getStreams().stream()
+				.filter(sd -> StreamType.WEBCAM == sd.getType())
+				.forEach(sd -> {
+					KStream stream = streamByUid.get(sd.getUid());
+					if (stream != null) {
+						KRoom room = kHandler.getRoom(c.getRoomId());
+						room.onStopBroadcast(stream, this);
+					}
+				});
+		}
+		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 	}
 
 	private void checkStreams(Long roomId) {
