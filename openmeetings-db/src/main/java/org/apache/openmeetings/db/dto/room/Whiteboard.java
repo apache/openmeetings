@@ -50,6 +50,9 @@ public class Whiteboard implements Serializable {
 	public static final String ATTR_FILE_ID = "fileId";
 	public static final String ATTR_FILE_TYPE = "fileType";
 	public static final String ATTR_SLIDE = "slide";
+	public static final String ATTR_WIDTH = "width";
+	public static final String ATTR_HEIGHT = "height";
+	public static final String ATTR_ZOOM = "zoom";
 	public enum ZoomMode {
 		fullFit
 		, pageWidth

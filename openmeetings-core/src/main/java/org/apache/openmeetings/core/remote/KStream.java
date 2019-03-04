@@ -111,9 +111,7 @@ public class KStream extends AbstractStream {
 				break;
 		}
 		outgoingMedia = createEndpoint(processor, sd.getSid(), sd.getUid());
-		outgoingMedia.addMediaSessionTerminatedListener(evt -> {
-			log.warn("Media stream terminated");
-		});
+		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated"));
 		outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
 			if (MediaFlowState.NOT_FLOWING == evt.getState()) {
 				log.warn("Media FlowOut :: {}", evt.getState());
@@ -123,9 +121,7 @@ public class KStream extends AbstractStream {
 				stopBroadcast(processor);
 			}
 		});
-		outgoingMedia.addMediaFlowInStateChangeListener(evt -> {
-			log.warn("Media FlowIn :: {}", evt);
-		});
+		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media FlowIn :: {}", evt));
 		processor.addStream(this);
 		addListener(processor, sd.getSid(), sd.getUid(), sdpOffer);
 		if (room.isRecording()) {

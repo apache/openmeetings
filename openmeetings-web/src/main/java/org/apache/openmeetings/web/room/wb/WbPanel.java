@@ -21,8 +21,11 @@ package org.apache.openmeetings.web.room.wb;
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_HEIGHT;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_WIDTH;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_ZOOM;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ITEMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
@@ -336,9 +339,9 @@ public class WbPanel extends AbstractWbPanel {
 				case setSize:
 				{
 					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
-					wb.setWidth(obj.getInt("width"));
-					wb.setHeight(obj.getInt("height"));
-					wb.setZoom(obj.getDouble("zoom"));
+					wb.setWidth(obj.getInt(ATTR_WIDTH));
+					wb.setHeight(obj.getInt(ATTR_HEIGHT));
+					wb.setZoom(obj.getDouble(ATTR_ZOOM));
 					wb.setZoomMode(ZoomMode.valueOf(obj.getString("zoomMode")));
 					wbm.update(roomId, wb);
 					sendWbOthers(WbAction.setSize, getAddWbJson(wb));
@@ -480,9 +483,9 @@ public class WbPanel extends AbstractWbPanel {
 	private static JSONObject getAddWbJson(final Whiteboard wb) {
 		return new JSONObject().put("wbId", wb.getId())
 				.put("name", wb.getName())
-				.put("width", wb.getWidth())
-				.put("height", wb.getHeight())
-				.put("zoom", wb.getZoom())
+				.put(ATTR_WIDTH, wb.getWidth())
+				.put(ATTR_HEIGHT, wb.getHeight())
+				.put(ATTR_ZOOM, wb.getZoom())
 				.put("zoomMode", wb.getZoomMode().name());
 	}
 
@@ -601,8 +604,8 @@ public class WbPanel extends AbstractWbPanel {
 							.put(ATTR_TYPE, "image")
 							.put("left", UPLOAD_WB_LEFT)
 							.put("top", UPLOAD_WB_TOP)
-							.put("width", fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
-							.put("height", fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight())
+							.put(ATTR_WIDTH, fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
+							.put(ATTR_HEIGHT, fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight())
 							.put("uid", wuid)
 							.put(ATTR_SLIDE, wb.getSlide())
 							;
