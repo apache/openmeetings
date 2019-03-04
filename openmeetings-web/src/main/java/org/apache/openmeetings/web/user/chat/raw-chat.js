@@ -255,12 +255,8 @@ var Chat = function() {
 			if (notify) {
 				ctrl.addClass('ui-state-highlight');
 				if (p.is(':visible') && !muted) {
-					const playPromise = audio.play();
-
-					// In browsers that don’t yet support this functionality,
-					// playPromise won’t be defined.
-					if (playPromise !== undefined) {
-						playPromise.then(function() {
+					audio.play()
+						.then(function() {
 							// Automatic playback started!
 						}).catch(function() {
 							// Automatic playback failed.

@@ -50,6 +50,7 @@ import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.crypt.ICrypt;
+import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.core.util.lang.PropertyResolver;
 import org.apache.wicket.core.util.lang.PropertyResolverConverter;
 import org.apache.wicket.util.string.Strings;
@@ -254,33 +255,7 @@ public class UserManager implements IUserManager {
 			fUser.getGroupUsers().add(new GroupUser(groupDao.get(getDefaultGroup()), fUser));
 			for (Map.Entry<String, String> entry : user.getUserData().entrySet()) {
 				final String expression = entry.getKey();
-				PropertyResolver.setValue(expression, fUser, entry.getValue(), new PropertyResolverConverter(null, null) {
-					private static final long serialVersionUID = 1L;
-
-					@SuppressWarnings("unchecked")
-					@Override
-					public <T> T convert(Object object, Class<T> clz) {
-						if ("languageId".equals(expression) && Long.class.isAssignableFrom(clz)) {
-							Long language = 1L;
-							String locale = (String)object;
-							if (locale != null) {
-								Locale loc = Locale.forLanguageTag(locale);
-								if (loc != null) {
-									language = getLanguage(loc);
-									fUser.setLanguageId(language);
-									fUser.getAddress().setCountry(loc.getCountry());
-								}
-							}
-							return (T)language;
-						}
-						return (T)object;
-					}
-
-					@Override
-					protected <C> String convertToString(C object, Locale locale) {
-						return String.valueOf(object);
-					}
-				});
+				PropertyResolver.setValue(expression, fUser, entry.getValue(), new LanguageConverter(expression, fUser, null, null));
 			}
 			fUser.setShowContactDataToContacts(true);
 			u = fUser;
@@ -290,5 +265,41 @@ public class UserManager implements IUserManager {
 		u = userDao.update(u, crypt.randomPassword(25), Long.valueOf(-1));
 
 		return u;
+	}
+
+	private class LanguageConverter extends PropertyResolverConverter {
+		private static final long serialVersionUID = 1L;
+		final String expression;
+		final User fUser;
+
+		public LanguageConverter(final String expression, final User fUser, IConverterLocator converterSupplier, Locale locale) {
+			super(converterSupplier, locale);
+			this.expression = expression;
+			this.fUser = fUser;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T> T convert(Object object, Class<T> clz) {
+			if ("languageId".equals(expression) && Long.class.isAssignableFrom(clz)) {
+				Long language = 1L;
+				String locale = (String)object;
+				if (locale != null) {
+					Locale loc = Locale.forLanguageTag(locale);
+					if (loc != null) {
+						language = getLanguage(loc);
+						fUser.setLanguageId(language);
+						fUser.getAddress().setCountry(loc.getCountry());
+					}
+				}
+				return (T)language;
+			}
+			return (T)object;
+		}
+
+		@Override
+		protected <C> String convertToString(C object, Locale locale) {
+			return String.valueOf(object);
+		}
 	}
 }

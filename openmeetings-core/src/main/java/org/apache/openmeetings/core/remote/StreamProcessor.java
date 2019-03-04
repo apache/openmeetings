@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import org.apache.openmeetings.core.converter.IRecordingConverter;
@@ -165,7 +166,7 @@ public class StreamProcessor implements IStreamProcessor {
 	}
 
 	public void toggleActivity(Client c, Activity a) {
-		log.info("PARTICIPANT {}: trying to toggle activity {}", c, c.getRoomId());
+		log.info("PARTICIPANT {}: trying to toggle activity {}", c, a);
 
 		if (!activityAllowed(c, a, c.getRoom())) {
 			if (a == Activity.AUDIO || a == Activity.AUDIO_VIDEO) {
@@ -189,18 +190,18 @@ public class StreamProcessor implements IStreamProcessor {
 			c.toggle(a);
 			if (!isBroadcasting(c)) {
 				//close
-				boolean changed = false;
-				for (StreamDesc sd : c.getStreams()) {
-					KStream s = getByUid(sd.getUid());
-					if (StreamType.WEBCAM == sd.getType()) {
+				AtomicBoolean changed = new AtomicBoolean(false);
+				c.getStreams().stream()
+					.filter(sd -> StreamType.WEBCAM == sd.getType())
+					.forEach(sd -> {
+						KStream s = getByUid(sd.getUid());
 						if (s != null) {
 							s.stopBroadcast(this);
 						}
 						c.removeStream(sd.getUid());
-						changed = true;
-					}
-				}
-				if (changed) {
+						changed.set(true);
+					});
+				if (changed.get()) {
 					cm.update(c);
 					checkStreams(c.getRoomId());
 				}
@@ -218,13 +219,13 @@ public class StreamProcessor implements IStreamProcessor {
 				//FIXME TODO update interview buttons
 			} else {
 				//constraints were changed
-				for (StreamDesc sd : c.getStreams()) {
-					if (StreamType.WEBCAM == sd.getType()) {
+				c.getStreams().stream()
+					.filter(sd -> StreamType.WEBCAM == sd.getType())
+					.findFirst()
+					.ifPresent(sd -> {
 						sd.setActivities();
 						cm.update(c);
-						break;
-					}
-				}
+					});
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 			}
 		}

@@ -211,9 +211,8 @@ var Player = (function() {
 				if (group.status.paused) {
 					video.getElement().pause();
 				} else {
-					const prom = video.getElement().play();
-					if (prom !== undefined) {
-						prom.then(function() {
+					video.getElement().play()
+						.then(function() {
 							fabric.util.requestAnimFrame(render);
 						}).catch(function(err) {
 							if ('NotAllowedError' === err.name) {

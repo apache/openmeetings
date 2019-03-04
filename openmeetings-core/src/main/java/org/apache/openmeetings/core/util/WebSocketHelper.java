@@ -119,12 +119,12 @@ public class WebSocketHelper {
 		if (publish) {
 			publish(new WsMessageRoomMsg(m));
 		}
-		log.debug("Sending WebSocket message: {} {}", m.getType(), m instanceof TextRoomMessage ? ((TextRoomMessage)m).getText() : "");
+		log.debug("Sending WebSocket message to room: {} {}", m.getType(), m instanceof TextRoomMessage ? ((TextRoomMessage)m).getText() : "");
 		sendRoom(m.getRoomId(), (t, c) -> t.sendMessage(m), null);
 	}
 
 	public static void sendServer(final RoomMessage m) {
-		log.debug("Sending WebSocket message: {}", m);
+		log.debug("Sending WebSocket message to All: {}", m);
 		sendAll(c -> {
 			try {
 				c.sendMessage(m);
@@ -176,7 +176,7 @@ public class WebSocketHelper {
 		if (publish) {
 			publish(new WsMessageAll(m));
 		}
-		log.debug("Sending WebSocket message: {}", m);
+		log.debug("Sending text WebSocket message to All: {}", m);
 		sendAll(c -> doSend(c, m, "ALL"));
 	}
 
@@ -201,7 +201,7 @@ public class WebSocketHelper {
 	}
 
 	protected static void sendRoom(final Long roomId, final JSONObject m, Predicate<Client> check, BiFunction<JSONObject, Client, JSONObject> func) {
-		log.debug("Sending WebSocket message: {}", m);
+		log.debug("Sending json WebSocket message to room: {}", m);
 		sendRoom(roomId, (t, c) -> doSend(t, c, m, func, "room"), check);
 	}
 

@@ -231,7 +231,7 @@ public class KRoom {
 	}
 
 	public void startSharing(StreamProcessor processor, IClientManager cm, Client c, Optional<StreamDesc> osd, JSONObject msg, Activity a) {
-		StreamDesc sd = null;
+		StreamDesc sd;
 		KurentoHandler h = processor.getHandler();
 		if (sharingStarted.compareAndSet(false, true)) {
 			sharingUser.put("sid", c.getSid());

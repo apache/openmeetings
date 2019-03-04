@@ -276,141 +276,140 @@ public class AppointmentManager {
 	private boolean discoverCalendars(HttpClient client, HttpClientContext context, OmCalendar calendar) {
 		cleanupIdleConnections();
 
-		if (calendar.getSyncType() == SyncType.NONE) {
-			HttpPropfind propFindMethod = null;
-			String userPath = null, homepath = null;
+		if (calendar.getSyncType() != SyncType.NONE) {
+			return false;
+		}
+		HttpPropfind propFindMethod = null;
+		String userPath = null, homepath = null;
 
-			DavPropertyName curUserPrincipal = DavPropertyName.create("current-user-principal"),
-					calHomeSet = DavPropertyName.create("calendar-home-set", CalDAVConstants.NAMESPACE_CALDAV),
-					suppCalCompSet = DavPropertyName.create("supported-calendar-component-set", CalDAVConstants.NAMESPACE_CALDAV);
+		DavPropertyName curUserPrincipal = DavPropertyName.create("current-user-principal"),
+				calHomeSet = DavPropertyName.create("calendar-home-set", CalDAVConstants.NAMESPACE_CALDAV),
+				suppCalCompSet = DavPropertyName.create("supported-calendar-component-set", CalDAVConstants.NAMESPACE_CALDAV);
 
-			//Find out whether it's a calendar or if we can find the calendar-home or current-user url
-			try {
-				String path = calendar.getHref();
+		//Find out whether it's a calendar or if we can find the calendar-home or current-user url
+		try {
+			String path = calendar.getHref();
 
-				DavPropertyNameSet properties = new DavPropertyNameSet();
-				properties.add(curUserPrincipal);
-				properties.add(calHomeSet);
-				properties.add(DavPropertyName.RESOURCETYPE);
+			DavPropertyNameSet properties = new DavPropertyNameSet();
+			properties.add(curUserPrincipal);
+			properties.add(calHomeSet);
+			properties.add(DavPropertyName.RESOURCETYPE);
 
-				propFindMethod = new HttpPropfind(path, properties, CalDAVConstants.DEPTH_0);
-				HttpResponse httpResponse = client.execute(propFindMethod, context);
+			propFindMethod = new HttpPropfind(path, properties, CalDAVConstants.DEPTH_0);
+			HttpResponse httpResponse = client.execute(propFindMethod, context);
 
-				if (propFindMethod.succeeded(httpResponse)) {
-					for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus(httpResponse).getResponses()) {
-						DavPropertySet set = response.getProperties(SC_OK);
-						DavProperty<?> calhome = set.get(calHomeSet), curPrinci = set.get(curUserPrincipal),
-								resourcetype = set.get(DavPropertyName.RESOURCETYPE);
+			if (!propFindMethod.succeeded(httpResponse)) {
+				return false;
+			}
+			for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus(httpResponse).getResponses()) {
+				DavPropertySet set = response.getProperties(SC_OK);
+				DavProperty<?> calhome = set.get(calHomeSet), curPrinci = set.get(curUserPrincipal),
+						resourcetype = set.get(DavPropertyName.RESOURCETYPE);
 
-						if (checkCalendarResourceType(resourcetype)) {
-							//This is a calendar and thus initialize and return
-							return initCalendar(client, context, calendar);
-						}
+				if (checkCalendarResourceType(resourcetype)) {
+					//This is a calendar and thus initialize and return
+					return initCalendar(client, context, calendar);
+				}
 
-						//Else find all the calendars on the Principal and return.
-						if (calhome != null) {
-							//Calendar Home Path
-							homepath = getTextValuefromProperty(calhome);
-							break;
-						} else if (curPrinci != null) {
-							//Current User Principal Path
-							userPath = getTextValuefromProperty(curPrinci);
-							break;
-						}
-					}
-				} else {
+				//Else find all the calendars on the Principal and return.
+				if (calhome != null) {
+					//Calendar Home Path
+					homepath = getTextValuefromProperty(calhome);
+					break;
+				} else if (curPrinci != null) {
+					//Current User Principal Path
+					userPath = getTextValuefromProperty(curPrinci);
+					break;
+				}
+			}
+
+			if (homepath == null && userPath != null) {
+				//If calendar home path wasn't set, then we get it
+				DavPropertyNameSet props = new DavPropertyNameSet();
+				props.add(calHomeSet);
+				propFindMethod = new HttpPropfind(userPath, props, DavConstants.DEPTH_0);
+				httpResponse = client.execute(propFindMethod, context);
+
+				if (!propFindMethod.succeeded(httpResponse)) {
 					return false;
 				}
+				for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus(httpResponse).getResponses()) {
+					DavPropertySet set = response.getProperties(SC_OK);
+					DavProperty<?> calhome = set.get(calHomeSet);
 
-				if (homepath == null && userPath != null) {
-					//If calendar home path wasn't set, then we get it
-					DavPropertyNameSet props = new DavPropertyNameSet();
-					props.add(calHomeSet);
-					propFindMethod = new HttpPropfind(userPath, props, DavConstants.DEPTH_0);
-					httpResponse = client.execute(propFindMethod, context);
-
-					if (propFindMethod.succeeded(httpResponse)) {
-						for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus(httpResponse).getResponses()) {
-							DavPropertySet set = response.getProperties(SC_OK);
-							DavProperty<?> calhome = set.get(calHomeSet);
-
-							if (calhome != null) {
-								homepath = getTextValuefromProperty(calhome);
-								break;
-							}
-						}
-					} else {
-						return false;
+					if (calhome != null) {
+						homepath = getTextValuefromProperty(calhome);
+						break;
 					}
 				}
+			}
 
-				if (homepath != null) {
-					DavPropertyNameSet props = new DavPropertyNameSet();
-					props.add(DavPropertyName.RESOURCETYPE);
-					props.add(suppCalCompSet);
-					props.add(DavPropertyName.DISPLAYNAME);
+			if (homepath != null) {
+				DavPropertyNameSet props = new DavPropertyNameSet();
+				props.add(DavPropertyName.RESOURCETYPE);
+				props.add(suppCalCompSet);
+				props.add(DavPropertyName.DISPLAYNAME);
 
-					propFindMethod = new HttpPropfind(homepath, props, DavConstants.DEPTH_1);
+				propFindMethod = new HttpPropfind(homepath, props, DavConstants.DEPTH_1);
 
-					httpResponse = client.execute(propFindMethod, context);
+				httpResponse = client.execute(propFindMethod, context);
 
-					if (propFindMethod.succeeded(httpResponse)) {
-						boolean success = false;
+				if (propFindMethod.succeeded(httpResponse)) {
+					boolean success = false;
 
-						URI resourceUri = propFindMethod.getURI();
-						String host = resourceUri.getScheme() + "://" + resourceUri.getHost() + ((resourceUri.getPort() != -1)? ":" + resourceUri.getPort() : "");
-						for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus(httpResponse).getResponses()) {
-							boolean isVevent = false, isCalendar;
+					URI resourceUri = propFindMethod.getURI();
+					String host = resourceUri.getScheme() + "://" + resourceUri.getHost() + ((resourceUri.getPort() != -1)? ":" + resourceUri.getPort() : "");
+					for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus(httpResponse).getResponses()) {
+						boolean isVevent = false, isCalendar;
 
-							DavPropertySet set = response.getProperties(SC_OK);
-							DavProperty<?> p = set.get(suppCalCompSet),
-									resourcetype = set.get(DavPropertyName.RESOURCETYPE),
-									displayname = set.get(DavPropertyName.DISPLAYNAME);
+						DavPropertySet set = response.getProperties(SC_OK);
+						DavProperty<?> p = set.get(suppCalCompSet),
+								resourcetype = set.get(DavPropertyName.RESOURCETYPE),
+								displayname = set.get(DavPropertyName.DISPLAYNAME);
 
-							isCalendar = checkCalendarResourceType(resourcetype);
+						isCalendar = checkCalendarResourceType(resourcetype);
 
-							if (p != null) {
-								for (Object o : (Collection<?>) p.getValue()) {
-									if (o instanceof Element) {
-										Element e = (Element) o;
-										String name = DomUtil.getAttribute(e, "name", null);
-										if ("VEVENT".equals(name)) {
-											isVevent = true;
-										}
+						if (p != null) {
+							for (Object o : (Collection<?>) p.getValue()) {
+								if (o instanceof Element) {
+									Element e = (Element) o;
+									String name = DomUtil.getAttribute(e, "name", null);
+									if ("VEVENT".equals(name)) {
+										isVevent = true;
 									}
 								}
 							}
-
-							if (isCalendar && isVevent) {
-								success = true;
-								//Get New Calendar
-								OmCalendar tempCalendar = new OmCalendar();
-
-								if (displayname != null) {
-									tempCalendar.setTitle(displayname.getValue().toString());
-								}
-
-								tempCalendar.setHref(host + response.getHref());
-
-								tempCalendar.setDeleted(false);
-								tempCalendar.setOwner(calendar.getOwner());
-
-								calendarDao.update(tempCalendar);
-								initCalendar(client, context, tempCalendar);
-							}
 						}
-						return success;
-					}
-				}
 
-			} catch (IOException e) {
-				log.error("Error executing PROPFIND Method, during testConnection.", e);
-			} catch (Exception e) {
-				log.error("Severe Error in executing PROPFIND Method, during testConnection.", e);
-			} finally {
-				if (propFindMethod != null) {
-					propFindMethod.reset();
+						if (isCalendar && isVevent) {
+							success = true;
+							//Get New Calendar
+							OmCalendar tempCalendar = new OmCalendar();
+
+							if (displayname != null) {
+								tempCalendar.setTitle(displayname.getValue().toString());
+							}
+
+							tempCalendar.setHref(host + response.getHref());
+
+							tempCalendar.setDeleted(false);
+							tempCalendar.setOwner(calendar.getOwner());
+
+							calendarDao.update(tempCalendar);
+							initCalendar(client, context, tempCalendar);
+						}
+					}
+					return success;
 				}
+			}
+
+		} catch (IOException e) {
+			log.error("Error executing PROPFIND Method, during testConnection.", e);
+		} catch (Exception e) {
+			log.error("Severe Error in executing PROPFIND Method, during testConnection.", e);
+		} finally {
+			if (propFindMethod != null) {
+				propFindMethod.reset();
 			}
 		}
 
