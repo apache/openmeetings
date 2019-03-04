@@ -222,9 +222,6 @@ var Player = (function() {
 								});
 							}
 						});
-					} else {
-						fabric.util.requestAnimFrame(render);
-					}
 				}
 			}
 			group.setPlayable(wb.getRole());
