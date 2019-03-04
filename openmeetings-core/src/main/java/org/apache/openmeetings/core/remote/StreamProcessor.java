@@ -206,7 +206,6 @@ public class StreamProcessor implements IStreamProcessor {
 					checkStreams(c.getRoomId());
 				}
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
-				//FIXME TODO update interview buttons
 			} else if (!wasBroadcasting) {
 				//join
 				StreamDesc sd = c.addStream(StreamType.WEBCAM);
@@ -216,7 +215,6 @@ public class StreamProcessor implements IStreamProcessor {
 						.put("id", "broadcast")
 						.put("stream", sd.toJson())
 						.put(PARAM_ICE, kHandler.getTurnServers(false)));
-				//FIXME TODO update interview buttons
 			} else {
 				//constraints were changed
 				c.getStreams().stream()
@@ -265,7 +263,8 @@ public class StreamProcessor implements IStreamProcessor {
 		Room r = c.getRoom();
 		return r != null && Room.Type.interview != r.getType()
 				&& !r.isHidden(RoomElement.ScreenSharing)
-				&& r.isAllowRecording() && c.hasRight(Right.share);
+				&& r.isAllowRecording()
+				&& c.hasRight(Right.share);
 	}
 
 	public boolean screenShareAllowed(Client c) {

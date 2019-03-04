@@ -47,11 +47,11 @@ public class TestStreamProcessor implements IStreamProcessor {
 	@Autowired
 	private KurentoHandler kHandler;
 
-	void onMessage(IWsClient _c, final String cmdId, JSONObject msg) {
-		KTestStream user = getByUid(_c.getUid());
+	void onMessage(IWsClient c, final String cmdId, JSONObject msg) {
+		KTestStream user = getByUid(c.getUid());
 		switch (cmdId) {
 			case "wannaRecord":
-				WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+				WebSocketHelper.sendClient(c, newTestKurentoMsg()
 						.put("id", "canRecord")
 						.put(PARAM_ICE, kHandler.getTurnServers(true))
 						);
@@ -60,8 +60,8 @@ public class TestStreamProcessor implements IStreamProcessor {
 				if (user != null) {
 					user.release(this);
 				}
-				user = new KTestStream(_c, msg, createTestPipeline());
-				streamByUid.put(_c.getUid(), user);
+				user = new KTestStream(c, msg, createTestPipeline());
+				streamByUid.put(c.getUid(), user);
 				break;
 			case "iceCandidate":
 				JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
@@ -72,15 +72,18 @@ public class TestStreamProcessor implements IStreamProcessor {
 				}
 				break;
 			case "wannaPlay":
-				WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+				WebSocketHelper.sendClient(c, newTestKurentoMsg()
 						.put("id", "canPlay")
 						.put(PARAM_ICE, kHandler.getTurnServers(true))
 						);
 				break;
 			case "play":
 				if (user != null) {
-					user.play(_c, msg, createTestPipeline());
+					user.play(c, msg, createTestPipeline());
 				}
+				break;
+			default:
+				//no-op
 				break;
 		}
 	}
@@ -103,8 +106,8 @@ public class TestStreamProcessor implements IStreamProcessor {
 		return KurentoHandler.newKurentoMsg().put(TAG_MODE, MODE_TEST);
 	}
 
-	void remove(IWsClient _c) {
-		AbstractStream s = getByUid(_c.getUid());
+	void remove(IWsClient c) {
+		AbstractStream s = getByUid(c.getUid());
 		if (s != null) {
 			s.release(this);
 		}
