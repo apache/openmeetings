@@ -192,7 +192,7 @@ public class OmFileHelper {
 	}
 
 	public static File getStreamsDir() {
-		return getDir(new File("/tmp/"), STREAMS_DIR); //FIXME TODO TEMP getDir(omHome, STREAMS_DIR);
+		return getDir(omHome, STREAMS_DIR);
 	}
 
 	public static File getStreamsHibernateDir() {
