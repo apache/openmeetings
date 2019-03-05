@@ -24,7 +24,10 @@ var StaticTMath = (function() {
 	function create(o, canvas, callback, errCallback) {
 		tex2svg(o.formula, function(svg) {
 			fabric.loadSVGFromString(svg, function(objects, options) {
-				const obj = fabric.util.groupSVGElements(objects, $.extend({}, o, options));
+				const opts = $.extend({}, o, options)
+					, obj = objects.length === 1
+						? new fabric.Group(objects, opts)
+						: fabric.util.groupSVGElements(objects, opts);
 				obj.selectable = canvas.selection;
 				obj.type = 'group';
 				if (typeof(callback) === 'function') {
