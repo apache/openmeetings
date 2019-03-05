@@ -6,6 +6,46 @@ See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number o
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
 
+Release Notes - Openmeetings - Version 4.0.8
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-1889] - Microphone does not work when video is disabled for mobile client
+    * [OPENMEETINGS-1974] - Video on WB might be not clickable
+    * [OPENMEETINGS-1976] - User List displays FN/LN where chat shows Disaply name
+    * [OPENMEETINGS-1979] - Login via VK API is not working
+    * [OPENMEETINGS-1980] - Group logo files are not being renamed after import
+    * [OPENMEETINGS-1982] - Mobile user is not added to user list.
+    * [OPENMEETINGS-1983] - upload audio file (ex mp3) for straming, and whiteboard player
+    * [OPENMEETINGS-1986] - using backspace
+    * [OPENMEETINGS-1987] - User without moderation rights shouldn't see activity notifications that require action of a moderator
+    * [OPENMEETINGS-1988] - Display the same repeated request for room rights only once
+    * [OPENMEETINGS-1989] - If connection is lost and the room reloaded the same user is showed twice
+    * [OPENMEETINGS-1990] - Chat timestamps should use the receiver's datetime format
+    * [OPENMEETINGS-1991] - For flexible text boxes, the cursor above the closing X is wrong.
+    * [OPENMEETINGS-2008] - chat still visible for connected clients after clean
+    * [OPENMEETINGS-2014] - Wrong profile pic url in video pod
+    * [OPENMEETINGS-2015] - Pointer shouldn't be scaled
+    * [OPENMEETINGS-2017] - Safari Mac browser no play some format videos at whiteboard
+    * [OPENMEETINGS-2018] - Download as PNG is broken
+    * [OPENMEETINGS-2020] - Autoclean seems to be broken
+    * [OPENMEETINGS-2024] - Math Formula rendering broken
+
+* Improvement
+    * [OPENMEETINGS-1984] - White Out Tool
+    * [OPENMEETINGS-1985] - Longer Page
+    * [OPENMEETINGS-1994] - Math form dialog: Add link or help to the required syntax
+    * [OPENMEETINGS-1996] - If the list of activity notifications is collapsed, mods do not get any information about incoming requests
+    * [OPENMEETINGS-1997] - You can't confirm the drawing board renaming with Enter
+    * [OPENMEETINGS-2001] - Separate notifications for activities and actions
+    * [OPENMEETINGS-2002] - A confirmation should be obtained before closing a Quick Poll for all.
+    * [OPENMEETINGS-2006] - OM should work as expected under Java11
+    * [OPENMEETINGS-2012] - Integrate Wso2 Identity Server
+
+* Task
+    * [OPENMEETINGS-1975] - Library versions need to be updated (4.0.8)
+
+
 Release Notes - Openmeetings - Version 4.0.7
 ================================================================================================================
 

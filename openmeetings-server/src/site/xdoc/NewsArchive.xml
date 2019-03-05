@@ -20,7 +20,40 @@
 	</properties>
 
 	<body>
-		<section name="Release 4.0.5">
+		<section name="Release 4.0.7">
+			<div class="bd-callout bd-callout-info">
+				<h4>Version 4.0.7 released!</h4>
+				<div>Release 4.0.7, provides following improvements:<br/>
+					<ul>
+						<li>kick function in RoomWebService is fixed</li>
+						<li>Reply button is added to Private Message</li>
+						<li>Multiple issues are fixed in Room</li>
+						<li>Save white board as JPG is removed</li>
+						<li>HttpClient in AppointmentManager is updated 3.x to 4.x</li>
+						<li>"endless" invitations can now be invalidated</li>
+						<li>Ability to chose user display name is added</li>
+						<li>Delete white board object using mouse is now possible</li>
+						<li>Ability to duplicate room poll is added</li>
+						<li>Health check web service API is added</li>
+						<li>OAuth2 authorization can be done via HTTP header</li>
+						<li>cliparts can be in SVG format</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
+				</div>
+				<br/>
+
+				<span>
+					18 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.7/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344283">Detailed list</a>
+				</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.7">Archived download</a>.</span>
+				<span class="date">(2019-01-01)</span>
+			</div>
+		</section>
+		<section name="Release 4.0.6">
 			<div class="bd-callout bd-callout-info">
 				<h4>Version 4.0.6 released!</h4>
 				<div>Release 4.0.6, provides following improvements:<br/>
@@ -41,9 +74,11 @@
 					<a href="https://www.apache.org/dist/openmeetings/4.0.6/CHANGELOG.md">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343986">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.6">Archived download</a>.</span>
 				<span class="date">(2018-10-18)</span>
 			</div>
+		</section>
+		<section name="Release 4.0.5">
 			<div class="bd-callout bd-callout-info">
 				<div class="h4">Version 4.0.5 released!</div>
 				<div>Release 4.0.5, provides following improvements:<br/>

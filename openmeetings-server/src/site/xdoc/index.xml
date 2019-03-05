@@ -69,21 +69,34 @@
 		</section>
 		<section name="News">
 			<div class="bd-callout bd-callout-danger">
-				<h4>Version 4.0.7 released!</h4>
-				<div>Release 4.0.7, provides following improvements:<br/>
+				<h4>Version 4.0.8 released!</h4>
+				<div>Release 4.0.8, provides following improvements:<br/>
+					Mobile client:
 					<ul>
-						<li>kick function in RoomWebService is fixed</li>
-						<li>Reply button is added to Private Message</li>
-						<li>Multiple issues are fixed in Room</li>
-						<li>Save white board as JPG is removed</li>
-						<li>HttpClient in AppointmentManager is updated 3.x to 4.x</li>
-						<li>"endless" invitations can now be invalidated</li>
-						<li>Ability to chose user display name is added</li>
-						<li>Delete white board object using mouse is now possible</li>
-						<li>Ability to duplicate room poll is added</li>
-						<li>Health check web service API is added</li>
-						<li>OAuth2 authorization can be done via HTTP header</li>
-						<li>cliparts can be in SVG format</li>
+						<li>Mobile clients are displayed in user list</li>
+						<li>Audio/Video switching is more stable</li>
+					</ul>
+					OAuth:
+					<ul>
+						<li>VK based OAuth login is fixed</li>
+						<li>Integrate Wso2 Identity Server</li>
+					</ul>
+					Activities&amp;Actions:
+					<ul>
+						<li>Less actions for non-moderators</li>
+						<li>No duplicated actions are displayed</li>
+					</ul>
+					White board:
+					<ul>
+						<li>Video on WB works in latest Safari</li>
+						<li>White Out tool is added</li>
+						<li>Whiteboard size can be tuned</li>
+						<li>Link to LaTeX guide is added</li>
+					</ul>
+					Room User list:
+					<ul>
+						<li>Issue with user's display name is fixed</li>
+						<li>"Ghost" users are not displayed in the room</li>
 					</ul>
 					<br/>
 					Other fixes and improvements
@@ -92,12 +105,12 @@
 				<br/>
 
 				<span>
-					18 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.7/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344283">Detailed list</a>
+					30 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.8/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344753">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2019-01-01)</span>
+				<span class="date">(2019-03-08)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
