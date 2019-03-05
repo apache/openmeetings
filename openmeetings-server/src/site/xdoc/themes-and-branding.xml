@@ -53,5 +53,8 @@
 				<li>restart OM (force reload might be required)</li>
 			</ol>
 		</section>
+		<section name="Ready to use themes">
+			Ready to use themes are available <a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Custom+Themes">here</a>.
+		</section>
 	</body>
 </document>

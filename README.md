@@ -47,6 +47,35 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+4.0.8
+-----
+[Release 4.0.8](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.8), provides following improvements:
+
+Mobile client:
+* Mobile clients are displayed in user list
+* Audio/Video switching is more stable
+
+OAuth:
+* VK based OAuth login is fixed
+* Integrate Wso2 Identity Server
+
+Activities&Actions:
+* Less actions for non-moderators
+* No duplicated actions are displayed
+
+White board:
+* Video on WB works in latest Safari
+* White Out tool is added
+* Whiteboard size can be tuned
+* Link to LaTeX guide is added
+
+Room User list:
+* Issue with user's display name is fixed
+* "Ghost" users are not displayed in the room
+
+Other fixes and improvements, 30 issues were addressed
+
+
 4.0.7
 -----
 [Release 4.0.7](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.7), provides following improvements:
