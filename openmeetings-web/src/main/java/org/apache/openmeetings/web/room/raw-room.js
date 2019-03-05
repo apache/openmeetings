@@ -61,6 +61,18 @@ var Room = (function() {
 		}
 		return null;
 	}
+	function _preventKeydown(e) {
+		const base = $(e.target);
+		if (e.target.isContentEditable === true || base.is('textarea, input:not([readonly]):not([type=radio]):not([type=checkbox])')) {
+			return;
+		}
+		switch (e.which) {
+			case 8:  // backspace
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				return false;
+		}
+	}
 	function _keyHandler(e) {
 		if (e.shiftKey) {
 			switch (e.which) {
@@ -168,12 +180,11 @@ var Room = (function() {
 			});
 			_sbAddResizable();
 		}
-		$(window).on('resize.openmeetings', function() {
-			_setSize();
-		});
+		$(window).on('resize.openmeetings', _setSize);
 		Wicket.Event.subscribe("/websocket/closed", _close);
 		Wicket.Event.subscribe("/websocket/error", _close);
-		$(window).keyup(_keyHandler);
+		$(window).on('keydown.openmeetings', _preventKeydown);
+		$(window).on('keyup.openmeetings', _keyHandler);
 		$(document).click(_mouseHandler);
 	}
 	function _unload() {
@@ -195,7 +206,8 @@ var Room = (function() {
 			_qconf.dialog('destroy');
 		}
 		$('.ui-dialog.user-video').remove();
-		$(window).off('keyup', _keyHandler);
+		$(window).off('keyup.openmeetings');
+		$(window).off('keydown.openmeetings');
 		$(document).off('click', _mouseHandler);
 		sb = undefined;
 	}
