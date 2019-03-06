@@ -18,13 +18,10 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
-
 import java.util.Locale;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.IWebSession;
-import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
@@ -42,16 +39,12 @@ public abstract class AbstractTemplatePanel extends Panel {
 
 	protected AbstractTemplatePanel(Locale locale) {
 		super(COMP_ID);
-		this.locale = locale == null ? getDefault() : locale;
+		this.locale = locale;
 		add(new TransparentWebMarkupContainer("container").add(AttributeModifier.append("dir", FormatHelper.isRtlLanguage(this.locale.toLanguageTag()) ? "rtl" : "ltr")));
 	}
 
 	public static IWebSession getOmSession() {
 		return (IWebSession)WebSession.get();
-	}
-
-	private static Locale getDefault() {
-		return LabelDao.getLocale(getDefaultLang());
 	}
 
 	public String getString(String id, Locale locale, String... params) {

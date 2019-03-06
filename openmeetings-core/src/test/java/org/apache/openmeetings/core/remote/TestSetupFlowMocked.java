@@ -92,6 +92,7 @@ public class TestSetupFlowMocked extends BaseMockedTest {
 		handler.onMessage(c, new JSONObject(MSG_BASE.toString())
 				.put("id", "play")
 				.put("sdpOffer", "sdpOffer"));
+		testProcessor.destroy();
 	}
 
 	@Test

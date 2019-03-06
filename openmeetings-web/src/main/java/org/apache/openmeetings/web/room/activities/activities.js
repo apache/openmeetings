@@ -96,7 +96,9 @@ var Activities = function() {
 		}
 	}
 	function _updateCount() {
-		if (!inited) return;
+		if (!inited) {
+			return;
+		}
 		$('.control.block .badge', activities).text(modArea.find('.activity').length);
 	}
 

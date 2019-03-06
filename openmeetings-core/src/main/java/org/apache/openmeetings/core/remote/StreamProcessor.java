@@ -158,6 +158,9 @@ public class StreamProcessor implements IStreamProcessor {
 			case "errorSharing":
 				errorSharing(c);
 				break;
+			default:
+				// no-op
+				break;
 		}
 	}
 

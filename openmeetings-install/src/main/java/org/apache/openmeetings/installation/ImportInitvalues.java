@@ -95,6 +95,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CHROME_EXT_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MINUTES_REMINDER_SEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SELF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
@@ -293,7 +294,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_MAX_UPLOAD_SIZE, String.valueOf(DEFAULT_MAX_UPLOAD_SIZE), Configuration.Type.number,
 				"Maximum size of upload file (bytes)", VER_1_8);
 
-		addCfg(list, CONFIG_APPOINTMENT_REMINDER_MINUTES, "15", Configuration.Type.number,
+		addCfg(list, CONFIG_APPOINTMENT_REMINDER_MINUTES, String.valueOf(DEFAULT_MINUTES_REMINDER_SEND), Configuration.Type.number,
 				"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails", VER_1_9);
 
 		addCfg(list, CONFIG_LOGIN_MIN_LENGTH, String.valueOf(USER_LOGIN_MINIMUM_LENGTH), Configuration.Type.number,

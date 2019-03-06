@@ -18,9 +18,13 @@
  */
 package org.apache.openmeetings.calendar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setBaseUrl;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -34,9 +38,34 @@ public class TestAppointmentSchedulerTask extends AbstractJUnitDefaults {
 	private AppointmentLogic appointmentLogic;
 
 	@Test
+	public void noBaseUrl() {
+		final String origBaseUrl = getBaseUrl();
+		try {
+			for (String url : new String[] {null, ""}) {
+				setBaseUrl(url);
+				doIt();
+			}
+		} finally {
+			setBaseUrl(origBaseUrl);
+		}
+	}
+
+	@Test
+	public void turnedOff() {
+		final Configuration origCfg = cfgDao.get(CONFIG_APPOINTMENT_REMINDER_MINUTES);
+		try {
+			Configuration cfg = cfgDao.get(origCfg.getId());
+			cfg.setValueN(0L);
+			cfgDao.update(cfg, null);
+			doIt();
+		} finally {
+			cfgDao.update(origCfg, null);
+		}
+	}
+
+	@Test
 	public void doIt() {
 		log.debug("- 1 MeetingReminderJob.execute");
-		log.warn("- 2 MeetingReminderJob.execute");
 		try {
 			appointmentLogic.doScheduledMeetingReminder();
 

@@ -60,11 +60,10 @@ var Room = (function() {
 		if (e.target.isContentEditable === true || base.is('textarea, input:not([readonly]):not([type=radio]):not([type=checkbox])')) {
 			return;
 		}
-		switch (e.which) {
-			case 8:  // backspace
-				e.preventDefault();
-				e.stopImmediatePropagation();
-				return false;
+		if (e.which === 8) { // backspace
+			e.preventDefault();
+			e.stopImmediatePropagation();
+			return false;
 		}
 	}
 	function _keyHandler(e) {

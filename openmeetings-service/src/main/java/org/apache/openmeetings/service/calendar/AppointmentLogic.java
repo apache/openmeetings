@@ -125,7 +125,7 @@ public class AppointmentLogic {
 			}
 			// Iterate through all MeetingMembers
 			for (MeetingMember mm : members) {
-				log.debug("doScheduledMeetingReminder : Member " + mm.getUser().getAddress().getEmail());
+				log.debug("doScheduledMeetingReminder : Member {}", mm.getUser().getAddress().getEmail());
 
 				Invitation inv = mm.getInvitation();
 
