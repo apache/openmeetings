@@ -27,7 +27,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -35,14 +34,12 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
 @Entity
 @Table(name = "conference_log")
-@NamedQueries({
-	@NamedQuery(name = "getLogRecentRooms", query = "SELECT c FROM ConferenceLog c "
-		+ "WHERE c.roomId IS NOT NULL AND c.type = :roomEnter and c.userId = :userId ORDER BY c.inserted DESC")
-	, @NamedQuery(name = "clearLogUserIpByUser", query = "UPDATE ConferenceLog c SET c.userip = NULL "
-			+ "WHERE c.userip IS NOT NULL AND c.userId = :userId")
-	, @NamedQuery(name = "clearLogUserIp", query = "UPDATE ConferenceLog c SET c.userip = NULL "
-			+ "WHERE c.userip IS NOT NULL AND c.inserted < :date")
-})
+@NamedQuery(name = "getLogRecentRooms", query = "SELECT c FROM ConferenceLog c "
+	+ "WHERE c.roomId IS NOT NULL AND c.type = :roomEnter and c.userId = :userId ORDER BY c.inserted DESC")
+@NamedQuery(name = "clearLogUserIpByUser", query = "UPDATE ConferenceLog c SET c.userip = NULL "
+		+ "WHERE c.userip IS NOT NULL AND c.userId = :userId")
+@NamedQuery(name = "clearLogUserIp", query = "UPDATE ConferenceLog c SET c.userip = NULL "
+		+ "WHERE c.userip IS NOT NULL AND c.inserted < :date")
 public class ConferenceLog implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 

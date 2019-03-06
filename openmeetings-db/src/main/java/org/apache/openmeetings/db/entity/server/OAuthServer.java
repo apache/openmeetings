@@ -33,7 +33,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -43,11 +42,10 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "oauth_server")
-@NamedQueries({
-	@NamedQuery(name = "getEnabledOAuthServers", query = "select s from OAuthServer as s where s.enabled = true and s.deleted = false"),
-	@NamedQuery(name = "getOAuthServerById", query = "select s from OAuthServer as s where s.id = :id"),
-	@NamedQuery(name = "getAllOAuthServers", query = "SELECT s FROM OAuthServer s WHERE s.deleted = false ORDER BY s.id"),
-	@NamedQuery(name = "countOAuthServers", query = "select count(s) from OAuthServer s WHERE s.deleted = false") })
+@NamedQuery(name = "getEnabledOAuthServers", query = "select s from OAuthServer as s where s.enabled = true and s.deleted = false")
+@NamedQuery(name = "getOAuthServerById", query = "select s from OAuthServer as s where s.id = :id")
+@NamedQuery(name = "getAllOAuthServers", query = "SELECT s FROM OAuthServer s WHERE s.deleted = false ORDER BY s.id")
+@NamedQuery(name = "countOAuthServers", query = "select count(s) from OAuthServer s WHERE s.deleted = false")
 @Root
 public class OAuthServer extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;

@@ -32,7 +32,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -47,18 +46,17 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name = "closePoll", query = "UPDATE RoomPoll rp SET rp.archived = :archived "
-			+ "WHERE rp.room.id = :roomId"),
-	@NamedQuery(name = "deletePoll", query = "DELETE FROM RoomPoll rp WHERE rp.id = :id"),
-	@NamedQuery(name = "getPollById", query = "SELECT rp FROM RoomPoll rp WHERE rp.id = :id"),
-	@NamedQuery(name = "getPoll", query = "SELECT rp FROM RoomPoll rp "
-			+ "WHERE rp.room.id = :roomId AND rp.archived = false"),
-	@NamedQuery(name = "getPollListBackup", query = "SELECT rp FROM RoomPoll rp ORDER BY rp.id"),
-	@NamedQuery(name = "getArchivedPollList", query = "SELECT rp FROM RoomPoll rp "
-			+ "WHERE rp.room.id = :roomId AND rp.archived = true ORDER BY rp.created DESC"),
-	@NamedQuery(name = "hasPoll", query = "SELECT COUNT(rp) FROM RoomPoll rp "
-			+ "WHERE rp.room.id = :roomId AND rp.archived = :archived") })
+@NamedQuery(name = "closePoll", query = "UPDATE RoomPoll rp SET rp.archived = :archived "
+		+ "WHERE rp.room.id = :roomId")
+@NamedQuery(name = "deletePoll", query = "DELETE FROM RoomPoll rp WHERE rp.id = :id")
+@NamedQuery(name = "getPollById", query = "SELECT rp FROM RoomPoll rp WHERE rp.id = :id")
+@NamedQuery(name = "getPoll", query = "SELECT rp FROM RoomPoll rp "
+		+ "WHERE rp.room.id = :roomId AND rp.archived = false")
+@NamedQuery(name = "getPollListBackup", query = "SELECT rp FROM RoomPoll rp ORDER BY rp.id")
+@NamedQuery(name = "getArchivedPollList", query = "SELECT rp FROM RoomPoll rp "
+		+ "WHERE rp.room.id = :roomId AND rp.archived = true ORDER BY rp.created DESC")
+@NamedQuery(name = "hasPoll", query = "SELECT COUNT(rp) FROM RoomPoll rp "
+		+ "WHERE rp.room.id = :roomId AND rp.archived = :archived")
 @Table(name = "room_poll")
 @Root(name = "roompoll")
 public class RoomPoll implements IDataProviderEntity {

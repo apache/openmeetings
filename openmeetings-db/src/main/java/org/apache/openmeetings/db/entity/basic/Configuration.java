@@ -29,7 +29,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -40,16 +39,14 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@NamedQueries({
-		@NamedQuery(name = "forceGetConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.key LIKE :key"),
-		@NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c "
-				+ "WHERE c.key IN :keys and c.deleted = false"),
-		@NamedQuery(name = "getNondeletedConfiguration", query = "SELECT c FROM Configuration c  "
-				+ "LEFT JOIN FETCH c.user WHERE c.deleted = false ORDER BY c.id ASC"),
-		@NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c "
-				+ "LEFT JOIN FETCH c.user WHERE c.id = :id and c.deleted = false"),
-		@NamedQuery(name = "countConfigurations", query = "SELECT COUNT(c) FROM Configuration c WHERE c.deleted = false")
-})
+@NamedQuery(name = "forceGetConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.key LIKE :key")
+@NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c "
+		+ "WHERE c.key IN :keys and c.deleted = false")
+@NamedQuery(name = "getNondeletedConfiguration", query = "SELECT c FROM Configuration c  "
+		+ "LEFT JOIN FETCH c.user WHERE c.deleted = false ORDER BY c.id ASC")
+@NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c "
+		+ "LEFT JOIN FETCH c.user WHERE c.id = :id and c.deleted = false")
+@NamedQuery(name = "countConfigurations", query = "SELECT COUNT(c) FROM Configuration c WHERE c.deleted = false")
 @Table(name = "configuration")
 @Root(name = "config")
 public class Configuration extends HistoricalEntity {

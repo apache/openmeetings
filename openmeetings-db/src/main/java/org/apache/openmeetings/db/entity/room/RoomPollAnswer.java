@@ -27,7 +27,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -39,10 +38,8 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name = "hasVoted", query = "SELECT rpa FROM RoomPollAnswer rpa WHERE rpa.roomPoll.room.id = :roomId "
-				+ "AND rpa.votedUser.id = :userId AND rpa.roomPoll.archived = false")
-})
+@NamedQuery(name = "hasVoted", query = "SELECT rpa FROM RoomPollAnswer rpa WHERE rpa.roomPoll.room.id = :roomId "
+		+ "AND rpa.votedUser.id = :userId AND rpa.roomPoll.archived = false")
 @Table(name = "room_poll_answer")
 @Root(name="roompollanswer")
 public class RoomPollAnswer implements IDataProviderEntity {

@@ -45,7 +45,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -56,20 +55,18 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.simpleframework.xml.Element;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name = "getFileById", query = "SELECT f FROM BaseFileItem f WHERE f.deleted = false AND f.id = :id")
-	, @NamedQuery(name = "getAnyFileById", query = "SELECT f FROM BaseFileItem f WHERE f.id = :id")
-	, @NamedQuery(name = "getFileByHash", query = "SELECT f FROM BaseFileItem f WHERE f.deleted = false AND f.hash = :hash")
-	, @NamedQuery(name = "getAllFileItemsForRoom", query = "SELECT f FROM BaseFileItem f"
-			+ " WHERE f.deleted = false AND f.type <> :folder"
-			+ " AND (f.roomId IS NULL OR f.roomId = :roomId)"
-			+ " AND (f.groupId IS NULL OR f.groupId IN :groups)"
-			+ " AND f.ownerId IS NULL" // not loading personal files
-			+ " AND f.name LIKE :name"
-			+ " ORDER BY f.name")
-	, @NamedQuery(name = "getFileItemsByIds", query = "SELECT f FROM BaseFileItem f"
-			+ " WHERE f.deleted = false AND f.id IN :ids")
-})
+@NamedQuery(name = "getFileById", query = "SELECT f FROM BaseFileItem f WHERE f.deleted = false AND f.id = :id")
+@NamedQuery(name = "getAnyFileById", query = "SELECT f FROM BaseFileItem f WHERE f.id = :id")
+@NamedQuery(name = "getFileByHash", query = "SELECT f FROM BaseFileItem f WHERE f.deleted = false AND f.hash = :hash")
+@NamedQuery(name = "getAllFileItemsForRoom", query = "SELECT f FROM BaseFileItem f"
+		+ " WHERE f.deleted = false AND f.type <> :folder"
+		+ " AND (f.roomId IS NULL OR f.roomId = :roomId)"
+		+ " AND (f.groupId IS NULL OR f.groupId IN :groups)"
+		+ " AND f.ownerId IS NULL" // not loading personal files
+		+ " AND f.name LIKE :name"
+		+ " ORDER BY f.name")
+@NamedQuery(name = "getFileItemsByIds", query = "SELECT f FROM BaseFileItem f"
+		+ " WHERE f.deleted = false AND f.id IN :ids")
 @Table(name = "om_file")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class BaseFileItem extends HistoricalEntity {

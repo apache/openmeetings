@@ -30,7 +30,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -41,14 +40,12 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name = "getPrivateMessages", query = "SELECT c FROM PrivateMessage c ORDER BY c.id"),
-	@NamedQuery(name = "getPrivateMessageById", query = "SELECT c FROM PrivateMessage c WHERE c.id = :id "),
-	@NamedQuery(name = "updatePrivateMessagesReadStatus", query = "UPDATE PrivateMessage c SET c.isRead = :isRead WHERE c.id IN (:ids) "),
-	@NamedQuery(name = "moveMailsToFolder", query = "UPDATE PrivateMessage c SET c.folderId = :folderId WHERE c.id IN (:ids) "),
-	@NamedQuery(name = "deletePrivateMessages", query = "DELETE FROM PrivateMessage c WHERE c.id IN (:ids) "),
-	@NamedQuery(name = "getPrivateMessagesByRoom", query = "SELECT c FROM PrivateMessage c WHERE c.room.id = :roomId ")
-})
+@NamedQuery(name = "getPrivateMessages", query = "SELECT c FROM PrivateMessage c ORDER BY c.id")
+@NamedQuery(name = "getPrivateMessageById", query = "SELECT c FROM PrivateMessage c WHERE c.id = :id ")
+@NamedQuery(name = "updatePrivateMessagesReadStatus", query = "UPDATE PrivateMessage c SET c.isRead = :isRead WHERE c.id IN (:ids) ")
+@NamedQuery(name = "moveMailsToFolder", query = "UPDATE PrivateMessage c SET c.folderId = :folderId WHERE c.id IN (:ids) ")
+@NamedQuery(name = "deletePrivateMessages", query = "DELETE FROM PrivateMessage c WHERE c.id IN (:ids) ")
+@NamedQuery(name = "getPrivateMessagesByRoom", query = "SELECT c FROM PrivateMessage c WHERE c.room.id = :roomId ")
 @Table(name = "private_message")
 @Root(name = "privatemessage")
 public class PrivateMessage implements IDataProviderEntity {

@@ -29,7 +29,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -38,27 +37,25 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name = "deleteUserContact", query = "delete from UserContact u where u.id = :id"),
-	@NamedQuery(name = "deleteAllUserContacts", query = "delete from UserContact u where u.owner.id = :ownerId"),
-	@NamedQuery(name = "getContactByUserOwner", query = "SELECT c FROM UserContact c WHERE c.contact.id = :userId AND c.owner.id = :ownerId AND c.contact.deleted = false"),
-	@NamedQuery(name = "getContactsByUserAndStatus", query = "select c from UserContact c " +
-			"where c.owner.id = :ownerId " +
-			"AND c.pending = :pending " +
-			"AND c.contact.deleted = false"),
-	@NamedQuery(name = "getContactRequestsByUserAndStatus", query = "select c from UserContact c " +
-			"where c.contact.id = :userId " +
-			"AND c.pending = :pending " +
-			"AND c.contact.deleted = false"),
-	@NamedQuery(name = "getContactsByUser", query = "SELECT c FROM UserContact c " +
-			"WHERE c.contact.id = :userId " +
-			"AND c.contact.deleted = false ORDER BY c.pending DESC"),
-	@NamedQuery(name = "countContactsByUser", query = "select COUNT(c) from UserContact c " +
-			"where c.contact.id = :userId " +
-			"AND c.contact.deleted = false"),
-	@NamedQuery(name = "getUserContactsById", query = "SELECT c FROM UserContact c WHERE c.id = :id"),
-	@NamedQuery(name = "getUserContacts", query = "SELECT c FROM UserContact c ORDER BY c.id")
-})
+@NamedQuery(name = "deleteUserContact", query = "delete from UserContact u where u.id = :id")
+@NamedQuery(name = "deleteAllUserContacts", query = "delete from UserContact u where u.owner.id = :ownerId")
+@NamedQuery(name = "getContactByUserOwner", query = "SELECT c FROM UserContact c WHERE c.contact.id = :userId AND c.owner.id = :ownerId AND c.contact.deleted = false")
+@NamedQuery(name = "getContactsByUserAndStatus", query = "select c from UserContact c " +
+		"where c.owner.id = :ownerId " +
+		"AND c.pending = :pending " +
+		"AND c.contact.deleted = false")
+@NamedQuery(name = "getContactRequestsByUserAndStatus", query = "select c from UserContact c " +
+		"where c.contact.id = :userId " +
+		"AND c.pending = :pending " +
+		"AND c.contact.deleted = false")
+@NamedQuery(name = "getContactsByUser", query = "SELECT c FROM UserContact c " +
+		"WHERE c.contact.id = :userId " +
+		"AND c.contact.deleted = false ORDER BY c.pending DESC")
+@NamedQuery(name = "countContactsByUser", query = "select COUNT(c) from UserContact c " +
+		"where c.contact.id = :userId " +
+		"AND c.contact.deleted = false")
+@NamedQuery(name = "getUserContactsById", query = "SELECT c FROM UserContact c WHERE c.id = :id")
+@NamedQuery(name = "getUserContacts", query = "SELECT c FROM UserContact c ORDER BY c.id")
 @Table(name = "user_contact")
 @Root(name="usercontact")
 public class UserContact implements Serializable {

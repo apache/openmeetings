@@ -26,7 +26,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -36,13 +35,11 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name="deleteGroupUsersByGroup", query="DELETE FROM GroupUser gu WHERE gu.group.id = :id")
-	, @NamedQuery(name="countGroupUsers", query="SELECT COUNT(c) FROM GroupUser c WHERE c.group.id = :id")
-	, @NamedQuery(name="getGroupUsersById", query="SELECT c FROM GroupUser c WHERE c.id = :id")
-	, @NamedQuery(name="getGroupUsersByGroupId", query="SELECT c FROM GroupUser c WHERE c.group.id = :id")
-	, @NamedQuery(name="isUserInGroup", query="SELECT c FROM GroupUser c WHERE c.group.id = :groupId AND c.user.id = :userId")
-})
+@NamedQuery(name="deleteGroupUsersByGroup", query="DELETE FROM GroupUser gu WHERE gu.group.id = :id")
+@NamedQuery(name="countGroupUsers", query="SELECT COUNT(c) FROM GroupUser c WHERE c.group.id = :id")
+@NamedQuery(name="getGroupUsersById", query="SELECT c FROM GroupUser c WHERE c.id = :id")
+@NamedQuery(name="getGroupUsersByGroupId", query="SELECT c FROM GroupUser c WHERE c.group.id = :id")
+@NamedQuery(name="isUserInGroup", query="SELECT c FROM GroupUser c WHERE c.group.id = :groupId AND c.user.id = :userId")
 @Table(name = "group_user")
 @Root(name="user_organisation")
 public class GroupUser extends HistoricalEntity {

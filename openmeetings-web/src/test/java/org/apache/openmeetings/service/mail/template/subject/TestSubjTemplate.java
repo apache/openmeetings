@@ -23,6 +23,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.function.Consumer;
@@ -47,7 +49,14 @@ public class TestSubjTemplate extends AbstractWicketTester {
 		String[] ids = TimeZone.getAvailableIDs();
 		Recording rec = new Recording();
 		rec.setRoomId(5L);
-		for (User u : userDao.get(0, 100)) {
+		List<User> users = new ArrayList<>(userDao.get(0, 100));
+		User en = new User();
+		en.setLanguageId(1L); // ltr
+		User ar = new User();
+		ar.setLanguageId(14L); // rtl, arabic
+		users.add(en);
+		users.add(ar);
+		for (User u : users) {
 			TimeZone tz = TimeZone.getTimeZone(ids[rnd.nextInt(ids.length)]);
 			checkTemplate(CreatedAppointmentTemplate.get(u, a, tz, u.getLogin()));
 			checkTemplate(CanceledAppointmentTemplate.get(u, a, tz, u.getLogin()));

@@ -28,18 +28,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
 @Entity
-@NamedQueries({
-		@NamedQuery(name = "getFileLogsByFile", query = "SELECT fl FROM FileItemLog fl WHERE fl.fileId = :fileId"),
-		@NamedQuery(name = "countErrorFileLogsByFile", query = "SELECT COUNT(fl) FROM FileItemLog fl WHERE fl.fileId = :fileId AND fl.optional = false AND fl.exitCode <> 0"),
-		@NamedQuery(name = "deleteErrorFileLogsByFile", query = "DELETE FROM FileItemLog fl WHERE fl.fileId = :fileId") })
-@Table(name = "file_log")
+@NamedQuery(name = "getFileLogsByFile", query = "SELECT fl FROM FileItemLog fl WHERE fl.fileId = :fileId")
+@NamedQuery(name = "countErrorFileLogsByFile", query = "SELECT COUNT(fl) FROM FileItemLog fl WHERE fl.fileId = :fileId AND fl.optional = false AND fl.exitCode <> 0")
+@NamedQuery(name = "deleteErrorFileLogsByFile", query = "DELETE FROM FileItemLog fl WHERE fl.fileId = :fileId")
 public class FileItemLog implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	public static final int MAX_LOG_SIZE = 1 * 1024 * 1024;

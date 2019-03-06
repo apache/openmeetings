@@ -30,7 +30,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlType;
@@ -50,13 +49,11 @@ import org.simpleframework.xml.Root;
  * @author sebawagner
  */
 @Entity
-@NamedQueries({
-	@NamedQuery(name = "getChunkById", query = "SELECT c FROM RecordingChunk c WHERE c.id = :id")
-	, @NamedQuery(name = "getChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.deleted = false")
-	, @NamedQuery(name = "getNotScreenChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.deleted = false "
-			+ "AND c.type <> :screen AND c.streamStatus <> :none")
-	, @NamedQuery(name = "getScreenChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.type = :screen")
-})
+@NamedQuery(name = "getChunkById", query = "SELECT c FROM RecordingChunk c WHERE c.id = :id")
+@NamedQuery(name = "getChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.deleted = false")
+@NamedQuery(name = "getNotScreenChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.deleted = false "
+		+ "AND c.type <> :screen AND c.streamStatus <> :none")
+@NamedQuery(name = "getScreenChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.type = :screen")
 @Table(name = "recording_chunk")
 @Root(name = "flvrecordingmetadata")
 public class RecordingChunk extends HistoricalEntity {
