@@ -79,7 +79,7 @@
 				</div>
 				<ul>
 					<li>Add users who can connect to the database remotely</li>
-					<li>Update <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</tt>
+					<li>Update <tt>/opt/om/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</tt>
 						set correct server address, login and password. Also uncomment following line:
 						<source><![CDATA[<property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=127.0.0.1)" />]]></source>
 					</li>
@@ -91,8 +91,8 @@
 				<ul>
 					<li>Install NFS to the data server. In the file <tt>/etc/exports</tt> add the following lines:
 						<source>
-/opt/red5/webapps/openmeetings/upload 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
-/opt/red5/webapps/openmeetings/streams 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
+/opt/om/webapps/openmeetings/upload 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
+/opt/om/webapps/openmeetings/streams 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
 						</source>
 						Here 10.1.1.2 - is node ip for NFS remote access. Add these lines for all nodes except node with
 						folders.
@@ -100,10 +100,10 @@
 					<li>
 						Install NFS common tools to other nodes. In the file <tt>/etc/fstab</tt> do the following:
 						<source>
-10.1.1.1:/opt/red5/webapps/openmeetings/upload/
-/opt/red5/webapps/openmeetings/upload nfs timeo=50,hard,intr
-10.1.1.1:/opt/red5/webapps/openmeetings/streams/
-/opt/red5/webapps/openmeetings/streams nfs timeo=50,hard,intr
+10.1.1.1:/opt/om/webapps/openmeetings/upload/
+/opt/om/webapps/openmeetings/upload nfs timeo=50,hard,intr
+10.1.1.1:/opt/om/webapps/openmeetings/streams/
+/opt/om/webapps/openmeetings/streams nfs timeo=50,hard,intr
 						</source>
 						Here 10.1.1.1 – data server ip. And run the command:
 						<source>mount -a</source>
@@ -113,7 +113,7 @@
 			<subsection name="OM nodes configuration">
 				<ol>
 					<li>
-						<p>In the file <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/hazelcast.xml</tt>:</p>
+						<p>In the file <tt>/opt/om/webapps/openmeetings/WEB-INF/classes/hazelcast.xml</tt>:</p>
 						<ul>
 							<li>Set <tt>instance-name</tt> for each server to unique value</li>
 							<li>
@@ -131,20 +131,6 @@
 							<li>
 								In case there are more than one network interface with multicast support and/or additional hazelcast configuration is required
 								Based on the following documentation: <a href="http://docs.hazelcast.org/docs/3.10.1/manual/html-single/index.html">http://docs.hazelcast.org/docs/3.10.1/manual/html-single/index.html</a>
-							</li>
-						</ul>
-					</li>
-					<li>
-						<p>In the file <tt>/opt/red5/webapps/root/crossdomain.xml</tt>:</p>
-						<ul>
-							<li>
-								Update policy to allow requests from other servers (<a href="https://www.adobe.com/devnet-docs/acrobatetk/tools/AppSec/xdomain.html">the guide</a>)<br/>
-								Here is example of very permissive policy (not recommended)<br/>
-								<source><![CDATA[
-<cross-domain-policy>
-	<allow-access-from domain="*" />
-</cross-domain-policy>
-								]]></source>
 							</li>
 						</ul>
 					</li>

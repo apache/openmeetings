@@ -49,10 +49,10 @@
 						<a href="http://www.mysql.com/downloads/connector/j/" target="_blank"
 							rel="nofollow">http://www.mysql.com/downloads/connector/j/</a>
 						and place it into:
-						<tt>$red5/webapps/openmeetings/WEB-INF/lib/</tt>
+						<tt>$OM_HOME/webapps/openmeetings/WEB-INF/lib/</tt>
 					</li>
 					<li>
-						Run red5-service and goto the web-based installer:
+						Run OpenMeetings and goto the web-based installer:
 						http://localhost:5080/openmeetings/install
 					</li>
 				</ul>

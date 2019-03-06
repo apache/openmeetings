@@ -22,46 +22,20 @@
 	<body>
 		<section name="Default Configuration">
 			<ul>
-				<li>Port 5080: HTTP (For example for file upload and download) </li>
-				<li>Port 1935: RTMP (Flash Stream and Remoting/RPC) </li>
+				<li>Port 5443: HTTPS (For web interface) </li>
+				<li>Port 5080: HTTP (For unsecured web interface, useful if SSL proxy is being used) </li>
 			</ul>
-			<p>Additionally red5 uses some ports internally. However those ports
-				are not in use by OpenMeetings by default.
-			</p>
 		</section>
 		<section name="Configure alternative ports">
 			<p>You need to change two files: </p>
 			<ul>
-				<li>Server-Side configuration: $RED5_HOME/conf/red5.properties, you
-					need to restart the red5-service so that changes are online.
+				<li>Server-Side configuration: $OM_HOME/conf/server.xml, you
+					need to restart the OpenMeetings so that changes are online.
 				</li>
 			</ul>
-			<p></p>
-			<table>
-				<tr>
-					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Config-Name </th>
-					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Default-value </th>
-					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Name in red5.properties </th>
-				</tr>
-				<tr>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> HTTP </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 5080 </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> http.port </td>
-				</tr>
-				<tr>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> RTMP </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1935 </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rtmp.port </td>
-				</tr>
-			</table>
 		</section>
 		<section name="Preventing Firewall issues">
 			<p>A common way of bypassing the firewall is to change HTTP port to 80</p>
-			<p>A short description about the connection mechanism: The
-				application first tries connecting to rtmp 3 times, because rtmp is
-				the protocol that is less performance hungry. If that fails the
-				application will fallback to rtmpT.
-			</p>
 		</section>
 		<section name="OpenMeetings over SSL">
 			<p>

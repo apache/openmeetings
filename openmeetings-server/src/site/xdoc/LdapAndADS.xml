@@ -63,7 +63,7 @@ TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
 			</div>
 		</section>
 		<section name="LDAP and Active Directory Integration">
-			<p> In: $RED5_HOME/webapps/openmeetings/conf<br/>
+			<p> In: $OM_HOME/webapps/openmeetings/conf<br/>
 				you will find sample configurations for LDAP and Active Directory. The
 				nature of those Directory Servers are that they are individual for
 				every organization, so you have to modify of course at least the
@@ -88,7 +88,7 @@ TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
 				You can configure multiple domains or different user-paths in the Administration of OpenMeetings.
 			</p>
 			<p>
-				<b>NOTE: </b>You should specify file name <i>RELATIVE</i> to <tt>$RED5_HOME/webapps/openmeetings/conf</tt>
+				<b>NOTE: </b>You should specify file name <i>RELATIVE</i> to <tt>$OM_HOME/webapps/openmeetings/conf</tt>
 			</p>
 		</section>
 

@@ -27,7 +27,7 @@
 				<ul>
 					<li>Download the latest JDBC Driver from Oracle for your database
 						version. Place those JARs into
-						$Red5/webapps/openmeetings/WEB-INF/lib
+						$OM_HOME/webapps/openmeetings/WEB-INF/lib
 					</li>
 					<li>If you encounter issues, you can drop the db and then run
 						the web based installer again
@@ -38,7 +38,7 @@
 			<subsection name="Steps todo">
 				<ul>
 					<li>
-						Run red5-service and goto the web-based installer:
+						Run OpenMeetings and goto the web-based installer:
 						http://localhost:5080/openmeetings/install
 					</li>
 				</ul>

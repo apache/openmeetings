@@ -543,7 +543,6 @@
 					<systemPropertyVariables>
 						<om.home>${project.build.directory}/test-root</om.home>
 						<languages.home>${project.build.directory}/test-root/languages</languages.home>
-						<red5.root>red5.root</red5.root>
 						<backups.dir>${old-backups.dir}</backups.dir>
 						<catalina.useNaming>true</catalina.useNaming>
 						<current_openmeetings_log_dir>${project.build.directory}</current_openmeetings_log_dir>

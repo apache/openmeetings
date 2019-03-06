@@ -168,7 +168,7 @@ sippeers => mysql,general,sipusers
 ; To Check if your astDB has been created do the following in a terminal window type the following:
 ; asterisk –rx “database show”
 ; If you do not receive an output with that resembles openmeetings/rooms/400## where “##” will equal the extension assigned when you created your room
-; If you do not receive the above output check your parameters in /opt/red5/webapps/openmeetings/WEB-INF/classes/applicationContext.xml
+; If you do not receive the above output check your parameters in /opt/om/webapps/openmeetings/WEB-INF/classes/applicationContext.xml
 ; Go back into the Administrator Panel and remove the PIN number in each room save the record with no PIN number and then re-enter the pin again resave the record.
 ; *****************************************************
 
@@ -248,7 +248,7 @@ write = all
 			</div><br />
 			<div>
 				Update OpenMeetings with credentials for Asterisk manager.
-				Modify <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/applicationContext.xml</tt><br />
+				Modify <tt>/opt/om/webapps/openmeetings/WEB-INF/classes/applicationContext.xml</tt><br />
 				find <strong>&lt;bean id="sipDao" class="org.apache.openmeetings.db.dao.room.SipDao"&gt;</strong>
 				uncomment its parameters and set it to your custom values.<br/>
 				set value for <tt>uid</tt> property to unique secret value (can be generated here <a href="https://www.uuidgenerator.net">https://www.uuidgenerator.net</a>)

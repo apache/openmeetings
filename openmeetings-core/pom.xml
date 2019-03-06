@@ -28,7 +28,7 @@
 	<artifactId>openmeetings-core</artifactId>
 	<packaging>jar</packaging>
 	<name>Openmeetings Core</name>
-	<description>Module for OpenMeetings core and red5 related classes and services</description>
+	<description>Module for OpenMeetings core classes and services</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 	</properties>

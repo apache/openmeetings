@@ -93,7 +93,6 @@
 			</item>
 			<item name="Customization" href="#customize">
 				<item name="Webapp name/path" href="/WebappNamePath.html" />
-				<item name="Navigation" href="/Navigation.html" />
 				<item name="Calendar and timezone" href="/CalendarAndTimezone.html" />
 				<item name="Custom room type" href="/CustomRoomTypeHowTo.html" />
 				<item name="Custom crypt mechanism" href="/CustomCryptMechanism.html" />

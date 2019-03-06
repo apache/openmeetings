@@ -105,16 +105,6 @@ public class OpenmeetingsVariables {
 	public static final String DEFAULT_APP_NAME = "OpenMeetings";
 	public static final String DEFAULT_CONTEXT_NAME = "openmeetings";
 	public static final long DEFAULT_MAX_UPLOAD_SIZE = 100 * 1024 * 1024L; // 100MB
-	public static final String FLASH_SECURE = "secure";
-	public static final String FLASH_NATIVE_SSL = "native";
-	public static final String FLASH_PORT = "rtmpPort";
-	public static final String FLASH_SSL_PORT = "rtmpsPort";
-	public static final String FLASH_VIDEO_CODEC = "videoCodec";
-	public static final String FLASH_FPS = "fps";
-	public static final String FLASH_BANDWIDTH = "bandwidth";
-	public static final String FLASH_QUALITY = "quality";
-	public static final String FLASH_ECHO_PATH = "echoPath";
-	public static final String FLASH_MIC_RATE = "micRate";
 	public static final int DEFAULT_MINUTES_REMINDER_SEND = 15;
 	public static final String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";
 	public static final String DEFAULT_SIP_CONTEXT = "rooms";

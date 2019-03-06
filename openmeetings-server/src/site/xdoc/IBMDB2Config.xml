@@ -49,7 +49,7 @@
 			<subsection name="Steps todo">
 				<ul>
 					<li>
-						Run red5-service and goto the web-based installer:
+						Run OpenMeetings and goto the web-based installer:
 						http://localhost:5080/openmeetings/install
 					</li>
 				</ul>

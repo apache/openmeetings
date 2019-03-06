@@ -42,8 +42,8 @@
 							<div class="small">Java 8 required</div>
 						</li>
 						<li class="step unpack">
-							<div>Unpack + run red5.bat (.sh)</div>
-							<div class="small">(Windows: double click red5.bat)</div>
+							<div>Unpack + run bin/startup.bat (.sh)</div>
+							<div class="small">(Windows: double click startup.bat)</div>
 						</li>
 						<li class="step run">
 							<div>Run Web Installer</div>
@@ -248,7 +248,7 @@
 		<section name="Tips and Tricks">
 			<ul>
 				<li>
-					Use the Debug-Application: open <tt>$RED5_HOME/webapps/openmeetings/WEB-INF/web.xml</tt> change
+					Use the Debug-Application: open <tt>$OM_HOME/webapps/openmeetings/WEB-INF/web.xml</tt> change
 					<source><![CDATA[
 <init-param>
 	<param-name>configuration</param-name>
@@ -264,7 +264,7 @@
 					then access your OM installation
 				</li>
 				<li>If you have Problems with conversion-jobs check your openmeetings log
-					output (available at <tt>$RED5_HOME/logs/openmeetings.log</tt>). There will be error Messages which help you. You must
+					output (available at <tt>$OM_HOME/logs/openmeetings.log</tt>). There will be error Messages which help you. You must
 					install OpenOffice, ImageMagick and GhostScript to run
 					all conversion-Jobs correctly.
 				</li>

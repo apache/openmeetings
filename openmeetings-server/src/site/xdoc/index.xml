@@ -58,7 +58,7 @@
 		<section name="Apache OpenMeetings - Features and overview">
 			<p> Openmeetings provides video conferencing, instant messaging,
 				white board, collaborative document editing and other groupware
-				tools using API functions of the Red5 Streaming Server for Remoting
+				tools using API functions of the Kurento Media Server for Remoting
 				and Streaming.
 			</p>
 			<p>

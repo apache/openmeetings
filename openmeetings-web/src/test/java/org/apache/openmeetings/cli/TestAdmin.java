@@ -24,7 +24,7 @@ import static org.apache.openmeetings.AbstractJUnitDefaults.email;
 import static org.apache.openmeetings.AbstractJUnitDefaults.group;
 import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
 import static org.apache.openmeetings.AbstractSpringTest.setOmHome;
-import static org.apache.openmeetings.cli.Admin.RED5_HOME;
+import static org.apache.openmeetings.cli.Admin.OM_HOME;
 import static org.apache.openmeetings.db.util.ApplicationHelper.destroyApplication;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
@@ -55,14 +55,14 @@ public class TestAdmin {
 		setOmHome();
 		tempFolder = Files.createTempDirectory("omtempdb").toFile();
 		System.setProperty("user.dir", tempFolder.getCanonicalPath());
-		System.setProperty(RED5_HOME, getOmHome().getCanonicalPath());
+		System.setProperty(OM_HOME, getOmHome().getCanonicalPath());
 		setDerbyHome(tempFolder);
 	}
 
 	@After
 	public void tearDown() throws IOException {
 		resetDerbyHome();
-		System.getProperties().remove(RED5_HOME);
+		System.getProperties().remove(OM_HOME);
 		deleteDirectory(tempFolder);
 		WebApplication app = (WebApplication)Application.get(getWicketApplicationName());
 		if (app != null) {

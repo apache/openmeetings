@@ -95,7 +95,7 @@ public class Admin {
 	private static final String REP_DELETED = "\t\t\tdeleted: ";
 	private static final String REP_MISSING = "\t\t\tmissing count: ";
 
-	public static final String RED5_HOME = "red5_home";
+	public static final String OM_HOME = "om_home";
 
 	private boolean verbose = false;
 	private InstallationConfig cfg = null;
@@ -114,7 +114,7 @@ public class Admin {
 		}
 		String ctxName = System.getProperty("context", DEFAULT_CONTEXT_NAME);
 		setWicketApplicationName(ctxName);
-		home = new File(System.getProperty(RED5_HOME));
+		home = new File(System.getProperty(OM_HOME));
 		if (OmFileHelper.getOmHome() == null) {
 			OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));
 		}

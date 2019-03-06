@@ -43,18 +43,18 @@
 			</p>
 			<div>To do that:
 				<ul>
-					<li>Stop the Red5/OpenMeetings service</li>
-					<li>Goto: <tt>$RED5_HOME/webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/service/mail/template/</tt></li>
+					<li>Stop the OpenMeetings service</li>
+					<li>Goto: <tt>$OM_HOME/webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/service/mail/template/</tt></li>
 					<li>Change HTML file(s) according to your needs, BUT do not remove
 						elements with <tt>wicket:id</tt> attributes! You can hide those
 						elements by adding <tt>wicket:visible="false"</tt> attribute
 					</li>
 					<li>Starting OM 3.1.4 you can change Appointment reminder subject by
 						modifying "subject" fragment in file
-						<tt>$RED5_HOME/webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/service/mail/template/subject/AbstractSubjectEmailTemplate.html</tt>
+						<tt>$OM_HOME/webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/service/mail/template/subject/AbstractSubjectEmailTemplate.html</tt>
 						as described in previous bullet.
 					</li>
-					<li>Start the Red5/OpenMeetings service</li>
+					<li>Start the OpenMeetings service</li>
 				</ul>
 			</div>
 		</section>

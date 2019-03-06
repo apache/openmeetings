@@ -12,10 +12,10 @@ REM See the License for the specific language governing permissions and
 REM limitations under the License.
 REM #############################################
 @echo off
-set RED5_HOME=%~dp0
+set OM_HOME=%~dp0
 set OM_CONTEXT=openmeetings
 
-set CLASSPATH=%RED5_HOME%\*;%RED5_HOME%\lib\*;%RED5_HOME%\webapps\%OM_CONTEXT%\WEB-INF\lib\*;%RED5_HOME%\webapps\%OM_CONTEXT%\WEB-INF;%RED5_HOME%\webapps\%OM_CONTEXT%\WEB-INF\classes
+set CLASSPATH=%OM_HOME%\*;%OM_HOME%\lib\*;%OM_HOME%\webapps\%OM_CONTEXT%\WEB-INF\lib\*;%OM_HOME%\webapps\%OM_CONTEXT%\WEB-INF;%OM_HOME%\webapps\%OM_CONTEXT%\WEB-INF\classes
 
-java -cp "%CLASSPATH%" -Dred5_home=%RED5_HOME% -Dcontext=%OM_CONTEXT% org.apache.openmeetings.cli.Admin %*
+java -cp "%CLASSPATH%" -Dom_home=%OM_HOME% -Dcontext=%OM_CONTEXT% org.apache.openmeetings.cli.Admin %*
 

@@ -23,44 +23,17 @@
 	<body>
 		<section name="Server Side">
 			<p>You can protect your OpenMeetings instance from beeing accessed
-				from 3th party by using the file:
+				from 3th party by setting up <tt>RemoteAddrValve</tt><br/>
+				Here <tt>$OM_HOME/conf/server.xml</tt> (will affect the whole Tomcat<br/>)
+				Or here $OM_HOME/webapps/openmeetings/META-INF/context.xml
 			</p>
-			<p>$RED5_HOME/webapps/openmeetings/WEB-INF/red5-web.properties </p>
-			<p>Content: </p>
-			<source>webapp.virtualHosts=*,localhost, 127.0.0.1</source>
-			<p>
-				Sample file:
-				<a
-					href="https://github.com/apache/openmeetings/blob/master/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties"
-					rel="nofollow">https://github.com/apache/openmeetings/blob/master/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties
-				</a>
+			<p>Please check Tomcat documentation for more details
+				<a href="https://tomcat.apache.org/tomcat-9.0-doc/config/context.html">Docs about context</a>, <a
+				href="https://tomcat.apache.org/tomcat-9.0-doc/config/valve.html#Remote_Address_Valve">Docs about RemoteAddrValve</a>
 			</p>
-		</section>
-		<section name="Client Side">
-			<p>And you can restrict the access also for the client side: Every
-				Flash Plugin will check a file called "crossdomain.xml" before it
-				tries to access the server using rtmp/RPC. This file is located: </p>
-			<p>$RED5_HOME/webapps/root/crossdomain.xml </p>
-			<p>Content: </p>
-			<source>
-<![CDATA[
-<?xml version="1.0"?>
-<cross-domain-policy>
-    <site-control permitted-cross-domain-policies="all"/>
-    <allow-access-from domain="localhost" to-ports="20-65535"/>
-    <allow-access-from domain="*.local" to-ports="20-65535"/>
-</cross-domain-policy>
-]]>
-			</source>
-			<p>
-				If you accessing your application behind an Apache Webservre (using
-				mod_proxy or mod_jk2) be careful to make the crossdomain.xml
-				accessible. Flash will always search for this file in the www-root
-				directory of every URL you connect to. You might use
-				<a href="https://addons.mozilla.org/de/firefox/addon/firebug/" rel="nofollow">FireBug
-				</a>
-				for example to lookup requests.
-			</p>
+			<p>For example: To allow access only for the clients connecting from localhost:</p>
+			<source><![CDATA[<Valve className="org.apache.catalina.valves.RemoteAddrValve"
+allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1"/>]]></source>
 		</section>
 	</body>
 </document>

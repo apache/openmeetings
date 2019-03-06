@@ -24,7 +24,7 @@
 			<p>If you want to set up your logo in Openmeetings header you can do the following:</p>
 			<ol>
 				<li>create your logo image as PNG 40px height</li>
-				<li>replace <tt>/opt/red5/webapps/openmeetings/css/images/logo.png</tt> with your logo file</li>
+				<li>replace <tt>/opt/om/webapps/openmeetings/css/images/logo.png</tt> with your logo file</li>
 			</ol>
 		</section>
 		<section name="Renaming /openmeetings context">
@@ -38,15 +38,15 @@
 			<ol>
 				<li>stop openmmetings if it is running </li>
 				<li>
-					go to openmeetings install dir (for ex. <tt>/opt/red5</tt>)
+					go to openmeetings install dir (for ex. <tt>/opt/om</tt>)
 				</li>
 				<li>
-					rename <tt>/opt/red5/webapps/openmeetings</tt> to <tt>/opt/red5/webapps/yourmeetings</tt>
-					(for ex. <tt>mv /opt/red5/webapps/openmeetings /opt/red5/webapps/yourmeetings</tt>)
+					rename <tt>/opt/om/webapps/openmeetings</tt> to <tt>/opt/om/webapps/yourmeetings</tt>
+					(for ex. <tt>mv /opt/om/webapps/openmeetings /opt/om/webapps/yourmeetings</tt>)
 				</li>
 				<li>
-					open <tt>/opt/red5/webapps/root/index.html</tt>
-					using your favorite text editor (for ex. <tt>vim /opt/red5/webapps/root/index.html</tt>)
+					open <tt>/opt/om/webapps/root/index.html</tt>
+					using your favorite text editor (for ex. <tt>vim /opt/om/webapps/root/index.html</tt>)
 					<ul>
 						<li>
 							find and modify <tt>&lt;meta http-equiv="REFRESH" content="0;url=openmeetings/"&gt;</tt>
@@ -117,13 +117,6 @@
 				<tt>http://yourcorp.com:5080/openmeetings1</tt><br/>
 				<tt>http://yourcorp.com:5080/openmeetings2</tt><br/> etc.<br/> you need to do the following:
 			</p>
-			<ol>
-				<li>in case of java memory problems modify <tt>red5.sh</tt> add following line:<br/>
-					<source>export JAVA_OPTS="-XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=128M"</source>
-					or <tt>red5.bat</tt>:<br/>
-					<source>set JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=128M</source>
-				</li>
-			</ol>
 		</section>
 	</body>
 </document>

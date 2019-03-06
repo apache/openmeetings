@@ -530,7 +530,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1494"><![CDATA[全部]]></entry>
 	<entry key="1500"><![CDATA[服务器名字]]></entry>
 	<entry key="1504"><![CDATA[发布. 用户:]]></entry>
-	<entry key="1505"><![CDATA[为了节省时间和网络流量，您可以使用命令行管理 backup/restore/upgrade: <ol> <li>到OM安装目录 (for ex. /opt/red5)</li> <li>停止OM (for ex. ./red5-shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (对当前OM产生备份)</li> <li>下载新OM的文件</li> <li>mv /opt/red5 /opt.red5.bak (移动OM的工作版本只是以防万一 :))</li> <li>将下载的OM解压到 /opt/red5</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' 在使用非默认数据库的情况下 )</li> <li>启动OM</li> </ol>]]></entry>
+	<entry key="1505"><![CDATA[为了节省时间和网络流量，您可以使用命令行管理 backup/restore/upgrade: <ol> <li>到OM安装目录 (for ex. /opt/om)</li> <li>停止OM (for ex. ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (对当前OM产生备份)</li> <li>下载新OM的文件</li> <li>mv /opt/om /opt/om.bak (移动OM的工作版本只是以防万一 :))</li> <li>将下载的OM解压到 /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' 在使用非默认数据库的情况下 )</li> <li>启动OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[所有用户共同的房间]]></entry>
 	<entry key="1507"><![CDATA[当前用户群共同的房间]]></entry>
 	<entry key="1508"><![CDATA[当前用户的房间]]></entry>

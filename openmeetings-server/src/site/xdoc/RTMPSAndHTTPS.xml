@@ -156,19 +156,19 @@ openssl pkcs12 -export -in red5.crt -inkey red5.key -out red5.p12 -name red5 -ce
 ]]></source>
 				</li>
 				<li>Import resulting red5.p12 into keystore:<source><![CDATA[
-keytool -importkeystore -srcstorepass changeit -srckeystore red5.p12 -srcstoretype PKCS12 -deststorepass changeit -destkeystore /opt/red5/conf/keystore.jks -alias red5
+keytool -importkeystore -srcstorepass changeit -srckeystore red5.p12 -srcstoretype PKCS12 -deststorepass changeit -destkeystore /opt/om/conf/keystore.jks -alias red5
 ]]></source>
 					This command creates the keystore.jks with password changeit (may be any password)
 				</li>
 				<li>Import your CA's root certificate into the keystore:<source><![CDATA[
-keytool -import -alias root -keystore /opt/red5/conf/keystore.jks -keystorepass changeit -trustcacerts -file ca.crt
+keytool -import -alias root -keystore /opt/om/conf/keystore.jks -keystorepass changeit -trustcacerts -file ca.crt
 ]]></source>
 				</li>
 				<li>copy keystore to truststore<source><![CDATA[
-cp /opt/red5/conf/keystore.jks /opt/red5/conf/truststore.jks
+cp /opt/om/conf/keystore.jks /opt/om/conf/truststore.jks
 ]]></source>
 				</li>
-				<li>Change passwords in  /opt/red5/conf/red5.properties<source><![CDATA[
+				<li>Change passwords in  /opt/om/conf/red5.properties<source><![CDATA[
 rtmps.keystorepass=changeit
 rtmps.truststorepass=changeit
 jmx.keystorepass=changeit
