@@ -180,6 +180,7 @@ public class StreamClientManager implements IStreamClientManager {
 		rcl.setLogin(u.getLogin());
 		rcl.setFirstname(u.getFirstname());
 		rcl.setLastname(u.getLastname());
+		rcl.setDisplayName(u.getDisplayName());
 		rcl.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
 		rcl.setSuperMod(client.hasRight(Right.superModerator));
 		rcl.setMod(client.hasRight(Right.moderator));

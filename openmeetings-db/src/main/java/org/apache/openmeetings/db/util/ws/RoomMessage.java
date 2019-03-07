@@ -66,20 +66,20 @@ public class RoomMessage implements IWebSocketPushMessage {
 	private final Type type;
 
 	public RoomMessage(Long roomId, IClient c, Type type) {
-		this(roomId, c.getUserId(), c.getFirstname(), c.getLastname(), type);
+		this(roomId, c.getUserId(), c.getDisplayName(), type);
 	}
 
 	public RoomMessage(Long roomId, User u, Type type) {
-		this(roomId, u.getId(), u.getFirstname(), u.getLastname(), type);
+		this(roomId, u.getId(), u.getDisplayName(), type);
 	}
 
-	private RoomMessage(Long roomId, Long userId, String firstName, String lastName, Type type) {
+	private RoomMessage(Long roomId, Long userId, String displayName, Type type) {
 		this.timestamp = new Date();
 		this.roomId = roomId;
 		if (SIP_USER_ID.equals(userId)) {
 			this.name = SIP_FIRST_NAME;
 		} else {
-			name = String.format("%s %s", firstName, lastName);
+			name = displayName;
 		}
 		this.userId = userId;
 		this.type = type;

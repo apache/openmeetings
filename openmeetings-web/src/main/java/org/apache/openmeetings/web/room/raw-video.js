@@ -4,9 +4,6 @@ var Video = (function() {
 	let c, v, vc, t, f, swf, size, vol, slider, handle
 		, lastVolume = 50;
 
-	function _getName() {
-		return c.user.firstName + ' ' + c.user.lastName;
-	}
 	function _getExtra() {
 		return t.height() + 2 + (f.is(':visible') ? f.height() : 0);
 	}
@@ -156,7 +153,7 @@ var Video = (function() {
 		c = _c;
 		size = {width: c.width, height: c.height};
 		const _id = VideoUtil.getVid(c.uid)
-			, name = _getName()
+			, name = c.user.displayName
 			, _w = c.self ? Math.max(300, c.width) : c.width
 			, _h = c.self ? Math.max(200, c.height) : c.height
 			, opts = Room.getOptions();
@@ -269,6 +266,7 @@ var Video = (function() {
 		c.activities = _c.activities;
 		c.user.firstName = _c.user.firstName;
 		c.user.lastName = _c.user.lastName;
+		c.user.displayName = _c.user.displayName;
 		const hasAudio = VideoUtil.hasAudio(c);
 		_handleMicStatus(hasAudio);
 		if (hasAudio) {
@@ -281,7 +279,7 @@ var Video = (function() {
 			c.pod = _c.pod;
 			v.dialog('option', 'appendTo', '.pod.pod-' + c.pod);
 		}
-		const name = _getName();
+		const name = c.user.displayName;
 		v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
 		if (typeof(swf[0].update) === 'function') {
 			swf[0].update(c);

@@ -230,10 +230,9 @@ public class MobileService {
 		c.setUserId(u.getId());
 		c.setFirstname(u.getFirstname());
 		c.setLastname(u.getLastname());
+		c.setDisplayName(u.getDisplayName());
 		if (c.getUserId() != null) {
 			c.setLogin(u.getLogin());
-			c.setFirstname(u.getFirstname());
-			c.setLastname(u.getLastname());
 			c.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
 		}
 		c.setBroadcastId(UUID.randomUUID().toString());

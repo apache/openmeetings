@@ -521,7 +521,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				String newNumber = getSipTransportLastname(c.getRoomId());
 				cl.getUser().setLastname(newNumber);
 				c.setLastname(newNumber);
-				c.setLastname(getSipTransportLastname(c.getRoomId()));
+				c.setDisplayName(newNumber);
 			}
 			streamClientManager.update(c);
 			if (Client.Type.sharing == c.getType() && c.isRecordingStarted()) {
@@ -1031,6 +1031,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			Client cl = clientManager.getBySid(client.getSid());
 			cl.getUser().setLastname(newNumber);
 			client.setLastname(newNumber);
+			client.setDisplayName(newNumber);
 			streamClientManager.update(client);
 			_log.debug("updateSipTransport: {}, {}, {}, {}, {}", new Object[] { client.getUid(), client.getRoomId(),
 					client.getFirstname(), client.getLastname(), client.getAvsettings() });

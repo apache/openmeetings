@@ -139,6 +139,11 @@ public class Client implements IClient {
 	}
 
 	@Override
+	public String getDisplayName() {
+		return user.getDisplayName();
+	}
+
+	@Override
 	public String getUid() {
 		return uid;
 	}
@@ -378,6 +383,7 @@ public class Client implements IClient {
 			u.put("id", user.getId())
 				.put("firstName", user.getFirstname())
 				.put("lastName", user.getLastname())
+				.put("displayName", user.getDisplayName())
 				.put("address", a);
 			if (user.getAddress() != null) {
 				if (Strings.isEmpty(user.getFirstname()) && Strings.isEmpty(user.getLastname())) {

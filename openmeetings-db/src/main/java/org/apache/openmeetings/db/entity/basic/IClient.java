@@ -42,6 +42,7 @@ public interface IClient extends IDataProviderEntity {
 	String getLogin();
 	String getFirstname();
 	String getLastname();
+	String getDisplayName();
 	String getRemoteAddress();
 	Long getRoomId();
 	Room.Type getRoomType();

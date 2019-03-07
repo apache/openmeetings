@@ -48,6 +48,7 @@ public class StreamClient implements IClient {
 	private Long userId = null;
 	private String firstname = "";
 	private String lastname = "";
+	private String displayName = "";
 	private String email;
 	private String lastLogin;
 	private String language = "";
@@ -227,6 +228,15 @@ public class StreamClient implements IClient {
 
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
+	}
+
+	@Override
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 	public String getEmail() {
