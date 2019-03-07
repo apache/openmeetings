@@ -54,19 +54,34 @@ var TMath = function(wb, s) {
 	const math = ShapeBase();
 	math.obj = null;
 
-	math.mouseDown = function(o) {
-		const canvas = this
-			, pointer = canvas.getPointer(o.e)
+	function _enableUpdate(upd, obj) {
+		upd.data('uid', obj.uid);
+		upd.data('slide', obj.slide);
+		upd.button('enable');
+	}
+	function _updateDisabled(cnvs) {
+		const canvas = cnvs || wb.getCanvas()
 			, ao = canvas.getActiveObject()
 			, fml = wb.getFormula()
 			, ta = fml.find('textarea')
 			, upd = fml.find('.update-btn');
-		fml.show();
 		if (!!ao && ao.omType === 'Math') {
-			upd.data('uid', ao.uid);
-			upd.data('slide', ao.slide);
+			_enableUpdate(upd, ao);
 			ta.val(ao.formula);
+			return false;
 		} else {
+			upd.button('disable');
+			return true;
+		}
+	}
+	math.mouseDown = function(o) {
+		const canvas = this
+			, pointer = canvas.getPointer(o.e)
+			, fml = wb.getFormula()
+			, ta = fml.find('textarea')
+			, upd = fml.find('.update-btn');
+		fml.show();
+		if (_updateDisabled(canvas)) {
 			const err = fml.find('.status');
 			err.text('');
 			if (ta.val().trim() === '') {
@@ -89,8 +104,7 @@ var TMath = function(wb, s) {
 					if (wb.getRole() !== NONE) {
 						canvas.setActiveObject(math.obj);
 					}
-					upd.data('uid', math.obj.uid);
-					upd.data('slide', math.obj.slide);
+					_enableUpdate(upd, math.obj);
 				}
 				, function(msg) {
 					err.text(msg);
@@ -109,6 +123,7 @@ var TMath = function(wb, s) {
 				}
 			});
 		});
+		_updateDisabled();
 		ToolUtil.disableAllProps(s);
 	};
 	math.deactivate = function() {
@@ -121,6 +136,7 @@ var TMath = function(wb, s) {
 				}
 			});
 		});
+		wb.getFormula().find('.update-btn').button('disable');
 	};
 
 	return math;
