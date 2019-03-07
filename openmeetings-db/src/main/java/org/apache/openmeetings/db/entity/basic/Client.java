@@ -338,6 +338,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 			u.put("id", user.getId())
 				.put("firstName", user.getFirstname())
 				.put("lastName", user.getLastname())
+				.put("displayName", user.getDisplayName())
 				.put("address", a)
 				.put("pictureUri", pictureUri);
 			if (user.getAddress() != null) {

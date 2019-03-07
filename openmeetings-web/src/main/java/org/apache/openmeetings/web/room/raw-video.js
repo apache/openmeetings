@@ -5,9 +5,6 @@ var Video = (function() {
 		, lastVolume = 50, muted = false, aCtx, aSrc, aDest, gainNode
 		, lm, level, userSpeaks = false;
 
-	function _getName() {
-		return sd.user.firstName + ' ' + sd.user.lastName;
-	}
 	function _getExtra() {
 		return t.height() + 2 + (f.is(':visible') ? f.height() : 0);
 	}
@@ -345,7 +342,7 @@ var Video = (function() {
 		sd.activities = sd.activities.sort();
 		size = {width: sd.width, height: sd.height};
 		const _id = VideoUtil.getVid(sd.uid)
-			, name = _getName()
+			, name = sd.user.displayName
 			, _w = sd.width
 			, _h = sd.height
 			, isSharing = VideoUtil.isSharing(sd)
@@ -395,7 +392,7 @@ var Video = (function() {
 		sd.activities = _c.activities.sort();
 		sd.user.firstName = _c.user.firstName;
 		sd.user.lastName = _c.user.lastName;
-		const name = _getName();
+		const name = sd.user.displayName;
 		v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
 		const same = prevA.length === sd.activities.length && prevA.every(function(value, index) { return value === sd.activities[index]})
 		if (sd.self && !same) {
