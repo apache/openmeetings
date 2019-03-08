@@ -16,14 +16,13 @@ var StaticTMath = (function() {
 		MathJax.Hub.Queue(function() {
 			if (!error) {
 				const mjOut = wrapper[0].getElementsByTagName('svg')[0];
-				$(mjOut).attr('xmlns', 'http://www.w3.org/2000/svg');
-				callback(mjOut.outerHTML);
+				callback(mjOut);
 			}
 		});
 	}
 	function create(o, canvas, callback, errCallback) {
 		tex2svg(o.formula, function(svg) {
-			fabric.loadSVGFromString(svg, function(objects, options) {
+			fabric.parseSVGDocument(svg, function(objects, options) {
 				const opts = $.extend({}, o, options)
 					, obj = objects.length === 1
 						? new fabric.Group(objects, opts)
