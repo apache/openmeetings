@@ -124,9 +124,9 @@ public class RoomSidebar extends Panel {
 							}
 						}
 						break;
-					case exclusive:
-						if (room.getClient().hasRight(Right.exclusive)) {
-							WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), cl, RoomMessage.Type.exclusive, uid));
+					case muteOthers:
+						if (room.getClient().hasRight(Right.muteOthers)) {
+							WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), cl, RoomMessage.Type.muteOthers, uid));
 						}
 						break;
 					case mute:

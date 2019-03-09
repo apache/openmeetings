@@ -38,7 +38,7 @@
 		<db>derby</db>
 		<jdk.version>1.8</jdk.version>
 		<!-- plugin versions -->
-		<maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
+		<maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
 		<maven-site-plugin.version>3.7.1</maven-site-plugin.version>
 		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>

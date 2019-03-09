@@ -49,13 +49,13 @@ public class RoomMessage implements IWebSocketPushMessage {
 		, requestRightRemote
 		, requestRightA
 		, requestRightAv
-		, requestRightExclusive
+		, requestRightMuteOthers
 		, haveQuestion
 		, kick
 		, newStream
 		, closeStream
 		, mute
-		, exclusive
+		, muteOthers
 		, quickPollUpdated
 	}
 	private final Date timestamp;

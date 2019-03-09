@@ -32,12 +32,12 @@ public class UserSpeaksIcon extends ClientIcon {
 
 	private boolean isActive() {
 		Client c = getClient();
-		return c != null && (c.hasActivity(Activity.broadcastA) && roomHasRight(Room.Right.exclusive));
+		return c != null && (c.hasActivity(Activity.broadcastA) && roomHasRight(Room.Right.muteOthers));
 	}
 
 	@Override
 	protected String getTitle() {
-		return getString(isActive() ? "372" : "371");
+		return getString("ulist.user.speaks") + (isActive() ? getString("ulist.user.muteothers") : "");
 	}
 
 	@Override
@@ -52,6 +52,6 @@ public class UserSpeaksIcon extends ClientIcon {
 
 	@Override
 	protected String getScript() {
-		return String.format("VideoManager.clickExclusive('%s');", uid);
+		return String.format("VideoManager.clickMuteOthers('%s');", uid);
 	}
 }

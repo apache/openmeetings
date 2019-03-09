@@ -59,8 +59,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_C
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_EXCLUSIVE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE_OTHERS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
@@ -309,8 +309,8 @@ public class ImportInitvalues {
 
 		addCfg(list, CONFIG_KEYCODE_ARRANGE, "119", Configuration.Type.number
 				, "A hot key code for arrange video windows functionality. Should be used with Shift key. (Keycode 119 is F8)", VER_2_0);
-		addCfg(list, CONFIG_KEYCODE_EXCLUSIVE, "123", Configuration.Type.number
-				, "A hot key code for the 'give exclusive audio' functionality. Should be used with Shift key. (Keycode 123 is F12)", VER_2_0);
+		addCfg(list, CONFIG_KEYCODE_MUTE_OTHERS, "123", Configuration.Type.number
+				, "A hot key code for the 'mute others' functionality. Should be used with Shift key. (Keycode 123 is F12)", VER_2_0);
 		addCfg(list, CONFIG_KEYCODE_MUTE, "118", Configuration.Type.number
 				, "A hot key code for the 'mute/unmute audio' functionality. Should be used with Shift key. (Keycode 118 is F7)", VER_2_0);
 

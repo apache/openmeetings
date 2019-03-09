@@ -170,7 +170,7 @@
 		}
 	]]></fx:Script>
 
-	<s:Image id="notRun" source="{notRunImgCls}" visible="true" width="113" height="113" x="0" y="0"/> <!-- toolTip="{exclusiveTitle}" -->
+	<s:Image id="notRun" source="{notRunImgCls}" visible="true" width="113" height="113" x="0" y="0"/>
 	<mx:UIComponent id="container" visible="false" width="113" height="113" x="0" y="0"/>
 	<s:Image id="failed" source="{failedImgCls}" visible="false" width="113" height="113" x="0" y="0"/>
 	<s:Image id="passed" source="{passedImgCls}" visible="false" width="113" height="113" x="0" y="0"/>

@@ -20,16 +20,16 @@ package org.apache.openmeetings.web.room.sidebar.icon.right;
 
 import org.apache.openmeetings.db.entity.room.Room.Right;
 
-public class ExclusiveRightIcon extends RoomRightIcon {
+public class MuteOthersRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
-	public ExclusiveRightIcon(String id, String uid) {
-		super(id, uid, Right.exclusive);
-		mainCssClass = "exclsv-audio ";
+	public MuteOthersRightIcon(String id, String uid) {
+		super(id, uid, Right.muteOthers);
+		mainCssClass = "mute-others ";
 	}
 
 	@Override
 	protected String getTitle() {
-		return getString(String.format("ulist.right.exclusive.%s", (isSelf() ? "request" : (hasRight() ? "revoke" : "grant"))));
+		return getString(String.format("ulist.right.muteothers.%s", (isSelf() ? "request" : (hasRight() ? "revoke" : "grant"))));
 	}
 }

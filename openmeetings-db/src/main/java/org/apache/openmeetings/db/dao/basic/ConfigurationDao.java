@@ -44,7 +44,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_A
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_EXCLUSIVE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE_OTHERS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
@@ -322,6 +322,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_FLASH_CAM_QUALITY:
 			case CONFIG_FLASH_ECHO_PATH:
 			case CONFIG_FLASH_MIC_RATE:
+			case CONFIG_KEYCODE_ARRANGE:
+			case CONFIG_KEYCODE_MUTE_OTHERS:
+			case CONFIG_KEYCODE_MUTE:
 				reloadRoomSettings();
 				break;
 			case CONFIG_MAX_UPLOAD_SIZE:
@@ -593,7 +596,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				.put(FLASH_MIC_RATE, getLong(CONFIG_FLASH_MIC_RATE, 22L))
 				.put("keycode", new JSONObject()
 						.put("arrange", getLong(CONFIG_KEYCODE_ARRANGE, 119L))
-						.put("exclusive", getLong(CONFIG_KEYCODE_EXCLUSIVE, 123L))
+						.put("muteothers", getLong(CONFIG_KEYCODE_MUTE_OTHERS, 123L))
 						.put("mute", getLong(CONFIG_KEYCODE_MUTE, 118L))
 						)
 				);

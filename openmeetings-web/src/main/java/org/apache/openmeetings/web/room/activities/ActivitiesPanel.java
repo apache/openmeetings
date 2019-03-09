@@ -128,9 +128,9 @@ public class ActivitiesPanel extends Panel {
 									sendRoom(getRemoveMsg(id));
 									room.allowRight(client, Right.audio);
 									break;
-								case reqRightExclusive:
+								case reqRightMuteOthers:
 									sendRoom(getRemoveMsg(id));
-									room.allowRight(client, Right.exclusive);
+									room.allowRight(client, Right.muteOthers);
 									break;
 								default:
 									break;
@@ -209,8 +209,8 @@ public class ActivitiesPanel extends Panel {
 			case reqRightAv:
 				text = String.format(fmt, name, getString("activities.request.right.video"), df.format(a.getCreated()));
 				break;
-			case reqRightExclusive:
-				text = String.format(fmt, name, getString("activities.request.right.exclusive"), df.format(a.getCreated()));
+			case reqRightMuteOthers:
+				text = String.format(fmt, name, getString("activities.request.right.muteothers"), df.format(a.getCreated()));
 				break;
 			case haveQuestion:
 				text = String.format(fmt, name, getString("activities.ask.question"), df.format(a.getCreated()));
@@ -232,7 +232,7 @@ public class ActivitiesPanel extends Panel {
 			case reqRightRemote:
 			case reqRightA:
 			case reqRightAv:
-			case reqRightExclusive:
+			case reqRightMuteOthers:
 				aobj.put("accept", room.getClient().hasRight(Right.moderator));
 				aobj.put("decline", room.getClient().hasRight(Right.moderator));
 				break;
@@ -275,7 +275,7 @@ public class ActivitiesPanel extends Panel {
 			case reqRightRemote:
 			case reqRightA:
 			case reqRightAv:
-			case reqRightExclusive:
+			case reqRightMuteOthers:
 			case haveQuestion:
 				cls.append("ui-state-highlight");
 				break;

@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.room.sidebar;
 
 import org.apache.openmeetings.web.room.sidebar.icon.right.AudioRightIcon;
-import org.apache.openmeetings.web.room.sidebar.icon.right.ExclusiveRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.ModeratorRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.right.MuteOthersRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.PresenterRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.RemoteControlRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.ScreenShareRightIcon;
@@ -38,7 +38,7 @@ public class ClientIconsPanel extends Panel {
 	private final RemoteControlRightIcon rightRemote;
 	private final AudioRightIcon rightAudio;
 	private final VideoRightIcon rightVideo;
-	private final ExclusiveRightIcon rightExclsv;
+	private final MuteOthersRightIcon rightMuteOthers;
 
 	public ClientIconsPanel(String id, String uid) {
 		super(id);
@@ -51,7 +51,7 @@ public class ClientIconsPanel extends Panel {
 		add(rightRemote = new RemoteControlRightIcon("right-remote-control", uid));
 		add(rightAudio = new AudioRightIcon("right-audio", uid));
 		add(rightVideo = new VideoRightIcon("right-video", uid));
-		add(rightExclsv = new ExclusiveRightIcon("right-exclsv", uid));
+		add(rightMuteOthers = new MuteOthersRightIcon("right-mute-others", uid));
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class ClientIconsPanel extends Panel {
 		rightRemote.update(handler);
 		rightAudio.update(handler);
 		rightVideo.update(handler);
-		rightExclsv.update(handler);
+		rightMuteOthers.update(handler);
 		return this;
 	}
 }

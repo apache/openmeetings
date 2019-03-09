@@ -172,8 +172,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[изтриване на език]]></entry>
 	<entry key="366"><![CDATA[добавяне на език]]></entry>
 	<entry key="367"><![CDATA[Бекъп]]></entry>
-	<entry key="371"><![CDATA[потребителят говори]]></entry>
-	<entry key="372"><![CDATA[потребителят говори (By clicking here you can give exclusive audio / mute the microphone of others)]]></entry>
 	<entry key="376"><![CDATA[Здравейте,]]></entry>
 	<entry key="377"><![CDATA[Редакт.на профил]]></entry>
 	<entry key="378"><![CDATA[Нови съобщения:]]></entry>
@@ -471,7 +469,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1361"><![CDATA[Deny]]></entry>
 	<entry key="1362"><![CDATA[I]]></entry>
 	<entry key="1363"><![CDATA[Activities and actions]]></entry>
-	<entry key="1386"><![CDATA[Mute microphone of others]]></entry>
 	<entry key="1410"><![CDATA[Poll Name]]></entry>
 	<entry key="1411"><![CDATA[You]]></entry>
 	<entry key="1412"><![CDATA[Archieved Polls]]></entry>
@@ -483,7 +480,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1420"><![CDATA[Delete Poll]]></entry>
 	<entry key="1421"><![CDATA[Are you sure you want to delete this Poll? The results will be deleted as well.]]></entry>
 	<entry key="1422"><![CDATA[Language ISO Code]]></entry>
-	<entry key="1428">Give a permission for exclusive audio.</entry>
 	<entry key="1429"><![CDATA[Cam resolution]]></entry>
 	<entry key="1430"><![CDATA[Changing the resolution affects bandwidth, bigger picture needs more bandwith!]]></entry>
 	<entry key="1443"><![CDATA[Layout options]]></entry>
@@ -543,7 +539,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[System import]]></entry>
 	<entry key="1537"><![CDATA[Include uploaded files and recordings in backup]]></entry>
 	<entry key="1538"><![CDATA[Enable SIP transport in the room]]></entry>
-	<entry key="1539">Do you really want to provide this user an exclusive audio?</entry>
 	<entry key="1546"><![CDATA[Welcome]]></entry>
 	<entry key="1547"><![CDATA[Widget displaying basic user info and support links]]></entry>
 	<entry key="1548"><![CDATA[Widgets]]></entry>
@@ -945,9 +940,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>
 	<entry key="ulist.right.audio.revoke"><![CDATA[Mute user and remove the right to turn on microphone]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[Request permission to use microphone]]></entry>
-	<entry key="ulist.right.exclusive.grant"><![CDATA[Allow this user to mute others]]></entry>
-	<entry key="ulist.right.exclusive.revoke"><![CDATA[Remove this user's right to mute others]]></entry>
-	<entry key="ulist.right.exclusive.request"><![CDATA[Request exclusive audio]]></entry>
+	<entry key="ulist.right.muteothers.grant"><![CDATA[Allow this user to mute others]]></entry>
+	<entry key="ulist.right.muteothers.revoke"><![CDATA[Remove this user's right to mute others]]></entry>
+	<entry key="ulist.right.muteothers.request"><![CDATA[Request permission to mute others]]></entry>
 	<entry key="ulist.right.moderator.grant"><![CDATA[Allow this user to be moderator]]></entry>
 	<entry key="ulist.right.moderator.revoke"><![CDATA[Remove moderator permissions from this user]]></entry>
 	<entry key="ulist.right.moderator.request"><![CDATA[Request moderator permissions]]></entry>
@@ -966,6 +961,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="ulist.right.wb.grant"><![CDATA[Allow this user to draw on the whiteboard]]></entry>
 	<entry key="ulist.right.wb.revoke"><![CDATA[Remove this user's permission to draw on the whiteboard]]></entry>
 	<entry key="ulist.right.wb.request"><![CDATA[Request permission to draw on the whiteboard]]></entry>
+	<entry key="ulist.user.speaks"><![CDATA[потребителят говори]]></entry>
+	<entry key="ulist.user.muteothers"><![CDATA[ (By clicking here you can mute the microphone of others)]]></entry>
+	<entry key="ulist.user.muteothers.confirm"><![CDATA[Do you really want to mute all users except this one?]]></entry>
 	<entry key="activities.request.right.moderator"><![CDATA[requests permission to be moderator]]></entry>
 	<entry key="activities.request.right.presenter"><![CDATA[requests permission to be presenter]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[requests permission to draw on the whiteboard]]></entry>
@@ -973,7 +971,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.remote"><![CDATA[requests permission to control screen during screen sharing]]></entry>
 	<entry key="activities.request.right.audio"><![CDATA[requests permission to turn on micropone]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[requests permission to turn on camera]]></entry>
-	<entry key="activities.request.right.exclusive"><![CDATA[requests permission to use exclusive audio]]></entry>
+	<entry key="activities.request.right.muteothers"><![CDATA[requests permission to mute others]]></entry>
 	<entry key="activities.ask.question"><![CDATA[would like to ask a question]]></entry>
 	<entry key="camera.on"><![CDATA[Turn on camera]]></entry>
 	<entry key="camera.off"><![CDATA[Turn off camera]]></entry>
@@ -996,4 +994,5 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="download.image.steps"><![CDATA[Please right click the image and choose "Save image as"]]></entry>
 	<entry key="video.permission.title"><![CDATA[Permission is required]]></entry>
 	<entry key="video.permission.text"><![CDATA[Extra permission is required to play video.<br/>Press OK to allow playing.]]></entry>
+	<entry key="video.muteothers"><![CDATA[Mute microphone of others]]></entry>
 </properties>
