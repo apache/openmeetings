@@ -36,7 +36,7 @@ public class Activity implements Serializable {
 		, reqRightRemote(true)
 		, reqRightA(true)
 		, reqRightAv(true)
-		, reqRightExclusive(true)
+		, reqRightMuteOthers(true)
 		, haveQuestion(true);
 
 		private final boolean action;

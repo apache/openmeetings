@@ -84,7 +84,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_CALENDAR_ROOM_CAPACITY = "calendar.conference.rooms.default.size";
 	public static final String CONFIG_REPLY_TO_ORGANIZER = "inviter.email.as.replyto";
 	public static final String CONFIG_KEYCODE_ARRANGE = "video.arrange.keycode";
-	public static final String CONFIG_KEYCODE_EXCLUSIVE = "exclusive.audio.keycode";
+	public static final String CONFIG_KEYCODE_MUTE_OTHERS = "mute.others.keycode";
 	public static final String CONFIG_KEYCODE_MUTE = "mute.keycode";
 	public static final String CONFIG_MYROOMS_ENABLED = "personal.rooms.enabled";
 	public static final String CONFIG_REMINDER_MESSAGE = "reminder.message";

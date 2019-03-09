@@ -30,9 +30,9 @@
 				</tr>
 				<tr>
 					<td>Shift+F12 (code 123)</td>
-					<td>A hot key code for the 'give exclusive audio' functionality.</td>
+					<td>A hot key code for the 'mute others' functionality.</td>
 					<td>Yes</td>
-					<td>exclusive.audio.keycode</td>
+					<td>mute.others.keycode</td>
 				</tr>
 				<tr>
 					<td>Shift+F8 (code 119)</td>

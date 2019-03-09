@@ -98,7 +98,7 @@ public class Room extends HistoricalEntity {
 		, remoteControl
 		, audio
 		, video
-		, exclusive
+		, muteOthers
 	}
 
 	@XmlType(namespace="org.apache.openmeetings.room.element")

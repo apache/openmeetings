@@ -228,18 +228,18 @@ var VideoManager = (function() {
 			v.data().mute(mute);
 		}
 	}
-	function _clickExclusive(uid) {
+	function _clickMuteOthers(uid) {
 		const s = VideoSettings.load();
-		if (false !== s.video.confirmExclusive) {
-			const dlg = $('#exclusive-confirm');
+		if (false !== s.video.confirmMuteOthers) {
+			const dlg = $('#muteothers-confirm');
 			dlg.dialog({
 				buttons: [
 					{
 						text: dlg.data('btn-ok')
 						, click: function() {
-							s.video.confirmExclusive = !$('#exclusive-confirm-dont-show').prop('checked');
+							s.video.confirmMuteOthers = !$('#muteothers-confirm-dont-show').prop('checked');
 							VideoSettings.save();
-							roomAction('exclusive', uid);
+							roomAction('muteOthers', uid);
 							$(this).dialog('close');
 						}
 					}
@@ -253,7 +253,7 @@ var VideoManager = (function() {
 			})
 		}
 	}
-	function _exclusive(uid) {
+	function _muteOthers(uid) {
 		const windows = $(VID_SEL + ' .ui-dialog-content');
 		for (let i = 0; i < windows.length; ++i) {
 			const w = $(windows[i]);
@@ -273,8 +273,8 @@ var VideoManager = (function() {
 	self.close = _close;
 	self.refresh = _refresh;
 	self.mute = _mute;
-	self.clickExclusive = _clickExclusive;
-	self.exclusive = _exclusive;
+	self.clickMuteOthers = _clickMuteOthers;
+	self.muteOthers = _muteOthers;
 	self.toggleActivity = _toggleActivity;
 	self.sendMessage = function(_m) {
 		OmUtil.sendMessage(_m, {type: 'kurento'});

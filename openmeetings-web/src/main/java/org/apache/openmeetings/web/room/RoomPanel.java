@@ -113,7 +113,7 @@ public class RoomPanel extends BasePanel {
 	private static final String EVENT_DETAILS_ID = "event-details";
 	public enum Action {
 		kick
-		, exclusive
+		, muteOthers
 		, mute
 	}
 	private final Room r;
@@ -140,7 +140,6 @@ public class RoomPanel extends BasePanel {
 					.put("audioOnly", r.isAudioOnly())
 					.put("questions", r.isAllowUserQuestions())
 					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus))
-					.put("exclusiveTitle", getString("1386"))
 					.put("chromeExtUrl", getChromeExtensionUrl());
 			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
 				options.put("reloadUrl", r.getRedirectURL());
@@ -485,8 +484,8 @@ public class RoomPanel extends BasePanel {
 					case requestRightAv:
 						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightAv), handler);
 						break;
-					case requestRightExclusive:
-						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightExclusive), handler);
+					case requestRightMuteOthers:
+						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightMuteOthers), handler);
 						break;
 					case activityRemove:
 						sidebar.removeActivity(((TextRoomMessage)m).getText(), handler);
@@ -520,7 +519,7 @@ public class RoomPanel extends BasePanel {
 						}
 					}
 						break;
-					case exclusive:
+					case muteOthers:
 					{
 						String uid = ((TextRoomMessage)m).getText();
 						Client c = cm.get(uid);
@@ -528,7 +527,7 @@ public class RoomPanel extends BasePanel {
 							// no luck
 							return;
 						}
-						handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.exclusive('%s');}", uid));
+						handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.muteOthers('%s');}", uid));
 					}
 						break;
 					case quickPollUpdated:
@@ -686,8 +685,8 @@ public class RoomPanel extends BasePanel {
 			case audio:
 				reqType = Type.requestRightA;
 				break;
-			case exclusive:
-				reqType = Type.requestRightExclusive;
+			case muteOthers:
+				reqType = Type.requestRightMuteOthers;
 				break;
 			case remoteControl:
 				reqType = Type.requestRightRemote;

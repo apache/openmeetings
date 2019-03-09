@@ -47,11 +47,11 @@ public class RoomMessage implements IWebSocketPushMessage {
 		, requestRightRemote
 		, requestRightA
 		, requestRightAv
-		, requestRightExclusive
+		, requestRightMuteOthers
 		, haveQuestion
 		, kick
 		, mute
-		, exclusive
+		, muteOthers
 		, quickPollUpdated
 		, kurentoStatus
 	}

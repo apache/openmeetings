@@ -260,12 +260,12 @@
 								Allow/Deny Remote Control Screen
 							</li>
 							<li>
-								<img src="images/microphone_exclusive.png" class="alignnone" title="Right for exclusive audio" alt="" />
-								Allow/Deny right for exclusive audio
+								<img src="images/microphone_mute_others.png" class="alignnone" title="Right for 'Mute others'" alt="" />
+								Allow/Deny right for 'Mute others'
 							</li>
 							<li>
-								<img src="images/micro_small.png" class="alignnone" title="Exclusive audio" alt="" />
-								Give exclusive audio to others or self
+								<img src="images/micro_small.png" class="alignnone" title="Mute others" alt="" />
+								Let one user to speak while others are muted
 							</li>
 							<li>
 								<img src="images/webcam_add.png" class="alignnone" title="Video" alt="" />

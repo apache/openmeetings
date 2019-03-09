@@ -172,8 +172,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[Nyelv törlése]]></entry>
 	<entry key="366"><![CDATA[nyelv hozzáadása]]></entry>
 	<entry key="367"><![CDATA[Mentés]]></entry>
-	<entry key="371"><![CDATA[a felhasználó beszél]]></entry>
-	<entry key="372"><![CDATA[a felhasználó beszél (Kattints ide a mikrofonja némításhoz, bekapcsoláshoz)]]></entry>
 	<entry key="376"><![CDATA[Üdv,]]></entry>
 	<entry key="377"><![CDATA[Személyes adatok szerkesztése]]></entry>
 	<entry key="378"><![CDATA[Új üzenetek:]]></entry>
@@ -471,7 +469,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1361"><![CDATA[Tilt]]></entry>
 	<entry key="1362"><![CDATA[I]]></entry>
 	<entry key="1363"><![CDATA[Aktivitások és műveletek]]></entry>
-	<entry key="1386"><![CDATA[Mások mikrofonjának némítása]]></entry>
 	<entry key="1410"><![CDATA[Szavazás neve]]></entry>
 	<entry key="1411"><![CDATA[Te]]></entry>
 	<entry key="1412"><![CDATA[Régebbi szavazások]]></entry>
@@ -483,7 +480,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1420"><![CDATA[Szavazás törlése]]></entry>
 	<entry key="1421"><![CDATA[Biztosan törli ezt a szavazást? Az eredmények is törlésre kerülnek.]]></entry>
 	<entry key="1422"><![CDATA[Nyelv ISO kódja]]></entry>
-	<entry key="1428">Hozzászólási engedélyt kérek.</entry>
 	<entry key="1429"><![CDATA[Kamera felbontás]]></entry>
 	<entry key="1430"><![CDATA[Sávszélességének (Feltöltési irány) megfelelően válassza meg a felbontás. Nagyobb felbontás, nagyobb sávszélességet igényel!]]></entry>
 	<entry key="1443"><![CDATA[Felület tulajdonságai]]></entry>
@@ -543,7 +539,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[Rendszer import]]></entry>
 	<entry key="1537"><![CDATA[Feltöltött fileok és felvételek betöltése a mentásből]]></entry>
 	<entry key="1538"><![CDATA[SIP átvitel engedélyezése a szobában]]></entry>
-	<entry key="1539">Egyéni hangkapcsolatot kezdeményez ezzel a felhasználóval?</entry>
 	<entry key="1546"><![CDATA[Üdvözöljük]]></entry>
 	<entry key="1547"><![CDATA[Widgeten megjelenő felhasználói adatok és linkek]]></entry>
 	<entry key="1548"><![CDATA[Widgetek]]></entry>
@@ -933,9 +928,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>
 	<entry key="ulist.right.audio.revoke"><![CDATA[Mute user and remove the right to turn on microphone]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[Request permission to use microphone]]></entry>
-	<entry key="ulist.right.exclusive.grant"><![CDATA[Allow this user to mute others]]></entry>
-	<entry key="ulist.right.exclusive.revoke"><![CDATA[Remove this user's right to mute others]]></entry>
-	<entry key="ulist.right.exclusive.request"><![CDATA[Request exclusive audio]]></entry>
+	<entry key="ulist.right.muteothers.grant"><![CDATA[Allow this user to mute others]]></entry>
+	<entry key="ulist.right.muteothers.revoke"><![CDATA[Remove this user's right to mute others]]></entry>
+	<entry key="ulist.right.muteothers.request"><![CDATA[Request permission to mute others]]></entry>
 	<entry key="ulist.right.moderator.grant"><![CDATA[Allow this user to be moderator]]></entry>
 	<entry key="ulist.right.moderator.revoke"><![CDATA[Remove moderator permissions from this user]]></entry>
 	<entry key="ulist.right.moderator.request"><![CDATA[Request moderator permissions]]></entry>
@@ -961,8 +956,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.remote"><![CDATA[requests permission to control screen during screen sharing]]></entry>
 	<entry key="activities.request.right.audio"><![CDATA[requests permission to turn on micropone]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[requests permission to turn on camera]]></entry>
-	<entry key="activities.request.right.exclusive"><![CDATA[requests permission to use exclusive audio]]></entry>
+	<entry key="activities.request.right.muteothers"><![CDATA[requests permission to mute others]]></entry>
 	<entry key="activities.ask.question"><![CDATA[would like to ask a question]]></entry>
+	<entry key="ulist.user.speaks"><![CDATA[a felhasználó beszél]]></entry>
+	<entry key="ulist.user.muteothers"><![CDATA[ (Kattints ide a mikrofonja némításhoz, bekapcsoláshoz)]]></entry>
+	<entry key="ulist.user.muteothers.confirm"><![CDATA[Do you really want to mute all users except this one?]]></entry>
 	<entry key="camera.on"><![CDATA[Turn on camera]]></entry>
 	<entry key="camera.off"><![CDATA[Turn off camera]]></entry>
 	<entry key="microphone.on"><![CDATA[Turn on microphone]]></entry>
@@ -984,4 +982,5 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="download.image.steps"><![CDATA[Please right click the image and choose "Save image as"]]></entry>
 	<entry key="video.permission.title"><![CDATA[Permission is required]]></entry>
 	<entry key="video.permission.text"><![CDATA[Extra permission is required to play video.<br/>Press OK to allow playing.]]></entry>
+	<entry key="video.muteothers"><![CDATA[Mások mikrofonjának némítása]]></entry>
 </properties>

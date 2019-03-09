@@ -172,8 +172,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[удалить язык]]></entry>
 	<entry key="366"><![CDATA[добавить язык]]></entry>
 	<entry key="367"><![CDATA[Резервное копирование]]></entry>
-	<entry key="371"><![CDATA[Участник говорит]]></entry>
-	<entry key="372"><![CDATA[Участник говорит (Нажимая здесь Вы предоставляете этому участнику эксклюзивный микрофон / выключая микрофоны остальных участников)]]></entry>
 	<entry key="376"><![CDATA[Привет,]]></entry>
 	<entry key="377"><![CDATA[Ваш профиль]]></entry>
 	<entry key="378"><![CDATA[Новые сообщения:]]></entry>
@@ -471,7 +469,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1361"><![CDATA[Отклонить]]></entry>
 	<entry key="1362"><![CDATA[Я]]></entry>
 	<entry key="1363"><![CDATA[Активность и действия]]></entry>
-	<entry key="1386"><![CDATA[Дать слово]]></entry>
 	<entry key="1410"><![CDATA[Название опроса]]></entry>
 	<entry key="1411"><![CDATA[Вы]]></entry>
 	<entry key="1412"><![CDATA[Заархивированные голосования]]></entry>
@@ -483,7 +480,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1420"><![CDATA[Удалить опрос]]></entry>
 	<entry key="1421"><![CDATA[Хотите удалить этот опрос? Результаты тоже будут удалены.]]></entry>
 	<entry key="1422"><![CDATA[Код ISO языка]]></entry>
-	<entry key="1428">Разрешить эксклюзивный звук.</entry>
 	<entry key="1429"><![CDATA[Разрешение камеры]]></entry>
 	<entry key="1430"><![CDATA[Изменение разрешения влияет на пропускную способность сети, увеличенная картинка требует больше разрешения.]]></entry>
 	<entry key="1443"><![CDATA[Параметры расположения]]></entry>
@@ -543,7 +539,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[Системный импорт]]></entry>
 	<entry key="1537"><![CDATA[Включать загруженные файлы и записи в бэкап]]></entry>
 	<entry key="1538"><![CDATA[Разрешить SIP транспорт в комнате]]></entry>
-	<entry key="1539">Вы действительно хотите дать слово этому участнику?</entry>
 	<entry key="1546"><![CDATA[Добро пожаловать]]></entry>
 	<entry key="1547"><![CDATA[Виджет, содержащий основную информацию о пользователе и ссылки на сайты поддержки]]></entry>
 	<entry key="1548"><![CDATA[Виджеты]]></entry>
@@ -945,9 +940,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="ulist.right.audio.grant"><![CDATA[Разрешить этому пользователю использовать микрофон]]></entry>
 	<entry key="ulist.right.audio.revoke"><![CDATA[Выключить микрофон и запретить его использовать]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[Запросить право использовать микрофон]]></entry>
-	<entry key="ulist.right.exclusive.grant"><![CDATA[Разрешить этому пользователю выключать звук у остальных]]></entry>
-	<entry key="ulist.right.exclusive.revoke"><![CDATA[Запретить этому пользователю выключать звук у остальных]]></entry>
-	<entry key="ulist.right.exclusive.request"><![CDATA[Запросить право выключать звук у остальных]]></entry>
+	<entry key="ulist.right.muteothers.grant"><![CDATA[Разрешить этому пользователю выключать звук у остальных]]></entry>
+	<entry key="ulist.right.muteothers.revoke"><![CDATA[Запретить этому пользователю выключать звук у остальных]]></entry>
+	<entry key="ulist.right.muteothers.request"><![CDATA[Запросить право выключать звук у остальных]]></entry>
 	<entry key="ulist.right.moderator.grant"><![CDATA[Дать этому пользователю права модератора]]></entry>
 	<entry key="ulist.right.moderator.revoke"><![CDATA[Забрать у этого пользователя права модератора]]></entry>
 	<entry key="ulist.right.moderator.request"><![CDATA[Запросить права модератора]]></entry>
@@ -966,6 +961,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="ulist.right.wb.grant"><![CDATA[Разрешить этому пользователю рисовать на доске]]></entry>
 	<entry key="ulist.right.wb.revoke"><![CDATA[Запретить этому пользователю рисовать на доске]]></entry>
 	<entry key="ulist.right.wb.request"><![CDATA[Запросить право рисовать на доске]]></entry>
+	<entry key="ulist.user.speaks"><![CDATA[Участник говорит]]></entry>
+	<entry key="ulist.user.muteothers"><![CDATA[ (Нажимая здесь Вы выключаете микрофоны остальных участников)]]></entry>
+	<entry key="ulist.user.muteothers.confirm"><![CDATA[Вы действительно хотите выключить микрофоны у всех участников кроме этого?]]></entry>
 	<entry key="activities.request.right.moderator"><![CDATA[запрашивает право быть модератором]]></entry>
 	<entry key="activities.request.right.presenter"><![CDATA[запрашивает право быть докладчиком]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[запрашивает право рисовать на доске]]></entry>
@@ -973,7 +971,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.remote"><![CDATA[запрашивает право удалённо управлять общим экраном]]></entry>
 	<entry key="activities.request.right.audio"><![CDATA[запрашивает право включать микрофон]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[запрашивает право включать камеру]]></entry>
-	<entry key="activities.request.right.exclusive"><![CDATA[запрашивает право выключать звук у остальных]]></entry>
+	<entry key="activities.request.right.muteothers"><![CDATA[запрашивает право выключать звук у остальных]]></entry>
 	<entry key="activities.ask.question"><![CDATA[хочет задать вопрос]]></entry>
 	<entry key="camera.on"><![CDATA[Включить камеру]]></entry>
 	<entry key="camera.off"><![CDATA[Выключить камеру]]></entry>
@@ -996,4 +994,5 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="download.image.steps"><![CDATA[Кликните правой кнопкой на картинке и выберите "Сохранить как"]]></entry>
 	<entry key="video.permission.title"><![CDATA[Требуются права]]></entry>
 	<entry key="video.permission.text"><![CDATA[Для проигрывания видео требуются дополнительные права.<br/>Нажмите ОК чтобы разрешить проигрывание.]]></entry>
+	<entry key="video.muteothers"><![CDATA[Выключить микрофоны других участников]]></entry>
 </properties>

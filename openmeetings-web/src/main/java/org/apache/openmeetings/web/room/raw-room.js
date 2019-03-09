@@ -72,11 +72,11 @@ var Room = (function() {
 				case options.keycode.arrange: // Shift+F8 by default
 					VideoUtil.arrange();
 					break;
-				case options.keycode.exclusive: // Shift+F12 by default
+				case options.keycode.muteothers: // Shift+F12 by default
 				{
 					const v = _getSelfAudioClient();
 					if (v !== null) {
-						VideoManager.clickExclusive(Room.getOptions().uid);
+						VideoManager.clickMuteOthers(Room.getOptions().uid);
 					}
 				}
 					break;

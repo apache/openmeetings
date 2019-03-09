@@ -63,7 +63,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_EXCLUSIVE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE_OTHERS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
@@ -257,7 +257,7 @@ public class BackupImport {
 		configTypes.put(CONFIG_PASS_MIN_LENGTH, Configuration.Type.number);
 		configTypes.put(CONFIG_CALENDAR_ROOM_CAPACITY, Configuration.Type.number);
 		configTypes.put(CONFIG_KEYCODE_ARRANGE, Configuration.Type.number);
-		configTypes.put(CONFIG_KEYCODE_EXCLUSIVE, Configuration.Type.number);
+		configTypes.put(CONFIG_KEYCODE_MUTE_OTHERS, Configuration.Type.number);
 		configTypes.put(CONFIG_KEYCODE_MUTE, Configuration.Type.number);
 		configTypes.put(CONFIG_DEFAULT_LDAP_ID, Configuration.Type.number);
 		configTypes.put(CONFIG_CAM_FPS, Configuration.Type.number);
