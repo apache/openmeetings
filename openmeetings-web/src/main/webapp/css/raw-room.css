@@ -205,7 +205,7 @@
 .right.camera.ui-icon.granted {
 	background-image: url(images/webcam_delete.png);
 }
-.mute-others.ui-icon {
+.mute-others {
 	background-image: url(images/microphone_muteothers.png);
 }
 .restart.ui-icon {
@@ -578,6 +578,19 @@ ul.settings-menu {
 }
 #sharer input {
 	width: 75px;
+}
+.video .mute-others {
+	position: absolute;
+	top: calc(50% - 32px);
+	left: calc(50% - 32px);
+	width: 64px;
+	height: 64px;
+	background-size: 64px;
+	z-index: 2;
+	display: none;
+}
+.video:hover .mute-others.enabled {
+	display: block;
 }
 @media screen and (max-width: 1280px) {
 	.room.sidebar {

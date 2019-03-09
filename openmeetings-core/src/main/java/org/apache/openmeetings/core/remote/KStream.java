@@ -75,7 +75,7 @@ public class KStream extends AbstractStream {
 
 	public KStream startBroadcast(final StreamProcessor processor, final StreamDesc sd, final String sdpOffer) {
 		if (outgoingMedia != null) {
-			release(processor);
+			release(processor, false);
 		}
 		final boolean hasAudio = sd.hasActivity(Activity.AUDIO);
 		final boolean hasVideo = sd.hasActivity(Activity.VIDEO);
@@ -285,14 +285,16 @@ public class KStream extends AbstractStream {
 	}
 
 	@Override
-	public void release(IStreamProcessor processor) {
+	public void release(IStreamProcessor processor, boolean remove) {
 		if (outgoingMedia != null) {
 			releaseListeners();
 			outgoingMedia.release();
 			outgoingMedia = null;
 		}
 		releaseRecorder();
-		processor.release(this);
+		if (remove) {
+			processor.release(this);
+		}
 	}
 
 	private void releaseRecorder() {

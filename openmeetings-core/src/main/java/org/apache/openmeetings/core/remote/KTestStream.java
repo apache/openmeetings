@@ -216,7 +216,7 @@ public class KTestStream extends AbstractStream {
 	}
 
 	@Override
-	public void release(IStreamProcessor processor) {
+	public void release(IStreamProcessor processor, boolean remove) {
 		if (webRtcEndpoint != null) {
 			webRtcEndpoint.release();
 			webRtcEndpoint = null;

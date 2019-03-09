@@ -3,7 +3,7 @@ var Video = (function() {
 	const self = {};
 	let sd, v, vc, t, f, size, vol, slider, handle, video, rtcPeer
 		, lastVolume = 50, muted = false, aCtx, aSrc, aDest, gainNode
-		, lm, level, userSpeaks = false;
+		, lm, level, userSpeaks = false, muteOthers;
 
 	function _getExtra() {
 		return t.height() + 2 + (f.is(':visible') ? f.height() : 0);
@@ -92,7 +92,7 @@ var Video = (function() {
 						vol.show();
 						lm = vc.find('.level-meter')
 							.kendoProgressBar({ value: 0, showStatus: false, orientation: 'vertical' });
-						lm.height(vc.height() - 10);
+						lm.height(vc.height() - 10).show();
 						aCtx = new AudioContext();
 						gainNode = aCtx.createGain();
 						aSrc = aCtx.createMediaStreamSource(stream);
@@ -379,6 +379,7 @@ var Video = (function() {
 		v.on('remove', _cleanup);
 		vc = v.find('.video');
 		vc.width(_w).height(_h);
+		muteOthers = vc.find('.mute-others');
 
 		_refresh(msg);
 
@@ -429,7 +430,14 @@ var Video = (function() {
 			}
 		}
 	}
-	function _setRights(_r) {
+	function _setRights() {
+		if (Room.hasRight(['superModerator', 'moderator', 'muteOthers']) && VideoUtil.hasAudio(sd)) {
+			muteOthers.addClass('enabled').click(function() {
+				VideoManager.clickMuteOthers(sd.uid);
+			});
+		} else {
+			muteOthers.removeClass('enabled').off();
+		}
 	}
 	function _cleanup() {
 		OmUtil.log('Disposing participant ' + sd.uid);
@@ -463,6 +471,7 @@ var Video = (function() {
 		if (!!lm && lm.length > 0) {
 			_micActivity(0);
 			lm.hide();
+			muteOthers.removeClass('enabled').off();
 		}
 		if (!!level) {
 			level.dispose();

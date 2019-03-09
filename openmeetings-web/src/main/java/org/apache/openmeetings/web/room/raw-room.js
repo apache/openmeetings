@@ -225,11 +225,20 @@ var Room = (function() {
 			]
 		});
 	}
+	function _hasRight(_rights) {
+		const rights = Array.isArray(_rights) ? _rights : [];
+		for (let i = 0; i < rights.length; ++i) {
+			if (options.rights.includes(rights[i])) {
+				return true;
+			}
+		}
+		return false;
+	}
 	function _setQuickPollRights() {
 		const close = $('#quick-vote .close');
 		if (close.length === 1) {
 			close.off();
-			if (options.rights.includes('superModerator') || options.rights.includes('moderator') || options.rights.includes('presenter')) {
+			if (_hasRight(['superModerator', 'moderator', 'presenter'])) {
 				close.show().click(function() {
 					const _qconf = $('#quick-confirmation');
 					_qconf.dialog({
@@ -307,6 +316,7 @@ var Room = (function() {
 	self.unload = _unload;
 	self.showClipboard = _showClipboard;
 	self.quickPoll = _quickPoll;
+	self.hasRight = _hasRight;
 	return self;
 })();
 function startPrivateChat(el) {

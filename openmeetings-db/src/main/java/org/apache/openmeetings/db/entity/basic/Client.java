@@ -374,18 +374,18 @@ public class Client implements IDataProviderEntity, IWsClient {
 	public void merge(Client c) {
 		user = c.user;
 		room = c.room;
-		Set<Right> rr = new HashSet<>(c.rights);
 		synchronized (rights) {
+			Set<Right> rr = new HashSet<>(c.rights);
 			rights.clear();
 			rights.addAll(rr);
 		}
-		Set<Activity> aa = new HashSet<>(c.activities);
 		synchronized (activities) {
+			Set<Activity> aa = new HashSet<>(c.activities);
 			activities.clear();
 			activities.addAll(aa);
 		}
-		Map<String, StreamDesc> ss = new HashMap<>(c.streams);
 		synchronized (streams) {
+			Map<String, StreamDesc> ss = new HashMap<>(c.streams);
 			streams.clear();
 			for (Entry<String, StreamDesc> e : ss.entrySet()) {
 				streams.put(e.getKey(), new StreamDesc(e.getValue()));

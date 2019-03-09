@@ -41,7 +41,11 @@ public abstract class AbstractStream {
 		return uid;
 	}
 
-	public abstract void release(IStreamProcessor processor);
+	public void release(IStreamProcessor processor) {
+		release(processor, true);
+	}
+
+	public abstract void release(IStreamProcessor processor, boolean remove);
 
 	public WebRtcEndpoint createWebRtcEndpoint(MediaPipeline pipeline) {
 		return new WebRtcEndpoint.Builder(pipeline).build();
