@@ -75,7 +75,6 @@ public class GroupsPanel extends AdminBasePanel {
 						form.setModelObject(g);
 						form.updateView(target);
 						target.add(listContainer);
-						reinitJs(target);
 					}
 				});
 				item.add(AttributeModifier.append(ATTR_CLASS, getRowClass(g.getId(), form.getModelObject().getId())));

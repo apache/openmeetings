@@ -21,41 +21,41 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 	<div class="adminPanelColumnTable">
-		<span wicket:id="navigator">[dataview navigator]</span>
-		<table class="adminListTable">
+		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
+		<table class="list-table">
 			<thead>
-				<tr>
-					<th class="four_column_layout_column1 ui-widget-header"><span wicket:id="orderById"></span> <wicket:message key="188" /></th>
-					<th class="four_column_layout_column2 ui-widget-header"><span wicket:id="orderByLogin"></span> <wicket:message key="108" /></th>
-					<th class="four_column_layout_column3 ui-widget-header"><span wicket:id="orderByFirstName"></span> <wicket:message key="117" /></th>
-					<th class="four_column_layout_column4 ui-widget-header"><span wicket:id="orderByLastName"></span> <wicket:message key="136" /></th>
+				<tr class="ui-widget-header">
+					<th class="col-1"><span wicket:id="orderById"></span> <wicket:message key="188" /></th>
+					<th class="col-3"><span wicket:id="orderByLogin"></span> <wicket:message key="108" /></th>
+					<th class="col-4"><span wicket:id="orderByFirstName"></span> <wicket:message key="117" /></th>
+					<th class="col-4"><span wicket:id="orderByLastName"></span> <wicket:message key="136" /></th>
 				</tr>
 			</thead>
+			<tbody wicket:id="listContainer">
+				<tr wicket:id="userList">
+					<td class="col-1">
+						<div class="col-wrapper">
+							<span wicket:id="id"></span>
+						</div>
+					</td>
+					<td class="col-3">
+						<div class="col-wrapper">
+							<span wicket:id="login"></span>
+						</div>
+					</td>
+					<td class="col-4">
+						<div class="col-wrapper">
+							<span wicket:id="firstname"></span>
+						</div>
+					</td>
+					<td class="col-4">
+						<div class="col-wrapper">
+							<span wicket:id="lastname"></span>
+						</div>
+					</td>
+				</tr>
+			</tbody>
 		</table>
-		<div class="tableWrapper" id="adminTable">
-			<table class="adminListTable">
-				<tbody wicket:id="listContainer">
-					<tr wicket:id="userList">
-						<td class="four_column_layout_column1"><div
-								class="four_column_layout_divcolumn1">
-								<span wicket:id="id"></span>
-							</div></td>
-						<td class="four_column_layout_column2"><div
-								class="four_column_layout_divcolumn2">
-								<span wicket:id="login"></span>
-							</div></td>
-						<td class="four_column_layout_column3"><div
-								class="four_column_layout_divcolumn3">
-								<span wicket:id="firstname"></span>
-							</div></td>
-						<td class="four_column_layout_column4"><div
-								class="four_column_layout_divcolumn4">
-								<span wicket:id="lastname"></span>
-							</div></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
 	</div>
 	<div class="adminPanelColumnForm">
 		<form wicket:id="form" class="adminForm"/>

@@ -20,68 +20,71 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<div class="user info panel">
-		<table>
-			<tr>
-				<td><div wicket:id="img"></div></td>
-				<td>
+	<div style="height: 100%; overflow-y: auto;">
+		<div wicket:id="info-panel" class="user info panel">
+			<table>
+				<tr>
+					<td><div wicket:id="img"></div></td>
+					<td>
+						<table>
+							<tr>
+								<td><wicket:message key="165"/></td><td><span wicket:id="firstname"></span>&nbsp;<span wicket:id="lastname"></span></td>
+							</tr>
+							<tr>
+								<td><wicket:message key="1143"/></td><td><span wicket:id="timeZoneId"></span></td>
+							</tr>
+							<tr>
+								<td><wicket:message key="1296"/></td><td><span wicket:id="regdate"></span></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<div>
+				<fieldset class="ui-widget-content">
+					<legend class="ui-widget-header"><wicket:message key="1166"/></legend>
 					<table>
 						<tr>
-							<td><wicket:message key="165"/></td><td><span wicket:id="firstname"></span>&nbsp;<span wicket:id="lastname"></span></td>
+							<td><wicket:message key="1162"/></td>
+							<td><textarea wicket:id="userOffers"></textarea></td>
 						</tr>
 						<tr>
-							<td><wicket:message key="1143"/></td><td><span wicket:id="timeZoneId"></span></td>
-						</tr>
-						<tr>
-							<td><wicket:message key="1296"/></td><td><span wicket:id="regdate"></span></td>
+							<td><wicket:message key="1163"/></td>
+							<td><textarea wicket:id="userSearchs"></textarea></td>
 						</tr>
 					</table>
-				</td>
-			</tr>
-		</table>
-		<div>
-			<fieldset class="ui-widget-content">
-				<legend class="ui-widget-header"><wicket:message key="1166"/></legend>
-				<table>
-					<tr>
-						<td><wicket:message key="1162"/></td>
-						<td><textarea wicket:id="userOffers"></textarea></td>
-					</tr>
-					<tr>
-						<td><wicket:message key="1163"/></td>
-						<td><textarea wicket:id="userSearchs"></textarea></td>
-					</tr>
-				</table>
-			</fieldset>
+				</fieldset>
+			</div>
+			<div>
+				<fieldset class="ui-widget-content">
+					<legend class="ui-widget-header"><wicket:message key="1167"/></legend>
+					<table wicket:id="address">
+						<tr>
+							<td><wicket:message key="607" /></td>
+							<td><span wicket:id="address.phone"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="139" /></td>
+							<td><span wicket:id="address.street"></span>&nbsp;<span wicket:id="address.additionalname"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="140" /></td>
+							<td><span wicket:id="address.zip"></span>&nbsp;<span wicket:id="address.town"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="141" /></td>
+							<td><span wicket:id="country"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="142" /></td>
+							<td><span wicket:id="address.comment"></span></td>
+						</tr>
+					</table>
+					<div wicket:id="addressDenied"></div>
+				</fieldset>
+			</div>
 		</div>
-		<div>
-			<fieldset class="ui-widget-content">
-				<legend class="ui-widget-header"><wicket:message key="1167"/></legend>
-				<table wicket:id="address">
-					<tr>
-						<td><wicket:message key="607" /></td>
-						<td><span wicket:id="address.phone"></span></td>
-					</tr>
-					<tr>
-						<td><wicket:message key="139" /></td>
-						<td><span wicket:id="address.street"></span>&nbsp;<span wicket:id="address.additionalname"></span></td>
-					</tr>
-					<tr>
-						<td><wicket:message key="140" /></td>
-						<td><span wicket:id="address.zip"></span>&nbsp;<span wicket:id="address.town"></span></td>
-					</tr>
-					<tr>
-						<td><wicket:message key="141" /></td>
-						<td><span wicket:id="country"></span></td>
-					</tr>
-					<tr>
-						<td><wicket:message key="142" /></td>
-						<td><span wicket:id="address.comment"></span></td>
-					</tr>
-				</table>
-				<div wicket:id="addressDenied"></div>
-			</fieldset>
-		</div>
+		<div class="bottom-bumper"></div>
 	</div>
 </wicket:panel>
 </html>

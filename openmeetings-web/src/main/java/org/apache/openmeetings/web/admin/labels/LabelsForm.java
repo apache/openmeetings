@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
+import static org.apache.openmeetings.web.admin.labels.LangPanel.reinitJs;
+
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.label.StringLabel;
 import org.apache.openmeetings.web.admin.AdminBaseForm;

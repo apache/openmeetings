@@ -33,7 +33,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.tabs.AjaxTab;
 import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
 
 public class SettingsPanel extends UserBasePanel {
@@ -45,6 +44,8 @@ public class SettingsPanel extends UserBasePanel {
 	public static final int INVITATIONS_TAB_ID = 4;
 	public static final int DASHBOARD_TAB_ID = 5;
 	public final int active;
+	private UserProfilePanel profilePanel;
+	private MessagesContactsPanel messagesPanel;
 	@SpringBean
 	private UserDao userDao;
 
@@ -56,34 +57,26 @@ public class SettingsPanel extends UserBasePanel {
 	@Override
 	protected void onInitialize() {
 		List<ITab> tabs = new ArrayList<>();
-		tabs.add(new AjaxTab(new ResourceModel("1170")) {
+		tabs.add(new AbstractTab(new ResourceModel("1170")) {
 			private static final long serialVersionUID = 1L;
-			UserProfilePanel profilePanel = null;
 
 			@Override
-			protected WebMarkupContainer getLazyPanel(String panelId) {
+			public WebMarkupContainer getPanel(String panelId) {
 				if (profilePanel == null) {
 					profilePanel = new UserProfilePanel(panelId, getUserId());
-					profilePanel.setOutputMarkupId(true);
 				}
 				return profilePanel;
 			}
-
-			@Override
-			public boolean load(AjaxRequestTarget target) {
-				if (profilePanel != null) {
-					profilePanel.setDefaultModelObject(userDao.get(getUserId()));
-					target.add(profilePanel);
-				}
-				return super.load(target);
-			}
 		});
-		tabs.add(new AjaxTab(new ResourceModel("1188")) {
+		tabs.add(new AbstractTab(new ResourceModel("1188")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected WebMarkupContainer getLazyPanel(String panelId) {
-				return new MessagesContactsPanel(panelId);
+			public WebMarkupContainer getPanel(String panelId) {
+				if (messagesPanel == null) {
+					messagesPanel = new MessagesContactsPanel(panelId);
+				}
+				return messagesPanel;
 			}
 		});
 		tabs.add(new AbstractTab(new ResourceModel("1171")) {
@@ -91,7 +84,7 @@ public class SettingsPanel extends UserBasePanel {
 
 			@Override
 			public WebMarkupContainer getPanel(String panelId) {
-				return new ProfilePanel(panelId);
+				return new EditProfilePanel(panelId);
 			}
 		});
 		tabs.add(new AbstractTab(new ResourceModel("1172")) {
@@ -118,7 +111,32 @@ public class SettingsPanel extends UserBasePanel {
 				return new WidgetsPanel(panelId);
 			}
 		});
-		add(new TabbedPanel("tabs", tabs, new Options("active", active)).setActiveTab(active));
+		add(new TabbedPanel("tabs", tabs, new Options("active", active)) {
+			private static final long serialVersionUID = 1L;
+
+			/* This doesn't work so far
+			@Override
+			public boolean isActivatingEventEnabled() {
+				return true;
+			}
+
+			@Override
+			public void onActivating(AjaxRequestTarget target, int index, ITab tab) {
+				if (index == 0) {
+					profilePanel.setDefaultModelObject(userDao.get(getUserId()));
+					target.add(profilePanel);
+				}
+			}
+			*/
+			@Override
+			public void onActivate(AjaxRequestTarget target, int index, ITab tab) {
+				if (index == 0) {
+					profilePanel.update(target);
+				} else if (index == 1) {
+					messagesPanel.updateTable(target);
+				}
+			}
+		}.setActiveTab(active));
 
 		super.onInitialize();
 	}

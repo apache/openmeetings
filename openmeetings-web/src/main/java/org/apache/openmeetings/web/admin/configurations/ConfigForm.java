@@ -83,7 +83,6 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 
 	private void refresh(AjaxRequestTarget target) {
 		target.add(this);
-		reinitJs(target);
 	}
 
 	private void update(AjaxRequestTarget target) {

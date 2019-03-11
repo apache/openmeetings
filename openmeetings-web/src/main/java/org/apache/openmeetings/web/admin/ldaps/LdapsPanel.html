@@ -21,27 +21,23 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 	<div class="adminPanelColumnTable">
-		<span wicket:id="navigator">[dataview navigator]</span>
-		<table class="adminListTable">
+		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
+		<table class="list-table">
 			<thead>
-				<tr>
-					<th class="three_column_layout_column1 ui-widget-header"><span wicket:id="orderById"></span><wicket:message key="188" /></th>
-					<th class="three_column_layout_column2 ui-widget-header"><span wicket:id="orderByName"></span><wicket:message key="165" /></th>
-					<th class="three_column_layout_column3 ui-widget-header"><span wicket:id="orderByFile"></span><wicket:message key="1106" /></th>
+				<tr class="ui-widget-header">
+					<th class="col-1"><span wicket:id="orderById"></span><wicket:message key="188" /></th>
+					<th class="col-5"><span wicket:id="orderByName"></span><wicket:message key="165" /></th>
+					<th class="col-6"><span wicket:id="orderByFile"></span><wicket:message key="1106" /></th>
 				</tr>
 			</thead>
+			<tbody wicket:id="listContainer">
+				<tr wicket:id="ldapList">
+					<td class="col-1"><div class="col-wrapper"><span wicket:id="id"></span></div></td>
+					<td class="col-5"><div class="col-wrapper"><span wicket:id="name"></span></div></td>
+					<td class="col-6"><div class="col-wrapper"><span wicket:id="configFileName"></span></div></td>
+				</tr>
+			</tbody>
 		</table>
-		<div class="tableWrapper" id="adminTable">
-			<table class="adminListTable">
-				<tbody wicket:id="listContainer">
-					<tr wicket:id="ldapList">
-						<td class="three_column_layout_column1"><div class="three_column_layout_divcolumn1"><span wicket:id="id"></span></div></td>
-						<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="name"></span></div></td>
-						<td class="three_column_layout_column3"><div class="three_column_layout_divcolumn3"><span wicket:id="configFileName"></span></div></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
 	</div>
 	<div class="adminPanelColumnForm">
 		<form wicket:id="form" class="adminForm">
@@ -84,6 +80,7 @@
 						<label wicket:for="comment"><wicket:message key="196" /></label><textarea wicket:id="comment"/>
 					</div>
 				</fieldset>
+				<div class="bottom-bumper"></div>
 			</div>
 		</form>
 	</div>

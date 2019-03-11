@@ -26,6 +26,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.common.ProfileImagePanel;
 import org.apache.openmeetings.web.common.UserBasePanel;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -36,6 +37,7 @@ public class UserProfilePanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer address = new WebMarkupContainer("address");
 	private final Label addressDenied = new Label("addressDenied", "");
+	private final WebMarkupContainer panel = new WebMarkupContainer("info-panel");
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean
@@ -54,13 +56,13 @@ public class UserProfilePanel extends UserBasePanel {
 	protected void onInitialize() {
 		User u = (User)getDefaultModelObject();
 
-		add(new ProfileImagePanel("img", u.getId()));
-		add(new Label("firstname"));
-		add(new Label("lastname"));
-		add(new Label("timeZoneId"));
-		add(new Label("regdate"));
-		add(new TextArea<String>("userOffers").setEnabled(false));
-		add(new TextArea<String>("userSearchs").setEnabled(false));
+		panel.add(new ProfileImagePanel("img", u.getId()));
+		panel.add(new Label("firstname"));
+		panel.add(new Label("lastname"));
+		panel.add(new Label("timeZoneId"));
+		panel.add(new Label("regdate"));
+		panel.add(new TextArea<String>("userOffers").setEnabled(false));
+		panel.add(new TextArea<String>("userSearchs").setEnabled(false));
 		if (getUserId().equals(u.getId()) || u.isShowContactData()
 				|| (u.isShowContactDataToContacts() && contactDao.isContact(u.getId(), getUserId())))
 		{
@@ -76,9 +78,15 @@ public class UserProfilePanel extends UserBasePanel {
 			address.setVisible(false);
 			addressDenied.setDefaultModelObject(getString(u.isShowContactDataToContacts() ? "1269" : "1268"));
 		}
-		add(address.setDefaultModel(getDefaultModel()));
-		add(addressDenied);
+		panel.add(address.setDefaultModel(getDefaultModel()));
+		panel.add(addressDenied);
 
+		add(panel.setOutputMarkupId(true));
 		super.onInitialize();
+	}
+
+	void update(AjaxRequestTarget target) {
+		setDefaultModelObject(userDao.get(getUserId()));
+		target.add(panel);
 	}
 }

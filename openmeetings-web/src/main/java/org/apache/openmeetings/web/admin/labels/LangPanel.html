@@ -21,7 +21,7 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:head>
 	<script type="text/javascript">
-		function extAdminPanelInit() {
+		function langPanelInit() {
 			$('#addLanguage').dialog({
 				closeOnEscape: true
 				, autoOpen: false
@@ -32,8 +32,8 @@
 </wicket:head>
 <wicket:extend>
 	<div wicket:id="feedback"></div>
-	<div class="adminPanelColumnTable">
-		<div>
+	<div class="adminPanelColumnTable label">
+		<div class="lblNav">
 			<div class="ui-button ui-widget ui-corner-all ui-button-icon-only" style="margin-top: -1.5em;" wicket:id="addLangBtn" wicket:message="title:362">
 				<span class="ui-button-icon ui-icon ui-icon-plusthick"></span>&nbsp;
 			</div>
@@ -59,29 +59,25 @@
 				</table>
 			</form>
 		</div>
-		<span wicket:id="navigator">[dataview navigator]</span>
-		<table class="adminListTable">
+		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
+		<table class="list-table">
 			<thead>
-				<tr>
-					<th class="two_column_layout_column1 ui-widget-header"><span wicket:id="orderByName"></span><wicket:message key="165" /></th>
-					<th class="two_column_layout_column2 ui-widget-header"><span wicket:id="orderByValue"></span><wicket:message key="271" /></th>
+				<tr class="ui-widget-header">
+					<th class="col-6"><span wicket:id="orderByName"></span><wicket:message key="165" /></th>
+					<th class="col-6"><span wicket:id="orderByValue"></span><wicket:message key="271" /></th>
 				</tr>
 			</thead>
-		</table>
-		<div class="tableWrapper" id="adminTable">
-			<table class="adminListTable">
-				<tbody wicket:id="listContainer" >
+			<tbody wicket:id="listContainer" >
 				<tr wicket:id="langList">
-						<td class="two_column_layout_column1"><div class="three_column_layout_divcolumn2"><span wicket:id="key"></span></div></td>
-						<td class="two_column_layout_column2"><div class="three_column_layout_divcolumn3"><span wicket:id="value"></span></div></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+					<td class="col-6"><div class="col-wrapper"><span wicket:id="key"></span></div></td>
+					<td class="col-6"><div class="col-wrapper"><span wicket:id="value"></span></div></td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 	<div class="adminPanelColumnForm">
 		<form wicket:id="form" class="adminForm">
-			<div wicket:id="buttons"></div>
+			<div class="actions" wicket:id="buttons"></div>
 			<div class="scrollcontent" id="adminForm">
 				<fieldset class="ui-widget-content">
 					<legend class="ui-widget-header"><wicket:message key="353" /></legend>
@@ -92,6 +88,7 @@
 						<label wicket:for="value"><wicket:message key="271" /></label><textarea wicket:id="value"></textarea>
 					</div>
 				</fieldset>
+				<div class="bottom-bumper"></div>
 			</div>
 		</form>
 	</div>

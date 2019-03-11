@@ -264,7 +264,6 @@ public class UserForm extends AdminBaseForm<User> {
 		setModelObject(userDao.get(getModelObject().getId()));
 		setNewVisible(false);
 		target.add(this, listContainer);
-		reinitJs(target);
 	}
 
 	@Override
@@ -341,7 +340,6 @@ public class UserForm extends AdminBaseForm<User> {
 		updateDomain(target);
 		if (target != null) {
 			target.add(this, listContainer);
-			reinitJs(target);
 		}
 	}
 

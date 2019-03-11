@@ -82,8 +82,6 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class MessagesContactsPanel extends UserBasePanel {
@@ -120,7 +118,6 @@ public class MessagesContactsPanel extends UserBasePanel {
 	private final Button replyBtn = new Button("replyBtn");
 	private final Button readBtn = new Button("readBtn");
 	private final Button unreadBtn = new Button("unreadBtn");
-	private final FixedHeaderTableBehavior fixedTable = new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100));
 	private final DropDownChoice<String> selectDropDown = new DropDownChoice<>(
 		"msgSelect", Model.of(SELECT_CHOOSE)
 		, Arrays.asList(SELECT_CHOOSE, SELECT_ALL, SELECT_NONE, SELECT_UNREAD, SELECT_READ)
@@ -587,7 +584,6 @@ public class MessagesContactsPanel extends UserBasePanel {
 	}
 
 	void updateTable(AjaxRequestTarget target) {
-		container.add(fixedTable);
 		if (target != null) {
 			target.add(container);
 		}

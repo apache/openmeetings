@@ -66,7 +66,6 @@ public class RoomsPanel extends AdminBasePanel {
 						form.setModelObject(roomDao.get(roomId));
 						form.updateView(target);
 						target.add(form, listContainer);
-						reinitJs(target);
 					}
 				});
 				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(room.getId(), form.getModelObject().getId())));

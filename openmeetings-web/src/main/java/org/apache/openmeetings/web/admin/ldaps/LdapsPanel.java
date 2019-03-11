@@ -70,7 +70,6 @@ public class LdapsPanel extends AdminBasePanel {
 						form.setModelObject(lc);
 						form.setNewVisible(false);
 						target.add(form, listContainer);
-						reinitJs(target);
 					}
 				});
 				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(lc.getId(), form.getModelObject().getId())));

@@ -95,6 +95,7 @@
 						<configuration>
 							<charset>UTF-8</charset>
 							<cssSourceFiles>
+								<cssSourceFile>raw-variables.css</cssSourceFile>
 								<cssSourceFile>raw-nettest.css</cssSourceFile>
 								<cssSourceFile>raw-general.css</cssSourceFile>
 								<cssSourceFile>raw-activities.css</cssSourceFile>

@@ -145,7 +145,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 	}
 
 	static String formatUser(User choice) {
-		return String.format("%s [%s %s]", choice.getLogin(), choice.getFirstname(), choice.getLastname());
+		return String.format("%s [%s]", choice.getLogin(), choice.getDisplayName());
 	}
 
 	@Override
@@ -195,7 +195,6 @@ public class GroupForm extends AdminBaseForm<Group> {
 		reminderDays.setEnabled(getModelObject().isLimited());
 		logo.update();
 		target.add(this, groupList);
-		reinitJs(target);
 	}
 
 	private long getGroupId() {

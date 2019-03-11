@@ -72,9 +72,6 @@
 form .input {
 	float: right !important;
 }
-#searchUsersTable th, .fht-table th {
-	text-align: right !important;
-}
 .ui-dialog .ui-dialog-title {
 	float: right !important;
 }
@@ -164,6 +161,9 @@ form .input {
 	right: auto !important; /* IE */
 	right: initial !important;
 	left: 3px !important;
+}
+.list-table th {
+	text-align: right !important;
 }
 
 /**** TODO need to be moved to wicket-jquery-ui **************/

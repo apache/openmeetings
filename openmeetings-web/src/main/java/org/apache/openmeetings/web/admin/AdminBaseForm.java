@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.admin;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.time.Duration;
@@ -172,9 +171,5 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 	 */
 	protected void onRestoreSubmit(AjaxRequestTarget target, Form<?> form) {
 		//no-op
-	}
-
-	public static void reinitJs(IPartialPageRequestHandler handler) {
-		AdminBasePanel.reinitJs(handler);
 	}
 }

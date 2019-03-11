@@ -35,6 +35,7 @@ import org.apache.openmeetings.db.entity.label.StringLabel;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
@@ -46,6 +47,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -254,6 +256,16 @@ public class LangPanel extends AdminBasePanel {
 			}
 		});
 		super.onInitialize();
+	}
+
+	@Override
+	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		reinitJs(handler);
+		return this;
+	}
+
+	static void reinitJs(IPartialPageRequestHandler handler) {
+		handler.appendJavaScript("langPanelInit()");
 	}
 
 	public LangForm getLangForm() {

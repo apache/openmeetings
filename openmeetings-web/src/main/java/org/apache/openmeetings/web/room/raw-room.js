@@ -175,6 +175,7 @@ var Room = (function() {
 			});
 			_sbAddResizable();
 		}
+		$('body').addClass('no-header');
 		$(window).on('resize.openmeetings', _setSize);
 		Wicket.Event.subscribe("/websocket/closed", _close);
 		Wicket.Event.subscribe("/websocket/error", _close);
@@ -183,6 +184,7 @@ var Room = (function() {
 		$(document).click(_mouseHandler);
 	}
 	function _unload() {
+		$('body').removeClass('no-header');
 		$(window).off('resize.openmeetings');
 		Wicket.Event.unsubscribe("/websocket/closed", _close);
 		Wicket.Event.unsubscribe("/websocket/error", _close);

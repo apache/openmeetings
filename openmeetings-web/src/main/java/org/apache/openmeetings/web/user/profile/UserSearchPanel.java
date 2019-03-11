@@ -49,9 +49,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
-import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
 
 public class UserSearchPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
@@ -63,7 +61,6 @@ public class UserSearchPanel extends UserBasePanel {
 	private boolean asc = true;
 	private boolean searched = false;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
-	private final FixedHeaderTableBehavior fixedHeader = new FixedHeaderTableBehavior("#searchUsersTable", new Options("height", 400));
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean
@@ -143,7 +140,7 @@ public class UserSearchPanel extends UserBasePanel {
 	}
 
 	private void refresh(IPartialPageRequestHandler handler) {
-		handler.add(container.add(fixedHeader));
+		handler.add(container);
 	}
 
 	private static String getName(User u) {

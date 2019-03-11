@@ -16,21 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.common;
-
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
-import org.apache.wicket.markup.html.navigation.paging.IPageable;
-
-public class OmPagingNavigator extends AjaxPagingNavigator {
-	private static final long serialVersionUID = 1L;
-
-	public OmPagingNavigator(String id, IPageable pageable) {
-		super(id, pageable);
-	}
-
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		getPagingNavigation().setViewSize(5);
-	}
+body {
+	--header-height: 50px;
+	--menu-height: 36px;
+}
+body.no-header {
+	--header-height: 0px;
+}
+body.no-menu {
+	--menu-height: 0px;
+}
+.adminPanel {
+	--lbl-nav-height: 0px;
+	--nav-height: 30px;
+	--list-width: 518px;
+	--buffer-height: 4px;
+}
+.adminPanelColumnTable.label {
+	--lbl-nav-height: 40px;
+}
+.adminPanelColumnForm {
+	--actions-height: 0px;
+}
+.adminPanelColumnForm .adminForm {
+	--actions-height: 40px;
 }

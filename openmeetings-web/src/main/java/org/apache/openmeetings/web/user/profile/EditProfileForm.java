@@ -29,12 +29,14 @@ import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.FormActionsPanel;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
+import org.apache.openmeetings.web.pages.PrivacyPage;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -48,9 +50,9 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.ui.form.button.ButtonBehavior;
 
-public class ProfileForm extends Form<User> {
+public class EditProfileForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(ProfileForm.class);
+	private static final Logger log = LoggerFactory.getLogger(EditProfileForm.class);
 	private final PasswordTextField passwd = new PasswordTextField("passwd", new Model<String>());
 	private final GeneralUserForm userForm;
 	private final ChangePasswordDialog chPwdDlg;
@@ -60,7 +62,7 @@ public class ProfileForm extends Form<User> {
 	@SpringBean
 	private UserDao userDao;
 
-	public ProfileForm(String id, final ChangePasswordDialog chPwdDlg) {
+	public EditProfileForm(String id, final ChangePasswordDialog chPwdDlg) {
 		super(id);
 		setModel(new CompoundPropertyModel<>(userDao.get(getUserId())));
 		userForm = new GeneralUserForm("general", getModel(), false);
@@ -94,13 +96,13 @@ public class ProfileForm extends Form<User> {
 					error(e.getMessage());
 				}
 				refreshUser();
-				target.add(ProfileForm.this);
+				target.add(EditProfileForm.this);
 			}
 
 			@Override
 			protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 				refreshUser();
-				target.add(ProfileForm.this);
+				target.add(EditProfileForm.this);
 			}
 
 			@Override
@@ -125,6 +127,7 @@ public class ProfileForm extends Form<User> {
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
+		add(new BookmarkablePageLink<>("link", PrivacyPage.class));
 	}
 
 	@Override

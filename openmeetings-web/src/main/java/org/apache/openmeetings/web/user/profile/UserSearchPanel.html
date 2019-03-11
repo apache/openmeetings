@@ -21,49 +21,45 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<!--  TODO move styles into CSS -->
-	<table style="width: 100%; height: 100%;">
-		<tr>
-			<td valign="top" style="width: 200px;">
-				<form wicket:id="form">
-					<div><wicket:message key="1179"/></div>
-					<input type="text" wicket:id="text"/><br/>
-					<div><wicket:message key="1177"/></div>
-					<input type="text" wicket:id="offer"/><br/>
-					<div><wicket:message key="1178"/></div>
-					<input type="text" wicket:id="search"/><br/>
-					<br/>
-					<button wicket:id="submit" type="button"><wicket:message key="714"/></button>
-				</form>
-			</td>
-			<td valign="top">
-				<div wicket:id="container" style="height: 100%; min-height: 400px;">
-					<div><strong><wicket:message key="1184"/></strong>&nbsp;&nbsp;&nbsp;<span wicket:id="navigator"></span></div>
-					<table id="searchUsersTable" style="width: 100%;">
-						<thead>
-							<tr>
-								<th><wicket:message key="165"/></th>
-								<th><wicket:message key="1143"/></th>
-								<th><wicket:message key="1182"/></th>
-								<th><wicket:message key="1183"/></th>
-								<th><wicket:message key="635"/></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr wicket:id="users">
-								<td><span class="om-icon" wicket:id="status"></span><span wicket:id="name"></span></td>
-								<td wicket:id="tz"></td>
-								<td wicket:id="offer"></td>
-								<td wicket:id="search"></td>
-								<td style="white-space: nowrap;"><div wicket:id="add" class="add om-icon clickable" wicket:message="title:1186"
-									></div><div wicket:id="message" class="new-email om-icon clickable" wicket:message="title:1253"
-									></div><div wicket:id="view" class="user om-icon clickable" wicket:message="title:1236"
-									></div><div wicket:id="invite" class="invite om-icon clickable" wicket:message="title:1131"></div></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</td>
-		</tr>
-	</table>
+	<div style="height: 100%; display: flex;">
+		<div style="width: 200px;">
+			<form wicket:id="form">
+				<div><wicket:message key="1179"/></div>
+				<input type="text" wicket:id="text"/><br/>
+				<div><wicket:message key="1177"/></div>
+				<input type="text" wicket:id="offer"/><br/>
+				<div><wicket:message key="1178"/></div>
+				<input type="text" wicket:id="search"/><br/>
+				<br/>
+				<button wicket:id="submit" type="button"><wicket:message key="714"/></button>
+			</form>
+		</div>
+		<div wicket:id="container" style="height: 100%; padding-left: 10px;">
+			<div><strong><wicket:message key="1184"/></strong>&nbsp;&nbsp;&nbsp;<div class="adminNav"  wicket:id="navigator"></div></div>
+			<table id="searchUsersTable" class="list-table">
+				<thead>
+					<tr class="ui-widget-header">
+						<th class="col-3"><wicket:message key="165"/></th>
+						<th class="col-2"><wicket:message key="1143"/></th>
+						<th class="col-2"><wicket:message key="1182"/></th>
+						<th class="col-3"><wicket:message key="1183"/></th>
+						<th class="col-2"><wicket:message key="635"/></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr wicket:id="users">
+						<td class="col-3"><span class="om-icon" wicket:id="status"></span><span wicket:id="name"></span></td>
+						<td class="col-2" wicket:id="tz"></td>
+						<td class="col-2" wicket:id="offer"></td>
+						<td class="col-3" wicket:id="search"></td>
+						<td class="col-2" style="white-space: nowrap;"><div wicket:id="add" class="add om-icon clickable" wicket:message="title:1186"
+							></div><div wicket:id="message" class="new-email om-icon clickable" wicket:message="title:1253"
+							></div><div wicket:id="view" class="user om-icon clickable" wicket:message="title:1236"
+							></div><div wicket:id="invite" class="invite om-icon clickable" wicket:message="title:1131"></div></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </wicket:panel>
 </html>

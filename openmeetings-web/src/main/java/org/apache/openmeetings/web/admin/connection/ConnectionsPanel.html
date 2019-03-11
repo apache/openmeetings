@@ -21,38 +21,37 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 	<div class="adminPanelColumnTable">
-		<span wicket:id="navigator">[dataview navigator]</span>
-		<table class="adminListTable">
+		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
+		<table class="list-table">
 			<thead>
-				<tr>
-					<th class="ui-widget-header one_sixth"><wicket:message key="45" /></th>
-					<th class="ui-widget-header one_sixth"><wicket:message key="108" /></th>
-					<th class="ui-widget-header one_sixth"><wicket:message key="601" /></th>
-					<th class="ui-widget-header one_sixth"><wicket:message key="602" /></th>
-					<th class="ui-widget-header one_sixth" style="padding: 0 16px;"><wicket:message key="603" /></th>
-					<th class="ui-widget-header one_sixth"><wicket:message key="1500" /></th>
+				<tr class="ui-widget-header">
+					<th class="col-2"><wicket:message key="45" /></th>
+					<th class="col-2"><wicket:message key="108" /></th>
+					<th class="col-2"><wicket:message key="601" /></th>
+					<th class="col-2"><wicket:message key="602" /></th>
+					<th class="col-2" style="padding: 0 16px;"><wicket:message key="603" /></th>
+					<th class="col-2"><wicket:message key="1500" /></th>
 				</tr>
 			</thead>
+			<tbody wicket:id="container">
+				<tr wicket:id="clientList">
+					<td class="col-2" wicket:id="type"></td>
+					<td class="col-2" wicket:id="login"></td>
+					<td class="col-2" wicket:id="since"></td>
+					<td class="col-2" wicket:id="scope"></td>
+					<td class="col-2"><a wicket:id="kick"><wicket:message key="603" /></a></td>
+					<td class="col-2" wicket:id="server"></td>
+				</tr>
+			</tbody>
 		</table>
-		<div class="tableWrapper" id="adminTable">
-			<table class="adminListTable">
-				<tbody wicket:id="container">
-					<tr wicket:id="clientList">
-						<td class="one_sixth" wicket:id="type"></td>
-						<td class="one_sixth" wicket:id="login"></td>
-						<td class="one_sixth" wicket:id="since"></td>
-						<td class="one_sixth" wicket:id="scope"></td>
-						<td class="one_sixth"><a wicket:id="kick"><wicket:message key="603" /></a></td>
-						<td class="one_sixth" wicket:id="server"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
 	</div>
 	<div class="adminPanelColumnForm" id="adminForm">
-		<table wicket:id="details" style="width: 450px; overflow-y: auto; padding-bottom: 30px;">
-			<tr wicket:id="line"><td wicket:id="name"></td><td wicket:id="value"></td></tr>
-		</table>
+		<div class="scrollcontent">
+			<table wicket:id="details" style="width: 100%;">
+				<tr wicket:id="line"><td wicket:id="name"></td><td wicket:id="value"></td></tr>
+			</table>
+			<div class="bottom-bumper"></div>
+		</div>
 	</div>
 </wicket:extend>
 </html>

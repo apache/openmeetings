@@ -21,29 +21,25 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 	<div class="adminPanelColumnTable">
-		<span wicket:id="navigator">[dataview navigator]</span>
-		<table class="adminListTable">
+		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
+		<table class="list-table">
 			<thead>
-				<tr>
-					<th class="two_column_layout_column1 ui-widget-header"><span wicket:id="orderById"></span><wicket:message key="188" /></th>
-					<th class="two_column_layout_column2 ui-widget-header"><span wicket:id="orderByName"></span><wicket:message key="165" /></th>
+				<tr class="ui-widget-header">
+					<th class="col-1"><span wicket:id="orderById"></span><wicket:message key="188" /></th>
+					<th class="col-11"><span wicket:id="orderByName"></span><wicket:message key="165" /></th>
 				</tr>
 			</thead>
+			<tbody wicket:id="listContainer">
+				<tr wicket:id="oauthServersList">
+					<td class="col-1"><div class="col-wrapper"><span wicket:id="id"></span></div></td>
+					<td class="col-11"><div class="col-wrapper"><span wicket:id="name"></span></div></td>
+				</tr>
+			</tbody>
 		</table>
-		<div class="tableWrapper" id="adminTable">
-			<table class="adminListTable">
-				<tbody wicket:id="listContainer">
-					<tr wicket:id="oauthServersList">
-						<td class="two_column_layout_column1"><div class="two_column_layout_divcolumn1"><span wicket:id="id"></span></div></td>
-						<td class="two_column_layout_column2"><div class="two_column_layout_divcolumn2"><span wicket:id="name"></span></div></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
 	</div>
 	<div class="adminPanelColumnForm">
 		<form wicket:id="form" class="adminForm">
-			<div wicket:id="buttons"></div>
+			<div class="actions" wicket:id="buttons"></div>
 			<div class="scrollcontent" id="adminForm">
 				<fieldset class="ui-widget-content">
 					<legend class="ui-widget-header"><wicket:message key="1581" /></legend>
@@ -97,32 +93,29 @@
 							</div>
 							<button type="button" wicket:id="addMapping"><wicket:message key="1261"/></button>
 						</form>
-						<table class="adminListTable">
+						<table class="list-table small">
 							<thead>
-								<tr>
-									<th class="ui-widget-header" style="width: 380px"><wicket:message key="admin.oauth.attr.om" /></th>
-									<th class="ui-widget-header" style="width: 80px"><wicket:message key="admin.oauth.attr.oauth" /></th>
-									<th class="ui-widget-header" style="width: 50px"><wicket:message key=275 /></th>
+								<tr class="ui-widget-header">
+									<th class="col-7"><wicket:message key="admin.oauth.attr.om" /></th>
+									<th class="col-4"><wicket:message key="admin.oauth.attr.oauth" /></th>
+									<th class="col-1"><wicket:message key=275 /></th>
 								</tr>
 							</thead>
+							<tbody wicket:id="attrsContainer">
+								<tr wicket:id="mapping">
+									<td class="col-7"><div class="col-wrapper"><span wicket:id="key"></span></div></td>
+									<td class="col-4"><div class="col-wrapper"><span wicket:id="value"></span></div></td>
+									<td class="col-1">
+										<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="delete" wicket:message="title:80">
+											<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+										</div>
+									</td>
+								</tr>
+							</tbody>
 						</table>
-						<div class="tableWrapperSmall" id="adminTableSmall">
-							<table class="adminListTable">
-								<tbody wicket:id="attrsContainer">
-									<tr wicket:id="mapping">
-										<td style="width: 380px"><div class="three_column_layout_divcolumn1" style="width: auto"><span wicket:id="key"></span></div></td>
-										<td style="width: 80px"><span wicket:id="value"></span></td>
-										<td style="width: 50px">
-											<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="delete" wicket:message="title:80">
-												<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
-											</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
 					</fieldset>
 				</fieldset>
+				<div class="bottom-bumper"></div>
 			</div>
 		</form>
 	</div>

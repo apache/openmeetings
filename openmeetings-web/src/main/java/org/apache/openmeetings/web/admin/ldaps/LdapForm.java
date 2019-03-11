@@ -74,14 +74,12 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		setModelObject(ldapDao.update(getModelObject(), WebSession.getUserId()));
 		setNewVisible(false);
 		target.add(this, listContainer);
-		reinitJs(target);
 	}
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
 		this.setModelObject(new LdapConfig());
 		target.add(this);
-		reinitJs(target);
 	}
 
 	@Override
@@ -94,7 +92,6 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		}
 		this.setModelObject(ldapConfig);
 		target.add(this);
-		reinitJs(target);
 	}
 
 	@Override
@@ -103,6 +100,5 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		this.setModelObject(new LdapConfig());
 		target.add(listContainer);
 		target.add(this);
-		reinitJs(target);
 	}
 }

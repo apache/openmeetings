@@ -155,14 +155,12 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		setNewVisible(false);
 		target.add(this);
 		target.add(listContainer);
-		reinitJs(target);
 	}
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
 		this.setModelObject(new OAuthServer());
 		target.add(this);
-		reinitJs(target);
 	}
 
 	@Override
@@ -175,7 +173,6 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		}
 		this.setModelObject(server);
 		target.add(this);
-		reinitJs(target);
 	}
 
 	@Override
@@ -184,6 +181,5 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		this.setModelObject(new OAuthServer());
 		target.add(listContainer);
 		target.add(this);
-		reinitJs(target);
 	}
 }

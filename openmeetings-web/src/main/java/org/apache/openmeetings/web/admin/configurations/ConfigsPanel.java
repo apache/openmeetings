@@ -70,7 +70,6 @@ public class ConfigsPanel extends AdminBasePanel {
 						form.setNewVisible(false);
 						form.setModelObject(c);
 						target.add(form, listContainer);
-						reinitJs(target);
 					}
 				});
 				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(c.getId(), form.getModelObject().getId())));

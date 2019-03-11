@@ -64,7 +64,6 @@ public class OAuthPanel extends AdminBasePanel {
 						form.setModelObject(server);
 						form.setNewVisible(false);
 						target.add(form, listContainer);
-						reinitJs(target);
 					}
 				});
 				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(server.getId(), form.getModelObject().getId())));
