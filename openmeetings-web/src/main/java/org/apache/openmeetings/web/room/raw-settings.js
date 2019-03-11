@@ -226,16 +226,17 @@ var VideoSettings = (function() {
 	}
 	function _setCntsDimensions(cnts) {
 		const b = kurentoUtils.WebRtcPeer.browser;
-		let width = s.video.width;
 		if (b.name === 'Safari') {
+			let width = s.video.width;
 			//valid widths are 320, 640, 1280
 			[320, 640, 1280].some(function(w) {
 				if (width < w + 1) {
-					cnts.video.width = w;
+					width = w;
 					return true;
 				}
 				return false;
 			});
+			cnts.video.width = width < 1281 ? width : 1280;
 		} else {
 			cnts.video.width = s.video.width;
 			cnts.video.height = s.video.height;
