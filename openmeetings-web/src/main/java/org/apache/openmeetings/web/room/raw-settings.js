@@ -224,6 +224,23 @@ var VideoSettings = (function() {
 	function _updateRec() {
 		recBtn.prop('disabled', !recAllowed || (s.video.cam < 0 && s.video.mic < 0)).button('refresh');
 	}
+	function _setCntsDimensions(cnts) {
+		const b = kurentoUtils.WebRtcPeer.browser;
+		let width = s.video.width;
+		if (b.name === 'Safari') {
+			//valid widths are 320, 640, 1280
+			[320, 640, 1280].some(function(w) {
+				if (width < w + 1) {
+					cnts.video.width = w;
+					return true;
+				}
+				return false;
+			});
+		} else {
+			cnts.video.width = s.video.width;
+			cnts.video.height = s.video.height;
+		}
+	}
 	//each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
 	// min/ideal/max/exact/mandatory can also be used
 	function _constraints(sd, callback) {
@@ -231,10 +248,9 @@ var VideoSettings = (function() {
 			const cnts = {};
 			if (devCnts.video && false === o.audioOnly && VideoUtil.hasVideo(sd) && s.video.cam > -1) {
 				cnts.video = {
-					width: s.video.width
-					, height: s.video.height
-					, frameRate: o.camera.fps
+					frameRate: o.camera.fps
 				};
+				_setCntsDimensions(cnts)
 				if (!!s.video.camDevice) {
 					cnts.video.deviceId = {
 						ideal: s.video.camDevice
