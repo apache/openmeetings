@@ -14,9 +14,9 @@ $.widget('openmeetings.iconselectmenu', $.ui.selectmenu, {
 	}
 });
 var MicLevel = (function() {
-	let ctx, mic, script, vol = .0;
+	let ctx, mic, analyser, vol = .0;
 
-	function _meter(rtcPeer, _micActivity, _error) {
+	function _meterPeer(rtcPeer, cnvs, _micActivity, _error) {
 		if (!rtcPeer || 'function' !== typeof(rtcPeer.getLocalStream)) {
 			return;
 		}
@@ -25,28 +25,55 @@ var MicLevel = (function() {
 			return;
 		}
 		try {
-			ctx = new AudioContext();
-			script = ctx.createScriptProcessor(512);
+			const AudioCtx = window.AudioContext || window.webkitAudioContext;
+			if (!AudioCtx) {
+				_error("AudioContext is inaccessible");
+				return;
+			}
+			ctx = new AudioCtx();
+			analyser = ctx.createAnalyser();
 			mic = ctx.createMediaStreamSource(stream);
-			mic.connect(script);
-			script.connect(ctx.destination);
-			let t = Date.now();
-			script.onaudioprocess = function(event) {
-				const arr = event.inputBuffer.getChannelData(0)
-					, al = arr.length;
-				let avg = 0.0;
-				for (let i = 0; i < al; ++i) {
-					avg += arr[i] * arr[i];
+			mic.connect(analyser);
+			analyser.connect(ctx.destination);
+			_meter(analyser, cnvs, _micActivity, _error);
+		} catch (err) {
+			_error(err);
+		}
+	}
+	function _meter(analyser, cnvs, _micActivity, _error) {
+		try {
+			analyser.minDecibels = -90;
+			analyser.maxDecibels = -10;
+			analyser.fftSize = 256;
+			const canvas = cnvs[0]
+				, color = $('body').css('--level-color')
+				, canvasCtx = canvas.getContext('2d')
+				, al = analyser.frequencyBinCount
+				, arr = new Uint8Array(al)
+				, horiz = cnvs.data('orientation') === 'horizontal';
+			function update() {
+				const WIDTH = canvas.width
+					, HEIGHT = canvas.height;
+				canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+				if (!!analyser && cnvs.is(':visible')) {
+					analyser.getByteFrequencyData(arr);
+					let favg = 0.0;
+					for (let i = 0; i < al; ++i) {
+						favg += arr[i] * arr[i];
+					}
+					vol = Math.sqrt(favg / al);
+					_micActivity(vol);
+					canvasCtx.fillStyle = color;
+					if (horiz) {
+						canvasCtx.fillRect(0, 0, WIDTH * vol / 100, HEIGHT);
+					} else {
+						const h = HEIGHT * vol / 100;
+						canvasCtx.fillRect(0, HEIGHT - h, WIDTH, h);
+					}
+					requestAnimationFrame(update);
 				}
-				avg = Math.sqrt(avg / al);
-				vol = Math.max(avg, vol * .95);
-				//we will continuously get volume but do not perform re-draw too often
-				if (Date.now() - t < 200) {
-					return;
-				}
-				t = Date.now();
-				_micActivity(vol);
-			};
+			}
+			update();
 		} catch (err) {
 			_error(err);
 		}
@@ -56,14 +83,17 @@ var MicLevel = (function() {
 			VideoUtil.cleanStream(mic.mediaStream);
 			mic.disconnect();
 			ctx.destination.disconnect();
-			script.disconnect();
-			script.onaudioprocess = null;
 			ctx.close();
 			ctx = null;
+		}
+		if (!!analyser) {
+			analyser.disconnect();
+			analyser = null;
 		}
 	}
 	return {
 		meter: _meter
+		, meterPeer: _meterPeer
 		, dispose: _dispose
 	};
 });
@@ -205,7 +235,6 @@ var VideoSettings = (function() {
 				_close();
 			}
 		});
-		lm.kendoProgressBar({ value: 0, showStatus: false });
 		o.width = 300;
 		o.height = 200;
 		o.mode = 'settings';
@@ -304,7 +333,7 @@ var VideoSettings = (function() {
 							return OmUtil.error(error);
 						}
 						level = MicLevel();
-						level.meter(rtcPeer, _micActivity, OmUtil.error);
+						level.meterPeer(rtcPeer, lm, _micActivity, OmUtil.error);
 						rtcPeer.generateOffer(function(error, _offerSdp) {
 							if (error) {
 								return OmUtil.error('Error generating the offer');
@@ -328,7 +357,6 @@ var VideoSettings = (function() {
 		_updateRec();
 	}
 	function _micActivity(level) {
-		lm.getKendoProgressBar().value(140 * level); // magic number
 	}
 	function _setLoading(el) {
 		el.find('option').remove();

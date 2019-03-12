@@ -1,8 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Video = (function() {
-	const self = {};
+	const self = {}
+		, AudioCtx = window.AudioContext || window.webkitAudioContext;
 	let sd, v, vc, t, f, size, vol, slider, handle, video, rtcPeer
-		, lastVolume = 50, muted = false, aCtx, aSrc, aDest, gainNode
+		, lastVolume = 50, muted = false, aCtx, aSrc, aDest, gainNode, analyser
 		, lm, level, userSpeaks = false, muteOthers;
 
 	function _getExtra() {
@@ -21,16 +22,19 @@ var Video = (function() {
 			, pw = p.width(), ph = p.height();
 		_resizeDlgArea(pw, ph);
 	}
+	function _resizeLm(h) {
+		if (!!lm) {
+			lm.attr('height', h).height(h);
+		}
+		return lm;
+	}
 	function _resize(w, h) {
 		vc.width(w).height(h);
-		if (!!lm) {
-			lm.height(h - 10);
-		}
+		_resizeLm(h - 10);
 		video.width(w).height(h);
 	}
 	function _micActivity(level) {
-		lm.getKendoProgressBar().value(140 * level); // magic number
-		const speaks = level > .02;
+		const speaks = level > 5;
 		if (speaks !== userSpeaks) {
 			userSpeaks = speaks;
 			OmUtil.sendMessage({type: 'mic', id: 'activity', active: speaks});
@@ -90,18 +94,19 @@ var Video = (function() {
 					let _stream = stream;
 					if (stream.getAudioTracks().length !== 0) {
 						vol.show();
-						lm = vc.find('.level-meter')
-							.kendoProgressBar({ value: 0, showStatus: false, orientation: 'vertical' });
-						lm.height(vc.height() - 10).show();
-						aCtx = new AudioContext();
+						lm = vc.find('.level-meter');
+						_resizeLm(vc.height() - 10).show();
+						aCtx = new AudioCtx();
 						gainNode = aCtx.createGain();
+						analyser = aCtx.createAnalyser();
 						aSrc = aCtx.createMediaStreamSource(stream);
 						aSrc.connect(gainNode);
+						gainNode.connect(analyser);
 						if (VideoUtil.isEdge()) {
-							gainNode.connect(aCtx.destination);
+							analyser.connect(aCtx.destination);
 						} else {
 							aDest = aCtx.createMediaStreamDestination();
-							gainNode.connect(aDest);
+							analyser.connect(aDest);
 							aSrc.origStream = stream;
 							_stream = aDest.stream;
 							stream.getVideoTracks().forEach(function(track) {
@@ -133,7 +138,7 @@ var Video = (function() {
 					return OmUtil.error(error);
 				}
 				level = MicLevel();
-				level.meter(rtcPeer, _micActivity, OmUtil.error);
+				level.meter(analyser, lm, _micActivity, OmUtil.error);
 				this.generateOffer(function(error, offerSdp) {
 					if (error) {
 						return OmUtil.error('Sender sdp offer error ' + error);
@@ -441,6 +446,10 @@ var Video = (function() {
 	}
 	function _cleanup() {
 		OmUtil.log('Disposing participant ' + sd.uid);
+		if (!!analyser) {
+			analyser.disconnect();
+			analyser = null;
+		}
 		if (!!gainNode) {
 			gainNode.disconnect();
 			gainNode = null;
@@ -463,9 +472,11 @@ var Video = (function() {
 			aCtx = null;
 		}
 		if (!!video && video.length > 0) {
-			VideoUtil.cleanStream(video[0].srcObject);
-			video[0].srcObject = null;
-			video.remove();
+			video.attr('id', 'dummy');
+			const vidNode = video[0];
+			VideoUtil.cleanStream(vidNode.srcObject);
+			vidNode.srcObject = null;
+			vidNode.parentNode.removeChild(vidNode);
 			video = null;
 		}
 		if (!!lm && lm.length > 0) {

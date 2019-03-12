@@ -282,26 +282,16 @@ ul.settings-menu {
 	min-width: 300px;
 	padding-left: 305px;
 }
-#video-settings .level-meter {
-	height: 16px;
-}
 .ui-dialog.video .warn {
 	float: right;
 	margin-right: .3em;
 }
-.level-meter.k-progressbar .k-state-selected {
-	background: greenyellow;
-	border-color: #d5d5d5;
-}
-.ui-dialog.video .level-meter {
-	background: transparent;
-}
 .ui-dialog.user-video .level-meter {
 	display: inline-block;
-	width: 10px;
 	position: absolute;
 	bottom: 5px;
 	left: 5px;
+	width: 10px;
 }
 .ui-dialog.video .sett-container {
 	position: relative;
@@ -321,9 +311,6 @@ ul.settings-menu {
 .sett-container .vid-block .timer {
 	float: left;
 	padding: 2px 4px;
-}
-.ui-dialog.video .sett-row select, #video-settings .level-meter {
-	width: 250px;
 }
 .ui-dialog.video .ui-dialog-titlebar-collapse span
 , .ui-dialog.video .ui-dialog-titlebar-volume span

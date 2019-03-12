@@ -19,6 +19,7 @@
 body {
 	--header-height: 50px;
 	--menu-height: 36px;
+	--level-color: greenyellow;
 }
 body.no-header {
 	--header-height: 0px;

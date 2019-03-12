@@ -400,12 +400,12 @@ function WebRtcPeer(mode, options, callback) {
         }
         if (videoStream) {
             videoStream.getTracks().forEach(function(track) {
-                pc.addTrack(track);
+                pc.addTrack(track, videoStream);
             });
         }
         if (audioStream) {
             audioStream.getTracks().forEach(function(track) {
-                pc.addTrack(track);
+                pc.addTrack(track, audioStream);
             });
         }
         var browser = parser.getBrowser();
