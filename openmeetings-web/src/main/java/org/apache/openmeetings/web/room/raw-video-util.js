@@ -158,6 +158,13 @@ var VideoUtil = (function() {
 		}
 		perm.data('callbacks').push(callback);
 	}
+	function _disconnect(node) {
+		try {
+			node.disconnect(); //this one can throw
+		} catch (e) {
+			//no-op
+		}
+	}
 
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
@@ -179,5 +186,6 @@ var VideoUtil = (function() {
 	self.isEdge = _isEdge;
 	self.setPos = _setPos;
 	self.askPermission = _askPermission;
+	self.disconnect = _disconnect;
 	return self;
 })();

@@ -137,8 +137,10 @@ var Video = (function() {
 				if (error) {
 					return OmUtil.error(error);
 				}
-				level = MicLevel();
-				level.meter(analyser, lm, _micActivity, OmUtil.error);
+				if (!!analyser) {
+					level = MicLevel();
+					level.meter(analyser, lm, _micActivity, OmUtil.error);
+				}
 				this.generateOffer(function(error, offerSdp) {
 					if (error) {
 						return OmUtil.error('Sender sdp offer error ' + error);
@@ -447,26 +449,26 @@ var Video = (function() {
 	function _cleanup() {
 		OmUtil.log('Disposing participant ' + sd.uid);
 		if (!!analyser) {
-			analyser.disconnect();
+			VideoUtil.disconnect(analyser);
 			analyser = null;
 		}
 		if (!!gainNode) {
-			gainNode.disconnect();
+			VideoUtil.disconnect(gainNode);
 			gainNode = null;
 		}
 		if (!!aSrc) {
 			VideoUtil.cleanStream(aSrc.mediaStream);
 			VideoUtil.cleanStream(aSrc.origStream);
-			aSrc.disconnect();
+			VideoUtil.disconnect(aSrc);
 			aSrc = null;
 		}
 		if (!!aDest) {
-			aDest.disconnect();
+			VideoUtil.disconnect(aDest);
 			aDest = null;
 		}
 		if (!!aCtx) {
 			if (!!aCtx.destination) {
-				aCtx.destination.disconnect();
+				VideoUtil.disconnect(aCtx.destination);
 			}
 			aCtx.close();
 			aCtx = null;

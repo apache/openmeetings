@@ -81,13 +81,13 @@ var MicLevel = (function() {
 	function _dispose() {
 		if (!!ctx) {
 			VideoUtil.cleanStream(mic.mediaStream);
-			mic.disconnect();
-			ctx.destination.disconnect();
+			VideoUtil.disconnect(mic);
+			VideoUtil.disconnect(ctx.destination);
 			ctx.close();
 			ctx = null;
 		}
 		if (!!analyser) {
-			analyser.disconnect();
+			VideoUtil.disconnect(analyser);
 			analyser = null;
 		}
 	}
