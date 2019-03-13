@@ -81,16 +81,6 @@ html, body {
 .help.support h3 {
 	margin-bottom: 5px;
 }
-.tableWrapper {
-	background-color: #FFFFFF;
-	border: solid 1px #aacfe4;
-	width: 536px;
-	height: 100px;
-	overflow-y: scroll;
-}
-.tableWrapper {
-	height: 500px;
-}
 .user-settings.ui-tabs {
 	height: calc(100% - 10px);
 }
@@ -488,6 +478,31 @@ select.messages.selector {
 .page.recording .video {
 	min-width: 400px;
 }
+.rooms-header {
+	min-height: var(--rooms-header-height);
+	max-height: var(--rooms-header-height);
+	height: var(--rooms-header-height);
+}
+#orgTabs, .rooms-area {
+	height: calc(100% - var(--rooms-header-height) - var(--buffer-height));
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.rooms-area {
+	display: flex;
+}
+#orgTabs.ui-tabs .ui-tabs-panel {
+	display: flex;
+	padding-bottom: 0;
+	height: calc(100% - var(--tabs-height));
+	padding-top: 0;
+}
+.rooms-table {
+	display: inline-block;
+	min-width: 400px;
+	height: 100%;
+	overflow-y: auto;
+}
 .rooms.title {
 	font-weight: bold;
 	padding: 10px;
@@ -668,6 +683,30 @@ form .input {
 	background-color: #e4f1fb;
 	font-weight: normal;
 	color: #0070a3;
+}
+.tableWrapper {
+	background-color: #FFFFFF;
+	border: solid 1px #aacfe4;
+	width: 536px;
+	height: 100px;
+}
+.dashboard {
+	overflow-y: auto;
+	height: 100%;
+}
+.dragbox-content .tableWrapper {
+	/* room users on dashboard */
+	width: auto;
+	height: 100px;
+}
+.dragbox-content .rooms-widget {
+	display: flex;
+}
+.tableWrapper .list-table {
+	height: 100%;
+}
+.dragbox-content .tableWrapper .list-table {
+	min-width: auto;
 }
 /**** TODO need to be unified with other icons used ****/
 .hash-panel-main {

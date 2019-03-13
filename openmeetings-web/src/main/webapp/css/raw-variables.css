@@ -20,6 +20,9 @@ body {
 	--header-height: 50px;
 	--menu-height: 36px;
 	--level-color: greenyellow;
+	--rooms-header-height: 70px;
+	--tabs-height: 45px;
+	--buffer-height: 4px;
 }
 body.no-header {
 	--header-height: 0px;
@@ -31,7 +34,6 @@ body.no-menu {
 	--lbl-nav-height: 0px;
 	--nav-height: 30px;
 	--list-width: 518px;
-	--buffer-height: 4px;
 }
 .adminPanelColumnTable.label {
 	--lbl-nav-height: 40px;

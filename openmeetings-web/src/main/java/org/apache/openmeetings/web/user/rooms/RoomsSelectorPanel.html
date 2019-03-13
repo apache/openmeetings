@@ -20,8 +20,10 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<div wicket:id="title" class="rooms title"></div>
-	<div wicket:id="desc" class="rooms desc info-text"></div>
-	<div wicket:id="rooms"></div>
+	<div class="rooms-header">
+		<div wicket:id="title" class="rooms title"></div>
+		<div wicket:id="desc" class="rooms desc info-text"></div>
+	</div>
+	<div class="rooms-area" wicket:id="rooms"></div>
 </wicket:panel>
 </html>
