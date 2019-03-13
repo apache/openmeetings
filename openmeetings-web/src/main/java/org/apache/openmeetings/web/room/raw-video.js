@@ -118,7 +118,18 @@ var Video = (function() {
 					callback(msg, cnts, _stream);
 				})
 				.catch(function(err) {
-					OmUtil.error(err);
+					VideoManager.sendMessage({
+						id : 'devicesAltered'
+						, uid: sd.uid
+						, audio: false
+						, video: false
+					});
+					VideoManager.close(sd.uid);
+					if ('NotReadableError' === err.name) {
+						OmUtil.error('Camera/Microphone is busy and can\'t be used');
+					} else {
+						OmUtil.error(err);
+					}
 				});
 		});
 	}
