@@ -44,3 +44,10 @@ body.no-menu {
 .adminPanelColumnForm .adminForm {
 	--actions-height: 40px;
 }
+.recording-panel {
+	--info-height: 115px;
+}
+.file.tree {
+	--tree-header-height: 36px;
+	--tree-footer-height: 40px;
+}

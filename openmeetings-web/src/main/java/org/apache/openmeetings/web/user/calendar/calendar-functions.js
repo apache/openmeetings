@@ -2,18 +2,6 @@
 /**
  * @author Sebastien Briquet
  */
-function getCalendarHeight() {
-	return window.innerHeight - $('#${markupId}').position().top - 20;
-}
-function setCalendarHeight() {
-	const cal = $('#${markupId}');
-	if (cal.length) {
-		cal.fullCalendar('option', 'height', getCalendarHeight());
-	}
-}
-$(function() {
-	$(window).on("load", function() { setCalendarHeight(); } );
-});
 function toggleDatePicker(id) {
 	const dp = $("#" + id);
 	dp.datepicker(dp.datepicker("widget").is(":visible") ? "hide" : "show");

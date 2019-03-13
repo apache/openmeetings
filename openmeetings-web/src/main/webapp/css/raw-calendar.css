@@ -83,3 +83,6 @@
 	width: 80%;
 	height: 100%;
 }
+#wrapper-panel-frame .main-form, #calendar {
+	height: 100%;
+}

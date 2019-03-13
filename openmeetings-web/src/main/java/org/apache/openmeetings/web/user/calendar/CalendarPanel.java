@@ -48,7 +48,6 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -71,13 +70,11 @@ import com.googlecode.wicket.jquery.ui.form.button.Button;
 public class CalendarPanel extends UserBasePanel {
 	private static final Logger log = LoggerFactory.getLogger(CalendarPanel.class);
 	private static final long serialVersionUID = 1L;
-	private static final String JS_MARKUP = "setCalendarHeight();";
 	private final AbstractAjaxTimerBehavior refreshTimer = new AbstractAjaxTimerBehavior(Duration.seconds(10)) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected void onTimer(AjaxRequestTarget target) {
-			target.appendJavaScript("setCalendarHeight();");
 			refresh(target);
 		}
 	};
@@ -125,6 +122,7 @@ public class CalendarPanel extends UserBasePanel {
 		boolean isRtl = isRtl();
 		Options options = new Options();
 		options.set("isRTL", isRtl);
+		options.set("height", Options.asString("parent"));
 		options.set("header", isRtl ? "{left: 'agendaDay,agendaWeek,month', center: 'title', right: 'today nextYear,next,prev,prevYear'}"
 				: "{left: 'prevYear,prev,next,nextYear today', center: 'title', right: 'month,agendaWeek,agendaDay'}");
 		options.set("allDaySlot", false);
@@ -346,10 +344,7 @@ public class CalendarPanel extends UserBasePanel {
 
 		Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
 		if (target.isPresent()) {
-			target.get().appendJavaScript(JS_MARKUP);
 			target.get().appendJavaScript("addCalButton('datepicker');");
-		} else {
-			response.render(JavaScriptHeaderItem.forScript(JS_MARKUP, this.getId()));
 		}
 	}
 

@@ -19,17 +19,13 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<table class="recording">
-		<tr>
-			<td valign="top" class="file tree container">
-				<div wicket:id="tree"></div>
-				<div wicket:id="info"></div>
-			</td>
-			<td valign="top">
-				<div wicket:id="video"></div>
-			</td>
-		</tr>
-	</table>
+	<div class="recording-panel">
+		<div class="file tree container">
+			<div class="tree-panel" wicket:id="tree"></div>
+			<div class="info" wicket:id="info"></div>
+		</div>
+		<div wicket:id="video"></div>
+	</div>
 	<div wicket:id="addFolder"></div>
 </wicket:panel>
 </html>

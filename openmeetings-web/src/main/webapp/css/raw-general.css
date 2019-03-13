@@ -459,23 +459,45 @@ select.messages.selector {
 .om-select2.full-width .select2.select2-container {
 	width: 100% !important;
 }
-.recording .video {
+.recording-panel {
+	display: flex;
+	height: 100%;
+}
+.recording-panel .file.tree.container {
+	width: 325px;
+	height: 100%;
+}
+.recording-panel .file.tree.container .tree-panel {
+	height: calc(100% - var(--info-height));
+}
+.recording-panel .file.tree.container .info {
+	height: var(--info-height);
+}
+.recording-panel .file.tree.container .tree-panel form
+	, .recording-panel .file.tree.container .tree-panel form .file.tree
+{
+	height: 100%;
+}
+.recording-panel .file.tree.container .tree-panel form .file.tree{
+	height: 100%;
+}
+.recording-panel .video {
 	width: 100%;
 	display: inline-block;
 	box-shadow: 0 0 10px 1px rgba(74, 137, 151, 0.5);
 }
-.recording .video video {
+.recording-panel .video video {
 	width: 100%;
 }
-.page.recording {
+.page.recording-panel {
 	padding-top: 40px;
 }
-.page.recording .video, .page.recording .info {
+.page.recording-panel .video, .page.recording-panel .info {
 	display: inline-block;
 	float: left;
 	padding-left: 20px;
 }
-.page.recording .video {
+.page.recording-panel .video {
 	min-width: 400px;
 }
 .rooms-header {

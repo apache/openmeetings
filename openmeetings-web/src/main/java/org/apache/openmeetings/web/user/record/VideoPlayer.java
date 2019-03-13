@@ -56,6 +56,7 @@ public class VideoPlayer extends Panel {
 
 	public VideoPlayer(String id) {
 		super(id);
+		setRenderBodyOnly(true);
 		add(container.setOutputMarkupPlaceholderTag(true));
 		mp4Rec.setDisplayType(true);
 		mp4Rec.setType(MP4_MIME_TYPE);
