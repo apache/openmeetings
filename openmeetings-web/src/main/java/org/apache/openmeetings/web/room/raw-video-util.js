@@ -128,6 +128,10 @@ var VideoUtil = (function() {
 			peer = null;
 		}
 	}
+	function _isChrome72() {
+		const b = kurentoUtils.WebRtcPeer.browser;
+		return b.name === 'Chrome' && b.major > 71;
+	}
 	function _isEdge() {
 		const b = kurentoUtils.WebRtcPeer.browser;
 		return b.name === 'Edge';
@@ -165,6 +169,12 @@ var VideoUtil = (function() {
 			//no-op
 		}
 	}
+	function _sharingSupported() {
+		const b = kurentoUtils.WebRtcPeer.browser;
+		return (b.name === 'Edge' && b.major > 16)
+			|| (b.name === 'Firefox')
+			|| (b.name === 'Chrome');
+	}
 
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
@@ -184,8 +194,10 @@ var VideoUtil = (function() {
 		return opts;
 	};
 	self.isEdge = _isEdge;
+	self.isChrome72 = _isChrome72;
 	self.setPos = _setPos;
 	self.askPermission = _askPermission;
 	self.disconnect = _disconnect;
+	self.sharingSupported = _sharingSupported;
 	return self;
 })();

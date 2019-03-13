@@ -14,57 +14,62 @@ var Sharer = (function() {
 			width: 450
 			, autoOpen: false
 		});
-		type = sharer.find('select.type');
-		const b = kurentoUtils.WebRtcPeer.browser;
-		type.find('option[value="' + (b.name === 'Chrome' ? 'application' : 'tab') + '"]').remove();
-		type.selectmenu({
-			width: 150
-			, disabled: VideoUtil.isEdge()
-		});
-		fps = sharer.find('select.fps').selectmenu({
-			width: 120
-			, disabled: VideoUtil.isEdge()
-		});
-		sbtn = sharer.find('.share-start-stop').button({
-			icon: 'ui-icon-image'
-		}).off().click(function() {
-			if (shareState === SHARE_STOPED) {
-				_setShareState(SHARE_STARTING);
-				VideoManager.sendMessage({
-					id: 'wannaShare'
-					, shareType: type.val()
-					, fps: fps.val()
-					, width: width.val()
-					, height: height.val()
-				});
-			} else {
-				VideoManager.sendMessage({
-					id: 'pauseSharing'
-					, uid: _getShareUid()
-				});
-			}
-		});
-		width = sharer.find('.width');
-		height = sharer.find('.height');
-		rbtn = sharer.find('.record-start-stop').button({
-			icon: 'ui-icon-bullet'
-		}).off().click(function() {
-			if (recState === SHARE_STOPED) {
-				_setRecState(SHARE_STARTING);
-				VideoManager.sendMessage({
-					id: 'wannaRecord'
-					, shareType: type.val()
-					, fps: fps.val()
-					, width: width.val()
-					, height: height.val()
-				});
-			} else {
-				VideoManager.sendMessage({
-					id: 'stopRecord'
-					, uid: _getShareUid()
-				});
-			}
-		});
+		if (!VideoUtil.sharingSupported()) {
+			sharer.find('.container').remove();
+			sharer.find('.alert').show();
+		} else {
+			type = sharer.find('select.type');
+			const b = kurentoUtils.WebRtcPeer.browser;
+			type.find('option[value="' + (b.name === 'Chrome' ? 'application' : 'tab') + '"]').remove();
+			type.selectmenu({
+				width: 150
+				, disabled: VideoUtil.isEdge() || VideoUtil.isChrome72()
+			});
+			fps = sharer.find('select.fps').selectmenu({
+				width: 120
+				, disabled: VideoUtil.isEdge()
+			});
+			sbtn = sharer.find('.share-start-stop').button({
+				icon: 'ui-icon-image'
+			}).off().click(function() {
+				if (shareState === SHARE_STOPED) {
+					_setShareState(SHARE_STARTING);
+					VideoManager.sendMessage({
+						id: 'wannaShare'
+						, shareType: type.val()
+						, fps: fps.val()
+						, width: width.val()
+						, height: height.val()
+					});
+				} else {
+					VideoManager.sendMessage({
+						id: 'pauseSharing'
+						, uid: _getShareUid()
+					});
+				}
+			});
+			width = sharer.find('.width');
+			height = sharer.find('.height');
+			rbtn = sharer.find('.record-start-stop').button({
+				icon: 'ui-icon-bullet'
+			}).off().click(function() {
+				if (recState === SHARE_STOPED) {
+					_setRecState(SHARE_STARTING);
+					VideoManager.sendMessage({
+						id: 'wannaRecord'
+						, shareType: type.val()
+						, fps: fps.val()
+						, width: width.val()
+						, height: height.val()
+					});
+				} else {
+					VideoManager.sendMessage({
+						id: 'stopRecord'
+						, uid: _getShareUid()
+					});
+				}
+			});
+		}
 	}
 	function _setShareState(state) {
 		shareState = state;
@@ -148,7 +153,7 @@ var Sharer = (function() {
 		});
 	};
 	function _getScreenConstraints(sd, sourceId) {
-		//Chrom screen constraints requires old school definition
+		//Chrome screen constraints requires old school definition
 		const cnts = {
 			audio: false
 			, video: {

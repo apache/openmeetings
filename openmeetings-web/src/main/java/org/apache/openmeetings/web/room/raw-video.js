@@ -59,6 +59,11 @@ var Video = (function() {
 			cnts = Sharer.baseConstraints(sd);
 			cnts.video.mediaSource = sd.shareType;
 			promise = navigator.mediaDevices.getUserMedia(cnts);
+		} else if (VideoUtil.isChrome72()) {
+			cnts = {
+				video: true
+			};
+			promise = navigator.mediaDevices.getDisplayMedia(cnts);
 		} else if (b.name === 'Chrome') {
 			promise = Sharer.getChromeConstraints(sd).then((_cnts) => {
 				cnts = _cnts;
