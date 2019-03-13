@@ -136,7 +136,6 @@ var VideoSettings = (function() {
 			level.dispose();
 			level = null;
 		}
-		_micActivity(0);
 	}
 	function _close() {
 		_clear();
@@ -332,8 +331,13 @@ var VideoSettings = (function() {
 						if (error) {
 							return OmUtil.error(error);
 						}
-						level = MicLevel();
-						level.meterPeer(rtcPeer, lm, _micActivity, OmUtil.error);
+						if (cnts.audio) {
+							lm.show();
+							level = MicLevel();
+							level.meterPeer(rtcPeer, lm, function(){}, OmUtil.error);
+						} else {
+							lm.hide();
+						}
 						rtcPeer.generateOffer(function(error, _offerSdp) {
 							if (error) {
 								return OmUtil.error('Error generating the offer');
@@ -355,8 +359,6 @@ var VideoSettings = (function() {
 	function _allowRec(allow) {
 		recAllowed = allow;
 		_updateRec();
-	}
-	function _micActivity(level) {
 	}
 	function _setLoading(el) {
 		el.find('option').remove();
