@@ -20,14 +20,14 @@ var Sharer = (function() {
 		} else {
 			type = sharer.find('select.type');
 			const b = kurentoUtils.WebRtcPeer.browser;
-			type.find('option[value="' + (b.name === 'Chrome' ? 'application' : 'tab') + '"]').remove();
+			type.find('option[value="' + (VideoUtil.isChrome() ? 'application' : 'tab') + '"]').remove();
 			type.selectmenu({
 				width: 150
-				, disabled: VideoUtil.isEdge() || VideoUtil.isChrome72()
+				, disabled: _typeDisabled(b)
 			});
 			fps = sharer.find('select.fps').selectmenu({
 				width: 120
-				, disabled: VideoUtil.isEdge()
+				, disabled: VideoUtil.isEdge(b)
 			});
 			sbtn = sharer.find('.share-start-stop').button({
 				icon: 'ui-icon-image'
@@ -71,11 +71,16 @@ var Sharer = (function() {
 			});
 		}
 	}
+	function _typeDisabled(_b) {
+		const b = _b || kurentoUtils.WebRtcPeer.browser;
+		return VideoUtil.isEdge(b) || VideoUtil.isChrome72(b);
+	}
 	function _setShareState(state) {
 		shareState = state;
-		const dis = SHARE_STOPED !== state;
-		type.selectmenu('option', 'disabled', dis || VideoUtil.isEdge());
-		fps.selectmenu('option', 'disabled', dis || VideoUtil.isEdge());
+		const dis = SHARE_STOPED !== state
+			, typeDis = _typeDisabled();
+		type.selectmenu('option', 'disabled', dis || typeDis);
+		fps.selectmenu('option', 'disabled', dis || typeDis);
 		width.prop('disabled', dis);
 		height.prop('disabled', dis);
 		sbtn.text(sbtn.data(dis ? 'stop' : 'start'));
@@ -90,9 +95,10 @@ var Sharer = (function() {
 	}
 	function _setRecState(state) {
 		recState = state;
-		const dis = SHARE_STOPED !== state;
-		type.selectmenu('option', 'disabled', dis || VideoUtil.isEdge());
-		fps.selectmenu('option', 'disabled', dis || VideoUtil.isEdge());
+		const dis = SHARE_STOPED !== state
+			, typeDis = _typeDisabled();
+		type.selectmenu('option', 'disabled', dis || typeDis);
+		fps.selectmenu('option', 'disabled', dis || typeDis);
 		width.prop('disabled', dis);
 		height.prop('disabled', dis);
 		rbtn.text(rbtn.data(dis ? 'stop' : 'start'));

@@ -49,7 +49,7 @@ var Video = (function() {
 		}
 		const b = kurentoUtils.WebRtcPeer.browser;
 		let promise, cnts;
-		if (VideoUtil.isEdge() && b.major > 16) {
+		if (VideoUtil.isEdge(b) && b.major > 16) {
 			cnts = {
 				video: true
 			};
@@ -59,12 +59,12 @@ var Video = (function() {
 			cnts = Sharer.baseConstraints(sd);
 			cnts.video.mediaSource = sd.shareType;
 			promise = navigator.mediaDevices.getUserMedia(cnts);
-		} else if (VideoUtil.isChrome72()) {
+		} else if (VideoUtil.isChrome72(b)) {
 			cnts = {
 				video: true
 			};
 			promise = navigator.mediaDevices.getDisplayMedia(cnts);
-		} else if (b.name === 'Chrome') {
+		} else if (VideoUtil.isChrome(b)) {
 			promise = Sharer.getChromeConstraints(sd).then((_cnts) => {
 				cnts = _cnts;
 				return navigator.mediaDevices.getUserMedia(_cnts);

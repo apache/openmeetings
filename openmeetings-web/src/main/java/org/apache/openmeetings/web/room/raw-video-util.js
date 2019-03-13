@@ -128,12 +128,16 @@ var VideoUtil = (function() {
 			peer = null;
 		}
 	}
-	function _isChrome72() {
-		const b = kurentoUtils.WebRtcPeer.browser;
-		return b.name === 'Chrome' && b.major > 71;
+	function _isChrome(_b) {
+		const b = _b || kurentoUtils.WebRtcPeer.browser;
+		return b.name === 'Chrome' || b.name === 'Chromium';
 	}
-	function _isEdge() {
-		const b = kurentoUtils.WebRtcPeer.browser;
+	function _isChrome72(_b) {
+		const b = _b || kurentoUtils.WebRtcPeer.browser;
+		return _isChrome(b) && b.major > 71;
+	}
+	function _isEdge(_b) {
+		const b = _b || kurentoUtils.WebRtcPeer.browser;
 		return b.name === 'Edge';
 	}
 	function _setPos(v, pos) {
@@ -173,7 +177,8 @@ var VideoUtil = (function() {
 		const b = kurentoUtils.WebRtcPeer.browser;
 		return (b.name === 'Edge' && b.major > 16)
 			|| (b.name === 'Firefox')
-			|| (b.name === 'Chrome');
+			|| (b.name === 'Chrome')
+			|| (b.name === 'Chromium');
 	}
 
 	self.getVid = _getVid;
@@ -194,6 +199,7 @@ var VideoUtil = (function() {
 		return opts;
 	};
 	self.isEdge = _isEdge;
+	self.isChrome = _isChrome;
 	self.isChrome72 = _isChrome72;
 	self.setPos = _setPos;
 	self.askPermission = _askPermission;
