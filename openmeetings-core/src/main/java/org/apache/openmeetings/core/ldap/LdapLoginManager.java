@@ -18,22 +18,17 @@
  */
 package org.apache.openmeetings.core.ldap;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.LocaleHelper.validateCountry;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OmException.BAD_CREDENTIALS;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
+import static org.apache.openmeetings.util.OmFileHelper.loadLdapConf;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.Closeable;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -66,7 +61,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -321,18 +315,8 @@ public class LdapLoginManager {
 		public LdapWorker(Long domainId) throws Exception {
 			this.domainId = domainId;
 			ldapCfg = ldapConfigDao.get(domainId);
-			try (InputStream is = new FileInputStream(new File(OmFileHelper.getConfDir(), ldapCfg.getConfigFileName()));
-					Reader r = new InputStreamReader(is, UTF_8))
-			{
-				config.load(r);
-				if (config.isEmpty()) {
-					throw new RuntimeException("Error on LdapLogin : Configurationdata couldnt be retrieved!");
-				}
-				options = new LdapOptions(config);
-			} catch (Exception e) {
-				log.error("Error on LdapLogin : Configurationdata couldn't be retrieved!");
-				throw e;
-			}
+			loadLdapConf(ldapCfg.getConfigFileName(), config);
+			options = new LdapOptions(config);
 
 			conn = new LdapNetworkConnection(options.host, options.port, options.secure);
 		}
