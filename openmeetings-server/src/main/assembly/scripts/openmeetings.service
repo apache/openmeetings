@@ -27,7 +27,7 @@ Environment=CATALINA_PID=/var/run/openmeetings.pid
 WorkingDirectory=/opt/openmeetings
 Environment=CATALINA_HOME=/opt/openmeetings
 Environment=CATALINA_BASE=/opt/openmeetings
-Environment='CATALINA_OPTS=-Xms4G -Xmx4G -server -XX:+UseParallelGC'
+Environment='CATALINA_OPTS=-Xms1G -Xmx4G -server -XX:+UseParallelGC'
 Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
 
 ExecStart=/opt/openmeetings/bin/startup.sh

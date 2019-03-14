@@ -769,7 +769,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.docQuality.text"><![CDATA[埋め込みJPEG画像の品質を入力してください。0=最低（小容量）, 最高=100（大容量）。（既定=90）]]></entry>
 	<entry key="install.wizard.params.step3.docQuality.title"><![CDATA[埋め込みJPEG画像の品質を入力してください。0=最低（小容量）, 最高=100（大容量）。（既定=90）]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath"><![CDATA[FFMPEG のパス]]></entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[FFMpeg をインストールしてください。最新の FFMPEG が必要です。Windowsの場合、例えば http://ffmpeg.arrozcru.org/builds/ からバイナリをダウンロード可能です。Linux や OSx の場合は、ウェブの各種インストール手順を利用できます。libmp3lame を有効化しておく必要があります!]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Install fresh and up-to-date FFMpeg.]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title"><![CDATA[FFMPEG のパスを入力してください。システム・パスにインストールされている場合は空欄に設定してください]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick のパス]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[ImageMagick をインストールしてください。詳細は http://www.imagemagick.org を参照してください。インストール手順は http://www.imagemagick.org/script/binary-releases.php にありますが、多くのLinuxシステムではそれぞれのパッケージ・マネージャ（apt-get等）で取得可能です]]></entry>

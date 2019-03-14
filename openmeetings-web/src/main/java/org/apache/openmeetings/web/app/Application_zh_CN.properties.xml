@@ -769,7 +769,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.docQuality.text"><![CDATA[Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)]]></entry>
 	<entry key="install.wizard.params.step3.docQuality.title"><![CDATA[Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath"><![CDATA[FFMPEG 路径]]></entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[安装 FFMpeg. 你应该获得一个最新版本的FFMPEG!针对Windows你可以下载一个示例从 http://ffmpeg.arrozcru.org/builds/ Linux和OSX用户应该能够使用网上不同的安装说明，你需要激活libmp3lame！]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Install fresh and up-to-date FFMpeg.]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title"><![CDATA[输入FFMPEG的路径, 如果FFMPEG成功安装到系统路径，就不用填写这个字段]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick 路径]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[安装 ImageMagick 在服务器上，你可以得到更多的信息在 http://www.imagemagick.org 关于安装. 安装的说明可以在这里找到 http://www.imagemagick.org/script/binary-releases.php, 然而，在大多数linux系统中，您可以通过您最喜爱的软件包管理器来获得它(apt-get it)]]></entry>

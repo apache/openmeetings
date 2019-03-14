@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
+import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,9 @@ public class OmFileHelper {
 	/**
 	 * This variable needs to point to the openmeetings webapp directory
 	 */
-	private static File omHome = null;
+	private static File OM_HOME = null;
+	private static File DATA_HOME = null;
+	private static final String DATA_DIR = "data";
 	private static final String UPLOAD_DIR = "upload";
 	private static final String PUBLIC_DIR = "public";
 	private static final String CLIPARTS_DIR = "cliparts";
@@ -94,11 +97,17 @@ public class OmFileHelper {
 	private OmFileHelper() {}
 
 	public static void setOmHome(File home) {
-		omHome = home;
+		OM_HOME = home;
+		final String dataDir = System.getProperty("DATA_DIR");
+		if (Strings.isEmpty(dataDir)) {
+			DATA_HOME = new File(OM_HOME, DATA_DIR);
+		} else {
+			DATA_HOME = new File(dataDir);
+		}
 	}
 
 	public static void setOmHome(String home) {
-		omHome = new File(home);
+		setOmHome(new File(home));
 	}
 
 	public static File getRootDir() {
@@ -107,7 +116,7 @@ public class OmFileHelper {
 	}
 
 	public static File getOmHome() {
-		return omHome;
+		return OM_HOME;
 	}
 
 	private static File getDir(File parent, String name) {
@@ -119,7 +128,7 @@ public class OmFileHelper {
 	}
 
 	public static File getUploadDir() {
-		return new File(omHome, UPLOAD_DIR);
+		return new File(DATA_HOME, UPLOAD_DIR);
 	}
 
 	public static File getUploadFilesDir() {
@@ -192,7 +201,7 @@ public class OmFileHelper {
 	}
 
 	public static File getStreamsDir() {
-		return getDir(omHome, STREAMS_DIR);
+		return getDir(DATA_HOME, STREAMS_DIR);
 	}
 
 	public static File getStreamsHibernateDir() {
@@ -232,11 +241,11 @@ public class OmFileHelper {
 	}
 
 	public static File getLanguagesDir() {
-		return new File(omHome, LANGUAGES_DIR);
+		return new File(OM_HOME, LANGUAGES_DIR);
 	}
 
 	public static File getPublicDir() {
-		return new File(omHome, PUBLIC_DIR);
+		return new File(OM_HOME, PUBLIC_DIR);
 	}
 
 	public static File getPublicClipartsDir() {
@@ -248,7 +257,7 @@ public class OmFileHelper {
 	}
 
 	public static File getWebinfDir() {
-		return new File(omHome, WEB_INF_DIR);
+		return new File(OM_HOME, WEB_INF_DIR);
 	}
 
 	public static File getPersistence() {
@@ -264,7 +273,7 @@ public class OmFileHelper {
 	}
 
 	public static File getLdapConf(String name) {
-		return new File(new File(omHome, CONF_DIR), name);
+		return new File(new File(DATA_HOME, CONF_DIR), name);
 	}
 
 	public static void loadLdapConf(String name, Properties config) {
@@ -282,15 +291,15 @@ public class OmFileHelper {
 	}
 
 	public static File getScreenSharingDir() {
-		return new File(omHome, SCREENSHARING_DIR);
+		return new File(OM_HOME, SCREENSHARING_DIR);
 	}
 
 	public static File getImagesDir() {
-		return new File(omHome, IMAGES_DIR);
+		return new File(OM_HOME, IMAGES_DIR);
 	}
 
 	public static File getCssDir() {
-		return new File(omHome, CSS_DIR);
+		return new File(OM_HOME, CSS_DIR);
 	}
 
 	public static File getCssImagesDir() {

@@ -770,6 +770,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.docQuality.title"><![CDATA[Укажите качество встроенного jpeg изображения. 0 плохое (маленькое), 100 высокое (большое). (по умолчанию:90)]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath"><![CDATA[FFMPEG Путь]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Установите FFMpeg. Вы должны получить последнюю версию FFMPEG! Для Windows Вы можете скачать программу с этого сайта http://ffmpeg.arrozcru.org/builds/ Пользователи Linux или OSx могут использовать одну из различных Инструкций по установке из Сети. Вы должны установить libmp3lame!]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Установите самую  версию FFMpeg.]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title"><![CDATA[Укажите путь к FFMPEG, или не заполняйте данное поле если FFMPEG установлен в путях Вашей системы]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick Путь]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Установите ImageMagick на Ваш сервер, более подробную информацию касающуюся установки можно посмотреть тут http://www.imagemagick.org Инструкцию по установке Вы можете найти здесь http://www.imagemagick.org/script/binary-releases.php, однако в большинстве систем Линукс Вы можете установить его через Ваш менеджер пакетов (apt-get it)]]></entry>

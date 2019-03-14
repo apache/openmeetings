@@ -47,7 +47,7 @@
 		</init-param>
 		<init-param>
 			<param-name>ignorePaths</param-name>
-			<param-value>conf,css,docs,images,js,persistence,public,screenshare,streams,upload,services</param-value>
+			<param-value>css,docs,images,js,persistence,public,screenshare,data,services</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
@@ -97,19 +97,7 @@
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Forbidden</web-resource-name>
-			<url-pattern>/streams/*</url-pattern>
-		</web-resource-collection>
-		<web-resource-collection>
-			<web-resource-name>Forbidden</web-resource-name>
-			<url-pattern>/conf/*</url-pattern>
-		</web-resource-collection>
-		<web-resource-collection>
-			<web-resource-name>Forbidden</web-resource-name>
-			<url-pattern>/upload/*</url-pattern>
-		</web-resource-collection>
-		<web-resource-collection>
-			<web-resource-name>Forbidden</web-resource-name>
-			<url-pattern>/uploadtemp/*</url-pattern>
+			<url-pattern>/data/*</url-pattern>
 		</web-resource-collection>
 		<web-resource-collection>
 			<web-resource-name>Forbidden</web-resource-name>

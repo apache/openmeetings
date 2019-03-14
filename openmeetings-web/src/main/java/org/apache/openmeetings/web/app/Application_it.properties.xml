@@ -769,7 +769,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.docQuality.text"><![CDATA[Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)]]></entry>
 	<entry key="install.wizard.params.step3.docQuality.title"><![CDATA[Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath"><![CDATA[Percorso FFMPEG]]></entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Installa FFMpeg. Dovresti recuperare FFMPEG nella copia più aggiornata! Per Windows puoi scaricare una Build per esempio da http://ffmpeg.arrozcru.org/builds/ Gli utenti Linux o OSx dovrebbero poter usare una delle varie istruzioni di installazione presenti sul Web. Devi abilitare libmp3lame, libx264, libfdk_aac, libvorbis e libtheora.]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Install fresh and up-to-date FFMpeg.]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title"><![CDATA[Specifica il percorso di  FFMPEG, lascia vuoto se FFMPEG è già presente nel percorso di sistema]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[Percorso ImageMagick]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Installa ImageMagick sul server, puoi trovare informazioni su http://www.imagemagick.org per l'installazione. Le istruzioni per l'installazione possono essere recuperate qui http://www.imagemagick.org/script/binary-releases.php, comunque nella maggior parte dei sistemi linux potrai recuperarlo dal vostro gestore dei pacchetti (apt-get, yum, etc)]]></entry>

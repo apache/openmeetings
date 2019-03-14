@@ -767,7 +767,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.docQuality.text"><![CDATA[کیفیت عکس های jpeg را وارد کنید.0 بدترین(کوچک)، 100 بهترین(بزرگ).(پیش فرض:90)]]></entry>
 	<entry key="install.wizard.params.step3.docQuality.title"><![CDATA[کیفیت عکس های jpeg اضافه شده را در کیفیت وارد کنید.0 بدترین(کوچک)، 100  بهترین (بزرگ).(پیش فرض:90).]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath"><![CDATA[مسیر FFMPEG]]></entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[FFMpeg را نصب کنید.FFMPEG را در کپی بروز شده دریافت کنید.برای ویندوز می توانید یک Build به طور مثال از http://ffmpeg.arrozcru.org/builds/Linux دریافت کنند یا کاربران OSx باید قادر باشند یکی از دستورات نصب مختلف روی وب استفاده کنند.باید limp3lame را فعال کنید.]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Install fresh and up-to-date FFMpeg.]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title"><![CDATA[مسیر به FFMPEG را وارد کنید،اگر FFMPEG به طور موفق در مسیر سیستم نصب شده مسیر را خالی بگذارید]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[مسیر ImageMagick]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[ImageMagick را بر روی سرور نصب کنید، شما می توانید اطلاعات بیشتر را در http://www.ImageMagick.org با توجه به نصب دریافت کنید. دستورات نصب در آدرس http://www.ImageMagick.org/Script/binary-releases.php، یافت می شود، با این حال در اکثر سیستم های لینوکس میتوانید آنرا از طریق بسته مدیریتی دلخواه دریافت کنید.]]></entry>

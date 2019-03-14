@@ -767,7 +767,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.docQuality.text"><![CDATA[Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)]]></entry>
 	<entry key="install.wizard.params.step3.docQuality.title"><![CDATA[Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath"><![CDATA[FFMPEG útvonala]]></entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Telepítse az FFMpeg programcsomagot. Használja az FFMPEG aktuális, friss verzióját. Windows rendszerekhez kiadások itt http://ffmpeg.arrozcru.org/builds/ Linux, OSX rendszerkhez többféle lehetőség érhető el, keresse meg a megfelelőt az interneten. Szükséges a libmp3lame kóder engedélyezése/implementálása!]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Install fresh and up-to-date FFMpeg.]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title"><![CDATA[Adja meg az FFMPEG alérési útvonalát, hagyja üresen, ha az FFMPEG elérhető a rendszer útvonalak közt]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick útvonala]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Telepítse a ImageMagick program csomagot a szerverre. Telepítési útmutató és további információk itt http://www.imagemagick.org http://www.imagemagick.org/script/binary-releases.php, Linux operációs rendszerben használja a beépített csomagkezelőt (apt-get it).]]></entry>

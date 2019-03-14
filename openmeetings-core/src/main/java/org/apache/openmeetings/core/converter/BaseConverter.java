@@ -22,8 +22,8 @@ import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
+import static org.apache.openmeetings.util.OmFileHelper.getPublicDir;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
-import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
@@ -158,7 +158,7 @@ public abstract class BaseConverter {
 		stripAudioFirstPass(r, logs, waveFiles, streamFolder, chunks == null ? chunkDao.getNotScreenChunksByRecording(r.getId()) : chunks);
 		if (waveFiles.isEmpty()) {
 			// create default Audio to merge it. strip to content length
-			String oneSecWav = new File(getStreamsHibernateDir(), "one_second.wav").getCanonicalPath();
+			String oneSecWav = new File(getPublicDir(), "one_second.wav").getCanonicalPath();
 
 			// Calculate delta at beginning
 			double duration = diffSeconds(r.getRecordEnd(), r.getRecordStart());
