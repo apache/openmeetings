@@ -1,4 +1,3 @@
-#!/bin/bash
 ##############################################
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,58 +12,32 @@
 # limitations under the License.
 ##############################################
 
-### BEGIN INIT INFO
-# Provides: OpenMeetings
-# Required-Start: $network
-# Required-Stop: $network
-# Default-Start: 2 3 4 5
-# Default-Stop: 0 1 6
-# Short-Description: Start/Stop OpenMeetings server
-### END INIT INFO
+# sudo systemctl daemon-reload
+# sudo systemctl restart openmeetings
 
-DESC="OpenMeetings server"
-NAME=openmeetings
-OM_HOME=/opt/openmeetings
-PATH=/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-export CATALINA_PID=/var/run/${NAME}.pid
+[Unit]
+Description=Apache OpenMeetings server
+After=network.target
 
-start() {
-	cd ${OM_HOME}
-	touch ${CATALINA_PID}
-	chown nobody ${CATALINA_PID}
-	# HOME is required for jodConverter
-	/usr/bin/sudo -u nobody CATALINA_PID=${CATALINA_PID} ${OM_HOME}/bin/startup.sh
-}
+[Service]
+Type=forking
 
-stop() {
-	# TPID=$(ps aux | grep tomcat | awk 'NR==1{print $2}') # -- might be useful
-	TPID=$(cat ${CATALINA_PID})
-	kill -9 ${TPID}
-}
+Environment=JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+Environment=CATALINA_PID=/var/run/openmeetings.pid
+WorkingDirectory=/opt/openmeetings
+Environment=CATALINA_HOME=/opt/openmeetings
+Environment=CATALINA_BASE=/opt/openmeetings
+Environment='CATALINA_OPTS=-Xms4G -Xmx4G -server -XX:+UseParallelGC'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
 
-case "$1" in
-	start)
-		echo -n "Starting $DESC: $NAME"
-		start
-		echo "."
-	;;
-	stop)
-		echo -n "Stopping $DESC: $NAME"
-		stop
-		echo "."
-	;;
+ExecStart=/opt/openmeetings/bin/startup.sh
+ExecStop=/opt/openmeetings/bin/shutdown.sh
 
-	restart|force-reload)
-		echo -n "Restarting $DESC: $NAME"
-		stop
-		sleep 5
-		start
-		echo "."
-	;;
+User=nobody
+Group=nogroup
+UMask=0007
+RestartSec=10
+Restart=always
 
-	*)
-		echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
-		exit 1
-	;;
-
-esac
+[Install]
+WantedBy=multi-user.target
