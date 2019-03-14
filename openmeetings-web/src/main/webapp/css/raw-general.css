@@ -521,7 +521,7 @@ select.messages.selector {
 }
 .rooms-table {
 	display: inline-block;
-	min-width: 400px;
+	min-width: 415px;
 	height: 100%;
 	overflow-y: auto;
 }
@@ -729,6 +729,9 @@ form .input {
 }
 .dragbox-content .tableWrapper .list-table {
 	min-width: auto;
+}
+.level-meter {
+	border-radius: 3px;
 }
 /**** TODO need to be unified with other icons used ****/
 .hash-panel-main {
