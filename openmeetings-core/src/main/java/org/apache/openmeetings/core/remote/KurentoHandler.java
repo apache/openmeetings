@@ -281,7 +281,9 @@ public class KurentoHandler {
 					turn.put("username", turnUser)
 						.put("credential", turnSecret);
 				}
-				turn.put("url", String.format("turn:%s", turnUrl));
+				final String fturnUrl = "turn:" + turnUrl;
+				turn.put("url", fturnUrl); // old-school
+				turn.put("urls", fturnUrl);
 				arr.put(turn);
 			} catch (NoSuchAlgorithmException|InvalidKeyException e) {
 				log.error("Unexpected error while creating turn", e);
