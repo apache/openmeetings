@@ -209,9 +209,10 @@ public class KStream extends AbstractStream {
 	}
 
 	public void startRecord(StreamProcessor processor) {
-		log.debug("startRecord outMedia OK ? ", outgoingMedia != null);
+		log.debug("startRecord outMedia OK ? {}", outgoingMedia != null);
 		if (outgoingMedia == null) {
 			release(processor, true);
+			return;
 		}
 		final String chunkUid = "rec_" + room.getRecordingId() + "_" + randomUUID();
 		recorder = createRecorderEndpoint(room.getPipeline(), getRecUri(getRecordingChunk(room.getRoomId(), chunkUid)), profile);
