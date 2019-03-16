@@ -706,11 +706,11 @@ var Wb = function() {
 	function _setSize() {
 		switch (zoomMode) {
 			case 'fullFit':
-				zoom = Math.min((area.width() - 10) / width, (area.height() - bar.height() - 10) / height);
+				zoom = Math.min((area.width() - 30) / width, (area.height() - bar.height() - 30) / height);
 				z.find('.zoom').val(zoomMode);
 				break;
 			case 'pageWidth':
-				zoom = (area.width() - 10) / width;
+				zoom = (area.width() - 30) / width;
 				z.find('.zoom').val(zoomMode);
 				break;
 			default:

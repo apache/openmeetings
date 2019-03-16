@@ -125,7 +125,7 @@ public class KStream extends AbstractStream {
 		processor.addStream(this);
 		addListener(processor, sd.getSid(), sd.getUid(), sdpOffer);
 		if (room.isRecording()) {
-			startRecord();
+			startRecord(processor);
 		}
 		Client c = sd.getClient();
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
@@ -208,8 +208,12 @@ public class KStream extends AbstractStream {
 		return endpoint;
 	}
 
-	public void startRecord() {
-		final String chunkUid = String.format("rec_%s_%s", room.getRecordingId(), randomUUID());
+	public void startRecord(StreamProcessor processor) {
+		log.debug("startRecord outMedia OK ? ", outgoingMedia != null);
+		if (outgoingMedia == null) {
+			release(processor, true);
+		}
+		final String chunkUid = "rec_" + room.getRecordingId() + "_" + randomUUID();
 		recorder = createRecorderEndpoint(room.getPipeline(), getRecUri(getRecordingChunk(room.getRoomId(), chunkUid)), profile);
 		recorder.addTag("outUid", uid);
 		recorder.addTag("uid", uid);

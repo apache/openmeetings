@@ -404,7 +404,7 @@ public class StreamProcessor implements IStreamProcessor {
 		if (!kHandler.isConnected() || !hasRightsToRecord(c)) {
 			return;
 		}
-		kHandler.getRoom(c.getRoomId()).startRecording(cm, c, recDao);
+		kHandler.getRoom(c.getRoomId()).startRecording(this, c);
 	}
 
 	public void stopRecording(Client c) {

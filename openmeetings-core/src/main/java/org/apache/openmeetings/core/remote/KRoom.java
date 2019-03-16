@@ -34,7 +34,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
-import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
@@ -142,7 +141,7 @@ public class KRoom {
 		return new JSONObject(recordingUser.toString());
 	}
 
-	public void startRecording(IClientManager cm, Client c, RecordingDao recDao) {
+	public void startRecording(StreamProcessor processor, Client c) {
 		if (recordingStarted.compareAndSet(false, true)) {
 			log.debug("##REC:: recording in room {} is starting ::", roomId);
 			Room r = c.getRoom();
@@ -174,15 +173,15 @@ public class KRoom {
 			Optional<StreamDesc> osd = c.getScreenStream();
 			if (osd.isPresent()) {
 				osd.get().addActivity(Activity.RECORD);
-				cm.update(c);
+				processor.getClientManager().update(c);
 				rec.setWidth(osd.get().getWidth());
 				rec.setHeight(osd.get().getWidth());
 			}
-			rec = recDao.update(rec);
+			rec = processor.getRecordingDao().update(rec);
 			// Receive recordingId
 			recordingId = rec.getId();
 			for (final KStream stream : streams.values()) {
-				stream.startRecord();
+				stream.startRecord(processor);
 			}
 
 			// Send notification to all users that the recording has been started
