@@ -77,24 +77,24 @@ var Wb = function() {
 		});
 		return c;
 	}
-	function _initTexts() {
+	function _initTexts(sBtn) {
 		const c = _initGroup('#wb-area-texts', _getBtn('apointer'));
-		_initToolBtn('text', false, Text(wb, s));
-		_initToolBtn('textbox', false, Textbox(wb, s));
+		_initToolBtn('text', false, Text(wb, s, sBtn));
+		_initToolBtn('textbox', false, Textbox(wb, s, sBtn));
 		_initGroupHandle(c);
 	}
-	function _initDrawings() {
+	function _initDrawings(sBtn) {
 		const c = _initGroup('#wb-area-drawings', t.find('.texts'));
-		_initToolBtn('eraser', false, Whiteout(wb, s));
-		_initToolBtn('paint', false, Paint(wb, s));
-		_initToolBtn('line', false, Line(wb, s));
-		_initToolBtn('uline', false, ULine(wb, s));
-		_initToolBtn('rect', false, Rect(wb, s));
-		_initToolBtn('ellipse', false, Ellipse(wb, s));
-		_initToolBtn('arrow', false, Arrow(wb, s));
+		_initToolBtn('eraser', false, Whiteout(wb, s, sBtn));
+		_initToolBtn('paint', false, Paint(wb, s, sBtn));
+		_initToolBtn('line', false, Line(wb, s, sBtn));
+		_initToolBtn('uline', false, ULine(wb, s, sBtn));
+		_initToolBtn('rect', false, Rect(wb, s, sBtn));
+		_initToolBtn('ellipse', false, Ellipse(wb, s, sBtn));
+		_initToolBtn('arrow', false, Arrow(wb, s, sBtn));
 		_initGroupHandle(c);
 	}
-	function _initCliparts() {
+	function _initCliparts(sBtn) {
 		const c = OmUtil.tmpl('#wb-area-cliparts');
 		t.find('.drawings').after(c);
 		c.find('.om-icon.clipart').each(function() {
@@ -103,7 +103,7 @@ var Wb = function() {
 				.click(function() {
 					_setCurrent(c, cur);
 				});
-			_initToolBtn(cur.data('mode'), false, Clipart(wb, cur, s));
+			_initToolBtn(cur.data('mode'), false, Clipart(wb, cur, s, sBtn));
 		});
 		_initGroupHandle(c);
 	}
@@ -254,7 +254,8 @@ var Wb = function() {
 			, containment: 'parent'
 			, scroll: false
 		});
-		const clearAll = t.find('.om-icon.clear-all');
+		const clearAll = t.find('.om-icon.clear-all')
+			, sBtn = t.find('.om-icon.settings');
 		let _firstToolItem = true;
 		switch (role) {
 			case PRESENTER:
@@ -307,12 +308,12 @@ var Wb = function() {
 				if (role === WHITEBOARD) {
 					clearAll.addClass('disabled');
 				}
-				_initToolBtn('pointer', _firstToolItem, Pointer(wb, s));
+				_initToolBtn('pointer', _firstToolItem, Pointer(wb, s, sBtn));
 				_firstToolItem = false;
-				_initTexts();
-				_initDrawings();
-				_initToolBtn('math', _firstToolItem, TMath(wb, s));
-				_initCliparts();
+				_initTexts(sBtn);
+				_initDrawings(sBtn);
+				_initToolBtn('math', _firstToolItem, TMath(wb, s, sBtn));
+				_initCliparts(sBtn);
 				t.find('.om-icon.settings').click(function() {
 					s.show();
 				});
@@ -403,7 +404,7 @@ var Wb = function() {
 					_sendSetSize();
 				});
 				_setSize();
-				_initToolBtn('apointer', _firstToolItem, APointer(wb, s));
+				_initToolBtn('apointer', _firstToolItem, APointer(wb, s, sBtn));
 			default:
 				//no-op
 		}

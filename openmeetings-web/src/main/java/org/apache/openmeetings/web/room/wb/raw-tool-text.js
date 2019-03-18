@@ -1,5 +1,5 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var Text = function(wb, s) {
+var Text = function(wb, s, sBtn) {
 	const text = ShapeBase();
 	text.obj = null;
 	text.fabricType = 'i-text';
@@ -75,6 +75,7 @@ var Text = function(wb, s) {
 			i.removeClass('ui-state-active selected');
 		}
 		text._onActivate();
+		VideoUtil.highlight(sBtn.removeClass('disabled'), 5);
 	};
 	text.deactivate = function() {
 		wb.eachCanvas(function(canvas) {

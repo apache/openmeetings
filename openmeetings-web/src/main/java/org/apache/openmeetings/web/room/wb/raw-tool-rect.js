@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var Rect = function(wb, s) {
-	const rect = Shape(wb);
+var Rect = function(wb, s, sBtn) {
+	const rect = Shape(wb, sBtn);
 	rect.createShape = function() {
 		rect.obj = new fabric.Rect({
 			strokeWidth: rect.stroke.width

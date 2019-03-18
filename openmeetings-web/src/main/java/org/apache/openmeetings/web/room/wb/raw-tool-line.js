@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var Line = function(wb, s) {
-	const line = Shape(wb);
+var Line = function(wb, s, sBtn) {
+	const line = Shape(wb, sBtn);
 	line.createShape = function() {
 		line.obj = new fabric.Line([line.orig.x, line.orig.y, line.orig.x, line.orig.y], {
 			strokeWidth: line.stroke.width
