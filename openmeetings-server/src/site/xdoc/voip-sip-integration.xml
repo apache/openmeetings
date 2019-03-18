@@ -20,6 +20,12 @@
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 	<body>
+		<section name="Not implemented">
+			<div class="bd-callout bd-callout-danger">
+				Please NOTE: this functionality is not yet implemented in 5.0.x
+			</div>
+		</section>
+
 		<section name="VoIP and SIP Integration">
 			<p>
 				There are multiple ways to integrate with VoIP and or SIP.
