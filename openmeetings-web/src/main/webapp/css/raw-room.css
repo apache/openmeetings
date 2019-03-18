@@ -205,7 +205,7 @@
 .right.camera.ui-icon.granted {
 	background-image: url(images/webcam_delete.png);
 }
-.mute-others {
+.ui-icon.mute-others {
 	background-image: url(images/microphone_muteothers.png);
 }
 .restart.ui-icon {
