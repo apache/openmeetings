@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var Textbox = function(wb, s) {
-	const text = Text(wb, s);
+var Textbox = function(wb, s, sBtn) {
+	const text = Text(wb, s, sBtn);
 	text.fabricType = 'textbox';
 
 	text.createTextObj = function(canvas, pointer) {

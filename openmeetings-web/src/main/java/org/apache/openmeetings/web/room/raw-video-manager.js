@@ -81,7 +81,7 @@ var VideoManager = (function() {
 			return;
 		}
 		if (VideoUtil.isSharing(c)) {
-			_highlight(share
+			VideoUtil.highlight(share
 					.attr('title', share.data('user') + ' ' + c.user.firstName + ' ' + c.user.lastName + ' ' + share.data('text'))
 					.data('uid', c.uid)
 					.show(), 10);
@@ -105,16 +105,6 @@ var VideoManager = (function() {
 		if (!showShareBtn && uid === share.data('uid')) {
 			share.off('click').hide();
 		}
-	}
-	function _highlight(el, count) {
-		if (count < 0) {
-			return;
-		}
-		el.addClass('ui-state-highlight', 2000, function() {
-			el.removeClass('ui-state-highlight', 2000, function() {
-				_highlight(el, --count);
-			});
-		});
 	}
 	function _find(uid) {
 		return $(VID_SEL + ' div[data-client-uid="room' + uid + '"]');

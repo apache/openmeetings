@@ -86,6 +86,9 @@
 	margin: 0;
 	background-position: 4px !important;
 }
+.room.wb.area .tools .om-icon.big.settings {
+	border: 0 !important;
+}
 .room.wb.area .tools .dropdown-menu .om-icon.big {
 	float: none;
 }

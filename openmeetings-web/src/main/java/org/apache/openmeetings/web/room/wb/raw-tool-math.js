@@ -49,7 +49,7 @@ var StaticTMath = (function() {
 		, highlight: highlight
 	}
 })();
-var TMath = function(wb, s) {
+var TMath = function(wb, s, sBtn) {
 	const math = ShapeBase();
 	math.obj = null;
 
@@ -124,6 +124,7 @@ var TMath = function(wb, s) {
 		});
 		_updateDisabled();
 		ToolUtil.disableAllProps(s);
+		sBtn.addClass('disabled');
 	};
 	math.deactivate = function() {
 		wb.eachCanvas(function(canvas) {

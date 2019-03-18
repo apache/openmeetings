@@ -7,9 +7,9 @@ if (!String.prototype.endsWith) {
 		return this.substring(this_len - search.length, this_len) === search;
 	};
 }
-var Clipart = function(wb, btn, s) {
-	const art = Shape(wb);
-	art.add2Canvas = function(canvas) {}
+var Clipart = function(wb, btn, s, sBtn) {
+	const art = Shape(wb, sBtn);
+	art.add2Canvas = function() {}
 	art.createShape = function(canvas) {
 		const imgSrc = btn.data('image')
 			, opts = {
