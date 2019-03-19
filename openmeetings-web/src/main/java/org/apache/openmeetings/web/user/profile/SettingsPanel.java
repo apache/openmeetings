@@ -114,7 +114,6 @@ public class SettingsPanel extends UserBasePanel {
 		add(new TabbedPanel("tabs", tabs, new Options("active", active)) {
 			private static final long serialVersionUID = 1L;
 
-			/* This doesn't work so far
 			@Override
 			public boolean isActivatingEventEnabled() {
 				return true;
@@ -122,14 +121,6 @@ public class SettingsPanel extends UserBasePanel {
 
 			@Override
 			public void onActivating(AjaxRequestTarget target, int index, ITab tab) {
-				if (index == 0) {
-					profilePanel.setDefaultModelObject(userDao.get(getUserId()));
-					target.add(profilePanel);
-				}
-			}
-			*/
-			@Override
-			public void onActivate(AjaxRequestTarget target, int index, ITab tab) {
 				if (index == 0) {
 					profilePanel.update(target);
 				} else if (index == 1) {
