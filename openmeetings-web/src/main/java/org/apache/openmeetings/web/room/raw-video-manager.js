@@ -165,7 +165,7 @@ var VideoManager = (function() {
 		streams.forEach(function(sd) {
 			const m = {stream: sd, iceServers: iceServers};
 			if (VideoUtil.isSharing(sd)) {
-				_highlight(share
+				VideoUtil.highlight(share
 						.attr('title', share.data('user') + ' ' + sd.user.firstName + ' ' + sd.user.lastName + ' ' + share.data('text'))
 						.data('uid', sd.uid)
 						.data('cuid', sd.cuid)
@@ -191,16 +191,6 @@ var VideoManager = (function() {
 		if (!showShareBtn && uid === share.data('uid')) {
 			share.off('click').hide();
 		}
-	}
-	function _highlight(el, count) {
-		if (count < 0) {
-			return;
-		}
-		el.addClass('ui-state-highlight', 2000, function() {
-			el.removeClass('ui-state-highlight', 2000, function() {
-				_highlight(el, --count);
-			});
-		});
 	}
 	function _find(uid) {
 		return $(VID_SEL + ' div[data-client-uid="' + uid + '"][data-client-type="WEBCAM"]');

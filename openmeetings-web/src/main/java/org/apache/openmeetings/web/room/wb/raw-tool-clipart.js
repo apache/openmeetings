@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var Clipart = function(wb, btn, s) {
-	const art = Shape(wb);
+var Clipart = function(wb, btn, s, sBtn) {
+	const art = Shape(wb, sBtn);
 	art.add2Canvas = function() {}
 	art.createShape = function(canvas) {
 		const imgSrc = btn.data('image')

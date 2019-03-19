@@ -180,6 +180,16 @@ var VideoUtil = (function() {
 			|| (b.name === 'Chrome')
 			|| (b.name === 'Chromium');
 	}
+	function _highlight(el, count) {
+		if (!el || el.length < 1 || el.hasClass('disabled') || count < 0) {
+			return;
+		}
+		el.addClass('ui-state-highlight', 2000, function() {
+			el.removeClass('ui-state-highlight', 2000, function() {
+				_highlight(el, --count);
+			});
+		});
+	}
 
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
@@ -205,5 +215,6 @@ var VideoUtil = (function() {
 	self.askPermission = _askPermission;
 	self.disconnect = _disconnect;
 	self.sharingSupported = _sharingSupported;
+	self.highlight = _highlight;
 	return self;
 })();

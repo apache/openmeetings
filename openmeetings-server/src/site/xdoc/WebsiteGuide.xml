@@ -24,8 +24,8 @@
 			<subsection name="Required tools">
 				<div>
 					<ul>
-						<li>Sun JDK7</li>
-						<li>Apache Maven (3.3.9 or later)</li>
+						<li>JDK8</li>
+						<li>Apache Maven (3.5.0 or later)</li>
 					</ul>
 				</div>
 			</subsection>
