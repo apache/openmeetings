@@ -3,6 +3,9 @@ iframe {
 	width: 100%;
 	min-height: 700px;
 }
+.apachecon-banner.bannerRight img {
+	max-width: 250px;
+}
 .bannerRight img, .bannerLeft img {
 	height: 80px !important;
 }

@@ -32,7 +32,7 @@
 			<p>Some example commands:</p>
 			<p>MySQL (requires to place the MySQL JDBC driver into webapps/openmeetings/WEB-INF/lib before running the command):</p>
 			<source>./admin.sh -i -v -tz Europe/Berlin -email your.email@gmail.com -group webbase -user admin --smtp-server localhost \
-	--db-type mysql --db-name openmeetings_db --email-auth-user noreply@webbase-design.de --password 123qweasd \
+	--db-type mysql --db-name openmeetings_db --email-auth-user noreply@webbase-design.de --password 123qweAsd! \
 	--system-email-address noreply@webbase-design.de --db-user root --db-host localhost --email-auth-pass 123qweasd
 			</source>
 			<p>Derby (Not recommended for production environment):</p>

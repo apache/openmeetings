@@ -9,8 +9,7 @@ There are 2 ways the client communicates with the server:
 
 1. Pure HTTP: all browser-server communications go through plain, unsecured HTTP
 
-> This option can be used in case you will have frontend proxy to do encryption
-
+    This option can be used in case you will have frontend proxy to do encryption
 2. HTTPS: all browser-server communications will be encrypted
 
 ### Self-signed certificate
