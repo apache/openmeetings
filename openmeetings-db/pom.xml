@@ -112,6 +112,11 @@
 			<version>${postgresql.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>${mssql.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.mina</groupId>
 			<artifactId>mina-core</artifactId>
 			<version>${mina.version}</version>

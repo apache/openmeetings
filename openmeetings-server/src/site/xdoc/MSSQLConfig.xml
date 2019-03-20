@@ -13,16 +13,14 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>MSSQL Configuration</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
 		<section name="MSSQL Configuration">
-
 			<subsection name="Before you start">
 				<ul>
 					<li>You need Openmeetings 2.2 or later to use MSSQL integration</li>
@@ -42,23 +40,14 @@
 					</li>
 				</ul>
 			</subsection>
-
 			<subsection name="Steps todo">
 				<ul>
-					<li>
-						You need to download the JDBC driver from Microsoft
-						<a href="http://www.microsoft.com/en-us/download/details.aspx?displaylang=en&amp;id=11774" target="_blank"
-							rel="nofollow">http://www.microsoft.com/en-us/download/details.aspx?displaylang=en&amp;id=11774</a>
-						Unarchive appropriate file from it (sqljdbc.jar or sqljdbc4.jar) and place it into:
-						<tt>$OM_HOME/webapps/openmeetings/WEB-INF/lib/</tt>
-					</li>
 					<li>
 						Run OpenMeetings and goto the web-based installer:
 						http://localhost:5080/openmeetings/install
 					</li>
 				</ul>
 			</subsection>
-
 			<subsection name="MSSQL Sample Configuration">
 				<p>
 					There is a sample configuration for MySQL that ships with
@@ -67,10 +56,6 @@
 					/webapps/openmeetings/WEB-INF/classes/META-INF/mssql_persistence.xml
 				</p>
 			</subsection>
-
-
 		</section>
-
 	</body>
-
 </document>

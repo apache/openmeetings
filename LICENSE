@@ -2507,6 +2507,7 @@ webapps/openmeetings/WEB-INF/lib/grib-*.jar
 webapps/openmeetings/WEB-INF/lib/checker-compat-qual-*.jar
 webapps/openmeetings/WEB-INF/lib/jdk-serializable-functional-1.8.3.jar
 webapps/openmeetings/WEB-INF/lib/animal-sniffer-annotations-*.jar
+webapps/openmeetings/WEB-INF/lib/mssql-jdbc-*.jar
 
 The MIT License (MIT)
 
