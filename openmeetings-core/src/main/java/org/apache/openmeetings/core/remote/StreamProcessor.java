@@ -23,6 +23,7 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
+import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
 
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,7 @@ import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.IceCandidate;
+import org.kurento.client.internal.server.KurentoServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,16 +97,7 @@ public class StreamProcessor implements IStreamProcessor {
 				toggleActivity(c, Activity.valueOf(msg.getString("activity")));
 				break;
 			case "broadcastStarted":
-				sd = c.getStream(uid);
-				sender = getByUid(uid);
-				if (sender == null) {
-					KRoom room = kHandler.getRoom(c.getRoomId());
-					sender = room.join(sd);
-				}
-				sender.startBroadcast(this, sd, msg.getString("sdpOffer"));
-				if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !isRecording(c.getRoomId())) {
-					startRecording(c);
-				}
+				handleBroadcastStarted(c, uid, msg);
 				break;
 			case "onIceCandidate":
 				sender = getByUid(uid);
@@ -161,6 +154,25 @@ public class StreamProcessor implements IStreamProcessor {
 			default:
 				// no-op
 				break;
+		}
+	}
+
+	private void handleBroadcastStarted(Client c, final String uid, JSONObject msg) {
+		StreamDesc sd = c.getStream(uid);
+		KStream sender= getByUid(uid);
+		try {
+			if (sender == null) {
+				KRoom room = kHandler.getRoom(c.getRoomId());
+				sender = room.join(sd);
+			}
+			sender.startBroadcast(this, sd, msg.getString("sdpOffer"));
+			if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !isRecording(c.getRoomId())) {
+				startRecording(c);
+			}
+		} catch (KurentoServerException e) {
+			sender.release(this);
+			sendError(c, "Failed to start broadcast: " + e.getMessage());
+			log.error("Failed to start broadcast", e);
 		}
 	}
 

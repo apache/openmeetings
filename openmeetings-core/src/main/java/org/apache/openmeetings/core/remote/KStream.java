@@ -150,13 +150,13 @@ public class KStream extends AbstractStream {
 		final WebRtcEndpoint endpoint = getEndpointForUser(processor, sid, uid);
 		final String sdpAnswer = endpoint.processOffer(sdpOffer);
 
+		log.debug("gather candidates");
+		endpoint.gatherCandidates(); // this one might throw Exception
 		log.trace("USER {}: SdpAnswer is {}", this.uid, sdpAnswer);
 		processor.getHandler().sendClient(sid, newKurentoMsg()
 				.put("id", "videoResponse")
 				.put("uid", this.uid)
 				.put("sdpAnswer", sdpAnswer));
-		log.debug("gather candidates");
-		endpoint.gatherCandidates();
 	}
 
 	private WebRtcEndpoint getEndpointForUser(final StreamProcessor processor, String sid, String uid) {
