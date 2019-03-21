@@ -25,13 +25,13 @@ body {
 	--buffer-height: 4px;
 }
 body.no-header {
-	--header-height: 0px;
+	--header-height: 0ch; /* 0px is being stripped by YUI compressor*/
 }
 body.no-menu {
-	--menu-height: 0px;
+	--menu-height: 0ch; /* 0px is being stripped by YUI compressor*/
 }
 .adminPanel {
-	--lbl-nav-height: 0px;
+	--lbl-nav-height: 0ch; /* 0px is being stripped by YUI compressor*/
 	--nav-height: 30px;
 	--list-width: 518px;
 }
@@ -39,7 +39,7 @@ body.no-menu {
 	--lbl-nav-height: 40px;
 }
 .adminPanelColumnForm {
-	--actions-height: 0px;
+	--actions-height: 0ch; /* 0px is being stripped by YUI compressor*/
 }
 .adminPanelColumnForm .adminForm {
 	--actions-height: 40px;
