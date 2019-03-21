@@ -171,6 +171,10 @@ public class StreamProcessor implements IStreamProcessor {
 			}
 		} catch (KurentoServerException e) {
 			sender.release(this);
+			WebSocketHelper.sendClient(c, newKurentoMsg()
+					.put("id", "broadcastStopped")
+					.put("uid", sd.getUid())
+				);
 			sendError(c, "Failed to start broadcast: " + e.getMessage());
 			log.error("Failed to start broadcast", e);
 		}
