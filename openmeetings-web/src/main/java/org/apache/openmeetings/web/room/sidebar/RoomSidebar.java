@@ -22,7 +22,7 @@ import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -54,6 +54,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
@@ -88,7 +89,16 @@ public class RoomSidebar extends Panel {
 	private Client kickedClient;
 	private VideoSettings settings = new VideoSettings("settings");
 	private ActivitiesPanel activities;
-	private final ListView<Client> users = new ListView<Client>("user", new ArrayList<Client>()) {
+	private final ListView<Client> users = new ListView<Client>("user", new LoadableDetachableModel<List<Client>>() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected List<Client> load() {
+			List<Client> list = cm.listByRoom(room.getRoom().getId());
+			userCount.setDefaultModelObject(list.size());
+			return list;
+		}
+	}) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -228,7 +238,7 @@ public class RoomSidebar extends Panel {
 		final Form<?> form = new Form<>("form");
 		ConfirmableBorderDialog confirmTrash = new ConfirmableBorderDialog("confirm-trash", getString("80"), getString("713"), form);
 		roomFiles = new RoomFilePanel("tree", room, addFolder, confirmTrash);
-		add(selfRights, userList.add(updateUsers()).setOutputMarkupId(true)
+		add(selfRights, userList.add(users).setOutputMarkupId(true)
 				, fileTab.setVisible(!room.isInterview()), roomFiles.setVisible(!room.isInterview()));
 
 		add(addFolder, settings, userCount.setOutputMarkupId(true));
@@ -255,11 +265,6 @@ public class RoomSidebar extends Panel {
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_SETTINGS, avSettings, explicit(PARAM_SETTINGS))));
 	}
 
-	private ListView<Client> updateUsers() {
-		users.setList(cm.listByRoom(room.getRoom().getId()));
-		return users;
-	}
-
 	private void updateShowFiles(IPartialPageRequestHandler handler) {
 		if (room.isInterview()) {
 			return;
@@ -273,8 +278,6 @@ public class RoomSidebar extends Panel {
 			return;
 		}
 		updateShowFiles(handler);
-		updateUsers();
-		userCount.setDefaultModelObject(users.getList().size());
 		handler.add(selfRights.update(handler), userList, userCount);
 	}
 
