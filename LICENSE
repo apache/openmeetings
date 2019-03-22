@@ -2569,6 +2569,7 @@ lib/grib-*.jar
 lib/checker-compat-qual-*.jar
 lib/jdk-serializable-functional-1.8.3.jar
 lib/animal-sniffer-annotations-*.jar
+lib/mssql-jdbc-*.jar
 
 The MIT License (MIT)
 

@@ -56,13 +56,6 @@
 				<db_user>sa</db_user>
 				<db_pass>ass</db_pass>
 			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>com.microsoft.sqlserver</groupId>
-					<artifactId>mssql-jdbc</artifactId>
-					<version>${mssql.version}</version>
-				</dependency>
-			</dependencies>
 		</profile>
 		<profile>
 			<id>Jenkins</id>

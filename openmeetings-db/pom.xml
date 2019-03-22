@@ -112,6 +112,11 @@
 			<version>${postgresql.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>${mssql.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-util</artifactId>
 			<version>${project.version}</version>

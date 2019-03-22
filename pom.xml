@@ -79,10 +79,10 @@
 		<red5-server.version>1.0.10</red5-server.version>
 		<red5-client.version>1.0.10</red5-client.version>
 		<spring.version>5.1.5.RELEASE</spring.version>
-		<mina.version>2.0.20</mina.version>
+		<mina.version>2.1.0</mina.version>
 		<tomcat.version>9.0.17</tomcat.version>
 		<ical4j.version>3.0.6</ical4j.version>
-		<cxf.version>3.3.0</cxf.version>
+		<cxf.version>3.3.1</cxf.version>
 		<selenium.version>3.141.59</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.0</jettison.version>
@@ -102,7 +102,7 @@
 		<commons-codec.version>1.12</commons-codec.version>
 		<commons-io.version>2.6</commons-io.version>
 		<mysql.version>8.0.11</mysql.version>
-		<mssql.version>6.2.1.jre8</mssql.version>
+		<mssql.version>7.2.1.jre8</mssql.version>
 		<pdfbox.version>2.0.14</pdfbox.version>
 		<commons-collections4.version>4.3</commons-collections4.version>
 		<xstream.version>1.4.11.1</xstream.version>
@@ -112,7 +112,7 @@
 		<commons-text.version>1.6</commons-text.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.61</bcprov-jdk15on.version>
-		<mockito.version>2.24.5</mockito.version>
+		<mockito.version>2.25.1</mockito.version>
 		<jaxws-api.version>2.3.1</jaxws-api.version>
 		<javax.jws-api.version>1.1</javax.jws-api.version>
 		<!--  URL of the ASF SonarQube server  -->
