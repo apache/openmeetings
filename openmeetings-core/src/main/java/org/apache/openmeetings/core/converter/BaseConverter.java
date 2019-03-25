@@ -315,6 +315,7 @@ public abstract class BaseConverter {
 		argv.addAll(Arrays.asList(
 				"-c:v", "h264", //
 				"-crf", "24",
+				"-vsync", "0",
 				"-pix_fmt", "yuv420p",
 				"-preset", getVideoPreset(),
 				"-profile:v", "baseline",
