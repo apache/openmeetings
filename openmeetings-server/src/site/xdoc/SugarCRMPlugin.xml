@@ -23,14 +23,8 @@
 
 		<section name="SugarCRM Plugin for OpenMeetings">
 			<p>
-				You can get the latest Version of the Plugin for SugarCRM from the
-				<a href="downloads.html">downloads</a>
-				.
-			</p>
-			<p>
 				You can find the OpenMeetings Plugin also in the
-				<a href="http://www.sugarforge.org/projects/openmeetings/" target="_blank" rel="nofollow">SugarCRM Plugin database</a>
-				.
+				<a href="http://www.sugarforge.org/projects/openmeetings/" target="_blank" rel="nofollow">SugarCRM Plugin database</a>.
 			</p>
 		</section>
 
@@ -65,7 +59,7 @@
 
 		<section name="Demo video">
 			<p>The demo video of SugarCRM plugin show you the plugin in action </p>
-			<iframe width="640" height="390" src="http://www.youtube.com/embed/xrDbcXqxDq8" frameborder="0" allowfullscreen=""></iframe>
+			<iframe width="640" height="390" src="https://www.youtube.com/embed/xrDbcXqxDq8" frameborder="0" allowfullscreen=""></iframe>
 		</section>
 
 	</body>
