@@ -128,9 +128,9 @@ var VideoSettings = (function() {
 		}
 	}
 	function _clear(_ms) {
-		const ms = _ms || (vid.length === 1 ? vid[0].srcObject : null);
+		const ms = _ms || (vid && vid.length === 1 ? vid[0].srcObject : null);
 		VideoUtil.cleanStream(ms);
-		if (vid.length === 1) {
+		if (vid && vid.length === 1) {
 			vid[0].srcObject = null;
 		}
 		VideoUtil.cleanPeer(rtcPeer);
