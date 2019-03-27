@@ -591,7 +591,7 @@ var VideoSettings = (function() {
 		, open: _open
 		, close: function() {
 			_close();
-			vs.dialog('close');
+			vs && vs.dialog('close');
 		}
 		, load: _load
 		, save: _save
