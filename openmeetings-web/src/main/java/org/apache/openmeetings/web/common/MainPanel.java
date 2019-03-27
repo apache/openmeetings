@@ -124,6 +124,10 @@ public class MainPanel extends Panel {
 		setAuto(true);
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
+	}
+
+	@Override
+	protected void onInitialize() {
 		add(new OmWebSocketPanel("ws-panel") {
 			private static final long serialVersionUID = 1L;
 
@@ -182,10 +186,6 @@ public class MainPanel extends Panel {
 				return getClient();
 			}
 		});
-	}
-
-	@Override
-	protected void onInitialize() {
 		menu = new MenuPanel("menu", getMainMenu());
 		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
 		add(contents.add(getClient() == null || panel == null ? EMPTY : panel).setOutputMarkupId(true).setMarkupId("contents"));

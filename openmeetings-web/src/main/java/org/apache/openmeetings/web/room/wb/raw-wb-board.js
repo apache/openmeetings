@@ -15,9 +15,15 @@ var Wb = function() {
 	function _setActive() {
 		!!t && t.find('.om-icon.' + mode).addClass(ACTIVE);
 	}
+	function __validBtn(btn) {
+		return !!btn && btn.length === 1
+			&& typeof(btn.data) === 'function'
+			&& typeof(btn.data()) === 'object'
+			&& typeof(btn.data().deactivate) === 'function';
+	}
 	function _btnClick(toolType) {
 		const b = _getBtn();
-		if (b.length && b.hasClass(ACTIVE)) {
+		if (__validBtn(b)) {
 			b.data().deactivate();
 		}
 		_cleanActive();
@@ -474,7 +480,7 @@ var Wb = function() {
 				_updateZoomPanel();
 				if (ccount !== canvases.length) {
 					const b = _getBtn();
-					if (b.length && b.hasClass(ACTIVE)) {
+					if (__validBtn(b)) {
 						b.data().deactivate();
 						b.data().activate();
 					}
@@ -753,7 +759,7 @@ var Wb = function() {
 	wb.setRole = function(_role) {
 		if (role !== _role) {
 			const btn = _getBtn();
-			if (!!btn && btn.length === 1) {
+			if (__validBtn(btn)) {
 				btn.data().deactivate();
 			}
 			a.find('.tools').remove();
