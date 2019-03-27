@@ -174,9 +174,9 @@ public class RoomPanel extends BasePanel {
 				for (StreamDesc sd : c.getStreams()) {
 					streams.put(sd.toJson());
 				}
-				if (streams.length() > 0) {
-					sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers()).append(");");
-				}
+			}
+			if (streams.length() > 0) {
+				sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers()).append(");");
 			}
 			if (interview && streamProcessor.recordingAllowed(getClient())) {
 				sb.append("WbArea.setRecEnabled(true);");
