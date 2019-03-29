@@ -42,6 +42,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -79,26 +80,28 @@ import org.simpleframework.xml.Root;
 	@FetchGroup(name = "backupexport", attributes = { @FetchAttribute(name = "password") })
 	, @FetchGroup(name = "groupUsers", attributes = { @FetchAttribute(name = "groupUsers")})
 })
+@NamedQueries({
 @NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.id = :id")
-@NamedQuery(name = "getUsersByIds", query = "select c from User c where c.id IN :ids")
-@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))")
-@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.address.email = :email AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))")
-@NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash")
-@NamedQuery(name = "getUserByExpiredHash",  query = "SELECT u FROM User u WHERE u.resetDate < :date")
-@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.address.email = :email AND u.type = :type AND u.ownerId = :ownerId")
-@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.id) from User c "
+, @NamedQuery(name = "getUsersByIds", query = "select c from User c where c.id IN :ids")
+, @NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))")
+, @NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.address.email = :email AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))")
+, @NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash")
+, @NamedQuery(name = "getUserByExpiredHash",  query = "SELECT u FROM User u WHERE u.resetDate < :date")
+, @NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.address.email = :email AND u.type = :type AND u.ownerId = :ownerId")
+, @NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.id) from User c "
 		+ "where c.deleted = false " + "AND ("
 		+ "lower(c.login) LIKE :search "
 		+ "OR lower(c.firstname) LIKE :search "
 		+ "OR lower(c.lastname) LIKE :search )")
-@NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u ORDER BY u.id")
-@NamedQuery(name = "getPassword", query = "SELECT u.password FROM User u WHERE u.deleted = false AND u.id = :userId ")
-@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.id = :userId")
-@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false")
-@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false")
-@NamedQuery(name = "getUsersByGroupId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.groupUsers.group.id = :groupId")
-@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalId LIKE :externalId AND u.externalType LIKE :externalType")
-@NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.address.email = :userOrEmail)")
+, @NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u ORDER BY u.id")
+, @NamedQuery(name = "getPassword", query = "SELECT u.password FROM User u WHERE u.deleted = false AND u.id = :userId ")
+, @NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.id = :userId")
+, @NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false")
+, @NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false")
+, @NamedQuery(name = "getUsersByGroupId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.groupUsers.group.id = :groupId")
+, @NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalId LIKE :externalId AND u.externalType LIKE :externalType")
+, @NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.address.email = :userOrEmail)")
+})
 @Table(name = "om_user")
 @Root(name = "user")
 public class User extends HistoricalEntity {

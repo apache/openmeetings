@@ -86,7 +86,11 @@ public class ApplicationHelper {
 			} catch(IllegalStateException e) {
 				app.setServletContext(new MockServletContext(app, null));
 			}
-			app.setConfigurationType(RuntimeConfigurationType.DEPLOYMENT);
+			try {
+				app.setConfigurationType(RuntimeConfigurationType.DEPLOYMENT);
+			} catch(IllegalStateException e) {
+				//no-op configuration type already set
+			}
 			OMContextListener omcl = new OMContextListener();
 			omcl.contextInitialized(new ServletContextEvent(app.getServletContext()));
 			ThreadContext.setApplication(app);
