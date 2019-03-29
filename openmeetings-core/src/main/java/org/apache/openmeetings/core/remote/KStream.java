@@ -200,10 +200,11 @@ public class KStream extends AbstractStream {
 		endpoint.addTag("outUid", this.uid);
 		endpoint.addTag("uid", uid);
 
-		endpoint.addIceCandidateFoundListener(evt -> processor.getHandler().sendClient(sid, newKurentoMsg()
-						.put("id", "iceCandidate")
-						.put("uid", KStream.this.uid)
-						.put(PARAM_CANDIDATE, convert(JsonUtils.toJsonObject(evt.getCandidate()))))
+		endpoint.addIceCandidateFoundListener(evt -> processor.getHandler().sendClient(sid
+				, newKurentoMsg()
+					.put("id", "iceCandidate")
+					.put("uid", KStream.this.uid)
+					.put(PARAM_CANDIDATE, convert(JsonUtils.toJsonObject(evt.getCandidate()))))
 				);
 		return endpoint;
 	}

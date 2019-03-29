@@ -11,6 +11,17 @@ var VideoManager = (function() {
 			if (error) {
 				return OmUtil.error(error);
 			}
+			const vidEls = w.find('audio, video')
+				, vidEl = vidEls.length === 1 ? vidEls[0] : null;
+			if (vidEl && vidEl.paused) {
+				vidEl.play().catch(function(err) {
+					if ('NotAllowedError' === err.name) {
+						VideoUtil.askPermission(function() {
+							vidEl.play();
+						});
+					}
+				});
+			}
 		});
 	}
 	function _onBroadcast(msg) {

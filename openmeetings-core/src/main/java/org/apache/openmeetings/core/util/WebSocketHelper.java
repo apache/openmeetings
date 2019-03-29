@@ -55,9 +55,9 @@ import com.github.openjson.JSONObject;
 public class WebSocketHelper {
 	private static final Logger log = LoggerFactory.getLogger(WebSocketHelper.class);
 
-	public static void sendClient(final IWsClient _c, byte[] b) {
-		if (_c != null) {
-			sendClient(_c, c -> {
+	public static void sendClient(final IWsClient inC, byte[] b) {
+		if (inC != null) {
+			sendClient(inC, c -> {
 				try {
 					c.sendMessage(b, 0, b.length);
 				} catch (IOException e) {
@@ -67,9 +67,10 @@ public class WebSocketHelper {
 		}
 	}
 
-	public static void sendClient(final IWsClient _c, JSONObject msg) {
-		if (_c != null) {
-			sendClient(_c, c -> {
+	public static void sendClient(final IWsClient inC, JSONObject msg) {
+		log.trace("Sending WebSocket message to Client: {} -> {}", inC, msg);
+		if (inC != null) {
+			sendClient(inC, c -> {
 				try {
 					c.sendMessage(msg.toString());
 				} catch (IOException e) {
