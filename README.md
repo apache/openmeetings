@@ -29,10 +29,10 @@ Building and running
 ====================
 To build from source code:
 
-  - Requirements:  
-    Sources compilation require [Oracle Java SE 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  
+  - Requirements:
+    Sources compilation require [Oracle Java SE 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
     The project is built with [Apache Maven 3.3.9 or later](https://maven.apache.org/). 
-  - To build the OpenMeetings project run mvn in the root directory:  
+  - To build the OpenMeetings project run mvn in the root directory:
      `mvn clean install -P allModules`
   - To run the OpenMeetings project:
     - go to `openmeetings-server/target` directory
@@ -46,6 +46,18 @@ Release Notes
 =============
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
+
+5.0.0-M1
+-----
+[Release 5.0.0-M1](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M1), provides following improvements:
+
+This release provides WebRTC audio/video/screen-sharing in the Room
+Flash plugin is no more required in the browser
+
+Please NOTE: this version might be not production ready
+
+Some other fixes and improvements, 30 issues were addressed
+
 
 4.0.8
 -----

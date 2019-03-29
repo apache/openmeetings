@@ -2,8 +2,48 @@ Apache OpenMeetings Change Log
 ==============================
 Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 
-See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)  
+See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
+
+
+Release Notes - Openmeetings - Version 5.0.0-M1
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-1761] - Restore of backups earlier than 3.1.3 should be dropped
+    * [OPENMEETINGS-1850] - Currently build is broken
+    * [OPENMEETINGS-1857] - RoomWebService hash method is broken
+    * [OPENMEETINGS-1962] - Video about OM 5.0.0 Snapshot 2630
+    * [OPENMEETINGS-1981] - When try send invitation no show users-mail addresses
+    * [OPENMEETINGS-2023] - Audio/Video should be turned off in case right was revoked
+    * [OPENMEETINGS-2027] - Screen-sharing/Recording is not working with Firefox or Safari
+    * [OPENMEETINGS-2028] - Site contents need to be updated
+    * [OPENMEETINGS-2029] - The mic at room don`t work - Firefox and Safari. The cam works in firefox, not in Safari
+    * [OPENMEETINGS-2031] - "Mute others" icon is absent on video pad
+    * [OPENMEETINGS-2035] - When start a recording can not stop it
+    * [OPENMEETINGS-2039] - When recording the video file have errors 
+    * [OPENMEETINGS-2041] - Microphone feedback in OM 5.0
+    * [OPENMEETINGS-2046] - webm recording not always correctly converted to mp4
+
+* Improvement
+    * [OPENMEETINGS-29] - Mitigate Bandwidth Congestion when sharing the screen
+    * [OPENMEETINGS-550] - GSOC: Improvements for video conferencing with limited bandwidth.
+    * [OPENMEETINGS-710] - Make OpenMeetings 3.x tree runnable in Eclipse and provide some docs
+    * [OPENMEETINGS-1178] - GSOC: WebRTC support for OM
+    * [OPENMEETINGS-1352] - Change screen capturing via java applet to webRTC way
+    * [OPENMEETINGS-1649] - HTML5 video need to be implemented
+    * [OPENMEETINGS-1854] - Test recording should be implemented
+    * [OPENMEETINGS-1855] - Network checking tool need to be migrated to JS
+    * [OPENMEETINGS-1867] - Code-clean-up
+    * [OPENMEETINGS-1955] - Room recording need to be implemented
+    * [OPENMEETINGS-2003] - When opening a drawing board tool, the tool properties should automatically open up
+    * [OPENMEETINGS-2032] - CSS need to be simplified, JS calls reduced
+    * [OPENMEETINGS-2033] - User files location need to be configurable
+
+* Task
+    * [OPENMEETINGS-1856] - Sonar issues need to be addressed (M1)
+    * [OPENMEETINGS-1859] - Library versions need to be updated (5.0.0-M1)
+    * [OPENMEETINGS-2049] - Room performance need to be tested
 
 
 Release Notes - Openmeetings - Version 4.0.8
@@ -1791,7 +1831,7 @@ Release Notes - OpenMeetings - Version 3.0.0
     * [OPENMEETINGS-693] - Tomcat 7 patch should be removed from OM build
     * [OPENMEETINGS-695] - Rooms page is not completly in the HTML version
     * [OPENMEETINGS-696] - Choose device dialog is not availble in the restricted room
-    * [OPENMEETINGS-702] - when uploading file in a room, after click start upload,  return a window with HTTP-ERROR: 500  
+    * [OPENMEETINGS-702] - when uploading file in a room, after click start upload,  return a window with HTTP-ERROR: 500
     * [OPENMEETINGS-703] - Invitation is not implemented to the HTML Calendar
     * [OPENMEETINGS-704] - Calendar UI - Unify button list (Cancel always on right side)
     * [OPENMEETINGS-705] - Not possible to enter any conference room

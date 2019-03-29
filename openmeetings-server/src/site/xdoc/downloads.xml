@@ -26,12 +26,57 @@
 				All downloads should be verified using the Apache OpenMeetings code
 				signing <a href="https://www.apache.org/dist/openmeetings/KEYS">KEYS</a>, <br/>
 				Here are <a href="https://www.apache.org/dyn/closer.cgi#verify">the instructions</a><br/>
-				<br/>
-				changes: <a href="https://www.apache.org/dist/openmeetings/4.0.8/CHANGELOG.md">CHANGELOG.md</a>.
 			</p>
 			<p>
 				All versions are available for download as source and binary.
 			</p>
+			<subsection name="Latest Official WebRTC Release">
+				<p>
+					Apache OpenMeetings 5.0.0-M1<br/>
+					Please NOTE: this version might be not production ready
+				</p>
+				<ul>
+					<li>
+						Binaries:
+						<ul>
+							<li>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M1/bin/apache-openmeetings-5.0.0-M1.zip">apache-openmeetings-5.0.0-M1.zip</a>
+								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M1/bin/apache-openmeetings-5.0.0-M1.zip.asc">[SIG]</a>
+								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M1/bin/apache-openmeetings-5.0.0-M1.zip.sha512">[SHA512]</a>
+							</li>
+							<li>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M1/bin/apache-openmeetings-5.0.0-M1.tar.gz">apache-openmeetings-5.0.0-M1.tar.gz</a>
+								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M1/bin/apache-openmeetings-5.0.0-M1.tar.gz.asc">[SIG]</a>
+								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M1/bin/apache-openmeetings-5.0.0-M1.tar.gz.sha512">[SHA512]</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						Sources:
+						<ul>
+							<li>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M1/src/apache-openmeetings-5.0.0-M1-src.zip">apache-openmeetings-5.0.0-M1-src.zip</a>
+								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M1/src/apache-openmeetings-5.0.0-M1-src.zip.asc">[SIG]</a>
+								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M1/src/apache-openmeetings-5.0.0-M1-src.zip.sha512">[SHA512]</a>
+							</li>
+							<li>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M1/src/apache-openmeetings-5.0.0-M1-src.tar.gz">apache-openmeetings-5.0.0-M1-src.tar.gz</a>
+								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M1/src/apache-openmeetings-5.0.0-M1-src.tar.gz.asc">[SIG]</a>
+								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M1/src/apache-openmeetings-5.0.0-M1-src.tar.gz.sha512">[SHA512]</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						Changes: <a href="https://www.apache.org/dist/openmeetings/5.0.0-M1/CHANGELOG.md">CHANGELOG.md</a>.
+					</li>
+					<li>
+						Docker image: <a href="https://github.com/openmeetings/openmeetings-docker/tree/5.0.0-M1">https://github.com/openmeetings/openmeetings-docker/tree/5.0.0-M1</a>
+					</li>
+					<li>
+						<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Live+iso+OpenMeetings+on+Ubuntu">Live OM iso images by Alvaro</a>
+					</li>
+				</ul>
+			</subsection>
 			<subsection name="Latest Official Release">
 				<p>
 					Apache OpenMeetings 4.0.8
@@ -66,6 +111,9 @@
 								<a href="https://www.apache.org/dist/openmeetings/4.0.8/src/apache-openmeetings-4.0.8-src.tar.gz.sha512">[SHA512]</a>
 							</li>
 						</ul>
+					</li>
+					<li>
+						Changes: <a href="https://www.apache.org/dist/openmeetings/4.0.8/CHANGELOG.md">CHANGELOG.md</a>.
 					</li>
 					<li>
 						Docker image: <a href="https://github.com/openmeetings/openmeetings-docker/tree/4.0.8">https://github.com/openmeetings/openmeetings-docker/tree/4.0.8</a>

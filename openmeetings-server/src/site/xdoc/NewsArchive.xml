@@ -20,6 +20,52 @@
 	</properties>
 
 	<body>
+		<section name="Release 4.0.8">
+			<div class="bd-callout bd-callout-info">
+				<h4>Version 4.0.8 released!</h4>
+				<div>Release 4.0.8, provides following improvements:<br/>
+					Mobile client:
+					<ul>
+						<li>Mobile clients are displayed in user list</li>
+						<li>Audio/Video switching is more stable</li>
+					</ul>
+					OAuth:
+					<ul>
+						<li>VK based OAuth login is fixed</li>
+						<li>Integrate Wso2 Identity Server</li>
+					</ul>
+					Activities&amp;Actions:
+					<ul>
+						<li>Less actions for non-moderators</li>
+						<li>No duplicated actions are displayed</li>
+					</ul>
+					White board:
+					<ul>
+						<li>Video on WB works in latest Safari</li>
+						<li>White Out tool is added</li>
+						<li>Whiteboard size can be tuned</li>
+						<li>Link to LaTeX guide is added</li>
+					</ul>
+					Room User list:
+					<ul>
+						<li>Issue with user's display name is fixed</li>
+						<li>"Ghost" users are not displayed in the room</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
+				</div>
+				<br/>
+
+				<span>
+					30 issues are fixed please check <br/>
+					<a href="https://archive.apache.org/dist/openmeetings/4.0.8/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344753">Detailed list</a>
+				</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.8">Archived download</a>.</span>
+				<span class="date">(2019-03-08)</span>
+			</div>
+		</section>
 		<section name="Release 4.0.7">
 			<div class="bd-callout bd-callout-info">
 				<h4>Version 4.0.7 released!</h4>
@@ -46,7 +92,7 @@
 
 				<span>
 					18 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.7/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/4.0.7/CHANGELOG.md">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344283">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.7">Archived download</a>.</span>
@@ -71,7 +117,7 @@
 
 				<span>
 					16 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.6/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/4.0.6/CHANGELOG.md">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343986">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.6">Archived download</a>.</span>
@@ -97,7 +143,7 @@
 
 				<span>
 					24 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.5/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/4.0.5/CHANGELOG.md">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343344">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.5">Archived download</a>.</span>
@@ -124,7 +170,7 @@
 
 				<span>
 					9 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.4/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/4.0.4/CHANGELOG.md">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343045">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.4">Archived download</a>.</span>
@@ -153,7 +199,7 @@
 
 				<span>
 					13 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.3/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/4.0.3/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342829">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.3">Archived download</a>.</span>
@@ -193,7 +239,7 @@
 
 				<span>
 					32 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.2/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/4.0.2/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342276">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.2">Archived download</a>.</span>
@@ -220,7 +266,7 @@
 
 				<span>
 					43 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.1/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/4.0.1/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342042">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.1">Archived download</a>.</span>
@@ -256,7 +302,7 @@
 
 				<span>
 					515 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.0/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/4.0.0/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12324572">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.0">Archived download</a>.</span>
@@ -281,7 +327,7 @@
 				<br/>
 				<span>
 					8 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.3.2/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/3.3.2/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12341445">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.3.2">Archived download</a>.</span>
@@ -307,7 +353,7 @@
 				<br/>
 				<span>
 					19 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.3.1/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/3.3.1/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12340997">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.3.1">Archived download</a>.</span>
@@ -343,7 +389,7 @@
 				<br/>
 				<span>
 					21 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.3.0/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/3.3.0/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12339849">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.3.0">Archived download</a>.</span>
@@ -383,7 +429,7 @@
 				<br/>
 				<span>
 					49 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.2.1/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/3.2.1/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12339215">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.2.1">Archived download</a>.</span>
@@ -410,7 +456,7 @@
 				<br/>
 				<span>
 					128 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.2.0/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/3.2.0/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12335565">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.2.0">Archived download</a>.</span>
@@ -433,7 +479,7 @@
 				</div>
 				<div>
 					11 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.1.5/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/3.1.5/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12338819">Detailed list</a>
 				</div>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.5">Archived download</a>.</span>
@@ -468,7 +514,7 @@
 				<br/>
 				<span>
 					47 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.1.4/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/3.1.4/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12338183">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.4">Archived download</a>.</span>
@@ -493,7 +539,7 @@
 				<br/>
 				<span>
 					21 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.1.3/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/3.1.3/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12337950">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.3">Archived download</a>.</span>
@@ -523,7 +569,7 @@
 				<br/>
 				<span>
 					55 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.1.2/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/3.1.2/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12335347">Detailed list</a>
 				</span>
 				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.2">Archived download</a>.</span>
@@ -544,7 +590,7 @@
 				</div>
 				<span>
 					8 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.1.1/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/3.1.1/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12334656">Detailed list</a>
 				</span>
 				<div class="bd-callout bd-callout-danger">please NOTE this release contains screen-sharing application signed be self-signed certificate due to <a href="https://issues.apache.org/jira/browse/INFRA-11384">INFRA-11384</a>.
