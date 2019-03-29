@@ -141,6 +141,11 @@ public abstract class OmWebSocketPanel extends Panel {
 
 	public OmWebSocketPanel(String id) {
 		super(id);
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		add(pingTimer, wsBehavior);
 		pingTimer.stop(null);
 	}

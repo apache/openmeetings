@@ -144,8 +144,7 @@ public class RoomPanel extends BasePanel {
 			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
 				options.put("reloadUrl", r.getRedirectURL());
 			}
-			StringBuilder sb = new StringBuilder()
-					.append("Room.init(").append(options.toString(new NullStringer())).append(");")
+			StringBuilder sb = new StringBuilder("Room.init(").append(options.toString(new NullStringer())).append(");")
 					.append(wb.getInitScript())
 					.append("Room.setSize();")
 					.append(getQuickPollJs());

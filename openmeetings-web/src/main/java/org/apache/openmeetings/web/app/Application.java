@@ -184,12 +184,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		hazelcast.getCluster().getLocalMember().setStringAttribute(NAME_ATTR_KEY, hazelcast.getName());
 		hazelWsTopic = hazelcast.getTopic("default");
 		hazelWsTopic.addMessageListener(msg -> {
-				String serverId = msg.getPublishingMember().getStringAttribute(NAME_ATTR_KEY);
-				if (serverId.equals(hazelcast.getName())) {
-					return;
-				}
-				WbWebSocketHelper.send(msg.getMessageObject());
-			});
+			String serverId = msg.getPublishingMember().getStringAttribute(NAME_ATTR_KEY);
+			if (serverId.equals(hazelcast.getName())) {
+				return;
+			}
+			WbWebSocketHelper.send(msg.getMessageObject());
+		});
 		hazelcast.getCluster().addMembershipListener(new MembershipListener() {
 			@Override
 			public void memberRemoved(MembershipEvent evt) {
