@@ -56,10 +56,10 @@
 		</section>
 		<hr/>
 		<section name="Apache OpenMeetings - Features and overview">
-			<p> Openmeetings provides video conferencing, instant messaging,
+			<p>Openmeetings provides video conferencing, instant messaging,
 				white board, collaborative document editing and other groupware
-				tools using API functions of the Kurento Media Server for Remoting
-				and Streaming.
+				tools. It uses API functions of Media Server for Remoting
+				and Streaming (Red5 or Kurento).
 			</p>
 			<p>
 				OpenMeetings is a project of the Apache, the old project

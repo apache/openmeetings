@@ -126,15 +126,15 @@
 <scm>
     <url>https://github.com/apache/openmeetings.git</url>
 
-    SET https://github.com/apache/openmeetings/tree/4.0.0RC1
+    SET https://github.com/apache/openmeetings/tree/4.0.0
 						]]></source>
 					</li>
 					<li>
 						Create a TAG and commit it to the Git<br/>
 						<source>
 git commit -a -m "4.0.0 Release Candidate 1"
-git tag -s 4.0.0RC1 -m "4.0.0 Release Candidate 1 tag"
-git push origin 4.0.0RC1
+git tag -s 4.0.0 -m "4.0.0 Release Candidate 1 tag"
+git push origin 4.0.0
 						</source>
 					</li>
 					<li>
@@ -263,7 +263,17 @@ for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
 				</ul>
 				<p>NOTE: "Type of signing" can be selected as "Test" to check everything works as expected</p>
 			</subsection>
-			<subsection name="Step4 - Distribute and announce">
+			<subsection name="Step4 - Create release tag">
+				<p>Release tag based on RCXX should finally be created</p>
+				<source>
+<![CDATA[
+git checkout 5.0.0-M1-RC1
+git tag 5.0.0-M1
+git push origin 5.0.0-M1
+]]>
+				</source>
+			</subsection>
+			<subsection name="Step5 - Distribute and announce">
 				<p>If VOTEs positive: Upload the release </p>
 				<ul>
 					<li>Upload Artifacts with signatures created on the previous steps to
