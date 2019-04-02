@@ -112,6 +112,7 @@ public class Room extends HistoricalEntity {
 		, ScreenSharing
 		, Whiteboard
 		, MicrophoneStatus
+		, UserCount
 	}
 
 	@XmlType(namespace="org.apache.openmeetings.room.type")

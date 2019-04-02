@@ -22,6 +22,7 @@ import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.core.remote.StreamProcessor;
@@ -94,7 +95,13 @@ public class RoomSidebar extends Panel {
 
 		@Override
 		protected List<Client> load() {
-			List<Client> list = cm.listByRoom(room.getRoom().getId());
+			Client self = room.getClient();
+			List<Client> list;
+			if (!self.hasRight(Room.Right.moderator) && room.getRoom().isHidden(RoomElement.UserCount)) {
+				list = Arrays.asList(self);
+			} else {
+				list = cm.listByRoom(room.getRoom().getId());
+			}
 			userCount.setDefaultModelObject(list.size());
 			return list;
 		}
