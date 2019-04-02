@@ -31,7 +31,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -43,11 +42,9 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
 
 @Entity
-@NamedQueries({
 @NamedQuery(name = "getInvitationbyId", query = "SELECT i FROM Invitation i WHERE i.deleted = false AND i.id = :id")
-, @NamedQuery(name = "getInvitationByHashCode", query = "SELECT i FROM Invitation i where i.hash LIKE :hashCode AND i.deleted = false")
-, @NamedQuery(name = "getInvitationByAppointment", query = "SELECT i FROM Invitation i WHERE i.appointment.id = :appointmentId")
-})
+@NamedQuery(name = "getInvitationByHashCode", query = "SELECT i FROM Invitation i where i.hash LIKE :hashCode AND i.deleted = false")
+@NamedQuery(name = "getInvitationByAppointment", query = "SELECT i FROM Invitation i WHERE i.appointment.id = :appointmentId")
 @Table(name = "invitation")
 public class Invitation extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;

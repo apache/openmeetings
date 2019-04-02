@@ -63,8 +63,10 @@
 			<property name="openjpa.ConnectionProperties"
 				value="DriverClassName=org.postgresql.Driver
 					, Url=jdbc:postgresql://localhost:5432/openmeetings
-					, MaxActive=100
-					, MaxWait=10000
+					, maxTotal=100
+					, maxIdle=100
+					, minIdle=0
+					, maxWaitMillis=10000
 					, TestOnBorrow=true
 					, poolPreparedStatements=true
 					, Username=${db_user}
