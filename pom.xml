@@ -324,9 +324,9 @@
 			<post>mailto:user@openmeetings.apache.org</post>
 			<subscribe>mailto:user-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:user-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user</archive>
+			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-user</archive>
 			<otherArchives>
-				<otherArchive>http://openmeetings.markmail.org</otherArchive>
+				<otherArchive>https://openmeetings.markmail.org</otherArchive>
 			</otherArchives>
 		</mailingList>
 		<mailingList>
@@ -334,9 +334,9 @@
 			<post>mailto:user-espanol@openmeetings.apache.org</post>
 			<subscribe>mailto:user-espanol-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:user-espanol-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user-espanol</archive>
+			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-user-espanol</archive>
 			<otherArchives>
-				<otherArchive>http://openmeetings.markmail.org</otherArchive>
+				<otherArchive>https://openmeetings.markmail.org</otherArchive>
 			</otherArchives>
 		</mailingList>
 		<mailingList>
@@ -344,9 +344,9 @@
 			<post>mailto:user-russian@openmeetings.apache.org</post>
 			<subscribe>mailto:user-russian-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:user-russian-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user-russian</archive>
+			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-user-russian</archive>
 			<otherArchives>
-				<otherArchive>http://openmeetings.markmail.org</otherArchive>
+				<otherArchive>https://openmeetings.markmail.org</otherArchive>
 			</otherArchives>
 		</mailingList>
 		<mailingList>
@@ -354,16 +354,16 @@
 			<post>mailto:dev@openmeetings.apache.org</post>
 			<subscribe>mailto:dev-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:dev-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-dev</archive>
+			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-dev</archive>
 			<otherArchives>
-				<otherArchive>http://openmeetings.markmail.org</otherArchive>
+				<otherArchive>https://openmeetings.markmail.org</otherArchive>
 			</otherArchives>
 		</mailingList>
 		<mailingList>
 			<name>Commits List</name>
 			<subscribe>mailto:commits-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:commits-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-commits/</archive>
+			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-commits/</archive>
 		</mailingList>
 		<mailingList>
 			<name>Security List</name>

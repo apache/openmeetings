@@ -186,14 +186,14 @@ git push origin 4.0.0
 					Send an email to the developer mailing list with the subject line:<br />
 					[VOTE] Apache OpenMeetings x.xx release<br />
 					An example for such an email:
-					<a href="http://mail-archives.apache.org/mod_mbox/openmeetings-dev/201701.mbox/%3CCAJmbs8jZ7EiXoeBbG4ynvg30FPx2nAOJMypE2Qp-v-c63ayO9A%40mail.gmail.com%3E">example Vote email</a>
-					<a href="http://s.apache.org/vote-2.0.0RC4">example Vote email (Incubator)</a>
+					<a href="https://mail-archives.apache.org/mod_mbox/openmeetings-dev/201701.mbox/%3CCAJmbs8jZ7EiXoeBbG4ynvg30FPx2nAOJMypE2Qp-v-c63ayO9A%40mail.gmail.com%3E">example Vote email</a>
+					<a href="https://s.apache.org/vote-2.0.0RC4">example Vote email (Incubator)</a>
 					<br />
 					After the vote is over, send a "RESULT" email to the list with the subject line:<br />
 					[RESULT][VOTE] Apache OpenMeetings x.xx release<br />
 					An example for such an email:
 					<a
-						href="http://mail-archives.apache.org/mod_mbox/openmeetings-dev/201701.mbox/%3CCAJmbs8gyvHuarzdVma%2BF6ap7RHBhhVciZp5Oi5JogQdLR6o0NA%40mail.gmail.com%3E">example Result email</a>
+						href="https://mail-archives.apache.org/mod_mbox/openmeetings-dev/201701.mbox/%3CCAJmbs8gyvHuarzdVma%2BF6ap7RHBhhVciZp5Oi5JogQdLR6o0NA%40mail.gmail.com%3E">example Result email</a>
 					<br />
 					Votes on whether a package is ready to be released use majority approval -- i.e., at
 					least three PMC members must vote affirmatively for release, and there must be more

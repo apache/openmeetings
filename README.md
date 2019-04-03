@@ -5,19 +5,21 @@
  - [x] **instant messaging**
  - [x] **white board**
  - [x] **collaborative document editing**
- - [x] **other groupware tools** using API functions of the [Red5 Streaming Server](http://red5.org/) for Remoting and Streaming. 
+ - [x] **other groupware tools**
+
+It uses API functions of Media Server for Remoting and Streaming ([Red5](http://red5.org/) or [Kurento](https://www.kurento.org)).
 
 Getting Started
 ===============
 Please visit the project website for the latest information:
-  - http://openmeetings.apache.org/
+  - https://openmeetings.apache.org/
     
 Documentation for Installation and Upgrade:
-  - http://openmeetings.apache.org/installation.html
-  - http://openmeetings.apache.org/Upgrade.html
+  - https://openmeetings.apache.org/installation.html
+  - https://openmeetings.apache.org/Upgrade.html
 
 Along with the developer mailing list archive:
-  - http://openmeetings.apache.org/mail-lists.html
+  - https://openmeetings.apache.org/mail-lists.html
     
     
 System Requirements
@@ -38,9 +40,9 @@ To build from source code:
     - go to `openmeetings-server/target` directory
     - extract `apache-openmeetings-x.x.x.tar.gz` (or `apache-openmeetings-x.x.x.zip` for windows) to **new** directory
     - enter to this new directory and execute `red5.sh` (`red5.bat` for windows)
-    
+
 For a detailed documentation on how to build from source and options see:
-    http://openmeetings.apache.org/BuildInstructions.html
+    https://openmeetings.apache.org/BuildInstructions.html
 
 Release Notes 
 =============
@@ -61,7 +63,7 @@ Some other fixes and improvements, 30 issues were addressed
 
 4.0.8
 -----
-[Release 4.0.8](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.8), provides following improvements:
+[Release 4.0.8](https://archive.apache.org/dist/openmeetings/4.0.8), provides following improvements:
 
 Mobile client:
 * Mobile clients are displayed in user list
@@ -90,7 +92,7 @@ Other fixes and improvements, 30 issues were addressed
 
 4.0.7
 -----
-[Release 4.0.7](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.7), provides following improvements:
+[Release 4.0.7](https://archive.apache.org/dist/openmeetings/4.0.7), provides following improvements:
 
 * kick function in RoomWebService is fixed
 * Reply button is added to Private Message
@@ -110,7 +112,7 @@ Other fixes and improvements, 18 issues were addressed
 
 4.0.6
 -----
-[Release 4.0.6](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.6), provides following improvements:
+[Release 4.0.6](https://archive.apache.org/dist/openmeetings/4.0.6), provides following improvements:
 
 * Multiple issues with device list retrieval in Settings dialog
 * Web services were improved
@@ -122,7 +124,7 @@ Other fixes and improvements, 16 issues were addressed
 
 4.0.5
 -----
-[Release 4.0.5](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.5), provides following improvements:
+[Release 4.0.5](https://archive.apache.org/dist/openmeetings/4.0.5), provides following improvements:
 
 Room:
 * Interview room is improved: re-designed, multiple video windows are supported
@@ -134,7 +136,7 @@ Other fixes and improvements, 24 issues were addressed
 
 4.0.4
 -----
-[Release 4.0.4](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.4), provides following improvements:
+[Release 4.0.4](https://archive.apache.org/dist/openmeetings/4.0.4), provides following improvements:
 
 The purpose of this release is to provide GDPR compatible version of OpenMeetings
 
@@ -147,7 +149,7 @@ Other fixes and improvements, 9 issues were fixed
 
 4.0.3
 -----
-[Release 4.0.3](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.3), provides following improvements:
+[Release 4.0.3](https://archive.apache.org/dist/openmeetings/4.0.3), provides following improvements:
 
 Security fix in Calendar
 
