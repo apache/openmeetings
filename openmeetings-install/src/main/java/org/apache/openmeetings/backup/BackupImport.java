@@ -70,8 +70,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE_OTHERS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE_OTHERS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
@@ -913,10 +913,19 @@ public class BackupImport {
 			Long fId = file.getId();
 			// We need to reset this as openJPA reject to store them otherwise
 			file.setId(null);
-			Long roomId = file.getRoomId();
-			file.setRoomId(roomMap.containsKey(roomId) ? roomMap.get(roomId) : null);
+			if (file.getRoomId() != null) {
+				Long newRoomId = roomMap.get(file.getRoomId());
+				if (newRoomId == null) {
+					continue; // room was deleted
+				}
+				file.setRoomId(newRoomId);
+			}
 			if (file.getOwnerId() != null) {
-				file.setOwnerId(userMap.get(file.getOwnerId()));
+				Long newOwnerId = userMap.get(file.getOwnerId());
+				if (newOwnerId == null) {
+					continue; // owner was deleted
+				}
+				file.setOwnerId(newOwnerId);
 			}
 			if (file.getParentId() != null && file.getParentId().longValue() <= 0L) {
 				file.setParentId(null);
