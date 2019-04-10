@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.common;
 import static org.apache.openmeetings.core.remote.KurentoHandler.KURENTO_TYPE;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.openmeetings.core.remote.KurentoHandler;
@@ -178,8 +179,10 @@ public abstract class OmWebSocketPanel extends Panel {
 	 *
 	 * @param handler - handler to perform some updates
 	 * @param m - incoming message as {@link JSONObject}
+	 *
+	 * @throws IOException in case some IO operation fails
 	 */
-	protected void onMessage(WebSocketRequestHandler handler, JSONObject m) {
+	protected void onMessage(WebSocketRequestHandler handler, JSONObject m) throws IOException {
 	}
 
 	@Override

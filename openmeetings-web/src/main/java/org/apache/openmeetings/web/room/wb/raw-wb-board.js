@@ -128,10 +128,10 @@ var Wb = function() {
 	}
 	function _setSlide(_sld) {
 		slide = _sld;
-		wbAction('setSlide', JSON.stringify({
+		OmUtil.wbAction({action: 'setSlide', data: {
 			wbId: wb.id
 			, slide: _sld
-		}));
+		}});
 		_updateZoomPanel();
 	}
 	function _initSettings() {
@@ -266,7 +266,7 @@ var Wb = function() {
 		switch (role) {
 			case PRESENTER:
 				clearAll.click(function() {
-					OmUtil.confirmDlg('clear-all-confirm', function() { wbAction('clearAll', JSON.stringify({wbId: wb.id})); });
+					OmUtil.confirmDlg('clear-all-confirm', function() { OmUtil.wbAction({action: 'clearAll', data: {wbId: wb.id}}); });
 				}).removeClass('disabled');
 				z.find('.curr-slide').change(function() {
 					_setSlide($(this).val() - 1);
@@ -327,13 +327,13 @@ var Wb = function() {
 					f.show();
 				});
 				t.find('.om-icon.clear-slide').click(function() {
-					OmUtil.confirmDlg('clear-slide-confirm', function() { wbAction('clearSlide', JSON.stringify({wbId: wb.id, slide: slide})); });
+					OmUtil.confirmDlg('clear-slide-confirm', function() { OmUtil.wbAction({action: 'clearSlide', data: {wbId: wb.id, slide: slide}}); });
 				});
 				t.find('.om-icon.save').click(function() {
-					wbAction('save', JSON.stringify({wbId: wb.id}));
+					OmUtil.wbAction({action: 'save', data: {wbId: wb.id}});
 				});
 				t.find('.om-icon.undo').click(function() {
-					wbAction('undo', JSON.stringify({wbId: wb.id}));
+					OmUtil.wbAction({action: 'undo', data: {wbId: wb.id}});
 				});
 				f.find('.ui-dialog-titlebar-close').click(function() {
 					f.hide();
@@ -417,13 +417,13 @@ var Wb = function() {
 	}
 	function _sendSetSize() {
 		_setSize();
-		wbAction('setSize', JSON.stringify({
+		OmUtil.wbAction({action: 'setSize', data: {
 			wbId: wb.id
 			, zoom: zoom
 			, zoomMode: zoomMode
 			, width: width
 			, height: height
-		}));
+		}});
 	}
 	function _findObject(o) {
 		let _o = null;
@@ -550,10 +550,10 @@ var Wb = function() {
 				json = toOmJson(o);
 				break;
 		}
-		wbAction('createObj', JSON.stringify({
+		OmUtil.wbAction({action: 'createObj', data: {
 			wbId: wb.id
 			, obj: json
-		}));
+		}});
 	};
 	function objAddedHandler(e) {
 		const o = e.target;
@@ -590,10 +590,10 @@ var Wb = function() {
 		} else {
 			items.push(toOmJson(o));
 		}
-		wbAction('modifyObj', JSON.stringify({
+		OmUtil.wbAction({action: 'modifyObj', data: {
 			wbId: wb.id
 			, obj: items
-		}));
+		}});
 	};
 	function objSelectedHandler(e) {
 		const o = e.target;
@@ -608,13 +608,13 @@ var Wb = function() {
 			return;
 		}
 		if ('textbox' === o.type || 'i-text' === o.type) {
-			wbAction('deleteObj', JSON.stringify({
+			OmUtil.wbAction({action: 'deleteObj', data: {
 				wbId: wb.id
 				, obj: [{
 					uid: o.uid
 					, slide: o.slide
 				}]
-			}));
+			}});
 		}
 	}
 	function pathCreatedHandler(o) {

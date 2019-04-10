@@ -25,6 +25,10 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/classes/applicationContext.xml</param-value>
 	</context-param>
+	<context-param>
+		<param-name>org.apache.tomcat.websocket.textBufferSize</param-name>
+		<param-value>1048576</param-value> <!-- 1MB by default -->
+	</context-param>
 	<listener>
 		<listener-class>org.apache.openmeetings.util.OMContextListener</listener-class>
 	</listener>

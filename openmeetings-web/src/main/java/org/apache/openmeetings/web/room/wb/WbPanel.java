@@ -81,8 +81,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.Method;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -206,12 +205,7 @@ public class WbPanel extends AbstractWbPanel {
 	}
 
 	@Override
-	protected void updateWbActionAttributes(AjaxRequestAttributes attributes) {
-		attributes.setMethod(Method.POST);
-	}
-
-	@Override
-	protected void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException {
+	public void processWbAction(WbAction a, JSONObject obj, IPartialPageRequestHandler handler) throws IOException {
 		Client c = rp.getClient();
 		if (c == null) {
 			return;
@@ -249,7 +243,7 @@ public class WbPanel extends AbstractWbPanel {
 						}
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
 						doc.save(baos);
-						rp.startDownload(target, baos.toByteArray());
+						rp.startDownload(handler, baos.toByteArray());
 					}
 				}
 				return;
@@ -278,7 +272,7 @@ public class WbPanel extends AbstractWbPanel {
 					}
 				}
 				sb.append(arr.toString()).append(");");
-				target.appendJavaScript(sb);
+				handler.appendJavaScript(sb);
 				return;
 			}
 			default:
@@ -417,7 +411,7 @@ public class WbPanel extends AbstractWbPanel {
 					break;
 				case save:
 					wb2save = obj.getLong("wbId");
-					fileName.open(target);
+					fileName.open(handler);
 					break;
 				case undo:
 				{

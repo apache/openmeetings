@@ -96,6 +96,9 @@ var OmUtil = (function() {
 	self.error = _error;
 	self.info = _info;
 	self.log = _log;
+	self.wbAction = function(_m) {
+		self.sendMessage(_m, {area: 'room', type: 'wb'});
+	};
 	return self;
 })();
 Wicket.BrowserInfo.collectExtraInfo = function(info) {

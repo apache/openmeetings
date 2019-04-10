@@ -31,6 +31,7 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -165,7 +166,7 @@ public class MainPanel extends Panel {
 			}
 
 			@Override
-			protected void onMessage(WebSocketRequestHandler handler, JSONObject m) {
+			protected void onMessage(WebSocketRequestHandler handler, JSONObject m) throws IOException {
 				BasePanel p = getCurrentPanel();
 				if (p != null) {
 					p.process(handler, m);

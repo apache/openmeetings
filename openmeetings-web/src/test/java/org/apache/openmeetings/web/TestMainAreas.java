@@ -272,8 +272,7 @@ public class TestMainAreas extends AbstractWicketTester {
 		checkArea(AreaKeys.room, String.valueOf(id), RoomPanel.class, p -> {
 			RoomPanel rp = (RoomPanel)p.get(PATH_CHILD);
 			tester.executeBehavior((AbstractAjaxBehavior)rp.getBehaviorById(0)); //room enter
-			AbstractWbPanel wb = (AbstractWbPanel)rp.get("roomContainer:wb-area:whiteboard");
-			tester.executeBehavior((AbstractAjaxBehavior)wb.getBehaviorById(0)); //wb load
+			tester.assertComponent(PATH_CHILD + ":roomContainer:wb-area:whiteboard", AbstractWbPanel.class);
 		}, regularUsername);
 	}
 

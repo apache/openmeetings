@@ -18,64 +18,25 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
-import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.PARAM_OBJ;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
-import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
-
 import java.io.IOException;
 
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.util.string.StringValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
 public abstract class AbstractWbPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(AbstractWbPanel.class);
-	public static final String FUNC_ACTION = "wbAction";
-	public static final String PARAM_ACTION = "action";
 	protected static final String ROLE_NONE = "none";
 	protected final RoomPanel rp;
 	protected boolean inited = false;
-	private final AbstractDefaultAjaxBehavior wbAction = new AbstractDefaultAjaxBehavior() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-			updateWbActionAttributes(attributes);
-		}
-
-		@Override
-		protected void respond(AjaxRequestTarget target) {
-			if (!inited) {
-				return;
-			}
-			try {
-				WbAction a = WbAction.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
-				StringValue sv = getRequest().getRequestParameters().getParameterValue(PARAM_OBJ);
-				JSONObject obj = sv.isEmpty() ? new JSONObject() : new JSONObject(sv.toString());
-				processWbAction(a, obj, target);
-			} catch (Exception e) {
-				log.error("Unexpected error while processing wbAction", e);
-			}
-		}
-	};
 
 	public AbstractWbPanel(String id, RoomPanel rp) {
 		super(id);
 		this.rp = rp;
 		setOutputMarkupId(true);
-		add(wbAction);
 	}
 
 	public CharSequence getInitScript() {
@@ -109,18 +70,5 @@ public abstract class AbstractWbPanel extends Panel {
 	 */
 	public void sendFileToWb(final BaseFileItem fi, boolean clean) {}
 
-	/**
-	 * This method allows to set additional attributes to wbAction
-	 *
-	 * @param attributes - attributes to set
-	 */
-	protected void updateWbActionAttributes(AjaxRequestAttributes attributes) {}
-
-	protected abstract void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException;
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_ACTION, wbAction, explicit(PARAM_ACTION), explicit(PARAM_OBJ))));
-	}
+	public abstract void processWbAction(WbAction a, JSONObject obj, IPartialPageRequestHandler handler) throws IOException;
 }

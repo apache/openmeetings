@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.common;
 
+import java.io.IOException;
+
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
@@ -92,7 +94,9 @@ public abstract class BasePanel extends Panel {
 	 *
 	 * @param handler - handler to perform update
 	 * @param o - message to process
+	 *
+	 * @throws IOException in case pdf download fails
 	 */
-	protected void process(IPartialPageRequestHandler handler, JSONObject o) {
+	protected void process(IPartialPageRequestHandler handler, JSONObject o) throws IOException {
 	}
 }

@@ -6,14 +6,14 @@ var Player = (function() {
 	function _sendStatus(g, _paused, _pos) {
 		g.status.paused = _paused;
 		g.status.pos = _pos;
-		wbAction('videoStatus', JSON.stringify({
+		OmUtil.wbAction({action: 'videoStatus', data: {
 			wbId: g.canvas.wbId
 			, uid: g.uid
 			, status: {
 				paused: _paused
 				, pos: _pos
 			}
-		}));
+		}});
 	}
 	function _initControls(_o) {
 		trg = new fabric.Triangle({

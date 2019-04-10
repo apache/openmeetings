@@ -25,7 +25,7 @@ import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -53,7 +53,7 @@ public class InterviewWbPanel extends AbstractWbPanel {
 	}
 
 	@Override
-	protected void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException {
+	public void processWbAction(WbAction a, JSONObject obj, IPartialPageRequestHandler handler) throws IOException {
 		Client c = rp.getClient();
 		switch (a) {
 			case startRecording:

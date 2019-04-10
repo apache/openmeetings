@@ -82,10 +82,10 @@ var DrawWbArea = function() {
 				, slide: objs[i].slide
 			});
 		}
-		wbAction('deleteObj', JSON.stringify({
+		OmUtil.wbAction({action: 'deleteObj', data: {
 			wbId: wb.id
 			, obj: arr
-		}));
+		}});
 		return false;
 	}
 	function _deleteHandler(e) {
@@ -137,7 +137,7 @@ var DrawWbArea = function() {
 		}
 		li.append(OmUtil.tmpl('#wb-tab-close'));
 		li.find('button').click(function() {
-			OmUtil.confirmDlg('wb-confirm-remove', function() { wbAction('removeWb', JSON.stringify({wbId: li.data().wbId})); });
+			OmUtil.confirmDlg('wb-confirm-remove', function() { OmUtil.wbAction({action: 'removeWb', data: {wbId: li.data().wbId}}); });
 		});
 	}
 	function _getImage(cnv) {
@@ -183,7 +183,7 @@ var DrawWbArea = function() {
 					, right = OmUtil.tmpl('#wb-tabbar-ctrls-right');
 				cc.before(left).after(right);
 				tabs.find('.add.om-icon').click(function() {
-					wbAction('createWb');
+					OmUtil.wbAction({action: 'createWb'});
 				});
 				tabs.find('.prev.om-icon').click(function() {
 					scroll.scrollLeft(scroll.scrollLeft() - 30);
@@ -210,7 +210,7 @@ var DrawWbArea = function() {
 		});
 	}
 	function _actionActivateWb(_wbId) {
-		wbAction('activateWb', JSON.stringify({wbId: _wbId}));
+		OmUtil.wbAction({action: 'activateWb', data: {wbId: _wbId}});
 	}
 	self.init = function() {
 		Wicket.Event.subscribe('/websocket/message', self.wbWsHandler);
@@ -278,7 +278,7 @@ var DrawWbArea = function() {
 					, renameWbTab = function() {
 						const newName = editor.val();
 						if (newName !== '') {
-							wbAction('renameWb', JSON.stringify({wbId: obj.wbId, name: newName}));
+							OmUtil.wbAction({action: 'renameWb', data: {wbId: obj.wbId, name: newName}});
 						}
 						editor.remove();
 						name.show();
@@ -404,9 +404,9 @@ var DrawWbArea = function() {
 			wb.eachCanvas(function(cnv) {
 				arr.push(_getImage(cnv));
 			});
-			wbAction('downloadPdf', JSON.stringify({
+			OmUtil.wbAction({action: 'downloadPdf', data: {
 				slides: arr
-			}));
+			}});
 		} else {
 			const cnv = wb.getCanvas()
 				, dataUri = _getImage(cnv);
@@ -427,7 +427,7 @@ var DrawWbArea = function() {
 		if (!_inited) {
 			return;
 		}
-		wbAction('loadVideos');
+		OmUtil.wbAction({action: 'loadVideos'});
 	};
 	self.initVideos = _initVideos;
 	self.addDeleteHandler = function() {

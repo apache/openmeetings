@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var InterviewWbArea = function() {
-	const self = BaseWbArea();;
+	const self = BaseWbArea();
 	let container, area, pArea, role = NONE, _inited = false, rec;
 
 	function _init() {
@@ -15,7 +15,7 @@ var InterviewWbArea = function() {
 			, showLabel: false
 			, icon: 'record'
 		}).click(function() {
-			wbAction($(this).data('mode') === 'rec' ? 'startRecording' : 'stopRecording', '');
+			OmUtil.wbAction({action: $(this).data('mode') === 'rec' ? 'startRecording' : 'stopRecording'});
 		});
 		pArea.find('.pod-big').droppable({
 			accept: '.pod'
