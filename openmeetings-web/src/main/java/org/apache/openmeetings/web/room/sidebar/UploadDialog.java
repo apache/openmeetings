@@ -31,8 +31,12 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
+import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
+import org.apache.wicket.ThreadContext;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -53,38 +57,101 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class UploadDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(UploadDialog.class);
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private final Form<String> form;
+	private final Form<String> form = new Form<>("form");
 	private DialogButton upload;
 	private DialogButton cancel;
-	private final FileUploadField uploadField;
-	private final HiddenField<String> fileName;
+	private final FileUploadField uploadField = new FileUploadField("file", new IModel<List<FileUpload>>() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void setObject(List<FileUpload> object) {
+			//no-op
+		}
+
+		@Override
+		public List<FileUpload> getObject() {
+			return new ArrayList<>();
+		}
+	}) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected boolean forceCloseStreamsOnDetach() {
+			return false;
+		}
+	};
+	private final HiddenField<String> fileName = new HiddenField<>("name", Model.of(""));
 	private final CheckBox toWb = new CheckBox("to-wb", Model.of(false));
 	private final WebMarkupContainer cleanBlock = new WebMarkupContainer("clean-block");
 	private final CheckBox cleanWb = new CheckBox("clean-wb", Model.of(false));
 	private final RoomFilePanel roomFiles;
 	private final RoomPanel room;
+
 	@SpringBean
 	private FileProcessor processor;
 	@SpringBean
 	private FileItemLogDao fileLogDao;
 
+	private final AbstractAjaxTimerBehavior timer = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onTimer(AjaxRequestTarget target) {
+			if (progress == null) {
+				timer.stop(target);
+				return;
+			}
+			if (progress.intValue() == 100) {
+				timer.stop(target);
+				target.add(progressBar.setVisible(false));
+				room.getSidebar().updateFiles(target);
+				if (form.hasError()) {
+					target.add(form.setVisible(true));
+					onError(target, null);
+				} else {
+					close(target, null);
+				}
+			} else {
+				progressBar.setModelObject(progress);
+				progressBar.refresh(target);
+			}
+		}
+	};
+	private final ProgressBar progressBar = new ProgressBar("convProgress", new Model<>(0)) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onComplete(AjaxRequestTarget target) {
+			timer.stop(target);
+			progressBar.setVisible(false);
+			target.add(progressBar);
+		}
+	};
+	private Integer progress;
+
 	public UploadDialog(String id, RoomPanel room, RoomFilePanel roomFiles) {
 		super(id, "");
 		this.roomFiles = roomFiles;
 		this.room = room;
-		add(form = new Form<>("form"));
+	}
+
+	@Override
+	protected void onInitialize() {
+		add(form.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 		toWb.add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
@@ -94,27 +161,13 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			}
 		});
 		form.add(feedback.setOutputMarkupId(true), toWb.setOutputMarkupId(true)
-				, cleanBlock.add(cleanWb.setOutputMarkupId(true)).setVisible(false).setOutputMarkupPlaceholderTag(true))
-			.setOutputMarkupId(true);
+				, cleanBlock.add(cleanWb.setOutputMarkupId(true)).setVisible(false).setOutputMarkupPlaceholderTag(true));
 
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.bytes(getMaxUploadSize()));
 		// Model is necessary here to avoid writing image to the User object
-		form.add(uploadField = new FileUploadField("file", new IModel<List<FileUpload>>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void setObject(List<FileUpload> object) {
-				//no-op
-			}
-
-			@Override
-			public List<FileUpload> getObject() {
-				return new ArrayList<>();
-			}
-		}));
-		Form<String> nameForm = new Form<>("name-form");
-		fileName = new HiddenField<>("name", Model.of(""));
+		form.add(uploadField);
+		final Form<String> nameForm = new Form<>("name-form");
 		fileName.add(new AjaxFormSubmitBehavior(nameForm, "change") {
 			private static final long serialVersionUID = 1L;
 
@@ -126,12 +179,9 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			}
 		}).setOutputMarkupId(true);
 		form.add(new UploadProgressBar("progress", form, uploadField));
+
 		add(nameForm.add(fileName.setOutputMarkupId(true)));
 		add(BootstrapFileUploadBehavior.INSTANCE);
-	}
-
-	@Override
-	protected void onInitialize() {
 		getTitle().setObject(getString("304"));
 		upload = new DialogButton("upload", getString("593"), false) {
 			private static final long serialVersionUID = 1L;
@@ -142,6 +192,9 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			}
 		};
 		cancel = new DialogButton("close", getString("85"));
+
+		add(progressBar.setOutputMarkupPlaceholderTag(true).setVisible(false));
+		add(timer);
 		super.onInitialize();
 	}
 
@@ -172,7 +225,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 		super.onOpen(handler);
 		upload.setEnabled(true, handler);
 		uploadField.setModelObject(new ArrayList<>());
-		handler.add(form, fileName);
+		handler.add(form.setVisible(true), fileName);
 		handler.appendJavaScript(String.format("bindUpload('%s', '%s');", form.getMarkupId(), fileName.getMarkupId()));
 	}
 
@@ -185,13 +238,41 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		List<FileUpload> ful = uploadField.getFileUploads();
 		if (ful != null) {
-			boolean clean = cleanWb.getModelObject();
-			for (FileUpload fu : ful) {
+
+			progress = 0;
+			timer.restart(target);
+			target.add(progressBar.setVisible(true), form.setVisible(false));
+
+			final Application app = Application.get();
+			final WebSession session = WebSession.get();
+			new Thread(() -> {
+				ThreadContext.setApplication(app);
+				ThreadContext.setSession(session);
+				convertAll();
+				ThreadContext.detach();
+			}).start();
+		}
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(UploadDialog.class, "upload.js"))));
+	}
+
+	private void convertAll() {
+		List<FileUpload> ful = uploadField.getFileUploads();
+		final BaseFileItem parent = roomFiles.getLastSelected();
+		boolean clean = cleanWb.getModelObject();
+		final long totalSize = ful.stream().mapToLong(fu -> fu.getSize()).sum();
+		long currentSize = 0;
+		for (FileUpload fu : ful) {
+			long size = fu.getSize();
+			try {
 				FileItem f = new FileItem();
-				f.setSize(fu.getSize());
+				f.setSize(size);
 				f.setName(fu.getClientFileName());
 				f.setExternalType(room.getRoom().getExternalType());
-				BaseFileItem parent = roomFiles.getLastSelected();
 				if (parent == null || !(parent instanceof FileItem)) {
 					f.setOwnerId(getUserId());
 				} else {
@@ -204,39 +285,28 @@ public class UploadDialog extends AbstractFormDialog<String> {
 				}
 				f.setInsertedBy(getUserId());
 
-				try {
-					ProcessResultList logs = processor.processFile(f, fu.getInputStream());
-					for (ProcessResult res : logs.getJobs()) {
-						fileLogDao.add(res.getProcess(), f, res);
-					}
-					room.getSidebar().updateFiles(target);
-					if (logs.hasError()) {
-						form.error(getString("convert.errors.file"));
-					} else {
-						if (toWb.getModelObject()) {
-							room.getWb().sendFileToWb(f, clean);
-							clean = false;
-						}
-					}
-				} catch (Exception e) {
-					log.error("Unexpected error while processing uploaded file", e);
-					form.error(e.getMessage() == null ? "Unexpected error" : e.getMessage());
-				} finally {
-					fu.closeStreams();
-					fu.delete();
+				ProcessResultList logs = processor.processFile(f, fu.getInputStream());
+				for (ProcessResult res : logs.getJobs()) {
+					fileLogDao.add(res.getProcess(), f, res);
 				}
+				if (logs.hasError()) {
+					form.error(getString("convert.errors.file"));
+				} else {
+					if (toWb.getModelObject()) {
+						room.getWb().sendFileToWb(f, clean);
+						clean = false;
+					}
+				}
+			} catch (Exception e) {
+				log.error("Unexpected error while processing uploaded file", e);
+				form.error(e.getMessage() == null ? "Unexpected error" : e.getMessage());
+			} finally {
+				fu.closeStreams();
+				fu.delete();
 			}
-			if (form.hasError()) {
-				onError(target, null);
-			} else {
-				close(target, null);
-			}
+			currentSize += size;
+			progress = (int)(100 * currentSize / totalSize);
 		}
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(UploadDialog.class, "upload.js"))));
+		progress = 100;
 	}
 }
