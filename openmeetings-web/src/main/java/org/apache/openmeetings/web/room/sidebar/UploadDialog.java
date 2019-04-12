@@ -259,7 +259,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 		List<FileUpload> ful = uploadField.getFileUploads();
 		final BaseFileItem parent = roomFiles.getLastSelected();
 		boolean clean = cleanWb.getModelObject();
-		final long totalSize = ful.stream().mapToLong(fu -> fu.getSize()).sum();
+		final long totalSize = ful.stream().mapToLong(FileUpload::getSize).sum();
 		long currentSize = 0;
 		for (FileUpload fu : ful) {
 			long size = fu.getSize();
