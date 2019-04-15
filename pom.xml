@@ -78,7 +78,7 @@
 		<wickets.version>8.3.0</wickets.version>
 		<red5-client.version>1.0.10</red5-client.version>
 		<spring.version>5.1.5.RELEASE</spring.version>
-		<mina.version>2.1.0</mina.version>
+		<mina.version>2.1.1</mina.version>
 		<tomcat.version>9.0.17</tomcat.version>
 		<ical4j.version>3.0.6</ical4j.version>
 		<cxf.version>3.3.1</cxf.version>
