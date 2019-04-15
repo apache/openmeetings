@@ -39,6 +39,7 @@ import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 
 @Entity
@@ -105,7 +106,7 @@ public class OAuthServer extends HistoricalEntity {
 	private RequestInfoMethod requestInfoMethod = RequestInfoMethod.GET;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@Element(data = true, required = false)
+	@ElementMap(data = true, required = false)
 	@MapKeyColumn(name = "name")
 	@Column(name = "value")
 	@CollectionTable(name = "oauth_mapping", joinColumns = @JoinColumn(name = "oauth_id"))
