@@ -775,6 +775,23 @@ public class BackupImport {
 		}
 	}
 
+	private boolean isInvalidFile(BaseFileItem file) {
+		if (file.getRoomId() != null) {
+			Long newRoomId = roomMap.get(file.getRoomId());
+			if (newRoomId == null) {
+				return true; // room was deleted
+			}
+			file.setRoomId(newRoomId);
+		}
+		if (file.getOwnerId() != null) {
+			Long newOwnerId = userMap.get(file.getOwnerId());
+			if (newOwnerId == null) {
+				return true; // owner was deleted
+			}
+			file.setOwnerId(newOwnerId);
+		}
+		return false;
+	}
 	/*
 	 * ##################### Import Recordings
 	 */
@@ -784,11 +801,8 @@ public class BackupImport {
 		for (Recording r : list) {
 			Long recId = r.getId();
 			r.setId(null);
-			if (r.getRoomId() != null) {
-				r.setRoomId(roomMap.get(r.getRoomId()));
-			}
-			if (r.getOwnerId() != null) {
-				r.setOwnerId(userMap.get(r.getOwnerId()));
+			if (isInvalidFile(r)) {
+				continue;
 			}
 			if (r.getMetaData() != null) {
 				for (RecordingMetaData meta : r.getMetaData()) {
@@ -913,19 +927,8 @@ public class BackupImport {
 			Long fId = file.getId();
 			// We need to reset this as openJPA reject to store them otherwise
 			file.setId(null);
-			if (file.getRoomId() != null) {
-				Long newRoomId = roomMap.get(file.getRoomId());
-				if (newRoomId == null) {
-					continue; // room was deleted
-				}
-				file.setRoomId(newRoomId);
-			}
-			if (file.getOwnerId() != null) {
-				Long newOwnerId = userMap.get(file.getOwnerId());
-				if (newOwnerId == null) {
-					continue; // owner was deleted
-				}
-				file.setOwnerId(newOwnerId);
+			if (isInvalidFile(file)) {
+				continue;
 			}
 			if (file.getParentId() != null && file.getParentId().longValue() <= 0L) {
 				file.setParentId(null);
