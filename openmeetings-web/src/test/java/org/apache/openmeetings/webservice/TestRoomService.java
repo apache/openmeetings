@@ -20,10 +20,10 @@ package org.apache.openmeetings.webservice;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.OmFileHelper.getDefaultProfilePicture;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,7 +38,7 @@ import org.apache.openmeetings.db.dto.room.RoomFileDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestRoomService extends AbstractWebServiceTest {
 	private static final long CAPACITY = 666L;
@@ -59,14 +59,14 @@ public class TestRoomService extends AbstractWebServiceTest {
 				.query("sid", sr.getMessage())
 				.query("room", r.toString())
 				.get(RoomDTO.class);
-		assertNotNull("Valid room should be returned", room);
-		assertNotNull("Room ID should be not empty", room.getId());
+		assertNotNull(room, "Valid room should be returned");
+		assertNotNull(room.getId(), "Room ID should be not empty");
 
 		RoomDTO room1 = getClient(getRoomUrl()).path(String.format("/%s/%s/%s", Room.Type.presentation, UNIT_TEST_EXT_TYPE, extId))
 				.query("sid", sr.getMessage())
 				.get(RoomDTO.class);
-		assertNotNull("Valid room should be returned", room1);
-		assertEquals("Same Room should be returned", room.getId(), room1.getId());
+		assertNotNull(room1, "Valid room should be returned");
+		assertEquals(room.getId(), room1.getId(), "Same Room should be returned");
 	}
 
 	@Test
@@ -115,7 +115,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 		r.getFiles().add(rf);
 
 		CallResult<RoomDTO> res = createAndValidate(r);
-		assertTrue("No room files should be added", res.getObj().getFiles().isEmpty());
+		assertTrue(res.getObj().getFiles().isEmpty(), "No room files should be added");
 	}
 
 	@Test
@@ -137,13 +137,13 @@ public class TestRoomService extends AbstractWebServiceTest {
 		r.getFiles().add(rf);
 
 		CallResult<RoomDTO> res = createAndValidate(fileCall.getSid(), r);
-		assertFalse("Room files should NOT be empty", res.getObj().getFiles().isEmpty());
+		assertFalse(res.getObj().getFiles().isEmpty(), "Room files should NOT be empty");
 	}
 
 	@Test
 	public void testHash() {
 		List<Room> rooms = getBean(RoomDao.class).get(0,  100);
-		assertFalse("Room list should not be empty", rooms.isEmpty());
+		assertFalse(rooms.isEmpty(), "Room list should not be empty");
 
 		ServiceResult sr = login();
 		ServiceResult res = getClient(getRoomUrl())
@@ -163,6 +163,6 @@ public class TestRoomService extends AbstractWebServiceTest {
 						.setValidTo("2018-04-20 02:25:12")
 						.toString())
 				.post("", ServiceResult.class);
-		assertEquals("Login should be successful", Type.SUCCESS.name(), res.getType());
+		assertEquals(Type.SUCCESS.name(), res.getType(), "Login should be successful");
 	}
 }

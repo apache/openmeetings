@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.openmeetings.db.dto.basic.Info;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestInfoService extends AbstractWebServiceTest {
 	private static final String INFO_SERVICE_MOUNT = "info";
@@ -29,10 +29,10 @@ public class TestInfoService extends AbstractWebServiceTest {
 	@Test
 	public void infoTest() {
 		Info info = getClient(getInfoUrl()).path("/version").get(Info.class);
-		assertNotNull("Valid info should be returned", info);
-		assertNotNull("Valid BuildDate should be returned", info.getBuildDate());
-		assertNotNull("Valid Revision should be returned", info.getRevision());
-		assertNotNull("Valid Version should be returned", info.getVersion());
+		assertNotNull(info, "Valid info should be returned");
+		assertNotNull(info.getBuildDate(), "Valid BuildDate should be returned");
+		assertNotNull(info.getRevision(), "Valid Revision should be returned");
+		assertNotNull(info.getVersion(), "Valid Version should be returned");
 	}
 
 	protected static String getInfoUrl() {

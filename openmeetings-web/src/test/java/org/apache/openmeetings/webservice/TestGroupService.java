@@ -20,9 +20,9 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.AbstractJUnitDefaults.adminUsername;
 import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Collection;
 
@@ -32,7 +32,7 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.GroupDTO;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestGroupService extends AbstractWebServiceTest {
 	public static final String GROUP_SERVICE_MOUNT = "group";
@@ -43,8 +43,8 @@ public class TestGroupService extends AbstractWebServiceTest {
 		Collection<? extends GroupDTO> groups = getClient(getGroupUrl())
 				.path("/")
 				.query("sid", r.getMessage()).getCollection(GroupDTO.class);
-		assertNotNull("Collection should be not null", groups);
-		assertFalse("Collection should be not empty", groups.isEmpty());
+		assertNotNull(groups, "Collection should be not null");
+		assertFalse(groups.isEmpty(), "Collection should be not empty");
 	}
 
 	@Test
@@ -53,17 +53,17 @@ public class TestGroupService extends AbstractWebServiceTest {
 		Response resp = getClient(getGroupUrl())
 				.path("/")
 				.query("sid", r.getMessage()).put("");
-		assertEquals("Call should NOT be successful", Response.Status.METHOD_NOT_ALLOWED.getStatusCode(), resp.getStatus());
+		assertEquals(Response.Status.METHOD_NOT_ALLOWED.getStatusCode(), resp.getStatus(), "Call should NOT be successful");
 	}
 
 	private static Long createGroup(String sid, String name) {
 		Response resp = getClient(getGroupUrl())
 				.path("/")
 				.query("sid", sid).query("name", name).post("");
-		assertNotNull("Valid ServiceResult should be returned", resp);
-		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+		assertNotNull(resp, "Valid ServiceResult should be returned");
+		assertEquals(Response.Status.OK.getStatusCode(), resp.getStatus(), "Call should be successful");
 		ServiceResult r1 = resp.readEntity(ServiceResult.class);
-		assertEquals("OM Call should be successful", r1.getType(), Type.SUCCESS.name());
+		assertEquals(Type.SUCCESS.name(), r1.getType(), "OM Call should be successful");
 		return Long.valueOf(r1.getMessage());
 	}
 
@@ -76,10 +76,10 @@ public class TestGroupService extends AbstractWebServiceTest {
 			Response resp = getClient(getGroupUrl())
 					.path("/" + groupId)
 					.query("sid", r.getMessage()).delete();
-			assertNotNull("Valid ServiceResult should be returned", resp);
-			assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+			assertNotNull(resp, "Valid ServiceResult should be returned");
+			assertEquals(Response.Status.OK.getStatusCode(), resp.getStatus(), "Call should be successful");
 			ServiceResult r1 = resp.readEntity(ServiceResult.class);
-			assertEquals("OM Call should be successful", r1.getType(), Type.SUCCESS.name());
+			assertEquals(Type.SUCCESS.name(), r1.getType(), "OM Call should be successful");
 		}
 	}
 
@@ -95,10 +95,10 @@ public class TestGroupService extends AbstractWebServiceTest {
 		Response resp = getClient(getGroupUrl())
 				.path(String.format("/%s/rooms/add/%s", groupId, room.getObj().getId()))
 				.query("sid", sr.getMessage()).query("name", "Test Group").post("");
-		assertNotNull("Valid ServiceResult should be returned", resp);
-		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+		assertNotNull(resp, "Valid ServiceResult should be returned");
+		assertEquals(Response.Status.OK.getStatusCode(), resp.getStatus(), "Call should be successful");
 		ServiceResult sr1 = resp.readEntity(ServiceResult.class);
-		assertEquals("OM Call should be successful", sr1.getType(), Type.SUCCESS.name());
+		assertEquals(Type.SUCCESS.name(), sr1.getType(), "OM Call should be successful");
 	}
 
 	protected static String getGroupUrl() {

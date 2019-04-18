@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -29,33 +29,35 @@ import java.util.Date;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.webservice.util.CalendarParamConverter;
 import org.apache.openmeetings.webservice.util.DateParamConverter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.openjson.JSONObject;
 
 public class TestWebConverters {
 	@Test
 	public void testDateConverter() {
-		assertEquals("Null date should be parsed", null, DateParamConverter.get(null));
-		assertEquals("Date should be parsed"
-				, Date.from(LocalDate.of(2017, 01, 15).atStartOfDay(ZoneId.systemDefault()).toInstant())
-				, DateParamConverter.get("2017-01-15"));
-		assertEquals("Date should be parsed"
-				, Date.from(ZonedDateTime.of(2017, 01, 20, 20, 30, 03, 0, ZoneId.of("Europe/Moscow")).toInstant())
-				, DateParamConverter.get("2017-01-20T20:30:03+0300"));
+		assertEquals(null, DateParamConverter.get(null), "Null date should be parsed");
+		assertEquals(
+				Date.from(LocalDate.of(2017, 01, 15).atStartOfDay(ZoneId.systemDefault()).toInstant())
+				, DateParamConverter.get("2017-01-15")
+				, "Date should be parsed");
+		assertEquals(
+				Date.from(ZonedDateTime.of(2017, 01, 20, 20, 30, 03, 0, ZoneId.of("Europe/Moscow")).toInstant())
+				, DateParamConverter.get("2017-01-20T20:30:03+0300")
+				, "Date should be parsed");
 	}
 
 	@Test
 	public void testCalendarConverter() {
 		CalendarParamConverter c = new CalendarParamConverter();
-		assertEquals("Null calendar should be parsed", null, c.fromString(null));
+		assertEquals(null, c.fromString(null), "Null calendar should be parsed");
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(Date.from(LocalDate.of(2017, 01, 15).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-		assertEquals("Calendar should be parsed", cal, c.fromString("2017-01-15"));
+		assertEquals(cal, c.fromString("2017-01-15"), "Calendar should be parsed");
 	}
 
 	@Test
 	public void testUserConverter() {
-		assertEquals("Null UserDTO should be parsed", null, UserDTO.get((JSONObject)null));
+		assertEquals(null, UserDTO.get((JSONObject)null), "Null UserDTO should be parsed");
 	}
 }

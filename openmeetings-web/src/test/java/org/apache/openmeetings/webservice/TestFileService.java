@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -32,14 +32,13 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.file.FileExplorerObject;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
-import org.apache.openmeetings.test.NonJenkinsTests;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 public class TestFileService extends AbstractWebServiceTest {
 
 	@Test
-	@Category(NonJenkinsTests.class)
+	@Tag("org.apache.openmeetings.test.NonJenkinsTests")
 	public void addFileTest() throws IOException {
 		File img = null;
 		try {
@@ -51,9 +50,9 @@ public class TestFileService extends AbstractWebServiceTest {
 			g.drawString("Hello World!!!", 10, 20);
 			ImageIO.write(image, "jpg", img);
 			CallResult<FileItemDTO> cr = createVerifiedFile(img, "test.txt", BaseFileItem.Type.Presentation);
-			assertEquals("Type should be Image", BaseFileItem.Type.Image, cr.getObj().getType());
-			assertEquals("Width should be determined", width, cr.getObj().getWidth());
-			assertEquals("Height should be Image", height, cr.getObj().getHeight());
+			assertEquals(BaseFileItem.Type.Image, cr.getObj().getType(), "Type should be Image");
+			assertEquals(width, cr.getObj().getWidth(), "Width should be determined");
+			assertEquals(height, cr.getObj().getHeight(), "Height should be Image");
 		} finally {
 			if (img != null && img.exists()) {
 				img.delete();

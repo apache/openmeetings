@@ -25,11 +25,11 @@ import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
 import static org.apache.openmeetings.AbstractJUnitDefaults.rnd;
 import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -49,7 +49,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.string.StringValue;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestUserService extends AbstractWebServiceTest {
 	private static final String DUMMY_PICTURE_URL = "https://openmeetings.apache.org/images/logo.png";
@@ -57,14 +57,14 @@ public class TestUserService extends AbstractWebServiceTest {
 	@Test
 	public void invalidLoginTest() {
 		ServiceResult r = loginNoCheck("invalid-user", "bad pass");
-		assertNotNull("Valid ServiceResult should be returned", r);
-		assertEquals("Login should NOT be successful", Type.ERROR.name(), r.getType());
+		assertNotNull(r, "Valid ServiceResult should be returned");
+		assertEquals(Type.ERROR.name(), r.getType(), "Login should NOT be successful");
 	}
 
 	@Test
 	public void loginTest() {
 		ServiceResult r = login();
-		assertNotNull("Valid ServiceResult should be returned", r);
+		assertNotNull(r, "Valid ServiceResult should be returned");
 	}
 
 	private static ServiceResult getHash(String sid, boolean expectError) {
@@ -84,12 +84,12 @@ public class TestUserService extends AbstractWebServiceTest {
 				.query("sid", sid)
 				.form(new Form().param("user", user.toString()).param("options", options.toString())))
 		{
-			assertNotNull("Valid ServiceResult should be returned", resp);
+			assertNotNull(resp, "Valid ServiceResult should be returned");
 			if (expectError) {
-				assertEquals("Call should NOT be successful", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), resp.getStatus());
+				assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), resp.getStatus(), "Call should NOT be successful");
 				return null;
 			} else {
-				assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+				assertEquals(Response.Status.OK.getStatusCode(), resp.getStatus(), "Call should be successful");
 				return resp.readEntity(ServiceResult.class);
 			}
 		}
@@ -104,19 +104,19 @@ public class TestUserService extends AbstractWebServiceTest {
 	public void hashTest() throws OmException {
 		ServiceResult r = login();
 		ServiceResult r1 = getHash(r.getMessage(), false);
-		assertEquals("OM Call should be successful", Type.SUCCESS.name(), r1.getType());
+		assertEquals(Type.SUCCESS.name(), r1.getType(), "OM Call should be successful");
 
 		ensureApplication(-1L); // to ensure WebSession is attached
 		WebSession ws = WebSession.get();
 		assertTrue(ws.signIn(adminUsername, userpass, User.Type.user, null));
 		Long userId0 = WebSession.getUserId();
 		ws.checkHashes(StringValue.valueOf(r1.getMessage()), StringValue.valueOf(""));
-		assertTrue("Login via secure hash should be successful", ws.isSignedIn());
+		assertTrue(ws.isSignedIn(), "Login via secure hash should be successful");
 		Long userId1 = WebSession.getUserId();
 		assertNotEquals(userId0, userId1);
 		User u = getBean(UserDao.class).get(userId1);
-		assertNotNull("User should be created successfuly", u);
-		assertEquals("Picture URL should be preserved", DUMMY_PICTURE_URL, u.getPictureUri());
+		assertNotNull(u, "User should be created successfuly");
+		assertEquals(DUMMY_PICTURE_URL, u.getPictureUri(), "Picture URL should be preserved");
 	}
 
 	@Test
@@ -141,10 +141,10 @@ public class TestUserService extends AbstractWebServiceTest {
 				.query("sid", r.getMessage())
 				.type(APPLICATION_FORM_URLENCODED)
 				.post(new Form().param("user", u.toString()).param("confirm", "" + false), UserDTO.class);
-		assertNotNull("Valid UserDTO should be returned", user);
-		assertNotNull("Id should not be NULL", user.getId());
-		assertEquals("OM Call should be successful", u.getLogin(), user.getLogin());
-		assertEquals("OM Call should be successful", tz, user.getTimeZoneId());
+		assertNotNull(user, "Valid UserDTO should be returned");
+		assertNotNull(user.getId(), "Id should not be NULL");
+		assertEquals(u.getLogin(), user.getLogin(), "OM Call should be successful");
+		assertEquals(tz, user.getTimeZoneId(), "OM Call should be successful");
 	}
 
 	@Test
@@ -153,7 +153,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		Collection<? extends UserDTO> users = getClient(getUserUrl())
 				.path("/")
 				.query("sid", r.getMessage()).getCollection(UserDTO.class);
-		assertNotNull("Collection should be not null", users);
-		assertFalse("Collection should be not empty", users.isEmpty());
+		assertNotNull(users, "Collection should be not null");
+		assertFalse(users.isEmpty(), "Collection should be not empty");
 	}
 }

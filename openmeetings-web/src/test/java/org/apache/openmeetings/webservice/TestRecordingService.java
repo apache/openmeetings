@@ -20,9 +20,9 @@ package org.apache.openmeetings.webservice;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.AbstractJUnitDefaults.getUser;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
 
@@ -31,7 +31,7 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.record.RecordingDTO;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestRecordingService extends AbstractWebServiceTest {
 	public static final String RECORD_SERVICE_MOUNT = "record";
@@ -56,8 +56,8 @@ public class TestRecordingService extends AbstractWebServiceTest {
 		ServiceResult sr = login();
 		Collection<? extends RecordingDTO> recs = getClient(getRecordUrl()).path("/" + UNIT_TEST_EXT_TYPE).query("sid", sr.getMessage())
 				.getCollection(RecordingDTO.class);
-		assertNotNull("Valid collection should be returned", recs);
-		assertFalse("Collection of the recordings should not be empty", recs.isEmpty());
+		assertNotNull(recs, "Valid collection should be returned");
+		assertFalse(recs.isEmpty(), "Collection of the recordings should not be empty");
 		boolean found = false;
 		for (RecordingDTO rdo : recs) {
 			if (r.getId().equals(rdo.getId())) {
@@ -66,7 +66,7 @@ public class TestRecordingService extends AbstractWebServiceTest {
 				break;
 			}
 		}
-		assertTrue("Just created recording was not found by the service", found);
+		assertTrue(found, "Just created recording was not found by the service");
 	}
 
 	protected static String getRecordUrl() {

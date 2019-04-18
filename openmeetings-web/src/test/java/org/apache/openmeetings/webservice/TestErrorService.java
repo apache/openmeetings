@@ -20,8 +20,8 @@ package org.apache.openmeetings.webservice;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.AbstractJUnitDefaults.rnd;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Locale;
 
@@ -29,7 +29,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestErrorService extends AbstractWebServiceTest {
 	public static final String ERROR_SERVICE_MOUNT = "error";
@@ -40,8 +40,8 @@ public class TestErrorService extends AbstractWebServiceTest {
 		ServiceResult sr = getClient(getErrorUrl())
 				.path(String.format("/%s/%s", randomUUID().toString(), LabelDao.getLanguage(locales[rnd.nextInt(locales.length)], 1L)))
 				.get(ServiceResult.class);
-		assertNotNull("Valid Result should be returned", sr);
-		assertEquals("SUCCESS result should be returned", ServiceResult.Type.SUCCESS.name(), sr.getType());
+		assertNotNull(sr, "Valid Result should be returned");
+		assertEquals(ServiceResult.Type.SUCCESS.name(), sr.getType(), "SUCCESS result should be returned");
 	}
 
 	@Test
@@ -50,8 +50,8 @@ public class TestErrorService extends AbstractWebServiceTest {
 		ServiceResult sr = getClient(getErrorUrl())
 				.path(String.format("/%s/%s", "error.unknown", LabelDao.getLanguage(locales[rnd.nextInt(locales.length)], 1L)))
 				.get(ServiceResult.class);
-		assertNotNull("Valid Result should be returned", sr);
-		assertEquals("SUCCESS result should be returned", ServiceResult.Type.SUCCESS.name(), sr.getType());
+		assertNotNull(sr, "Valid Result should be returned");
+		assertEquals(ServiceResult.Type.SUCCESS.name(), sr.getType(), "SUCCESS result should be returned");
 	}
 
 	@Test
@@ -60,16 +60,16 @@ public class TestErrorService extends AbstractWebServiceTest {
 		Response resp = getClient(getErrorUrl())
 				.path("/report")
 				.post("");
-		assertNotNull("Not null Response should be returned", resp);
-		assertEquals("SUCCESS result should be returned", Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus());
+		assertNotNull(resp, "Not null Response should be returned");
+		assertEquals(Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus(), "SUCCESS result should be returned");
 
 		// report with message
 		resp = getClient(getErrorUrl())
 				.path("/report")
 				.query("message", "Dummy test")
 				.post("");
-		assertNotNull("Not null Response should be returned", resp);
-		assertEquals("SUCCESS result should be returned", Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus());
+		assertNotNull(resp, "Not null Response should be returned");
+		assertEquals(Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus(), "SUCCESS result should be returned");
 
 		// report with invalid sid and message
 		resp = getClient(getErrorUrl())
@@ -77,8 +77,8 @@ public class TestErrorService extends AbstractWebServiceTest {
 				.query("message", "Dummy test")
 				.query("sid", "n/a")
 				.post("");
-		assertNotNull("Not null Response should be returned", resp);
-		assertEquals("SUCCESS result should be returned", Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus());
+		assertNotNull(resp, "Not null Response should be returned");
+		assertEquals(Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus(), "SUCCESS result should be returned");
 
 		// report with valid sid and no message
 		ServiceResult r = login();
@@ -86,8 +86,8 @@ public class TestErrorService extends AbstractWebServiceTest {
 				.path("/report")
 				.query("sid", r.getMessage())
 				.post("");
-		assertNotNull("Not null Response should be returned", resp);
-		assertEquals("SUCCESS result should be returned", Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus());
+		assertNotNull(resp, "Not null Response should be returned");
+		assertEquals(Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus(), "SUCCESS result should be returned");
 
 		// report with valid sid and message
 		resp = getClient(getErrorUrl())
@@ -95,8 +95,8 @@ public class TestErrorService extends AbstractWebServiceTest {
 				.query("sid", r.getMessage())
 				.query("message", "Dummy test")
 				.post("");
-		assertNotNull("Not null Response should be returned", resp);
-		assertEquals("SUCCESS result should be returned", Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus());
+		assertNotNull(resp, "Not null Response should be returned");
+		assertEquals(Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus(), "SUCCESS result should be returned");
 	}
 
 	protected static String getErrorUrl() {
