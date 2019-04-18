@@ -42,15 +42,15 @@ import java.util.UUID;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 public class TestAdmin {
 	private File tempFolder;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws IOException {
 		setOmHome();
 		tempFolder = Files.createTempDirectory("omtempdb").toFile();
@@ -59,7 +59,7 @@ public class TestAdmin {
 		setDerbyHome(tempFolder);
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() throws IOException {
 		resetDerbyHome();
 		System.getProperties().remove(OM_HOME);

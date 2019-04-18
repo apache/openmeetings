@@ -18,17 +18,17 @@
  */
 package org.apache.openmeetings.backup;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 public class TestBackupVersion {
 	@Test
 	public void testGet() {
 		BackupVersion bv = BackupVersion.get();
-		assertNotEquals("Major should be set", 0, bv.getMajor());
+		assertNotEquals(0, bv.getMajor(), "Major should be set");
 	}
 
 	@Test

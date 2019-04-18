@@ -52,9 +52,9 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,7 +90,7 @@ public class TestInstall {
 		System.getProperties().remove(DERBY_HOME);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws IOException {
 		log.info("Going to perform setup for TestInstall");
 		AbstractSpringTest.setOmHome();
@@ -104,7 +104,7 @@ public class TestInstall {
 		log.info("Setup complete");
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() throws IOException {
 		log.info("Going to perform clean-up for TestInstall");
 		AbstractWicketTester.destroy(tester);

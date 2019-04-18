@@ -18,13 +18,13 @@
  */
 package org.apache.openmeetings.util;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestStoredFile {
 	@Test
@@ -32,8 +32,8 @@ public class TestStoredFile {
 		final String[] exts = {"aif", "aifc", "aiff", "au", "mp3", "flac", "wav"}; //TODO enlarge
 		for (String ext : exts) {
 			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
-			assertTrue(String.format("Files of type '%s' should be treated as Video", ext), sf.isVideo());
-			assertFalse(String.format("Files of type '%s' should NOT be treated as Image", ext), sf.isImage());
+			assertTrue(sf.isVideo(), String.format("Files of type '%s' should be treated as Video", ext));
+			assertFalse(sf.isImage(), String.format("Files of type '%s' should NOT be treated as Image", ext));
 		}
 	}
 
@@ -42,8 +42,8 @@ public class TestStoredFile {
 		final String[] exts = {"avi", "mov", "flv", "mp4"}; //TODO enlarge
 		for (String ext : exts) {
 			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
-			assertTrue(String.format("Files of type '%s' should be treated as Video", ext), sf.isVideo());
-			assertFalse(String.format("Files of type '%s' should NOT be treated as Image", ext), sf.isImage());
+			assertTrue(sf.isVideo(), String.format("Files of type '%s' should be treated as Video", ext));
+			assertFalse(sf.isImage(), String.format("Files of type '%s' should NOT be treated as Image", ext));
 		}
 	}
 
@@ -61,8 +61,8 @@ public class TestStoredFile {
 				"jpg", "jpeg"}; //TODO enlarge
 		for (String ext : exts) {
 			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
-			assertTrue(String.format("Files of type '%s' should be treated as Image", ext), sf.isImage());
-			assertFalse(String.format("Files of type '%s' should NOT be treated as Video", ext), sf.isVideo());
+			assertTrue(sf.isImage(), String.format("Files of type '%s' should be treated as Image", ext));
+			assertFalse(sf.isVideo(), String.format("Files of type '%s' should NOT be treated as Video", ext));
 		}
 	}
 
@@ -73,16 +73,16 @@ public class TestStoredFile {
 		};
 		for (String ext : exts) {
 			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
-			assertTrue(String.format("Files of type '%s' should be treated as Convertible", ext), sf.isOffice());
-			assertFalse(String.format("Files of type '%s' should NOT be treated as Video", ext), sf.isVideo());
+			assertTrue(sf.isOffice(), String.format("Files of type '%s' should be treated as Convertible", ext));
+			assertFalse(sf.isVideo(), String.format("Files of type '%s' should NOT be treated as Video", ext));
 		}
 	}
 
 	private static void fileOfficeTest(String path) throws IOException {
 		try (InputStream is = TestStoredFile.class.getResourceAsStream(path)) {
 			StoredFile sf = new StoredFile(path, is);
-			assertTrue(String.format("Files of type '%s' should be treated as Convertible", sf.getExt()), sf.isOffice());
-			assertFalse(String.format("Files of type '%s' should NOT be treated as Video", sf.getExt()), sf.isVideo());
+			assertTrue(sf.isOffice(), String.format("Files of type '%s' should be treated as Convertible", sf.getExt()));
+			assertFalse(sf.isVideo(), String.format("Files of type '%s' should NOT be treated as Video", sf.getExt()));
 		}
 	}
 

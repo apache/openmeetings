@@ -24,11 +24,11 @@ import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
 import static org.apache.openmeetings.AbstractJUnitDefaults.createUser;
 import static org.apache.openmeetings.AbstractJUnitDefaults.getAppointment;
 import static org.apache.openmeetings.AbstractJUnitDefaults.getUser;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,7 +53,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.webservice.util.AppointmentParamConverter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
@@ -74,7 +74,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 
 		AppointmentDTO app = getClient(getCalendarUrl()).path("/room/" + a.getRoom().getId()).query("sid", sr.getMessage())
 				.get(AppointmentDTO.class);
-		assertNotNull("Valid DTO should be returned", app);
+		assertNotNull(app, "Valid DTO should be returned");
 	}
 
 	@Test
@@ -143,11 +143,11 @@ public class TestCalendarService extends AbstractWebServiceTest {
 				.query("sid", sid)
 				.form(new Form().param("appointment", o.toString()));
 
-		assertNotNull("Valid AppointmentDTO should be returned", resp);
-		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+		assertNotNull(resp, "Valid AppointmentDTO should be returned");
+		assertEquals(Response.Status.OK.getStatusCode(), resp.getStatus(), "Call should be successful");
 		AppointmentDTO dto = resp.readEntity(AppointmentDTO.class);
-		assertNotNull("Valid DTO should be returned", dto);
-		assertNotNull("DTO id should be valid", dto.getId());
+		assertNotNull(dto, "Valid DTO should be returned");
+		assertNotNull(dto.getId(), "DTO id should be valid");
 
 		return sid;
 	}
@@ -165,7 +165,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 				.query("sid", sr.getMessage())
 				.delete();
 
-		assertNotEquals("Call should NOT be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+		assertNotEquals(Response.Status.OK.getStatusCode(), resp.getStatus(), "Call should NOT be successful");
 	}
 
 	@Test
@@ -186,11 +186,11 @@ public class TestCalendarService extends AbstractWebServiceTest {
 				.query("sid", sr.getMessage())
 				.form(new Form().param("appointment", o.toString()));
 
-		assertNotNull("Valid AppointmentDTO should be returned", resp);
-		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+		assertNotNull(resp, "Valid AppointmentDTO should be returned");
+		assertEquals(Response.Status.OK.getStatusCode(), resp.getStatus(), "Call should be successful");
 		AppointmentDTO dto = resp.readEntity(AppointmentDTO.class);
-		assertNotNull("Valid DTO should be returned", dto);
-		assertNotNull("DTO id should be valid", dto.getId());
+		assertNotNull(dto, "Valid DTO should be returned");
+		assertNotNull(dto.getId(), "DTO id should be valid");
 	}
 
 	private static AppointmentDTO createEventWithGuests(String sid) throws Exception {
@@ -213,12 +213,12 @@ public class TestCalendarService extends AbstractWebServiceTest {
 				.query("sid", sid)
 				.form(new Form().param("appointment", o.toString()));
 
-		assertNotNull("Valid AppointmentDTO should be returned", resp);
-		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+		assertNotNull(resp, "Valid AppointmentDTO should be returned");
+		assertEquals(Response.Status.OK.getStatusCode(), resp.getStatus(), "Call should be successful");
 		AppointmentDTO dto = resp.readEntity(AppointmentDTO.class);
-		assertNotNull("Valid DTO should be returned", dto);
-		assertNotNull("DTO id should be valid", dto.getId());
-		assertEquals("DTO should have 2 attendees", 2, dto.getMeetingMembers().size());
+		assertNotNull(dto, "Valid DTO should be returned");
+		assertNotNull(dto.getId(), "DTO id should be valid");
+		assertEquals(2, dto.getMeetingMembers().size(), "DTO should have 2 attendees");
 		for (MeetingMemberDTO mm : dto.getMeetingMembers()) {
 			assertNotNull("Email should be valid", mm.getUser().getAddress().getEmail());
 		}
@@ -242,12 +242,12 @@ public class TestCalendarService extends AbstractWebServiceTest {
 				.query("sid", sid)
 				.form(new Form().param("appointment", o1.toString()));
 
-		assertNotNull("Valid AppointmentDTO should be returned", resp);
-		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+		assertNotNull(resp, "Valid AppointmentDTO should be returned");
+		assertEquals(Response.Status.OK.getStatusCode(), resp.getStatus(), "Call should be successful");
 		dto = resp.readEntity(AppointmentDTO.class);
-		assertNotNull("Valid DTO should be returned", dto);
-		assertNotNull("DTO id should be valid", dto.getId());
-		assertEquals("DTO should have 1 attendees", 1, dto.getMeetingMembers().size());
+		assertNotNull(dto, "Valid DTO should be returned");
+		assertNotNull(dto.getId(), "DTO id should be valid");
+		assertEquals(1, dto.getMeetingMembers().size(), "DTO should have 1 attendees");
 	}
 
 	@Test
@@ -268,18 +268,18 @@ public class TestCalendarService extends AbstractWebServiceTest {
 				.query("sid", sid)
 				.form(new Form().param("appointment", o.toString()));
 
-		assertNotNull("Valid AppointmentDTO should be returned", resp);
-		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+		assertNotNull(resp, "Valid AppointmentDTO should be returned");
+		assertEquals(Response.Status.OK.getStatusCode(), resp.getStatus(), "Call should be successful");
 		dto = resp.readEntity(AppointmentDTO.class);
-		assertNotNull("Valid DTO should be returned", dto);
-		assertNotNull("DTO id should be valid", dto.getId());
-		assertEquals("DTO should have 1 attendees", 1, dto.getMeetingMembers().size());
+		assertNotNull(dto, "Valid DTO should be returned");
+		assertNotNull(dto.getId(), "DTO id should be valid");
+		assertEquals(1, dto.getMeetingMembers().size(), "DTO should have 1 attendees");
 
-		assertNull("Meeting member should deleted", mmDao.get(mmId));
-		assertNull("Invitation should deleted", getBean(InvitationDao.class).getByHash(hash, true, false));
+		assertNull(mmDao.get(mmId), "Meeting member should deleted");
+		assertNull(getBean(InvitationDao.class).getByHash(hash, true, false), "Invitation should deleted");
 		User uc = getBean(UserDao.class).get(mmUserId);
-		assertNotNull("Meeting member user should not be deleted", uc);
-		assertFalse("Meeting member user should not be deleted", uc.isDeleted());
+		assertNotNull(uc, "Meeting member user should not be deleted");
+		assertFalse(uc.isDeleted(), "Meeting member user should not be deleted");
 	}
 
 	@Test
@@ -292,8 +292,8 @@ public class TestCalendarService extends AbstractWebServiceTest {
 			.query("sid", sid)
 			.getCollection(AppointmentDTO.class);
 
-		assertEquals("List of one item should be returned", 1, list.size());
-		assertEquals("Title should match", title, list.get(0).getTitle());
+		assertEquals(1, list.size(), "List of one item should be returned");
+		assertEquals(title, list.get(0).getTitle(), "Title should match");
 
 		title = randomUUID().toString();
 		@SuppressWarnings("unchecked")
@@ -301,7 +301,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 			.path(String.format("/title/%s", title))
 			.query("sid", sid)
 			.getCollection(AppointmentDTO.class);
-		assertEquals("None items should be returned", 0, list1.size());
+		assertEquals(0, list1.size(), "None items should be returned");
 	}
 
 	protected static String getCalendarUrl() {

@@ -18,17 +18,17 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Set;
 
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.webservice.error.ServiceException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.sun.star.uno.RuntimeException;
 
@@ -38,20 +38,20 @@ public class TestBaseService {
 			r.run();
 			fail("ServiceException expected");
 		} catch (ServiceException e) {
-			assertTrue("expected", true);
+			assertTrue(true, "expected");
 		}
 	}
 
 	@Test
 	public void testCheck() {
 		Sessiondata sd = new BaseWebService() {}.check(null);
-		assertNotNull("NOT null Sessiondata should be returned", sd);
-		assertNull("UserId should be null", sd.getUserId());
+		assertNotNull(sd, "NOT null Sessiondata should be returned");
+		assertNull(sd.getUserId(), "UserId should be null");
 	}
 
 	private static void checkRights(Set<Right> rights) {
-		assertNotNull("NOT null Rights should be returned", rights);
-		assertTrue("Rights should be empty", rights.isEmpty());
+		assertNotNull(rights, "NOT null Rights should be returned");
+		assertTrue(rights.isEmpty(), "Rights should be empty");
 	}
 
 	@Test

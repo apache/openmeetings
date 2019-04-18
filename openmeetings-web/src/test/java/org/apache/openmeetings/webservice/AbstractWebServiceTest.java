@@ -26,8 +26,8 @@ import static org.apache.openmeetings.AbstractJUnitDefaults.soapUsername;
 import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,10 +59,10 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.webservice.util.AppointmentMessageBodyReader;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 public class AbstractWebServiceTest {
 	private static Tomcat tomcat;
@@ -100,11 +100,11 @@ public class AbstractWebServiceTest {
 
 	public static ServiceResult login(String user, String pass) {
 		ServiceResult sr = loginNoCheck(user, pass);
-		assertEquals("Login should be successful", Type.SUCCESS.name(), sr.getType());
+		assertEquals(Type.SUCCESS.name(), sr.getType(), "Login should be successful");
 		return sr;
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void initialize() throws Exception {
 		AbstractSpringTest.init();
 		tomcat = new Tomcat();
@@ -124,12 +124,12 @@ public class AbstractWebServiceTest {
 		port = tomcat.getConnector().getLocalPort();
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		ensureSchema(getBean(UserDao.class), getBean(ImportInitvalues.class));
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void destroy() throws Exception {
 		if (tomcat.getServer() != null && tomcat.getServer().getState() != LifecycleState.DESTROYED) {
 			if (tomcat.getServer().getState() != LifecycleState.STOPPED) {
@@ -152,17 +152,17 @@ public class AbstractWebServiceTest {
 				.query("sid", sid)
 				.type(APPLICATION_FORM_URLENCODED)
 				.post(new Form().param("room", r.toString()), RoomDTO.class);
-		assertNotNull("Valid room should be returned", room);
-		assertNotNull("Room ID should be not empty", room.getId());
+		assertNotNull(room, "Valid room should be returned");
+		assertNotNull(room.getId(), "Room ID should be not empty");
 
 		RoomDTO room1 = getClient(getRoomUrl()).path(String.format("/%s", room.getId()))
 				.query("sid", sid)
 				.get(RoomDTO.class);
-		assertNotNull("Valid room should be returned", room1);
-		assertEquals("Room with same ID should be returned", room.getId(), room1.getId());
-		assertEquals("Room with same Name should be returned", r.getName(), room1.getName());
-		assertEquals("Room with same ExternalType should be returned", r.getExternalType(), room1.getExternalType());
-		assertEquals("Room with same ExternalId should be returned", r.getExternalId(), room1.getExternalId());
+		assertNotNull(room1, "Valid room should be returned");
+		assertEquals(room.getId(), room1.getId(), "Room with same ID should be returned");
+		assertEquals(r.getName(), room1.getName(), "Room with same Name should be returned");
+		assertEquals(r.getExternalType(), room1.getExternalType(), "Room with same ExternalType should be returned");
+		assertEquals(r.getExternalId(), room1.getExternalId(), "Room with same ExternalId should be returned");
 		//TODO check other fields
 		return new CallResult<>(sid, room1);
 	}
@@ -196,8 +196,8 @@ public class AbstractWebServiceTest {
 					.path("/")
 					.query("sid", r.getMessage())
 					.type(MediaType.MULTIPART_FORM_DATA_TYPE).postCollection(atts, Attachment.class, FileItemDTO.class);
-			assertNotNull("Valid FileItem should be returned", f1);
-			assertNotNull("Valid FileItem should be returned", f1.getId());
+			assertNotNull(f1, "Valid FileItem should be returned");
+			assertNotNull(f1.getId(), "Valid FileItem should be returned");
 		}
 		return new CallResult<>(r.getMessage(), f1);
 	}

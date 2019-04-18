@@ -20,14 +20,14 @@ package org.apache.openmeetings.db.util;
 
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountries;
 import static org.apache.openmeetings.db.util.LocaleHelper.validateCountry;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestLocaleHelper {
 	private static final String COUNTRY_IT_LC = "it";
@@ -37,11 +37,11 @@ public class TestLocaleHelper {
 	@Test
 	public void testCountry() {
 		List<String> list = getCountries();
-		assertNotNull("Country list shouldn't be null", list);
-		assertFalse("Country list shouldn't be empty", list.isEmpty());
-		assertEquals("Check for valid", COUNTRY_IT, validateCountry(COUNTRY_IT));
-		assertEquals("Check for valid (lower case)", COUNTRY_IT, validateCountry(COUNTRY_IT_LC));
-		assertNotEquals("Check for invalid (null)", COUNTRY_IT, validateCountry(null));
-		assertNotEquals("Check for invalid", COUNTRY_IT, validateCountry(COUNTRY_ITALY));
+		assertNotNull(list, "Country list shouldn't be null");
+		assertFalse(list.isEmpty(), "Country list shouldn't be empty");
+		assertEquals(COUNTRY_IT, validateCountry(COUNTRY_IT), "Check for valid");
+		assertEquals(COUNTRY_IT, validateCountry(COUNTRY_IT_LC), "Check for valid (lower case)");
+		assertNotEquals(COUNTRY_IT, validateCountry(null), "Check for invalid (null)");
+		assertNotEquals(COUNTRY_IT, validateCountry(COUNTRY_ITALY), "Check for invalid");
 	}
 }

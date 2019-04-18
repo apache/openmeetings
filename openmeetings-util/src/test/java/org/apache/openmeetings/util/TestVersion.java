@@ -22,10 +22,10 @@ import static org.apache.openmeetings.util.Version.getBuildDate;
 import static org.apache.openmeetings.util.Version.getRevision;
 import static org.apache.openmeetings.util.Version.getVersion;
 import static org.apache.openmeetings.util.Version.logOMStarted;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestVersion {
 	@Test
@@ -46,6 +46,6 @@ public class TestVersion {
 	@Test
 	public void testLogVersion() {
 		logOMStarted();
-		Assert.assertTrue(true);
+		assertTrue(true);
 	}
 }

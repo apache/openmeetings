@@ -18,18 +18,18 @@
  */
 package org.apache.openmeetings.util.crypt;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.text.RandomStringGenerator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public abstract class AbstractCryptTest {
 	protected static ICrypt crypt;
@@ -37,15 +37,15 @@ public abstract class AbstractCryptTest {
 	@Test
 	public void nulltest() {
 		String hash = crypt.hash(null);
-		assertEquals("Hash for null should be null", null, hash);
+		assertNull(hash, "Hash for null should be null");
 
-		assertTrue("Hash for null should be null", crypt.verify(null, null));
-		assertFalse("Hash for null should be null", crypt.verify(null, "abc"));
-		assertFalse("Hash for null should NOT be null", crypt.verify("abc", null));
+		assertTrue(crypt.verify(null, null), "Hash for null should be null");
+		assertFalse(crypt.verify(null, "abc"), "Hash for null should be null");
+		assertFalse(crypt.verify("abc", null), "Hash for null should NOT be null");
 
-		assertTrue("Hash for null should be null", crypt.fallback(null, null));
-		assertFalse("Hash for null should be null", crypt.fallback(null, "abc"));
-		assertFalse("Hash for null should NOT be null", crypt.fallback("abc", null));
+		assertTrue(crypt.fallback(null, null), "Hash for null should be null");
+		assertFalse(crypt.fallback(null, "abc"), "Hash for null should be null");
+		assertFalse(crypt.fallback("abc", null), "Hash for null should NOT be null");
 	}
 
 	private static List<String> get(int count) {
@@ -66,11 +66,11 @@ public abstract class AbstractCryptTest {
 	public void test() {
 		for (String str : get(64)) {
 			String h1 = crypt.hash(str);
-			assertNotNull("Hash should not be null", h1);
+			assertNotNull(h1, "Hash should not be null");
 			String h2 = crypt.hash(str);
-			assertNotEquals("Hashes of same string should NOT be the same", h1,  h2);
-			assertTrue("String should be verified successfully", crypt.verify(str, h1));
-			assertTrue("String should be verified successfully", crypt.verify(str, h2));
+			assertNotEquals(h1,  h2, "Hashes of same string should NOT be the same");
+			assertTrue(crypt.verify(str, h1), "String should be verified successfully");
+			assertTrue(crypt.verify(str, h2), "String should be verified successfully");
 		}
 	}
 }

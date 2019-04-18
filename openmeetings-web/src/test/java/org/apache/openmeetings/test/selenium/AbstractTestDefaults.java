@@ -23,8 +23,8 @@ import java.util.List;
 import org.apache.openmeetings.AbstractSpringTest;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -90,7 +90,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 		return doTearDownAfterTest;
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", getLocale());

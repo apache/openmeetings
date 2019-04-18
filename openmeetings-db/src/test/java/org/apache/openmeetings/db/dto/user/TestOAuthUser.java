@@ -22,16 +22,16 @@ import static org.apache.openmeetings.db.dto.user.OAuthUser.PARAM_EMAIL;
 import static org.apache.openmeetings.db.dto.user.OAuthUser.PARAM_FNAME;
 import static org.apache.openmeetings.db.dto.user.OAuthUser.PARAM_LNAME;
 import static org.apache.openmeetings.db.dto.user.OAuthUser.PARAM_LOGIN;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.wicket.util.string.Strings;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestOAuthUser {
 	@Test
@@ -45,10 +45,10 @@ public class TestOAuthUser {
 				"{'id': '11klahjsfwehf5', 'email': 'alsfkvslvmclqwkdsm@gmail.com', 'verified_email': true, 'name': 'John Doe', 'given_name': 'John', 'family_name': 'Doe', 'link': 'https://plus.google.com/+JohnDoe', 'picture': 'https://lh3.googleusercontent.com/somehash/photo.jpg', 'gender': 'male', 'locale': 'en'}"
 				, server
 				);
-		assertEquals("Login should be correct", "11klahjsfwehf5", user.getLogin());
-		assertEquals("Email should be correct", "alsfkvslvmclqwkdsm@gmail.com", user.getEmail());
-		assertEquals("Firstname should be correct", "John", user.getUserData().get(PARAM_FNAME));
-		assertEquals("Lastname should be correct", "Doe", user.getUserData().get(PARAM_LNAME));
+		assertEquals("11klahjsfwehf5", user.getLogin(), "Login should be correct");
+		assertEquals("alsfkvslvmclqwkdsm@gmail.com", user.getEmail(), "Email should be correct");
+		assertEquals("John", user.getUserData().get(PARAM_FNAME), "Firstname should be correct");
+		assertEquals("Doe", user.getUserData().get(PARAM_LNAME), "Lastname should be correct");
 	}
 
 	@Test
@@ -62,17 +62,17 @@ public class TestOAuthUser {
 				"{'response':[{'uid':4uidhere4,'first_name':'John','last_name':'Doe'}]}"
 				, server
 				);
-		assertEquals("Login should be correct", "4uidhere4", user.getLogin());
-		assertTrue("Email should be empty", Strings.isEmpty(user.getEmail()));
-		assertEquals("Firstname should be correct", "John", user.getUserData().get(PARAM_FNAME));
-		assertEquals("Lastname should be correct", "Doe", user.getUserData().get(PARAM_LNAME));
+		assertEquals("4uidhere4", user.getLogin(), "Login should be correct");
+		assertTrue(Strings.isEmpty(user.getEmail()), "Email should be empty");
+		assertEquals("John", user.getUserData().get(PARAM_FNAME), "Firstname should be correct");
+		assertEquals("Doe", user.getUserData().get(PARAM_LNAME), "Lastname should be correct");
 
 		server.setIconUrl("https://goo.gl/images/q23g7Y");
 		user = new OAuthUser(
 				"{'response':[{'uid':4uidhere4,'first_name':'John','last_name':'Doe'}]}"
 				, server
 				);
-		assertEquals("Email should be constructed", "4uidhere4@goo.gl", user.getEmail());
+		assertEquals("4uidhere4@goo.gl", user.getEmail(), "Email should be constructed");
 	}
 
 	@Test
@@ -86,10 +86,10 @@ public class TestOAuthUser {
 				"{\"hasError\": false, \"result\": {\"username\": \"test\", \"email\": \"aaa@test.com\", \"fname\": \"first\", \"lname\":\"last\"}}"
 				, server
 				);
-		assertEquals("Login should be correct", "test", user.getLogin());
-		assertEquals("Email should be correct", "aaa@test.com", user.getEmail());
-		assertEquals("Firstname should be correct", "first", user.getUserData().get(PARAM_FNAME));
-		assertEquals("Lastname should be correct", "last", user.getUserData().get(PARAM_LNAME));
+		assertEquals("test", user.getLogin(), "Login should be correct");
+		assertEquals("aaa@test.com", user.getEmail(), "Email should be correct");
+		assertEquals("first", user.getUserData().get(PARAM_FNAME), "Firstname should be correct");
+		assertEquals("last", user.getUserData().get(PARAM_LNAME), "Lastname should be correct");
 	}
 
 	@Test
@@ -98,9 +98,9 @@ public class TestOAuthUser {
 		umap.put("login", "abc");
 		umap.put("email", "abc@local");
 		OAuthUser user = new OAuthUser(umap);
-		assertEquals("Login should be correct", "abc", user.getLogin());
-		assertEquals("Email should be correct", "abc@local", user.getEmail());
-		assertNull("First should be empty", user.getUserData().get(PARAM_FNAME));
-		assertNull("Lastname should be empty", user.getUserData().get(PARAM_LNAME));
+		assertEquals("abc", user.getLogin(), "Login should be correct");
+		assertEquals("abc@local", user.getEmail(), "Email should be correct");
+		assertNull(user.getUserData().get(PARAM_FNAME), "First name should be empty");
+		assertNull(user.getUserData().get(PARAM_LNAME), "Last name should be empty");
 	}
 }
