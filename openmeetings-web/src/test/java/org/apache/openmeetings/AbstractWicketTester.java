@@ -21,10 +21,10 @@ package org.apache.openmeetings;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.web.common.OmWebSocketPanel.CONNECTED_MSG;
 import static org.apache.wicket.util.string.Strings.escapeMarkup;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.Serializable;
 import java.util.List;
@@ -43,7 +43,7 @@ import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.protocol.ws.util.tester.WebSocketTester;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,10 +82,11 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	}
 
 	@Override
+	@BeforeEach
 	public void setUp() throws Exception {
 		super.setUp();
 		tester = getWicketTester(app);
-		assertNotNull("Web session should not be null", WebSession.get());
+		assertNotNull(WebSession.get(), "Web session should not be null");
 		Locale[] locales = Locale.getAvailableLocales();
 		tester.getSession().setLocale(locales[rnd.nextInt(locales.length)]);
 	}
@@ -101,7 +102,7 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 		} catch (OmException e) {
 			fail(e.getMessage());
 		}
-		assertTrue("Web session is not signed in for user: " + (login != null ? login : adminUsername), s.isSignedIn());
+		assertTrue(s.isSignedIn(), "Web session is not signed in for user: " + (login != null ? login : adminUsername));
 	}
 
 	public ButtonAjaxBehavior getButtonBehavior(String path, String name) {
@@ -124,7 +125,7 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	}
 
 	protected void testArea(String user, Consumer<MainPage> consumer) throws OmException {
-		Assert.assertTrue(((WebSession)tester.getSession()).signIn(user, userpass, User.Type.user, null));
+		assertTrue(((WebSession)tester.getSession()).signIn(user, userpass, User.Type.user, null));
 		MainPage page = tester.startPage(MainPage.class);
 		tester.assertRenderedPage(MainPage.class);
 		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(0));
@@ -156,6 +157,6 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 				log.debug("Error {}", fm);
 			}
 		}
-		assertEquals(String.format("There should be exactly %s errors", count), count, errors.size());
+		assertEquals(count, errors.size(), String.format("There should be exactly %s errors", count));
 	}
 }

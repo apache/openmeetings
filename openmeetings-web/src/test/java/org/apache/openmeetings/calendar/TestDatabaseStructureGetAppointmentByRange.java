@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.calendar;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +26,7 @@ import java.util.Calendar;
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,20 +80,20 @@ public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDef
 		for (Appointment a : appointmentDao.getInRange(userId, rangeStart.getTime(), rangeEnd.getTime())) {
 			int mmCount = a.getMeetingMembers() == null ? 0 : a.getMeetingMembers().size();
 			if (a.getId().equals(a1.getId())) {
-				assertEquals("Inapropriate MeetingMembers count", 0, mmCount);
+				assertEquals(0, mmCount, "Inapropriate MeetingMembers count");
 				a1found++;
 			}
 			if (a.getId().equals(a2.getId())) {
-				assertEquals("Inapropriate MeetingMembers count", 1, mmCount);
+				assertEquals(1, mmCount, "Inapropriate MeetingMembers count");
 				a2found++;
 			}
 			if (a.getId().equals(a3.getId())) {
-				assertEquals("Inapropriate MeetingMembers count", 2, mmCount);
+				assertEquals(2, mmCount, "Inapropriate MeetingMembers count");
 				a3found++;
 			}
 		}
-		assertEquals("Inappropriate count of appointments without members found", 1, a1found);
-		assertEquals("Inappropriate count of appointments with 1 member found", 1, a2found);
-		assertEquals("Inappropriate count of appointments with 2 members found", 1, a3found);
+		assertEquals(1, a1found, "Inappropriate count of appointments without members found");
+		assertEquals(1, a2found, "Inappropriate count of appointments with 1 member found");
+		assertEquals(1, a3found, "Inappropriate count of appointments with 2 members found");
 	}
 }

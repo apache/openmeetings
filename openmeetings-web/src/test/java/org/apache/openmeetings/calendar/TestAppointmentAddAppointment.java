@@ -19,9 +19,9 @@
 package org.apache.openmeetings.calendar;
 
 import static java.util.UUID.randomUUID;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -40,7 +40,7 @@ import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,7 +142,7 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 
 		Thread.sleep(3000);
 
-		assertNotNull("Saved appointment should have valid id: " + a.getId(), a.getId());
+		assertNotNull(a.getId(), "Saved appointment should have valid id");
 	}
 
 	@Test
@@ -163,18 +163,18 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 			a.getMeetingMembers().add(mm);
 		}
 		a = appointmentDao.update(a, owner.getId());
-		assertNotNull("Saved appointment should have valid id: " + a.getId(), a.getId());
-		assertEquals("Saved appointment should have corect count of guests: ", 3, a.getMeetingMembers().size());
+		assertNotNull(a.getId(), "Saved appointment should have valid id");
+		assertEquals(3, a.getMeetingMembers().size(), "Saved appointment should have corect count of guests");
 		for (MeetingMember mm : a.getMeetingMembers()) {
-			assertNotNull("Saved guest should have valid id: ", mm.getId());
-			assertNotNull("Saved guest should have valid invitation: ", mm.getInvitation());
-			assertNotNull("Saved guest should have invitation with ID: ", mm.getInvitation().getId());
+			assertNotNull(mm.getId(), "Saved guest should have valid id");
+			assertNotNull(mm.getInvitation(), "Saved guest should have valid invitation");
+			assertNotNull(mm.getInvitation().getId(), "Saved guest should have invitation with ID");
 		}
 
 		WebSession ws = WebSession.get();
 		Appointment a1 = appointmentDao.get(a.getId());
 		ws.checkHashes(StringValue.valueOf(""), StringValue.valueOf(a1.getMeetingMembers().get(0).getInvitation().getHash()));
-		assertTrue("Login via secure hash should be successful", ws.isSignedIn());
+		assertTrue(ws.isSignedIn(), "Login via secure hash should be successful");
 	}
 
 	private static String createClientObj(String firstname, String lastname, String email, String jNameTimeZone) {

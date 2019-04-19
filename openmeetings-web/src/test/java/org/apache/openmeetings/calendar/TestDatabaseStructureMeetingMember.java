@@ -18,10 +18,8 @@
  */
 package org.apache.openmeetings.calendar;
 
-
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 
 public class TestDatabaseStructureMeetingMember extends AbstractJUnitDefaults {
 

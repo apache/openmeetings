@@ -18,14 +18,14 @@
  */
 package org.apache.openmeetings.calendar;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.user.User;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestOmCalendar extends AbstractJUnitDefaults {
@@ -46,10 +46,9 @@ public class TestOmCalendar extends AbstractJUnitDefaults {
 
 		calendar = calendarDao.update(calendar);
 
-		assertTrue("Saved calendar should have valid id: " + calendar.getId(),
-				calendar.getId() != null && calendar.getId() > 0);
+		assertTrue(calendar.getId() != null && calendar.getId() > 0, "Saved calendar should have valid id: " + calendar.getId());
 
 		OmCalendar c = calendarDao.get(calendar.getId());
-		assertNotNull("Failed to find Calendar by id", c);
+		assertNotNull(c, "Failed to find Calendar by id");
 	}
 }

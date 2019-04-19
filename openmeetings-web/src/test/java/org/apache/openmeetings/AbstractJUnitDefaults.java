@@ -24,7 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CONTEXT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Date;
 import java.util.Random;
@@ -90,9 +90,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		} else {
 			log.info("Default scheme already created");
 		}
-		if (getCryptClassName() == null) {
-			assertNotNull("Crypt class name should not be null", getCryptClassName());
-		}
+		assertNotNull(getCryptClassName(), "Crypt class name should not be null");
 	}
 
 	public Appointment getAppointment() {
@@ -145,10 +143,10 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	}
 
 	public static Appointment createAppointment(AppointmentDao appointmentDao, Appointment ap) {
-		assertNotNull("Can't access to appointment dao implimentation", appointmentDao);
+		assertNotNull(appointmentDao, "Can't access to appointment dao implimentation");
 		// add new appointment
 		ap = appointmentDao.update(ap, null, false);
-		assertNotNull("Can't add appointment", ap.getId());
+		assertNotNull(ap.getId(), "Can't add appointment");
 		return ap;
 	}
 
@@ -197,7 +195,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 
 	public static User createUser(UserDao userDao, User u) {
 		u = userDao.update(u, null);
-		assertNotNull("Can't add user", u);
+		assertNotNull(u, "Can't add user");
 		return u;
 	}
 
@@ -237,7 +235,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 
 	public User createUserContact(User user, Long ownerId) {
 		user = userDao.update(user, ownerId);
-		assertNotNull("Cann't add user", user);
+		assertNotNull(user, "Cann't add user");
 		return user;
 	}
 }

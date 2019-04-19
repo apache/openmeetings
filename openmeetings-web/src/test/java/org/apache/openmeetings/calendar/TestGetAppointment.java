@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.calendar;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -27,7 +27,7 @@ import java.util.Date;
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +53,8 @@ public class TestGetAppointment extends AbstractJUnitDefaults {
 		a1 = appointmentDao.update(a1, userId);
 
 		Appointment a = appointmentDao.get(a1.getId());
-		assertNotNull("Failed to get Appointment By id", a);
-		assertEquals("Inapropriate MeetingMembers count", 0, a.getMeetingMembers() == null ? 0 : a.getMeetingMembers().size());
+		assertNotNull(a, "Failed to get Appointment By id");
+		assertEquals(0, a.getMeetingMembers() == null ? 0 : a.getMeetingMembers().size(), "Inapropriate MeetingMembers count");
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class TestGetAppointment extends AbstractJUnitDefaults {
 		Date start = new Date();
 		Appointment a = createAppointment(getAppointment(userDao.get(1L), roomDao.get(5L), start, new Date(start.getTime() + ONE_HOUR)));
 		Appointment a1 = appointmentDao.getByRoom(1L, 5L);
-		assertNotNull("Created appointment should be found", a1);
+		assertNotNull(a1, "Created appointment should be found");
 		assertEquals(a.getId(), a1.getId());
 	}
 }

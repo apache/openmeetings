@@ -24,9 +24,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMA
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFFICE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,8 +36,9 @@ import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,21 +55,22 @@ public class TestBackup extends AbstractJUnitDefaults {
 	private MeetingMemberDao meetingMemberDao;
 
 	@Override
+	@BeforeEach
 	public void setUp() throws Exception {
 		super.setUp();
 		// Crypt class need to be preserved here to avoid overriding by backup import
 		cryptClass = getCryptClassName();
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		Configuration cfg = cfgDao.get(CONFIG_CRYPT);
-		assertNotNull("Not null config should be returned", cfg);
+		assertNotNull(cfg, "Not null config should be returned");
 		cfg.setValue(cryptClass);
 		cfgDao.update(cfg, null);
 		for (String key : new String[] {CONFIG_PATH_IMAGEMAGIC, CONFIG_PATH_FFMPEG, CONFIG_PATH_OFFICE, CONFIG_PATH_SOX}) {
 			Configuration c = cfgDao.get(key);
-			assertNotNull("Not null config should be returned", c);
+			assertNotNull(c, "Not null config should be returned");
 			c.setValue("");
 			cfgDao.update(c, null);
 		}
@@ -99,12 +101,12 @@ public class TestBackup extends AbstractJUnitDefaults {
 				long newRoomGroupCount = roomDao.getGroups().size();
 				long newApptCount = appointmentDao.get().size();
 				long newMeetingMembersCount = meetingMemberDao.getMeetingMembers().size();
-				assertTrue("Zero groups were imported from " + name, newGroupCount > groupCount);
-				assertTrue("Zero users were imported from " + name, newUserCount > userCount);
-				assertTrue("Zero rooms were imported from " + name, newRoomCount > roomCount);
-				assertTrue("Zero room groups were imported from " + name, newRoomGroupCount > roomGroupCount);
-				assertTrue("Zero appointments were imported from " + name, newApptCount > apptCount);
-				assertTrue("Zero meeting members were imported from " + name, newMeetingMembersCount > meetingMembersCount);
+				assertTrue(newGroupCount > groupCount, "Zero groups were imported from " + name);
+				assertTrue(newUserCount > userCount, "Zero users were imported from " + name);
+				assertTrue(newRoomCount > roomCount, "Zero rooms were imported from " + name);
+				assertTrue(newRoomGroupCount > roomGroupCount, "Zero room groups were imported from " + name);
+				assertTrue(newApptCount > apptCount, "Zero appointments were imported from " + name);
+				assertTrue(newMeetingMembersCount > meetingMembersCount, "Zero meeting members were imported from " + name);
 
 				groupCount = newGroupCount;
 				userCount = newUserCount;
