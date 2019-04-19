@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.admin.backup.BackupPanel;
@@ -36,8 +38,7 @@ import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
 import org.apache.openmeetings.web.user.record.RecordingsPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.googlecode.wicket.jquery.ui.widget.menu.Menu;
 
@@ -45,7 +46,7 @@ public class TestMainMenu extends AbstractWicketTester {
 	private void checkMenuItem(int idx1, int idx2, Class<? extends BasePanel> clazz) throws OmException {
 		testArea(adminUsername, p -> {
 			Menu menu = (Menu)p.get(PATH_MENU);
-			Assert.assertNotNull(menu);
+			assertNotNull(menu);
 			tester.getRequest().setParameter("hash", menu.getItemList().get(idx1).getItems().get(idx2).getId());
 			tester.executeBehavior((AbstractAjaxBehavior)menu.getBehaviorById(0));
 

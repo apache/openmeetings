@@ -18,16 +18,17 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.wicket.util.string.Strings;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestEmailTemplate extends AbstractWicketTester {
 	private static void checkTemplate(String eml) {
-		Assert.assertFalse("Body should be not empty", Strings.isEmpty(eml));
+		assertFalse(Strings.isEmpty(eml), "Body should be not empty");
 	}
 
 	@Test

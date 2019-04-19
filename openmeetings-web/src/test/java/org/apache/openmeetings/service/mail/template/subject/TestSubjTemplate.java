@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.service.mail.template.subject;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +34,13 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.util.string.Strings;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestSubjTemplate extends AbstractWicketTester {
 	private static void checkTemplate(SubjectEmailTemplate t) {
-		assertNotNull("Template should be created", t);
-		assertFalse("Subject should be not empty", Strings.isEmpty(t.getSubject()));
-		assertFalse("Body should be not empty", Strings.isEmpty(t.getEmail()));
+		assertNotNull(t, "Template should be created");
+		assertFalse(Strings.isEmpty(t.getSubject()), "Subject should be not empty");
+		assertFalse(Strings.isEmpty(t.getEmail()), "Body should be not empty");
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class TestSubjTemplate extends AbstractWicketTester {
 			cons.accept(t);
 			fail("RuntimeException is expected");
 		} catch (RuntimeException ex) {
-			assertTrue("Expected", true);
+			assertTrue(true, "Expected");
 		}
 	}
 

@@ -20,23 +20,23 @@ package org.apache.openmeetings.user;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestUserContact extends AbstractWicketTester {
 
 	@Test
 	public void testGetUser() {
-		assertNull("Null should be returned in case User does not exist", userDao.get(Long.MAX_VALUE));
+		assertNull(userDao.get(Long.MAX_VALUE), "Null should be returned in case User does not exist");
 	}
 
 	@Test
@@ -45,19 +45,19 @@ public class TestUserContact extends AbstractWicketTester {
 		User u = getUser(uuid);
 		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
 		u = userDao.update(u, null);
-		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), createPass()));
+		assertTrue(userDao.verifyPassword(u.getId(), createPass()), "Password should be set as expected");
 
 		User u1 = userDao.get(u.getId());
-		assertNotNull("Just created user should not be null", u1);
-		assertNotNull("Just created user should have non null org-users", u1.getGroupUsers());
-		assertFalse("Just created user should have not empty org-users", u1.getGroupUsers().isEmpty());
+		assertNotNull(u1, "Just created user should not be null");
+		assertNotNull(u1.getGroupUsers(), "Just created user should have non null org-users");
+		assertFalse(u1.getGroupUsers().isEmpty(), "Just created user should have not empty org-users");
 	}
 
 	@Test
 	public void testCreateUser() throws Exception {
 		String uuid = randomUUID().toString();
 		User u = createUser(uuid);
-		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), createPass()));
+		assertTrue(userDao.verifyPassword(u.getId(), createPass()), "Password should be set as expected");
 	}
 
 	@Test
@@ -65,23 +65,23 @@ public class TestUserContact extends AbstractWicketTester {
 		login(null, null);
 
 		List<User> users = userDao.getAllUsers();
-		assertNotNull("User list should not be null ", users);
-		assertFalse("User list should not be empty ", users.isEmpty());
+		assertNotNull(users, "User list should not be null ");
+		assertFalse(users.isEmpty(), "User list should not be empty ");
 
 		User contact = createUserContact(getUserId());
 		String email = contact.getAddress().getEmail();
 		List<User> l = userDao.get(email, false, 0, 9999);
 		// check that contact is visible for admin
-		assertNotNull("Contact list should not be null for admin ", l);
-		assertFalse("Contact list should not be empty for admin ", l.isEmpty());
+		assertNotNull(l, "Contact list should not be null for admin ");
+		assertFalse(l.isEmpty(), "Contact list should not be empty for admin ");
 
 		// check that contact is visible for owner
 		l = userDao.get(email, 0, 9999, null, true, getUserId());
-		assertTrue("Contact list should not be empty for owner ", !l.isEmpty());
+		assertFalse(l.isEmpty(), "Contact list should not be empty for owner ");
 		//delete contact
 		userDao.delete(contact, getUserId());
 		l = userDao.get(email, false, 0, 9999);
-		assertTrue("Contact list should be empty after deletion", l.isEmpty());
+		assertTrue(l.isEmpty(), "Contact list should be empty after deletion");
 
 		User u = createUser();
 		User u1 = createUser();
@@ -89,10 +89,10 @@ public class TestUserContact extends AbstractWicketTester {
 		email = contact.getAddress().getEmail();
 		// check that contact is not visible for user that is not owner of this contact
 		l = userDao.get(email, 0, 9999, null, true, u1.getId());
-		assertTrue("Contact list should be empty for another user", l.isEmpty());
+		assertTrue(l.isEmpty(), "Contact list should be empty for another user");
 		//delete contact
 		userDao.delete(contact, u.getId());
 		l = userDao.get(email, false, 0, 9999);
-		assertTrue("Contact list should be empty after deletion", l.isEmpty());
+		assertTrue(l.isEmpty(), "Contact list should be empty after deletion");
 	}
 }

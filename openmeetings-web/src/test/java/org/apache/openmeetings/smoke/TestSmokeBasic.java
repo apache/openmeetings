@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.smoke;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestSmokeBasic extends AbstractJUnitDefaults {
 	@Test

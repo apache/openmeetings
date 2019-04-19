@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.user;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.mail.Message;
 import javax.mail.Transport;
@@ -26,7 +26,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.openmeetings.core.mail.MailHandler;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

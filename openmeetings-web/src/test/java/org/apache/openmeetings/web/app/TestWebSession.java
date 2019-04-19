@@ -18,26 +18,26 @@
  */
 package org.apache.openmeetings.web.app;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestWebSession extends AbstractWicketTester {
 	@Test
 	public void testLogin() throws OmException {
 		WebSession ws = WebSession.get();
-		assertFalse("Should not be signed in", ws.isSignedIn());
+		assertFalse(ws.isSignedIn(), "Should not be signed in");
 
 		try {
 			ws.signIn(adminUsername, "", User.Type.contact, null);
 			fail("Exception should be thrown");
 		} catch(OmException exc) {
-			assertTrue("Expected exception", true);
+			assertTrue(true, "Expected exception");
 		}
 		assertFalse(ws.signIn(adminUsername, "", User.Type.user, null));
 		assertTrue(ws.signIn(adminUsername, userpass, User.Type.user, null));
@@ -45,7 +45,7 @@ public class TestWebSession extends AbstractWicketTester {
 			ws.signIn(adminUsername, userpass, User.Type.ldap, null);
 			fail("Exception should be thrown");
 		} catch(OmException exc) {
-			assertTrue("Expected exception", true);
+			assertTrue(true, "Expected exception");
 		}
 	}
 }

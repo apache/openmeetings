@@ -19,7 +19,8 @@
 package org.apache.openmeetings.web;
 
 import static java.util.UUID.randomUUID;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,8 +32,7 @@ import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.user.calendar.CalendarPanel;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.util.tester.FormTester;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
 import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
@@ -46,7 +46,7 @@ public class TestCalendar extends AbstractWicketTester {
 	public void testEventCreate() throws OmException {
 		testArea(regularUsername, p -> {
 			Menu menu = (Menu)p.get(PATH_MENU);
-			Assert.assertNotNull(menu);
+			assertNotNull(menu);
 			tester.getRequest().setParameter("hash", menu.getItemList().get(0).getItems().get(1).getId());
 			tester.executeBehavior((AbstractAjaxBehavior)menu.getBehaviorById(0));
 
@@ -69,8 +69,8 @@ public class TestCalendar extends AbstractWicketTester {
 			tester.executeBehavior(save);
 
 			List<Appointment> appts = appointmentDao.searchByTitle(u.getId(), title);
-			assertEquals("Appointment should be created", 1, appts.size());
-			assertEquals("Appointment should be created", title, appts.get(0).getTitle());
+			assertEquals(1, appts.size(), "Appointment should be created");
+			assertEquals(title, appts.get(0).getTitle(), "Appointment should be created");
 		});
 	}
 }

@@ -34,8 +34,8 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_PUBLIC;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_RECORDINGS;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_ROOM;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_USER;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.function.Consumer;
 
@@ -66,7 +66,7 @@ import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +109,7 @@ public class TestMainAreas extends AbstractWicketTester {
 					tester.executeBehavior((AbstractAjaxBehavior)p.getBehaviorById(1));
 					fail("Not authorized");
 				} catch (UnauthorizedInstantiationException e) {
-					assertTrue("Exception is expected", true);
+					assertTrue(true, "Exception is expected");
 				}
 			});
 		}

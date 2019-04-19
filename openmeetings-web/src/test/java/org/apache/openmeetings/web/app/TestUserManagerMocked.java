@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.app;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -39,7 +39,7 @@ import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.SCryptImplementation;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -77,8 +77,8 @@ public class TestUserManagerMocked {
 				.addMapping(OAuthUser.PARAM_LOGIN, "preferred_username")
 				.addMapping(OAuthUser.PARAM_EMAIL, "email"));
 		User u = userManager.loginOAuth(user, 1);
-		assertNotNull("Valid user should be created", u);
-		assertEquals("User should have valid login", "openmeetings", u.getLogin());
-		assertEquals("User should have valid email", "openmeetings@pod.land", u.getAddress().getEmail());
+		assertNotNull(u, "Valid user should be created");
+		assertEquals("openmeetings", u.getLogin(), "User should have valid login");
+		assertEquals("openmeetings@pod.land", u.getAddress().getEmail(), "User should have valid email");
 	}
 }

@@ -19,14 +19,14 @@
 package org.apache.openmeetings.config;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.List;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.entity.basic.Configuration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +57,7 @@ public class TestConfig extends AbstractJUnitDefaults {
 				}
 			}
 
-			assertEquals(list.size(), 6);
+			assertEquals(6, list.size());
 		} catch (Exception err) {
 			log.error("[getConfigs]", err);
 		}

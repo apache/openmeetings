@@ -31,7 +31,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplic
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
 import static org.apache.openmeetings.web.pages.install.TestInstall.resetDerbyHome;
 import static org.apache.openmeetings.web.pages.install.TestInstall.setDerbyHome;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,10 +43,9 @@ import java.util.UUID;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.junit.Assert;
-import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestAdmin {
 	private File tempFolder;
@@ -76,7 +76,7 @@ public class TestAdmin {
 			new Admin().process(args);
 			fail();
 		} catch (ExitException ee) {
-			Assert.assertTrue(true);
+			assertTrue(true);
 		}
 	}
 
@@ -93,7 +93,7 @@ public class TestAdmin {
 	@Test
 	public void testUsage() throws Exception {
 		new Admin().process("-h");
-		Assert.assertTrue(true);
+		assertTrue(true);
 	}
 
 	@Test

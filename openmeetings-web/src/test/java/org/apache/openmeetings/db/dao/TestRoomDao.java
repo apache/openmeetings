@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.db.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,8 +31,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,37 +44,37 @@ public class TestRoomDao extends AbstractJUnitDefaults {
 	@Test
 	public void testMicStatusHidden() throws Exception {
 		Room r = roomDao.get(1);
-		assertNotNull("Room must exist", r);
-		assertTrue("Default interview room should have mic status hidden", r.isHidden(RoomElement.MicrophoneStatus));
+		assertNotNull(r, "Room must exist");
+		assertTrue(r.isHidden(RoomElement.MicrophoneStatus), "Default interview room should have mic status hidden");
 		r = roomDao.get(5);
-		assertNotNull("Room must exist", r);
-		assertTrue("Default presentation room should have mic status hidden", r.isHidden(RoomElement.MicrophoneStatus));
+		assertNotNull(r, "Room must exist");
+		assertTrue(r.isHidden(RoomElement.MicrophoneStatus), "Default presentation room should have mic status hidden");
 		r = roomDao.get(6);
-		assertNotNull("Room must exist", r);
-		assertFalse("Default Mic room should have mic status visible", r.isHidden(RoomElement.MicrophoneStatus));
+		assertNotNull(r, "Room must exist");
+		assertFalse(r.isHidden(RoomElement.MicrophoneStatus), "Default Mic room should have mic status visible");
 
 		User u = createUser(); //creating new User here
 		r = roomDao.getUserRoom(u.getId(), Room.Type.presentation, "bla");
-		assertNotNull("Room must exist", r);
+		assertNotNull(r, "Room must exist");
 		boolean hidden = r.isHidden(RoomElement.MicrophoneStatus);
 		if (!hidden && log.isDebugEnabled()) {
 			log.debug("Invalid personal room found -> User: {}, Room: {} ... deleted ? {}", u, r, r.isDeleted());
 		}
-		Assert.assertEquals("User presentation room should be created", Room.Type.presentation, r.getType());
-		assertTrue("User presentation room should have mic status hidden", hidden);
+		assertEquals(Room.Type.presentation, r.getType(), "User presentation room should be created");
+		assertTrue(hidden, "User presentation room should have mic status hidden");
 	}
 
 	@Test
 	public void testPublicRooms() {
 		for (Room.Type type : Room.Type.values()) {
 			for (Room r : roomDao.getPublicRooms(type)) {
-				assertEquals(String.format("Room type should be %s", type), type, r.getType());
+				assertEquals(type, r.getType(), "Room type should be " + type);
 			}
 		}
 		Set<Room.Type> types = new HashSet<>();
 		for (Room r : roomDao.getPublicRooms()) {
 			types.add(r.getType());
 		}
-		assertEquals("All room types should be listed", Room.Type.values().length, types.size());
+		assertEquals(Room.Type.values().length, types.size(), "All room types should be listed");
 	}
 }

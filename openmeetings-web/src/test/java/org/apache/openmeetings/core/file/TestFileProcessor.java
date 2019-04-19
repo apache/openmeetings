@@ -21,8 +21,8 @@ package org.apache.openmeetings.core.file;
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
 import static org.apache.openmeetings.util.OmFileHelper.getDefaultProfilePicture;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -33,7 +33,7 @@ import org.apache.openmeetings.db.dto.file.FileItemDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.process.ProcessResultList;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestFileProcessor extends AbstractJUnitDefaults {
@@ -51,8 +51,8 @@ public class TestFileProcessor extends AbstractJUnitDefaults {
 					.setType(BaseFileItem.Type.Recording).get();
 			try (InputStream is = new FileInputStream(getDefaultProfilePicture())) {
 				ProcessResultList result = processor.processFile(f, is);
-				assertFalse("Conversion should be successful", result.hasError());
-				assertEquals("Type should be image", BaseFileItem.Type.Image, f.getType());
+				assertFalse(result.hasError(), "Conversion should be successful");
+				assertEquals(BaseFileItem.Type.Image, f.getType(), "Type should be image");
 			}
 		}
 	}

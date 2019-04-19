@@ -29,7 +29,7 @@ import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.room.InvitationManager;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestInvitation extends AbstractWicketTester {

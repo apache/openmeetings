@@ -19,14 +19,14 @@
 package org.apache.openmeetings.util;
 
 import static org.apache.openmeetings.util.OmFileHelper.getDefaultProfilePicture;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestStoredFile extends AbstractJUnitDefaults {
 	@Test
@@ -34,8 +34,8 @@ public class TestStoredFile extends AbstractJUnitDefaults {
 		File f = getDefaultProfilePicture();
 		for (String ext : new String[] {null, "txt", "jpg"}) {
 			StoredFile sf = new StoredFile("test image", ext, f);
-			assertTrue("Type should be detected as image", sf.isImage());
-			assertTrue("Type should be detected as image", sf.isAsIs());
+			assertTrue(sf.isImage(), "Type should be detected as image");
+			assertTrue(sf.isAsIs(), "Type should be detected as image");
 		}
 	}
 }

@@ -18,26 +18,26 @@
  */
 package org.apache.openmeetings.web.app;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import javax.servlet.http.Cookie;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.User;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestOmAuthenticationStrategy extends AbstractWicketTester {
 	@Test
 	public void test() {
 		OmAuthenticationStrategy s = new OmAuthenticationStrategy();
 		s.save(null, null, User.Type.oauth, null);
-		assertNull("Wasn't saved, should not be loaded", s.load());
+		assertNull(s.load(), "Wasn't saved, should not be loaded");
 
 		s.save("aa", "bb", User.Type.contact, null);
 		copyCookies();
-		assertNotNull("Should be loaded", s.load());
+		assertNotNull(s.load(), "Should be loaded");
 
 		assertEquals(0, s.decode(null).length);
 		assertEquals(4, s.decode("1").length);

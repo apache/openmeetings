@@ -22,7 +22,7 @@ import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.util.crypt.CryptProvider;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestAuth extends AbstractJUnitDefaults {

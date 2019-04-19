@@ -19,35 +19,35 @@
 package org.apache.openmeetings.user;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.User;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestUserCount extends AbstractWicketTester {
 	@Test
 	public void testCountSearchUsers() throws Exception {
 		User u = createUser();
-		assertTrue("Account of search users should be one", userDao.count(u.getFirstname()) == 1);
+		assertTrue(userDao.count(u.getFirstname()) == 1, "Account of search users should be one");
 	}
 
 	@Test
 	public void testCountFilteredUsers() throws Exception {
 		User u = createUser();
 		User contact = createUserContact(u.getId());
-		assertTrue("Account of filtered user should be one", userDao.count(contact.getFirstname(), true, u.getId()) == 1);
+		assertTrue(userDao.count(contact.getFirstname(), true, u.getId()) == 1, "Account of filtered user should be one");
 	}
 
 	@Test
 	public void testCountUnfilteredUsers() throws Exception {
 		User u = createUser();
 		createUserContact(u.getId());
-		assertTrue("Account of unfiltered should be more then one", userDao.count("firstname", false, getUserId()) > 1);
+		assertTrue(userDao.count("firstname", false, getUserId()) > 1, "Account of unfiltered should be more then one");
 	}
 
 	@Test
 	public void testCountAllUsers() {
-		assertTrue("Account of users should be positive", userDao.count() > 0);
+		assertTrue(userDao.count() > 0, "Account of users should be positive");
 	}
 }

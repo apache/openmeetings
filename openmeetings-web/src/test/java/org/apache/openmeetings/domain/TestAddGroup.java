@@ -18,13 +18,13 @@
  */
 package org.apache.openmeetings.domain;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,12 +36,12 @@ public class TestAddGroup extends AbstractJUnitDefaults {
 		Group o = new Group();
 		o.setName("default");
 		o = groupDao.update(o, null);
-		assertNotNull("Id of group created should not be null", o.getId());
+		assertNotNull(o.getId(), "Id of group created should not be null");
 
 		User us = userDao.get(1L);
-		assertNotNull("User should exist", us);
+		assertNotNull(us, "User should exist");
 
-		assertNotNull("Group User list should exist", us.getGroupUsers());
+		assertNotNull(us.getGroupUsers(), "Group User list should exist");
 		us.getGroupUsers().add(new GroupUser(o, us));
 		us = userDao.update(us, null);
 

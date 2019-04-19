@@ -20,7 +20,7 @@ package org.apache.openmeetings.test.selenium;
 
 import java.util.Date;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebElement;
 

@@ -25,7 +25,7 @@ import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.service.quartz.scheduler.CleanupJob;
 import org.apache.openmeetings.service.quartz.scheduler.ReminderJob;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestJob extends AbstractWicketTester {

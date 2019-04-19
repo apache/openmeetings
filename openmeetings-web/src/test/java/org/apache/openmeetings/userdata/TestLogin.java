@@ -18,18 +18,18 @@
  */
 package org.apache.openmeetings.userdata;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestLogin extends AbstractJUnitDefaults {
 	@Test
 	public void testTestLogin() throws OmException {
 		User us = userDao.login(adminUsername, userpass);
-		assertNotNull("User is unable to login", us);
+		assertNotNull(us, "User is unable to login");
 	}
 
 }

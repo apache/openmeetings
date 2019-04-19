@@ -19,9 +19,10 @@
 package org.apache.openmeetings.user;
 
 import static java.util.UUID.randomUUID;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 
@@ -30,10 +31,9 @@ import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.test.HeavyTests;
 import org.apache.openmeetings.util.OmException;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestUserGroup extends AbstractJUnitDefaults {
@@ -56,10 +56,10 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 		User u = getValidUser();
 		Long groupId = u.getGroupUsers().get(0).getGroup().getId();
 		List<GroupUser> ul = groupUserDao.get(groupId, 0, 9999);
-		assertTrue("Default Group should contain at least 1 user: " + ul.size(), ul.size() > 0);
+		assertTrue(ul.size() > 0, "Default Group should contain at least 1 user: " + ul.size());
 
 		GroupUser ou = groupUserDao.getByGroupAndUser(groupId, u.getId());
-		assertNotNull("Unable to find [group, user] pair - [" + groupId + "," + u.getId() + "]", ou);
+		assertNotNull(ou, "Unable to find [group, user] pair - [" + groupId + "," + u.getId() + "]");
 	}
 
 	@Test
@@ -67,10 +67,10 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 		Group g = new Group();
 		g.setName(GROUP_NAME);
 		Long groupId = groupDao.update(g, null).getId(); //inserted by not checked
-		assertNotNull("New Group have valid id", groupId);
+		assertNotNull(groupId, "New Group have valid id");
 
 		List<GroupUser> ul = groupUserDao.get(groupId, 0, 9999);
-		assertTrue("New Group should contain NO users: " + ul.size(), ul.size() == 0);
+		assertEquals(0, ul.size(), "New Group should contain NO users: " + ul.size());
 	}
 
 	@Test
@@ -78,13 +78,13 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
 		u = userDao.update(u, null);
-		assertNotNull("User successfully created", u.getId());
+		assertNotNull(u.getId(), "User successfully created");
 		checkEmptyGroup("dao.get()", userDao.get(u.getId()));
 		try {
 			checkEmptyGroup("dao.login()", userDao.login(u.getAddress().getEmail(), createPass()));
 			fail("User with no Group is unable to login");
 		} catch (OmException e) {
-			assertTrue("Expected Om Exception", "error.nogroup".equals(e.getKey()));
+			assertEquals("error.nogroup", e.getKey(), "Expected Om Exception");
 		}
 		checkEmptyGroup("dao.getByLogin(user)", userDao.getByLogin(u.getLogin(), u.getType(), u.getDomainId()));
 	}
@@ -100,13 +100,13 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 	}
 
 	private static void checkEmptyGroup(String prefix, User u) {
-		assertNotNull(prefix + ":: Created user should be available", u);
-		assertNotNull(prefix + ":: List<GroupUser> for newly created user should not be null", u.getGroupUsers());
-		assertTrue(prefix + ":: List<GroupUser> for newly created user should be empty", u.getGroupUsers().isEmpty());
+		assertNotNull(u, prefix + ":: Created user should be available");
+		assertNotNull(u.getGroupUsers(), prefix + ":: List<GroupUser> for newly created user should not be null");
+		assertTrue(u.getGroupUsers().isEmpty(), prefix + ":: List<GroupUser> for newly created user should be empty");
 	}
 
 	@Test
-	@Category(HeavyTests.class)
+	@Tag("org.apache.openmeetings.test.HeavyTests")
 	public void add10kUsers() throws Exception {
 		List<Group> groups = groupDao.get(GROUP_NAME, 0, 1, null);
 		Group g = null;

@@ -22,9 +22,9 @@ import java.util.List;
 
 import org.apache.openmeetings.AbstractSpringTest;
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.junit.After;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -32,7 +32,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
-@Category(SeleniumTests.class)
+@Tag("org.apache.openmeetings.test.selenium.SeleniumTests")
 public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	public WebDriver driver = null;
 
@@ -218,7 +218,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 		throw new Exception("Timeout during installation");
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		if (getDoTearDownAfterTest()) {
 			driver.close();
