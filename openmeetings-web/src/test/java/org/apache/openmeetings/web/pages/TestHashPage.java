@@ -70,7 +70,8 @@ public class TestHashPage extends AbstractWicketTester {
 		tester.startPage(HashPage.class, pp);
 		tester.assertRenderedPage(HashPage.class);
 		MessageDialog dlg = (MessageDialog)tester.getComponentFromLastRenderedPage("access-denied");
-		assertTrue(((JQueryBehavior)dlg.getBehaviors().get(0)).getOption("autoOpen"), "Access denied should be displayed");
+		Boolean autoOpen = ((JQueryBehavior)dlg.getBehaviors().get(0)).getOption("autoOpen");
+		assertTrue(autoOpen, "Access denied should be displayed");
 		tester.assertInvisible(PANEL_MAIN);
 	}
 
@@ -78,7 +79,8 @@ public class TestHashPage extends AbstractWicketTester {
 		HashPage page = tester.startPage(HashPage.class, pp);
 		tester.assertRenderedPage(HashPage.class);
 		MessageDialog dlg = (MessageDialog)tester.getComponentFromLastRenderedPage("access-denied");
-		assertFalse(((JQueryBehavior)dlg.getBehaviors().get(0)).getOption("autoOpen"), "Access denied should NOT be displayed");
+		Boolean autoOpen = ((JQueryBehavior)dlg.getBehaviors().get(0)).getOption("autoOpen");
+		assertFalse(autoOpen, "Access denied should NOT be displayed");
 		return page;
 	}
 
