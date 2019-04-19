@@ -59,7 +59,6 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.webservice.util.AppointmentMessageBodyReader;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -176,7 +175,7 @@ public class AbstractWebServiceTest {
 				.query("sid", r.getMessage())
 				.type(APPLICATION_FORM_URLENCODED)
 				.post(new Form().param("user", dto.toString()).param("confirm", "" + false), UserDTO.class);
-		Assert.assertNotNull(user.getId());
+		assertNotNull(user.getId());
 		u.setId(user.getId());
 	}
 

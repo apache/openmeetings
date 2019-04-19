@@ -25,8 +25,8 @@ import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.pages.HashPage.PANEL_MAIN;
 import static org.apache.openmeetings.web.pages.HashPage.PANEL_RECORDING;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
 import java.util.UUID;
@@ -48,7 +48,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.protocol.ws.util.tester.WebSocketTester;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +70,7 @@ public class TestHashPage extends AbstractWicketTester {
 		tester.startPage(HashPage.class, pp);
 		tester.assertRenderedPage(HashPage.class);
 		MessageDialog dlg = (MessageDialog)tester.getComponentFromLastRenderedPage("access-denied");
-		assertTrue("Access denied should be displayed", ((JQueryBehavior)dlg.getBehaviors().get(0)).getOption("autoOpen"));
+		assertTrue(((JQueryBehavior)dlg.getBehaviors().get(0)).getOption("autoOpen"), "Access denied should be displayed");
 		tester.assertInvisible(PANEL_MAIN);
 	}
 
@@ -78,7 +78,7 @@ public class TestHashPage extends AbstractWicketTester {
 		HashPage page = tester.startPage(HashPage.class, pp);
 		tester.assertRenderedPage(HashPage.class);
 		MessageDialog dlg = (MessageDialog)tester.getComponentFromLastRenderedPage("access-denied");
-		assertFalse("Access denied should NOT be displayed", ((JQueryBehavior)dlg.getBehaviors().get(0)).getOption("autoOpen"));
+		assertFalse(((JQueryBehavior)dlg.getBehaviors().get(0)).getOption("autoOpen"), "Access denied should NOT be displayed");
 		return page;
 	}
 

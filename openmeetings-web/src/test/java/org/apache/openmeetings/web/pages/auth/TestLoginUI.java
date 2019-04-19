@@ -21,10 +21,10 @@ package org.apache.openmeetings.web.pages.auth;
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -42,7 +42,7 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.tester.FormTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 
@@ -58,7 +58,7 @@ public class TestLoginUI extends AbstractWicketTester {
 		tester.assertNoErrorMessage();
 		tester.assertRenderedPage(MainPage.class);
 		WebSession ws = (WebSession)tester.getSession();
-		assertTrue("Login should be successful", ws.isSignedIn());
+		assertTrue(ws.isSignedIn(), "Login should be successful");
 	}
 
 	@Test

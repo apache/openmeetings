@@ -31,9 +31,9 @@ import static org.apache.openmeetings.AbstractWicketTester.getWicketTester;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,9 +52,9 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,7 +98,7 @@ public class TestInstall {
 		tempFolder = Files.createTempDirectory("omtempdb").toFile();
 		setDerbyHome(tempFolder);
 		tester = getWicketTester((Application)ensureApplication(-1L));
-		assertNotNull("Web session should not be null", WebSession.get());
+		assertNotNull(WebSession.get(), "Web session should not be null");
 		Locale[] locales = Locale.getAvailableLocales();
 		tester.getSession().setLocale(locales[rnd.nextInt(locales.length)]);
 		log.info("Setup complete");
@@ -119,13 +119,13 @@ public class TestInstall {
 		InstallWizardPage page = tester.startPage(InstallWizardPage.class);
 		tester.assertRenderedPage(InstallWizardPage.class);
 		InstallWizard wiz = (InstallWizard)page.get(WIZARD_PATH);
-		assertNull("Model should be null", wiz.getWizardModel().getActiveStep());
+		assertNull(wiz.getWizardModel().getActiveStep(), "Model should be null");
 		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(0)); //welcome step
-		assertNotNull("Model should NOT be null", wiz.getWizardModel().getActiveStep());
+		assertNotNull(wiz.getWizardModel().getActiveStep(), "Model should NOT be null");
 
 		ButtonAjaxBehavior prev = getButtonBehavior(tester, WIZARD_PATH, "PREV");
 		//check enabled, add check for other buttons on other steps
-		assertFalse("Prev button should be disabled", prev.getButton().isEnabled());
+		assertFalse(prev.getButton().isEnabled(), "Prev button should be disabled");
 		ButtonAjaxBehavior next = getButtonBehavior(tester, WIZARD_PATH, "NEXT");
 		ButtonAjaxBehavior finish = getButtonBehavior(tester, WIZARD_PATH, SUBMIT);
 		tester.executeBehavior(next); //DB step
