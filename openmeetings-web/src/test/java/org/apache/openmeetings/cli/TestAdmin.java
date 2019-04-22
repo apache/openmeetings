@@ -27,8 +27,10 @@ import static org.apache.openmeetings.AbstractSpringTest.setOmHome;
 import static org.apache.openmeetings.cli.Admin.OM_HOME;
 import static org.apache.openmeetings.db.util.ApplicationHelper.destroyApplication;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CONTEXT_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
 import static org.apache.openmeetings.web.pages.install.TestInstall.resetDerbyHome;
 import static org.apache.openmeetings.web.pages.install.TestInstall.setDerbyHome;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -57,6 +59,7 @@ public class TestAdmin {
 		System.setProperty("user.dir", tempFolder.getCanonicalPath());
 		System.setProperty(OM_HOME, getOmHome().getCanonicalPath());
 		setDerbyHome(tempFolder);
+		System.setProperty("context", UUID.randomUUID().toString());
 	}
 
 	@AfterEach
@@ -69,6 +72,8 @@ public class TestAdmin {
 			destroyApplication();
 			setInitComplete(false);
 		}
+		System.setProperty("context", DEFAULT_CONTEXT_NAME);
+		setWicketApplicationName(DEFAULT_CONTEXT_NAME);
 	}
 
 	private static void checkError(String... args) throws Exception {
