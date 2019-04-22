@@ -29,7 +29,8 @@ import static org.apache.openmeetings.core.ldap.LdapOptions.CONFIGKEY_LDAP_SEARC
 import static org.apache.openmeetings.core.ldap.LdapOptions.CONFIGKEY_LDAP_SEARCH_SCOPE;
 import static org.apache.openmeetings.util.OmFileHelper.getLdapConf;
 import static org.apache.openmeetings.util.OmFileHelper.loadLdapConf;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -46,7 +47,6 @@ import org.apache.directory.server.annotations.CreateTransport;
 import org.apache.directory.server.core.annotations.ApplyLdifFiles;
 import org.apache.directory.server.core.annotations.CreateDS;
 import org.apache.directory.server.core.annotations.CreatePartition;
-import org.apache.directory.server.core.integ.CreateLdapServerRule;
 import org.apache.directory.server.protocol.shared.transport.Transport;
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.core.ldap.LdapLoginManager;
@@ -55,10 +55,10 @@ import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.WebSession;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @CreateDS(name = "omDS",
@@ -76,13 +76,13 @@ public class TestLdap extends AbstractWicketTester {
 	@Autowired
 	private LdapConfigDao ldapDao;
 
-	@ClassRule
-	public static CreateLdapServerRule serverRule = new CreateLdapServerRule();
+	@RegisterExtension
+	public static CreateLdapServerExtension serverExtension = new CreateLdapServerExtension();
 
-	@BeforeClass
+	@BeforeAll
 	public static void prepare() {
 		loadLdapConf("om_ldap.cfg", PROPS);
-		Transport t = serverRule.getLdapServer().getTransports()[0];
+		Transport t = serverExtension.getLdapServer().getTransports()[0];
 		PROPS.put(CONFIGKEY_LDAP_HOST, t.getAddress());
 		PROPS.put(CONFIGKEY_LDAP_PORT, String.valueOf(t.getPort()));
 		PROPS.put(CONFIGKEY_LDAP_ADMIN_DN, ADMIN_SYSTEM_DN);
@@ -106,7 +106,7 @@ public class TestLdap extends AbstractWicketTester {
 		CFG_MAP.put(CFG_SEARCH_BIND, cfg);
 	}
 
-	@Before
+	@BeforeEach
 	public void clean() throws FileNotFoundException, IOException {
 		if (CFG_MAP.isEmpty()) {
 			createSbnd();
@@ -124,12 +124,12 @@ public class TestLdap extends AbstractWicketTester {
 	@Test
 	public void testSbndSessionLogin() throws OmException {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
-		assertTrue("Login should be successful", WebSession.get().signIn(USER1, userpass, User.Type.ldap, cfg.getId()));
+		assertTrue(WebSession.get().signIn(USER1, userpass, User.Type.ldap, cfg.getId()), "Login should be successful");
 	}
 
-	@Test(expected = OmException.class)
+	@Test
 	public void testSbndSessionLoginBadPassword() throws OmException {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
-		WebSession.get().signIn(USER1, BAD_PASSWORD, User.Type.ldap, cfg.getId());
+		assertThrows(OmException.class, () -> WebSession.get().signIn(USER1, BAD_PASSWORD, User.Type.ldap, cfg.getId()));
 	}
 }
