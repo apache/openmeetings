@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 public class SCryptImplementation implements ICrypt {
 	private static final Logger log = LoggerFactory.getLogger(SCryptImplementation.class);
-	private static final ThreadLocal<SecureRandom> rnd = new ThreadLocal<SecureRandom>() {
+	private static final ThreadLocal<SecureRandom> rnd = new ThreadLocal<>() {
 		@Override
 		protected SecureRandom initialValue() {
 			SecureRandom sr;

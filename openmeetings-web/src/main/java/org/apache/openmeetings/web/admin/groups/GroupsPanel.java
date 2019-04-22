@@ -58,7 +58,7 @@ public class GroupsPanel extends AdminBasePanel {
 		add(form);
 
 		//List view
-		SearchableDataView<Group> dataView = new SearchableDataView<Group>("groupList", new SearchableGroupAdminDataProvider<>(GroupDao.class)) {
+		SearchableDataView<Group> dataView = new SearchableDataView<>("groupList", new SearchableGroupAdminDataProvider<>(GroupDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -49,7 +49,7 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 	private final PasswordTextField pass = new PasswordTextField("pass", Model.of((String)null));
 	private final PasswordTextField pass2 = new PasswordTextField("pass2", Model.of((String)null));
 	private StrongPasswordValidator passValidator;
-	private final Form<String> form = new Form<String>("form") {
+	private final Form<String> form = new Form<>("form") {
 		private static final long serialVersionUID = 1L;
 
 		@Override

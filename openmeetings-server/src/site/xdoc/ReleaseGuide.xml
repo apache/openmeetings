@@ -26,7 +26,7 @@
 				<div>
 					<p>To build a binary release of OpenMeetings you need: </p>
 					<ul>
-						<li>Sun JDK8</li>
+						<li>JDK11</li>
 						<li>Apache Maven 3.5.0</li>
 						<li>Git Command line client</li>
 						<li>A text editor</li>

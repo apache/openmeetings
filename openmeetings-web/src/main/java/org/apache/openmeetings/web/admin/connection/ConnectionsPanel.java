@@ -58,7 +58,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 	public ConnectionsPanel(String id) {
 		super(id);
 
-		SearchableDataProvider<Client> sdp = new SearchableDataProvider<Client>(null) {
+		SearchableDataProvider<Client> sdp = new SearchableDataProvider<>(null) {
 			private static final long serialVersionUID = 1L;
 
 			private List<Client> list() {
@@ -80,7 +80,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 		};
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		final WebMarkupContainer details = new WebMarkupContainer("details");
-		SearchableDataView<Client> dataView = new SearchableDataView<Client>("clientList", sdp) {
+		SearchableDataView<Client> dataView = new SearchableDataView<>("clientList", sdp) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

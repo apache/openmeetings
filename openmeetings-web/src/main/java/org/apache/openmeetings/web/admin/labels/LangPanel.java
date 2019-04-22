@@ -96,9 +96,9 @@ public class LangPanel extends AdminBasePanel {
 		form.setNewVisible(true);
 		add(form);
 
-		final SearchableDataView<StringLabel> dataView = new SearchableDataView<StringLabel>(
+		final SearchableDataView<StringLabel> dataView = new SearchableDataView<>(
 				"langList"
-				, new SearchableDataProvider<StringLabel>(LabelDao.class) {
+				, new SearchableDataProvider<>(LabelDao.class) {
 					private static final long serialVersionUID = 1L;
 
 					@Override

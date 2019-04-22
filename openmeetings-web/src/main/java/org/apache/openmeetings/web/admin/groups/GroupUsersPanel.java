@@ -53,7 +53,7 @@ public class GroupUsersPanel extends Panel {
 		this.groupId = groupId;
 		setOutputMarkupId(true);
 
-		SearchableDataView<GroupUser> dataView = new SearchableDataView<GroupUser>("userList", new GroupUserDataProvider()) {
+		SearchableDataView<GroupUser> dataView = new SearchableDataView<>("userList", new GroupUserDataProvider()) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

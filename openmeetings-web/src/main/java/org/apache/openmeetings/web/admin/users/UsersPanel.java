@@ -56,7 +56,7 @@ public class UsersPanel extends AdminBasePanel {
 	public UsersPanel(String id) {
 		super(id);
 
-		final SearchableDataView<User> dataView = new SearchableDataView<User>("userList", new SearchableGroupAdminDataProvider<>(UserDao.class)) {
+		final SearchableDataView<User> dataView = new SearchableDataView<>("userList", new SearchableGroupAdminDataProvider<>(UserDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

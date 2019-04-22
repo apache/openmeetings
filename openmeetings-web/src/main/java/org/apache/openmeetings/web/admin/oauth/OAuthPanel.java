@@ -46,7 +46,7 @@ public class OAuthPanel extends AdminBasePanel {
 
 	@Override
 	protected void onInitialize() {
-		SearchableDataView<OAuthServer> dataView = new SearchableDataView<OAuthServer>("oauthServersList",
+		SearchableDataView<OAuthServer> dataView = new SearchableDataView<>("oauthServersList",
 				new SearchableDataProvider<>(OAuth2Dao.class))
 		{
 			private static final long serialVersionUID = 1L;

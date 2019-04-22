@@ -98,7 +98,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 						.set("containment", Options.asString(treePanel.getContainment()))
 					, this));
 		}
-		Component name = f.getId() == null || !editable ? new Label("name", f.getName()) : new AjaxEditableLabel<String>("name", Model.of(f.getName())) {
+		Component name = f.getId() == null || !editable ? new Label("name", f.getName()) : new AjaxEditableLabel<>("name", Model.of(f.getName())) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

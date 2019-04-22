@@ -75,7 +75,7 @@ public class EditProfileForm extends Form<User> {
 		super.onInitialize();
 		add(passwd.setLabel(new ResourceModel("current.password")).setRequired(true).setVisible(checkPassword));
 
-		add(actions = new FormActionsPanel<User>("buttons", this) {
+		add(actions = new FormActionsPanel<>("buttons", this) {
 			private static final long serialVersionUID = 1L;
 
 			private void refreshUser() {

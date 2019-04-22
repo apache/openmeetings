@@ -42,7 +42,7 @@ public class EmailPanel extends AdminBasePanel {
 
 	public EmailPanel(String id) {
 		super(id);
-		SearchableDataView<MailMessage> dataView = new SearchableDataView<MailMessage>("email",
+		SearchableDataView<MailMessage> dataView = new SearchableDataView<>("email",
 				new SearchableDataProvider<>(MailMessageDao.class))
 		{
 			private static final long serialVersionUID = 1L;

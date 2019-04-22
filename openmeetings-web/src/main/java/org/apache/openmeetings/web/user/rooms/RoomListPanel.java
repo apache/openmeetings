@@ -54,7 +54,7 @@ public class RoomListPanel extends Panel {
 	public RoomListPanel(String id, List<Room> rooms, final String label) {
 		super(id);
 		setOutputMarkupId(true);
-		add(list = new ListView<Room>("list", rooms) {
+		add(list = new ListView<>("list", rooms) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

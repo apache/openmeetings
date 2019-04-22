@@ -52,7 +52,7 @@ public class LdapsPanel extends AdminBasePanel {
 
 	@Override
 	protected void onInitialize() {
-		SearchableDataView<LdapConfig> dataView = new SearchableDataView<LdapConfig>("ldapList"
+		SearchableDataView<LdapConfig> dataView = new SearchableDataView<>("ldapList"
 				, new SearchableDataProvider<>(LdapConfigDao.class)) {
 			private static final long serialVersionUID = 1L;
 

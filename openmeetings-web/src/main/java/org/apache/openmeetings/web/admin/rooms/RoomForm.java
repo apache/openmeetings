@@ -92,7 +92,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	private final WebMarkupContainer moderatorContainer = new WebMarkupContainer("moderatorContainer");
 	private final WebMarkupContainer filesContainer = new WebMarkupContainer("filesContainer");
 	private final WebMarkupContainer clientsContainer = new WebMarkupContainer("clientsContainer");
-	private final ListView<Client> clients = new ListView<Client>("clients", new ArrayList<>()) {
+	private final ListView<Client> clients = new ListView<>("clients", new ArrayList<>()) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -348,7 +348,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					return fileDao.get(ids);
 				}
 			}).setLabel(new ResourceModel("245")))
-			.add(new TextField<Long>("wbidx", wbIdx) {
+			.add(new TextField<>("wbidx", wbIdx) {
 				private static final long serialVersionUID = 1L;
 
 				@Override

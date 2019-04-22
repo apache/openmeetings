@@ -89,7 +89,7 @@ public class UserSearchPanel extends UserBasePanel {
 				});
 			}
 		});
-		IDataProvider<User> dp = new IDataProvider<User>() {
+		IDataProvider<User> dp = new IDataProvider<>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -109,7 +109,7 @@ public class UserSearchPanel extends UserBasePanel {
 			}
 
 		};
-		final DataView<User> dw = new DataView<User>("users", dp) {
+		final DataView<User> dw = new DataView<>("users", dp) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -44,7 +44,7 @@ public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Label message = new Label("message", Model.of((String)null));
-	private final ListView<FileItemLog> logView = new ListView<FileItemLog>("row") {
+	private final ListView<FileItemLog> logView = new ListView<>("row") {
 		private static final long serialVersionUID = 1L;
 
 		@Override

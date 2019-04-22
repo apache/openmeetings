@@ -36,7 +36,7 @@
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
 		<db>derby</db>
-		<jdk.version>1.8</jdk.version>
+		<jdk.version>11</jdk.version>
 		<!-- plugin versions -->
 		<maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
@@ -73,9 +73,9 @@
 		<forbiddenapis.version>2.6</forbiddenapis.version>
 		<!-- dependency versions -->
 		<junit.version>5.4.2</junit.version>
-		<wicket.version>8.5.0-SNAPSHOT</wicket.version>
-		<wicketju.version>8.3.0</wicketju.version>
-		<wickets.version>8.4.0</wickets.version>
+		<wicket.version>9.0.0-M1</wicket.version>
+		<wicketju.version>9.0.0-SNAPSHOT</wicketju.version>
+		<wickets.version>9.0.0-M1</wickets.version>
 		<red5-client.version>1.0.10</red5-client.version>
 		<spring.version>5.1.6.RELEASE</spring.version>
 		<mina.version>2.1.1</mina.version>

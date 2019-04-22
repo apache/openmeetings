@@ -203,7 +203,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private final RequiredTextField<String> dbname = new RequiredTextField<>("dbname", Model.of(""));
 		private final RequiredTextField<String> user = new RequiredTextField<>("login");
 		private final TextField<String> pass = new TextField<>("password");
-		private final Form<ConnectionProperties> form = new Form<ConnectionProperties>("form", new CompoundPropertyModel<>(getProps(null))) {
+		private final Form<ConnectionProperties> form = new Form<>("form", new CompoundPropertyModel<>(getProps(null))) {
 			private static final long serialVersionUID = 1L;
 			private final DropDownChoice<DbType> db = new DropDownChoice<>("dbType", Arrays.asList(DbType.values()), new ChoiceRenderer<DbType>() {
 				private static final long serialVersionUID = 1L;

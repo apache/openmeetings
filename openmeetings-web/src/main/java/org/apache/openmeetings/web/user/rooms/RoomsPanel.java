@@ -62,7 +62,7 @@ public class RoomsPanel extends UserPanel {
 	public RoomsPanel(String id, List<Room> rooms) {
 		super(id);
 		this.rooms = rooms;
-		clients = new ListView<Client>("clients", clientsInRoom){
+		clients = new ListView<>("clients", clientsInRoom){
 			private static final long serialVersionUID = 1L;
 
 			@Override

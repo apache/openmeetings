@@ -72,7 +72,7 @@ public class WidgetsPanel extends Panel {
 				continue;
 			}
 		}
-		add(new ListView<WidgetDescriptor>("widgets", widgets) {
+		add(new ListView<>("widgets", widgets) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -90,7 +90,7 @@ public class RoomSidebar extends Panel {
 	private Client kickedClient;
 	private VideoSettings settings = new VideoSettings("settings");
 	private ActivitiesPanel activities;
-	private final ListView<Client> users = new ListView<Client>("user", new LoadableDetachableModel<List<Client>>() {
+	private final ListView<Client> users = new ListView<>("user", new LoadableDetachableModel<List<Client>>() {
 		private static final long serialVersionUID = 1L;
 
 		@Override

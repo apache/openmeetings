@@ -276,7 +276,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 				}
 			});
 			add(new WebMarkupContainer("oauthContainer").add(
-				new ListView<OAuthServer>("oauthList", oauthDao.getActive()) {
+				new ListView<>("oauthList", oauthDao.getActive()) {
 					private static final long serialVersionUID = 1L;
 
 					@Override

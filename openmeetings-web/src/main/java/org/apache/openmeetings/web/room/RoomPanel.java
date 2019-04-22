@@ -269,7 +269,7 @@ public class RoomPanel extends BasePanel {
 		if (interview) {
 			room.add(new WebMarkupContainer("wb-area").add(wb));
 		} else {
-			Droppable<BaseFileItem> wbArea = new Droppable<BaseFileItem>("wb-area") {
+			Droppable<BaseFileItem> wbArea = new Droppable<>("wb-area") {
 				private static final long serialVersionUID = 1L;
 
 				@Override

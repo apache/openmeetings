@@ -213,7 +213,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				addFolder.open(target);
 			}
 		}).add(new JQueryBehavior(".email.newdir", "button")));
-		add(folders.add(new ListView<PrivateMessageFolder>("folder", foldersModel) {
+		add(folders.add(new ListView<>("folder", foldersModel) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -247,7 +247,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 			}
 		}).setOutputMarkupId(true));
 
-		SearchableDataProvider<PrivateMessage> sdp = new SearchableDataProvider<PrivateMessage>(PrivateMessageDao.class) {
+		SearchableDataProvider<PrivateMessage> sdp = new SearchableDataProvider<>(PrivateMessageDao.class) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -270,7 +270,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				return getDao().count(getUserId(), selectedFolderModel.getObject(), search);
 			}
 		};
-		final SearchableDataView<PrivateMessage> dv = new SearchableDataView<PrivateMessage>("messages", sdp) {
+		final SearchableDataView<PrivateMessage> dv = new SearchableDataView<>("messages", sdp) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -436,7 +436,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 		add(container.add(dv).setOutputMarkupId(true));
 		add(selectedMessage.add(roomContainer.setVisible(false)).setOutputMarkupId(true));
 
-		IDataProvider<UserContact> dp = new IDataProvider<UserContact>() {
+		IDataProvider<UserContact> dp = new IDataProvider<>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -454,7 +454,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				return Model.of(object);
 			}
 		};
-		final DataView<UserContact> dw = new DataView<UserContact>("users", dp) {
+		final DataView<UserContact> dw = new DataView<>("users", dp) {
 			private static final long serialVersionUID = 1L;
 
 			private String getName(UserContact uc) {

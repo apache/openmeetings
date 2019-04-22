@@ -32,7 +32,7 @@
 			<div>
 				<p>To build a binary release of OpenMeetings you need: </p>
 				<ul>
-					<li>Oracle JDK8</li>
+					<li>Oracle JDK11</li>
 					<li>Apache Maven (minimum) 3.5.0</li>
 					<li>Git</li>
 				</ul>

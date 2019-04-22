@@ -60,7 +60,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 	private WebMarkupContainer listContainer;
 	private final WebMarkupContainer attrsContainer = new WebMarkupContainer("attrsContainer");
 	private TextField<String> redirectUriText;
-	private final ListView<Map.Entry<String, String>> mappingView = new ListView<Map.Entry<String, String>>("mapping", new ListModel<>(new ArrayList<>())) {
+	private final ListView<Map.Entry<String, String>> mappingView = new ListView<>("mapping", new ListModel<>(new ArrayList<>())) {
 		private static final long serialVersionUID = 1L;
 
 		@Override

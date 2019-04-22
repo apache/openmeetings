@@ -147,7 +147,7 @@ public class WbPanel extends AbstractWbPanel {
 		if (rp.getRoom().isHidden(RoomElement.Whiteboard)) {
 			setVisible(false);
 		} else {
-			add(new ListView<String>("clipart"
+			add(new ListView<>("clipart"
 					, Arrays.asList(OmFileHelper.getPublicClipartsDir().list())
 						.stream()
 						.sorted()

@@ -52,7 +52,7 @@ public class ConfigsPanel extends AdminBasePanel {
 
 	@Override
 	protected void onInitialize() {
-		SearchableDataView<Configuration> dataView = new SearchableDataView<Configuration>("configList"
+		SearchableDataView<Configuration> dataView = new SearchableDataView<>("configList"
 				, new SearchableDataProvider<>(ConfigurationDao.class)) {
 			private static final long serialVersionUID = 1L;
 

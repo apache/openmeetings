@@ -261,7 +261,7 @@ public class CalendarPanel extends UserBasePanel {
 		add(calendarDialog);
 
 		calendarListContainer.setOutputMarkupId(true);
-		calendarListContainer.add(new ListView<OmCalendar>("items", new LoadableDetachableModel<List<OmCalendar>>() {
+		calendarListContainer.add(new ListView<>("items", new LoadableDetachableModel<List<OmCalendar>>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override

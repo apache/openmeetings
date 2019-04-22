@@ -72,7 +72,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private final RadioGroup<Type> rg = new RadioGroup<>("type", Model.of(Type.email));
 	private final Label label = new Label("label", Model.of(""));
 	private final Captcha captcha = new Captcha("captcha");
-	private Form<String> form = new Form<String>("form") {
+	private Form<String> form = new Form<>("form") {
 		private static final long serialVersionUID = 1L;
 
 		@Override

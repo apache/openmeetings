@@ -52,7 +52,7 @@ public class RoomsTabbedPanel extends UserPanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		User u = userDao.get(getUserId());
-		add(new ListView<GroupUser>("orgTabs", u.getGroupUsers()) {
+		add(new ListView<>("orgTabs", u.getGroupUsers()) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -63,7 +63,7 @@ public class RoomsTabbedPanel extends UserPanel {
 					.add(AttributeModifier.replace("href", "#org" + org.getId())));
 			}
 		});
-		add(new ListView<GroupUser>("orgRooms", u.getGroupUsers()) {
+		add(new ListView<>("orgRooms", u.getGroupUsers()) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

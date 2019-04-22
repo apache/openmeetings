@@ -47,7 +47,7 @@ public class RoomsPanel extends AdminBasePanel {
 
 	public RoomsPanel(String id) {
 		super(id);
-		SearchableDataView<Room> dataView = new SearchableDataView<Room>("roomList", new SearchableGroupAdminDataProvider<>(RoomDao.class)) {
+		SearchableDataView<Room> dataView = new SearchableDataView<>("roomList", new SearchableGroupAdminDataProvider<>(RoomDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

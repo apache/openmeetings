@@ -66,7 +66,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 		valueS = new TextArea<>("valueS");
-		valueN = new TextField<Long>("valueN") {
+		valueN = new TextField<>("valueN") {
 			private static final long serialVersionUID = 1L;
 
 			@Override

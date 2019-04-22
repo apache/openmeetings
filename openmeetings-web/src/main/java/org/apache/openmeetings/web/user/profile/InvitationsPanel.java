@@ -52,7 +52,7 @@ public class InvitationsPanel extends UserBasePanel {
 		super(id);
 		setOutputMarkupId(true);
 
-		SearchableDataView<Invitation> dataView = new SearchableDataView<Invitation>("invitations",
+		SearchableDataView<Invitation> dataView = new SearchableDataView<>("invitations",
 				new InvitationProvider())
 		{
 			private static final long serialVersionUID = 1L;

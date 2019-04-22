@@ -41,7 +41,7 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 	public AdminBaseForm(String id, IModel<T> object) {
 		super(id, object);
 
-		savePanel = new AdminActionsPanel<T>("buttons", this) {
+		savePanel = new AdminActionsPanel<>("buttons", this) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

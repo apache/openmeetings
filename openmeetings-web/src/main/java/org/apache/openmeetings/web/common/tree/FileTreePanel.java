@@ -153,7 +153,7 @@ public abstract class FileTreePanel extends Panel {
 	protected void onInitialize() {
 		super.onInitialize();
 		download.setDefaultModelObject(newDownloadMenuList());
-		Droppable<BaseFileItem> trashToolbar = new Droppable<BaseFileItem>("trash-toolbar") {
+		Droppable<BaseFileItem> trashToolbar = new Droppable<>("trash-toolbar") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
