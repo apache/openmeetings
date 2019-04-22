@@ -26,6 +26,8 @@ import static org.apache.openmeetings.AbstractJUnitDefaults.soapUsername;
 import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
+import static org.apache.openmeetings.web.pages.install.TestInstall.resetDerbyHome;
+import static org.apache.openmeetings.web.pages.install.TestInstall.setDerbyHome;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -62,6 +64,7 @@ import org.apache.openmeetings.webservice.util.AppointmentMessageBodyReader;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 
 public class AbstractWebServiceTest {
 	private static Tomcat tomcat;
@@ -73,6 +76,8 @@ public class AbstractWebServiceTest {
 	private static final String FILE_SERVICE_MOUNT = "file";
 	public static final String UNIT_TEST_EXT_TYPE = "om_unit_tests";
 	public static final long TIMEOUT = 5 * 60 * 1000;
+	@TempDir
+	static File tempFolder;
 
 	protected static <T> T getBean(Class<T> clazz) {
 		return ensureApplication().getBean(clazz);
@@ -106,6 +111,7 @@ public class AbstractWebServiceTest {
 	@BeforeAll
 	public static void initialize() throws Exception {
 		AbstractSpringTest.init();
+		setDerbyHome(tempFolder);
 		tomcat = new Tomcat();
 		Connector connector = new Connector("HTTP/1.1");
 		connector.setAttribute("address", InetAddress.getByName(HOST).getHostAddress());
@@ -136,6 +142,7 @@ public class AbstractWebServiceTest {
 			}
 			tomcat.destroy();
 		}
+		resetDerbyHome();
 	}
 
 	protected static CallResult<RoomDTO> createAndValidate(RoomDTO r) {
