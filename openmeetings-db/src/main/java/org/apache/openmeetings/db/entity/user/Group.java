@@ -23,7 +23,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -32,15 +31,13 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name="getGroupById", query="SELECT g FROM Group AS g WHERE g.id = :id AND g.deleted = false")
-	, @NamedQuery(name="getGroupByName", query="SELECT g FROM Group AS g WHERE g.name = :name AND g.deleted = false")
-	, @NamedQuery(name="getAnyGroupById", query="SELECT g FROM Group AS g WHERE g.id = :groupId")
-	, @NamedQuery(name="getGroupsByIds", query="SELECT g FROM Group AS g WHERE g.id IN :ids")
-	, @NamedQuery(name="getNondeletedGroups", query="SELECT g FROM Group g WHERE g.deleted = false ORDER BY g.id")
-	, @NamedQuery(name="countGroups", query="SELECT COUNT(g) FROM Group AS g WHERE g.deleted = false")
-	, @NamedQuery(name="getLimitedGroups", query="SELECT g FROM Group AS g WHERE g.deleted = false AND g.limited = true")
-})
+@NamedQuery(name="getGroupById", query="SELECT g FROM Group AS g WHERE g.id = :id AND g.deleted = false")
+@NamedQuery(name="getGroupByName", query="SELECT g FROM Group AS g WHERE g.name = :name AND g.deleted = false")
+@NamedQuery(name="getAnyGroupById", query="SELECT g FROM Group AS g WHERE g.id = :groupId")
+@NamedQuery(name="getGroupsByIds", query="SELECT g FROM Group AS g WHERE g.id IN :ids")
+@NamedQuery(name="getNondeletedGroups", query="SELECT g FROM Group g WHERE g.deleted = false ORDER BY g.id")
+@NamedQuery(name="countGroups", query="SELECT COUNT(g) FROM Group AS g WHERE g.deleted = false")
+@NamedQuery(name="getLimitedGroups", query="SELECT g FROM Group AS g WHERE g.deleted = false AND g.limited = true")
 @Table(name = "om_group")
 @Root(name = "organisation")
 public class Group extends HistoricalEntity {

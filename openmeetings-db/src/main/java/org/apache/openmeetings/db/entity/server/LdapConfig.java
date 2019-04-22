@@ -27,7 +27,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -38,12 +37,10 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name="getNondeletedLdapConfigs", query="SELECT u FROM LdapConfig u WHERE u.deleted = false")
-	, @NamedQuery(name="getLdapConfigById", query="SELECT c FROM LdapConfig c WHERE c.id = :id AND c.deleted = false")
-	, @NamedQuery(name="countNondeletedLdapConfigs", query="SELECT COUNT(c.id) FROM LdapConfig c WHERE c.deleted = false")
-	, @NamedQuery(name="getActiveLdapConfigs", query="SELECT c FROM LdapConfig c WHERE c.deleted = false AND c.active = :isActive ORDER BY c.id")
-})
+@NamedQuery(name="getNondeletedLdapConfigs", query="SELECT u FROM LdapConfig u WHERE u.deleted = false")
+@NamedQuery(name="getLdapConfigById", query="SELECT c FROM LdapConfig c WHERE c.id = :id AND c.deleted = false")
+@NamedQuery(name="countNondeletedLdapConfigs", query="SELECT COUNT(c.id) FROM LdapConfig c WHERE c.deleted = false")
+@NamedQuery(name="getActiveLdapConfigs", query="SELECT c FROM LdapConfig c WHERE c.deleted = false AND c.active = :isActive ORDER BY c.id")
 @Table(name = "ldapconfig")
 @Root(name="ldapconfig")
 public class LdapConfig extends HistoricalEntity {

@@ -25,15 +25,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
-@NamedQueries({
-	@NamedQuery(name = "getRecordingMetaDeltaByMetaDataId", query = "SELECT c FROM RecordingMetaDelta c WHERE c.metaDataId = :metaDataId")
-})
+@NamedQuery(name = "getRecordingMetaDeltaByMetaDataId", query = "SELECT c FROM RecordingMetaDelta c WHERE c.metaDataId = :metaDataId")
 @Entity
 @Table(name = "recording_meta_delta")
 public class RecordingMetaDelta implements IDataProviderEntity {

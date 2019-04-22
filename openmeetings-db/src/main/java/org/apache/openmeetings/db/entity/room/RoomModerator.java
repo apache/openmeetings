@@ -26,7 +26,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -37,13 +36,11 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name = "getRoomModeratorById", query = "select c from RoomModerator as c where c.id = :id"),
-	@NamedQuery(name = "getRoomModeratorsByIds", query = "select c from RoomModerator as c where c.id IN :ids"),
-	@NamedQuery(name = "getRoomModeratorByRoomId", query = "select c from RoomModerator as c where c.roomId = :roomId AND c.deleted = false"),
-	@NamedQuery(name = "getRoomModeratorByUserAndRoomId", query = "select c from RoomModerator as c "
-			+ "where c.roomId = :roomId AND c.deleted = false AND c.user.id = :userId")
-})
+@NamedQuery(name = "getRoomModeratorById", query = "select c from RoomModerator as c where c.id = :id")
+@NamedQuery(name = "getRoomModeratorsByIds", query = "select c from RoomModerator as c where c.id IN :ids")
+@NamedQuery(name = "getRoomModeratorByRoomId", query = "select c from RoomModerator as c where c.roomId = :roomId AND c.deleted = false")
+@NamedQuery(name = "getRoomModeratorByUserAndRoomId", query = "select c from RoomModerator as c "
+		+ "where c.roomId = :roomId AND c.deleted = false AND c.user.id = :userId")
 @Table(name = "room_moderator")
 @Root(name = "room_moderator")
 public class RoomModerator extends HistoricalEntity {

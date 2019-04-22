@@ -26,22 +26,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name = "getMailMessageById", query = "SELECT m FROM MailMessage m WHERE m.id = :id")
-	, @NamedQuery(name = "getMailMessages", query = "SELECT m FROM MailMessage m ORDER BY m.updated, m.inserted")
-	, @NamedQuery(name = "getMailMessagesByStatus", query = "SELECT m FROM MailMessage m WHERE m.status = :status ORDER BY m.updated, m.inserted")
-	, @NamedQuery(name = "countMailMessages", query = "SELECT COUNT(m) FROM MailMessage m")
-	, @NamedQuery(name = "resetMailStatusByDate", query = "UPDATE MailMessage m SET m.status = :noneStatus WHERE m.status = :sendingStatus AND m.updated < :date")
-	, @NamedQuery(name = "resetMailStatusById", query = "UPDATE MailMessage m SET m.errorCount = 0, m.status = :noneStatus WHERE m.id = :id")
-	, @NamedQuery(name = "purgeMailMessages", query = "DELETE FROM MailMessage m WHERE m.recipients LIKE :email OR m.replyTo LIKE :email")
-})
+@NamedQuery(name = "getMailMessageById", query = "SELECT m FROM MailMessage m WHERE m.id = :id")
+@NamedQuery(name = "getMailMessages", query = "SELECT m FROM MailMessage m ORDER BY m.updated, m.inserted")
+@NamedQuery(name = "getMailMessagesByStatus", query = "SELECT m FROM MailMessage m WHERE m.status = :status ORDER BY m.updated, m.inserted")
+@NamedQuery(name = "countMailMessages", query = "SELECT COUNT(m) FROM MailMessage m")
+@NamedQuery(name = "resetMailStatusByDate", query = "UPDATE MailMessage m SET m.status = :noneStatus WHERE m.status = :sendingStatus AND m.updated < :date")
+@NamedQuery(name = "resetMailStatusById", query = "UPDATE MailMessage m SET m.errorCount = 0, m.status = :noneStatus WHERE m.id = :id")
+@NamedQuery(name = "purgeMailMessages", query = "DELETE FROM MailMessage m WHERE m.recipients LIKE :email OR m.replyTo LIKE :email")
 @Table(name = "email_queue")
 public class MailMessage extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;

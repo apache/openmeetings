@@ -20,32 +20,29 @@ package org.apache.openmeetings.db.entity.file;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name = "getAllFiles", query = "SELECT f FROM FileItem f ORDER BY f.id")
-	, @NamedQuery(name = "getFilesByRoom", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.roomId = :roomId " +
-			"AND f.ownerId IS NULL AND f.parentId IS NULL ORDER BY f.type ASC, f.name ")
-	, @NamedQuery(name = "getFilesByOwner", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.ownerId = :ownerId "
-			+ "AND f.parentId IS NULL ORDER BY f.type ASC, f.name ")
-	, @NamedQuery(name = "getFilesByParent", query = "SELECT f FROM FileItem f WHERE f.deleted = false "
-			+ "AND f.parentId = :parentId ORDER BY f.type ASC, f.name ")
-	, @NamedQuery(name = "getFilesFilteredByParent", query = "SELECT f FROM FileItem f WHERE f.deleted = false "
-			+ "AND f.parentId = :parentId AND f.type IN :filter ORDER BY f.type ASC, f.name ")
-	, @NamedQuery(name = "getFileExternal", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.externalId = :externalId AND f.externalType LIKE :externalType")
-	, @NamedQuery(name = "getFileAllExternal", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.externalType LIKE :externalType")
-	, @NamedQuery(name = "getFileByGroup", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.ownerId IS NULL "
-			+ "AND f.groupId = :groupId AND f.parentId IS NULL "
-			+ "ORDER BY f.type ASC, f.name")
-	, @NamedQuery(name = "getFileFilteredByGroup", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.ownerId IS NULL "
-			+ "AND f.groupId = :groupId AND f.parentId IS NULL AND f.type IN :filter "
-			+ "ORDER BY f.type ASC, f.name")
-})
+@NamedQuery(name = "getAllFiles", query = "SELECT f FROM FileItem f ORDER BY f.id")
+@NamedQuery(name = "getFilesByRoom", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.roomId = :roomId " +
+		"AND f.ownerId IS NULL AND f.parentId IS NULL ORDER BY f.type ASC, f.name ")
+@NamedQuery(name = "getFilesByOwner", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.ownerId = :ownerId "
+		+ "AND f.parentId IS NULL ORDER BY f.type ASC, f.name ")
+@NamedQuery(name = "getFilesByParent", query = "SELECT f FROM FileItem f WHERE f.deleted = false "
+		+ "AND f.parentId = :parentId ORDER BY f.type ASC, f.name ")
+@NamedQuery(name = "getFilesFilteredByParent", query = "SELECT f FROM FileItem f WHERE f.deleted = false "
+		+ "AND f.parentId = :parentId AND f.type IN :filter ORDER BY f.type ASC, f.name ")
+@NamedQuery(name = "getFileExternal", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.externalId = :externalId AND f.externalType LIKE :externalType")
+@NamedQuery(name = "getFileAllExternal", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.externalType LIKE :externalType")
+@NamedQuery(name = "getFileByGroup", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.ownerId IS NULL "
+		+ "AND f.groupId = :groupId AND f.parentId IS NULL "
+		+ "ORDER BY f.type ASC, f.name")
+@NamedQuery(name = "getFileFilteredByGroup", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.ownerId IS NULL "
+		+ "AND f.groupId = :groupId AND f.parentId IS NULL AND f.type IN :filter "
+		+ "ORDER BY f.type ASC, f.name")
 @Root
 public class FileItem extends BaseFileItem {
 	private static final long serialVersionUID = 1L;

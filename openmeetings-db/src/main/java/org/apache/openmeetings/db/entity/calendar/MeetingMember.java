@@ -27,7 +27,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -41,13 +40,11 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "meeting_member")
-@NamedQueries({
-	@NamedQuery(name="getMeetingMemberById"
-			, query="SELECT mm FROM MeetingMember mm WHERE mm.deleted = false AND mm.id = :id")
-	, @NamedQuery(name="getMeetingMembers", query="SELECT mm FROM MeetingMember mm ORDER BY mm.id")
-	, @NamedQuery(name="getMeetingMemberIdsByAppointment"
-			, query="SELECT mm.id FROM MeetingMember mm WHERE mm.deleted = false AND mm.appointment.id = :id")
-})
+@NamedQuery(name="getMeetingMemberById"
+		, query="SELECT mm FROM MeetingMember mm WHERE mm.deleted = false AND mm.id = :id")
+@NamedQuery(name="getMeetingMembers", query="SELECT mm FROM MeetingMember mm ORDER BY mm.id")
+@NamedQuery(name="getMeetingMemberIdsByAppointment"
+		, query="SELECT mm.id FROM MeetingMember mm WHERE mm.deleted = false AND mm.appointment.id = :id")
 @Root(name = "meetingmember")
 public class MeetingMember extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;

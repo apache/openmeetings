@@ -26,15 +26,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "soaplogin")
-@NamedQueries({
-	@NamedQuery(name = "getSoapLoginByHash", query = "SELECT s FROM SOAPLogin s WHERE s.hash LIKE :hash")
-})
+@NamedQuery(name = "getSoapLoginByHash", query = "SELECT s FROM SOAPLogin s WHERE s.hash LIKE :hash")
 public class SOAPLogin implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
