@@ -68,8 +68,8 @@
 		<apache-rat-plugin.version>0.13</apache-rat-plugin.version>
 		<keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
-		<sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
-		<jacoco-maven-plugin.versoin>0.8.2</jacoco-maven-plugin.versoin>
+		<sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
+		<jacoco-maven-plugin.versoin>0.8.3</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>2.6</forbiddenapis.version>
 		<!-- dependency versions -->
 		<junit.version>5.4.2</junit.version>
@@ -120,7 +120,8 @@
 		<sonar.exclusions>file:**/generated-sources/**, file:**/fabric.js, file:**/cssemoticons.js, file:**/kurento-utils.js, file:**/fileinput*.js, file:**/MathJax.js, file:**/network.js, file:**/jquery.dialogextend.js</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+		<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../target/jacoco.exec</sonar.coverage.jacoco.xmlReportPaths>
+		<sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
 		<db_user></db_user>
 		<db_pass></db_pass>
 	</properties>
@@ -1001,7 +1002,7 @@
 					<artifactId>jacoco-maven-plugin</artifactId>
 					<version>${jacoco-maven-plugin.versoin}</version>
 					<configuration>
-						<destFile>${sonar.jacoco.reportPath}</destFile>
+						<destFile>${sonar.coverage.jacoco.xmlReportPaths}</destFile>
 						<append>true</append>
 					</configuration>
 				</plugin>
@@ -1548,7 +1549,7 @@
 									<goal>report</goal>
 								</goals>
 								<configuration>
-									<dataFile>${sonar.jacoco.reportPath}</dataFile>
+									<dataFile>${sonar.coverage.jacoco.xmlReportPaths}</dataFile>
 								</configuration>
 							</execution>
 						</executions>
