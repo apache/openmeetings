@@ -107,6 +107,7 @@ import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.IPageStore;
+import org.apache.wicket.pageStore.SerializingPageStore;
 import org.apache.wicket.protocol.ws.WebSocketAwareCsrfPreventionRequestCycleListener;
 import org.apache.wicket.protocol.ws.api.WebSocketResponse;
 import org.apache.wicket.request.IRequestHandler;
@@ -225,7 +226,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		setPageManagerProvider(new DefaultPageManagerProvider(this) {
 			@Override
 			protected IPageStore newAsynchronousStore(IPageStore pageStore) {
-				return new HazelcastDataStore(getName(), hazelcast);
+				return new SerializingPageStore(
+						new HazelcastDataStore(getName(), hazelcast)
+						, getFrameworkSettings().getSerializer());
 			}
 		});
 		//Add custom resource loader at the beginning, so it will be checked first in the
