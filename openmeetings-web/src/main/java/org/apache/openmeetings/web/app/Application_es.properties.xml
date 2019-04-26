@@ -994,4 +994,5 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="video.muteothers"><![CDATA[Silenciar los micrófonos de los demás]]></entry>
 	<entry key="upload.dlg.choose.title"><![CDATA[Seleccione un archivo]]></entry>
 	<entry key="upload.dlg.convert.title"><![CDATA[Converting...]]></entry>
+	<entry key="lbl.settings.whiteboard"><![CDATA[Whiteboard Settings]]></entry>
 </properties>
