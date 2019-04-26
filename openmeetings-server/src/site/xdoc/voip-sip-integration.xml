@@ -63,7 +63,7 @@
 				Run the commands
 				<source>
 <![CDATA[
-sudo apt-get update && sudo apt-get upgrade
+sudo apt update && sudo apt upgrade
 ]]>
 				</source>
 			</div>
