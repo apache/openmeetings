@@ -375,7 +375,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static void kickUser(Client client) {
-		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoom().getId(), client, RoomMessage.Type.kick, client.getUid()));
+		if (client != null) {
+			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoom().getId(), client, RoomMessage.Type.kick, client.getUid()));
+			get().cm.exitRoom(client);
+		}
 	}
 
 	public static boolean isInvaldSession(String sessionId) {
