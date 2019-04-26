@@ -182,7 +182,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 
 		add(nameForm.add(fileName.setOutputMarkupId(true)));
 		add(BootstrapFileUploadBehavior.INSTANCE);
-		getTitle().setObject(getString("304"));
+		getTitle().setObject(getString("upload.dlg.choose.title"));
 		upload = new DialogButton("upload", getString("593"), false) {
 			private static final long serialVersionUID = 1L;
 
@@ -222,6 +222,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
+		setTitle(handler, getString("upload.dlg.convert.title"));
 		super.onOpen(handler);
 		upload.setEnabled(true, handler);
 		uploadField.setModelObject(new ArrayList<>());
@@ -241,6 +242,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 
 			progress = 0;
 			timer.restart(target);
+			setTitle(target, getString("upload.dlg.convert.title"));
 			target.add(progressBar.setVisible(true), form.setVisible(false));
 
 			final Application app = Application.get();

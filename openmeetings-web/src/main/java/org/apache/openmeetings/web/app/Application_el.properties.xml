@@ -148,7 +148,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="288"><![CDATA[Υπενθύμιση Login]]></entry>
 	<entry key="290"><![CDATA[Η Αρχική Μου Σελίδα]]></entry>
 	<entry key="291"><![CDATA[Προγραμματισμένες Συναντήσεις]]></entry>
-	<entry key="304"><![CDATA[Επιλογή Αρχείου]]></entry>
 	<entry key="306"><![CDATA[Κάμερα & Μικρόφωνο]]></entry>
 	<entry key="308"><![CDATA[Έξοδος]]></entry>
 	<entry key="309"><![CDATA[Πίσω στα Δωμάτια]]></entry>
@@ -995,4 +994,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="video.permission.title"><![CDATA[Permission is required]]></entry>
 	<entry key="video.permission.text"><![CDATA[Extra permission is required to play video.<br/>Press OK to allow playing.]]></entry>
 	<entry key="video.muteothers"><![CDATA[Mute microphone of others]]></entry>
+	<entry key="upload.dlg.choose.title"><![CDATA[Επιλογή Αρχείου]]></entry>
+	<entry key="upload.dlg.convert.title"><![CDATA[Converting...]]></entry>
 </properties>

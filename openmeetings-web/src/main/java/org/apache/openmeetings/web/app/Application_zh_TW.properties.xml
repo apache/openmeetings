@@ -148,7 +148,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="288"><![CDATA[記住登錄]]></entry>
 	<entry key="290"><![CDATA[我的首頁]]></entry>
 	<entry key="291"><![CDATA[我安排的會議]]></entry>
-	<entry key="304"><![CDATA[選擇一個文件]]></entry>
 	<entry key="306"><![CDATA[攝像机和麥克風设定]]></entry>
 	<entry key="308"><![CDATA[退出]]></entry>
 	<entry key="309"><![CDATA[回到房間]]></entry>
@@ -995,4 +994,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="video.permission.title"><![CDATA[Permission is required]]></entry>
 	<entry key="video.permission.text"><![CDATA[Extra permission is required to play video.<br/>Press OK to allow playing.]]></entry>
 	<entry key="video.muteothers"><![CDATA[Mute microphone of others]]></entry>
+	<entry key="upload.dlg.choose.title"><![CDATA[選擇一個文件]]></entry>
+	<entry key="upload.dlg.convert.title"><![CDATA[Converting...]]></entry>
 </properties>
