@@ -115,6 +115,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 				target.add(progressBar.setVisible(false));
 				room.getSidebar().updateFiles(target);
 				if (form.hasError()) {
+					setTitle(target, getString("upload.dlg.choose.title"));
 					target.add(form.setVisible(true));
 					onError(target, null);
 				} else {
@@ -217,7 +218,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
-		setTitle(handler, getString("upload.dlg.convert.title"));
+		setTitle(handler, getString("upload.dlg.choose.title"));
 		super.onOpen(handler);
 		upload.setEnabled(true, handler);
 		uploadField.setModelObject(new ArrayList<>());
