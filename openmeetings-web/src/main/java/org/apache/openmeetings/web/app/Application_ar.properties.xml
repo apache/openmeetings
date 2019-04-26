@@ -148,7 +148,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="288"><![CDATA[نتذكر تسجيل الدخول]]></entry>
 	<entry key="290"><![CDATA[صفحتي الرئيسية]]></entry>
 	<entry key="291"><![CDATA[بلدي الجلسات المقررة]]></entry>
-	<entry key="304"><![CDATA[اختر ملف]]></entry>
 	<entry key="306"><![CDATA[كأم التابعة لهيئة التصنيع العسكرى والاعدادات]]></entry>
 	<entry key="308"><![CDATA[خروج]]></entry>
 	<entry key="309"><![CDATA[عودة الى غرف]]></entry>
@@ -995,4 +994,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="video.permission.title"><![CDATA[Permission is required]]></entry>
 	<entry key="video.permission.text"><![CDATA[Extra permission is required to play video.<br/>Press OK to allow playing.]]></entry>
 	<entry key="video.muteothers"><![CDATA[Mute microphone of others]]></entry>
+	<entry key="upload.dlg.choose.title"><![CDATA[اختر ملف]]></entry>
+	<entry key="upload.dlg.convert.title"><![CDATA[Converting...]]></entry>
 </properties>

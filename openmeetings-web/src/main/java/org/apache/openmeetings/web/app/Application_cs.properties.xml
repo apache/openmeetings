@@ -148,7 +148,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="288"><![CDATA[Zapamatuj si přihlášení]]></entry>
 	<entry key="290"><![CDATA[Má domovská stránka]]></entry>
 	<entry key="291"><![CDATA[Mé plánované schůzky]]></entry>
-	<entry key="304"><![CDATA[Vyber soubor]]></entry>
 	<entry key="306"><![CDATA[Nastavení kamery a mikrofonu]]></entry>
 	<entry key="308"><![CDATA[Odchod]]></entry>
 	<entry key="309"><![CDATA[Zpět do výběru místností]]></entry>
@@ -995,4 +994,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="video.permission.title"><![CDATA[Permission is required]]></entry>
 	<entry key="video.permission.text"><![CDATA[Extra permission is required to play video.<br/>Press OK to allow playing.]]></entry>
 	<entry key="video.muteothers"><![CDATA[Mute microphone of others]]></entry>
+	<entry key="upload.dlg.choose.title"><![CDATA[Vyber soubor]]></entry>
+	<entry key="upload.dlg.convert.title"><![CDATA[Converting...]]></entry>
 </properties>

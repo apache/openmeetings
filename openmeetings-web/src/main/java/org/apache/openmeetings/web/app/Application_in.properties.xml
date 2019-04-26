@@ -148,7 +148,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="288"><![CDATA[Ingat saya]]></entry>
 	<entry key="290"><![CDATA[Home Page saya]]></entry>
 	<entry key="291"><![CDATA[Jadwal Rapat]]></entry>
-	<entry key="304"><![CDATA[Pilih file]]></entry>
 	<entry key="306"><![CDATA[Seting Kamera dan Mic]]></entry>
 	<entry key="308"><![CDATA[Keluar]]></entry>
 	<entry key="309"><![CDATA[Kembali ke ruangan]]></entry>
@@ -995,4 +994,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="video.permission.title"><![CDATA[Permission is required]]></entry>
 	<entry key="video.permission.text"><![CDATA[Extra permission is required to play video.<br/>Press OK to allow playing.]]></entry>
 	<entry key="video.muteothers"><![CDATA[Mute microphone of others]]></entry>
+	<entry key="upload.dlg.choose.title"><![CDATA[Pilih file]]></entry>
+	<entry key="upload.dlg.convert.title"><![CDATA[Converting...]]></entry>
 </properties>
