@@ -29,6 +29,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -274,26 +275,17 @@ public class ClientManager implements IClientManager {
 		return false;
 	}
 
-	private Client getByKeys(Long userId, String sessionId) {
-		Client client = null;
-		for (Map.Entry<String, Client> e : map().entrySet()) {
-			Client c = e.getValue();
-			if (c.getUserId().equals(userId) && c.getSessionId().equals(sessionId)) {
-				client = c;
-				break;
-			}
-		}
-		return client;
+	private List<Client> getByKeys(Long userId, String sessionId) {
+		return map().values().stream()
+				.filter(c -> c.getUserId().equals(userId) && c.getSessionId().equals(sessionId))
+				.collect(Collectors.toList());
 	}
 
 	public void invalidate(Long userId, String sessionId) {
-		Client client = getByKeys(userId, sessionId);
-		if (client != null) {
+		for (Client c : getByKeys(userId, sessionId)) {
 			Map<String, String> invalid = Application.get().getInvalidSessions();
-			if (!invalid.containsKey(client.getSessionId())) {
-				invalid.put(client.getSessionId(), client.getUid());
-				exit(client);
-			}
+			invalid.putIfAbsent(sessionId, c.getUid());
+			exit(c);
 		}
 	}
 
