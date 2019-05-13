@@ -104,7 +104,7 @@
 		<dependency>
 			<groupId>org.kurento</groupId>
 			<artifactId>kurento-client</artifactId>
-			<version>6.9.1</version>
+			<version>6.10.0</version>
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
