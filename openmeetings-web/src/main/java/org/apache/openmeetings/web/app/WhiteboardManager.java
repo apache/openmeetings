@@ -20,9 +20,13 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +35,9 @@ import javax.annotation.PostConstruct;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.manager.IWhiteboardManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,14 +74,6 @@ public class WhiteboardManager implements IWhiteboardManager {
 		map().addEntryListener(new WbListener(), true);
 	}
 
-	public boolean tryLock(Long roomId) {
-		return map().tryLock(roomId);
-	}
-
-	public void unlock(Long roomId) {
-		map().unlock(roomId);
-	}
-
 	private static String getDefaultName(Long langId, int num) {
 		StringBuilder sb = new StringBuilder(LabelDao.getString("615", langId));
 		if (num > 0) {
@@ -83,7 +82,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 		return sb.toString();
 	}
 
-	public boolean contains(Long roomId) {
+	private boolean contains(Long roomId) {
 		return onlineWbs.containsKey(roomId);
 	}
 
@@ -111,13 +110,52 @@ public class WhiteboardManager implements IWhiteboardManager {
 		return get(roomId, null);
 	}
 
-	public Whiteboards get(Long roomId, Long langId) {
+	private Whiteboards getOrCreate(Long roomId) {
 		if (roomId == null) {
 			return null;
 		}
 		Whiteboards wbs = onlineWbs.get(roomId);
 		if (wbs == null) {
 			wbs = new Whiteboards(roomId);
+		}
+		return wbs;
+	}
+
+	public Map<Long, List<BaseFileItem>> get(Room r, Long langId) {
+		Map<Long, List<BaseFileItem>> result = new HashMap<>();
+		if (!contains(r.getId()) && r.getFiles() != null && !r.getFiles().isEmpty()) {
+			if (map().tryLock(r.getId())) {
+				try {
+					TreeMap<Long, List<BaseFileItem>> files = new TreeMap<>();
+					for (RoomFile rf : r.getFiles()) {
+						List<BaseFileItem> bfl = files.get(rf.getWbIdx());
+						if (bfl == null) {
+							files.put(rf.getWbIdx(), new ArrayList<>());
+							bfl = files.get(rf.getWbIdx());
+						}
+						bfl.add(rf.getFile());
+					}
+					Whiteboards wbs = getOrCreate(r.getId());
+					for (Map.Entry<Long, List<BaseFileItem>> e : files.entrySet()) {
+						Whiteboard wb = add(wbs, langId);
+						wbs.setActiveWb(wb.getId());
+						result.put(wb.getId(), e.getValue());
+					}
+					update(wbs);
+				} finally {
+					map().unlock(r.getId());
+				}
+			}
+		}
+		return result;
+	}
+
+	public Whiteboards get(Long roomId, Long langId) {
+		Whiteboards wbs = getOrCreate(roomId);
+		if (wbs == null) {
+			return null;
+		}
+		if (wbs.getWhiteboards().isEmpty()) {
 			Whiteboard wb = add(wbs, langId);
 			wbs.setActiveWb(wb.getId());
 			update(wbs);

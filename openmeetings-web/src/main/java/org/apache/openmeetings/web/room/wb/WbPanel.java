@@ -40,7 +40,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
@@ -49,7 +48,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -67,7 +65,6 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
-import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.WhiteboardManager;
@@ -168,29 +165,10 @@ public class WbPanel extends AbstractWbPanel {
 	@Override
 	void internalWbLoad(StringBuilder sb) {
 		Long langId = rp.getClient().getUser().getLanguageId();
-		if (!wbm.contains(roomId) && rp.getRoom().getFiles() != null && !rp.getRoom().getFiles().isEmpty()) {
-			if (wbm.tryLock(roomId)) {
-				try {
-					TreeMap<Long, List<BaseFileItem>> files = new TreeMap<>();
-					for (RoomFile rf : rp.getRoom().getFiles()) {
-						List<BaseFileItem> bfl = files.get(rf.getWbIdx());
-						if (bfl == null) {
-							files.put(rf.getWbIdx(), new ArrayList<>());
-							bfl = files.get(rf.getWbIdx());
-						}
-						bfl.add(rf.getFile());
-					}
-					Whiteboards _wbs = wbm.get(roomId, langId);
-					for (Map.Entry<Long, List<BaseFileItem>> e : files.entrySet()) {
-						Whiteboard wb = wbm.add(roomId, langId);
-						_wbs.setActiveWb(wb.getId());
-						for (BaseFileItem fi : e.getValue()) {
-							sendFileToWb(fi, false);
-						}
-					}
-				} finally {
-					wbm.unlock(roomId);
-				}
+		Map<Long, List<BaseFileItem>> files = wbm.get(rp.getRoom(), langId);
+		for (Map.Entry<Long, List<BaseFileItem>> e : files.entrySet()) {
+			for (BaseFileItem fi : e.getValue()) {
+				sendFileToWb(e.getKey(), fi, false);
 			}
 		}
 		Whiteboards wbs = wbm.get(roomId, langId);
@@ -552,12 +530,11 @@ public class WbPanel extends AbstractWbPanel {
 		wb.setHeight(Math.max(wb.getHeight(), (int)(h * scale)));
 	}
 
-	@Override
-	public void sendFileToWb(final BaseFileItem fi, boolean clean) {
+	private void sendFileToWb(Long wbId, final BaseFileItem fi, boolean clean) {
 		if (isVisible() && fi.getId() != null) {
 			Whiteboards wbs = wbm.get(roomId);
 			String wuid = randomUUID().toString();
-			Whiteboard wb = wbs.get(wbs.getActiveWb());
+			Whiteboard wb = wbs.get(wbId == null ? wbs.getActiveWb() : wbId);
 			if (wb == null) {
 				return;
 			}
@@ -623,6 +600,11 @@ public class WbPanel extends AbstractWbPanel {
 					break;
 			}
 		}
+	}
+
+	@Override
+	public void sendFileToWb(final BaseFileItem fi, boolean clean) {
+		sendFileToWb(null, fi, clean);
 	}
 
 	private void sendWbOthers(WbAction a, JSONObject obj) {
