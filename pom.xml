@@ -44,15 +44,15 @@
 		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
 		<maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
-		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+		<maven-source-plugin.version>3.1.0</maven-source-plugin.version>
 		<checksum-maven-plugin.version>1.8</checksum-maven-plugin.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 		<license-maven-plugin.version>1.16</license-maven-plugin.version>
-		<reflow-maven-skin.version>2.0.0</reflow-maven-skin.version>
+		<reflow-maven-skin.version>2.0.2</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
-		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
-		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+		<maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
 		<maven-bundle-plugin.version>4.1.0</maven-bundle-plugin.version>
@@ -82,7 +82,7 @@
 		<mina.version>2.0.21</mina.version>
 		<tomcat.version>9.0.20</tomcat.version>
 		<ical4j.version>3.0.6</ical4j.version>
-		<cxf.version>3.3.1</cxf.version>
+		<cxf.version>3.3.2</cxf.version>
 		<selenium.version>3.141.59</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.0</jettison.version>
@@ -105,9 +105,9 @@
 		<pdfbox.version>2.0.15</pdfbox.version>
 		<commons-collections4.version>4.3</commons-collections4.version>
 		<xstream.version>1.4.11.1</xstream.version>
-		<api-all.version>2.0.0.AM2</api-all.version>
+		<api-all.version>2.0.0.AM3</api-all.version>
 		<caldav4j.version>1.0.0-rc.2</caldav4j.version>
-		<tika-parsers.version>1.20</tika-parsers.version>
+		<tika-parsers.version>1.21</tika-parsers.version>
 		<commons-text.version>1.6</commons-text.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.61</bcprov-jdk15on.version>
