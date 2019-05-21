@@ -1532,22 +1532,21 @@
 		</profile>
 		<profile>
 			<id>jacoco-report</id>
-			<build>
+			<reporting>
 				<plugins>
 					<plugin>
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>jacoco-report</id>
-								<goals>
-									<goal>report-aggregate</goal>
-								</goals>
-							</execution>
-						</executions>
+						<reportSets>
+							<reportSet>
+								<reports>
+									<report>report-aggregate</report>
+								</reports>
+							</reportSet>
+						</reportSets>
 					</plugin>
 				</plugins>
-			</build>
+			</reporting>
 		</profile>
 	</profiles>
 </project>
