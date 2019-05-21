@@ -390,7 +390,7 @@ public class RoomWebService extends BaseWebService {
 			if (i != null) {
 				if (sendmail) {
 					try {
-						getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false);
+						getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false, null);
 					} catch (Exception e) {
 						throw new ServiceException(e.getMessage());
 					}

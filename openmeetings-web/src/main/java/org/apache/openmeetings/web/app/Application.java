@@ -422,8 +422,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	@Override
-	public String getOmInvitationLink(Invitation i) {
-		return getInvitationLink(i, null);
+	public String getOmInvitationLink(Invitation i, String baseUrl) {
+		return getInvitationLink(i, baseUrl);
 	}
 
 	@Override
