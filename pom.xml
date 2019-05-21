@@ -119,7 +119,6 @@
 		<sonar.exclusions>file:**/generated-sources/**, file:**/fabric.js, file:**/cssemoticons.js, file:**/kurento-utils.js, file:**/fileinput*.js, file:**/MathJax.js, file:**/network.js, file:**/jquery.dialogextend.js</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../target/jacoco.exec</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
 		<db_user></db_user>
 		<db_pass></db_pass>
@@ -1000,10 +999,6 @@
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
 					<version>${jacoco-maven-plugin.versoin}</version>
-					<configuration>
-						<destFile>${sonar.coverage.jacoco.xmlReportPaths}</destFile>
-						<append>true</append>
-					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>de.thetaphi</groupId>
@@ -1547,9 +1542,6 @@
 								<goals>
 									<goal>report</goal>
 								</goals>
-								<configuration>
-									<dataFile>${sonar.coverage.jacoco.xmlReportPaths}</dataFile>
-								</configuration>
 							</execution>
 						</executions>
 					</plugin>
