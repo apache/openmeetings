@@ -31,6 +31,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.room.InvitationManager;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.GroupChoiceProvider;
 import org.apache.openmeetings.web.common.InvitationForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -138,11 +139,12 @@ public class RoomInvitationForm extends InvitationForm {
 	@Override
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
 		if (button.equals(dialog.getSend()) && Strings.isEmpty(url.getModelObject()) && rdi.getModelObject() == InviteeType.group) {
+			final String userbaseUrl = WebSession.get().getExtendedProperties().getBaseUrl();
 			for (Group g : groups.getModelObject()) {
 				for (GroupUser ou : groupUserDao.get(g.getId(), 0, Integer.MAX_VALUE)) {
 					Invitation i = create(ou.getUser());
 					try {
-						invitationManager.sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
+						invitationManager.sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false, userbaseUrl);
 					} catch (Exception e) {
 						log.error("error while sending invitation by Group ", e);
 					}

@@ -95,15 +95,15 @@ public class InvitationManager implements IInvitationManager {
 				t = UpdatedAppointmentTemplate.get(mm.getUser(), a, tz, invitorName);
 				break;
 		}
-		sendInvitationLink(mm.getInvitation(), type, t.getSubject(), t.getEmail(), ical);
+		sendInvitationLink(mm.getInvitation(), type, t.getSubject(), t.getEmail(), ical, null);
 	}
 
 	@Override
-	public void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
+	public void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical, String baseUrl) throws Exception {
 		String invitationLink = null;
 		if (type != MessageType.Cancel) {
 			IApplication app = ensureApplication(1L);
-			invitationLink = app.getOmInvitationLink(i);
+			invitationLink = app.getOmInvitationLink(i, baseUrl);
 		}
 		User owner = i.getInvitedBy();
 

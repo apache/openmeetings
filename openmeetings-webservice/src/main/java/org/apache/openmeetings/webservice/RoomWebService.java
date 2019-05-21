@@ -395,7 +395,7 @@ public class RoomWebService extends BaseWebService {
 			if (i != null) {
 				if (sendmail) {
 					try {
-						inviteManager.sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false);
+						inviteManager.sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false, null);
 					} catch (Exception e) {
 						throw new ServiceException(e.getMessage());
 					}

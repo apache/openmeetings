@@ -49,6 +49,6 @@ public class TestInvitation extends AbstractWicketTester {
 				, us, us.getLanguageId(),
 				getDate(from, "GMT"), getDate(from.plusHours(2), "GMT"), null);
 
-		invitationManager.sendInvitationLink(i, MessageType.Create, "subject", "message", false);
+		invitationManager.sendInvitationLink(i, MessageType.Create, "subject", "message", false, null);
 	}
 }

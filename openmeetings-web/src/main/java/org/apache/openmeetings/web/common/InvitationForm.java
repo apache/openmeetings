@@ -214,19 +214,20 @@ public abstract class InvitationForm extends Form<Invitation> {
 	}
 
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
+		final String userbaseUrl = WebSession.get().getExtendedProperties().getBaseUrl();
 		if (button.equals(dialog.getCancel())) {
 			dialog.onSuperClick(target, button);
 		} else if (button.equals(dialog.getGenerate())) {
 			Invitation i = create(recipients.getModelObject().iterator().next());
 			setModelObject(i);
-			url.setModelObject(getInvitationLink(i, WebSession.get().getExtendedProperties().getBaseUrl()));
+			url.setModelObject(getInvitationLink(i, userbaseUrl));
 			target.add(url);
 		} else if (button.equals(dialog.getSend())) {
 			if (Strings.isEmpty(url.getModelObject())) {
 				for (User u : recipients.getModelObject()) {
 					Invitation i = create(u);
 					try {
-						inviteManager.sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
+						inviteManager.sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false, userbaseUrl);
 					} catch (Exception e) {
 						log.error("error while sending invitation by User ", e);
 					}
@@ -234,7 +235,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 			} else {
 				Invitation i = getModelObject();
 				try {
-					inviteManager.sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
+					inviteManager.sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false, userbaseUrl);
 				} catch (Exception e) {
 					log.error("error while sending invitation by URL ", e);
 				}
