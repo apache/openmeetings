@@ -18,15 +18,11 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
-import static org.apache.openmeetings.web.app.Application.urlForPage;
-
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
@@ -55,11 +51,14 @@ import org.apache.wicket.validation.Validatable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
+import static org.apache.openmeetings.web.app.Application.urlForPage;
 
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final Logger log = LoggerFactory.getLogger(ForgetPasswordDialog.class);
@@ -229,9 +228,8 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	 * reset a username by a given mail oder login by sending a mail to the
 	 * registered EMail-Address
 	 *
-	 * @param email
-	 * @param username
-	 * @param appLink
+	 * @param email - email of the user
+	 * @param username - username of the user
 	 * @return <code>true</code> in case reset was successful, <code>false</code> otherwise
 	 */
 	private boolean resetUser(String email, String username) {

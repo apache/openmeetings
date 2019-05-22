@@ -18,16 +18,6 @@
  */
 package org.apache.openmeetings.web.util;
 
-import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.URI;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -42,6 +32,15 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URI;
+
+import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 
 public class ProfileImageResourceReference extends ResourceReference {
 	private static final long serialVersionUID = 1L;
@@ -60,7 +59,7 @@ public class ProfileImageResourceReference extends ResourceReference {
 
 	public static String getUrl(RequestCycle rc, User u) {
 		String uri = u.getPictureUri();
-		if (!isAbsolute(uri)) {
+		if (isRelative(uri)) {
 			File img = OmFileHelper.getUserProfilePicture(u.getId(), uri);
 			uri = rc.urlFor(new ProfileImageResourceReference()
 					, new PageParameters().add("id", u.getId()).add("anticache", img.lastModified())).toString();
@@ -68,14 +67,14 @@ public class ProfileImageResourceReference extends ResourceReference {
 		return uri;
 	}
 
-	private static boolean isAbsolute(String uri) {
-		boolean absolute = false;
+	private static boolean isRelative(String uri) {
+		boolean relative = true;
 		try {
-			absolute = URI.create(uri).isAbsolute();
+			relative = !URI.create(uri).isAbsolute();
 		} catch (Exception e) {
 			//no-op
 		}
-		return absolute;
+		return relative;
 	}
 
 	@Override
@@ -108,7 +107,7 @@ public class ProfileImageResourceReference extends ResourceReference {
 
 			@Override
 			protected byte[] getData(Attributes attributes) {
-				if (!isAbsolute(uri)) {
+				if (isRelative(uri)) {
 					File img = OmFileHelper.getUserProfilePicture(userId, uri);
 					try (InputStream is = new FileInputStream(img)) {
 						return IOUtils.toByteArray(is);

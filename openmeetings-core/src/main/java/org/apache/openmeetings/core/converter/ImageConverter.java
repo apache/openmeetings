@@ -18,23 +18,6 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.commons.io.FileUtils.copyFile;
-import static org.apache.openmeetings.util.OmFileHelper.DOC_PAGE_PREFIX;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
-import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.PROFILE_FILE_NAME;
-import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
-import static org.apache.openmeetings.util.process.ProcessResult.ZERO;
-import static org.apache.tika.metadata.HttpHeaders.CONTENT_TYPE;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -55,6 +38,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xml.sax.helpers.DefaultHandler;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
+
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.apache.openmeetings.util.OmFileHelper.DOC_PAGE_PREFIX;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
+import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.PROFILE_FILE_NAME;
+import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
+import static org.apache.openmeetings.util.process.ProcessResult.ZERO;
+import static org.apache.tika.metadata.HttpHeaders.CONTENT_TYPE;
 
 @Component
 public class ImageConverter extends BaseConverter {
@@ -146,7 +146,7 @@ public class ImageConverter extends BaseConverter {
 	 * @param in - input file
 	 * @param out - output file
 	 * @return - conversion result
-	 * @throws IOException
+	 * @throws IOException - if any Io exception occurs while processing
 	 *
 	 */
 	private ProcessResult convertSinglePng(File in, File out) throws IOException {

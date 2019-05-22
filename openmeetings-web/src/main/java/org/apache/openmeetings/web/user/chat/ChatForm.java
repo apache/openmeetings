@@ -18,17 +18,9 @@
  */
 package org.apache.openmeetings.web.user.chat;
 
-import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_ALL;
-import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_ROOM_PREFIX;
-import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_USER_PREFIX;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
-
-import java.util.Arrays;
-import java.util.Date;
-import java.util.function.BooleanSupplier;
-import java.util.function.Predicate;
-
+import com.github.openjson.JSONObject;
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
+import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 import org.apache.openmeetings.core.util.ChatWebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -52,9 +44,16 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
-import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.function.BooleanSupplier;
+import java.util.function.Predicate;
+
+import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_ALL;
+import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_ROOM_PREFIX;
+import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_USER_PREFIX;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 
 public class ChatForm extends Form<Void> {
 	private static final long serialVersionUID = 1L;
@@ -130,7 +129,7 @@ public class ChatForm extends Form<Void> {
 							}))
 					{
 						return;
-					};
+					}
 					chatDao.update(m);
 					JSONObject msg = getChat().getMessage(Arrays.asList(m));
 					if (m.getToRoom() != null) {
@@ -144,7 +143,7 @@ public class ChatForm extends Form<Void> {
 					}
 					chatMessage.setDefaultModelObject("");
 					target.appendJavaScript("Chat.clean();");
-				};
+				}
 			});
 	}
 

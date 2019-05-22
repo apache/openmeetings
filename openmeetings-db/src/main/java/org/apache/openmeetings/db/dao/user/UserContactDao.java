@@ -18,22 +18,21 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
-import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
-
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.Date;
+import java.util.List;
+
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
 @Repository
 @Transactional
@@ -88,7 +87,7 @@ public class UserContactDao {
 
 	public boolean isContact(Long userId, Long ownerId) {
 		UserContact c = get(userId, ownerId);
-		return c == null ? false : !c.isPending();
+		return c != null && !c.isPending();
 	}
 
 	public List<UserContact> get(long ownerId, long first, long count) {

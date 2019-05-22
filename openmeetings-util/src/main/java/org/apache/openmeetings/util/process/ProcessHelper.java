@@ -18,9 +18,8 @@
  */
 package org.apache.openmeetings.util.process;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,8 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
 
 public class ProcessHelper {
 	public static final Logger log = LoggerFactory.getLogger(ProcessHelper.class);
@@ -49,7 +49,7 @@ public class ProcessHelper {
 
 		@Override
 		public void run() {
-			try (BufferedReader br = new BufferedReader(new InputStreamReader(is, UTF_8));) {
+			try (BufferedReader br = new BufferedReader(new InputStreamReader(is, UTF_8))) {
 				String line = br.readLine();
 				while (run && line != null) {
 					output.append(line).append('\n');

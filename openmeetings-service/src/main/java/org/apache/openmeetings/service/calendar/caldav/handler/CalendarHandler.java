@@ -43,7 +43,7 @@ public interface CalendarHandler {
 	 * created are the same as the owner of the calendar.
 	 * @return Returns the updated calendar after updation of all events.
 	 */
-	public OmCalendar syncItems();
+	OmCalendar syncItems();
 
 	/**
 	 * Function for create/updating multiple appointment on the server.
@@ -51,12 +51,12 @@ public interface CalendarHandler {
 	 * @param appointment Appointment to create/update.
 	 * @return <code>True</code> when the updation is a success else <code>False</code>
 	 */
-	public boolean updateItem(Appointment appointment);
+	boolean updateItem(Appointment appointment);
 
 	/**
 	 * Delete Appointment on the server.
 	 * @param appointment Appointment to delete
 	 * @return <code>True</code> when the deletion is a success else <code>False</code>
 	 */
-	public boolean deleteItem(Appointment appointment);
+	boolean deleteItem(Appointment appointment);
 }

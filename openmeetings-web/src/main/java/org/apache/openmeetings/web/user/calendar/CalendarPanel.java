@@ -18,18 +18,12 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
-import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
-
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
+import com.github.openjson.JSONObject;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.calendar.Calendar;
+import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
+import com.googlecode.wicket.jquery.ui.calendar.EventSource.GoogleCalendar;
+import com.googlecode.wicket.jquery.ui.form.button.Button;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -60,12 +54,17 @@ import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.calendar.Calendar;
-import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
-import com.googlecode.wicket.jquery.ui.calendar.EventSource.GoogleCalendar;
-import com.googlecode.wicket.jquery.ui.form.button.Button;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
 
 public class CalendarPanel extends UserBasePanel {
 	private static final Logger log = LoggerFactory.getLogger(CalendarPanel.class);
@@ -343,9 +342,7 @@ public class CalendarPanel extends UserBasePanel {
 		super.renderHead(response);
 
 		Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
-		if (target.isPresent()) {
-			target.get().appendJavaScript("addCalButton('datepicker');");
-		}
+		target.ifPresent(t -> t.appendJavaScript("addCalButton('datepicker');"));
 	}
 
 	// Client creation here, because the client is not created until necessary

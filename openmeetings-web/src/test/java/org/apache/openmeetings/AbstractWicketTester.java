@@ -18,19 +18,8 @@
  */
 package org.apache.openmeetings;
 
-import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.apache.openmeetings.web.common.OmWebSocketPanel.CONNECTED_MSG;
-import static org.apache.wicket.util.string.Strings.escapeMarkup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Locale;
-import java.util.function.Consumer;
-
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
+import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
@@ -47,8 +36,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Locale;
+import java.util.function.Consumer;
+
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+import static org.apache.openmeetings.web.common.OmWebSocketPanel.CONNECTED_MSG;
+import static org.apache.wicket.util.string.Strings.escapeMarkup;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class AbstractWicketTester extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(AbstractWicketTester.class);
@@ -63,8 +62,7 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	public static WicketTester getWicketTester(Application app, long langId) {
 		ensureApplication(langId); // to ensure WebSession is attached
 
-		WicketTester tester = new WicketTester(app, app.getServletContext(), false);
-		return tester;
+		return new WicketTester(app, app.getServletContext(), false);
 	}
 
 	public static void destroy(WicketTester tester) {

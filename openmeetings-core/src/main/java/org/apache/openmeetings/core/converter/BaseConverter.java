@@ -18,30 +18,6 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.commons.io.FileUtils.copyFile;
-import static org.apache.commons.lang3.math.NumberUtils.toInt;
-import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
-import static org.apache.openmeetings.util.OmFileHelper.getPublicDir;
-import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
-import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioRate;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getVideoPreset;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
@@ -57,6 +33,30 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.apache.commons.lang3.math.NumberUtils.toInt;
+import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
+import static org.apache.openmeetings.util.OmFileHelper.getPublicDir;
+import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
+import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioRate;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getVideoPreset;
 
 public abstract class BaseConverter {
 	private static final Logger log = LoggerFactory.getLogger(BaseConverter.class);
@@ -270,8 +270,6 @@ public abstract class BaseConverter {
 
 				if (outputWav.exists() && outputWav.length() != 0) {
 					// Strip Wave to Full Length
-					File outputGapFullWav = outputWav;
-
 					// Strip Wave to Full Length
 					String hashFileFullName = chunk.getStreamName() + "_FULL_WAVE.wav";
 					File outputFullWav = new File(streamFolder, hashFileFullName);
@@ -282,7 +280,7 @@ public abstract class BaseConverter {
 					// Calculate delta at ending
 					double endPad = diffSeconds(recording.getRecordEnd(), chunk.getEnd());
 
-					addSoxPad(logs, "addStartEndToAudio", startPad, endPad, outputGapFullWav, outputFullWav);
+					addSoxPad(logs, "addStartEndToAudio", startPad, endPad, outputWav, outputFullWav);
 
 					// Fix for Audio Length - Invalid Audio Length in Recorded Files
 					// Audio must match 100% the Video
@@ -354,10 +352,10 @@ public abstract class BaseConverter {
 	protected static Dimension getDimension(String txt) {
 		Matcher matcher = p.matcher(txt);
 
-		while (matcher.find()) {
+		if (matcher.find()) {
 			String foundResolution = txt.substring(matcher.start(), matcher.end());
-			String[] resultions = foundResolution.split("x");
-			return new Dimension(toInt(resultions[0]), toInt(resultions[1]));
+			String[] resolutions = foundResolution.split("x");
+			return new Dimension(toInt(resolutions[0]), toInt(resolutions[1]));
 		}
 
 		return new Dimension(100, 100); // will return 100x100 for non-video to be able to play

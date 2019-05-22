@@ -36,9 +36,9 @@ public class ProcessResultList {
 	}
 
 	/**
-	 * returns true if there was an job with exitValue "-1"
+	 * checks if process was successful
 	 *
-	 * @return
+	 * @return true if there was an job with exitValue "-1"
 	 */
 	public boolean hasError() {
 		for (ProcessResult res : jobs) {
@@ -52,7 +52,7 @@ public class ProcessResultList {
 	/**
 	 * converts all job results into a human readable format
 	 *
-	 * @return
+	 * @return - string representation of the job
 	 */
 	public String getLogMessage() {
 		StringBuilder logMessage = new StringBuilder();

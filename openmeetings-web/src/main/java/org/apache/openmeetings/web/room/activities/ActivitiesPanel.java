@@ -18,14 +18,8 @@
  */
 package org.apache.openmeetings.web.room.activities;
 
-import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
-import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -48,8 +42,13 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
+import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 public class ActivitiesPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -61,7 +60,7 @@ public class ActivitiesPanel extends Panel {
 	private static final String ACTIVITY_FMT_RTL = "%3$s %2$s [%1$s]";
 	private enum Action {
 		accept, decline, close
-	};
+	}
 	private static final FastDateFormat df = FastDateFormat.getInstance("HH:mm:ss");
 	private final Map<String, Activity> activities = new LinkedHashMap<>();
 	private final RoomPanel room;

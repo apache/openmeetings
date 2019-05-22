@@ -38,7 +38,7 @@ public class KickMessageDialog extends AbstractDialog<String> {
 	protected void onInitialize() {
 		super.onInitialize();
 		add(new Label("message", getString("606")));
-	};
+	}
 
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {

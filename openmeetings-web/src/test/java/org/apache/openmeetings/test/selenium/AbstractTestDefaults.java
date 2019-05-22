@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.test.selenium;
 
-import java.util.List;
-
 import org.apache.openmeetings.AbstractSpringTest;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.junit.jupiter.api.AfterEach;
@@ -31,6 +29,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
+
+import java.util.List;
 
 @Tag("org.apache.openmeetings.test.selenium.SeleniumTests")
 public abstract class AbstractTestDefaults extends AbstractSpringTest {
@@ -84,7 +84,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	/**
 	 * Make method overwrite possible to have custom behavior in tests
 	 *
-	 * @return
+	 * @return false if you need not to shut down browser will after the test
 	 */
 	public boolean getDoTearDownAfterTest() {
 		return doTearDownAfterTest;
@@ -101,7 +101,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	 * This test is a basic test to verify the default loader mechanism works
 	 * it is not intend to be a part of any sub test
 	 *
-	 * @throws Exception
+	 * @throws Exception if any error occurs
 	 */
 	//@Test
 	public void smokeTest() throws Exception {
@@ -130,7 +130,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	 * Throws exception in case that test fails, so it is important to not catch
 	 * that exception but really let the test fail!
 	 *
-	 * @throws Exception
+	 * @throws Exception if any error occurs
 	 */
 	protected void testIsInstalledAndDoInstallation() throws Exception {
 

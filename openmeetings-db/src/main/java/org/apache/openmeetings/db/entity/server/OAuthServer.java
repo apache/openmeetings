@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings.db.entity.server;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementMap;
+import org.simpleframework.xml.Root;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -35,11 +37,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-
-import org.apache.openmeetings.db.entity.HistoricalEntity;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "oauth_server")
@@ -248,10 +247,10 @@ public class OAuthServer extends HistoricalEntity {
 	}
 
 	public enum RequestTokenMethod {
-		POST, GET;
+		POST, GET
 	}
 
 	public enum RequestInfoMethod {
-		POST, GET, HEADER;
+		POST, GET, HEADER
 	}
 }

@@ -16,12 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-/**
+/*
  * @author Sebastien Briquet
  */
 package org.apache.openmeetings.web.user.calendar;
-
-import java.util.Map;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
@@ -33,6 +31,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 import org.apache.wicket.util.collections.MicroMap;
+
+import java.util.Map;
 
 public class CalendarFunctionsBehavior extends Behavior {
 	private static final long serialVersionUID = 1L;

@@ -18,21 +18,20 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
-
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.Date;
+import java.util.List;
+
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
 @Repository
 @Transactional
@@ -108,8 +107,8 @@ public class PollDao {
 				.getSingleResult() > 0;
 	}
 
-	public boolean hasVoted(Long roomId, Long userId) {
-		return !em.createNamedQuery("hasVoted", RoomPollAnswer.class)
+	public boolean notVoted(Long roomId, Long userId) {
+		return em.createNamedQuery("notVoted", RoomPollAnswer.class)
 				.setParameter(PARAM_ROOMID, roomId)
 				.setParameter(PARAM_USER_ID, userId)
 				.getResultList().isEmpty();

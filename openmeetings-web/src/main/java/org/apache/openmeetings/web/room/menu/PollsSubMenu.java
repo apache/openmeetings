@@ -18,13 +18,6 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.PARAM_ACTION;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
-import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
-
-import java.io.Serializable;
-
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -45,6 +38,13 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.Serializable;
+
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.PARAM_ACTION;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
+import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 public class PollsSubMenu implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -160,7 +160,7 @@ public class PollsSubMenu implements Serializable {
 		pollsMenu.setEnabled(moder || r.isAllowUserQuestions());
 		pollQuickMenuItem.setEnabled(room.getClient().hasRight(Room.Right.presenter) && !qpollManager.isStarted(r.getId()));
 		pollCreateMenuItem.setEnabled(moder);
-		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !pollDao.hasVoted(r.getId(), getUserId()));
+		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && pollDao.notVoted(r.getId(), getUserId()));
 		pollResultMenuItem.setEnabled(pollExists || !pollDao.getArchived(r.getId()).isEmpty());
 	}
 

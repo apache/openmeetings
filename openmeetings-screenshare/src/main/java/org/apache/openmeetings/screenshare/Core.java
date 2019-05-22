@@ -18,20 +18,6 @@
  */
 package org.apache.openmeetings.screenshare;
 
-import static java.lang.Boolean.TRUE;
-import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.screenshare.util.Util.getQurtzProps;
-import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.net.ConnectException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import org.apache.openmeetings.screenshare.gui.ScreenDimensions;
 import org.apache.openmeetings.screenshare.gui.ScreenSharerFrame;
 import org.apache.openmeetings.screenshare.job.RemoteJob;
@@ -55,6 +41,20 @@ import org.red5.server.net.rtmp.event.Notify;
 import org.red5.server.net.rtmp.status.StatusCodes;
 import org.slf4j.Logger;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.net.ConnectException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import static java.lang.Boolean.TRUE;
+import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.screenshare.util.Util.getQurtzProps;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	private static final Logger log = getLogger(Core.class);
@@ -174,8 +174,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 				break;
 			case rtmps:
 				if (nativeSsl) {
-					RTMPSScreenShare client = new RTMPSScreenShare(this);
-					instance = client;
+					instance = new RTMPSScreenShare(this);
 				} else {
 					instance = new RTMPTSScreenShare(this);
 				}

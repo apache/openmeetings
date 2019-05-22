@@ -33,7 +33,7 @@ public class RTMPTScreenShare extends RTMPTClient implements IScreenShare {
 
 	public RTMPTScreenShare(Core core) {
 		this.core = core;
-	};
+	}
 
 	@Override
 	public void connectionOpened(RTMPConnection conn) {

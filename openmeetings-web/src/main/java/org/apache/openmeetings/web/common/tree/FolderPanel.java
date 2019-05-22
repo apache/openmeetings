@@ -18,11 +18,13 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
-
-import java.util.Map.Entry;
-
+import com.github.openjson.JSONObject;
+import com.googlecode.wicket.jquery.core.IJQueryWidget.JQueryWidget;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.interaction.draggable.DraggableBehavior;
+import com.googlecode.wicket.jquery.ui.interaction.draggable.IDraggableListener;
+import com.googlecode.wicket.jquery.ui.interaction.droppable.DroppableBehavior;
+import com.googlecode.wicket.jquery.ui.interaction.droppable.IDroppableListener;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -46,13 +48,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
-import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.core.IJQueryWidget.JQueryWidget;
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.interaction.draggable.DraggableBehavior;
-import com.googlecode.wicket.jquery.ui.interaction.draggable.IDraggableListener;
-import com.googlecode.wicket.jquery.ui.interaction.droppable.DroppableBehavior;
-import com.googlecode.wicket.jquery.ui.interaction.droppable.IDroppableListener;
+import java.util.Map.Entry;
+
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 
 public class FolderPanel extends Panel implements IDraggableListener, IDroppableListener {
 	private static final long serialVersionUID = 1L;
@@ -77,7 +76,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 	protected void onInitialize() {
 		super.onInitialize();
 		final BaseFileItem f = (BaseFileItem)getDefaultModelObject();
-		boolean editable = !treePanel.isReadOnly() && !f.isReadOnly();
+		boolean editable = treePanel.isEditable() && !f.isReadOnly();
 		final String selector = JQueryWidget.getSelector(this);
 		if (f.getType() == Type.Folder && editable) {
 			add(new DroppableBehavior(
@@ -87,7 +86,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 						.set("accept", Options.asString(getDefaultModelObject() instanceof Recording ? ".recorditem" : ".fileitem"))
 					, this));
 		}
-		if (f.getId() != null && !treePanel.isReadOnly()) {
+		if (f.getId() != null && treePanel.isEditable()) {
 			add(new DraggableBehavior(
 					selector
 					, new Options()

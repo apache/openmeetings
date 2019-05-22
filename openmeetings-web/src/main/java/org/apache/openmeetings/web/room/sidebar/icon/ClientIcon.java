@@ -18,12 +18,6 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
-import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
-import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
-
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -34,6 +28,12 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
 public abstract class ClientIcon extends WebMarkupContainer {
 	private static final long serialVersionUID = 1L;
@@ -57,7 +57,7 @@ public abstract class ClientIcon extends WebMarkupContainer {
 	protected void onInitialize() {
 		super.onInitialize();
 		Client rc = getRoomClient();
-		self = rc == null ? false : rc.getUid().equals(uid);
+		self = rc != null && rc.getUid().equals(uid);
 		update(null);
 	}
 
@@ -99,12 +99,12 @@ public abstract class ClientIcon extends WebMarkupContainer {
 
 	protected boolean hasRight(Right right) {
 		Client c = getClient();
-		return c == null ? false : c.hasRight(right);
+		return c != null && c.hasRight(right);
 	}
 
 	protected boolean roomHasRight(Right right) {
 		Client rc = getRoomClient();
-		return rc == null ? false : rc.hasRight(right);
+		return rc != null && rc.hasRight(right);
 	}
 
 	protected Client getRoomClient() {

@@ -18,7 +18,11 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import java.util.Date;
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.user.User;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,15 +34,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
-import org.apache.openmeetings.db.entity.user.User;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import java.util.Date;
 
 @Entity
-@NamedQuery(name = "hasVoted", query = "SELECT rpa FROM RoomPollAnswer rpa WHERE rpa.roomPoll.room.id = :roomId "
+@NamedQuery(name = "notVoted", query = "SELECT rpa FROM RoomPollAnswer rpa WHERE rpa.roomPoll.room.id = :roomId "
 		+ "AND rpa.votedUser.id = :userId AND rpa.roomPoll.archived = false")
 @Table(name = "room_poll_answer")
 @Root(name="roompollanswer")

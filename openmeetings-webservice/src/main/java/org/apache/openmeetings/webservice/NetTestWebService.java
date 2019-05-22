@@ -19,9 +19,9 @@
 package org.apache.openmeetings.webservice;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.ThreadLocalRandom;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -32,10 +32,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service("netTestWebService")
 @Path("/networktest")
@@ -105,7 +104,7 @@ public class NetTestWebService {
 				, count;
 		while ((count = stream.read(b)) > -1) {
 			totalCount += count;
-		};
+		}
 		log.debug("Total bytes read {}", totalCount);
 	}
 

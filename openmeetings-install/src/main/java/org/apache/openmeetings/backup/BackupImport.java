@@ -1072,7 +1072,7 @@ public class BackupImport {
 			if (listNodeName.equals(listNode1.getName())) {
 				InputNode item1 = listNode1.getNext();
 				while (item1 != null) {
-					T o = ser.read(clazz, item1, false);;
+					T o = ser.read(clazz, item1, false);
 					if (consumer != null) {
 						consumer.accept(listNode2, o);
 					}

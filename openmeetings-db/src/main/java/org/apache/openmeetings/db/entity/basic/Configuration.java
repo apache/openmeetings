@@ -18,7 +18,11 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
-import static java.lang.Boolean.TRUE;
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
+import org.apache.openmeetings.db.entity.user.User;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,11 +36,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.HistoricalEntity;
-import org.apache.openmeetings.db.entity.user.User;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import static java.lang.Boolean.TRUE;
 
 @Entity
 @NamedQuery(name = "forceGetConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.key LIKE :key")
@@ -158,7 +158,7 @@ public class Configuration extends HistoricalEntity {
 	}
 
 	public boolean getValueB() {
-		return value == null ? false : TRUE.equals(Boolean.valueOf(value));
+		return value != null && TRUE.equals(Boolean.valueOf(value));
 	}
 
 	public void setValueB(boolean value) {

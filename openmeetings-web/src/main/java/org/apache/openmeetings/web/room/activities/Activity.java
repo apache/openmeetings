@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.web.room.activities;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+
+import java.io.Serializable;
+import java.util.Date;
 
 public class Activity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -41,11 +41,11 @@ public class Activity implements Serializable {
 
 		private final boolean action;
 
-		private Type() {
+		Type() {
 			this(false);
 		}
 
-		private Type(boolean action) {
+		Type(boolean action) {
 			this.action = action;
 		}
 
