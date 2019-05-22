@@ -133,7 +133,7 @@
 									<goal>download-single</goal>
 								</goals>
 								<configuration>
-									<url>http://archive.apache.org/dist/tomcat/tomcat-9/v${tomcat.version}/bin</url>
+									<url>https://archive.apache.org/dist/tomcat/tomcat-9/v${tomcat.version}/bin</url>
 									<fromFile>apache-tomcat-${tomcat.version}.tar.gz</fromFile>
 									<toDir>${server-file.dir}</toDir>
 									<skip>${server.dwnd.skip}</skip>
