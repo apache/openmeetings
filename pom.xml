@@ -120,7 +120,7 @@
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
-		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml,target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+		<jacoco.binary.path>${project.basedir}/../target/jacoco.exec</jacoco.binary.path>
 		<db_user></db_user>
 		<db_pass></db_pass>
 	</properties>
@@ -1000,6 +1000,10 @@
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
 					<version>${jacoco-maven-plugin.versoin}</version>
+					<configuration>
+						<destFile>${jacoco.binary.path}</destFile>
+						<append>true</append>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>de.thetaphi</groupId>
@@ -1540,10 +1544,13 @@
 						<reportSets>
 							<reportSet>
 								<reports>
-									<report>report-aggregate</report>
+									<report>report</report>
 								</reports>
 							</reportSet>
 						</reportSets>
+						<configuration>
+							<dataFile>${jacoco.binary.path}</dataFile>
+						</configuration>
 					</plugin>
 				</plugins>
 			</reporting>
