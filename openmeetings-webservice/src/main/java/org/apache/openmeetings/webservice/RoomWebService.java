@@ -423,7 +423,7 @@ public class RoomWebService extends BaseWebService {
 	{
 		log.debug("[cleanwb] room id {}", id);
 		return performCall(sid, User.Right.Soap, sd -> {
-			wbManager.remove(id);
+			wbManager.clean(id, sd.getUserId());
 			return new ServiceResult("", Type.SUCCESS);
 		});
 	}

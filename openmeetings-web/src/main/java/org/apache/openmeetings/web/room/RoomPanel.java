@@ -540,6 +540,11 @@ public class RoomPanel extends BasePanel {
 					case kurentoStatus:
 						menu.update(handler);
 						break;
+					case wbReload:
+						if (Room.Type.interview != r.getType()) {
+							wb.reloadWb(handler);
+						}
+						break;
 				}
 			}
 		}

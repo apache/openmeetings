@@ -439,5 +439,17 @@ var DrawWbArea = function() {
 		$(window).off('keyup', _deleteHandler);
 	};
 	self.updateAreaClass = function() {};
+	self.doCleanAll = function() {
+		if (!_inited) {
+			return;
+		}
+		tabs.find('li').each(function() {
+			const wbId = $(this).data('wb-id')
+				, tabId = self.getWbTabId(wbId);
+			$(this).remove();
+			$('#' + tabId).remove();
+		});
+		refreshTabs();
+	};
 	return self;
 };

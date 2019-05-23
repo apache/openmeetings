@@ -183,6 +183,13 @@ public class WbPanel extends AbstractWbPanel {
 	}
 
 	@Override
+	public void reloadWb(IPartialPageRequestHandler handler) {
+		StringBuilder sb = new StringBuilder("WbArea.doCleanAll();");
+		internalWbLoad(sb);
+		handler.appendJavaScript(sb);
+	}
+
+	@Override
 	public void processWbAction(WbAction a, JSONObject obj, IPartialPageRequestHandler handler) throws IOException {
 		Client c = rp.getClient();
 		if (c == null) {

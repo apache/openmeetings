@@ -53,6 +53,10 @@ public abstract class AbstractWbPanel extends Panel {
 		return this;
 	}
 
+	public void reloadWb(IPartialPageRequestHandler handler) {
+		//designed to be empty
+	}
+
 	protected abstract String getRole();
 
 	/**
