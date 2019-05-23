@@ -1536,24 +1536,25 @@
 		</profile>
 		<profile>
 			<id>jacoco-report</id>
-			<reporting>
+			<build>
 				<plugins>
 					<plugin>
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
-						<reportSets>
-							<reportSet>
-								<reports>
-									<report>report</report>
-								</reports>
-							</reportSet>
-						</reportSets>
-						<configuration>
-							<dataFile>${jacoco.binary.path}</dataFile>
-						</configuration>
+						<executions>
+							<execution>
+								<id>jacoco-report</id>
+								<goals>
+									<goal>report</goal>
+								</goals>
+								<configuration>
+									<dataFile>${jacoco.binary.path}</dataFile>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
-			</reporting>
+			</build>
 		</profile>
 	</profiles>
 </project>
