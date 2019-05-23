@@ -418,7 +418,7 @@ public class RoomWebService extends BaseWebService {
 	{
 		log.debug("[cleanwb] room id {}", id);
 		return performCall(sid, User.Right.Soap, sd -> {
-			getBean(IWhiteboardManager.class).remove(id);
+			getBean(IWhiteboardManager.class).clean(id, sd.getUserId());
 			return new ServiceResult("", Type.SUCCESS);
 		});
 	}

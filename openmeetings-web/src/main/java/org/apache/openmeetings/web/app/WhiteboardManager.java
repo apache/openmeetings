@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
@@ -34,13 +35,16 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomFile;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IWhiteboardManager;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -88,7 +92,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 	}
 
 	@Override
-	public void remove(Long roomId) {
+	public void clean(Long roomId, Long userId) {
 		if (roomId == null) {
 			return;
 		}
@@ -101,6 +105,12 @@ public class WhiteboardManager implements IWhiteboardManager {
 					map().unlock(roomId);
 				}
 			}
+			new Thread(() -> {
+				ensureApplication();
+				User u = new User();
+				u.setId(userId);
+				WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.wbReload));
+			}).start();
 		} catch (InterruptedException e) {
 			log.warn("Unexpected exception while map clean-up", e);
 		}

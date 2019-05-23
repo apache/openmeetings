@@ -79,6 +79,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.Method;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -180,6 +181,13 @@ public class WbPanel extends AbstractWbPanel {
 	@Override
 	protected void updateWbActionAttributes(AjaxRequestAttributes attributes) {
 		attributes.setMethod(Method.POST);
+	}
+
+	@Override
+	public void reloadWb(IPartialPageRequestHandler handler) {
+		StringBuilder sb = new StringBuilder("WbArea.doCleanAll();");
+		internalWbLoad(sb);
+		handler.appendJavaScript(sb);
 	}
 
 	@Override

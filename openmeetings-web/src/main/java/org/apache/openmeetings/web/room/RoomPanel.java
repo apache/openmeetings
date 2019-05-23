@@ -614,6 +614,11 @@ public class RoomPanel extends BasePanel {
 						handler.appendJavaScript(getQuickPollJs());
 					}
 						break;
+					case wbReload:
+						if (Room.Type.interview != r.getType()) {
+							wb.reloadWb(handler);
+						}
+						break;
 				}
 			}
 		}
