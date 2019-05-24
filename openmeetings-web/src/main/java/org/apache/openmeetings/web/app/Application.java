@@ -18,14 +18,36 @@
  */
 package org.apache.openmeetings.web.app;
 
-import com.hazelcast.config.XmlConfigBuilder;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.ITopic;
-import com.hazelcast.core.Member;
-import com.hazelcast.core.MemberAttributeEvent;
-import com.hazelcast.core.MembershipEvent;
-import com.hazelcast.core.MembershipListener;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getChromeExtensionUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getContentSecurityPolicy;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getxFrameOptions;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
+import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
+import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
+import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
+import static org.wicketstuff.dashboard.DashboardContextInitializer.DASHBOARD_CONTEXT_KEY;
+
+import java.io.File;
+import java.net.UnknownHostException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import javax.websocket.WebSocketContainer;
+
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -110,34 +132,14 @@ import org.wicketstuff.dashboard.web.DashboardContext;
 import org.wicketstuff.dashboard.web.DashboardSettings;
 import org.wicketstuff.datastores.hazelcast.HazelcastDataStore;
 
-import javax.websocket.WebSocketContainer;
-import java.io.File;
-import java.net.UnknownHostException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getChromeExtensionUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getContentSecurityPolicy;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getxFrameOptions;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
-import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
-import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
-import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
-import static org.wicketstuff.dashboard.DashboardContextInitializer.DASHBOARD_CONTEXT_KEY;
+import com.hazelcast.config.XmlConfigBuilder;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.ITopic;
+import com.hazelcast.core.Member;
+import com.hazelcast.core.MemberAttributeEvent;
+import com.hazelcast.core.MembershipEvent;
+import com.hazelcast.core.MembershipListener;
 
 @Component
 public class Application extends AuthenticatedWebApplication implements IApplication {
@@ -535,12 +537,14 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 	}
 
-	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp, String _baseUrl) {
+	public static boolean isUrlValid(String url) {
+		return new UrlValidator(new String[] {"http", "https"}).isValid(url);
+	}
+
+	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp, String inBaseUrl) {
 		RequestCycle rc = RequestCycle.get();
-		String baseUrl = getBaseUrl();
-		if (!new UrlValidator(new String[] {"http", "https"}).isValid(baseUrl) && !Strings.isEmpty(_baseUrl)) {
-			baseUrl = _baseUrl;
-		}
+		String baseUrl = isUrlValid(inBaseUrl) ? inBaseUrl
+				: (isUrlValid(getBaseUrl()) ? getBaseUrl() : "");
 		return rc.getUrlRenderer().renderFullUrl(Url.parse(baseUrl + rc.mapUrlFor(clazz, pp)));
 	}
 
