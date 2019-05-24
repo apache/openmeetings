@@ -162,7 +162,7 @@
 			<name>Maxim Solodovnik</name>
 			<email>solomax666@gmail.com</email>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 			<roles>
 				<role>chair</role>
 				<role>architect</role>
@@ -175,7 +175,7 @@
 			<name>Vasiliy Degtyarev</name>
 			<email>vdegtyarev1964@gmail.com</email>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 			<roles>
 				<role>developer</role>
 				<role>tester</role>
@@ -187,7 +187,7 @@
 			<name>Irina Arkhipets</name>
 			<email>Irina.Arkhipets@gmail.com</email>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 			<roles>
 				<role>support</role>
 				<role>pmc</role>
@@ -208,7 +208,7 @@
 			<id>dkandrov</id>
 			<name>Denis Kandrov</name>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 			<roles>
 				<role>support</role>
 				<role>pmc</role>
@@ -243,7 +243,7 @@
 		<developer>
 			<name>Timur Tleukenov</name>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 			<roles>
 				<role>developer</role>
 				<role>pmc</role>
@@ -252,7 +252,7 @@
 		<developer>
 			<name>Dmitry Bezhetskov</name>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 			<roles>
 				<role>developer</role>
 			</roles>
@@ -274,7 +274,7 @@
 		<developer>
 			<name>Yulia Algaer</name>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 		</developer>
 		<developer>
 			<name>Artyom Horuzhenko</name>
@@ -283,7 +283,7 @@
 			<id>daehn</id>
 			<name>Peter Dähn</name>
 			<organization>VCRP</organization>
-			<organizationUrl>http://www.vcrp.de</organizationUrl>
+			<organizationUrl>https://www.vcrp.de/</organizationUrl>
 		</developer>
 		<developer>
 			<id>onoke</id>
