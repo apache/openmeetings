@@ -463,12 +463,14 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return link;
 	}
 
-	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp, String _baseUrl) {
+	public static boolean isUrlValid(String url) {
+		return new UrlValidator(new String[] {"http", "https"}).isValid(url);
+	}
+
+	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp, String inBaseUrl) {
 		RequestCycle rc = RequestCycle.get();
-		String baseUrl = getBaseUrl();
-		if (!new UrlValidator(new String[] {"http", "https"}).isValid(baseUrl) && !Strings.isEmpty(_baseUrl)) {
-			baseUrl = _baseUrl;
-		}
+		String baseUrl = isUrlValid(inBaseUrl) ? inBaseUrl
+				: (isUrlValid(getBaseUrl()) ? getBaseUrl() : "");
 		return rc.getUrlRenderer().renderFullUrl(Url.parse(baseUrl + rc.mapUrlFor(clazz, pp)));
 	}
 
