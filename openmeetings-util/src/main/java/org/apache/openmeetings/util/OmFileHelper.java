@@ -110,11 +110,6 @@ public class OmFileHelper {
 		setOmHome(new File(home));
 	}
 
-	public static File getRootDir() {
-		// hack !!!!
-		return getOmHome().getParentFile().getParentFile();
-	}
-
 	public static File getOmHome() {
 		return OM_HOME;
 	}

@@ -33,6 +33,7 @@ import org.apache.openmeetings.web.room.RoomResourceReference;
 import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
 import org.apache.openmeetings.web.user.record.PngRecordingResourceReference;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.FileSystemResourceReference;
@@ -89,8 +90,10 @@ public class WbWebSocketHelper extends WebSocketHelper {
 		return getWbJson(wbId).put(PARAM_OBJ, o);
 	}
 
-	private static CharSequence urlFor(final ResourceReference resourceReference, PageParameters parameters) {
-		return RequestCycle.get().urlFor(resourceReference, parameters);
+	private static CharSequence urlFor(final ResourceReference ref, PageParameters params) {
+		RequestCycle rc = RequestCycle.get();
+		ResourceReferenceRequestHandler handler = new ResourceReferenceRequestHandler(ref, params);
+		return rc.getUrlRenderer().renderContextRelativeUrl(rc.mapUrlFor(handler).toString());
 	}
 
 	public static JSONObject addFileUrl(String ruid, JSONObject _file, BaseFileItem fi, Client c) {

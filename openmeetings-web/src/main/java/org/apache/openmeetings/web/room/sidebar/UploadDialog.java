@@ -53,6 +53,7 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
@@ -248,9 +249,11 @@ public class UploadDialog extends AbstractFormDialog<String> {
 
 			final Application app = Application.get();
 			final WebSession session = WebSession.get();
+			final RequestCycle rc = RequestCycle.get();
 			new Thread(() -> {
 				ThreadContext.setApplication(app);
 				ThreadContext.setSession(session);
+				ThreadContext.setRequestCycle(rc);
 				convertAll();
 				ThreadContext.detach();
 			}).start();
