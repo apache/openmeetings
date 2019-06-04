@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
+import java.time.Duration;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,6 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.time.Duration;
 
 /**
  * Modify the language selection, add/delete language
@@ -84,7 +84,7 @@ public class LangForm extends Form<Void> {
 		add(languages);
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
-		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
+		add(new AjaxFormValidatingBehavior("keydown", Duration.ofSeconds(1)));
 	}
 
 	static List<Map.Entry<Long, Locale>> getLanguages() {

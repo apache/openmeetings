@@ -18,11 +18,12 @@
  */
 package org.apache.openmeetings.web.admin;
 
+import java.time.Duration;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.util.time.Duration;
 
 /**
  * provides basic functionality to insert, update, remove, refresh record in
@@ -36,7 +37,7 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 	private static final long serialVersionUID = 1L;
 	private AdminActionsPanel<T> savePanel;
 	protected final AjaxFormValidatingBehavior validationBehavior
-			= new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND);
+			= new AjaxFormValidatingBehavior("keydown", Duration.ofSeconds(1));
 
 	public AdminBaseForm(String id, IModel<T> object) {
 		super(id, object);

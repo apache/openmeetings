@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.web.room;
 
-import org.apache.openmeetings.web.app.WebSession;
+import java.time.Duration;
+
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.util.time.Duration;
 
 public abstract class OmRedirectTimerBehavior extends AbstractAjaxTimerBehavior {
 	private static final long serialVersionUID = 1L;
@@ -30,14 +30,14 @@ public abstract class OmRedirectTimerBehavior extends AbstractAjaxTimerBehavior 
 	private final String labelId;
 
 	public OmRedirectTimerBehavior(int delay, String labelId) {
-		super(Duration.ONE_SECOND);
+		super(Duration.ofSeconds(1));
 		clock = System.currentTimeMillis();
 		this.delay = delay;
 		this.labelId = labelId;
 	}
 
 	protected static String getTime(int remain) {
-		return Duration.seconds(remain).toString(WebSession.get().getLocale());
+		return Duration.ofSeconds(remain).toString();
 	}
 
 	public static String getText(String text, int remain) {

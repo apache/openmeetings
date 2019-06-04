@@ -18,13 +18,13 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static java.time.Duration.ZERO;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getChromeExtensionUrl;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.wb.InterviewWbPanel.INTERVIEWWB_JS_REFERENCE;
 import static org.apache.openmeetings.web.room.wb.WbPanel.WB_JS_REFERENCE;
-import static org.apache.wicket.util.time.Duration.NONE;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -198,7 +198,7 @@ public class RoomPanel extends BasePanel {
 		private static final long serialVersionUID = 1L;
 
 		{
-			setCacheDuration(NONE);
+			setCacheDuration(ZERO);
 			setFileName("whiteboard.pdf");
 		}
 

@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.user.chat;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.time.Duration.ZERO;
 import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
@@ -26,7 +27,6 @@ import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
-import static org.apache.wicket.util.time.Duration.NONE;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 		private final String quoteReplacement = new StringBuilder().append(QUOTE_CHAR).append(QUOTE_CHAR).toString();
 
 		{
-			setCacheDuration(NONE);
+			setCacheDuration(ZERO);
 		}
 
 		@Override

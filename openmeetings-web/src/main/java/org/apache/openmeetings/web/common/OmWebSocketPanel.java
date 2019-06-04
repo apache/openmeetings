@@ -22,6 +22,7 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.KURENTO_TYPE;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.openmeetings.core.remote.KurentoHandler;
@@ -44,7 +45,6 @@ import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.protocol.ws.api.message.ErrorMessage;
 import org.apache.wicket.protocol.ws.api.message.TextMessage;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +55,7 @@ public abstract class OmWebSocketPanel extends Panel {
 	private static final Logger log = LoggerFactory.getLogger(OmWebSocketPanel.class);
 	public static final String CONNECTED_MSG = "socketConnected";
 	private final AtomicBoolean connected = new AtomicBoolean();
-	private final AbstractAjaxTimerBehavior pingTimer = new AbstractAjaxTimerBehavior(Duration.seconds(30)) {
+	private final AbstractAjaxTimerBehavior pingTimer = new AbstractAjaxTimerBehavior(Duration.ofSeconds(30)) {
 		private static final long serialVersionUID = 1L;
 
 		@Override

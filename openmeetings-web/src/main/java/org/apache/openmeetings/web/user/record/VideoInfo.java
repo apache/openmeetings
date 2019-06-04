@@ -18,11 +18,17 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import com.googlecode.wicket.jquery.ui.JQueryIcon;
-import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
-import com.googlecode.wicket.jquery.ui.form.button.AjaxSplitButton;
-import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
-import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
+import static java.time.Duration.ZERO;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
+import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.openmeetings.core.converter.IRecordingConverter;
 import org.apache.openmeetings.core.converter.InterviewConverter;
 import org.apache.openmeetings.core.converter.RecordingConverter;
@@ -46,16 +52,11 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.wicket.util.time.Duration.NONE;
+import com.googlecode.wicket.jquery.ui.JQueryIcon;
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
+import com.googlecode.wicket.jquery.ui.form.button.AjaxSplitButton;
+import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
+import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
 
 public class VideoInfo extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -92,7 +93,7 @@ public class VideoInfo extends Panel {
 				@Override
 				protected ResourceResponse createResourceResponse(Attributes attr, Path path) {
 					ResourceResponse response = super.createResourceResponse(attr, path);
-					response.setCacheDuration(NONE);
+					response.setCacheDuration(ZERO);
 					return response;
 				}
 			}.respond(attributes);

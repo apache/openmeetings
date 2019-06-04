@@ -32,6 +32,7 @@ import java.net.URI;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -78,7 +79,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
-import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
@@ -668,7 +668,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			super(paramsStep4);
 
 			// Timer //
-			container.add(timer = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
+			container.add(timer = new AbstractAjaxTimerBehavior(Duration.ofSeconds(1)) {
 				private static final long serialVersionUID = 1L;
 
 				@Override

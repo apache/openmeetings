@@ -18,12 +18,13 @@
  */
 package org.apache.openmeetings.web.admin.backup;
 
+import static java.time.Duration.ZERO;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
-import static org.apache.wicket.util.time.Duration.NONE;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
+import java.time.Duration;
 import java.util.Date;
 
 import org.apache.openmeetings.backup.BackupExport;
@@ -48,7 +49,6 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,7 +121,7 @@ public class BackupPanel extends AdminBasePanel {
 						@Override
 						protected ResourceResponse createResourceResponse(Attributes attr, Path path) {
 							ResourceResponse response = super.createResourceResponse(attr, path);
-							response.setCacheDuration(NONE);
+							response.setCacheDuration(ZERO);
 							return response;
 						}
 					}.respond(attributes);
@@ -154,7 +154,7 @@ public class BackupPanel extends AdminBasePanel {
 					target.add(feedback);
 				}
 			});
-			add(timer = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
+			add(timer = new AbstractAjaxTimerBehavior(Duration.ofSeconds(1)) {
 				private static final long serialVersionUID = 1L;
 
 				@Override

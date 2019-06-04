@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
+import static java.time.Duration.ZERO;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.wicket.request.resource.ContentDisposition.ATTACHMENT;
-import static org.apache.wicket.util.time.Duration.NONE;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -180,7 +180,7 @@ public class LangPanel extends AdminBasePanel {
 
 			{
 				setContentDisposition(ATTACHMENT);
-				setCacheDuration(NONE);
+				setCacheDuration(ZERO);
 			}
 
 			@Override
