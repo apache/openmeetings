@@ -28,6 +28,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.DoubleConsumer;
 
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.file.FileItem;
@@ -42,8 +44,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class VideoConverter extends BaseConverter {
 	private static final Logger log = LoggerFactory.getLogger(VideoConverter.class);
+	private static final double STEP = 1. / 5;
 
-	public void convertVideo(FileItem f, StoredFile sf, ProcessResultList logs) {
+	public void convertVideo(FileItem f, StoredFile sf, ProcessResultList logs, Optional<DoubleConsumer> progress) {
 		try {
 			final File mp4 = f.getFile(EXTENSION_MP4);
 			f.setType(Type.Video);
@@ -56,6 +59,7 @@ public class VideoConverter extends BaseConverter {
 				tmp = Files.createTempFile("video", ".mp4");
 				input = Files.move(mp4.toPath(), tmp, REPLACE_EXISTING).toFile().getCanonicalPath();
 			}
+			progress.ifPresent(theProgress -> theProgress.accept(STEP));
 			List<String> args = new ArrayList<>(Arrays.asList(getPathToFFMPEG(), "-y"));
 			if (sf.isAudio()) {
 				// need to add background image, it should be jpg since black on transparent will be invisible
@@ -73,6 +77,7 @@ public class VideoConverter extends BaseConverter {
 			args.add(mp4.getCanonicalPath());
 			ProcessResult res = ProcessHelper.executeScript("convert to MP4 :: " + f.getHash(), args.toArray(new String[0]));
 			logs.add(res);
+			progress.ifPresent(theProgress -> theProgress.accept(STEP));
 			if (sameExt && tmp != null) {
 				if (res.isOk()) {
 					Files.delete(tmp);
@@ -81,11 +86,14 @@ public class VideoConverter extends BaseConverter {
 					Files.move(tmp, mp4.toPath(), REPLACE_EXISTING);
 				}
 			}
+			progress.ifPresent(theProgress -> theProgress.accept(STEP));
 			//Parse the width height from the FFMPEG output
 			Dimension dim = getDimension(res.getError());
+			progress.ifPresent(theProgress -> theProgress.accept(STEP));
 			f.setWidth(dim.getWidth());
 			f.setHeight(dim.getHeight());
 			convertToPng(f, mp4.getCanonicalPath(), logs);
+			progress.ifPresent(theProgress -> theProgress.accept(STEP));
 		} catch (Exception err) {
 			log.error("[convertVideo]", err);
 			logs.add(new ProcessResult("convertToMP4", err.getMessage(), err));

@@ -18,6 +18,25 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.apache.openmeetings.util.OmFileHelper.DOC_PAGE_PREFIX;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
+import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.PROFILE_FILE_NAME;
+import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
+import static org.apache.openmeetings.util.process.ProcessResult.ZERO;
+import static org.apache.tika.metadata.HttpHeaders.CONTENT_TYPE;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
+import java.util.Optional;
+import java.util.function.DoubleConsumer;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -39,23 +58,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
-
-import static org.apache.commons.io.FileUtils.copyFile;
-import static org.apache.openmeetings.util.OmFileHelper.DOC_PAGE_PREFIX;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
-import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.PROFILE_FILE_NAME;
-import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
-import static org.apache.openmeetings.util.process.ProcessResult.ZERO;
-import static org.apache.tika.metadata.HttpHeaders.CONTENT_TYPE;
-
 @Component
 public class ImageConverter extends BaseConverter {
 	private static final Logger log = LoggerFactory.getLogger(ImageConverter.class);
@@ -64,11 +66,11 @@ public class ImageConverter extends BaseConverter {
 	@Autowired
 	private UserDao userDao;
 
-	public ProcessResultList convertImage(BaseFileItem f, StoredFile sf) throws IOException {
-		return convertImage(f, sf, new ProcessResultList());
+	public ProcessResultList convertImage(BaseFileItem f, StoredFile sf, Optional<DoubleConsumer> progress) throws IOException {
+		return convertImage(f, sf, new ProcessResultList(), progress);
 	}
 
-	public ProcessResultList convertImage(BaseFileItem f, StoredFile sf, ProcessResultList logs) throws IOException {
+	public ProcessResultList convertImage(BaseFileItem f, StoredFile sf, ProcessResultList logs, Optional<DoubleConsumer> progress) throws IOException {
 		File png = f.getFile(EXTENSION_PNG);
 		if (!sf.isPng()) {
 			File img = f.getFile(sf.getExt());
@@ -78,7 +80,9 @@ public class ImageConverter extends BaseConverter {
 		} else if (!png.exists()){
 			copyFile(f.getFile(sf.getExt()), png);
 		}
+		progress.ifPresent(theProgress -> theProgress.accept(HALF_STEP));
 		logs.add(initSize(f, png, PNG_MIME_TYPE));
+		progress.ifPresent(theProgress -> theProgress.accept(HALF_STEP));
 		return logs;
 	}
 
@@ -172,7 +176,7 @@ public class ImageConverter extends BaseConverter {
 	 * @return - result of conversion
 	 * @throws IOException in case IO exception occurred
 	 */
-	public ProcessResultList convertDocument(FileItem f, File pdf, ProcessResultList logs) throws IOException {
+	public ProcessResultList convertDocument(FileItem f, File pdf, ProcessResultList logs, Optional<DoubleConsumer> progress) throws IOException {
 		log.debug("convertDocument");
 		String[] argv = new String[] {
 			getPathToConvert()
@@ -183,6 +187,7 @@ public class ImageConverter extends BaseConverter {
 			};
 		ProcessResult res = ProcessHelper.executeScript("convert PDF to images", argv);
 		logs.add(res);
+		progress.ifPresent(theProgress -> theProgress.accept(1. / 4));
 		if (res.isOk()) {
 			File[] pages = pdf.getParentFile().listFiles(fi -> fi.isFile() && fi.getName().startsWith(DOC_PAGE_PREFIX) && fi.getName().endsWith(EXTENSION_PNG));
 			if (pages == null || pages.length == 0) {
@@ -192,6 +197,7 @@ public class ImageConverter extends BaseConverter {
 				logs.add(initSize(f, pages[0], PNG_MIME_TYPE));
 			}
 		}
+		progress.ifPresent(theProgress -> theProgress.accept(1. / 4));
 		return logs;
 	}
 }

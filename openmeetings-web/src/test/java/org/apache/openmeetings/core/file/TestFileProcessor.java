@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Optional;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.core.data.file.FileProcessor;
@@ -50,7 +51,7 @@ public class TestFileProcessor extends AbstractJUnitDefaults {
 					.setHash(randomUUID().toString())
 					.setType(BaseFileItem.Type.Recording).get();
 			try (InputStream is = new FileInputStream(getDefaultProfilePicture())) {
-				ProcessResultList result = processor.processFile(f, is);
+				ProcessResultList result = processor.processFile(f, is, Optional.empty());
 				assertFalse(result.hasError(), "Conversion should be successful");
 				assertEquals(BaseFileItem.Type.Image, f.getType(), "Type should be image");
 			}

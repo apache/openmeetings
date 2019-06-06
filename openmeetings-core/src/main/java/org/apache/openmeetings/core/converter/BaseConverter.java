@@ -18,6 +18,30 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.apache.commons.lang3.math.NumberUtils.toInt;
+import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
+import static org.apache.openmeetings.util.OmFileHelper.getPublicDir;
+import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
+import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioRate;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getVideoPreset;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
@@ -34,36 +58,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.apache.commons.io.FileUtils.copyFile;
-import static org.apache.commons.lang3.math.NumberUtils.toInt;
-import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
-import static org.apache.openmeetings.util.OmFileHelper.getPublicDir;
-import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
-import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioRate;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getVideoPreset;
-
 public abstract class BaseConverter {
 	private static final Logger log = LoggerFactory.getLogger(BaseConverter.class);
 	private static final Pattern p = Pattern.compile("\\d{2,5}(x)\\d{2,5}");
 	public static final String EXEC_EXT = System.getProperty("os.name").toUpperCase(Locale.ROOT).indexOf("WINDOWS") < 0 ? "" : ".exe";
 	private static final int MINUTE_MULTIPLIER = 60 * 1000;
 	public static final int TIME_TO_WAIT_FOR_FRAME = 15 * MINUTE_MULTIPLIER;
+	public static final double HALF_STEP = 1. / 2;
 
 	@Autowired
 	protected ConfigurationDao cfgDao;

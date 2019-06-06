@@ -25,6 +25,8 @@ import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Optional;
+import java.util.function.DoubleConsumer;
 
 import org.apache.openmeetings.core.converter.DocumentConverter;
 import org.apache.openmeetings.core.converter.ImageConverter;
@@ -55,7 +57,7 @@ public class FileProcessor {
 	@Autowired
 	private DocumentConverter docConverter;
 
-	public ProcessResultList processFile(FileItem f, InputStream is) throws Exception {
+	public ProcessResultList processFile(FileItem f, InputStream is, Optional<DoubleConsumer> progress) throws Exception {
 		ProcessResultList logs = new ProcessResultList();
 		// Generate a random string to prevent any problems with
 		// foreign characters and duplicates
@@ -86,7 +88,7 @@ public class FileProcessor {
 			}
 			f.setHash(hash);
 
-			processFile(f, sf, temp, logs);
+			processFile(f, sf, temp, logs, progress);
 		} catch (Exception e) {
 			log.debug("Error while processing the file", e);
 			throw e;
@@ -98,7 +100,7 @@ public class FileProcessor {
 		return logs;
 	}
 
-	private void processFile(FileItem f, StoredFile sf, File temp, ProcessResultList logs) throws Exception {
+	private void processFile(FileItem f, StoredFile sf, File temp, ProcessResultList logs, Optional<DoubleConsumer> progress) throws Exception {
 		try {
 			File file = f.getFile(sf.getExt());
 			log.debug("writing file to: {}", file);
@@ -111,7 +113,7 @@ public class FileProcessor {
 					log.debug("Office document: {}", file);
 					copyFile(temp, file);
 					// convert to pdf, thumbs, swf and xml-description
-					docConverter.convertPDF(f, sf, logs);
+					docConverter.convertPDF(f, sf, logs, progress);
 					break;
 				case PollChart:
 					log.debug("uploaded chart file"); // NOT implemented yet
@@ -120,11 +122,11 @@ public class FileProcessor {
 					// convert it to PNG
 					log.debug("##### convert it to PNG: ");
 					copyFile(temp, file);
-					imageConverter.convertImage(f, sf);
+					imageConverter.convertImage(f, sf, progress);
 					break;
 				case Video:
 					copyFile(temp, file);
-					videoConverter.convertVideo(f, sf, logs);
+					videoConverter.convertVideo(f, sf, logs, progress);
 					break;
 				default:
 					break;

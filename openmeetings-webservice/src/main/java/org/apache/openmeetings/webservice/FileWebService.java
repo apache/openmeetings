@@ -22,6 +22,7 @@ import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.jws.WebMethod;
@@ -158,7 +159,7 @@ public class FileWebService extends BaseWebService {
 			f.setInsertedBy(sd.getUserId());
 			if (stream != null) {
 				try {
-					ProcessResultList result = fileProcessor.processFile(f, stream);
+					ProcessResultList result = fileProcessor.processFile(f, stream, Optional.empty());
 					if (result.hasError()) {
 						throw new ServiceException(result.getLogMessage());
 					}
