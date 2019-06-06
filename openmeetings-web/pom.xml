@@ -446,7 +446,7 @@
 						</goals>
 						<configuration>
 							<overwrite>true</overwrite>
-							<outputDirectory>${project.build.directory}/test-classes</outputDirectory>
+							<outputDirectory>${project.build.directory}/test-root/WEB-INF/classes/</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${project.basedir}/src/main/java</directory>
@@ -479,14 +479,6 @@
 										<include>**/*.properties</include>
 									</includes>
 								</resource>
-								<resource>
-									<directory>${project.build.directory}/generated-test-res</directory>
-									<filtering>true</filtering>
-								</resource>
-								<resource>
-									<directory>${project.build.directory}/test-root/WEB-INF/classes/</directory>
-									<filtering>true</filtering>
-								</resource>
 							</resources>
 							<skip>${om.quick.build}</skip>
 						</configuration>
@@ -516,8 +508,8 @@
 						<phase>generate-test-resources</phase>
 						<configuration>
 							<target>
-								<copy file="${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF/derby_persistence.xml"
-									tofile="${project.build.directory}/generated-test-res/META-INF/persistence.xml"
+								<copy file="${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF/h2_persistence.xml"
+									tofile="${project.build.directory}/test-root/WEB-INF/classes/META-INF/persistence.xml"
 									overwrite="true" force="true"/>
 							</target>
 						</configuration>
@@ -542,6 +534,9 @@
 						<current_openmeetings_log_dir>${project.build.directory}</current_openmeetings_log_dir>
 						<current_openmeetings_context_name>openmeetings</current_openmeetings_context_name>
 					</systemPropertyVariables>
+					<additionalClasspathElements>
+						<additionalClasspathElement>${project.build.directory}/test-root/WEB-INF/classes</additionalClasspathElement>
+					</additionalClasspathElements>
 					<skip>${maven.test.skip}</skip>
 				</configuration>
 			</plugin>
@@ -701,12 +696,6 @@
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-rs-client</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derbynet</artifactId>
-			<version>${derby.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

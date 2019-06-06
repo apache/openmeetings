@@ -75,7 +75,7 @@
 			<subsection name="Database">
 				<div>All servers should be configured to use the same database. It can be on the server or on the one node
 					of the cluster.<br/>
-					<div class="bd-callout bd-callout-danger">NOTE: Db other than Derby should be used</div>
+					<div class="bd-callout bd-callout-danger">NOTE: Db other than H2 should be used</div>
 				</div>
 				<ul>
 					<li>Add users who can connect to the database remotely</li>

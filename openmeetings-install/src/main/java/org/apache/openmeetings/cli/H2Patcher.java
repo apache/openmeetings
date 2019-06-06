@@ -18,12 +18,12 @@
  */
 package org.apache.openmeetings.cli;
 
-public class DerbyPatcher extends ConnectionPropertiesPatcher {
+public class H2Patcher extends ConnectionPropertiesPatcher {
 	@Override
-	protected String getUrl(String _url, String host, String _port, String _db) {
-		String db = (_db == null) ? DEFAULT_DB_NAME : _db;
-		int idx = _url.indexOf(';');
-		String suffix = idx > -1 ? _url.substring(idx) : "";
-		return String.format("jdbc:derby:%s%s", db, suffix);
+	protected String getUrl(String inUrl, String host, String _port, String inDb) {
+		String db = (inDb == null) ? "./" + DEFAULT_DB_NAME : inDb;
+		int idx = inUrl.indexOf(';');
+		String suffix = idx > -1 ? inUrl.substring(idx) : "";
+		return String.format("jdbc:h2:%s%s", db, suffix);
 	}
 }

@@ -320,7 +320,7 @@ public class Admin {
 				|| cmdl.hasOption(OPTION_DB_PORT) || cmdl.hasOption(OPTION_DB_NAME) || cmdl.hasOption(OPTION_DB_USER)
 				|| cmdl.hasOption(OPTION_DB_PASS))
 		{
-			String dbType = cmdl.getOptionValue(OPTION_DB_TYPE, DbType.derby.name());
+			String dbType = cmdl.getOptionValue(OPTION_DB_TYPE, DbType.h2.name());
 			connectionProperties = ConnectionPropertiesPatcher.patch(dbType
 					, cmdl.getOptionValue(OPTION_DB_HOST, "localhost")
 					, cmdl.getOptionValue(OPTION_DB_PORT, null)

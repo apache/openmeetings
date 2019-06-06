@@ -79,7 +79,7 @@
 				<li>
 					<b>Recommendation for production environment</b>
 					<div style="margin-top: 10px; margin-bottom:10px">
-						By default OpenMeetings uses the integrated Apache Derby database.
+						By default OpenMeetings uses the integrated H2 database.
 						For production environment you should consider using
 						<a href="MySQLConfig.html">MySQL</a>
 						,

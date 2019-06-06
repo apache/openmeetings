@@ -35,7 +35,7 @@
 	--db-type mysql --db-name openmeetings_db --email-auth-user noreply@webbase-design.de --password 123qweAsd! \
 	--system-email-address noreply@webbase-design.de --db-user root --db-host localhost --email-auth-pass 123qweasd
 			</source>
-			<p>Derby (Not recommended for production environment):</p>
+			<p>H2 (Not recommended for production environment):</p>
 			<source>./admin.sh -i -v -tz Europe/Berlin -email seba.wagner@gmail.com -group webbase -user admin --smtp-server localhost \
 	--email-auth-user noreply@webbase-design.de --password 123qweasd --system-email-address noreply@webbase-design.de --email-auth-pass 123qweasd
 			</source>

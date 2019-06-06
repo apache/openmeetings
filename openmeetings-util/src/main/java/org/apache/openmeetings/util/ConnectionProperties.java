@@ -25,18 +25,18 @@ public class ConnectionProperties implements Serializable {
 
 	public enum DbType {
 		db2
-		, derby
+		, h2
 		, mssql
 		, mysql
 		, oracle
 		, postgresql
 	}
 
-	private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-	private String url = "jdbc:derby:openmeetings";
+	private String driver = "org.h2.Driver";
+	private String url = "jdbc:h2:./omdb";
 	private String login = "user";
 	private String password = "secret";
-	private DbType dbType = DbType.derby;
+	private DbType dbType = DbType.h2;
 
 	public String getDriver() {
 		return driver;

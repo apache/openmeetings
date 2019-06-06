@@ -35,7 +35,7 @@
 		<maven.build.timestamp.format>yyyy/MM/dd HH:mm</maven.build.timestamp.format>
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
-		<db>derby</db>
+		<db>h2</db>
 		<jdk.version>11</jdk.version>
 		<!-- plugin versions -->
 		<maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
@@ -87,7 +87,7 @@
 		<jettison.version>1.4.0</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
-		<derby.version>10.14.2.0</derby.version>
+		<h2.version>1.4.199</h2.version>
 		<commons-lang3.version>3.9</commons-lang3.version>
 		<javax.mail.version>1.6.2</javax.mail.version>
 		<openjpa.version>3.1.0</openjpa.version>

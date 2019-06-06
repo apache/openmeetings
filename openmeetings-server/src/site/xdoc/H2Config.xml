@@ -13,45 +13,37 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
 	<properties>
-		<title>Apache Derby Configuration</title>
+		<title>H2 Configuration</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
-		<section name="Apache Derby Configuration">
-
+		<section name="H2 Configuration">
 			<p>
-				OpenMeetings default configuration is to use Apache Derby.
+				OpenMeetings default configuration is to use H2.
 			</p>
-
 			<p>
 				It is recommended for production environments and high
-				availibility to change to an usual relational database like MySQL,
-				Postgres or DB2.
+				availibility to change to an usual relational database like Oracle, MySQL,
+				Postgres, MSSQL or DB2.
 			</p>
 			<p>
-				For more information about Apache Derby see
-				<a href="http://db.apache.org/derby/">http://db.apache.org/derby/</a>
+				For more information about H2 see
+				<a href="https://www.h2database.com">https://www.h2database.com</a>
 			</p>
-
 			<p>
-				There is a sample configuration for Apache Derby that ships with
+				There is a sample configuration for H2 that ships with
 				every release in:
 				<br />
-				/webapps/openmeetings/WEB-INF/classes/META-INF/derby_persistence.xml
+				/webapps/openmeetings/WEB-INF/classes/META-INF/h2_persistence.xml
 			</p>
-
 			<p>
 				If you encounter issues, you can drop the db and then run the web
 				based installer again
 			</p>
-
 		</section>
-
 	</body>
-
 </document>
