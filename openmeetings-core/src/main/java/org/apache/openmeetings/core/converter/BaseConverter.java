@@ -68,6 +68,7 @@ public abstract class BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(BaseConverter.class, getWebAppRootKey());
 	private static final Pattern p = Pattern.compile("\\d{2,5}(x)\\d{2,5}");
 	public static final String EXEC_EXT = System.getProperty("os.name").toUpperCase(Locale.ROOT).indexOf("WINDOWS") < 0 ? "" : ".exe";
+	public static final double HALF_STEP = 1. / 2;
 
 	@Autowired
 	protected ConfigurationDao cfgDao;

@@ -25,6 +25,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
@@ -50,7 +51,7 @@ public class TestFileProcessor extends AbstractJUnitDefaults {
 					.setHash(UUID.randomUUID().toString())
 					.setType(BaseFileItem.Type.Recording).get();
 			try (InputStream is = new FileInputStream(getDefaultProfilePicture())) {
-				ProcessResultList result = processor.processFile(f, is);
+				ProcessResultList result = processor.processFile(f, is, Optional.empty());
 				assertFalse("Conversion should be successful", result.hasError());
 				assertEquals("Type should be image", BaseFileItem.Type.Image, f.getType());
 			}

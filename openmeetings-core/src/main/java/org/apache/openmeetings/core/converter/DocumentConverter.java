@@ -19,12 +19,15 @@
 package org.apache.openmeetings.core.converter;
 
 import static org.apache.commons.io.FileUtils.copyFile;
+import static org.apache.openmeetings.core.converter.BaseConverter.HALF_STEP;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFFICE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.file.FileItem;
@@ -50,10 +53,10 @@ public class DocumentConverter {
 	private ImageConverter imageConverter;
 
 	public ProcessResultList convertPDF(FileItem f, StoredFile sf) throws Exception {
-		return convertPDF(f, sf, new ProcessResultList());
+		return convertPDF(f, sf, new ProcessResultList(), Optional.empty());
 	}
 
-	public ProcessResultList convertPDF(FileItem f, StoredFile sf, ProcessResultList logs) throws Exception {
+	public ProcessResultList convertPDF(FileItem f, StoredFile sf, ProcessResultList logs, Optional<DoubleConsumer> progress) throws Exception {
 		boolean fullProcessing = !sf.isPdf();
 		File original = f.getFile(sf.getExt());
 		File pdf = f.getFile(EXTENSION_PDF);
@@ -64,9 +67,10 @@ public class DocumentConverter {
 		} else if (!EXTENSION_PDF.equals(sf.getExt())) {
 			copyFile(original, pdf);
 		}
+		progress.ifPresent(theProgress -> theProgress.accept(HALF_STEP));
 
 		log.debug("-- generate page images --");
-		return imageConverter.convertDocument(f, pdf, logs);
+		return imageConverter.convertDocument(f, pdf, logs, progress);
 	}
 
 	public static void createOfficeManager(String officePath, Consumer<OfficeManager> consumer) {

@@ -26,6 +26,8 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.DoubleConsumer;
 
 import org.apache.openmeetings.core.data.file.FileProcessor;
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
@@ -240,7 +242,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			progress = 0;
 			timer.restart(target);
 			setTitle(target, getString("upload.dlg.convert.title"));
-			target.add(progressBar.setVisible(true), form.setVisible(false));
+			target.add(progressBar.setModelObject(progress).setVisible(true), form.setVisible(false));
 
 			final Application app = Application.get();
 			final WebSession session = WebSession.get();
@@ -286,7 +288,8 @@ public class UploadDialog extends AbstractFormDialog<String> {
 				}
 				f.setInsertedBy(getUserId());
 
-				ProcessResultList logs = getBean(FileProcessor.class).processFile(f, fu.getInputStream());
+				ProcessResultList logs = getBean(FileProcessor.class).processFile(f, fu.getInputStream()
+						, Optional.<DoubleConsumer>of(part -> progress += (int)(100 * part * size / totalSize)));
 				for (ProcessResult res : logs.getJobs()) {
 					getBean(FileItemLogDao.class).add(res.getProcess(), f, res);
 				}
