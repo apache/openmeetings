@@ -69,7 +69,7 @@
 					, minIdle=0
 					, maxWaitMillis=10000
 					, TestOnBorrow=true
-					, Username=omdbuser
+					, Username=
 					, Password=" />
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />

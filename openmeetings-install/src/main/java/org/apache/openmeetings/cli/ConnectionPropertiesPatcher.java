@@ -68,7 +68,6 @@ public abstract class ConnectionPropertiesPatcher {
 			case h2:
 			default:
 				patcher = new H2Patcher();
-				props.setLogin("omuser");
 				break;
 		}
 		patcher.props = props;
