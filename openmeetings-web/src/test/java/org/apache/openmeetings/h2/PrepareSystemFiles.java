@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.derby;
+package org.apache.openmeetings.h2;
 
 import java.io.File;
 
@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This file is called from command line to patch the derby configuration
+ * This file is called from command line to patch the h2 configuration
  * during the automated run of Selenium
  *
  * @author swagner
@@ -50,7 +50,7 @@ public class PrepareSystemFiles {
 				conf.delete();
 			}
 
-			ConnectionPropertiesPatcher.patch(DbType.derby.name()
+			ConnectionPropertiesPatcher.patch(DbType.h2.name()
 					, "localhost"
 					, "1527"
 					, databaseHomeDirectory + "openmeetings"

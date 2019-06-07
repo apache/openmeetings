@@ -690,13 +690,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.db2.name"><![CDATA[IBM DB2]]></entry>
 	<entry key="install.wizard.db.step.dbname"><![CDATA[Specifica il nome del database]]></entry>
 	<entry key="install.wizard.db.step.dbtype"><![CDATA[Scegli il tipo di DB]]></entry>
-	<entry key="install.wizard.db.step.derby.name"><![CDATA[Apache Derby]]></entry>
+	<entry key="install.wizard.db.step.h2.name"><![CDATA[H2]]></entry>
 	<entry key="install.wizard.db.step.error.patch"><![CDATA[Errore inaspettato nell'aggiornamento del file persistence: {0}]]></entry>
 	<entry key="install.wizard.db.step.errorprops"><![CDATA[Impossibile recuperare le proprietà]]></entry>
 	<entry key="install.wizard.db.step.field.title"><![CDATA[Configurazione DB]]></entry>
 	<entry key="install.wizard.db.step.host"><![CDATA[Specifica l'host DB]]></entry>
 	<entry key="install.wizard.db.step.instructions.db2"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>]]></entry>
-	<entry key="install.wizard.db.step.instructions.derby"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/ApacheDerbyConfig.html">Apache Derby</a>]]></entry>
+	<entry key="install.wizard.db.step.instructions.h2"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/H2Config.html">H2</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mssql"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/MSSQLConfig.html">MSSQL</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mysql"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/MySQLConfig.html">MySQL</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.oracle"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/OracleConfig.html">Oracle</a>]]></entry>

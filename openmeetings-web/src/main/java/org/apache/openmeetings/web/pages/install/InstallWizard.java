@@ -273,9 +273,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 						case oracle:
 							sql = "SELECT 1 FROM DUAL";
 							break;
-						case derby:
-							sql = "SELECT 1 FROM SYSIBM.SYSDUMMY1";
-							break;
 						default:
 							sql = "SELECT 1";
 							break;
@@ -331,7 +328,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					return props; // initial select
 				}
 				props = ConnectionPropertiesPatcher.getConnectionProperties(conf);
-				if (DbType.derby != props.getDbType()) {
+				if (DbType.h2 != props.getDbType()) {
 					// resetting default login/password
 					props.setLogin(null);
 					props.setPassword(null);
@@ -345,10 +342,10 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private void initForm(boolean getProps, AjaxRequestTarget target) {
 			ConnectionProperties props = getProps ? getProps(form.getModelObject().getDbType()) : form.getModelObject();
 			form.setModelObject(props);
-			host.setVisible(props.getDbType() != DbType.derby);
-			port.setVisible(props.getDbType() != DbType.derby);
-			user.setVisible(props.getDbType() != DbType.derby);
-			pass.setVisible(props.getDbType() != DbType.derby);
+			host.setVisible(props.getDbType() != DbType.h2);
+			port.setVisible(props.getDbType() != DbType.h2);
+			user.setVisible(props.getDbType() != DbType.h2);
+			pass.setVisible(props.getDbType() != DbType.h2);
 			try {
 				switch (props.getDbType()) {
 					case mssql: {
@@ -367,7 +364,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 						dbname.setModelObject(parts[5]);
 						}
 						break;
-					case derby: {
+					case h2: {
 						host.setModelObject("");
 						port.setModelObject(0);
 						String[] parts = props.getURL().split(";");
@@ -393,7 +390,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();
-			add(new OmLabel("note", "install.wizard.db.step.note", getModelObject().getAppName(), getString("install.wizard.db.step.instructions.derby")
+			add(new OmLabel("note", "install.wizard.db.step.note", getModelObject().getAppName(), getString("install.wizard.db.step.instructions.h2")
 					, getString("install.wizard.db.step.instructions.mysql"), getString("install.wizard.db.step.instructions.postgresql")
 					, getString("install.wizard.db.step.instructions.db2"), getString("install.wizard.db.step.instructions.mssql")
 					, getString("install.wizard.db.step.instructions.oracle")).setEscapeModelStrings(false));

@@ -689,13 +689,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.db2.name"><![CDATA[IBM DB2]]></entry>
 	<entry key="install.wizard.db.step.dbname"><![CDATA[نام پایگاه داده را مشخص کنید]]></entry>
 	<entry key="install.wizard.db.step.dbtype"><![CDATA[مشخص کردن نوع DB]]></entry>
-	<entry key="install.wizard.db.step.derby.name"><![CDATA[Apache Derby]]></entry>
+	<entry key="install.wizard.db.step.h2.name"><![CDATA[H2]]></entry>
 	<entry key="install.wizard.db.step.error.patch"><![CDATA[یک خطای غیرمنتظره حین اتصال فایل پایداری:]]></entry>
 	<entry key="install.wizard.db.step.errorprops"><![CDATA[دسترسی به ویژگی ها مقدور نیست]]></entry>
 	<entry key="install.wizard.db.step.field.title"><![CDATA[پیکربندی DB]]></entry>
 	<entry key="install.wizard.db.step.host"><![CDATA[مشخص کردن DBhost]]></entry>
 	<entry key="install.wizard.db.step.instructions.db2"><![CDATA[<a target="_blank" href="https://ito.gov.ir/IBMDB2Config.html">IBM DB2</a>]]></entry>
-	<entry key="install.wizard.db.step.instructions.derby"><![CDATA[<a target="_blank" href="https://ito.gov.ir/ApacheDerbyConfig.html">Apache Derby</a>]]></entry>
+	<entry key="install.wizard.db.step.instructions.h2"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/H2Config.html">H2</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mssql"><![CDATA[<a target="_blank" href="https://ito.gov.ir/MSSQLConfig.html">MSSQL</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mysql"><![CDATA[<a target="_blank" href="https://ito.gov.ir MySQLConfig.html">MySQL</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.oracle"><![CDATA[<a target="_blank" href="https://ito.gov.ir/OracleConfig.html">Oracle</a>]]></entry>

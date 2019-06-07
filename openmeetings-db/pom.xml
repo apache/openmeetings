@@ -97,14 +97,9 @@
 			<version>${commons-pool2.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>${derby.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derbyclient</artifactId>
-			<version>${derby.version}</version>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -139,7 +134,7 @@
 					<includes>**/entity/**/*.class</includes>
 					<addDefaultConstructor>true</addDefaultConstructor>
 					<enforcePropertyRestrictions>true</enforcePropertyRestrictions>
-					<persistenceXmlFile>${project.parent.basedir}/openmeetings-web/src/main/webapp/WEB-INF/classes/META-INF/derby_persistence.xml</persistenceXmlFile>
+					<persistenceXmlFile>${project.parent.basedir}/openmeetings-web/src/main/webapp/WEB-INF/classes/META-INF/h2_persistence.xml</persistenceXmlFile>
 				</configuration>
 				<executions>
 					<execution>

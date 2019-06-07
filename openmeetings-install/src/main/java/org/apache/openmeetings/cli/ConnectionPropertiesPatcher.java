@@ -65,9 +65,9 @@ public abstract class ConnectionPropertiesPatcher {
 			case postgresql:
 				patcher = new PostgresPatcher();
 				break;
-			case derby:
+			case h2:
 			default:
-				patcher = new DerbyPatcher();
+				patcher = new H2Patcher();
 				break;
 		}
 		patcher.props = props;
@@ -129,7 +129,7 @@ public abstract class ConnectionPropertiesPatcher {
 
 	protected void patchAttribute(String[] tokens) {
 		for (int i = 0; i < tokens.length; ++i) {
-			patchProp(tokens, i, USER_PREFIX, props.getLogin());
+			patchProp(tokens, i, USER_PREFIX, props.getLogin() == null ? "" : props.getLogin());
 			patchProp(tokens, i, PASS_PREFIX, props.getPassword() == null ? "" : props.getPassword());
 			patchProp(tokens, i, URL_PREFIX, props.getURL());
 		}

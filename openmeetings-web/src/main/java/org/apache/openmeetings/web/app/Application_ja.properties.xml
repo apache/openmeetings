@@ -690,13 +690,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.db2.name"><![CDATA[IBM DB2]]></entry>
 	<entry key="install.wizard.db.step.dbname"><![CDATA[データベース名を指定してください]]></entry>
 	<entry key="install.wizard.db.step.dbtype"><![CDATA[データベース・タイプを選択]]></entry>
-	<entry key="install.wizard.db.step.derby.name"><![CDATA[Apache Derby]]></entry>
+	<entry key="install.wizard.db.step.h2.name"><![CDATA[H2]]></entry>
 	<entry key="install.wizard.db.step.error.patch"><![CDATA[下記パッチ適用中にエラーが発生しました: {0}]]></entry>
 	<entry key="install.wizard.db.step.errorprops"><![CDATA[プロパティを取得できません]]></entry>
 	<entry key="install.wizard.db.step.field.title"><![CDATA[データベース構成]]></entry>
 	<entry key="install.wizard.db.step.host"><![CDATA[データベース・ホスト名を指定してください]]></entry>
 	<entry key="install.wizard.db.step.instructions.db2"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>]]></entry>
-	<entry key="install.wizard.db.step.instructions.derby"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/ApacheDerbyConfig.html">Apache Derby</a>]]></entry>
+	<entry key="install.wizard.db.step.instructions.h2"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/H2Config.html">H2</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mssql"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/MSSQLConfig.html">MSSQL</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mysql"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/MySQLConfig.html">MySQL</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.oracle"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/OracleConfig.html">Oracle</a>]]></entry>

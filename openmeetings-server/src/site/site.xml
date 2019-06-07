@@ -64,7 +64,7 @@
 				<item name="Redmine Plugin" href="/RedminePlugin.html" />
 			</item>
 			<item name="DB Sample Configurations" href="#db">
-				<item name="Apache Derby" href="/ApacheDerbyConfig.html" />
+				<item name="H2" href="/H2Config.html" />
 				<item name="IBM DB2" href="/IBMDB2Config.html" />
 				<item name="Oracle" href="/OracleConfig.html" />
 				<item name="MySQL" href="/MySQLConfig.html" />

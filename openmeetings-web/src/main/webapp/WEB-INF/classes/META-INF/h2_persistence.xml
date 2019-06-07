@@ -61,15 +61,15 @@
 			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported" />
 			<property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp2.BasicDataSource" />
 			<property name="openjpa.ConnectionProperties"
-				value="DriverClassName=org.apache.derby.jdbc.EmbeddedDriver
-					, Url=jdbc:derby:openmeetings;create=true
+				value="DriverClassName=org.h2.Driver
+					, Url=jdbc:h2:./omdb;create=true
 					, create=true
 					, maxTotal=100
 					, maxIdle=100
 					, minIdle=0
 					, maxWaitMillis=10000
 					, TestOnBorrow=true
-					, Username=omdbuser
+					, Username=
 					, Password=" />
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
