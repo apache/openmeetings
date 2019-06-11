@@ -79,6 +79,7 @@ import org.apache.openmeetings.web.pages.PrivacyPage;
 import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.openmeetings.web.pages.install.InstallWizardPage;
+import org.apache.openmeetings.web.room.GroupCustomCssResourceReference;
 import org.apache.openmeetings.web.room.RoomPreviewResourceReference;
 import org.apache.openmeetings.web.room.RoomResourceReference;
 import org.apache.openmeetings.web.room.wb.WbWebSocketHelper;
@@ -288,6 +289,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountResource("/room/preview/${id}", new RoomPreviewResourceReference());
 		mountResource("/profile/${id}", new ProfileImageResourceReference());
 		mountResource("/group/${id}", new GroupLogoResourceReference());
+		mountResource("/group/customcss/${id}", new GroupCustomCssResourceReference());
 
 		log.debug("Application::init");
 		try {

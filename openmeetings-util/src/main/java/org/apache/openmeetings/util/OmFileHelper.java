@@ -68,6 +68,7 @@ public class OmFileHelper {
 	public static final String DB_PERSISTENCE_NAME = "classes/META-INF/%s_persistence.xml";
 	public static final String PROFILES_PREFIX = "profile_";
 	public static final String GROUP_LOGO_PREFIX = "logo";
+	public static final String GROUP_CSS_PREFIX = "customcss";
 	public static final String LANG_FILE_NAME = "languages.xml";
 	public static final String LIBRARY_FILE_NAME = "library.xml";
 	public static final String PROFILE_IMG_NAME = "profile.png";
@@ -152,6 +153,11 @@ public class OmFileHelper {
 			logo = new File(getImagesDir(), "blank.png");
 		}
 		return logo;
+	}
+
+	public static File getGroupCss(Long groupId) {
+		File css = new File(getGroupLogoDir(), String.format("%s%s.css", GROUP_CSS_PREFIX, groupId));
+		return groupId == null || !css.exists() ? null : css;
 	}
 
 	public static File getDefaultProfilePicture() {

@@ -94,11 +94,11 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 	@Override
 	protected FileItem getFileItem(Attributes attr) {
 		PageParameters params = attr.getParameters();
-		StringValue _id = params.get("id");
+		StringValue idStr = params.get("id");
 		String uid = params.get("uid").toString();
 		Long id = null;
 		try {
-			id = _id.toOptionalLong();
+			id = idStr.toOptionalLong();
 		} catch (NumberFormatException e) {
 			//no-op expected
 		}

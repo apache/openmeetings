@@ -84,8 +84,11 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.protocol.ws.api.BaseWebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -395,10 +398,19 @@ public class RoomPanel extends BasePanel {
 		} else {
 			add(new WebMarkupContainer("wait-for-recording").setVisible(false));
 		}
+		RepeatingView groupstyles = new RepeatingView("groupstyle");
+		add(groupstyles.setVisible(room.isVisible() && !r.getGroups().isEmpty()));
 		if (room.isVisible()) {
 			add(new NicknameDialog("nickname", this));
 			add(download);
 			add(new BaseWebSocketBehavior("media"));
+			for (RoomGroup rg : r.getGroups()) {
+				WebMarkupContainer groupstyle = new WebMarkupContainer(groupstyles.newChildId());
+				groupstyle.add(AttributeModifier.append("href"
+						, (String)RequestCycle.get().urlFor(new GroupCustomCssResourceReference(), new PageParameters().add("id", rg.getGroup().getId()))
+						));
+				groupstyles.add(groupstyle);
+			}
 		} else {
 			add(new WebMarkupContainer("nickname").setVisible(false));
 		}
