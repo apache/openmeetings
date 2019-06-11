@@ -35,6 +35,7 @@
 		<maven.build.timestamp.format>yyyy/MM/dd HH:mm</maven.build.timestamp.format>
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
+		<om.notquick.build>true</om.notquick.build>
 		<db>h2</db>
 		<jdk.version>11</jdk.version>
 		<!-- plugin versions -->
@@ -648,6 +649,10 @@
 						<groupId>com.google.protobuf</groupId>
 						<artifactId>protobuf-java</artifactId>
 					</exclusion>
+					<exclusion>
+						<groupId>xml-apis</groupId>
+						<artifactId>xml-apis</artifactId>
+					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
@@ -783,6 +788,9 @@
 			<plugin>
 				<groupId>de.thetaphi</groupId>
 				<artifactId>forbiddenapis</artifactId>
+				<configuration>
+					<failOnMissingClasses>${om.notquick.build}</failOnMissingClasses>
+				</configuration>
 				<executions>
 					<execution>
 						<id>forbiddenapis</id>
@@ -1132,6 +1140,7 @@
 			<properties>
 				<maven.test.skip>true</maven.test.skip>
 				<om.quick.build>true</om.quick.build>
+				<om.notquick.build>false</om.notquick.build>
 				<wicket.configuration>DEVELOPMENT</wicket.configuration>
 				<src.pack.skip>true</src.pack.skip>
 			</properties>
