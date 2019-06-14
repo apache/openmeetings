@@ -41,7 +41,6 @@ import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
@@ -113,7 +112,7 @@ public class UserManager implements IUserManager {
 
 				// this is needed cause the language is not a necessary data at registering
 				u.setLanguageId(languageId != 0 ? languageId : 1);
-				u.getGroupUsers().add(new GroupUser(groupDao.get(getDefaultGroup()), u));
+				u.addGroup(groupDao.get(getDefaultGroup()));
 
 				Object user = registerUser(u, password, null);
 
@@ -252,7 +251,7 @@ public class UserManager implements IUserManager {
 			fUser.setType(Type.oauth);
 			fUser.getRights().remove(Right.Login);
 			fUser.setDomainId(serverId);
-			fUser.getGroupUsers().add(new GroupUser(groupDao.get(getDefaultGroup()), fUser));
+			fUser.addGroup(groupDao.get(getDefaultGroup()));
 			for (Map.Entry<String, String> entry : user.getUserData().entrySet()) {
 				final String expression = entry.getKey();
 				PropertyResolver.setValue(expression, fUser, entry.getValue(), new LanguageConverter(expression, fUser, null, null));

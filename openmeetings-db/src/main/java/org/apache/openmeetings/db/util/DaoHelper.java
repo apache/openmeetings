@@ -18,9 +18,16 @@
  */
 package org.apache.openmeetings.db.util;
 
+import java.util.List;
+import java.util.function.Function;
+
+import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.openjpa.persistence.OpenJPAEntityManager;
+import org.apache.openjpa.persistence.OpenJPAPersistence;
+import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.wicket.util.string.Strings;
 
 public class DaoHelper {
@@ -121,5 +128,24 @@ public class DaoHelper {
 			q.setMaxResults(max.intValue());
 		}
 		return q;
+	}
+
+	public static <T> List<T> fillLazy(EntityManager em, Function<OpenJPAEntityManager, TypedQuery<T>> func, String...groups) {
+		OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
+		boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
+		try {
+			oem.getFetchPlan().setQueryResultCacheEnabled(false); //update in cache during update
+			TypedQuery<T> q = func.apply(oem);
+			@SuppressWarnings("unchecked")
+			OpenJPAQuery<T> kq = OpenJPAPersistence.cast(q);
+			kq.getFetchPlan().addFetchGroups(groups);
+			return kq.getResultList();
+		} finally {
+			oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
+		}
+	}
+
+	public static <T> T single(List<T> l) {
+		return l.size() == 1 ? l.get(0) : null;
 	}
 }

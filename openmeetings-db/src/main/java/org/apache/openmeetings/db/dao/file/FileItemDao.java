@@ -47,7 +47,7 @@ public class FileItemDao extends BaseFileItemDao {
 	private static final Logger log = LoggerFactory.getLogger(FileItemDao.class);
 
 	public List<FileItem> getByRoom(Long roomId) {
-		log.debug("getByRoom roomId :: " + roomId);
+		log.debug("getByRoom roomId :: {}", roomId);
 		return em.createNamedQuery("getFilesByRoom", FileItem.class).setParameter("roomId", roomId).getResultList();
 	}
 

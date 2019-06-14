@@ -119,7 +119,7 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 		}
 		for (int i = 0; i < 10000; ++i) {
 			User u = createUser();
-			u.getGroupUsers().add(new GroupUser(g, u));
+			u.addGroup(g);
 			userDao.update(u, null);
 		}
 	}

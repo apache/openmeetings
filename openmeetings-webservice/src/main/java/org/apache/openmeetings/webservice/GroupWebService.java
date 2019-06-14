@@ -132,7 +132,7 @@ public class GroupWebService extends BaseWebService {
 		return performCall(sid, User.Right.Soap, sd -> {
 			if (!groupUserDao.isUserInGroup(id, userid)) {
 				User u = userDao.get(userid);
-				u.getGroupUsers().add(new GroupUser(groupDao.get(id), u));
+				u.addGroup(groupDao.get(id));
 				userDao.update(u, sd.getUserId());
 			}
 			return new ServiceResult(String.valueOf(userid), Type.SUCCESS);
@@ -204,7 +204,7 @@ public class GroupWebService extends BaseWebService {
 					}
 				}
 				if (!found) {
-					r.getGroups().add(new RoomGroup(groupDao.get(id), r));
+					r.addGroup(groupDao.get(id));
 					roomDao.update(r, sd.getUserId());
 					return new ServiceResult("Success", Type.SUCCESS);
 				}

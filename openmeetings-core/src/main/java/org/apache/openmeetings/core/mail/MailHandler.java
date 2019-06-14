@@ -212,7 +212,7 @@ public class MailHandler {
 		msg.setSubject(m.getSubject(), UTF_8.name());
 		String replyTo = m.getReplyTo();
 		if (replyTo != null && mailAddReplyTo) {
-			log.debug("setReplyTo " + replyTo);
+			log.debug("setReplyTo {}", replyTo);
 			if (MailUtil.isValid(replyTo)) {
 				msg.setReplyTo(new InternetAddress[]{new InternetAddress(replyTo)});
 			}
@@ -242,8 +242,8 @@ public class MailHandler {
 			}
 			taskExecutor.execute(() -> {
 				log.debug("Message sending in progress");
-				log.debug("  To: " + m.getRecipients());
-				log.debug("  Subject: " + m.getSubject());
+				log.debug("  To: {}", m.getRecipients());
+				log.debug("  Subject: {}", m.getSubject());
 
 				// -- Send the message --
 				try {

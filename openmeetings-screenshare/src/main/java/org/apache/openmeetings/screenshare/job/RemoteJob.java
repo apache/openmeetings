@@ -80,14 +80,14 @@ public class RemoteJob implements Job {
 					{
 						Point p = getCoordinates(obj);
 						robot.mouseMove(p.x, p.y);
-						robot.mouseRelease(InputEvent.BUTTON1_MASK);
+						robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 					}
 						break;
 					case "mouseDown":
 					{
 						Point p = getCoordinates(obj);
 						robot.mouseMove(p.x, p.y);
-						robot.mousePress(InputEvent.BUTTON1_MASK);
+						robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
 					}
 						break;
 					case "mousePos":

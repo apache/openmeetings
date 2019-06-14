@@ -24,9 +24,17 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.User;
+import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +44,12 @@ public class BaseFileItemDao {
 	private static final Logger log = LoggerFactory.getLogger(BaseFileItemDao.class);
 	@PersistenceContext
 	protected EntityManager em;
+	@Autowired
+	private RoomDao roomDao;
+	@Autowired
+	private GroupDao groupDao;
+	@Autowired
+	private UserDao userDao;
 
 	public BaseFileItem get(String hash) {
 		log.debug("getByHash() started");
@@ -45,6 +59,9 @@ public class BaseFileItemDao {
 	}
 
 	public BaseFileItem get(Long id) {
+		if (id == null || id.longValue() <= 0) {
+			return null;
+		}
 		List<BaseFileItem> list = em.createNamedQuery("getFileById", BaseFileItem.class)
 					.setParameter("id", id).getResultList();
 		return list.size() == 1 ? list.get(0) : null;
@@ -67,6 +84,35 @@ public class BaseFileItemDao {
 	}
 
 	public BaseFileItem _update(BaseFileItem f) {
+		f.setExternalType(null);
+		BaseFileItem parent = get(f.getParentId());
+		if (parent != null) {
+			f.setExternalType(parent.getExternalType());
+		}
+		if (Strings.isEmpty(f.getExternalType())) {
+			Room r = roomDao.get(f.getRoomId());
+			if (r != null) {
+				f.setExternalType(r.externalType());
+			}
+		}
+		if (Strings.isEmpty(f.getExternalType())) {
+			Group g = groupDao.get(f.getGroupId());
+			if (g != null && g.isExternal()) {
+				f.setExternalType(g.getName());
+			}
+		}
+		if (Strings.isEmpty(f.getExternalType())) {
+			User u = userDao.get(f.getOwnerId());
+			if (u != null) {
+				f.setExternalType(u.externalType());
+			}
+		}
+		if (Strings.isEmpty(f.getExternalType())) {
+			User u = userDao.get(f.getInsertedBy());
+			if (u != null) {
+				f.setExternalType(u.externalType());
+			}
+		}
 		if (f.getId() == null) {
 			f.setInserted(new Date());
 			em.persist(f);

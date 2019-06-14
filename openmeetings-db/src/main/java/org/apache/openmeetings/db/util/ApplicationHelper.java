@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -61,7 +62,7 @@ public class ApplicationHelper {
 		if (app == null) {
 			// This is the case for non-web-app applications (command line admin)
 			try {
-				app = (WebApplication)OpenmeetingsVariables.getAppClass().newInstance();
+				app = (WebApplication)OpenmeetingsVariables.getAppClass().getDeclaredConstructor().newInstance();
 				app.setName(String.format("--%s--", UUID.randomUUID())); //temporary name for temporary application
 				ServletContext sc = new MockServletContext(app, null);
 				XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();
@@ -72,7 +73,7 @@ public class ApplicationHelper {
 				app = xmlContext.getBean(WebApplication.class);
 				app.setName(getWicketApplicationName());
 				app.setServletContext(sc);
-			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | InvocationTargetException | NoSuchMethodException e) {
 				log.error("Failed to create Application");
 			}
 		}

@@ -18,11 +18,15 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
+import static org.apache.openmeetings.web.app.Application.urlForPage;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
@@ -51,14 +55,11 @@ import org.apache.wicket.validation.Validatable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
-import static org.apache.openmeetings.web.app.Application.urlForPage;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final Logger log = LoggerFactory.getLogger(ForgetPasswordDialog.class);
@@ -234,7 +235,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	 */
 	private boolean resetUser(String email, String username) {
 		try {
-			log.debug("resetUser " + email);
+			log.debug("resetUser {}", email);
 
 			// check if Mail given
 			if (!Strings.isEmpty(email)) {
@@ -257,7 +258,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	}
 
 	private void sendHashByUser(User us) {
-		log.debug("User: " + us.getLogin());
+		log.debug("User: {}", us.getLogin());
 		us.setResethash(randomUUID().toString());
 		us.setResetDate(new Date());
 		userDao.update(us, null);

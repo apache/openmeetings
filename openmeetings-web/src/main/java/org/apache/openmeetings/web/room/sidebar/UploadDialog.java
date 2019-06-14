@@ -280,7 +280,6 @@ public class UploadDialog extends AbstractFormDialog<String> {
 				FileItem f = new FileItem();
 				f.setSize(size);
 				f.setName(fu.getClientFileName());
-				f.setExternalType(room.getRoom().getExternalType());
 				if (parent == null || !(parent instanceof FileItem)) {
 					f.setOwnerId(getUserId());
 				} else {

@@ -29,7 +29,7 @@ public class TestDatabaseStructureGetUserStart extends AbstractJUnitDefaults {
 	@Test
 	public void testAddingGroup() {
 		try {
-			userDao.get(new Long(1));
+			userDao.get(1L);
 		} catch (Exception err) {
 			log.error("[testAddingGroup]", err);
 		}

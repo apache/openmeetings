@@ -167,7 +167,7 @@ public class InvitationManager implements IInvitationManager {
 			return;
 		}
 
-		log.debug(":::: processInvitation ..... " + reminder);
+		log.debug(":::: processInvitation ..... {}", reminder);
 		log.debug("Invitation for Appointment : simple email");
 		try {
 			mm.setInvitation(getInvitation(mm.getInvitation()

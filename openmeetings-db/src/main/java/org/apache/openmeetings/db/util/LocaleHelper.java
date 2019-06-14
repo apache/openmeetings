@@ -72,7 +72,7 @@ public class LocaleHelper {
 			}
 			locale = builder.build();
 		} catch (Exception e) {
-			log.error("Unexpected Error while constructing locale for the user", e.getMessage());
+			log.error("Unexpected Error while constructing locale for the user", e);
 		}
 		return locale;
 	}

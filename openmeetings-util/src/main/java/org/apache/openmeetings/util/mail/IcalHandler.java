@@ -81,7 +81,7 @@ public class IcalHandler {
 	 *            (@see IcalHandler) constants
 	 */
 	public IcalHandler(Method method) {
-		log.debug("Icalhandler method type : " + method);
+		log.debug("Icalhandler method type : {}", method);
 
 		icsCalendar = new Calendar();
 		icsCalendar.getProperties().add(new ProdId("-//Events Calendar//iCal4j 1.0//EN"));
@@ -138,10 +138,10 @@ public class IcalHandler {
 		Uid ui;
 		if (Strings.isEmpty(uid)) {
 			ui = new Uid(randomUUID().toString());
-			log.debug("Generating Meeting UID : " + ui.getValue());
+			log.debug("Generating Meeting UID : {}", ui.getValue());
 		} else {
 			ui = new Uid(uid);
-			log.debug("Using Meeting UID : " + ui.getValue());
+			log.debug("Using Meeting UID : {}", ui.getValue());
 		}
 
 		meeting.getProperties().add(ui);

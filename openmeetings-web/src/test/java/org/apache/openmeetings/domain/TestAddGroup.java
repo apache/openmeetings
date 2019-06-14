@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.entity.user.Group;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -42,7 +41,7 @@ public class TestAddGroup extends AbstractJUnitDefaults {
 		assertNotNull(us, "User should exist");
 
 		assertNotNull(us.getGroupUsers(), "Group User list should exist");
-		us.getGroupUsers().add(new GroupUser(o, us));
+		us.addGroup(o);
 		us = userDao.update(us, null);
 
 		log.error(us.getLastname());

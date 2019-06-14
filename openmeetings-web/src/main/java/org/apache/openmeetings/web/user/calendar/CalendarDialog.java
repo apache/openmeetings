@@ -268,7 +268,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 		}
 		apptManager.syncItem(client, context, c);
 		calendarPanel.refresh(handler);
-		log.trace("Calendar " + c.getTitle() + " Successfully synced.");
+		log.trace("Calendar {} Successfully synced.", c.getTitle());
 	}
 
 	/**

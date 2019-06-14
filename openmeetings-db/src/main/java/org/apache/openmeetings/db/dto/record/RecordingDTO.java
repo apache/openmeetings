@@ -44,6 +44,7 @@ public class RecordingDTO implements Serializable {
 	private Integer width;
 	private Integer height;
 	private Long ownerId;
+	private String externalType;
 
 	public RecordingDTO() {
 		//def constructor
@@ -61,6 +62,7 @@ public class RecordingDTO implements Serializable {
 		this.width = r.getWidth();
 		this.height = r.getHeight();
 		this.ownerId = r.getOwnerId();
+		this.externalType = r.getExternalType();
 	}
 
 	public Long getId() {
@@ -149,6 +151,15 @@ public class RecordingDTO implements Serializable {
 
 	public void setOwnerId(Long ownerId) {
 		this.ownerId = ownerId;
+	}
+
+	public String getExternalType() {
+		return externalType;
+	}
+
+	public RecordingDTO setExternalType(String externalType) {
+		this.externalType = externalType;
+		return this;
 	}
 
 	public static List<RecordingDTO> list(List<Recording> l) {

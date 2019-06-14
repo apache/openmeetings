@@ -56,7 +56,6 @@ import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.util.OmException;
@@ -180,7 +179,8 @@ public class UserWebService extends BaseWebService {
 			if (user.getLanguageId() == null) {
 				user.setLanguageId(1L);
 			}
-			IValidator<String> passValidator = new StrongPasswordValidator(true, user.get(userDao));
+			User jsonUser = user.get(userDao, groupDao);
+			IValidator<String> passValidator = new StrongPasswordValidator(true, jsonUser);
 			Validatable<String> passVal = new Validatable<>(user.getPassword());
 			passValidator.validate(passVal);
 			if (!passVal.isValid()) {
@@ -191,32 +191,27 @@ public class UserWebService extends BaseWebService {
 				log.debug("addNewUser::weak password '{}', msg: {}", user.getPassword(), sb);
 				throw new ServiceException(sb.toString());
 			}
-			Object _user;
+			Object ouser;
 			try {
-				User u = user.get(userDao);
-				u.getGroupUsers().add(new GroupUser(groupDao.get(getDefaultGroup()), u));
-				_user = userManager.registerUser(u, user.getPassword(), null);
+				jsonUser.addGroup(groupDao.get(getDefaultGroup()));
+				ouser = userManager.registerUser(jsonUser, user.getPassword(), null);
 			} catch (NoSuchAlgorithmException | OmException e) {
 				throw new ServiceException("Unexpected error while creating user");
 			}
 
-			if (_user == null) {
+			if (ouser == null) {
 				throw new ServiceException(UNKNOWN.getMessage());
-			} else if (_user instanceof String) {
-				throw new ServiceException((String)_user);
+			} else if (ouser instanceof String) {
+				throw new ServiceException((String)ouser);
 			}
 
-			User u = (User)_user;
+			User u = (User)ouser;
 
 			u.getRights().add(Right.Room);
 			if (Strings.isEmpty(user.getExternalId()) && Strings.isEmpty(user.getExternalType())) {
 				// activate the User
 				u.getRights().add(Right.Login);
 				u.getRights().add(Right.Dashboard);
-			} else {
-				u.setType(User.Type.external);
-				u.setExternalId(user.getExternalId());
-				u.setExternalType(user.getExternalType());
 			}
 
 			u = userDao.update(u, sd.getUserId());

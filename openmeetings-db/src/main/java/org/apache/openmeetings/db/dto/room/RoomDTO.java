@@ -34,8 +34,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.dao.file.BaseFileItemDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
@@ -48,7 +51,7 @@ public class RoomDTO implements Serializable {
 	private String name;
 	private String comment;
 	private Room.Type type;
-	private Long capacity = new Long(4);
+	private Long capacity = Long.valueOf(4);
 	private boolean appointment;
 	private String confno;
 	private boolean isPublic;
@@ -83,7 +86,7 @@ public class RoomDTO implements Serializable {
 		closed = r.isClosed();
 		demoTime = r.getDemoTime();
 		externalId = r.getExternalId();
-		externalType = r.getExternalType();
+		externalType = r.externalType();
 		redirectUrl = r.getRedirectURL();
 		moderated = r.isModerated();
 		allowUserQuestions = r.isAllowUserQuestions();
@@ -94,8 +97,8 @@ public class RoomDTO implements Serializable {
 		files = RoomFileDTO.get(r.getFiles());
 	}
 
-	public Room get(BaseFileItemDao fileDao) {
-		Room r = new Room();
+	public Room get(RoomDao roomDao, GroupDao groupDao, BaseFileItemDao fileDao) {
+		Room r = id == null ? new Room() : roomDao.get(id);
 		r.setId(id);
 		r.setName(name);
 		r.setComment(comment);
@@ -107,7 +110,11 @@ public class RoomDTO implements Serializable {
 		r.setDemoRoom(demo);
 		r.setDemoTime(demoTime);
 		r.setExternalId(externalId);
-		r.setExternalType(externalType);
+		if (!Strings.isEmpty(externalType)
+				&& r.getGroups().stream().filter(gu -> gu.getGroup().isExternal() && gu.getGroup().getName().equals(externalType)).count() == 0)
+		{
+			r.addGroup(groupDao.getExternal(externalType));
+		}
 		r.setRedirectURL(redirectUrl);
 		r.setModerated(moderated);
 		r.setAllowUserQuestions(allowUserQuestions);

@@ -60,7 +60,7 @@ public class DocumentConverter {
 		boolean fullProcessing = !sf.isPdf();
 		File original = f.getFile(sf.getExt());
 		File pdf = f.getFile(EXTENSION_PDF);
-		log.debug("fullProcessing: " + fullProcessing);
+		log.debug("fullProcessing: {}", fullProcessing);
 		if (fullProcessing) {
 			log.debug("-- running JOD --");
 			logs.add(doJodConvert(original, pdf));

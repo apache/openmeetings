@@ -18,21 +18,22 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.util.Date;
-import java.util.List;
-
-import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
 @Repository
 @Transactional
@@ -81,7 +82,7 @@ public class UserContactDao {
 				.setParameter(PARAM_USER_ID, userId)
 				.setParameter(PARAM_OWNERID, ownerId)
 				.getResultList();
-		log.info("number of contacts:: " + (ll == null ? null : ll.size()));
+		log.info("number of contacts:: {}", (ll == null ? null : ll.size()));
 		return ll != null && ll.size() == 1 ? ll.get(0) : null;
 	}
 

@@ -82,7 +82,7 @@
 					<!-- Attribute mapping -->
 					<fieldset class="ui-widget-content">
 						<legend class="ui-widget-header"><wicket:message key="admin.oauth.user.mapping" /></legend>
-						<form wicket:id="mappingForm">
+						<div wicket:id="mappingForm">
 							<div class="formelement">
 								<label wicket:for="omAttr"><wicket:message key="admin.oauth.attr.om" /></label>
 								<input type="text" class="input" wicket:id="omAttr"/>
@@ -92,7 +92,7 @@
 								<input type="text" class="input" wicket:id="oauthAttr"/>
 							</div>
 							<button type="button" wicket:id="addMapping"><wicket:message key="1261"/></button>
-						</form>
+						</div>
 						<table class="list-table small">
 							<thead>
 								<tr class="ui-widget-header">

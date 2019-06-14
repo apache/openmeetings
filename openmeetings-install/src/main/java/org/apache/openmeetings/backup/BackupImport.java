@@ -195,7 +195,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class BackupImport {
 	private static final Logger log = LoggerFactory.getLogger(BackupImport.class);
-	private static final String LDAP_EXT_TYPE = "LDAP";
 	private static final Map<String, String> outdatedConfigKeys = new HashMap<>();
 	private static final Map<String, Configuration.Type> configTypes = new HashMap<>();
 	static {
@@ -374,9 +373,9 @@ public class BackupImport {
 		BackupVersion ver = getVersion(simpleSerializer, f);
 		importConfigs(f);
 		importGroups(f, simpleSerializer);
-		Long defaultLdapId = importLdap(f, simpleSerializer);
+		importLdap(f, simpleSerializer);
 		importOauth(f, simpleSerializer);
-		importUsers(f, defaultLdapId);
+		importUsers(f);
 		importRooms(f);
 		importRoomGroups(f);
 		importChat(f);
@@ -558,7 +557,7 @@ public class BackupImport {
 	/*
 	 * ##################### Import Users
 	 */
-	private void importUsers(File f, Long defaultLdapId) throws Exception {
+	private void importUsers(File f) throws Exception {
 		log.info("OAuth2 servers import complete, starting user import");
 		String jNameTimeZone = getDefaultTimezone();
 		//add existence email from database
@@ -588,14 +587,14 @@ public class BackupImport {
 			// check that email is unique
 			if (u.getAddress() != null && u.getAddress().getEmail() != null && User.Type.user == u.getType()) {
 				if (userEmailMap.containsKey(u.getAddress().getEmail())) {
-					log.warn("Email is duplicated for user " + u.toString());
+					log.warn("Email is duplicated for user {}", u);
 					String updateEmail = String.format("modified_by_import_<%s>%s", randomUUID(), u.getAddress().getEmail());
 					u.getAddress().setEmail(updateEmail);
 				}
 				userEmailMap.put(u.getAddress().getEmail(), Integer.valueOf(userEmailMap.size()));
 			}
 			if (userLoginMap.containsKey(u.getLogin())) {
-				log.warn("Login is duplicated for user " + u.toString());
+				log.warn("Login is duplicated for user {}", u);
 				String updateLogin = String.format("modified_by_import_<%s>%s", randomUUID(), u.getLogin());
 				u.setLogin(updateLogin);
 			}
@@ -621,17 +620,6 @@ public class BackupImport {
 			u.setId(null);
 			if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
 				u.getSipUser().setId(0);
-			}
-			if (LDAP_EXT_TYPE.equals(u.getExternalType()) && User.Type.external != u.getType()) {
-				log.warn("Found LDAP user in 'old' format, external_type == 'LDAP':: " + u);
-				u.setType(User.Type.ldap);
-				u.setExternalType(null);
-				if (u.getDomainId() == null) {
-					u.setDomainId(defaultLdapId); //domainId was not supported in old versions of OM
-				}
-			}
-			if (!Strings.isEmpty(u.getExternalType())) {
-				u.setType(User.Type.external);
 			}
 			if (AuthLevelUtil.hasLoginLevel(u.getRights()) && !Strings.isEmpty(u.getActivatehash())) {
 				u.setActivatehash(null);

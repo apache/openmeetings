@@ -159,7 +159,7 @@ public class SipDao {
 		ConfbridgeListAction da = new ConfbridgeListAction(confno);
 		ResponseEvents r = execEvent(da);
 		if (r != null) {
-			log.debug("SipDao::countUsers size == " + r.getEvents().size());
+			log.debug("SipDao::countUsers size == {}", r.getEvents().size());
 			// "- 1" here means: ListComplete event
 			return r.getEvents().size() - 1;
 		}

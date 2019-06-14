@@ -103,7 +103,7 @@ public class SessiondataDao {
 			return null;
 		}
 		Sessiondata sd = sessions.get(0);
-		if (sd == null || sd.getUserId() == null || sd.getUserId().equals(new Long(0)) || !sid.equals(sd.getSessionId())) {
+		if (sd == null || sd.getUserId() == null || sd.getUserId().equals(Long.valueOf(0)) || !sid.equals(sd.getSessionId())) {
 			return null;
 		}
 		return sd;

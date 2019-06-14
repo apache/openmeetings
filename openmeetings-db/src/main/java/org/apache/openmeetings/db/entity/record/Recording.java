@@ -59,33 +59,34 @@ import org.simpleframework.xml.Root;
  *
  */
 @Entity
-@NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT c FROM Recording c, User u "
-		+ "WHERE c.insertedBy = u.id AND u.externalId = :externalId  AND u.externalType = :externalType "
-		+ "AND c.deleted = false")
-@NamedQuery(name = "getRecordingsPublic", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId IS NULL "
-		+ "AND f.groupId IS NULL AND (f.parentId IS NULL OR f.parentId = 0) "
-		+ "ORDER BY f.type ASC, f.inserted")
-@NamedQuery(name = "getRecordingsByGroup", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId IS NULL "
-		+ "AND f.groupId = :groupId AND (f.parentId IS NULL OR f.parentId = 0) "
-		+ "ORDER BY f.type ASC, f.inserted")
-@NamedQuery(name = "getRecordingsByOwner", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId = :ownerId "
-		+ "AND (f.parentId IS NULL OR f.parentId = 0) "
-		+ "ORDER BY f.type ASC, f.inserted")
-@NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE Recording f SET f.status = :error WHERE f.status IN (:recording, :converting)")
-@NamedQuery(name = "getRecordingsAll", query = "SELECT c FROM Recording c LEFT JOIN FETCH c.chunks ORDER BY c.id")
-@NamedQuery(name = "getRecordingsByRoom", query = "SELECT c FROM Recording c WHERE c.deleted = false AND c.roomId = :roomId "
-		+ "ORDER BY c.type ASC, c.inserted")
-@NamedQuery(name = "getRecordingsByParent", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.parentId = :parentId "
-		+ "ORDER BY f.type ASC, f.inserted")
-@NamedQuery(name = "getRecordingsByExternalType", query = "SELECT rec FROM Recording rec, Room r, User u "
-		+ "WHERE rec.deleted = false AND rec.roomId = r.id AND rec.insertedBy = u.id "
-		+ "AND (r.externalType = :externalType OR u.externalType = :externalType)")
-@NamedQuery(name = "getExpiringRecordings", query = "SELECT DISTINCT rec FROM Recording rec "
-		+ "WHERE rec.deleted = false AND rec.notified = :notified AND rec.inserted < :date "
-		+ "  AND (rec.groupId = :groupId "
-		+ "    OR rec.ownerId IN (SELECT gu.user.id FROM GroupUser gu WHERE gu.group.id = :groupId)"
-		+ "    OR rec.roomId IN (SELECT rg.room.id FROM RoomGroup rg WHERE rg.group.id = :groupId)"
-		+ "  ) order by rec.inserted ASC")
+@NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT r FROM Recording r "
+		+ "WHERE r.insertedBy = (SELECT gu.user.id FROM GroupUser gu WHERE "
+		+ "gu.group.deleted = false AND gu.group.external = true AND gu.group.name = :externalType "
+		+ "AND gu.user.deleted = false AND gu.user.type = :type AND gu.user.externalId = :externalId) "
+		+ "AND r.deleted = false")
+@NamedQuery(name = "getRecordingsPublic", query = "SELECT r FROM Recording r WHERE r.deleted = false AND r.ownerId IS NULL "
+		+ "AND r.groupId IS NULL AND (r.parentId IS NULL OR r.parentId = 0) "
+		+ "ORDER BY r.type ASC, r.inserted")
+@NamedQuery(name = "getRecordingsByGroup", query = "SELECT r FROM Recording r WHERE r.deleted = false AND r.ownerId IS NULL "
+		+ "AND r.groupId = :groupId AND (r.parentId IS NULL OR r.parentId = 0) "
+		+ "ORDER BY r.type ASC, r.inserted")
+@NamedQuery(name = "getRecordingsByOwner", query = "SELECT r FROM Recording r WHERE r.deleted = false AND r.ownerId = :ownerId "
+		+ "AND (r.parentId IS NULL OR r.parentId = 0) "
+		+ "ORDER BY r.type ASC, r.inserted")
+@NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE Recording r SET r.status = :error WHERE r.status IN (:recording, :converting)")
+@NamedQuery(name = "getRecordingsAll", query = "SELECT r FROM Recording r LEFT JOIN FETCH r.chunks ORDER BY r.id")
+@NamedQuery(name = "getRecordingsByRoom", query = "SELECT r FROM Recording r WHERE r.deleted = false AND r.roomId = :roomId "
+		+ "ORDER BY r.type ASC, r.inserted")
+@NamedQuery(name = "getRecordingsByParent", query = "SELECT r FROM Recording r WHERE r.deleted = false AND r.parentId = :parentId "
+		+ "ORDER BY r.type ASC, r.inserted")
+@NamedQuery(name = "getRecordingsByExternalType", query = "SELECT r FROM Recording r "
+		+ "WHERE r.deleted = false AND r.externalType = :externalType")
+@NamedQuery(name = "getExpiringRecordings", query = "SELECT DISTINCT r FROM Recording r "
+		+ "WHERE r.deleted = false AND r.notified = :notified AND r.inserted < :date "
+		+ "  AND (r.groupId = :groupId "
+		+ "    OR r.ownerId IN (SELECT gu.user.id FROM GroupUser gu WHERE gu.group.id = :groupId)"
+		+ "    OR r.roomId IN (SELECT rg.room.id FROM RoomGroup rg WHERE rg.group.id = :groupId)"
+		+ "  ) order by r.inserted ASC")
 @Root(name = "flvrecording")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)

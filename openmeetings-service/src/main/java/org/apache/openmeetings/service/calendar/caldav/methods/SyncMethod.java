@@ -141,7 +141,7 @@ public class SyncMethod extends BaseDavRequest {
 				Document document = getResponseBodyAsDocument(response.getEntity());
 				if (document != null) {
 					synctoken = DomUtil.getChildText(document.getDocumentElement(), SyncReportInfo.XML_SYNC_TOKEN, DavConstants.NAMESPACE);
-					log.info("Sync-Token for REPORT: " + synctoken);
+					log.info("Sync-Token for REPORT: {}", synctoken);
 					multiStatus = MultiStatus.createFromXml(document.getDocumentElement());
 				}
 			} catch (IOException e) {

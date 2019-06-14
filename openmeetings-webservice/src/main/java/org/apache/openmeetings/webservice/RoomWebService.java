@@ -39,6 +39,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
@@ -86,6 +87,8 @@ public class RoomWebService extends BaseWebService {
 	private InvitationDao inviteDao;
 	@Autowired
 	private InvitationManager inviteManager;
+	@Autowired
+	private GroupDao groupDao;
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of
@@ -141,7 +144,7 @@ public class RoomWebService extends BaseWebService {
 		return roomDao.update(r, userId);
 	}
 	/**
-	 * Checks if a room with this exteralRoomId + externalRoomType does exist,
+	 * Checks if a room with this exteralId + externalType does exist,
 	 * if yes it returns the room id if not, it will create the room and then
 	 * return the room id of the newly created room
 	 *
@@ -173,9 +176,9 @@ public class RoomWebService extends BaseWebService {
 				if (room == null) {
 					return null;
 				} else {
-					r = room.get(fileDao);
-					r.setExternalType(externalType);
-					r.setExternalId(externalId);
+					room.setExternalType(externalType);
+					room.setExternalId(externalId);
+					r = room.get(roomDao, groupDao, fileDao);
 					r = updateRtoRoom(r, sd.getUserId());
 					return new RoomDTO(r);
 				}
@@ -200,7 +203,7 @@ public class RoomWebService extends BaseWebService {
 	@Path("/")
 	public RoomDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="room") @FormParam("room") RoomDTO room) {
 		return performCall(sid, User.Right.Soap, sd -> {
-			Room r = room.get(fileDao);
+			Room r = room.get(roomDao, groupDao, fileDao);
 			r = updateRtoRoom(r, sd.getUserId());
 			return new RoomDTO(r);
 		});

@@ -566,6 +566,14 @@ ul.settings-menu {
 #sharer input {
 	width: 75px;
 }
+#room-sidebar-tabs.tabs .btn-dock {
+	display: block;
+	list-style: none;
+	list-style-type: none;
+	float: right;
+	padding: .4em 1em;
+	border-bottom-width: inherit;
+}
 .video .mute-others {
 	position: absolute;
 	top: calc(50% - 32px);

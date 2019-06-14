@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
+import static org.apache.openmeetings.db.dao.user.UserDao.FETCH_GROUP_BACKUP;
+import static org.apache.openmeetings.db.dao.user.UserDao.FETCH_GROUP_GROUP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getSipContext;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 import static org.apache.wicket.util.string.Strings.escapeMarkup;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -76,8 +79,8 @@ import org.simpleframework.xml.Root;
  */
 @Entity
 @FetchGroups({
-	@FetchGroup(name = "backupexport", attributes = { @FetchAttribute(name = "password") })
-	, @FetchGroup(name = "groupUsers", attributes = { @FetchAttribute(name = "groupUsers")})
+	@FetchGroup(name = FETCH_GROUP_BACKUP, attributes = { @FetchAttribute(name = "password") })
+	, @FetchGroup(name = FETCH_GROUP_GROUP, attributes = { @FetchAttribute(name = "groupUsers")})
 })
 @NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.id = :id")
 @NamedQuery(name = "getUsersByIds", query = "select c from User c where c.id IN :ids")
@@ -86,8 +89,8 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash")
 @NamedQuery(name = "getUserByExpiredHash",  query = "SELECT u FROM User u WHERE u.resetDate < :date")
 @NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.address.email = :email AND u.type = :type AND u.ownerId = :ownerId")
-@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.id) from User c "
-		+ "where c.deleted = false " + "AND ("
+@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "SELECT count(c.id) FROM User c "
+		+ "WHERE c.deleted = false AND ("
 		+ "lower(c.login) LIKE :search "
 		+ "OR lower(c.firstname) LIKE :search "
 		+ "OR lower(c.lastname) LIKE :search )")
@@ -97,7 +100,9 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false")
 @NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false")
 @NamedQuery(name = "getUsersByGroupId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.groupUsers.group.id = :groupId")
-@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalId LIKE :externalId AND u.externalType LIKE :externalType")
+@NamedQuery(name = "getExternalUser", query = "SELECT gu.user FROM GroupUser gu WHERE "
+		+ "gu.group.deleted = false AND gu.group.external = true AND gu.group.name = :externalType "
+		+ "AND gu.user.deleted = false AND gu.user.type = :type AND gu.user.externalId = :externalId")
 @NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.address.email = :userOrEmail)")
 @Table(name = "om_user")
 @Root(name = "user")
@@ -260,8 +265,9 @@ public class User extends HistoricalEntity {
 	@Element(name = "externalUserId", data = true, required = false)
 	private String externalId;
 
-	@Column(name = "external_type")
 	@Element(name = "externalUserType", data = true, required = false)
+	@Deprecated(since = "5.0")
+	@Transient
 	private String externalType;
 
 	/**
@@ -453,6 +459,13 @@ public class User extends HistoricalEntity {
 		return groupUsers;
 	}
 
+	public void addGroup(Group g) {
+		if (groupUsers == null) {
+			groupUsers = new ArrayList<>();
+		}
+		groupUsers.add(new GroupUser(g, this));
+	}
+
 	public void setGroupUsers(List<GroupUser> groupUsers) {
 		if (groupUsers != null) {
 			this.groupUsers = groupUsers;
@@ -491,10 +504,20 @@ public class User extends HistoricalEntity {
 		this.externalId = externalId;
 	}
 
+	public String externalType() {
+		Optional<String> extType = groupUsers == null
+				? Optional.empty()
+				: groupUsers.stream().filter(gu -> gu.getGroup().isExternal()).findFirst()
+				.map(gu -> gu.getGroup().getName());
+		return extType.isPresent() ? extType.get() : null;
+	}
+
+	@Deprecated(since = "5.0")
 	public String getExternalType() {
 		return externalType;
 	}
 
+	@Deprecated(since = "5.0")
 	public void setExternalType(String externalType) {
 		this.externalType = externalType;
 	}

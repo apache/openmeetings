@@ -49,7 +49,7 @@ public class MeetingMemberDao {
 	}
 
 	public Set<Long> getMeetingMemberIdsByAppointment(Long appointmentId) {
-		log.debug("getMeetingMemberIdsByAppointment: " + appointmentId);
+		log.debug("getMeetingMemberIdsByAppointment: {}", appointmentId);
 
 		return new HashSet<>(em.createNamedQuery("getMeetingMemberIdsByAppointment", Long.class)
 				.setParameter("id", appointmentId)

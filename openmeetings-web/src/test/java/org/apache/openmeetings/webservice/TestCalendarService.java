@@ -50,7 +50,6 @@ import org.apache.openmeetings.db.dto.calendar.MeetingMemberDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.webservice.util.AppointmentParamConverter;
 import org.junit.jupiter.api.Test;
@@ -64,7 +63,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 	private void actualTest(Room r) throws Exception {
 		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
-		u.getGroupUsers().add(new GroupUser(getBean(GroupDao.class).get(1L), u));
+		u.addGroup(getBean(GroupDao.class).get(1L));
 		webCreateUser(u);
 		ServiceResult sr = login(u.getLogin(), createPass());
 		u = getBean(UserDao.class).get(u.getId());
@@ -127,7 +126,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 	private String loginNewUser() throws Exception {
 		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
-		u.getGroupUsers().add(new GroupUser(getBean(GroupDao.class).get(1L), u));
+		u.addGroup(getBean(GroupDao.class).get(1L));
 		webCreateUser(u);
 		ServiceResult sr = login(u.getLogin(), createPass());
 		return sr.getMessage();
@@ -177,7 +176,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 
 		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
-		u.getGroupUsers().add(new GroupUser(getBean(GroupDao.class).get(1L), u));
+		u.addGroup(getBean(GroupDao.class).get(1L));
 		u = createUser(getBean(UserDao.class), u);
 		ServiceResult sr = login(u.getLogin(), createPass());
 

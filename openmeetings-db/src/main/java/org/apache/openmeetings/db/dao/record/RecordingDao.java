@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,35 +64,25 @@ public class RecordingDao extends BaseFileItemDao {
 		return bf instanceof Recording ? (Recording)bf : null;
 	}
 
-	public List<Recording> getByExternalId(String externalId, String externalType) {
-		try {
-			log.debug("getFByExternalId :externalId: {}; externalType: {}", externalId, externalType);
+	public List<Recording> getByExternalUser(String externalId, String externalType) {
+		log.debug("getByExternalUser :externalId: {}; externalType: {}", externalId, externalType);
 
-			TypedQuery<Recording> query = em.createNamedQuery("getRecordingsByExternalUser", Recording.class);
-			query.setParameter("externalId", externalId);
-			query.setParameter("externalType", externalType);
-
-			List<Recording> recordingList = query.getResultList();
-
-			log.debug("getByExternalId :: " + recordingList.size());
-
-			return recordingList;
-		} catch (Exception ex2) {
-			log.error("[getByExternalId]: ", ex2);
-		}
-		return new ArrayList<>();
+		return em.createNamedQuery("getRecordingsByExternalUser", Recording.class)
+				.setParameter("externalId", externalId)
+				.setParameter("externalType", externalType)
+				.getResultList();
 	}
+
 	public List<Recording> get() {
 		return em.createNamedQuery("getRecordingsAll", Recording.class).getResultList();
 	}
 
 	public List<Recording> getByExternalType(String externalType) {
-		log.debug("getByExternalType :externalType: " + externalType);
+		log.debug("getByExternalType :externalType: {}", externalType);
 
-		TypedQuery<Recording> query = em.createNamedQuery("getRecordingsByExternalType", Recording.class);
-		query.setParameter("externalType", externalType);
-
-		return query.getResultList();
+		return em.createNamedQuery("getRecordingsByExternalType", Recording.class)
+				.setParameter("externalType", externalType)
+				.getResultList();
 	}
 
 	public List<Recording> getRootByPublic(Long groupId) {
@@ -110,7 +99,8 @@ public class RecordingDao extends BaseFileItemDao {
 
 	public List<Recording> getByRoomId(Long roomId) {
 		return em.createNamedQuery("getRecordingsByRoom", Recording.class)
-				.setParameter("roomId", roomId).getResultList();
+				.setParameter("roomId", roomId)
+				.getResultList();
 	}
 
 	public List<Recording> getExpiring(Long groupId, int reminderDays, boolean notified) {
@@ -123,20 +113,9 @@ public class RecordingDao extends BaseFileItemDao {
 	}
 
 	public List<Recording> getByParent(Long parentId) {
-		return em.createNamedQuery("getRecordingsByParent", Recording.class).setParameter("parentId", parentId).getResultList();
-	}
-
-	public void updateEndTime(Long recordingId, Date recordEnd) {
-		try {
-
-			Recording fId = get(recordingId);
-
-			fId.setRecordEnd(recordEnd);
-
-			update(fId);
-		} catch (Exception ex2) {
-			log.error("[updateEndTime]: ", ex2);
-		}
+		return em.createNamedQuery("getRecordingsByParent", Recording.class)
+				.setParameter("parentId", parentId)
+				.getResultList();
 	}
 
 	public Recording update(Recording f) {

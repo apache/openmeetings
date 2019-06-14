@@ -359,7 +359,7 @@ public class IcalUtils {
 				return date;
 			}
 		}
-		log.error("Unable to parse the date: " + str + " at " + -1);
+		log.error("Unable to parse the date: {} at {}", str, -1);
 		return null;
 	}
 

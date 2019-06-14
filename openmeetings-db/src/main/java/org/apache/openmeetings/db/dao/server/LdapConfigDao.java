@@ -105,7 +105,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		try {
 			TypedQuery<Long> query = em.createNamedQuery("countNondeletedLdapConfigs", Long.class);
 			List<Long> ll = query.getResultList();
-			log.debug("selectMaxFromLdapConfig" + ll.get(0));
+			log.debug("selectMaxFromLdapConfig {}", ll.get(0));
 			return ll.get(0);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromLdapConfig] ", ex2);

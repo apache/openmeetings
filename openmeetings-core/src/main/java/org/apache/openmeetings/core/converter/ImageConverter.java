@@ -75,7 +75,7 @@ public class ImageConverter extends BaseConverter {
 		if (!sf.isPng()) {
 			File img = f.getFile(sf.getExt());
 
-			log.debug("##### convertImage destinationFile: " + png);
+			log.debug("##### convertImage destinationFile: {}", png);
 			logs.add(convertSinglePng(img, png));
 		} else if (!png.exists()){
 			copyFile(f.getFile(sf.getExt()), png);
