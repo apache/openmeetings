@@ -21,6 +21,7 @@ package org.apache.openmeetings.db.entity.room;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -382,6 +383,14 @@ public class Room extends HistoricalEntity {
 
 	public void setExternalId(String externalId) {
 		this.externalId = externalId;
+	}
+
+	public String externalType() {
+		Optional<String> extType = groups == null
+				? Optional.empty()
+				: groups.stream().filter(rg -> rg.getGroup().isExternal()).findFirst()
+				.map(gu -> gu.getGroup().getName());
+		return extType.isPresent() ? extType.get() : null;
 	}
 
 	@Deprecated(since = "5.0")

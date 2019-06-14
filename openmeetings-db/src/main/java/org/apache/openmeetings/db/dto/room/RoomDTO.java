@@ -86,7 +86,7 @@ public class RoomDTO implements Serializable {
 		closed = r.isClosed();
 		demoTime = r.getDemoTime();
 		externalId = r.getExternalId();
-		r.getGroups().stream().findFirst().ifPresent(g -> externalType = g.getGroup().getName());
+		externalType = r.externalType();
 		redirectUrl = r.getRedirectURL();
 		moderated = r.isModerated();
 		allowUserQuestions = r.isAllowUserQuestions();

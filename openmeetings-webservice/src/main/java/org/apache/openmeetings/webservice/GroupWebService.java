@@ -204,7 +204,7 @@ public class GroupWebService extends BaseWebService {
 					}
 				}
 				if (!found) {
-					r.getGroups().add(new RoomGroup(groupDao.get(id), r));
+					r.addGroup(groupDao.get(id));
 					roomDao.update(r, sd.getUserId());
 					return new ServiceResult("Success", Type.SUCCESS);
 				}

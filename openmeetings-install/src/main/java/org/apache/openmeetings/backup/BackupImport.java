@@ -373,9 +373,9 @@ public class BackupImport {
 		BackupVersion ver = getVersion(simpleSerializer, f);
 		importConfigs(f);
 		importGroups(f, simpleSerializer);
-		Long defaultLdapId = importLdap(f, simpleSerializer);
+		importLdap(f, simpleSerializer);
 		importOauth(f, simpleSerializer);
-		importUsers(f, defaultLdapId);
+		importUsers(f);
 		importRooms(f);
 		importRoomGroups(f);
 		importChat(f);
@@ -557,7 +557,7 @@ public class BackupImport {
 	/*
 	 * ##################### Import Users
 	 */
-	private void importUsers(File f, Long defaultLdapId) throws Exception {
+	private void importUsers(File f) throws Exception {
 		log.info("OAuth2 servers import complete, starting user import");
 		String jNameTimeZone = getDefaultTimezone();
 		//add existence email from database
@@ -620,9 +620,6 @@ public class BackupImport {
 			u.setId(null);
 			if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
 				u.getSipUser().setId(0);
-			}
-			if (!Strings.isEmpty(u.getExternalType())) {
-				u.setType(User.Type.external);
 			}
 			if (AuthLevelUtil.hasLoginLevel(u.getRights()) && !Strings.isEmpty(u.getActivatehash())) {
 				u.setActivatehash(null);

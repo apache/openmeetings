@@ -121,7 +121,6 @@ import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.Room.Type;
-import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestInfoMethod;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestTokenMethod;
@@ -394,10 +393,7 @@ public class ImportInitvalues {
 		r.setAllowRecording(true);
 
 		if (groupId != null) {
-			RoomGroup ro = new RoomGroup();
-			ro.setRoom(r);
-			ro.setGroup(groupDao.get(groupId));
-			r.getGroups().add(ro);
+			r.addGroup(groupDao.get(groupId));
 		}
 		r = roomDao.update(r, null);
 		return r;
