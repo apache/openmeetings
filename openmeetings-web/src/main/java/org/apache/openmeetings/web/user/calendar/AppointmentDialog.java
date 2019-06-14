@@ -180,7 +180,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		form.start.setModelObject(getDateTime(a.getStart()));
 		form.end.setModelObject(getDateTime(a.getEnd()));
 		form.setEnabled(isOwner(a));
-		log.debug(" -- setModelObjectWithAjaxTarget -- Current model " + a);
+		log.debug(" -- setModelObjectWithAjaxTarget -- Current model {}", a);
 		if (a.getId() != null) {
 			delete.setVisible(isOwner(a), target);
 			enterRoom.setVisible(a.getRoom() != null, target);

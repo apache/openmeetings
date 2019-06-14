@@ -65,7 +65,11 @@ public class GroupsPanel extends AdminBasePanel {
 			protected void populateItem(Item<Group> item) {
 				final Group g = item.getModelObject();
 				item.add(new Label("id"));
-				item.add(new Label("name"));
+				Label name = new Label("name");
+				if (g.isExternal()) {
+					name.add(AttributeModifier.append("class", "external"));
+				}
+				item.add(name);
 				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 

@@ -34,8 +34,8 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CleanupHelper {
 	private static final Logger log = LoggerFactory.getLogger(CleanupHelper.class);
@@ -101,7 +101,7 @@ public class CleanupHelper {
 		int missing = 0;
 		for (File f : list(hibernateDir, (dir, name) -> name.endsWith(EXTENSION_MP4))) {
 			if (!f.isFile()) {
-				log.warn("Recording found is not a file: " + f);
+				log.warn("Recording found is not a file: {}", f);
 				continue;
 			}
 			String hash = f.getName().substring(0, f.getName().length() - EXTENSION_MP4.length() - 1);

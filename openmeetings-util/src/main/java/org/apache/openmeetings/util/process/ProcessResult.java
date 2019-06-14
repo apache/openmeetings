@@ -28,7 +28,7 @@ package org.apache.openmeetings.util.process;
  *
  */
 public class ProcessResult {
-	public static final Integer ZERO = new Integer(0);
+	public static final Integer ZERO = Integer.valueOf(0);
 
 	private String process;
 	private String command;

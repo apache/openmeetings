@@ -130,6 +130,10 @@ public abstract class BaseFileItem extends HistoricalEntity {
 	@Element(data = true, required = false)
 	private int count = 1;
 
+	@Column(name = "external_type")
+	@Element(data = true, required = false)
+	private String externalType;
+
 	// Not Mapped
 	@Transient
 	private List<FileItemLog> log;
@@ -257,6 +261,14 @@ public abstract class BaseFileItem extends HistoricalEntity {
 
 	public void setReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
+	}
+
+	public String getExternalType() {
+		return externalType;
+	}
+
+	public void setExternalType(String externalType) {
+		this.externalType = externalType;
 	}
 
 	public final File getFile(String ext) {

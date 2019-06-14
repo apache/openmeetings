@@ -73,7 +73,7 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 	@Override
 	public void resultReceived(IPendingServiceCall call) {
 		String method = call == null ? null : call.getServiceMethodName();
-		logger.trace("call ### get Method Name " + method);
+		logger.trace("call ### get Method Name {}", method);
 		if ("createStream".equals(method)) {
 			if (call.getResult() != null) {
 				publishScreen.setStreamId((Integer)call.getResult());

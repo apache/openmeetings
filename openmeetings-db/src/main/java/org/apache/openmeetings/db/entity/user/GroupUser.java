@@ -35,13 +35,13 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@NamedQuery(name="deleteGroupUsersByGroup", query="DELETE FROM GroupUser gu WHERE gu.group.id = :id")
-@NamedQuery(name="countGroupUsers", query="SELECT COUNT(c) FROM GroupUser c WHERE c.group.id = :id")
-@NamedQuery(name="getGroupUsersById", query="SELECT c FROM GroupUser c WHERE c.id = :id")
-@NamedQuery(name="getGroupUsersByGroupId", query="SELECT c FROM GroupUser c WHERE c.group.id = :id")
-@NamedQuery(name="isUserInGroup", query="SELECT c FROM GroupUser c WHERE c.group.id = :groupId AND c.user.id = :userId")
+@NamedQuery(name = "deleteGroupUsersByGroup", query = "DELETE FROM GroupUser gu WHERE gu.group.id = :id")
+@NamedQuery(name = "countGroupUsers", query = "SELECT COUNT(gu) FROM GroupUser gu WHERE gu.group.id = :id")
+@NamedQuery(name = "getGroupUsersById", query = "SELECT gu FROM GroupUser gu WHERE gu.id = :id")
+@NamedQuery(name = "getGroupUsersByGroupId", query = "SELECT gu FROM GroupUser gu WHERE gu.group.id = :id")
+@NamedQuery(name = "isUserInGroup", query = "SELECT gu FROM GroupUser gu WHERE gu.group.id = :groupId AND gu.user.id = :userId")
 @Table(name = "group_user")
-@Root(name="user_organisation")
+@Root(name = "user_organisation")
 public class GroupUser extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	@Id

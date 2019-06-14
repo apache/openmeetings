@@ -29,12 +29,12 @@ public class ScreenKeyListener implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent kEvent) {
-		logger.debug("keyPressed :Code: " + kEvent.getKeyCode());
+		logger.debug("keyPressed :Code: {}", kEvent.getKeyCode());
 	}
 
 	@Override
 	public void keyReleased(KeyEvent kEvent) {
-		logger.debug("keyReleased :Code: " + kEvent.getKeyCode());
+		logger.debug("keyReleased :Code: {}", kEvent.getKeyCode());
 	}
 
 	@Override

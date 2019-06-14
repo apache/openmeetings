@@ -403,7 +403,7 @@ public class CalendarPanel extends UserBasePanel {
 		a.setReminder(Reminder.ical);
 		a.setOwner(userDao.get(getUserId()));
 		a.setTitle(getString("1444"));
-		log.debug(" -- getDefault -- Current model " + a);
+		log.debug(" -- getDefault -- Current model {}", a);
 		return a;
 	}
 }

@@ -196,7 +196,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		List<Configuration> list = get(new String[] {key});
 
 		if (list == null || list.isEmpty() || list.get(0) == null) {
-			log.warn("Could not find key in configurations: " + key);
+			log.warn("Could not find key in configurations: {}", key);
 			return null;
 		}
 		return list.get(0);

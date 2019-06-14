@@ -18,6 +18,20 @@
  */
 package org.apache.openmeetings.screenshare;
 
+import static java.lang.Boolean.TRUE;
+import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.screenshare.util.Util.getQurtzProps;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+import static org.slf4j.LoggerFactory.getLogger;
+
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.net.ConnectException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import org.apache.openmeetings.screenshare.gui.ScreenDimensions;
 import org.apache.openmeetings.screenshare.gui.ScreenSharerFrame;
 import org.apache.openmeetings.screenshare.job.RemoteJob;
@@ -41,20 +55,6 @@ import org.red5.server.net.rtmp.event.Notify;
 import org.red5.server.net.rtmp.status.StatusCodes;
 import org.slf4j.Logger;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.net.ConnectException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
-
-import static java.lang.Boolean.TRUE;
-import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.screenshare.util.Util.getQurtzProps;
-import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
-import static org.slf4j.LoggerFactory.getLogger;
 
 public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	private static final Logger log = getLogger(Core.class);
@@ -108,7 +108,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		try {
 			System.setProperty("org.terracotta.quartz.skipUpdateCheck", "true");
 			for (String arg : args) {
-				log.debug("arg: " + arg);
+				log.debug("arg: {}", arg);
 			}
 			String[] textArray = null;
 			if (args.length > 8) {
@@ -127,10 +127,12 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 				if (labelTexts.length() > 0) {
 					textArray = labelTexts.split(";");
 
-					log.debug("labelTexts :: " + labelTexts);
-					log.debug("textArray Length " + textArray.length);
-					for (int i = 0; i < textArray.length; i++) {
-						log.debug(i + " :: " + textArray[i]);
+					if (log.isDebugEnabled()) {
+						log.debug("labelTexts :: {}", labelTexts);
+						log.debug("textArray Length {}", textArray.length);
+						for (int i = 0; i < textArray.length; i++) {
+							log.debug("{} :: {}", i, textArray[i]);
+						}
 					}
 				}
 			} else {
@@ -439,20 +441,20 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			getCapture().release();
 			_capture = null;
 		} catch (Exception e) {
-			log.error("ScreenShare stopStream exception " + e);
+			log.error("ScreenShare stopStream exception ", e);
 		}
 	}
 
 	@Override
 	public void onStreamEvent(Notify notify) {
-		log.debug( "onStreamEvent " + notify );
+		log.debug("onStreamEvent {}", notify);
 
 		@SuppressWarnings("rawtypes")
 		ObjectMap map = (ObjectMap) notify.getCall().getArguments()[0];
 		String code = (String) map.get("code");
 
 		if (StatusCodes.NS_PUBLISH_START.equals(code)) {
-			log.debug( "onStreamEvent Publish start" );
+			log.debug("onStreamEvent Publish start");
 			getCapture().setStartPublish(true);
 			setReadyToRecord(true);
 		}
@@ -467,7 +469,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			return;
 		}
 		log.trace("#### sendRemoteCursorEvent ");
-		log.trace("Result Map Type "+ obj);
+		log.trace("Result Map Type ", obj);
 
 		if (obj != null) {
 			remoteEvents.offer(obj);
@@ -478,7 +480,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	@Override
 	public void resultReceived(IPendingServiceCall call) {
 		try {
-			log.trace("service call result: " + call);
+			log.trace("service call result: {}", call);
 			if (call == null) {
 				return;
 			}
@@ -486,12 +488,12 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			String method = call.getServiceMethodName();
 			Object o = call.getResult();
 			if (log.isTraceEnabled()) {
-				log.trace("Result Map Type " + (o == null ? null : o.getClass().getName()));
-				log.trace("" + o);
+				log.trace("Result Map Type {}", (o == null ? null : o.getClass().getName()));
+				log.trace("{}", o);
 			}
 			@SuppressWarnings("unchecked")
 			Map<String, Object> returnMap = (o != null && o instanceof Map) ? (Map<String, Object>) o : new HashMap<>();
-			log.trace("call ### get Method Name " + method);
+			log.trace("call ### get Method Name {}", method);
 			if ("connect".equals(method)) {
 				Object code = returnMap.get("code");
 				if (CONNECT_FAILED.equals(code) && !fallbackUsed) {
@@ -569,7 +571,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			} else if ("setNewCursorPosition".equals(method)) {
 				// Do not do anything
 			} else {
-				log.debug("Unknown method " + method);
+				log.debug("Unknown method {}", method);
 			}
 
 		} catch (Exception err) {

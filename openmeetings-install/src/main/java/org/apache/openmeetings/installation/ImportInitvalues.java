@@ -444,11 +444,11 @@ public class ImportInitvalues {
 		u.setFirstname("firstname");
 		u.setLastname("lastname");
 		u.getAddress().setEmail(cfg.getEmail());
-		u.getGroupUsers().add(new GroupUser(g, u));
+		u.addGroup(g);
 
 		u = userDao.update(u, cfg.getPassword(), -1L);
 
-		log.debug("Installation - User Added user-Id " + u.getId());
+		log.debug("Installation - User Added user-Id {}", u.getId());
 
 		if (u.getId() == null) {
 			throw new InstallException("Unable to add user");

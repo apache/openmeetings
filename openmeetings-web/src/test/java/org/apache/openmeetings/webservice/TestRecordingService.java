@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Collection;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.record.RecordingDTO;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -39,7 +40,7 @@ public class TestRecordingService extends AbstractWebServiceTest {
 	private User getExternalUser() throws Exception {
 		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
-		u.setExternalType(UNIT_TEST_EXT_TYPE);
+		u.addGroup(getBean(GroupDao.class).getExternal(UNIT_TEST_EXT_TYPE));
 		u.setExternalId(uuid);
 		webCreateUser(u);
 		return u;

@@ -54,9 +54,6 @@ public class FileItem extends BaseFileItem {
 	@Column(name = "external_id")
 	private String externalId;
 
-	@Column(name = "external_type")
-	private String externalType;
-
 	@Override
 	@Element(data = true, name = "fileExplorerItemId")
 	public Long getId() {
@@ -83,13 +80,5 @@ public class FileItem extends BaseFileItem {
 
 	public void setExternalId(String externalId) {
 		this.externalId = externalId;
-	}
-
-	public String getExternalType() {
-		return externalType;
-	}
-
-	public void setExternalType(String externalType) {
-		this.externalType = externalType;
 	}
 }

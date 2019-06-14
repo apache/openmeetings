@@ -18,6 +18,23 @@
  */
 package org.apache.openmeetings.core.ldap;
 
+import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
+import static org.apache.openmeetings.db.util.LocaleHelper.validateCountry;
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
+import static org.apache.openmeetings.util.OmException.BAD_CREDENTIALS;
+import static org.apache.openmeetings.util.OmException.UNKNOWN;
+import static org.apache.openmeetings.util.OmFileHelper.loadLdapConf;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+
 import org.apache.directory.api.ldap.model.cursor.CursorException;
 import org.apache.directory.api.ldap.model.cursor.CursorLdapReferralException;
 import org.apache.directory.api.ldap.model.cursor.EntryCursor;
@@ -50,23 +67,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-
-import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
-import static org.apache.openmeetings.db.util.LocaleHelper.validateCountry;
-import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
-import static org.apache.openmeetings.util.OmException.BAD_CREDENTIALS;
-import static org.apache.openmeetings.util.OmException.UNKNOWN;
-import static org.apache.openmeetings.util.OmFileHelper.loadLdapConf;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 
 /**
  * Management of optional LDAP Login
@@ -346,7 +346,7 @@ public class LdapLoginManager {
 				u.setDomainId(domainId);
 				Group g = groupDao.get(getDefaultGroup());
 				if (g != null) {
-					u.getGroupUsers().add(new GroupUser(g, u));
+					u.addGroup(g);
 				}
 				String login = getLogin(config, entry);
 				if (ldapCfg.getAddDomainToUserName()) {
@@ -410,8 +410,8 @@ public class LdapLoginManager {
 						}
 					}
 					if (!found) {
-						u.getGroupUsers().add(new GroupUser(o, u));
-						log.debug("Going to add user to group:: " + name);
+						u.addGroup(o);
+						log.debug("Going to add user to group:: {}", name);
 					}
 				}
 			}

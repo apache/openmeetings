@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
@@ -50,7 +51,7 @@ public class MeetingMemberDTO implements Serializable {
 		this.user = new UserDTO(mm.getUser());
 	}
 
-	public MeetingMember get(UserDao userDao, User owner) {
+	public MeetingMember get(UserDao userDao, GroupDao groupDao, User owner) {
 		MeetingMember mm = new MeetingMember();
 		mm.setId(id);
 		if (user.getId() != null) {
@@ -70,11 +71,9 @@ public class MeetingMemberDTO implements Serializable {
 						, owner);
 			}
 			if (u == null) {
-				u = user.get(userDao);
-				u.setType(User.Type.contact);
+				user.setType(User.Type.contact);
+				u = user.get(userDao, groupDao);
 				u.getRights().clear();
-				u.setExternalId(null);
-				u.setExternalType(null);
 			}
 			if (Strings.isEmpty(u.getTimeZoneId())) {
 				u.setTimeZoneId(owner.getTimeZoneId());

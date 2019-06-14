@@ -37,7 +37,7 @@ public class CryptProvider {
 					try {
 						log.debug("getInstanceOfCrypt:: configKeyCryptClassName: {}", clazz);
 
-						crypt = clazz == null ? null : (ICrypt) Class.forName(clazz).newInstance();
+						crypt = clazz == null ? null : (ICrypt) Class.forName(clazz).getDeclaredConstructor().newInstance();
 					} catch (Exception err) {
 						log.error("[getInstanceOfCrypt]", err);
 					}

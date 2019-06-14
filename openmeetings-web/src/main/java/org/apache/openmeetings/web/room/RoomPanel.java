@@ -338,7 +338,7 @@ public class RoomPanel extends BasePanel {
 				}
 			} else {
 				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()));
-				log.debug("public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
+				log.debug("public ? {}, ownedId ? {} {}", r.getIspublic(), r.getOwnerId(), allowed);
 				if (!allowed) {
 					User u = getClient().getUser();
 					for (RoomGroup ro : r.getGroups()) {

@@ -31,6 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.file.BaseFileItemDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
@@ -98,7 +100,7 @@ public class AppointmentDTO implements Serializable {
 		reminderEmailSend = a.isReminderEmailSend();
 	}
 
-	public Appointment get(UserDao userDao, BaseFileItemDao fileDao, AppointmentDao appointmentDao, User u) {
+	public Appointment get(UserDao userDao, GroupDao groupDao, RoomDao roomDao, BaseFileItemDao fileDao, AppointmentDao appointmentDao, User u) {
 		Appointment a = id == null ? new Appointment() : appointmentDao.get(id);
 		a.setId(id);
 		a.setTitle(title);
@@ -111,7 +113,7 @@ public class AppointmentDTO implements Serializable {
 		a.setUpdated(updated);
 		a.setDeleted(deleted);
 		a.setReminder(reminder);
-		a.setRoom(room.get(fileDao));
+		a.setRoom(room.get(roomDao, groupDao, fileDao));
 		a.setIcalId(icalId);
 		List<MeetingMember> mml = new ArrayList<>();
 		for(MeetingMemberDTO mm : meetingMembers) {
@@ -128,7 +130,7 @@ public class AppointmentDTO implements Serializable {
 					throw new RuntimeException("Weird guest from different appointment is passed");
 				}
 			} else {
-				m = mm.get(userDao, u);
+				m = mm.get(userDao, groupDao, u);
 				m.setAppointment(a);
 			}
 			mml.add(m);

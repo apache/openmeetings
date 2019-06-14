@@ -607,7 +607,7 @@ public class ScreenSharerFrame extends JFrame {
 		if (status != sharingStarted) {
 			sharingActionRequested = false;
 		}
-		logger.debug("sharingActionRequested=" + sharingActionRequested);
+		logger.debug("sharingActionRequested={}", sharingActionRequested);
 		sharingStarted = status;
 		btnStartStopSharing.setIcon(status ? stopIcon : startIcon);
 		btnStartStopSharing.setText(status ? stopSharingLabel : startSharingLabel);
@@ -619,7 +619,7 @@ public class ScreenSharerFrame extends JFrame {
 		if (status != recordingStarted) {
 			recordingActionRequested = false;
 		}
-		logger.debug("recordingActionRequested=" + recordingActionRequested);
+		logger.debug("recordingActionRequested={}", recordingActionRequested);
 		recordingStarted = status;
 		btnStartStopRecording.setIcon(status ? stopIcon : startIcon);
 		btnStartStopRecording.setText(status ? stopRecordingLabel : startRecordingLabel);

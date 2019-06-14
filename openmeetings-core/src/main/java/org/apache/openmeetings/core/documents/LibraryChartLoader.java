@@ -45,7 +45,7 @@ public class LibraryChartLoader {
 		try {
 			File file = new File(dir, fileName + CHART_EXT);
 
-			log.error("filepathComplete: " + file);
+			log.error("filepathComplete: {}", file);
 
 			XStream xStream = new XStream(new XppDriver());
 			xStream.setMode(XStream.NO_REFERENCES);

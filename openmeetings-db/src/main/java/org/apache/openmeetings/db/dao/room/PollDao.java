@@ -18,20 +18,21 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.Date;
-import java.util.List;
-
-import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
 @Repository
 @Transactional
@@ -100,7 +101,7 @@ public class PollDao {
 	}
 
 	public boolean hasPoll(Long roomId) {
-		log.debug(" :: hasPoll :: " + roomId);
+		log.debug(" :: hasPoll :: {}", roomId);
 		return em.createNamedQuery("hasPoll", Long.class)
 				.setParameter(PARAM_ROOMID, roomId)
 				.setParameter("archived", false)

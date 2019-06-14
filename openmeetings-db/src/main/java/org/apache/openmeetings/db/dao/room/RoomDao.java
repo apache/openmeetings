@@ -18,7 +18,9 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
+import static org.apache.openmeetings.db.util.DaoHelper.fillLazy;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
+import static org.apache.openmeetings.db.util.DaoHelper.single;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ROOM_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
@@ -38,9 +40,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openjpa.persistence.OpenJPAEntityManager;
-import org.apache.openjpa.persistence.OpenJPAPersistence;
-import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -76,39 +75,20 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	public Room get(Long id) {
 		Room r = null;
 		if (id != null && id.longValue() > 0) {
-			OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
-			boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
-			try {
-				oem.getFetchPlan().setQueryResultCacheEnabled(false); //update in cache during update
-				TypedQuery<Room> q = oem.createNamedQuery("getRoomById", Room.class);
-				q.setParameter("id", id);
-				@SuppressWarnings("unchecked")
-				OpenJPAQuery<Room> kq = OpenJPAPersistence.cast(q);
-				kq.getFetchPlan().addFetchGroups("roomModerators", "roomGroups", "roomFiles");
-				List<Room> l = kq.getResultList();
-				r = l.isEmpty() ? r : l.get(0);
-			} finally {
-				oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
-			}
+			r = single(fillLazy(em
+					, oem -> oem.createNamedQuery("getRoomById", Room.class)
+						.setParameter("id", id)
+					, "roomModerators", "roomGroups", "roomFiles"));
 		} else {
-			log.info("[get] " + "Info: No room id given");
+			log.info("[get]: No room id given");
 		}
 		return r;
 	}
 
 	public List<Room> get() {
-		OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
-		boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
-		try {
-			oem.getFetchPlan().setQueryResultCacheEnabled(false); //update in cache during update
-			TypedQuery<Room> q = oem.createNamedQuery("getBackupRooms", Room.class);
-			@SuppressWarnings("unchecked")
-			OpenJPAQuery<Room> kq = OpenJPAPersistence.cast(q);
-			kq.getFetchPlan().addFetchGroups("roomModerators", "roomGroups", "roomFiles");
-			return kq.getResultList();
-		} finally {
-			oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
-		}
+		return fillLazy(em
+				, oem -> oem.createNamedQuery("getBackupRooms", Room.class)
+				, "roomModerators", "roomGroups", "roomFiles");
 	}
 
 	public List<Room> get(List<Long> ids) {
@@ -177,7 +157,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	}
 
 	public List<Room> getAppointedRoomsByUser(long userId) {
-		log.debug("getAppointedRoomsByUser : UserID - " + userId);
+		log.debug("getAppointedRoomsByUser : UserID - {}", userId);
 
 		TimeZone timeZone = getTimeZone(userDao.get(userId));
 
@@ -241,7 +221,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	}
 
 	public Room getUserRoom(Long ownerId, Room.Type type, String name) {
-		log.debug("getUserRoom : " + ownerId + " || " + type);
+		log.debug("getUserRoom : {} || {}", ownerId, type);
 		Room room = null;
 		List<Room> ll = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class).setParameter("ownerId", ownerId).setParameter("type", type).getResultList();
 		if (!ll.isEmpty()) {
@@ -249,7 +229,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 		}
 
 		if (room == null) {
-			log.debug("Could not find room " + ownerId + " || " + type);
+			log.debug("Could not find room {} || {}", ownerId, type);
 
 			room = new Room();
 			room.setName(name);
@@ -272,13 +252,13 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	}
 
 	public Room getExternal(Type type, String externalType, String externalId) {
-		log.debug("getExternal : " + externalId + " - " + externalType + " - " + type);
-		List<Room> ll = em.createNamedQuery("getRoomByExternalId", Room.class)
-				.setParameter("externalId", externalId)
-				.setParameter("externalType", externalType)
-				.setParameter("type", type)
-				.getResultList();
-		return ll.isEmpty() ? null : ll.get(0);
+		log.debug("getExternal : {} - {}  - {}", type, externalType, externalId);
+		return single(fillLazy(em
+				, oem -> oem.createNamedQuery("getExternalRoom", Room.class)
+					.setParameter("externalId", externalId)
+					.setParameter("externalType", externalType)
+					.setParameter("type", type)
+				, "roomGroups"));
 	}
 
 	public List<Room> getRecent(Long userId) {

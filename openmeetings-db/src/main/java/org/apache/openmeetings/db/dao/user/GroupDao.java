@@ -52,6 +52,15 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 		return groups == null || groups.isEmpty() ? null : groups.get(0);
 	}
 
+	public Group getExternal(String name) {
+		List<Group> groups = em.createNamedQuery("getExtGroupByName", Group.class).setParameter("name", name).getResultList();
+		Group g = groups == null || groups.isEmpty() ? null : groups.get(0);
+		if (g == null) {
+			g = update(new Group().setExternal(true).setName(name), null);
+		}
+		return g;
+	}
+
 	@Override
 	public List<Group> get(long start, long count) {
 		return setLimits(em.createNamedQuery("getNondeletedGroups", Group.class), start, count)

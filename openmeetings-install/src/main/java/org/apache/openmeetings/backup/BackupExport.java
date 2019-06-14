@@ -194,7 +194,7 @@ public class BackupExport {
 		for (File file : getUploadDir().listFiles()) {
 			String fName = file.getName();
 			if (file.isDirectory() && !IMPORT_DIR.equals(fName) && !BACKUP_DIR.equals(fName)) {
-				log.debug("### " + file.getName());
+				log.debug("### {}", file.getName());
 				writeZipDir(BCKP_ROOM_FILES, file.getParentFile().toURI(), file, zos);
 			}
 		}
@@ -531,7 +531,7 @@ public class BackupExport {
 
 	private static void writeZip(String prefix, URI base, File file, ZipOutputStream zos) throws IOException {
 		String path = prefix + "/" + base.relativize(file.toURI()).toString();
-		log.debug("Writing '" + path + "' to zip file");
+		log.debug("Writing '{}' to zip file", path);
 		ZipEntry zipEntry = new ZipEntry(path);
 		zos.putNextEntry(zipEntry);
 

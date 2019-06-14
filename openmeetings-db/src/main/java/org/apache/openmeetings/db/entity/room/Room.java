@@ -39,6 +39,7 @@ import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -50,6 +51,7 @@ import org.apache.openjpa.persistence.FetchGroup;
 import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -65,9 +67,9 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name = "getRoomByOwnerAndTypeId", query = "SELECT r FROM Room as r WHERE r.ownerId = :ownerId "
 				+ "AND r.type = :type AND r.deleted = false")
 @NamedQuery(name = "selectMaxFromRooms", query = "SELECT COUNT(r.id) from Room r WHERE r.deleted = false AND r.name LIKE :search ")
-@NamedQuery(name = "getRoomByExternalId", query = "SELECT r FROM Room as r "
-		+ "WHERE r.externalId = :externalId AND r.externalType = :externalType "
-		+ "AND r.type = :type AND r.deleted = false")
+@NamedQuery(name = "getExternalRoom", query = "SELECT rg.room FROM RoomGroup rg WHERE "
+		+ "rg.group.deleted = false AND rg.group.external = true AND rg.group.name = :externalType "
+		+ "AND rg.room.deleted = false AND rg.room.type = :type AND rg.room.externalId = :externalId")
 @NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC")
 @NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id = :id")
 @NamedQuery(name = "getRoomsByIds", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id IN :ids")
@@ -192,8 +194,9 @@ public class Room extends HistoricalEntity {
 	@Element(data = true, required = false)
 	private String externalId;
 
-	@Column(name = "external_type")
 	@Element(data = true, required = false)
+	@Deprecated(since = "5.0")
+	@Transient
 	private String externalType;
 
 	@Column(name = "demo_room", nullable = false)
@@ -381,10 +384,12 @@ public class Room extends HistoricalEntity {
 		this.externalId = externalId;
 	}
 
+	@Deprecated(since = "5.0")
 	public String getExternalType() {
 		return externalType;
 	}
 
+	@Deprecated(since = "5.0")
 	public void setExternalType(String externalType) {
 		this.externalType = externalType;
 	}
@@ -484,6 +489,13 @@ public class Room extends HistoricalEntity {
 
 	public List<RoomGroup> getGroups() {
 		return groups;
+	}
+
+	public void addGroup(Group g) {
+		if (groups == null) {
+			groups = new ArrayList<>();
+		}
+		groups.add(new RoomGroup(g, this));
 	}
 
 	public void setGroups(List<RoomGroup> groups) {

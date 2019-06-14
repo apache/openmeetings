@@ -82,13 +82,13 @@ public class RecordingWebService extends BaseWebService {
 	}
 
 	/**
-	 * Gets a list of flv recordings
+	 * Gets a list of recordings created by particular external user
 	 *
 	 * @param sid The SID of the User. This SID must be marked as Loggedin
 	 * @param externalId the externalUserId
 	 * @param externalType the externalUserType
 	 *
-	 * @return - list of flv recordings
+	 * @return - list of recordings
 	 */
 	@WebMethod
 	@GET
@@ -97,7 +97,7 @@ public class RecordingWebService extends BaseWebService {
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
 			, @PathParam("externalid") @WebParam(name="externalid") String externalId) {
 		log.debug("getExternal:: type {}, id {}", externalType, externalId);
-		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(recordingDao.getByExternalId(externalId, externalType)));
+		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(recordingDao.getByExternalUser(externalId, externalType)));
 	}
 
 	/**

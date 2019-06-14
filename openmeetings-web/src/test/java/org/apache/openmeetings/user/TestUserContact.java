@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.apache.openmeetings.AbstractWicketTester;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +42,7 @@ public class TestUserContact extends AbstractWicketTester {
 	public void createUserWithGroup() throws Exception {
 		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
-		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
+		u.addGroup(groupDao.get(1L));
 		u = userDao.update(u, null);
 		assertTrue(userDao.verifyPassword(u.getId(), createPass()), "Password should be set as expected");
 

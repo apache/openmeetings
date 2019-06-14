@@ -88,7 +88,7 @@ public class ErrorWebService extends BaseWebService {
 		if (sid != null && message != null) {
 			Sessiondata sd = check(sid);
 			if (sd.getId() != null) {
-				log.error("[CLIENT MESSAGE] " + message);
+				log.error("[CLIENT MESSAGE] {}", message);
 			}
 		}
 	}

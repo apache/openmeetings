@@ -19,8 +19,10 @@
 package org.apache.openmeetings.db.dao.user;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.db.util.DaoHelper.fillLazy;
 import static org.apache.openmeetings.db.util.DaoHelper.getStringParam;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
+import static org.apache.openmeetings.db.util.DaoHelper.single;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
@@ -44,9 +46,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.openjpa.persistence.OpenJPAEntityManager;
-import org.apache.openjpa.persistence.OpenJPAPersistence;
-import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.Address;
@@ -79,6 +78,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	private static final Logger log = LoggerFactory.getLogger(UserDao.class);
 	private static final String PARAM_EMAIL = "email";
 	private static final String[] searchFields = {"lastname", "firstname", "login", "address.email", "address.town"};
+	public static final String FETCH_GROUP_GROUP = "groupUsers";
+	public static final String FETCH_GROUP_BACKUP = "backupexport";
 
 	@PersistenceContext
 	private EntityManager em;
@@ -277,22 +278,14 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	private User get(Long id, boolean force) {
 		User u = null;
 		if (id != null && id.longValue() > 0) {
-			OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
-			boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
-			try {
-				oem.getFetchPlan().setQueryResultCacheEnabled(false); //update in cache during update
-				TypedQuery<User> q = oem.createNamedQuery("getUserById", User.class).setParameter("id", id);
-				@SuppressWarnings("unchecked")
-				OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);
-				kq.getFetchPlan().addFetchGroup("groupUsers");
-				if (force) {
-					kq.getFetchPlan().addFetchGroup("backupexport");
-				}
-				List<User> list = kq.getResultList();
-				u = list.size() == 1 ? list.get(0) : null;
-			} finally {
-				oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
+			List<String> groups = new ArrayList<>(2);
+			groups.add(FETCH_GROUP_GROUP);
+			if (force) {
+				groups.add(FETCH_GROUP_BACKUP);
 			}
+			u = single(fillLazy(em
+					, oem -> oem.createNamedQuery("getUserById", User.class).setParameter("id", id)
+					, groups.toArray(new String[groups.size()])));
 		} else {
 			log.info("[get]: No user id given");
 		}
@@ -364,23 +357,15 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public List<User> getAllUsers() {
-		TypedQuery<User> q = em.createNamedQuery("getNondeletedUsers", User.class);
-		return q.getResultList();
+		return fillLazy(em
+				, oem -> oem.createNamedQuery("getNondeletedUsers", User.class)
+				, FETCH_GROUP_GROUP);
 	}
 
 	public List<User> getAllBackupUsers() {
-		OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
-		boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
-		try {
-			oem.getFetchPlan().setQueryResultCacheEnabled(false); //update in cache during update
-			TypedQuery<User> q = oem.createNamedQuery("getAllUsers", User.class);
-			@SuppressWarnings("unchecked")
-			OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);
-			kq.getFetchPlan().addFetchGroups("backupexport", "groupUsers");
-			return kq.getResultList();
-		} finally {
-			oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
-		}
+		return fillLazy(em
+				, oem -> oem.createNamedQuery("getAllUsers", User.class)
+				, FETCH_GROUP_BACKUP, FETCH_GROUP_GROUP);
 	}
 
 	/**
@@ -416,21 +401,13 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return !Strings.isEmpty(login) && login.length() >= getMinLoginLength();
 	}
 
-	private static User getSingle(List<User> list) {
-		User u = null;
-		if (list.size() == 1) {
-			u = list.get(0);
-			u.getGroupUsers().size(); // this will initiate lazy collection
-		}
-		return u;
-	}
-
 	public User getByLogin(String login, Type type, Long domainId) {
-		return getSingle(em.createNamedQuery("getUserByLogin", User.class)
-				.setParameter("login", login)
-				.setParameter("type", type)
-				.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
-				.getResultList());
+		return single(fillLazy(em
+				, oem -> oem.createNamedQuery("getUserByLogin", User.class)
+					.setParameter("login", login)
+					.setParameter("type", type)
+					.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
+				, FETCH_GROUP_GROUP));
 	}
 
 	public User getByEmail(String email) {
@@ -438,21 +415,23 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public User getByEmail(String email, User.Type type, Long domainId) {
-		return getSingle(em.createNamedQuery("getUserByEmail", User.class)
-				.setParameter(PARAM_EMAIL, email)
-				.setParameter("type", type)
-				.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
-				.getResultList());
+		return single(fillLazy(em
+				, oem -> oem.createNamedQuery("getUserByEmail", User.class)
+					.setParameter(PARAM_EMAIL, email)
+					.setParameter("type", type)
+					.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
+				, FETCH_GROUP_GROUP));
 	}
 
 	public User getUserByHash(String hash) {
 		if (Strings.isEmpty(hash)) {
 			return null;
 		}
-		return getSingle(em.createNamedQuery("getUserByHash", User.class)
+		return single(fillLazy(em
+				, oem -> oem.createNamedQuery("getUserByHash", User.class)
 					.setParameter("resethash", hash)
 					.setParameter("type", User.Type.user)
-					.getResultList());
+				, FETCH_GROUP_GROUP));
 	}
 
 	/**
@@ -546,8 +525,10 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 * @return user with this hash
 	 */
 	public User getByActivationHash(String hash) {
-		return getSingle(em.createQuery("SELECT u FROM User as u WHERE u.activatehash = :activatehash AND u.deleted = false", User.class)
-				.setParameter("activatehash", hash).getResultList());
+		return single(fillLazy(em
+				, oem -> oem.createQuery("SELECT u FROM User as u WHERE u.activatehash = :activatehash AND u.deleted = false", User.class)
+				.setParameter("activatehash", hash)
+				, FETCH_GROUP_GROUP));
 	}
 
 	private <T> TypedQuery<T> getUserProfileQuery(Class<T> clazz, Long userId, String text, String offers, String search, String orderBy, boolean asc) {
@@ -593,10 +574,12 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public User getExternalUser(String extId, String extType) {
-		return getSingle(em.createNamedQuery("getExternalUser", User.class)
-				.setParameter("externalId", extId)
-				.setParameter("externalType", extType)
-				.getResultList());
+		return single(fillLazy(em
+				, oem -> oem.createNamedQuery("getExternalUser", User.class)
+					.setParameter("externalId", extId)
+					.setParameter("externalType", extType)
+					.setParameter("type", Type.external)
+				, FETCH_GROUP_GROUP));
 	}
 
 	@Override
@@ -654,7 +637,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			log.debug("Not activated: {}", u);
 			throw new OmException("error.notactivated");
 		}
-		log.debug("loginUser " + u.getGroupUsers());
+		log.debug("login user groups {}", u.getGroupUsers());
 		if (u.getGroupUsers().isEmpty()) {
 			log.debug("No Group assigned: {}", u);
 			throw new OmException("error.nogroup");

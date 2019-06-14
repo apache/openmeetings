@@ -143,8 +143,9 @@ public class TestUserService extends AbstractWebServiceTest {
 				.post(new Form().param("user", u.toString()).param("confirm", "" + false), UserDTO.class);
 		assertNotNull(user, "Valid UserDTO should be returned");
 		assertNotNull(user.getId(), "Id should not be NULL");
-		assertEquals(u.getLogin(), user.getLogin(), "OM Call should be successful");
-		assertEquals(tz, user.getTimeZoneId(), "OM Call should be successful");
+		assertEquals(u.getLogin(), user.getLogin(), "Login should match");
+		assertEquals(User.Type.external, user.getType(), "Type should match");
+		assertEquals(tz, user.getTimeZoneId(), "Timezone should match");
 	}
 
 	@Test

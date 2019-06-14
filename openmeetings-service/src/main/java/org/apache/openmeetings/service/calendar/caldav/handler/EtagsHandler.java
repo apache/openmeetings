@@ -86,7 +86,8 @@ public class EtagsHandler extends AbstractCalendarHandler {
 	}
 
 	public EtagsHandler(String path, OmCalendar calendar, HttpClient client,
-	                    HttpClientContext context, AppointmentDao appointmentDao, IcalUtils utils) {
+			HttpClientContext context, AppointmentDao appointmentDao, IcalUtils utils)
+	{
 		super(path, calendar, client, context, appointmentDao, utils);
 	}
 
@@ -206,9 +207,9 @@ public class EtagsHandler extends AbstractCalendarHandler {
 
 					//Check if the ETag header was returned.
 					Header etagh = putMethod.getFirstHeader("ETag");
-					if (etagh == null)
+					if (etagh == null) {
 						hrefs = Collections.singletonList(appointment.getHref());
-					else {
+					} else {
 						appointment.setEtag(etagh.getValue());
 						appointmentDao.update(appointment, appointment.getOwner().getId());
 					}
@@ -260,7 +261,7 @@ public class EtagsHandler extends AbstractCalendarHandler {
 
 				int status = response.getStatusLine().getStatusCode();
 				if (status == SC_NO_CONTENT || status == SC_OK || status == SC_NOT_FOUND) {
-					log.info("Successfully deleted appointment with id: " + appointment.getId());
+					log.info("Successfully deleted appointment with id: {}", appointment.getId());
 					return true;
 				} else {
 					// Appointment Not deleted

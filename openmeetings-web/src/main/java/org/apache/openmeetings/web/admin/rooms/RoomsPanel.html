@@ -136,7 +136,7 @@
 				<!-- Room files -->
 				<fieldset class="ui-widget-content">
 					<legend class="ui-widget-header"><wicket:message key="245" /></legend>
-					<form wicket:id="filesForm">
+					<div wicket:id="filesForm">
 						<div class="formelement">
 							<label wicket:for="files2add"><wicket:message key="245" /></label>
 							<div class="om-select2"><select class="input" wicket:id="files2add"></select></div>
@@ -146,7 +146,7 @@
 							<input type="number" class="input" wicket:id="wbidx"/>
 						</div>
 						<button type="button" wicket:id="addFiles"><wicket:message key="1261"/></button>
-					</form>
+					</div>
 					<table class="list-table small">
 						<thead>
 							<tr class="ui-widget-header">
