@@ -59,16 +59,11 @@ var Video = (function() {
 			cnts = Sharer.baseConstraints(sd);
 			cnts.video.mediaSource = sd.shareType;
 			promise = navigator.mediaDevices.getUserMedia(cnts);
-		} else if (VideoUtil.isChrome72(b)) {
+		} else if (VideoUtil.isChrome(b)) {
 			cnts = {
 				video: true
 			};
 			promise = navigator.mediaDevices.getDisplayMedia(cnts);
-		} else if (VideoUtil.isChrome(b)) {
-			promise = Sharer.getChromeConstraints(sd).then((_cnts) => {
-				cnts = _cnts;
-				return navigator.mediaDevices.getUserMedia(_cnts);
-			});
 		} else {
 			promise = new Promise(() => {
 				Sharer.close();

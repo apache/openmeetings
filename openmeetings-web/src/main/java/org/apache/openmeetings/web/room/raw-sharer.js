@@ -73,7 +73,7 @@ var Sharer = (function() {
 	}
 	function _typeDisabled(_b) {
 		const b = _b || kurentoUtils.WebRtcPeer.browser;
-		return VideoUtil.isEdge(b) || VideoUtil.isChrome72(b);
+		return VideoUtil.isEdge(b) || VideoUtil.isChrome(b);
 	}
 	function _setShareState(state) {
 		shareState = state;
@@ -111,53 +111,6 @@ var Sharer = (function() {
 			rbtn.button('enable');
 		}
 	}
-	// Following methods are based on
-	// Licensed MIT
-	// Last time updated on June 08, 2018
-	// Latest file can be found here: https://cdn.webrtc-experiment.com/getScreenId.js
-	// Muaz Khan         - www.MuazKhan.com
-	function _getChromeConstraints(sd) {
-		return new Promise((resolve) => {
-			if (iframe) {
-				iframe.remove();
-			}
-			iframe = $('<iframe>')
-				.on('load', function() {
-					resolve();
-				})
-				.attr('src', frameUrl)
-				.hide();
-			$(document.body || document.documentElement).append(iframe);
-		}).then(() => {
-			return new Promise((resolve, reject) => {
-				window.addEventListener('message', _onIFrameCallback);
-
-				function _onIFrameCallback(event) {
-					if (!event.data) {
-						return;
-					}
-					if (event.data.chromeMediaSourceId) {
-						if (event.data.chromeMediaSourceId === 'PermissionDeniedError') {
-							reject('permission-denied');
-						} else {
-							resolve(_getScreenConstraints(sd, event.data.chromeMediaSourceId));
-						}
-						// this event listener is no more needed
-						window.removeEventListener('message', _onIFrameCallback);
-					}
-					if (event.data.chromeExtensionStatus) {
-						reject(event.data.chromeExtensionStatus);
-						// this event listener is no more needed
-						window.removeEventListener('message', _onIFrameCallback);
-					}
-				}
-
-				iframe[0].contentWindow.postMessage({
-					captureCustomSourceId: [sd.shareType]
-				}, '*');
-			});
-		});
-	};
 	function _getScreenConstraints(sd, sourceId) {
 		//Chrome screen constraints requires old school definition
 		const cnts = {
@@ -212,6 +165,5 @@ var Sharer = (function() {
 			, audio: false
 		};
 	};
-	self.getChromeConstraints = _getChromeConstraints;
 	return self;
 })();

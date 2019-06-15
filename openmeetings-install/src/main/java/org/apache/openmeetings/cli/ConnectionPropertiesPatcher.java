@@ -20,6 +20,7 @@ package org.apache.openmeetings.cli;
 
 import java.io.File;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -86,6 +87,8 @@ public abstract class ConnectionPropertiesPatcher {
 
 	private static Document getDocument(File xml) throws Exception {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		dbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		dbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		return dBuilder.parse(xml);
 	}
@@ -106,8 +109,10 @@ public abstract class ConnectionPropertiesPatcher {
 		patcher.patchAttribute(tokens);
 		attr.setValue(StringUtils.join(tokens, ","));
 
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
+		TransformerFactory factory = TransformerFactory.newInstance();
+		factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+		Transformer transformer = factory.newTransformer();
 		DOMSource source = new DOMSource(doc);
 		transformer.transform(source, new StreamResult(OmFileHelper.getPersistence().getCanonicalPath())); //this constructor is used to avoid transforming path to URI
 	}

@@ -132,10 +132,6 @@ var VideoUtil = (function() {
 		const b = _b || kurentoUtils.WebRtcPeer.browser;
 		return b.name === 'Chrome' || b.name === 'Chromium';
 	}
-	function _isChrome72(_b) {
-		const b = _b || kurentoUtils.WebRtcPeer.browser;
-		return _isChrome(b) && b.major > 71;
-	}
 	function _isEdge(_b) {
 		const b = _b || kurentoUtils.WebRtcPeer.browser;
 		return b.name === 'Edge';
@@ -210,7 +206,6 @@ var VideoUtil = (function() {
 	};
 	self.isEdge = _isEdge;
 	self.isChrome = _isChrome;
-	self.isChrome72 = _isChrome72;
 	self.setPos = _setPos;
 	self.askPermission = _askPermission;
 	self.disconnect = _disconnect;

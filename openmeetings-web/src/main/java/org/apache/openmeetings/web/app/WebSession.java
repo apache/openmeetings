@@ -93,8 +93,8 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(WebSession.class);
 	public static final int MILLIS_IN_MINUTE = 60000;
-	public static final List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
-	public static final Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<>(AVAILABLE_TIMEZONES);
+	public static final List<String> AVAILABLE_TIMEZONES = Collections.unmodifiableList(Arrays.asList(TimeZone.getAvailableIDs()));
+	public static final Set<String> AVAILABLE_TIMEZONE_SET = Collections.unmodifiableSet(new LinkedHashSet<>(AVAILABLE_TIMEZONES));
 	public static final String WICKET_ROOM_ID = "wicketroomid";
 	private Long userId = null;
 	private Set<Right> rights = new HashSet<>();
