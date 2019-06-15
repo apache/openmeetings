@@ -18,26 +18,27 @@
   under the License.
 
 -->
+<!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-	<wicket:head>
-		<style>
-			input:not([type='checkbox']):not([type='radio']), select {
-				width: 170px;
-			}
-			td.desc {
-				width: 200px;
-			}
-		</style>
-	</wicket:head>
-	<wicket:extend>
-		<script type="text/javascript">
-			$(function(){
-				$('#area').val(location.hash);
-			});
-		</script>
-		<div wicket:id="signin"></div>
-		<div wicket:id="register"></div>
-		<div wicket:id="forget"></div>
-		<div wicket:id="kick"></div>
-	</wicket:extend>
+<wicket:head>
+	<style>
+		input:not([type='checkbox']):not([type='radio']), select {
+			width: 170px;
+		}
+		td.desc {
+			width: 200px;
+		}
+	</style>
+</wicket:head>
+<wicket:extend>
+	<script type="text/javascript">
+		$(function(){
+			$('#area').val(location.hash);
+		});
+	</script>
+	<div wicket:id="signin"></div>
+	<div wicket:id="register"></div>
+	<div wicket:id="forget"></div>
+	<div wicket:id="kick"></div>
+</wicket:extend>
 </html>

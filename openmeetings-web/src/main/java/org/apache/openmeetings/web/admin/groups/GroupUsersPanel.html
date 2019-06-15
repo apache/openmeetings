@@ -17,30 +17,31 @@
   specific language governing permissions and limitations
   under the License.
 -->
+<!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-	<wicket:panel>
-		<div class="usergroupspanel">
-			<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
-			<table class="list-table small">
-				<thead>
-					<tr class="ui-widget-header">
-						<th class="col-1" wicket:message="title:98"><wicket:message key="98" /></th>
-						<th class="col-10" ><wicket:message key="177" /></th>
-						<th class="col-1"><wicket:message key="275" /></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr wicket:id="userList" class="ui-widget-content">
-						<td class="col-1"><input type="checkbox" wicket:id="isModerator"/></td>
-						<td class="col-10"><div class="col-wrapper"><span wicket:id="label"></span></div></td>
-						<td class="col-1">
-							<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="deleteUserBtn" wicket:message="title:274">
-								<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</wicket:panel>
+<wicket:panel>
+	<div class="usergroupspanel">
+		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
+		<table class="list-table small">
+			<thead>
+				<tr class="ui-widget-header">
+					<th class="col-1" wicket:message="title:98"><wicket:message key="98" /></th>
+					<th class="col-10" ><wicket:message key="177" /></th>
+					<th class="col-1"><wicket:message key="275" /></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="userList" class="ui-widget-content">
+					<td class="col-1"><input type="checkbox" wicket:id="isModerator"/></td>
+					<td class="col-10"><div class="col-wrapper"><span wicket:id="label"></span></div></td>
+					<td class="col-1">
+						<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="deleteUserBtn" wicket:message="title:274">
+							<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</wicket:panel>
 </html>

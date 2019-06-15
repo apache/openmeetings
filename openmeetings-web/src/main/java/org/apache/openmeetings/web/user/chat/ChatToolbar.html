@@ -18,6 +18,7 @@
   under the License.
 
 -->
+<!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:head>
 	<style>
@@ -44,7 +45,7 @@
 			</ul>
 		</div>
 		<div class="btn-group dropup">
-			<a id="fontSize" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" title="Font Size"> A <b class="caret"></b></a>
+			<a id="fontSize" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" title="Font Size"> A <b class="caret"></strong></a>
 			<ul class="dropdown-menu">
 				<li><a data-edit="fontSize 5"><font size="3">Huge</font></a></li>
 				<li><a data-edit="fontSize 3"><font size="2">Normal</font></a></li>
@@ -54,7 +55,7 @@
 		<div class="btn-group dropup">
 			<a id="fontStyle" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" title="Font Style">
 				<span class="chat-tool-icon">&nbsp;</span>
-				<b class="caret"></b>
+				<b class="caret"></strong>
 			</a>
 			<ul class="dropdown-menu btns-only">
 				<li><a class="chat-btn chat-tool-icon btn btn-default" id="bold" data-edit="bold" title="Bold (Ctrl/Cmd+B)" style="font-weight: bold;"> B </a></li>
@@ -73,7 +74,7 @@
 		<div class="btn-group dropup">
 			<a id="actions" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" wicket:message="title:635">
 				<span class="list chat-tool-icon">&nbsp;</span>
-				<b class="caret"></b>
+				<b class="caret"></strong>
 			</a>
 			<ul class="dropdown-menu btns-only">
 				<li><a class="chat-btn chat-tool-icon btn btn-default save" wicket:message="title:197" wicket:id="save"></a></li>
@@ -81,7 +82,7 @@
 					<span class="ui-button-icon ui-icon ui-icon-closethick"></span>
 				</a></li>
 				<li><a class="chat-btn chat-tool-icon btn btn-default audio" wicket:message="data-sound-enabled:sound.mute,data-sound-muted:sound.enable">&nbsp;</a></li>
-				<li><a class="chat-btn chat-tool-icon btn btn-default send-btn" wicket:message="data-send-enter:send.on.enter,data-send-ctrl:send.on.ctrl.enter"><b>&crarr;</b></a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-default send-btn" wicket:message="data-send-enter:send.on.enter,data-send-ctrl:send.on.ctrl.enter"><strong>&crarr;</strong></a></li>
 			</ul>
 		</div>
 	</div>

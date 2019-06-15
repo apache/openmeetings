@@ -18,104 +18,105 @@
   under the License.
 
 -->
+<!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-	<wicket:panel>
-		<form wicket:id="appForm" class="appointmentPopUp">
-			<span wicket:id="feedback"></span>
-			<div class="tabs">
-				<ul>
-					<li><a href="#tab1"><wicket:message key="appointment.tab.general"/></a></li>
-					<li><a href="#tab2"><wicket:message key="406"/></a></li>
-					<li><a href="#tab3"><wicket:message key="appointment.tab.advanced"/></a></li>
-				</ul>
-				<div id="tab1">
-					<div class="table">
+<wicket:panel>
+	<form wicket:id="appForm" class="appointmentPopUp">
+		<span wicket:id="feedback"></span>
+		<div class="tabs">
+			<ul>
+				<li><a href="#tab1"><wicket:message key="appointment.tab.general"/></a></li>
+				<li><a href="#tab2"><wicket:message key="406"/></a></li>
+				<li><a href="#tab3"><wicket:message key="appointment.tab.advanced"/></a></li>
+			</ul>
+			<div id="tab1">
+				<div class="table">
+					<div>
+						<div class="column label"><wicket:message key="572" /></div>
+						<div class="column data"><input type="text" wicket:id="title" /></div>
+					</div>
+					<div>
+						<div class="column label"><wicket:message key="570" /></div>
+						<div class="column data"><span class="date time picker" wicket:id="start"></span></div>
+					</div>
+					<div>
+						<div class="column label"><wicket:message key="571" /></div>
+						<div class="column data"><span class="date time picker" wicket:id="end"></span></div>
+					</div>
+					<div wicket:id="owner-row">
+						<div class="column label"><wicket:message key="1156" /></div>
+						<div class="column data"><span wicket:id="aowner"></span></div>
+					</div>
+					<div wicket:id="inviteeType">
 						<div>
-							<div class="column label"><wicket:message key="572" /></div>
-							<div class="column data"><input type="text" wicket:id="title" /></div>
+							<div class="column label"><input type="radio" wicket:id="user"/><label wicket:for="user"><wicket:message key="803" /></label></div>
+							<div class="column data om-select2" wicket:message="title:1588"><select class="appointment attendees input" wicket:id="attendees"></select></div>
 						</div>
-						<div>
-							<div class="column label"><wicket:message key="570" /></div>
-							<div class="column data"><span class="date time picker" wicket:id="start"></span></div>
-						</div>
-						<div>
-							<div class="column label"><wicket:message key="571" /></div>
-							<div class="column data"><span class="date time picker" wicket:id="end"></span></div>
-						</div>
-						<div wicket:id="owner-row">
-							<div class="column label"><wicket:message key="1156" /></div>
-							<div class="column data"><span wicket:id="aowner"></span></div>
-						</div>
-						<div wicket:id="inviteeType">
-							<div>
-								<div class="column label"><input type="radio" wicket:id="user"/><label wicket:for="user"><wicket:message key="803" /></label></div>
-								<div class="column data om-select2" wicket:message="title:1588"><select class="appointment attendees input" wicket:id="attendees"></select></div>
-							</div>
-							<div wicket:id="groupContainer">
-								<div class="column label"><input type="radio" wicket:id="group"/><label wicket:for="group"><wicket:message key="126" /></label></div>
-								<div class="column data om-select2"><select wicket:id="groups" class="input invitees"></select></div>
-							</div>
-						</div>
-						<div>
-							<div class="column label"><wicket:message key="569" /></div>
-							<div class="column data"><input type="text" wicket:id="location" /></div>
-						</div>
-						<div>
-							<div class="column label"><wicket:message key="196" /></div>
-							<div class="column data">
-								<div wicket:id="toolbarContainer"></div>
-								<div wicket:id="description"></div>
-							</div>
+						<div wicket:id="groupContainer">
+							<div class="column label"><input type="radio" wicket:id="group"/><label wicket:for="group"><wicket:message key="126" /></label></div>
+							<div class="column data om-select2"><select wicket:id="groups" class="input invitees"></select></div>
 						</div>
 					</div>
-				</div>
-				<div id="tab2">
-					<div class="table">
-						<div wicket:enclosure="createRoom">
-							<input type="checkbox" wicket:id="createRoom" /><label wicket:for="createRoom"><wicket:message key="1509" /></label>
-						</div>
-						<div wicket:id="create-room-block">
-							<div>
-								<div class="column label"><wicket:message key="619" /></div>
-								<div class="column data"><select wicket:id="type" ></select></div>
-							</div>
-							<div>
-								<div class="column label"><label wicket:for="moderated"><wicket:message key="640" /></label></div>
-								<div class="column data"><input type="checkbox" wicket:id="moderated" /></div>
-							</div>
-						</div>
-						<div>
-							<div class="column label"><wicket:message key="406" /></div>
-							<div class="column data"><select wicket:id="groom" ></select></div>
-						</div>
-						<div wicket:id="sip-container">
-							<div class="column label"><wicket:message key="1003"/></div>
-							<div class="column data"><span wicket:id="room.confno"></span></div>
-						</div>
+					<div>
+						<div class="column label"><wicket:message key="569" /></div>
+						<div class="column data"><input type="text" wicket:id="location" /></div>
 					</div>
-				</div>
-				<div id="tab3">
-					<div class="table">
-						<div>
-							<div class="column label"><wicket:message key="565" /></div>
-							<div class="column data"><select wicket:id="reminder" ></select></div>
-						</div>
-						<div>
-							<input type="checkbox" wicket:id="passwordProtected" /><label wicket:for="passwordProtected"><wicket:message key="524" /></label>
-						</div>
-						<div>
-							<div class="column label"><wicket:message key="110" /></div>
-							<div class="column data"><input type="password" wicket:id="password" /></div>
-						</div>
-						<div><wicket:message key="1445" /></div>
-						<div>
-							<div class="column label"><wicket:message key="162" /></div>
-							<div class="column data"><select wicket:id="calendar"></select></div>
+					<div>
+						<div class="column label"><wicket:message key="196" /></div>
+						<div class="column data">
+							<div wicket:id="toolbarContainer"></div>
+							<div wicket:id="description"></div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</form>
-		<div wicket:id="confirmDelete"></div>
-	</wicket:panel>
+			<div id="tab2">
+				<div class="table">
+					<div wicket:enclosure="createRoom">
+						<input type="checkbox" wicket:id="createRoom" /><label wicket:for="createRoom"><wicket:message key="1509" /></label>
+					</div>
+					<div wicket:id="create-room-block">
+						<div>
+							<div class="column label"><wicket:message key="619" /></div>
+							<div class="column data"><select wicket:id="type" ></select></div>
+						</div>
+						<div>
+							<div class="column label"><label wicket:for="moderated"><wicket:message key="640" /></label></div>
+							<div class="column data"><input type="checkbox" wicket:id="moderated" /></div>
+						</div>
+					</div>
+					<div>
+						<div class="column label"><wicket:message key="406" /></div>
+						<div class="column data"><select wicket:id="groom" ></select></div>
+					</div>
+					<div wicket:id="sip-container">
+						<div class="column label"><wicket:message key="1003"/></div>
+						<div class="column data"><span wicket:id="room.confno"></span></div>
+					</div>
+				</div>
+			</div>
+			<div id="tab3">
+				<div class="table">
+					<div>
+						<div class="column label"><wicket:message key="565" /></div>
+						<div class="column data"><select wicket:id="reminder" ></select></div>
+					</div>
+					<div>
+						<input type="checkbox" wicket:id="passwordProtected" /><label wicket:for="passwordProtected"><wicket:message key="524" /></label>
+					</div>
+					<div>
+						<div class="column label"><wicket:message key="110" /></div>
+						<div class="column data"><input type="password" wicket:id="password" /></div>
+					</div>
+					<div><wicket:message key="1445" /></div>
+					<div>
+						<div class="column label"><wicket:message key="162" /></div>
+						<div class="column data"><select wicket:id="calendar"></select></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div wicket:id="confirmDelete"></div>
+</wicket:panel>
 </html>

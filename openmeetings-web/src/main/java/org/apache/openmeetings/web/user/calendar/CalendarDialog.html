@@ -18,35 +18,36 @@
   under the License.
 
 -->
+<!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-	<wicket:panel>
-		<form wicket:id="calform" class="appointmentPopUp">
-			<span wicket:id="feedback"></span>
-			<div id="tabs">
-				<table>
-					<tr>
-						<td><wicket:message key="572"/></td>
-						<td><input type="text" wicket:id="title"/></td>
-					</tr>
-					<tr>
-						<td wicket:id="urlLabel"></td>
-						<td><input type="url" wicket:id="url" /></td>
-					</tr>
-					<tr>
-						<td wicket:id="userLabel"></td>
-						<td><input type="text" wicket:id="login"/></td>
-					</tr>
-					<tr>
-						<td wicket:id="passLabel"></td>
-						<td><input type="password" wicket:id="password"/></td>
-					</tr>
-					<tr>
-						<td><wicket:message key="calendar.gcal"/></td>
-						<td><input type="checkbox" wicket:id="gcal"/></td>
-					</tr>
-				</table>
-			</div>
-		</form>
-		<div wicket:id="confirmDelete"></div>
-	</wicket:panel>
+<wicket:panel>
+	<form wicket:id="calform" class="appointmentPopUp">
+		<span wicket:id="feedback"></span>
+		<div id="tabs">
+			<table>
+				<tr>
+					<td><wicket:message key="572"/></td>
+					<td><input type="text" wicket:id="title"/></td>
+				</tr>
+				<tr>
+					<td wicket:id="urlLabel"></td>
+					<td><input type="url" wicket:id="url" /></td>
+				</tr>
+				<tr>
+					<td wicket:id="userLabel"></td>
+					<td><input type="text" wicket:id="login"/></td>
+				</tr>
+				<tr>
+					<td wicket:id="passLabel"></td>
+					<td><input type="password" wicket:id="password"/></td>
+				</tr>
+				<tr>
+					<td><wicket:message key="calendar.gcal"/></td>
+					<td><input type="checkbox" wicket:id="gcal"/></td>
+				</tr>
+			</table>
+		</div>
+	</form>
+	<div wicket:id="confirmDelete"></div>
+</wicket:panel>
 </html>
