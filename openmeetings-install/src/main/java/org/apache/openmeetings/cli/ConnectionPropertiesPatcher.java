@@ -87,8 +87,7 @@ public abstract class ConnectionPropertiesPatcher {
 
 	private static Document getDocument(File xml) throws Exception {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		dbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-		dbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+		dbFactory.setAttribute(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		return dBuilder.parse(xml);
 	}
