@@ -70,7 +70,7 @@
 		<keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
-		<jacoco-maven-plugin.versoin>0.8.3</jacoco-maven-plugin.versoin>
+		<jacoco-maven-plugin.versoin>0.8.4</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>2.6</forbiddenapis.version>
 		<!-- dependency versions -->
 		<junit.version>5.4.2</junit.version>
