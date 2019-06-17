@@ -152,12 +152,8 @@ public class UserManager implements IUserManager {
 			boolean checkEmail = Strings.isEmpty(email) || userDao.checkEmail(email, User.Type.user, null, null);
 			if (checkName && checkEmail) {
 				String ahash = Strings.isEmpty(hash) ? randomUUID().toString() : hash;
-				if (Strings.isEmpty(u.getExternalType())) {
-					if (!Strings.isEmpty(email)) {
-						emailManager.sendMail(login, email, ahash, sendConfirmation(), u.getLanguageId());
-					}
-				} else {
-					u.setType(Type.external);
+				if (Type.external != u.getType() && !Strings.isEmpty(email)) {
+					emailManager.sendMail(login, email, ahash, sendConfirmation(), u.getLanguageId());
 				}
 
 				// If this user needs first to click his E-Mail verification
