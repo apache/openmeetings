@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.common;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -44,7 +44,7 @@ public class Captcha extends Panel {
 	private String randomText;
 	private final CaptchaImageResource captchaImageResource = new CaptchaImageResource() {
 		private static final long serialVersionUID = 1L;
-		private Random rnd = new Random();
+		private SecureRandom rnd = new SecureRandom();
 
 		@Override
 		protected byte[] render() {

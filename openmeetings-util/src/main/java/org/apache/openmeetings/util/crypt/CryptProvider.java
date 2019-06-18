@@ -23,25 +23,24 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassNa
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.jcip.annotations.ThreadSafe;
+
+@ThreadSafe
 public class CryptProvider {
 	private static final Logger log = LoggerFactory.getLogger(CryptProvider.class);
 	private static ICrypt crypt;
 
 	private CryptProvider() {}
 
-	public static ICrypt get() {
+	public static synchronized ICrypt get() {
 		if (crypt == null) {
-			synchronized (CryptProvider.class) {
-				if (crypt == null) {
-					String clazz = getCryptClassName();
-					try {
-						log.debug("getInstanceOfCrypt:: configKeyCryptClassName: {}", clazz);
+			String clazz = getCryptClassName();
+			try {
+				log.debug("get:: configKeyCryptClassName: {}", clazz);
 
-						crypt = clazz == null ? null : (ICrypt) Class.forName(clazz).getDeclaredConstructor().newInstance();
-					} catch (Exception err) {
-						log.error("[getInstanceOfCrypt]", err);
-					}
-				}
+				crypt = clazz == null ? null : (ICrypt) Class.forName(clazz).getDeclaredConstructor().newInstance();
+			} catch (Exception err) {
+				log.error("[get]", err);
 			}
 		}
 		return crypt;
