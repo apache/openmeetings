@@ -87,9 +87,11 @@ public abstract class ConnectionPropertiesPatcher {
 
 	private static Document getDocument(File xml) throws Exception {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		dbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-		dbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
-		dbFactory.setAttribute(XMLConstants.FEATURE_SECURE_PROCESSING, Boolean.TRUE);
+		dbFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+		dbFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		dbFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+		dbFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+		dbFactory.setXIncludeAware(false);
 		dbFactory.setExpandEntityReferences(false);
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		return dBuilder.parse(xml);

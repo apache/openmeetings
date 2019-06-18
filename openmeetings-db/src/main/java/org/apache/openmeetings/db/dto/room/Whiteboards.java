@@ -30,8 +30,8 @@ public class Whiteboards implements Serializable {
 	private Long roomId;
 	private final String uid = randomUUID().toString();
 	private Map<Long, Whiteboard> whiteboards = new ConcurrentHashMap<>();
-	private volatile AtomicLong whiteboardId = new AtomicLong(0);
-	private volatile AtomicLong activeWb = new AtomicLong(0);
+	private AtomicLong whiteboardId = new AtomicLong(0);
+	private AtomicLong activeWb = new AtomicLong(0);
 
 	public Whiteboards() {
 		//def constructor

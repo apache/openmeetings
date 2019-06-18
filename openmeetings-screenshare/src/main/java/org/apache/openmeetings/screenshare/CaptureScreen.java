@@ -52,8 +52,8 @@ public class CaptureScreen extends Thread {
 	private static final String QUARTZ_CURSOR_JOB_NAME = "CursorJob";
 	private final Core core;
 	private int timestampDelta;
-	private volatile AtomicInteger timestamp = new AtomicInteger(0);
-	private volatile AtomicBoolean sendFrameGuard = new AtomicBoolean(false);
+	private AtomicInteger timestamp = new AtomicInteger(0);
+	private AtomicBoolean sendFrameGuard = new AtomicBoolean(false);
 	private long startTime = 0;
 	private volatile boolean active = true;
 	private IScreenEncoder se;

@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 public class CryptProvider {
 	private static final Logger log = LoggerFactory.getLogger(CryptProvider.class);
-	private static volatile ICrypt crypt;
+	private static ICrypt crypt;
 
 	private CryptProvider() {}
 

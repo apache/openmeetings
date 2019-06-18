@@ -545,8 +545,6 @@ select.messages.selector {
 	height: var(--menu-height);
 }
 #topControls #wicketDebugBar {
-	right: auto; /* IE */
-	top: auto; /* IE */
 	right: initial;
 	top: initial;
 	z-index: 2;
