@@ -41,6 +41,7 @@
 			<excludes>
 				<exclude>**/openmeetings-*/target/**</exclude>
 				<exclude>openmeetings-server/web-server/**</exclude>
+				<exclude>openmeetings-server/red5-server/**</exclude>
 				<exclude>openmeetings-web/test-data/**</exclude>
 				<exclude>**/.classpath/**</exclude>
 				<exclude>**/.project/**</exclude>

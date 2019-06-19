@@ -10,5 +10,5 @@ function dragHelper() {
 }
 function treeRevert(dropped) {
 	$('.file.tree .trees')[0].scrollTop = $(this).parent()[0].offsetTop - 32;
-	return !dropped || (!!dropped && !!dropped.context && $(dropped.context).hasClass('wb', 'room'));
+	return !dropped || (!!dropped.context && $(dropped.context).hasClass('wb', 'room'));
 }

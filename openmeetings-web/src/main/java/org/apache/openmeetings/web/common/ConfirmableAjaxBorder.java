@@ -71,8 +71,8 @@ public abstract class ConfirmableAjaxBorder extends Border {
 		}
 		this.userForm = userForm;
 		this.validate = validate;
-		this.dialog.setSubmitHandler((SerializableConsumer<AjaxRequestTarget>)t->onSubmit(t));
-		this.dialog.setErrorHandler((SerializableConsumer<AjaxRequestTarget>)t->onError(t));
+		this.dialog.setSubmitHandler(this::onSubmit);
+		this.dialog.setErrorHandler(this::onError);
 		setOutputMarkupId(true);
 	}
 

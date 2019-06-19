@@ -16,10 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-.appointmentPopUp td {
-	vertical-align: top;
-}
-
 .appointmentPopUp input[type="text"], .appointmentPopUp input[type="url"] {
 	width: 420px;
 }

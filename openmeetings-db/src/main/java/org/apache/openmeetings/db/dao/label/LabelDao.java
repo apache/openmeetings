@@ -39,7 +39,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -80,7 +81,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static void storeLanguages() throws Exception {
 		Document d = XmlExport.createDocument();
 		Element r = XmlExport.createRoot(d, "language");
-		for (Map.Entry<Long, OmLanguage> e : languages.entrySet()) {
+		for (Entry<Long, OmLanguage> e : languages.entrySet()) {
 			r.addElement("lang").addAttribute("id", "" + e.getKey()).addAttribute("code", e.getValue().getLocale().toLanguageTag());
 		}
 		XmlExport.toXml(getLangFile(), d);
@@ -88,7 +89,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 
 	public static void add(Locale l) throws Exception {
 		long id = 0L;
-		for (Map.Entry<Long, OmLanguage> e : languages.entrySet()) {
+		for (Entry<Long, OmLanguage> e : languages.entrySet()) {
 			id = e.getKey();
 		}
 		languages.put(id + 1, new OmLanguage(l));
@@ -214,19 +215,16 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	public static Long getLanguage(Locale loc, Long def) {
-		if (loc != null) {
-			for (Map.Entry<Long, OmLanguage> e : languages.entrySet()) {
-				if (loc.equals(e.getValue().getLocale())) {
-					return e.getKey();
-				}
-			}
-		}
-		return def;
+		Optional<Long> lang = languages.entrySet().stream()
+				.filter(e -> e.getValue().getLocale().equals(loc))
+				.map(Entry::getKey).findFirst();
+		return lang.isPresent() ? lang.get() : def;
 	}
 
-	public static Set<Map.Entry<Long, Locale>> getLanguages() {
+	public static Set<Entry<Long, Locale>> getLanguages() {
 		return languages.entrySet().stream()
-				.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().getLocale())).entrySet();
+				.collect(Collectors.toMap(Entry::getKey, e -> e.getValue().getLocale()))
+				.entrySet();
 	}
 
 	public static List<StringLabel> get(Locale l, final String search, long start, long count, final SortParam<String> sort) {
@@ -281,7 +279,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	public static void delete(Locale l) {
-		for (Map.Entry<Long, OmLanguage> e : languages.entrySet()) {
+		for (Entry<Long, OmLanguage> e : languages.entrySet()) {
 			if (e.getValue().getLocale().equals(l)) {
 				languages.remove(e.getKey());
 				break;

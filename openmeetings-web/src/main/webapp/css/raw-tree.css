@@ -122,9 +122,6 @@
 .folder-open.file.om-icon {
 	background-image: url(images/folder_open.png);
 }
-.chart.file.om-icon {
-	background-image: url(images/chart_pie.png);
-}
 .drag-container .om-icon {
 	display: block !important;
 }

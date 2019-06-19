@@ -206,7 +206,7 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onPurgeSubmit(AjaxRequestTarget target, Form<?> form) {
 		if (isAdminPassRequired()) {
-			adminPass.setAction((SerializableConsumer<AjaxRequestTarget>)t -> purgeUser(t));
+			adminPass.setAction(this::purgeUser);
 			adminPass.open(target);
 		} else {
 			purgeUser(target);
@@ -293,7 +293,7 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		if (isAdminPassRequired()) {
-			adminPass.setAction((SerializableConsumer<AjaxRequestTarget>)t -> deleteUser(t));
+			adminPass.setAction(this::deleteUser);
 			adminPass.open(target);
 		} else {
 			deleteUser(target);
