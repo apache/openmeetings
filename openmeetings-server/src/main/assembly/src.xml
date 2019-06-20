@@ -43,8 +43,9 @@
 				<exclude>openmeetings-server/web-server/**</exclude>
 				<exclude>openmeetings-server/red5-server/**</exclude>
 				<exclude>openmeetings-web/test-data/**</exclude>
-				<exclude>**/.classpath/**</exclude>
-				<exclude>**/.project/**</exclude>
+				<exclude>**/.classpath</exclude>
+				<exclude>**/.project</exclude>
+				<exclude>**/*.iml</exclude>
 				<exclude>**/.settings/**</exclude>
 			</excludes>
 		</fileSet>
