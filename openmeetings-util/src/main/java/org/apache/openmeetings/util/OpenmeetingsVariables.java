@@ -75,7 +75,6 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_MIC_RATE = "mic.rate";
 	public static final String CONFIG_MIC_ECHO = "mic.echo.cancellation";
 	public static final String CONFIG_MIC_NOISE = "mic.noise.suppression";
-	public static final String CONFIG_CHROME_EXT_URL = "chrome.sharing.ext.url";
 	public static final String CONFIG_CSP_XFRAME = "header.csp.frame.options";
 	public static final String CONFIG_EXT_PROCESS_TTL = "external.process.ttl";
 	public static final String CONFIG_HEADER_CSP = "header.content.security.policy";
@@ -108,7 +107,6 @@ public class OpenmeetingsVariables {
 	public static final int DEFAULT_MINUTES_REMINDER_SEND = 15;
 	public static final String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";
 	public static final String DEFAULT_SIP_CONTEXT = "rooms";
-	public static final String DEFAULT_CHROME_EXT_URL = "https://www.webrtc-experiment.com/getSourceId/";
 
 	private static String cryptClassName = null;
 	private static String wicketApplicationName = null;
@@ -141,7 +139,6 @@ public class OpenmeetingsVariables {
 	private static boolean sendRegisterEmail = false;
 	private static String contentSecurityPolicy = HEADER_CSP_SELF;
 	private static String xFrameOptions = HEADER_XFRAME_SELF;
-	private static String chromeExtensionUrl = DEFAULT_CHROME_EXT_URL;
 	private static boolean displayNameEditable = false;
 
 	private OpenmeetingsVariables() {}
@@ -396,14 +393,6 @@ public class OpenmeetingsVariables {
 
 	public static void setContentSecurityPolicy(String policy) {
 		contentSecurityPolicy = policy;
-	}
-
-	public static String getChromeExtensionUrl() {
-		return chromeExtensionUrl;
-	}
-
-	public static void setChromeExtensionUrl(String url) {
-		chromeExtensionUrl = url;
 	}
 
 	public static boolean isDisplayNameEditable() {

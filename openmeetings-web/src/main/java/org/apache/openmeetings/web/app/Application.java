@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.app;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getChromeExtensionUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getContentSecurityPolicy;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
@@ -247,9 +246,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					wresp.setHeader("X-Content-Type-Options", "nosniff");
 					Url reqUrl = cycle.getRequest().getUrl();
 					wresp.setHeader("Content-Security-Policy"
-							, String.format("%s; connect-src 'self' %s; frame-src %s %s;"
+							, String.format("%s; connect-src 'self' %s; frame-src %s;"
 									, getContentSecurityPolicy(), getWsUrl(reqUrl)
-									, getxFrameOptions(), getChromeExtensionUrl()
+									, getxFrameOptions()
 							));
 				}
 			}

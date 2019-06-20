@@ -20,9 +20,9 @@ package org.apache.openmeetings.cli;
 
 public class PostgresPatcher extends ConnectionPropertiesPatcher {
 	@Override
-	protected String getUrl(String _url, String host, String _port, String _db) {
-		String port = (_port == null) ? "5432" : _port;
-		String db = (_db == null) ? DEFAULT_DB_NAME : _db;
+	protected String getUrl(String inUrl, String host, String inPort, String inDb) {
+		String port = (inPort == null) ? "5432" : inPort;
+		String db = (inDb == null) ? DEFAULT_DB_NAME : inDb;
 		return String.format("jdbc:postgresql://%s:%s/%s", host, port, db);
 	}
 }

@@ -29,7 +29,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHAT_SEND_ON_ENTER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHROME_EXT_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
@@ -93,7 +92,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CHROME_EXT_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MINUTES_REMINDER_SEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
@@ -352,7 +350,6 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_MIC_ECHO, String.valueOf(true), Configuration.Type.bool, "Whether or not echo cancellation is preferred and/or required.", VER_5_0_0);
 		addCfg(list, CONFIG_MIC_NOISE, String.valueOf(true), Configuration.Type.bool, "Whether noise suppression is preferred and/or required.", VER_5_0_0);
 		addCfg(list, CONFIG_CSP_XFRAME, HEADER_XFRAME_SELF, Configuration.Type.string, String.format("Value for 'frame-src' directive of 'Content-Security-Policy' header (default: %s), more info: https://w3c.github.io/webappsec-csp/", HEADER_XFRAME_SELF), VER_5_0_0);
-		addCfg(list, CONFIG_CHROME_EXT_URL, DEFAULT_CHROME_EXT_URL, Configuration.Type.string, String.format("URL to custom page with Chrome Extension logic (default %s).", DEFAULT_CHROME_EXT_URL), VER_5_0_0);
 		addCfg(list, CONFIG_DISPLAY_NAME_EDITABLE, String.valueOf(false), Configuration.Type.bool, "Is user will be able to edit his/her display name (default false).", "4.0.7");
 		return list;
 	}

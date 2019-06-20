@@ -20,9 +20,9 @@ package org.apache.openmeetings.cli;
 
 public class OraclePatcher extends ConnectionPropertiesPatcher {
 	@Override
-	protected String getUrl(String _url, String host, String _port, String _db) {
-		String port = (_port == null) ? "1521" : _port;
-		String db = (_db == null) ? DEFAULT_DB_NAME : _db;
+	protected String getUrl(String inUrl, String host, String inPort, String inDb) {
+		String port = (inPort == null) ? "1521" : inPort;
+		String db = (inDb == null) ? DEFAULT_DB_NAME : inDb;
 		String delim = ":";
 		if (db.startsWith("/")) {
 			delim = "";

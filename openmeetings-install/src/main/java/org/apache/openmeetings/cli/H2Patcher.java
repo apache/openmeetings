@@ -20,7 +20,7 @@ package org.apache.openmeetings.cli;
 
 public class H2Patcher extends ConnectionPropertiesPatcher {
 	@Override
-	protected String getUrl(String inUrl, String host, String _port, String inDb) {
+	protected String getUrl(String inUrl, String host, String inPort, String inDb) {
 		String db = (inDb == null) ? "./" + DEFAULT_DB_NAME : inDb;
 		int idx = inUrl.indexOf(';');
 		String suffix = idx > -1 ? inUrl.substring(idx) : "";

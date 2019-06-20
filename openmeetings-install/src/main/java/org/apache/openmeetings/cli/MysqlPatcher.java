@@ -20,10 +20,10 @@ package org.apache.openmeetings.cli;
 
 public class MysqlPatcher extends ConnectionPropertiesPatcher {
 	@Override
-	protected String getUrl(String _url, String host, String _port, String _db) {
-		String port = (_port == null) ? "3306" : _port;
-		String db = (_db == null) ? DEFAULT_DB_NAME : _db;
-		String suffix = _url.substring(_url.indexOf('?'));
+	protected String getUrl(String inUrl, String host, String inPort, String inDb) {
+		String port = (inPort == null) ? "3306" : inPort;
+		String db = (inDb == null) ? DEFAULT_DB_NAME : inDb;
+		String suffix = inUrl.substring(inUrl.indexOf('?'));
 		return String.format("jdbc:mysql://%s:%s/%s%s", host, port, db, suffix);
 	}
 }

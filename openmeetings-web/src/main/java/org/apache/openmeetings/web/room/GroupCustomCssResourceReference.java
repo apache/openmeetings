@@ -48,7 +48,6 @@ public class GroupCustomCssResourceReference extends FileSystemResourceReference
 	public IResource getResource() {
 		return new FileSystemResource() {
 			private static final long serialVersionUID = 1L;
-			private File file;
 
 			@Override
 			protected String getMimeType() throws IOException {
@@ -65,7 +64,7 @@ public class GroupCustomCssResourceReference extends FileSystemResourceReference
 				} catch (NumberFormatException e) {
 					//no-op expected
 				}
-				file = getGroupCss(id);
+				File file = getGroupCss(id);
 				if (file != null) {
 					ResourceResponse rr = createResourceResponse(attr, file.toPath());
 					rr.setFileName(file.getName());

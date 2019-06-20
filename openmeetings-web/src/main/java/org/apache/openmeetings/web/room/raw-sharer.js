@@ -5,11 +5,9 @@ var SHARE_STOPED = 'stoped';
 var Sharer = (function() {
 	const self = {};
 	let sharer, type, fps, sbtn, rbtn, width, height
-		, shareState = SHARE_STOPED, recState = SHARE_STOPED
-		, iframe, frameUrl = 'https://www.webrtc-experiment.com/getSourceId/';
+		, shareState = SHARE_STOPED, recState = SHARE_STOPED;
 
-	function _init(url) {
-		frameUrl = url;
+	function _init() {
 		sharer = $('#sharer').dialog({
 			width: 450
 			, autoOpen: false
@@ -110,26 +108,6 @@ var Sharer = (function() {
 			sbtn.button('enable');
 			rbtn.button('enable');
 		}
-	}
-	function _getScreenConstraints(sd, sourceId) {
-		//Chrome screen constraints requires old school definition
-		const cnts = {
-			audio: false
-			, video: {
-				mandatory: {
-					maxWidth: sd.width
-					, maxHeight: sd.height
-				}
-				, optional: []
-			}
-		};
-		if (sourceId) {
-			cnts.video.mandatory = {
-				chromeMediaSourceId: sourceId
-				, chromeMediaSource: 'desktop'
-			};
-		}
-		return cnts;
 	}
 	function _getShareUid() {
 		const v = $('div[data-client-uid="' + Room.getOptions().uid + '"][data-client-type="SCREEN"]');

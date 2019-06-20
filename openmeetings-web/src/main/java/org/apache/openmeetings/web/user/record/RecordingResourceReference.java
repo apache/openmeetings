@@ -120,18 +120,6 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 		if (r.getGroupId() != null && groupUserDao.isUserInGroup(r.getGroupId(), getUserId())) {
 			return r;
 		}
-		//external group check was added for plugin recording download
-		/*
-		FIXME TODO recording/file should have external group assigned
-		WebSession.getUserId()
-		String extType = getExternalType();
-		if (extType != null) {
-			User creator = userDao.get(r.getInsertedBy());
-			if (extType.equals(creator.getExternalType())) {
-				return r;
-			}
-		}
-		*/
 		return null;
 	}
 }

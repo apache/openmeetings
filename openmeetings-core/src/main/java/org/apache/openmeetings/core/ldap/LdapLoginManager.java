@@ -145,8 +145,7 @@ public class LdapLoginManager {
 		if (Strings.isEmpty(alias)) {
 			alias = defaultAlias;
 		}
-		Attribute a = Strings.isEmpty(alias) ? null : entry.get(alias);
-		return a;
+		return Strings.isEmpty(alias) ? null : entry.get(alias);
 	}
 
 	private static String getStringAttr(Properties config, Entry entry, String aliasCode, String defaultAlias) throws LdapInvalidAttributeValueException {

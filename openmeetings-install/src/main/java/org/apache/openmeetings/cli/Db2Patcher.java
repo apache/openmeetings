@@ -20,9 +20,9 @@ package org.apache.openmeetings.cli;
 
 public class Db2Patcher extends ConnectionPropertiesPatcher {
 	@Override
-	protected String getUrl(String _url, String host, String _port, String _db) {
-		String port = (_port == null) ? "50000" : _port;
-		String db = (_db == null) ? "openmeet" : _db;
+	protected String getUrl(String inUrl, String host, String inPort, String inDb) {
+		String port = (inPort == null) ? "50000" : inPort;
+		String db = (inDb == null) ? "openmeet" : inDb;
 		return "jdbc:db2://" + host + ":" + port + "/" + db;
 	}
 }

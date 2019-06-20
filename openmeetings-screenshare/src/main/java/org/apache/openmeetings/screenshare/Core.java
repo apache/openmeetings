@@ -469,7 +469,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			return;
 		}
 		log.trace("#### sendRemoteCursorEvent ");
-		log.trace("Result Map Type ", obj);
+		log.trace("Result Map Type {}", obj);
 
 		if (obj != null) {
 			remoteEvents.offer(obj);

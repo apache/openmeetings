@@ -268,6 +268,9 @@ public class User extends HistoricalEntity {
 	@Element(name = "externalUserType", data = true, required = false)
 	@Deprecated(since = "5.0")
 	@Transient
+	/**
+	 * @deprecated External group should be used instead
+	 */
 	private String externalType;
 
 	/**
@@ -414,11 +417,11 @@ public class User extends HistoricalEntity {
 	}
 
 	/**
-	 * @deprecated should not be used directly (for bean usage only)
+	 * For internal use only
+	 * should not be used directly (for bean usage only)
 	 *
 	 * @param password - password to set
 	 */
-	@Deprecated
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -513,11 +516,17 @@ public class User extends HistoricalEntity {
 	}
 
 	@Deprecated(since = "5.0")
+	/**
+	 * @deprecated External group should be used instead
+	 */
 	public String getExternalType() {
 		return externalType;
 	}
 
 	@Deprecated(since = "5.0")
+	/**
+	 * @deprecated External group should be used instead
+	 */
 	public void setExternalType(String externalType) {
 		this.externalType = externalType;
 	}
@@ -623,8 +632,7 @@ public class User extends HistoricalEntity {
 				+ ", lastname=" + lastname + ", login=" + login
 				+ ", pictureuri=" + pictureUri + ", deleted=" + isDeleted()
 				+ ", languageId=" + languageId + ", address=" + address
-				+ ", externalId=" + externalId + ", externalType=" + externalType
-				+ ", type=" + type + "]";
+				+ ", externalId=" + externalId + ", type=" + type + "]";
 	}
 
 	private String generateDisplayName() {

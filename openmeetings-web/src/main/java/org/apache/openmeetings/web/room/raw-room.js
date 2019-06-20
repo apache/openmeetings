@@ -43,7 +43,7 @@ var Room = (function() {
 		if (typeof(Activities) !== 'undefined') {
 			Activities.init();
 		}
-		Sharer.init(options.chromeExtUrl);
+		Sharer.init();
 	}
 	function _getSelfAudioClient() {
 		const vw = $('#video' + Room.getOptions().uid);
