@@ -32,14 +32,13 @@ Building and running
 To build from source code:
 
   - Requirements:
-    Sources compilation require [Oracle Java SE 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
-    The project is built with [Apache Maven 3.3.9 or later](https://maven.apache.org/). 
+    Sources compilation require `Java SE 11`, [Apache Maven 3.5.0 or later](https://maven.apache.org/).
   - To build the OpenMeetings project run mvn in the root directory:
-     `mvn clean install -P allModules`
+     `mvn clean install -PallModules`
   - To run the OpenMeetings project:
     - go to `openmeetings-server/target` directory
     - extract `apache-openmeetings-x.x.x.tar.gz` (or `apache-openmeetings-x.x.x.zip` for windows) to **new** directory
-    - enter to this new directory and execute `red5.sh` (`red5.bat` for windows)
+    - enter to this new directory and execute `./bin/startup.sh` (`./bin/startup.bat` for Windows)
 
 For a detailed documentation on how to build from source and options see:
     https://openmeetings.apache.org/BuildInstructions.html
