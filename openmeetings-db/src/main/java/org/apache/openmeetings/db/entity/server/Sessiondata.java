@@ -26,6 +26,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -34,7 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @NamedQuery(name = "getSessionById", query = "SELECT s FROM Sessiondata s WHERE s.sessionId LIKE :sessionId")
 @NamedQuery(name = "getSessionToDelete", query = "SELECT s FROM Sessiondata s WHERE s.refreshed < :refreshed AND s.permanent = false")
-@Table(name = "sessiondata")
+@Table(name = "sessiondata", indexes = {
+		@Index(name = "session_id_idx", columnList = "session_id", unique = true)
+})
 @XmlRootElement
 public class Sessiondata implements Serializable {
 	private static final long serialVersionUID = 1L;

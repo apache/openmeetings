@@ -839,9 +839,7 @@ public class BackupImport {
 				fileMap.put(String.format(FILE_NAME_FMT, name, EXTENSION_JPG), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_PNG));
 				fileMap.put(String.format("%s.%s.%s", name, "flv", EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
 			}
-			if (Strings.isEmpty(r.getHash())) {
-				r.setHash(randomUUID().toString());
-			}
+			r.setHash(randomUUID().toString());
 			r = recordingDao.update(r);
 			fileItemMap.put(recId, r.getId());
 		}
@@ -964,9 +962,7 @@ public class BackupImport {
 			if (file.getParentId() != null && file.getParentId().longValue() <= 0L) {
 				file.setParentId(null);
 			}
-			if (Strings.isEmpty(file.getHash())) {
-				file.setHash(randomUUID().toString());
-			}
+			file.setHash(randomUUID().toString());
 			file = fileItemDao.update(file);
 			result.add(file);
 			fileItemMap.put(fId, file.getId());

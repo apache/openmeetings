@@ -23,6 +23,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -39,7 +40,9 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name = "getNondeletedGroups", query = "SELECT g FROM Group g WHERE g.deleted = false ORDER BY g.id")
 @NamedQuery(name = "countGroups", query = "SELECT COUNT(g) FROM Group AS g WHERE g.deleted = false")
 @NamedQuery(name = "getLimitedGroups", query = "SELECT g FROM Group AS g WHERE g.deleted = false AND g.limited = true")
-@Table(name = "om_group")
+@Table(name = "om_group", indexes = {
+		@Index(name = "group_name_idx", columnList = "name")
+})
 @Root(name = "organisation")
 public class Group extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;

@@ -38,9 +38,9 @@ public class MeetingMemberDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public MeetingMember get(Long meetingMemberId) {
+	public MeetingMember get(Long id) {
 		List<MeetingMember> list = em.createNamedQuery("getMeetingMemberById", MeetingMember.class)
-				.setParameter("id", meetingMemberId).getResultList();
+				.setParameter("id", id).getResultList();
 		return list.size() == 1 ? list.get(0) : null;
 	}
 

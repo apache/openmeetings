@@ -18,11 +18,7 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
-import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.HistoricalEntity;
-import org.apache.openmeetings.db.entity.user.User;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import static java.lang.Boolean.TRUE;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,13 +26,18 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import static java.lang.Boolean.TRUE;
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
+import org.apache.openmeetings.db.entity.user.User;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQuery(name = "forceGetConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.key LIKE :key")
@@ -47,7 +48,9 @@ import static java.lang.Boolean.TRUE;
 @NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c "
 		+ "LEFT JOIN FETCH c.user WHERE c.id = :id and c.deleted = false")
 @NamedQuery(name = "countConfigurations", query = "SELECT COUNT(c) FROM Configuration c WHERE c.deleted = false")
-@Table(name = "configuration")
+@Table(name = "configuration", indexes = {
+		@Index(name = "key_idx", columnList = "om_key", unique = true)
+})
 @Root(name = "config")
 public class Configuration extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;

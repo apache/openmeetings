@@ -29,8 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This Class is marshaled as an XML-Object and stored as a String in the DB to make
- * it more easy to extend it
+ * This Class is marshaled as an XML-Object and stored as a String in the DB to
+ * make it more easy to extend it
  *
  * @author sebastianwagner
  *
@@ -54,32 +54,33 @@ public class RemoteSessionObject {
 	private String externalUserType;
 
 	public RemoteSessionObject() {
-		//def constructor
+		// def constructor
 	}
 
-	public RemoteSessionObject(String username, String firstname, String lastname,
-			String pictureUrl, String email) {
+	public RemoteSessionObject(String username, String firstname, String lastname, String pictureUrl, String email) {
 		this(username, firstname, lastname, pictureUrl, email, "0", "");
 	}
 
 	/**
-	 * @param username - username
-	 * @param firstname - first name
-	 * @param lastname - last name
-	 * @param pictureUrl - picture url
-	 * @param email - email
-	 * @param externalUserId - external user id
-	 * @param externalUserType - external user type
+	 * @param username
+	 *            - username
+	 * @param firstname
+	 *            - first name
+	 * @param lastname
+	 *            - last name
+	 * @param pictureUrl
+	 *            - picture url
+	 * @param email
+	 *            - email
+	 * @param externalUserId
+	 *            - external user id
+	 * @param externalUserType
+	 *            - external user type
 	 *
-	 * 06.09.2009 17:05:48
-	 * sebastianwagner
-	 *
-	 *
+	 *            06.09.2009 17:05:48 sebastianwagner
 	 */
-	public RemoteSessionObject(String username, String firstname,
-			String lastname, String pictureUrl, String email,
+	public RemoteSessionObject(String username, String firstname, String lastname, String pictureUrl, String email,
 			String externalUserId, String externalUserType) {
-		super();
 		this.username = username;
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -92,30 +93,39 @@ public class RemoteSessionObject {
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	public String getFirstname() {
 		return firstname;
 	}
+
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
+
 	public String getLastname() {
 		return lastname;
 	}
+
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
+
 	public String getPictureUrl() {
 		return pictureUrl;
 	}
+
 	public void setPictureUrl(String pictureUrl) {
 		this.pictureUrl = pictureUrl;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -123,6 +133,7 @@ public class RemoteSessionObject {
 	public String getExternalUserId() {
 		return externalUserId;
 	}
+
 	public void setExternalUserId(String externalUserId) {
 		this.externalUserId = externalUserId;
 	}
@@ -130,6 +141,7 @@ public class RemoteSessionObject {
 	public String getExternalUserType() {
 		return externalUserType;
 	}
+
 	public void setExternalUserType(String externalUserType) {
 		this.externalUserType = externalUserType;
 	}

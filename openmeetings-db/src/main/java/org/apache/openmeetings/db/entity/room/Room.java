@@ -35,6 +35,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
@@ -81,7 +82,9 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name = "getGroupRooms", query = "SELECT DISTINCT rg.room FROM RoomGroup rg LEFT JOIN FETCH rg.room "
 		+ "WHERE rg.group.id = :groupId AND rg.room.deleted = false AND rg.room.appointment = false "
 		+ "ORDER BY rg.room.name ASC")
-@Table(name = "room")
+@Table(name = "room", indexes = {
+		@Index(name = "room_name_idx", columnList = "name")
+})
 @Root(name = "room")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)

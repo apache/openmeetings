@@ -44,6 +44,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -104,7 +105,11 @@ import org.simpleframework.xml.Root;
 		+ "gu.group.deleted = false AND gu.group.external = true AND gu.group.name = :externalType "
 		+ "AND gu.user.deleted = false AND gu.user.type = :type AND gu.user.externalId = :externalId")
 @NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.address.email = :userOrEmail)")
-@Table(name = "om_user")
+@Table(name = "om_user", indexes = {
+		@Index(name = "login_idx", columnList = "login")
+		, @Index(name = "lastname_idx", columnList = "lastname")
+		, @Index(name = "firstname_idx", columnList = "firstname")
+})
 @Root(name = "user")
 public class User extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;

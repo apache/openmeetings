@@ -32,6 +32,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -47,7 +48,9 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@Table(name = "appointment")
+@Table(name = "appointment", indexes = {
+		@Index(name = "title_idx", columnList = "title")
+})
 @NamedQuery(name="getAppointmentById", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.id = :id")
 @NamedQuery(name="getAppointmentByIdAny", query="SELECT a FROM Appointment a WHERE a.id = :id")
 @NamedQuery(name="getAppointments", query="SELECT a FROM Appointment a WHERE a.deleted = false ORDER BY a.id")
