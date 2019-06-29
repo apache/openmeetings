@@ -383,7 +383,7 @@ public class LdapLoginManager {
 				Attribute attr = getAttr(config, entry, CONFIGKEY_LDAP_KEY_GROUP, LDAP_KEY_GROUP);
 				if (attr != null) {
 					for (Value v : attr) {
-						groups.add(new Dn(v.getString()));
+						groups.add(new Dn(v.getValue()));
 					}
 				}
 			} else if (GroupMode.QUERY == options.groupMode) {
