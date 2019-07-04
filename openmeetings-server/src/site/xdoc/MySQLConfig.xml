@@ -13,16 +13,14 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>MySQL Configuration</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
 		<section name="MySQL Configuration">
-
 			<subsection name="Before you start">
 				<ul>
 					<li>Make sure that you have set utf8 as
@@ -41,36 +39,33 @@
 					</li>
 				</ul>
 			</subsection>
-
 			<subsection name="Steps todo">
 				<ul>
 					<li>
-						You need to download the JConnector from mysql
-						<a href="http://www.mysql.com/downloads/connector/j/" target="_blank"
-							rel="nofollow">http://www.mysql.com/downloads/connector/j/</a>
+						You need to download the JConnector from Maven central
+						<a href="https://mvnrepository.com/artifact/mysql/mysql-connector-java" target="_blank"
+							rel="nofollow">https://mvnrepository.com/artifact/mysql/mysql-connector-java</a>
 						and place it into:
 						<tt>$OM_HOME/webapps/openmeetings/WEB-INF/lib/</tt>
 					</li>
 					<li>
 						Run OpenMeetings and goto the web-based installer:
-						http://localhost:5080/openmeetings/install
+						<tt>http://localhost:5080/openmeetings/install</tt><br/>
+						Or <a href="./CommandLineAdmin.html" target="_blank"
+							rel="nofollow">Command line installer</a>
+					</li>
+					<li>After installation is complete please make sure additional parameter <tt>serverTimezone=</tt> was added
+						to the connection string.
 					</li>
 				</ul>
 			</subsection>
-
 			<subsection name="MySQL Sample Configuration">
 				<p>
-					There is a sample configuration for MySQL that ships with
-					every
-					release in:
+					There is a sample configuration for MySQL that ships with every release in:
 					<br />
-					/webapps/openmeetings/WEB-INF/classes/META-INF/mysql_persistence.xml
+					<tt>/webapps/openmeetings/WEB-INF/classes/META-INF/mysql_persistence.xml</tt>
 				</p>
 			</subsection>
-
-
 		</section>
-
 	</body>
-
 </document>
