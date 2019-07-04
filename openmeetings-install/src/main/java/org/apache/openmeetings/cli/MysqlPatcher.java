@@ -18,12 +18,27 @@
  */
 package org.apache.openmeetings.cli;
 
+import java.util.TimeZone;
+
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
+import org.apache.wicket.util.string.StringValue;
+
 public class MysqlPatcher extends ConnectionPropertiesPatcher {
+	static final String TZ_PARAM = "serverTimezone";
+
 	@Override
-	protected String getUrl(String _url, String host, String _port, String _db) {
-		String port = (_port == null) ? "3306" : _port;
-		String db = (_db == null) ? DEFAULT_DB_NAME : _db;
-		String suffix = _url.substring(_url.indexOf('?'));
-		return String.format("jdbc:mysql://%s:%s/%s%s", host, port, db, suffix);
+	protected String getUrl(String inUrl, String host, String inPort, String inDb) {
+		Url url = Url.parse(inUrl);
+		url.setHost(host);
+		url.setPort((inPort == null) ? 3306 : Integer.valueOf(inPort));
+		url.getSegments().set(1, (inDb == null) ? DEFAULT_DB_NAME : inDb);
+		PageParameters pp = new PageParametersEncoder().decodePageParameters(url);
+		StringValue tz = pp.get(TZ_PARAM);
+		if (tz.isEmpty()) {
+			url.setQueryParameter(TZ_PARAM, TimeZone.getDefault().getID());
+		}
+		return url.toString(Url.StringMode.FULL);
 	}
 }
