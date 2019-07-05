@@ -21,15 +21,19 @@ package org.apache.openmeetings.cli;
 import static org.apache.openmeetings.AbstractSpringTest.setOmHome;
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.TimeZone;
 
+import org.apache.openjpa.lib.util.Files;
 import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.util.string.StringValue;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class TestPatcher {
@@ -39,8 +43,8 @@ public class TestPatcher {
 	private static final String USER = "myuser";
 	private static final String PASS = "mypass";
 
-	@Before
-	public void setUp() {
+	@BeforeClass
+	public static void setUp() {
 		setOmHome();
 	}
 
@@ -56,5 +60,10 @@ public class TestPatcher {
 				assertEquals("serverTimezone parameter is mandatory for MySql", TimeZone.getDefault().getID(), tz.toString());
 			}
 		}
+	}
+
+	@AfterClass
+	public static void cleanup() throws IOException {
+		Files.copy(OmFileHelper.getPersistence(DbType.derby), OmFileHelper.getPersistence());
 	}
 }
