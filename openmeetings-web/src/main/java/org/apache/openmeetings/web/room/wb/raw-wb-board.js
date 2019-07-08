@@ -4,7 +4,7 @@ var Wb = function() {
 		, area = $('.room.wb.area .wb-area .tabs.ui-tabs'), bar = area.find('.wb-tabbar')
 		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src', 'formula'];
 	let a, t, z, s, f, mode, slide = 0, width = 0, height = 0
-			, zoom = 1., zoomMode = 'pageWidth', role = null;
+			, zoom = 1., zoomMode = 'pageWidth', role = null, scrollTimeout = null;
 
 	function _getBtn(m) {
 		return !!t ? t.find('.om-icon.' + (m || mode) + ':not(.stub)') : null;
@@ -609,14 +609,26 @@ var Wb = function() {
 		objCreatedHandler(o.path);
 	};
 	function scrollHandler() {
-		$(this).find('.canvas-container').each(function(idx) {
-			const h = $(this).height(), pos = $(this).position();
-			if (slide !== idx && pos.top > BUMPER - h && pos.top < BUMPER) {
-				//TODO might be done without iterating
-				_setSlide(idx);
+		if (scrollTimeout !== null) {
+			clearTimeout(scrollTimeout);
+		}
+		scrollTimeout = setTimeout(function() {
+			const sc = a.find('.scroll-container')
+				, canvases = sc.find('.canvas-container');
+			if (Math.round(sc.height() + sc[0].scrollTop) === sc[0].scrollHeight) {
+				if (slide !== canvases.length - 1) {
+					_setSlide(canvases.length - 1);
+				}
 				return false;
 			}
-		});
+			canvases.each(function(idx) {
+				const h = $(this).height(), pos = $(this).position();
+				if (slide !== idx && pos.top > BUMPER - h && pos.top < BUMPER) {
+					_setSlide(idx);
+					return false;
+				}
+			});
+		}, 100);
 	}
 	function showCurrentSlide() {
 		a.find('.scroll-container .canvas-container').each(function(idx) {
