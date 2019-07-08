@@ -550,6 +550,7 @@ ul.settings-menu {
 	bottom: 40px;
 	padding: 5px;
 	background-color: aquamarine;
+	z-index: 10000000;
 }
 #quick-vote .control {
 	display: inline-block;
