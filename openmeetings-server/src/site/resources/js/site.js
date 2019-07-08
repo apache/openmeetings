@@ -24,8 +24,8 @@ $(document).ready(function() {
 		$('ul.nav li a[title="' + topics[i] + '"').append('&nbsp;&nbsp;<span class="badge badge-success">New</span>')
 	}
 	// "ACNA" banner on the right
-	$('.bannerRight').parent().parent().append(
-		$('<div class="float-right">')
+	$('.d-lg-block').append(
+		$('<div>')
 			.append($('<a href="https://www.apache.org/events/current-event" class="apachecon-banner bannerRight">')
 				.append($('<img src="https://www.apache.org/events/current-event-234x60.png">'))
 				)

@@ -5,6 +5,7 @@ iframe {
 }
 .apachecon-banner.bannerRight img {
 	max-width: 250px;
+	height: initial !important;
 }
 .bannerRight img, .bannerLeft img {
 	height: 80px !important;

@@ -16,12 +16,14 @@
 		xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd"
 		name="Apache OpenMeetings Project">
 	<bannerLeft>
-		<name>Apache OpenMeetings</name>
+		<title>Apache OpenMeetings</title>
+		<alt>Apache OpenMeetings</alt>
 		<src>https://openmeetings.apache.org/images/logo.png</src>
 		<href>https://openmeetings.apache.org/index.html</href>
 	</bannerLeft>
 	<bannerRight>
-		<name>Apache</name>
+		<title>Apache</title>
+		<alt>Apache</alt>
 		<src>https://apache.org/img/asf_logo.png</src>
 		<href>https://apache.org</href>
 	</bannerRight>
