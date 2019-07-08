@@ -104,14 +104,14 @@ public class StoredFile {
 		}
 	}
 
-	private void init(String _name, String _ext, InputStream is) {
-		if (Strings.isEmpty(_ext)) {
-			int idx = _name.lastIndexOf('.');
-			name = idx < 0 ? _name : _name.substring(0, idx);
-			ext = getFileExt(_name);
+	private void init(String inName, String inExt, InputStream is) {
+		if (Strings.isEmpty(inExt)) {
+			int idx = inName.lastIndexOf('.');
+			name = idx < 0 ? inName : inName.substring(0, idx);
+			ext = getFileExt(inName);
 		} else {
-			name = _name;
-			ext = _ext.toLowerCase(Locale.ROOT);
+			name = inName;
+			ext = inExt.toLowerCase(Locale.ROOT);
 		}
 		Metadata md = new Metadata();
 		md.add(RESOURCE_NAME_KEY, String.format(FILE_NAME_FMT, name, ext));

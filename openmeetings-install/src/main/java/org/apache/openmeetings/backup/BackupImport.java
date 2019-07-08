@@ -25,25 +25,29 @@ import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.CSS_DIR;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_CSS;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.FILES_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
+import static org.apache.openmeetings.util.OmFileHelper.GROUP_CSS_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.GROUP_LOGO_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.GROUP_LOGO_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.PROFILES_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.PROFILES_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.RECORDING_FILE_NAME;
-import static org.apache.openmeetings.util.OmFileHelper.THUMB_IMG_PREFIX;
+import static org.apache.openmeetings.util.OmFileHelper.WML_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.getCssDir;
 import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
 import static org.apache.openmeetings.util.OmFileHelper.getFileName;
+import static org.apache.openmeetings.util.OmFileHelper.getGroupCss;
+import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
+import static org.apache.openmeetings.util.OmFileHelper.getName;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
-import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
-import static org.apache.openmeetings.util.OmFileHelper.getUploadRoomDir;
+import static org.apache.openmeetings.util.OmFileHelper.getUploadWmlDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
@@ -310,6 +314,7 @@ public class BackupImport {
 	private final Map<Long, Long> messageFolderMap = new HashMap<>();
 	private final Map<Long, Long> userContactMap = new HashMap<>();
 	private final Map<String, String> fileMap = new HashMap<>();
+	private final Map<String, String> hashMap = new HashMap<>();
 
 	private static File validate(String ename, File intended) throws IOException {
 		final String intendedPath = intended.getCanonicalPath();
@@ -357,6 +362,7 @@ public class BackupImport {
 		messageFolderMap.clear();
 		userContactMap.clear();
 		fileMap.clear();
+		hashMap.clear();
 		messageFolderMap.put(INBOX_FOLDER_ID, INBOX_FOLDER_ID);
 		messageFolderMap.put(SENT_FOLDER_ID, SENT_FOLDER_ID);
 		messageFolderMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
@@ -833,13 +839,15 @@ public class BackupImport {
 					chunk.setRecording(r);
 				}
 			}
-			if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(RECORDING_FILE_NAME)) {
-				String name = getFileName(r.getHash());
-				r.setHash(randomUUID().toString());
+			String oldHash = r.getHash();
+			r.setHash(randomUUID().toString());
+			if (!Strings.isEmpty(oldHash) && oldHash.startsWith(RECORDING_FILE_NAME)) {
+				String name = getFileName(oldHash);
 				fileMap.put(String.format(FILE_NAME_FMT, name, EXTENSION_JPG), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_PNG));
 				fileMap.put(String.format("%s.%s.%s", name, "flv", EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
+			} else {
+				hashMap.put(oldHash, r.getHash());
 			}
-			r.setHash(randomUUID().toString());
 			r = recordingDao.update(r);
 			fileItemMap.put(recId, r.getId());
 		}
@@ -962,7 +970,9 @@ public class BackupImport {
 			if (file.getParentId() != null && file.getParentId().longValue() <= 0L) {
 				file.setParentId(null);
 			}
+			String oldHash = file.getHash();
 			file.setHash(randomUUID().toString());
+			hashMap.put(oldHash, file.getHash());
 			file = fileItemDao.update(file);
 			result.add(file);
 			fileItemMap.put(fId, file.getId());
@@ -1068,71 +1078,111 @@ public class BackupImport {
 		return list;
 	}
 
-	private static Long getPrefixedId(String prefix, File f) {
-		String n = f.getName();
-		int dIdx = n.indexOf('.', prefix.length());
+	private static Long getPrefixedId(String prefix, File f, Map<Long, Long> map) {
+		String n = getFileName(f.getName());
+		Long id = null;
 		if (n.indexOf(prefix) > -1) {
-			return importLongType(n.substring(prefix.length(), dIdx > -1 ? dIdx : n.length()));
+			id = importLongType(n.substring(prefix.length(), n.length()));
 		}
-		return null;
+		return id == null ? null : map.get(id);
 	}
 
-	private void importFolders(File importBaseDir) throws IOException {
-		// Now check the room files and import them
-		final File roomFilesFolder = new File(importBaseDir, BCKP_ROOM_FILES);
-
-		File uploadDir = getUploadDir();
-
-		log.debug("roomFilesFolder PATH {} ", roomFilesFolder.getCanonicalPath());
-
-		if (roomFilesFolder.exists()) {
-			for (File file : roomFilesFolder.listFiles()) {
-				if (file.isDirectory()) {
-					String fName = file.getName();
-					if (PROFILES_DIR.equals(fName)) {
-						// profile should correspond to the new user id
-						for (File profile : file.listFiles()) {
-							Long oldId = getPrefixedId(PROFILES_PREFIX, profile);
-							Long id = oldId != null ? userMap.get(oldId) : null;
-							if (id != null) {
-								FileUtils.copyDirectory(profile, getUploadProfilesUserDir(id));
-							}
-						}
-					} else if (FILES_DIR.equals(fName)) {
-						log.debug("Entered FILES folder");
-						for (File rf : file.listFiles()) {
-							// going to fix images
-							if (rf.isFile() && rf.getName().endsWith(EXTENSION_JPG)) {
-								FileUtils.copyFileToDirectory(rf, getImgDir(rf.getName()));
-							} else {
-								FileUtils.copyDirectory(rf, new File(getUploadFilesDir(), rf.getName()));
-							}
-						}
-					} else if (GROUP_LOGO_DIR.equals(fName)) {
-						log.debug("Entered group logo folder");
-						for (File logo : file.listFiles()) {
-							Long oldId = getPrefixedId(GROUP_LOGO_PREFIX, logo);
-							Long id = oldId != null ? groupMap.get(oldId) : null;
-							if (id != null) {
-								FileUtils.moveFile(logo, OmFileHelper.getGroupLogo(id, false));
-							}
-						}
-					} else {
-						// check if folder is room folder, store it under new id if necessary
-						Long oldId = importLongType(fName);
-						Long id = oldId != null ? roomMap.get(oldId) : null;
-						if (id != null) {
-							FileUtils.copyDirectory(file, getUploadRoomDir(id.toString()));
-						} else {
-							FileUtils.copyDirectory(file, new File(uploadDir, fName));
-						}
-					}
+	private void processGroupFiles(File baseDir) throws IOException {
+		log.debug("Entered group logo folder");
+		for (File f : baseDir.listFiles()) {
+			String ext = getFileExt(f.getName());
+			if (EXTENSION_PNG.equals(ext)) {
+				Long id = getPrefixedId(GROUP_LOGO_PREFIX, f, groupMap);
+				if (id != null) {
+					FileUtils.moveFile(f, getGroupLogo(id, false));
+				}
+			} else if (EXTENSION_CSS.equals(ext)) {
+				Long id = getPrefixedId(GROUP_CSS_PREFIX, f, groupMap);
+				if (id != null) {
+					FileUtils.moveFile(f, getGroupCss(id, false));
 				}
 			}
 		}
+	}
+
+	private static void changeHash(File f, File dir, String hash, String inExt) throws IOException {
+		String ext = inExt == null ? getFileExt(f.getName()) : inExt;
+		FileUtils.copyFile(f, new File(dir, getName(hash, ext)));
+	}
+
+	private void processFiles(File baseDir) throws IOException {
+		log.debug("Entered FILES folder");
+		for (File rf : baseDir.listFiles()) {
+			String oldHash = OmFileHelper.getFileName(rf.getName());
+			String hash = hashMap.get(oldHash);
+			if (hash == null) {
+				continue;
+			}
+			File dir = new File(getUploadFilesDir(), hash);
+			// going to fix images
+			if (rf.isFile() && rf.getName().endsWith(EXTENSION_JPG)) {
+				changeHash(rf, dir, hash, EXTENSION_JPG);
+			} else {
+				for (File f : rf.listFiles()) {
+					FileUtils.copyFile(f, new File(dir
+							, f.getName().startsWith(oldHash) ? getName(hash, getFileExt(f.getName())) : f.getName()));
+				}
+			}
+		}
+	}
+
+	private void processProfiles(File baseDir) throws IOException {
+		log.debug("Entered profiles folder");
+		for (File profile : baseDir.listFiles()) {
+			Long id = getPrefixedId(PROFILES_PREFIX, profile, userMap);
+			if (id != null) {
+				FileUtils.copyDirectory(profile, getUploadProfilesUserDir(id));
+			}
+		}
+	}
+
+	private void processWmls(File baseDir) throws IOException {
+		log.debug("Entered WML folder");
+		File dir = getUploadWmlDir();
+		for (File wml : baseDir.listFiles()) {
+			String oldHash = OmFileHelper.getFileName(wml.getName());
+			String hash = hashMap.get(oldHash);
+			if (hash == null) {
+				continue;
+			}
+			changeHash(wml, dir, hash, null);
+		}
+	}
+
+	private void processFilesRoot(File baseDir) throws IOException {
+		// Now check the room files and import them
+		final File roomFilesFolder = new File(baseDir, BCKP_ROOM_FILES);
+		log.debug("roomFilesFolder PATH {} ", roomFilesFolder.getCanonicalPath());
+		if (!roomFilesFolder.exists()) {
+			return;
+		}
+
+		for (File file : roomFilesFolder.listFiles()) {
+			if (file.isDirectory()) {
+				String fName = file.getName();
+				if (PROFILES_DIR.equals(fName)) {
+					processProfiles(file);
+				} else if (FILES_DIR.equals(fName)) {
+					processFiles(file);
+				} else if (GROUP_LOGO_DIR.equals(fName)) {
+					processGroupFiles(file);
+				} else if (WML_DIR.equals(fName)) {
+					processWmls(file);
+				}
+			}
+		}
+	}
+
+	private void importFolders(File baseDir) throws IOException {
+		processFilesRoot(baseDir);
 
 		// Now check the recordings and import them
-		final File recDir = new File(importBaseDir, BCKP_RECORD_FILES);
+		final File recDir = new File(baseDir, BCKP_RECORD_FILES);
 		log.debug("sourceDirRec PATH {}", recDir.getCanonicalPath());
 		if (recDir.exists()) {
 			final File hiberDir = getStreamsHibernateDir();
@@ -1141,23 +1191,23 @@ public class BackupImport {
 				if (n != null) {
 					FileUtils.copyFile(r, new File(hiberDir, n));
 				} else {
-					FileUtils.copyFileToDirectory(r, hiberDir);
+					String oldHash = OmFileHelper.getFileName(r.getName());
+					String hash = hashMap.get(oldHash);
+					if (hash == null) {
+						FileUtils.copyFileToDirectory(r, hiberDir);
+					} else {
+						changeHash(r, hiberDir, hash, null);
+					}
 				}
 			}
 		}
-		final File cssDir = new File(importBaseDir, CSS_DIR);
+		final File cssDir = new File(baseDir, CSS_DIR);
 		if (cssDir.exists()) {
 			final File wCssDir = getCssDir();
 			for (File css : cssDir.listFiles()) {
 				FileUtils.copyFileToDirectory(css, wCssDir);
 			}
 		}
-	}
-
-	private static File getImgDir(String name) {
-		int start = name.startsWith(THUMB_IMG_PREFIX) ? THUMB_IMG_PREFIX.length() : 0;
-		String hash = name.substring(start, name.length() - EXTENSION_PNG.length() - 1);
-		return new File(getUploadFilesDir(), hash);
 	}
 
 	private static Long importLongType(String value) {

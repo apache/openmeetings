@@ -315,6 +315,7 @@ public class WbConverter {
 		xstream.addPermission(PrimitiveTypePermission.PRIMITIVES);
 		xstream.allowTypeHierarchy(List.class);
 		xstream.allowTypeHierarchy(String.class);
+		xstream.ignoreUnknownElements();
 		try (InputStream is = new FileInputStream(file); BufferedReader reader = new BufferedReader(new InputStreamReader(is, UTF_8))) {
 			return (List<?>) xstream.fromXML(reader);
 		} catch (Exception err) {

@@ -64,7 +64,7 @@ public class GroupCustomCssResourceReference extends FileSystemResourceReference
 				} catch (NumberFormatException e) {
 					//no-op expected
 				}
-				File file = getGroupCss(id);
+				File file = getGroupCss(id, true);
 				if (file != null) {
 					ResourceResponse rr = createResourceResponse(attr, file.toPath());
 					rr.setFileName(file.getName());
