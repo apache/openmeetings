@@ -69,14 +69,64 @@
 		</section>
 		<section name="News">
 			<div class="bd-callout bd-callout-danger">
-				<h4>Version 5.0.0-M1 released!</h4>
-				<div>Release 5.0.0-M1, provides following improvements:<br/>
+				<h4>Version 5.0.0-M2 released!</h4>
+				<div>Release 5.0.0-M2, provides following improvements:<br/>
 					This release provides WebRTC audio/video/screen-sharing in the Room
 					<div class="bd-callout bd-callout-info">Flash plugin is no more required in the browser<br/>
 						<br/>
-						Please NOTE: this version might be not production ready
+						Please NOTE: this version might be not production ready<br/>
+						<br/>
+						IMPORTANT: Java 11 is required
 					</div>
+					Backup/Restore:
+					<ul>
+						<li>OAuth configs were not properly backup</li>
+					</ul>
+					White board:
+					<ul>
+						<li>Math formula is improved</li>
+						<li>Room files are improved</li>
+						<li>Clean WB REST method perform real-time clean</li>
+					</ul>
+					Room:
+					<ul>
+						<li>Rooms can be customized on group basis</li>
+						<li>"Ghost" users are not displayed in the room</li>
+						<li>External user name is displayed as expected</li>
+					</ul>
 
+					<br/>
+					Other fixes and improvements
+				</div>
+				<br/>
+
+				<span>
+					18 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/5.0.0-M2/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12345199">Detailed list</a>
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2019-07-15)</span>
+			</div>
+			<div class="bd-callout bd-callout-danger">
+				<h4>Version 4.0.9 released!</h4>
+				<div>Release 4.0.9, provides following improvements:<br/>
+					Backup/Restore:
+					<ul>
+						<li>Recordings of deleted users were restored as public</li>
+						<li>OAuth configs were not properly backup</li>
+					</ul>
+					White board:
+					<ul>
+						<li>Math formula is improved</li>
+						<li>Room files are improved</li>
+						<li>Clean WB REST method perform real-time clean</li>
+					</ul>
+					Room User list:
+					<ul>
+						<li>"Ghost" users are not displayed in the room</li>
+						<li>External user name is displayed as expected</li>
+					</ul>
 					<br/>
 					Other fixes and improvements
 					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
@@ -84,12 +134,12 @@
 				<br/>
 
 				<span>
-					30 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/5.0.0-M1/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342043">Detailed list</a>
+					19 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.9/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344942">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2019-04-02)</span>
+				<span class="date">(2019-07-15)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>

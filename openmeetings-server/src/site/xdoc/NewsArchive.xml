@@ -20,6 +20,31 @@
 	</properties>
 
 	<body>
+		<section name="Release 5.0.0-M1">
+			<div class="bd-callout bd-callout-info">
+				<h4>Version 5.0.0-M1 released!</h4>
+				<div>Release 5.0.0-M1, provides following improvements:<br/>
+					This release provides WebRTC audio/video/screen-sharing in the Room
+					<div class="bd-callout bd-callout-info">Flash plugin is no more required in the browser<br/>
+						<br/>
+						Please NOTE: this version might be not production ready
+					</div>
+
+					<br/>
+					Other fixes and improvements
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
+				</div>
+				<br/>
+
+				<span>
+					30 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/5.0.0-M1/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342043">Detailed list</a>
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2019-04-02)</span>
+			</div>
+		</section>
 		<section name="Release 4.0.8">
 			<div class="bd-callout bd-callout-info">
 				<h4>Version 4.0.8 released!</h4>
