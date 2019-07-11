@@ -6,6 +6,35 @@ See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number o
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
 
+Release Notes - Openmeetings - Version 4.0.9
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-2025] - Adding a math formula throws TypeError
+    * [OPENMEETINGS-2030] - External Usernames mixed when missing
+    * [OPENMEETINGS-2054] - Backup and Reimport "produces" public recordings
+    * [OPENMEETINGS-2055] - uploading MP3
+    * [OPENMEETINGS-2057] - OAuth configs are not properly exported
+    * [OPENMEETINGS-2062] - Ghosts users stays in room under some circumstances
+    * [OPENMEETINGS-2070] - Room Files with WB index === 0 (#0) are uploaded to WB #1
+    * [OPENMEETINGS-2071] - OM-access with 2 subdomains
+    * [OPENMEETINGS-2079] - last slide of a presentation is sometimes not accessible
+
+* Improvement
+    * [OPENMEETINGS-1993] - "exclusive audio" should be renamed to "mute others"
+    * [OPENMEETINGS-2003] - When opening a drawing board tool, the tool properties should automatically open up
+    * [OPENMEETINGS-2033] - User files location need to be configurable
+    * [OPENMEETINGS-2036] - FFMPEG should use aac encoder (not libfdk_aac)
+    * [OPENMEETINGS-2050] - Userlist, complete list only visible for moderator/admin
+    * [OPENMEETINGS-2063] - Whiteboard settings button label should be changed
+    * [OPENMEETINGS-2068] - More usable layout of user registration form
+    * [OPENMEETINGS-2073] - cleanWb REST method should perform "real-time" clean
+    * [OPENMEETINGS-2080] - `serverTimezone` parameter should be added to MySql URL
+
+* Task
+    * [OPENMEETINGS-2037] - Library versions need to be updated (4.0.9)
+
+
 Release Notes - Openmeetings - Version 4.0.8
 ================================================================================================================
 

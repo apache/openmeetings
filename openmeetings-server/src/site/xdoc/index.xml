@@ -69,34 +69,23 @@
 		</section>
 		<section name="News">
 			<div class="bd-callout bd-callout-danger">
-				<h4>Version 4.0.8 released!</h4>
-				<div>Release 4.0.8, provides following improvements:<br/>
-					Mobile client:
+				<h4>Version 4.0.9 released!</h4>
+				<div>Release 4.0.9, provides following improvements:<br/>
+					Backup/Restore:
 					<ul>
-						<li>Mobile clients are displayed in user list</li>
-						<li>Audio/Video switching is more stable</li>
-					</ul>
-					OAuth:
-					<ul>
-						<li>VK based OAuth login is fixed</li>
-						<li>Integrate Wso2 Identity Server</li>
-					</ul>
-					Activities&amp;Actions:
-					<ul>
-						<li>Less actions for non-moderators</li>
-						<li>No duplicated actions are displayed</li>
+						<li>Recordings of deleted users were restored as public</li>
+						<li>OAuth configs were not properly backup</li>
 					</ul>
 					White board:
 					<ul>
-						<li>Video on WB works in latest Safari</li>
-						<li>White Out tool is added</li>
-						<li>Whiteboard size can be tuned</li>
-						<li>Link to LaTeX guide is added</li>
+						<li>Math formula is improved</li>
+						<li>Room files are improved</li>
+						<li>Clean WB REST method perform real-time clean</li>
 					</ul>
 					Room User list:
 					<ul>
-						<li>Issue with user's display name is fixed</li>
 						<li>"Ghost" users are not displayed in the room</li>
+						<li>External user name is displayed as expected</li>
 					</ul>
 					<br/>
 					Other fixes and improvements
@@ -105,12 +94,12 @@
 				<br/>
 
 				<span>
-					30 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.8/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344753">Detailed list</a>
+					19 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.9/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344942">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2019-03-08)</span>
+				<span class="date">(2019-07-15)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
