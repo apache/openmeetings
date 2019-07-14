@@ -44,8 +44,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_A
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE_OTHERS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE_OTHERS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_QUICKPOLL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
@@ -112,8 +113,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
@@ -325,6 +328,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_KEYCODE_ARRANGE:
 			case CONFIG_KEYCODE_MUTE_OTHERS:
 			case CONFIG_KEYCODE_MUTE:
+			case CONFIG_KEYCODE_QUICKPOLL:
 				reloadRoomSettings();
 				break;
 			case CONFIG_MAX_UPLOAD_SIZE:
@@ -577,6 +581,16 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadDisplayNameEditable();
 	}
 
+	private static JSONObject getHotkey(String value) {
+		List<String> partList = Arrays.asList(value.split("\\+"));
+		Set<String> parts = new HashSet<>(partList);
+		return new JSONObject()
+				.put("alt", parts.contains("Alt"))
+				.put("shift", parts.contains("Shift"))
+				.put("ctrl", parts.contains("Ctrl"))
+				.put("key", partList.get(partList.size() - 1));
+	}
+
 	private JSONObject reloadRoomSettings() {
 		try {
 			Properties props = new Properties();
@@ -595,9 +609,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				.put(FLASH_ECHO_PATH, getLong(CONFIG_FLASH_ECHO_PATH, 128L))
 				.put(FLASH_MIC_RATE, getLong(CONFIG_FLASH_MIC_RATE, 22L))
 				.put("keycode", new JSONObject()
-						.put("arrange", getLong(CONFIG_KEYCODE_ARRANGE, 119L))
-						.put("muteothers", getLong(CONFIG_KEYCODE_MUTE_OTHERS, 123L))
-						.put("mute", getLong(CONFIG_KEYCODE_MUTE, 118L))
+						.put("arrange", getHotkey(getString(CONFIG_KEYCODE_ARRANGE, "Shift+F8")))
+						.put("muteothers", getHotkey(getString(CONFIG_KEYCODE_MUTE_OTHERS, "Shift+F12")))
+						.put("mute", getHotkey(getString(CONFIG_KEYCODE_MUTE, "Shift+F7")))
+						.put("quickpoll", getHotkey(getString(CONFIG_KEYCODE_QUICKPOLL, "Ctrl+Alt+Q")))
 						)
 				);
 		} catch (Exception e) {

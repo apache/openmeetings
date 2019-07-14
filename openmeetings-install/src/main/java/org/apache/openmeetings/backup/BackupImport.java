@@ -103,6 +103,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -111,6 +112,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -131,6 +133,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.text.WordUtils;
 import org.apache.openmeetings.backup.converter.AppointmentConverter;
 import org.apache.openmeetings.backup.converter.AppointmentReminderTypeConverter;
 import org.apache.openmeetings.backup.converter.BaseFileItemConverter;
@@ -250,46 +253,46 @@ public class BackupImport {
 		outdatedConfigKeys.put("swftools_zoom", CONFIG_DOCUMENT_DPI);
 		outdatedConfigKeys.put("swftools_jpegquality", CONFIG_DOCUMENT_QUALITY);
 		outdatedConfigKeys.put("sms.subject", CONFIG_REMINDER_MESSAGE);
-		configTypes.put(CONFIG_REGISTER_FRONTEND, Configuration.Type.bool);
-		configTypes.put(CONFIG_REGISTER_SOAP, Configuration.Type.bool);
-		configTypes.put(CONFIG_REGISTER_OAUTH, Configuration.Type.bool);
-		configTypes.put(CONFIG_SMTP_TLS, Configuration.Type.bool);
-		configTypes.put(CONFIG_EMAIL_AT_REGISTER, Configuration.Type.bool);
-		configTypes.put(CONFIG_EMAIL_VERIFICATION, Configuration.Type.bool);
-		configTypes.put(CONFIG_SIP_ENABLED, Configuration.Type.bool);
-		configTypes.put(CONFIG_SCREENSHARING_FPS_SHOW, Configuration.Type.bool);
-		configTypes.put(CONFIG_SCREENSHARING_ALLOW_REMOTE, Configuration.Type.bool);
-		configTypes.put(CONFIG_DASHBOARD_SHOW_MYROOMS, Configuration.Type.bool);
-		configTypes.put(CONFIG_DASHBOARD_SHOW_CHAT, Configuration.Type.bool);
-		configTypes.put(CONFIG_DASHBOARD_SHOW_RSS, Configuration.Type.bool);
-		configTypes.put(CONFIG_REPLY_TO_ORGANIZER, Configuration.Type.bool);
-		configTypes.put(CONFIG_IGNORE_BAD_SSL, Configuration.Type.bool);
-		configTypes.put(CONFIG_FLASH_SECURE, Configuration.Type.bool);
-		configTypes.put(CONFIG_MYROOMS_ENABLED, Configuration.Type.bool);
-		configTypes.put(CONFIG_DEFAULT_GROUP_ID, Configuration.Type.number);
-		configTypes.put(CONFIG_SMTP_PORT, Configuration.Type.number);
-		configTypes.put(CONFIG_SMTP_TIMEOUT_CON, Configuration.Type.number);
-		configTypes.put(CONFIG_SMTP_TIMEOUT, Configuration.Type.number);
-		configTypes.put(CONFIG_DEFAULT_LANG, Configuration.Type.number);
-		configTypes.put(CONFIG_DOCUMENT_DPI, Configuration.Type.number);
-		configTypes.put(CONFIG_DOCUMENT_QUALITY, Configuration.Type.number);
-		configTypes.put(CONFIG_SCREENSHARING_QUALITY, Configuration.Type.number);
-		configTypes.put(CONFIG_SCREENSHARING_FPS, Configuration.Type.number);
-		configTypes.put(CONFIG_MAX_UPLOAD_SIZE, Configuration.Type.number);
-		configTypes.put(CONFIG_APPOINTMENT_REMINDER_MINUTES, Configuration.Type.number);
-		configTypes.put(CONFIG_LOGIN_MIN_LENGTH, Configuration.Type.number);
-		configTypes.put(CONFIG_PASS_MIN_LENGTH, Configuration.Type.number);
-		configTypes.put(CONFIG_CALENDAR_ROOM_CAPACITY, Configuration.Type.number);
-		configTypes.put(CONFIG_KEYCODE_ARRANGE, Configuration.Type.number);
-		configTypes.put(CONFIG_KEYCODE_MUTE_OTHERS, Configuration.Type.number);
-		configTypes.put(CONFIG_KEYCODE_MUTE, Configuration.Type.number);
-		configTypes.put(CONFIG_DEFAULT_LDAP_ID, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_VIDEO_FPS, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_VIDEO_BANDWIDTH, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_CAM_QUALITY, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_MIC_RATE, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_ECHO_PATH, Configuration.Type.number);
-		configTypes.put(CONFIG_EXT_PROCESS_TTL, Configuration.Type.number);
+		configTypes.put(CONFIG_FLASH_SECURE, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_FLASH_VIDEO_FPS, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_FLASH_VIDEO_BANDWIDTH, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_FLASH_CAM_QUALITY, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_FLASH_MIC_RATE, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_FLASH_ECHO_PATH, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_REGISTER_FRONTEND, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_REGISTER_SOAP, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_REGISTER_OAUTH, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_SMTP_TLS, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_EMAIL_AT_REGISTER, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_EMAIL_VERIFICATION, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_SIP_ENABLED, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_SCREENSHARING_FPS_SHOW, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_SCREENSHARING_ALLOW_REMOTE, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_DASHBOARD_SHOW_MYROOMS, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_DASHBOARD_SHOW_CHAT, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_DASHBOARD_SHOW_RSS, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_REPLY_TO_ORGANIZER, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_IGNORE_BAD_SSL, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_MYROOMS_ENABLED, Configuration.Type.BOOL);
+		configTypes.put(CONFIG_DEFAULT_GROUP_ID, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_SMTP_PORT, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_SMTP_TIMEOUT_CON, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_SMTP_TIMEOUT, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_DEFAULT_LANG, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_DOCUMENT_DPI, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_DOCUMENT_QUALITY, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_SCREENSHARING_QUALITY, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_SCREENSHARING_FPS, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_MAX_UPLOAD_SIZE, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_APPOINTMENT_REMINDER_MINUTES, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_LOGIN_MIN_LENGTH, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_PASS_MIN_LENGTH, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_CALENDAR_ROOM_CAPACITY, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_KEYCODE_ARRANGE, Configuration.Type.HOTKEY);
+		configTypes.put(CONFIG_KEYCODE_MUTE_OTHERS, Configuration.Type.HOTKEY);
+		configTypes.put(CONFIG_KEYCODE_MUTE, Configuration.Type.HOTKEY);
+		configTypes.put(CONFIG_DEFAULT_LDAP_ID, Configuration.Type.NUMBER);
+		configTypes.put(CONFIG_EXT_PROCESS_TTL, Configuration.Type.NUMBER);
 	}
 
 	@Autowired
@@ -466,6 +469,17 @@ public class BackupImport {
 		registry.bind(Date.class, DateConverter.class);
 		registry.bind(User.class, new UserConverter(userDao, userMap));
 
+		final Map<Integer, String> keyMap = new HashMap<>();
+		Arrays.asList(KeyEvent.class.getDeclaredFields()).stream()
+				.filter(fld -> fld.getName().startsWith("VK_"))
+				.forEach(fld -> {
+					try {
+						keyMap.put(fld.getInt(null), "Shift+" + WordUtils.capitalizeFully(fld.getName().substring(3)));
+					} catch (IllegalArgumentException|IllegalAccessException e) {
+						log.error("Unexpected exception while building KEY map {}", fld);
+					}
+				});
+
 		List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, null, true);
 		for (Configuration c : list) {
 			if (c.getKey() == null || c.isDeleted()) {
@@ -478,8 +492,15 @@ public class BackupImport {
 			Configuration.Type type = configTypes.get(c.getKey());
 			if (type != null) {
 				c.setType(type);
-				if (Configuration.Type.bool == type) {
+				if (Configuration.Type.BOOL == type) {
 					c.setValue(String.valueOf("1".equals(c.getValue()) || "yes".equals(c.getValue()) || "true".equals(c.getValue())));
+				} else if (Configuration.Type.HOTKEY == type) {
+					try {
+						int val = c.getValueN().intValue();
+						c.setValue(keyMap.get(val));
+					} catch(Exception e) {
+						//no-op, value is already HOTKEY
+					}
 				}
 			}
 			Configuration cfg = cfgDao.forceGet(c.getKey());

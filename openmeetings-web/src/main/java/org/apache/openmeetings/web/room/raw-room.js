@@ -73,29 +73,27 @@ var Room = (function() {
 				return false;
 		}
 	}
+	function __keyPressed(hotkey, e) {
+		return hotkey.alt === e.altKey
+			&& hotkey.ctrl === e.ctrlKey
+			&& hotkey.shift === e.shiftKey
+			&& hotkey.key.toUpperCase() === e.key.toUpperCase();
+	}
 	function _keyHandler(e) {
-		if (e.shiftKey) {
-			switch (e.which) {
-				case options.keycode.arrange: // Shift+F8 by default
-					VideoUtil.arrange();
-					break;
-				case options.keycode.muteothers: // Shift+F12 by default
-				{
-					const v = _getSelfAudioClient();
-					if (v !== null) {
-						VideoManager.clickMuteOthers(Room.getOptions().uid);
-					}
-				}
-					break;
-				case options.keycode.mute: // Shift+F7 by default
-				{
-					const v = _getSelfAudioClient();
-					if (v !== null) {
-						v.mute(!v.isMuted());
-					}
-				}
-					break;
+		if (__keyPressed(options.keycode.arrange, e)) {
+			VideoUtil.arrange();
+		} else if (__keyPressed(options.keycode.muteothers, e)) {
+			const v = _getSelfAudioClient();
+			if (v !== null) {
+				VideoManager.clickMuteOthers(Room.getOptions().uid);
 			}
+		} else if (__keyPressed(options.keycode.mute, e)) {
+			const v = _getSelfAudioClient();
+			if (v !== null) {
+				v.mute(!v.isMuted());
+			}
+		} else if (__keyPressed(options.keycode.quickpoll, e)) {
+			quickPollAction('open');
 		}
 		if (e.which === 27) {
 			$('#wb-rename-menu').hide();
