@@ -18,6 +18,13 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.PARAM_ACTION;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
+import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
+
+import java.io.Serializable;
+
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -39,19 +46,13 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
-
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.PARAM_ACTION;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
-import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
-
 public class PollsSubMenu implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(PollsSubMenu.class);
 	private static final String FUNC_QPOLL_ACTION = "quickPollAction";
 	private static final String PARAM_VOTE = "vote";
 	private static final String ACTION_CLOSE = "close";
+	private static final String ACTION_OPEN = "open";
 	private final RoomPanel room;
 	private final RoomMenuPanel mp;
 	private final CreatePollDialog createPoll;
@@ -73,7 +74,9 @@ public class PollsSubMenu implements Serializable {
 				}
 				String action = mp.getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString();
 				Client c = room.getClient();
-				if (ACTION_CLOSE.equals(action)) {
+				if (ACTION_OPEN.equals(action)) {
+					qpollManager.start(room.getClient());
+				} else if (ACTION_CLOSE.equals(action)) {
 					qpollManager.close(c);
 				} else if (PARAM_VOTE.equals(action)) {
 					final boolean curVote = mp.getRequest().getRequestParameters().getParameterValue(PARAM_VOTE).toBoolean();

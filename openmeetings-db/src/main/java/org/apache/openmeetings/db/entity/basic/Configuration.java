@@ -22,6 +22,8 @@ import static java.lang.Boolean.TRUE;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -56,9 +58,10 @@ public class Configuration extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
 	public enum Type {
-		string
-		, number
-		, bool
+		STRING
+		, NUMBER
+		, BOOL
+		, HOTKEY
 	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,7 +71,8 @@ public class Configuration extends HistoricalEntity {
 
 	@Column(name = "type")
 	@Element(name = "type", data = true, required = false)
-	private Type type = Type.string;
+	@Enumerated(EnumType.STRING)
+	private Type type = Type.STRING;
 
 	@Column(name = "om_key", unique = true)
 	@Element(name = "key", data = true, required = false)

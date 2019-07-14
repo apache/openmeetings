@@ -55,9 +55,17 @@ import org.apache.wicket.validation.ValidationError;
 public class ConfigForm extends AdminBaseForm<Configuration> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer listContainer;
-	private final TextArea<String> valueS;
-	private final TextField<Long> valueN;
-	private final CheckBox valueB;
+	private final TextArea<String> valueS = new TextArea<>("valueS");
+	private final TextField<Long> valueN = new TextField<>("valueN") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected String[] getInputTypes() {
+			return new String[] {"number"};
+		}
+	};
+	private final CheckBox valueB = new CheckBox("valueB");
+	private final TextField<String> valueH = new TextField<>("value");
 	@SpringBean
 	private ConfigurationDao cfgDao;
 
@@ -65,20 +73,6 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		super(id, new CompoundPropertyModel<>(configuration));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-		valueS = new TextArea<>("valueS");
-		valueN = new TextField<>("valueN") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected String[] getInputTypes() {
-				return new String[] {"number"};
-			}
-		};
-		valueB = new CheckBox("valueB");
-		add(new DateLabel("updated"));
-		add(new Label("user.login"));
-		add(new TextArea<String>("comment"));
-		update(null);
 	}
 
 	private void refresh(AjaxRequestTarget target) {
@@ -87,11 +81,12 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 
 	private void update(AjaxRequestTarget target) {
 		Configuration c = getModelObject();
-		valueS.setVisible(Type.string == c.getType());
-		valueN.setVisible(Type.number == c.getType());
-		valueB.setVisible(Type.bool == c.getType());
+		valueS.setVisible(Type.STRING == c.getType());
+		valueN.setVisible(Type.NUMBER == c.getType());
+		valueB.setVisible(Type.BOOL == c.getType());
+		valueH.setVisible(Type.HOTKEY == c.getType());
 		if (target != null) {
-			target.add(valueS, valueN, valueB);
+			target.add(valueS, valueN, valueB, valueH);
 		}
 	}
 
@@ -104,6 +99,11 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		add(new DateLabel("updated"));
+		add(new Label("user.login"));
+		add(new TextArea<String>("comment"));
+		update(null);
+
 		add(new DropDownChoice<>("type", Arrays.asList(Type.values()), new IChoiceRenderer<Type>() {
 			private static final long serialVersionUID = 1L;
 
@@ -148,6 +148,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		add(valueS.setLabel(new ResourceModel("271")).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 		add(valueN.setLabel(new ResourceModel("271")).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 		add(valueB.setLabel(new ResourceModel("271")).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
+		add(valueH.setLabel(new ResourceModel("271")).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 	}
 
 	@Override

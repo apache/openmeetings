@@ -20,6 +20,29 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
+<wicket:head>
+	<script>
+		function configHandleKey(evt) {
+			const inp = $(evt.target);
+			evt.preventDefault();
+			let val = '';
+			if (evt.ctrlKey) {
+				val += 'Ctrl+';
+			}
+			if (evt.altKey) {
+				val += 'Alt+';
+			}
+			if (evt.shiftKey) {
+				val += 'Shift+';
+			}
+			val += evt.key;
+			console.info(val);
+			if (evt.keyCode !== 16 && evt.keyCode !== 17 && evt.keyCode !== 18 && inp.length == 1) {
+				inp.val(val);
+			}
+		}
+	</script>
+</wicket:head>
 <wicket:extend>
 	<div class="adminPanelColumnTable">
 		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
@@ -73,6 +96,10 @@
 									<span class="onoffswitch-switch"></span>
 								</label>
 							</div>
+						</div>
+						<div wicket:enclosure="value">
+							<label wicket:for="value"><wicket:message key="271" /></label>
+							<input type="text" onkeydown="configHandleKey(event)" onpaste="return false;" wicket:id="value"/>
 						</div>
 					</div>
 					<div class="formelement">
