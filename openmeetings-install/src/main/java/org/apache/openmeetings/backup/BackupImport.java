@@ -138,6 +138,7 @@ import org.apache.openmeetings.backup.converter.AppointmentConverter;
 import org.apache.openmeetings.backup.converter.AppointmentReminderTypeConverter;
 import org.apache.openmeetings.backup.converter.BaseFileItemConverter;
 import org.apache.openmeetings.backup.converter.DateConverter;
+import org.apache.openmeetings.backup.converter.EnumIcaseConverter;
 import org.apache.openmeetings.backup.converter.GroupConverter;
 import org.apache.openmeetings.backup.converter.OmCalendarConverter;
 import org.apache.openmeetings.backup.converter.PollTypeConverter;
@@ -468,9 +469,10 @@ public class BackupImport {
 		matcher.bind(Long.class, LongTransform.class);
 		registry.bind(Date.class, DateConverter.class);
 		registry.bind(User.class, new UserConverter(userDao, userMap));
+		registry.bind(Configuration.Type.class, new EnumIcaseConverter(Configuration.Type.values()));
 
 		final Map<Integer, String> keyMap = new HashMap<>();
-		Arrays.asList(KeyEvent.class.getDeclaredFields()).stream()
+		Arrays.stream(KeyEvent.class.getDeclaredFields())
 				.filter(fld -> fld.getName().startsWith("VK_"))
 				.forEach(fld -> {
 					try {
