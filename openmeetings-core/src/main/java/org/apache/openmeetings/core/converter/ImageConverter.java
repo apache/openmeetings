@@ -183,6 +183,7 @@ public class ImageConverter extends BaseConverter {
 			getPathToConvert()
 			, "-density", getDpi()
 			, pdf.getCanonicalPath()
+			, "+profile", "'*'"
 			, "-quality", getQuality()
 			, new File(pdf.getParentFile(), PAGE_TMPLT).getCanonicalPath()
 			};
