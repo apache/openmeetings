@@ -1,4 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+if (window.hasOwnProperty('isSecureContext') === false) {
+	window.isSecureContext = window.location.protocol == 'https:' || ["localhost", "127.0.0.1"].indexOf(window.location.hostname) !== -1;
+}
 $.widget('openmeetings.iconselectmenu', $.ui.selectmenu, {
 	_renderItem: function(ul, item) {
 		ul.addClass('settings-menu');
@@ -403,6 +406,9 @@ var VideoSettings = (function() {
 			});
 	}
 	function _initDevices() {
+		if (window.isSecureContext === false) {
+			OmUtil.error($('#settings-https-required').text());
+		}
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
 			OmUtil.error('enumerateDevices() not supported.');
 			return;

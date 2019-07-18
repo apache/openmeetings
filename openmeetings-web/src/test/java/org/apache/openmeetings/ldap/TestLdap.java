@@ -128,7 +128,7 @@ public class TestLdap extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testSbndSessionLoginBadPassword() throws OmException {
+	public void testSbndSessionLoginBadPassword() {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
 		assertThrows(OmException.class, () -> WebSession.get().signIn(USER1, BAD_PASSWORD, User.Type.ldap, cfg.getId()));
 	}

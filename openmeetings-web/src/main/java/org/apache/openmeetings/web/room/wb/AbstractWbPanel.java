@@ -53,6 +53,11 @@ public abstract class AbstractWbPanel extends Panel {
 		return this;
 	}
 
+	/**
+	 * This method have to be overridden to handle reload WB
+	 *
+	 * @param handler {@link IPartialPageRequestHandler} to perform necessary actions
+	 */
 	public void reloadWb(IPartialPageRequestHandler handler) {
 		//designed to be empty
 	}
