@@ -75,7 +75,18 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(UploadDialog.class, getWebAppRootKey());
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private final Form<String> form = new Form<>("form");
+	private final Form<String> form = new Form<>("form") {
+		private static final long serialVersionUID = 1L;
+
+		protected boolean handleMultiPart() {
+			try {
+				return super.handleMultiPart();
+			} catch (Exception e) {
+				log.warn("Multipart processing failed {}", e.getMessage());
+			}
+			return true;
+		}
+	};
 	private DialogButton upload;
 	private DialogButton cancel;
 	private final FileUploadField uploadField = new FileUploadField("file", new IModel<List<FileUpload>>() {
