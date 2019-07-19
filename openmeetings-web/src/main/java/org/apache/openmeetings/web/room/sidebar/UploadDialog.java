@@ -77,6 +77,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	private final Form<String> form = new Form<>("form") {
 		private static final long serialVersionUID = 1L;
 
+		@Override
 		protected boolean handleMultiPart() {
 			try {
 				return super.handleMultiPart();
