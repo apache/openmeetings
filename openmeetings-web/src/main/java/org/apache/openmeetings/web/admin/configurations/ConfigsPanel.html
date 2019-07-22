@@ -34,8 +34,11 @@
 			if (evt.shiftKey) {
 				val += 'Shift+';
 			}
-			val += evt.key;
-			console.info(val);
+			const code = OmUtil.getKeyCode(evt);
+			if (typeof(code) === 'undefined') {
+				return;
+			}
+			val += code;
 			if (evt.keyCode !== 16 && evt.keyCode !== 17 && evt.keyCode !== 18 && inp.length == 1) {
 				inp.val(val);
 			}

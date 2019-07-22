@@ -360,7 +360,7 @@ public class ImportInitvalues {
 				"Preset (encoder optimization settings) to be used while performing mp4 conversion."
 						+ "Valid values are: ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow", "4.0.5");
 		addCfg(list, CONFIG_DISPLAY_NAME_EDITABLE, String.valueOf(false), Configuration.Type.BOOL, "Is user will be able to edit his/her display name (default false).", "4.0.7");
-		addCfg(list, CONFIG_KEYCODE_QUICKPOLL, "Ctrl+Alt+Q", Configuration.Type.HOTKEY
+		addCfg(list, CONFIG_KEYCODE_QUICKPOLL, "Ctrl+Alt+KeyQ", Configuration.Type.HOTKEY
 				, "A hot key code to start quick poll", "4.0.10");
 		return list;
 	}

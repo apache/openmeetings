@@ -588,7 +588,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				.put("alt", parts.contains("Alt"))
 				.put("shift", parts.contains("Shift"))
 				.put("ctrl", parts.contains("Ctrl"))
-				.put("key", partList.get(partList.size() - 1));
+				.put("code", partList.get(partList.size() - 1));
 	}
 
 	private JSONObject reloadRoomSettings() {
@@ -612,7 +612,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 						.put("arrange", getHotkey(getString(CONFIG_KEYCODE_ARRANGE, "Shift+F8")))
 						.put("muteothers", getHotkey(getString(CONFIG_KEYCODE_MUTE_OTHERS, "Shift+F12")))
 						.put("mute", getHotkey(getString(CONFIG_KEYCODE_MUTE, "Shift+F7")))
-						.put("quickpoll", getHotkey(getString(CONFIG_KEYCODE_QUICKPOLL, "Ctrl+Alt+Q")))
+						.put("quickpoll", getHotkey(getString(CONFIG_KEYCODE_QUICKPOLL, "Ctrl+Alt+KeyQ")))
 						)
 				);
 		} catch (Exception e) {
