@@ -67,10 +67,11 @@ var Room = (function() {
 		}
 	}
 	function __keyPressed(hotkey, e) {
+		const code = OmUtil.getKeyCode(e);
 		return hotkey.alt === e.altKey
 			&& hotkey.ctrl === e.ctrlKey
 			&& hotkey.shift === e.shiftKey
-			&& hotkey.key.toUpperCase() === e.key.toUpperCase();
+			&& hotkey.code.toUpperCase() === (code ? code.toUpperCase() : '');
 	}
 	function _keyHandler(e) {
 		if (__keyPressed(options.keycode.arrange, e)) {

@@ -352,7 +352,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_MIC_NOISE, String.valueOf(true), Configuration.Type.BOOL, "Whether noise suppression is preferred and/or required.", VER_5_0_0);
 		addCfg(list, CONFIG_CSP_XFRAME, HEADER_XFRAME_SELF, Configuration.Type.STRING, String.format("Value for 'frame-src' directive of 'Content-Security-Policy' header (default: %s), more info: https://w3c.github.io/webappsec-csp/", HEADER_XFRAME_SELF), VER_5_0_0);
 		addCfg(list, CONFIG_DISPLAY_NAME_EDITABLE, String.valueOf(false), Configuration.Type.BOOL, "Is user will be able to edit his/her display name (default false).", "4.0.7");
-		addCfg(list, CONFIG_KEYCODE_QUICKPOLL, "Ctrl+Alt+Q", Configuration.Type.HOTKEY
+		addCfg(list, CONFIG_KEYCODE_QUICKPOLL, "Ctrl+Alt+KeyQ", Configuration.Type.HOTKEY
 				, "A hot key code to start quick poll", "4.0.10");
 		return list;
 	}
