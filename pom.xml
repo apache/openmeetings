@@ -98,7 +98,7 @@
 		<postgresql.version>42.2.6</postgresql.version>
 		<commons-cli.version>1.4</commons-cli.version>
 		<dom4j.version>2.1.1</dom4j.version>
-		<commons-codec.version>1.12</commons-codec.version>
+		<commons-codec.version>1.13</commons-codec.version>
 		<commons-io.version>2.6</commons-io.version>
 		<mysql.version>8.0.16</mysql.version>
 		<mssql.version>7.2.2.jre8</mssql.version>
@@ -780,7 +780,7 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.groovy.maven</groupId>
+				<groupId>org.codehaus.gmaven</groupId>
 				<artifactId>gmaven-plugin</artifactId>
 				<executions>
 					<execution>
