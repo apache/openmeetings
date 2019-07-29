@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.cli;
 
+import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.openmeetings.AbstractJUnitDefaults.adminUsername;
 import static org.apache.openmeetings.AbstractJUnitDefaults.email;
 import static org.apache.openmeetings.AbstractJUnitDefaults.group;
@@ -47,15 +48,14 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 public class TestAdmin {
-	@TempDir
-	File tempFolder;
+	private File tempFolder;
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		setOmHome();
+		tempFolder = Files.createTempDirectory("omtempdb").toFile();
 		System.setProperty("user.dir", tempFolder.getCanonicalPath());
 		System.setProperty(OM_HOME, getOmHome().getCanonicalPath());
 		setH2Home(tempFolder);
@@ -73,6 +73,7 @@ public class TestAdmin {
 		}
 		System.setProperty("context", DEFAULT_CONTEXT_NAME);
 		setWicketApplicationName(DEFAULT_CONTEXT_NAME);
+		deleteQuietly(tempFolder);
 	}
 
 	private static void checkError(String... args) throws Exception {

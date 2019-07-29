@@ -368,8 +368,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 						host.setModelObject("");
 						port.setModelObject(0);
 						String[] parts = props.getURL().split(";");
-						String[] hp = parts[0].split(":");
-						dbname.setModelObject(hp[2]);
+						dbname.setModelObject(parts[0].substring("jdbc:h2:".length()));
 						}
 						break;
 					default:

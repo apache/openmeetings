@@ -18,12 +18,19 @@
  */
 package org.apache.openmeetings.cli;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class H2Patcher extends ConnectionPropertiesPatcher {
+	private static final Logger log = LoggerFactory.getLogger(H2Patcher.class);
+
 	@Override
 	protected String getUrl(String inUrl, String host, String inPort, String inDb) {
 		String db = (inDb == null) ? "./" + DEFAULT_DB_NAME : inDb;
 		int idx = inUrl.indexOf(';');
 		String suffix = idx > -1 ? inUrl.substring(idx) : "";
-		return String.format("jdbc:h2:%s%s", db, suffix);
+		String url = "jdbc:h2:" + db + suffix;
+		log.info("resulting H2 URL: '{}', db: '{}', suffix: '{}'", url, db, suffix);
+		return url;
 	}
 }

@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.pages.install;
 
 import static com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog.SUBMIT;
-import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.openmeetings.AbstractJUnitDefaults.adminUsername;
 import static org.apache.openmeetings.AbstractJUnitDefaults.email;
 import static org.apache.openmeetings.AbstractJUnitDefaults.group;
@@ -28,6 +28,7 @@ import static org.apache.openmeetings.AbstractWicketTester.checkErrors;
 import static org.apache.openmeetings.AbstractWicketTester.countErrors;
 import static org.apache.openmeetings.AbstractWicketTester.getButtonBehavior;
 import static org.apache.openmeetings.AbstractWicketTester.getWicketTester;
+import static org.apache.openmeetings.cli.ConnectionPropertiesPatcher.DEFAULT_DB_NAME;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
@@ -65,8 +66,18 @@ public class TestInstall {
 	protected WicketTester tester;
 	protected Random rnd = new Random();
 
+	private static String getH2Home(File dir) throws Exception {
+		File f = new File(dir.getCanonicalFile(), DEFAULT_DB_NAME);
+		String path = f.toURI().toString();
+		if (System.getProperty("os.name").startsWith("Win")) {
+			path = "file:" + path.substring(6);
+		}
+		log.warn("Gonna create DB at {}", path);
+		return path;
+	}
+
 	public static void setH2Home(File f) throws Exception {
-		ConnectionPropertiesPatcher.patch("h2", null, null, f.getCanonicalPath(), null, null);
+		ConnectionPropertiesPatcher.patch("h2", null, null, getH2Home(f), null, null);
 	}
 
 	public static void resetH2Home() throws Exception {
@@ -93,7 +104,7 @@ public class TestInstall {
 		AbstractWicketTester.destroy(tester);
 		log.info("WicketTester is destroyed");
 		resetH2Home();
-		deleteDirectory(tempFolder);
+		deleteQuietly(tempFolder);
 		log.info("Clean-up complete");
 	}
 
