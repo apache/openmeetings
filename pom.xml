@@ -94,13 +94,13 @@
 		<openjpa.version>3.1.0</openjpa.version>
 		<asterisk-java.version>2.0.2</asterisk-java.version>
 		<commons-dbcp.version>2.6.0</commons-dbcp.version>
-		<commons-pool2.version>2.6.2</commons-pool2.version>
+		<commons-pool2.version>2.7.0</commons-pool2.version>
 		<postgresql.version>42.2.6</postgresql.version>
 		<commons-cli.version>1.4</commons-cli.version>
 		<dom4j.version>2.1.1</dom4j.version>
 		<commons-codec.version>1.13</commons-codec.version>
 		<commons-io.version>2.6</commons-io.version>
-		<mysql.version>8.0.16</mysql.version>
+		<mysql.version>8.0.17</mysql.version>
 		<mssql.version>7.2.2.jre8</mssql.version>
 		<pdfbox.version>2.0.16</pdfbox.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
