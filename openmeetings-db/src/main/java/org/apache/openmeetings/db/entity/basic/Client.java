@@ -457,14 +457,13 @@ public class Client implements IDataProviderEntity, IWsClient {
 			} else {
 				sactivities.addAll(Arrays.asList(activities));
 			}
-			if (StreamType.WEBCAM == type) {
-				boolean interview = room != null && Room.Type.interview == room.getType();
-				this.swidth = interview ? 320 : width;
-				this.sheight = interview ? 260 : height;
-			}
 			if (StreamType.SCREEN == type) {
 				this.swidth = 800;
 				this.sheight = 600;
+			} else if (StreamType.WEBCAM == type) {
+				boolean interview = room != null && Room.Type.interview == room.getType();
+				this.swidth = interview ? 320 : width;
+				this.sheight = interview ? 260 : height;
 			}
 		}
 

@@ -20,13 +20,11 @@ package org.apache.openmeetings.db.dao.server;
 
 import static java.util.UUID.randomUUID;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.slf4j.Logger;
@@ -99,7 +97,7 @@ public class SessiondataDao {
 		List<Sessiondata> sessions = em.createNamedQuery("getSessionById", Sessiondata.class)
 				.setParameter("sessionId", String.format("%%%s%%", sid)).getResultList();
 
-		if (sessions == null || sessions.isEmpty()) {
+		if (sessions.isEmpty()) {
 			return null;
 		}
 		Sessiondata sd = sessions.get(0);
@@ -129,14 +127,9 @@ public class SessiondataDao {
 	 * @return - the list of all expired session data
 	 */
 	private List<Sessiondata> getSessionToDelete(Date refreshed) {
-		try {
-			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionToDelete", Sessiondata.class);
-			query.setParameter("refreshed", refreshed);
-			return query.getResultList();
-		} catch (Exception ex2) {
-			log.error("[getSessionToDelete]: ", ex2);
-		}
-		return new ArrayList<>();
+		return em.createNamedQuery("getSessionToDelete", Sessiondata.class)
+				.setParameter("refreshed", refreshed)
+				.getResultList();
 	}
 
 	/**

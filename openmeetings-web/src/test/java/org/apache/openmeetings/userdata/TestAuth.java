@@ -18,10 +18,13 @@
  */
 package org.apache.openmeetings.userdata;
 
+import static java.util.UUID.randomUUID;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,15 +33,25 @@ public class TestAuth extends AbstractJUnitDefaults {
 	private SessiondataDao sessionDao;
 
 	@Test
-	public void testTestAuth() {
-		Sessiondata sessionData = sessionDao.create(1L, 1L);
-
-		System.out.println("sessionData: " + sessionData.getSessionId());
-
-		String tTemp = CryptProvider.get().hash("test");
-
-		System.out.println("tTemp: " + tTemp);
-
+	public void test() {
+		Sessiondata sd = sessionDao.create(1L, 1L);
+		assertNotNull(sd);
+		sessionDao.clearSessionTable(-1L);
 	}
 
+	@Test
+	public void testNotExistent() {
+		Sessiondata sd = sessionDao.check(randomUUID().toString());
+		assertNotNull(sd);
+	}
+
+	@Test
+	public void testFind1() {
+		assertNull(sessionDao.find(null));
+	}
+
+	@Test
+	public void testFind2() {
+		assertNull(sessionDao.find(randomUUID().toString()));
+	}
 }

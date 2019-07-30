@@ -23,15 +23,13 @@ var Video = (function() {
 		_resizeDlgArea(pw, ph);
 	}
 	function _resizeLm(h) {
-		if (!!lm) {
-			lm.attr('height', h).height(h);
-		}
+		lm && lm.attr('height', h).height(h);
 		return lm;
 	}
 	function _resize(w, h) {
 		vc.width(w).height(h);
 		_resizeLm(h - 10);
-		video.width(w).height(h);
+		video && video.width(w).height(h);
 	}
 	function _micActivity(level) {
 		const speaks = level > 5;
@@ -289,6 +287,7 @@ var Video = (function() {
 			v.on('dialogresizestop', function(event, ui) {
 				const w = ui.size.width - 2
 					, h = ui.size.height - t.height() - 4 - (f.is(':visible') ? f.height() : 0);
+				size = {width: w, height: h};
 				_resize(w, h);
 			});
 			if (VideoUtil.isSharing(sd)) {
@@ -422,6 +421,8 @@ var Video = (function() {
 		_cleanup();
 		const _id = VideoUtil.getVid(sd.uid);
 		const hasVideo = VideoUtil.hasVideo(sd) || VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd);
+		_resizeDlgArea(hasVideo ? size.width : 120
+			, hasVideo ? size.height : 90);
 		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 			.width(vc.width()).height(vc.height())
 			.prop('autoplay', true).prop('controls', false);
