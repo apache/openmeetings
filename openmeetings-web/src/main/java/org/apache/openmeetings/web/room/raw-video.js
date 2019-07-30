@@ -113,7 +113,7 @@ var Video = (function() {
 						}
 						_handleVolume(lastVolume);
 					}
-					callback(msg, cnts, _stream);
+					video && callback(msg, cnts, _stream);
 				})
 				.catch(function(err) {
 					VideoManager.sendMessage({
@@ -257,7 +257,7 @@ var Video = (function() {
 		let contSel;
 		if (opts.interview) {
 			const area = $('.pod-area');
-			const contId = UUID.v4();
+			const contId = uuidv4();
 			contSel = '#' + contId;
 			area.append($('<div class="pod"></div>').attr('id', contId));
 			WbArea.updateAreaClass();

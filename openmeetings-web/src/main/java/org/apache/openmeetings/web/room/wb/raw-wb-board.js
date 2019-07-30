@@ -563,7 +563,7 @@ var Wb = function() {
 		switch(o.type) {
 			case 'textbox':
 			case 'i-text':
-				o.uid = UUID.v4();
+				o.uid = uuidv4();
 				o.slide = this.slide;
 				objCreatedHandler(o);
 				break;
@@ -618,7 +618,7 @@ var Wb = function() {
 		}
 	}
 	function pathCreatedHandler(o) {
-		o.path.uid = UUID.v4();
+		o.path.uid = uuidv4();
 		o.path.slide = this.slide;
 		objCreatedHandler(o.path);
 	};
