@@ -51,11 +51,11 @@
 				i.e. each room type can be customized by specifying CSS rules for this room type only. to do it:
 				<ul>
 					<li>
-						create CSS rule starting <tt>.room.box.custom</tt> where <tt>custom</tt> is the room type<br/>
+						create CSS rule starting <tt>.room-block .container.custom</tt> where <tt>custom</tt> is the room type<br/>
 						for ex.
 						<source>
 <![CDATA[
-.room.box.presentation .room.menu {
+.room-block .container.presentation .menu {
 	background-color: red;
 }
 ]]>

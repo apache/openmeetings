@@ -57,7 +57,7 @@ public class EventDetailDialog extends AbstractDialog<Appointment> {
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("autoOpen", true);
-		behavior.setOption("position", "{my: 'right top', at: 'right bottom', of: '.room.menu' }");
+		behavior.setOption("position", "{my: 'right top', at: 'right bottom', of: '.room-block .menu' }");
 	}
 
 	@Override

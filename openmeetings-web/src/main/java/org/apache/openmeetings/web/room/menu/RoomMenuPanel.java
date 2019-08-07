@@ -130,7 +130,7 @@ public class RoomMenuPanel extends Panel {
 
 	@Override
 	protected void onInitialize() {
-		exitMenuItem = new RoomMenuItem(getString("308"), getString("309"), "room menu exit") {
+		exitMenuItem = new RoomMenuItem(getString("308"), getString("309"), "exit") {
 			private static final long serialVersionUID = 1L;
 
 			@Override

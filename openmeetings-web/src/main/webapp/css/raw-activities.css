@@ -17,7 +17,7 @@
  * under the License.
  */
 #activities {
-	height: 20px;
+	height: var(--activities-height);
 	overflow: hidden;
 }
 #activities .ui-resizable-handle {
@@ -39,7 +39,7 @@
 	padding-right: 20px;
 }
 #activities .area {
-	height: 319px;
+	height: calc(100% - 46px);
 	overflow-y: auto;
 }
 .activity.item {

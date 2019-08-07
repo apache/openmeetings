@@ -16,169 +16,181 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-#header {
+html[dir="rtl"] #header {
 	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 150px;
 	background-position: right center;
 }
-#topLinks {
+html[dir="rtl"] #topLinks {
 	right: auto !important; /* IE */
 	right: initial !important;
 	left: 10px;
 }
-#topLinks span {
+html[dir="rtl"] #topLinks span {
 	border-right: none !important;
 	border-left: 1px solid black;
 }
-#topLinks span:last-child {
+html[dir="rtl"] #topLinks span:last-child {
 	border-left: none;
 }
-#busy-indicator {
+html[dir="rtl"] #busy-indicator {
 	right: auto !important; /* IE */
 	right: initial !important;
 	left: 0 !important;
 }
-.ui-tabs .ui-tabs-nav li {
+html[dir="rtl"] .ui-tabs .ui-tabs-nav li {
 	float: right !important;
 }
-.info-text {
+html[dir="rtl"] .info-text {
 	background-position: right top !important;
 	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 20px;
 }
-.start_step1, .start_step2, .start_step3, .start_step4 {
+html[dir="rtl"] .start_step1
+, html[dir="rtl"] .start_step2
+, html[dir="rtl"] .start_step3
+, html[dir="rtl"] .start_step4
+{
 	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 30px;
 	background-position: right top !important;
 }
-.start_step2 {
+html[dir="rtl"] .start_step2 {
 	margin-left: 0 !important; /* IE */
 	margin-left: initial !important;
 	margin-right: 20px !important;
 }
-.start_step3 {
+html[dir="rtl"] .start_step3 {
 	margin-left: 0 !important; /* IE */
 	margin-left: initial !important;
 	margin-right: 40px !important;
 }
-.start_step4 {
+html[dir="rtl"] .start_step4 {
 	margin-left: 0 !important; /* IE */
 	margin-left: initial !important;
 	margin-right: 60px !important;
 }
-form .input {
+html[dir="rtl"] form .input {
 	float: right !important;
 }
-.ui-dialog .ui-dialog-title {
+html[dir="rtl"] .ui-dialog .ui-dialog-title {
 	float: right !important;
 }
-.ui-dialog .ui-dialog-titlebar-close {
+html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 	right: auto !important; /* IE */
 	right: initial !important;
 	left: .3em;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+html[dir="rtl"] .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
 	float: left !important;
 }
-.room.menu.right {
+html[dir="rtl"] .room-block .menu .details {
 	right: auto !important; /* IE */
 	right: initial !important;
 	left: 0;
 }
-.room.menu.right .icon, .room.menu.right .room.name {
+html[dir="rtl"] .room-block .menu .details .icon
+, html[dir="rtl"] .room-block .menu .details .room.name
+{
 	float: left !important;
 }
-#activities {
+html[dir="rtl"] #activities {
 	right: 10px !important;
 	left: auto !important; /* IE */
 	left: initial !important;
 }
-#activities .control.block .label, #chatPopup .control.block .label {
+html[dir="rtl"] #activities .control.block .label
+, html[dir="rtl"] #chatPopup .control.block .label
+{
 	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 20px !important;
 }
-.btn-toolbar .btn, .btn-toolbar .btn-group, .btn-toolbar .input-group {
+html[dir="rtl"] .btn-toolbar .btn
+, html[dir="rtl"] .btn-toolbar .btn-group
+, html[dir="rtl"] .btn-toolbar .input-group
+{
 	float: right !important;
 }
-#chatPanel {
+html[dir="rtl"] #chatPanel {
 	right: auto !important; /* IE */
 	right: initial !important;
 	left: 10px;
 }
-#chatPanel.room {
-	right: auto !important; /* IE */
-	right: initial !important;
-	left: 0px;
-}
-#chat .chat-btn {
+html[dir="rtl"] #chat .chat-btn {
 	float: left !important;
 }
-#chat .chat-btn:first-of-type {
+html[dir="rtl"] #chat .chat-btn:first-of-type {
 	margin-right: 0 !important; /* IE */
 	margin-right: initial !important;
 }
-#chat .chat-btn:last-of-type {
+html[dir="rtl"] #chat .chat-btn:last-of-type {
 	margin-left: 10px !important;
 }
-#chatMessage {
+html[dir="rtl"] #chatMessage {
 	margin-right: 0 !important; /* IE */
 	margin-right: initial !important;
 	margin-left: 22px;
 }
-#chat .send {
+html[dir="rtl"] #chat .send {
 	right: auto !important; /* IE */
 	right: initial !important;
 	left: 0;
 }
-#chat .messageArea .user-row {
+html[dir="rtl"] #chat .messageArea .user-row {
 	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 40px !important;
 }
-.room.sidebar .tab.om-icon.big {
+html[dir="rtl"] .room-block .sidebar .tab.om-icon.big {
 	padding: 0em 2.5em 0 1em !important;
 }
-@media screen and (max-width: 1280px) {
-	.room.holder .room.sidebar .tab.om-icon.big {
+html[dir="rtl"] @media screen and (max-width: 1280px) {
+	.room-block .sidebar .tab.om-icon.big {
 		padding-left: 0 !important;
 	}
 }
-.om-icon.big {
+html[dir="rtl"] .om-icon.big {
 	background-position: right 1px top 1px !important;
 }
-.room.sidebar .user.list .user {
+html[dir="rtl"] .room-block .sidebar .user-list .user {
 	background-position: right 2px top 2px !important;
 }
-.room.sidebar .user.list .user.name {
+html[dir="rtl"] .room-block .sidebar .user-list .user.name {
 	margin-left: 0px 0px 0px 20px !important;
 	padding: 0px 44px 0px 0px !important;
 }
-.room.sidebar .user.list .user .ui-icon.audio-activity {
+html[dir="rtl"] .room-block .sidebar .user-list .user .ui-icon.audio-activity {
 	right: auto !important; /* IE */
 	right: initial !important;
 	left: 3px !important;
 }
-.list-table th {
+html[dir="rtl"] .list-table th {
 	text-align: right !important;
 }
 
 /**** TODO need to be moved to wicket-jquery-ui **************/
-span.css-emoticon.un-transformed-emoticon, span.css-emoticon.animated-emoticon:hover {
+html[dir="rtl"] span.css-emoticon.un-transformed-emoticon
+, html[dir="rtl"] span.css-emoticon.animated-emoticon:hover
+{
 	transform: rotate(0deg) !important;
 }
-span.css-emoticon {
+html[dir="rtl"] span.css-emoticon {
 	transform: rotate(-90deg) !important;
 }
-.chat.dropdown-menu {
+html[dir="rtl"] .chat.dropdown-menu {
 	left: auto !important; /* IE */
 	left: initial !important;
 	right: -50px !important;
 	float: right !important;
 }
-.adminForm label, .adminForm input, .adminForm select, .adminForm textarea {
+html[dir="rtl"] .adminForm label
+, html[dir="rtl"] .adminForm input
+, html[dir="rtl"] .adminForm select
+, html[dir="rtl"] .adminForm textarea
+{
 	float: right !important;
 }

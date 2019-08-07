@@ -16,68 +16,85 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-.room.wb.area {
+.room-block .wb-block {
 	position: absolute;
+	height: calc(100% - var(--room-menu-height));
+	width: calc(100% - var(--room-sidebar-width) - var(--chat-width) - 2 * var(--buffer-size));
+	top: var(--room-menu-height);
+	left: calc(var(--room-sidebar-width) + var(--buffer-size));
 }
-.room.wb.area.ui-state-hover {
+html[dir="rtl"] .room-block .wb-block {
+	right: calc(var(--room-sidebar-width) + var(--buffer-size));
+	left: auto;
+}
+.room-block .wb-block.ui-state-hover {
 	border: 0;
 }
-.room.wb.area.ui-state-hover .wb-area {
+.room-block .wb-block .wb-area {
+	height: 100%;
+}
+.room-block .wb-block.ui-state-hover .wb-area {
 	visibility: hidden;
 	height: 1px !important;
 }
-.room.wb.area .wb-drop-area {
+.room-block .wb-block .wb-drop-area {
 	display: none;
 }
-.room.wb.area.ui-state-hover .wb-drop-area {
+.room-block .wb-block.ui-state-hover .wb-drop-area {
 	background-image: url(images/drop.png);
 	display: block;
 	background-repeat: no-repeat;
 	height: inherit;
 	background-position: center;
 }
-.room.wb.area .tabs.ui-tabs, .room.wb.area .ui-tabs-panel {
+.room-block .wb-block .tabs.ui-tabs {
+	height: calc(100% - var(--buffer-size));
+}
+.room-block .wb-block .tabs.ui-tabs, .room-block .wb-block .ui-tabs-panel {
 	padding: 0;
 	background-color:transparent;
 }
-.room.wb.area .ui-tabs-panel {
+.room-block .wb-block .ui-tabs-panel {
+	height: calc(100% - var(--room-wb-tabs-height));
+}
+.room-block .wb-block .ui-tabs-panel {
 	position: relative;
 }
-.room.wb.area .tools {
+.room-block .wb-block .tools {
 	position: relative;
 	display: inline-block;
 	border: 0;
 }
-.room.wb.area .tools .bumper {
+.room-block .wb-block .tools .bumper {
 	float: left;
 	display: inline-block;
 	background: repeating-linear-gradient(-45deg, transparent, transparent 3px, gray 3px, gray 5px);
 }
-.room.wb.area .tools.vertical .bumper {
+.room-block .wb-block .tools.vertical .bumper {
 	width: 35px;
 	height: 9px;
 }
-.room.wb.area .tools.horisontal .bumper {
+.room-block .wb-block .tools.horisontal .bumper {
 	width: 9px;
 	height: 35px;
 }
-.room.wb.area .tools.vertical {
+.room-block .wb-block .tools.vertical {
 	width: 35px;
 	height: 394px;
 }
-.room.wb.area .tools.readonly.vertical {
+.room-block .wb-block .tools.readonly.vertical {
 	width: 35px;
 	height: 43px;
 }
-.room.wb.area .tools.horisontal {
+.room-block .wb-block .tools.horisontal {
 	width: 394px;
 	height: 35px;
 }
-.room.wb.area .tools.readonly.horisontal {
+.room-block .wb-block .tools.readonly.horisontal {
 	width: 44px;
 	height: 35px;
 }
-.room.wb.area .tools .om-icon.big {
+.room-block .wb-block .tools .om-icon.big {
 	float: left;
 	vertical-align: top;
 	width: 35px;
@@ -86,70 +103,70 @@
 	margin: 0;
 	background-position: 4px !important;
 }
-.room.wb.area .tools .om-icon.big.settings {
+.room-block .wb-block .tools .om-icon.big.settings {
 	border: 0 !important;
 }
-.room.wb.area .tools .dropdown-menu .om-icon.big {
+.room-block .wb-block .tools .dropdown-menu .om-icon.big {
 	float: none;
 }
-.room.wb.area .tools .om-icon.big.active {
+.room-block .wb-block .tools .om-icon.big.active {
 	background-color: whitesmoke;
 }
-.room.wb.area .tools .dropdown-menu .om-icon.big.active {
+.room-block .wb-block .tools .dropdown-menu .om-icon.big.active {
 	border: 1px solid #6b6565;
 }
-.room.wb.area .tools .om-icon.big.paint {
+.room-block .wb-block .tools .om-icon.big.paint {
 	background-image: url(images/paintbrush.png);
 }
-.room.wb.area .tools .om-icon.big.pointer {
+.room-block .wb-block .tools .om-icon.big.pointer {
 	background-image: url(images/pointer.png);
 }
-.room.wb.area .tools .om-icon.big.apointer {
+.room-block .wb-block .tools .om-icon.big.apointer {
 	background-image: url(images/wbpointer.png);
 }
-.room.wb.area .tools .om-icon.big.line {
+.room-block .wb-block .tools .om-icon.big.line {
 	background-image: url(images/line.png);
 }
-.room.wb.area .tools .om-icon.big.uline {
+.room-block .wb-block .tools .om-icon.big.uline {
 	background-image: url(images/uline.png);
 }
-.room.wb.area .tools .om-icon.big.rect {
+.room-block .wb-block .tools .om-icon.big.rect {
 	background-image: url(images/rectangle.png);
 }
-.room.wb.area .tools .om-icon.big.ellipse {
+.room-block .wb-block .tools .om-icon.big.ellipse {
 	background-image: url(images/ellipse.png);
 }
-.room.wb.area .tools .om-icon.big.text {
+.room-block .wb-block .tools .om-icon.big.text {
 	background-image: url(images/font.png);
 }
-.room.wb.area .tools .om-icon.big.arrow {
+.room-block .wb-block .tools .om-icon.big.arrow {
 	background-image: url(images/arrow.png);
 }
-.room.wb.area .tools .om-icon.big.eraser {
+.room-block .wb-block .tools .om-icon.big.eraser {
 	background-image: url(images/clear-icon.png);
 }
-.room.wb.area .tools .om-icon.big.clear-all {
+.room-block .wb-block .tools .om-icon.big.clear-all {
 	background-image: url(images/cancel.png);
 }
-.room.wb.area .tools .om-icon.big.clear-slide {
+.room-block .wb-block .tools .om-icon.big.clear-slide {
 	background-image: url(images/page_delete.png);
 }
-.room.wb.area .tools .om-icon.big.save {
+.room-block .wb-block .tools .om-icon.big.save {
 	background-image: url(images/file_save_as.png);
 }
-.room.wb.area .tools .om-icon.big.undo {
+.room-block .wb-block .tools .om-icon.big.undo {
 	background-image: url(images/arrow_undo.png);
 }
-.room.wb.area .tools .om-icon.big.math {
+.room-block .wb-block .tools .om-icon.big.math {
 	background-image: url(images/math.png);
 }
-.room.wb.area .tools .om-icon.big.textbox {
+.room-block .wb-block .tools .om-icon.big.textbox {
 	background-image: url(images/textbox.png);
 }
-.room.wb.area .om-icon.big.next {
+.room-block .wb-block .om-icon.big.next {
 	background-image: url(images/next.png);
 }
-.room.wb.area .om-icon.big.prev {
+.room-block .wb-block .om-icon.big.prev {
 	background-image: url(images/prev.png);
 }
 .wb-tool-settings, .wb-formula {
@@ -159,27 +176,27 @@
 .wb-formula .latex-guide {
 	padding: 0 10px;
 }
-.room.wb.area .tools.vertical .dropdown-toggle {
+.room-block .wb-block .tools.vertical .dropdown-toggle {
 	width: 35px;
 	height: 28px;
 }
-.room.wb.area .tools.horisontal .dropdown-toggle {
+.room-block .wb-block .tools.horisontal .dropdown-toggle {
 	width: 35px;
 	height: 23px;
 }
-.room.wb.area .tools .dropdown-toggle {
+.room-block .wb-block .tools .dropdown-toggle {
 	position: relative;
 	display: inline-block;
 }
-.room.wb.area .tools.horisontal .dropdown-toggle .caret {
+.room-block .wb-block .tools.horisontal .dropdown-toggle .caret {
 	left: -1px;
 	bottom: -12px;
 }
-.room.wb.area .tools.vertical .dropdown-toggle .caret {
+.room-block .wb-block .tools.vertical .dropdown-toggle .caret {
 	left: -1px;
 	bottom: -7px;
 }
-.room.wb.area .tools .dropdown-toggle .caret {
+.room-block .wb-block .tools .dropdown-toggle .caret {
 	position: absolute;
 	border-top: 8px solid transparent;
 	border-left: 8px solid blue;
@@ -300,6 +317,7 @@
 }
 .wb-area .ui-tabs-panel .scroll-container {
 	overflow: auto;
+	height: 100%;
 }
 .wb-area .ui-tabs-panel .scroll-container .canvas-container {
 	margin-top: 5px;

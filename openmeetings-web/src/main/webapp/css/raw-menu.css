@@ -45,40 +45,43 @@
 	border: 0;
 }
 #menu .ui-menu {
-	z-index: 10000000; /*need to be in sync with .room.menu.right*/
+	z-index: var(--menu-zindex);
 }
 .recording .ui-menu .ui-menu-item {
 	display: block;
 }
-.room.menu .ui-menu .ui-menu-item {
+.room-block .menu {
+	height: var(--room-menu-height);
+}
+.room-block .menu .ui-menu .ui-menu-item {
 	padding-left: 5px;
 	padding-right: 0;
 }
-.room.menu .top.room.menu.exit {
+.room-block .menu .top.exit {
 	padding-left: 0;
 }
-.room.menu.right {
+.room-block .menu .details {
 	position: absolute;
 	top: 0;
 	margin-right: 5px;
 	right: 0;
 	display: inline-block;
-	z-index: 10000001;
+	z-index: calc(var(--menu-zindex) + 1);
 }
-.room.menu.right .room {
+.room-block .menu .details .room {
 	float: right;
 	padding-top: 5px;
 	padding-right: 5px;
 }
-.room.menu.right .room.name {
+.room-block .menu .details .room.name {
 	font-weight: bold;
 }
-.room.menu.right .room.name.screen {
+.room-block .menu .details .room.name.screen {
 	color: red;
 }
-.room.menu.right .room.demo {
+.room-block .menu .details .room.demo {
 }
-.room.menu.right .icon {
+.room-block .menu .details .icon {
 	width: 30px;
 	height: 30px;
 	background-repeat: no-repeat;
@@ -87,15 +90,15 @@
 	float: right;
 	padding: 0;
 }
-.room.menu.right .icon.share {
+.room-block .menu .details .icon.share {
 	background-image: url(images/monitor_go.png);
 }
-.room.menu.right .icon.shared {
+.room-block .menu .details .icon.shared {
 	background-image: url(images/shared.png);
 }
-.room.menu.right .icon .profile {
+.room-block .menu .details .icon .profile {
 	margin-top: 3px;
 }
-.room.menu.right .icon .profile img {
+.room-block .menu .details .icon .profile img {
 	width: 28px;
 }

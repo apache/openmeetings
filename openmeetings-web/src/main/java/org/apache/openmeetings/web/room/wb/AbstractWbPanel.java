@@ -48,7 +48,7 @@ public abstract class AbstractWbPanel extends Panel {
 
 	public AbstractWbPanel update(IPartialPageRequestHandler handler) {
 		if (inited && handler != null) {
-			handler.appendJavaScript(String.format("Room.setSize();WbArea.setRole('%s');", getRole()));
+			handler.appendJavaScript(String.format("WbArea.setRole('%s');", getRole()));
 		}
 		return this;
 	}

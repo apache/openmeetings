@@ -91,6 +91,7 @@
 								<cssSourceFile>raw-variables.css</cssSourceFile>
 								<cssSourceFile>raw-nettest.css</cssSourceFile>
 								<cssSourceFile>raw-general.css</cssSourceFile>
+								<cssSourceFile>raw-general-rtl.css</cssSourceFile>
 								<cssSourceFile>raw-activities.css</cssSourceFile>
 								<cssSourceFile>raw-admin.css</cssSourceFile>
 								<cssSourceFile>raw-calendar.css</cssSourceFile>
@@ -102,19 +103,6 @@
 								<cssSourceFile>raw-wb.css</cssSourceFile>
 							</cssSourceFiles>
 							<cssFinalFile>theme.css</cssFinalFile>
-						</configuration>
-					</execution>
-					<execution>
-						<id>theme-rtl-minify</id>
-						<goals>
-							<goal>minify</goal>
-						</goals>
-						<configuration>
-							<charset>UTF-8</charset>
-							<cssSourceFiles>
-								<cssSourceFile>raw-general-rtl.css</cssSourceFile>
-							</cssSourceFiles>
-							<cssFinalFile>theme-rtl.css</cssFinalFile>
 						</configuration>
 					</execution>
 					<execution>

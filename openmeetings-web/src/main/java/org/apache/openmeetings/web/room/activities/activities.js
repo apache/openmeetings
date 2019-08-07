@@ -23,6 +23,9 @@ var Activities = function() {
 	function isClosed() {
 		return activities.height() < 24;
 	}
+	function _updateHeightVar(h) {
+		Room.setCssVar('--activities-height', h);
+	}
 	function _open() {
 		if (isClosed()) {
 			$('.control.block .ui-icon', activities).removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
@@ -35,10 +38,10 @@ var Activities = function() {
 				, 1000
 				, function() {
 					activities.css({'top': ''});
-					Room.setSize();
+					_updateHeightVar(openedHeightPx);
+					activities.resizable('option', 'disabled', false);
 				}
 			);
-			activities.resizable('option', 'disabled', false);
 		}
 	}
 	function _close() {
@@ -52,7 +55,7 @@ var Activities = function() {
 				, 1000
 				, function() {
 					activities.css({'top': ''});
-					Room.setSize();
+					_updateHeightVar(closedHeight + 'px');
 				}
 			);
 			activities.resizable('option', 'disabled', true);
@@ -82,7 +85,7 @@ var Activities = function() {
 		return 'activity-' + id;
 	}
 	function _action(name, val) {
-		activityAction($('.room.box').data('room-id'), name, val);
+		activityAction($('.room-block .container').data('room-id'), name, val);
 	}
 	function _remove(ids) {
 		for (let i = 0; i < ids.length; ++i) {
@@ -111,14 +114,12 @@ var Activities = function() {
 			activities.resizable({
 				handles: 'n'
 				, disabled: isClosed()
-				, alsoResize: '#activities .area'
 				, minHeight: 195
-				, resize: function() {
-					activities.css({'top': ''});
-				}
 				, stop: function(event, ui) {
 					openedHeight = ui.size.height;
 					openedHeightPx = openedHeight + 'px';
+					_updateHeightVar(openedHeightPx);
+					activities.css({'top': ''});
 				}
 			});
 			modArea = activities.find('.area .actions');

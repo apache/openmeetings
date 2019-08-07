@@ -108,6 +108,9 @@ var OmUtil = (function() {
 		}
 		return code;
 	};
+	self.setCssVar = function(key, val) {
+		($('body')[0]).style.setProperty(key, val);
+	};
 	return self;
 })();
 Wicket.BrowserInfo.collectExtraInfo = function(info) {

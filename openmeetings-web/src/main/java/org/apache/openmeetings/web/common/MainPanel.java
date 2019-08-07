@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -64,6 +65,7 @@ import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -413,7 +415,7 @@ public class MainPanel extends Panel {
 			if (prev != null) {
 				prev.cleanup(handler);
 			}
-			handler.add(contents.replace(panel));
+			handler.add(contents.replace(panel), this.add(AttributeModifier.replace(ATTR_CLASS, "main " + panel.getCssClass())));
 			panel.onMenuPanelLoad(handler);
 		}
 	}

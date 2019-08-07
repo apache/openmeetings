@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Wb = function() {
 	const ACTIVE = 'active', BUMPER = 100, wb = {id: -1, name: ''}, canvases = []
-		, area = $('.room.wb.area .wb-area .tabs.ui-tabs'), bar = area.find('.wb-tabbar')
+		, area = $('.room-block .wb-block .wb-area .tabs.ui-tabs'), bar = area.find('.wb-tabbar')
 		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src', 'formula'];
 	let a, t, z, s, f, mode, slide = 0, width = 0, height = 0
 			, zoom = 1., zoomMode = 'pageWidth', role = null, scrollTimeout = null;
@@ -934,7 +934,7 @@ var Wb = function() {
 			cc.remove();
 			canvases[i].dispose();
 		}
-		$('.room.wb.area .wb-video').remove();
+		$('.room-block .wb-block .wb-video').remove();
 		canvases.splice(1);
 		canvases[0].clear();
 		_updateZoomPanel();
@@ -948,7 +948,7 @@ var Wb = function() {
 				canvas.remove(arr[arr.length - 1]);
 				arr = canvas.getObjects();
 			}
-			$('.room.wb.area .wb-video.slide-' + _sl).remove();
+			$('.room-block .wb-block .wb-video.slide-' + _sl).remove();
 			canvas.renderOnAddRemove = true;
 			canvas.requestRenderAll();
 		}

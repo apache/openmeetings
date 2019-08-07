@@ -5,7 +5,7 @@ var InterviewWbArea = function() {
 
 	function _init() {
 		Wicket.Event.subscribe("/websocket/message", self.wbWsHandler);
-		container = $(".room.wb.area");
+		container = $(".room-block .wb-block");
 		area = container.find(".wb-area");
 		pArea = area.find(".pod-area");
 		rec = area.find('.rec-btn');
@@ -56,22 +56,6 @@ var InterviewWbArea = function() {
 		}
 		role = _role;
 	}
-	function _resizePod() {
-		pArea.find('.ui-dialog-content').each(function() {
-			$(this).data().resizePod();
-		});
-	}
-	function _resize(sbW, chW, w, h) {
-		if (!container || !_inited) {
-			return;
-		}
-		const hh = h - 5 - 40;//rec button height
-		container.width(w).height(h).css('left', (Settings.isRtl ? chW : sbW) + 'px');
-		area.width(w).height(hh);
-		pArea.width(w).height(hh);
-		rec.css('right', w / 2)
-		_resizePod();
-	}
 	function _setRecEnabled(en) {
 		if (!_inited) {
 			return;
@@ -99,7 +83,6 @@ var InterviewWbArea = function() {
 				return count < el;
 			});
 		pArea.attr('class', cls);
-		_resizePod();
 	}
 
 	self.init = _init;
@@ -107,7 +90,6 @@ var InterviewWbArea = function() {
 		Wicket.Event.unsubscribe("/websocket/message", self.wbWsHandler);
 	};
 	self.setRole = _setRole;
-	self.resize = _resize;
 	self.setRecEnabled = _setRecEnabled;
 	self.setRecStarted = _setRecStarted;
 	self.addDeleteHandler = function() {};

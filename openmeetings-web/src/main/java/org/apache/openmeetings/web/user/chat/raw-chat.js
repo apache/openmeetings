@@ -27,6 +27,22 @@ var Chat = function() {
 			play: function() {}
 		};
 	}
+	function __setCssVar(key, _val) {
+		const val = ('' + _val).endsWith('px') ? _val : _val + 'px';
+		if (roomMode) {
+			if (typeof(Room) == 'object' && typeof(Room.setCssVar) === 'function') {
+				Room.setCssVar(key, val);
+			}
+		} else {
+			OmUtil.setCssVar(key, val);
+		}
+	};
+	function __setCssWidth(val) {
+		__setCssVar('--chat-width', val)
+	}
+	function __setCssHeight(val) {
+		__setCssVar('--chat-height', val)
+	}
 	function _load() {
 		const s = Settings.load();
 		if (typeof(s.chat) === 'undefined') {
@@ -59,7 +75,7 @@ var Chat = function() {
 	}
 	function doneTyping () {
 		typingTimer = null;
-		chatActivity('typing_stop', $('.room.box').data('room-id'));
+		chatActivity('typing_stop', $('.room-block .container').data('room-id'));
 	}
 	function _emtClick() {
 		_editorAppend($(this).data('emt'));
@@ -147,34 +163,30 @@ var Chat = function() {
 		});
 		if (roomMode) {
 			icon.addClass(isClosed() ? iconOpenRoom : iconCloseRoom);
-			p.addClass('room');
-			pp.width(closedSize);
 			_removeResize();
 		} else {
 			ctrl.attr('title', '');
-			icon.addClass(isClosed() ? iconOpen : iconClose);
-			ctrl.height(closedSize).width(globalWidth);
-			pp.width(globalWidth).height(closedSize);
+			icon.addClass(iconOpen);
 			p.removeClass('room opened').addClass('closed')
 				.off('mouseenter mouseleave')
 				.resizable({
 					handles: 'n, ' + (Settings.isRtl ? 'e' : 'w')
 					, disabled: isClosed()
-					, alsoResize: "#chatPopup,#chatPopup .control.block,#chat .ui-tabs .ui-tabs-panel.messageArea, #chatMessage .wysiwyg-editor"
 					, minHeight: 195
 					, minWidth: 260
 					, stop: function(event, ui) {
 						p.css({'top': '', 'left': ''});
-						editor.width(p.width() - 30);
-						openedHeight = ui.size.height + "px";
+						openedHeight = ui.size.height + 'px';
 						globalWidth = ui.size.width;
-						ctrl.width(globalWidth);
+						__setCssHeight(openedHeight);
+						__setCssWidth(ui.size.width);
 					}
 				});
+			__setCssHeight(closedSize);
 		}
 		ctrl.off('click').click(Chat.toggle);
 		$('#chatMessage').off().on('input propertychange paste', function () {
-			const room = $('.room.box');
+			const room = $('.room-block .container');
 			if (room.length) {
 				if (!!typingTimer) {
 					clearTimeout(typingTimer);
@@ -267,15 +279,14 @@ var Chat = function() {
 		}
 	}
 	function _setOpened() {
-		editor.width(p.width() - 30);
+		__setCssWidth(openedWidth);
 		p.resizable({
 			handles: (Settings.isRtl ? 'e' : 'w')
-			, alsoResize: '#chatPopup, #chatMessage .wysiwyg-editor'
 			, minWidth: 120
 			, stop: function(event, ui) {
-				p.css({'left': ''});
-				editor.width(p.width() - 30);
+				p.css({'left': '', 'width': '', 'height': ''});
 				openedWidth = ui.size.width + 'px';
+				__setCssWidth(openedWidth);
 			}
 		});
 	}
@@ -291,22 +302,21 @@ var Chat = function() {
 			let opts;
 			if (roomMode) {
 				opts = {width: openedWidth};
-				ctrl.height(closedSize);
 			} else {
 				opts = {height: openedHeight};
 				p.resizable("option", "disabled", false);
 			}
-			p.removeClass('closed');
-			pp.animate(opts, 1000, function() {
+			p.removeClass('closed').animate(opts, 1000, function() {
 				p.removeClass('closed');
+				p.css({'height': '', 'width': ''});
 				if (typeof(handler) === 'function') {
 					handler();
 				}
-				editor.width(p.width() - 30);
 				ctrl.attr('title', ctrl.data('ttl-undock'));
 				if (roomMode) {
 					_setOpened();
-					Room.setSize();
+				} else {
+					__setCssHeight(openedHeight);
 				}
 				_setAreaHeight();
 			});
@@ -322,19 +332,18 @@ var Chat = function() {
 				opts = {height: closedSizePx};
 				p.resizable("option", "disabled", true);
 			}
-			pp.animate(opts, 1000, function() {
-				p.addClass('closed');
+			p.animate(opts, 1000, function() {
+				p.addClass('closed').css({'height': '', 'width': ''});
 				if (roomMode) {
-					ctrl.height(p.height());
+					__setCssWidth(closedSizePx);
 					_removeResize();
+				} else {
+					__setCssHeight(closedSizePx);
 				}
 				if (typeof(handler) === 'function') {
 					handler();
 				}
 				ctrl.attr('title', ctrl.data('ttl-dock'));
-				if (roomMode) {
-					Room.setSize();
-				}
 			});
 		}
 	}
@@ -361,21 +370,9 @@ var Chat = function() {
 		}, 300);
 	}
 	function _setAreaHeight() {
-		$('#chat .ui-tabs .ui-tabs-panel.messageArea').height(p.height() - closedSize - $('#chat .ui-tabs-nav').height() - $('#chat form').height() - 5);
 		$('#chat .messageArea').each(function() {
 			_scrollDown($(this));
 		});
-	}
-	function _setHeight(h) {
-		if (!isInited()) {
-			return;
-		}
-		pp.height(h);
-		if (isClosed()) {
-			ctrl.height(h);
-		} else {
-			_setAreaHeight();
-		}
 	}
 	function _insertLink() {
 		const text = $('#chat #hyperlink').parent().find('input').val();
@@ -417,7 +414,6 @@ var Chat = function() {
 		, close: _close
 		, toggle: _toggle
 		, setRoomMode: _setRoomMode
-		, setHeight: _setHeight
 		, clean: _clean
 		, validate: function() {
 			return !!editor && editor.text().trim().length > 0;

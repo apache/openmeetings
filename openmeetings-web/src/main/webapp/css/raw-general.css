@@ -22,6 +22,15 @@ html, body {
 	font-family: Arial, Helvetica, sans-serif;
 	overflow-y: hidden;
 }
+.main-container {
+	height: calc(100% - var(--header-height));
+}
+.main-container .main
+, #contents .child-panel
+, .full-height
+{
+	height: 100%;
+}
 * {
 	box-sizing: content-box; /* IE */
 	box-sizing: initial; /*reset bootstrap box sizing*/
@@ -506,7 +515,7 @@ select.messages.selector {
 	height: var(--rooms-header-height);
 }
 #orgTabs, .rooms-area {
-	height: calc(100% - var(--rooms-header-height) - var(--buffer-height));
+	height: calc(100% - var(--rooms-header-height) - var(--buffer-size));
 	padding-top: 0;
 	padding-bottom: 0;
 }
@@ -655,7 +664,7 @@ form .input {
 	width: 100%;
 	max-width: 518px;
 	min-width: 518px;
-	height: calc(100% - var(--nav-height) - var(--lbl-nav-height) - var(--buffer-height));
+	height: calc(100% - var(--nav-height) - var(--lbl-nav-height) - var(--buffer-size));
 }
 .list-table thead {
 	/* head takes the height it requires, 

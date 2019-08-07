@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room;
 
 import static java.time.Duration.ZERO;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.wb.InterviewWbPanel.INTERVIEWWB_JS_REFERENCE;
@@ -149,7 +148,6 @@ public class RoomPanel extends BasePanel {
 			}
 			StringBuilder sb = new StringBuilder("Room.init(").append(options.toString(new NullStringer())).append(");")
 					.append(wb.getInitScript())
-					.append("Room.setSize();")
 					.append(getQuickPollJs());
 			target.appendJavaScript(sb);
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), _c, RoomMessage.Type.roomEnter));
@@ -264,7 +262,6 @@ public class RoomPanel extends BasePanel {
 		cm.update(getClient().updateUser(userDao));
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
 
-		room.add(AttributeModifier.append(ATTR_CLASS, r.getType().name()));
 		room.add(menu = new RoomMenuPanel("menu", this));
 		room.add(AttributeModifier.append("data-room-id", r.getId()));
 		if (interview) {
@@ -786,5 +783,20 @@ public class RoomPanel extends BasePanel {
 
 	public boolean isInterview() {
 		return interview;
+	}
+
+	@Override
+	protected String getCssClass() {
+		String clazz = "room " + r.getType().name();
+		if (r.isHidden(RoomElement.TopBar)) {
+			clazz += " no-menu";
+		}
+		if (r.isHidden(RoomElement.Activities)) {
+			clazz += " no-activities";
+		}
+		if (r.isHidden(RoomElement.Chat)) {
+			clazz += " no-chat";
+		}
+		return clazz;
 	}
 }

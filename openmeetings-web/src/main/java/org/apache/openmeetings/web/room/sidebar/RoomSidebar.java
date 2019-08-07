@@ -64,7 +64,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
@@ -260,7 +259,7 @@ public class RoomSidebar extends Panel {
 		});
 		add(form.add(confirmTrash), upload = new UploadDialog("upload", room, roomFiles));
 		updateShowFiles(null);
-		add(new JQueryUIBehavior("#room-sidebar-tabs", "tabs", new Options("activate", "function(event, ui) {Room.setSize();}")));
+		add(new JQueryUIBehavior("#room-sidebar-tabs", "tabs"));
 		add(activities = new ActivitiesPanel("activities", room));
 	}
 

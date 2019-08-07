@@ -99,4 +99,8 @@ public abstract class BasePanel extends Panel {
 	 */
 	protected void process(IPartialPageRequestHandler handler, JSONObject o) throws IOException {
 	}
+
+	protected String getCssClass() {
+		return "";
+	}
 }

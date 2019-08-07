@@ -22,7 +22,13 @@ body {
 	--level-color: #ADFF2F;
 	--rooms-header-height: 70px;
 	--tabs-height: 45px;
-	--buffer-height: 4px;
+	--buffer-size: 4px;
+	--menu-zindex: 10000000;
+	--chat-width: 600px;
+	--chat-height: 20px;
+	--chat-tabs-height: 26px;
+	--chat-tools-height: 37px;
+	--chat-msg-height: 80px;
 }
 body.no-header {
 	--header-height: 0ch; /* 0px is being stripped by YUI compressor*/
@@ -50,4 +56,31 @@ body.no-menu {
 .file.tree {
 	--tree-header-height: 36px;
 	--tree-footer-height: 40px;
+}
+.main.room {
+	--header-height: 0ch;
+	--room-menu-height: 34px;
+	--room-sidebar-width: 315px;
+	--room-wb-tabs-height: 45px;
+	--room-sidebar-header-height: 37px;
+	--chat-width: 20px;
+	--chat-height: calc(100% - var(--room-menu-height));
+	--activities-height: 20px;
+}
+.main.room.interview {
+	--rec-btn-height: 40px;
+}
+.main.room.no-menu {
+	--room-menu-height: 0ch;
+}
+.main.room.no-activities {
+	--activities-height: 0ch;
+}
+.main.room.no-chat {
+	--chat-width: 0ch;
+}
+@media screen and (max-width: 1280px) {
+	.main.room {
+		--room-sidebar-width: 155px;
+	}
 }

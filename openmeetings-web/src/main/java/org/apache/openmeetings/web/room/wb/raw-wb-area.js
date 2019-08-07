@@ -120,17 +120,6 @@ var DrawWbArea = function() {
 	function _renameTab(obj) {
 		_setTabName(_getWbTab(obj.wbId), obj.name);
 	}
-	function _resizeWbs() {
-		const w = area.width(), hh = area.height()
-			, wbTabs = area.find('.tabs.ui-tabs')
-			, tabPanels = wbTabs.find('.ui-tabs-panel')
-			, wbah = hh - 5 - wbTabs.find('ul.ui-tabs-nav').height();
-		tabPanels.height(wbah);
-		tabPanels.each(function() {
-			$(this).data().resize(w - 25, wbah - 20);
-		});
-		wbTabs.find('.ui-tabs-panel .scroll-container').height(wbah);
-	}
 	function _addCloseBtn(li) {
 		if (role !== PRESENTER) {
 			return;
@@ -214,7 +203,7 @@ var DrawWbArea = function() {
 	}
 	self.init = function() {
 		Wicket.Event.subscribe('/websocket/message', self.wbWsHandler);
-		container = $('.room.wb.area');
+		container = $('.room-block .wb-block');
 		tabs = container.find('.tabs');
 		if (tabs.length === 0) {
 			return;
@@ -301,7 +290,6 @@ var DrawWbArea = function() {
 		wbo.init(obj, tid, role);
 		wb.on('remove', wbo.destroy);
 		wb.data(wbo);
-		_resizeWbs();
 	}
 	self.createWb = function(obj) {
 		if (!_inited) {
@@ -368,7 +356,6 @@ var DrawWbArea = function() {
 			return;
 		}
 		self.getWb(json.wbId).clearAll();
-		Room.setSize();
 	};
 	self.clearSlide = function(json) {
 		if (!_inited) {
@@ -376,18 +363,6 @@ var DrawWbArea = function() {
 		}
 		self.getWb(json.wbId).clearSlide(json.slide);
 	};
-	self.resize = function(sbW, chW, w, h) {
-		const hh = h - 5;
-		container.width(w).height(h).css('left', (Settings.isRtl ? chW : sbW) + 'px');
-		if (!container || !_inited) {
-			return;
-		}
-		area.width(w).height(hh);
-
-		const wbTabs = area.find('.tabs.ui-tabs');
-		wbTabs.height(hh);
-		_resizeWbs();
-	}
 	self.setSize = function(json) {
 		if (!_inited) {
 			return;
@@ -415,7 +390,7 @@ var DrawWbArea = function() {
 				dlg.find('img').attr('src', dataUri);
 				dlg.dialog({
 					width: 350
-					, appendTo: '.room.wb.area'
+					, appendTo: '.room-block .wb-block'
 				});
 			} catch (e) {
 				console.error(e);

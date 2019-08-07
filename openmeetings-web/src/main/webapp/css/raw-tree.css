@@ -23,6 +23,7 @@
 	max-width: 350px;
 }
 .file.tree {
+	height: 100%;
 	width: 100%;
 	display: inline-block;
 }
@@ -31,10 +32,20 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 }
+.file.tree .footer {
+	height: var(--tree-footer-height);
+}
+.file.tree .footer .sizes {
+	display: inline-block;
+}
+.file.tree .footer .sizes .size {
+	padding-left: 5px;
+}
 .trash-toolbar {
 	font-weight: bold;
 	line-height: 20px;
 	color: transparent;
+	height: var(--tree-header-height);
 }
 .trash-toolbar .om-icon.fileitem, .trash-toolbar .om-icon.recorditem {
 	display: none !important;
