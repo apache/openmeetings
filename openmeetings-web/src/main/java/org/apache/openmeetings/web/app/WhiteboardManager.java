@@ -53,6 +53,7 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.map.listener.EntryAddedListener;
 import com.hazelcast.map.listener.EntryRemovedListener;
 import com.hazelcast.map.listener.EntryUpdatedListener;
+import com.hazelcast.util.function.Consumer;
 
 /**
  * Hazelcast based Whiteboard manager
@@ -120,13 +121,16 @@ public class WhiteboardManager implements IWhiteboardManager {
 		return get(roomId, null);
 	}
 
-	private Whiteboards getOrCreate(Long roomId) {
+	private Whiteboards getOrCreate(Long roomId, Consumer<Whiteboards> consumer) {
 		if (roomId == null) {
 			return null;
 		}
 		Whiteboards wbs = onlineWbs.get(roomId);
 		if (wbs == null) {
 			wbs = new Whiteboards(roomId);
+			if (consumer != null) {
+				consumer.accept(wbs);
+			}
 		}
 		return wbs;
 	}
@@ -145,7 +149,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 						}
 						bfl.add(rf.getFile());
 					}
-					Whiteboards wbs = getOrCreate(r.getId());
+					Whiteboards wbs = getOrCreate(r.getId(), null);
 					for (Map.Entry<Long, List<BaseFileItem>> e : files.entrySet()) {
 						Whiteboard wb = add(wbs, langId);
 						wbs.setActiveWb(wb.getId());
@@ -161,14 +165,15 @@ public class WhiteboardManager implements IWhiteboardManager {
 	}
 
 	public Whiteboards get(Long roomId, Long langId) {
-		Whiteboards wbs = getOrCreate(roomId);
+		Whiteboards wbs = getOrCreate(roomId, inWbs -> {
+			if (inWbs.getWhiteboards().isEmpty()) {
+				Whiteboard wb = add(inWbs, langId);
+				inWbs.setActiveWb(wb.getId());
+				update(inWbs);
+			}
+		});
 		if (wbs == null) {
 			return null;
-		}
-		if (wbs.getWhiteboards().isEmpty()) {
-			Whiteboard wb = add(wbs, langId);
-			wbs.setActiveWb(wb.getId());
-			update(wbs);
 		}
 		return wbs;
 	}

@@ -21,22 +21,26 @@ package org.apache.openmeetings.web.room.menu;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.io.Serializable;
 
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.openmeetings.web.app.WhiteboardManager;
 import org.apache.openmeetings.web.common.InvitationDialog;
 import org.apache.openmeetings.web.common.menu.RoomMenuItem;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.injection.Injector;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class ActionsSubMenu implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private final InvitationDialog invite;
-	private final SipDialerDialog sipDialer;
 	private final RoomPanel room;
 	private final RoomMenuPanel mp;
+	private InvitationDialog invite;
+	private SipDialerDialog sipDialer;
 	private RoomMenuItem actionsMenu;
 	private RoomMenuItem inviteMenuItem;
 	private RoomMenuItem shareMenuItem;
@@ -46,19 +50,23 @@ public class ActionsSubMenu implements Serializable {
 	private RoomMenuItem sipDialerMenuItem;
 	private RoomMenuItem downloadPngMenuItem;
 	private RoomMenuItem downloadPdfMenuItem;
+	private RoomMenuItem resetWb;
 	private final boolean visible;
+	@SpringBean
+	private WhiteboardManager wbManager;
 
 	public ActionsSubMenu(final RoomPanel room, final RoomMenuPanel mp) {
+		Injector.get().inject(this);
 		this.room = room;
 		this.mp = mp;
-		RoomInvitationForm rif = new RoomInvitationForm("form", room.getRoom().getId());
-		mp.add(invite = new InvitationDialog("invite", rif));
-		rif.setDialog(invite);
-		mp.add(sipDialer = new SipDialerDialog("sipDialer", room));
 		visible = !room.getRoom().isHidden(RoomElement.ActionMenu);
 	}
 
 	public void init() {
+		RoomInvitationForm rif = new RoomInvitationForm("form", room.getRoom().getId());
+		mp.add(invite = new InvitationDialog("invite", rif));
+		rif.setDialog(invite);
+		mp.add(sipDialer = new SipDialerDialog("sipDialer", room));
 		actionsMenu = new RoomMenuItem(mp.getString("635"), null, false);
 		inviteMenuItem = new RoomMenuItem(mp.getString("213"), mp.getString("1489"), false) {
 			private static final long serialVersionUID = 1L;
@@ -125,6 +133,15 @@ public class ActionsSubMenu implements Serializable {
 				download(target, EXTENSION_PDF);
 			}
 		};
+		resetWb = new RoomMenuItem(mp.getString("reset.whiteboard"), mp.getString("reset.whiteboard")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				wbManager.clean(room.getRoom().getId(), getUserId());
+				download(target, EXTENSION_PDF);
+			}
+		};
 	}
 
 	RoomMenuItem getMenu() {
@@ -135,15 +152,19 @@ public class ActionsSubMenu implements Serializable {
 		actionsMenu.getItems().add(applyWbMenuItem);
 		actionsMenu.getItems().add(applyAvMenuItem);
 		actionsMenu.getItems().add(sipDialerMenuItem);
-		actionsMenu.getItems().add(downloadPngMenuItem);
-		actionsMenu.getItems().add(downloadPdfMenuItem);
+		if (Room.Type.interview != room.getRoom().getType()) {
+			actionsMenu.getItems().add(downloadPngMenuItem);
+			actionsMenu.getItems().add(downloadPdfMenuItem);
+			actionsMenu.getItems().add(resetWb);
+		}
 		return actionsMenu;
 	}
 
-	public void update(final boolean moder, final boolean notExternalUser, final Room r) {
+	public void update(final boolean moder, final boolean notExternalUser) {
 		if (!visible) {
 			return;
 		}
+		final Room r = room.getRoom();
 		boolean isInterview = Room.Type.interview == r.getType();
 		downloadPngMenuItem.setEnabled(!isInterview);
 		downloadPdfMenuItem.setEnabled(!isInterview);
@@ -155,6 +176,7 @@ public class ActionsSubMenu implements Serializable {
 		applyWbMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.whiteBoard));
 		applyAvMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.audio) || !room.getClient().hasRight(Room.Right.video));
 		sipDialerMenuItem.setEnabled(r.isSipEnabled() && isSipEnabled());
+		resetWb.setEnabled(moder);
 	}
 
 	private static void download(AjaxRequestTarget target, String type) {

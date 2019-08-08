@@ -206,7 +206,7 @@ public class RoomMenuPanel extends Panel {
 		exitMenuItem.setEnabled(notExternalUser);
 		filesMenu.setEnabled(!isInterview && room.getSidebar().isShowFiles());
 		boolean moder = room.getClient().hasRight(Room.Right.moderator);
-		actionsSubMenu.update(moder, notExternalUser, r);
+		actionsSubMenu.update(moder, notExternalUser);
 		pollsSubMenu.update(moder, notExternalUser, r);
 		menuPanel.update(handler);
 		StringBuilder roomClass = new StringBuilder("room name");
