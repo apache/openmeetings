@@ -46,6 +46,7 @@ import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.room.VideoSettings;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.IResourceStream;
@@ -125,7 +126,7 @@ public class StartSharingButton extends OmButton {
 					.replace("$allowRecording", String.valueOf(room.isAllowRecording() && (0 == streamClientManager.getRecordingCount(roomId))))
 					.replace("$allowPublishing", String.valueOf(0 == streamClientManager.getPublishingCount(roomId)))
 					;
-			download.initiate(target);
+			download.initiate((IPartialPageRequestHandler)target);
 		} catch (Exception e) {
 			log.error("Unexpected error while creating jnlp file", e);
 		}

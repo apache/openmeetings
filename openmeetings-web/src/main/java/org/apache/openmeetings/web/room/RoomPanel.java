@@ -237,7 +237,7 @@ public class RoomPanel extends BasePanel {
 
 	public void startDownload(AjaxRequestTarget target, byte[] bb) {
 		pdfWb = bb;
-		download.initiate(target);
+		download.initiate((IPartialPageRequestHandler)target);
 	}
 
 	@Override

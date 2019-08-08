@@ -997,4 +997,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="upload.dlg.choose.title"><![CDATA[Kies een bestand]]></entry>
 	<entry key="upload.dlg.convert.title"><![CDATA[Converting...]]></entry>
 	<entry key="lbl.settings.whiteboard"><![CDATA[Whiteboard Settings]]></entry>
+	<entry key="video.settings.https.required"><![CDATA[Camera/microphone most probably will not work in insecure environment.]]></entry>
+	<entry key="reset.whiteboard"><![CDATA[Reset Whiteboard]]></entry>
 </properties>
