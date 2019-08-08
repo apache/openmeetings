@@ -139,7 +139,6 @@ public class ActionsSubMenu implements Serializable {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				wbManager.clean(room.getRoom().getId(), getUserId());
-				download(target, EXTENSION_PDF);
 			}
 		};
 	}
