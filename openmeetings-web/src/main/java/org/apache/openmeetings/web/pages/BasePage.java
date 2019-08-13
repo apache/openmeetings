@@ -110,7 +110,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		super.renderHead(response);
 		final String suffix = DEVELOPMENT == getApplication().getConfigurationType() ? "" : ".min";
 		response.render(CssHeaderItem.forUrl(String.format("css/theme_om/jquery-ui%s.css", suffix)));
-		response.render(CssHeaderItem.forUrl(String.format("css/theme%s.css", suffix)));
+		response.render(CssHeaderItem.forUrl("css/theme.css"));
 		if (!Strings.isEmpty(getGaCode())) {
 			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BasePage.class, "om-ga.js"))));
 			StringBuilder script = new StringBuilder("initGA('");
