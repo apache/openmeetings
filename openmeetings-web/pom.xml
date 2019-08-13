@@ -102,6 +102,7 @@
 								<cssSourceFile>raw-tree.css</cssSourceFile>
 								<cssSourceFile>raw-wb.css</cssSourceFile>
 							</cssSourceFiles>
+							<skipMinify>true</skipMinify>
 							<cssFinalFile>theme.css</cssFinalFile>
 						</configuration>
 					</execution>

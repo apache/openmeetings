@@ -520,7 +520,7 @@ public class ImportInitvalues {
 		// VK
 		oauthDao.update(new OAuthServer()
 				.setName("VK")
-				.setIconUrl("https://vk.com/images/safari_152.png")
+				.setIconUrl("https://vk.com/images/icons/pwa/apple/default.png")
 				.setEnabled(false)
 				.setClientId(CLIENT_PLACEHOLDER)
 				.setClientSecret(SECRET_PLACEHOLDER)
