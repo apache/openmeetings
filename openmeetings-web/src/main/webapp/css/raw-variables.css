@@ -14,13 +14,13 @@ body {
 	--chat-msg-height: 80px;
 }
 body.no-header {
-	--header-height: 0ch; /* 0px is being stripped by YUI compressor*/
+	--header-height: 0px;
 }
 body.no-menu {
-	--menu-height: 0ch; /* 0px is being stripped by YUI compressor*/
+	--menu-height: 0px;
 }
 .adminPanel {
-	--lbl-nav-height: 0ch; /* 0px is being stripped by YUI compressor*/
+	--lbl-nav-height: 0px;
 	--nav-height: 30px;
 	--list-width: 518px;
 }
@@ -28,7 +28,7 @@ body.no-menu {
 	--lbl-nav-height: 40px;
 }
 .adminPanelColumnForm {
-	--actions-height: 0ch; /* 0px is being stripped by YUI compressor*/
+	--actions-height: 0px;
 }
 .adminPanelColumnForm .adminForm {
 	--actions-height: 40px;
@@ -41,7 +41,7 @@ body.no-menu {
 	--tree-footer-height: 40px;
 }
 .main.room {
-	--header-height: 0ch;
+	--header-height: 0px;
 	--room-menu-height: 34px;
 	--room-sidebar-width: 315px;
 	--room-wb-tabs-height: 45px;
@@ -54,13 +54,13 @@ body.no-menu {
 	--rec-btn-height: 40px;
 }
 .main.room.no-menu {
-	--room-menu-height: 0ch;
+	--room-menu-height: 0px;
 }
 .main.room.no-activities {
-	--activities-height: 0ch;
+	--activities-height: 0px;
 }
 .main.room.no-chat {
-	--chat-width: 0ch;
+	--chat-width: 0px;
 }
 @media screen and (max-width: 1280px) {
 	.main.room {
