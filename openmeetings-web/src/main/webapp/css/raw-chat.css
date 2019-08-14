@@ -144,17 +144,17 @@
 }
 /* room mode */
 .main.room #chatPanel {
-	right: 0px;
+	right: 0ch;
 	top: var(--room-menu-height);
 }
 html[dir="rtl"] .main.room #chatPanel {
 	right: auto !important; /* IE */
 	right: initial !important;
-	left: 0px;
+	left: 0ch;
 }
 .main.room #chatPanel #chat form {
 	position: absolute;
-	bottom: 0px;
+	bottom: 0ch;
 	left: 1px;
 	width: 100%;
 }
