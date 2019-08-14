@@ -447,6 +447,9 @@ public class StreamProcessor implements IStreamProcessor {
 			AbstractStream s = getByUid(sd.getUid());
 			if (s != null) {
 				s.release(this);
+				WebSocketHelper.sendRoomOthers(c.getRoomId(), c.getUid(), newKurentoMsg()
+						.put("id", "broadcastStopped")
+						.put("uid", sd.getUid()));
 			}
 		}
 		if (c.getRoomId() != null) {
