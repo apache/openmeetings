@@ -10,7 +10,9 @@ var Video = (function() {
 		return t.height() + 2 + (f.is(':visible') ? f.height() : 0);
 	}
 	function _resizeDlgArea(_w, _h) {
-		v.dialog('option', 'width', _w).dialog('option', 'height', _h);
+		if (v.dialog('instance')) {
+			v.dialog('option', 'width', _w).dialog('option', 'height', _h);
+		}
 		const h = _h - _getExtra();
 		_resize(_w, h);
 		if (Room.getOptions().interview) {
