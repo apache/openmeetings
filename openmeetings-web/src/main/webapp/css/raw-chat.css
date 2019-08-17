@@ -140,7 +140,6 @@
 #chat .tool-container {
 	max-height: var(--chat-tools-height);
 	height: var(--chat-tools-height);
-	overflow: auto;
 }
 /* room mode */
 .main.room #chatPanel {

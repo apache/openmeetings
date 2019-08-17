@@ -30,9 +30,9 @@ span.css-emoticon {
 	border: 1px solid rgba(0,0,0,0.25);
 	background-color: #ffcc00;
 	background-image: linear-gradient(to right, #fff4c8, #fc0);
-	-webkit-transition-property:color, background, transform;  
-	-webkit-transition-duration: 1s, 1s;  
-	-webkit-transition-timing-function: linear, ease-in;
+	transition-property: color, background, transform;
+	transition-duration: 1s, 1s;
+	transition-timing-function: linear, ease-in;
 }
 /* Styles for two-character emoticons that need more letter-spacing for proportionality */
 span.css-emoticon.spaced-emoticon {

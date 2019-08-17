@@ -141,7 +141,6 @@ html, body {
 	display: inline;
 	float: none;
 }
-
 .goto, .goto :link, .goto :hover {
 	font-size: 14px;
 	line-height: 14px;
@@ -150,7 +149,6 @@ html, body {
 	vertical-align: middle;
 	min-width: 16px;
 }
-
 .goto.icon {
 	display: inline-block;
 	width: 16px;
@@ -160,16 +158,7 @@ html, body {
 	padding: 0px;
 	zoom: 1.2;
 }
-
 .ui-dialog {
-	-moz-box-shadow: 3px 3px 4px #000;
-	-webkit-box-shadow: 3px 3px 4px #000;
-	/* For IE 8 */
-	-ms-filter:
-		"progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000')";
-	/* For IE 5.5 - 7 */
-	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135,
-		Color='#000000' );
 	box-shadow: 3px 3px 4px #000;
 }
 .sort-icon, .sort-icon a {
@@ -281,7 +270,6 @@ html, body {
 	margin: 50px;
 	border: 1px solid black;
 	padding: 15px;
-	-webkit-border-radius: 8px;
 	border-radius: 8px;
 }
 .private.message.body {

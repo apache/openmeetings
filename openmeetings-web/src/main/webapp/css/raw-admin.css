@@ -22,7 +22,6 @@
 .adminPanelColumnTable.label .lblNav {
 	height: var(--lbl-nav-height);
 }
-
 .adminPanelColumnForm {
 	display: inline-block;
 	vertical-align: top;
@@ -76,38 +75,32 @@
 	width: 20px;
 	height: 20px;
 }
-
 .adminForm fieldset {
 	margin-top: 4px;
 	padding: 4px;
 }
-
 .adminForm legend {
 	padding: 0.2em 0.5em;
 	margin: 0px 10px;
 	font-style: italic;
 	text-align: right;
 }
-
 .adminForm textarea {
 	border: solid 1px #aacfe4;
 	width: 280px;
 	height: 60px;
 }
-
 .adminForm div.formelement {
 	display: block;
 	clear: both;
 	max-width: 540px;
 	white-space: nowrap;
 }
-
 .adminForm select {
 	height: 20px;
 	border: solid 1px #aacfe4;
 	width: 282px;
 }
-
 .adminForm label {
 	font-weight: bold;
 	text-align: right;

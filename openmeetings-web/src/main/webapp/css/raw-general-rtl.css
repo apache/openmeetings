@@ -1,12 +1,10 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 html[dir="rtl"] #header {
-	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 150px;
 	background-position: right center;
 }
 html[dir="rtl"] #topLinks {
-	right: auto !important; /* IE */
 	right: initial !important;
 	left: 10px;
 }
@@ -18,7 +16,6 @@ html[dir="rtl"] #topLinks span:last-child {
 	border-left: none;
 }
 html[dir="rtl"] #busy-indicator {
-	right: auto !important; /* IE */
 	right: initial !important;
 	left: 0 !important;
 }
@@ -27,7 +24,6 @@ html[dir="rtl"] .ui-tabs .ui-tabs-nav li {
 }
 html[dir="rtl"] .info-text {
 	background-position: right top !important;
-	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 20px;
 }
@@ -36,23 +32,19 @@ html[dir="rtl"] .start_step1
 , html[dir="rtl"] .start_step3
 , html[dir="rtl"] .start_step4
 {
-	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 30px;
 	background-position: right top !important;
 }
 html[dir="rtl"] .start_step2 {
-	margin-left: 0 !important; /* IE */
 	margin-left: initial !important;
 	margin-right: 20px !important;
 }
 html[dir="rtl"] .start_step3 {
-	margin-left: 0 !important; /* IE */
 	margin-left: initial !important;
 	margin-right: 40px !important;
 }
 html[dir="rtl"] .start_step4 {
-	margin-left: 0 !important; /* IE */
 	margin-left: initial !important;
 	margin-right: 60px !important;
 }
@@ -63,7 +55,6 @@ html[dir="rtl"] .ui-dialog .ui-dialog-title {
 	float: right !important;
 }
 html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
-	right: auto !important; /* IE */
 	right: initial !important;
 	left: .3em;
 }
@@ -71,7 +62,6 @@ html[dir="rtl"] .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
 	float: left !important;
 }
 html[dir="rtl"] .room-block .menu .details {
-	right: auto !important; /* IE */
 	right: initial !important;
 	left: 0;
 }
@@ -82,13 +72,11 @@ html[dir="rtl"] .room-block .menu .details .icon
 }
 html[dir="rtl"] #activities {
 	right: 10px !important;
-	left: auto !important; /* IE */
 	left: initial !important;
 }
 html[dir="rtl"] #activities .control.block .label
 , html[dir="rtl"] #chatPopup .control.block .label
 {
-	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 20px !important;
 }
@@ -99,7 +87,6 @@ html[dir="rtl"] .btn-toolbar .btn
 	float: right !important;
 }
 html[dir="rtl"] #chatPanel {
-	right: auto !important; /* IE */
 	right: initial !important;
 	left: 10px;
 }
@@ -107,24 +94,20 @@ html[dir="rtl"] #chat .chat-btn {
 	float: left !important;
 }
 html[dir="rtl"] #chat .chat-btn:first-of-type {
-	margin-right: 0 !important; /* IE */
 	margin-right: initial !important;
 }
 html[dir="rtl"] #chat .chat-btn:last-of-type {
 	margin-left: 10px !important;
 }
 html[dir="rtl"] #chatMessage {
-	margin-right: 0 !important; /* IE */
 	margin-right: initial !important;
 	margin-left: 22px;
 }
 html[dir="rtl"] #chat .send {
-	right: auto !important; /* IE */
 	right: initial !important;
 	left: 0;
 }
 html[dir="rtl"] #chat .messageArea .user-row {
-	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 40px !important;
 }
@@ -147,7 +130,6 @@ html[dir="rtl"] .room-block .sidebar .user-list .user.name {
 	padding: 0px 44px 0px 0px !important;
 }
 html[dir="rtl"] .room-block .sidebar .user-list .user .ui-icon.audio-activity {
-	right: auto !important; /* IE */
 	right: initial !important;
 	left: 3px !important;
 }
