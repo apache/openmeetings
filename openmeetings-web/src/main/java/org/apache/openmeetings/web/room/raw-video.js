@@ -6,32 +6,12 @@ var Video = (function() {
 		, lastVolume = 50, muted = false, aCtx, aSrc, aDest, gainNode, analyser
 		, lm, level, userSpeaks = false, muteOthers;
 
-	function _getExtra() {
-		return t.height() + 2 + (f.is(':visible') ? f.height() : 0);
-	}
 	function _resizeDlgArea(_w, _h) {
-		if (v.dialog('instance')) {
-			v.dialog('option', 'width', _w).dialog('option', 'height', _h);
-		}
-		const h = _h - _getExtra();
-		_resize(_w, h);
 		if (Room.getOptions().interview) {
 			VideoUtil.setPos(v, VideoUtil.getPos());
+		} else if (v.dialog('instance')) {
+			v.dialog('option', 'width', _w).dialog('option', 'height', _h);
 		}
-	}
-	function _resizePod() {
-		const p = v.parents('.pod,.pod-big')
-			, pw = p.width(), ph = p.height();
-		_resizeDlgArea(pw, ph);
-	}
-	function _resizeLm(h) {
-		lm && lm.attr('height', h).height(h);
-		return lm;
-	}
-	function _resize(w, h) {
-		vc.width(w).height(h);
-		_resizeLm(h - 10);
-		video && video.width(w).height(h);
 	}
 	function _micActivity(level) {
 		const speaks = level > 5;
@@ -95,7 +75,6 @@ var Video = (function() {
 					if (stream.getAudioTracks().length !== 0) {
 						vol.show();
 						lm = vc.find('.level-meter');
-						_resizeLm(vc.height() - 10).show();
 						aCtx = new AudioCtx();
 						gainNode = aCtx.createGain();
 						analyser = aCtx.createAnalyser();
@@ -286,12 +265,6 @@ var Video = (function() {
 		} else {
 			v.dialog('option', 'draggable', true);
 			v.dialog('option', 'resizable', true);
-			v.on('dialogresizestop', function(event, ui) {
-				const w = ui.size.width - 2
-					, h = ui.size.height - t.height() - 4 - (f.is(':visible') ? f.height() : 0);
-				size = {width: w, height: h};
-				_resize(w, h);
-			});
 			if (VideoUtil.isSharing(sd)) {
 				v.on('dialogclose', function() {
 					VideoManager.close(sd.uid, true);
@@ -531,7 +504,6 @@ var Video = (function() {
 			, luid: sd.self ? sd.uid : opts.uid
 		});
 	};
-	self.resizePod = _resizePod;
 	self.reattachStream = _reattachStream;
 	return self;
 });

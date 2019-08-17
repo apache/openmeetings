@@ -240,18 +240,6 @@ html[dir="rtl"] .room-block .sidebar {
 	font-weight: bold;
 	background-color: #00FF00;
 }
-.ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .ui-dialog-content {
-	padding: 0;
-}
-.ui-dialog.video .ui-dialog-content {
-	overflow: hidden;
-}
-.ui-dialog.video .ui-dialog-titlebar {
-	padding-left: 10px
-}
-.ui-dialog.video.user-video.user-speaks{
-	box-shadow: 3px 3px 4px green;
-}
 .dropdown-menu.video.volume, .dropdown-menu.video.volume li {
 	width: 20px;
 	min-width: 20px;
@@ -285,45 +273,6 @@ ul.settings-menu {
 .ui-dialog.video .warn {
 	float: right;
 	margin-right: .3em;
-}
-.ui-dialog.user-video .level-meter {
-	display: inline-block;
-	position: absolute;
-	bottom: 5px;
-	left: 5px;
-	width: 10px;
-}
-.ui-dialog.video .sett-container {
-	position: relative;
-	min-height: 250px;
-}
-.ui-dialog.video .sett-row {
-	padding-top: 10px;
-}
-.ui-dialog.video .sett-row.right {
-	text-align: right;
-}
-.ui-dialog.video .vid-block .video-conainer {
-	overflow: auto;
-	max-height: 300px;
-	position: relative;
-}
-.sett-container .vid-block .timer {
-	float: left;
-	padding: 2px 4px;
-}
-.ui-dialog.video .ui-dialog-titlebar-collapse span
-, .ui-dialog.video .ui-dialog-titlebar-volume span
-, .ui-dialog.video .ui-dialog-titlebar-refresh span
-{
-	display: block;
-	margin: 1px;
-}
-.ui-dialog.video .footer {
-	display: none;
-}
-.ui-dialog.video.mic-status .footer {
-	display: block;
 }
 .input .select2-container {
 	max-height: 100px;
@@ -401,6 +350,57 @@ ul.settings-menu {
 	border-radius: 10px;
 }
 /************ VIDEO **************/
+.ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .ui-dialog-content {
+	padding: 0;
+}
+.ui-dialog.video .ui-dialog-content {
+	overflow: hidden;
+}
+.ui-dialog.video .ui-dialog-titlebar {
+	padding-left: 10px
+}
+.ui-dialog.video.user-video.user-speaks {
+	box-shadow: 3px 3px 4px green;
+}
+.ui-dialog.user-video .level-meter {
+	display: inline-block;
+	position: absolute;
+	bottom: 5px;
+	left: 5px;
+	width: 10px;
+}
+.ui-dialog.video .sett-container {
+	position: relative;
+	min-height: 250px;
+}
+.ui-dialog.video .sett-row {
+	padding-top: 10px;
+}
+.ui-dialog.video .sett-row.right {
+	text-align: right;
+}
+.ui-dialog.video .vid-block .video-conainer {
+	overflow: auto;
+	max-height: 300px;
+	position: relative;
+}
+.sett-container .vid-block .timer {
+	float: left;
+	padding: 2px 4px;
+}
+.ui-dialog.video .ui-dialog-titlebar-collapse span
+, .ui-dialog.video .ui-dialog-titlebar-volume span
+, .ui-dialog.video .ui-dialog-titlebar-refresh span
+{
+	display: block;
+	margin: 1px;
+}
+.ui-dialog.video .footer {
+	display: none;
+}
+.ui-dialog.video.mic-status .footer {
+	display: block;
+}
 .room-block .container .user-video {
 	display: inline-block !important;
 }
@@ -492,6 +492,12 @@ ul.settings-menu {
 	background-size: 64px;
 }
 .pod-area .pod {
+}
+.pod-area .pod .user-video.ui-dialog
+, .pod-area .pod-big .user-video.ui-dialog
+{
+	height: calc(100% - var(--buffer-size)) !important;
+	width:  calc(100% - var(--buffer-size)) !important;
 }
 .pod-area .pod.ui-sortable-placeholder {
 	background-color: whitesmoke;
@@ -590,6 +596,24 @@ ul.settings-menu {
 }
 .video:hover .mute-others.enabled {
 	display: block;
+}
+.user-video.ui-dialog .ui-dialog-content {
+	height: calc(100% - var(--vdialog-titlebar-height)) !important;
+	width: 100% !important;
+}
+.user-video.ui-dialog .ui-dialog-content .video {
+	height: calc(100% - var(--vdialog-footer-height)) !important;
+	width: 100%  !important;
+}
+.user-video.ui-dialog .ui-dialog-content .video video, .user-video.ui-dialog .ui-dialog-content .video audio {
+	height: 100% !important;
+	width: 100% !important;
+}
+.user-video.ui-dialog .ui-dialog-content .video .level-meter {
+	height: calc(100% - 10px) !important;
+}
+.user-video.ui-dialog .ui-dialog-content .footer {
+	height: var(--vdialog-footer-height) !important;
 }
 @media screen and (max-width: 1280px) {
 	.room-block .sidebar .tab.om-icon.big {

@@ -797,6 +797,9 @@ public class RoomPanel extends BasePanel {
 		if (r.isHidden(RoomElement.Chat)) {
 			clazz += " no-chat";
 		}
+		if (!r.isHidden(RoomElement.MicrophoneStatus)) {
+			clazz += " mic-status";
+		}
 		return clazz;
 	}
 }

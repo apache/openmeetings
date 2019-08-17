@@ -49,6 +49,8 @@ body.no-menu {
 	--chat-width: 20px;
 	--chat-height: calc(100% - var(--room-menu-height));
 	--activities-height: 20px;
+	--vdialog-titlebar-height: 27px;
+	--vdialog-footer-height: 0px;
 }
 .main.room.interview {
 	--rec-btn-height: 40px;
@@ -61,6 +63,9 @@ body.no-menu {
 }
 .main.room.no-chat {
 	--chat-width: 0px;
+}
+.main.room.mic-status {
+	--vdialog-footer-height: 22px;
 }
 @media screen and (max-width: 1280px) {
 	.main.room {
