@@ -242,7 +242,7 @@ var VideoManager = (function() {
 						, click: function() {
 							s.video.confirmMuteOthers = !$('#muteothers-confirm-dont-show').prop('checked');
 							VideoSettings.save();
-							roomAction('muteOthers', uid);
+							OmUtil.roomAction({action: 'muteOthers', uid: uid});
 							$(this).dialog('close');
 						}
 					}

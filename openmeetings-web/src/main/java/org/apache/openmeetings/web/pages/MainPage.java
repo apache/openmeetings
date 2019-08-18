@@ -97,12 +97,12 @@ public class MainPage extends BaseInitedPage {
 	@Override
 	protected void onParameterArrival(IRequestParameters params, AjaxRequestTarget target) {
 		log.debug("MainPage::onParameterArrival");
-		OmUrlFragment _f = getUrlFragment(params);
-		if (_f != null) {
-			uf = _f;
+		OmUrlFragment newf = getUrlFragment(params);
+		if (newf != null) {
+			uf = newf;
 		}
-		if (loaded && _f != null) {
-			main.updateContents(_f, target, false);
+		if (loaded && newf != null) {
+			main.updateContents(newf, target, false);
 		}
 	}
 

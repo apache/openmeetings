@@ -118,6 +118,7 @@ public class RoomPanel extends BasePanel {
 		kick
 		, muteOthers
 		, mute
+		, toggleRight
 	}
 	private final Room r;
 	private final boolean interview;
@@ -170,7 +171,7 @@ public class RoomPanel extends BasePanel {
 		private void initVideos(AjaxRequestTarget target) {
 			StringBuilder sb = new StringBuilder();
 			JSONArray streams = new JSONArray();
-			for (Client c: cm.listByRoom(getRoom().getId())) {
+			for (Client c : cm.listByRoom(getRoom().getId())) {
 				for (StreamDesc sd : c.getStreams()) {
 					streams.put(sd.toJson());
 				}
@@ -749,6 +750,8 @@ public class RoomPanel extends BasePanel {
 			if ("wb".equals(type)) {
 				WbAction a = WbAction.valueOf(o.getString(PARAM_ACTION));
 				wb.processWbAction(a, o.optJSONObject("data"), handler);
+			} else if ("room".equals(type)) {
+				sidebar.roomAction(handler, o);
 			}
 		}
 	}

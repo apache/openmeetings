@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Textbox = function(wb, s, sBtn) {
 	const text = Text(wb, s, sBtn);
-	text.fabricType = 'textbox';
+	text.omType = 'textbox';
 
 	text.createTextObj = function(canvas, pointer) {
 		return new fabric.Textbox('', {
@@ -12,6 +12,7 @@ var Textbox = function(wb, s, sBtn) {
 			, stroke: text.stroke.enabled ? text.stroke.color : 'rgba(0,0,0,0)'
 			//, strokeWidth: text.stroke.width
 			, fontSize: text.stroke.width
+			, omType: text.omType
 			, fontFamily: text.fontFamily
 			, opacity: text.opacity
 			, breakWords: true
@@ -22,7 +23,7 @@ var Textbox = function(wb, s, sBtn) {
 	};
 	text.doubleClick = function(e) {
 		const ao = e.target;
-		if (!!ao && text.fabricType === ao.type) {
+		if (!!ao && text.omType === ao.omType) {
 			text.obj = ao;
 			text.obj.enterEditing();
 			WbArea.removeDeleteHandler();

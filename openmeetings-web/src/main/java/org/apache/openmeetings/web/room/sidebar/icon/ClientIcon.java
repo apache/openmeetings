@@ -18,6 +18,12 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
+
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -29,13 +35,8 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
-import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
-import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
-
 public abstract class ClientIcon extends WebMarkupContainer {
+	protected static final String FUNC_ACTION = "OmUtil.roomAction";
 	private static final long serialVersionUID = 1L;
 	protected static final String ICON_CLASS = "ui-icon ";
 	protected static final String CLS_CLICKABLE = "clickable ";

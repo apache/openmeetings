@@ -293,7 +293,7 @@ var Video = (function() {
 			})
 			.click(function(e) {
 				e.stopImmediatePropagation();
-				roomAction('mute', JSON.stringify({uid: sd.uid, mute: !muted}));
+				OmUtil.roomAction({action: 'mute', uid: sd.uid, mute: !muted});
 				_mute(!muted);
 				volume.hide();
 				return false;

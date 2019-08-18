@@ -2,18 +2,30 @@
 var Text = function(wb, s, sBtn) {
 	const text = ShapeBase();
 	text.obj = null;
-	text.fabricType = 'i-text';
+	text.omType = 'i-text';
 	text.fill.color = '#000000';
 	text.stroke.enabled = false;
 	text.stroke.width = 50; //fontSize
 	text.stroke.color = '#000000';
 	text.style = {bold: false, italic: false};
 
+	function __valid(o) {
+		return !!o && text.omType === o.omType;
+	}
+	function __getObj(canvas, o) {
+		if (__valid(o)) {
+			return o;
+		} else {
+			const _o = canvas.getActiveObject();
+			return __valid(_o) ? _o : null;
+		}
+	}
 	text.createTextObj = function(canvas, pointer) {
 		return new fabric.IText('', {
 			left: pointer.x
 			, top: pointer.y
 			, padding: 7
+			, omType: text.omType
 			, fill: text.fill.enabled ? text.fill.color : 'rgba(0,0,0,0)'
 			, stroke: text.stroke.enabled ? text.stroke.color : 'rgba(0,0,0,0)'
 			, fontSize: text.stroke.width
@@ -33,8 +45,8 @@ var Text = function(wb, s, sBtn) {
 	text.mouseDown = function(o) {
 		const canvas = this
 			, pointer = canvas.getPointer(o.e)
-			, ao = canvas.getActiveObject();
-		if (!!ao && text.fabricType === ao.type) {
+			, ao = __getObj(canvas, o.target);
+		if (!!ao) {
 			text.obj = ao;
 		} else {
 			text.obj = text.createTextObj(canvas, pointer);
@@ -48,13 +60,16 @@ var Text = function(wb, s, sBtn) {
 		}
 		text._onMouseDown();
 	};
+	text._editable = function(o) {
+		return text.omType === o.omType;
+	}
 	text.activate = function() {
 		wb.eachCanvas(function(canvas) {
 			canvas.on('mouse:down', text.mouseDown);
 			canvas.on('mouse:dblclick', text.doubleClick);
 			canvas.selection = true;
 			canvas.forEachObject(function(o) {
-				if (text.fabricType === o.type) {
+				if (text._editable(o)) {
 					o.selectable = true;
 					o.editable = true;
 				}
@@ -83,7 +98,7 @@ var Text = function(wb, s, sBtn) {
 			canvas.off('mouse:dblclick', text.doubleClick);
 			canvas.selection = false;
 			canvas.forEachObject(function(o) {
-				if (text.fabricType === o.type) {
+				if (text.omType === o.omType) {
 					o.selectable = false;
 					o.editable = false;
 				}

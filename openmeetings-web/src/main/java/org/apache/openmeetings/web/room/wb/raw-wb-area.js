@@ -25,9 +25,13 @@ var DrawWbArea = function() {
 					break;
 				case 'tr':
 				{
-					const x = left + (this.cornerSize - delImg.width) / 2
-						, y = top + (this.cornerSize - delImg.height) / 2;
-					ctx.drawImage(delImg, x, y);
+					if (role === PRESENTER) {
+						const x = left + (this.cornerSize - delImg.width) / 2
+							, y = top + (this.cornerSize - delImg.height) / 2;
+						ctx.drawImage(delImg, x, y);
+					} else {
+						window.originalDrawControl.call(this, control, ctx, methodName, left, top, styleOverride);
+					}
 				}
 					break;
 				default:

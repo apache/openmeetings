@@ -127,6 +127,10 @@ var Wb = function() {
 		}
 	}
 	function _setSlide(_sld) {
+		const sld = 1 * _sld;
+		if (sld < 0 || sld > canvases.length - 1) {
+			return;
+		}
 		slide = _sld;
 		OmUtil.wbAction({action: 'setSlide', data: {
 			wbId: wb.id
@@ -523,11 +527,9 @@ var Wb = function() {
 		const r = o.toJSON(extraProps);
 		switch (o.omType) {
 			case 'Video':
-				r.type = 'video';
 				delete r.objects;
 				break;
 			case 'Math':
-				r.type = 'math';
 				delete r.objects;
 				break;
 			default:
@@ -537,11 +539,11 @@ var Wb = function() {
 	}
 	//events
 	function objCreatedHandler(o) {
-		if (role === NONE && o.type !== 'pointer') {
+		if (role === NONE && o.omType !== 'pointer') {
 			return;
 		}
 		let json;
-		switch(o.type) {
+		switch(o.omType) {
 			case 'pointer':
 				json = o;
 				break;
@@ -557,10 +559,10 @@ var Wb = function() {
 	};
 	function objAddedHandler(e) {
 		const o = e.target;
-		if (!!o.loaded) {
+		if (o.loaded === true) {
 			return;
 		}
-		switch(o.type) {
+		switch(o.omType) {
 			case 'textbox':
 			case 'i-text':
 				o.uid = uuidv4();
@@ -574,7 +576,7 @@ var Wb = function() {
 	};
 	function objModifiedHandler(e) {
 		const o = e.target, items = [];
-		if (role === NONE && o.type !== 'pointer') {
+		if (role === NONE && o.omType !== 'pointer') {
 			return;
 		}
 		o.includeDefaultValues = false;
@@ -607,7 +609,7 @@ var Wb = function() {
 		if (!o || '' !== o.text) {
 			return;
 		}
-		if ('textbox' === o.type || 'i-text' === o.type) {
+		if ('textbox' === o.omType || 'i-text' === o.omType) {
 			OmUtil.wbAction({action: 'deleteObj', data: {
 				wbId: wb.id
 				, obj: [{
@@ -863,14 +865,14 @@ var Wb = function() {
 				del.push(o);
 				continue;
 			}
-			switch(o.type) {
+			switch(o.omType) {
 				case 'pointer':
 					APointer(wb).create(canvases[o.slide], o);
 					break;
-				case 'video':
+				case 'Video':
 					Player.create(canvases[o.slide], o, wb);
 					break;
-				case 'math':
+				case 'Math':
 					StaticTMath.create(o, canvases[o.slide]);
 					break;
 				default:
@@ -896,11 +898,11 @@ var Wb = function() {
 		const arr = [], _arr = Array.isArray(obj) ? obj : [obj];
 		for (let i = 0; i < _arr.length; ++i) {
 			const o = _arr[i];
-			switch(o.type) {
+			switch(o.omType) {
 				case 'pointer':
 					_modifyHandler(APointer(wb).create(canvases[o.slide], o))
 					break;
-				case 'video':
+				case 'Video':
 				{
 					const g = _findObject(o);
 					if (!!g) {
@@ -908,7 +910,7 @@ var Wb = function() {
 					}
 				}
 					break;
-				case 'math':
+				case 'Math':
 				{
 					_removeHandler(o);
 					StaticTMath.create(o, canvases[o.slide]);

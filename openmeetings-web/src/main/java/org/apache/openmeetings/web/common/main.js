@@ -98,6 +98,9 @@ var OmUtil = (function() {
 	self.wbAction = function(_m) {
 		self.sendMessage(_m, {area: 'room', type: 'wb'});
 	};
+	self.roomAction = function(_m) {
+		self.sendMessage(_m, {area: 'room', type: 'room'});
+	};
 	self.getKeyCode = function(evt) {
 		let code = evt.code;
 		if (typeof (code) === 'undefined') {

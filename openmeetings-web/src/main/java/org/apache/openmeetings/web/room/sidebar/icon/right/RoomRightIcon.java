@@ -18,9 +18,8 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon.right;
 
-import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_TOGGLE_RIGHT;
-
 import org.apache.openmeetings.db.entity.room.Room.Right;
+import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.ClientIcon;
 
 public abstract class RoomRightIcon extends ClientIcon {
@@ -44,7 +43,8 @@ public abstract class RoomRightIcon extends ClientIcon {
 
 	@Override
 	protected String getScript() {
-		return String.format("%s('%s', '%s');", FUNC_TOGGLE_RIGHT, right.name(), uid);
+		return String.format("OmUtil.roomAction({action: '%s', right: '%s', uid: '%s'});"
+				, RoomPanel.Action.toggleRight.name(), right.name(), uid);
 	}
 
 	protected boolean visible() {

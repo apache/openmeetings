@@ -23,6 +23,7 @@ import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_HEIGHT;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_OMTYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_WIDTH;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_ZOOM;
@@ -444,7 +445,7 @@ public class WbPanel extends AbstractWbPanel {
 					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
 					String uid = obj.getString("uid");
 					JSONObject po = wb.get(uid);
-					if (po != null && "video".equals(po.getString(ATTR_TYPE))) {
+					if (po != null && "Video".equals(po.getString(ATTR_OMTYPE))) {
 						JSONObject ns = obj.getJSONObject(PARAM_STATUS);
 						po.put(PARAM_STATUS, ns.put(PARAM_UPDATED, System.currentTimeMillis()));
 						wbm.update(roomId, wb.put(uid, po));

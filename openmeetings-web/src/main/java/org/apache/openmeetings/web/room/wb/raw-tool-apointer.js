@@ -75,7 +75,7 @@ var APointer = function(wb, s, sBtn) {
 			pointer.user = $('.room-block .sidebar .user-list .current .name').text();
 		}
 		const obj = {
-			type: 'pointer'
+			omType: 'pointer'
 			, x: ptr.x
 			, y: ptr.y
 			, user: pointer.user

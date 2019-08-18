@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
-import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_ACTION;
-
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
@@ -45,7 +43,7 @@ public class KickIcon extends ClientIcon {
 	@Override
 	protected String getScript() {
 		Client c = getClient();
-		return c == null ? "" : String.format("%s('%s', '%s');", FUNC_ACTION, Action.kick.name(), c.getUid());
+		return c == null ? "" : String.format("%s({action: '%s', uid: '%s'});", FUNC_ACTION, Action.kick.name(), c.getUid());
 	}
 
 	@Override

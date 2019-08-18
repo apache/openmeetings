@@ -18,7 +18,6 @@ var Sharer = (function() {
 		} else {
 			type = sharer.find('select.type');
 			const b = kurentoUtils.WebRtcPeer.browser;
-			type.find('option[value="' + (VideoUtil.isChrome() ? 'application' : 'tab') + '"]').remove();
 			type.selectmenu({
 				width: 150
 				, disabled: _typeDisabled(b)

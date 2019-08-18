@@ -47,6 +47,7 @@ public class Whiteboard implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(Whiteboard.class);
 	public static final String ATTR_TYPE = "type";
+	public static final String ATTR_OMTYPE = "omType";
 	public static final String ATTR_FILE_ID = "fileId";
 	public static final String ATTR_FILE_TYPE = "fileType";
 	public static final String ATTR_SLIDE = "slide";

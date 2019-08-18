@@ -18,6 +18,7 @@ var Clipart = function(wb, btn, s, sBtn) {
 				art.orig.width = 32;
 				art.orig.height = 32;
 				art.obj = fabric.util.groupSVGElements(elements, opts);
+				art.obj.set(opts);
 				canvas.add(art.obj);
 			});
 		} else {
