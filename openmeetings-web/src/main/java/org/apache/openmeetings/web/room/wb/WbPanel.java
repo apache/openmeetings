@@ -22,8 +22,8 @@ import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_HEIGHT;
-import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_OMTYPE;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_WIDTH;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_ZOOM;
@@ -201,7 +201,7 @@ public class WbPanel extends AbstractWbPanel {
 			case modifyObj:
 			{
 				JSONObject o = obj.optJSONObject("obj");
-				if (o != null && "pointer".equals(o.getString(ATTR_TYPE))) {
+				if (o != null && "pointer".equals(o.getString(ATTR_OMTYPE))) {
 					sendWbOthers(a, obj);
 					return;
 				}
