@@ -75,6 +75,7 @@ var Video = (function() {
 					if (stream.getAudioTracks().length !== 0) {
 						vol.show();
 						lm = vc.find('.level-meter');
+						lm.show();
 						aCtx = new AudioCtx();
 						gainNode = aCtx.createGain();
 						analyser = aCtx.createAnalyser();
@@ -402,6 +403,7 @@ var Video = (function() {
 			.width(vc.width()).height(vc.height())
 			.prop('autoplay', true).prop('controls', false);
 		if (hasVideo) {
+			vc.removeClass('audio-only');
 			video.attr('poster', sd.user.pictureUri);
 		} else {
 			vc.addClass('audio-only').css('background-image', 'url(' + sd.user.pictureUri + ')');

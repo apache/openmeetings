@@ -603,6 +603,9 @@ ul.settings-menu {
 .user-video.ui-dialog .ui-dialog-content .video {
 	height: calc(100% - var(--vdialog-footer-height)) !important;
 	width: 100%  !important;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 100%;
 }
 .user-video.ui-dialog .ui-dialog-content .video video, .user-video.ui-dialog .ui-dialog-content .video audio {
 	height: 100% !important;
