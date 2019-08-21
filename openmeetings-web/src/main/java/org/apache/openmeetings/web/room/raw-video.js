@@ -2,7 +2,7 @@
 var Video = (function() {
 	const self = {}
 		, AudioCtx = window.AudioContext || window.webkitAudioContext;
-	let sd, v, vc, t, f, size, vol, slider, handle, video
+	let sd, v, vc, t, f, size, vol, slider, handle, video, iceServers
 		, lastVolume = 50, muted = false
 		, lm, level, userSpeaks = false, muteOthers;
 
@@ -339,6 +339,7 @@ var Video = (function() {
 	}
 	function _init(msg) {
 		sd = msg.stream;
+		iceServers = msg.iceServers;
 		sd.activities = sd.activities.sort();
 		size = {width: sd.width, height: sd.height};
 		const _id = VideoUtil.getVid(sd.uid)
@@ -409,7 +410,7 @@ var Video = (function() {
 			.width(vc.width()).height(vc.height())
 			.prop('autoplay', true).prop('controls', false);
 		if (hasVideo) {
-			vc.removeClass('audio-only');
+			vc.removeClass('audio-only').css('background-image', '');;
 			vc.parents('.ui-dialog').removeClass('audio-only');
 			video.attr('poster', sd.user.pictureUri);
 		} else {
@@ -417,9 +418,8 @@ var Video = (function() {
 			vc.addClass('audio-only').css('background-image', 'url(' + sd.user.pictureUri + ')');
 		}
 		vc.append(video);
-		const hasAudio = VideoUtil.hasAudio(sd);
 		if (vol) {
-			if (hasAudio) {
+			if (VideoUtil.hasAudio(sd)) {
 				vol.show();
 				_mute(muted);
 			} else {
@@ -428,7 +428,8 @@ var Video = (function() {
 			}
 		}
 	}
-	function _refresh(msg) {
+	function _refresh(_msg) {
+		const msg = _msg || {iceServers: iceServers};
 		_cleanup();
 		const hasAudio = VideoUtil.hasAudio(sd);
 		if (sd.self) {
