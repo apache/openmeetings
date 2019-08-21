@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.admin.users;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
+import static org.apache.openmeetings.db.entity.user.User.DISPLAY_NAME_NA;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
@@ -244,6 +245,9 @@ public class UserForm extends AdminBaseForm<User> {
 		boolean sendEmailAtRegister = isSendRegisterEmail();
 		if (isNew && sendEmailAtRegister) {
 			u.setActivatehash(randomUUID().toString());
+		}
+		if (isNew && DISPLAY_NAME_NA.equals(u.getDisplayName())) {
+			u.resetDisplayName();
 		}
 		try {
 			u = userDao.update(u, pass, getUserId());

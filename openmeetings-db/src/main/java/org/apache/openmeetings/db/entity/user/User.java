@@ -113,6 +113,7 @@ import org.simpleframework.xml.Root;
 @Root(name = "user")
 public class User extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
+	public static final String DISPLAY_NAME_NA = "N/A";
 	public static final int SALUTATION_MR_ID = 1;
 	public static final int SALUTATION_MS_ID = 2;
 	public static final int SALUTATION_MRS_ID = 3;
@@ -391,6 +392,10 @@ public class User extends HistoricalEntity {
 		return this;
 	}
 
+	public void resetDisplayName() {
+		displayName = generateDisplayName();
+	}
+
 	public String getLogin() {
 		return login;
 	}
@@ -657,7 +662,7 @@ public class User extends HistoricalEntity {
 			sb.append(delim).append(address.getEmail());
 		}
 		if (Strings.isEmpty(sb)) {
-			sb.append("N/A");
+			sb.append(DISPLAY_NAME_NA);
 		}
 		return escapeMarkup(sb).toString();
 	}
