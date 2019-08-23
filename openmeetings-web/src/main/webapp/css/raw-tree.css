@@ -36,13 +36,24 @@
 .trash-toolbar-hover {
 	color: inherit;
 }
-.file.tree .files .sizes table, .file.tree .files .info table {
+.file.tree .info .details {
 	width: 100%;
+	display: table;
 }
-.file.tree .files .info input {
-	width: 100%;
-	padding-right: 5px;
-	padding-left: 5px;
+.file.tree .info .row {
+	display: table-row;
+}
+.file.tree .info .row .label, .file.tree .info .row .value {
+	display: table-cell;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.file.tree .info .row .label {
+	max-width: 50px;
+}
+.file.tree .info .row .value {
+	max-width: 270px;
 }
 .trees .om-icon {
 	width: auto;
