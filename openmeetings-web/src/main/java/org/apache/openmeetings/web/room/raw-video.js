@@ -51,6 +51,7 @@ var Video = (function() {
 			});
 		}
 		promise.then(function(stream) {
+			__createVideo();
 			callback(msg, cnts, stream);
 		}).catch(__handleScreenError);
 	}
