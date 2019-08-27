@@ -622,6 +622,7 @@ var Wb = function() {
 	function pathCreatedHandler(o) {
 		o.path.uid = uuidv4();
 		o.path.slide = this.slide;
+		o.path.omType = 'freeDraw';
 		objCreatedHandler(o.path);
 	};
 	function scrollHandler() {

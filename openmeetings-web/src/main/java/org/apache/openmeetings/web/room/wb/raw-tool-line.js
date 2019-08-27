@@ -7,6 +7,7 @@ var Line = function(wb, s, sBtn) {
 			, fill: line.stroke.color
 			, stroke: line.stroke.color
 			, opacity: line.opacity
+			, omType: 'line'
 		});
 		return line.obj;
 	};

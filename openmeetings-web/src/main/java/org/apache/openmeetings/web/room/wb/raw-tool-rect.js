@@ -11,6 +11,7 @@ var Rect = function(wb, s, sBtn) {
 			, top: rect.orig.y
 			, width: 0
 			, height: 0
+			, omType: 'rect'
 		});
 		return rect.obj;
 	};

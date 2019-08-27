@@ -19,6 +19,7 @@ var Arrow = function(wb, s, sBtn) {
 				, fill: arrow.fill.enabled ? arrow.fill.color : 'rgba(0,0,0,0)'
 				, stroke: arrow.stroke.enabled ? arrow.stroke.color : 'rgba(0,0,0,0)'
 				, opacity: arrow.opacity
+				, omType: 'arrow'
 			});
 
 		return arrow.obj;

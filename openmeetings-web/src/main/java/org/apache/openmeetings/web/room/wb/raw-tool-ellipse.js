@@ -13,6 +13,7 @@ var Ellipse = function(wb, s, sBtn) {
 			, ry: 0
 			, originX: 'center'
 			, originY: 'center'
+			, omType: 'ellipse'
 		});
 		return ellipse.obj;
 	};
