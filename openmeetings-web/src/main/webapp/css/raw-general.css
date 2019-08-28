@@ -8,7 +8,7 @@ html, body {
 .main-container {
 	height: calc(100% - var(--header-height));
 }
-.main-container .main
+.main
 , #contents .child-panel
 , .full-height
 {
