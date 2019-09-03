@@ -589,7 +589,7 @@ public class WbPanel extends AbstractWbPanel {
 							.put(ATTR_SLIDE, wb.getSlide())
 							;
 					if (FileItem.Type.Video == fi.getType() || FileItem.Type.Recording == fi.getType()) {
-						file.put(ATTR_TYPE, "video");
+						file.put(ATTR_OMTYPE, "Video");
 						file.put(PARAM_STATUS, new JSONObject()
 								.put("paused", true)
 								.put("pos", 0.0)

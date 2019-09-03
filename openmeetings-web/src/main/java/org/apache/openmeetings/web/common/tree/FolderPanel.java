@@ -18,13 +18,11 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
-import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.core.IJQueryWidget.JQueryWidget;
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.interaction.draggable.DraggableBehavior;
-import com.googlecode.wicket.jquery.ui.interaction.draggable.IDraggableListener;
-import com.googlecode.wicket.jquery.ui.interaction.droppable.DroppableBehavior;
-import com.googlecode.wicket.jquery.ui.interaction.droppable.IDroppableListener;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
+
+import java.util.Map.Entry;
+
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -48,10 +46,13 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
-import java.util.Map.Entry;
-
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
+import com.github.openjson.JSONObject;
+import com.googlecode.wicket.jquery.core.IJQueryWidget.JQueryWidget;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.interaction.draggable.DraggableBehavior;
+import com.googlecode.wicket.jquery.ui.interaction.draggable.IDraggableListener;
+import com.googlecode.wicket.jquery.ui.interaction.droppable.DroppableBehavior;
+import com.googlecode.wicket.jquery.ui.interaction.droppable.IDroppableListener;
 
 public class FolderPanel extends Panel implements IDraggableListener, IDroppableListener {
 	private static final long serialVersionUID = 1L;
@@ -207,7 +208,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 					if (f instanceof Recording) {
 						Status st = ((Recording)f).getStatus();
 						if (Status.RECORDING == st || Status.CONVERTING == st) {
-							style.append("processing");
+							style.append("processing ");
 						}
 					}
 				}
