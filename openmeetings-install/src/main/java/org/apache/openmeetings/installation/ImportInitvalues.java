@@ -26,6 +26,7 @@ import static org.apache.openmeetings.db.dto.user.OAuthUser.PARAM_LOGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_AUTO_OPEN_SHARING;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHAT_SEND_ON_ENTER;
@@ -354,6 +355,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_DISPLAY_NAME_EDITABLE, String.valueOf(false), Configuration.Type.BOOL, "Is user will be able to edit his/her display name (default false).", "4.0.7");
 		addCfg(list, CONFIG_KEYCODE_QUICKPOLL, "Ctrl+Alt+KeyQ", Configuration.Type.HOTKEY
 				, "A hot key code to start quick poll", "4.0.10");
+		addCfg(list, CONFIG_AUTO_OPEN_SHARING, String.valueOf(false), Configuration.Type.BOOL, "Whether shared screen should be auto-opened.", VER_5_0_0);
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {

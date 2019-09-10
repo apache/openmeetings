@@ -22,6 +22,7 @@ import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_AUTO_OPEN_SHARING;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHAT_SEND_ON_ENTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
@@ -306,6 +307,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_KEYCODE_MUTE_OTHERS:
 			case CONFIG_KEYCODE_MUTE:
 			case CONFIG_KEYCODE_QUICKPOLL:
+			case CONFIG_AUTO_OPEN_SHARING:
 				reloadRoomSettings();
 				break;
 			case CONFIG_MAX_UPLOAD_SIZE:
@@ -583,6 +585,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 							.put("echo", getBool(CONFIG_MIC_ECHO, true))
 							.put("noise", getBool(CONFIG_MIC_NOISE, true))
 						)
+					.put("autoOpenSharing", getBool(CONFIG_AUTO_OPEN_SHARING, false))
 				);
 		} catch (Exception e) {
 			log.error("Unexpected exception while reloading room settings: ", e);

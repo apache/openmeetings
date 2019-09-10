@@ -171,6 +171,15 @@ var VideoManager = (function() {
 		v.remove();
 		WbArea.updateAreaClass();
 	}
+	function _playSharing(sd, iceServers) {
+		const m = {stream: sd, iceServers: iceServers};
+		let v = $('#' + VideoUtil.getVid(sd.uid))
+		if (v.length === 1) {
+			v.remove();
+		}
+		v = Video().init(m);
+		VideoUtil.setPos(v, {left: 0, top: 35});
+	}
 	function _play(streams, iceServers) {
 		if (!inited) {
 			return;
@@ -184,13 +193,11 @@ var VideoManager = (function() {
 						.data('cuid', sd.cuid)
 						.show(), 10);
 				share.tooltip().off('click').click(function() {
-					let v = $('#' + VideoUtil.getVid(sd.uid))
-					if (v.length === 1) {
-						v.remove();
-					}
-					v = Video().init(m);
-					VideoUtil.setPos(v, {left: 0, top: 35});
+					_playSharing(sd, iceServers);
 				});
+				if (Room.getOptions().autoOpenSharing === true) {
+					_playSharing(sd, iceServers);
+				}
 			} else {
 				_onReceive(m);
 			}
