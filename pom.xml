@@ -73,7 +73,7 @@
 		<jacoco-maven-plugin.versoin>0.8.4</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>2.6</forbiddenapis.version>
 		<!-- dependency versions -->
-		<junit.version>5.5.1</junit.version>
+		<junit.version>5.5.2</junit.version>
 		<wicket.version>9.0.0-M2</wicket.version>
 		<wicketju.version>9.0.0-M2</wicketju.version>
 		<wickets.version>9.0.0-M2</wickets.version>
@@ -110,7 +110,7 @@
 		<commons-text.version>1.8</commons-text.version>
 		<slf4j.version>1.7.26</slf4j.version>
 		<logback.version>1.2.3</logback.version>
-		<jetty.version>9.4.15.v20190215</jetty.version>
+		<jetty.version>9.4.20.v20190813</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.62</bcprov-jdk15on.version>
 		<mockito.version>3.0.0</mockito.version>
