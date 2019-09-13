@@ -48,6 +48,7 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.wicket.util.string.Strings;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.internal.server.KurentoServerException;
 import org.slf4j.Logger;
@@ -103,11 +104,14 @@ public class StreamProcessor implements IStreamProcessor {
 				sender = getByUid(uid);
 				if (sender != null) {
 					JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
-					IceCandidate cand = new IceCandidate(
-							candidate.getString(PARAM_CANDIDATE)
-							, candidate.getString("sdpMid")
-							, candidate.getInt("sdpMLineIndex"));
-					sender.addCandidate(cand, msg.getString("luid"));
+					String candStr = candidate.getString(PARAM_CANDIDATE);
+					if (!Strings.isEmpty(candStr)) {
+						IceCandidate cand = new IceCandidate(
+								candStr
+								, candidate.getString("sdpMid")
+								, candidate.getInt("sdpMLineIndex"));
+						sender.addCandidate(cand, msg.getString("luid"));
+					}
 				}
 				break;
 			case "addListener":
