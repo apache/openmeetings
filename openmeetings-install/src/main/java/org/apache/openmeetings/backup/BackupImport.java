@@ -722,7 +722,11 @@ public class BackupImport {
 		List<ChatMessage> list = readList(serializer, f, "chat_messages.xml", "chat_messages", ChatMessage.class, null, true);
 		for (ChatMessage m : list) {
 			m.setId(null);
-			if (m.getFromUser() == null || m.getFromUser().getId() == null) {
+			if (m.getFromUser() == null
+					|| m.getFromUser().getId() == null
+					|| (m.getToRoom() != null && m.getToRoom().getId() == null)
+					|| (m.getToUser() != null && m.getToUser().getId() == null))
+			{
 				continue;
 			}
 			chatDao.update(m, m.getSent());
