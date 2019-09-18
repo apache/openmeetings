@@ -74,7 +74,7 @@
 		<forbiddenapis.version>2.6</forbiddenapis.version>
 		<!-- dependency versions -->
 		<junit.version>5.5.2</junit.version>
-		<wicket.version>9.0.0-M2</wicket.version>
+		<wicket.version>9.0.0-M3</wicket.version>
 		<wicketju.version>9.0.0-M2</wicketju.version>
 		<wickets.version>9.0.0-M2</wickets.version>
 		<red5-client.version>1.1.1</red5-client.version>
@@ -95,7 +95,7 @@
 		<asterisk-java.version>2.0.2</asterisk-java.version>
 		<commons-dbcp.version>2.7.0</commons-dbcp.version>
 		<commons-pool2.version>2.7.0</commons-pool2.version>
-		<postgresql.version>42.2.6</postgresql.version>
+		<postgresql.version>42.2.8</postgresql.version>
 		<commons-cli.version>1.4</commons-cli.version>
 		<dom4j.version>2.1.1</dom4j.version>
 		<commons-codec.version>1.13</commons-codec.version>
@@ -108,11 +108,11 @@
 		<caldav4j.version>1.0.0-rc.2</caldav4j.version>
 		<tika-parsers.version>1.22</tika-parsers.version>
 		<commons-text.version>1.8</commons-text.version>
-		<slf4j.version>1.7.26</slf4j.version>
+		<slf4j.version>1.7.28</slf4j.version>
 		<logback.version>1.2.3</logback.version>
 		<jetty.version>9.4.20.v20190813</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
-		<bcprov-jdk15on.version>1.62</bcprov-jdk15on.version>
+		<bcprov-jdk15on.version>1.63</bcprov-jdk15on.version>
 		<mockito.version>3.0.0</mockito.version>
 		<powermock.version>2.0.2</powermock.version>
 		<quartz.version>2.3.1</quartz.version>
