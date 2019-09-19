@@ -13,8 +13,7 @@ var Video = (function() {
 			v.dialog('option', 'width', _w).dialog('option', 'height', _h);
 		}
 	}
-	function _micActivity(level) {
-		const speaks = level > 5;
+	function _micActivity(speaks) {
 		if (speaks !== userSpeaks) {
 			userSpeaks = speaks;
 			OmUtil.sendMessage({type: 'mic', id: 'activity', active: speaks});
@@ -488,7 +487,7 @@ var Video = (function() {
 			video = null;
 		}
 		if (lm && lm.length > 0) {
-			_micActivity(0);
+			_micActivity(false);
 			lm.hide();
 			muteOthers.removeClass('enabled').off();
 		}
