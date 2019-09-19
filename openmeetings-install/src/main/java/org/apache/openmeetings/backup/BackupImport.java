@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.backup;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
@@ -118,9 +119,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.UUID;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -619,7 +622,7 @@ public class BackupImport {
 				continue;
 			}
 			if (u.getType() == User.Type.contact && u.getLogin().length() < minLoginLength) {
-				u.setLogin(UUID.randomUUID().toString());
+				u.setLogin(randomUUID().toString());
 			}
 
 			String tz = u.getTimeZoneId();
@@ -802,7 +805,21 @@ public class BackupImport {
 		}
 	}
 
-	private boolean isInvalidFile(BaseFileItem file) {
+	private boolean isInvalidFile(BaseFileItem file, final Map<Long, Long> folders) {
+		if (file.isDeleted()) {
+			return true;
+		}
+		if (file.getParentId() != null && file.getParentId() > 0) {
+			Long newFolder = folders.get(file.getParentId());
+			if (newFolder == null) {
+				//folder was deleted
+				return true;
+			} else {
+				file.setParentId(newFolder);
+			}
+		} else {
+			file.setParentId(null);
+		}
 		if (file.getRoomId() != null) {
 			Long newRoomId = roomMap.get(file.getRoomId());
 			if (newRoomId == null) {
@@ -819,18 +836,41 @@ public class BackupImport {
 		}
 		return false;
 	}
+
+	private static <T extends BaseFileItem> FileTree<T> build(List<T> list) {
+		TreeMap<Long, T> items = new TreeMap<>(list.stream().collect(Collectors.toMap(f -> f.getId(), f -> f)));
+		FileTree<T> tree = new FileTree<>();
+		TreeMap<Long, T> remain = new TreeMap<>();
+		int counter = list.size(); //max iterations
+		while (counter > 0 && !items.isEmpty()) {
+			Entry<Long, T> e = items.pollFirstEntry();
+			if (e == null) {
+				break;
+			} else {
+				if (!tree.add(e.getValue())) {
+					remain.put(e.getKey(), e.getValue());
+				}
+			}
+			if (items.isEmpty()) {
+				counter = Math.min(counter - 1, remain.size());
+				items.putAll(remain);
+				remain.clear();
+			}
+		}
+		remain.entrySet().forEach(e -> log.warn("Doungling file/recording: {}", e.getValue()));
+		return tree;
+	}
 	/*
 	 * ##################### Import Recordings
 	 */
 	private void importRecordings(File f) throws Exception {
 		log.info("Meeting members import complete, starting recordings server import");
+		final Map<Long, Long> folders = new HashMap<>();
 		List<Recording> list = readRecordingList(f, "flvRecordings.xml", "flvrecordings");
-		for (Recording r : list) {
+		FileTree<Recording> tree = build(list);
+		tree.process(r -> isInvalidFile(r, folders), r -> {
 			Long recId = r.getId();
 			r.setId(null);
-			if (isInvalidFile(r)) {
-				continue;
-			}
 			if (r.getMetaData() != null) {
 				for (RecordingMetaData meta : r.getMetaData()) {
 					meta.setId(null);
@@ -839,16 +879,19 @@ public class BackupImport {
 			}
 			if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(RECORDING_FILE_NAME)) {
 				String name = getFileName(r.getHash());
-				r.setHash(UUID.randomUUID().toString());
+				r.setHash(randomUUID().toString());
 				fileMap.put(String.format(FILE_NAME_FMT, name, EXTENSION_JPG), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_PNG));
 				fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
 			}
 			if (Strings.isEmpty(r.getHash())) {
-				r.setHash(UUID.randomUUID().toString());
+				r.setHash(randomUUID().toString());
 			}
 			r = recordingDao.update(r);
+			if (BaseFileItem.Type.Folder == r.getType()) {
+				folders.put(recId, r.getId());
+			}
 			fileItemMap.put(recId, r.getId());
-		}
+		});
 	}
 
 	/*
@@ -949,24 +992,21 @@ public class BackupImport {
 	private List<FileItem> importFiles(File f) throws Exception {
 		log.info("Private message import complete, starting file explorer item import");
 		List<FileItem> result = new ArrayList<>();
+		final Map<Long, Long> folders = new HashMap<>();
 		List<FileItem> list = readFileItemList(f, "fileExplorerItems.xml", "fileExplorerItems");
-		for (FileItem file : list) {
+		FileTree<FileItem> tree = build(list);
+		tree.process(file -> isInvalidFile(file, folders), file -> {
 			Long fId = file.getId();
 			// We need to reset this as openJPA reject to store them otherwise
 			file.setId(null);
-			if (isInvalidFile(file)) {
-				continue;
-			}
-			if (file.getParentId() != null && file.getParentId().longValue() <= 0L) {
-				file.setParentId(null);
-			}
-			if (Strings.isEmpty(file.getHash())) {
-				file.setHash(UUID.randomUUID().toString());
-			}
+			file.setHash(randomUUID().toString());
 			file = fileItemDao.update(file);
+			if (BaseFileItem.Type.Folder == file.getType()) {
+				folders.put(fId, file.getId());
+			}
 			result.add(file);
 			fileItemMap.put(fId, file.getId());
-		}
+		});
 		return result;
 	}
 
@@ -1529,14 +1569,14 @@ public class BackupImport {
 				if (u.getAddress() != null && u.getAddress().getEmail() != null && User.Type.user == u.getType()) {
 					if (userEmailMap.containsKey(u.getAddress().getEmail())) {
 						log.warn("Email is duplicated for user " + u.toString());
-						String updateEmail = String.format("modified_by_import_<%s>%s", UUID.randomUUID(), u.getAddress().getEmail());
+						String updateEmail = String.format("modified_by_import_<%s>%s", randomUUID(), u.getAddress().getEmail());
 						u.getAddress().setEmail(updateEmail);
 					}
 					userEmailMap.put(u.getAddress().getEmail(), Integer.valueOf(userEmailMap.size()));
 				}
 				if (userLoginMap.containsKey(u.getLogin())) {
 					log.warn("Login is duplicated for user " + u.toString());
-					String updateLogin = String.format("modified_by_import_<%s>%s", UUID.randomUUID(), u.getLogin());
+					String updateLogin = String.format("modified_by_import_<%s>%s", randomUUID(), u.getLogin());
 					u.setLogin(updateLogin);
 				}
 				userLoginMap.put(u.getLogin(), Integer.valueOf(userLoginMap.size()));
