@@ -16,8 +16,25 @@ $.widget('openmeetings.iconselectmenu', $.ui.selectmenu, {
 		return li.append(wrapper).appendTo(ul);
 	}
 });
+var RingBuffer = (function(length) {
+	const buffer = [];
+	let pos = 0;
+
+	return {
+		get: function(key){
+			return buffer[key];
+		}
+		, push: function(item) {
+			buffer[pos] = item;
+			pos = (pos + 1) % length;
+		}
+		, min: function(){
+			return Math.min.apply(Math, buffer);
+		}
+	};
+});
 var MicLevel = (function() {
-	let ctx, mic, analyser, vol = .0;
+	let ctx, mic, analyser, vol = .0, vals = RingBuffer(100);
 
 	function _meterPeer(rtcPeer, cnvs, _micActivity, _error, connectAudio) {
 		if (!rtcPeer || ('function' !== typeof(rtcPeer.getLocalStream) && 'function' !== typeof(rtcPeer.getRemoteStream))) {
@@ -45,8 +62,9 @@ var MicLevel = (function() {
 			_error(err);
 		}
 	}
-	function _meter(analyser, cnvs, _micActivity, _error) {
+	function _meter(_analyser, cnvs, _micActivity, _error) {
 		try {
+			analyser = _analyser;
 			analyser.minDecibels = -90;
 			analyser.maxDecibels = -10;
 			analyser.fftSize = 256;
@@ -67,6 +85,8 @@ var MicLevel = (function() {
 						favg += arr[i] * arr[i];
 					}
 					vol = Math.sqrt(favg / al);
+					vals.push(vol);
+					console.info(vals.min());
 					_micActivity(vol);
 					canvasCtx.fillStyle = color;
 					if (horiz) {

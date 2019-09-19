@@ -56,12 +56,12 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
@@ -267,14 +267,8 @@ public class SignInDialog extends NonClosableDialog<String> {
 					f.open(target);
 				}
 			});
-			add(new Link<Void>("netTest") {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onClick() {
-					setResponsePage(HashPage.class, new PageParameters().add(APP, APP_TYPE_NETWORK));
-				}
-			});
+			add(new WebMarkupContainer("netTest").add(AttributeModifier.append("href"
+					, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP, APP_TYPE_NETWORK)).toString())));
 			add(new WebMarkupContainer("oauthContainer").add(
 				new ListView<>("oauthList", oauthDao.getActive()) {
 					private static final long serialVersionUID = 1L;

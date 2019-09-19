@@ -32,11 +32,13 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.dashboard.Widget;
@@ -73,21 +75,9 @@ public class WelcomeWidgetView extends WidgetView {
 				((MainPage)getPage()).updateContents(PROFILE_EDIT, target);
 			}
 		});
-		add(new Link<Void>("netTest") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				setResponsePage(HashPage.class, new PageParameters().add(APP, APP_TYPE_NETWORK));
-			}
-		});
-		add(new Link<Void>("avTest") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				setResponsePage(HashPage.class, new PageParameters().add(APP, APP_TYPE_SETTINGS));
-			}
-		});
+		add(new WebMarkupContainer("netTest").add(AttributeModifier.append("href"
+				, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP, APP_TYPE_NETWORK)).toString())));
+		add(new WebMarkupContainer("avTest").add(AttributeModifier.append("href"
+				, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP, APP_TYPE_SETTINGS)).toString())));
 	}
 }
