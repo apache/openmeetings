@@ -116,7 +116,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -822,7 +825,21 @@ public class BackupImport {
 		}
 	}
 
-	private boolean isInvalidFile(BaseFileItem file) {
+	private boolean isInvalidFile(BaseFileItem file, final Map<Long, Long> folders) {
+		if (file.isDeleted()) {
+			return true;
+		}
+		if (file.getParentId() != null && file.getParentId() > 0) {
+			Long newFolder = folders.get(file.getParentId());
+			if (newFolder == null) {
+				//folder was deleted
+				return true;
+			} else {
+				file.setParentId(newFolder);
+			}
+		} else {
+			file.setParentId(null);
+		}
 		if (file.getRoomId() != null) {
 			Long newRoomId = roomMap.get(file.getRoomId());
 			if (newRoomId == null) {
@@ -839,6 +856,30 @@ public class BackupImport {
 		}
 		return false;
 	}
+
+	private static <T extends BaseFileItem> FileTree<T> build(List<T> list) {
+		TreeMap<Long, T> items = new TreeMap<>(list.stream().collect(Collectors.toMap(f -> f.getId(), f -> f)));
+		FileTree<T> tree = new FileTree<>();
+		TreeMap<Long, T> remain = new TreeMap<>();
+		int counter = list.size(); //max iterations
+		while (counter > 0 && !items.isEmpty()) {
+			Entry<Long, T> e = items.pollFirstEntry();
+			if (e == null) {
+				break;
+			} else {
+				if (!tree.add(e.getValue())) {
+					remain.put(e.getKey(), e.getValue());
+				}
+			}
+			if (items.isEmpty()) {
+				counter = Math.min(counter - 1, remain.size());
+				items.putAll(remain);
+				remain.clear();
+			}
+		}
+		remain.entrySet().forEach(e -> log.warn("Doungling file/recording: {}", e.getValue()));
+		return tree;
+	}
 	/*
 	 * ##################### Import Recordings
 	 */
@@ -853,13 +894,12 @@ public class BackupImport {
 		matcher.bind(Integer.class, IntegerTransform.class);
 		registry.bind(Date.class, DateConverter.class);
 		registry.bind(Recording.Status.class, RecordingStatusConverter.class);
+		final Map<Long, Long> folders = new HashMap<>();
 		List<Recording> list = readList(ser, f, "flvRecordings.xml", "flvrecordings", Recording.class);
-		for (Recording r : list) {
+		FileTree<Recording> tree = build(list);
+		tree.process(r -> isInvalidFile(r, folders), r -> {
 			Long recId = r.getId();
 			r.setId(null);
-			if (isInvalidFile(r)) {
-				continue;
-			}
 			if (r.getChunks() != null) {
 				for (RecordingChunk chunk : r.getChunks()) {
 					chunk.setId(null);
@@ -876,8 +916,11 @@ public class BackupImport {
 				hashMap.put(oldHash, r.getHash());
 			}
 			r = recordingDao.update(r);
+			if (BaseFileItem.Type.Folder == r.getType()) {
+				folders.put(recId, r.getId());
+			}
 			fileItemMap.put(recId, r.getId());
-		}
+		});
 	}
 
 	/*
@@ -986,24 +1029,23 @@ public class BackupImport {
 		matcher.bind(Long.class, LongTransform.class);
 		matcher.bind(Integer.class, IntegerTransform.class);
 		registry.bind(Date.class, DateConverter.class);
+		final Map<Long, Long> folders = new HashMap<>();
 		List<FileItem> list = readList(ser, f, "fileExplorerItems.xml", "fileExplorerItems", FileItem.class);
-		for (FileItem file : list) {
+		FileTree<FileItem> tree = build(list);
+		tree.process(file -> isInvalidFile(file, folders), file -> {
 			Long fId = file.getId();
 			// We need to reset this as openJPA reject to store them otherwise
 			file.setId(null);
-			if (isInvalidFile(file)) {
-				continue;
-			}
-			if (file.getParentId() != null && file.getParentId().longValue() <= 0L) {
-				file.setParentId(null);
-			}
 			String oldHash = file.getHash();
 			file.setHash(randomUUID().toString());
 			hashMap.put(oldHash, file.getHash());
 			file = fileItemDao.update(file);
+			if (BaseFileItem.Type.Folder == file.getType()) {
+				folders.put(fId, file.getId());
+			}
 			result.add(file);
 			fileItemMap.put(fId, file.getId());
-		}
+		});
 		return result;
 	}
 
