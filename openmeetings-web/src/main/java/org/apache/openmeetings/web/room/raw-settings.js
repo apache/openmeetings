@@ -86,7 +86,8 @@ var MicLevel = (function() {
 					}
 					vol = Math.sqrt(favg / al);
 					vals.push(vol);
-					_micActivity(vol > vals.min());
+					const min = vals.min();
+					_micActivity(vol > min + 5); // magic number
 					canvasCtx.fillStyle = color;
 					if (horiz) {
 						canvasCtx.fillRect(0, 0, WIDTH * vol / 100, HEIGHT);
