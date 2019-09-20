@@ -18,10 +18,14 @@
  */
 package org.apache.openmeetings.backup;
 
-public class BackupException extends Exception {
+public class BackupException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public BackupException(String msg) {
 		super(msg);
+	}
+
+	public BackupException(Exception e) {
+		super(e);
 	}
 }
