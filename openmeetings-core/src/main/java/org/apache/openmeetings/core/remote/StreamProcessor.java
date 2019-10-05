@@ -492,8 +492,15 @@ public class StreamProcessor implements IStreamProcessor {
 		final String uid = stream.getUid();
 		Client c = cm.getBySid(stream.getSid());
 		if (c != null) {
+			StreamDesc sd = c.getStream(uid);
 			c.removeStream(uid);
+			if (StreamType.WEBCAM == sd.getType()) {
+				for (Activity a : sd.getActivities()) {
+					c.remove(a);
+				}
+			}
 			cm.update(c);
+			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 		}
 		streamByUid.remove(uid);
 	}

@@ -530,8 +530,8 @@ public class Client implements IDataProviderEntity, IWsClient {
 			return Client.this;
 		}
 
-		private JSONArray getActivities() {
-			return new JSONArray(new ArrayList<>(sactivities));
+		public List<Activity> getActivities() {
+			return List.copyOf(sactivities);
 		}
 
 		public JSONObject toJson() {
@@ -540,7 +540,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 					.put("type", type.name())
 					.put("width", swidth)
 					.put("height", sheight)
-					.put("activities", getActivities())
+					.put("activities", new JSONArray(sactivities))
 					.put("cuid", uid));
 		}
 
