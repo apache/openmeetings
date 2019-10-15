@@ -38,7 +38,7 @@
 		<db>derby</db>
 		<jdk.version>1.8</jdk.version>
 		<!-- plugin versions -->
-		<maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
+		<maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
 		<maven-site-plugin.version>3.7.1</maven-site-plugin.version>
 		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
@@ -48,7 +48,7 @@
 		<checksum-maven-plugin.version>1.8</checksum-maven-plugin.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 		<license-maven-plugin.version>1.16</license-maven-plugin.version>
-		<reflow-maven-skin.version>2.0.2</reflow-maven-skin.version>
+		<reflow-maven-skin.version>2.1.0</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
@@ -68,7 +68,7 @@
 		<apache-rat-plugin.version>0.13</apache-rat-plugin.version>
 		<keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
-		<sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
+		<sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.versoin>0.8.2</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>2.6</forbiddenapis.version>
 		<!-- dependency versions -->
@@ -78,10 +78,10 @@
 		<wickets.version>8.6.0</wickets.version>
 		<red5-server.version>1.1.1</red5-server.version>
 		<red5-client.version>1.1.1</red5-client.version>
-		<spring.version>5.1.9.RELEASE</spring.version>
-		<mina.version>2.0.21</mina.version>
-		<tomcat.version>9.0.26</tomcat.version>
-		<ical4j.version>3.0.9</ical4j.version>
+		<spring.version>5.2.0.RELEASE</spring.version>
+		<mina.version>2.1.3</mina.version>
+		<tomcat.version>9.0.27</tomcat.version>
+		<ical4j.version>3.0.11</ical4j.version>
 		<cxf.version>3.3.3</cxf.version>
 		<selenium.version>3.141.59</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
@@ -110,8 +110,8 @@
 		<tika-parsers.version>1.22</tika-parsers.version>
 		<commons-text.version>1.8</commons-text.version>
 		<license.excludedScopes>test</license.excludedScopes>
-		<bcprov-jdk15on.version>1.63</bcprov-jdk15on.version>
-		<mockito.version>3.0.0</mockito.version>
+		<bcprov-jdk15on.version>1.64</bcprov-jdk15on.version>
+		<mockito.version>3.1.0</mockito.version>
 		<jaxws-api.version>2.3.1</jaxws-api.version>
 		<javax.jws-api.version>1.1</javax.jws-api.version>
 		<quartz.version>2.3.1</quartz.version>
@@ -163,7 +163,7 @@
 			<name>Maxim Solodovnik</name>
 			<email>solomax666@gmail.com</email>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru</organizationUrl>
 			<roles>
 				<role>chair</role>
 				<role>architect</role>
@@ -176,7 +176,7 @@
 			<name>Vasiliy Degtyarev</name>
 			<email>vdegtyarev1964@gmail.com</email>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru</organizationUrl>
 			<roles>
 				<role>developer</role>
 				<role>tester</role>
@@ -188,7 +188,7 @@
 			<name>Irina Arkhipets</name>
 			<email>Irina.Arkhipets@gmail.com</email>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru</organizationUrl>
 			<roles>
 				<role>support</role>
 				<role>pmc</role>
@@ -209,7 +209,7 @@
 			<id>dkandrov</id>
 			<name>Denis Kandrov</name>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru</organizationUrl>
 			<roles>
 				<role>support</role>
 				<role>pmc</role>
@@ -244,7 +244,7 @@
 		<developer>
 			<name>Timur Tleukenov</name>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru</organizationUrl>
 			<roles>
 				<role>developer</role>
 				<role>pmc</role>
@@ -253,7 +253,7 @@
 		<developer>
 			<name>Dmitry Bezhetskov</name>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru</organizationUrl>
 			<roles>
 				<role>developer</role>
 			</roles>
@@ -275,7 +275,7 @@
 		<developer>
 			<name>Yulia Algaer</name>
 			<organization>Unipro</organization>
-			<organizationUrl>http://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru</organizationUrl>
 		</developer>
 		<developer>
 			<name>Artyom Horuzhenko</name>
@@ -284,7 +284,7 @@
 			<id>daehn</id>
 			<name>Peter Dähn</name>
 			<organization>VCRP</organization>
-			<organizationUrl>http://www.vcrp.de</organizationUrl>
+			<organizationUrl>https://www.vcrp.de</organizationUrl>
 		</developer>
 		<developer>
 			<id>onoke</id>
@@ -325,9 +325,9 @@
 			<post>mailto:user@openmeetings.apache.org</post>
 			<subscribe>mailto:user-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:user-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user</archive>
+			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-user</archive>
 			<otherArchives>
-				<otherArchive>http://openmeetings.markmail.org</otherArchive>
+				<otherArchive>https://openmeetings.markmail.org</otherArchive>
 			</otherArchives>
 		</mailingList>
 		<mailingList>
@@ -335,9 +335,9 @@
 			<post>mailto:user-espanol@openmeetings.apache.org</post>
 			<subscribe>mailto:user-espanol-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:user-espanol-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user-espanol</archive>
+			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-user-espanol</archive>
 			<otherArchives>
-				<otherArchive>http://openmeetings.markmail.org</otherArchive>
+				<otherArchive>https://openmeetings.markmail.org</otherArchive>
 			</otherArchives>
 		</mailingList>
 		<mailingList>
@@ -345,9 +345,9 @@
 			<post>mailto:user-russian@openmeetings.apache.org</post>
 			<subscribe>mailto:user-russian-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:user-russian-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user-russian</archive>
+			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-user-russian</archive>
 			<otherArchives>
-				<otherArchive>http://openmeetings.markmail.org</otherArchive>
+				<otherArchive>https://openmeetings.markmail.org</otherArchive>
 			</otherArchives>
 		</mailingList>
 		<mailingList>
@@ -355,16 +355,16 @@
 			<post>mailto:dev@openmeetings.apache.org</post>
 			<subscribe>mailto:dev-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:dev-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-dev</archive>
+			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-dev</archive>
 			<otherArchives>
-				<otherArchive>http://openmeetings.markmail.org</otherArchive>
+				<otherArchive>https://openmeetings.markmail.org</otherArchive>
 			</otherArchives>
 		</mailingList>
 		<mailingList>
 			<name>Commits List</name>
 			<subscribe>mailto:commits-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:commits-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-commits/</archive>
+			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-commits/</archive>
 		</mailingList>
 		<mailingList>
 			<name>Security List</name>
