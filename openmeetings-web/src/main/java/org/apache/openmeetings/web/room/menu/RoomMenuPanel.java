@@ -210,12 +210,18 @@ public class RoomMenuPanel extends Panel {
 		pollsSubMenu.update(moder, notExternalUser, r);
 		menuPanel.update(handler);
 		StringBuilder roomClass = new StringBuilder("room name");
-		StringBuilder roomTitle = new StringBuilder();
+		String roomTitle = "";
 		if (streamProcessor.isRecording(r.getId())) {
 			JSONObject ru = kHandler.getRecordingUser(r.getId());
 			if (!Strings.isEmpty(ru.optString("login"))) {
-				roomTitle.append(String.format("%s %s %s %s %s", getString("419")
-						, ru.getString("login"), ru.getString("firstName"), ru.getString("lastName"), df.format(new Date(ru.getLong("started")))));
+				roomTitle += getString("419") + " " + ru.getString("login");
+				if (!Strings.isEmpty(ru.optString("firstName"))) {
+					roomTitle += " " + ru.getString("firstName");
+				}
+				if (!Strings.isEmpty(ru.optString("lastName"))) {
+					roomTitle += " " + ru.getString("lastName");
+				}
+				roomTitle += " " + df.format(new Date(ru.getLong("started")));
 				roomClass.append(" screen");
 			}
 		}
