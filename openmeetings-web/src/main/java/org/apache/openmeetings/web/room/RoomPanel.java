@@ -769,7 +769,8 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public boolean screenShareAllowed() {
-		return streamProcessor.screenShareAllowed(getClient());
+		Client c = getClient();
+		return c.getScreenStream().isPresent() || streamProcessor.screenShareAllowed(c);
 	}
 
 	public RoomSidebar getSidebar() {

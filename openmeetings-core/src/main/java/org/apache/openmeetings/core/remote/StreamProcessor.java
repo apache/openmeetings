@@ -308,6 +308,9 @@ public class StreamProcessor implements IStreamProcessor {
 
 	// Sharing
 	public boolean hasRightsToShare(Client c) {
+		if (!kHandler.isConnected()) {
+			return false;
+		}
 		Room r = c.getRoom();
 		return r != null && Room.Type.interview != r.getType()
 				&& !r.isHidden(RoomElement.ScreenSharing)
@@ -316,9 +319,6 @@ public class StreamProcessor implements IStreamProcessor {
 	}
 
 	public boolean screenShareAllowed(Client c) {
-		if (!kHandler.isConnected()) {
-			return false;
-		}
 		Room r = c.getRoom();
 		return hasRightsToShare(c) && !isSharing(r.getId());
 	}
@@ -493,14 +493,16 @@ public class StreamProcessor implements IStreamProcessor {
 		Client c = cm.getBySid(stream.getSid());
 		if (c != null) {
 			StreamDesc sd = c.getStream(uid);
-			c.removeStream(uid);
-			if (StreamType.WEBCAM == sd.getType()) {
-				for (Activity a : sd.getActivities()) {
-					c.remove(a);
+			if (sd != null) {
+				c.removeStream(uid);
+				if (StreamType.WEBCAM == sd.getType()) {
+					for (Activity a : sd.getActivities()) {
+						c.remove(a);
+					}
 				}
+				cm.update(c);
+				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 			}
-			cm.update(c);
-			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 		}
 		streamByUid.remove(uid);
 	}

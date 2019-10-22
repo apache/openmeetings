@@ -198,6 +198,8 @@ var VideoManager = (function() {
 				if (Room.getOptions().autoOpenSharing === true) {
 					_playSharing(sd, iceServers);
 				}
+			} else if (VideoUtil.isRecording(sd)) {
+				return;
 			} else {
 				_onReceive(m);
 			}
