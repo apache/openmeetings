@@ -243,6 +243,15 @@ public class Client implements IDataProviderEntity, IWsClient {
 				.findFirst();
 	}
 
+	public Client restoreActivities(StreamDesc sd) {
+		synchronized (activities) {
+			Set<Activity> aa = new HashSet<>(sd.sactivities);
+			activities.clear();
+			activities.addAll(aa);
+		}
+		return this;
+	}
+
 	public Date getConnectedSince() {
 		return connectedSince;
 	}

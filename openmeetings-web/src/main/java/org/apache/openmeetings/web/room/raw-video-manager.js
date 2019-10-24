@@ -27,6 +27,9 @@ var VideoManager = (function() {
 	function _onBroadcast(msg) {
 		const sd = msg.stream
 			, uid = sd.uid;
+		msg.cleanup.forEach(function(_cuid) {
+			_close(_cuid);
+		});
 		$('#' + VideoUtil.getVid(uid)).remove();
 		Video().init(msg);
 		OmUtil.log(uid + ' registered in room');

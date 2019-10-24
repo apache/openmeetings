@@ -25,11 +25,12 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import org.apache.openmeetings.core.converter.IRecordingConverter;
@@ -57,6 +58,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 @Component
@@ -85,14 +87,17 @@ public class StreamProcessor implements IStreamProcessor {
 		log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
 		switch (cmdId) {
 			case "devicesAltered":
-				if (!msg.getBoolean("audio") && c.hasActivity(Activity.AUDIO)) {
-					c.remove(Activity.AUDIO);
+				sd = c.getStream(uid);
+				if (sd != null) {
+					if (!msg.getBoolean("audio") && c.hasActivity(Activity.AUDIO)) {
+						c.remove(Activity.AUDIO);
+					}
+					if (!msg.getBoolean("video") && c.hasActivity(Activity.VIDEO)) {
+						c.remove(Activity.VIDEO);
+					}
+					sd.setActivities();
+					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.rightUpdated, c.getUid()));
 				}
-				if (!msg.getBoolean("video") && c.hasActivity(Activity.VIDEO)) {
-					c.remove(Activity.VIDEO);
-				}
-				c.getStream(uid).setActivities();
-				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.rightUpdated, c.getUid()));
 				break;
 			case "toggleActivity":
 				toggleActivity(c, Activity.valueOf(msg.getString("activity")));
@@ -188,6 +193,21 @@ public class StreamProcessor implements IStreamProcessor {
 		return c.hasAnyActivity(Activity.AUDIO, Activity.VIDEO);
 	}
 
+	private Set<String> cleanWebCams(Client c, List<StreamDesc> streams) {
+		Set<String> closed = new HashSet<>();
+		streams.stream()
+			.filter(lsd -> StreamType.WEBCAM == lsd.getType())
+			.forEach(lsd -> {
+				KStream s = getByUid(lsd.getUid());
+				if (s != null) {
+					s.stopBroadcast(this);
+				}
+				c.removeStream(lsd.getUid());
+				closed.add(lsd.getUid());
+			});
+		return closed;
+	}
+
 	public void toggleActivity(Client c, Activity a) {
 		log.info("PARTICIPANT {}: trying to toggle activity {}", c, a);
 
@@ -211,36 +231,24 @@ public class StreamProcessor implements IStreamProcessor {
 				return;
 			}
 			c.toggle(a);
+			List<StreamDesc> streams = c.getStreams();
 			if (!isBroadcasting(c)) {
-				//close
-				AtomicBoolean changed = new AtomicBoolean(false);
-				c.getStreams().stream()
-					.filter(sd -> StreamType.WEBCAM == sd.getType())
-					.forEach(sd -> {
-						KStream s = getByUid(sd.getUid());
-						if (s != null) {
-							s.stopBroadcast(this);
-						}
-						c.removeStream(sd.getUid());
-						changed.set(true);
-					});
-				if (changed.get()) {
+				Set<String> closed = cleanWebCams(c, streams);
+				if (!closed.isEmpty()) {
 					cm.update(c);
 					checkStreams(c.getRoomId());
+					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 				}
-				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
-			} else if (!wasBroadcasting) {
-				//join
+			} else {
 				StreamDesc sd = c.addStream(StreamType.WEBCAM);
-				cm.update(c);
+				Set<String> closed = wasBroadcasting ? cleanWebCams(c, streams) : Set.of();
+				cm.update(c.restoreActivities(sd));
 				log.debug("User {}: has started broadcast", sd.getUid());
 				kHandler.sendClient(sd.getSid(), newKurentoMsg()
 						.put("id", "broadcast")
 						.put("stream", sd.toJson())
+						.put("cleanup", new JSONArray(closed))
 						.put(PARAM_ICE, kHandler.getTurnServers(false)));
-			} else {
-				constraintsChanged(c);
-				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 			}
 		}
 	}
