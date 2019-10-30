@@ -25,8 +25,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFF
 
 import java.io.File;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.DoubleConsumer;
+import java.util.function.Function;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.file.FileItem;
@@ -34,9 +34,11 @@ import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
-import org.artofsolving.jodconverter.OfficeDocumentConverter;
-import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
-import org.artofsolving.jodconverter.office.OfficeManager;
+import org.jodconverter.LocalConverter;
+import org.jodconverter.job.ConversionJob;
+import org.jodconverter.office.LocalOfficeManager;
+import org.jodconverter.office.OfficeException;
+import org.jodconverter.office.OfficeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,17 +75,17 @@ public class DocumentConverter {
 		return imageConverter.convertDocument(f, pdf, logs, progress);
 	}
 
-	public static void createOfficeManager(String officePath, Consumer<OfficeManager> consumer) {
+	public static void createOfficeManager(String officePath, Function<OfficeManager, ConversionJob> job) throws OfficeException {
 		OfficeManager manager = null;
 		try {
-			DefaultOfficeManagerConfiguration configuration = new DefaultOfficeManagerConfiguration();
+			LocalOfficeManager.Builder builder = LocalOfficeManager.builder();
 			if (!Strings.isEmpty(officePath)) {
-				configuration.setOfficeHome(officePath);
+				builder.officeHome(officePath);
 			}
-			manager = configuration.buildOfficeManager();
+			manager = builder.build();
 			manager.start();
-			if (consumer != null) {
-				consumer.accept(manager);
+			if (job != null) {
+				job.apply(manager).execute();
 			}
 		} finally {
 			if (manager != null) {
@@ -102,10 +104,7 @@ public class DocumentConverter {
 	public ProcessResult doJodConvert(File in, File out) {
 		try {
 			createOfficeManager(cfgDao.getString(CONFIG_PATH_OFFICE, null)
-					, man -> {
-						OfficeDocumentConverter converter = new OfficeDocumentConverter(man);
-						converter.convert(in, out);
-					});
+					, man -> LocalConverter.make(man).convert(in).to(out));
 		} catch (Exception ex) {
 			log.error(JOD_JOD_NAME, ex);
 			return new ProcessResult(JOD_JOD_NAME, ex.getMessage(), ex);

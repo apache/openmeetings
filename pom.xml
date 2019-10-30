@@ -695,6 +695,11 @@
 				<artifactId>kurento-client</artifactId>
 				<version>${kurento.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.jodconverter</groupId>
+				<artifactId>jodconverter-local</artifactId>
+				<version>4.2.2</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>

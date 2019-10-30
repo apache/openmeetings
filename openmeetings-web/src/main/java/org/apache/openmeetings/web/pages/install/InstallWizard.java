@@ -486,27 +486,28 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private static final long serialVersionUID = 1L;
 		private static final String REGEX = "\\r\\n|\\r|\\n";
 		private static final String OPT_VERSION = "-version";
-		private final TextField<String> ffmpegPath;
-		private final TextField<String> imageMagicPath;
-		private final TextField<String> soxPath;
-		private final TextField<String> officePath;
+		private final TextField<String> ffmpegPath = new TextField<>("ffmpegPath");
+		private final TextField<String> imageMagicPath = new TextField<>("imageMagicPath");
+		private final TextField<String> soxPath = new TextField<>("soxPath");
+		private final TextField<String> officePath = new TextField<>("officePath");
 		private boolean isAllChecked = false;
 
 		public ParamsStep3() {
 			super(paramsStep2);
-			add(imageMagicPath = new TextField<>("imageMagicPath"));
-			add(ffmpegPath = new TextField<>("ffmpegPath"));
-			add(soxPath = new TextField<>("soxPath"));
-			add(officePath = new TextField<>("officePath"));
 		}
 
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();
+			add(imageMagicPath.setLabel(new ResourceModel("install.wizard.params.step3.imageMagicPath")));
+			add(ffmpegPath.setLabel(new ResourceModel("install.wizard.params.step3.ffmpegPath")));
+			add(soxPath.setLabel(new ResourceModel("install.wizard.params.step3.soxPath")));
+			add(officePath.setLabel(new ResourceModel("install.wizard.params.step3.officePath")));
 			add(new TextField<Integer>("docDpi").setRequired(true).add(range(50, 600)));
 			add(new TextField<Integer>("docQuality").setRequired(true).add(range(1, 100)));
 			add(new AjaxButton("validateImageMagic") {
 				private static final long serialVersionUID = 1L;
+
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
 					checkMagicPath();
@@ -540,10 +541,15 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			add(new TooltipBehavior(".info-title"));
 		}
 
+		private void reportSuccess(TextField<String> path) {
+			path.success(path.getLabel().getObject() + " " + getString("54"));
+		}
 		private boolean checkToolPath(TextField<String> path, String[] args) {
 			ProcessResult result = ProcessHelper.executeScript(path.getInputName() + " path:: '" + path.getValue() + "'", args);
 			if (!result.isOk()) {
 				path.error(result.getError().replaceAll(REGEX, ""));
+			} else {
+				reportSuccess(path);
 			}
 			return result.isOk();
 		}
@@ -564,6 +570,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			String err  = "";
 			try {
 				DocumentConverter.createOfficeManager(officePath.getValue(), null);
+				reportSuccess(officePath);
 			} catch (Exception ex) {
 				officePath.error(err = ex.getMessage().replaceAll(REGEX, ""));
 			}

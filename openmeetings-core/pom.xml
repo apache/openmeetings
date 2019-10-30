@@ -92,9 +92,8 @@
 			<version>${javax.mail.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.artofsolving.jodconverter</groupId>
-			<artifactId>jodconverter-core</artifactId>
-			<version>3.0.1-om</version>
+			<groupId>org.jodconverter</groupId>
+			<artifactId>jodconverter-local</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
