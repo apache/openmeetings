@@ -80,10 +80,10 @@ public class BackupPanel extends AdminBasePanel {
 	 */
 	private class BackupForm extends Form<Void> {
 		private static final long serialVersionUID = 1L;
-		private final FileUploadField fileUploadField;
 		private final Model<Boolean> includeFilesInBackup = Model.of(true);
-		private final AbstractAjaxTimerBehavior timer;
-		private final ProgressBar progressBar;
+		private FileUploadField fileUploadField;
+		private AbstractAjaxTimerBehavior timer;
+		private ProgressBar progressBar;
 		private File backupFile;
 		private Throwable th = null;
 		private boolean started = false;
@@ -91,10 +91,12 @@ public class BackupPanel extends AdminBasePanel {
 
 		public BackupForm(String id) {
 			super(id);
-
 			// set this form to multipart mode (allways needed for uploads!)
 			setMultiPart(true);
+		}
 
+		@Override
+		protected void onInitialize() {
 			// set max upload size in form as info text
 			Long maxBytes = getMaxUploadSize();
 			double megaBytes = maxBytes.doubleValue() / 1024 / 1024;
@@ -198,6 +200,7 @@ public class BackupPanel extends AdminBasePanel {
 							return;
 						}
 						backupImport.performImport(upload.getInputStream());
+						feedback.success(getString("387") + " - " + getString("54"));
 					} catch (Exception e) {
 						log.error("Exception on panel backup upload ", e);
 						feedback.error(e);
@@ -212,10 +215,6 @@ public class BackupPanel extends AdminBasePanel {
 					target.add(feedback);
 				}
 			}));
-		}
-
-		@Override
-		protected void onInitialize() {
 			add(new Label("cmdLineDesc", getString("1505")).setEscapeModelStrings(false));
 			super.onInitialize();
 		}

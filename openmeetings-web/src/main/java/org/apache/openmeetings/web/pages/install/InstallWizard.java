@@ -542,7 +542,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		}
 
 		private void reportSuccess(TextField<String> path) {
-			path.success(path.getLabel().getObject() + " " + getString("54"));
+			path.success(path.getLabel().getObject() + " - " + getString("54"));
 		}
 		private boolean checkToolPath(TextField<String> path, String[] args) {
 			ProcessResult result = ProcessHelper.executeScript(path.getInputName() + " path:: '" + path.getValue() + "'", args);
