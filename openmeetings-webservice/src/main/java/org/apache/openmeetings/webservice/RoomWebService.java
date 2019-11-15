@@ -164,7 +164,7 @@ public class RoomWebService extends BaseWebService {
 	 */
 	@WebMethod
 	@GET
-	@Path("/{type}/{externaltype}/{externaliId}")
+	@Path("/{type}/{externaltype}/{externaliid}")
 	public RoomDTO getExternal(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("type") @WebParam(name="type") String type
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
