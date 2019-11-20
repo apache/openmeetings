@@ -134,6 +134,12 @@ public class WbPanel extends AbstractWbPanel {
 			return getString("144");
 		}
 	};
+	private final Consumer<Whiteboard> addUndo = wb -> {
+		JSONArray arr = getArray(wb.toJson(), null);
+		if (arr.length() != 0) {
+			addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
+		}
+	};
 	@SpringBean
 	private WhiteboardManager wbm;
 	@SpringBean
@@ -271,7 +277,7 @@ public class WbPanel extends AbstractWbPanel {
 				case createWb:
 				{
 					Whiteboard wb = wbm.add(roomId, c.getUser().getLanguageId());
-					sendWbAll(WbAction.createWb, getAddWbJson(wb));
+					sendWbAll(WbAction.createWb, wb.getAddJson());
 				}
 					break;
 				case removeWb:
@@ -313,7 +319,7 @@ public class WbPanel extends AbstractWbPanel {
 					break;
 				case clearAll:
 				{
-					clearAll(roomId, obj.getLong("wbId"));
+					wbm.clearAll(roomId, obj.getLong("wbId"), addUndo);
 				}
 					break;
 				case setSize:
@@ -324,7 +330,7 @@ public class WbPanel extends AbstractWbPanel {
 					wb.setZoom(obj.getDouble(ATTR_ZOOM));
 					wb.setZoomMode(ZoomMode.valueOf(obj.getString("zoomMode")));
 					wbm.update(roomId, wb);
-					sendWbOthers(WbAction.setSize, getAddWbJson(wb));
+					sendWbOthers(WbAction.setSize, wb.getAddJson());
 				}
 					break;
 				default:
@@ -460,15 +466,6 @@ public class WbPanel extends AbstractWbPanel {
 		}
 	}
 
-	private static JSONObject getAddWbJson(final Whiteboard wb) {
-		return new JSONObject().put("wbId", wb.getId())
-				.put("name", wb.getName())
-				.put(ATTR_WIDTH, wb.getWidth())
-				.put(ATTR_HEIGHT, wb.getHeight())
-				.put(ATTR_ZOOM, wb.getZoom())
-				.put("zoomMode", wb.getZoomMode().name());
-	}
-
 	@Override
 	protected String getRole() {
 		String role = ROLE_NONE;
@@ -515,20 +512,6 @@ public class WbPanel extends AbstractWbPanel {
 		return arr;
 	}
 
-	private void clearAll(Long roomId, long wbId) {
-		Whiteboard wb = wbm.get(roomId).get(wbId);
-		if (wb == null) {
-			return;
-		}
-		JSONArray arr = getArray(wb.toJson(), null);
-		if (arr.length() != 0) {
-			addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
-		}
-		wb = wbm.clear(roomId, wbId);
-		sendWbAll(WbAction.clearAll, new JSONObject().put("wbId", wbId));
-		sendWbAll(WbAction.setSize, getAddWbJson(wb));
-	}
-
 	private static void updateWbSize(Whiteboard wb, final BaseFileItem fi) {
 		int w = fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth();
 		int h = fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight();
@@ -564,7 +547,7 @@ public class WbPanel extends AbstractWbPanel {
 							if (updated[0]) {
 								wbm.update(roomId, wb);
 							}
-							sendWbAll(WbAction.setSize, getAddWbJson(wb));
+							sendWbAll(WbAction.setSize, wb.getAddJson());
 							sendWbAll(WbAction.load, getObjWbJson(wb.getId(), arr));
 						} catch (Exception e) {
 							log.error("Unexpected error while loading WB", e);
@@ -597,12 +580,12 @@ public class WbPanel extends AbstractWbPanel {
 					}
 					final String ruid = wbs.getUid();
 					if (clean) {
-						clearAll(roomId, wb.getId());
+						wbm.clearAll(roomId, wb.getId(), addUndo);
 					}
 					wb.put(wuid, file);
 					updateWbSize(wb, fi);
 					wbm.update(roomId, wb);
-					sendWbAll(WbAction.setSize, getAddWbJson(wb));
+					sendWbAll(WbAction.setSize, wb.getAddJson());
 					WbWebSocketHelper.sendWbFile(roomId, wb.getId(), ruid, file, fi);
 				}
 					break;
@@ -667,7 +650,7 @@ public class WbPanel extends AbstractWbPanel {
 	private StringBuilder loadWhiteboards(StringBuilder sb, Client cl, Whiteboards wbs, Set<Entry<Long, Whiteboard>> boardSet) {
 		for (Entry<Long, Whiteboard> entry : boardSet) {
 			Whiteboard wb = entry.getValue();
-			sb.append(new StringBuilder("WbArea.create(").append(getAddWbJson(wb)).append(");"));
+			sb.append(new StringBuilder("WbArea.create(").append(wb.getAddJson()).append(");"));
 			JSONArray arr = new JSONArray();
 			for (JSONObject o : wb.list()) {
 				arr.put(addFileUrl(cl, wbs.getUid(), o));

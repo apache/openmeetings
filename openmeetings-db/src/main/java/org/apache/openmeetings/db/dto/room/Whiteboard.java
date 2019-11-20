@@ -196,6 +196,15 @@ public class Whiteboard implements Serializable {
 		this.height = height;
 	}
 
+	public JSONObject getAddJson() {
+		return new JSONObject().put("wbId", getId())
+				.put("name", getName())
+				.put(ATTR_WIDTH, getWidth())
+				.put(ATTR_HEIGHT, getHeight())
+				.put(ATTR_ZOOM, getZoom())
+				.put("zoomMode", getZoomMode().name());
+	}
+
 	public JSONObject toJson() {
 		//deep-copy
 		JSONObject json = new JSONObject(new JSONObject(this).toString(new NullStringer()));

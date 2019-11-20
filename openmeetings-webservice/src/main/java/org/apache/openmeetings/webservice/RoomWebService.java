@@ -411,12 +411,15 @@ public class RoomWebService extends BaseWebService {
 	}
 
 	/**
+	 * @deprecated please use {@link WbWebService#resetWb(String, long)} method instead
+	 *
 	 * Method to clean room white board (all objects will be purged)
 	 *
 	 * @param sid - The SID of the User. This SID must be marked as Loggedin
 	 * @param id - id of the room to clean
 	 * @return - serviceResult object with the result
 	 */
+	@Deprecated(since = "5.0.0-M3")
 	@WebMethod
 	@GET
 	@Path("/cleanwb/{id}")
@@ -426,7 +429,7 @@ public class RoomWebService extends BaseWebService {
 	{
 		log.debug("[cleanwb] room id {}", id);
 		return performCall(sid, User.Right.Soap, sd -> {
-			wbManager.clean(id, sd.getUserId());
+			wbManager.reset(id, sd.getUserId());
 			return new ServiceResult("", Type.SUCCESS);
 		});
 	}

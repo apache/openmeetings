@@ -18,9 +18,13 @@
  */
 package org.apache.openmeetings.db.manager;
 
+import java.util.function.Consumer;
+
+import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 
 public interface IWhiteboardManager {
 	Whiteboards get(Long roomId);
-	void clean(Long roomId, Long userId);
+	void reset(Long roomId, Long userId);
+	void clearAll(Long roomId, long wbId, Consumer<Whiteboard> consumer);
 }

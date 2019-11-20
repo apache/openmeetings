@@ -48,6 +48,7 @@
 			<ref bean="recordWebService"/>
 			<ref bean="roomWebService"/>
 			<ref bean="userWebService"/>
+			<ref bean="wbWebService"/>
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean id="appDtoMessageBodyWriter" class="org.apache.openmeetings.webservice.util.AppointmentMessageBodyWriter" />
@@ -67,4 +68,5 @@
 	<jaxws:endpoint id="recordServiceWS" address="/RecordService" implementor="#recordWebService" />
 	<jaxws:endpoint id="roomServiceWS" address="/RoomService" implementor="#roomWebService" />
 	<jaxws:endpoint id="userServiceWS" address="/UserService" implementor="#userWebService" />
+	<jaxws:endpoint id="wbServiceWS" address="/WbService" implementor="#wbWebService" />
 </beans>
