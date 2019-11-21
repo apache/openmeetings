@@ -86,6 +86,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
+import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -134,7 +135,7 @@ public class WbPanel extends AbstractWbPanel {
 			return getString("144");
 		}
 	};
-	private final Consumer<Whiteboard> addUndo = wb -> {
+	private final SerializableConsumer<Whiteboard> addUndo = wb -> {
 		JSONArray arr = getArray(wb.toJson(), null);
 		if (arr.length() != 0) {
 			addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
