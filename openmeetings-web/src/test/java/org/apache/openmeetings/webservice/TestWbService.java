@@ -21,6 +21,8 @@ package org.apache.openmeetings.webservice;
 import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.function.BiConsumer;
+
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -34,7 +36,7 @@ public class TestWbService extends AbstractWebServiceTest {
 		return getServiceUrl(WB_SERVICE_MOUNT);
 	}
 
-	private static RoomDTO createTestRoom() {
+	private static RoomDTO createTestRoom(final String sid) {
 		String extId = randomUUID().toString();
 		Room.Type type = Room.Type.presentation;
 		String name = "Unit Test Ext Room1";
@@ -47,30 +49,37 @@ public class TestWbService extends AbstractWebServiceTest {
 		r.setExternalType(UNIT_TEST_EXT_TYPE);
 		r.setExternalId(extId);
 
-		CallResult<RoomDTO> res = createAndValidate(r);
+		CallResult<RoomDTO> res = createAndValidate(sid, r);
 		return res.getObj();
+	}
+
+	private void doTest(BiConsumer<RoomDTO, String> consumer) {
+		ServiceResult sr = login();
+		final String sid = sr.getMessage();
+		RoomDTO room = createTestRoom(sid);
+
+		consumer.accept(room, sid);
 	}
 
 	@Test
 	public void testReset() {
-		RoomDTO room = createTestRoom();
-
-		ServiceResult res = getClient(getWbUrl())
-				.path("/resetwb")
-				.query("id", room.getId())
-				.get(ServiceResult.class);
-		assertEquals(ServiceResult.Type.SUCCESS.name(), res.getType());
+		doTest((room, sid) -> {
+			ServiceResult res = getClient(getWbUrl())
+					.path("/resetwb/" + room.getId())
+					.query("sid", sid)
+					.get(ServiceResult.class);
+			assertEquals(ServiceResult.Type.SUCCESS.name(), res.getType());
+		});
 	}
 
 	@Test
 	public void testCleanAll() {
-		RoomDTO room = createTestRoom();
-
-		ServiceResult res = getClient(getWbUrl())
-				.path("/cleanwb")
-				.query("roomid", room.getId())
-				.query("wbid", 0)
-				.get(ServiceResult.class);
-		assertEquals(ServiceResult.Type.SUCCESS.name(), res.getType());
+		doTest((room, sid) -> {
+			ServiceResult res = getClient(getWbUrl())
+					.path("/cleanwb/" + room.getId() + "/" + 0)
+					.query("sid", sid)
+					.get(ServiceResult.class);
+			assertEquals(ServiceResult.Type.SUCCESS.name(), res.getType());
+		});
 	}
 }
