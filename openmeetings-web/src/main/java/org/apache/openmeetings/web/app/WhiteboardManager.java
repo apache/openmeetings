@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.sendWbAll;
@@ -31,6 +32,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import javax.annotation.PostConstruct;
@@ -51,6 +53,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.IMap;
@@ -221,6 +224,21 @@ public class WhiteboardManager implements IWhiteboardManager {
 		wb = clear(roomId, wbId);
 		sendWbAll(roomId, WbAction.clearAll, new JSONObject().put("wbId", wbId));
 		sendWbAll(roomId, WbAction.setSize, wb.getAddJson());
+	}
+
+	@Override
+	public void cleanSlide(Long roomId, long wbId, int slide, BiConsumer<Whiteboard, JSONArray> consumer) {
+		Whiteboard wb = get(roomId).get(wbId);
+		JSONArray arr = wb.clearSlide(slide);
+		if (arr.length() != 0) {
+			update(roomId, wb);
+			if (consumer != null) {
+				consumer.accept(wb, arr);
+			}
+			sendWbAll(roomId, WbAction.clearSlide, new JSONObject()
+					.put("wbId", wbId)
+					.put(ATTR_SLIDE, slide));
+		}
 	}
 
 	public Whiteboard remove(long roomId, Long wbId) {

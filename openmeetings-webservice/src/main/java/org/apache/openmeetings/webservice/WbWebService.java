@@ -99,4 +99,29 @@ public class WbWebService extends BaseWebService {
 			return new ServiceResult("", Type.SUCCESS);
 		});
 	}
+
+	/**
+	 * This method will do the same as clean slide in the room (except for there will be no UNDO)
+	 *
+	 * @param sid - The SID of the User. This SID must be marked as Loggedin
+	 * @param roomId - id of the room to clean
+	 * @param wbId - id of the white board to clean
+	 * @param slideNo - slide number (zero based)
+	 * @return - serviceResult object with the result
+	 */
+	@WebMethod
+	@GET
+	@Path("/cleanslide/{roomid}/{wbid}/{slide}")
+	public ServiceResult cleanSlide(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="roomid") @PathParam("roomid") long roomId
+			, @WebParam(name="wbid") @PathParam("wbid") long wbId
+			, @WebParam(name="slide") @PathParam("slide") int slide
+			)
+	{
+		log.debug("[cleanSlide] room id {}, wb id {}, slide {}", roomId, wbId, slide);
+		return performCall(sid, User.Right.Soap, sd -> {
+			wbManager.cleanSlide(roomId, wbId, slide, null);
+			return new ServiceResult("", Type.SUCCESS);
+		});
+	}
 }

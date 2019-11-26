@@ -82,4 +82,15 @@ public class TestWbService extends AbstractWebServiceTest {
 			assertEquals(ServiceResult.Type.SUCCESS.name(), res.getType());
 		});
 	}
+
+	@Test
+	public void testCleanSlide() {
+		doTest((room, sid) -> {
+			ServiceResult res = getClient(getWbUrl())
+					.path("/cleanslide/" + room.getId() + "/" + 0 + "/" + 0)
+					.query("sid", sid)
+					.get(ServiceResult.class);
+			assertEquals(ServiceResult.Type.SUCCESS.name(), res.getType());
+		});
+	}
 }

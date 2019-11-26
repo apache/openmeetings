@@ -393,13 +393,9 @@ public class WbPanel extends AbstractWbPanel {
 					break;
 				case clearSlide:
 				{
-					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
-					JSONArray arr = wb.clearSlide(obj.getInt(ATTR_SLIDE));
-					if (arr.length() != 0) {
-						wbm.update(roomId, wb);
+					wbm.cleanSlide(roomId, obj.getLong("wbId"), obj.getInt(ATTR_SLIDE), (wb, arr) -> {
 						addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
-					}
-					sendWbAll(WbAction.clearSlide, obj);
+					});
 				}
 					break;
 				case save:
