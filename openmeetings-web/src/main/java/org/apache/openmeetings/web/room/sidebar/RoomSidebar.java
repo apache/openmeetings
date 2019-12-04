@@ -108,7 +108,7 @@ public class RoomSidebar extends Panel {
 				list = getBean(ClientManager.class).listByRoom(room.getRoom().getId());
 				list.sort(Comparator.<Client, Boolean>comparing(c -> c.hasRight(Room.Right.moderator), naturalOrder())
 						.reversed()
-						.thenComparing(c -> c.getUser().getDisplayName(), naturalOrder()));
+						.thenComparing(c -> c.getUser().getDisplayName(), String::compareToIgnoreCase));
 			}
 			userCount.setDefaultModelObject(list.size());
 			return list;
