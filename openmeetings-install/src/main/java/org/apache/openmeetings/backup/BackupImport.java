@@ -908,12 +908,11 @@ public class BackupImport {
 			String oldHash = r.getHash();
 			if (!Strings.isEmpty(oldHash) && oldHash.startsWith(RECORDING_FILE_NAME)) {
 				String name = getFileName(oldHash);
+				r.setHash(randomUUID().toString());
 				fileMap.put(String.format(FILE_NAME_FMT, name, EXTENSION_JPG), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_PNG));
 				fileMap.put(String.format("%s.%s.%s", name, "flv", EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
-				r.setHash(randomUUID().toString());
-			} else {
-				checkHash(r, recordingDao);
 			}
+			checkHash(r, recordingDao);
 			r = recordingDao.update(r);
 			if (BaseFileItem.Type.Folder == r.getType()) {
 				folders.put(recId, r.getId());
@@ -1024,7 +1023,7 @@ public class BackupImport {
 			Long fId = file.getId();
 			// We need to reset this as openJPA reject to store them otherwise
 			file.setId(null);
-			checkHash(file, recordingDao);
+			checkHash(file, fileItemDao);
 			file = fileItemDao.update(file);
 			if (BaseFileItem.Type.Folder == file.getType()) {
 				folders.put(fId, file.getId());
