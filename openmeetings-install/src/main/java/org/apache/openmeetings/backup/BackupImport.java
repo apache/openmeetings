@@ -120,6 +120,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -146,6 +147,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
+import org.apache.openmeetings.db.dao.file.BaseFileItemDao;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
@@ -208,6 +210,7 @@ public class BackupImport {
 	private static final Logger log = LoggerFactory.getLogger(BackupImport.class);
 	private static final Map<String, String> outdatedConfigKeys = new HashMap<>();
 	private static final Map<String, Configuration.Type> configTypes = new HashMap<>();
+	private static final Pattern UUID_PATTERN = Pattern.compile("^[\\da-f]{8}(?:-[\\da-f]{4}){3}-[\\da-f]{12}$");
 	static {
 		outdatedConfigKeys.put("crypt_ClassName", CONFIG_CRYPT);
 		outdatedConfigKeys.put("system_email_addr", CONFIG_SMTP_SYSTEM_EMAIL);
@@ -903,13 +906,13 @@ public class BackupImport {
 				}
 			}
 			String oldHash = r.getHash();
-			r.setHash(randomUUID().toString());
 			if (!Strings.isEmpty(oldHash) && oldHash.startsWith(RECORDING_FILE_NAME)) {
 				String name = getFileName(oldHash);
 				fileMap.put(String.format(FILE_NAME_FMT, name, EXTENSION_JPG), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_PNG));
 				fileMap.put(String.format("%s.%s.%s", name, "flv", EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
+				r.setHash(randomUUID().toString());
 			} else {
-				hashMap.put(oldHash, r.getHash());
+				checkHash(r, recordingDao);
 			}
 			r = recordingDao.update(r);
 			if (BaseFileItem.Type.Folder == r.getType()) {
@@ -917,6 +920,14 @@ public class BackupImport {
 			}
 			fileItemMap.put(recId, r.getId());
 		});
+	}
+
+	private void checkHash(BaseFileItem file, BaseFileItemDao dao) {
+		String oldHash = file.getHash();
+		if (Strings.isEmpty(oldHash) || !UUID_PATTERN.matcher(oldHash).matches() || dao.get(oldHash) != null) {
+			file.setHash(randomUUID().toString());
+			hashMap.put(oldHash, file.getHash());
+		}
 	}
 
 	/*
@@ -1013,9 +1024,7 @@ public class BackupImport {
 			Long fId = file.getId();
 			// We need to reset this as openJPA reject to store them otherwise
 			file.setId(null);
-			String oldHash = file.getHash();
-			file.setHash(randomUUID().toString());
-			hashMap.put(oldHash, file.getHash());
+			checkHash(file, recordingDao);
 			file = fileItemDao.update(file);
 			if (BaseFileItem.Type.Folder == file.getType()) {
 				folders.put(fId, file.getId());
