@@ -100,8 +100,15 @@ public class RoomSidebar extends Panel {
 				list = Arrays.asList(self);
 			} else {
 				list = cm.listByRoom(room.getRoom().getId());
-				list.sort(Comparator.<Client, Boolean>comparing(c -> c.hasRight(Room.Right.moderator), naturalOrder())
-						.reversed()
+				list.sort(Comparator.<Client, Integer>comparing(c -> {
+							if (c.hasRight(Room.Right.moderator)) {
+								return 0;
+							}
+							if (c.hasRight(Room.Right.presenter)) {
+								return 1;
+							}
+							return 5;
+						}, naturalOrder())
 						.thenComparing(c -> c.getUser().getDisplayName(), String::compareToIgnoreCase));
 			}
 			userCount.setDefaultModelObject(list.size());
