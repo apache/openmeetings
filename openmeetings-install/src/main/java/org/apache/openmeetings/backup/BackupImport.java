@@ -26,7 +26,6 @@ import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.CSS_DIR;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
@@ -123,6 +122,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -157,6 +157,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
+import org.apache.openmeetings.db.dao.file.BaseFileItemDao;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
@@ -228,6 +229,7 @@ public class BackupImport {
 	private static final Properties countries = new Properties();
 	private static final Map<String, String> outdatedConfigKeys = new HashMap<>();
 	private static final Map<String, Configuration.Type> configTypes = new HashMap<>();
+	private static final Pattern UUID_PATTERN = Pattern.compile("^[\\da-f]{8}(?:-[\\da-f]{4}){3}-[\\da-f]{12}$");
 	static {
 		outdatedConfigKeys.put("crypt_ClassName", CONFIG_CRYPT);
 		outdatedConfigKeys.put("system_email_addr", CONFIG_SMTP_SYSTEM_EMAIL);
@@ -877,21 +879,27 @@ public class BackupImport {
 					meta.setRecording(r);
 				}
 			}
-			if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(RECORDING_FILE_NAME)) {
-				String name = getFileName(r.getHash());
+			String oldHash = r.getHash();
+			if (!Strings.isEmpty(oldHash) && oldHash.startsWith(RECORDING_FILE_NAME)) {
+				String name = getFileName(oldHash);
 				r.setHash(randomUUID().toString());
 				fileMap.put(String.format(FILE_NAME_FMT, name, EXTENSION_JPG), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_PNG));
-				fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
+				fileMap.put(String.format("%s.%s.%s", name, "flv", EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
 			}
-			if (Strings.isEmpty(r.getHash())) {
-				r.setHash(randomUUID().toString());
-			}
+			checkHash(r, recordingDao);
 			r = recordingDao.update(r);
 			if (BaseFileItem.Type.Folder == r.getType()) {
 				folders.put(recId, r.getId());
 			}
 			fileItemMap.put(recId, r.getId());
 		});
+	}
+
+	private void checkHash(BaseFileItem file, BaseFileItemDao dao) {
+		String oldHash = file.getHash();
+		if (Strings.isEmpty(oldHash) || !UUID_PATTERN.matcher(oldHash).matches() || dao.get(oldHash) != null) {
+			file.setHash(randomUUID().toString());
+		}
 	}
 
 	/*
@@ -999,7 +1007,7 @@ public class BackupImport {
 			Long fId = file.getId();
 			// We need to reset this as openJPA reject to store them otherwise
 			file.setId(null);
-			file.setHash(randomUUID().toString());
+			checkHash(file, fileItemDao);
 			file = fileItemDao.update(file);
 			if (BaseFileItem.Type.Folder == file.getType()) {
 				folders.put(fId, file.getId());
