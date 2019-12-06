@@ -40,9 +40,10 @@ public abstract class AbstractWbPanel extends Panel {
 	}
 
 	public CharSequence getInitScript() {
-		StringBuilder sb = new StringBuilder("WbArea.init();");
+		StringBuilder sb = new StringBuilder("WbArea.init(() => {");
 		internalWbLoad(sb);
 		inited = true;
+		sb.append("});");
 		return sb;
 	}
 

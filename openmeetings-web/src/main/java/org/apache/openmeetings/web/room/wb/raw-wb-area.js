@@ -205,11 +205,11 @@ var DrawWbArea = function() {
 	function _actionActivateWb(_wbId) {
 		OmUtil.wbAction({action: 'activateWb', data: {wbId: _wbId}});
 	}
-	self.init = function() {
-		Wicket.Event.subscribe('/websocket/message', self.wbWsHandler);
+	function _doInit(callback) {
 		container = $('.room-block .wb-block');
 		tabs = container.find('.tabs');
 		if (tabs.length === 0) {
+			setTimeout(_doInit, 100, callback);
 			return;
 		}
 		tabs.tabs({
@@ -237,9 +237,17 @@ var DrawWbArea = function() {
 		});
 		_inited = true;
 		self.setRole(role);
+		if (typeof(callback) === 'function') {
+			callback();
+		}
 		$('#wb-rename-menu').menu().find('.wb-rename').click(function() {
 			_getWbTab($(this).parent().data('wb-id')).find('a span').trigger('dblclick');
 		});
+	}
+
+	self.init = function(callback) {
+		Wicket.Event.subscribe('/websocket/message', self.wbWsHandler);
+		_doInit(callback);
 	};
 	self.destroy = function() {
 		self.removeDeleteHandler();
