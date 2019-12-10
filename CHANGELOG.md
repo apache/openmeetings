@@ -6,6 +6,54 @@ See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number 
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
 
+Release Notes - Openmeetings - Version 5.0.0-M3
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-2048] - WB performance need to be improved
+    * [OPENMEETINGS-2087] - Audio and screen sharing not working in Chrome
+    * [OPENMEETINGS-2088] - Internal error on clicking start upload button without selecting file in file uploading
+    * [OPENMEETINGS-2098] - New Whiteboard each time admin logs in
+    * [OPENMEETINGS-2099] - Video window is not removed
+    * [OPENMEETINGS-2100] - JS error prevents screen-sharing from being started
+    * [OPENMEETINGS-2101] - Audio+Video doesn't work together
+    * [OPENMEETINGS-2102] - User display name is N/A for new users created via Admin
+    * [OPENMEETINGS-2105] -  Incorrect date output in the date of birth.
+    * [OPENMEETINGS-2106] - At Public Conference Room, when try to drop a right video recording from the tree to whiteboard, nothing hapens.
+    * [OPENMEETINGS-2108] - icon for opening "little sharing-window" not appears when closing this window
+    * [OPENMEETINGS-2110] - Restore of backup failed
+    * [OPENMEETINGS-2111] - Empty Ice candidate should be skipped
+    * [OPENMEETINGS-2113] - messed up documents in folder after backup/import
+    * [OPENMEETINGS-2115] - Activities are not cleaned up on Media flow stop
+    * [OPENMEETINGS-2127] - Problems recording when I change the camara default resolution
+    * [OPENMEETINGS-2132] - Turn on/off video is not properly working
+    * [OPENMEETINGS-2134] - Null data when calling getExternal on Room Soap Service
+    * [OPENMEETINGS-2135] - Failed to share screen in latest nightly version #2954
+    * [OPENMEETINGS-2142] - Wrong information in meeting invitation mail
+
+* Improvement
+    * [OPENMEETINGS-2045] - JS code need to be simplified
+    * [OPENMEETINGS-2078] - Shortcut for quick poll is needed
+    * [OPENMEETINGS-2089] - Additional ImageMagic parameter should be added
+    * [OPENMEETINGS-2091] - picture small/invisible when only audio is on
+    * [OPENMEETINGS-2107] - sharing programs/desktop
+    * [OPENMEETINGS-2112] - Minimal mic level should be calculated dynamically
+    * [OPENMEETINGS-2130] - Web  backup needs  confirmation of  import
+    * [OPENMEETINGS-2131] - Need  positive  feedback  during checks  at  converters  stage
+    * [OPENMEETINGS-2137] - new WB REST service should be created
+    * [OPENMEETINGS-2143] - Polish translation need to be improved
+    * [OPENMEETINGS-2144] - sort user list
+
+* Test
+    * [OPENMEETINGS-2095] - Build on Windows fails because of tests
+
+* Task
+    * [OPENMEETINGS-2082] - Sonar issues need to be addressed (M3)
+    * [OPENMEETINGS-2093] - Library versions need to be updated (5.0.0-M3)
+    * [OPENMEETINGS-2123] - FB API should be updated to use v4.0
+    * [OPENMEETINGS-2146] - Hash of file/recording shouldn't be changed on every import
+
+
 Release Notes - Openmeetings - Version 5.0.0-M2
 ================================================================================================================
 

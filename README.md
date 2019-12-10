@@ -48,6 +48,35 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+5.0.0-M3
+-----
+[Release 5.0.0-M3](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M3), provides following improvements:
+
+This release provides WebRTC audio/video/screen-sharing in the Room
+IMPORTANT: Java 11 is required
+Flash plugin is no more required in the browser
+
+Backup/Restore:
+* Multiple issues with restore were fixed
+* Confirmation of backup import was added
+* File/recording hashes are preserved when possible
+
+White board:
+* Document upload/conversion is improved
+* Whiteboards are not auto-created on room enter
+* Keyboard shortcut for quick poll is added
+
+Room:
+* User list is now sorted
+
+Audio/Video:
+* Multiple issues with audio/video/screen sharing are fixed
+
+Please NOTE: this version might be not production ready
+
+Some other fixes and improvements, 36 issues were addressed
+
+
 5.0.0-M2
 -----
 [Release 5.0.0-M2](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M2), provides following improvements:
