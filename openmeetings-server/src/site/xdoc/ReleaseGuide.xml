@@ -133,8 +133,8 @@
 						Create a TAG and commit it to the Git<br/>
 						<source>
 git commit -a -m "4.0.0 Release Candidate 1"
-git tag -s 4.0.0 -m "4.0.0 Release Candidate 1 tag"
-git push origin 4.0.0
+git tag -s 4.0.0-RC1 -m "4.0.0 Release Candidate 1 tag"
+git push origin 4.0.0-RC1
 						</source>
 					</li>
 					<li>
@@ -143,7 +143,7 @@ git push origin 4.0.0
 					</li>
 					<li>
 						<p>Run the command: </p>
-						<source>mvn clean &amp;&amp; mvn install -P allModules,rc</source>
+						<source>mvn clean &amp;&amp; mvn install -PallModules,rc</source>
 					</li>
 					<li>
 						<p>Test building the source on windows and OSx or Linux</p>
