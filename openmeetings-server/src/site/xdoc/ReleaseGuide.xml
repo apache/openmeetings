@@ -31,7 +31,7 @@
 						<li>Git Command line client</li>
 						<li>A text editor</li>
 						<li>You need to be online! The build process actively downloads needed libraries and dependencies.</li>
-						<li>Valid certficate to be able to enter <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a>
+						<li>Valid certficate to be able to enter <a href="https://securesigning.pki.digicert.com/csportal">https://securesigning.pki.digicert.com/csportal</a>
 							Please ask INFRA in case you need one.
 						</li>
 					</ul>
@@ -215,7 +215,7 @@ cd openmeetings-screenshare
 mvn clean install -Prc,release
 						</source>
 					</li>
-					<li>Go to <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a></li>
+					<li>Go to <a href="https://securesigning.pki.digicert.com/csportal">https://securesigning.pki.digicert.com/csportal</a></li>
 					<li>Select "Signing Sets"</li>
 					<li>Select "Add signing set"</li>
 					<li>Enter "Signing set name" (must include "Apache OpenMeetings" and version) for ex. "Apache OpenMeetings 4.0.0-RELEASE"</li>
