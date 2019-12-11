@@ -2,8 +2,29 @@ Apache OpenMeetings Change Log
 ==============================
 Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 
-See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)  
+See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
+
+
+Release Notes - Openmeetings - Version 4.0.10
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-2088] - Internal error on clicking start upload button without selecting file in file uploading
+    * [OPENMEETINGS-2098] - New Whiteboard each time admin logs in
+    * [OPENMEETINGS-2110] - Restore of backup failed
+    * [OPENMEETINGS-2113] - messed up documents in folder after backup/import
+
+* Improvement
+    * [OPENMEETINGS-2078] - Shortcut for quick poll is needed
+    * [OPENMEETINGS-2089] - Additional ImageMagic parameter should be added
+    * [OPENMEETINGS-2143] - Polish translation need to be improved
+    * [OPENMEETINGS-2144] - sort user list
+
+* Task
+    * [OPENMEETINGS-2094] - Library versions need to be updated (4.0.10)
+    * [OPENMEETINGS-2123] - FB API should be updated to use v4.0
+    * [OPENMEETINGS-2146] - Hash of file/recording shouldn't be changed on every import
 
 
 Release Notes - Openmeetings - Version 4.0.9
