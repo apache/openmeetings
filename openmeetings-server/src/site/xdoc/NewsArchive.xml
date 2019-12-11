@@ -20,6 +20,41 @@
 	</properties>
 
 	<body>
+		<section name="Release 4.0.9">
+			<div class="bd-callout bd-callout-info">
+				<h4>Version 4.0.9 released!</h4>
+				<div>Release 4.0.9, provides following improvements:<br/>
+					Backup/Restore:
+					<ul>
+						<li>Recordings of deleted users were restored as public</li>
+						<li>OAuth configs were not properly backup</li>
+					</ul>
+					White board:
+					<ul>
+						<li>Math formula is improved</li>
+						<li>Room files are improved</li>
+						<li>Clean WB REST method perform real-time clean</li>
+					</ul>
+					Room User list:
+					<ul>
+						<li>"Ghost" users are not displayed in the room</li>
+						<li>External user name is displayed as expected</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
+				</div>
+				<br/>
+
+				<span>
+					19 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.9/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344942">Detailed list</a>
+				</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.9">Archived download</a>.</span>
+				<span class="date">(2019-07-15)</span>
+			</div>
+		</section>
 		<section name="Release 4.0.8">
 			<div class="bd-callout bd-callout-info">
 				<h4>Version 4.0.8 released!</h4>
@@ -62,7 +97,7 @@
 					<a href="https://archive.apache.org/dist/openmeetings/4.0.8/CHANGELOG.md">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344753">Detailed list</a>
 				</span>
-				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.8">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.8">Archived download</a>.</span>
 				<span class="date">(2019-03-08)</span>
 			</div>
 		</section>

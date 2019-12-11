@@ -47,6 +47,26 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+4.0.10
+-----
+[Release 4.0.10](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.10), provides following improvements:
+
+Backup/Restore:
+* Multiple issues with restore were fixed
+* Confirmation of backup import was added
+* File/recording hashes are preserved when possible
+
+White board:
+* Document upload/conversion is improved
+* Whiteboards are not auto-created on room enter
+* Keyboard shortcut for quick poll is added
+
+Room:
+* User list is now sorted
+
+Other fixes and improvements, 11 issues were addressed
+
+
 4.0.9
 -----
 [Release 4.0.9](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.9), provides following improvements:
