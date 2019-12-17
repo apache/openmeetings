@@ -308,6 +308,7 @@ public class BackupExport {
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
 		registry.bind(User.class, UserConverter.class);
+		bindDate(registry, list);
 
 		writeList(serializer, zos, "calendars.xml", "calendars", list);
 		progressHolder.setProgress(22);
