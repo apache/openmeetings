@@ -22,15 +22,20 @@
 package org.apache.openmeetings.core.remote;
 
 import static java.util.UUID.randomUUID;
+import static java.util.concurrent.CompletableFuture.delayedExecutor;
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
+import static org.apache.openmeetings.core.remote.KurentoHandler.getFlowoutTimeout;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.util.OmFileHelper.getRecUri;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
 import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -42,7 +47,6 @@ import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.Continuation;
 import org.kurento.client.IceCandidate;
-import org.kurento.client.MediaFlowState;
 import org.kurento.client.MediaProfileSpecType;
 import org.kurento.client.MediaType;
 import org.kurento.client.RecorderEndpoint;
@@ -62,6 +66,7 @@ public class KStream extends AbstractStream {
 	private RecorderEndpoint recorder;
 	private WebRtcEndpoint outgoingMedia = null;
 	private final ConcurrentMap<String, WebRtcEndpoint> listeners = new ConcurrentHashMap<>();
+	private Optional<CompletableFuture<Object>> flowoutFuture = Optional.empty();
 	private Long chunkId;
 	private Type type;
 
@@ -111,14 +116,28 @@ public class KStream extends AbstractStream {
 				break;
 		}
 		outgoingMedia = createEndpoint(processor, sd.getSid(), sd.getUid());
-		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated"));
+		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
 		outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
-			if (MediaFlowState.NOT_FLOWING == evt.getState()) {
-				log.warn("Media FlowOut :: {}", evt.getState());
-				if (StreamType.SCREEN == streamType) {
-					processor.doStopSharing(sid, uid);
-				}
-				stopBroadcast(processor);
+			log.info("Media Flow STATE :: {}", evt.getState());
+			switch (evt.getState()) {
+				case NOT_FLOWING:
+					log.warn("FlowOut Future is created");
+					flowoutFuture = Optional.of(new CompletableFuture<>().completeAsync(() -> {
+						log.warn("KStream will be dropped {}", sd);
+						if (StreamType.SCREEN == streamType) {
+							processor.doStopSharing(sid, uid);
+						}
+						stopBroadcast(processor);
+						return null;
+					}, delayedExecutor(getFlowoutTimeout(), TimeUnit.SECONDS)));
+					break;
+				case FLOWING:
+					flowoutFuture.ifPresent(f -> {
+						log.warn("FlowOut Future is canceled");
+						f.cancel(true);
+						flowoutFuture = Optional.empty();
+					});
+					break;
 			}
 		});
 		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media FlowIn :: {}", evt));

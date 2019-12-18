@@ -154,5 +154,6 @@
 			p:turnMode="rest"
 			p:turnTtl="60"
 			p:objCheckTimeout="200"
+			p:flowoutTimeout="5"
 			/>
 </beans>

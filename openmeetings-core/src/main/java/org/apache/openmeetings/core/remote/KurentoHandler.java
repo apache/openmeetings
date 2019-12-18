@@ -78,8 +78,9 @@ public class KurentoHandler {
 	public static final String TAG_MODE = "mode";
 	public static final String TAG_ROOM = "roomId";
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
-	private final ScheduledExecutorService recheckScheduler = Executors.newScheduledThreadPool(1);
+	private final ScheduledExecutorService kmsRecheckScheduler = Executors.newScheduledThreadPool(1);
 	public static final String KURENTO_TYPE = "kurento";
+	private static int FLOWOUT_TIMEOUT_SEC = 5;
 	private long checkTimeout = 120000; //ms
 	private long objCheckTimeout = 200; //ms
 	private int watchThreadCount = 10;
@@ -122,7 +123,7 @@ public class KurentoHandler {
 				client.getServerManager().addObjectCreatedListener(new KWatchDog());
 			} catch (Exception e) {
 				log.warn("Fail to create Kurento client, will re-try in {} ms", checkTimeout);
-				recheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
+				kmsRecheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
 			}
 		};
 		check.run();
@@ -336,6 +337,14 @@ public class KurentoHandler {
 		this.turnTtl = turnTtl;
 	}
 
+	public void setFlowoutTimeout(int timeout) {
+		FLOWOUT_TIMEOUT_SEC = timeout;
+	}
+
+	static int getFlowoutTimeout() {
+		return FLOWOUT_TIMEOUT_SEC;
+	}
+
 	private class KConnectionListener implements KurentoConnectionListener {
 		final String lkuid;
 
@@ -359,7 +368,7 @@ public class KurentoHandler {
 				connected = false;
 				notifyRooms();
 				destroy();
-				recheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
+				kmsRecheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
 			}
 		}
 
