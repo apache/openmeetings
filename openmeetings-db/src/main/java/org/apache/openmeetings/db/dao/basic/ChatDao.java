@@ -70,8 +70,16 @@ public class ChatDao {
 	public List<ChatMessage> getUserRecent(long userId, Date date, long start, long count) {
 		return setLimits(em.createNamedQuery("getChatMessagesByUserTime", ChatMessage.class)
 					.setParameter(PARAM_USER_ID, userId)
+					.setParameter("status", ChatMessage.Status.CLOSED)
 					.setParameter("date", date)
 				, start, count).getResultList();
+	}
+
+	public void closeMessages(long userId) {
+		em.createNamedQuery("chatCloseMessagesByUser")
+			.setParameter(PARAM_USER_ID, userId)
+			.setParameter("status", ChatMessage.Status.CLOSED)
+			.executeUpdate();
 	}
 
 	public ChatMessage update(ChatMessage entity) {

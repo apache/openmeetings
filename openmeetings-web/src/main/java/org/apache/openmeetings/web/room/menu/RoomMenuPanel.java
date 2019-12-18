@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
@@ -33,6 +34,7 @@ import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -104,6 +106,8 @@ public class RoomMenuPanel extends Panel {
 	@SpringBean
 	private ConfigurationDao cfgDao;
 	@SpringBean
+	private ChatDao chatDao;
+	@SpringBean
 	private KurentoHandler kHandler;
 	@SpringBean
 	private StreamProcessor streamProcessor;
@@ -137,6 +141,7 @@ public class RoomMenuPanel extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
+				chatDao.closeMessages(getUserId());
 				exit(target);
 			}
 		};
