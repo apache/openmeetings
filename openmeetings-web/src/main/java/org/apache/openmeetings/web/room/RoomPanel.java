@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -536,6 +537,7 @@ public class RoomPanel extends BasePanel {
 					case roomExit:
 						sidebar.update(handler);
 						sidebar.addActivity(new Activity(m, Activity.Type.roomExit), handler);
+						handler.appendJavaScript("Chat.removeTab('" + ID_USER_PREFIX + m.getUserId() + "');");
 						break;
 					case roomClosed:
 						handler.add(room.setVisible(false));

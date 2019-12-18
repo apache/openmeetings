@@ -22,6 +22,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,10 +46,15 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name = "getGlobalChatMessages", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NULL AND c.toRoom IS NULL ORDER BY c.sent DESC")
 @NamedQuery(name = "getChatMessagesByRoom", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NULL AND c.toRoom.id = :roomId"
 		+ " AND (true = :all OR (false = :all AND c.needModeration = false)) ORDER BY c.sent DESC")
-@NamedQuery(name = "getChatMessagesByUser", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NOT NULL AND c.toRoom IS NULL AND "
+@NamedQuery(name = "getChatMessagesByUser", query = "SELECT c FROM ChatMessage c WHERE "
+		+ "c.toUser IS NOT NULL AND c.toRoom IS NULL AND "
 		+ "(c.fromUser.id = :userId OR c.toUser.id = :userId) ORDER BY c.sent DESC")
-@NamedQuery(name = "getChatMessagesByUserTime", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NOT NULL AND c.toRoom IS NULL AND "
+@NamedQuery(name = "getChatMessagesByUserTime", query = "SELECT c FROM ChatMessage c WHERE "
+		+ "c.toUser IS NOT NULL AND c.toRoom IS NULL AND c.status <> :status AND "
 		+ "(c.fromUser.id = :userId OR c.toUser.id = :userId) AND c.sent > :date ORDER BY c.sent DESC")
+@NamedQuery(name = "chatCloseMessagesByUser", query = "UPDATE ChatMessage c SET c.status = :status WHERE "
+		+ "c.toUser IS NOT NULL AND c.toRoom IS NULL AND c.status <> :status AND "
+		+ "(c.fromUser.id = :userId OR c.toUser.id = :userId)")
 @NamedQuery(name = "deleteChatGlobal", query = "DELETE FROM ChatMessage c WHERE c.toUser IS NULL AND c.toRoom IS NULL")
 @NamedQuery(name = "deleteChatRoom", query = "DELETE FROM ChatMessage c WHERE c.toUser IS NULL AND c.toRoom.id = :roomId")
 @NamedQuery(name = "deleteChatUser", query = "DELETE FROM ChatMessage c WHERE c.toRoom IS NULL AND c.toUser.id = :userId")
@@ -56,6 +63,11 @@ import org.simpleframework.xml.Root;
 @Root(name = "ChatMessage")
 public class ChatMessage implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
+
+	public enum Status {
+		OPEN
+		, CLOSED
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -97,6 +109,11 @@ public class ChatMessage implements IDataProviderEntity {
 	@Column(name = "from_name")
 	@Element(name = "from_name", data = true, required = false)
 	private String fromName; // this is required for users with no first/last name specified
+
+	@Column(name = "status")
+	@Element(data = true, required = false)
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
 	@Override
 	public Long getId() {
@@ -162,5 +179,13 @@ public class ChatMessage implements IDataProviderEntity {
 
 	public void setFromName(String fromName) {
 		this.fromName = fromName;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 }

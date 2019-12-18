@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
@@ -31,6 +32,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -124,6 +126,7 @@ public class RoomMenuPanel extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
+				getBean(ChatDao.class).closeMessages(getUserId());
 				exit(target);
 			}
 		};
