@@ -21,9 +21,7 @@
 <wicket:panel>
 	<div id="chatTabs">
 		<ul>
-			<li><a href="#chatTab-all"><wicket:message key="1494"/></a></li>
 		</ul>
-		<div id="chatTab-all" class="messageArea"></div>
 	</div>
 	<form wicket:id="sendForm">
 		<div wicket:id="toolbarContainer"></div>
@@ -38,7 +36,6 @@
 		<div id="chat-msg-template" class='msg-row'>
 			<div class='user-row'>
 				<div class='from'></div>
-				<div class='clear icons'></div>
 				<span class='time'></span>
 				<div class="clear"></div>
 			</div>
@@ -47,16 +44,25 @@
 		</div>
 		<div id="chat-accept-template" class='tick om-icon clickable' wicket:message="title:1190"
 			onclick='const e=$(this);chatActivity("accept", e.data("roomid"), e.data("msgid")); e.parent().remove();'></div>
-		<div id="chat-info-template" class='user om-icon clickable' wicket:message="title:1167"
-			onclick='const e=$(this);showUserInfo(e.data("userId"));'></div>
-		<div id="chat-add-template" class='add om-icon clickable' wicket:message="title:1186"
-			onclick='const e=$(this);addContact(e.data("userId"));'></div>
-		<div id="chat-message-template" class='new-email om-icon clickable' wicket:message="title:1253"
-			onclick='const e=$(this);privateMessage(e.data("userId"));'></div>
-		<div id="chat-invite-template" class='invite om-icon clickable' wicket:message="title:1131"
-			onclick='const e=$(this);inviteUser(e.data("userId"));'></div>
 		<span id="chat-close-block" class='ui-icon ui-icon-close' wicket:message="title:85"
 			role='presentation'></span>
+
+		<div id="chat-msg-area-template" class="messageArea">
+			<div class="clear icons actions short">
+				<div class='user om-icon clickable' wicket:message="title:1167"
+						onclick='const e=$(this).parent();showUserInfo(e.data("userId"));'></div>
+			</div>
+			<div class="clear icons actions full">
+				<div class='user om-icon clickable' wicket:message="title:1167"
+						onclick='const e=$(this).parent();showUserInfo(e.data("userId"));'></div>
+				<div class='add om-icon clickable' wicket:message="title:1186"
+						onclick='const e=$(this);addContact(e.data("userId"));'></div>
+				<div class='new-email om-icon clickable' wicket:message="title:1253"
+						onclick='const e=$(this);privateMessage(e.data("userId"));'></div>
+				<div class='invite om-icon clickable' wicket:message="title:1131"
+						onclick='const e=$(this);inviteUser(e.data("userId"));'></div>
+			</div>
+		</div>
 	</div>
 </wicket:panel>
 </html>

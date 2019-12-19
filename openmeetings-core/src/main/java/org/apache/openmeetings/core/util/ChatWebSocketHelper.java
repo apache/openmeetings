@@ -73,7 +73,7 @@ public class ChatWebSocketHelper extends WebSocketHelper {
 					.put("id", m.getId())
 					.put("message", smsg)
 					.put("from", from)
-					.put("actions", curUser.getId() == m.getFromUser().getId() ? "short" : "full")
+					.put("actions", curUser.getId().equals(m.getFromUser().getId()) ? "short" : "full")
 				, m, curUser, true));
 		}
 		return new JSONObject()
