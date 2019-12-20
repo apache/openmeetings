@@ -106,7 +106,7 @@ public class WbWebService extends BaseWebService {
 	 * @param sid - The SID of the User. This SID must be marked as Loggedin
 	 * @param roomId - id of the room to clean
 	 * @param wbId - id of the white board to clean
-	 * @param slideNo - slide number (zero based)
+	 * @param slide - slide number (zero based)
 	 * @return - serviceResult object with the result
 	 */
 	@WebMethod
