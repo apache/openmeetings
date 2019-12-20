@@ -96,9 +96,6 @@ public class SCryptImplementation implements ICrypt {
 		if (SHA256Implementation.verify(str, hash)) {
 			return true;
 		}
-		if (MD5Implementation.verify(str, hash)) {
-			return true;
-		}
 		return false;
 	}
 
