@@ -391,7 +391,7 @@ public class ImportInitvalues {
 
 		r.setOwnerId(null);
 
-		r.setWaitForRecording(false);
+		r.setWaitRecording(false);
 		r.setAllowRecording(true);
 
 		if (groupId != null) {

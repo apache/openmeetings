@@ -23,13 +23,13 @@ import java.time.Duration;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-public abstract class OmRedirectTimerBehavior extends AbstractAjaxTimerBehavior {
+public abstract class OmTimerBehavior extends AbstractAjaxTimerBehavior {
 	private static final long serialVersionUID = 1L;
 	private final long clock;
 	private final int delay;
 	private final String labelId;
 
-	public OmRedirectTimerBehavior(int delay, String labelId) {
+	public OmTimerBehavior(int delay, String labelId) {
 		super(Duration.ofSeconds(1));
 		clock = System.currentTimeMillis();
 		this.delay = delay;
@@ -41,7 +41,7 @@ public abstract class OmRedirectTimerBehavior extends AbstractAjaxTimerBehavior 
 	}
 
 	public static String getText(String text, int remain) {
-		return String.format("%s: %s", text, getTime(remain));
+		return text + ": " + getTime(remain);
 	}
 
 	protected String getText(int remain) {
@@ -61,7 +61,7 @@ public abstract class OmRedirectTimerBehavior extends AbstractAjaxTimerBehavior 
 	}
 
 	/**
-	 * @param remain - time in seconds until redirect
+	 * @param remain - time in seconds until finish
 	 */
 	protected void onTimer(int remain) {
 	}

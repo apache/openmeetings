@@ -59,7 +59,7 @@ public class RedirectMessageDialog extends NonClosableMessageDialog {
 	}
 
 	private void startTimer(IPartialPageRequestHandler handler) {
-		label.add(new OmRedirectTimerBehavior(DELAY, labelId) {
+		label.add(new OmTimerBehavior(DELAY, labelId) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -86,7 +86,11 @@ public class RedirectMessageDialog extends NonClosableMessageDialog {
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("autoOpen", autoOpen);
-		behavior.setOption("resizable", false);
+	}
+
+	@Override
+	public boolean isResizable() {
+		return false;
 	}
 
 	@Override
@@ -97,11 +101,6 @@ public class RedirectMessageDialog extends NonClosableMessageDialog {
 	@Override
 	public boolean isDefaultCloseEventEnabled() {
 		return false;
-	}
-
-	@Override
-	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		//no-op
 	}
 
 	@Override

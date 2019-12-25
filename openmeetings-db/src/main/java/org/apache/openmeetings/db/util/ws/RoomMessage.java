@@ -55,6 +55,7 @@ public class RoomMessage implements IWebSocketPushMessage {
 		, quickPollUpdated
 		, kurentoStatus
 		, wbReload
+		, moderatorInRoom
 	}
 	private final Date timestamp;
 	private final String uid;

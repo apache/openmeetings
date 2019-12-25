@@ -210,7 +210,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("audioOnly"));
 		add(new CheckBox("closed"));
 		add(new TextField<String>("redirectURL"));
-		add(new CheckBox("waitForRecording"));
+		add(new CheckBox("waitRecording"));
 		add(new CheckBox("allowRecording"));
 		add(new CheckBox("chatModerated"));
 
@@ -321,6 +321,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		}).setOutputMarkupId(true));
 
 		add(new CheckBox("moderated"));
+		add(new CheckBox("waitModerator"));
 
 		// Files
 		Form<Void> filesForm = new Form<>("filesForm");

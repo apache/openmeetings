@@ -95,7 +95,11 @@ public class InvitationPasswordDialog extends NonClosableDialog<Invitation> {
 		super.onConfigure(behavior);
 		Invitation i = WebSession.get().getInvitation();
 		behavior.setOption("autoOpen", i != null && i.isPasswordProtected());
-		behavior.setOption("resizable", false);
+	}
+
+	@Override
+	public boolean isResizable() {
+		return false;
 	}
 
 	@Override

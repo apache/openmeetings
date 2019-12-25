@@ -216,7 +216,11 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 			public void onConfigure(JQueryBehavior behavior) {
 				super.onConfigure(behavior);
 				behavior.setOption("autoOpen", error);
-				behavior.setOption("resizable", false);
+			}
+
+			@Override
+			public boolean isResizable() {
+				return false;
 			}
 
 			@Override

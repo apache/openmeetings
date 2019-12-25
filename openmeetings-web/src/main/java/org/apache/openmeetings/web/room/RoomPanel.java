@@ -59,6 +59,7 @@ import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.QuickPollManager;
+import org.apache.openmeetings.web.app.TimerService;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.pages.BasePage;
@@ -189,7 +190,8 @@ public class RoomPanel extends BasePanel {
 		}
 	};
 	private RedirectMessageDialog roomClosed;
-	private MessageDialog clientKicked, waitForModerator, waitApplyModeration;
+	private MessageDialog clientKicked, nooneCanHelp, waitApplyModeration;
+	private WaitModeratorDialog waitModerator;
 
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
@@ -244,6 +246,8 @@ public class RoomPanel extends BasePanel {
 	private KurentoHandler kHandler;
 	@SpringBean
 	private StreamProcessor streamProcessor;
+	@SpringBean
+	private TimerService timerService;
 
 	public RoomPanel(String id, Room r) {
 		super(id);
@@ -264,6 +268,7 @@ public class RoomPanel extends BasePanel {
 		cm.update(getClient().updateUser(userDao));
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
 
+		room.setOutputMarkupPlaceholderTag(true);
 		room.add(menu = new RoomMenuPanel("menu", this));
 		room.add(AttributeModifier.append("data-room-id", r.getId()));
 		if (interview) {
@@ -359,7 +364,7 @@ public class RoomPanel extends BasePanel {
 				room.setVisible(false);
 			}
 		}
-		waitForModerator = new MessageDialog("wait-for-moderator", getString("204"), getString("696"), DialogButtons.OK, DialogIcon.LIGHT) {
+		nooneCanHelp = new MessageDialog("noone-can-help", getString("204"), getString("696"), DialogButtons.OK, DialogIcon.LIGHT) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -375,16 +380,19 @@ public class RoomPanel extends BasePanel {
 				// no-op
 			}
 		};
-		add(room, accessDenied, eventDetail, waitForModerator, waitApplyModeration);
-		if (r.isWaitForRecording()) {
-			add(new MessageDialog("wait-for-recording", getString("1316"), getString("1315"), DialogButtons.OK, DialogIcon.LIGHT) {
+		if (r.isWaitRecording()) {
+			add(new MessageDialog("wait-recording", getString("1316"), getString("1315"), DialogButtons.OK, DialogIcon.LIGHT) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
 				public void onConfigure(JQueryBehavior behavior) {
 					super.onConfigure(behavior);
 					behavior.setOption("autoOpen", true);
-					behavior.setOption("resizable", false);
+				}
+
+				@Override
+				public boolean isResizable() {
+					return false;
 				}
 
 				@Override
@@ -393,7 +401,7 @@ public class RoomPanel extends BasePanel {
 				}
 			});
 		} else {
-			add(new WebMarkupContainer("wait-for-recording").setVisible(false));
+			add(new WebMarkupContainer("wait-recording").setVisible(false));
 		}
 		RepeatingView groupstyles = new RepeatingView("groupstyle");
 		add(groupstyles.setVisible(room.isVisible() && !r.getGroups().isEmpty()));
@@ -408,9 +416,37 @@ public class RoomPanel extends BasePanel {
 						));
 				groupstyles.add(groupstyle);
 			}
+			//We are setting initial rights here
+			Client c = getClient();
+			final int count = cm.addToRoom(c.setRoom(getRoom()));
+			SOAPLogin soap = WebSession.get().getSoapLogin();
+			if (soap != null && soap.isModerator()) {
+				c.allow(Right.superModerator);
+				cm.update(c);
+			} else {
+				Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? apptDao.getByRoom(r.getId()) : null, count);
+				if (!rr.isEmpty()) {
+					c.allow(rr);
+					cm.update(c);
+					log.info("Setting rights for client:: {} -> {}", rr, c.hasRight(Right.moderator));
+				}
+			}
+			if (r.isModerated() && r.isWaitModerator()
+					&& !c.hasRight(Right.moderator)
+					&& cm.listByRoom(r.getId(), cl -> cl.hasRight(Right.moderator)).isEmpty())
+			{
+				room.setVisible(false);
+				createWaitModerator(true);
+				getMainPanel().getChat().toggle(null, false);
+			}
+			timerService.scheduleModCheck(r);
 		} else {
 			add(new WebMarkupContainer("nickname").setVisible(false));
 		}
+		if (waitModerator == null) {
+			createWaitModerator(false);
+		}
+		add(room, accessDenied, eventDetail, waitModerator, nooneCanHelp, waitApplyModeration);
 		add(clientKicked = new MessageDialog("client-kicked", getString("797"), getString("606"), DialogButtons.OK, DialogIcon.ERROR) {
 			private static final long serialVersionUID = 1L;
 
@@ -555,6 +591,25 @@ public class RoomPanel extends BasePanel {
 							wb.reloadWb(handler);
 						}
 						break;
+					case moderatorInRoom: {
+						if (!r.isModerated() || !r.isWaitModerator()) {
+							log.warn("Something weird: `moderatorInRoom` in wrong room {}", r);
+						} else if (!_c.hasRight(Room.Right.moderator)) {
+							boolean moderInRoom = Boolean.TRUE.equals(Boolean.valueOf(((TextRoomMessage)m).getText()));
+							log.warn("!! moderatorInRoom: {}", moderInRoom);
+							if (room.isVisible() != moderInRoom) {
+								handler.add(room.setVisible(moderInRoom));
+								getMainPanel().getChat().toggle(handler, moderInRoom && !r.isHidden(RoomElement.Chat));
+								if (room.isVisible()) {
+									handler.appendJavaScript(roomEnter.getCallbackScript());
+									waitModerator.close(handler, null);
+								} else {
+									waitModerator.open(handler);
+								}
+							}
+						}
+					}
+						break;
 				}
 			}
 		}
@@ -579,28 +634,6 @@ public class RoomPanel extends BasePanel {
 					}
 				}
 				handler.appendJavaScript(String.format("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(false);WbArea.setRecEnabled(%s);}", hasStreams));
-			}
-		}
-	}
-
-	@Override
-	protected void onBeforeRender() {
-		super.onBeforeRender();
-		if (room.isVisible()) {
-			//We are setting initial rights here
-			Client c = getClient();
-			final int count = cm.addToRoom(c.setRoom(getRoom()));
-			SOAPLogin soap = WebSession.get().getSoapLogin();
-			if (soap != null && soap.isModerator()) {
-				c.allow(Right.superModerator);
-				cm.update(c);
-			} else {
-				Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? apptDao.getByRoom(r.getId()) : null, count);
-				if (!rr.isEmpty()) {
-					c.allow(rr);
-					cm.update(c);
-					log.info("Setting rights for client:: {} -> {}", rr, cm.get(c.getUid()).hasRight(Right.moderator));
-				}
 			}
 		}
 	}
@@ -640,9 +673,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void show(IPartialPageRequestHandler handler) {
-		if (!r.isHidden(RoomElement.Chat)) {
-			getMainPanel().getChat().toggle(handler, true);
-		}
+		getMainPanel().getChat().toggle(handler, !r.isHidden(RoomElement.Chat));
 		handler.add(this.setVisible(true));
 		handler.appendJavaScript("Room.load();");
 	}
@@ -677,7 +708,7 @@ public class RoomPanel extends BasePanel {
 		if (mods.isEmpty()) {
 			if (r.isModerated()) {
 				//dialog
-				waitForModerator.open(handler);
+				nooneCanHelp.open(handler);
 				return;
 			} else {
 				// we found no-one we can ask, allow right
@@ -789,6 +820,10 @@ public class RoomPanel extends BasePanel {
 
 	public boolean isInterview() {
 		return interview;
+	}
+
+	private void createWaitModerator(final boolean autoopen) {
+		waitModerator = new WaitModeratorDialog("wait-moderator", getString("204"), autoopen);
 	}
 
 	@Override

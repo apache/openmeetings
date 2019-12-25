@@ -49,7 +49,7 @@ import org.apache.openmeetings.web.common.ImagePanel;
 import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.common.menu.RoomMenuItem;
-import org.apache.openmeetings.web.room.OmRedirectTimerBehavior;
+import org.apache.openmeetings.web.room.OmTimerBehavior;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -155,7 +155,7 @@ public class RoomMenuPanel extends Panel {
 		Room r = room.getRoom();
 		add(demo.setVisible(r.isDemoRoom() && r.getDemoTime() != null && room.getRoom().getDemoTime().intValue() > 0));
 		if (demo.isVisible()) {
-			demo.add(new OmRedirectTimerBehavior(room.getRoom().getDemoTime().intValue(), "637") {
+			demo.add(new OmTimerBehavior(room.getRoom().getDemoTime().intValue(), "637") {
 				private static final long serialVersionUID = 1L;
 
 				@Override

@@ -41,12 +41,16 @@ public class KickMessageDialog extends AbstractDialog<String> {
 	}
 
 	@Override
+	public boolean isResizable() {
+		return false;
+	}
+
+	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("autoOpen", true);
 		behavior.setOption("closeOnEscape", false);
 		behavior.setOption("classes", "{'ui-dialog-titlebar': 'ui-corner-all no-close'}");
-		behavior.setOption("resizable", false);
 	}
 
 	@Override

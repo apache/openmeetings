@@ -130,7 +130,11 @@ public class SignInDialog extends NonClosableDialog<String> {
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("autoOpen", true);
-		behavior.setOption("resizable", false);
+	}
+
+	@Override
+	public boolean isResizable() {
+		return false;
 	}
 
 	@Override

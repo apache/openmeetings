@@ -109,7 +109,7 @@
 					<div class="formelement">
 						<div class="info-text"><wicket:message key="1102" /></div>
 						<br/>
-						<label wicket:for="waitForRecording"><wicket:message key="1356" /></label><input type="checkbox" class="formcheckbox" wicket:id="waitForRecording" />
+						<label wicket:for="waitRecording"><wicket:message key="1356" /></label><input type="checkbox" class="formcheckbox" wicket:id="waitRecording" />
 					</div>
 					<div class="formelement">
 						<label wicket:for="allowRecording"><wicket:message key="1355" /></label><input type="checkbox" class="formcheckbox" wicket:id="allowRecording" />
@@ -201,6 +201,10 @@
 					<div class="formelement">
 						<div class="info-text"><wicket:message key="823" /></div>
 						<label wicket:for="moderated"><wicket:message key="640" /></label><input type="checkbox" class="formcheckbox" wicket:id="moderated" />
+					</div>
+					<div class="formelement">
+						<div class="info-text"><wicket:message key="admin.room.wait-moderator.info" /></div>
+						<label wicket:for="waitModerator"><wicket:message key="admin.room.wait-moderator.label" /></label><input type="checkbox" class="formcheckbox" wicket:id="waitModerator" />
 					</div>
 					<div class="formelement">
 						<label wicket:for="moderator2add"><wicket:message key="816" /></label><div class="om-select2"><select wicket:id="moderator2add" class="input"></select></div>

@@ -214,21 +214,26 @@ public class Room extends HistoricalEntity {
 	@Element(data = true, required = false)
 	private Integer demoTime; // In Seconds
 
-	// If this is true all participants of a meeting have to wait for the
-	// moderator to come into the room
-	@Column(name = "ismoderatedroom", nullable = false)
+	// If this is true noone can automatically get additional rights
+	@Column(name = "moderated", nullable = false)
 	@Element(name="isModeratedRoom", data = true, required = false)
 	private boolean moderated;
+
+	// If this is true all participants of a meeting have to wait for the
+	// moderator to come into the room
+	@Column(name = "wait_moderator", nullable = false)
+	@Element(name="waitModerator", data = true, required = false)
+	private boolean waitModerator;
 
 	@Column(name = "allow_user_questions", nullable = false)
 	@Element(data = true, required = false)
 	private boolean allowUserQuestions;
 
-	@Column(name = "is_audio_only", nullable = false)
+	@Column(name = "audio_only", nullable = false)
 	@Element(name = "isAudioOnly", data = true, required = false)
 	private boolean audioOnly;
 
-	@Column(name = "is_closed", nullable = false)
+	@Column(name = "closed", nullable = false)
 	@Element(data = true, required = false)
 	private boolean closed;
 
@@ -242,8 +247,7 @@ public class Room extends HistoricalEntity {
 
 	@Column(name = "wait_for_recording", nullable = false)
 	@Element(data = true, required = false)
-	private boolean waitForRecording; // Show warning that user has to start
-										// recording
+	private boolean waitRecording; // Show warning that user has to start recording
 
 	@Column(name = "allow_recording", nullable = false)
 	@Element(name = "allowRecording", data = true, required = false)
@@ -383,6 +387,14 @@ public class Room extends HistoricalEntity {
 		this.moderated = moderated;
 	}
 
+	public boolean isWaitModerator() {
+		return waitModerator;
+	}
+
+	public void setWaitModerator(boolean waitModerator) {
+		this.waitModerator = waitModerator;
+	}
+
 	public String getExternalId() {
 		return externalId;
 	}
@@ -455,12 +467,12 @@ public class Room extends HistoricalEntity {
 		this.ownerId = ownerId;
 	}
 
-	public boolean isWaitForRecording() {
-		return waitForRecording;
+	public boolean isWaitRecording() {
+		return waitRecording;
 	}
 
-	public void setWaitForRecording(boolean waitForRecording) {
-		this.waitForRecording = waitForRecording;
+	public void setWaitRecording(boolean waitRecording) {
+		this.waitRecording = waitRecording;
 	}
 
 	public boolean isAllowRecording() {

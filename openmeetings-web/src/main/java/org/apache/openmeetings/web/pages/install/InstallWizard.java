@@ -137,7 +137,11 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		super.onConfigure(behavior);
 		behavior.setOption("closeOnEscape", false);
 		behavior.setOption("classes", "{'ui-dialog-titlebar': 'ui-corner-all no-close'}");
-		behavior.setOption("resizable", false);
+	}
+
+	@Override
+	public boolean isResizable() {
+		return false;
 	}
 
 	@Override

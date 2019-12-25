@@ -16,27 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.util;
+package org.apache.openmeetings.web.room;
 
 import java.util.List;
 
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
-public abstract class NonClosableMessageDialog extends MessageDialog {
+public class WaitModeratorDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
+	private final boolean autoopen;
 
-	public NonClosableMessageDialog(String id, String title, String message) {
-		super(id, title, message, DialogButtons.OK, DialogIcon.INFO);
-	}
-
-	public NonClosableMessageDialog(String id, String title, String message, List<DialogButton> buttons, DialogIcon icon) {
-		super(id, title, message, buttons, icon);
+	public WaitModeratorDialog(String id, String title, boolean autoopen) {
+		super(id, title);
+		this.autoopen = autoopen;
 	}
 
 	@Override
@@ -44,6 +41,13 @@ public abstract class NonClosableMessageDialog extends MessageDialog {
 		super.onConfigure(behavior);
 		behavior.setOption("classes", "{'ui-dialog-titlebar': 'ui-corner-all no-close'}");
 		behavior.setOption("closeOnEscape", false);
+		behavior.setOption("autoOpen", autoopen);
+		behavior.setOption("appendTo", Options.asString(".room-block"));
+	}
+
+	@Override
+	protected List<DialogButton> getButtons() {
+		return List.of();
 	}
 
 	@Override

@@ -87,7 +87,11 @@ public class NicknameDialog extends NonClosableDialog<User> {
 			u.setLastname(String.format("%s %s", u.getFirstname(), TIME_DF.format(new Date())));
 		}
 		behavior.setOption("autoOpen", visible);
-		behavior.setOption("resizable", false);
+	}
+
+	@Override
+	public boolean isResizable() {
+		return false;
 	}
 
 	@Override

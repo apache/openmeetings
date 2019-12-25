@@ -62,9 +62,10 @@ public class RoomDTO implements Serializable {
 	private String externalType;
 	private String redirectUrl;
 	private boolean moderated;
+	private boolean waitModerator;
 	private boolean allowUserQuestions;
 	private boolean allowRecording;
-	private boolean waitForRecording;
+	private boolean waitRecording;
 	private boolean audioOnly;
 	private Set<RoomElement> hiddenElements = new HashSet<>();
 	private List<RoomFileDTO> files = new ArrayList<>();
@@ -89,9 +90,10 @@ public class RoomDTO implements Serializable {
 		externalType = r.externalType();
 		redirectUrl = r.getRedirectURL();
 		moderated = r.isModerated();
+		waitModerator = r.isWaitModerator();
 		allowUserQuestions = r.isAllowUserQuestions();
 		allowRecording = r.isAllowRecording();
-		waitForRecording = r.isWaitForRecording();
+		waitRecording = r.isWaitRecording();
 		audioOnly = r.isAudioOnly();
 		hiddenElements = r.getHiddenElements();
 		files = RoomFileDTO.get(r.getFiles());
@@ -117,9 +119,10 @@ public class RoomDTO implements Serializable {
 		}
 		r.setRedirectURL(redirectUrl);
 		r.setModerated(moderated);
+		r.setWaitModerator(waitModerator);
 		r.setAllowUserQuestions(allowUserQuestions);
 		r.setAllowRecording(allowRecording);
-		r.setWaitForRecording(waitForRecording);
+		r.setWaitRecording(waitRecording);
 		r.setAudioOnly(audioOnly);
 		r.setHiddenElements(hiddenElements);
 		r.setFiles(RoomFileDTO.get(id, files, fileDao));
@@ -222,12 +225,12 @@ public class RoomDTO implements Serializable {
 		this.allowRecording = allowRecording;
 	}
 
-	public boolean isWaitForRecording() {
-		return waitForRecording;
+	public boolean isWaitRecording() {
+		return waitRecording;
 	}
 
-	public void setWaitForRecording(boolean waitForRecording) {
-		this.waitForRecording = waitForRecording;
+	public void setWaitRecording(boolean waitRecording) {
+		this.waitRecording = waitRecording;
 	}
 
 	public boolean isAudioOnly() {
@@ -328,9 +331,10 @@ public class RoomDTO implements Serializable {
 		r.externalType = o.optString("externalType", null);
 		r.redirectUrl = o.optString("redirectUrl");
 		r.moderated = o.optBoolean("moderated", false);
+		r.waitModerator = o.optBoolean("waitModerator", false);
 		r.allowUserQuestions = o.optBoolean("allowUserQuestions", false);
 		r.allowRecording = o.optBoolean("allowRecording", false);
-		r.waitForRecording = o.optBoolean("waitForRecording", false);
+		r.waitRecording = o.optBoolean("waitRecording", false);
 		r.audioOnly = o.optBoolean("audioOnly", false);
 		r.getHiddenElements().addAll(optEnumList(RoomElement.class, o.optJSONArray("hiddenElements")));
 		JSONArray fa = o.optJSONArray("files");
