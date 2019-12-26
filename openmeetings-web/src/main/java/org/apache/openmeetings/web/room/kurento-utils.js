@@ -308,10 +308,10 @@ function WebRtcPeer(mode, options, callback) {
             useAudio = typeof mediaConstraints.audio === 'boolean' ? mediaConstraints.audio : true;
             useVideo = typeof mediaConstraints.video === 'boolean' ? mediaConstraints.video : true;
         }
-        if (useAudio) {
+        if (mode !== 'sendonly' && useAudio) {
             pc.addTransceiver('audio', { direction: mode });
         }
-        if (useVideo) {
+        if (mode !== 'sendonly' && useVideo) {
             pc.addTransceiver('video', { direction: mode });
         }
         if (typeof AdapterJS !== 'undefined' && AdapterJS.webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9) {
