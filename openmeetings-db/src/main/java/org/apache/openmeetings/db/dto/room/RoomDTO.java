@@ -110,6 +110,7 @@ public class RoomDTO implements Serializable {
 		r.setConfno(confno);
 		r.setIspublic(isPublic);
 		r.setDemoRoom(demo);
+		r.setClosed(closed);
 		r.setDemoTime(demoTime);
 		r.setExternalId(externalId);
 		if (!Strings.isEmpty(externalType)
