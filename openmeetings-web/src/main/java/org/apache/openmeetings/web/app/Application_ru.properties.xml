@@ -1001,4 +1001,5 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="reset.whiteboard"><![CDATA[Восстановить начальную доску]]></entry>
 	<entry key="admin.room.wait-moderator.info"><![CDATA[Никто не сможет воспользоваться комнатой пока нет модератора]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Ждать модератора]]></entry>
+	<entry key="wait-moderator.title"><![CDATA[Пожалуйста подождите ...]]></entry>
 </properties>

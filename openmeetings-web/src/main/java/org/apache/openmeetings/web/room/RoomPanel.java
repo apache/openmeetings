@@ -823,7 +823,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	private void createWaitModerator(final boolean autoopen) {
-		waitModerator = new WaitModeratorDialog("wait-moderator", getString("204"), autoopen);
+		waitModerator = new WaitModeratorDialog("wait-moderator", getString("wait-moderator.title"), autoopen);
 	}
 
 	@Override
