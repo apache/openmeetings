@@ -152,13 +152,15 @@ var NetTest = (function() {
 		_log($('<span></span>').append(lbls['jitter'])
 				.append(':').append(_value(max - avg, lbls['ms']))
 				.append(';').append(_value(min - avg, lbls['ms'])));
-		_setResult('')
+		_setResult($('<div></div>')
+				.append($('<div class="line"></div>').append(lbls['jitter.avgAbbr'] + '&nbsp;').append(_value(avg, lbls['ms'])))
+				.append($('<div class="line"></div>').append(lbls['jitter'] + '&nbsp;').append(_value(max - avg, lbls['ms']))));
 	}
 	function _pingEnd(avg, _all) {
 		_log($('<span></span>').append(lbls['ping.avg']).append(_value(avg, lbls['ms'])));
 		_log($('<span></span>').append(lbls['ping.rcv']).append(_value(_all.length, '')));
 		_log($('<span></span>').append(lbls['ping.lost']).append(_value(PINGS - _all.length, '')));
-		_setResult(_value(avg, lbls['ms']))
+		_setResult(_value(avg, lbls['ms']));
 	}
 	function _restart(size) {
 		__start(size, false);
@@ -189,7 +191,7 @@ var NetTest = (function() {
 				.append(lbls[testName === 'upload' ? 'upl.speed' : 'dwn.speed'])
 				.append(val);
 		_log(msg);
-		_setResult(val)
+		_setResult(val);
 	}
 	function _delimiter(text) {
 		return $('<span class="delim"></span>').html(text);
@@ -203,11 +205,7 @@ var NetTest = (function() {
 		output.find('span').last()[0].scrollIntoView(false);
 	}
 	function _value(value, unit) {
-		if (value != null) {
-			return $('<span class="value">' + value.toFixed(3) + ' ' + unit + '</span>');
-		} else {
-			return $('<span class="value">null</span>');
-		}
+		return $('<span class="value"></span>').append(value == null ? 'null' : value.toFixed(1) + ' ' + unit);
 	}
 
 	self.init = _init;

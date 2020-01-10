@@ -67,7 +67,7 @@ public class NetTestPanel extends BasePanel {
 				, "network.test.ping.lost", "network.test.ping.load"
 				, "network.test.port", "network.test.port.avail", "network.test.port.stopped"
 				, "network.test.jitter", "network.test.jitter.avg", "network.test.jitter.min"
-				, "network.test.jitter.max"
+				, "network.test.jitter.max", "network.test.jitter.avgAbbr"
 				, "network.test.dwn", "network.test.dwn.bytes", "network.test.dwn.time"
 				, "network.test.dwn.speed"
 				, "network.test.upl", "network.test.upl.bytes", "network.test.upl.time"

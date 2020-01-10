@@ -853,6 +853,7 @@ target="_blank">Custom Crypt Mechanism</a>
 	<entry key="network.test.dwn.time"><![CDATA[زمان دریافت]]></entry>
 	<entry key="network.test.jitter"><![CDATA[Jitter]]></entry>
 	<entry key="network.test.jitter.avg"><![CDATA[زمان متوسط]]></entry>
+	<entry key="network.test.jitter.avgAbbr"><![CDATA[Avg.]]></entry>
 	<entry key="network.test.jitter.max"><![CDATA[زمان ماکزیمم]]></entry>
 	<entry key="network.test.jitter.min"><![CDATA[زمان حداقل]]></entry>
 	<entry key="network.test.mb"><![CDATA[مگا بیت]]></entry>

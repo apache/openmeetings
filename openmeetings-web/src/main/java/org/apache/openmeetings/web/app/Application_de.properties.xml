@@ -863,6 +863,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.dwn.time"><![CDATA[Download time]]></entry>
 	<entry key="network.test.jitter"><![CDATA[Jitter]]></entry>
 	<entry key="network.test.jitter.avg"><![CDATA[Average time]]></entry>
+	<entry key="network.test.jitter.avgAbbr"><![CDATA[Avg.]]></entry>
 	<entry key="network.test.jitter.max"><![CDATA[Max time]]></entry>
 	<entry key="network.test.jitter.min"><![CDATA[Min time]]></entry>
 	<entry key="network.test.mb"><![CDATA[Mb]]></entry>

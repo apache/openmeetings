@@ -18,6 +18,13 @@
 	width: 80px;
 	height: 40px;
 }
+.nettest .test-container button .line {
+	white-space: nowrap;
+}
+.nettest .test-container button .line .value {
+	width: auto;
+	height: auto;
+}
 .nettest .test-container button.not-started
 	, .nettest .test-container button.started
 {

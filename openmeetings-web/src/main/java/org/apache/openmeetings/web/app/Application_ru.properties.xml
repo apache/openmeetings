@@ -858,6 +858,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.dwn.time"><![CDATA[Время скачивания]]></entry>
 	<entry key="network.test.jitter"><![CDATA[Колебания]]></entry>
 	<entry key="network.test.jitter.avg"><![CDATA[Среднее время]]></entry>
+	<entry key="network.test.jitter.avgAbbr"><![CDATA[Ср-нее]]></entry>
 	<entry key="network.test.jitter.max"><![CDATA[Максимальное время]]></entry>
 	<entry key="network.test.jitter.min"><![CDATA[Минимальное время]]></entry>
 	<entry key="network.test.mb"><![CDATA[Мб]]></entry>
