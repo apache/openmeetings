@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Player = (function() {
 	const player = {}, mainColor = '#ff6600', rad = 20;
-	let trg, rectPause1, rectPause2, play, cProgress, progress;
+	let trg, circle, rectPause1, rectPause2, play, cProgress, progress;
 
 	function _sendStatus(g, _paused, _pos) {
 		g.status.paused = _paused;
@@ -44,16 +44,15 @@ var Player = (function() {
 			, stroke: mainColor
 			, fill: mainColor
 		});
-		play = new fabric.Group([
-				new fabric.Circle({
-					left: rad
-					, top: _o.height - 3 * rad
-					, radius: rad
-					, stroke: mainColor
-					, strokeWidth: 2
-					, fill: null
-				})
-				, trg, rectPause1, rectPause2]
+		circle = new fabric.Circle({
+			left: rad
+			, top: _o.height - 3 * rad
+			, radius: rad
+			, stroke: mainColor
+			, strokeWidth: 2
+			, fill: null
+		});
+		play = new fabric.Group([circle, trg, rectPause1, rectPause2]
 			, {
 				objectCaching: false
 				, visible: false
@@ -152,22 +151,15 @@ var Player = (function() {
 				}
 			});
 			play.on({
-				/*
-				 * https://github.com/kangax/fabric.js/issues/4115
-				 *
 				'mouseover': function() {
-					circle1.set({strokeWidth: 4});
+					circle.set({strokeWidth: 4});
 					canvas.requestRenderAll();
 				}
 				, 'mouseout': function() {
-					circle1.set({
-						left: pos.left
-						, top: pos.top
-						, strokeWidth: 2
-					});
+					circle.set({strokeWidth: 2});
 					canvas.requestRenderAll();
 				}
-				, */'mousedown': function () {
+				, 'mousedown': function () {
 					play.set({
 						left: pos.left + 3
 						, top: pos.top + 3
