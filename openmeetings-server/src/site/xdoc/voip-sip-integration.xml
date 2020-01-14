@@ -257,7 +257,7 @@ write = all
 				Modify <tt>/opt/om/webapps/openmeetings/WEB-INF/classes/applicationContext.xml</tt><br />
 				find <strong>&lt;bean id="sipDao" class="org.apache.openmeetings.db.dao.room.SipDao"&gt;</strong>
 				uncomment its parameters and set it to your custom values.<br/>
-				set value for <tt>uid</tt> property to unique secret value (can be generated here <a href="https://www.uuidgenerator.net">https://www.uuidgenerator.net</a>)
+				set value for <tt>uid</tt> property to unique secret value (can be generated here <a href="https://www.uuidtools.com">https://www.uuidtools.com</a>)
 				and sync it with <tt>settings.properties</tt> of red5sip (see below)
 				<p style="font-size: larger; color: blue;">
 					IMPORTANT: this step should be done <strong>BEFORE</strong> system install/restore
@@ -306,7 +306,7 @@ sip.secret=12345 # sip password
 sip.realm=asterisk # sip realm
 sip.proxy=127.0.0.1 # address of sip proxy
 rooms.forceStart=no # TBD
-uid=87dddad4-9ca5-475b-860f-2e0825d02b76 #can be generated here: https://www.uuidgenerator.net/
+uid=87dddad4-9ca5-475b-860f-2e0825d02b76 #can be generated here: https://www.uuidtools.com/
 rooms=1 # TBD (not in use)
 ]]>
 					</source>
