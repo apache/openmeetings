@@ -75,7 +75,7 @@
 		<!-- dependency versions -->
 		<junit.version>5.5.2</junit.version>
 		<wicket.version>9.0.0-M4</wicket.version>
-		<wicketju.version>9.0.0-M3.1</wicketju.version>
+		<wicketju.version>9.0.0-M4</wicketju.version>
 		<wickets.version>9.0.0-M4</wickets.version>
 		<red5-client.version>1.2.3</red5-client.version>
 		<spring.version>5.2.3.RELEASE</spring.version>
