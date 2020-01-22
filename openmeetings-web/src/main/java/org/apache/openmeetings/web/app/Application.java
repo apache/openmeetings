@@ -21,10 +21,8 @@ package org.apache.openmeetings.web.app;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getContentSecurityPolicy;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getxFrameOptions;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
@@ -36,6 +34,8 @@ import static org.wicketstuff.dashboard.DashboardContextInitializer.DASHBOARD_CO
 
 import java.io.File;
 import java.net.UnknownHostException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -102,6 +102,7 @@ import org.apache.wicket.ThreadContext;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.core.random.ISecureRandomSupplier;
 import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler;
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
@@ -109,7 +110,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.IPageStore;
 import org.apache.wicket.pageStore.SerializingPageStore;
 import org.apache.wicket.protocol.ws.WebSocketAwareCsrfPreventionRequestCycleListener;
-import org.apache.wicket.protocol.ws.api.WebSocketResponse;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
@@ -235,21 +235,41 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//chain of Resource Loaders, if not found it will search in Wicket's internal
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
+		getSecuritySettings().setRandomSupplier(new ISecureRandomSupplier() {
+			private SecureRandom rnd = null;
+
+			{
+				try {
+					rnd = SecureRandom.getInstance("SHA1PRNG");
+				} catch (NoSuchAlgorithmException e) {
+					log.error("Failed to init secure random {}", e);
+				}
+			}
+
+			@Override
+			public SecureRandom getRandom() {
+				return rnd;
+			}
+		});
+		getCsp().blocking().strict();
 		getRequestCycleListeners().add(new WebSocketAwareCsrfPreventionRequestCycleListener() {
 			@Override
 			public void onEndRequest(RequestCycle cycle) {
 				Response resp = cycle.getResponse();
-				if (resp instanceof WebResponse && !(resp instanceof WebSocketResponse)) {
+				if (resp instanceof WebResponse) {
 					WebResponse wresp = (WebResponse)resp;
-					wresp.setHeader("X-XSS-Protection", "1; mode=block");
-					wresp.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
-					wresp.setHeader("X-Content-Type-Options", "nosniff");
-					Url reqUrl = cycle.getRequest().getUrl();
-					wresp.setHeader("Content-Security-Policy"
-							, String.format("%s; connect-src 'self' %s; frame-src %s;"
-									, getContentSecurityPolicy(), getWsUrl(reqUrl)
-									, getxFrameOptions()
-							));
+					if (wresp.isHeaderSupported()) {
+						wresp.setHeader("X-XSS-Protection", "1; mode=block");
+						wresp.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+						wresp.setHeader("X-Content-Type-Options", "nosniff");
+						/*Url reqUrl = cycle.getRequest().getUrl();
+						wresp.setHeader("Content-Security-Policy"
+								, String.format("%s; connect-src 'self' %s; frame-src %s;"
+										, getContentSecurityPolicy(), getWsUrl(reqUrl)
+										, getxFrameOptions()
+								));
+						*/
+					}
 				}
 			}
 		});

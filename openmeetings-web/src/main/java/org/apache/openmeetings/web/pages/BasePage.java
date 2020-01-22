@@ -43,6 +43,7 @@ import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
@@ -54,7 +55,14 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	public static final String ALIGN_RIGHT = "align-right ";
 	private final Map<String, String> options;
 	private final HeaderPanel header;
-	private final WebMarkupContainer loader = new WebMarkupContainer("main-loader");
+	private final WebMarkupContainer loader = new WebMarkupContainer("main-loader") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void renderHead(IHeaderResponse response) {
+			response.render(CssHeaderItem.forReference(new CssResourceReference(BasePage.class, "loader.css")));
+		}
+	};
 
 	public BasePage() {
 		if (isInitComplete()) {

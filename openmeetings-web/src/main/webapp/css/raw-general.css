@@ -5,6 +5,9 @@ html, body {
 	font-family: Arial, Helvetica, sans-serif;
 	overflow-y: hidden;
 }
+.main-loader {
+	height: 100%;
+}
 .main-container {
 	height: calc(100% - var(--header-height));
 }
@@ -17,6 +20,12 @@ html, body {
 * {
 	box-sizing: content-box; /* IE */
 	box-sizing: initial; /*reset bootstrap box sizing*/
+}
+.signin input:not([type='checkbox']):not([type='radio']), .signin select {
+	width: 170px;
+}
+.signin td.desc {
+	width: 200px;
 }
 .signin .oauth-section {
 	border-left: 2px dotted;
@@ -140,6 +149,9 @@ html, body {
 	margin: 2px 2px;
 	display: inline;
 	float: none;
+}
+.centered {
+	text-align: center;
 }
 .goto, .goto :link, .goto :hover {
 	font-size: 14px;
@@ -725,4 +737,16 @@ form .input {
 }
 .om-tbl .om-tbl-row .om-tbl-cell {
 	display: table-cell;
+}
+.access-denied.outer {
+	margin: 4em;
+}
+.access-denied.outer .inner {
+	padding: 2em;
+}
+.captcha-text {
+	margin-bottom: 5px;
+}
+.captcha-img {
+	vertical-align: bottom;
 }

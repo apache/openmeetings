@@ -1,0 +1,32 @@
+/* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+.sk-chasing-dots {
+	margin: 20% auto;
+	width: 80px;
+	height: 80px;
+	position: relative;
+	text-align: center;
+	animation: sk-chasingDotsRotate 2s infinite linear;
+}
+.sk-chasing-dots .sk-child {
+	width: 40%;
+	height: 40%;
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	background-color: #333;
+	border-radius: 100%;
+	animation: sk-chasingDotsBounce 2s infinite ease-in-out;
+}
+.sk-chasing-dots .sk-dot2 {
+	top: auto;
+	bottom: 0;
+	-webkit-animation-delay: -1s;
+	animation-delay: -1s;
+}
+@keyframes sk-chasingDotsRotate {
+	100% { transform: rotate(360deg); }
+}
+@keyframes sk-chasingDotsBounce {
+	0%, 100% { transform: scale(0); }
+	50% { transform: scale(1); }
+}
