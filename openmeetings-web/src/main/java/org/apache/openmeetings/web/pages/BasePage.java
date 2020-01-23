@@ -39,6 +39,8 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.head.filter.FilteredHeaderItem;
+import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -53,8 +55,9 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = 1L;
 	public static final String ALIGN_LEFT = "align-left ";
 	public static final String ALIGN_RIGHT = "align-right ";
-	private final Map<String, String> options;
-	private final HeaderPanel header;
+	public static final String CUSTOM_CSS_FILTER = "customCSS";
+	private final Map<String, String> options = new HashMap<>();
+	private HeaderPanel header;
 	private final WebMarkupContainer loader = new WebMarkupContainer("main-loader") {
 		private static final long serialVersionUID = 1L;
 
@@ -72,9 +75,13 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		} else {
 			throw new RestartResponseException(NotInitedPage.class);
 		}
-		options = new HashMap<>();
 		options.put("fragmentIdentifierSuffix", "");
 		options.put("keyValueDelimiter", "/");
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		String appName = getApplicationName();
 
 		String code = getLanguageCode();
@@ -85,6 +92,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		add(new Label("pageTitle", appName));
 		add(header = new HeaderPanel("header", appName));
 		add(loader.setVisible(isMainPage()).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
+		add(new HeaderResponseContainer("customCSS", CUSTOM_CSS_FILTER));
 	}
 
 	public abstract boolean isRtl();
@@ -125,6 +133,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 			script.append(getGaCode()).append("');").append(isMainPage() ? "initHash()" : "init()").append(';');
 			response.render(OnDomReadyHeaderItem.forScript(script));
 		}
+		response.render(new FilteredHeaderItem(CssHeaderItem.forUrl("css/custom.css"), CUSTOM_CSS_FILTER));
 	}
 
 	@Override

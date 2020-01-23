@@ -715,7 +715,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 			By default {0} uses the integrated {1} database. For
 			production environment you should consider using {2}, {3}, {4}, {5} or {6}
 		</blockquote>
-		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
+		<div class="ui-state-highlight ui-corner-all installer-note">
 			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
 		</div>
 	]]></entry>
@@ -821,23 +821,23 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	</ol>
 
 	<br />
-	<b> <span style="font-size: 1.2em">If you have further
+	<b> <span class="installer-important">If you have further
 			questions or need support in installation or hosting:</span></b>
 	<br />
 	<br />
 
-	<b><span style="font-size: 1.2em">Community-Support:</span></b>
+	<b><span class="installer-important">Community-Support:</span></b>
 	<br />
 	<br />
-	<span style="font-size: 1.1em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/mailing-lists.html"
 		target="_blank">Mailing lists</a></span>
 	<br />
 	<br />
-	<b> <span style="font-size: 1.2em">Commercial-Support:</span></b>
+	<b> <span class="installer-important">Commercial-Support:</span></b>
 	<br />
 	<br />
-	<span style="font-size: 1.1em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/commercial-support.html"
 		target="_blank">Commercial-Support</a></span>
 

@@ -34,8 +34,6 @@ import static org.wicketstuff.dashboard.DashboardContextInitializer.DASHBOARD_CO
 
 import java.io.File;
 import java.net.UnknownHostException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -102,10 +100,12 @@ import org.apache.wicket.ThreadContext;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.core.random.ISecureRandomSupplier;
 import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler;
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.filter.FilteringHeaderResponse;
+import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.IPageStore;
 import org.apache.wicket.pageStore.SerializingPageStore;
@@ -235,22 +235,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//chain of Resource Loaders, if not found it will search in Wicket's internal
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
-		getSecuritySettings().setRandomSupplier(new ISecureRandomSupplier() {
-			private SecureRandom rnd = null;
-
-			{
-				try {
-					rnd = SecureRandom.getInstance("SHA1PRNG");
-				} catch (NoSuchAlgorithmException e) {
-					log.error("Failed to init secure random {}", e);
-				}
-			}
-
-			@Override
-			public SecureRandom getRandom() {
-				return rnd;
-			}
-		});
 		getCsp().blocking().strict();
 		getRequestCycleListeners().add(new WebSocketAwareCsrfPreventionRequestCycleListener() {
 			@Override
@@ -277,6 +261,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (sc != null) {
 			sc.setDefaultMaxSessionIdleTimeout(60 * 1000L); // should be enough, should it be configurable?
 		}
+		getHeaderResponseDecorators().add(new IHeaderResponseDecorator() {
+			@Override
+			public IHeaderResponse decorate(IHeaderResponse response) {
+				return new FilteringHeaderResponse(response);
+			}
+		});
 		super.init();
 
 		// register some widgets

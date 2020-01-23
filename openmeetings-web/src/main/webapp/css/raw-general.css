@@ -37,6 +37,9 @@ html, body {
 	background-repeat: no-repeat;
 	padding-left: 20px;
 }
+.signin .remember {
+	white-space: nowrap;
+}
 #header {
 	font-size: 28px;
 	line-height: 40px;
@@ -749,4 +752,14 @@ form .input {
 }
 .captcha-img {
 	vertical-align: bottom;
+}
+.installer-note {
+	margin-top: 20px;
+	padding: 0.7em;
+}
+.installer-important {
+	font-size: 1.2em;
+}
+.installer-less-important {
+	font-size: 1.1em;
 }

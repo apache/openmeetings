@@ -715,7 +715,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 			{0} viene predeterminado para emplear la base de datos {1}. Para
 			medios de producción considere emplear {2}, {3}, {4}, {5} u {6}
 		</blockquote>
-		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
+		<div class="ui-state-highlight ui-corner-all installer-note">
 			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
 		</div>
 	]]></entry>
@@ -819,24 +819,24 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	</ol>
 
 	<br />
-	<b> <span style="font-size: 1.2em">Si tiene otras cuestiones o necesita soporte para instalación o hosting:</span></b>
+	<b> <span class="installer-important">Si tiene otras cuestiones o necesita soporte para instalación o hosting:</span></b>
 	<br />
 	<br />
 
-	<b><span style="font-size: 1.2em">Soporte-Comunidad:</span></b>
+	<b><span class="installer-important">Soporte-Comunidad:</span></b>
 	<br />
 	<br />
-	<span style="font-size: 1.1em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/mailing-lists.html"
 		target="_blank">Listas de correo</a></span>
 	<br />
-	<b> <span style="font-size: 1.4em">Hay algunas compañias
+	<b> <span class="installer-important">Hay algunas compañias
 			que tambien ofrecen soporte comercial para Apache OpenMeetings:</span></b>
 	<br />
 	<br />
 	<br />
 	<br />
-	<span style="font-size: 1.3em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/commercial-support.html"
 		target="_blank">https://openmeetings.apache.org/commercial-support.html</a></span>
 	<br />

@@ -713,7 +713,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 		<blockquote>
 			默认 {0} 使用集成 {1} 数据库。对于生产环境，你应该考虑使用 {2}，{3}，{4}，{5} 或 {6}
 		</blockquote>
-		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
+		<div class="ui-state-highlight ui-corner-all installer-note">
 			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
 		</div>
 
@@ -817,23 +817,23 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	</ol>
 
 	<br />
-	<b> <span style="font-size: 1.2em">如果您在安装或托管有进一步的问题或需要支持:</span></b>
+	<b> <span class="installer-important">如果您在安装或托管有进一步的问题或需要支持:</span></b>
 	<br />
 	<br />
 
-	<b><span style="font-size: 1.2em">社区支持:</span></b>
+	<b><span class="installer-important">社区支持:</span></b>
 	<br />
 	<br />
-	<span style="font-size: 1.1em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/mailing-lists.html"
 		target="_blank">邮件列表</a></span>
 	<br />
 	<br />
 
-	<b> <span style="font-size: 1.2em">商业支持:</span></b>
+	<b> <span class="installer-important">商业支持:</span></b>
 	<br />
 	<br />
-	<span style="font-size: 1.1em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/commercial-support.html"
 		target="_blank">商业支持</a></span>
 
