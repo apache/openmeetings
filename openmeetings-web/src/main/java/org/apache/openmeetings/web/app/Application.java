@@ -142,13 +142,10 @@ import com.hazelcast.core.MembershipEvent;
 import com.hazelcast.core.MembershipListener;
 
 import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.markup.html.references.PopperJavaScriptReference;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.SingleThemeProvider;
 import de.agilecoders.wicket.themes.markup.html.material_design.MaterialDesignTheme;
-import de.agilecoders.wicket.webjars.WicketWebjars;
-import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 
 @Component
 public class Application extends AuthenticatedWebApplication implements IApplication {
@@ -277,10 +274,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			}
 		});
 		super.init();
-		WicketWebjars.install(this, new WebjarsSettings());
 		final IBootstrapSettings settings = new BootstrapSettings();
 		settings.setThemeProvider(new SingleThemeProvider(new MaterialDesignTheme()));
-		settings.setPopperJsResourceReference(PopperJavaScriptReference.instance());
 		Bootstrap.builder().withBootstrapSettings(settings).install(this);
 
 		// register some widgets
