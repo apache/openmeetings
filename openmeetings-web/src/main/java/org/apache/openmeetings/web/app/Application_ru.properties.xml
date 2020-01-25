@@ -377,7 +377,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1135"><![CDATA[Пригласить]]></entry>
 	<entry key="1137"><![CDATA[хотелось бы пригласить вас в комнату для конференций:]]></entry>
 	<entry key="1138"><![CDATA[Приглашение]]></entry>
-	<entry key="1143"><![CDATA[Таймзона]]></entry>
+	<entry key="1143"><![CDATA[Временная зона]]></entry>
 	<entry key="1146"><![CDATA[Описание]]></entry>
 	<entry key="1147"><![CDATA[Создано]]></entry>
 	<entry key="1148"><![CDATA[Сообщение в ТЗ]]></entry>
@@ -428,11 +428,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1218"><![CDATA[Зарезервировать комнату]]></entry>
 	<entry key="1221"><![CDATA[Добавьте дополнительный запрос для митинга и создайте комнату для конференций. Событие скопируется в календарь каждого участника.]]></entry>
 	<entry key="1222"><![CDATA[Входящие]]></entry>
-	<entry key="1223"><![CDATA[Посланные]]></entry>
+	<entry key="1223"><![CDATA[Отправленные]]></entry>
 	<entry key="1224"><![CDATA[Корзина]]></entry>
 	<entry key="1234"><![CDATA[Удалить контакт из списка]]></entry>
-	<entry key="1235"><![CDATA[Профайл пользователя]]></entry>
-	<entry key="1236"><![CDATA[Показать профайл пользователя]]></entry>
+	<entry key="1235"><![CDATA[Профиль пользователя]]></entry>
+	<entry key="1236"><![CDATA[Показать профиль пользователя]]></entry>
 	<entry key="1239"><![CDATA[Все]]></entry>
 	<entry key="1240"><![CDATA[Никто]]></entry>
 	<entry key="1241"><![CDATA[Непрочит.]]></entry>
