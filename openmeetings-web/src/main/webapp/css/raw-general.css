@@ -21,12 +21,6 @@ html, body {
 	box-sizing: content-box; /* IE */
 	box-sizing: initial; /*reset bootstrap box sizing*/
 }
-.signin input:not([type='checkbox']):not([type='radio']), .signin select {
-	width: 170px;
-}
-.signin td.desc {
-	width: 200px;
-}
 .signin .oauth-section {
 	border-left: 2px dotted;
 	padding-left: 5px;
@@ -39,6 +33,9 @@ html, body {
 }
 .signin .remember {
 	white-space: nowrap;
+}
+.signin-forget .form-check-label {
+	padding-right: 10px;
 }
 #header {
 	font-size: 28px;

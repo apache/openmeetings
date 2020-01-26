@@ -661,13 +661,18 @@
 		</dependency>
 		<dependency>
 			<groupId>de.agilecoders.wicket</groupId>
-			<artifactId>wicket-bootstrap-core</artifactId>
+			<artifactId>wicket-bootstrap-extensions</artifactId>
 			<version>${wicket-bootstrap.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.agilecoders.wicket</groupId>
 			<artifactId>wicket-bootstrap-themes</artifactId>
 			<version>${wicket-bootstrap.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>5.12.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

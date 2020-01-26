@@ -22,12 +22,26 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.pages.auth.ResetPasswordDialog;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.Backdrop;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
 
 public class ResetPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 1L;
 	public static final String RESET_PARAM = "hash";
+	private final Modal<String> resetInfo = new TextContentModal("resetInfo", new ResourceModel("332")) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onClose(IPartialPageRequestHandler target) {
+			setResponsePage(Application.get().getSignInPageClass());
+		}
+	};
 	@SpringBean
 	private UserDao userDao;
 
@@ -36,7 +50,11 @@ public class ResetPage extends BaseNotInitedPage {
 		if (resetHash != null) {
 			User user = userDao.getUserByHash(resetHash);
 			if (user != null) {
-				add(new ResetPasswordDialog("resetPassword", user));
+				add(new ResetPasswordDialog("resetPassword", user, resetInfo));
+				add(resetInfo.header(new ResourceModel("325"))
+						.addCloseButton(new ResourceModel("54"))
+						.setUseCloseHandler(true)
+						.setBackdrop(Backdrop.STATIC));
 				return;
 			}
 		}

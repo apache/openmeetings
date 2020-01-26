@@ -23,9 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.web.app.Application.urlForPage;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -33,7 +31,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.mail.template.ResetPasswordTemplate;
 import org.apache.openmeetings.web.common.Captcha;
 import org.apache.openmeetings.web.pages.ResetPage;
-import org.apache.openmeetings.web.util.NonClosableMessageDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -46,6 +43,7 @@ import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
@@ -55,80 +53,26 @@ import org.apache.wicket.validation.Validatable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public class ForgetPasswordDialog extends AbstractFormDialog<String> {
+public class ForgetPasswordDialog extends Modal<String> {
 	private static final Logger log = LoggerFactory.getLogger(ForgetPasswordDialog.class);
 	private static final long serialVersionUID = 1L;
-	private DialogButton send;
-	private DialogButton cancel;
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final IValidator<String> emailValidator = RfcCompliantEmailAddressValidator.getInstance();
 	private final RequiredTextField<String> name = new RequiredTextField<>("name", Model.of((String)null));
 	private final RadioGroup<Type> rg = new RadioGroup<>("type", Model.of(Type.email));
 	private final Label label = new Label("label", Model.of(""));
 	private final Captcha captcha = new Captcha("captcha");
-	private Form<String> form = new Form<>("form") {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void onInitialize() {
-			super.onInitialize();
-			add(feedback.setOutputMarkupId(true));
-			add(label.setDefaultModelObject(getString("315")).setOutputMarkupId(true));
-			add(name.setOutputMarkupId(true));
-			add(captcha);
-			add(rg.add(new Radio<>("email", Model.of(Type.email)))
-					.add(new Radio<>("login", Model.of(Type.login)))
-					.setOutputMarkupId(true));
-			rg.add(new AjaxFormChoiceComponentUpdatingBehavior() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					updateLabel(target);
-				}
-			});
-			add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onSubmit(AjaxRequestTarget target) {
-					ForgetPasswordDialog.this.onSubmit(target, send);
-				}
-
-				@Override
-				protected void onError(AjaxRequestTarget target) {
-					ForgetPasswordDialog.this.onError(target, send);
-				}
-			});
-			updateLabel(null);
-		}
-
-		@Override
-		protected void onValidate() {
-			String n = name.getConvertedInput();
-			if (n != null) {
-				IValidatable<String> val = new Validatable<>(n);
-				Type type = rg.getConvertedInput();
-				if (type == Type.email) {
-					emailValidator.validate(val);
-					if (!val.isValid()) {
-						error(getString("234"));
-					}
-				}
-				if (type == Type.login && n.length() < getMinLoginLength()) {
-					error(getString("104"));
-				}
-			}
-		}
-	};
+	private ForgetPasswordForm form = new ForgetPasswordForm("form");
 	private SignInDialog s;
-	MessageDialog confirmDialog;
+	private final Modal<String> forgetInfoDialog;
+	private boolean wasReset = false;
+
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean
@@ -139,25 +83,30 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		, login
 	}
 
-	public ForgetPasswordDialog(String id) {
-		super(id, "");
+	public ForgetPasswordDialog(String id, Modal<String> forgetInfoDialog) {
+		super(id);
+		this.forgetInfoDialog = forgetInfoDialog;
 	}
 
 	@Override
 	protected void onInitialize() {
-		setTitle(new ResourceModel("312"));
-		send = new DialogButton("send", getString("317"));
-		cancel = new DialogButton("cancel", getString("lbl.cancel"));
-		add(form);
-		confirmDialog = new NonClosableMessageDialog("confirmDialog", getString("312"), getString("321")) {
+		header(new ResourceModel("312"));
+		setCloseOnEscapeKey(true);
+		setUseCloseHandler(true);
+		setBackdrop(Backdrop.STATIC);
+
+		addButton(new BootstrapAjaxButton("button", new ResourceModel("317"), form, Buttons.Type.Primary) {
+			private static final long serialVersionUID = 1L;
+		}); // Send
+		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Secondary, new ResourceModel("lbl.cancel")) {
 			private static final long serialVersionUID = 1L;
 
-			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				s.open(handler);
+			public void onClick(AjaxRequestTarget target) {
+				ForgetPasswordDialog.this.close(target);
 			}
-		};
-		add(confirmDialog);
+		});
+
+		add(form);
 		super.onInitialize();
 	}
 
@@ -171,58 +120,27 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
-	protected void onOpen(IPartialPageRequestHandler handler) {
-		super.onOpen(handler);
+	public Modal<String> show(IPartialPageRequestHandler handler) {
 		name.setModelObject(null);
 		rg.setModelObject(Type.email);
 		captcha.refresh(handler);
 		handler.add(rg);
 		updateLabel(handler);
+		wasReset = false;
+		return super.show(handler);
 	}
 
 	@Override
-	public boolean isDefaultCloseEventEnabled()	{
-		return true;
-	}
-
-	@Override
-	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		if (send.equals(button)){
-			confirmDialog.open(handler);
+	public void onClose(IPartialPageRequestHandler handler) {
+		if (wasReset) {
+			forgetInfoDialog.show(handler);
 		} else {
-			s.open(handler);
+			s.show(handler);
 		}
 	}
 
 	public void setSignInDialog(SignInDialog s) {
 		this.s = s;
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(send, cancel);
-	}
-
-	@Override
-	public DialogButton getSubmitButton() {
-		return send;
-	}
-
-	@Override
-	public Form<?> getForm() {
-		return form;
-	}
-
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
-		target.add(feedback);
-	}
-
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		String nm = name.getModelObject();
-		Type type = rg.getModelObject();
-		resetUser(type == Type.email ? nm : "", type == Type.login ? nm : "");
 	}
 
 	/**
@@ -272,4 +190,86 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 		mailHandler.send(email, getString("517"), template);
 	}
+
+	private class ForgetPasswordForm extends Form<String> {
+		private static final long serialVersionUID = 1L;
+
+		public ForgetPasswordForm(String id) {
+			super(id);
+		}
+
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
+			add(feedback.setOutputMarkupId(true));
+			add(label.setDefaultModelObject(getString("315")).setOutputMarkupId(true));
+			add(name.setOutputMarkupId(true));
+			add(captcha);
+			add(rg.add(new Radio<>("email", Model.of(Type.email)))
+					.add(new Radio<>("login", Model.of(Type.login)))
+					.setOutputMarkupId(true));
+			rg.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					updateLabel(target);
+				}
+			});
+			add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onSubmit(AjaxRequestTarget target) {
+					ForgetPasswordForm.this.onSubmit(target);
+				}
+
+				@Override
+				protected void onError(AjaxRequestTarget target) {
+					ForgetPasswordForm.this.onError(target);
+				}
+			});
+			updateLabel(null);
+		}
+
+		@Override
+		protected void onValidate() {
+			String n = name.getConvertedInput();
+			if (n != null) {
+				IValidatable<String> val = new Validatable<>(n);
+				Type type = rg.getConvertedInput();
+				if (type == Type.email) {
+					emailValidator.validate(val);
+					if (!val.isValid()) {
+						error(getString("234"));
+					}
+				}
+				if (type == Type.login && n.length() < getMinLoginLength()) {
+					error(getString("104"));
+				}
+			}
+		}
+
+		@Override
+		protected void onError() {
+			RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(this::onError);
+		}
+
+		private void onError(AjaxRequestTarget target) {
+			target.add(feedback);
+		}
+
+		@Override
+		protected void onSubmit() {
+			RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(this::onSubmit);
+		}
+
+		private void onSubmit(AjaxRequestTarget target) {
+			String nm = name.getModelObject();
+			Type type = rg.getModelObject();
+			resetUser(type == Type.email ? nm : "", type == Type.login ? nm : "");
+			wasReset = true;
+			ForgetPasswordDialog.this.close(target);
+		}
+	};
 }

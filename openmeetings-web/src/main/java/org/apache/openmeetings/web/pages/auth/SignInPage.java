@@ -58,6 +58,8 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BaseInitedPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
@@ -70,11 +72,46 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONException;
 import com.github.openjson.JSONObject;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.Backdrop;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
+
 public class SignInPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(SignInPage.class);
-	private SignInDialog d;
-	private KickMessageDialog m;
+	private SignInDialog signin;
+	private KickMessageDialog kick;
+	private final Modal<String> forgetInfoDialog = new TextContentModal("forgetInfo", new ResourceModel("321")) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onClose(IPartialPageRequestHandler handler) {
+			signin.show(handler);
+		}
+	};
+	private final ForgetPasswordDialog forget = new ForgetPasswordDialog("forget", forgetInfoDialog);
+	private final Modal<String> registerInfoDialog = new TextContentModal("registerInfo", new ResourceModel("warn.notverified")) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
+			get("content").setOutputMarkupId(true);
+		}
+
+		@Override
+		public Modal<String> setModelObject(String obj) {
+			super.setModelObject(obj);
+			get("content").setDefaultModelObject(obj);
+			return this;
+		}
+
+		@Override
+		protected void onClose(IPartialPageRequestHandler handler) {
+			signin.show(handler);
+		}
+	};
+	RegisterDialog r = new RegisterDialog("register", registerInfoDialog);
 	@SpringBean
 	private ConfigurationDao cfgDao;
 	@SpringBean
@@ -136,16 +173,26 @@ public class SignInPage extends BaseInitedPage {
 	protected void onInitialize() {
 		super.onInitialize();
 
-		RegisterDialog r = new RegisterDialog("register");
-		ForgetPasswordDialog f = new ForgetPasswordDialog("forget");
-		d = new SignInDialog("signin", this);
-		d.setRegisterDialog(r);
-		d.setForgetPasswordDialog(f);
-		r.setSignInDialog(d);
-		f.setSignInDialog(d);
-		m = new KickMessageDialog("kick");
-		add(d.setVisible(!WebSession.get().isKickedByAdmin()),
-				r.setVisible(allowRegister()), f, m.setVisible(WebSession.get().isKickedByAdmin()));
+		signin = new SignInDialog("signin");
+		signin.setRegisterDialog(r);
+		signin.setForgetPasswordDialog(forget);
+		r.setSignInDialog(signin);
+		forget.setSignInDialog(signin);
+		kick = new KickMessageDialog("kick");
+		add(signin.setVisible(!WebSession.get().isKickedByAdmin()),
+				r.setVisible(allowRegister()), forget, kick.setVisible(WebSession.get().isKickedByAdmin()));
+		add(forgetInfoDialog
+				.header(new ResourceModel("312"))
+				.addCloseButton(new ResourceModel("54"))
+				.setUseCloseHandler(true)
+				.setBackdrop(Backdrop.STATIC)
+		);
+		add(registerInfoDialog
+				.header(new ResourceModel("235"))
+				.addCloseButton(new ResourceModel("54"))
+				.setUseCloseHandler(true)
+				.setBackdrop(Backdrop.STATIC)
+		);
 	}
 
 	boolean allowRegister() {

@@ -80,13 +80,18 @@ public class MainPage extends BaseInitedPage {
 
 	public MainPage() {
 		super();
-		getHeader().setVisible(false);
-		add(mainContainer.add(new EmptyPanel(MAIN_PANEL_ID)).setOutputMarkupId(true));
-		add(delayedLoad);
 	}
 
 	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler) {
 		main.updateContents(f, handler);
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		getHeader().setVisible(false);
+		add(mainContainer.add(new EmptyPanel(MAIN_PANEL_ID)).setOutputMarkupId(true));
+		add(delayedLoad);
 	}
 
 	@Override
