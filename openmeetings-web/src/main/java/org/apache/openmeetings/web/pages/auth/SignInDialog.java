@@ -44,6 +44,8 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -72,7 +74,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxButton;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
 public class SignInDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -113,7 +115,7 @@ public class SignInDialog extends Modal<String> {
 				register.show(target);
 			}
 		});
-		addButton(new LaddaAjaxButton("button", new ResourceModel("112"), form, Buttons.Type.Primary)); // Login
+		addButton(new SpinnerAjaxButton("button", new ResourceModel("112"), form, Buttons.Type.Primary)); // Login
 
 		super.onInitialize();
 	}
@@ -176,7 +178,7 @@ public class SignInDialog extends Modal<String> {
 			};
 			add(ab);
 			setDefaultButton(ab);
-			add(new AjaxLink<Void>("forget") {
+			credentials.add(new AjaxLink<Void>("forget") {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -202,16 +204,20 @@ public class SignInDialog extends Modal<String> {
 							public void onSubmit() {
 								showAuth(s);
 							}
+
+							@Override
+							public void renderHead(IHeaderResponse response) {
+								if (!Strings.isEmpty(s.getIconUrl())) {
+									response.render(CssHeaderItem.forCSS("#" + this.getMarkupId() + " .provider {background-image: url(" + s.getIconUrl() + ")}", this.getMarkupId()));
+								}
+							}
 						};
 						Component lbl = new Label("label", s.getName());
-						if (!Strings.isEmpty(s.getIconUrl())) {
-							lbl.add(AttributeModifier.replace("style", String.format("background-image: url(%s)", s.getIconUrl())));
-						}
 						btn.add(lbl);
 						item.add(btn.setDefaultFormProcessing(false)); //skip all rules, go to redirect
+						item.setRenderBodyOnly(true);
 					}
 				}).setVisible(showOauth));
-			credentials.add(AttributeModifier.append("class", showOauth ? "col-8" : "col-12"));
 			if (showOauth) {
 				add(AttributeModifier.append("class", "wide"));
 			}

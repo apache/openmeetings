@@ -22,8 +22,7 @@ html, body {
 	box-sizing: initial; /*reset bootstrap box sizing*/
 }
 .signin .oauth-section {
-	border-left: 2px dotted;
-	padding-left: 5px;
+	padding-bottom: 20px;
 }
 .signin .oauth-section .provider {
 	background-position: 0 0;
@@ -33,6 +32,18 @@ html, body {
 }
 .signin .remember {
 	white-space: nowrap;
+}
+.signin .or-seperator {
+	margin-top: 20px;
+	text-align: center;
+	border-top: 1px solid #cccccc;
+}
+.signin .or-seperator i {
+	padding: 0 10px;
+	background: #ffffff;
+	position: relative;
+	top: -11px;
+	z-index: 1;
 }
 .signin-forget .form-check-label {
 	padding-right: 10px;

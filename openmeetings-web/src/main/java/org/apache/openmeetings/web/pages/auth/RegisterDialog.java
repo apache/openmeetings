@@ -56,7 +56,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxButton;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
 public class RegisterDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -95,7 +95,7 @@ public class RegisterDialog extends Modal<String> {
 		setUseCloseHandler(true);
 		setBackdrop(Backdrop.STATIC);
 
-		addButton(new LaddaAjaxButton("button", new ResourceModel("121"), form, Buttons.Type.Primary)); // register
+		addButton(new SpinnerAjaxButton("button", new ResourceModel("121"), form, Buttons.Type.Primary)); // register
 		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Secondary, new ResourceModel("lbl.cancel")) {
 			private static final long serialVersionUID = 1L;
 

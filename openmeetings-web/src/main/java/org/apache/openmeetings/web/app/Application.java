@@ -51,6 +51,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
+import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -103,6 +104,8 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler;
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
+import org.apache.wicket.csp.CSPDirective;
+import org.apache.wicket.csp.CSPHeaderConfiguration;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.FilteringHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderResponseDecorator;
@@ -179,6 +182,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private ClientManager cm;
 	@Autowired
 	private AppointmentDao appointmentDao;
+	@Autowired
+	private OAuth2Dao oauthDao;
 
 	@Override
 	protected void init() {
@@ -241,7 +246,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//chain of Resource Loaders, if not found it will search in Wicket's internal
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
-		getCsp().blocking().strict();
+		final CSPHeaderConfiguration cspConfig = getcspConfig().strict();
 		getRequestCycleListeners().add(new WebSocketAwareCsrfPreventionRequestCycleListener() {
 			@Override
 			public void onEndRequest(RequestCycle cycle) {
@@ -327,6 +332,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
 
+			oauthDao.getActive().forEach(oauth -> {
+				if (!Strings.isEmpty(oauth.getIconUrl())) {
+					getCsp().blocking().add(CSPDirective.IMG_SRC, oauth.getIconUrl()); //FIXME TODO
+					cspConfig.add(CSPDirective.IMG_SRC, oauth.getIconUrl());
+				}
+			});
 			setInitComplete(true);
 		} catch (Exception err) {
 			log.error("[appStart]", err);
@@ -355,6 +366,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				return super.mapHandler(requestHandler);
 			}
 		}
+	}
+
+	public CSPHeaderConfiguration getcspConfig() {
+		return getCsp().reporting();
 	}
 
 	public static OmAuthenticationStrategy getAuthenticationStrategy() {
