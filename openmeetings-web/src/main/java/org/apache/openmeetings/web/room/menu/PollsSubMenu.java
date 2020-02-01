@@ -147,11 +147,11 @@ public class PollsSubMenu implements Serializable {
 	}
 
 	RoomMenuItem getMenu() {
-		pollsMenu.setTop(true);
-		pollsMenu.getItems().add(pollQuickMenuItem);
-		pollsMenu.getItems().add(pollCreateMenuItem);
-		pollsMenu.getItems().add(pollResultMenuItem);
-		pollsMenu.getItems().add(pollVoteMenuItem);
+		pollsMenu
+			.add(pollQuickMenuItem)
+			.add(pollCreateMenuItem)
+			.add(pollResultMenuItem)
+			.add(pollVoteMenuItem);
 		return pollsMenu;
 	}
 
@@ -160,11 +160,11 @@ public class PollsSubMenu implements Serializable {
 			return;
 		}
 		boolean pollExists = pollDao.hasPoll(r.getId());
-		pollsMenu.setEnabled(moder || r.isAllowUserQuestions());
-		pollQuickMenuItem.setEnabled(room.getClient().hasRight(Room.Right.presenter) && !qpollManager.isStarted(r.getId()));
-		pollCreateMenuItem.setEnabled(moder);
-		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && pollDao.notVoted(r.getId(), getUserId()));
-		pollResultMenuItem.setEnabled(pollExists || !pollDao.getArchived(r.getId()).isEmpty());
+		pollsMenu.setVisible(moder || r.isAllowUserQuestions());
+		pollQuickMenuItem.setVisible(room.getClient().hasRight(Room.Right.presenter) && !qpollManager.isStarted(r.getId()));
+		pollCreateMenuItem.setVisible(moder);
+		pollVoteMenuItem.setVisible(pollExists && notExternalUser && pollDao.notVoted(r.getId(), getUserId()));
+		pollResultMenuItem.setVisible(pollExists || !pollDao.getArchived(r.getId()).isEmpty());
 	}
 
 	public void updatePoll(IPartialPageRequestHandler handler, Long createdBy) {

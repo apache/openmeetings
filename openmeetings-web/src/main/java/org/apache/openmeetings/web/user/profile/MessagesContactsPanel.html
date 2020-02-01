@@ -22,7 +22,7 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<!-- TODO design should be changed in the future -->
-	<div style="height: 100%; overflow-y: auto;">
+	<div class="h-100 overflow-y-auto">
 		<table class="messages">
 			<tr>
 				<td class="side left">
@@ -69,23 +69,23 @@
 						<select wicket:id="msgMove"></select>
 					</div>
 					<div wicket:id="selectedMessage">
-						<table style="width: 100%">
+						<table class="w-100">
 							<tr>
-								<td style="width: 10px; padding-right: 20px;"><wicket:message key="1202"/></td>
+								<td class="pr-4"><wicket:message key="1202"/></td>
 								<td wicket:id="from"></td>
 							</tr>
 							<tr>
-								<td style="width: 10px; padding-right: 20px;"><wicket:message key="1210"/></td>
+								<td class="pr-4"><wicket:message key="1210"/></td>
 								<td wicket:id="to"></td>
 							</tr>
 							<tr>
-								<td style="width: 10px; padding-right: 20px;"><wicket:message key="1211"/></td>
+								<td class="pr-4"><wicket:message key="1211"/></td>
 								<td wicket:id="subj"></td>
 							</tr>
 						</table>
-						<div style="background-color: white;min-height: 300px;" wicket:id="body"></div>
+						<div wicket:id="body"></div>
 						<div wicket:id="roomContainer">
-							<table style="width: 100%">
+							<table class="w-100">
 								<tr>
 									<td>
 										<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" wicket:id="enter">
@@ -93,8 +93,8 @@
 										</button>
 									</td>
 									<td>
-										<div style="display: inline-block; width: 300px;"><wicket:message key="570" /></div><span wicket:id="start"></span><br/>
-										<div style="display: inline-block; width: 300px;"><wicket:message key="571" /></div><span wicket:id="end"></span>
+										<div class="d-inline-block"><wicket:message key="570" /></div><span wicket:id="start"></span><br/>
+										<div class="d-inline-block"><wicket:message key="571" /></div><span wicket:id="end"></span>
 									</td>
 								</tr>
 							</table>
@@ -104,13 +104,13 @@
 				<td class="side right" wicket:id="contacts">
 					<div><strong><wicket:message key="1189"/>&nbsp;(<span wicket:id="pendingContacts"></span>)</strong></div>
 					<div><strong><wicket:message key="1188"/>&nbsp;(<span wicket:id="allContacts"></span>)</strong></div>
-					<table style="width: 100%">
+					<table class="w-100">
 						<tr>
 							<th><wicket:message key="165"/></th>
 							<th><wicket:message key="635"/></th>
 						</tr>
 						<tr wicket:id="users">
-							<td><div wicket:id="name" style="overflow-x: hidden;"></div></td>
+							<td><div wicket:id="name" class="overflow-x-hidden"></div></td>
 							<td><div wicket:id="accept" class="tick om-icon clickable" wicket:message="title:1190"
 								></div><div wicket:id="decline" class="cross om-icon clickable" wicket:message="title:1191"
 								></div><div wicket:id="view" class="user om-icon clickable" wicket:message="title:1236"

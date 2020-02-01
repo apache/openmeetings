@@ -537,7 +537,13 @@ select.messages.selector {
 	margin: 10px;
 	max-width: 900px;
 }
-.user.info.panel legend {
+.overflow-y-auto {
+	overflow-y: auto;
+}
+.overflow-x-hidden {
+	overflow-y: hidden;
+}
+..user.info.panel legend {
 	font-style: italic;
 	text-align: right;
 }
@@ -577,7 +583,7 @@ form .input {
 	padding-right: 0.2em;
 	padding-left: 0.2em;
 }
-.profile .ui-button-icon.ui-icon.ui-icon-closethick.remove {
+.profile .remove {
 	position: absolute;
 	right: 5px;
 	top: 5px;
@@ -612,42 +618,6 @@ form .input {
 .table .column.data {
 	width: 75%;
 	vertical-align: middle;
-}
-.col-1 {
-	width: 8.3333%;
-}
-.col-2 {
-	width: 16.6666%;
-}
-.col-3 {
-	width: 24.9999%;
-}
-.col-4 {
-	width: 33.3332%;
-}
-.col-5 {
-	width: 41.6665%;
-}
-.col-6 {
-	width: 49.9998%;
-}
-.col-7 {
-	width: 58.3331%;
-}
-.col-8 {
-	width: 66.6664%;
-}
-.col-9 {
-	width: 74.9997%;
-}
-.col-10 {
-	width: 83.333%;
-}
-.col-11 {
-	width: 91.6663%;
-}
-.col-12 {
-	width: 100%;
 }
 .col-wrapper {
 	word-wrap: break-word;
@@ -770,4 +740,73 @@ form .input {
 }
 .installer-less-important {
 	font-size: 1.1em;
+}
+.main.privacy {
+	max-width: 800px;
+	padding: 20px;
+	border: 1px solid #cccccc;
+	border-radius: 10px;
+}
+.main.privacy h2 {
+	font-size: 30px;
+	font-weight: 300;
+	margin: 10px 0;
+	color: #333;
+}
+.main.privacy h3 {
+	color: #325d72;
+	font-weight: 700;
+	font-size: 24px;
+	margin: 1.5em 0 1em;
+	border-bottom: 1px solid #ddd;
+}
+.main.privacy h4 {
+	color: #333;
+	font-weight: 700;
+	font-size: 1.2em;
+	margin: 1em 0;
+}
+.main.privacy h5 {
+	color: #325D72;
+	font-weight: 700;
+	font-size: 1em;
+	margin: 1em 0;
+}
+.main.privacy p {
+	margin: 1em 0;
+}
+.private-message .ui-autocomplete {
+	z-index: 999 !important;
+}
+.abstractWizard .adminForm div.formelement {
+	max-width: 600px;
+}
+.abstractWizard .adminForm label {
+	width: 240px;
+}
+.abstractWizard ul.paramList {
+	list-style-type: none;
+}
+.abstractWizard ul.paramList li {
+	padding-top: 5px;
+}
+.abstractWizard ul.paramList label {
+	width: 350px;
+	display: inline-block;
+}
+.abstractWizard input, .abstractWizard select {
+	width: 280px;
+}
+.abstractWizard input[type=checkbox], .abstractWizard input[type=radio] {
+	width: auto;
+}
+.invitation .message {
+	width: 280px;
+	height: 70px;
+}
+.img-upload .btn.btn-file {
+	width: 120px;
+}
+.profile-edit-form {
+	height: calc(100% - 50px);
 }

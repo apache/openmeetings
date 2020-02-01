@@ -15,6 +15,10 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 }
+.file.tree .trees #tree-anchor {
+	height: 2px;
+	width: 2px;
+}
 .file.tree .footer {
 	height: var(--tree-footer-height);
 }

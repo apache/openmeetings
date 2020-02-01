@@ -144,17 +144,18 @@ public class ActionsSubMenu implements Serializable {
 	}
 
 	RoomMenuItem getMenu() {
-		actionsMenu.setTop(true);
-		actionsMenu.getItems().add(inviteMenuItem);
-		actionsMenu.getItems().add(shareMenuItem);
-		actionsMenu.getItems().add(applyModerMenuItem);
-		actionsMenu.getItems().add(applyWbMenuItem);
-		actionsMenu.getItems().add(applyAvMenuItem);
-		actionsMenu.getItems().add(sipDialerMenuItem);
+		actionsMenu
+			.add(inviteMenuItem)
+			.add(shareMenuItem)
+			.add(applyModerMenuItem)
+			.add(applyWbMenuItem)
+			.add(applyAvMenuItem)
+			.add(sipDialerMenuItem);
 		if (Room.Type.interview != room.getRoom().getType()) {
-			actionsMenu.getItems().add(downloadPngMenuItem);
-			actionsMenu.getItems().add(downloadPdfMenuItem);
-			actionsMenu.getItems().add(resetWb);
+			actionsMenu
+				.add(downloadPngMenuItem)
+				.add(downloadPdfMenuItem)
+				.add(resetWb);
 		}
 		return actionsMenu;
 	}
@@ -165,17 +166,17 @@ public class ActionsSubMenu implements Serializable {
 		}
 		final Room r = room.getRoom();
 		boolean isInterview = Room.Type.interview == r.getType();
-		downloadPngMenuItem.setEnabled(!isInterview);
-		downloadPdfMenuItem.setEnabled(!isInterview);
-		actionsMenu.setEnabled(moder || r.isAllowUserQuestions());
-		inviteMenuItem.setEnabled(notExternalUser && moder);
+		downloadPngMenuItem.setVisible(!isInterview);
+		downloadPdfMenuItem.setVisible(!isInterview);
+		actionsMenu.setVisible(moder || r.isAllowUserQuestions());
+		inviteMenuItem.setVisible(notExternalUser && moder);
 		boolean shareVisible = room.screenShareAllowed();
-		shareMenuItem.setEnabled(shareVisible);
-		applyModerMenuItem.setEnabled(!moder);
-		applyWbMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.whiteBoard));
-		applyAvMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.audio) || !room.getClient().hasRight(Room.Right.video));
-		sipDialerMenuItem.setEnabled(r.isSipEnabled() && isSipEnabled());
-		resetWb.setEnabled(moder);
+		shareMenuItem.setVisible(shareVisible);
+		applyModerMenuItem.setVisible(!moder);
+		applyWbMenuItem.setVisible(!room.getClient().hasRight(Room.Right.whiteBoard));
+		applyAvMenuItem.setVisible(!room.getClient().hasRight(Room.Right.audio) || !room.getClient().hasRight(Room.Right.video));
+		sipDialerMenuItem.setVisible(r.isSipEnabled() && isSipEnabled());
+		resetWb.setVisible(moder);
 	}
 
 	private static void download(AjaxRequestTarget target, String type) {

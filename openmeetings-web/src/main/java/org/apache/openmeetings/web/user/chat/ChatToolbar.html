@@ -20,21 +20,8 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:head>
-	<style>
-		.emt {
-			font-size: 10pt;
-		}
-		.chat.btn{
-			font-weight: bold;
-		}
-		.chat.dropdown-menu {
-			left: -50px;
-		}
-	</style>
-</wicket:head>
 <wicket:panel>
-	<div wicket:id="toolbar" class="btn-toolbar" data-role="editor-toolbar">
+	<div wicket:id="toolbar" class="btn-toolbar chat-toolbar" data-role="editor-toolbar">
 		<div class="btn-group dropup">
 			<a id="emoticons" class="chat btn btn-default emt dropdown-toggle" data-toggle="dropdown" title="Emoticons"></a>
 			<ul class="chat dropdown-menu" >
@@ -47,9 +34,9 @@
 		<div class="btn-group dropup">
 			<a id="fontSize" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" title="Font Size"> A <strong class="caret"></strong></a>
 			<ul class="dropdown-menu">
-				<li><a data-edit="fontSize 5"><span style="font-size: x-large;">Huge</span></a></li>
-				<li><a data-edit="fontSize 3"><span style="font-size: small;">Normal</span></a></li>
-				<li><a data-edit="fontSize 1"><span style="font-size: x-small;">Small</span></a></li>
+				<li><a data-edit="fontSize 5"><span class="font-huge">Huge</span></a></li>
+				<li><a data-edit="fontSize 3"><span class="font-small">Normal</span></a></li>
+				<li><a data-edit="fontSize 1"><span class="font-tiny">Small</span></a></li>
 			</ul>
 		</div>
 		<div class="btn-group dropup">
@@ -58,10 +45,10 @@
 				<strong class="caret"></strong>
 			</a>
 			<ul class="dropdown-menu btns-only">
-				<li><a class="chat-btn chat-tool-icon btn btn-default" id="bold" data-edit="bold" title="Bold (Ctrl/Cmd+B)" style="font-weight: bold;"> B </a></li>
-				<li><a class="chat-btn chat-tool-icon btn btn-default" id="italic" data-edit="italic" title="Italic (Ctrl/Cmd+I)" style="font-style: italic;"> I </a></li>
-				<li><a class="chat-btn chat-tool-icon btn btn-default" id="strikethrough" data-edit="strikethrough" title="Strikethrough" style="text-decoration: line-through;"> S </a></li>
-				<li><a class="chat-btn chat-tool-icon btn btn-default" id="underline" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U </a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-default bold" id="bold" data-edit="bold" title="Bold (Ctrl/Cmd+B)"> B </a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-default italic" id="italic" data-edit="italic" title="Italic (Ctrl/Cmd+I)"> I </a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-default strike" id="strikethrough" data-edit="strikethrough" title="Strikethrough"> S </a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-default under" id="underline" data-edit="underline" title="Underline (Ctrl/Cmd+U)"> U </a></li>
 			</ul>
 		</div>
 		<div class="btn-group dropup">

@@ -121,6 +121,12 @@ Wicket.BrowserInfo.collectExtraInfo = function(info) {
 	info.codebase = l.origin + l.pathname;
 	info.settings = Settings.load();
 };
+function showBusyIndicator() {
+	$('#busy-indicator').show();
+}
+function hideBusyIndicator() {
+	$('#busy-indicator').hide();
+}
 (function() {
 	// https://github.com/inexorabletash/polyfill/blob/master/LICENSE.md
 	// Licensed MIT

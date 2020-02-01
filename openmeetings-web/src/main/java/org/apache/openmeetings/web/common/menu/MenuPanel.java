@@ -18,20 +18,13 @@
  */
 package org.apache.openmeetings.web.common.menu;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
-
 import java.util.List;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
-import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.util.string.Strings;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
-import com.googlecode.wicket.jquery.ui.widget.menu.Menu;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 
 /**
  * Loads the menu items into the main area
@@ -42,28 +35,11 @@ import com.googlecode.wicket.jquery.ui.widget.menu.Menu;
 public class MenuPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
-	public MenuPanel(String id, List<IMenuItem> menus) {
+	public MenuPanel(String id, List<INavbarComponent> menus) {
 		super(id);
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
-		add(new Menu("menu", menus, new Options().set("icons", "{ submenu: 'ui-icon-triangle-1-s' }")
-					.set("position", "{ my: 'left top', at: 'left bottom'}"))
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void addMenuItem(ListItem<IMenuItem> item, IMenuItem menuItem) {
-				super.addMenuItem(item, menuItem);
-				OmMenuItem m = (OmMenuItem)menuItem;
-				item.add(AttributeModifier.append(ATTR_CLASS, m.isTop() ? "top" : "sub"));
-				if (!Strings.isEmpty(m.getDesc())) {
-					item.add(AttributeModifier.append(ATTR_TITLE, m.getDesc()));
-				}
-				if (!Strings.isEmpty(m.getIcon())) {
-					item.add(AttributeModifier.append(ATTR_CLASS, m.getIcon()));
-				}
-			}
-		});
+		add(new Navbar("menu").addComponents(menus));
 	}
 
 	public void update(IPartialPageRequestHandler target) {

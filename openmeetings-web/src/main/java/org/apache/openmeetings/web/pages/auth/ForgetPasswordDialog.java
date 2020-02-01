@@ -31,16 +31,18 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.mail.template.ResetPasswordTemplate;
 import org.apache.openmeetings.web.common.Captcha;
 import org.apache.openmeetings.web.pages.ResetPage;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -66,7 +68,7 @@ public class ForgetPasswordDialog extends Modal<String> {
 	private final IValidator<String> emailValidator = RfcCompliantEmailAddressValidator.getInstance();
 	private final RequiredTextField<String> name = new RequiredTextField<>("name", Model.of((String)null));
 	private final RadioGroup<Type> rg = new RadioGroup<>("type", Model.of(Type.email));
-	private final Label label = new Label("label", Model.of(""));
+	private final WebMarkupContainer label = new WebMarkupContainer("label");
 	private final Captcha captcha = new Captcha("captcha");
 	private ForgetPasswordForm form = new ForgetPasswordForm("form");
 	private SignInDialog s;
@@ -111,9 +113,12 @@ public class ForgetPasswordDialog extends Modal<String> {
 	}
 
 	private void updateLabel(IPartialPageRequestHandler handler) {
-		String lbl = getString(rg.getModelObject() == Type.email ? "315" : "316");
-		name.setLabel(Model.of(lbl));
-		label.setDefaultModelObject(lbl);
+		IModel<String> lbl = new ResourceModel(rg.getModelObject() == Type.email ? "315" : "316");
+		name.setLabel(lbl);
+		name.add(AttributeModifier.replace("type", rg.getModelObject() == Type.email ? "email" : "text"));
+		name.add(AttributeModifier.replace("title", lbl));
+		name.add(AttributeModifier.replace("placeholder", lbl));
+		label.add(AttributeModifier.replace("class", rg.getModelObject() == Type.email ? "fa fa-at" : "fa fa-user"));
 		if (handler != null) {
 			handler.add(name, label);
 		}
@@ -202,7 +207,7 @@ public class ForgetPasswordDialog extends Modal<String> {
 		protected void onInitialize() {
 			super.onInitialize();
 			add(feedback.setOutputMarkupId(true));
-			add(label.setDefaultModelObject(getString("315")).setOutputMarkupId(true));
+			add(label.setOutputMarkupId(true));
 			add(name.setOutputMarkupId(true));
 			add(captcha);
 			add(rg.add(new Radio<>("email", Model.of(Type.email)))

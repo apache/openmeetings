@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.common.menu;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
+
 public class RoomMenuItem extends OmMenuItem {
 	private static final long serialVersionUID = 1L;
 
@@ -25,13 +27,13 @@ public class RoomMenuItem extends OmMenuItem {
 		super(name, desc);
 	}
 
-	public RoomMenuItem(String name, String desc, String icon) {
+	public RoomMenuItem(String name, String desc, IconType icon) {
 		super(name, desc);
 		setIcon(icon);
 	}
 
 	public RoomMenuItem(String name, String desc, boolean enabled) {
 		super(name, desc);
-		setEnabled(enabled);
+		setVisible(enabled);
 	}
 }

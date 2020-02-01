@@ -182,7 +182,14 @@ public class RegisterDialog extends Modal<String> {
 			add(loginField = new RequiredTextField<>("login", new PropertyModel<String>(RegisterDialog.this, "login")));
 			add(passwordField = new PasswordTextField("password", new PropertyModel<String>(RegisterDialog.this, "password")));
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()).setResetPassword(true));
-			add(emailField = new RequiredTextField<>("email", new PropertyModel<String>(RegisterDialog.this, "email")));
+			add(emailField = new RequiredTextField<>("email", new PropertyModel<String>(RegisterDialog.this, "email")) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected String[] getInputTypes() {
+					return new String[] {"email"};
+				}
+			});
 			add(captcha = new Captcha("captcha"));
 			firstNameField.setLabel(new ResourceModel("117"));
 			lastNameField.setLabel(new ResourceModel("136"));

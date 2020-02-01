@@ -182,3 +182,36 @@ ul.dropdown-menu.btns-only, ul.dropdown-menu.btns-only li {
 ul.dropdown-menu.btns-only li .chat-btn {
 	float: none !important;
 }
+.emt {
+	font-size: 10pt;
+}
+.chat.btn{
+	font-weight: bold;
+}
+.chat.dropdown-menu {
+	left: -50px;
+}
+.chat-msg-container {
+	position: relative;
+}
+.chat-toolbar .font-huge {
+	font-size: x-large;
+}
+.chat-toolbar .font-small {
+	font-size: small;
+}
+.chat-toolbar .font-tiny {
+	font-size: small;
+}
+.chat-toolbar .chat-btn.bold {
+	font-weight: bold;
+}
+.chat-toolbar .chat-btn.bold {
+	font-style: italic;
+}
+.chat-toolbar .chat-btn.strike {
+	text-decoration: line-through;
+}
+.chat-toolbar .chat-btn.under {
+	text-decoration: underline;
+}

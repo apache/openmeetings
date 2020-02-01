@@ -58,7 +58,7 @@
 						<label wicket:for="type"><wicket:message key="45" /></label><select wicket:id="type"/>
 					</div>
 					<div class="formelement">
-						<label wicket:for="comment"><wicket:message key="196" /></label><textarea style="width: 200px; height: 100px;" wicket:id="comment"/>
+						<label wicket:for="comment"><wicket:message key="196" /></label><textarea wicket:id="comment"/>
 					</div>
 					<div class="formelement">
 						<label wicket:for="appointment"><wicket:message key="620" /></label><input type="checkbox" class="formcheckbox" wicket:id="appointment" />
@@ -158,7 +158,7 @@
 						</thead>
 						<tbody wicket:id="filesContainer">
 							<tr wicket:id="files">
-								<td class="col-9"><div class="col-wrapper" style="width: auto"><span wicket:id="name"></span></div></td>
+								<td class="col-9"><div class="col-wrapper w-auto"><span wicket:id="name"></span></div></td>
 								<td class="col-2"><span wicket:id="wbIdx"></span></td>
 								<td class="col-1">
 									<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="delete" wicket:message="title:80">
@@ -213,7 +213,7 @@
 						<table class="list-table small">
 							<thead>
 								<tr class="ui-widget-header">
-									<th class="col-1" style="overflow: hidden;" wicket:message="title:817"><wicket:message key="817" /></th>
+									<th class="col-1 overflow-hidden" wicket:message="title:817"><wicket:message key="817" /></th>
 									<th class="col-1"><wicket:message key="188" /></th>
 									<th class="col-4"><wicket:message key="165" /></th>
 									<th class="col-5"><wicket:message key="510" /></th>
@@ -225,7 +225,7 @@
 									<td class="col-1"><div class="col-wrapper"><input type="checkbox" wicket:id="superModerator"/></div></td>
 									<td class="col-1"><div class="col-wrapper"><span wicket:id="userId"></span></div></td>
 									<td class="col-4"><div class="col-wrapper"><span wicket:id="uName"></span></div></td>
-									<td class="col-5"><div class="col-wrapper" style="overflow: hidden;"><span wicket:id="email"></span></div></td>
+									<td class="col-5"><div class="col-wrapper overflow-hidden"><span wicket:id="email"></span></div></td>
 									<td class="col-1">
 										<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="delete" wicket:message="title:80">
 											<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;

@@ -54,6 +54,7 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -64,7 +65,10 @@ import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
-import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5CssReference;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public class RoomMenuPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -136,7 +140,7 @@ public class RoomMenuPanel extends Panel {
 
 	@Override
 	protected void onInitialize() {
-		exitMenuItem = new RoomMenuItem(getString("308"), getString("309"), "exit") {
+		exitMenuItem = new RoomMenuItem(getString("308"), getString("309"), FontAwesome5IconType.sign_out_alt_s) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -175,15 +179,16 @@ public class RoomMenuPanel extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
+		response.render(CssHeaderItem.forReference(FontAwesome5CssReference.instance()));
 		pollsSubMenu.renderHead(response);
 	}
 
-	private List<IMenuItem> getMenu() {
-		List<IMenuItem> menu = new ArrayList<>();
-		exitMenuItem.setEnabled(false);
-		menu.add(exitMenuItem.setTop(true));
+	private List<INavbarComponent> getMenu() {
+		List<INavbarComponent> menu = new ArrayList<>();
+		exitMenuItem.setVisible(false);
+		menu.add(exitMenuItem);
 
-		filesMenu.getItems().add(new RoomMenuItem(getString("15"), getString("1479")) {
+		filesMenu.add(new RoomMenuItem(getString("15"), getString("1479")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -191,7 +196,7 @@ public class RoomMenuPanel extends Panel {
 				room.getSidebar().showUpload(target);
 			}
 		});
-		menu.add(filesMenu.setTop(true));
+		menu.add(filesMenu);
 
 		if (actionsSubMenu.isVisible()) {
 			menu.add(actionsSubMenu.getMenu());
@@ -210,8 +215,8 @@ public class RoomMenuPanel extends Panel {
 		boolean isInterview = Room.Type.interview == r.getType();
 		User u = room.getClient().getUser();
 		boolean notExternalUser = u.getType() != User.Type.contact;
-		exitMenuItem.setEnabled(notExternalUser);
-		filesMenu.setEnabled(!isInterview && room.getSidebar().isShowFiles());
+		exitMenuItem.setVisible(notExternalUser);
+		filesMenu.setVisible(!isInterview && room.getSidebar().isShowFiles());
 		boolean moder = room.getClient().hasRight(Room.Right.moderator);
 		actionsSubMenu.update(moder, notExternalUser);
 		pollsSubMenu.update(moder, notExternalUser, r);

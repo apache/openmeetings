@@ -22,15 +22,15 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<form wicket:id="selForm">
-		<table style="width: 100%">
+		<table class="w-100">
 			<tr>
 				<td><wicket:message key="1412"/></td>
-				<td><select style="width: 230px" wicket:id="polls"></select></td>
+				<td><select wicket:id="polls"></select></td>
 			</tr>
 		</table>
 	</form>
 	<form wicket:id="dispForm">
-		<table style="width: 100%">
+		<table class="w-100">
 			<tr>
 				<td colspan="2"><span wicket:id="name"></span>&nbsp;<wicket:message key="36"/></td>
 			</tr>
@@ -39,7 +39,7 @@
 			</tr>
 			<tr>
 				<td><wicket:message key="39"/>&nbsp;(<span wicket:id="count"></span>)</td>
-				<td><select style="width: 280px" wicket:id="chartType"></select></td>
+				<td><select wicket:id="chartType"></select></td>
 			</tr>
 			<tr>
 				<td><wicket:message key="40"/></td>
