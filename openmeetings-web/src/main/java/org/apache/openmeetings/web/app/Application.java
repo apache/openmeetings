@@ -246,7 +246,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//chain of Resource Loaders, if not found it will search in Wicket's internal
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
-		final CSPHeaderConfiguration cspConfig = getcspConfig().strict();
+		final CSPHeaderConfiguration cspConfig = getCspConfig().strict();
 		getRequestCycleListeners().add(new WebSocketAwareCsrfPreventionRequestCycleListener() {
 			@Override
 			public void onEndRequest(RequestCycle cycle) {
@@ -332,9 +332,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
 
+			getCsp().blocking().disabled(); //FIXME TODO due to `reporting-only enabled`
 			oauthDao.getActive().forEach(oauth -> {
 				if (!Strings.isEmpty(oauth.getIconUrl())) {
-					getCsp().blocking().add(CSPDirective.IMG_SRC, oauth.getIconUrl()); //FIXME TODO
 					cspConfig.add(CSPDirective.IMG_SRC, oauth.getIconUrl());
 				}
 			});
@@ -368,7 +368,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 	}
 
-	public CSPHeaderConfiguration getcspConfig() {
+	public CSPHeaderConfiguration getCspConfig() {
 		return getCsp().reporting();
 	}
 

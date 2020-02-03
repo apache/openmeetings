@@ -17,10 +17,6 @@ html, body {
 {
 	height: 100%;
 }
-* {
-	box-sizing: content-box; /* IE */
-	box-sizing: initial; /*reset bootstrap box sizing*/
-}
 .signin .oauth-section {
 	padding-bottom: 20px;
 }
