@@ -302,23 +302,21 @@ function WebRtcPeer(mode, options, callback) {
     };
     this.generateOffer = function (callback) {
         callback = callback.bind(this);
-        var useAudio = true;
-        var useVideo = true;
-        if (mediaConstraints) {
-            useAudio = typeof mediaConstraints.audio === 'boolean' ? mediaConstraints.audio : true;
-            useVideo = typeof mediaConstraints.video === 'boolean' ? mediaConstraints.video : true;
-        }
-        if (mode !== 'sendonly' && useAudio) {
-            pc.addTransceiver('audio', { direction: mode });
-        }
-        if (mode !== 'sendonly' && useVideo) {
-            pc.addTransceiver('video', { direction: mode });
+        if (mode === 'recvonly') {
+            var useAudio = mediaConstraints && typeof mediaConstraints.audio === 'boolean' ? mediaConstraints.audio : true;
+            var useVideo = mediaConstraints && typeof mediaConstraints.video === 'boolean' ? mediaConstraints.video : true;
+            if (useAudio) {
+                pc.addTransceiver('audio', { direction: 'recvonly' });
+            }
+            if (useVideo) {
+                pc.addTransceiver('video', { direction: 'recvonly' });
+            }
         }
         if (typeof AdapterJS !== 'undefined' && AdapterJS.webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9) {
             var setLocalDescriptionOnSuccess = function () {
                 sleep(1000);
                 var localDescription = pc.localDescription;
-                logger.debug('Local description set', localDescription.sdp);
+                logger.debug('Local description set\n', localDescription.sdp);
                 if (multistream && usePlanB) {
                     localDescription = interop.toUnifiedPlan(localDescription);
                     logger.debug('offer::origPlanB->UnifiedPlan', dumpSDP(localDescription));
@@ -327,7 +325,7 @@ function WebRtcPeer(mode, options, callback) {
             };
             var createOfferOnSuccess = function (offer) {
                 logger.debug('Created SDP offer');
-                logger.debug('Local description set', pc.localDescription);
+                logger.debug('Local description set\n', pc.localDescription);
                 pc.setLocalDescription(offer, setLocalDescriptionOnSuccess, callback);
             };
             pc.createOffer(createOfferOnSuccess, callback);
@@ -338,7 +336,7 @@ function WebRtcPeer(mode, options, callback) {
                 return pc.setLocalDescription(offer);
             }).then(function () {
                 var localDescription = pc.localDescription;
-                logger.debug('Local description set', localDescription.sdp);
+                logger.debug('Local description set\n', localDescription.sdp);
                 if (multistream && usePlanB) {
                     localDescription = interop.toUnifiedPlan(localDescription);
                     logger.debug('offer::origPlanB->UnifiedPlan', dumpSDP(localDescription));
@@ -429,7 +427,7 @@ function WebRtcPeer(mode, options, callback) {
                 localDescription = interop.toUnifiedPlan(localDescription);
                 logger.debug('answer::origPlanB->UnifiedPlan', dumpSDP(localDescription));
             }
-            logger.debug('Local description set', localDescription.sdp);
+            logger.debug('Local description set\n', localDescription.sdp);
             callback(null, localDescription.sdp);
         }).catch(callback);
     };
@@ -627,7 +625,6 @@ exports.WebRtcPeerRecvonly = WebRtcPeerRecvonly;
 exports.WebRtcPeerSendonly = WebRtcPeerSendonly;
 exports.WebRtcPeerSendrecv = WebRtcPeerSendrecv;
 exports.hark = harkUtils;
-exports.browser = browser;
 },{"events":4,"freeice":5,"hark":8,"inherits":9,"kurento-browser-extensions":10,"merge":11,"sdp-translator":18,"ua-parser-js":21,"uuid/v4":24}],2:[function(require,module,exports){
 if (window.addEventListener)
     module.exports = require('./index');
@@ -3244,7 +3241,7 @@ exports.parse = function(sdp) {
 
 },{"sdp-transform":14}],21:[function(require,module,exports){
 /*!
- * UAParser.js v0.7.20
+ * UAParser.js v0.7.21
  * Lightweight JavaScript-based User-Agent string parser
  * https://github.com/faisalman/ua-parser-js
  *
@@ -3261,7 +3258,7 @@ exports.parse = function(sdp) {
     /////////////
 
 
-    var LIBVERSION  = '0.7.20',
+    var LIBVERSION  = '0.7.21',
         EMPTY       = '',
         UNKNOWN     = '?',
         FUNC_TYPE   = 'function',
@@ -3482,10 +3479,10 @@ exports.parse = function(sdp) {
             /(kindle)\/([\w\.]+)/i,                                             // Kindle
             /(lunascape|maxthon|netfront|jasmine|blazer)[\/\s]?([\w\.]*)/i,
                                                                                 // Lunascape/Maxthon/Netfront/Jasmine/Blazer
-
             // Trident based
-            /(avant\s|iemobile|slim|baidu)(?:browser)?[\/\s]?([\w\.]*)/i,
-                                                                                // Avant/IEMobile/SlimBrowser/Baidu
+            /(avant\s|iemobile|slim)(?:browser)?[\/\s]?([\w\.]*)/i,
+                                                                                // Avant/IEMobile/SlimBrowser
+            /(bidubrowser|baidubrowser)[\/\s]?([\w\.]+)/i,                      // Baidu Browser
             /(?:ms|\()(ie)\s([\w\.]+)/i,                                        // Internet Explorer
 
             // Webkit/KHTML based
@@ -3505,6 +3502,12 @@ exports.parse = function(sdp) {
 
             /(yabrowser)\/([\w\.]+)/i                                           // Yandex
             ], [[NAME, 'Yandex'], VERSION], [
+
+            /(Avast)\/([\w\.]+)/i                                               // Avast Secure Browser
+            ], [[NAME, 'Avast Secure Browser'], VERSION], [
+
+            /(AVG)\/([\w\.]+)/i                                                 // AVG Secure Browser
+            ], [[NAME, 'AVG Secure Browser'], VERSION], [
 
             /(puffin)\/([\w\.]+)/i                                              // Puffin
             ], [[NAME, 'Puffin'], VERSION], [
@@ -3527,7 +3530,7 @@ exports.parse = function(sdp) {
             /(micromessenger)\/([\w\.]+)/i                                      // WeChat
             ], [[NAME, 'WeChat'], VERSION], [
 
-            /(brave)\/([\w\.]+)/i                                              // Brave browser
+            /(brave)\/([\w\.]+)/i                                               // Brave browser
             ], [[NAME, 'Brave'], VERSION], [
 
             /(qqbrowserlite)\/([\w\.]+)/i                                       // QQBrowserLite
@@ -3539,7 +3542,7 @@ exports.parse = function(sdp) {
             /m?(qqbrowser)[\/\s]?([\w\.]+)/i                                    // QQBrowser
             ], [NAME, VERSION], [
 
-            /(BIDUBrowser)[\/\s]?([\w\.]+)/i                                    // Baidu Browser
+            /(baiduboxapp)[\/\s]?([\w\.]+)/i                                    // Baidu App
             ], [NAME, VERSION], [
 
             /(2345Explorer)[\/\s]?([\w\.]+)/i                                   // 2345 Browser
@@ -3548,7 +3551,7 @@ exports.parse = function(sdp) {
             /(MetaSr)[\/\s]?([\w\.]+)/i                                         // SouGouBrowser
             ], [NAME], [
 
-            /(LBBROWSER)/i                                      // LieBao Browser
+            /(LBBROWSER)/i                                                      // LieBao Browser
             ], [NAME], [
 
             /xiaomi\/miuibrowser\/([\w\.]+)/i                                   // MIUI Browser
@@ -3582,6 +3585,9 @@ exports.parse = function(sdp) {
 
             /(dolfin)\/([\w\.]+)/i                                              // Dolphin
             ], [[NAME, 'Dolphin'], VERSION], [
+
+            /(qihu|qhbrowser|qihoobrowser|360browser)/i                         // 360
+            ], [[NAME, '360 Browser']], [
 
             /((?:android.+)crmo|crios)\/([\w\.]+)/i                             // Chrome for Android/iOS
             ], [[NAME, 'Chrome'], VERSION], [
@@ -3663,7 +3669,7 @@ exports.parse = function(sdp) {
             ], [MODEL, [VENDOR, 'Apple'], [TYPE, TABLET]], [
 
             /(apple\s{0,1}tv)/i                                                 // Apple TV
-            ], [[MODEL, 'Apple TV'], [VENDOR, 'Apple']], [
+            ], [[MODEL, 'Apple TV'], [VENDOR, 'Apple'], [TYPE, SMARTTV]], [
 
             /(archos)\s(gamepad2?)/i,                                           // Archos
             /(hp).+(touchpad)/i,                                                // HP TouchPad
@@ -3726,8 +3732,11 @@ exports.parse = function(sdp) {
             ], [MODEL, [VENDOR, 'HTC'], [TYPE, TABLET]], [
 
             /d\/huawei([\w\s-]+)[;\)]/i,
-            /(nexus\s6p)/i                                                      // Huawei
+            /(nexus\s6p|vog-l29|ane-lx1|eml-l29)/i                              // Huawei
             ], [MODEL, [VENDOR, 'Huawei'], [TYPE, MOBILE]], [
+
+            /android.+(bah2?-a?[lw]\d{2})/i                                     // Huawei MediaPad
+            ], [MODEL, [VENDOR, 'Huawei'], [TYPE, TABLET]], [
 
             /(microsoft);\s(lumia[\s\w]+)/i                                     // Microsoft Lumia
             ], [VENDOR, MODEL, [TYPE, MOBILE]], [
@@ -3803,7 +3812,7 @@ exports.parse = function(sdp) {
             ], [VENDOR, MODEL, [TYPE, MOBILE]], [
 
             /crkey/i                                                            // Google Chromecast
-            ], [[MODEL, 'Chromecast'], [VENDOR, 'Google']], [
+            ], [[MODEL, 'Chromecast'], [VENDOR, 'Google'], [TYPE, SMARTTV]], [
 
             /android.+;\s(glass)\s\d/i                                          // Google Glass
             ], [MODEL, [VENDOR, 'Google'], [TYPE, WEARABLE]], [
@@ -3828,7 +3837,7 @@ exports.parse = function(sdp) {
             ], [[VENDOR, 'Meizu'], MODEL, [TYPE, MOBILE]], [
 
             /android.+a000(1)\s+build/i,                                        // OnePlus
-            /android.+oneplus\s(a\d{4})\s+build/i
+            /android.+oneplus\s(a\d{4})[\s)]/i
             ], [MODEL, [VENDOR, 'OnePlus'], [TYPE, MOBILE]], [
 
             /android.+[;\/]\s*(RCT[\d\w]+)\s+build/i                            // RCA Tablets
@@ -3914,8 +3923,8 @@ exports.parse = function(sdp) {
             /windows.+\sedge\/([\w\.]+)/i                                       // EdgeHTML
             ], [VERSION, [NAME, 'EdgeHTML']], [
 
-            /webkit\/537\.36.+chrome\/(?!27)/i                                  // Blink
-            ], [[NAME, 'Blink']], [
+            /webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i                         // Blink
+            ], [VERSION, [NAME, 'Blink']], [
 
             /(presto)\/([\w\.]+)/i,                                             // Presto
             /(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i,     
@@ -3944,7 +3953,7 @@ exports.parse = function(sdp) {
             /\((bb)(10);/i                                                      // BlackBerry 10
             ], [[NAME, 'BlackBerry'], VERSION], [
             /(blackberry)\w*\/?([\w\.]*)/i,                                     // Blackberry
-            /(tizen)[\/\s]([\w\.]+)/i,                                          // Tizen
+            /(tizen|kaios)[\/\s]([\w\.]+)/i,                                    // Tizen/KaiOS
             /(android|webos|palm\sos|qnx|bada|rim\stablet\sos|meego|sailfish|contiki)[\/\s-]?([\w\.]*)/i
                                                                                 // Android/WebOS/Palm/QNX/Bada/RIM/MeeGo/Contiki/Sailfish OS
             ], [NAME, VERSION], [
@@ -4123,7 +4132,7 @@ exports.parse = function(sdp) {
     //   jQuery always exports to global scope, unless jQuery.noConflict(true) is used,
     //   and we should catch that.
     var $ = window && (window.jQuery || window.Zepto);
-    if (typeof $ !== UNDEF_TYPE && !$.ua) {
+    if ($ && !$.ua) {
         var parser = new UAParser();
         $.ua = parser.getResult();
         $.ua.get = function () {
@@ -4154,14 +4163,16 @@ function bytesToUuid(buf, offset) {
   var i = offset || 0;
   var bth = byteToHex;
   // join used to fix memory issue caused by concatenation: https://bugs.chromium.org/p/v8/issues/detail?id=3175#c4
-  return ([bth[buf[i++]], bth[buf[i++]], 
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]],
-	bth[buf[i++]], bth[buf[i++]],
-	bth[buf[i++]], bth[buf[i++]]]).join('');
+  return ([
+    bth[buf[i++]], bth[buf[i++]],
+    bth[buf[i++]], bth[buf[i++]], '-',
+    bth[buf[i++]], bth[buf[i++]], '-',
+    bth[buf[i++]], bth[buf[i++]], '-',
+    bth[buf[i++]], bth[buf[i++]], '-',
+    bth[buf[i++]], bth[buf[i++]],
+    bth[buf[i++]], bth[buf[i++]],
+    bth[buf[i++]], bth[buf[i++]]
+  ]).join('');
 }
 
 module.exports = bytesToUuid;
