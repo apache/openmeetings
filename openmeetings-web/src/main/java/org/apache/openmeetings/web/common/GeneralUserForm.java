@@ -100,7 +100,7 @@ public class GeneralUserForm extends Form<User> {
 		add(new DropDownChoice<>("timeZoneId", AVAILABLE_TIMEZONES));
 		add(new LanguageDropDown("languageId"));
 		add(new TextField<String>("address.phone"));
-		add(new AjaxOmDatePicker("age", new PropertyModel<LocalDate>(this, "age")) {
+		final AjaxOmDatePicker bday = new AjaxOmDatePicker("age", new PropertyModel<LocalDate>(this, "age")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -108,7 +108,9 @@ public class GeneralUserForm extends Form<User> {
 				User u = GeneralUserForm.this.getModelObject();
 				u.setAge(CalendarHelper.getDate(age, u.getTimeZoneId()));
 			}
-		});
+		};
+		bday.getConfig().withMaxDate(LocalDate.now());
+		add(bday);
 		add(new TextField<String>("address.street"));
 		add(new TextField<String>("address.additionalname"));
 		add(new TextField<String>("address.zip"));
