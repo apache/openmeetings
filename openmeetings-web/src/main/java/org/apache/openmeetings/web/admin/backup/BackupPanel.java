@@ -52,10 +52,10 @@ import org.apache.wicket.util.lang.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 /**
  * Panel component to manage Backup Import/Export
  *
@@ -66,7 +66,7 @@ public class BackupPanel extends AdminBasePanel {
 	private static final Logger log = LoggerFactory.getLogger(BackupPanel.class);
 	private static final long serialVersionUID = 1L;
 
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	@SpringBean
 	private BackupExport backupExport;
 	@SpringBean

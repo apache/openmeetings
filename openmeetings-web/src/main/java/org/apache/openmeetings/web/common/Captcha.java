@@ -25,8 +25,6 @@ import java.security.SecureRandom;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -39,7 +37,6 @@ import org.apache.wicket.validation.ValidationError;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.Icon;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5CssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public class Captcha extends Panel {
@@ -93,11 +90,6 @@ public class Captcha extends Panel {
 		}).setOutputMarkupId(true));
 		add(new BootstrapAjaxLink<>("refresh", Model.of(""), Buttons.Type.Outline_Info, new ResourceModel("lbl.refresh")) {
 			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void renderHead(IHeaderResponse response) {
-				response.render(CssHeaderItem.forReference(FontAwesome5CssReference.instance()));
-			}
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {

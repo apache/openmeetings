@@ -23,13 +23,12 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public abstract class FormActionsPanel<T> extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final Form<T> form;
-	protected final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	protected final NotificationPanel feedback = new NotificationPanel("feedback");
 	private AjaxButton saveBtn;
 	private ConfirmableAjaxBorder purgeBtn;
 

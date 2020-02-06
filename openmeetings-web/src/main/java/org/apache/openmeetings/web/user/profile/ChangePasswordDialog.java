@@ -35,10 +35,10 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public class ChangePasswordDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
@@ -71,7 +71,7 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 			super.onValidate();
 		}
 	};
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	@SpringBean
 	private UserDao userDao;
 

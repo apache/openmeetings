@@ -40,11 +40,11 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.form.button.ConfirmAjaxButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
@@ -56,7 +56,7 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 	private final Label streamsSize;
 	private final CleanupEntityUnitPanel fin;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean

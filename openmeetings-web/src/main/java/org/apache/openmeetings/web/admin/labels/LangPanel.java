@@ -62,9 +62,9 @@ import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Language Editor, add/insert/update Label and add/delete language contains several Forms and one list
@@ -75,7 +75,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class LangPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(LangPanel.class);
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private LangForm langForm;
 	private final FileUploadField fileUploadField = new FileUploadField("fileInput");
 

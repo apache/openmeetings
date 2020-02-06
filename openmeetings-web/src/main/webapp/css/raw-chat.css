@@ -112,12 +112,6 @@ html[dir="rtl"] #chat .messageArea .icons {
 .save.chat-tool-icon {
 	background-image: url(images/file_save_as.png);
 }
-#chat #hyperlink {
-	background-image: url(images/link.png);
-}
-#chat #fontStyle span {
-	background-image: url(images/settings.png);
-}
 .send-ctrl.chat-tool-icon {
 	background-image: url(images/key_ctrl.png);
 	background-position: 0px 0px;
@@ -175,21 +169,11 @@ html[dir="rtl"] .main.room #chatPanel {
 .main.room #chatPanel.closed #chatPopup #chat {
 	display: none;
 }
-ul.dropdown-menu.btns-only, ul.dropdown-menu.btns-only li {
-	max-width: 62px;
-	min-width: 62px;
-}
-ul.dropdown-menu.btns-only li .chat-btn {
-	float: none !important;
-}
 .emt {
 	font-size: 10pt;
 }
 .chat.btn{
 	font-weight: bold;
-}
-.chat.dropdown-menu {
-	left: -50px;
 }
 .chat-msg-container {
 	position: relative;

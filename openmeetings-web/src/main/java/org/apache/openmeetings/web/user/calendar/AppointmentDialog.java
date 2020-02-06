@@ -86,7 +86,6 @@ import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
@@ -96,8 +95,8 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-import com.googlecode.wicket.kendo.ui.form.datetime.local.DateTimePicker;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 1L;
@@ -109,7 +108,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private DialogButton delete;
 	private DialogButton enterRoom;
 	private final CalendarPanel calendarPanel;
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	MessageDialog confirmDelete;
 	private final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
 	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.user));
@@ -310,8 +309,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		private final boolean myRoomsAllowed;
 		private boolean createRoom = true;
 		private Room appRoom = new Room();
-		private final DateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
-		private final DateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
+		private final OmDateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
+		private final OmDateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 		private final PasswordTextField pwd = new PasswordTextField("password");
 		private final Label owner = new Label("aowner", Model.of(""));
 		private final WebMarkupContainer ownerPanel = new WebMarkupContainer("owner-row");

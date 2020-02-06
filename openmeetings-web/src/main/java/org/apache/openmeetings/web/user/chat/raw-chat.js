@@ -97,7 +97,7 @@ var Chat = function() {
 		}
 		const emtBtn = $('#emoticons');
 		emtBtn.html('');
-		emtBtn.append(' ' + emoticon.emoticonize(':)') + ' <b class="caret"></b>');
+		emtBtn.append(' ' + emoticon.emoticonize(':)'));
 		const a = $('#chat .audio');
 		const sbtn = $('#chat .send-btn');
 		{ //scope
@@ -105,7 +105,6 @@ var Chat = function() {
 			_updateAudioBtn(a);
 			_updateSendBtn(sbtn)
 		}
-		$('#chat .chat-btn').hover(function(){ $(this).addClass('ui-state-hover') }, function(){ $(this).removeClass('ui-state-hover') });
 		a.off().click(function() {
 			const s = _load();
 			muted = s.chat.muted = !s.chat.muted;

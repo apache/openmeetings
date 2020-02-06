@@ -89,7 +89,6 @@ import org.slf4j.LoggerFactory;
 import org.wicketstuff.urlfragment.UrlFragment;
 
 import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
 
@@ -216,7 +215,7 @@ public class MainPanel extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				about.open(target);
+				about.show(target);
 			}
 		});
 		if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
@@ -230,9 +229,9 @@ public class MainPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+			public void onSend(IPartialPageRequestHandler handler) {
 				BasePanel bp = getCurrentPanel();
-				if (send.equals(button) && bp != null) {
+				if (bp != null) {
 					bp.onNewMessageClose(handler);
 				}
 			}
@@ -243,7 +242,7 @@ public class MainPanel extends Panel {
 
 			@Override
 			protected void respond(AjaxRequestTarget target) {
-				userInfo.open(target, getParam(getComponent(), PARAM_USER_ID).toLong());
+				userInfo.show(target, getParam(getComponent(), PARAM_USER_ID).toLong());
 			}
 
 			@Override
@@ -271,7 +270,7 @@ public class MainPanel extends Panel {
 
 			@Override
 			protected void respond(AjaxRequestTarget target) {
-				newMessage.reset(true).open(target, getParam(getComponent(), PARAM_USER_ID).toOptionalLong());
+				newMessage.reset(true).show(target, getParam(getComponent(), PARAM_USER_ID).toOptionalLong());
 			}
 
 			@Override

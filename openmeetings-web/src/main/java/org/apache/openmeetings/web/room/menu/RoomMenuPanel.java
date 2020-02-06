@@ -54,7 +54,6 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -67,7 +66,6 @@ import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5CssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public class RoomMenuPanel extends Panel {
@@ -179,7 +177,6 @@ public class RoomMenuPanel extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(CssHeaderItem.forReference(FontAwesome5CssReference.instance()));
 		pollsSubMenu.renderHead(response);
 	}
 

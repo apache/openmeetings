@@ -29,17 +29,17 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.Model;
 
-import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public abstract class NameDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private DialogButton add;
 	private DialogButton cancel;
 	private final Form<String> form;
-	protected final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	protected final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final String name;
 	private RequiredTextField<String> title;
 

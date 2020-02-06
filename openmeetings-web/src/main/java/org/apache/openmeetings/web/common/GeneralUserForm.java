@@ -36,12 +36,10 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.util.CalendarHelper;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.CountryDropDown;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -57,9 +55,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
-
-import com.googlecode.wicket.kendo.ui.KendoCultureHeaderItem;
-import com.googlecode.wicket.kendo.ui.form.datetime.local.AjaxDatePicker;
 
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
@@ -105,7 +100,7 @@ public class GeneralUserForm extends Form<User> {
 		add(new DropDownChoice<>("timeZoneId", AVAILABLE_TIMEZONES));
 		add(new LanguageDropDown("languageId"));
 		add(new TextField<String>("address.phone"));
-		add(new AjaxDatePicker("age", new PropertyModel<LocalDate>(this, "age"), WebSession.get().getLocale()) {
+		add(new AjaxOmDatePicker("age", new PropertyModel<LocalDate>(this, "age")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -185,11 +180,5 @@ public class GeneralUserForm extends Form<User> {
 	@Override
 	protected IMarkupSourcingStrategy newMarkupSourcingStrategy() {
 		return new PanelMarkupSourcingStrategy(false);
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(KendoCultureHeaderItem.of(WebSession.get().getLocale()));
 	}
 }
