@@ -135,6 +135,7 @@ import org.wicketstuff.dashboard.web.DashboardContext;
 import org.wicketstuff.dashboard.web.DashboardSettings;
 import org.wicketstuff.datastores.hazelcast.HazelcastDataStore;
 
+import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.WysiwygLibrarySettings;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -282,6 +283,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		final IBootstrapSettings settings = new BootstrapSettings();
 		settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Sandstone));//FIXME TODO new SingleThemeProvider(new MaterialDesignTheme())
 		Bootstrap.builder().withBootstrapSettings(settings).install(this);
+		WysiwygLibrarySettings.get().setBootstrapCssReference(null);
+		WysiwygLibrarySettings.get().setBootstrapDropDownJavaScriptReference(null);
 
 		// register some widgets
 		final DashboardContext dashboardContext = getDashboardContext();

@@ -7,16 +7,16 @@ var Chat = function() {
 		, closedSizePx = closedSize + "px"
 		, emoticon = new CSSEmoticon()
 		, doneTypingInterval = 5000 //time in ms, 5 second for example
-		, iconOpen = 'ui-icon-caret-1-n'
-		, iconOpenRoom = 'ui-icon-caret-1-' + (Settings.isRtl ? 'e' : 'w')
-		, iconClose = 'ui-icon-caret-1-s'
-		, iconCloseRoom = 'ui-icon-caret-1-' + (Settings.isRtl ? 'w' : 'e')
+		, iconOpen = 'fa-angle-up'
+		, iconOpenRoom = 'fa-angle-' + (Settings.isRtl ? 'left' : 'right')
+		, iconClose = 'fa-angle-down'
+		, iconCloseRoom = 'fa-angle-' + (Settings.isRtl ? 'right' : 'left')
 		, SEND_ENTER = 'enter', SEND_CTRL = 'ctrl'
 		;
 	let p, pp, ctrl, icon, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
 		, roomPrefix = "Room ", typingTimer, audio, roomMode = false, globalWidth = 600
 		, editor = $('#chatMessage .wysiwyg-editor'), muted = false, sendOn, DEF_SEND
-		, userId;
+		, userId
 		;
 
 	try {
@@ -141,7 +141,7 @@ var Chat = function() {
 		clearTimeout(p.data('timeout'));
 		pp = $('#chatPanel, #chatPopup');
 		ctrl = $('#chatPopup .control.block');
-		icon = $('#chatPopup .control.block .ui-icon');
+		icon = $('#chatPopup .control.block i.fas');
 		editor = $('#chatMessage .wysiwyg-editor');
 		icon.removeClass(function(index, className) {
 			return (className.match (/(^|\s)ui-icon-caret-\S+/g) || []).join(' ');
@@ -241,7 +241,7 @@ var Chat = function() {
 				msg.find('.user-row')
 					.data('userId', cm.from.id)
 					.data('actions', cm.actions)
-					.css('background-image', 'url(' + (!!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now()) + ')')
+					//.css('background-image', 'url(' + (!!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now()) + ')')
 					.mouseenter(function() {
 						__hideActions();
 						__getActions($(this))

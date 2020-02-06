@@ -34,6 +34,7 @@
 }
 .adminPanelColumnForm .adminForm .actions {
 	height: var(--actions-height);
+	padding-top: 5px;
 }
 .adminPanelColumnTable .list-table .ui-button.ui-widget {
 	padding: 0;
@@ -42,9 +43,6 @@
 	height: calc(100% - var(--actions-height));
 	vertical-align: top;
 	overflow-y: auto;
-}
-.adminForm .btn {
-	width: 280px;
 }
 .adminForm .input, .adminForm input, .adminForm input.formcheckbox
 ,.adminForm textarea, .adminForm select, .adminForm label

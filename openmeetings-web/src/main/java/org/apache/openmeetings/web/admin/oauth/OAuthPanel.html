@@ -80,41 +80,41 @@
 					<div class="formelement">
 						<label wicket:for="requestInfoUrl"><wicket:message key="1580" /></label><input type="text" wicket:id="requestInfoUrl"/>
 					</div>
-					<!-- Attribute mapping -->
-					<fieldset class="ui-widget-content">
-						<legend class="ui-widget-header"><wicket:message key="admin.oauth.user.mapping" /></legend>
-						<div wicket:id="mappingForm">
-							<div class="formelement">
-								<label wicket:for="omAttr"><wicket:message key="admin.oauth.attr.om" /></label>
-								<input type="text" class="input" wicket:id="omAttr"/>
-							</div>
-							<div class="formelement">
-								<label wicket:for="oauthAttr"><wicket:message key="admin.oauth.attr.oauth" /></label>
-								<input type="text" class="input" wicket:id="oauthAttr"/>
-							</div>
-							<button type="button" wicket:id="addMapping"><wicket:message key="1261"/></button>
+				</fieldset>
+				<!-- Attribute mapping -->
+				<fieldset class="ui-widget-content">
+					<legend class="ui-widget-header"><wicket:message key="admin.oauth.user.mapping" /></legend>
+					<div wicket:id="mappingForm">
+						<div class="formelement">
+							<label wicket:for="omAttr"><wicket:message key="admin.oauth.attr.om" /></label>
+							<input type="text" class="input" wicket:id="omAttr"/>
 						</div>
-						<table class="list-table small">
-							<thead>
-								<tr class="ui-widget-header">
-									<th class="col-7"><wicket:message key="admin.oauth.attr.om" /></th>
-									<th class="col-4"><wicket:message key="admin.oauth.attr.oauth" /></th>
-									<th class="col-1"><wicket:message key=275 /></th>
-								</tr>
-							</thead>
-							<tbody wicket:id="attrsContainer">
-								<tr wicket:id="mapping">
-									<td class="col-7"><div class="col-wrapper"><span wicket:id="key"></span></div></td>
-									<td class="col-4"><div class="col-wrapper"><span wicket:id="value"></span></div></td>
-									<td class="col-1">
-										<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="delete" wicket:message="title:80">
-											<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</fieldset>
+						<div class="formelement">
+							<label wicket:for="oauthAttr"><wicket:message key="admin.oauth.attr.oauth" /></label>
+							<input type="text" class="input" wicket:id="oauthAttr"/>
+						</div>
+						<button type="button" wicket:id="addMapping"><wicket:message key="1261"/></button>
+					</div>
+					<table class="list-table small">
+						<thead>
+							<tr class="ui-widget-header">
+								<th class="col-7"><wicket:message key="admin.oauth.attr.om" /></th>
+								<th class="col-4"><wicket:message key="admin.oauth.attr.oauth" /></th>
+								<th class="col-1"><wicket:message key=275 /></th>
+							</tr>
+						</thead>
+						<tbody wicket:id="attrsContainer">
+							<tr wicket:id="mapping">
+								<td class="col-7"><div class="col-wrapper"><span wicket:id="key"></span></div></td>
+								<td class="col-4"><div class="col-wrapper"><span wicket:id="value"></span></div></td>
+								<td class="col-1">
+									<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="delete" wicket:message="title:80">
+										<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</fieldset>
 				<div class="bottom-bumper"></div>
 			</div>

@@ -172,9 +172,6 @@ html[dir="rtl"] .main.room #chatPanel {
 .emt {
 	font-size: 10pt;
 }
-.chat.btn{
-	font-weight: bold;
-}
 .chat-msg-container {
 	position: relative;
 }

@@ -118,6 +118,9 @@ html, body {
 	margin-left: 2px;
 	display: inline-block;
 }
+.pagedEntityListPanel .pagination {
+	display: inline-block;
+}
 .searchForm {
 	display: inline-block;
 	vertical-align: top;
@@ -574,19 +577,12 @@ form .input {
 	font-size: 12px;
 	white-space: nowrap;
 }
-.profile .ui-button-text-only .ui-button-text {
-	font-size: 12px;
-	padding-right: 0.2em;
-	padding-left: 0.2em;
-}
 .profile .remove {
 	position: absolute;
 	right: 5px;
 	top: 5px;
 	border: 1px solid #cccc;
-}
-#contents .btn-file>input {
-	transform: translate(-30px, 0) scale(1);
+	padding: 0px 7px;
 }
 .room.list.container {
 	height: 150px;
@@ -682,6 +678,34 @@ form .input {
 .dashboard {
 	overflow-y: auto;
 	height: 100%;
+}
+.dragbox .dragbox-header .dragbox-toggle, .dragbox .dragbox-header .dragbox-actions .icon {
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	display: inline-block;
+	font-style: normal;
+	text-rendering: auto;
+	line-height: 1;
+	font-variant: normal;
+	background: none;
+	vertical-align: super;
+	margin: 0;
+}
+.dragbox .dragbox-header .dragbox-actions .icon {
+	vertical-align: middle;
+}
+.dragbox .dragbox-header .dragbox-toggle.expanded::before {
+	content: "\f0d7";
+}
+.dragbox .dragbox-header .dragbox-toggle.collapsed::before {
+	content: "\f0d8";
+}
+.dragbox .dragbox-header .dragbox-actions .icon.refresh::before {
+	content: "\f2f1";
+}
+.dragbox .dragbox-header .dragbox-actions .icon.delete::before {
+	content: "\f00d";
+	color: var(--danger);
 }
 .dragbox-content .tableWrapper {
 	/* room users on dashboard */
@@ -802,6 +826,7 @@ form .input {
 }
 .img-upload .btn.btn-file {
 	width: 120px;
+	padding: 0;
 }
 .profile-edit-form {
 	height: calc(100% - 50px);

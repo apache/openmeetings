@@ -80,8 +80,7 @@ html[dir="rtl"] #activities .control.block .label
 	padding-left: initial !important;
 	padding-right: 20px !important;
 }
-html[dir="rtl"] .btn-toolbar .btn
-, html[dir="rtl"] .btn-toolbar .btn-group
+html[dir="rtl"] .btn-toolbar .btn-group
 , html[dir="rtl"] .btn-toolbar .input-group
 {
 	float: right !important;
