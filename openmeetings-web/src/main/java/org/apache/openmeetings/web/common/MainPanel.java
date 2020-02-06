@@ -95,7 +95,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
 public class MainPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(MainPanel.class);
-	private static final String DELIMITER = "     ";
 	private final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
 	private String uid = null;
 	private MenuPanel menu;
@@ -336,7 +335,7 @@ public class MainPanel extends Panel {
 			}
 			List<Room> recent = roomDao.getRecent(getUserId());
 			if (!recent.isEmpty()) {
-				l.add(new OmMenuItem(DELIMITER, (String)null));
+				l.add(new OmMenuItem(null, (String)null));
 			}
 			for (Room r : recent) {
 				final Long roomId = r.getId();

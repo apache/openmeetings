@@ -183,14 +183,6 @@ html, body {
 .ui-dialog {
 	box-shadow: 3px 3px 4px #000;
 }
-.sort-icon, .sort-icon a {
-	display: inline-block !important;
-	text-indent: 0px !important;
-}
-.sort-icon a {
-	width: inherit;
-	height: inherit;
-}
 .start_step1, .start_step2, .start_step3, .start_step4 {
 	padding-left: 30px;
 	background-position: left top;
@@ -662,13 +654,6 @@ form .input {
 .list-table tr.deleted {
 	background-image: repeating-linear-gradient(-45deg, transparent, transparent 5px, /* gap */ #cccccc 6px, /* overall width incluing gap */ #cccccc 6px);
 }
-.list-table tr:hover, .room-row:hover {
-	/*SHOULD BE MANUALLY IN SYNC WITH THEME .ui-state-hover */
-	border: 1px solid #74b2e2;
-	background-color: #e4f1fb;
-	font-weight: normal;
-	color: #0070a3;
-}
 .tableWrapper {
 	background-color: #FFFFFF;
 	border: solid 1px #aacfe4;
@@ -679,7 +664,7 @@ form .input {
 	overflow-y: auto;
 	height: 100%;
 }
-.dragbox .dragbox-header .dragbox-toggle, .dragbox .dragbox-header .dragbox-actions .icon {
+.dragbox .dragbox-header .dragbox-toggle, .dragbox .dragbox-header .dragbox-actions .icon, .sort-icon a {
 	font-family: "Font Awesome 5 Free";
 	font-weight: 900;
 	display: inline-block;
@@ -714,6 +699,18 @@ form .input {
 }
 .dragbox-content .rooms-widget {
 	display: flex;
+}
+.sort-icon a {
+	vertical-align: middle;
+}
+.sort-icon.none a::before {
+	content: '\f0dc';
+}
+.sort-icon.desc a::before {
+	content: '\f0dd';
+}
+.sort-icon.asc a::before {
+	content: '\f0de';
 }
 .tableWrapper .list-table {
 	height: 100%;

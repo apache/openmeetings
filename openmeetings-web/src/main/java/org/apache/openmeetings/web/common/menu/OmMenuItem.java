@@ -29,7 +29,9 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuDivider;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar.ComponentPosition;
@@ -79,7 +81,9 @@ public class OmMenuItem implements INavbarComponent {
 	@Override
 	public AbstractLink create(String markupId) {
 		AbstractLink item;
-		if (items.isEmpty()) {
+		if (Strings.isEmpty(title)) {
+			item = new MenuDivider();
+		} else if (items.isEmpty()) {
 			item = new NavbarAjaxLink<String>(markupId, Model.of(title)) {
 				private static final long serialVersionUID = 1L;
 

@@ -32,7 +32,7 @@ public abstract class AdminBasePanel extends BasePanel {
 	protected StringBuilder getRowClass(Long id, Long selectedId) {
 		StringBuilder sb = new StringBuilder(ROW_CLASS);
 		if (id != null && id.equals(selectedId)) {
-			sb.append(" ui-state-default");
+			sb.append(" table-active");
 		}
 		return sb;
 	}
