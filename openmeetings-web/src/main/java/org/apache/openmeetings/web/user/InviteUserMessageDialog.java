@@ -18,9 +18,6 @@
  */
 package org.apache.openmeetings.web.user;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -31,15 +28,16 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public class InviteUserMessageDialog extends AbstractFormDialog<String> {
+public class InviteUserMessageDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
-	private DialogButton send;
-	private DialogButton cancel;
 	private final Form<Void> form = new Form<>("form");
 	private final TextArea<String> message = new TextArea<>("message", Model.of(""));
 	private final CheckBox enterRoom = new CheckBox("enterRoom", Model.of(false));
@@ -49,49 +47,45 @@ public class InviteUserMessageDialog extends AbstractFormDialog<String> {
 	private RoomDao roomDao;
 
 	public InviteUserMessageDialog(String id) {
-		super(id, "");
-		add(form.add(message.setRequired(true), enterRoom.setOutputMarkupId(true)).setOutputMarkupId(true));
+		super(id);
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("1138"));
-		send = new DialogButton("send", getString("213"));
-		cancel = new DialogButton("cancel", getString("lbl.cancel"));
+		header(new ResourceModel("1138"));
+		setCloseOnEscapeKey(true);
+		setBackdrop(Backdrop.STATIC);
+
+		addButton(new BootstrapAjaxButton("button", new ResourceModel("213"), form, Buttons.Type.Primary) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				// no-op
+			}
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				InviteUserMessageDialog.this.close(target);
+			}
+		}); //send
+		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Secondary, new ResourceModel("lbl.cancel")) {
+			private static final long serialVersionUID = 1L;
+
+			public void onClick(AjaxRequestTarget target) {
+				InviteUserMessageDialog.this.close(target);
+			}
+		});
 		super.onInitialize();
+		add(form.add(message.setRequired(true), enterRoom.setOutputMarkupId(true)).setOutputMarkupId(true));
 	}
 
-	public void open(IPartialPageRequestHandler handler, Long roomId, Long userId) {
+	public void show(IPartialPageRequestHandler handler, Long roomId, Long userId) {
 		Room r = roomDao.get(roomId);
 		User u = userDao.get(userId);
 		message.setModelObject(String.format("%s %s %s %s", u.getFirstname(), u.getLastname(), getString("1137"), r.getName()));
 		enterRoom.setModelObject(false);
 		handler.add(form);
-		open(handler);
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(send, cancel);
-	}
-
-	@Override
-	public DialogButton getSubmitButton() {
-		return send;
-	}
-
-	@Override
-	public Form<?> getForm() {
-		return form;
-	}
-
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
-		// no-op
-	}
-
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		// no-op
+		show(handler);
 	}
 }

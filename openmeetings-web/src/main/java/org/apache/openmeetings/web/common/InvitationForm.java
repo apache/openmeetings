@@ -61,8 +61,6 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public abstract class InvitationForm extends Form<Invitation> {
@@ -85,6 +83,11 @@ public abstract class InvitationForm extends Form<Invitation> {
 	private UserDao userDao;
 	@SpringBean
 	private InvitationManager inviteManager;
+
+	public enum Action {
+		GENERATE
+		, SEND
+	};
 
 	public InvitationForm(String id) {
 		super(id, new CompoundPropertyModel<>(new Invitation()));
@@ -145,8 +148,10 @@ public abstract class InvitationForm extends Form<Invitation> {
 
 	protected void updateButtons(AjaxRequestTarget target) {
 		Collection<User> recpnts = recipients.getModelObject();
-		dialog.getSend().setEnabled(!recpnts.isEmpty(), target);
-		dialog.getGenerate().setEnabled(recpnts.size() == 1, target);
+		target.add(
+				dialog.getSend().setEnabled(!recpnts.isEmpty())
+				, dialog.getGenerate().setEnabled(recpnts.size() == 1)
+				);
 	}
 
 	@Override
@@ -213,16 +218,14 @@ public abstract class InvitationForm extends Form<Invitation> {
 		this.dialog = dialog;
 	}
 
-	public void onClick(AjaxRequestTarget target, DialogButton button) {
+	public void onClick(AjaxRequestTarget target, Action action) {
 		final String userbaseUrl = WebSession.get().getExtendedProperties().getBaseUrl();
-		if (button.equals(dialog.getCancel())) {
-			dialog.onSuperClick(target, button);
-		} else if (button.equals(dialog.getGenerate())) {
+		if (Action.GENERATE == action) {
 			Invitation i = create(recipients.getModelObject().iterator().next());
 			setModelObject(i);
 			url.setModelObject(getInvitationLink(i, userbaseUrl));
 			target.add(url);
-		} else if (button.equals(dialog.getSend())) {
+		} else {
 			if (Strings.isEmpty(url.getModelObject())) {
 				for (User u : recipients.getModelObject()) {
 					Invitation i = create(u);
@@ -240,7 +243,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 					log.error("error while sending invitation by URL ", e);
 				}
 			}
-			dialog.onSuperClick(target, button);
+			dialog.close(target);
 		}
 	}
 }

@@ -507,7 +507,7 @@ public class RoomPanel extends BasePanel {
 						break;
 					case roomClosed:
 						handler.add(room.setVisible(false));
-						roomClosed.open(handler);
+						roomClosed.show(handler);
 						break;
 					case requestRightModerator:
 						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightModerator), handler);

@@ -74,7 +74,7 @@ public class ActionsSubMenu implements Serializable {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				invite.updateModel(target);
-				invite.open(target);
+				invite.show(target);
 			}
 		};
 		shareMenuItem = new RoomMenuItem(mp.getString("239"), mp.getString("1480"), false) {

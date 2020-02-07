@@ -111,7 +111,7 @@ public class VideoInfo extends Panel {
 		protected void onSubmit(AjaxRequestTarget target) {
 			rif.setRecordingId(rm.getObject().getId());
 			invite.updateModel(target);
-			invite.open(target);
+			invite.show(target);
 		}
 	};
 	@SpringBean

@@ -534,10 +534,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	private static void checkIsInvalid() {
-		if (isInvaldSession(get().getId())) {
+		WebSession session = get();
+		if (isInvaldSession(session.getId())) {
 			setKickedByAdmin(true);
-			removeInvalidSession(get().getId());
-			org.apache.wicket.Session session = get();
+			removeInvalidSession(session.getId());
 			session.invalidateNow();
 			Application.get().restartResponseAtSignInPage();
 		}

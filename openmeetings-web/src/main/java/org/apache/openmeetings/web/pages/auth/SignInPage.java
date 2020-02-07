@@ -57,6 +57,7 @@ import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BaseInitedPage;
+import org.apache.openmeetings.web.room.IconTextModal;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.model.ResourceModel;
@@ -80,7 +81,23 @@ public class SignInPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(SignInPage.class);
 	private SignInDialog signin;
-	private KickMessageDialog kick;
+	private final Modal<String> kick = new IconTextModal("kick") {
+		private static final long serialVersionUID = 1L;
+		{
+			withLabel(new ResourceModel("606"));
+			withErrorIcon();
+			setCloseOnEscapeKey(false);
+			show(true);
+			setUseCloseHandler(true);
+			addCloseButton(new ResourceModel("54"));
+		}
+
+		@Override
+		protected void onClose(IPartialPageRequestHandler target) {
+			WebSession.setKickedByAdmin(false);
+			Application.get().restartResponseAtSignInPage();
+		}
+	};
 	private final Modal<String> forgetInfoDialog = new TextContentModal("forgetInfo", new ResourceModel("321")) {
 		private static final long serialVersionUID = 1L;
 
@@ -178,7 +195,6 @@ public class SignInPage extends BaseInitedPage {
 		signin.setForgetPasswordDialog(forget);
 		r.setSignInDialog(signin);
 		forget.setSignInDialog(signin);
-		kick = new KickMessageDialog("kick");
 		add(signin.setVisible(!WebSession.get().isKickedByAdmin()),
 				r.setVisible(allowRegister()), forget, kick.setVisible(WebSession.get().isKickedByAdmin()));
 		add(forgetInfoDialog

@@ -284,7 +284,7 @@ public class MainPanel extends Panel {
 
 			@Override
 			protected void respond(AjaxRequestTarget target) {
-				inviteUser.open(target, getParam(getComponent(), PARAM_USER_ID).toLong());
+				inviteUser.show(target, getParam(getComponent(), PARAM_USER_ID).toLong());
 			}
 
 			@Override

@@ -48,9 +48,11 @@
 				</div>
 			</div>
 			<div class="row form-group no-gutters">
-				<div class="col-6 remember">
-					<input wicket:id="rememberMe" type="checkbox" />
-					<label wicket:for="rememberMe"><wicket:message key="288" /></label>
+				<div class="col-6">
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" wicket:id="rememberMe" class="custom-control-input"/>
+						<label wicket:for="rememberMe" class="custom-control-label"><wicket:message key="288" /></label>
+					</div>
 				</div>
 				<div class="col-5">
 					<a class="text-primary" wicket:id="forget"><wicket:message key="311"/></a>

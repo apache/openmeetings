@@ -26,9 +26,6 @@ html, body {
 	background-repeat: no-repeat;
 	padding-left: 20px;
 }
-.signin .remember {
-	white-space: nowrap;
-}
 .signin .or-seperator {
 	margin-top: 20px;
 	text-align: center;
