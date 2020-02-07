@@ -86,6 +86,6 @@ public class InviteUserMessageDialog extends Modal<String> {
 		message.setModelObject(String.format("%s %s %s %s", u.getFirstname(), u.getLastname(), getString("1137"), r.getName()));
 		enterRoom.setModelObject(false);
 		handler.add(form);
-		show(handler);
+		super.show(handler);
 	}
 }

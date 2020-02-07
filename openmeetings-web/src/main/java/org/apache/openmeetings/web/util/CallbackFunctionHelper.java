@@ -27,6 +27,9 @@ import org.apache.wicket.ajax.attributes.CallbackParameter;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.util.string.StringValue;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
+
 public class CallbackFunctionHelper {
 	private CallbackFunctionHelper() {}
 
@@ -61,5 +64,16 @@ public class CallbackFunctionHelper {
 
 	public static AttributeModifier addOnClick(Serializable handler) {
 		return AttributeModifier.replace("onclick", handler);
+	}
+
+	public static ConfirmationConfig newOkCancelConfirmCfg(Component c, String title) {
+		return new ConfirmationConfig()
+				.withBtnCancelLabel(c.getString("lbl.cancel"))
+				.withBtnOkLabel(c.getString("54"))
+				.withTitle(title);
+	}
+
+	public static ConfirmationBehavior newOkCancelConfirm(Component c, String title) {
+		return new ConfirmationBehavior(newOkCancelConfirmCfg(c, title));
 	}
 }

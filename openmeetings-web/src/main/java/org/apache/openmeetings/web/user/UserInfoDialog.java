@@ -87,7 +87,7 @@ public class UserInfoDialog extends Modal<String> {
 		message.setVisible(userId != getUserId());
 		container.replace(new UserProfilePanel("body", userId));
 		handler.add(container, contacts, contacts);
-		show(handler);
+		super.show(handler);
 	}
 
 	public WebMarkupContainer getContainer() {

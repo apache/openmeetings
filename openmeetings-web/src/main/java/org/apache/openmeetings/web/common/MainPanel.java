@@ -26,6 +26,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.newOkCancelConfirm;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
@@ -130,6 +131,7 @@ public class MainPanel extends Panel {
 
 	@Override
 	protected void onInitialize() {
+		super.onInitialize();
 		add(new OmWebSocketPanel("ws-panel") {
 			private static final long serialVersionUID = 1L;
 
@@ -293,16 +295,19 @@ public class MainPanel extends Panel {
 				response.render(new PriorityHeaderItem(getNamedFunction("inviteUser", this, explicit(PARAM_USER_ID))));
 			}
 		});
-		topLinks.add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
+		topLinks.add(new AjaxLink<Void>("logout") {
 			private static final long serialVersionUID = 1L;
+			{
+				add(newOkCancelConfirm(this, getString("634")));
+			}
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
+			public void onClick(AjaxRequestTarget target) {
 				getSession().invalidate();
 				setResponsePage(Application.get().getSignInPageClass());
 			}
+
 		});
-		super.onInitialize();
 	}
 
 	private OmMenuItem getSubItem(String lbl, String title, MenuActions action, MenuParams param) {

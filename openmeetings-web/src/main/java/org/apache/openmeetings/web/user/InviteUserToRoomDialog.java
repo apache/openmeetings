@@ -106,6 +106,6 @@ public class InviteUserToRoomDialog extends Modal<String> {
 		this.userId = userId;
 		publicRooms.update(handler, roomDao.getPublicRooms());
 		privateRooms.update(handler, getPrivateRooms(getUserId(), userId, roomDao));
-		show(handler);
+		super.show(handler);
 	}
 }

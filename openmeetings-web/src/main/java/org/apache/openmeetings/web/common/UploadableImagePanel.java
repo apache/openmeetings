@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.newOkCancelConfirm;
 
 import java.io.File;
 import java.util.Optional;
@@ -39,6 +40,10 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.lang.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public abstract class UploadableImagePanel extends ImagePanel {
 	private static final long serialVersionUID = 1L;
@@ -70,11 +75,15 @@ public abstract class UploadableImagePanel extends ImagePanel {
 			add(new WebMarkupContainer("remove").add(AttributeModifier.append("onclick"
 					, "$(this).parent().find('.fileinput').fileinput('clear');")));
 		} else {
-			add(new ConfirmableAjaxBorder("remove", getString("80"), getString("833")) {
+			add(new BootstrapAjaxLink<String>("remove", Buttons.Type.Secondary) {
 				private static final long serialVersionUID = 1L;
+				{
+					setIconType(FontAwesome5IconType.times_s);
+					add(newOkCancelConfirm(this, getString("833")));
+				}
 
 				@Override
-				protected void onSubmit(AjaxRequestTarget target) {
+				public void onClick(AjaxRequestTarget target) {
 					try {
 						deleteImage();
 					} catch (Exception e) {
