@@ -139,7 +139,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 						}
 					})
 					.setRequired(true).setLabel(new ResourceModel("21")));
-			add(feedback);
+			add(feedback.setOutputMarkupId(true));
 			super.onInitialize();
 		}
 	}

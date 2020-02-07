@@ -65,7 +65,7 @@ public class NicknameDialog extends NonClosableDialog<User> {
 	protected void onInitialize() {
 		getTitle().setObject(getString("1287"));
 		ok = new DialogButton("ok", getString("54"));
-		form.add(feedback);
+		form.add(feedback.setOutputMarkupId(true));
 		form.add(new RequiredTextField<String>("firstname").setLabel(new ResourceModel("135")).add(minimumLength(getMinFnameLength())));
 		form.add(new RequiredTextField<String>("lastname").setLabel(new ResourceModel("136")).add(minimumLength(getMinLnameLength())));
 		form.add(new RequiredTextField<String>("address.email").setLabel(new ResourceModel("119")).add(RfcCompliantEmailAddressValidator.getInstance()));

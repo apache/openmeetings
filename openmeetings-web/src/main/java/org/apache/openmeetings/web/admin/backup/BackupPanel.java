@@ -215,7 +215,7 @@ public class BackupPanel extends AdminBasePanel {
 					target.add(feedback);
 				}
 			}));
-			add(new Label("cmdLineDesc", getString("1505")).setEscapeModelStrings(false));
+			add(new Label("cmdLineDesc", getString("1505")).setEscapeModelStrings(false).setRenderBodyOnly(true));
 			super.onInitialize();
 		}
 
@@ -250,7 +250,7 @@ public class BackupPanel extends AdminBasePanel {
 	public BackupPanel(String id) {
 		super(id);
 
-		add(feedback);
+		add(feedback.setOutputMarkupId(true));
 
 		BackupForm backupForm = new BackupForm("backupUpload");
 

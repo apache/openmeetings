@@ -26,7 +26,7 @@
 		<fieldset class="ui-widget-content">
 			<legend class="ui-widget-header"><wicket:message key="1066" /></legend>
 			<div class="formelement">
-				<div class="info-text"><wicket:message key="1065" /></div>
+				<div><i class="fas fa-info-circle m-1"></i><wicket:message key="1065" /></div>
 			</div>
 			<div class="formelement">
 				<label wicket:for="includeFilesInBackup"><wicket:message key="1537" /></label> <input type="checkbox" wicket:id="includeFilesInBackup" />
@@ -50,7 +50,8 @@
 			</div>
 			<div class="formelement">
 				<!-- Backup CLI import information -->
-				<div class="info-text" wicket:id="cmdLineDesc"></div>
+				<i class="fas fa-info-circle m-1"></i>
+				<div wicket:id="cmdLineDesc"></div>
 			</div>
 		</fieldset>
 	</form>

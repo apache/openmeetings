@@ -20,9 +20,6 @@ package org.apache.openmeetings.web.admin.users;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -33,15 +30,13 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public class PasswordDialog extends AbstractFormDialog<String> {
+public class PasswordDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
-	private DialogButton btnOk;
-	private DialogButton btnCancel;
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final Form<String> form = new Form<>("form");
 	private final PasswordTextField pass = new PasswordTextField("password", Model.of(""));
@@ -50,7 +45,7 @@ public class PasswordDialog extends AbstractFormDialog<String> {
 	private UserDao userDao;
 
 	public PasswordDialog(String id) {
-		super(id, "");
+		super(id);
 	}
 
 	public UserForm getUserForm() {
@@ -59,62 +54,46 @@ public class PasswordDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onInitialize() {
-		setTitle(new ResourceModel("537"));
-		btnOk = new DialogButton("ok", getString("54"));
-		btnCancel = new DialogButton("cancel", getString("lbl.cancel"));
-		add(form.add(feedback, pass.setRequired(false).setLabel(new ResourceModel("110")).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true)));
+		header(new ResourceModel("537"));
+		setCloseOnEscapeKey(true);
+		setBackdrop(Backdrop.STATIC);
+
+		addButton(new BootstrapAjaxButton("button", new ResourceModel("54"), form, Buttons.Type.Primary) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				target.add(feedback);
+			}
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				final UserForm uf = getUserForm();
+				if (uf.isAdminPassRequired()) {
+					if (userDao.verifyPassword(getUserId(), pass.getConvertedInput())) {
+						if (action != null) {
+							action.accept(target);
+						}
+						PasswordDialog.this.close(target);
+					} else {
+						form.error(getString("error.bad.password"));
+						target.add(feedback);
+					}
+				}
+			}
+		}); // OK
+		addCloseButton(new ResourceModel("lbl.cancel"));
+		add(form.add(feedback.setOutputMarkupId(true), pass.setRequired(false).setLabel(new ResourceModel("110")).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true)));
 		super.onInitialize();
 	}
 
 	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(btnOk, btnCancel);
-	}
-
-	@Override
-	public DialogButton getSubmitButton() {
-		return btnOk;
-	}
-
-	@Override
-	public Form<?> getForm() {
-		return form;
-	}
-
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
-		target.add(feedback);
-	}
-
-	@Override
-	protected void onOpen(IPartialPageRequestHandler handler) {
+	public Modal<String> show(IPartialPageRequestHandler handler) {
 		handler.add(pass.setModelObject(""));
-		super.onOpen(handler);
-	}
-
-	@Override
-	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		if (!form.hasError() || !button.equals(btnOk)) {
-			super.onClick(target, button);
-		}
+		return super.show(handler);
 	}
 
 	public void setAction(SerializableConsumer<AjaxRequestTarget> action) {
 		this.action = action;
-	}
-
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		final UserForm uf = getUserForm();
-		if (uf.isAdminPassRequired()) {
-			if (userDao.verifyPassword(getUserId(), pass.getConvertedInput())) {
-				if (action != null) {
-					action.accept(target);
-				}
-			} else {
-				form.error(getString("error.bad.password"));
-				target.add(feedback);
-			}
-		}
 	}
 }

@@ -155,7 +155,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 
 		PollAnswerForm(String id, IModel<RoomPollAnswer> model) {
 			super(id, model);
-			add(feedback);
+			add(feedback.setOutputMarkupId(true));
 			add(new Label("user", user));
 			add(new Label("roomPoll.question"));
 			add(typeBool.add(new RadioGroup<Boolean>("answer").setRequired(true)

@@ -22,11 +22,6 @@ html[dir="rtl"] #busy-indicator {
 html[dir="rtl"] .ui-tabs .ui-tabs-nav li {
 	float: right !important;
 }
-html[dir="rtl"] .info-text {
-	background-position: right top !important;
-	padding-left: initial !important;
-	padding-right: 20px;
-}
 html[dir="rtl"] .start_step1
 , html[dir="rtl"] .start_step2
 , html[dir="rtl"] .start_step3
@@ -47,9 +42,6 @@ html[dir="rtl"] .start_step3 {
 html[dir="rtl"] .start_step4 {
 	margin-left: initial !important;
 	margin-right: 60px !important;
-}
-html[dir="rtl"] form .input {
-	float: right !important;
 }
 html[dir="rtl"] .ui-dialog .ui-dialog-title {
 	float: right !important;

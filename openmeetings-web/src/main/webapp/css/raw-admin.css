@@ -36,74 +36,16 @@
 	height: var(--actions-height);
 	padding-top: 5px;
 }
-.adminPanelColumnTable .list-table .ui-button.ui-widget {
-	padding: 0;
-}
 .adminPanelColumnForm div.scrollcontent {
 	height: calc(100% - var(--actions-height));
 	vertical-align: top;
 	overflow-y: auto;
-}
-.adminForm .input, .adminForm input, .adminForm input.formcheckbox
-,.adminForm textarea, .adminForm select, .adminForm label
- {
-	display: block;
-	float: left;
-	font-size: 14px;
-	padding: 0px 0px;
-	margin: 2px 2px;
-}
-.adminForm .input {
-	border: solid 1px #aacfe4;
-	width: 280px;
-	min-height: 20px;
-	white-space: normal; /* IE */
-	white-space: initial;
-}
-.adminForm input {
-	border: solid 1px #aacfe4;
-	width: 280px;
-	height: 20px;
-}
-.adminForm input[type=checkbox], .adminForm input[type=radio] {
-	width: auto;
-}
-.adminForm input.formcheckbox {
-	border: none;
-	width: 20px;
-	height: 20px;
-}
-.adminForm fieldset {
-	margin-top: 4px;
-	padding: 4px;
 }
 .adminForm legend {
 	padding: 0.2em 0.5em;
 	margin: 0px 10px;
 	font-style: italic;
 	text-align: right;
-}
-.adminForm textarea {
-	border: solid 1px #aacfe4;
-	width: 280px;
-	height: 60px;
-}
-.adminForm div.formelement {
-	display: block;
-	clear: both;
-	max-width: 540px;
-	white-space: nowrap;
-}
-.adminForm select {
-	height: 20px;
-	border: solid 1px #aacfe4;
-	width: 282px;
-}
-.adminForm label {
-	font-weight: bold;
-	text-align: right;
-	width: 180px;
-	white-space: normal;
 }
 .adminForm .group.logo .profile img {
 	height: 16px;

@@ -50,7 +50,7 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 	public AddLanguageDialog(String id, final LangPanel langPanel) {
 		super(id, "");
 		this.langPanel = langPanel;
-		add(form.add(feedback, iso.setOutputMarkupId(true)));
+		add(form.add(feedback.setOutputMarkupId(true), iso.setOutputMarkupId(true)));
 		iso.add(new IValidator<String>() {
 			private static final long serialVersionUID = 1L;
 

@@ -208,7 +208,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onPurgeSubmit(AjaxRequestTarget target, Form<?> form) {
 		if (isAdminPassRequired()) {
 			adminPass.setAction(this::purgeUser);
-			adminPass.open(target);
+			adminPass.show(target);
 		} else {
 			purgeUser(target);
 		}
@@ -218,7 +218,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		if (isAdminPassRequired()) {
 			adminPass.setAction((SerializableConsumer<AjaxRequestTarget>)t -> saveUser(t, password.getModelObject()));
-			adminPass.open(target);
+			adminPass.show(target);
 		} else {
 			saveUser(target, password.getConvertedInput());
 		}
@@ -298,7 +298,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		if (isAdminPassRequired()) {
 			adminPass.setAction(this::deleteUser);
-			adminPass.open(target);
+			adminPass.show(target);
 		} else {
 			deleteUser(target);
 		}

@@ -96,18 +96,6 @@ html, body {
 	max-width: 100%;
 	height: calc(100% - 50px);
 }
-.formelementradiobox {
-	margin-left: 100px;
-}
-.formelementradiobox input {
-	margin: 0px 0px;
-	border: none;
-	width: 20px;
-}
-.formelementradiobox label {
-	width: 260px;
-	margin: 0px
-}
 .pagedEntityListPanel {
 	margin-left: 2px;
 	display: inline-block;
@@ -370,16 +358,6 @@ textarea.messages.body {
 select.messages.selector {
 	width: 220px;
 }
-.info-text {
-	background-image: url(images/information.png);
-	background-repeat: no-repeat;
-	background-position: left top;
-	cursor: default;
-	border: none;
-	padding-left: 20px;
-	font-style: italic;
-	white-space: normal;
-}
 .info-title {
 	background-image: url(images/information.png);
 	background-repeat: no-repeat;
@@ -406,21 +384,10 @@ select.messages.selector {
 #ui-datepicker-div {
 	z-index: 100 !important;
 }
-.room-list {
-	border-collapse: collapse;
-	min-width: 400px;
+.room-list .room-row button.refresh {
+	padding: 0 0.25rem;
 }
-.room-list .room-row {
-	border: 1px solid transparent;
-	background-color: rgb(248, 248, 248);
-	margin-bottom: 4px;
-	padding: 5px;
-	position: relative;
-}
-.room-list .room-row .container {
-	margin-right: 120px;
-}
-.room-list .room-row button {
+.room-list .room-row button.enter {
 	position: absolute;
 	right: 10px;
 	top: 10px;
@@ -498,7 +465,7 @@ select.messages.selector {
 .rooms-area {
 	display: flex;
 }
-#orgTabs.ui-tabs .ui-tabs-panel {
+#orgTabs .tab-content {
 	display: flex;
 	padding-bottom: 0;
 	height: calc(100% - var(--tabs-height));
@@ -538,14 +505,6 @@ select.messages.selector {
 	z-index: 2;
 	bottom: 0;
 	position: fixed;
-}
-form .input {
-	display: block;
-	float: left;
-	font-size: 14px;
-	padding: 0px 0px;
-	width: 280px;
-	margin: 2px 2px;
 }
 .profile {
 	position: relative;
