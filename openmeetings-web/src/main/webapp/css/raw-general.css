@@ -11,10 +11,7 @@ html, body {
 .main-container {
 	height: calc(100% - var(--header-height));
 }
-.main
-, #contents .child-panel
-, .full-height
-{
+.main {
 	height: 100%;
 }
 .signin .oauth-section {
@@ -215,10 +212,7 @@ html, body {
 #feedcontainer {
 	overflow: auto;
 }
-#feeds.ui-accordion .ui-accordion-header {
-	margin-bottom: 2px;
-}
-#feeds.ui-accordion .ui-accordion-content {
+#feeds .card .card-body {
 	white-space: pre;
 }
 .align-left {
@@ -537,9 +531,6 @@ select.messages.selector {
 }
 .user.info.panel fieldset table, .user.info.panel fieldset table textarea {
 	width: 100%;
-}
-#topControls {
-	height: var(--menu-height);
 }
 #topControls #wicketDebugBar {
 	right: initial;
