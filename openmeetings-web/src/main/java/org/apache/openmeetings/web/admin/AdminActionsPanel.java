@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.web.admin;
 
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.newOkCancelDangerConfirm;
+
 import org.apache.openmeetings.web.common.FormActionsPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -30,7 +31,7 @@ public abstract class AdminActionsPanel<T> extends FormActionsPanel<T> {
 	private static final long serialVersionUID = 1L;
 	private final Label newRecord = new Label("newRecord", Model.of(""));
 	private final Form<T> form;
-	private ConfirmableAjaxBorder delBtn;
+	private AjaxButton delBtn;
 	private AjaxButton restoreBtn;
 
 	public AdminActionsPanel(String id, final Form<T> form) {
@@ -66,16 +67,8 @@ public abstract class AdminActionsPanel<T> extends FormActionsPanel<T> {
 		final Form<?> cForm = new Form<>("form");
 		cForm.setMultiPart(form.isMultiPart());
 		add(cForm);
-		delBtn = new ConfirmableAjaxBorder("btn-delete", getString("80"), getString("833"), cForm) {
+		delBtn = new AjaxButton("btn-delete", cForm) {
 			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onError(AjaxRequestTarget target) {
-				// repaint the feedback panel so errors are shown
-				target.add(feedback);
-				setNewVisible(false);
-				AdminActionsPanel.this.onError(target, form);
-			}
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
@@ -84,7 +77,16 @@ public abstract class AdminActionsPanel<T> extends FormActionsPanel<T> {
 				setNewVisible(false);
 				onDeleteSubmit(target, form);
 			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				// repaint the feedback panel so errors are shown
+				target.add(feedback);
+				setNewVisible(false);
+				AdminActionsPanel.this.onError(target, form);
+			}
 		};
+		delBtn.add(newOkCancelDangerConfirm(this, getString("833")));
 		restoreBtn = new AjaxButton("btn-restore", form) {
 			private static final long serialVersionUID = 1L;
 

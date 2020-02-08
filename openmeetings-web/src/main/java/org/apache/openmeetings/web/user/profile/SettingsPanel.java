@@ -25,15 +25,14 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.web.common.UserBasePanel;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
 public class SettingsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
@@ -44,8 +43,6 @@ public class SettingsPanel extends UserBasePanel {
 	public static final int INVITATIONS_TAB_ID = 4;
 	public static final int DASHBOARD_TAB_ID = 5;
 	public final int active;
-	private UserProfilePanel profilePanel;
-	private MessagesContactsPanel messagesPanel;
 	@SpringBean
 	private UserDao userDao;
 
@@ -62,10 +59,7 @@ public class SettingsPanel extends UserBasePanel {
 
 			@Override
 			public WebMarkupContainer getPanel(String panelId) {
-				if (profilePanel == null) {
-					profilePanel = new UserProfilePanel(panelId, getUserId());
-				}
-				return profilePanel;
+				return new UserProfilePanel(panelId, getUserId());
 			}
 		});
 		tabs.add(new AbstractTab(new ResourceModel("1188")) {
@@ -73,10 +67,7 @@ public class SettingsPanel extends UserBasePanel {
 
 			@Override
 			public WebMarkupContainer getPanel(String panelId) {
-				if (messagesPanel == null) {
-					messagesPanel = new MessagesContactsPanel(panelId);
-				}
-				return messagesPanel;
+				return new MessagesContactsPanel(panelId);
 			}
 		});
 		tabs.add(new AbstractTab(new ResourceModel("1171")) {
@@ -111,24 +102,7 @@ public class SettingsPanel extends UserBasePanel {
 				return new WidgetsPanel(panelId);
 			}
 		});
-		add(new TabbedPanel("tabs", tabs, new Options("active", active)) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isActivatingEventEnabled() {
-				return true;
-			}
-
-			@Override
-			public void onActivating(AjaxRequestTarget target, int index, ITab tab) {
-				if (index == 0) {
-					profilePanel.update(target);
-				} else if (index == 1) {
-					messagesPanel.updateTable(target);
-				}
-			}
-		}.setActiveTab(active));
-
+		add(new AjaxBootstrapTabbedPanel<>("tabs", tabs, Model.of(active)));
 		super.onInitialize();
 	}
 }

@@ -26,7 +26,7 @@ import static org.apache.openmeetings.cli.CleanupHelper.getRecUnit;
 import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.newOkCancelConfirmCfg;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.newOkCancelDangerConfirm;
 
 import org.apache.openmeetings.cli.CleanupEntityUnit;
 import org.apache.openmeetings.cli.CleanupUnit;
@@ -44,7 +44,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
 public class AdminCleanupInfoDialog extends Modal<String> {
@@ -97,11 +96,7 @@ public class AdminCleanupInfoDialog extends Modal<String> {
 					private static final long serialVersionUID = 1L;
 
 					{
-						add(new ConfirmationBehavior(
-								newOkCancelConfirmCfg(this, getString("dashboard.widget.admin.cleanup.warn"))
-								.withBtnOkClass("btn btn-sm btn-danger")
-								.withBtnOkIconClass("fas fa-exclamation-triangle")
-								));
+						add(newOkCancelDangerConfirm(this, getString("dashboard.widget.admin.cleanup.warn")));
 					}
 
 					@Override

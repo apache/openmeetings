@@ -51,13 +51,19 @@ var OmUtil = (function() {
 	function _tmpl(tmplId, newId) {
 		return $(tmplId).clone().attr('id', newId || '');
 	}
+	function __alert(level, msg, autohideAfter) {
+		const holder = $('#alert-holder');
+		holder.append($(`<div class="alert alert-${level} alert-dismissible fade show m-0" role="alert">${msg}
+				<button type="button" class="close" data-dismiss="alert" aria-label="${holder.data('lbl-close')}">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>`))
+	}
 	function _error(msg) {
 		if (typeof(msg) === 'object') {
 			msg = msg.name + ': ' + msg.message;
 		}
-		if (!!errs && errs.length > 0) {
-			errs.getKendoNotification().error(msg);
-		}
+		__alert('danger', msg, 20000);
 		return console.error(msg);
 	}
 	function _debugEnabled() {
@@ -89,9 +95,7 @@ var OmUtil = (function() {
 			, msg = JSON.stringify($.extend({}, base, m));
 		Wicket.WebSocket.send(msg);
 	};
-	self.initErrs = function(_e) {
-		errs = _e;
-	};
+	self.alert = __alert;
 	self.error = _error;
 	self.info = _info;
 	self.log = _log;

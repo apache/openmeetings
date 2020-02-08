@@ -144,3 +144,6 @@ html[dir="rtl"] .adminForm label
 {
 	float: right !important;
 }
+html[dir="rtl"] #alert-holder {
+	left: 0;
+}

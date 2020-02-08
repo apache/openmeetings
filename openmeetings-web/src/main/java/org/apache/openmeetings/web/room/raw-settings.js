@@ -179,18 +179,8 @@ var VideoSettings = (function() {
 	function _init(options) {
 		o = JSON.parse(JSON.stringify(options));
 		if (!!o.infoMsg) {
-			$('#jsInfo').kendoNotification({
-				autoHideAfter: 0
-				, button: true
-				, hideOnClick: false
-			}).getKendoNotification().info(o.infoMsg);
+			OmUtil.alert('info', o.infoMsg, 0);
 		}
-		OmUtil.initErrs($('#jsNotifications').kendoNotification({
-			autoHideAfter: 20000
-			, button: true
-			, hideOnClick: false
-			, stacking: 'up'
-		}));
 		vs = $('#video-settings');
 		lm = vs.find('.level-meter');
 		cam = vs.find('select.cam').iconselectmenu({

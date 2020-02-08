@@ -21,8 +21,9 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<div id="chatTabs">
-		<ul>
+		<ul class="nav nav-tabs" role="tablist">
 		</ul>
+		<div class="tab-content"></div>
 	</div>
 	<form wicket:id="sendForm">
 		<div wicket:id="toolbarContainer" class="tool-container"></div>
@@ -48,20 +49,15 @@
 		<span id="chat-close-block" class='ui-icon ui-icon-close' wicket:message="title:85"
 			role='presentation'></span>
 
-		<div id="chat-msg-area-template" class="messageArea bg-white">
+		<div id="chat-msg-area-template" class="messageArea bg-white tab-pane h-100" role="tabpanel">
 			<div class="clear icons actions short">
-				<div class='user om-icon clickable' wicket:message="title:1167"
-						onclick='const e=$(this).parent();showUserInfo(e.data("userId"));'></div>
+				<div class='user clickable' wicket:message="title:1167"><i class="fas fa-address-card"></i></div>
 			</div>
 			<div class="clear icons actions full">
-				<div class='user om-icon clickable' wicket:message="title:1167"
-						onclick='const e=$(this).parent();showUserInfo(e.data("userId"));'></div>
-				<div class='add om-icon clickable' wicket:message="title:1186"
-						onclick='const e=$(this);addContact(e.data("userId"));'></div>
-				<div class='new-email om-icon clickable' wicket:message="title:1253"
-						onclick='const e=$(this);privateMessage(e.data("userId"));'></div>
-				<div class='invite om-icon clickable' wicket:message="title:1131"
-						onclick='const e=$(this);inviteUser(e.data("userId"));'></div>
+				<div class='user clickable' wicket:message="title:1167"><i class="fas fa-address-card"></i></div>
+				<div class='add clickable' wicket:message="title:1186"><i class="fas fa-plus-square"></i></div>
+				<div class='new-email clickable' wicket:message="title:1253"><i class="fas fa-envelope"></i></div>
+				<div class='invite clickable' wicket:message="title:1131"><i class="fas fa-link"></i></div>
 			</div>
 		</div>
 	</div>

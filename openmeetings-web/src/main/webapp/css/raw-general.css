@@ -83,10 +83,10 @@ html, body {
 .help.support h3 {
 	margin-bottom: 5px;
 }
-.user-settings.ui-tabs {
+.user-settings {
 	height: calc(100% - 10px);
 }
-.user-settings.ui-tabs .ui-tabs-panel {
+.user-settings .tab-content {
 	height: calc(100% - 60px);
 }
 .user-settings .edit-profile {
@@ -774,4 +774,9 @@ select.messages.selector {
 }
 .profile-edit-form {
 	height: calc(100% - 50px);
+}
+#alert-holder {
+	position: fixed;
+	right: 0;
+	bottom: 0;
 }
