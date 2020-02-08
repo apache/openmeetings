@@ -625,6 +625,7 @@ exports.WebRtcPeerRecvonly = WebRtcPeerRecvonly;
 exports.WebRtcPeerSendonly = WebRtcPeerSendonly;
 exports.WebRtcPeerSendrecv = WebRtcPeerSendrecv;
 exports.hark = harkUtils;
+exports.browser = browser;
 },{"events":4,"freeice":5,"hark":8,"inherits":9,"kurento-browser-extensions":10,"merge":11,"sdp-translator":18,"ua-parser-js":21,"uuid/v4":24}],2:[function(require,module,exports){
 if (window.addEventListener)
     module.exports = require('./index');
