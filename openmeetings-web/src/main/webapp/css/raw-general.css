@@ -200,7 +200,7 @@ html, body {
 #feedcontainer {
 	overflow: auto;
 }
-#feeds .card .card-body {
+#feeds .card .card-body, .text-pre {
 	white-space: pre;
 }
 .align-left {
@@ -224,10 +224,12 @@ html, body {
 	display: inline-block !important;
 }
 .om-icon.big {
-	background-size: 32px;
-	background-position: 1px 1px !important;
 	width: 34px;
 	height: 34px;
+}
+.om-icon.big i {
+	font-size: 2.5em;
+	color: var(--secondary);
 }
 .cross.om-icon {
 	background-image: url(images/cross.png);
@@ -415,22 +417,19 @@ select.messages.selector {
 	display: flex;
 	height: 100%;
 }
-.recording-panel .file.tree.container {
+.recording-panel .file-tree {
 	width: 325px;
 	height: 100%;
 }
-.recording-panel .file.tree.container .tree-panel {
+.recording-panel .file-tree .tree-panel {
 	height: calc(100% - var(--info-height));
 }
-.recording-panel .file.tree.container .info {
+.recording-panel .file-tree .info {
 	height: var(--info-height);
 }
-.recording-panel .file.tree.container .tree-panel form
-	, .recording-panel .file.tree.container .tree-panel form .file.tree
+.recording-panel .file-tree .tree-panel form
+	, .recording-panel .file-tree .tree-panel form .file.tree
 {
-	height: 100%;
-}
-.recording-panel .file.tree.container .tree-panel form .file.tree{
 	height: 100%;
 }
 .recording-panel .video {
@@ -557,7 +556,6 @@ select.messages.selector {
 	display: flex;
 	flex-flow: column;
 	width: 100%;
-	max-width: 518px;
 	min-width: 518px;
 	height: calc(100% - var(--nav-height) - var(--lbl-nav-height) - var(--buffer-size));
 }

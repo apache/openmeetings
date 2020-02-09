@@ -1004,4 +1004,5 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Ждать модератора]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[Пожалуйста подождите ...]]></entry>
 	<entry key="lbl.or"><![CDATA[or]]></entry>
+	<entry key="lbl.new"><![CDATA[новый]]></entry>
 </properties>

@@ -22,8 +22,8 @@
 <wicket:panel>
 	<div class="actions" wicket:id="buttons"></div>
 	<div class="scrollcontent" wicket:id="adminForm" id="adminForm">
-		<fieldset class="ui-widget-content">
-			<legend class="ui-widget-header">
+		<fieldset>
+			<legend>
 				<wicket:message key="143" />
 			</legend>
 			<div class="formelement">
@@ -49,7 +49,10 @@
 				<label class="col-3 text-right"><wicket:message key="1112" /></label><span wicket:id="updated" class="col-8"/>
 			</div>
 			<div class="formelement">
-				<div><i class="fas fa-info-circle m-1"></i><wicket:message key="1149" /></div>
+				<div class="col-3 d-inline-block"></div>
+				<div class="col-8 d-inline-block">
+					<i class="fas fa-info-circle m-1"></i><wicket:message key="1149" />
+				</div>
 				<label wicket:for="forceTimeZoneCheck" class="col-3 text-right"><wicket:message key="1148" /></label>
 				<input class="formcheckbox" type="checkbox" wicket:id="forceTimeZoneCheck"/>
 			</div>
@@ -58,8 +61,8 @@
 				<div class="om-select2 p-0 d-inline-block col-8"><select class="input w-100" wicket:id="rights"></select></div>
 			</div>
 		</fieldset>
-		<fieldset class="ui-widget-content">
-			<legend class="ui-widget-header">
+		<fieldset>
+			<legend>
 				<wicket:message key="1159" />
 			</legend>
 			<form wicket:id="comunity"></form>

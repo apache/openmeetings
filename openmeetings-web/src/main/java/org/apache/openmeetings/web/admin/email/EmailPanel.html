@@ -48,17 +48,41 @@
 				</div>
 			</div>
 			<div class="scrollcontent" id="adminForm">
-				<fieldset class="ui-widget-content">
-					<legend class="ui-widget-header"><wicket:message key="admin.email.group.label" /></legend>
+				<fieldset>
+					<legend><wicket:message key="admin.email.group.label" /></legend>
 					<div class="formelement">
-						<label><wicket:message key="996" /></label><span class="input" wicket:id="status"></span>
-						<label><wicket:message key="admin.email.recipients" /></label><span class="input" wicket:id="recipients"></span>
-						<label><wicket:message key="215" /></label><span class="input" wicket:id="subject"></span>
-						<label><wicket:message key="admin.email.body" /></label><span class="input" wicket:id="body"></span>
-						<label><wicket:message key="1110" /></label><span class="input" wicket:id="inserted"></span>
-						<label><wicket:message key="1112" /></label><span class="input" wicket:id="updated"></span>
-						<label><wicket:message key="admin.email.errorCount" /></label><span class="input" wicket:id="errorCount"></span>
-						<label><wicket:message key="admin.email.lastError" /></label><span class="input" wicket:id="lastError"></span>
+						<div>
+							<label class="col-3 text-right"><wicket:message key="996" /></label>
+							<span class="col-8" wicket:id="status"></span>
+						</div>
+						<div>
+							<label class="col-3 text-right"><wicket:message key="admin.email.recipients" /></label>
+							<span class="col-8" wicket:id="recipients"></span>
+						</div>
+						<div>
+							<label class="col-3 text-right"><wicket:message key="215" /></label>
+							<span class="col-8" wicket:id="subject"></span>
+						</div>
+						<div>
+							<label class="col-3 text-right"><wicket:message key="admin.email.body" /></label>
+							<div class="col-8 d-inline-block" wicket:id="body"></div>
+						</div>
+						<div>
+							<label class="col-3 text-right"><wicket:message key="1110" /></label>
+							<span class="col-8" wicket:id="inserted"></span>
+						</div>
+						<div>
+							<label class="col-3 text-right"><wicket:message key="1112" /></label>
+							<span class="col-8" wicket:id="updated"></span>
+						</div>
+						<div>
+							<label class="col-3 text-right"><wicket:message key="admin.email.errorCount" /></label>
+							<span class="col-8" wicket:id="errorCount"></span>
+						</div>
+						<div>
+							<label class="col-3 text-right"><wicket:message key="admin.email.lastError" /></label>
+							<div class="col-8 d-inline-block text-pre" wicket:id="lastError"></div>
+						</div>
 					</div>
 					<button wicket:id="reset" class="align-right mr-3"><wicket:message key="admin.email.reset.status"/></button>
 				</fieldset>

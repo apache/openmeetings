@@ -79,9 +79,6 @@ public abstract class FileTreePanel extends Panel {
 	private static final String ALIGN_LEFT_CLASS = " align-left";
 	private static final String ALIGN_RIGHT_CLASS = " align-right";
 	private static final String BASE_CLASS = " om-icon big clickable";
-	private static final String UPLOAD_CLASS = "add" + BASE_CLASS + ALIGN_LEFT_CLASS;
-	private static final String CREATE_DIR_CLASS = "folder-create" + BASE_CLASS + ALIGN_LEFT_CLASS;
-	private static final String TRASH_CLASS = "trash" + BASE_CLASS + ALIGN_RIGHT_CLASS;
 	private static final String DISABLED_CLASS = " disabled";
 	final WebMarkupContainer trees = new WebMarkupContainer("tree-container");
 	private final WebMarkupContainer sizes = new WebMarkupContainer("sizes");
@@ -281,10 +278,10 @@ public abstract class FileTreePanel extends Panel {
 			this.readOnly = readOnly;
 			tree.refreshRoots(!readOnly);
 			createDir.setEnabled(!readOnly);
-			createDir.add(AttributeModifier.replace(ATTR_CLASS, new StringBuilder(CREATE_DIR_CLASS).append(readOnly ? DISABLED_CLASS : "")));
+			createDir.add(AttributeModifier.replace(ATTR_CLASS, BASE_CLASS + ALIGN_LEFT_CLASS + (readOnly ? DISABLED_CLASS : "")));
 			upload.setEnabled(!readOnly);
-			upload.add(AttributeModifier.replace(ATTR_CLASS, new StringBuilder(UPLOAD_CLASS).append(readOnly ? DISABLED_CLASS : "")));
-			trashBorder.add(AttributeModifier.replace(ATTR_CLASS, new StringBuilder(TRASH_CLASS).append(readOnly ? DISABLED_CLASS : "")));
+			upload.add(AttributeModifier.replace(ATTR_CLASS, BASE_CLASS + ALIGN_LEFT_CLASS + (readOnly ? DISABLED_CLASS : "")));
+			trashBorder.add(AttributeModifier.replace(ATTR_CLASS, BASE_CLASS + ALIGN_RIGHT_CLASS + (readOnly ? DISABLED_CLASS : "")));
 			if (handler != null) {
 				handler.add(createDir, upload, trashBorder);
 				update(handler);

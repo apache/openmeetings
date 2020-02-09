@@ -36,7 +36,7 @@ body.no-menu {
 .recording-panel {
 	--info-height: 115px;
 }
-.file.tree {
+.file-tree {
 	--tree-header-height: 36px;
 	--tree-footer-height: 40px;
 }

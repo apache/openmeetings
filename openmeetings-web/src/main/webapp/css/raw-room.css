@@ -314,12 +314,8 @@ ul.settings-menu {
 .room-block.small .sidebar .tab.om-icon.big .label {
 	display: none;
 }
-.room-block.small .sidebar .tab.om-icon.big .badge {
-	margin-left: -20px;
-	margin-top: 15px;
-}
-.room-block.small .sidebar .file.tree .file.item .name
-	, .room-block.small .sidebar .file.tree .file.item .name span
+.room-block.small .sidebar .file-tree .file.item .name
+	, .room-block.small .sidebar .file-tree .file.item .name span
 {
 	width: 40px;
 }
@@ -328,25 +324,6 @@ ul.settings-menu {
 }
 .room-block .sidebar .tab.om-icon.big.file {
 	background-image: url(images/folder_explore.png);
-}
-.ui-state-active .badge {
-	color: #337ab7;
-	background-color: #fff;
-}
-
-.badge {
-	display: inline-block;
-	min-width: 10px;
-	padding: 3px 7px;
-	font-size: 12px;
-	font-weight: 700;
-	line-height: 1;
-	color: #fff;
-	text-align: center;
-	white-space: nowrap;
-	vertical-align: middle;
-	background-color: #777;
-	border-radius: 10px;
 }
 /************ VIDEO **************/
 .ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .ui-dialog-content {
@@ -552,11 +529,6 @@ ul.settings-menu {
 #quick-vote .control.con {
 	background-image: url(images/cancel.png);
 }
-#quick-vote .control .badge {
-	position: absolute;
-	right: 0;
-	bottom: 0;
-}
 .main.room.interview #quick-vote {
 	z-index: 100;
 	right: 10px;
@@ -632,23 +604,23 @@ ul.settings-menu {
 	.room-block.big .sidebar .user-list .user.name {
 		display: block;
 	}
-	.room-block .sidebar .file.tree .file.item .name
-	, .room-block .sidebar .file.tree .file.item .name span
+	.room-block .sidebar .file-tree .file.item .name
+	, .room-block .sidebar .file-tree .file.item .name span
 	{
 		width: 40px;
 	}
-	.room-block.big .sidebar .file.tree .file.item .name
-	, .room-block.big .sidebar .file.tree .file.item .name span
+	.room-block.big .sidebar .file-tree .file.item .name
+	, .room-block.big .sidebar .file-tree .file.item .name span
 	{
 		width: 255px;
 	}
-	.room-block .sidebar .file.tree .file.item .name span {
+	.room-block .sidebar .file-tree .file.item .name span {
 		padding: 0;
 	}
-	.room-block .sidebar .file.tree .file.item {
+	.room-block .sidebar .file-tree .file.item {
 		width: 80px;
 	}
-	.room-block.big .sidebar .file.tree .file.item {
+	.room-block.big .sidebar .file-tree .file.item {
 		width: auto;
 	}
 }

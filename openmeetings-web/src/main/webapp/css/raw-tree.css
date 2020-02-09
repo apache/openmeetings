@@ -1,31 +1,29 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-.file.tree.container {
+.file-tree {
 	vertical-align: top;
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	max-width: 350px;
-}
-.file.tree {
 	height: 100%;
 	width: 100%;
 	display: inline-block;
 }
-.file.tree .trees {
+.file-tree .trees {
 	height: calc(100% - var(--tree-header-height) - var(--tree-footer-height));
 	overflow-x: hidden;
 	overflow-y: auto;
 }
-.file.tree .trees #tree-anchor {
+.file-tree .trees #tree-anchor {
 	height: 2px;
 	width: 2px;
 }
-.file.tree .footer {
+.file-tree .footer {
 	height: var(--tree-footer-height);
 }
-.file.tree .footer .sizes {
+.file-tree .footer .sizes {
 	display: inline-block;
 }
-.file.tree .footer .sizes .size {
+.file-tree .footer .sizes .size {
 	padding-left: 5px;
 }
 .trash-toolbar {
@@ -40,23 +38,23 @@
 .trash-toolbar-hover {
 	color: inherit;
 }
-.file.tree .info .details {
+.file-tree .info .details {
 	width: 100%;
 	display: table;
 }
-.file.tree .info .row {
+.file-tree .info .row {
 	display: table-row;
 }
-.file.tree .info .row .label, .file.tree .info .row .value {
+.file-tree .info .row .label, .file-tree .info .row .value {
 	display: table-cell;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
-.file.tree .info .row .label {
+.file-tree .info .row .label {
 	max-width: 50px;
 }
-.file.tree .info .row .value {
+.file-tree .info .row .value {
 	max-width: 270px;
 }
 .trees .om-icon {
@@ -71,6 +69,7 @@
 .trees .tree-node {
 	white-space: nowrap;
 }
+
 .refresh.om-icon {
 	background-image: url(images/refresh.png);
 }

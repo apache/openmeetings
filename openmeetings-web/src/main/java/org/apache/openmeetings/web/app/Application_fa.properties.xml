@@ -996,4 +996,5 @@ target="_blank">Custom Crypt Mechanism</a>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Wait moderator]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[Please be patient ...]]></entry>
 	<entry key="lbl.or"><![CDATA[or]]></entry>
+	<entry key="lbl.new"><![CDATA[new]]></entry>
 </properties>

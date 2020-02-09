@@ -9,6 +9,6 @@ function dragHelper() {
 	return c.append(h);
 }
 function treeRevert(dropped) {
-	$('.file.tree .trees')[0].scrollTop = $(this).parent()[0].offsetTop - 32;
+	$('.file-tree .trees')[0].scrollTop = $(this).parent()[0].offsetTop - 32;
 	return !dropped || (!!dropped.context && $(dropped.context).hasClass('wb', 'room'));
 }
