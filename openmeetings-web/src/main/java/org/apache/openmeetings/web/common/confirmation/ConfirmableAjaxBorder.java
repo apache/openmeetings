@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.common;
+package org.apache.openmeetings.web.common.confirmation;
 
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 

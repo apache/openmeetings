@@ -22,14 +22,17 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<div wicket:id="feedback"></div>
-	<form wicket:id="backupUpload" class="adminForm adminBackupForm">
+	<form wicket:id="backupUpload" class="adminForm adminBackupForm container">
 		<fieldset class="ui-widget-content">
 			<legend class="ui-widget-header"><wicket:message key="1066" /></legend>
 			<div class="formelement">
 				<div><i class="fas fa-info-circle m-1"></i><wicket:message key="1065" /></div>
 			</div>
 			<div class="formelement">
-				<label wicket:for="includeFilesInBackup"><wicket:message key="1537" /></label> <input type="checkbox" wicket:id="includeFilesInBackup" />
+				<div class="custom-control custom-checkbox m-2">
+					<label class="custom-control-label" wicket:for="includeFilesInBackup"><wicket:message key="1537" /></label>
+					<input class="custom-control-input" type="checkbox" wicket:id="includeFilesInBackup" />
+				</div>
 			</div>
 			<div class="formelement">
 				<span wicket:id="progress"></span>
@@ -37,14 +40,14 @@
 			</div>
 			<div class="formelement">
 				<!-- Perform Download -->
-				<div wicket:id="download" class="btn"><wicket:message key="1066"/></div>
+				<button wicket:id="download"></button>
 				<!-- Perform Upload -->
-				<div class="fileinput fileinput-new d-inline m-0" data-provides="fileinput">
-					<span class="btn btn-file ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span
-						class="ui-button-text"><wicket:message key="1536"/></span><input class="uploadFileField" wicket:id="fileInput" type="file"/></span>
-				</div>
+				<button class="fileinput fileinput-new d-inline m-0 btn btn-file btn-outline-primary" data-provides="fileinput">
+					<wicket:message key="1536"/>
+					<input class="uploadFileField" wicket:id="fileInput" type="file"/>
+				</button>
 			</div>
-			<div class="formelement">
+			<div class="formelement m-2">
 				<!-- Max upload size -->
 				<wicket:message key="1491" /> <span wicket:id="MaxUploadSize" /><span>MB</span>
 			</div>

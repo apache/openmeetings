@@ -34,32 +34,25 @@
 <wicket:extend>
 	<div wicket:id="feedback"></div>
 	<div class="adminPanelColumnTable label">
-		<div class="lblNav">
-			<div class="ui-button ui-widget ui-corner-all ui-button-icon-only mt-n2" wicket:id="addLangBtn" wicket:message="title:362">
-				<span class="ui-button-icon ui-icon ui-icon-plusthick"></span>&nbsp;
+		<form wicket:id="langForm" class="addLanguagePanel">
+			<div class="input-group input-group-sm">
+				<div class="input-group-prepend">
+					<button class="btn btn-outline-success" wicket:id="addLangBtn" wicket:message="title:362">
+						<i class="fas fa-plus"></i>
+					</button>
+					<button wicket:id="deleteLangBtn" wicket:message="title:363"></button>
+				</div>
+				<select wicket:id="language" class="form-control"></select>
+				<div class="input-group-append">
+					<button wicket:id="export"></button>
+					<button class="fileupload fileupload-new m-0 btn btn-file btn-xs btn-primary" data-provides="fileupload">
+						<wicket:message key="387"/>
+						<input type="file" accept="text/xml" wicket:id="fileInput"/>
+					</button>
+					<span wicket:id="progress">[progressbar]</span>
+				</div>
 			</div>
-			<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error mt-n2" wicket:id="deleteLangBtn" wicket:message="title:363">
-				<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
-			</div>
-			<form wicket:id="langForm" class="addLanguagePanel">
-				<table>
-					<tr>
-						<td>
-							<select wicket:id="language"></select>
-						</td>
-						<td>
-							<span wicket:id="export" class="btn"><wicket:message key="360"/></span>
-						</td>
-						<td>
-							<div class="fileupload fileupload-new m-0" data-provides="fileupload">
-								<span class="btn btn-file ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text"><wicket:message key="387"/></span><input type="file" accept="text/xml" wicket:id="fileInput"/></span>
-							</div>
-							<span wicket:id="progress">[progressbar]</span>
-						</td>
-					</tr>
-				</table>
-			</form>
-		</div>
+		</form>
 		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
 		<table class="list-table table-striped table-hover">
 			<thead>
@@ -83,10 +76,12 @@
 				<fieldset class="ui-widget-content">
 					<legend class="ui-widget-header"><wicket:message key="353" /></legend>
 					<div class="formelement">
-						<label wicket:for="key"><wicket:message key="165" /></label><input type="text" wicket:id="key"/>
+						<label wicket:for="key" class="col-3 text-right"><wicket:message key="165" /></label>
+						<input type="text" wicket:id="key" class="col-8"/>
 					</div>
 					<div class="formelement">
-						<label wicket:for="value"><wicket:message key="271" /></label><textarea wicket:id="value"></textarea>
+						<label wicket:for="value" class="col-3 text-right"><wicket:message key="271" /></label>
+						<textarea wicket:id="value" class="col-8"></textarea>
 					</div>
 				</fieldset>
 				<div class="bottom-bumper"></div>

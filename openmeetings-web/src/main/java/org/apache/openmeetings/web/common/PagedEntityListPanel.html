@@ -23,8 +23,12 @@
 <wicket:panel>
 	<div wicket:id="pagedPanel" class="pagedEntityListPanel"></div>
 	<form wicket:id="searchForm" class="searchForm">
-		<input type="text" wicket:id="searchText" wicket:message="title:714"/>
-		<input type="submit" wicket:id="search" wicket:message="value:714"/>
+		<div class="input-group input-group-sm">
+			<input type="text" wicket:id="searchText" wicket:message="title:714" class="form-control"/>
+			<div class="input-group-append">
+				<button wicket:id="search"></button>
+			</div>
+		</div>
 	</form>
 </wicket:panel>
 </html>

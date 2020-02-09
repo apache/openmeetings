@@ -32,7 +32,7 @@ import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestInfoMethod;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestTokenMethod;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;

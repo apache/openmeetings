@@ -37,7 +37,7 @@ import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.ClientManager;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;

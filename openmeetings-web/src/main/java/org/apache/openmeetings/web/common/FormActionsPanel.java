@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.common;
 
+import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;

@@ -34,6 +34,7 @@ import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
+import org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -47,7 +48,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
 public class ConnectionsPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;

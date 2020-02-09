@@ -20,15 +20,14 @@ import static java.util.UUID.randomUUID;
 
 import java.io.Serializable;
 
+import org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior;
+import org.apache.openmeetings.web.common.confirmation.ConfirmationConfig;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.attributes.CallbackParameter;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.util.string.StringValue;
-
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
 public class CallbackFunctionHelper {
 	private CallbackFunctionHelper() {}

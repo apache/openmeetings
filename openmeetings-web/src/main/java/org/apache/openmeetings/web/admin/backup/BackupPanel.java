@@ -45,6 +45,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -52,9 +53,10 @@ import org.apache.wicket.util.lang.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 /**
  * Panel component to manage Backup Import/Export
@@ -131,7 +133,7 @@ public class BackupPanel extends AdminBasePanel {
 			});
 			add(download);
 			// add an download button
-			add(new AjaxButton("download", this) {
+			add(new BootstrapAjaxButton("download", new ResourceModel("1066"), this, Buttons.Type.Outline_Primary) {
 				private static final long serialVersionUID = 1L;
 
 				@Override

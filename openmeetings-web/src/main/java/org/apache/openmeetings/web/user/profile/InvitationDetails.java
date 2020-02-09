@@ -26,7 +26,7 @@ import java.util.Date;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;

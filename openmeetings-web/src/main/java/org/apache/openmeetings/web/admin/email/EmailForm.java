@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.admin.email;
 
 import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;

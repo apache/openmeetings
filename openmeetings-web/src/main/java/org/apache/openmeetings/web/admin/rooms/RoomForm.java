@@ -49,7 +49,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.app.ClientManager;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.wicket.AttributeModifier;

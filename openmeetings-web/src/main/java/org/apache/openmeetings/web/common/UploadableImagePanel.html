@@ -24,10 +24,19 @@
 	<button type="button" class="btn btn-xs btn-secondary remove" wicket:id="remove">
 		<span aria-hidden="true">×</span>
 	</button>
-	<form wicket:id="form" class="img-upload"><div
-		class="fileinput fileinput-new m-0" data-provides="fileinput"><div
-		class="fileinput-preview" data-trigger="fileinput"><img wicket:id="img"/></div><div><span
-		class="btn btn-file btn btn-xs btn-primary"><wicket:message key="379"/><input
-		type="file" accept="image/*" wicket:id="image"/></span></div></div><span wicket:id="progress">[progressbar]</span></form>
+	<form wicket:id="form" class="img-upload">
+		<div class="fileinput fileinput-new m-0" data-provides="fileinput">
+			<div class="fileinput-preview" data-trigger="fileinput">
+				<img wicket:id="img"/>
+			</div>
+			<div>
+				<span class="btn btn-file btn-xs btn-primary">
+					<wicket:message key="379"/>
+					<input type="file" accept="image/*" wicket:id="image"/>
+				</span>
+			</div>
+		</div>
+		<span wicket:id="progress">[progressbar]</span>
+	</form>
 </wicket:extend>
 </html>

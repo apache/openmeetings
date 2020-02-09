@@ -18,9 +18,6 @@
  */
 package org.apache.openmeetings.web.common;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
@@ -29,17 +26,25 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 
-import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public abstract class PagedEntityListPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	private List<Integer> numbers = Arrays.asList(10, 25, 50, 75, 100, 200);
+	private final SearchableDataView<? extends IDataProviderEntity> dataView;
 
 	public PagedEntityListPanel(String id, final SearchableDataView<? extends IDataProviderEntity> dataView) {
 		super(id);
+		this.dataView = dataView;
+	}
 
-		final PagingNavigatorPanel navPanel = new PagingNavigatorPanel("pagedPanel", dataView, numbers) {
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+
+		final PagingNavigatorPanel navPanel = new PagingNavigatorPanel("pagedPanel", dataView) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -52,7 +57,7 @@ public abstract class PagedEntityListPanel extends Panel {
 		Form<Void> searchForm = new Form<>("searchForm");
 		add(searchForm.setOutputMarkupId(true));
 		searchForm.add(new TextField<>("searchText", new PropertyModel<String>(dp, "search")).setOutputMarkupId(true));
-		AjaxButton b = new AjaxButton("search", searchForm) {
+		BootstrapAjaxButton b = new BootstrapAjaxButton("search", new ResourceModel("714"), searchForm, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

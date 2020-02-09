@@ -96,7 +96,7 @@ html, body {
 	max-width: 100%;
 	height: calc(100% - 50px);
 }
-.pagedEntityListPanel {
+.pagedEntityListPanel, .addLanguagePanel {
 	margin-left: 2px;
 	display: inline-block;
 }

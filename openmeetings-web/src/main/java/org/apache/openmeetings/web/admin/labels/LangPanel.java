@@ -36,11 +36,11 @@ import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.util.CallbackFunctionHelper;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -55,6 +55,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
@@ -62,9 +63,11 @@ import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
-
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 /**
  * Language Editor, add/insert/update Label and add/delete language contains several Forms and one list
@@ -157,13 +160,13 @@ public class LangPanel extends AdminBasePanel {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				FileUpload download = fileUploadField.getFileUpload();
+				FileUpload upload = fileUploadField.getFileUpload();
 				try {
-					if (download == null || download.getInputStream() == null) {
+					if (upload == null || upload.getInputStream() == null) {
 						feedback.error("File is empty");
 						return;
 					}
-					LabelDao.upload(language.getValue(), download.getInputStream());
+					LabelDao.upload(language.getValue(), upload.getInputStream());
 				} catch (Exception e) {
 					log.error("Exception on panel language editor import ", e);
 					feedback.error(e);
@@ -213,37 +216,30 @@ public class LangPanel extends AdminBasePanel {
 		});
 		langForm.add(download);
 
-		langForm.add(new AjaxButton("export"){
+		langForm.add(new BootstrapAjaxLink<String>("export", null, Buttons.Type.Outline_Primary, new ResourceModel("360")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
+			public void onClick(AjaxRequestTarget target) {
 				download.initiate(target);
 
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
 			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target) {
-				// repaint the feedback panel so errors are shown
-				target.add(feedback);
-			}
-
 		});
 
-		add(langForm);
 		final AddLanguageDialog addLang = new AddLanguageDialog("addLang", this);
-		add(addLang, new AjaxLink<Void>("addLangBtn") {
+		add(langForm, addLang);
+		langForm.add(new AjaxLink<Void>("addLangBtn") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				addLang.open(target);
+				addLang.show(target);
 			}
 		});
 		add(BootstrapFileUploadBehavior.INSTANCE);
-		add(new ConfirmableAjaxBorder("deleteLangBtn", getString("80"), getString("833")) {
+		final BootstrapAjaxButton delLngBtn = new BootstrapAjaxButton("deleteLangBtn", Buttons.Type.Outline_Danger) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -254,13 +250,16 @@ public class LangPanel extends AdminBasePanel {
 				langForm.updateLanguages(target);
 				target.add(listContainer);
 			}
-		});
+		};
+		langForm.add(delLngBtn.setIconType(FontAwesome5IconType.times_s)
+				.add(CallbackFunctionHelper.newOkCancelDangerConfirm(this, getString("833"))));
 		super.onInitialize();
 	}
 
 	@Override
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		reinitJs(handler);
+		super.onMenuPanelLoad(handler);
 		return this;
 	}
 

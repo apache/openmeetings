@@ -139,9 +139,6 @@
 	right: 0px;
 	background-color: #A1A1A1;
 }
-.addLanguagePanel {
-	display: inline-block;
-}
 .addLanguagePanel select {
 	padding: 0px 0px;
 	border: solid 1px #aacfe4;
