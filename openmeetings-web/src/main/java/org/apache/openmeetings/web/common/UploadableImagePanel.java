@@ -75,12 +75,8 @@ public abstract class UploadableImagePanel extends ImagePanel {
 			add(new WebMarkupContainer("remove").add(AttributeModifier.append("onclick"
 					, "$(this).parent().find('.fileinput').fileinput('clear');")));
 		} else {
-			add(new BootstrapAjaxLink<String>("remove", Buttons.Type.Secondary) {
+			BootstrapAjaxLink<String> remove = new BootstrapAjaxLink<>("remove", Buttons.Type.Secondary) {
 				private static final long serialVersionUID = 1L;
-				{
-					setIconType(FontAwesome5IconType.times_s);
-					add(newOkCancelConfirm(this, getString("833")));
-				}
 
 				@Override
 				public void onClick(AjaxRequestTarget target) {
@@ -91,7 +87,10 @@ public abstract class UploadableImagePanel extends ImagePanel {
 					}
 					update(Optional.of(target));
 				}
-			});
+			};
+			add(remove
+					.setIconType(FontAwesome5IconType.times_s)
+					.add(newOkCancelConfirm(this, getString("833"))));
 			fileUploadField.add(new AjaxFormSubmitBehavior(form, "change") {
 				private static final long serialVersionUID = 1L;
 

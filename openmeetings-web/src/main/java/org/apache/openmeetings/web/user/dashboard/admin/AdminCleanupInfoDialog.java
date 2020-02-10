@@ -92,12 +92,8 @@ public class AdminCleanupInfoDialog extends Modal<String> {
 			@Override
 			protected void onInitialize() {
 				super.onInitialize();
-				add(new SpinnerAjaxButton("cleanup", new ResourceModel("dashboard.widget.admin.cleanup.cleanup"), this, Buttons.Type.Danger) {
+				SpinnerAjaxButton cleanup = new SpinnerAjaxButton("cleanup", new ResourceModel("dashboard.widget.admin.cleanup.cleanup"), this, Buttons.Type.Danger) {
 					private static final long serialVersionUID = 1L;
-
-					{
-						add(newOkCancelDangerConfirm(this, getString("dashboard.widget.admin.cleanup.warn")));
-					}
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
@@ -108,7 +104,8 @@ public class AdminCleanupInfoDialog extends Modal<String> {
 					protected void onError(AjaxRequestTarget target) {
 						target.add(feedback);
 					}
-				});
+				};
+				add(cleanup.add(newOkCancelDangerConfirm(this, getString("dashboard.widget.admin.cleanup.warn"))));
 			}
 		});
 	}

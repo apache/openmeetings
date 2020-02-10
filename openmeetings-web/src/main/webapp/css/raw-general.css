@@ -227,9 +227,15 @@ html, body {
 	width: 34px;
 	height: 34px;
 }
-.om-icon.big i {
-	font-size: 2.5em;
+.om-icon::before {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
 	color: var(--secondary);
+	font-size: 1.5em;
+	vertical-align: text-top;
+}
+.om-icon.big::before {
+	font-size: 2.4em;
 }
 .cross.om-icon {
 	background-image: url(images/cross.png);
@@ -421,16 +427,11 @@ select.messages.selector {
 	width: 325px;
 	height: 100%;
 }
-.recording-panel .file-tree .tree-panel {
+.recording-panel .tree-panel {
 	height: calc(100% - var(--info-height));
 }
 .recording-panel .file-tree .info {
 	height: var(--info-height);
-}
-.recording-panel .file-tree .tree-panel form
-	, .recording-panel .file-tree .tree-panel form .file.tree
-{
-	height: 100%;
 }
 .recording-panel .video {
 	width: 100%;

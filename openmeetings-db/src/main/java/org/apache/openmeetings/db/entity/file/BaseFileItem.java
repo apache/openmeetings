@@ -334,7 +334,7 @@ public abstract class BaseFileItem extends HistoricalEntity {
 	}
 
 	public final boolean exists() {
-		return exists(null);
+		return Type.Folder == type || exists(null);
 	}
 
 	public final boolean exists(String ext) {

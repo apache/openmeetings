@@ -53,7 +53,7 @@ public class FileItemPanel extends FolderPanel {
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				fileTreePanel.errorsDialog.setDefaultModel(model);
-				fileTreePanel.errorsDialog.open(target);
+				fileTreePanel.errorsDialog.show(target);
 			}
 		}).setVisible(visible);
 		add(errors);

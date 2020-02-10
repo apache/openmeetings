@@ -75,7 +75,7 @@
 		<!-- dependency versions -->
 		<junit.version>5.5.2</junit.version>
 		<wicket.version>9.0.0-M5-SNAPSHOT</wicket.version>
-		<wicketju.version>9.0.0-SNAPSHOT</wicketju.version>
+		<wicketju.version>9.0.0-M4</wicketju.version>
 		<wickets.version>9.0.0-M5-SNAPSHOT</wickets.version>
 		<wicket-bootstrap.version>5.0.0-M1-SNAPSHOT</wicket-bootstrap.version>
 		<red5-client.version>1.2.3</red5-client.version>

@@ -295,11 +295,8 @@ public class MainPanel extends Panel {
 				response.render(new PriorityHeaderItem(getNamedFunction("inviteUser", this, explicit(PARAM_USER_ID))));
 			}
 		});
-		topLinks.add(new AjaxLink<Void>("logout") {
+		AjaxLink<Void> logout = new AjaxLink<>("logout") {
 			private static final long serialVersionUID = 1L;
-			{
-				add(newOkCancelConfirm(this, getString("634")));
-			}
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -307,7 +304,9 @@ public class MainPanel extends Panel {
 				setResponsePage(Application.get().getSignInPageClass());
 			}
 
-		});
+		};
+		logout.add(newOkCancelConfirm(this, getString("634")));
+		topLinks.add(logout);
 	}
 
 	private OmMenuItem getSubItem(String lbl, String title, MenuActions action, MenuParams param) {
