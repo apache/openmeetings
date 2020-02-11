@@ -23,7 +23,7 @@ var Settings = (function() {
 	};
 })();
 var OmUtil = (function() {
-	let options, errs
+	let options, errs, alertId = 0;
 	const self = {};
 
 	function _init(_options) {
@@ -53,11 +53,15 @@ var OmUtil = (function() {
 	}
 	function __alert(level, msg, autohideAfter) {
 		const holder = $('#alert-holder');
-		holder.append($(`<div class="alert alert-${level} alert-dismissible fade show m-0" role="alert">${msg}
+		const curId = 'om-alert' + alertId++;
+		holder.append($(`<div id="${curId}" class="alert alert-${level} alert-dismissible fade show m-0" role="alert">${msg}
 				<button type="button" class="close" data-dismiss="alert" aria-label="${holder.data('lbl-close')}">
 					<span aria-hidden="true">&times;</span>
 				</button>
-			</div>`))
+			</div>`));
+		if (autohideAfter > 0) {
+			setTimeout(() => { $(`#${curId}`).alert('close');}, autohideAfter);
+		}
 	}
 	function _error(msg) {
 		if (typeof(msg) === 'object') {

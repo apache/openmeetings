@@ -185,7 +185,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 		if (f.getId() == null) {
 			style.append(CSS_CLASS_FILE).append(f.getHash().indexOf("my") > -1 ? "my " : "public ");
 		} else {
-			if (!f.exists()) {
+			if (BaseFileItem.Type.Folder != f.getType() && !f.exists()) {
 				style.append("broken ");
 			}
 			switch(f.getType()) {

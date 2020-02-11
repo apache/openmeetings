@@ -82,7 +82,6 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class MessagesContactsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
@@ -171,8 +170,8 @@ public class MessagesContactsPanel extends UserBasePanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-				super.onSubmit(target, btn);
+			protected void onSubmit(AjaxRequestTarget target) {
+				super.onSubmit(target);
 				folderDao.addPrivateMessageFolder(getModelObject(), getUserId());
 				foldersModel.setObject(folderDao.get(0, Integer.MAX_VALUE));
 				updateMoveModel();
@@ -210,7 +209,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				addFolder.open(target);
+				addFolder.show(target);
 			}
 		}).add(new JQueryBehavior(".email.newdir", "button")));
 		add(folders.add(new ListView<>("folder", foldersModel) {

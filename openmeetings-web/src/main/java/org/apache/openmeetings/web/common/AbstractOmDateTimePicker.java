@@ -53,6 +53,7 @@ public abstract class AbstractOmDateTimePicker<T> extends AbstractDateTimePicker
 						.useClearIcon(FontAwesome5IconType.eraser_s)
 						.useCloseIcon(FontAwesome5IconType.times_s))
 				);
+		setRenderBodyOnly(false);
 	}
 
 	public static String getDateTimeFormat() {

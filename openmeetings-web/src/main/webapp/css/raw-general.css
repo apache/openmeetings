@@ -779,3 +779,6 @@ select.messages.selector {
 	right: 0;
 	bottom: 0;
 }
+.popover.confirmation.show {
+	z-index: 3000; /* FIXME TODO move this to variables */
+}

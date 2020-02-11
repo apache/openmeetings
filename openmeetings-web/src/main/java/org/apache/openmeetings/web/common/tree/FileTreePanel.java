@@ -128,7 +128,7 @@ public abstract class FileTreePanel extends Panel {
 
 		@Override
 		protected void onEvent(AjaxRequestTarget target) {
-			addFolder.open(target);
+			addFolder.show(target);
 		}
 	});
 	private final Component upload = new WebMarkupContainer("upload");

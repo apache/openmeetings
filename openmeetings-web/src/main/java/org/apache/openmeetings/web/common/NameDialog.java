@@ -18,26 +18,23 @@
  */
 package org.apache.openmeetings.web.common;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public abstract class NameDialog extends AbstractFormDialog<String> {
+public abstract class NameDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
-	private DialogButton add;
-	private DialogButton cancel;
 	private final Form<String> form;
 	protected final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final String name;
@@ -48,17 +45,32 @@ public abstract class NameDialog extends AbstractFormDialog<String> {
 	}
 
 	public NameDialog(String id, String name) {
-		super(id, "", Model.of(name));
+		super(id, Model.of(name));
 		this.name = name;
 		form = new Form<>("form", getModel());
 	}
 
 	@Override
 	protected void onInitialize() {
-		setTitle(Model.of(getTitleStr()));
-		add = new DialogButton("add", getAddStr());
-		cancel = new DialogButton("cancel", getString("lbl.cancel"));
-		form.add(new Label("label", getLabelStr())
+		header(getTitle());
+		setCloseOnEscapeKey(true);
+		setBackdrop(Backdrop.STATIC);
+
+		addCloseButton(new ResourceModel("lbl.cancel"));
+		addButton(new BootstrapAjaxButton("button", getAddBtnLabel(), form, Buttons.Type.Primary) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				NameDialog.this.onSubmit(target);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				NameDialog.this.onError(target);
+			}
+		}); // add
+		form.add(new Label("label", getLabel())
 				, title = new RequiredTextField<>("title", getModel())
 				, feedback.setOutputMarkupId(true)
 				, new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
@@ -66,60 +78,44 @@ public abstract class NameDialog extends AbstractFormDialog<String> {
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
-						NameDialog.this.onSubmit(target, add);
+						NameDialog.this.onSubmit(target);
 					}
 
 					@Override
 					protected void onError(AjaxRequestTarget target) {
-						NameDialog.this.onError(target, add);
+						NameDialog.this.onError(target);
 					}
 				});
-		title.setLabel(Model.of(getLabelStr()));
+		title.setLabel(getLabel());
 		add(form.setOutputMarkupId(true));
 		super.onInitialize();
 	}
 
 	@Override
-	protected void onOpen(IPartialPageRequestHandler handler) {
+	public Modal<String> show(IPartialPageRequestHandler handler) {
 		handler.add(form);
 		setModelObject(name);
 		getFeedbackMessages().clear();
+		return super.show(handler);
 	}
 
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		close(target, getSubmitButton());
+	protected void onSubmit(AjaxRequestTarget target) {
+		close(target);
 	}
 
-	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(add, cancel);
-	}
-
-	@Override
-	public DialogButton getSubmitButton() {
-		return add;
-	}
-
-	@Override
-	public Form<String> getForm() {
-		return form;
-	}
-
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
+	protected void onError(AjaxRequestTarget target) {
 		target.add(feedback);
 	}
 
-	protected String getTitleStr() {
-		return getString("703");
+	protected IModel<String> getTitle() {
+		return new ResourceModel("703");
 	}
 
-	protected String getLabelStr() {
-		return getString("572");
+	protected IModel<String> getLabel() {
+		return new ResourceModel("572");
 	}
 
-	protected String getAddStr() {
-		return getString("1261");
+	protected IModel<String> getAddBtnLabel() {
+		return new ResourceModel("1261");
 	}
 }
