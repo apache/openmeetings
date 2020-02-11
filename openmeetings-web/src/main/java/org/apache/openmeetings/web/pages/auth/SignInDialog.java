@@ -47,7 +47,6 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -68,12 +67,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.ui.effect.JQueryEffectBehavior;
-import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
 public class SignInDialog extends Modal<String> {
@@ -106,7 +105,7 @@ public class SignInDialog extends Modal<String> {
 		show(true);
 		setCloseOnEscapeKey(false);
 		setBackdrop(Backdrop.STATIC);
-		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Secondary, new ResourceModel("123")) {
+		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("123")) {
 			private static final long serialVersionUID = 1L;
 
 			public void onClick(AjaxRequestTarget target) {
@@ -115,7 +114,7 @@ public class SignInDialog extends Modal<String> {
 				register.show(target);
 			}
 		});
-		addButton(new SpinnerAjaxButton("button", new ResourceModel("112"), form, Buttons.Type.Primary)); // Login
+		addButton(new SpinnerAjaxButton("button", new ResourceModel("112"), form, Buttons.Type.Outline_Primary)); // Login
 
 		super.onInitialize();
 	}
@@ -197,24 +196,34 @@ public class SignInDialog extends Modal<String> {
 					@Override
 					protected void populateItem(final ListItem<OAuthServer> item) {
 						final OAuthServer s = item.getModelObject();
-						Button btn = new Button("oauthBtn") {
+
+						BootstrapAjaxLink<String> btn = new BootstrapAjaxLink<>("oauthBtn", null, Buttons.Type.Outline_Info, Model.of(s.getName())) {
 							private static final long serialVersionUID = 1L;
+							{
+								setMarkupId("om-oauth-btn-" + s.getId());
+								setOutputMarkupId(true);
+							}
 
 							@Override
-							public void onSubmit() {
+							public void onClick(AjaxRequestTarget target) {
 								showAuth(s);
 							}
 
 							@Override
 							public void renderHead(IHeaderResponse response) {
 								if (!Strings.isEmpty(s.getIconUrl())) {
-									response.render(CssHeaderItem.forCSS("#" + this.getMarkupId() + " .provider {background-image: url(" + s.getIconUrl() + ")}", this.getMarkupId()));
+									response.render(CssHeaderItem.forCSS("#" + this.getMarkupId() + " .provider {background-image: url(" + s.getIconUrl() + ")}", "oauth-btn-css-" + this.getMarkupId()));
 								}
 							}
 						};
-						Component lbl = new Label("label", s.getName());
-						btn.add(lbl);
-						item.add(btn.setDefaultFormProcessing(false)); //skip all rules, go to redirect
+						item.add(btn.setIconType(new IconType("provider") {
+							private static final long serialVersionUID = 1L;
+
+							@Override
+							public String cssClassName() {
+								return "provider";
+							}
+						}));
 						item.setRenderBodyOnly(true);
 					}
 				}).setVisible(showOauth));

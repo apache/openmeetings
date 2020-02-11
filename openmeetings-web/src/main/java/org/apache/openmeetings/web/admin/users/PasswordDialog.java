@@ -58,7 +58,7 @@ public class PasswordDialog extends Modal<String> {
 		setCloseOnEscapeKey(true);
 		setBackdrop(Backdrop.STATIC);
 
-		addButton(new BootstrapAjaxButton("button", new ResourceModel("54"), form, Buttons.Type.Primary) {
+		addButton(new BootstrapAjaxButton("button", new ResourceModel("54"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

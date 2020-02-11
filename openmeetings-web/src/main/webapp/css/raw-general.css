@@ -19,9 +19,12 @@ html, body {
 }
 .signin .oauth-section .provider {
 	background-position: 0 0;
-	background-size: 16px;
+	background-size: 24px;
 	background-repeat: no-repeat;
+	height: 24px;
+	display: inline-block;
 	padding-left: 20px;
+	vertical-align: bottom;
 }
 .signin .or-seperator {
 	margin-top: 20px;
@@ -235,7 +238,7 @@ html, body {
 	vertical-align: text-top;
 }
 .om-icon.big::before {
-	font-size: 2.4em;
+	font-size: 2.2em;
 }
 .cross.om-icon {
 	background-image: url(images/cross.png);
@@ -424,11 +427,22 @@ select.messages.selector {
 	height: 100%;
 }
 .recording-panel .file-tree {
-	width: 325px;
 	height: 100%;
 }
 .recording-panel .tree-panel {
 	height: calc(100% - var(--info-height));
+}
+.recording-panel .file-tree
+, .recording-panel .tree-panel
+, .recording-panel .info
+{
+	width: 325px;
+}
+.recording-panel .info .details .value {
+	padding: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 .recording-panel .file-tree .info {
 	height: var(--info-height);

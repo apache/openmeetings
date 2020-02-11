@@ -43,8 +43,8 @@
 	<div class="adminPanelColumnForm">
 		<form wicket:id="form" class="adminForm">
 			<div class="actions ui-widget-header">
-				<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="ajax-cancel-button" wicket:message="title:157">
-					<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+				<div class="btn btn-outline-warning btn-sm" wicket:id="btn-delete" wicket:message="title:157,data-original-title:157">
+					<i class="fas fa-times"></i>
 				</div>
 			</div>
 			<div class="scrollcontent" id="adminForm">
@@ -84,7 +84,7 @@
 							<div class="col-8 d-inline-block text-pre" wicket:id="lastError"></div>
 						</div>
 					</div>
-					<button wicket:id="reset" class="align-right mr-3"><wicket:message key="admin.email.reset.status"/></button>
+					<button wicket:id="reset" class="align-right mr-3"></button>
 				</fieldset>
 				<div class="bottom-bumper"></div>
 			</div>

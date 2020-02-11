@@ -56,7 +56,7 @@ public class InviteUserMessageDialog extends Modal<String> {
 		setCloseOnEscapeKey(true);
 		setBackdrop(Backdrop.STATIC);
 
-		addButton(new BootstrapAjaxButton("button", new ResourceModel("213"), form, Buttons.Type.Primary) {
+		addButton(new BootstrapAjaxButton("button", new ResourceModel("213"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -69,7 +69,7 @@ public class InviteUserMessageDialog extends Modal<String> {
 				InviteUserMessageDialog.this.close(target);
 			}
 		}); //send
-		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Secondary, new ResourceModel("lbl.cancel")) {
+		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("lbl.cancel")) {
 			private static final long serialVersionUID = 1L;
 
 			public void onClick(AjaxRequestTarget target) {

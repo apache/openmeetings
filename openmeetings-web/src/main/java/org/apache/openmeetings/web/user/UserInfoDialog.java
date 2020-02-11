@@ -54,7 +54,7 @@ public class UserInfoDialog extends Modal<String> {
 		header(new ResourceModel("1235"));
 		setCloseOnEscapeKey(true);
 		setBackdrop(Backdrop.STATIC);
-		addButton(contacts = new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Info, new ResourceModel("1186")) {
+		addButton(contacts = new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Info, new ResourceModel("1186")) {
 			private static final long serialVersionUID = 1L;
 
 			public void onClick(AjaxRequestTarget target) {
@@ -62,7 +62,7 @@ public class UserInfoDialog extends Modal<String> {
 				UserInfoDialog.this.close(target);
 			}
 		});
-		addButton(message = new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Primary, new ResourceModel("1253")) {
+		addButton(message = new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Primary, new ResourceModel("1253")) {
 			private static final long serialVersionUID = 1L;
 
 			public void onClick(AjaxRequestTarget target) {
@@ -70,7 +70,7 @@ public class UserInfoDialog extends Modal<String> {
 				UserInfoDialog.this.close(target);
 			}
 		});
-		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Secondary, new ResourceModel("lbl.cancel")) {
+		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("lbl.cancel")) {
 			private static final long serialVersionUID = 1L;
 
 			public void onClick(AjaxRequestTarget target) {

@@ -34,11 +34,11 @@ body.no-menu {
 	--actions-height: 40px;
 }
 .recording-panel {
-	--info-height: 115px;
+	--info-height: 125px;
 }
 .file-tree {
 	--tree-header-height: 36px;
-	--tree-footer-height: 40px;
+	--tree-footer-height: 80px;
 }
 .main.room {
 	--header-height: 0px;

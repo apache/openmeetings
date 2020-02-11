@@ -31,6 +31,8 @@
 	line-height: 20px;
 	color: transparent;
 	height: var(--tree-header-height);
+	padding-top: 5px;
+	overflow: hidden;
 }
 .trash-toolbar .om-icon.fileitem, .trash-toolbar .om-icon.recorditem {
 	display: none !important;

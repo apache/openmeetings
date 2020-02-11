@@ -95,8 +95,8 @@ public class RegisterDialog extends Modal<String> {
 		setUseCloseHandler(true);
 		setBackdrop(Backdrop.STATIC);
 
-		addButton(new SpinnerAjaxButton("button", new ResourceModel("121"), form, Buttons.Type.Primary)); // register
-		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Secondary, new ResourceModel("lbl.cancel")) {
+		addButton(new SpinnerAjaxButton("button", new ResourceModel("121"), form, Buttons.Type.Outline_Primary)); // register
+		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("lbl.cancel")) {
 			private static final long serialVersionUID = 1L;
 
 			public void onClick(AjaxRequestTarget target) {

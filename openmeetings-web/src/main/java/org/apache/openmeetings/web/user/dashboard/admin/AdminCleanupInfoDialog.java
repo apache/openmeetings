@@ -92,7 +92,7 @@ public class AdminCleanupInfoDialog extends Modal<String> {
 			@Override
 			protected void onInitialize() {
 				super.onInitialize();
-				SpinnerAjaxButton cleanup = new SpinnerAjaxButton("cleanup", new ResourceModel("dashboard.widget.admin.cleanup.cleanup"), this, Buttons.Type.Danger) {
+				SpinnerAjaxButton cleanup = new SpinnerAjaxButton("cleanup", new ResourceModel("dashboard.widget.admin.cleanup.cleanup"), this, Buttons.Type.Outline_Danger) {
 					private static final long serialVersionUID = 1L;
 
 					@Override

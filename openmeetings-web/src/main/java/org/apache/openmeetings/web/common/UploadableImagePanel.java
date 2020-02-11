@@ -30,8 +30,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -48,7 +46,6 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5I
 public abstract class UploadableImagePanel extends ImagePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(UploadableImagePanel.class);
-	private static final String HOVER = "$('.profile .ui-button-icon.ui-icon.ui-icon-closethick.remove').hover(function (e) {$(this).toggleClass('ui-widget-content', e.type === 'mouseenter');});";
 	private final FileUploadField fileUploadField = new FileUploadField("image", new ListModel<FileUpload>());
 	private final Form<Void> form = new Form<>("form");
 	private final boolean delayed;
@@ -75,7 +72,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 			add(new WebMarkupContainer("remove").add(AttributeModifier.append("onclick"
 					, "$(this).parent().find('.fileinput').fileinput('clear');")));
 		} else {
-			BootstrapAjaxLink<String> remove = new BootstrapAjaxLink<>("remove", Buttons.Type.Secondary) {
+			BootstrapAjaxLink<String> remove = new BootstrapAjaxLink<>("remove", Buttons.Type.Outline_Secondary) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -105,12 +102,6 @@ public abstract class UploadableImagePanel extends ImagePanel {
 	}
 
 	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(OnDomReadyHeaderItem.forScript(HOVER));
-	}
-
-	@Override
 	public void update() {
 		profile.addOrReplace(new WebMarkupContainer("img").setVisible(false));
 		form.addOrReplace(getImage());
@@ -120,7 +111,6 @@ public abstract class UploadableImagePanel extends ImagePanel {
 		update();
 		target.ifPresent(t -> {
 			t.add(profile, form);
-			t.appendJavaScript(HOVER);
 		});
 	}
 

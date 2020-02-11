@@ -57,7 +57,7 @@ public abstract class NameDialog extends Modal<String> {
 		setBackdrop(Backdrop.STATIC);
 
 		addCloseButton(new ResourceModel("lbl.cancel"));
-		addButton(new BootstrapAjaxButton("button", getAddBtnLabel(), form, Buttons.Type.Primary) {
+		addButton(new BootstrapAjaxButton("button", getAddBtnLabel(), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

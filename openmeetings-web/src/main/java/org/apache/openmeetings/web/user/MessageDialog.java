@@ -119,7 +119,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 		setBackdrop(Backdrop.STATIC);
 		size(Modal.Size.Large);
 
-		addButton(new BootstrapAjaxButton("button", new ResourceModel("218"), form, Buttons.Type.Primary) {
+		addButton(new BootstrapAjaxButton("button", new ResourceModel("218"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -210,7 +210,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 				onSend(target);
 			}
 		}); // send
-		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Secondary, new ResourceModel("lbl.cancel")) {
+		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("lbl.cancel")) {
 			private static final long serialVersionUID = 1L;
 
 			public void onClick(AjaxRequestTarget target) {

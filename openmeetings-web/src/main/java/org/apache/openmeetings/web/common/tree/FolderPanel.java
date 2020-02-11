@@ -83,7 +83,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 			add(new DroppableBehavior(
 					selector
 					, new Options()
-						.set("hoverClass", Options.asString("ui-state-hover"))
+						.set("hoverClass", Options.asString("bg-light"))
 						.set("accept", Options.asString(getDefaultModelObject() instanceof Recording ? ".recorditem" : ".fileitem"))
 					, this));
 		}
@@ -221,7 +221,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 			}
 		}
 		if (treePanel.isSelected(f)) {
-			style.append("ui-state-active ");
+			style.append("bg-info ");
 		}
 		String cls = f instanceof Recording ? "recorditem " : "fileitem ";
 		style.append(f.isReadOnly() ? "readonlyitem " : cls);

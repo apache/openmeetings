@@ -69,7 +69,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	static final String HASH = "secure";
 	static final String LANG = "language";
 	private final WebMarkupContainer recContainer = new WebMarkupContainer(PANEL_RECORDING);
-	private final VideoInfo vi = new VideoInfo("info", null);
+	private final VideoInfo vi = new VideoInfo("info");
 	private final VideoPlayer vp = new VideoPlayer("player");
 	private boolean error = true;
 	private MainPanel mp = null;

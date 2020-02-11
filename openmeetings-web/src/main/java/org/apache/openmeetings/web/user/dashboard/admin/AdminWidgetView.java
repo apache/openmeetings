@@ -44,7 +44,7 @@ public class AdminWidgetView extends WidgetView {
 		super.onInitialize();
 		add(form);
 		form.add(cleanupDialog = new AdminCleanupInfoDialog("cleanup-dialog"));
-		form.add(new SpinnerAjaxButton("show-cleanup-dialog", new ResourceModel("dashboard.widget.admin.cleanup.show"), form, Buttons.Type.Primary) {
+		form.add(new SpinnerAjaxButton("show-cleanup-dialog", new ResourceModel("dashboard.widget.admin.cleanup.show"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

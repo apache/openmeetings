@@ -18,8 +18,14 @@
  */
 package org.apache.openmeetings.web.room.activities;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
+import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
+import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -42,13 +48,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
-import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 
 public class ActivitiesPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -277,11 +278,11 @@ public class ActivitiesPanel extends Panel {
 			case reqRightAv:
 			case reqRightMuteOthers:
 			case haveQuestion:
-				cls.append("ui-state-highlight");
+				cls.append("bg-warning");
 				break;
 			case roomEnter:
 			case roomExit:
-				cls.append("ui-state-default auto-clean");
+				cls.append("bg-white auto-clean");
 		}
 		return cls;
 	}
