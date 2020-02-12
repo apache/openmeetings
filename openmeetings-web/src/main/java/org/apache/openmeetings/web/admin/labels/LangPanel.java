@@ -35,7 +35,6 @@ import org.apache.openmeetings.db.entity.label.StringLabel;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -47,7 +46,6 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -129,7 +127,6 @@ public class LangPanel extends AdminBasePanel {
 						form.setModelObject(fv);
 						form.setNewVisible(false);
 						target.add(form, listContainer);
-						reinitJs(target);
 					}
 				});
 				item.add(AttributeModifier.append(ATTR_CLASS, getRowClass(fv.getId(), form.getModelObject().getId())));
@@ -254,17 +251,6 @@ public class LangPanel extends AdminBasePanel {
 		langForm.add(delLngBtn.setIconType(FontAwesome5IconType.times_s)
 				.add(CallbackFunctionHelper.newOkCancelDangerConfirm(this, getString("833"))));
 		super.onInitialize();
-	}
-
-	@Override
-	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
-		reinitJs(handler);
-		super.onMenuPanelLoad(handler);
-		return this;
-	}
-
-	static void reinitJs(IPartialPageRequestHandler handler) {
-		handler.appendJavaScript("langPanelInit()");
 	}
 
 	public LangForm getLangForm() {

@@ -91,9 +91,9 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 			add(new DraggableBehavior(
 					selector
 					, new Options()
-						.set("revert", "treeRevert")
+						.set("revert", "OmFileTree.treeRevert")
 						.set("cursor", Options.asString("move"))
-						.set("helper", "dragHelper")
+						.set("helper", "OmFileTree.dragHelper")
 						.set("cursorAt", "{left: 40, top: 18}")
 						.set("containment", Options.asString(treePanel.getContainment()))
 					, this));

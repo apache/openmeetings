@@ -38,8 +38,7 @@ import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.NameDialog;
-import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder;
-import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.ConfirmableBorderDialog;
+import org.apache.openmeetings.web.common.confirmation.ConfirmationDialog;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
 import org.apache.openmeetings.web.room.VideoSettings;
@@ -53,12 +52,12 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
@@ -82,7 +81,7 @@ public class RoomSidebar extends Panel {
 	private final WebMarkupContainer userList = new WebMarkupContainer("user-list");
 	private final WebMarkupContainer fileTab = new WebMarkupContainer("file-tab");
 	private final SelfIconsPanel selfRights;
-	private ConfirmableAjaxBorder confirmKick;
+	private ConfirmationDialog confirmKick;
 	private boolean showFiles;
 	private boolean avInited = false;
 	private Client kickedClient;
@@ -167,23 +166,21 @@ public class RoomSidebar extends Panel {
 				super.onSubmit(target);
 			}
 		};
-		final Form<?> form = new Form<>("form");
-		ConfirmableBorderDialog confirmTrash = new ConfirmableBorderDialog("confirm-trash", getString("80"), getString("713"), form);
-		roomFiles = new RoomFilePanel("tree", room, addFolder, confirmTrash);
+		roomFiles = new RoomFilePanel("tree", room, addFolder);
 		add(selfRights, userList.add(users).setOutputMarkupId(true)
 				, fileTab.setVisible(!room.isInterview()), roomFiles.setVisible(!room.isInterview()));
 
 		add(addFolder, settings, userCount.setOutputMarkupId(true));
 		add(avSettings);
-		add(confirmKick = new ConfirmableAjaxBorder("confirm-kick", getString("603"), getString("605")) {
+		add(new ConfirmationDialog("confirm-kick", new ResourceModel("603"), new ResourceModel("605")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
+			protected void onConfirm(AjaxRequestTarget target) {
 				kickUser(kickedClient);
 			}
 		});
-		add(form.add(confirmTrash), upload = new UploadDialog("upload", room, roomFiles));
+		add(upload = new UploadDialog("upload", room, roomFiles));
 		updateShowFiles(null);
 		add(new JQueryUIBehavior("#room-sidebar-tabs", "tabs"));
 		add(activities = new ActivitiesPanel("activities", room));
@@ -255,7 +252,7 @@ public class RoomSidebar extends Panel {
 							return;
 						}
 						if (!kickedClient.hasRight(Right.superModerator) && !self.getUid().equals(kickedClient.getUid())) {
-							confirmKick.getDialog().open(handler);
+							confirmKick.show(handler);
 						}
 					}
 					break;

@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
-import static org.apache.openmeetings.web.admin.labels.LangPanel.reinitJs;
-
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.label.StringLabel;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
@@ -57,14 +55,12 @@ public class LabelsForm extends AdminBaseForm<StringLabel> {
 		value = null;
 		setModelObject(new StringLabel(key, value));
 		target.add(this);
-		reinitJs(target);
 	}
 
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		this.setModelObject(new StringLabel(key, value));
 		target.add(this);
-		reinitJs(target);
 	}
 
 	@Override
@@ -76,7 +72,6 @@ public class LabelsForm extends AdminBaseForm<StringLabel> {
 		}
 		setNewVisible(false);
 		target.add(panel.listContainer);
-		reinitJs(target);
 	}
 
 	@Override
@@ -87,6 +82,5 @@ public class LabelsForm extends AdminBaseForm<StringLabel> {
 			error("Unexpected error while deleting label:" + e.getMessage());
 		}
 		target.add(panel.listContainer);
-		reinitJs(target);
 	}
 }

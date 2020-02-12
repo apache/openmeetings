@@ -34,6 +34,9 @@
 	padding-top: 5px;
 	overflow: hidden;
 }
+.trash-toolbar .om-confirm-dialog {
+	color: var(--danger);
+}
 .trash-toolbar .om-icon.fileitem, .trash-toolbar .om-icon.recorditem {
 	display: none !important;
 }

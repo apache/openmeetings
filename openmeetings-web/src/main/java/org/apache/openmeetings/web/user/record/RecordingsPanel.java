@@ -53,7 +53,7 @@ public class RecordingsPanel extends UserBasePanel {
 				super.onSubmit(target);
 			}
 		};
-		add(fileTree = new FileTreePanel("tree", null, addFolder, null) {
+		add(fileTree = new FileTreePanel("tree", null, addFolder) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

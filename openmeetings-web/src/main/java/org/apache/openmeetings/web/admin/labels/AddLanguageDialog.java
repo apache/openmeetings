@@ -53,7 +53,6 @@ public class AddLanguageDialog extends Modal<String> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("362"));
-		setCloseOnEscapeKey(true);
 		setBackdrop(Backdrop.STATIC);
 
 		addButton(new BootstrapAjaxButton("button", new ResourceModel("366"), form, Buttons.Type.Outline_Primary) {

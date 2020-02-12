@@ -22,13 +22,17 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public abstract class ConfirmationDialog extends TextContentModal {
 	private static final long serialVersionUID = 1L;
+	private BootstrapAjaxLink<String> okButton;
 
 	public ConfirmationDialog(String id, IModel<String> title, IModel<String> model) {
 		super(id, model);
@@ -36,18 +40,37 @@ public abstract class ConfirmationDialog extends TextContentModal {
 		setBackdrop(Backdrop.STATIC);
 	}
 
+	private BootstrapAjaxLink<String> getOkButton() {
+		if (okButton == null) {
+			okButton = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Danger, new ResourceModel("54")) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick(AjaxRequestTarget target) {
+					close(target);
+					onConfirm(target);
+				}
+			};
+			okButton.setIconType(FontAwesome5IconType.exclamation_triangle_s);
+		}
+		return okButton;
+	}
+
+	public ConfirmationDialog withOkType(Buttons.Type type) {
+		getOkButton().setType(type);
+		return this;
+	}
+
+	public ConfirmationDialog withOkIcon(IconType icon) {
+		getOkButton().setIconType(icon);
+		return this;
+	}
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		addButton(new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Primary, new ResourceModel("54")) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				close(target);
-				onConfirm(target);
-			}
-		}); //send
+		add(new CssClassNameAppender("om-confirm-dialog"));
+		addButton(getOkButton());
 		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
 	}
 

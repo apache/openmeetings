@@ -24,7 +24,7 @@ import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -40,7 +40,7 @@ public class EmailForm extends Form<MailMessage> {
 	private static final long serialVersionUID = 1L;
 	private final Label status = new Label("status", Model.of(""));
 	private BootstrapAjaxButton reset;
-	private AjaxButton delBtn;
+	private AjaxLink<Void> delBtn;
 	private final WebMarkupContainer list;
 	@SpringBean
 	private MailMessageDao emailDao;
@@ -72,11 +72,10 @@ public class EmailForm extends Form<MailMessage> {
 		});
 		reset.setEnabled(false);
 		// add a cancel button that can be used to submit the form via ajax
-		delBtn = new AjaxButton("btn-delete", this) {
+		delBtn = new AjaxLink<>("btn-delete") {
 			private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
+			public void onClick(AjaxRequestTarget target) {
 				emailDao.delete(EmailForm.this.getModelObject().getId());
 				EmailForm.this.setModelObject(new MailMessage());
 				target.add(list, EmailForm.this);

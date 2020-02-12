@@ -22,6 +22,7 @@ import static org.apache.openmeetings.web.util.CallbackFunctionHelper.newOkCance
 
 import org.apache.openmeetings.web.common.FormActionsPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -31,8 +32,8 @@ public abstract class AdminActionsPanel<T> extends FormActionsPanel<T> {
 	private static final long serialVersionUID = 1L;
 	private final Label newRecord = new Label("newRecord", Model.of(""));
 	private final Form<T> form;
-	private AjaxButton delBtn;
-	private AjaxButton restoreBtn;
+	private AjaxLink<Void> delBtn;
+	private AjaxLink<Void> restoreBtn;
 
 	public AdminActionsPanel(String id, final Form<T> form) {
 		super(id, form);
@@ -67,42 +68,27 @@ public abstract class AdminActionsPanel<T> extends FormActionsPanel<T> {
 		final Form<?> cForm = new Form<>("form");
 		cForm.setMultiPart(form.isMultiPart());
 		add(cForm);
-		delBtn = new AjaxButton("btn-delete", cForm) {
+		delBtn = new AjaxLink<>("btn-delete") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
+			public void onClick(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
 				setNewVisible(false);
 				onDeleteSubmit(target, form);
 			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target) {
-				// repaint the feedback panel so errors are shown
-				target.add(feedback);
-				setNewVisible(false);
-				AdminActionsPanel.this.onError(target, form);
-			}
 		};
 		delBtn.add(newOkCancelDangerConfirm(this, getString("833")));
-		restoreBtn = new AjaxButton("btn-restore", form) {
+		restoreBtn = new AjaxLink<>("btn-restore") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
+			public void onClick(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
 				setNewVisible(false);
 				onRestoreSubmit(target, form);
-			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target) {
-				// repaint the feedback panel so errors are shown
-				target.add(feedback);
-				AdminActionsPanel.this.onError(target, form);
 			}
 		};
 		add(newBtn, delBtn

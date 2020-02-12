@@ -43,7 +43,6 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder;
-import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -170,7 +169,6 @@ public abstract class FileTreePanel extends Panel {
 	};
 	private final Form<Void> form = new Form<>("form");
 	private final NameDialog addFolder;
-	private final ConfirmableBorderDialog trashConfirm;
 	private ConfirmableAjaxBorder trashBorder;
 	private final Long roomId;
 	private boolean readOnly = true;
@@ -188,11 +186,10 @@ public abstract class FileTreePanel extends Panel {
 	@SpringBean
 	private FileItemDao fileDao;
 
-	public FileTreePanel(String id, Long roomId, NameDialog addFolder, ConfirmableBorderDialog trashConfirm) {
+	public FileTreePanel(String id, Long roomId, NameDialog addFolder) {
 		super(id);
 		this.roomId = roomId;
 		this.addFolder = addFolder;
-		this.trashConfirm = trashConfirm;
 		final OmTreeProvider tp = new OmTreeProvider(roomId);
 		select(tp.getRoot(), null, false, false);
 		form.add(tree = new FileItemTree("tree", this, tp));
@@ -268,25 +265,42 @@ public abstract class FileTreePanel extends Panel {
 				update(target);
 			}
 		}));
-		trashToolbar.add(trashBorder = new ConfirmableAjaxBorder("trash", getString("80"), getString("713"), trashConfirm) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected boolean isClickable() {
-				return !readOnly && !selected.isEmpty();
-			}
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				deleteAll(target);
-			}
-		});
+		trashToolbar.add(getTrashBorder());
 
 		form.add(trees.add(tree).setOutputMarkupId(true));
 		updateSizes();
 		form.add(sizes.add(new Label("homeSize", homeSize), new Label("publicSize", publicSize)).setOutputMarkupId(true));
 		form.add(errorsDialog);
 		setReadOnly(false, null);
+	}
+
+	private ConfirmableAjaxBorder getTrashBorder() {
+		if (trashBorder == null) {
+			trashBorder = new ConfirmableAjaxBorder("trash", new ResourceModel("80"), new ResourceModel("713")) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected boolean isClickable() {
+					return !readOnly && !selected.isEmpty();
+				}
+
+				@Override
+				protected void onConfirm(AjaxRequestTarget target) {
+					deleteAll(target);
+				}
+			};
+		}
+		return trashBorder;
+	}
+
+	public FileTreePanel setBorderTitle(IModel<String> title) {
+		getTrashBorder().setTitle(title);
+		return this;
+	}
+
+	public FileTreePanel setBorderMessage(IModel<String> message) {
+		getTrashBorder().setMessage(message);
+		return this;
 	}
 
 	@Override
