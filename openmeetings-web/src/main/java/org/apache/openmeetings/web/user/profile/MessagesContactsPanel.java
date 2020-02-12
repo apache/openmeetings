@@ -48,20 +48,18 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.common.UserBasePanel;
-import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.openmeetings.web.user.MessageDialog;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
+import org.apache.openmeetings.web.util.CallbackFunctionHelper;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.EventPropagation;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -82,6 +80,10 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public class MessagesContactsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
@@ -218,22 +220,20 @@ public class MessagesContactsPanel extends UserBasePanel {
 			@Override
 			protected void populateItem(final ListItem<PrivateMessageFolder> item) {
 				item.add(new Label("name", item.getModelObject().getFolderName()));
-				item.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
+				BootstrapAjaxLink<String> del = new BootstrapAjaxLink<>("delete", Buttons.Type.Outline_Danger) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-						attributes.setEventPropagation(EventPropagation.STOP_IMMEDIATE);
-					}
-
-					@Override
-					protected void onSubmit(AjaxRequestTarget target) {
+					public void onClick(AjaxRequestTarget target) {
 						folderDao.delete(item.getModelObject(), getUserId());
 						foldersModel.setObject(folderDao.get(0, Integer.MAX_VALUE));
 						updateMoveModel();
 						target.add(folders, moveDropDown);
 					}
-				});
+				};
+				del.setIconType(FontAwesome5IconType.times_s)
+						.add(CallbackFunctionHelper.newOkCancelDangerConfirm(this, getString("833")));
+				item.add(del);
 				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
@@ -489,20 +489,18 @@ public class MessagesContactsPanel extends UserBasePanel {
 				}).setVisible(uc.isPending()));
 				item.add(new WebMarkupContainer("view").add(addOnClick(String.format("showUserInfo(%s);", userId))));
 				item.add(new WebMarkupContainer("message").add(addOnClick(String.format("privateMessage(%s);", userId))).setVisible(!uc.isPending()));
-				item.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
+				BootstrapAjaxLink<String> del = new BootstrapAjaxLink<>("delete", Buttons.Type.Outline_Danger) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-						attributes.setEventPropagation(EventPropagation.STOP_IMMEDIATE);
-					}
-
-					@Override
-					protected void onSubmit(AjaxRequestTarget target) {
+					public void onClick(AjaxRequestTarget target) {
 						contactDao.delete(contactId);
 						updateContacts(target);
 					}
-				}.setVisible(!uc.isPending()));
+				};
+				del.setIconType(FontAwesome5IconType.times_s)
+						.add(CallbackFunctionHelper.newOkCancelDangerConfirm(this, getString("833")));
+				item.add(del.setVisible(!uc.isPending()));
 			}
 		};
 		updateContacts(null);

@@ -26,10 +26,11 @@ import java.util.Optional;
 
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -68,10 +69,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 		form.add(fileUploadField);
 		form.add(new UploadProgressBar("progress", form, fileUploadField));
 		form.addOrReplace(getImage());
-		if (delayed) {
-			add(new WebMarkupContainer("remove").add(AttributeModifier.append("onclick"
-					, "$(this).parent().find('.fileinput').fileinput('clear');")));
-		} else {
+		if (!delayed) {
 			BootstrapAjaxLink<String> remove = new BootstrapAjaxLink<>("remove", Buttons.Type.Outline_Secondary) {
 				private static final long serialVersionUID = 1L;
 
@@ -99,6 +97,14 @@ public abstract class UploadableImagePanel extends ImagePanel {
 		}
 		add(form.setOutputMarkupId(true));
 		add(BootstrapFileUploadBehavior.INSTANCE);
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		if (delayed) {
+			response.render(OnDomReadyHeaderItem.forScript("$('#" + form.getOutputMarkupId() + " .remove').click(function() {$(this).parent().find('.fileinput').fileinput('clear');})"));
+		}
 	}
 
 	@Override

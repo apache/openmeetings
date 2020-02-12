@@ -20,9 +20,6 @@ package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -35,16 +32,15 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
-public class ChangePasswordDialog extends AbstractFormDialog<String> {
+public class ChangePasswordDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(ChangePasswordDialog.class);
-	private DialogButton update;
-	private DialogButton cancel;
 	private final PasswordTextField current = new PasswordTextField("current", Model.of((String)null));
 	private final PasswordTextField pass = new PasswordTextField("pass", Model.of((String)null));
 	private final PasswordTextField pass2 = new PasswordTextField("pass2", Model.of((String)null));
@@ -76,21 +72,35 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 	private UserDao userDao;
 
 	public ChangePasswordDialog(String id) {
-		super(id, "");
+		super(id);
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("327"));
-		update = new DialogButton("update", new ResourceModel("327")) {
+		header(new ResourceModel("327"));
+		setCloseOnEscapeKey(true);
+		setBackdrop(Backdrop.STATIC);
+
+		addButton(new SpinnerAjaxButton("button", new ResourceModel("327"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public boolean isIndicating() {
-				return true;
+			protected void onError(AjaxRequestTarget target) {
+				target.add(feedback);
 			}
-		};
-		cancel = new DialogButton("cancel", new ResourceModel("lbl.cancel"));
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				try {
+					userDao.update(userDao.get(getUserId()), pass.getModelObject(), getUserId());
+					ChangePasswordDialog.this.close(target);
+				} catch (Exception e) {
+					error(e.getMessage());
+					target.add(feedback);
+				}
+			}
+		}); //send
+		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
 		passValidator = new StrongPasswordValidator(userDao.get(getUserId()));
 		add(form.add(
 				current.setLabel(new ResourceModel("current.password")).setRequired(true)
@@ -99,35 +109,5 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 				, feedback.setOutputMarkupId(true)
 				));
 		super.onInitialize();
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(update, cancel);
-	}
-
-	@Override
-	public DialogButton getSubmitButton() {
-		return update;
-	}
-
-	@Override
-	public Form<?> getForm() {
-		return form;
-	}
-
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
-		target.add(feedback);
-	}
-
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		try {
-			userDao.update(userDao.get(getUserId()), pass.getModelObject(), getUserId());
-		} catch (Exception e) {
-			error(e.getMessage());
-			target.add(feedback);
-		}
 	}
 }

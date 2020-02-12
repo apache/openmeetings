@@ -33,6 +33,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public class UserInfoDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -70,13 +71,7 @@ public class UserInfoDialog extends Modal<String> {
 				UserInfoDialog.this.close(target);
 			}
 		});
-		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("lbl.cancel")) {
-			private static final long serialVersionUID = 1L;
-
-			public void onClick(AjaxRequestTarget target) {
-				UserInfoDialog.this.close(target);
-			}
-		});
+		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
 		add(container.add(new WebMarkupContainer("body")).setOutputMarkupId(true));
 		super.onInitialize();
 	}

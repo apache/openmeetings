@@ -16,24 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.util;
+package org.apache.openmeetings.web.user;
 
-import java.io.Serializable;
+import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-
-public abstract class NonClosableDialog<T extends Serializable> extends AbstractFormDialog<T> {
+public class OmWysiwygToolbar extends DefaultWysiwygToolbar {
 	private static final long serialVersionUID = 1L;
 
-	public NonClosableDialog(String id, String title) {
-		super(id, title);
-	}
-
-	@Override
-	public void onConfigure(JQueryBehavior behavior) {
-		super.onConfigure(behavior);
-		behavior.setOption("closeOnEscape", false);
-		behavior.setOption("classes", "{'ui-dialog-titlebar': 'ui-corner-all no-close'}");
+	public OmWysiwygToolbar(String id) {
+		super(id);
 	}
 }

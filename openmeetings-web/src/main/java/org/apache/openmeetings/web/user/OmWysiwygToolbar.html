@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<div wicket:id="toolbar" class="btn-toolbar wysiwyg-toolbar" data-role="editor-toolbar">
+		<div class="btn-group">
+			<a wicket:id="fontSize" id="fontSize" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" role="button" title="Font Size"> A </a>
+			<ul class="dropdown-menu">
+				<li><a wicket:id="huge" class="font-huge text-center clickable" data-edit="fontSize 5"></a></li>
+				<li><a wicket:id="medium" class="font-small text-center clickable" data-edit="fontSize 3"></a></li>
+				<li><a wicket:id="small" class="font-tiny text-center clickable" data-edit="fontSize 1"></a></li>
+			</ul>
+		</div>
+		<div class="btn-group">
+			<a wicket:id="bold" class="btn btn-outline-secondary tool-btn bold" data-edit="bold" title=""> B </a>
+			<a wicket:id="italic" class="btn btn-outline-secondary tool-btn italic" data-edit="italic" title=""> I </a>
+			<a wicket:id="strikethrough" class="btn btn-outline-secondary tool-btn strike" data-edit="strikethrough" title=""> S </a>
+			<a wicket:id="underline" class="btn btn-outline-secondary tool-btn under" data-edit="underline" title=""> U </a>
+		</div>
+		<div class="btn-group">
+			<a wicket:id="bullets" class="btn btn-outline-secondary" data-edit="insertunorderedlist" title="">
+				<i class="fas fa-list-ul"></i>
+			</a>
+			<a wicket:id="numbers" class="btn btn-outline-secondary" data-edit="insertorderedlist" title="">
+				<i class="fas fa-list-ol"></i>
+			</a>
+			<a wicket:id="reduceIndent" class="btn btn-outline-secondary" data-edit="outdent" title="">
+				<i class="fas fa-indent"></i>
+			</a>
+			<a wicket:id="indent" class="btn btn-outline-secondary" data-edit="indent" title="">
+				<i class="fas fa-outdent"></i>
+			</a>
+		</div>
+		<div class="btn-group">
+			<a wicket:id="justifyLeft" class="btn btn-outline-secondary" data-edit="justifyleft" title="">
+				<i class="fas fa-align-left"></i>
+			</a>
+			<a wicket:id="justifyCenter" class="btn btn-outline-secondary" data-edit="justifycenter" title="">
+				<i class="fas fa-align-center"></i>
+			</a>
+			<a wicket:id="justifyRight" class="btn btn-outline-secondary" data-edit="justifyright" title="">
+				<i class="fas fa-align-right"></i>
+			</a>
+			<a wicket:id="justifyFull" class="btn btn-outline-secondary" data-edit="justifyfull" title="">
+				<i class="fas fa-align-justify"></i>
+			</a>
+		</div>
+		<div class="btn-group">
+			<a wicket:id="hyperlink" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" title="">
+				<i class="fas fa-link"></i>
+			</a>
+			<div class="dropdown-menu input-append">
+				<input class="span2" placeholder="URL" type="text" data-edit="createLink"/>
+				<button class="btn btn-outline-secondary" type="button"><wicket:message key="1261"/></button>
+			</div>
+			<a wicket:id="removeHyperlink" class="btn btn-outline-secondary" data-edit="unlink" title="">
+				<i class="fas fa-unlink"></i>
+			</a>
+		</div>
+		<div class="btn-group">
+			<a wicket:id="undo" class="btn btn-outline-secondary" data-edit="undo" title="">
+				<i class="fas fa-undo-alt"></i>
+			</a>
+			<a wicket:id="redo" class="btn btn-outline-secondary" data-edit="redo" title="">
+				<i class="fas fa-redo-alt"></i>
+			</a>
+		</div>
+	</div>
+</wicket:panel>
+</html>

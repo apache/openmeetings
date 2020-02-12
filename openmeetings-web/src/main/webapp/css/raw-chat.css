@@ -165,24 +165,24 @@ html[dir="rtl"] .main.room #chatPanel {
 .chat-msg-container {
 	position: relative;
 }
-.chat-toolbar .font-huge {
+.chat-toolbar .font-huge, .wysiwyg-toolbar .font-huge {
 	font-size: x-large;
 }
-.chat-toolbar .font-small {
+.chat-toolbar .font-small, .wysiwyg-toolbar .font-small {
 	font-size: small;
 }
-.chat-toolbar .font-tiny {
+.chat-toolbar .font-tiny, .wysiwyg-toolbar .font-tiny {
 	font-size: small;
 }
-.chat-toolbar .chat-btn.bold {
+.chat-toolbar .chat-btn.bold, .wysiwyg-toolbar .tool-btn.bold {
 	font-weight: bold;
 }
-.chat-toolbar .chat-btn.bold {
+.chat-toolbar .chat-btn.italic, .wysiwyg-toolbar .tool-btn.italic {
 	font-style: italic;
 }
-.chat-toolbar .chat-btn.strike {
+.chat-toolbar .chat-btn.strike, .wysiwyg-toolbar .tool-btn.strike {
 	text-decoration: line-through;
 }
-.chat-toolbar .chat-btn.under {
+.chat-toolbar .chat-btn.under, .wysiwyg-toolbar .tool-btn.under {
 	text-decoration: underline;
 }

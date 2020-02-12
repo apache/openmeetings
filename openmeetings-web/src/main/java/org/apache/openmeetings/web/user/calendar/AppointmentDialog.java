@@ -53,6 +53,7 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.GroupChoiceProvider;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
 import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.user.OmWysiwygToolbar;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
@@ -88,7 +89,6 @@ import org.wicketstuff.select2.Select2MultiChoice;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
-import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
@@ -385,7 +385,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			rdi.add(new Radio<>("user", Model.of(InviteeType.user)));
 
 			add(new TextField<String>("location"));
-			DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
+			OmWysiwygToolbar toolbar = new OmWysiwygToolbar("toolbarContainer");
 			add(toolbar);
 			add(new WysiwygEditor("description", toolbar));
 

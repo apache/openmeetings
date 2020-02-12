@@ -105,6 +105,7 @@ import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.csp.CSPDirective;
+import org.apache.wicket.csp.CSPDirectiveSrcValue;
 import org.apache.wicket.csp.CSPHeaderConfiguration;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.FilteringHeaderResponse;
@@ -341,6 +342,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					cspConfig.add(CSPDirective.IMG_SRC, oauth.getIconUrl());
 				}
 			});
+			cspConfig.add(CSPDirective.STYLE_SRC, "https://fonts.googleapis.com/css"); //Roboto font FIXME TODO should this be moved to configs???
+			cspConfig.add(CSPDirective.FONT_SRC, "https://fonts.gstatic.com"); //Roboto font FIXME TODO should this be moved to configs???
+			cspConfig.add(CSPDirective.MEDIA_SRC, CSPDirectiveSrcValue.SELF);
 			setInitComplete(true);
 		} catch (Exception err) {
 			log.error("[appStart]", err);

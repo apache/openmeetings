@@ -20,13 +20,12 @@ package org.apache.openmeetings.web.common;
 
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public class InvitationDialog extends Modal<Invitation> {
 	private static final long serialVersionUID = 1L;
@@ -71,13 +70,7 @@ public class InvitationDialog extends Modal<Invitation> {
 				InvitationDialog.this.onClick(target, InvitationForm.Action.SEND);
 			}
 		});
-		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("lbl.cancel")) {
-			private static final long serialVersionUID = 1L;
-
-			public void onClick(AjaxRequestTarget target) {
-				InvitationDialog.this.close(target);
-			}
-		});
+		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
 		super.onInitialize();
 	}
 

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
 import java.time.Duration;
 
@@ -32,10 +31,8 @@ import org.apache.openmeetings.web.common.FormActionsPanel;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.pages.PrivacyPage;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -49,7 +46,8 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.ui.form.button.ButtonBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public class EditProfileForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
@@ -113,14 +111,14 @@ public class EditProfileForm extends Form<User> {
 				setResponsePage(Application.get().getSignInPageClass());
 			}
 		});
-		add(new WebMarkupContainer("changePwd").add(new ButtonBehavior("#changePwd"), new AjaxEventBehavior(EVT_CLICK) {
+		add(new BootstrapAjaxLink<>("changePwd", Model.of(""), Buttons.Type.Outline_Danger, new ResourceModel("327")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				chPwdDlg.open(target);
+			public void onClick(AjaxRequestTarget target) {
+				chPwdDlg.show(target);
 			}
-		}).setVisible(checkPassword));
+		}.setVisible(checkPassword));
 		add(userForm);
 		add(new UploadableProfileImagePanel("img", getUserId()));
 		add(new ComunityUserForm("comunity", getModel()));

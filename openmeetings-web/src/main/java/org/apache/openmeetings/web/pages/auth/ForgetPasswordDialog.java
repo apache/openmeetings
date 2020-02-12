@@ -56,10 +56,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public class ForgetPasswordDialog extends Modal<String> {
 	private static final Logger log = LoggerFactory.getLogger(ForgetPasswordDialog.class);
@@ -100,13 +100,7 @@ public class ForgetPasswordDialog extends Modal<String> {
 		addButton(new BootstrapAjaxButton("button", new ResourceModel("317"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 		}); // Send
-		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("lbl.cancel")) {
-			private static final long serialVersionUID = 1L;
-
-			public void onClick(AjaxRequestTarget target) {
-				ForgetPasswordDialog.this.close(target);
-			}
-		});
+		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
 
 		add(form);
 		super.onInitialize();

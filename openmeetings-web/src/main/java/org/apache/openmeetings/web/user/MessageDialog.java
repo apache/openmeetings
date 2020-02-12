@@ -73,13 +73,12 @@ import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
-import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public class MessageDialog extends Modal<PrivateMessage> {
 	private static final long serialVersionUID = 1L;
@@ -210,18 +209,12 @@ public class MessageDialog extends Modal<PrivateMessage> {
 				onSend(target);
 			}
 		}); // send
-		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("lbl.cancel")) {
-			private static final long serialVersionUID = 1L;
-
-			public void onClick(AjaxRequestTarget target) {
-				MessageDialog.this.close(target);
-			}
-		});
+		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
 
 		form.add(feedback.setOutputMarkupId(true));
 		form.add(new UserMultiChoice("to", modelTo).setRequired(true));
 		form.add(new TextField<String>("subject"));
-		DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
+		OmWysiwygToolbar toolbar = new OmWysiwygToolbar("toolbarContainer");
 		form.add(toolbar);
 		form.add(new WysiwygEditor("message", toolbar));
 		form.add(roomParamsBlock.setOutputMarkupId(true));
