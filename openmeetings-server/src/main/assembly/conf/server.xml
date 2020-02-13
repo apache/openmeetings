@@ -71,10 +71,17 @@
          the SSLImplementation selected. JSSE style configuration is used below.
     -->
     <Connector port="5443" protocol="org.apache.coyote.http11.Http11NioProtocol"
-               maxThreads="150" SSLEnabled="true"
-               keystoreFile="conf/keystore" keystorePass="openmeetings"
-               clientAuth="false" sslProtocol="TLS"/>
-    <!-- Define a SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2
+               maxThreads="150" SSLEnabled="true">
+        <SSLHostConfig>
+            <Certificate certificateKeystoreFile="conf/localhost.jks"
+                         certificateKeystorePassword="openmeetings"
+                         certificateKeystoreType="JKS"
+                         certificateVerification="false"
+                         sslProtocol="TLS"
+                         type="RSA" />
+        </SSLHostConfig>
+    </Connector>
+    <!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2
          This connector uses the APR/native implementation which always uses
          OpenSSL for TLS.
          Either JSSE or OpenSSL style configuration may be used. OpenSSL style
@@ -94,8 +101,12 @@
     -->
 
     <!-- Define an AJP 1.3 Connector on port 8009 -->
-    <Connector port="8009" protocol="AJP/1.3" redirectPort="5443" />
-
+    <!--
+    <Connector protocol="AJP/1.3"
+               address="::1"
+               port="8009"
+               redirectPort="8443" />
+    -->
 
     <!-- An Engine represents the entry point (within Catalina) that processes
          every request.  The Engine implementation for Tomcat stand alone
