@@ -336,6 +336,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
 
+			getCsp().blocking().disabled(); //FIXME TODO due to `reporting-only enabled`
 			oauthDao.getActive().forEach(oauth -> {
 				if (!Strings.isEmpty(oauth.getIconUrl())) {
 					cspConfig.add(CSPDirective.IMG_SRC, oauth.getIconUrl());
@@ -375,7 +376,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public CSPHeaderConfiguration getCspConfig() {
-		return getCsp().blocking();
+		return getCsp().reporting();
 	}
 
 	public static OmAuthenticationStrategy getAuthenticationStrategy() {

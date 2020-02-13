@@ -69,75 +69,27 @@
 	background-repeat: no-repeat;
 	background-position: 5px;
 }
-/* generated using https://proto.io/freebies/onoff/ */
 .onoffswitch {
-	position: relative;
-	width: 50px;
-	display: inline-block;
-	margin-left:  2px;
+	display:inline-block;
 }
-.onoffswitch-checkbox {
+.onoffswitch .onoff-checkbox {
 	display: none !important;
-	float: none !important;
-	margin: 0 !important;
 }
-.onoffswitch-label {
-	display: block !important;
-	float: none !important;
-	margin: 0 !important;
-	overflow: hidden;
-	cursor: pointer;
-	border: 2px solid #999999;
-	border-radius: 0px;
-	width: auto !important;
+.onoff-label {
+	margin: 0;
 }
-.onoffswitch-inner {
-	display: block;
-	width: 200%;
-	margin-left: -100%;
-	transition: margin 0.3s ease-in 0s;
+.onoff-label::before {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+	font-size: 2.2em;
 }
-.onoffswitch-inner .before, .onoffswitch-inner .after {
-	display: block;
-	float: left;
-	width: 50%;
-	height: 20px;
-	padding: 0;
-	line-height: 20px;
-	font-size: 14px;
-	font-weight: bold;
-	box-sizing: border-box;
+.onoff-checkbox + .onoff-label::before {
+	content: '\f204';
+	color: var(--danger);
 }
-.onoffswitch-inner .before {
-	content: " ";
-	padding-left: 5px;
-	background-color: #14da33;
-}
-.onoffswitch-inner .after {
-	content: " ";
-	padding-right: 5px;
-	background-color: #ef0808;
-	text-align: right;
-}
-.onoffswitch-switch {
-	display: block;
-	width: 19px;
-	margin: 0.5px;
-	background: #A1A1A1;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 26px;
-	border: 2px solid #999999;
-	border-radius: 0px;
-	transition: all 0.3s ease-in 0s;
-}
-.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-inner {
-	margin-left: 0;
-}
-.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch {
-	right: 0px;
-	background-color: #A1A1A1;
+.onoff-checkbox:checked + .onoff-label::before {
+	content: '\f205';
+	color: var(--success);
 }
 .addLanguagePanel select {
 	padding: 0px 0px;

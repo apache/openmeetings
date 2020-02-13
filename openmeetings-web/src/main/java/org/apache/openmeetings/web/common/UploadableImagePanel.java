@@ -35,6 +35,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.lang.Bytes;
 import org.slf4j.Logger;
@@ -69,7 +70,9 @@ public abstract class UploadableImagePanel extends ImagePanel {
 		form.add(fileUploadField);
 		form.add(new UploadProgressBar("progress", form, fileUploadField));
 		form.addOrReplace(getImage());
-		if (!delayed) {
+		if (delayed) {
+			add(new WebMarkupContainer("remove"));
+		} else {
 			BootstrapAjaxLink<String> remove = new BootstrapAjaxLink<>("remove", Buttons.Type.Outline_Secondary) {
 				private static final long serialVersionUID = 1L;
 
