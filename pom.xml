@@ -74,6 +74,7 @@
 		<jacoco-maven-plugin.versoin>0.8.5</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>2.7</forbiddenapis.version>
 		<!-- dependency versions -->
+		<junit.version>5.6.0</junit.version>
 		<wicket.version>9.0.0-M5-SNAPSHOT</wicket.version>
 		<wicketju.version>9.0.0-M4</wicketju.version>
 		<wickets.version>9.0.0-M5-SNAPSHOT</wickets.version>
