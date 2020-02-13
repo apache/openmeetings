@@ -246,8 +246,8 @@ html, body {
 .tick.om-icon {
 	background-image: url(images/tick.png);
 }
-.add.om-icon {
-	background-image: url(images/add.png);
+.add.om-icon::before {
+	content: '\f055';
 }
 .new-email.om-icon {
 	background-image: url(images/email_add.png);

@@ -42,6 +42,7 @@
 }
 .trash-toolbar-hover {
 	color: inherit;
+	background-color: var(--light);
 }
 .file-tree .info .details {
 	width: 100%;
@@ -82,15 +83,17 @@
 .trees .tree-node {
 	white-space: nowrap;
 }
-
+.file-tree .trees .om-icon.active {
+	background-color: var(--info);
+}
 .refresh.om-icon::before {
 	content: '\f2f1';
 }
 .trash.om-icon::before {
 	content: '\f2ed';
 }
-.ui-state-hover.trash-toolbar-hover .trash.om-icon::before {
-	font-weight: 900;
+.trash-toolbar-hover .trash.om-icon::before {
+	font-weight: 400;
 }
 .folder-create.om-icon::before {
 	content: '\f65e';

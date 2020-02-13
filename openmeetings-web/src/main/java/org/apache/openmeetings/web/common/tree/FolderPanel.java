@@ -221,7 +221,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 			}
 		}
 		if (treePanel.isSelected(f)) {
-			style.append("bg-info ");
+			style.append("active ");
 		}
 		String cls = f instanceof Recording ? "recorditem " : "fileitem ";
 		style.append(f.isReadOnly() ? "readonlyitem " : cls);

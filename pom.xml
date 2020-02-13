@@ -37,6 +37,7 @@
 		<om.quick.build>false</om.quick.build>
 		<om.notquick.build>true</om.notquick.build>
 		<db>h2</db>
+		<autoModuleName>apache.openmeetings.parent</autoModuleName>
 		<jdk.version>11</jdk.version>
 		<!-- plugin versions -->
 		<maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
@@ -818,25 +819,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.gmaven</groupId>
-				<artifactId>groovy-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-						<configuration>
-							<source>
-								def autoModuleName = "apache.${project.artifactId}".replace('-', '.')
-								project.properties['autoModuleName'] = autoModuleName;
-								println("Automatic-Module-Name will be '" + autoModuleName + "'")
-							</source>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
 			</plugin>
@@ -1049,11 +1031,6 @@
 							<bundledSignature>jdk-non-portable</bundledSignature>
 						</bundledSignatures>
 					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.gmaven</groupId>
-					<artifactId>groovy-maven-plugin</artifactId>
-					<version>2.1.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -1536,19 +1513,6 @@
 												<versionRange>[1.6.0,)</versionRange>
 												<goals>
 													<goal>java</goal>
-												</goals>
-											</pluginExecutionFilter>
-											<action>
-												<ignore></ignore>
-											</action>
-										</pluginExecution>
-										<pluginExecution>
-											<pluginExecutionFilter>
-												<groupId>org.codehaus.gmaven</groupId>
-												<artifactId>groovy-maven-plugin</artifactId>
-												<versionRange>[1.0.0,)</versionRange>
-												<goals>
-													<goal>execute</goal>
 												</goals>
 											</pluginExecutionFilter>
 											<action>

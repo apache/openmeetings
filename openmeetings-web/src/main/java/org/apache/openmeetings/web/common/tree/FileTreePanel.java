@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.common.tree;
 
 import static java.time.Duration.ZERO;
 import static java.util.UUID.randomUUID;
-import static org.apache.commons.text.StringEscapeUtils.escapeEcmaScript;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
@@ -206,7 +205,7 @@ public abstract class FileTreePanel extends Panel {
 			@Override
 			public void onConfigure(JQueryBehavior behavior) {
 				super.onConfigure(behavior);
-				behavior.setOption("hoverClass", Options.asString("bg-light trash-toolbar-hover"));
+				behavior.setOption("hoverClass", Options.asString("trash-toolbar-hover"));
 				behavior.setOption("accept", Options.asString(".recorditem, .fileitem"));
 			}
 
@@ -222,19 +221,9 @@ public abstract class FileTreePanel extends Panel {
 
 							@Override
 							public CharSequence getCallbackFunctionBody(CallbackParameter... parameters) {
-								String dialogId = randomUUID().toString();
-
-								String statement = "var $drop = $(this);";
-								statement += "$('body').append('<div id=" + dialogId + ">" + getString("713") + "</div>');";
-								statement += "$( '#" + dialogId
-										+ "' ).dialog({ title: '" + escapeEcmaScript(getString("80")) + "', classes: {'ui-dialog-titlebar': 'ui-corner-all no-close'}, buttons: [";
-								statement += "	{ text: '" + escapeEcmaScript(getString("54")) + "', click: function() { $drop.append(ui.draggable); $(this).dialog('close'); " + super.getCallbackFunctionBody(parameters) + " } },";
-								statement += "	{ text: '" + escapeEcmaScript(getString("lbl.cancel")) + "', click: function() { $(this).dialog('close'); } } ";
-								statement += "],";
-								statement += "close: function(event, ui) { $(this).dialog('destroy').remove(); }";
-								statement += "});";
-
-								return statement;
+								return "OmFileTree.confirmTrash($(this), ui, function() {"
+										+ super.getCallbackFunctionBody(parameters)
+										+ "});";
 							}
 						};
 					}
