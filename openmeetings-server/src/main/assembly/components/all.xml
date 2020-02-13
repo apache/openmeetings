@@ -26,6 +26,7 @@
 			<excludes>
 				<exclude>bin/*.sh</exclude>
 				<exclude>conf/server.xml</exclude>
+				<exclude>conf/web.xml</exclude>
 				<exclude>conf/tomcat-users*</exclude>
 				<exclude>webapps/docs/**</exclude>
 				<exclude>webapps/examples/**</exclude>
@@ -92,7 +93,7 @@
 			<directory>${project.parent.basedir}/openmeetings-web/src/test/resources</directory>
 			<outputDirectory>conf</outputDirectory>
 			<includes>
-				<include>keystore</include>
+				<include>localhost.jks</include>
 			</includes>
 		</fileSet>
 		<fileSet>
