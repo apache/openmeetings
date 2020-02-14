@@ -186,7 +186,7 @@ public class CalendarPanel extends UserBasePanel {
 				a.setEnd(getDate(e));
 				dialog.setModelObjectWithAjaxTarget(a, target);
 
-				dialog.open(target);
+				dialog.show(target);
 			}
 
 			@Override
@@ -197,7 +197,7 @@ public class CalendarPanel extends UserBasePanel {
 				Appointment a = apptDao.get(Long.valueOf(eventId));
 				dialog.setModelObjectWithAjaxTarget(a, target);
 
-				dialog.open(target);
+				dialog.show(target);
 			}
 
 			@Override
