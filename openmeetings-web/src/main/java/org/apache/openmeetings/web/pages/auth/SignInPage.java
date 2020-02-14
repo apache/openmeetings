@@ -73,8 +73,10 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONException;
 import com.github.openjson.JSONObject;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.Backdrop;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
 
 public class SignInPage extends BaseInitedPage {
@@ -89,7 +91,7 @@ public class SignInPage extends BaseInitedPage {
 			setCloseOnEscapeKey(false);
 			show(true);
 			setUseCloseHandler(true);
-			addCloseButton(new ResourceModel("54"));
+			addButton(new ModalCloseButton(new ResourceModel("54")).type(Buttons.Type.Outline_Secondary));
 		}
 
 		@Override
@@ -199,13 +201,13 @@ public class SignInPage extends BaseInitedPage {
 				r.setVisible(allowRegister()), forget, kick.setVisible(WebSession.get().isKickedByAdmin()));
 		add(forgetInfoDialog
 				.header(new ResourceModel("312"))
-				.addCloseButton(new ResourceModel("54"))
+				.addButton(new ModalCloseButton(new ResourceModel("54")).type(Buttons.Type.Outline_Secondary))
 				.setUseCloseHandler(true)
 				.setBackdrop(Backdrop.STATIC)
 		);
 		add(registerInfoDialog
 				.header(new ResourceModel("235"))
-				.addCloseButton(new ResourceModel("54"))
+				.addButton(new ModalCloseButton(new ResourceModel("54")).type(Buttons.Type.Outline_Secondary))
 				.setUseCloseHandler(true)
 				.setBackdrop(Backdrop.STATIC)
 		);

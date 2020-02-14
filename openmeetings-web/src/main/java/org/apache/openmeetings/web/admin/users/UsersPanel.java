@@ -41,7 +41,9 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.ColorBehavior;
 
 @AuthorizeInstantiation({"Admin", "GroupAdmin"})
@@ -107,7 +109,7 @@ public class UsersPanel extends AdminBasePanel {
 				.withLabel(new ResourceModel("warn.nogroup"))
 				.withErrorIcon(ColorBehavior.Color.Warning)
 				.header(new ResourceModel("797"))
-				.addCloseButton(new ResourceModel("54"));
+				.addButton(new ModalCloseButton(new ResourceModel("54")).type(Buttons.Type.Outline_Secondary));
 
 		form = new UserForm("form", listContainer, getNewUserInstance(userDao.get(getUserId())), warning);
 		form.setNewVisible(true);

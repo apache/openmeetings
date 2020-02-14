@@ -44,6 +44,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
 public class AdminCleanupInfoDialog extends Modal<String> {
@@ -74,7 +75,7 @@ public class AdminCleanupInfoDialog extends Modal<String> {
 		header(new ResourceModel("dashboard.widget.admin.cleanup.title"));
 		setCloseOnEscapeKey(true);
 		setBackdrop(Backdrop.STATIC);
-		addCloseButton(new ResourceModel("54"));
+		addButton(new ModalCloseButton(new ResourceModel("54")).type(Buttons.Type.Outline_Secondary));
 
 		uploadSize = new Label("upload-size", "");
 		profile = new CleanupEntityUnitPanel("profile", "dashboard.widget.admin.cleanup.profiles", new CleanupEntityUnit());

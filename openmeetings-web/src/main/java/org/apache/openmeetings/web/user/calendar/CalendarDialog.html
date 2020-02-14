@@ -20,34 +20,31 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
+<wicket:extend>
 	<form wicket:id="calform" class="appointmentPopUp">
 		<span wicket:id="feedback"></span>
 		<div id="tabs">
-			<table>
-				<tr>
-					<td><wicket:message key="572"/></td>
-					<td><input type="text" wicket:id="title"/></td>
-				</tr>
-				<tr>
-					<td wicket:id="urlLabel"></td>
-					<td><input type="url" wicket:id="url" /></td>
-				</tr>
-				<tr>
-					<td wicket:id="userLabel"></td>
-					<td><input type="text" wicket:id="login"/></td>
-				</tr>
-				<tr>
-					<td wicket:id="passLabel"></td>
-					<td><input type="password" wicket:id="password"/></td>
-				</tr>
-				<tr>
-					<td><wicket:message key="calendar.gcal"/></td>
-					<td><input type="checkbox" wicket:id="gcal"/></td>
-				</tr>
-			</table>
+			<div>
+				<label class="col-3" wicket:for="title"><wicket:message key="572"/></label>
+				<input class="col-8" type="text" wicket:id="title"/>
+			</div>
+			<div>
+				<label class="col-3" wicket:for="url"><span wicket:id="urlLabel"/></label>
+				<input class="col-8" type="url" wicket:id="url"/>
+			</div>
+			<div>
+				<label class="col-3" wicket:for="login"><span wicket:id="userLabel"/></label>
+				<input class="col-8" type="text" wicket:id="login"/>
+			</div>
+			<div>
+				<label class="col-3" wicket:for="password"><span wicket:id="passLabel"/></label>
+				<input class="col-8" type="password" wicket:id="password"/>
+			</div>
+			<div>
+				<label class="col-3" wicket:for="gcal"><wicket:message key="calendar.gcal"/></label>
+				<input type="checkbox" wicket:id="gcal"/>
+			</div>
 		</div>
 	</form>
-	<div wicket:id="confirmDelete"></div>
-</wicket:panel>
+</wicket:extend>
 </html>

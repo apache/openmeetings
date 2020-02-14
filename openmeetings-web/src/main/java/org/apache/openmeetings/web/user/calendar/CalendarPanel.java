@@ -284,7 +284,7 @@ public class CalendarPanel extends UserBasePanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						calendarDialog.open(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR, cal);
+						calendarDialog.show(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR, cal);
 						target.add(calendarDialog);
 					}
 				});
@@ -305,7 +305,7 @@ public class CalendarPanel extends UserBasePanel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				calendarDialog.open(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR, getDefaultCalendar());
+				calendarDialog.show(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR, getDefaultCalendar());
 				target.add(calendarDialog);
 			}
 		}));
@@ -390,12 +390,12 @@ public class CalendarPanel extends UserBasePanel {
 
 	//Function which delegates the syncing of the Calendar to CalendarDialog
 	public void syncCalendar(AjaxRequestTarget target) {
-		calendarDialog.open(target, CalendarDialog.DIALOG_TYPE.SYNC_CALENDAR, (OmCalendar) null);
+		calendarDialog.show(target, CalendarDialog.DIALOG_TYPE.SYNC_CALENDAR, (OmCalendar) null);
 	}
 
 	//Function which delegates the update / deletion of appointment on the Calendar to CalendarDialog
 	public void updatedeleteAppointment(IPartialPageRequestHandler target, CalendarDialog.DIALOG_TYPE type, Appointment a) {
-		calendarDialog.open(target, type, a);
+		calendarDialog.show(target, type, a);
 	}
 
 	private Appointment getDefault() {

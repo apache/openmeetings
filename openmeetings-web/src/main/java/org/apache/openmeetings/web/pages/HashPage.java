@@ -57,6 +57,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
+
 public class HashPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
 	public static final String APP = "app";
@@ -206,7 +209,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		add(new IconTextModal("access-denied")
 				.withLabel(errorMsg)
 				.withErrorIcon()
-				.addCloseButton(new ResourceModel("54"))
+				.addButton(new ModalCloseButton(new ResourceModel("54")).type(Buttons.Type.Outline_Secondary))
 				.header(new ResourceModel("invalid.hash"))
 				.show(error)
 				);

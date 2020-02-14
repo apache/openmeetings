@@ -255,7 +255,6 @@ var Chat = function() {
 				msg.find('.user-row')
 					.data('userId', cm.from.id)
 					.data('actions', cm.actions)
-					//.css('background-image', 'url(' + (!!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now()) + ')')
 					.mouseenter(function() {
 						__hideActions();
 						__getActions($(this))
@@ -283,6 +282,8 @@ var Chat = function() {
 					area.data('lastDate', cm.date);
 				}
 				area.append(msg);
+				msg.find('.user-row')[0].style.backgroundImage = 'url(' + (!!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now()) + ')';
+
 				msg.find('.msg').addClass(align).html(emoticon.emoticonize(!!cm.message ? cm.message : ""));
 				if (btm) {
 					_scrollDown(area);

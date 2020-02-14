@@ -27,8 +27,10 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.Backdrop;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
 
 public class ResetPage extends BaseNotInitedPage {
@@ -52,7 +54,7 @@ public class ResetPage extends BaseNotInitedPage {
 			if (user != null) {
 				add(new ResetPasswordDialog("resetPassword", user, resetInfo));
 				add(resetInfo.header(new ResourceModel("325"))
-						.addCloseButton(new ResourceModel("54"))
+						.addButton(new ModalCloseButton(new ResourceModel("54")).type(Buttons.Type.Outline_Secondary))
 						.setUseCloseHandler(true)
 						.setBackdrop(Backdrop.STATIC));
 				return;
