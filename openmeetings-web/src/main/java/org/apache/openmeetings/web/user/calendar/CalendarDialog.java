@@ -166,7 +166,7 @@ public class CalendarDialog extends Modal<OmCalendar> {
 			}
 		};
 		delete.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
-		add(delete.add(newOkCancelDangerConfirm(this, getString("833"))));
+		addButton(delete.add(newOkCancelDangerConfirm(this, getString("833"))));
 		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
 		super.onInitialize();
 	}
