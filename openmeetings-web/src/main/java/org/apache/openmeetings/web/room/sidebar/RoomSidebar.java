@@ -221,7 +221,7 @@ public class RoomSidebar extends Panel {
 	}
 
 	public void showUpload(IPartialPageRequestHandler handler) {
-		upload.open(handler);
+		upload.show(handler);
 	}
 
 	public void setFilesActive(IPartialPageRequestHandler handler) {

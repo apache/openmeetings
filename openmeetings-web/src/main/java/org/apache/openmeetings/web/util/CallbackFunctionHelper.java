@@ -20,8 +20,6 @@ import static java.util.UUID.randomUUID;
 
 import java.io.Serializable;
 
-import org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior;
-import org.apache.openmeetings.web.common.confirmation.ConfirmationConfig;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -63,23 +61,5 @@ public class CallbackFunctionHelper {
 
 	public static AttributeModifier addOnClick(Serializable handler) {
 		return AttributeModifier.replace("onclick", handler);
-	}
-
-	public static ConfirmationConfig newOkCancelConfirmCfg(Component c, String title) {
-		return new ConfirmationConfig()
-				.withBtnCancelLabel(c.getString("lbl.cancel"))
-				.withBtnOkLabel(c.getString("54"))
-				.withTitle(title);
-	}
-
-	public static ConfirmationBehavior newOkCancelConfirm(Component c, String title) {
-		return new ConfirmationBehavior(newOkCancelConfirmCfg(c, title));
-	}
-
-	public static ConfirmationBehavior newOkCancelDangerConfirm(Component c, String title) {
-		return new ConfirmationBehavior(newOkCancelConfirmCfg(c, title)
-				.withBtnOkClass("btn btn-sm btn-danger")
-				.withBtnOkIconClass("fas fa-exclamation-triangle")
-				);
 	}
 }

@@ -553,7 +553,7 @@ public class Admin {
 	private void processRestore(File backup) throws Exception {
 		try (InputStream is = new FileInputStream(backup)) {
 			BackupImport importCtrl = getApplicationContext().getBean(BackupImport.class);
-			importCtrl.performImport(is);
+			importCtrl.performImport(is, new ProgressHolder());
 		}
 	}
 

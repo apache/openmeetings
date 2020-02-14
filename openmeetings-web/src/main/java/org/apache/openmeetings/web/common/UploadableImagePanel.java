@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.newOkCancelConfirm;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelConfirm;
 
 import java.io.File;
 import java.util.Optional;
@@ -35,7 +35,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.lang.Bytes;
 import org.slf4j.Logger;

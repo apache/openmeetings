@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.admin.labels;
 
 import static java.time.Duration.ZERO;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 import static org.apache.wicket.request.resource.ContentDisposition.ATTACHMENT;
 
 import java.io.IOException;
@@ -39,7 +40,6 @@ import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
-import org.apache.openmeetings.web.util.CallbackFunctionHelper;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -47,7 +47,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
-import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -151,7 +150,6 @@ public class LangPanel extends AdminBasePanel {
 		add(navigator);
 		langForm = new LangForm("langForm", listContainer, this);
 		langForm.add(fileUploadField);
-		langForm.add(new UploadProgressBar("progress", langForm, fileUploadField));
 		fileUploadField.add(new AjaxFormSubmitBehavior(langForm, "change") {
 			private static final long serialVersionUID = 1L;
 
@@ -249,7 +247,7 @@ public class LangPanel extends AdminBasePanel {
 			}
 		};
 		langForm.add(delLngBtn.setIconType(FontAwesome5IconType.times_s)
-				.add(CallbackFunctionHelper.newOkCancelDangerConfirm(this, getString("833"))));
+				.add(newOkCancelDangerConfirm(this, getString("833"))));
 		super.onInitialize();
 	}
 

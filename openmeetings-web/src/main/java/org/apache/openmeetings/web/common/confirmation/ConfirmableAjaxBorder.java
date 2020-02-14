@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.common.confirmation;
 
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -113,5 +114,23 @@ public abstract class ConfirmableAjaxBorder extends Border {
 		super.detachModel();
 		title.detach();
 		message.detach();
+	}
+
+	public static ConfirmationBehavior newOkCancelDangerConfirm(Component c, String title) {
+		return new ConfirmationBehavior(newOkCancelConfirmCfg(c, title)
+				.withBtnOkClass("btn btn-sm btn-danger")
+				.withBtnOkIconClass("fas fa-exclamation-triangle")
+				);
+	}
+
+	public static ConfirmationBehavior newOkCancelConfirm(Component c, String title) {
+		return new ConfirmationBehavior(newOkCancelConfirmCfg(c, title));
+	}
+
+	public static ConfirmationConfig newOkCancelConfirmCfg(Component c, String title) {
+		return new ConfirmationConfig()
+				.withBtnCancelLabel(c.getString("lbl.cancel"))
+				.withBtnOkLabel(c.getString("54"))
+				.withTitle(title);
 	}
 }

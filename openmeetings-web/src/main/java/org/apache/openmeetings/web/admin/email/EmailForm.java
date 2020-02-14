@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.email;
 
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 
 import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;

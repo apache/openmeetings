@@ -162,24 +162,42 @@ public class BackupExport {
 			 */
 			writeList(ser, zos, "version.xml", "version", Arrays.asList(BackupVersion.get()));
 			progressHolder.setProgress(2);
-			exportGroups(zos, progressHolder);
-			exportUsers(zos, progressHolder);
-			exportRoom(zos, progressHolder);
-			exportRoomGroup(zos, progressHolder);
-			exportRoomFile(zos, progressHolder);
-			exportCalendar(zos, progressHolder);
-			exportAppointment(zos, progressHolder);
-			exportMeetingMember(zos, progressHolder);
-			exportLdap(zos, progressHolder, ser);
-			exportOauth(zos, progressHolder);
-			exportPrivateMsg(zos, progressHolder);
-			exportPrivateMsgFolder(zos, progressHolder, ser);
-			exportContacts(zos, progressHolder);
-			exportFile(zos, progressHolder);
-			exportRecording(zos, progressHolder);
-			exportPoll(zos, progressHolder);
-			exportConfig(zos, progressHolder);
-			exportChat(zos, progressHolder);
+			exportGroups(zos);
+			progressHolder.setProgress(5);
+			exportUsers(zos);
+			progressHolder.setProgress(10);
+			exportRoom(zos);
+			progressHolder.setProgress(15);
+			exportRoomGroup(zos);
+			progressHolder.setProgress(17);
+			exportRoomFile(zos);
+			progressHolder.setProgress(17);
+			exportCalendar(zos);
+			progressHolder.setProgress(22);
+			exportAppointment(zos);
+			progressHolder.setProgress(25);
+			exportMeetingMember(zos);
+			progressHolder.setProgress(30);
+			exportLdap(zos, ser);
+			progressHolder.setProgress(35);
+			exportOauth(zos);
+			progressHolder.setProgress(45);
+			exportPrivateMsg(zos);
+			progressHolder.setProgress(50);
+			exportPrivateMsgFolder(zos, ser);
+			progressHolder.setProgress(55);
+			exportContacts(zos);
+			progressHolder.setProgress(60);
+			exportFile(zos);
+			progressHolder.setProgress(65);
+			exportRecording(zos);
+			progressHolder.setProgress(70);
+			exportPoll(zos);
+			progressHolder.setProgress(75);
+			exportConfig(zos);
+			progressHolder.setProgress(80);
+			exportChat(zos);
+			progressHolder.setProgress(85);
 
 			if (includeFiles) {
 				exportFiles(progressHolder, zos);
@@ -229,20 +247,19 @@ public class BackupExport {
 	/*
 	 * ##################### Backup  Groups
 	 */
-	private void exportGroups(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportGroups(ZipOutputStream zos) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer ser = new Persister(strategy);
 		List<Group> list = groupDao.get(0, Integer.MAX_VALUE);
 		bindDate(registry, list);
 		writeList(ser, zos, "organizations.xml", "organisations", list);
-		progressHolder.setProgress(5);
 	}
 
 	/*
 	 * ##################### Backup Users
 	 */
-	private void exportUsers(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportUsers(ZipOutputStream zos) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer ser = new Persister(strategy);
@@ -253,13 +270,12 @@ public class BackupExport {
 		bindDate(registry, list);
 
 		writeList(ser, zos, "users.xml", "users", list);
-		progressHolder.setProgress(10);
 	}
 
 	/*
 	 * ##################### Backup Room
 	 */
-	private void exportRoom(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportRoom(ZipOutputStream zos) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
@@ -269,13 +285,12 @@ public class BackupExport {
 		List<Room> list = roomDao.get();
 		bindDate(registry, list);
 		writeList(serializer, zos, "rooms.xml", "rooms", list);
-		progressHolder.setProgress(15);
 	}
 
 	/*
 	 * ##################### Backup Room Groups
 	 */
-	private void exportRoomGroup(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportRoomGroup(ZipOutputStream zos) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
@@ -284,13 +299,12 @@ public class BackupExport {
 		registry.bind(Room.class, RoomConverter.class);
 
 		writeList(serializer, zos, "rooms_organisation.xml", "room_organisations", roomDao.getGroups());
-		progressHolder.setProgress(17);
 	}
 
 	/*
 	 * ##################### Backup Room Files
 	 */
-	private void exportRoomFile(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportRoomFile(ZipOutputStream zos) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
@@ -299,13 +313,12 @@ public class BackupExport {
 		registry.bind(Recording.class, BaseFileItemConverter.class);
 
 		writeList(serializer, zos, "roomFiles.xml", "RoomFiles", roomDao.getFiles());
-		progressHolder.setProgress(17);
 	}
 
 	/*
 	 * ##################### Backup Calendars
 	 */
-	private void exportCalendar(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportCalendar(ZipOutputStream zos) throws Exception {
 		List<OmCalendar> list = calendarDao.get();
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -314,13 +327,12 @@ public class BackupExport {
 		bindDate(registry, list);
 
 		writeList(serializer, zos, "calendars.xml", "calendars", list);
-		progressHolder.setProgress(22);
 	}
 
 	/*
 	 * ##################### Backup Appointments
 	 */
-	private void exportAppointment(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportAppointment(ZipOutputStream zos) throws Exception {
 		List<Appointment> list = appointmentDao.get();
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -332,13 +344,12 @@ public class BackupExport {
 		bindDate(registry, list);
 
 		writeList(serializer, zos, "appointements.xml", "appointments", list);
-		progressHolder.setProgress(25);
 	}
 
 	/*
 	 * ##################### Backup Meeting Members
 	 */
-	private void exportMeetingMember(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportMeetingMember(ZipOutputStream zos) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
@@ -348,38 +359,35 @@ public class BackupExport {
 
 		writeList(serializer, zos, "meetingmembers.xml",
 				"meetingmembers", meetingMemberDao.getMeetingMembers());
-		progressHolder.setProgress(30);
 	}
 
 	/*
 	 * ##################### LDAP Configs
 	 */
-	private void exportLdap(ZipOutputStream zos, ProgressHolder progressHolder, Serializer ser) throws Exception {
+	private void exportLdap(ZipOutputStream zos, Serializer ser) throws Exception {
 		List<LdapConfig> ldapList = ldapConfigDao.get();
 		if (!ldapList.isEmpty()) {
 			ldapList.remove(0);
 		}
 		writeList(ser, zos, "ldapconfigs.xml", "ldapconfigs", ldapList);
-		progressHolder.setProgress(35);
 	}
 
 	/*
 	 * ##################### OAuth2 servers
 	 */
-	private void exportOauth(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportOauth(ZipOutputStream zos) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
 		List<OAuthServer> list = auth2Dao.get(0, Integer.MAX_VALUE);
 		bindDate(registry, list);
 		writeList(serializer, zos, "oauth2servers.xml", "oauth2servers", list);
-		progressHolder.setProgress(45);
 	}
 
 	/*
 	 * ##################### Private Messages
 	 */
-	private void exportPrivateMsg(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportPrivateMsg(ZipOutputStream zos) throws Exception {
 		List<PrivateMessage> list = privateMessageDao.get(0, Integer.MAX_VALUE);
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -389,22 +397,20 @@ public class BackupExport {
 		registry.bind(Room.class, RoomConverter.class);
 		bindDate(registry, list, PrivateMessage::getInserted);
 		writeList(serializer, zos, "privateMessages.xml", "privatemessages", list);
-		progressHolder.setProgress(50);
 	}
 
 	/*
 	 * ##################### Private Message Folders
 	 */
-	private void exportPrivateMsgFolder(ZipOutputStream zos, ProgressHolder progressHolder, Serializer ser) throws Exception {
+	private void exportPrivateMsgFolder(ZipOutputStream zos, Serializer ser) throws Exception {
 		writeList(ser, zos, "privateMessageFolder.xml",
 				"privatemessagefolders", privateMessageFolderDao.get(0, Integer.MAX_VALUE));
-		progressHolder.setProgress(55);
 	}
 
 	/*
 	 * ##################### User Contacts
 	 */
-	private void exportContacts(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportContacts(ZipOutputStream zos) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
@@ -412,13 +418,12 @@ public class BackupExport {
 		registry.bind(User.class, UserConverter.class);
 
 		writeList(serializer, zos, "userContacts.xml", "usercontacts", userContactDao.get());
-		progressHolder.setProgress(60);
 	}
 
 	/*
 	 * ##################### File-Explorer
 	 */
-	private void exportFile(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportFile(ZipOutputStream zos) throws Exception {
 		List<FileItem> list = fileItemDao.get();
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -426,13 +431,12 @@ public class BackupExport {
 
 		bindDate(registry, list);
 		writeList(serializer, zos, "fileExplorerItems.xml", "fileExplorerItems", list);
-		progressHolder.setProgress(65);
 	}
 
 	/*
 	 * ##################### Recordings
 	 */
-	private void exportRecording(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportRecording(ZipOutputStream zos) throws Exception {
 		List<Recording> list = recordingDao.get();
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -440,13 +444,12 @@ public class BackupExport {
 
 		bindDate(registry, list);
 		writeList(serializer, zos, "flvRecordings.xml", "flvrecordings", list);
-		progressHolder.setProgress(70);
 	}
 
 	/*
 	 * ##################### Polls
 	 */
-	private void exportPoll(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportPoll(ZipOutputStream zos) throws Exception {
 		List<RoomPoll> list = pollManager.get();
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -457,24 +460,22 @@ public class BackupExport {
 		registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
 		bindDate(registry, list, RoomPoll::getCreated);
 		writeList(serializer, zos, "roompolls.xml", "roompolls", list);
-		progressHolder.setProgress(75);
 	}
 
 	/*
 	 * ##################### Config
 	 */
-	private void exportConfig(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportConfig(ZipOutputStream zos) throws Exception {
 		List<Configuration> list = configurationDao.get(0, Integer.MAX_VALUE);
 		Serializer serializer = getConfigSerializer(list);
 
 		writeList(serializer, zos, "configs.xml", "configs", list);
-		progressHolder.setProgress(80);
 	}
 
 	/*
 	 * ##################### Chat
 	 */
-	private void exportChat(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+	private void exportChat(ZipOutputStream zos) throws Exception {
 		List<ChatMessage> list = chatDao.get(0, Integer.MAX_VALUE);
 		Registry registry = new Registry();
 		registry.bind(User.class, UserConverter.class);
@@ -484,7 +485,6 @@ public class BackupExport {
 
 		bindDate(registry, list, ChatMessage::getSent);
 		writeList(serializer, zos, "chat_messages.xml", "chat_messages", list);
-		progressHolder.setProgress(85);
 	}
 
 	private static Serializer getConfigSerializer(List<Configuration> list) throws Exception {

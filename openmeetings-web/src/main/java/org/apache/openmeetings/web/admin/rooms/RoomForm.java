@@ -23,6 +23,7 @@ import static org.apache.openmeetings.web.admin.AdminUserChoiceProvider.PAGE_SIZ
 import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +49,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.app.ClientManager;
-import org.apache.openmeetings.web.util.CallbackFunctionHelper;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -110,7 +110,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				}
 			};
 			del.setIconType(FontAwesome5IconType.times_s)
-					.add(CallbackFunctionHelper.newOkCancelDangerConfirm(this, getString("833")));
+					.add(newOkCancelDangerConfirm(this, getString("833")));
 			item.add(new Label("clientId", "" + c.getUserId()))
 				.add(new Label("clientLogin", "" + c.getUser().getLogin()))
 				.add(del);
@@ -318,7 +318,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					}
 				};
 				del.setIconType(FontAwesome5IconType.times_s)
-						.add(CallbackFunctionHelper.newOkCancelDangerConfirm(this, getString("833")));
+						.add(newOkCancelDangerConfirm(this, getString("833")));
 				item.add(new CheckBox("superModerator", new PropertyModel<Boolean>(moderator, "superModerator")))
 					.add(new Label("userId", String.valueOf(moderator.getUser().getId())))
 					.add(name)
@@ -404,7 +404,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					}
 				};
 				del.setIconType(FontAwesome5IconType.times_s)
-						.add(CallbackFunctionHelper.newOkCancelDangerConfirm(this, getString("833")));
+						.add(newOkCancelDangerConfirm(this, getString("833")));
 				item.add(new Label("name", new PropertyModel<>(rf.getFile(), "name")))
 					.add(new Label("wbIdx", new PropertyModel<>(rf, "wbIdx")))
 					.add(del);

@@ -286,11 +286,6 @@ html, body {
 	margin-left: 10px;
 	padding-left: 10px;
 }
-.ui-progressbar div {
-	text-align: center;
-	padding-top: 7px;
-	font-weight: bold;
-}
 table.messages {
 	width: 100%;
 	min-height: 500px;

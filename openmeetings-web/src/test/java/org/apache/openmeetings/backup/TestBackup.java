@@ -94,7 +94,7 @@ public class TestBackup extends AbstractJUnitDefaults {
 			String name = backup.getName();
 			log.debug("Import of backup file : '" + name + "' is started ...");
 			try (InputStream is = new FileInputStream(backup)) {
-				backupController.performImport(is);
+				backupController.performImport(is, new ProgressHolder());
 				long newGroupCount = groupDao.count();
 				long newUserCount = userDao.count();
 				long newRoomCount = roomDao.count();

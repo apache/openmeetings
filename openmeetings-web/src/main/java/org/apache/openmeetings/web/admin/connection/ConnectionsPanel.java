@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.admin.connection;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.newOkCancelConfirmCfg;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelConfirm;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -34,7 +34,6 @@ import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
-import org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -98,9 +97,6 @@ public class ConnectionsPanel extends AdminBasePanel {
 					private static final long serialVersionUID = 1L;
 					{
 						setSize(Buttons.Size.Small);
-						add(new ConfirmationBehavior(/*TODO https://github.com/l0rdn1kk0n/wicket-bootstrap/issues/845 ".om-kick-btn", */newOkCancelConfirmCfg(container, getString("605"))
-								.withSingleton(true)
-								));
 					}
 
 					@Override
@@ -108,7 +104,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 						cm.invalidate(c.getUserId(), c.getSessionId());
 						target.add(container, details.setVisible(false));
 					}
-				});
+				}.add(newOkCancelConfirm(this, getString("605"))));
 				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 

@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.admin.oauth;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.getRedirectUri;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -32,7 +33,6 @@ import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestInfoMethod;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestTokenMethod;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import org.apache.openmeetings.web.util.CallbackFunctionHelper;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -80,7 +80,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 				}
 			};
 			del.setIconType(FontAwesome5IconType.times_s)
-					.add(CallbackFunctionHelper.newOkCancelDangerConfirm(this, getString("833")));
+					.add(newOkCancelDangerConfirm(this, getString("833")));
 			item.add(new Label("key", Model.of(entry.getKey())))
 				.add(new Label("value", Model.of(entry.getValue())))
 				.add(del);

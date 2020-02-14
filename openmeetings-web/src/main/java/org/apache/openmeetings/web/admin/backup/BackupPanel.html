@@ -35,14 +35,13 @@
 				</div>
 			</div>
 			<div class="formelement">
-				<span wicket:id="progress"></span>
-				<div wicket:id="dprogress"></div>
+				<div class="m-3" wicket:id="progress"></div>
 			</div>
 			<div class="formelement">
 				<!-- Perform Download -->
 				<button wicket:id="download"></button>
 				<!-- Perform Upload -->
-				<button class="fileinput fileinput-new d-inline m-0 btn btn-file btn-outline-primary" data-provides="fileinput">
+				<button class="fileinput fileinput-new d-inline m-0 btn btn-file btn-outline-primary" data-provides="fileinput" wicket:id="upload">
 					<wicket:message key="1536"/>
 					<input class="uploadFileField" wicket:id="fileInput" type="file"/>
 				</button>

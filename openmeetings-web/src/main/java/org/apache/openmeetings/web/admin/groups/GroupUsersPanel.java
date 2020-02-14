@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +31,6 @@ import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
-import org.apache.openmeetings.web.util.CallbackFunctionHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -92,7 +93,7 @@ public class GroupUsersPanel extends Panel {
 					}
 				};
 				del.setIconType(FontAwesome5IconType.times_s)
-						.add(CallbackFunctionHelper.newOkCancelDangerConfirm(this, getString("833")));
+						.add(newOkCancelDangerConfirm(this, getString("833")));
 				item.add(del);
 				item.add(new BootstrapBadge("new", new ResourceModel("lbl.new"), BadgeBehavior.Type.Warning).setVisible((grpUser.getId() == null)));
 			}

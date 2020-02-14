@@ -24,6 +24,7 @@ import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
 import java.util.ArrayList;
@@ -53,7 +54,6 @@ import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.openmeetings.web.user.MessageDialog;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
-import org.apache.openmeetings.web.util.CallbackFunctionHelper;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -232,7 +232,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 					}
 				};
 				del.setIconType(FontAwesome5IconType.times_s)
-						.add(CallbackFunctionHelper.newOkCancelDangerConfirm(this, getString("833")));
+						.add(newOkCancelDangerConfirm(this, getString("833")));
 				item.add(del);
 				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
@@ -499,7 +499,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 					}
 				};
 				del.setIconType(FontAwesome5IconType.times_s)
-						.add(CallbackFunctionHelper.newOkCancelDangerConfirm(this, getString("833")));
+						.add(newOkCancelDangerConfirm(this, getString("833")));
 				item.add(del.setVisible(!uc.isPending()));
 			}
 		};

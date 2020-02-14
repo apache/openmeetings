@@ -26,8 +26,8 @@ import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.newOkCancelDangerConfirm;
 
 import java.util.List;
 
