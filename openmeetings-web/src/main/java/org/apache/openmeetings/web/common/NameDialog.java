@@ -32,7 +32,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButt
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public abstract class NameDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -54,10 +53,8 @@ public abstract class NameDialog extends Modal<String> {
 	@Override
 	protected void onInitialize() {
 		header(getTitle());
-		setCloseOnEscapeKey(true);
-		setBackdrop(Backdrop.STATIC);
 
-		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of());
 		addButton(new BootstrapAjaxButton("button", getAddBtnLabel(), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 

@@ -71,8 +71,6 @@ public class ConvertingErrorsDialog extends Modal<BaseFileItem> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("887"));
-		setCloseOnEscapeKey(true);
-		setBackdrop(Backdrop.STATIC);
 		size(Modal.Size.Large);
 
 		super.onInitialize();

@@ -65,7 +65,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
 
 public class RoomSidebar extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -182,7 +181,6 @@ public class RoomSidebar extends Panel {
 		});
 		add(upload = new UploadDialog("upload", room, roomFiles));
 		updateShowFiles(null);
-		add(new JQueryUIBehavior("#room-sidebar-tabs", "tabs"));
 		add(activities = new ActivitiesPanel("activities", room));
 	}
 
@@ -225,7 +223,7 @@ public class RoomSidebar extends Panel {
 	}
 
 	public void setFilesActive(IPartialPageRequestHandler handler) {
-		handler.appendJavaScript("$('#room-sidebar-tabs').tabs('option', 'active', 1);");
+		handler.appendJavaScript("$('#room-sidebar-files-tab').tab('show');");
 	}
 
 	public void addActivity(Activity a, IPartialPageRequestHandler handler) {

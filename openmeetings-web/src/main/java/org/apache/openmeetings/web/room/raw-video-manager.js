@@ -128,7 +128,7 @@ var VideoManager = (function() {
 	function _init() {
 		Wicket.Event.subscribe('/websocket/message', _onWsMessage);
 		VideoSettings.init(Room.getOptions());
-		share = $('.room-block .container').find('.icon.shared.ui-button');
+		share = $('.room-block .room-container').find('.icon.shared.ui-button');
 		inited = true;
 	}
 	function _update(c) {

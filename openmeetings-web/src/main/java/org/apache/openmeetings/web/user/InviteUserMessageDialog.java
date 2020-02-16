@@ -22,6 +22,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -34,7 +35,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public class InviteUserMessageDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -53,8 +53,6 @@ public class InviteUserMessageDialog extends Modal<String> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("1138"));
-		setCloseOnEscapeKey(true);
-		setBackdrop(Backdrop.STATIC);
 
 		addButton(new BootstrapAjaxButton("button", new ResourceModel("213"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
@@ -69,7 +67,7 @@ public class InviteUserMessageDialog extends Modal<String> {
 				InviteUserMessageDialog.this.close(target);
 			}
 		}); //send
-		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of());
 		super.onInitialize();
 		add(form.add(message.setRequired(true), enterRoom.setOutputMarkupId(true)).setOutputMarkupId(true));
 	}

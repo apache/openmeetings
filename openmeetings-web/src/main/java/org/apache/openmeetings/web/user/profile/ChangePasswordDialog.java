@@ -22,6 +22,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -35,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
 public class ChangePasswordDialog extends Modal<String> {
@@ -78,8 +78,6 @@ public class ChangePasswordDialog extends Modal<String> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("327"));
-		setCloseOnEscapeKey(true);
-		setBackdrop(Backdrop.STATIC);
 
 		addButton(new SpinnerAjaxButton("button", new ResourceModel("327"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
@@ -100,7 +98,7 @@ public class ChangePasswordDialog extends Modal<String> {
 				}
 			}
 		}); //send
-		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of());
 		passValidator = new StrongPasswordValidator(userDao.get(getUserId()));
 		add(form.add(
 				current.setLabel(new ResourceModel("current.password")).setRequired(true)

@@ -30,6 +30,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -55,7 +56,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 /**
  * Multipurpose Calendar Dialog form. This provides the ability to ask for a user prompt,
@@ -97,7 +97,6 @@ public class CalendarDialog extends Modal<OmCalendar> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("calendar.dialogTitle"));
-		setBackdrop(Backdrop.STATIC);
 
 		form = new UserCalendarForm("calform", getModel());
 		add(form);
@@ -167,7 +166,7 @@ public class CalendarDialog extends Modal<OmCalendar> {
 		};
 		delete.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		addButton(delete.add(newOkCancelDangerConfirm(this, getString("833"))));
-		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of());
 		super.onInitialize();
 	}
 

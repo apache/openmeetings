@@ -30,6 +30,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.mail.template.ResetPasswordTemplate;
 import org.apache.openmeetings.web.common.Captcha;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -59,7 +60,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButt
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public class ForgetPasswordDialog extends Modal<String> {
 	private static final Logger log = LoggerFactory.getLogger(ForgetPasswordDialog.class);
@@ -93,14 +93,12 @@ public class ForgetPasswordDialog extends Modal<String> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("312"));
-		setCloseOnEscapeKey(true);
 		setUseCloseHandler(true);
-		setBackdrop(Backdrop.STATIC);
 
 		addButton(new BootstrapAjaxButton("button", new ResourceModel("317"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 		}); // Send
-		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of());
 
 		add(form);
 		super.onInitialize();

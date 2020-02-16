@@ -85,7 +85,7 @@ var Activities = function() {
 		return 'activity-' + id;
 	}
 	function _action(name, val) {
-		activityAction($('.room-block .container').data('room-id'), name, val);
+		activityAction($('.room-block .room-container').data('room-id'), name, val);
 	}
 	function _remove(ids) {
 		for (let i = 0; i < ids.length; ++i) {

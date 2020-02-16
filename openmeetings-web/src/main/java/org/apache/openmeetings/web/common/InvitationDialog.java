@@ -25,7 +25,6 @@ import org.apache.wicket.model.ResourceModel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public class InvitationDialog extends Modal<Invitation> {
 	private static final long serialVersionUID = 1L;
@@ -41,8 +40,6 @@ public class InvitationDialog extends Modal<Invitation> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("213"));
-		setCloseOnEscapeKey(true);
-		setBackdrop(Backdrop.STATIC);
 
 		addButton(generate = new BootstrapAjaxButton("button", new ResourceModel("1526"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
@@ -70,7 +67,7 @@ public class InvitationDialog extends Modal<Invitation> {
 				InvitationDialog.this.onClick(target, InvitationForm.Action.SEND);
 			}
 		});
-		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of());
 		super.onInitialize();
 	}
 

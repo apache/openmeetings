@@ -36,7 +36,6 @@ public class IconTextModal extends Modal<String> {
 
 	public IconTextModal(String id) {
 		super(id);
-		setBackdrop(Backdrop.STATIC);
 	}
 
 	@Override

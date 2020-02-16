@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.admin.users;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
@@ -34,7 +35,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButt
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public class PasswordDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -56,8 +56,6 @@ public class PasswordDialog extends Modal<String> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("537"));
-		setCloseOnEscapeKey(true);
-		setBackdrop(Backdrop.STATIC);
 
 		addButton(new BootstrapAjaxButton("button", new ResourceModel("54"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
@@ -83,7 +81,7 @@ public class PasswordDialog extends Modal<String> {
 				}
 			}
 		}); // OK
-		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of());
 		add(form.add(feedback.setOutputMarkupId(true), pass.setRequired(false).setLabel(new ResourceModel("110")).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true)));
 		super.onInitialize();
 	}

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.common.confirmation;
 
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
@@ -25,7 +26,6 @@ import org.apache.wicket.model.ResourceModel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
@@ -37,7 +37,6 @@ public abstract class ConfirmationDialog extends TextContentModal {
 	public ConfirmationDialog(String id, IModel<String> title, IModel<String> model) {
 		super(id, model);
 		header(title);
-		setBackdrop(Backdrop.STATIC);
 	}
 
 	private BootstrapAjaxLink<String> getOkButton() {
@@ -71,7 +70,7 @@ public abstract class ConfirmationDialog extends TextContentModal {
 		super.onInitialize();
 		add(new CssClassNameAppender("om-confirm-dialog"));
 		addButton(getOkButton());
-		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of());
 	}
 
 	protected abstract void onConfirm(AjaxRequestTarget target);

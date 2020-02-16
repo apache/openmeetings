@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.user.UserContactDao;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.user.profile.UserProfilePanel;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -33,7 +34,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public class UserInfoDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -53,8 +53,6 @@ public class UserInfoDialog extends Modal<String> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("1235"));
-		setCloseOnEscapeKey(true);
-		setBackdrop(Backdrop.STATIC);
 		addButton(contacts = new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Info, new ResourceModel("1186")) {
 			private static final long serialVersionUID = 1L;
 
@@ -71,7 +69,7 @@ public class UserInfoDialog extends Modal<String> {
 				UserInfoDialog.this.close(target);
 			}
 		});
-		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of());
 		add(container.add(new WebMarkupContainer("body")).setOutputMarkupId(true));
 		super.onInitialize();
 	}

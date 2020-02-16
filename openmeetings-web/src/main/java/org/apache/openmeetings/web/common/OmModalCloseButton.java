@@ -16,32 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user;
+package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
-import static org.apache.openmeetings.util.Version.getBuildDate;
-import static org.apache.openmeetings.util.Version.getRevision;
-import static org.apache.openmeetings.util.Version.getVersion;
-
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
-public class AboutDialog extends Modal<String> {
+public class OmModalCloseButton extends ModalCloseButton {
 	private static final long serialVersionUID = 1L;
 
-	public AboutDialog(String id) {
-		super(id);
+	public static ModalCloseButton of() {
+		return of("lbl.cancel");
 	}
 
-	@Override
-	protected void onInitialize() {
-		header(new ResourceModel("1549"));
-		super.onInitialize();
-		add(new Label("name", getApplicationName()));
-		add(new Label("version", getVersion()));
-		add(new Label("revision", getRevision()));
-		add(new Label("buildDate", getBuildDate()));
+	public static ModalCloseButton of(String lblKey) {
+		ModalCloseButton btn = new ModalCloseButton(new ResourceModel(lblKey)).type(Buttons.Type.Outline_Secondary);
+		btn.setOutputMarkupId(false);
+		return btn;
 	}
 }

@@ -21,16 +21,14 @@ package org.apache.openmeetings.web.pages;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.pages.auth.ResetPasswordDialog;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.Backdrop;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
 
 public class ResetPage extends BaseNotInitedPage {
@@ -54,9 +52,8 @@ public class ResetPage extends BaseNotInitedPage {
 			if (user != null) {
 				add(new ResetPasswordDialog("resetPassword", user, resetInfo));
 				add(resetInfo.header(new ResourceModel("325"))
-						.addButton(new ModalCloseButton(new ResourceModel("54")).type(Buttons.Type.Outline_Secondary))
-						.setUseCloseHandler(true)
-						.setBackdrop(Backdrop.STATIC));
+						.addButton(OmModalCloseButton.of("54"))
+						.setUseCloseHandler(true));
 				return;
 			}
 		}

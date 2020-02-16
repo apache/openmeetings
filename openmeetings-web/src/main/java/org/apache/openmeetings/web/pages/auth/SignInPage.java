@@ -56,6 +56,7 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.pages.BaseInitedPage;
 import org.apache.openmeetings.web.room.IconTextModal;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -73,10 +74,7 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONException;
 import com.github.openjson.JSONObject;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.Backdrop;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
 
 public class SignInPage extends BaseInitedPage {
@@ -91,7 +89,7 @@ public class SignInPage extends BaseInitedPage {
 			setCloseOnEscapeKey(false);
 			show(true);
 			setUseCloseHandler(true);
-			addButton(new ModalCloseButton(new ResourceModel("54")).type(Buttons.Type.Outline_Secondary));
+			addButton(OmModalCloseButton.of("54"));
 		}
 
 		@Override
@@ -201,15 +199,13 @@ public class SignInPage extends BaseInitedPage {
 				r.setVisible(allowRegister()), forget, kick.setVisible(WebSession.get().isKickedByAdmin()));
 		add(forgetInfoDialog
 				.header(new ResourceModel("312"))
-				.addButton(new ModalCloseButton(new ResourceModel("54")).type(Buttons.Type.Outline_Secondary))
+				.addButton(OmModalCloseButton.of("54"))
 				.setUseCloseHandler(true)
-				.setBackdrop(Backdrop.STATIC)
 		);
 		add(registerInfoDialog
 				.header(new ResourceModel("235"))
-				.addButton(new ModalCloseButton(new ResourceModel("54")).type(Buttons.Type.Outline_Secondary))
+				.addButton(OmModalCloseButton.of("54"))
 				.setUseCloseHandler(true)
-				.setBackdrop(Backdrop.STATIC)
 		);
 	}
 

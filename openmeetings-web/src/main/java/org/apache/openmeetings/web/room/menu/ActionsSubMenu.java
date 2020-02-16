@@ -114,7 +114,7 @@ public class ActionsSubMenu implements Serializable {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				sipDialer.open(target);
+				sipDialer.show(target);
 			}
 		};
 		downloadPngMenuItem = new RoomMenuItem(mp.getString("download.png"), mp.getString("download.png")) {

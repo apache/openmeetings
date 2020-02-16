@@ -53,6 +53,7 @@ public class InvitationPasswordDialog extends Modal<Invitation> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("230"));
+		setCloseOnEscapeKey(false);
 		setBackdrop(Backdrop.STATIC);
 
 		password.add(new IValidator<String>(){

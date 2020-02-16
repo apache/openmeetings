@@ -680,7 +680,7 @@ public class RoomPanel extends BasePanel {
 	@Override
 	public void cleanup(IPartialPageRequestHandler handler) {
 		if (eventDetail instanceof EventDetailDialog) {
-			((EventDetailDialog)eventDetail).close(handler, null);
+			((EventDetailDialog)eventDetail).close(handler);
 		}
 		handler.add(getBasePage().getHeader().setVisible(true), getMainPanel().getTopControls().setVisible(true));
 		if (r.isHidden(RoomElement.Chat)) {

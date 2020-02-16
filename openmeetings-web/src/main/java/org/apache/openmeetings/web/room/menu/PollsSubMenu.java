@@ -119,7 +119,7 @@ public class PollsSubMenu implements Serializable {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				createPoll.updateModel(target);
-				createPoll.open(target);
+				createPoll.show(target);
 			}
 		};
 		pollVoteMenuItem = new RoomMenuItem(mp.getString("32"), mp.getString("1485"), false) {
@@ -130,7 +130,7 @@ public class PollsSubMenu implements Serializable {
 				RoomPoll rp = pollDao.getByRoom(room.getRoom().getId());
 				if (rp != null) {
 					vote.updateModel(target, rp);
-					vote.open(target);
+					vote.show(target);
 				}
 			}
 		};
@@ -140,7 +140,7 @@ public class PollsSubMenu implements Serializable {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				pollResults.updateModel(target, room.getClient().hasRight(Room.Right.moderator));
-				pollResults.open(target);
+				pollResults.show(target);
 			}
 		};
 		mp.add(quickPollAction);
@@ -172,10 +172,10 @@ public class PollsSubMenu implements Serializable {
 		if (rp != null) {
 			vote.updateModel(handler, rp);
 		} else {
-			vote.close(handler, null);
+			vote.close(handler);
 		}
 		if (createdBy != null && !getUserId().equals(createdBy)) {
-			vote.open(handler);
+			vote.show(handler);
 		}
 		if (pollResults.isOpened()) {
 			pollResults.updateModel(handler, room.getClient().hasRight(Room.Right.moderator));

@@ -31,6 +31,7 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.Captcha;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.pages.PrivacyPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -55,7 +56,6 @@ import org.slf4j.LoggerFactory;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
 public class RegisterDialog extends Modal<String> {
@@ -91,12 +91,10 @@ public class RegisterDialog extends Modal<String> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("113"));
-		setCloseOnEscapeKey(true);
 		setUseCloseHandler(true);
-		setBackdrop(Backdrop.STATIC);
 
 		addButton(new SpinnerAjaxButton("button", new ResourceModel("121"), form, Buttons.Type.Outline_Primary)); // register
-		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of());
 		add(form);
 		add(new Label("register", getString("121")).setRenderBodyOnly(true), new BookmarkablePageLink<>("link", PrivacyPage.class));
 		reset(null);

@@ -36,6 +36,7 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.IUpdatable;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.common.OmWebSocketPanel;
 import org.apache.openmeetings.web.room.IconTextModal;
 import org.apache.openmeetings.web.room.NetTestPanel;
@@ -56,9 +57,6 @@ import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public class HashPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
@@ -209,7 +207,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		add(new IconTextModal("access-denied")
 				.withLabel(errorMsg)
 				.withErrorIcon()
-				.addButton(new ModalCloseButton(new ResourceModel("54")).type(Buttons.Type.Outline_Secondary))
+				.addButton(OmModalCloseButton.of("54"))
 				.header(new ResourceModel("invalid.hash"))
 				.show(error)
 				);

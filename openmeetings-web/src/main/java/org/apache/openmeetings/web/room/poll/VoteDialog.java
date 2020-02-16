@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.web.common.MainPanel;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -44,23 +45,22 @@ import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
 /**
  * @author solomax
  *
  */
-public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
+public class VoteDialog extends Modal<RoomPollAnswer> {
 	private static final long serialVersionUID = 1L;
 	private static final List<Integer> answers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 	private PollAnswerForm form;
-	private DialogButton vote;
-	private DialogButton cancel;
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final IModel<String> user = Model.of((String)null);
 	@SpringBean
@@ -69,15 +69,38 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	private PollDao pollDao;
 
 	public VoteDialog(String id) {
-		super(id, "");
+		super(id);
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("18"));
+		header(new ResourceModel("18"));
+		setCloseOnEscapeKey(false);
+		setBackdrop(Backdrop.STATIC);
+
 		add(form = new PollAnswerForm("form", new CompoundPropertyModel<>(new RoomPollAnswer())));
-		vote = new DialogButton("vote", getString("32"));
-		cancel = new DialogButton("cancel", getString("lbl.cancel"));
+		addButton(new BootstrapAjaxButton("button", new ResourceModel("32"), form, Buttons.Type.Outline_Primary) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				RoomPollAnswer a = form.getModelObject();
+				Long roomId = a.getRoomPoll().getRoom().getId();
+				if (pollDao.notVoted(roomId, getUserId())) {
+					a.setVoteDate(new Date());
+					a.getRoomPoll().getAnswers().add(a);
+					pollDao.update(a.getRoomPoll());
+				}
+				sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollUpdated));
+				close(target);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				target.add(feedback);
+			}
+		}); // vote
+		addButton(OmModalCloseButton.of());
 		super.onInitialize();
 	}
 
@@ -99,50 +122,6 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	}
 
 	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(vote, cancel);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog#getSubmitButton()
-	 */
-	@Override
-	public DialogButton getSubmitButton() {
-		return vote;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog#getForm()
-	 */
-	@Override
-	public PollAnswerForm getForm() {
-		return form;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog#onError(org.apache.wicket.ajax.AjaxRequestTarget)
-	 */
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
-		target.add(feedback);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog#onSubmit(org.apache.wicket.ajax.AjaxRequestTarget)
-	 */
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		RoomPollAnswer a = form.getModelObject();
-		Long roomId = a.getRoomPoll().getRoom().getId();
-		if (pollDao.notVoted(roomId, getUserId())) {
-			a.setVoteDate(new Date());
-			a.getRoomPoll().getAnswers().add(a);
-			pollDao.update(a.getRoomPoll());
-		}
-		sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollUpdated));
-	}
-
-	@Override
 	protected void onDetach() {
 		user.detach();
 		super.onDetach();
@@ -155,6 +134,11 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 
 		PollAnswerForm(String id, IModel<RoomPollAnswer> model) {
 			super(id, model);
+		}
+
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
 			add(feedback.setOutputMarkupId(true));
 			add(new Label("user", user));
 			add(new Label("roomPoll.question"));

@@ -75,7 +75,7 @@ var Chat = function() {
 	}
 	function doneTyping () {
 		typingTimer = null;
-		chatActivity('typing_stop', $('.room-block .container').data('room-id'));
+		chatActivity('typing_stop', $('.room-block .room-container').data('room-id'));
 	}
 	function _emtClick() {
 		_editorAppend($(this).data('emt'));
@@ -182,7 +182,7 @@ var Chat = function() {
 		}
 		ctrl.off('click').click(Chat.toggle);
 		$('#chatMessage').off().on('input propertychange paste', function () {
-			const room = $('.room-block .container');
+			const room = $('.room-block .room-container');
 			if (room.length) {
 				if (!!typingTimer) {
 					clearTimeout(typingTimer);

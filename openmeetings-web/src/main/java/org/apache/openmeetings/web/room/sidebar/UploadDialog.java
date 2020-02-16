@@ -33,6 +33,7 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.util.ThreadHelper;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
@@ -63,7 +64,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.progress.UpdatableProgressBar;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
@@ -149,6 +149,7 @@ public class UploadDialog extends Modal<String> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("upload.dlg.choose.title"));
+		setCloseOnEscapeKey(false);
 		setBackdrop(Backdrop.STATIC);
 
 		add(form.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
@@ -206,7 +207,7 @@ public class UploadDialog extends Modal<String> {
 			}
 		});
 		upload.setEnabled(false);
-		addButton(new ModalCloseButton(new ResourceModel("85")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of("85"));
 
 		progressBar.updateInterval(Duration.ofSeconds(1)).stop(null).striped(false);
 		add(progressBar.setOutputMarkupPlaceholderTag(true).setVisible(false));

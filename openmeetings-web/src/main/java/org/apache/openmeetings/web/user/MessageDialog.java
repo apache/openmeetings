@@ -54,6 +54,7 @@ import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.user.calendar.AppointmentDialog;
 import org.apache.openmeetings.web.util.CalendarWebHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
@@ -78,7 +79,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButt
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public class MessageDialog extends Modal<PrivateMessage> {
 	private static final long serialVersionUID = 1L;
@@ -113,9 +113,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("1209"));
-		setCloseOnEscapeKey(true);
 		setUseCloseHandler(true);
-		setBackdrop(Backdrop.STATIC);
 		size(Modal.Size.Large);
 
 		addButton(new BootstrapAjaxButton("button", new ResourceModel("218"), form, Buttons.Type.Outline_Primary) {
@@ -209,7 +207,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 				onSend(target);
 			}
 		}); // send
-		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of());
 
 		form.add(feedback.setOutputMarkupId(true));
 		form.add(new UserMultiChoice("to", modelTo).setRequired(true));

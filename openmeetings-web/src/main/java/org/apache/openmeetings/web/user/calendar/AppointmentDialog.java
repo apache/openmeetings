@@ -53,6 +53,7 @@ import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.GroupChoiceProvider;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.OmWysiwygToolbar;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
@@ -94,7 +95,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.ModalCloseButton;
 
 public class AppointmentDialog extends Modal<Appointment> {
 	private static final long serialVersionUID = 1L;
@@ -139,7 +139,6 @@ public class AppointmentDialog extends Modal<Appointment> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("815"));
-		setBackdrop(Backdrop.STATIC);
 		size(Size.Large);
 
 		add(form = new AppointmentForm("appForm", getModel()));
@@ -233,7 +232,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 		};
 		delete.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		addButton(delete.add(newOkCancelDangerConfirm(this, getString("833"))));
-		addButton(new ModalCloseButton(new ResourceModel("lbl.cancel")).type(Buttons.Type.Outline_Secondary));
+		addButton(OmModalCloseButton.of());
 		super.onInitialize();
 	}
 

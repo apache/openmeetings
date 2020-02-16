@@ -1,5 +1,5 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-.room-block, .room-block .container {
+.room-block, .room-block .room-container {
 	width: 100%;
 	height: 100%;
 }
@@ -18,6 +18,19 @@
 .ui-icon.status-mod {
 	background-image: url(images/status-mod.png);
 }
+.room-block .event-details.modal {
+	position: absolute;
+	width: 300px;
+	height: 300px;
+	top: 30px;
+	right:  0;
+	left: auto;
+	z-index: 3050;
+}
+.room-block .event-details.modal .modal-dialog {
+	padding: 0;
+	margin: 0;
+}
 .room-block .sidebar {
 	min-width: 155px;
 	width: var(--room-sidebar-width);
@@ -28,6 +41,12 @@
 }
 .room-block .sidebar #room-sidebar-tabs {
 	height: calc(100% - var(--buffer-size) - var(--activities-height));
+}
+.room-block .sidebar .tab {
+	padding: 5px 0 0 0;
+}
+.room-block .sidebar .tab i {
+	font-size: 2.2em;
 }
 html[dir="rtl"] .room-block .sidebar {
 	right: 0;
@@ -119,14 +138,14 @@ html[dir="rtl"] .room-block .sidebar {
 	background-size: 32px;
 }
 .room-block .sidebar .icon-undock, .room-block .sidebar .icon-dock {
-	width: 16px;
-	height: 16px;
+	font-size: 1.6em;
+	padding-top: 3px;
 }
-.room-block .sidebar .icon-undock {
-	background-image: url(images/double-arrow-left.png);
+.room-block .sidebar .icon-dock:before {
+	content: "\f101";
 }
-.room-block .sidebar .icon-dock {
-	background-image: url(images/double-arrow-right.png);
+.room-block .sidebar .icon-undock::before {
+	content: "\f100";
 }
 .room-block .sidebar #room-sidebar-tab-users
 , .room-block .sidebar #room-sidebar-tab-files
@@ -292,10 +311,15 @@ ul.settings-menu {
 	font-weight: bolder;
 }
 .room-block .sidebar .tab.om-icon.big {
-	padding: 0em 1em 0 2.5em;
 	line-height: 30px;
 	width: auto;
 	max-width: 80px;
+	position: relative;
+}
+.room-block .sidebar .tab .badge {
+	position: absolute;
+	bottom: 0;
+	right: 2px;
 }
 .room-block .sidebar .tab.om-icon.big .label {
 	max-width: 50px;
@@ -304,11 +328,9 @@ ul.settings-menu {
 	overflow: hidden;
 	white-space: nowrap;
 }
-.room-block.small .sidebar .tab.user.om-icon.big {
-	max-width: 20px;
-}
 .room-block.small .sidebar .tab.om-icon.big {
-	max-width: 0px;
+	max-width: 40px;
+	width: 40px;
 	padding-right: 0;
 }
 .room-block.small .sidebar .tab.om-icon.big .label {
@@ -318,12 +340,6 @@ ul.settings-menu {
 	, .room-block.small .sidebar .file-tree .file.item .name span
 {
 	width: 40px;
-}
-.room-block .sidebar .tab.om-icon.big.user {
-	background-image: url(images/group.png);
-}
-.room-block .sidebar .tab.om-icon.big.file {
-	background-image: url(images/folder_explore.png);
 }
 /************ VIDEO **************/
 .ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .ui-dialog-content {
@@ -377,25 +393,25 @@ ul.settings-menu {
 .ui-dialog.video.mic-status .footer {
 	display: block;
 }
-.room-block .container .user-video {
+.room-block .room-container .user-video {
 	display: inline-block !important;
 }
-.room-block .container .user-video .header {
+.room-block .room-container .user-video .header {
 	height: 20px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
 }
-.room-block .container .user-video .header .ui-dialog-title {
+.room-block .room-container .user-video .header .ui-dialog-title {
 	padding-left: 5px;
 }
-.room-block .container .user-video .video {
+.room-block .room-container .user-video .video {
 	min-width: 40px;
 	min-height: 30px;
 	overflow: hidden;
 	position: relative;
 }
-.room-block .container .user-video .video.audio-only {
+.room-block .room-container .user-video .video.audio-only {
 	background-repeat: no-repeat;
 	background-size: auto 100%;
 	background-position: center;
@@ -548,12 +564,15 @@ ul.settings-menu {
 	width: 75px;
 }
 #room-sidebar-tabs.tabs .btn-dock {
-	display: block;
+	display: inline-block;
 	list-style: none;
 	list-style-type: none;
-	float: right;
-	padding: .4em 1em;
+	padding: 0 .5em;
 	border-bottom-width: inherit;
+	height: 25px;
+	position: absolute;
+	top: 5px;
+	right: 5px;
 }
 .video .mute-others {
 	position: absolute;
