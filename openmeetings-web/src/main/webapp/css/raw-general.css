@@ -247,7 +247,7 @@ html, body {
 	color: var(--success);
 	content: '\f111';
 }
-.offline.om-icon {
+.offline.om-icon::before {
 	color: var(--danger);
 	content: '\f111';
 }
