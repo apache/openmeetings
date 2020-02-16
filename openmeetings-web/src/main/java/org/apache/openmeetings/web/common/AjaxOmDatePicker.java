@@ -20,11 +20,11 @@ package org.apache.openmeetings.web.common;
 
 import java.time.LocalDate;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.markup.html.form.datetime.LocalDateTextField;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 
 public class AjaxOmDatePicker extends AbstractOmDateTimePicker<LocalDate> {
@@ -35,8 +35,9 @@ public class AjaxOmDatePicker extends AbstractOmDateTimePicker<LocalDate> {
 	}
 
 	@Override
-	protected Component newInput(String wicketId, String dateFormat) {
-		return new LocalDateTextField(wicketId, getModel(), dateFormat).add(new OnChangeAjaxBehavior() {
+	protected FormComponent<LocalDate> newInput(String wicketId, String dateFormat) {
+		LocalDateTextField input = new LocalDateTextField(wicketId, getModel(), dateFormat);
+		input.add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -44,6 +45,7 @@ public class AjaxOmDatePicker extends AbstractOmDateTimePicker<LocalDate> {
 				onValueChanged(target);
 			}
 		});
+		return input;
 	}
 
 	protected void onValueChanged(IPartialPageRequestHandler target) {

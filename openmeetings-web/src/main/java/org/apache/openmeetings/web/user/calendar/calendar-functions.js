@@ -1,47 +1,35 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-/**
- * @author Sebastien Briquet
- */
-function toggleDatePicker(id) {
-	const dp = $("#" + id);
-	dp.datepicker(dp.datepicker("widget").is(":visible") ? "hide" : "show");
-	return false;
-}
-function addCalButton(id) {
-	const my_button =
-		'<button class="fc-button fc-state-default fc-corner-right fc-corner-left" onclick="return toggleDatePicker(\'' + id + '\');">' +
-		'<input type="text" id="' + id + '" /></button>';
-
-	if (Settings.isRtl) {
-		$(".fc .fc-toolbar .fc-right").prepend(my_button);
-	} else {
-		$(".fc .fc-toolbar .fc-left").append(my_button);
+function onOmGotoClick() {
+	const gotoBtn = $('#calendar .fc-gotoBtn-button');
+	let selected = null
+		, gotoSpan = gotoBtn.parent().find('.goto-span');
+	if (gotoSpan.length < 1) {
+		gotoBtn.parent().append($('<span class="goto-span"><span/></span>'));
 	}
-
-	const dp = $("#" + id);
-	dp.datepicker({
-		showOn: "button",
-		buttonImage: "images/calendar.gif",
-		buttonImageOnly: true,
-		changeMonth: true,
-		changeYear: true,
-		changeDay: true,
-		dayNames: $('#${markupId}').fullCalendar("option","dayNames"),
-		dayNamesShort: $('#${markupId}').fullCalendar("option","dayNamesShort"),
-		dayNamesMin: $('#${markupId}').fullCalendar("option","dayNamesShort"),
-		monthNames: $('#${markupId}').fullCalendar("option","monthNames"),
-		monthNamesShort: $('#${markupId}').fullCalendar("option","monthNamesShort"),
-		isRTL: Settings.isRtl,
-		onChangeMonthYear: function(year, month, inst) {
-			$('#${markupId}').fullCalendar('gotoDate', year + '-' + ('0' + month).slice(-2) + '-' + inst.selectedDay);
-		},
-		onSelect: function(dateText) {
-			var date = new Date(dateText);
-			$('#${markupId}').fullCalendar('gotoDate', date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getDate());
+	gotoSpan = gotoBtn.parent().find('.goto-span');
+	gotoSpan.datetimepicker({
+		format: 'L'
+		, icons: {
+			time: 'fas fa-clock'
+			, date: 'fas fa-calendar'
+			, up: 'fas fa-arrow-up'
+			, down: 'fas fa-arrow-down'
+			, previous: 'fas fa-chevron-left'
+			, next: 'fas fa-chevron-right'
+			, today: 'fas fa-calendar-check'
+			, clear: 'fas fa-trash'
+			, close: 'fas fa-times'
+		}
+		, buttons: {
+			showToday: true
+			, showClear: true
+			, showClose: true
 		}
 	});
-	dp.hide();
-}
-function setDatepickerDate(id, date) {
-	$("#"+id).datepicker('setDate', date);
+	gotoSpan
+		.off()
+		.on('hide.datetimepicker', function(e){
+			$('#calendar').fullCalendar('gotoDate', e.date.format('YYYY-MM-DD'));
+		})
+		.datetimepicker('show');
 }

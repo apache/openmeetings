@@ -615,6 +615,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="bad.password.upper"><![CDATA[رمز عبور ضعیف حداقل 1 حرف بزرگ ضروری است]]></entry>
 	<entry key="button.label.share"><![CDATA[به اشتراک بگذارید]]></entry>
 	<entry key="calendar.addCalendar"><![CDATA[تقویم خارجی اضافه کنید]]></entry>
+	<entry key="calendar.sync"><![CDATA[Sync]]></entry>
 	<entry key="calendar.defaultTitle"><![CDATA[تقویم جدید]]></entry>
 	<entry key="calendar.dialogTitle"><![CDATA[جزییات تقویم]]></entry>
 	<entry key="calendar.error"><![CDATA[خطا در برقراری اتصال روی URL مشخص شده]]></entry>

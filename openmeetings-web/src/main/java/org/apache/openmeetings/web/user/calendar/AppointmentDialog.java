@@ -140,6 +140,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 	protected void onInitialize() {
 		header(new ResourceModel("815"));
 		setBackdrop(Backdrop.STATIC);
+		size(Size.Large);
 
 		add(form = new AppointmentForm("appForm", getModel()));
 		addButton(save = new BootstrapAjaxButton("button", new ResourceModel("144"), form, Buttons.Type.Outline_Primary) {
@@ -206,6 +207,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 				apptDao.update(a, getUserId());
 				target.add(feedback);
 				calendarPanel.refresh(target);
+				close(target);
 			}
 
 			@Override
@@ -249,10 +251,10 @@ public class AppointmentDialog extends Modal<Appointment> {
 			enterRoom.setVisible(false);
 		}
 		if (a.getRoom() != null) {
-			target.add(sipContainer.replace(new Label("room.confno", a.getRoom().getConfno())).setVisible(a.getRoom().isSipEnabled()));
+			sipContainer.replace(new Label("room.confno", a.getRoom().getConfno())).setVisible(a.getRoom().isSipEnabled());
 		}
 		save.setVisible(isOwner(a));
-		target.add(delete, enterRoom, save);
+		target.add(form, delete, enterRoom, save);
 		super.setModelObject(a);
 	}
 

@@ -413,6 +413,7 @@ select.messages.selector {
 .om-select2 .select2.select2-container {
 	max-height: 80px;
 	overflow-y: auto;
+	width: 100% !important;
 }
 .om-select2.full-width .select2.select2-container {
 	width: 100% !important;

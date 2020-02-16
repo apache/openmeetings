@@ -29,7 +29,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.HttpClient;
@@ -49,6 +48,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -56,6 +56,9 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,11 +68,14 @@ import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.calendar.Calendar;
 import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
 import com.googlecode.wicket.jquery.ui.calendar.EventSource.GoogleCalendar;
-import com.googlecode.wicket.jquery.ui.form.button.Button;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public class CalendarPanel extends UserBasePanel {
 	private static final Logger log = LoggerFactory.getLogger(CalendarPanel.class);
 	private static final long serialVersionUID = 1L;
+	private static final ResourceReference CALJS = new JavaScriptResourceReference(CalendarPanel.class, "calendar-functions.js");
 	private final AbstractAjaxTimerBehavior refreshTimer = new AbstractAjaxTimerBehavior(Duration.ofSeconds(10)) {
 		private static final long serialVersionUID = 1L;
 
@@ -123,12 +129,14 @@ public class CalendarPanel extends UserBasePanel {
 		Options options = new Options();
 		options.set("isRTL", isRtl);
 		options.set("height", Options.asString("parent"));
-		options.set("header", isRtl ? "{left: 'agendaDay,agendaWeek,month', center: 'title', right: 'today nextYear,next,prev,prevYear'}"
-				: "{left: 'prevYear,prev,next,nextYear today', center: 'title', right: 'month,agendaWeek,agendaDay'}");
+		options.set("customButtons", "{gotoBtn: {text: ' ', click: onOmGotoClick}}");
+		options.set("header", isRtl ? "{left: 'agendaDay,agendaWeek,month', center: 'title', right: 'gotoBtn,today nextYear,next,prev,prevYear'}"
+				: "{left: 'prevYear,prev,next,nextYear today,gotoBtn', center: 'title', right: 'month,agendaWeek,agendaDay'}");
 		options.set("allDaySlot", false);
 		options.set("axisFormat", Options.asString("H(:mm)"));
 		options.set("defaultEventMinutes", 60);
 		options.set("timeFormat", Options.asString("H(:mm)"));
+		options.set("themeSystem", Options.asString("bootstrap4"));
 
 		options.set("buttonText", new JSONObject()
 				.put("month", getString("801"))
@@ -140,12 +148,6 @@ public class CalendarPanel extends UserBasePanel {
 
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
 			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onInitialize() {
-				super.onInitialize();
-				add(new CalendarFunctionsBehavior(getMarkupId()));
-			}
 
 			@Override
 			public boolean isSelectable() {
@@ -291,24 +293,24 @@ public class CalendarPanel extends UserBasePanel {
 			}
 		});
 
-		add(new Button("syncCalendarButton").add(new AjaxEventBehavior(EVT_CLICK) {
+		add(new BootstrapAjaxLink<String>("syncCalendarButton", null, Buttons.Type.Outline_Primary, new ResourceModel("calendar.sync")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onEvent(AjaxRequestTarget target) {
+			public void onClick(AjaxRequestTarget target) {
 				syncCalendar(target);
 			}
-		}));
+		}.setSize(Buttons.Size.Small));
 
-		add(new Button("submitCalendar").add(new AjaxEventBehavior(EVT_CLICK) {
+		add(new BootstrapAjaxLink<String>("submitCalendar", null, Buttons.Type.Outline_Primary, new ResourceModel("calendar.addCalendar")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onEvent(AjaxRequestTarget target) {
+			public void onClick(AjaxRequestTarget target) {
 				calendarDialog.show(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR, getDefaultCalendar());
 				target.add(calendarDialog);
 			}
-		}));
+		}.setSize(Buttons.Size.Small));
 
 		add(calendarListContainer);
 
@@ -341,9 +343,7 @@ public class CalendarPanel extends UserBasePanel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-
-		Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
-		target.ifPresent(t -> t.appendJavaScript("addCalButton('datepicker');"));
+		response.render(JavaScriptHeaderItem.forReference(CALJS));
 	}
 
 	// Client creation here, because the client is not created until necessary

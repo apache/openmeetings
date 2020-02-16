@@ -615,6 +615,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="bad.password.upper"><![CDATA[„Słabe” hasło: wymagana jest co najmniej 1 wielka litera]]></entry>
 	<entry key="button.label.share"><![CDATA[Udostępnij]]></entry>
 	<entry key="calendar.addCalendar"><![CDATA[Dodaj kalendarz zewnętrzny]]></entry>
+	<entry key="calendar.sync"><![CDATA[Sync]]></entry>
 	<entry key="calendar.defaultTitle"><![CDATA[Nowy kalendarz]]></entry>
 	<entry key="calendar.dialogTitle"><![CDATA[Szczegóły kalendarza]]></entry>
 	<entry key="calendar.error"><![CDATA[Błąd podczas nawiązywania połączenia pod określonym adresem URL.]]></entry>

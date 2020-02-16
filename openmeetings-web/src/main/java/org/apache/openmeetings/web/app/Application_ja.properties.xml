@@ -615,6 +615,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="bad.password.upper"><![CDATA[パスワード強度='弱': 1文字以上の大文字を含める必要があります。]]></entry>
 	<entry key="button.label.share"><![CDATA[共有]]></entry>
 	<entry key="calendar.addCalendar"><![CDATA[外部カレンダーを追加]]></entry>
+	<entry key="calendar.sync"><![CDATA[Sync]]></entry>
 	<entry key="calendar.defaultTitle"><![CDATA[新規カレンダー]]></entry>
 	<entry key="calendar.dialogTitle"><![CDATA[カレンダー詳細]]></entry>
 	<entry key="calendar.error"><![CDATA[エラー。指定された URL に接続できませんでした。]]></entry>

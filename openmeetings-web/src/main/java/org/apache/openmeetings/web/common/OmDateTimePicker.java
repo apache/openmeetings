@@ -20,8 +20,8 @@ package org.apache.openmeetings.web.common;
 
 import java.time.LocalDateTime;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.form.datetime.LocalDateTimeTextField;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 
 public class OmDateTimePicker extends AbstractOmDateTimePicker<LocalDateTime> {
@@ -32,7 +32,7 @@ public class OmDateTimePicker extends AbstractOmDateTimePicker<LocalDateTime> {
 	}
 
 	@Override
-	protected Component newInput(String wicketId, String dateFormat) {
+	protected FormComponent<LocalDateTime> newInput(String wicketId, String dateFormat) {
 		return new LocalDateTimeTextField(wicketId, getModel(), dateFormat);
 	}
 }
