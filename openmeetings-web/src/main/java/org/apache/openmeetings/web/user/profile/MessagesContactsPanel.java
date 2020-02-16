@@ -79,8 +79,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
@@ -181,7 +179,6 @@ public class MessagesContactsPanel extends UserBasePanel {
 			}
 		};
 		add(addFolder);
-		add(new JQueryBehavior(".email.new", "button"));
 		folders.add(inbox.add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
@@ -213,13 +210,13 @@ public class MessagesContactsPanel extends UserBasePanel {
 			protected void onEvent(AjaxRequestTarget target) {
 				addFolder.show(target);
 			}
-		}).add(new JQueryBehavior(".email.newdir", "button")));
+		}));
 		add(folders.add(new ListView<>("folder", foldersModel) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final ListItem<PrivateMessageFolder> item) {
-				item.add(new Label("name", item.getModelObject().getFolderName()));
+				item.add(new Label("name", item.getModelObject().getFolderName()).setRenderBodyOnly(true));
 				BootstrapAjaxLink<String> del = new BootstrapAjaxLink<>("delete", Buttons.Type.Outline_Danger) {
 					private static final long serialVersionUID = 1L;
 
@@ -531,7 +528,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 	}
 
 	private static void selectFolder(WebMarkupContainer folder) {
-		folder.add(AttributeModifier.append(ATTR_CLASS, "ui-widget-header ui-corner-all"));
+		folder.add(AttributeModifier.append(ATTR_CLASS, "selected"));
 	}
 
 	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {

@@ -234,41 +234,22 @@ html, body {
 	font-family: 'Font Awesome 5 Free';
 	font-weight: 900;
 	color: var(--secondary);
-	font-size: 1.5em;
-	vertical-align: text-top;
+	font-size: 1.2em;
+	vertical-align: text-bottom;
 }
 .om-icon.big::before {
 	font-size: 2.2em;
 }
-.cross.om-icon {
-	background-image: url(images/cross.png);
-}
-.tick.om-icon {
-	background-image: url(images/tick.png);
-}
 .add.om-icon::before {
 	content: '\f055';
 }
-.new-email.om-icon {
-	background-image: url(images/email_add.png);
-}
-.user.om-icon {
-	background-image: url(images/user.png);
-}
-.invite.om-icon {
-	background-image: url(images/connect.png);
-}
-.online.om-icon {
-	background-image: url(images/bullet_green.png);
+.online.om-icon::before {
+	color: var(--success);
+	content: '\f111';
 }
 .offline.om-icon {
-	background-image: url(images/bullet_red.png);
-}
-.error .k-notification-wrap {
-	white-space: normal;
-}
-.error {
-	color: red;
+	color: var(--danger);
+	content: '\f111';
 }
 .message {
 	margin: 50px;
@@ -301,11 +282,25 @@ table.messages td.side.right {
 	min-width: 200px;
 	overflow-x: hidden;
 }
+table.messages td.side.right .del-contact {
+	padding: 0;
+	margin: 0;
+	height: 16px;
+	width: 16px;
+	position: relative;
+}
+table.messages td.side.right .del-contact i {
+	position: absolute;
+	top: 1px;
+	left: 3px;
+}
 table.messages td.main {
 	width: 100%;
 }
+table.messages td.from, table.messages td.subject {
+	overflow-wrap: break-word;
+}
 .email {
-	padding-left: 25px;
 	background-repeat: no-repeat !important;
 	background-position: 5px 3px !important;
 	background-size: 16px 16px !important;
@@ -313,28 +308,11 @@ table.messages td.main {
 	display: block;
 	text-align:left;
 }
-.email.new {
-	background-image: url(images/email_add.png);
-	font-weight: normal;
-}
-.email.new .ui-button-text, .email.newdir .ui-button-text {
-	padding: 0;
-}
-.email.inbox {
-	background-image: url(images/basket_put.png);
-}
-.email.sent {
-	background-image: url(images/email_go.png);
-}
-.email.trash {
-	background-image: url(images/email_delete.png);
-}
-.email.newdir {
-	background-image: url(images/folder_add.png);
-	font-weight: normal;
+.email.selected {
+	border: 1px solid #cccccc;
+	background-color:var(--light);
 }
 .email.folder {
-	background-image: url(images/folder.png);
 	font-weight: normal;
 	position: relative;
 }
@@ -342,13 +320,17 @@ table.messages td.main {
 	position:absolute;
 	right: 2px;
 	top: 2px;
-	background-image: url(images/cross.png);
 	font-weight: normal;
 	padding: 0;
 	display: inline-block;
 	background-position: 0;
 	width: 18px;
 	height: 18px;
+}
+.email.folder .delete i {
+	top: 2px;
+	position: absolute;
+	left: 4px;
 }
 .messages.column.label {
 	width: 20px;

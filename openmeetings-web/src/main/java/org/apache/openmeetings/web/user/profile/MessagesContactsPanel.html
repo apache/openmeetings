@@ -26,13 +26,30 @@
 		<table class="messages">
 			<tr>
 				<td class="side left">
-					<div class="email new clickable" onclick="privateMessage();" wicket:message="title:1208"><wicket:message key="1207"/></div>
+					<div class="email new btn btn-sm btn-outline-primary
+					" onclick="privateMessage();" wicket:message="title:1208">
+						<i class="fas fa-envelope"></i>
+						<wicket:message key="1207"/>
+					</div>
 					<div wicket:id="folders">
-						<div wicket:id="inbox"><wicket:message key="1222"/></div>
-						<div wicket:id="sent"><wicket:message key="1223"/></div>
-						<div wicket:id="trash"><wicket:message key="1224"/></div>
-						<div class="email newdir clickable" wicket:id="newdir" wicket:message="title:1259"><wicket:message key="703"/></div>
+						<div wicket:id="inbox">
+							<i class="fas fa-inbox"></i>
+							<wicket:message key="1222"/>
+						</div>
+						<div wicket:id="sent">
+							<i class="fas fa-share-square"></i>
+							<wicket:message key="1223"/>
+						</div>
+						<div wicket:id="trash">
+							<i class="fas fa-trash-alt"></i>
+							<wicket:message key="1224"/>
+						</div>
+						<div class="email newdir btn btn-sm btn-outline-primary" wicket:id="newdir" wicket:message="title:1259">
+							<i class="fas fa-plus-circle"></i>
+							<wicket:message key="703"/>
+						</div>
 						<div wicket:id="folder">
+							<i class="fas fa-folder"></i>
 							<div wicket:id="name"></div>
 							<a class="delete" wicket:id="delete" wicket:message="title:1262"></a>
 						</div>
@@ -53,20 +70,22 @@
 						<tbody wicket:id="container">
 							<tr wicket:id="messages">
 								<td class="col-1" wicket:id="id"></td>
-								<td class="col-6" wicket:id="from"></td>
-								<td class="col-3" wicket:id="subject"></td>
+								<td class="col-6 from" wicket:id="from"></td>
+								<td class="col-3 subject" wicket:id="subject"></td>
 								<td class="col-2" wicket:id="send"></td>
 							</tr>
 						</tbody>
 					</table>
 					<div wicket:id="buttons">
-						<select wicket:id="msgSelect"></select>
-						<input wicket:id="toInboxBtn" type="button" wicket:message="value:1255"/>
-						<input wicket:id="replyBtn" type="button" wicket:message="value:messages.btn.reply"/>
-						<input wicket:id="deleteBtn" type="button" wicket:message="value:80"/>
-						<input wicket:id="readBtn" type="button" wicket:message="value:1248"/>
-						<input wicket:id="unreadBtn" type="button" wicket:message="value:1247"/>
-						<select wicket:id="msgMove"></select>
+						<select class="custom-select col-2" wicket:id="msgSelect"></select>
+						<div class="btn-group">
+							<button class="btn btn-sm btn-outline-primary" wicket:id="toInboxBtn"><wicket:message key="1255"/></button>
+							<button class="btn btn-sm btn-outline-primary" wicket:id="replyBtn"><wicket:message key="messages.btn.reply"/></button>
+							<button class="btn btn-sm btn-outline-danger" wicket:id="deleteBtn"><wicket:message key="80"/></button>
+							<button class="btn btn-sm btn-outline-secondary" wicket:id="readBtn"><wicket:message key="1248"/></button>
+							<button class="btn btn-sm btn-outline-secondary" wicket:id="unreadBtn"><wicket:message key="1247"/></button>
+						</div>
+						<select class="custom-select col-3" wicket:id="msgMove"></select>
 					</div>
 					<div wicket:id="selectedMessage">
 						<table class="w-100">
@@ -111,11 +130,20 @@
 						</tr>
 						<tr wicket:id="users">
 							<td><div wicket:id="name" class="overflow-x-hidden"></div></td>
-							<td><div wicket:id="accept" class="tick om-icon clickable" wicket:message="title:1190"
-								></div><div wicket:id="decline" class="cross om-icon clickable" wicket:message="title:1191"
-								></div><div wicket:id="view" class="user om-icon clickable" wicket:message="title:1236"
-								></div><div wicket:id="message" class="new-email om-icon clickable" wicket:message="title:1253"
-								></div><a wicket:id="delete" wicket:message="title:1234"></a></td>
+							<td>
+								<div wicket:id="accept" class="accept om-icon clickable" wicket:message="title:1190">
+									<i class="fas fa-check text-success"></i>
+								</div>
+								<div wicket:id="decline" class="decline om-icon clickable" wicket:message="title:1191">
+									<i class="fas fa-times text-danger"></i>
+								</div>
+								<div wicket:id="view" class="user om-icon clickable" wicket:message="title:1236">
+									<i class="fas fa-address-card"></i>
+								</div>
+								<div wicket:id="message" class="new-email om-icon clickable" wicket:message="title:1253">
+									<i class="fas fa-envelope"></i>
+								</div>
+								<a wicket:id="delete" class="del-contact btn-sm" wicket:message="title:1234"></a></td>
 						</tr>
 					</table>
 				</td>
