@@ -31,6 +31,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLeng
 
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -105,7 +106,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		user.setLanguageId(getDefaultLang());
 		user.setTimeZoneId(getTimeZone(currentUser).getID());
 		user.setForceTimeZoneCheck(false);
-		user.setAge(new Date());
+		user.setAge(LocalDate.now());
 		user.setLastlogin(new Date());
 		Address address = new Address();
 		address.setCountry(Locale.getDefault().getCountry());
@@ -327,7 +328,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			u.setDeleted(true);
 			u.setSipUser(new AsteriskSipUser());
 			u.setAddress(new Address());
-			u.setAge(new Date());
+			u.setAge(LocalDate.now());
 			u.setExternalId(null);
 			final String purged = String.format("Purged %s", randomUUID());
 			u.setFirstname(purged);

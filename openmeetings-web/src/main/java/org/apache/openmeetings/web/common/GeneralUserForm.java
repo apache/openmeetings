@@ -35,10 +35,8 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
-import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.util.CountryDropDown;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -49,7 +47,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
@@ -59,7 +56,6 @@ import org.wicketstuff.select2.Select2MultiChoice;
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
 	private final RequiredTextField<String> email = new RequiredTextField<>("address.email");
-	private LocalDate age;
 	private final List<GroupUser> grpUsers = new ArrayList<>();
 	private final boolean isAdminForm;
 	@SpringBean
@@ -100,15 +96,7 @@ public class GeneralUserForm extends Form<User> {
 		add(new DropDownChoice<>("timeZoneId", AVAILABLE_TIMEZONES));
 		add(new LanguageDropDown("languageId"));
 		add(new TextField<String>("address.phone"));
-		final AjaxOmDatePicker bday = new AjaxOmDatePicker("age", new PropertyModel<LocalDate>(this, "age")) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onValueChanged(IPartialPageRequestHandler target) {
-				User u = GeneralUserForm.this.getModelObject();
-				u.setAge(CalendarHelper.getDate(age, u.getTimeZoneId()));
-			}
-		};
+		final AjaxOmDatePicker bday = new AjaxOmDatePicker("age");
 		bday.getConfig().withMaxDate(LocalDate.now());
 		add(bday);
 		add(new TextField<String>("address.street"));
@@ -167,7 +155,6 @@ public class GeneralUserForm extends Form<User> {
 				}
 			}
 		}
-		age = CalendarHelper.getDate(u.getAge(), u.getTimeZoneId());
 	}
 
 	@Override

@@ -25,13 +25,12 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.markup.html.form.datetime.LocalDateTextField;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.model.IModel;
 
 public class AjaxOmDatePicker extends AbstractOmDateTimePicker<LocalDate> {
 	private static final long serialVersionUID = 1L;
 
-	public AjaxOmDatePicker(String id, IModel<LocalDate> model) {
-		super(id, model, getDateFormat());
+	public AjaxOmDatePicker(String id) {
+		super(id, null, getDateFormat());
 	}
 
 	@Override

@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 import static org.apache.wicket.util.string.Strings.escapeMarkup;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -193,7 +194,7 @@ public class User extends HistoricalEntity {
 
 	@Column(name = "age")
 	@Element(data = true, required = false)
-	private Date age;
+	private LocalDate age;
 
 	@Column(name = "firstname")
 	@Element(data = true, required = false)
@@ -347,12 +348,12 @@ public class User extends HistoricalEntity {
 		this.address = address;
 	}
 
-	public Date getAge() {
+	public LocalDate getAge() {
 		return age;
 	}
 
-	public void setAge(Date age) {
-		this.age = age == null ? new Date() :age;
+	public void setAge(LocalDate age) {
+		this.age = age == null ? LocalDate.now() : age;
 	}
 
 	public String getFirstname() {
