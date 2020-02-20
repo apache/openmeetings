@@ -456,7 +456,7 @@ $(function() {
 			if (msg instanceof Blob) {
 				return; //ping
 			}
-			const m = jQuery.parseJSON(msg);
+			const m = JSON.parse(msg);
 			if (m) {
 				switch(m.type) {
 					case "chat":

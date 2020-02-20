@@ -147,14 +147,13 @@ html[dir="rtl"] .room-block .sidebar {
 .room-block .sidebar .icon-undock::before {
 	content: "\f100";
 }
-.room-block .sidebar #room-sidebar-tab-users
-, .room-block .sidebar #room-sidebar-tab-files
-{
+.room-block .sidebar #room-sidebar-tabs .tab-content {
 	height: calc(100% - 44px);
 }
-.room-block .sidebar.closed #room-sidebar-tab-users
-, .room-block .sidebar.closed #room-sidebar-tab-files
-{
+.room-block .sidebar #room-sidebar-tabs .tab-content .tab-pane {
+	height: 100%;
+}
+.room-block .sidebar.closed .tab-content .tab-pane {
 	display: none;
 }
 .audio-activity.ui-icon {
@@ -268,30 +267,6 @@ html[dir="rtl"] .room-block .sidebar {
 	top: -50px;
 	background-color: transparent;
 }
-#video-settings {
-	padding: 5px 10px;
-}
-ul.settings-menu {
-	max-height: 130px;
-}
-.ui-dialog.video .title {
-	font-weight: bold;
-}
-.ui-dialog.video .opt-block {
-	width: 300px;
-	display: inline-block;
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-.ui-dialog.video .vid-block {
-	min-width: 300px;
-	padding-left: 305px;
-}
-.ui-dialog.video .warn {
-	float: right;
-	margin-right: .3em;
-}
 .input .select2-container {
 	max-height: 100px;
 	overflow-y: auto;
@@ -361,17 +336,41 @@ ul.settings-menu {
 	left: 5px;
 	width: 10px;
 }
-.ui-dialog.video .sett-container {
+#video-settings {
+	padding: 5px 10px;
+}
+#video-settings.video .modal-dialog {
+	max-width: 640px;
+}
+.modal.video .title {
+	font-weight: bold;
+}
+.modal.video .opt-block {
+	width: 300px;
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.modal.video .vid-block {
+	min-width: 300px;
+	padding-left: 305px;
+}
+.modal.video .warn {
+	float: right;
+	margin-right: .3em;
+}
+.modal.video .sett-container {
 	position: relative;
 	min-height: 250px;
 }
-.ui-dialog.video .sett-row {
+.modal.video .sett-row {
 	padding-top: 10px;
 }
-.ui-dialog.video .sett-row.right {
+.modal.video .sett-row.right {
 	text-align: right;
 }
-.ui-dialog.video .vid-block .video-conainer {
+.modal.video .vid-block .video-conainer {
 	overflow: auto;
 	max-height: 300px;
 	position: relative;
@@ -380,17 +379,13 @@ ul.settings-menu {
 	float: left;
 	padding: 2px 4px;
 }
-.ui-dialog.video .ui-dialog-titlebar-collapse span
-, .ui-dialog.video .ui-dialog-titlebar-volume span
-, .ui-dialog.video .ui-dialog-titlebar-refresh span
-{
-	display: block;
-	margin: 1px;
+#video-settings .close {
+	margin: 0 0 0 auto;
 }
-.ui-dialog.video .footer {
+.modal.video .footer {
 	display: none;
 }
-.ui-dialog.video.mic-status .footer {
+.modal.video.mic-status .footer {
 	display: block;
 }
 .room-block .room-container .user-video {

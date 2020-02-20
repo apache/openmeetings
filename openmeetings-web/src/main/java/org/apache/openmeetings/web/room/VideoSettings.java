@@ -20,9 +20,6 @@ package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
 
-import java.util.List;
-
-import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
@@ -32,20 +29,10 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.ui.settings.JQueryUILibrarySettings;
 
 public class VideoSettings extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final ResourceReference SETTINGS_JS_REFERENCE = new JavaScriptResourceReference(VideoSettings.class, "settings.js") {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public List<HeaderItem> getDependencies() {
-			List<HeaderItem> list = super.getDependencies();
-			list.add(JavaScriptHeaderItem.forReference(JQueryUILibrarySettings.get().getJavaScriptReference()));
-			return list;
-		}
-	};
+	private static final ResourceReference SETTINGS_JS_REFERENCE = new JavaScriptResourceReference(VideoSettings.class, "settings.js");
 	public static final String URL = "url";
 	public static final String FALLBACK = "fallback";
 

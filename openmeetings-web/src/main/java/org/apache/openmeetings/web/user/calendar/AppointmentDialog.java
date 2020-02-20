@@ -222,6 +222,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 				RoomEnterBehavior.roomEnter((MainPage)getPage(), handler, AppointmentDialog.this.getModelObject().getRoom().getId());
 			}
 		});
+		enterRoom.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		delete = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Danger, new ResourceModel("80")) {
 			private static final long serialVersionUID = 1L;
 
