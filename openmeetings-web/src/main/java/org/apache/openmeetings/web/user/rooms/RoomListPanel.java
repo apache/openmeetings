@@ -108,7 +108,7 @@ public class RoomListPanel extends Panel {
 				}.add(AttributeModifier.append(ATTR_TITLE, new ResourceModel("lbl.refresh"))));
 			}
 		});
-		add(new TooltipBehavior(".info-text"));
+		add(new TooltipBehavior(".info-tooltip"));
 	}
 
 	public void update(IPartialPageRequestHandler handler, List<Room> rooms) {

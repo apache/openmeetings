@@ -60,9 +60,6 @@ var DrawWbArea = function() {
 		}
 	}
 
-	function refreshTabs() {
-		tabs.tabs('refresh').find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
-	}
 	function getActive() {
 		const idx = tabs.tabs('option', 'active');
 		if (idx > -1) {
@@ -105,21 +102,19 @@ var DrawWbArea = function() {
 			}
 		}
 	}
-	function _getWbTab(wbId) {
-		return tabs.find('li[data-wb-id="' + wbId + '"]');
-	}
 	function _activateTab(wbId) {
-		container.find('.wb-tabbar li').each(function(idx) {
-			if (wbId === 1 * $(this).data('wb-id')) {
-				tabs.tabs('option', 'active', idx);
-				$(this)[0].scrollIntoView();
-				return false;
-			}
-		});
+		const li = _getWbTab(wbId);
+		if (li.length > 0) {
+			li.tab('show');
+			li[0].scrollIntoView();
+		}
 	}
-	function _setTabName(li, name) {
-		return li.find('a').attr('title', name)
+	function _setTabName(link, name) {
+		return link.attr('title', name)
 			.find('span').text(name)
+	}
+	function _getWbTab(wbId) {
+		return $('#' + __getWbTabId(wbId));
 	}
 	function _renameTab(obj) {
 		_setTabName(_getWbTab(obj.wbId), obj.name);
@@ -128,7 +123,7 @@ var DrawWbArea = function() {
 		if (role !== PRESENTER) {
 			return;
 		}
-		li.append(OmUtil.tmpl('#wb-tab-close'));
+		li.find('a').append(OmUtil.tmpl('#wb-tab-close'));
 		li.find('button').click(function() {
 			OmUtil.confirmDlg('wb-confirm-remove', function() { OmUtil.wbAction({action: 'removeWb', data: {wbId: li.data().wbId}}); });
 		});
@@ -151,12 +146,15 @@ var DrawWbArea = function() {
 			 _videoStatus(arr[i]);
 		}
 	}
-
-	self.getWbTabId = function(id) {
+	function __getWbTabId(id) {
 		return 'wb-tab-' + id;
 	};
+	function __getWbContentId(id) {
+		return 'wb-content-' + id;
+	};
+
 	self.getWb = function(id) {
-		return $('#' + self.getWbTabId(id)).data();
+		return $('#' + __getWbContentId(id)).data();
 	};
 	self.getCanvas = function(id) {
 		return self.getWb(id).getCanvas();
@@ -166,7 +164,7 @@ var DrawWbArea = function() {
 			return;
 		}
 		role = _role;
-		const tabsNav = tabs.find('.ui-tabs-nav');
+		const tabsNav = tabs.find('ul.nav-tabs');
 		tabsNav.sortable(role === PRESENTER ? 'enable' : 'disable');
 		const prev = tabs.find('.prev.om-icon'), next = tabs.find('.next.om-icon');
 		if (role === PRESENTER) {
@@ -185,20 +183,21 @@ var DrawWbArea = function() {
 					scroll.scrollLeft(scroll.scrollLeft() + 30);
 				});
 				tabsNav.find('li').each(function() {
-					const li = $(this);
-					_addCloseBtn(li);
+					_addCloseBtn($(this));
 				});
 				self.addDeleteHandler();
 			}
+			tabsNav.find('li > a').prop('disable', false);
 		} else {
 			if (prev.length > 0) {
 				prev.parent().remove();
 				next.parent().remove();
+				tabsNav.find('li > a').prop('disable', true);
 				tabsNav.find('li button').remove();
 			}
 			self.removeDeleteHandler();
 		}
-		tabs.find('.ui-tabs-panel').each(function() {
+		tabs.find('.wb-tab-content .tab-pane').each(function() {
 			$(this).data().setRole(role);
 		});
 	}
@@ -212,6 +211,9 @@ var DrawWbArea = function() {
 			setTimeout(_doInit, 100, callback);
 			return;
 		}
+		//FIXME TODO check disabled
+		//FIXME TODO send activating
+		/*
 		tabs.tabs({
 			beforeActivate: function(e) {
 				let res = true;
@@ -227,13 +229,11 @@ var DrawWbArea = function() {
 				}
 			}
 		});
+		*/
 		scroll = tabs.find('.scroll-container');
 		area = container.find('.wb-area');
-		tabs.find('.ui-tabs-nav').sortable({
+		tabs.find('ul.nav-tabs').sortable({
 			axis: 'x'
-			, stop: function() {
-				refreshTabs();
-			}
 		});
 		_inited = true;
 		self.setRole(role);
@@ -257,9 +257,10 @@ var DrawWbArea = function() {
 		if (!_inited) {
 			return;
 		}
-		const tid = self.getWbTabId(obj.wbId)
-			, wb = OmUtil.tmpl('#wb-area', tid)
-			, li = OmUtil.tmpl('#wb-area-tab').data('wb-id', obj.wbId).attr('data-wb-id', obj.wbId)
+		const tid = __getWbTabId(obj.wbId)
+			, tcid = __getWbContentId(obj.wbId)
+			, wb = OmUtil.tmpl('#wb-area', tcid).attr('aria-labelledby', tid)
+			, li = OmUtil.tmpl('#wb-area-tab')
 				.contextmenu(function(e) {
 					if (role !== PRESENTER) {
 						return;
@@ -267,9 +268,10 @@ var DrawWbArea = function() {
 					e.preventDefault();
 					$('#wb-rename-menu').show().data('wb-id', obj.wbId)
 						.position({my: 'left top', collision: 'none', of: _getWbTab(obj.wbId)});
-				});
-		li.find('a').attr('href', '#' + tid);
-		_setTabName(li, obj.name)
+				})
+			, link = li.find('a');
+		link.attr('id', tid).attr('data-wb-id', obj.wbId).attr('href', '#' + tcid).attr('aria-controls', tcid);
+		_setTabName(link, obj.name)
 			.dblclick(function() {
 				if (role !== PRESENTER) {
 					return;
@@ -293,13 +295,12 @@ var DrawWbArea = function() {
 					});
 			});
 
-		tabs.find('.ui-tabs-nav').append(li);
-		tabs.append(wb);
-		refreshTabs();
+		tabs.find('ul.nav-tabs').append(li);
+		tabs.find('.wb-tab-content').append(wb);
 		_addCloseBtn(li);
 
 		const wbo = Wb();
-		wbo.init(obj, tid, role);
+		wbo.init(obj, tcid, role);
 		wb.on('remove', wbo.destroy);
 		wb.data(wbo);
 	}
@@ -330,7 +331,6 @@ var DrawWbArea = function() {
 		const tabId = self.getWbTabId(obj.wbId);
 		_getWbTab(obj.wbId).remove();
 		$('#' + tabId).remove();
-		refreshTabs();
 		_actionActivateWb(getActive().data().id);
 	};
 	self.load = function(json) {
@@ -436,7 +436,6 @@ var DrawWbArea = function() {
 			$(this).remove();
 			$('#' + tabId).remove();
 		});
-		refreshTabs();
 	};
 	return self;
 };
