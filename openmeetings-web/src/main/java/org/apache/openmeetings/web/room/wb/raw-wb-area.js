@@ -61,12 +61,9 @@ var DrawWbArea = function() {
 	}
 
 	function getActive() {
-		const idx = tabs.tabs('option', 'active');
-		if (idx > -1) {
-			const href = tabs.find('a')[idx];
-			if (!!href) {
-				return $($(href).attr('href'));
-			}
+		const tab = tabs.find('.wb-tab-content .active');
+		if (tab.length === 1) {
+			return tab;
 		}
 		return null;
 	}
