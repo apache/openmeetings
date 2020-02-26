@@ -100,10 +100,16 @@ var DrawWbArea = function() {
 		}
 	}
 	function _activateTab(wbId) {
-		const li = _getWbTab(wbId);
-		if (li.length > 0) {
-			li.tab('show');
-			li[0].scrollIntoView();
+		const link = _getWbTab(wbId);
+		if (link.length > 0) {
+			link.tab('show');
+			if (role !== PRESENTER) {
+				$('.wb-tabbar ul.nav-tabs a.nav-link').removeClass('active');
+				link.addClass('active');
+				$('.wb-tab-content.tab-content .tab-pane').removeClass('active');
+				$('#' + link.attr('aria-controls')).addClass('active');
+			}
+			link[0].scrollIntoView();
 		}
 	}
 	function _setTabName(link, name) {
@@ -113,17 +119,28 @@ var DrawWbArea = function() {
 	function _getWbTab(wbId) {
 		return $('#' + __getWbTabId(wbId));
 	}
+	function _getWbContent(wbId) {
+		return $('#' + __getWbContentId(wbId));
+	};
 	function _renameTab(obj) {
 		_setTabName(_getWbTab(obj.wbId), obj.name);
 	}
 	function _addCloseBtn(li) {
-		if (role !== PRESENTER) {
+		if (role !== PRESENTER || li.find('button').length > 0) {
 			return;
 		}
-		li.find('a').append(OmUtil.tmpl('#wb-tab-close'));
-		li.find('button').click(function() {
-			OmUtil.confirmDlg('wb-confirm-remove', function() { OmUtil.wbAction({action: 'removeWb', data: {wbId: li.data().wbId}}); });
-		});
+		const link = li.find('a')
+			, wbId = link.data('wb-id')
+			, closeId = `wb-tab-${wbId}-close-btn`;
+		link.append(OmUtil.tmpl('#wb-tab-close', closeId));
+		li.find('button')
+			.confirmation({
+				rootSelector: closeId
+				, confirmationEvent: 'bla'
+				, onConfirm: function() {
+					OmUtil.wbAction({action: 'removeWb', data: {wbId: wbId}});
+				}
+			});
 	}
 	function _getImage(cnv) {
 		return cnv.toDataURL({
@@ -149,9 +166,28 @@ var DrawWbArea = function() {
 	function __getWbContentId(id) {
 		return 'wb-content-' + id;
 	};
+	function __initTab(elems) {
+		const links = elems.find('a');
+		if (role === PRESENTER) {
+			elems.each(function() {
+				_addCloseBtn($(this));
+			});
+			links.prop('disabled', false).removeClass('disabled');
+		} else {
+			links.prop('disabled', true).addClass('disabled');
+			elems.find('button').remove();
+		}
+		links.off()
+			.on('click', function(e) {
+				e.preventDefault();
+				if (role === PRESENTER) {
+					_actionActivateWb($(this).data('wb-id'));
+				}
+			});
+	};
 
 	self.getWb = function(id) {
-		return $('#' + __getWbContentId(id)).data();
+		return _getWbContent(id).data();
 	};
 	self.getCanvas = function(id) {
 		return self.getWb(id).getCanvas();
@@ -179,21 +215,16 @@ var DrawWbArea = function() {
 				tabs.find('.next.om-icon').click(function() {
 					scroll.scrollLeft(scroll.scrollLeft() + 30);
 				});
-				tabsNav.find('li').each(function() {
-					_addCloseBtn($(this));
-				});
 				self.addDeleteHandler();
 			}
-			tabsNav.find('li > a').prop('disable', false);
 		} else {
 			if (prev.length > 0) {
 				prev.parent().remove();
 				next.parent().remove();
-				tabsNav.find('li > a').prop('disable', true);
-				tabsNav.find('li button').remove();
 			}
 			self.removeDeleteHandler();
 		}
+		__initTab(tabsNav.find('li'));
 		tabs.find('.wb-tab-content .tab-pane').each(function() {
 			$(this).data().setRole(role);
 		});
@@ -208,25 +239,6 @@ var DrawWbArea = function() {
 			setTimeout(_doInit, 100, callback);
 			return;
 		}
-		//FIXME TODO check disabled
-		//FIXME TODO send activating
-		/*
-		tabs.tabs({
-			beforeActivate: function(e) {
-				let res = true;
-				if (e.originalEvent && e.originalEvent.type === 'click') {
-					res = role === PRESENTER;
-				}
-				return res;
-			}
-			, activate: function(e, ui) {
-				//only send `activateWb` event if activation was initiated by user
-				if (e.originalEvent && e.originalEvent.type === 'click') {
-					_actionActivateWb(ui.newTab.data('wb-id'));
-				}
-			}
-		});
-		*/
 		scroll = tabs.find('.scroll-container');
 		area = container.find('.wb-area');
 		tabs.find('ul.nav-tabs').sortable({
@@ -273,7 +285,7 @@ var DrawWbArea = function() {
 				if (role !== PRESENTER) {
 					return;
 				}
-				const editor = $('<input name="newName" type="text" style="color: black;"/>')
+				const editor = $('<input class="newName" name="newName" type="text"/>')
 					, name = $(this).hide().after(editor.val(obj.name))
 					, renameWbTab = function() {
 						const newName = editor.val();
@@ -294,7 +306,7 @@ var DrawWbArea = function() {
 
 		tabs.find('ul.nav-tabs').append(li);
 		tabs.find('.wb-tab-content').append(wb);
-		_addCloseBtn(li);
+		__initTab(li);
 
 		const wbo = Wb();
 		wbo.init(obj, tcid, role);
@@ -325,9 +337,8 @@ var DrawWbArea = function() {
 		if (!_inited) {
 			return;
 		}
-		const tabId = self.getWbTabId(obj.wbId);
-		_getWbTab(obj.wbId).remove();
-		$('#' + tabId).remove();
+		_getWbTab(obj.wbId).parent().remove();
+		_getWbContent(obj.wbId).remove();
 		_actionActivateWb(getActive().data().id);
 	};
 	self.load = function(json) {
