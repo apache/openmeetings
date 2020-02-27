@@ -28,8 +28,12 @@
 	<form wicket:id="sendForm">
 		<div wicket:id="toolbarContainer" class="tool-container"></div>
 		<div class="chat-msg-container">
-			<div id="chatMessage" wicket:id="chatMessage"></div>
-			<div class="send" wicket:id="send" wicket:message="title:218">&crarr;</div>
+			<div class="input-group">
+				<div id="chatMessage" wicket:id="chatMessage"></div>
+				<div class="input-group-append" id="button-addon4">
+					<button class="send btn btn-outline-primary" wicket:id="send" wicket:message="title:218">&crarr;</button>
+				</div>
+			</div>
 			<input type="hidden" wicket:id="activeTab" id="activeChatTab"/>
 		</div>
 	</form>

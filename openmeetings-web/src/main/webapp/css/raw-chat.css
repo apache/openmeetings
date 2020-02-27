@@ -80,7 +80,7 @@ html[dir="rtl"] #chat .messageArea .icons {
 	position: relative;
 }
 #chatMessage {
-	margin-right: 22px;
+	width: calc(100% - 16px);
 	height: var(--chat-msg-height);
 	max-height: var(--chat-msg-height);
 }
@@ -116,11 +116,6 @@ html[dir="rtl"] #chat .messageArea .icons {
 }
 #chat .send {
 	width: 16px;
-	display: inline-block;
-	position: absolute;
-	right: 0;
-	top: 0;
-	height: 60px;
 	padding-left: 0;
 	padding-right: 0;
 	margin-right: 0;

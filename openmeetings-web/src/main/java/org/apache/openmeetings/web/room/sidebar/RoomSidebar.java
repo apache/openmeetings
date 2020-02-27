@@ -171,7 +171,7 @@ public class RoomSidebar extends Panel {
 
 		add(addFolder, settings, userCount.setOutputMarkupId(true));
 		add(avSettings);
-		add(new ConfirmationDialog("confirm-kick", new ResourceModel("603"), new ResourceModel("605")) {
+		add(confirmKick = new ConfirmationDialog("confirm-kick", new ResourceModel("603"), new ResourceModel("605")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

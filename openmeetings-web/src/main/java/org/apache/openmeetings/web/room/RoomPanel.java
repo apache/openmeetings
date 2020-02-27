@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -85,6 +86,7 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.ws.api.BaseWebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
@@ -105,12 +107,13 @@ import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.interaction.droppable.Droppable;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Alert;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.Backdrop;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
 
 @AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
@@ -167,8 +170,11 @@ public class RoomPanel extends BasePanel {
 				List<Client> mods = cm.listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
 				log.debug("RoomPanel::roomEnter, mods IS EMPTY ? {}, is MOD ? {}", mods.isEmpty(), _c.hasRight(Room.Right.moderator));
 				if (mods.isEmpty()) {
-					waitApplyModeration.open(target);
+					showIdeaAlert(target, getString(r.isModerated() ? "641" : "498"));
 				}
+			}
+			if (r.isWaitRecording()) {
+				showIdeaAlert(target, getString("1315"));
 			}
 			wb.update(target);
 		}
@@ -193,7 +199,7 @@ public class RoomPanel extends BasePanel {
 		}
 	};
 	private RedirectMessageDialog roomClosed;
-	private MessageDialog clientKicked, nooneCanHelp, waitApplyModeration;
+	private Modal<String> clientKicked;
 	private Alert waitModerator;
 
 	private RoomMenuPanel menu;
@@ -367,45 +373,6 @@ public class RoomPanel extends BasePanel {
 				room.setVisible(false);
 			}
 		}
-		nooneCanHelp = new MessageDialog("noone-can-help", getString("204"), getString("696"), DialogButtons.OK, DialogIcon.LIGHT) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				// no-op
-			}
-		};
-		waitApplyModeration = new MessageDialog("wait-apply-moderation", getString("204"), getString(r.isModerated() ? "641" : "498"), DialogButtons.OK, DialogIcon.LIGHT) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				// no-op
-			}
-		};
-		if (r.isWaitRecording()) {
-			add(new MessageDialog("wait-recording", getString("1316"), getString("1315"), DialogButtons.OK, DialogIcon.LIGHT) {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onConfigure(JQueryBehavior behavior) {
-					super.onConfigure(behavior);
-					behavior.setOption("autoOpen", true);
-				}
-
-				@Override
-				public boolean isResizable() {
-					return false;
-				}
-
-				@Override
-				public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-					//no-op
-				}
-			});
-		} else {
-			add(new WebMarkupContainer("wait-recording").setVisible(false));
-		}
 		RepeatingView groupstyles = new RepeatingView("groupstyle");
 		add(groupstyles.setVisible(room.isVisible() && !r.getGroups().isEmpty()));
 		if (room.isVisible()) {
@@ -449,15 +416,20 @@ public class RoomPanel extends BasePanel {
 		if (waitModerator == null) {
 			createWaitModerator(false);
 		}
-		add(room, accessDenied, eventDetail, waitModerator, nooneCanHelp, waitApplyModeration);
-		add(clientKicked = new MessageDialog("client-kicked", getString("797"), getString("606"), DialogButtons.OK, DialogIcon.ERROR) {
-			private static final long serialVersionUID = 1L;
+		add(room, accessDenied, eventDetail, waitModerator);
+		add(clientKicked = new TextContentModal("client-kicked", new ResourceModel("606")));
+		clientKicked
+			.header(new ResourceModel("797"))
+			.setCloseOnEscapeKey(false)
+			.setBackdrop(Backdrop.FALSE)
+			.addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Primary, new ResourceModel("54")) {
+				private static final long serialVersionUID = 1L;
 
-			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				menu.exit(handler);
-			}
-		});
+				public void onClick(AjaxRequestTarget target) {
+					clientKicked.close(target);
+					menu.exit(target);
+				}
+			});
 	}
 
 	@Override
@@ -551,7 +523,7 @@ public class RoomPanel extends BasePanel {
 							if (_c.getUid().equals(uid)) {
 								handler.add(room.setVisible(false));
 								getMainPanel().getChat().toggle(handler, false);
-								clientKicked.open(handler);
+								clientKicked.show(handler);
 								cm.exitRoom(_c);
 							}
 						}
@@ -710,8 +682,7 @@ public class RoomPanel extends BasePanel {
 		List<Client> mods = cm.listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
 		if (mods.isEmpty()) {
 			if (r.isModerated()) {
-				//dialog
-				nooneCanHelp.open(handler);
+				showIdeaAlert(handler, getString("696"));
 				return;
 			} else {
 				// we found no-one we can ask, allow right
@@ -854,5 +825,14 @@ public class RoomPanel extends BasePanel {
 			clazz += " mic-status";
 		}
 		return clazz;
+	}
+
+	private void showIdeaAlert(IPartialPageRequestHandler handler, String msg) {
+		showAlert(handler, "info", msg, "far fa-lightbulb");
+	}
+	private void showAlert(IPartialPageRequestHandler handler, String type, String msg, String icon) {
+		handler.appendJavaScript("OmUtil.alert('" + type + "', '<i class=\"" + icon + "\"></i>&nbsp;"
+				+ StringEscapeUtils.escapeEcmaScript(msg)
+				+ "', 10000)");
 	}
 }
