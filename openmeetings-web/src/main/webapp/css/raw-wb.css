@@ -10,25 +10,33 @@ html[dir="rtl"] .room-block .wb-block {
 	right: calc(var(--room-sidebar-width) + var(--buffer-size));
 	left: auto;
 }
-.room-block .wb-block.ui-state-hover {
+.room-block .wb-block.droppable-hover {
 	border: 0;
 }
 .room-block .wb-block .wb-area {
 	height: 100%;
 }
-.room-block .wb-block.ui-state-hover .wb-area {
+.room-block .wb-block.droppable-hover .wb-area {
 	visibility: hidden;
 	height: 1px !important;
 }
 .room-block .wb-block .wb-drop-area {
 	display: none;
 }
-.room-block .wb-block.ui-state-hover .wb-drop-area {
-	background-image: url(images/drop.png);
+.room-block .wb-block.droppable-hover .wb-drop-area {
 	display: block;
-	background-repeat: no-repeat;
 	height: inherit;
 	background-position: center;
+}
+.room-block .wb-block.droppable-hover .wb-drop-area::before {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 400;
+	font-size: 20em;
+	content: '\f358';
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+	color: var(--success);
 }
 .room-block .wb-block .tabs {
 	height: calc(100% - var(--buffer-size));

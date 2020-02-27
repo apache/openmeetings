@@ -301,10 +301,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				});
 				StringBuilder cssClass = new StringBuilder(m.getIsRead() ? "" : CSS_UNREAD);
 				if (selectedMessages.contains(id)) {
-					if (cssClass.length() > 0) {
-						cssClass.append(" ");
-					}
-					cssClass.append("ui-state-active");
+					cssClass.append(" selected");
 				}
 				item.add(AttributeModifier.replace(ATTR_CLASS, cssClass.toString()));
 			}

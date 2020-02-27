@@ -84,6 +84,8 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.ws.api.BaseWebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -107,6 +109,8 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Alert;
 
 @AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
@@ -190,7 +194,7 @@ public class RoomPanel extends BasePanel {
 	};
 	private RedirectMessageDialog roomClosed;
 	private MessageDialog clientKicked, nooneCanHelp, waitApplyModeration;
-	private WaitModeratorDialog waitModerator;
+	private Alert waitModerator;
 
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
@@ -279,7 +283,7 @@ public class RoomPanel extends BasePanel {
 				@Override
 				public void onConfigure(JQueryBehavior behavior) {
 					super.onConfigure(behavior);
-					behavior.setOption("hoverClass", Options.asString("ui-state-hover"));
+					behavior.setOption("hoverClass", Options.asString("droppable-hover"));
 					behavior.setOption("accept", Options.asString(".recorditem, .fileitem, .readonlyitem"));
 				}
 
@@ -601,9 +605,9 @@ public class RoomPanel extends BasePanel {
 								getMainPanel().getChat().toggle(handler, moderInRoom && !r.isHidden(RoomElement.Chat));
 								if (room.isVisible()) {
 									handler.appendJavaScript(roomEnter.getCallbackScript());
-									waitModerator.close(handler, null);
+									handler.add(waitModerator.setVisible(false));
 								} else {
-									waitModerator.open(handler);
+									handler.add(waitModerator.setVisible(true));
 								}
 							}
 						}
@@ -822,7 +826,16 @@ public class RoomPanel extends BasePanel {
 	}
 
 	private void createWaitModerator(final boolean autoopen) {
-		waitModerator = new WaitModeratorDialog("wait-moderator", getString("wait-moderator.title"), autoopen);
+		waitModerator = new Alert("wait-moderator", new ResourceModel("wait-moderator.message"), new ResourceModel("wait-moderator.title")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected Component createMessage(String markupId, IModel<String> message) {
+				return super.createMessage(markupId, message).setEscapeModelStrings(false);
+			}
+		};
+		waitModerator.type(Alert.Type.Warning).setCloseButtonVisible(false);
+		waitModerator.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true).setVisible(autoopen);
 	}
 
 	@Override

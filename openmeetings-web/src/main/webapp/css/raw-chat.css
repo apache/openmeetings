@@ -154,7 +154,7 @@ html[dir="rtl"] .main.room #chatPanel {
 	transform-origin: -15% 68% 0;
 	position: absolute;
 	top: 0;
-	right: -73px;
+	right: -67px;
 }
 .main.room #chatPanel.closed #chatPopup #chat {
 	display: none;

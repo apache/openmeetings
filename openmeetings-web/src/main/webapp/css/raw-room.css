@@ -316,6 +316,19 @@ html[dir="rtl"] .room-block .sidebar {
 {
 	width: 40px;
 }
+.room-block .wait-moder {
+	position: fixed;
+	bottom: 30px;
+	right: 30px;
+}
+.room-block.small .wait-moder {
+	font-size: 120%;
+}
+.room-block .wait-moder strong {
+	display: block;
+	padding-bottom: 20px;
+}
+
 /************ VIDEO **************/
 .ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .ui-dialog-content {
 	padding: 0;
