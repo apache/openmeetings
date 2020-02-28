@@ -85,7 +85,6 @@
 		<tomcat.version>9.0.31</tomcat.version>
 		<ical4j.version>3.0.14</ical4j.version>
 		<cxf.version>3.3.5</cxf.version>
-		<selenium.version>3.141.59</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.0</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
@@ -541,26 +540,6 @@
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-rt-features-logging</artifactId>
 				<version>${cxf.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.seleniumhq.selenium</groupId>
-				<artifactId>selenium-java</artifactId>
-				<version>${selenium.version}</version>
-				<scope>test</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.httpcomponents</groupId>
-						<artifactId>httpclient</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>net.bytebuddy</groupId>
-						<artifactId>byte-buddy</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.simpleframework</groupId>
