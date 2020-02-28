@@ -74,10 +74,10 @@ public class DaoHelper {
 		return appendSort(sb, alias, sort).toString();
 	}
 
-	public static StringBuilder appendWhereClause(StringBuilder _sb, String search, String alias, String... fields) {
+	public static StringBuilder appendWhereClause(StringBuilder sb, String search, String alias, String... fields) {
 		if (!Strings.isEmpty(search) && fields != null) {
 			boolean notEmpty = false;
-			StringBuilder sb = new StringBuilder();
+			StringBuilder inSb = new StringBuilder();
 			String[] searchItems = search.replace("\'", "").replace("\"", "").split(" ");
 			for (int i = 0; i < searchItems.length; ++i) {
 				if (searchItems[i].isEmpty()) {
@@ -85,28 +85,28 @@ public class DaoHelper {
 				}
 				if (i == 0) {
 					notEmpty = true;
-					sb.append(" (");
+					inSb.append(" (");
 				} else {
-					sb.append(" OR ");
+					inSb.append(" OR ");
 				}
 				StringBuilder placeholder = new StringBuilder();
 				placeholder.append("%").append(StringUtils.lowerCase(searchItems[i])).append("%");
 
-				sb.append("(");
+				inSb.append("(");
 				for (int j = 0; j < fields.length; ++j) {
 					if (j != 0) {
-						sb.append(" OR ");
+						inSb.append(" OR ");
 					}
-					sb.append("lower(").append(alias).append(".").append(fields[j]).append(") LIKE '").append(placeholder).append("' ");
+					inSb.append("lower(").append(alias).append(".").append(fields[j]).append(") LIKE '").append(placeholder).append("' ");
 				}
-				sb.append(")");
+				inSb.append(")");
 			}
 			if (notEmpty) {
-				sb.append(") ");
-				_sb.append(" AND").append(sb);
+				inSb.append(") ");
+				sb.append(" AND").append(inSb);
 			}
 		}
-		return _sb;
+		return sb;
 	}
 
 	public static StringBuilder appendSort(StringBuilder sb, String alias, String sort) {

@@ -146,7 +146,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		return img.intersection(prev);
 	}
 
-	private void writeBytesIfChanged(ByteArrayOutputStream ba, boolean isKeyFrame, int[][] img, Rectangle area) throws IOException {
+	private void writeBytesIfChanged(ByteArrayOutputStream inBstream, boolean isKeyFrame, int[][] img, Rectangle area) throws IOException {
 		boolean changed = isKeyFrame;
 		int count = 0;
 		for (int y = area.y + area.height - 1; y >= area.y; --y) {
@@ -165,10 +165,10 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 			d.setInput(areaBuf, 0, count);
 			d.finish();
 			int written = d.deflate(zipBuf);
-			writeShort(ba, written);
-			ba.write(zipBuf, 0, written);
+			writeShort(inBstream, written);
+			inBstream.write(zipBuf, 0, written);
 		} else {
-			writeShort(ba, 0);
+			writeShort(inBstream, 0);
 		}
 	}
 

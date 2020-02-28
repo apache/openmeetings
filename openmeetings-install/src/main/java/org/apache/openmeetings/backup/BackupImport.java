@@ -440,7 +440,7 @@ public class BackupImport {
 				}
 				if (BaseFileItem.Type.Presentation == bfi.getType()) {
 					convertOldPresentation((FileItem)bfi);
-					fileItemDao._update(bfi);
+					fileItemDao.updateBase(bfi);
 				}
 				if (BaseFileItem.Type.WmlFile == bfi.getType()) {
 					try {

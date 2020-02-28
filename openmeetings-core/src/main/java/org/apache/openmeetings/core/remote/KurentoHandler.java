@@ -155,16 +155,16 @@ public class KurentoHandler {
 		return client.beginTransaction();
 	}
 
-	public void onMessage(IWsClient _c, JSONObject msg) {
+	public void onMessage(IWsClient inClient, JSONObject msg) {
 		if (!isConnected()) {
-			sendError(_c, "Multimedia server is inaccessible");
+			sendError(inClient, "Multimedia server is inaccessible");
 			return;
 		}
 		final String cmdId = msg.getString("id");
 		if (MODE_TEST.equals(msg.optString(TAG_MODE))) {
-			testProcessor.onMessage(_c, cmdId, msg);
+			testProcessor.onMessage(inClient, cmdId, msg);
 		} else {
-			final Client c = (Client)_c;
+			final Client c = (Client)inClient;
 
 			if (c == null || c.getRoomId() == null) {
 				log.warn("Incoming message from invalid user");
@@ -422,23 +422,23 @@ public class KurentoHandler {
 				}, objCheckTimeout, MILLISECONDS);
 			} else if (evt.getObject() instanceof Endpoint) {
 				// endpoint created
-				Endpoint _point = (Endpoint)evt.getObject();
-				final String eoid = _point.getId();
-				Class<? extends Endpoint> _clazz = null;
-				if (_point instanceof WebRtcEndpoint) {
-					_clazz = WebRtcEndpoint.class;
-				} else if (_point instanceof RecorderEndpoint) {
-					_clazz = RecorderEndpoint.class;
-				} else if (_point instanceof PlayerEndpoint) {
-					_clazz = PlayerEndpoint.class;
+				Endpoint curPoint = (Endpoint)evt.getObject();
+				final String eoid = curPoint.getId();
+				Class<? extends Endpoint> clazz = null;
+				if (curPoint instanceof WebRtcEndpoint) {
+					clazz = WebRtcEndpoint.class;
+				} else if (curPoint instanceof RecorderEndpoint) {
+					clazz = RecorderEndpoint.class;
+				} else if (curPoint instanceof PlayerEndpoint) {
+					clazz = PlayerEndpoint.class;
 				}
-				final Class<? extends Endpoint> clazz = _clazz;
+				final Class<? extends Endpoint> fClazz = clazz;
 				scheduler.schedule(() -> {
-					if (client == null || clazz == null) {
+					if (client == null || fClazz == null) {
 						return;
 					}
 					// still alive
-					Endpoint point = client.getById(eoid, clazz);
+					Endpoint point = client.getById(eoid, fClazz);
 					if (validTestPipeline(point.getMediaPipeline())) {
 						return;
 					}

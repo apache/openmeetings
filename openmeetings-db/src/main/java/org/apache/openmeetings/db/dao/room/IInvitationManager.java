@@ -33,7 +33,7 @@ public interface IInvitationManager {
 
 	void processInvitation(Appointment a, MeetingMember mm, MessageType type, boolean sendMail);
 
-	Invitation getInvitation(Invitation _invitation, User inveetee, Room room
+	Invitation getInvitation(Invitation invitation, User inveetee, Room room
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
 			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment);

@@ -294,8 +294,7 @@ public class RoomWebService extends BaseWebService {
 	 * kick all uses of a certain room
 	 *
 	 * @param sid
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 *            _Admin
+	 *            The SID of the User. This SID must be marked as Loggedin with SOAP privileges
 	 * @param id
 	 *            the room id
 	 *
@@ -315,8 +314,7 @@ public class RoomWebService extends BaseWebService {
 	 * kick external user from given room
 	 *
 	 * @param sid
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 *            _Admin
+	 *            The SID of the User. This SID must be marked as Loggedin with SOAP privileges
 	 * @param id
 	 *            the room id
 	 * @param externalType

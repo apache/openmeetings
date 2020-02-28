@@ -139,21 +139,21 @@ public class Client implements IDataProviderEntity, IWsClient {
 		return rights.contains(Right.superModerator) || rights.contains(Right.moderator) || rights.contains(right);
 	}
 
-	public Client allow(Right... _rights) {
-		allow(Arrays.asList(_rights));
+	public Client allow(Right... inRights) {
+		allow(Arrays.asList(inRights));
 		return this;
 	}
 
-	public void allow(Iterable<Right> _rights) {
-		for (Right right : _rights) {
+	public void allow(Iterable<Right> inRights) {
+		for (Right right : inRights) {
 			if (!hasRight(right)) {
 				rights.add(right);
 			}
 		}
 	}
 
-	public void deny(Right... _rights) {
-		for (Right right : _rights) {
+	public void deny(Right... inRights) {
+		for (Right right : inRights) {
 			rights.remove(right);
 		}
 	}
@@ -219,22 +219,22 @@ public class Client implements IDataProviderEntity, IWsClient {
 		return this;
 	}
 
-	public StreamDesc addStream(StreamType stype, Activity...activities) {
-		StreamDesc sd = new StreamDesc(stype, activities);
+	public StreamDesc addStream(StreamType stype, Activity...inActivities) {
+		StreamDesc sd = new StreamDesc(stype, inActivities);
 		streams.put(sd.getUid(), sd);
 		return sd;
 	}
 
-	public StreamDesc removeStream(String _uid) {
-		return streams.remove(_uid);
+	public StreamDesc removeStream(String inUid) {
+		return streams.remove(inUid);
 	}
 
 	public List<StreamDesc> getStreams() {
 		return new ArrayList<>(streams.values());
 	}
 
-	public StreamDesc getStream(String _uid) {
-		return streams.get(_uid);
+	public StreamDesc getStream(String inUid) {
+		return streams.get(inUid);
 	}
 
 	public Optional<StreamDesc> getScreenStream() {

@@ -57,8 +57,8 @@ public class ApplicationHelper {
 
 	private ApplicationHelper() {}
 
-	private static WebApplication createApp(WebApplication _app) {
-		WebApplication app = _app;
+	private static WebApplication createApp(WebApplication inApp) {
+		WebApplication app = inApp;
 		if (app == null) {
 			// This is the case for non-web-app applications (command line admin)
 			try {

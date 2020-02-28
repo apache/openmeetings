@@ -33,10 +33,10 @@ public class LoadAtomRssFeed {
 
 	private LoadAtomRssFeed() {}
 
-	public static HttpURLConnection getFeedConnection(String _url) throws IOException {
-		log.trace("getFeedConnection:: {}", _url);
+	public static HttpURLConnection getFeedConnection(String urlStr) throws IOException {
+		log.trace("getFeedConnection:: {}", urlStr);
 
-		URL url = new URL(_url);
+		URL url = new URL(urlStr);
 
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 

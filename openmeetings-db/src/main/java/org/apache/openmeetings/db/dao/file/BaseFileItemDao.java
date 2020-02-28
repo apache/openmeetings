@@ -80,10 +80,10 @@ public class BaseFileItemDao {
 		f.setDeleted(true);
 		f.setUpdated(new Date());
 
-		_update(f);
+		updateBase(f);
 	}
 
-	public BaseFileItem _update(BaseFileItem f) {
+	public BaseFileItem updateBase(BaseFileItem f) {
 		f.setExternalType(null);
 		BaseFileItem parent = get(f.getParentId());
 		if (parent != null) {

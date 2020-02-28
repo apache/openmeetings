@@ -122,20 +122,20 @@ public class KTestStream extends AbstractStream {
 		});
 	}
 
-	public void play(final IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
-		this.pipeline = pipeline;
+	public void play(final IWsClient inClient, JSONObject msg, MediaPipeline inPipeline) {
+		this.pipeline = inPipeline;
 		webRtcEndpoint = createWebRtcEndpoint(pipeline);
 		player = createPlayerEndpoint(pipeline, recPath);
 		player.connect(webRtcEndpoint);
 		webRtcEndpoint.addMediaSessionStartedListener(evt -> {
 				log.info("Media session started {}", evt);
 				player.addErrorListener(event -> {
-						log.info("ErrorEvent for player with uid '{}': {}", _c.getUid(), event.getDescription());
-						sendPlayEnd(_c);
+						log.info("ErrorEvent for player with uid '{}': {}", inClient.getUid(), event.getDescription());
+						sendPlayEnd(inClient);
 					});
 				player.addEndOfStreamListener(event -> {
-						log.info("EndOfStreamEvent for player with uid '{}'", _c.getUid());
-						sendPlayEnd(_c);
+						log.info("EndOfStreamEvent for player with uid '{}'", inClient.getUid());
+						sendPlayEnd(inClient);
 					});
 				player.play();
 			});
@@ -143,9 +143,9 @@ public class KTestStream extends AbstractStream {
 		String sdpOffer = msg.getString("sdpOffer");
 		String sdpAnswer = webRtcEndpoint.processOffer(sdpOffer);
 
-		addIceListener(_c);
+		addIceListener(inClient);
 
-		WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+		WebSocketHelper.sendClient(inClient, newTestKurentoMsg()
 				.put("id", "playResponse")
 				.put("sdpAnswer", sdpAnswer));
 
@@ -158,10 +158,10 @@ public class KTestStream extends AbstractStream {
 		}
 	}
 
-	private void addIceListener(IWsClient _c) {
+	private void addIceListener(IWsClient inClient) {
 		webRtcEndpoint.addIceCandidateFoundListener(evt -> {
 				IceCandidate cand = evt.getCandidate();
-				WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+				WebSocketHelper.sendClient(inClient, newTestKurentoMsg()
 						.put("id", "iceCandidate")
 						.put(PARAM_CANDIDATE, new JSONObject()
 								.put(PARAM_CANDIDATE, cand.getCandidate())
@@ -170,8 +170,8 @@ public class KTestStream extends AbstractStream {
 			});
 	}
 
-	private void sendPlayEnd(IWsClient _c) {
-		WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "playStopped"));
+	private void sendPlayEnd(IWsClient inClient) {
+		WebSocketHelper.sendClient(inClient, newTestKurentoMsg().put("id", "playStopped"));
 		releasePlayer();
 	}
 

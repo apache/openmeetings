@@ -119,7 +119,7 @@ public class RecordingDao extends BaseFileItemDao {
 	}
 
 	public Recording update(Recording f) {
-		return (Recording)_update(f);
+		return (Recording)updateBase(f);
 	}
 
 	public void resetProcessingStatus() {

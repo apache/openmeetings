@@ -58,8 +58,8 @@ public class OmHelpFormatter extends HelpFormatter {
 		for (OmOption o : reqOptions) {
 			map.put(o.getOpt(), new ArrayList<OmOption>());
 		}
-		for (Option _o : opts.getOptions()) {
-			OmOption o = (OmOption)_o;
+		for (Option option : opts.getOptions()) {
+			OmOption o = (OmOption)option;
 			boolean skipOption = map.containsKey(o.getOpt());
 			boolean mainOption = skipOption || o.getGroup() == null;
 

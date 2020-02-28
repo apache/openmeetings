@@ -253,11 +253,11 @@ public class WbPanel extends AbstractWbPanel {
 					for (JSONObject o : wb.list()) {
 						String ft = o.optString(ATTR_FILE_TYPE);
 						if (BaseFileItem.Type.Recording.name().equals(ft) || BaseFileItem.Type.Video.name().equals(ft)) {
-							JSONObject _sts = o.optJSONObject(PARAM_STATUS);
-							if (_sts == null) {
+							JSONObject status = o.optJSONObject(PARAM_STATUS);
+							if (status == null) {
 								continue;
 							}
-							JSONObject sts = new JSONObject(_sts.toString()); //copy
+							JSONObject sts = new JSONObject(status.toString()); //copy
 							sts.put("pos", sts.getDouble("pos") + (System.currentTimeMillis() - sts.getLong(PARAM_UPDATED)) * 1. / 1000);
 							arr.put(new JSONObject()
 									.put("wbId", wb.getId())
@@ -295,9 +295,9 @@ public class WbPanel extends AbstractWbPanel {
 					break;
 				case activateWb:
 				{
-					long _id = obj.optLong("wbId", -1);
-					if (_id > -1) {
-						wbm.activate(roomId, _id);
+					long wbId = obj.optLong("wbId", -1);
+					if (wbId > -1) {
+						wbm.activate(roomId, wbId);
 						sendWbAll(WbAction.activateWb, obj);
 					}
 				}
@@ -360,12 +360,12 @@ public class WbPanel extends AbstractWbPanel {
 					JSONArray arr = obj.getJSONArray("obj");
 					JSONArray undo = new JSONArray();
 					for (int i = 0; i < arr.length(); ++i) {
-						JSONObject _o = arr.getJSONObject(i);
-						String uid = _o.getString("uid");
+						JSONObject oi = arr.getJSONObject(i);
+						String uid = oi.getString("uid");
 						JSONObject po = wb.get(uid);
 						if (po != null) {
 							undo.put(po);
-							wb.put(uid, _o);
+							wb.put(uid, oi);
 						}
 					}
 					if (arr.length() != 0) {
@@ -381,8 +381,8 @@ public class WbPanel extends AbstractWbPanel {
 					JSONArray arr = obj.getJSONArray("obj");
 					JSONArray undo = new JSONArray();
 					for (int i = 0; i < arr.length(); ++i) {
-						JSONObject _o = arr.getJSONObject(i);
-						JSONObject u = wb.remove(_o.getString("uid"));
+						JSONObject oi = arr.getJSONObject(i);
+						JSONObject u = wb.remove(oi.getString("uid"));
 						if (u != null) {
 							undo.put(u);
 						}
@@ -477,26 +477,26 @@ public class WbPanel extends AbstractWbPanel {
 		return role;
 	}
 
-	private JSONObject addFileUrl(Client cl, String ruid, JSONObject _file) {
-		return addFileUrl(cl, ruid, _file, null);
+	private JSONObject addFileUrl(Client cl, String ruid, JSONObject file) {
+		return addFileUrl(cl, ruid, file, null);
 	}
 
-	private JSONObject addFileUrl(Client cl, String ruid, JSONObject _file, Consumer<BaseFileItem> consumer) {
+	private JSONObject addFileUrl(Client cl, String ruid, JSONObject file, Consumer<BaseFileItem> consumer) {
 		try {
-			final long fid = _file.optLong(ATTR_FILE_ID, -1);
+			final long fid = file.optLong(ATTR_FILE_ID, -1);
 			if (fid > 0) {
 				BaseFileItem fi = fileDao.getAny(fid);
 				if (fi != null) {
 					if (consumer != null) {
 						consumer.accept(fi);
 					}
-					return WbWebSocketHelper.addFileUrl(ruid, _file, fi, cl);
+					return WbWebSocketHelper.addFileUrl(ruid, file, fi, cl);
 				}
 			}
 		} catch (Exception e) {
 			//no-op, non-file object
 		}
-		return _file;
+		return file;
 	}
 
 	private static JSONArray getArray(JSONObject wb, Function<JSONObject, JSONObject> postprocess) {
@@ -542,7 +542,7 @@ public class WbPanel extends AbstractWbPanel {
 							JSONArray arr = getArray(new JSONObject(new JSONTokener(br)), o -> {
 									wb.put(o.getString("uid"), o);
 									updated[0] = true;
-									return addFileUrl(rp.getClient(), wbs.getUid(), o, _f -> updateWbSize(wb, _f));
+									return addFileUrl(rp.getClient(), wbs.getUid(), o, bf -> updateWbSize(wb, bf));
 								});
 							if (updated[0]) {
 								wbm.update(roomId, wb);

@@ -329,10 +329,10 @@ public abstract class BaseConverter {
 		return argv;
 	}
 
-	protected String convertToMp4(Recording r, List<String> _argv, ProcessResultList logs) throws IOException {
+	protected String convertToMp4(Recording r, List<String> inArgv, ProcessResultList logs) throws IOException {
 		String mp4path = r.getFile().getCanonicalPath();
 		List<String> argv = new ArrayList<>(Arrays.asList(getPathToFFMPEG(), "-y"));
-		argv.addAll(_argv);
+		argv.addAll(inArgv);
 		logs.add(ProcessHelper.executeScript("generate MP4", addMp4OutParams(r, argv, mp4path).toArray(new String[]{})));
 		return mp4path;
 	}

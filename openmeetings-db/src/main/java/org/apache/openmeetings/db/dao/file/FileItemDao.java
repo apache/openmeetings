@@ -153,7 +153,7 @@ public class FileItemDao extends BaseFileItemDao {
 	}
 
 	public FileItem update(FileItem f) {
-		return (FileItem)super._update(f);
+		return (FileItem)super.updateBase(f);
 	}
 
 	private void updateChilds(FileItem f) {

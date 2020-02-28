@@ -162,22 +162,22 @@ public class LdapLoginManager {
 	 *
 	 * Connection Data is retrieved from ConfigurationFile
 	 *
-	 * @param _login - user login
+	 * @param inLogin - user login
 	 * @param passwd - user password
 	 * @param domainId - user domain id
 	 * @return - {@link User} with this credentials or <code>null</code>
 	 * @throws OmException - in case of any error
 	 */
-	public User login(String _login, String passwd, Long domainId) throws OmException {
+	public User login(String inLogin, String passwd, Long domainId) throws OmException {
 		log.debug("LdapLoginmanager.doLdapLogin");
-		if (!userDao.validLogin(_login)) {
+		if (!userDao.validLogin(inLogin)) {
 			log.error("Invalid login provided");
 			return null;
 		}
 
 		User u = null;
 		try (LdapWorker w = new LdapWorker(domainId)) {
-			String login = w.options.useLowerCase ? _login.toLowerCase(Locale.ROOT) : _login;
+			String login = w.options.useLowerCase ? inLogin.toLowerCase(Locale.ROOT) : inLogin;
 
 			boolean authenticated = true;
 			Dn userDn = null;

@@ -46,10 +46,10 @@ public class LocaleHelper {
 		return new Locale.Builder().setRegion(code).build().getDisplayCountry();
 	}
 
-	public static String validateCountry(String _code) {
+	public static String validateCountry(String inCode) {
 		List<String> list = getCountries();
 		Set<String> countries = new HashSet<>(list);
-		String code = _code == null ? "" : _code.toUpperCase(Locale.ROOT);
+		String code = inCode == null ? "" : inCode.toUpperCase(Locale.ROOT);
 		if (!countries.contains(code)) {
 			String newCountry = list.get(0);
 			log.warn("Invalid country found: {}, will be replaced with: {}", code, newCountry);

@@ -46,9 +46,9 @@ public class OmKeyEvent {
 	private static final Logger log = getLogger(OmKeyEvent.class);
 	private static final Map<Integer, Integer> KEY_MAP = new HashMap<>();
 	private static final Map<Character, Integer> CHAR_MAP = new HashMap<>();
-	private static final List<Character> _UMLAUTS = Arrays.asList('ß', 'ö', 'Ö', 'ä', 'Ä', 'ü', 'Ü');
-	private static final Set<Character> UMLAUTS = Collections.unmodifiableSet(_UMLAUTS.stream().collect(Collectors.toSet()));
-	private static final Set<Character> UNPRINTABLE = Collections.unmodifiableSet(Stream.concat(_UMLAUTS.stream(), Stream.of('§')).collect(Collectors.toSet()));
+	private static final List<Character> UMLAUT_LIST = Arrays.asList('ß', 'ö', 'Ö', 'ä', 'Ä', 'ü', 'Ü');
+	private static final Set<Character> UMLAUTS = Collections.unmodifiableSet(UMLAUT_LIST.stream().collect(Collectors.toSet()));
+	private static final Set<Character> UNPRINTABLE = Collections.unmodifiableSet(Stream.concat(UMLAUT_LIST.stream(), Stream.of('§')).collect(Collectors.toSet()));
 	static {
 		KEY_MAP.put(13, KeyEvent.VK_ENTER);
 		KEY_MAP.put(16, 0);
