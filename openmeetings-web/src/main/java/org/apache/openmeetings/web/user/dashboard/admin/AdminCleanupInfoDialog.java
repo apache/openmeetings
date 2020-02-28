@@ -26,12 +26,14 @@ import static org.apache.openmeetings.cli.CleanupHelper.getRecUnit;
 import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 
 import org.apache.openmeetings.cli.CleanupEntityUnit;
 import org.apache.openmeetings.cli.CleanupUnit;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -40,23 +42,22 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.form.button.ConfirmAjaxButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
-public class AdminCleanupInfoDialog extends AbstractDialog<String> {
+public class AdminCleanupInfoDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
-	private final Label uploadSize;
-	private final CleanupEntityUnitPanel profile;
-	private final CleanupUnitPanel imp;
-	private final CleanupUnitPanel backup;
-	private final CleanupEntityUnitPanel files;
-	private final Label streamsSize;
-	private final CleanupEntityUnitPanel fin;
+	private Label uploadSize;
+	private CleanupEntityUnitPanel profile;
+	private CleanupUnitPanel imp;
+	private CleanupUnitPanel backup;
+	private CleanupEntityUnitPanel files;
+	private Label streamsSize;
+	private CleanupEntityUnitPanel fin;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean
@@ -65,7 +66,16 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 	private RecordingDao recDao;
 
 	public AdminCleanupInfoDialog(String id) {
-		super(id, "");
+		super(id);
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		header(new ResourceModel("dashboard.widget.admin.cleanup.title"));
+		setCloseOnEscapeKey(true);
+		addButton(OmModalCloseButton.of("54"));
+
 		uploadSize = new Label("upload-size", "");
 		profile = new CleanupEntityUnitPanel("profile", "dashboard.widget.admin.cleanup.profiles", new CleanupEntityUnit());
 		imp = new CleanupUnitPanel("import", "dashboard.widget.admin.cleanup.import", new CleanupUnit());
@@ -82,10 +92,7 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 			@Override
 			protected void onInitialize() {
 				super.onInitialize();
-				add(new ConfirmAjaxButton("cleanup", getString("dashboard.widget.admin.cleanup.cleanup")
-						, getString("dashboard.widget.admin.cleanup.cleanup")
-						, getString("dashboard.widget.admin.cleanup.warn"))
-				{
+				SpinnerAjaxButton cleanup = new SpinnerAjaxButton("cleanup", new ResourceModel("dashboard.widget.admin.cleanup.cleanup"), this, Buttons.Type.Outline_Danger) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -97,23 +104,13 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 					protected void onError(AjaxRequestTarget target) {
 						target.add(feedback);
 					}
-				});
+				};
+				add(cleanup.add(newOkCancelDangerConfirm(this, getString("dashboard.widget.admin.cleanup.warn"))));
 			}
 		});
 	}
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		setTitle(new ResourceModel("dashboard.widget.admin.cleanup.title"));
-	}
-
-	@Override
-	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		//no-op
-	}
-
-	private void update(AjaxRequestTarget target) {
+	private void update(IPartialPageRequestHandler target) {
 		uploadSize.setDefaultModelObject(getHumanSize(getUploadDir()));
 		profile.setDefaultModelObject(getProfileUnit(userDao));
 		imp.setDefaultModelObject(getImportUnit());
@@ -124,9 +121,10 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 		target.add(container);
 	}
 
-	public void show(AjaxRequestTarget target) {
+	@Override
+	public Modal<String> show(final IPartialPageRequestHandler target) {
 		update(target);
-		open(target);
+		return super.show(target);
 	}
 
 	public void cleanup(AjaxRequestTarget target) {

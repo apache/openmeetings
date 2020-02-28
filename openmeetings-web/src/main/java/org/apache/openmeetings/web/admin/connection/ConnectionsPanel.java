@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.admin.connection;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelConfirm;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -32,7 +33,6 @@ import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.ClientManager;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
@@ -42,9 +42,11 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.ui.form.button.ButtonBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public class ConnectionsPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
@@ -86,22 +88,23 @@ public class ConnectionsPanel extends AdminBasePanel {
 			@Override
 			protected void populateItem(final Item<Client> item) {
 				Client c = item.getModelObject();
-				final ConfirmableAjaxBorder confirm = new ConfirmableAjaxBorder("kick", getString("603"), getString("605")) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onSubmit(AjaxRequestTarget target) {
-						cm.invalidate(c.getUserId(), c.getSessionId());
-						target.add(container, details.setVisible(false));
-					}
-				};
-				confirm.setOutputMarkupId(true).add(new ButtonBehavior(String.format("#%s", confirm.getMarkupId())));
 				item.add(new Label("type", "html5"));
 				item.add(new Label("login", c.getUser().getLogin()));
 				item.add(new Label("since", c.getConnectedSince()));
 				item.add(new Label("scope", c.getRoom() == null ? "html5" : "" + c.getRoom().getId()));
 				item.add(new Label("server", c.getServerId()));
-				item.add(confirm);
+				item.add(new BootstrapAjaxLink<String>("kick", null, Buttons.Type.Outline_Danger, new ResourceModel("603")) {
+					private static final long serialVersionUID = 1L;
+					{
+						setSize(Buttons.Size.Small);
+					}
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						cm.invalidate(c.getUserId(), c.getSessionId());
+						target.add(container, details.setVisible(false));
+					}
+				}.add(newOkCancelConfirm(this, getString("605"))));
 				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 

@@ -8,7 +8,7 @@ var BaseWbArea = function() {
 			if (msg instanceof Blob) {
 				return; //ping
 			}
-			const m = jQuery.parseJSON(msg);
+			const m = JSON.parse(msg);
 			if (m && 'wb' === m.type && typeof(WbArea) !== 'undefined' && !!m.func) {
 				WbArea[m.func](m.param);
 			}

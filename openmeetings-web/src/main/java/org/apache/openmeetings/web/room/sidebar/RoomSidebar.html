@@ -22,36 +22,42 @@
 <wicket:panel>
 	<div id="busy-indicator"></div>
 	<div class="tabs" id="room-sidebar-tabs">
-		<ul>
-			<li>
-				<a href="#room-sidebar-tab-users" class="om-icon big tab user" wicket:message="title:398">
-					<span class="label"><wicket:message key="398"/>&nbsp;</span><span wicket:id="user-count" class="badge">42</span>
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="nav-item">
+				<a href="#room-sidebar-tab-users" class="nav-link active om-icon big tab user" id="room-sidebar-users-tab" data-toggle="tab" role="tab" aria-controls="room-sidebar-tab-users" wicket:message="title:398">
+					<i class="fas fa-users"></i>
+					<span class="label"><wicket:message key="398"/>&nbsp;</span><span wicket:id="user-count" class="badge badge-info">42</span>
 				</a>
 			</li>
-			<li wicket:enclosure="file-tab">
-				<a href="#room-sidebar-tab-files" class="om-icon big tab file" wicket:message="title:245" wicket:id="file-tab">
+			<li class="nav-item" wicket:enclosure="file-tab">
+				<a href="#room-sidebar-tab-files" class="nav-link om-icon big tab file" id="room-sidebar-files-tab" data-toggle="tab" role="tab" aria-controls="room-sidebar-tab-files" wicket:message="title:245" wicket:id="file-tab">
+					<i class="fas fa-folder"></i>
 					<span class="label"><wicket:message key="245"/></span>
 				</a>
 			</li>
-			<li class="btn-dock" wicket:message="data-ttl-dock:label.dock.panel,data-ttl-undock:label.undock.panel"></li>
+			<li class="btn-dock btn btn-outline-secondary" wicket:message="data-ttl-dock:label.dock.panel,data-ttl-undock:label.undock.panel">
+				<i class="fas"></i>
+				<span class="sr-only"></span>
+			</li>
 		</ul>
-		<div id="room-sidebar-tab-users">
-			<div wicket:id="icons" class="header"></div>
-			<div class="user-list clear"> <!-- auto-scrollable -->
-				<div wicket:id="user-list"> <!-- content -->
-					<div wicket:id="user" class="user entry ui-corner-all ui-widget-content">
-						<div wicket:id="user"></div>
+		<div class="tab-content">
+			<div id="room-sidebar-tab-users" class="tab-pane fade show active" role="tabpanel" aria-labelledby="room-sidebar-users-tab">
+				<div wicket:id="icons" class="header"></div>
+				<div class="user-list clear"> <!-- auto-scrollable -->
+					<div wicket:id="user-list"> <!-- content -->
+						<div wicket:id="user" class="user entry ui-corner-all ui-widget-content">
+							<div wicket:id="user"></div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div id="room-sidebar-tab-files" wicket:enclosure="tree">
-			<div class="file-list full-height" wicket:id="tree"></div>
+			<div id="room-sidebar-tab-files" class="tab-pane fade" role="tabpanel" aria-labelledby="room-sidebar-files-tab" wicket:enclosure="tree">
+				<div class="file-list h-100" wicket:id="tree"></div>
+			</div>
 		</div>
 	</div>
 	<div wicket:id="activities"></div>
 	<div wicket:id="addFolder"></div>
-	<form wicket:id="form"><div wicket:id="confirm-trash"></div></form>
 	<div wicket:id="upload"></div>
 	<div wicket:id="confirm-kick" />
 	<div wicket:id="settings" />

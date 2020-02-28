@@ -26,6 +26,7 @@ import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 
 import java.util.List;
@@ -37,12 +38,12 @@ import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.ClientManager;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -66,7 +67,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 	private final WebMarkupContainer toolbar = new WebMarkupContainer("toolbar");
 	private final WebMarkupContainer save = new WebMarkupContainer("save");
 	private final ChatForm chatForm;
-	private ConfirmableAjaxBorder delBtn;
+	private AjaxButton delBtn;
 	private final AjaxDownloadBehavior download = new AjaxDownloadBehavior(new ResourceStreamResource() {
 		private static final long serialVersionUID = 1L;
 		private static final char DELIMITER = ',';
@@ -182,7 +183,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 		BasePage page = (BasePage)getPage();
 		add(toolbar.add(new WebMarkupContainer("hyperlink").add(AttributeModifier.append("class", page.isRtl() ? "dropdown-menu-left" : "dropdown-menu-right"))));
 		add(download);
-		delBtn = new ConfirmableAjaxBorder("delete", getString("80"), getString("832"), chatForm) {
+		delBtn = new AjaxButton("delete", chatForm) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -210,6 +211,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 					});
 			}
 		};
+		delBtn.add(newOkCancelDangerConfirm(this, getString("832")));
 		toolbar.add(delBtn.setVisible(hasAdminLevel(getRights())).setOutputMarkupId(true)
 				.setOutputMarkupPlaceholderTag(true));
 		toolbar.add(save.setVisible(hasAdminLevel(getRights())).setOutputMarkupId(true)

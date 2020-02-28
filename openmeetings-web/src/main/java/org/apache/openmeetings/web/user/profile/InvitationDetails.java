@@ -20,15 +20,16 @@ package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.db.util.FormatHelper.formatUser;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 
 import java.util.Date;
 
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -39,7 +40,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class InvitationDetails extends Form<Invitation>{
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer list;
-	private ConfirmableAjaxBorder delBtn;
+	private AjaxLink<Void> delBtn;
 	private final Label valid = new Label("valid", Model.of(""));
 	private final Label invitee = new Label("invitee", Model.of(""));
 	private final DateLabel from = new DateLabel("validFrom", Model.of((Date)null));
@@ -51,27 +52,27 @@ public class InvitationDetails extends Form<Invitation>{
 		super(id, new CompoundPropertyModel<>(i));
 		this.list = list;
 		setOutputMarkupId(true);
-		add(new Label("id"));
-		add(valid);
-		add(invitee);
-		add(from);
-		add(to);
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		add(new Label("id"));
+		add(valid);
+		add(invitee);
+		add(from);
+		add(to);
 		// add a cancel button that can be used to submit the form via ajax
-		delBtn = new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("833"), this) {
+		delBtn = new AjaxLink<>("ajax-cancel-button") {
 			private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				inviteDao.delete(getModelObject(), getUserId());
-				setModelObject(new Invitation());
+			public void onClick(AjaxRequestTarget target) {
+				inviteDao.delete(InvitationDetails.this.getModelObject(), getUserId());
+				InvitationDetails.this.setModelObject(new Invitation());
 				target.add(list, InvitationDetails.this);
 			}
 		};
+		delBtn.add(newOkCancelDangerConfirm(this, getString("833")));
 		add(delBtn.setOutputMarkupId(true).setEnabled(false));
 	}
 

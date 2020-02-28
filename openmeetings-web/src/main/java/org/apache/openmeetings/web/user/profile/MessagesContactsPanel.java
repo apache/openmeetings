@@ -18,8 +18,22 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
+import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
+import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
@@ -32,7 +46,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.common.UserBasePanel;
@@ -47,8 +60,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.EventPropagation;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -68,20 +79,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
-import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
-import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public class MessagesContactsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
@@ -170,8 +170,8 @@ public class MessagesContactsPanel extends UserBasePanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-				super.onSubmit(target, btn);
+			protected void onSubmit(AjaxRequestTarget target) {
+				super.onSubmit(target);
 				folderDao.addPrivateMessageFolder(getModelObject(), getUserId());
 				foldersModel.setObject(folderDao.get(0, Integer.MAX_VALUE));
 				updateMoveModel();
@@ -179,7 +179,6 @@ public class MessagesContactsPanel extends UserBasePanel {
 			}
 		};
 		add(addFolder);
-		add(new JQueryBehavior(".email.new", "button"));
 		folders.add(inbox.add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
@@ -209,31 +208,29 @@ public class MessagesContactsPanel extends UserBasePanel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				addFolder.open(target);
+				addFolder.show(target);
 			}
-		}).add(new JQueryBehavior(".email.newdir", "button")));
+		}));
 		add(folders.add(new ListView<>("folder", foldersModel) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final ListItem<PrivateMessageFolder> item) {
-				item.add(new Label("name", item.getModelObject().getFolderName()));
-				item.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
+				item.add(new Label("name", item.getModelObject().getFolderName()).setRenderBodyOnly(true));
+				BootstrapAjaxLink<String> del = new BootstrapAjaxLink<>("delete", Buttons.Type.Outline_Danger) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-						attributes.setEventPropagation(EventPropagation.STOP_IMMEDIATE);
-					}
-
-					@Override
-					protected void onSubmit(AjaxRequestTarget target) {
+					public void onClick(AjaxRequestTarget target) {
 						folderDao.delete(item.getModelObject(), getUserId());
 						foldersModel.setObject(folderDao.get(0, Integer.MAX_VALUE));
 						updateMoveModel();
 						target.add(folders, moveDropDown);
 					}
-				});
+				};
+				del.setIconType(FontAwesome5IconType.times_s)
+						.add(newOkCancelDangerConfirm(this, getString("833")));
+				item.add(del);
 				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
@@ -304,10 +301,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				});
 				StringBuilder cssClass = new StringBuilder(m.getIsRead() ? "" : CSS_UNREAD);
 				if (selectedMessages.contains(id)) {
-					if (cssClass.length() > 0) {
-						cssClass.append(" ");
-					}
-					cssClass.append("ui-state-active");
+					cssClass.append(" selected");
 				}
 				item.add(AttributeModifier.replace(ATTR_CLASS, cssClass.toString()));
 			}
@@ -353,7 +347,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 						pm.setTo(opm.getFrom());
 						pm.setSubject(String.format("%s %s", getString("messages.subject.re"), opm.getSubject()));
 						pm.setMessage(String.format("<br/><blockquote class=\"quote\">%s</blockquote>", opm.getMessage()));
-						newDlg.open(target);
+						newDlg.show(target);
 					}
 				}
 			}));
@@ -489,20 +483,18 @@ public class MessagesContactsPanel extends UserBasePanel {
 				}).setVisible(uc.isPending()));
 				item.add(new WebMarkupContainer("view").add(addOnClick(String.format("showUserInfo(%s);", userId))));
 				item.add(new WebMarkupContainer("message").add(addOnClick(String.format("privateMessage(%s);", userId))).setVisible(!uc.isPending()));
-				item.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
+				BootstrapAjaxLink<String> del = new BootstrapAjaxLink<>("delete", Buttons.Type.Outline_Danger) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-						attributes.setEventPropagation(EventPropagation.STOP_IMMEDIATE);
-					}
-
-					@Override
-					protected void onSubmit(AjaxRequestTarget target) {
+					public void onClick(AjaxRequestTarget target) {
 						contactDao.delete(contactId);
 						updateContacts(target);
 					}
-				}.setVisible(!uc.isPending()));
+				};
+				del.setIconType(FontAwesome5IconType.times_s)
+						.add(newOkCancelDangerConfirm(this, getString("833")));
+				item.add(del.setVisible(!uc.isPending()));
 			}
 		};
 		updateContacts(null);
@@ -533,7 +525,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 	}
 
 	private static void selectFolder(WebMarkupContainer folder) {
-		folder.add(AttributeModifier.append(ATTR_CLASS, "ui-widget-header ui-corner-all"));
+		folder.add(AttributeModifier.append(ATTR_CLASS, "selected"));
 	}
 
 	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {

@@ -18,23 +18,16 @@
  */
 package org.apache.openmeetings.web.room;
 
-import java.util.ArrayList;
-
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.util.NonClosableMessageDialog;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.util.string.Strings;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-
-public class RedirectMessageDialog extends NonClosableMessageDialog {
+public class RedirectMessageDialog extends IconTextModal {
 	private static final long serialVersionUID = 1L;
 	private static final int DELAY = 5;
 	private final String labelId;
@@ -43,7 +36,7 @@ public class RedirectMessageDialog extends NonClosableMessageDialog {
 	private Component label;
 
 	public RedirectMessageDialog(String id, String labelId, boolean autoOpen, String url) {
-		super(id, "", "", new ArrayList<DialogButton>(), DialogIcon.ERROR);
+		super(id);
 		this.labelId = labelId;
 		this.url = url;
 		this.autoOpen = autoOpen;
@@ -51,7 +44,11 @@ public class RedirectMessageDialog extends NonClosableMessageDialog {
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("204"));
+		header(new ResourceModel("204"));
+		setCloseOnEscapeKey(false);
+		show(autoOpen);
+		withLabel(labelId);
+		withErrorIcon();
 		super.onInitialize();
 		if (autoOpen) {
 			startTimer(null);
@@ -77,35 +74,9 @@ public class RedirectMessageDialog extends NonClosableMessageDialog {
 	}
 
 	@Override
-	protected void onOpen(IPartialPageRequestHandler handler) {
-		super.onOpen(handler);
+	public RedirectMessageDialog show(IPartialPageRequestHandler handler) {
+		super.show(handler);
 		startTimer(handler);
-	}
-
-	@Override
-	public void onConfigure(JQueryBehavior behavior) {
-		super.onConfigure(behavior);
-		behavior.setOption("autoOpen", autoOpen);
-	}
-
-	@Override
-	public boolean isResizable() {
-		return false;
-	}
-
-	@Override
-	public boolean isModal() {
-		return true;
-	}
-
-	@Override
-	public boolean isDefaultCloseEventEnabled() {
-		return false;
-	}
-
-	@Override
-	protected Component newLabel(String id, IModel<String> model) {
-		label = super.newLabel(id, model);
-		return label;
+		return this;
 	}
 }

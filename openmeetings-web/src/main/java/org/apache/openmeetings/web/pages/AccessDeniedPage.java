@@ -22,9 +22,11 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.IRequestParameters;
 
-import com.googlecode.wicket.jquery.ui.form.button.Button;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public class AccessDeniedPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
@@ -33,7 +35,7 @@ public class AccessDeniedPage extends BaseInitedPage {
 	protected void onInitialize() {
 		super.onInitialize();
 		add(new Form<Void>("form").add(
-				new Button("home") {
+				new BootstrapButton("home", new ResourceModel("124"), Buttons.Type.Outline_Primary) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -41,7 +43,7 @@ public class AccessDeniedPage extends BaseInitedPage {
 						setResponsePage(Application.get().getHomePage());
 					}
 				}
-				, new Button("logout") {
+				, new BootstrapButton("logout", new ResourceModel("310"), Buttons.Type.Outline_Danger) {
 					private static final long serialVersionUID = 1L;
 
 					@Override

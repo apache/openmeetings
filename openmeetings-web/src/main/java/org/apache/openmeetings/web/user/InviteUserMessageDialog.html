@@ -20,12 +20,12 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
+<wicket:extend>
 	<form wicket:id="form">
-		<textarea wicket:id="message" style="width: 100%; height: 100px;"></textarea>
+		<textarea wicket:id="message" class="w-100"></textarea>
 		<div>
 			<input type="checkbox" wicket:id="enterRoom" /><label wicket:for="enterRoom"><wicket:message key="1134"/></label>
 		</div>
 	</form>
-</wicket:panel>
+</wicket:extend>
 </html>

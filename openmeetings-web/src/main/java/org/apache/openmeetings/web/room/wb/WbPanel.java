@@ -82,6 +82,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -93,7 +95,6 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.github.openjson.JSONTokener;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class WbPanel extends AbstractWbPanel {
 	private static final long serialVersionUID = 1L;
@@ -112,27 +113,29 @@ public class WbPanel extends AbstractWbPanel {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
+		protected void onSubmit(AjaxRequestTarget target) {
 			String res = saveWb(roomId, wb2save, getModelObject());
 			if (!Strings.isEmpty(res)) {
 				error("Unexpected error while saving WB: " + res);
 				target.add(feedback);
+			} else {
+				super.onSubmit(target);
 			}
 		}
 
 		@Override
-		protected String getTitleStr() {
-			return getString("199");
+		protected IModel<String> getTitle() {
+			return new ResourceModel("199");
 		}
 
 		@Override
-		protected String getLabelStr() {
-			return getString("200");
+		protected IModel<String> getLabel() {
+			return new ResourceModel("200");
 		}
 
 		@Override
-		protected String getAddStr() {
-			return getString("144");
+		protected IModel<String> getAddBtnLabel() {
+			return new ResourceModel("144");
 		}
 	};
 	private final SerializableConsumer<Whiteboard> addUndo = wb -> {
@@ -400,7 +403,7 @@ public class WbPanel extends AbstractWbPanel {
 					break;
 				case save:
 					wb2save = obj.getLong("wbId");
-					fileName.open(handler);
+					fileName.show(handler);
 					break;
 				case undo:
 				{

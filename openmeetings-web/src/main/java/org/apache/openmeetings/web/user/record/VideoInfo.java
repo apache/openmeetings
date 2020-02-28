@@ -25,7 +25,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,31 +43,58 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.ui.JQueryIcon;
-import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
-import com.googlecode.wicket.jquery.ui.form.button.AjaxSplitButton;
-import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
-import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.SplitButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public class VideoInfo extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final Form<Void> form = new Form<>("form");
-	private final AjaxSplitButton downloadBtn = new AjaxSplitButton("downloadBtn", new ArrayList<IMenuItem>());
-	private final AjaxButton reConvert = new AjaxButton("re-convert") {
+	private final SplitButton downloadBtn = new SplitButton("downloadBtn", Model.of("")) {
 		private static final long serialVersionUID = 1L;
 
-		@Override
-		protected String getIcon() {
-			return JQueryIcon.REFRESH;
+		private AbstractLink createLink(String markupId, IModel<String> model, String ext) {
+			return new BootstrapAjaxLink<>(markupId, model, Buttons.Type.Outline_Primary, model) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isEnabled() {
+					BaseFileItem r = rm.getObject();
+					return r != null && r.exists(EXTENSION_MP4) && !r.isReadOnly();
+				}
+
+				@Override
+				public void onClick(AjaxRequestTarget target) {
+					download.initiate(target);
+				}
+			}.setIconType(FontAwesome5IconType.download_s);
 		}
+
+		@Override
+		protected List<AbstractLink> newSubMenuButtons(String buttonMarkupId) {
+			return List.of(createLink(buttonMarkupId, Model.of(EXTENSION_MP4), EXTENSION_MP4));
+		}
+
+		@Override
+		protected AbstractLink newBaseButton(String markupId, IModel<String> labelModel, IModel<IconType> iconTypeModel) {
+			return createLink(markupId, Model.of(EXTENSION_MP4), EXTENSION_MP4);
+		}
+	};
+	private final BootstrapAjaxButton reConvert = new BootstrapAjaxButton("re-convert", new ResourceModel("1600"), form, Buttons.Type.Outline_Warning) {
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
@@ -102,16 +128,16 @@ public class VideoInfo extends Panel {
 	private final IModel<Recording> rm = new CompoundPropertyModel<>(new Recording());
 	private final IModel<String> roomName = Model.of((String)null);
 	private boolean isInterview = false;
-	private final InvitationDialog invite;
+	private InvitationDialog invite;
 	RecordingInvitationForm rif = new RecordingInvitationForm("form");
-	private final AjaxButton share = new AjaxButton("share") {
+	private final BootstrapAjaxButton share = new BootstrapAjaxButton("share", new ResourceModel("button.label.share"), form, Buttons.Type.Outline_Success) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
 			rif.setRecordingId(rm.getObject().getId());
 			invite.updateModel(target);
-			invite.open(target);
+			invite.show(target);
 		}
 	};
 	@SpringBean
@@ -124,21 +150,8 @@ public class VideoInfo extends Panel {
 	private RecordingChunkDao chunkDao;
 
 	public VideoInfo(String id) {
-		this(id, null);
-	}
-
-	public VideoInfo(String id, Recording r) {
 		super(id);
-		add(form.setOutputMarkupId(true));
 		setDefaultModel(rm);
-
-		form.add(new Label("name"), new Label("duration"), new Label("recordEnd"), new Label("roomName", roomName),
-				downloadBtn.setEnabled(false), reConvert.setEnabled(false), share.setEnabled(false));
-		add(download);
-		add(invite = new InvitationDialog("invitation", rif));
-		rif.setDialog(invite);
-
-		update(null, r);
 	}
 
 	public VideoInfo update(AjaxRequestTarget target, BaseFileItem _r) {
@@ -190,28 +203,19 @@ public class VideoInfo extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		downloadBtn.setDefaultModelObject(newDownloadMenuList());
-	}
+		add(form.setOutputMarkupId(true));
+		form.add(new Label("name")
+				, new Label("duration")
+				, new Label("recordEnd")
+				, new Label("roomName", roomName)
+				, downloadBtn.setEnabled(false)
+				, reConvert.setIconType(FontAwesome5IconType.sync_alt_s).setEnabled(false)
+				, share.setIconType(FontAwesome5IconType.share_alt_s).setEnabled(false));
+		add(download);
+		add(invite = new InvitationDialog("invitation", rif));
+		rif.setDialog(invite);
 
-	private List<IMenuItem> newDownloadMenuList() {
-		List<IMenuItem> list = new ArrayList<>();
-
-		//mp4
-		list.add(new MenuItem(EXTENSION_MP4, JQueryIcon.ARROWTHICKSTOP_1_S) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isEnabled() {
-				BaseFileItem r = rm.getObject();
-				return r != null && r.exists(EXTENSION_MP4) && !r.isReadOnly();
-			}
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				download.initiate(target);
-			}
-		});
-		return list;
+		update(null, null);
 	}
 
 	public VideoInfo setShowShare(boolean visible) {

@@ -22,8 +22,8 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<!--  TODO move styles into CSS -->
-	<div style="height: 100%; display: flex;">
-		<div style="width: 200px;">
+	<div class="d-flex h-100">
+		<div>
 			<form wicket:id="form">
 				<div><wicket:message key="1179"/></div>
 				<input type="text" wicket:id="text"/><br/>
@@ -32,14 +32,14 @@
 				<div><wicket:message key="1178"/></div>
 				<input type="text" wicket:id="search"/><br/>
 				<br/>
-				<button wicket:id="submit" type="button"><wicket:message key="714"/></button>
+				<button wicket:id="submit" type="button"></button>
 			</form>
 		</div>
-		<div wicket:id="container" style="height: 100%; padding-left: 10px;">
+		<div wicket:id="container" class="pl-3 h-100">
 			<div><strong><wicket:message key="1184"/></strong>&nbsp;&nbsp;&nbsp;<div class="adminNav"  wicket:id="navigator"></div></div>
-			<table id="searchUsersTable" class="list-table">
+			<table id="searchUsersTable" class="list-table table-striped table-hover">
 				<thead>
-					<tr class="ui-widget-header">
+					<tr>
 						<th class="col-3"><wicket:message key="165"/></th>
 						<th class="col-2"><wicket:message key="1143"/></th>
 						<th class="col-2"><wicket:message key="1182"/></th>
@@ -53,10 +53,11 @@
 						<td class="col-2" wicket:id="tz"></td>
 						<td class="col-2" wicket:id="offer"></td>
 						<td class="col-3" wicket:id="search"></td>
-						<td class="col-2" style="white-space: nowrap;"><div wicket:id="add" class="add om-icon clickable" wicket:message="title:1186"
-							></div><div wicket:id="message" class="new-email om-icon clickable" wicket:message="title:1253"
-							></div><div wicket:id="view" class="user om-icon clickable" wicket:message="title:1236"
-							></div><div wicket:id="invite" class="invite om-icon clickable" wicket:message="title:1131"></div></td>
+						<td class="col-2 text-nowrap">
+							<div wicket:id="add" class="om-icon clickable" wicket:message="title:1186"><i class="fas fa-plus-circle"></i></div>
+							<div wicket:id="message" class="om-icon clickable" wicket:message="title:1253"><i class="fas fa-envelope"></i></div>
+							<div wicket:id="view" class="om-icon clickable" wicket:message="title:1236"><i class="fas fa-address-card"></i></div>
+							<div wicket:id="invite" class="om-icon clickable" wicket:message="title:1131"><i class="fas fa-link"></i></div></td>
 					</tr>
 				</tbody>
 			</table>

@@ -615,6 +615,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="bad.password.upper"><![CDATA['Weak' password: at least 1 upper-case letter is required]]></entry>
 	<entry key="button.label.share"><![CDATA[Share]]></entry>
 	<entry key="calendar.addCalendar"><![CDATA[Add External Calendar]]></entry>
+	<entry key="calendar.sync"><![CDATA[Sync]]></entry>
 	<entry key="calendar.defaultTitle"><![CDATA[New Calendar]]></entry>
 	<entry key="calendar.dialogTitle"><![CDATA[Calendar Details]]></entry>
 	<entry key="calendar.error"><![CDATA[Error in making connection on the URL specified.]]></entry>
@@ -715,7 +716,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 			По умолчанию {0} использует интегрированную базу данных {1}. В
 			продакшине Вы должны задуматься об использовании таких баз, как {2}, {3}, {4}, {5} or {6}
 		</blockquote>
-		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
+		<div class="ui-state-highlight ui-corner-all installer-note">
 			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
 		</div>
 	]]></entry>
@@ -820,24 +821,24 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 		</li>
 
 	<br />
-	<b> <span style="font-size: 1.2em">Если у Вас остались
+	<b> <span class="installer-important">Если у Вас остались
 			вопросы или Вам требуется поддержка по установке или хостингу:</span></b>
 	<br />
 	<br />
-	<b><span style="font-size: 1.2em">Поддержка сообщества:</span></b>
+	<b><span class="installer-important">Поддержка сообщества:</span></b>
 	<br />
 	<br />
-	<span style="font-size: 1.1em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/mailing-lists.html"
 		target="_blank">Список рассылки</a></span>
 	<br />
 	<br />
 	<br />
-	<b> <span style="font-size: 1.4em">Это компании,
+	<b> <span class="installer-important">Это компании,
 		которые также оказывают коммерческую поддержку Apache OpenMeetings:</span></b>
 	<br />
 	<br />
-	<span style="font-size: 1.3em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/commercial-support.html"
 		target="_blank">https://openmeetings.apache.org/commercial-support.html</a></span>
 	<br />
@@ -1002,4 +1003,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use room until moderator will join]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Wait moderator]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[Please be patient ...]]></entry>
+	<entry key="wait-moderator.message"><![CDATA[Please wait until <b>moderator</b> will enter the room]]></entry>
+	<entry key="lbl.or"><![CDATA[or]]></entry>
+	<entry key="lbl.new"><![CDATA[new]]></entry>
 </properties>

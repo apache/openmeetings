@@ -8,12 +8,14 @@ function displayRss(entries) {
 	$('#feedcontainer').append('<div id="feeds"></div>');
 	const feeds = $('#feeds');
 	for (let i = 0; i < entries.length; ++i) {
-		addItem(feeds, entries[i]);
+		const headId = `om-rss-heading${i}`
+			, bodyId = `om-rss-content${i}`
+			, markup = OmUtil.tmpl('#rss-item-template');
+		markup.find('.card-header').attr('id', headId);
+		markup.find('button').attr('data-target', `#${bodyId}`).attr('aria-controls', bodyId)
+			.append(entries[i].title);
+		markup.find('.collapse').attr('id', bodyId).attr('aria-labelledby', headId);
+		markup.find('.card-body').text(entries[i].content);
+		feeds.append(markup);
 	}
-	feeds.accordion({
-		collapsible: true
-		, active: false
-		, header: 'h3'
-		, heightStyle: "content"
-		});
 }

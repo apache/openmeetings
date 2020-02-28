@@ -20,28 +20,52 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
+<wicket:extend>
 	<form wicket:id="form">
-		<table>
-			<tr>
-				<td><input wicket:id="firstName" type="text" wicket:message="placeholder:117" value="" /></td>
-				<td><input wicket:id="lastName" type="text" wicket:message="placeholder:136" value="" /></td>
-			</tr>
-			<tr>
-				<td><input wicket:id="login" type="text" wicket:message="placeholder:114" value="" /></td>
-				<td><input wicket:id="email" type="text" wicket:message="placeholder:119" value="" /></td>
-			</tr>
-			<tr>
-				<td><input wicket:id="password" type="password" wicket:message="placeholder:110" value="" /></td>
-				<td><input wicket:id="confirmPassword" type="password" wicket:message="placeholder:116" value="" /></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<div wicket:id="captcha" style="text-align: center;"></div>
-				</td>
-			</tr>
-		</table>
-		<span wicket:id="feedback" class="error"></span>
+		<div class="row form-group no-gutters">
+			<div class="col-6"><input wicket:id="firstName" type="text" wicket:message="placeholder:117" value=""/></div>
+			<div class="col-6"><input wicket:id="lastName" type="text" wicket:message="placeholder:136" value=""/></div>
+		</div>
+		<div class="row form-group no-gutters">
+			<div class="col-6">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-user"></i></span>
+					</div>
+					<input wicket:id="login" type="text" wicket:message="placeholder:114" value=""/>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-at"></i></span>
+					</div>
+					<input wicket:id="email" type="email" wicket:message="placeholder:119" value=""/>
+				</div>
+			</div>
+		</div>
+		<div class="row form-group no-gutters">
+			<div class="col-6">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-lock"></i></span>
+					</div>
+					<input wicket:id="password" type="password" wicket:message="placeholder:110" value=""/>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-lock"></i></span>
+					</div>
+					<input wicket:id="confirmPassword" type="password" wicket:message="placeholder:116" value=""/>
+				</div>
+			</div>
+		</div>
+		<div class="row form-group no-gutters">
+			<div class="col-12 centered" wicket:id="captcha"></div>
+		</div>
+		<div wicket:id="feedback" class="error"></div>
 		<input type="submit" wicket:id="submit" class="invisible-form-component"/>
 	</form>
 	<div>
@@ -50,6 +74,5 @@
 			<a wicket:id="link" target="_blank"><wicket:message key="register.privacy.statement"/></a>
 		</wicket:message>
 	</div>
-	<div wicket:id="confirmRegistration"></div>
-</wicket:panel>
+</wicket:extend>
 </html>

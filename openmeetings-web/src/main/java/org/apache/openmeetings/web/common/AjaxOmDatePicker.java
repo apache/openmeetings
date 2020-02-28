@@ -18,27 +18,36 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
+import java.time.LocalDate;
 
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.extensions.markup.html.form.datetime.LocalDateTextField;
+import org.apache.wicket.markup.html.form.FormComponent;
 
-import com.googlecode.wicket.jquery.ui.form.button.Button;
-
-public abstract class OmButton extends Button {
+public class AjaxOmDatePicker extends AbstractOmDateTimePicker<LocalDate> {
 	private static final long serialVersionUID = 1L;
 
-	public OmButton(String id) {
-		super(id);
-		add(new AjaxEventBehavior(EVT_CLICK) {
+	public AjaxOmDatePicker(String id) {
+		super(id, null, getDateFormat());
+	}
+
+	@Override
+	protected FormComponent<LocalDate> newInput(String wicketId, String dateFormat) {
+		LocalDateTextField input = new LocalDateTextField(wicketId, getModel(), dateFormat);
+		input.add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				OmButton.this.onClick(target);
+			protected void onUpdate(AjaxRequestTarget target) {
+				onValueChanged(target);
 			}
 		});
+		return input;
 	}
 
-	public abstract void onClick(AjaxRequestTarget target);
+	protected void onValueChanged(IPartialPageRequestHandler target) {
+		//no-op
+	}
 }

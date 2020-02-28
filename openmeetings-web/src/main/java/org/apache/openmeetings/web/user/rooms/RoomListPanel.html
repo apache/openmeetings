@@ -21,17 +21,19 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<div class="room-list">
-		<div wicket:id="list" class="room-row">
-			<div class="container" wicket:id="roomContainer">
-				<div><span wicket:id="roomName">[room name]</span>&nbsp;<span wicket:id="info" class="info-text">&nbsp;</span></div>
-				<div>
-					<wicket:message key="398" />&nbsp;<span wicket:id="curUsers"></span>&nbsp;/&nbsp;<span
-						wicket:id="totalUsers"></span>&nbsp;&nbsp;<span wicket:id="refresh"><wicket:message key="lbl.refresh"/></span>
+	<table class="room-list table table-striped table-hover">
+		<tr wicket:id="list" class="room-row">
+			<td class="position-relative">
+				<div class="container" wicket:id="roomContainer">
+					<div><span wicket:id="roomName">[room name]</span>&nbsp;<i wicket:id="info" class="fas fa-info-circle text-info info-tooltip"></i></div>
+					<div>
+						<wicket:message key="398" />&nbsp;<span wicket:id="curUsers"></span>&nbsp;/&nbsp;<span
+							wicket:id="totalUsers"></span>&nbsp;&nbsp;<button wicket:id="refresh" class="refresh btn-sm m2"></button>
+					</div>
 				</div>
-			</div>
-			<button wicket:id="btn"><span wicket:id="label"></span></button>
-		</div>
-	</div>
+				<button wicket:id="btn" class="enter btn btn-outline-primary"><span wicket:id="label"></span></button>
+			</td>
+		</tr>
+	</table>
 </wicket:panel>
 </html>

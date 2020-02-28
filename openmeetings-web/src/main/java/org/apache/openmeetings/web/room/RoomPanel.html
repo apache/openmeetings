@@ -21,7 +21,7 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<div class="room-block">
-		<div class="container" wicket:id="roomContainer">
+		<div class="room-container" wicket:id="roomContainer">
 			<div class="menu" wicket:id="menu"></div>
 			<div class="sidebar" wicket:id="sidebar"></div>
 			<div wicket:id="wb-area" class="wb-block">
@@ -29,20 +29,17 @@
 				<div class="wb-area" wicket:id="whiteboard"></div>
 			</div>
 		</div>
-		<div wicket:id="event-details"></div>
+		<div class="event-details" wicket:id="event-details"></div>
 		<div wicket:id="access-denied"></div>
 		<div wicket:id="room-closed"></div>
-		<div wicket:id="wait-recording"></div>
 		<div wicket:id="nickname"></div>
 		<div wicket:id="client-kicked"></div>
-		<div wicket:id="wait-moderator"></div>
-		<div wicket:id="wait-apply-moderation"></div>
-		<div wicket:id="noone-can-help"></div>
+		<div wicket:id="wait-moderator" class="wait-moder"></div>
 	</div>
-	<div id="disconnected-dlg" wicket:message="title:204, data-reload:753" style="display:none">
+	<div id="disconnected-dlg" wicket:message="title:204, data-reload:753" hidden="hidden">
 		<wicket:message key="556"/>
 	</div>
-	<div style="display:none">
+	<div hidden="hidden">
 		<div id="user-video">
 			<div class="video">
 				<canvas width="10" class="level-meter" wicket:message="title:767"></canvas>
@@ -50,7 +47,7 @@
 			</div>
 			<div class="footer ui-state-highlight">
 				<div class="on"><wicket:message key="video.mic.on"/></div>
-				<div class="off" style="display:none;"><wicket:message key="video.mic.off"/></div>
+				<div class="off" hidden="hidden"><wicket:message key="video.mic.off"/></div>
 			</div>
 		</div>
 		<div id="video-refresh-btn">
@@ -71,14 +68,14 @@
 			</ul>
 		</div>
 		<div id="muteothers-confirm" wicket:message="title:ulist.right.muteothers.grant, data-btn-ok:54, data-btn-cancel:lbl.cancel">
-			<div style="padding: 4px;" class="ui-state-highlight ui-corner-all">
-				<span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span><wicket:message key="ulist.user.muteothers.confirm"/>
+			<div class="ui-state-highlight ui-corner-all p-1">
+				<span class="ui-icon ui-icon-alert align-left mr-2 mt-2 mb-3 ml-0"></span><wicket:message key="ulist.user.muteothers.confirm"/>
 			</div>
 			<br/>
 			<input id="muteothers-confirm-dont-show" type="checkbox"/><label for="muteothers-confirm-dont-show"><wicket:message key="64"/></label>
 		</div>
 		<div id="clipboard-dialog" wicket:message="title:1121,data-btn-ok:54">
-			<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span><span class="text"></span></p>
+			<p><span class="ui-icon ui-icon-alert align-left mr-2 mt-2 mb-3 ml-0"></span><span class="text"></span></p>
 		</div>
 		<div id="quick-vote-template">
 			<div class="close clickable"><wicket:message key="85"/></div>
@@ -93,8 +90,8 @@
 			<wicket:message key="1419"/>
 		</div>
 		<div id="sharer" wicket:message="title:730">
-			<h2 class="alert" style="display: none">Screen-sharing is not supported in your browser</h2>
-			<div class="container">
+			<h2 class="alert" hidden="hidden">Screen-sharing is not supported in your browser</h2>
+			<div class="container p-0 m-0">
 				<div>
 					<span class="label"><wicket:message key="734"/></span>
 					<select name="type" class="type">

@@ -23,7 +23,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.DoubleConsumer;
@@ -34,17 +33,14 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
-import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.util.ThreadHelper;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
-import org.apache.wicket.ThreadContext;
-import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
-import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
@@ -56,7 +52,7 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
@@ -64,16 +60,17 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.progress.UpdatableProgressBar;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
-public class UploadDialog extends AbstractFormDialog<String> {
+public class UploadDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(UploadDialog.class);
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final Form<String> form = new Form<>("form") {
 		private static final long serialVersionUID = 1L;
 
@@ -87,8 +84,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			return true;
 		}
 	};
-	private DialogButton upload;
-	private DialogButton cancel;
+	private SpinnerAjaxButton upload;
 	private final FileUploadField uploadField = new FileUploadField("file", new IModel<List<FileUpload>>() {
 		private static final long serialVersionUID = 1L;
 
@@ -121,52 +117,41 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	@SpringBean
 	private FileItemLogDao fileLogDao;
 
-	private final AbstractAjaxTimerBehavior timer = new AbstractAjaxTimerBehavior(Duration.ofSeconds(1)) {
+	private final UpdatableProgressBar progressBar = new UpdatableProgressBar("progress", new Model<>(0), BackgroundColorBehavior.Color.Info, true) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected void onTimer(AjaxRequestTarget target) {
-			if (progress == null) {
-				timer.stop(target);
-				return;
-			}
-			if (progress.intValue() == 100) {
-				timer.stop(target);
-				target.add(progressBar.setVisible(false));
-				room.getSidebar().updateFiles(target);
-				if (form.hasError()) {
-					setTitle(target, getString("upload.dlg.choose.title"));
-					target.add(form.setVisible(true));
-					onError(target, null);
-				} else {
-					close(target, null);
-				}
-			} else {
-				progressBar.setModelObject(progress);
-				progressBar.refresh(target);
-			}
+		protected IModel<Integer> newValue() {
+			return Model.of(progress);
 		}
-	};
-	private final ProgressBar progressBar = new ProgressBar("convProgress", new Model<>(0)) {
-		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected void onComplete(AjaxRequestTarget target) {
-			timer.stop(target);
+		protected void onComplete(IPartialPageRequestHandler target) {
 			progressBar.setVisible(false);
+			room.getSidebar().updateFiles(target);
+			if (form.hasError()) {
+				target.add(form.setVisible(true));
+				target.add(feedback);
+			} else {
+				close(target);
+			}
 			target.add(progressBar);
 		}
 	};
-	private Integer progress;
+	private int progress = 0;
 
 	public UploadDialog(String id, RoomPanel room, RoomFilePanel roomFiles) {
-		super(id, "");
+		super(id);
 		this.roomFiles = roomFiles;
 		this.room = room;
 	}
 
 	@Override
 	protected void onInitialize() {
+		header(new ResourceModel("upload.dlg.choose.title"));
+		setCloseOnEscapeKey(false);
+		setBackdrop(Backdrop.STATIC);
+
 		add(form.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 		toWb.add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
@@ -190,88 +175,52 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				if (!Strings.isEmpty(getComponent().getDefaultModelObjectAsString())) {
-					upload.setEnabled(true, target);
+					target.add(upload.setEnabled(true));
 				}
 			}
 		}).setOutputMarkupId(true);
-		form.add(new UploadProgressBar("progress", form, uploadField));
 
 		add(nameForm.add(fileName.setOutputMarkupId(true)));
 		add(BootstrapFileUploadBehavior.INSTANCE);
-		getTitle().setObject(getString("upload.dlg.choose.title"));
-		upload = new DialogButton("upload", getString("593"), false) {
+		addButton(upload = new SpinnerAjaxButton("button", new ResourceModel("593"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public boolean isIndicating() {
-				return true;
+			protected void onError(AjaxRequestTarget target) {
+				target.add(feedback);
 			}
-		};
-		cancel = new DialogButton("close", getString("85"));
 
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				List<FileUpload> ful = uploadField.getFileUploads();
+				if (ful != null) {
+
+					progress = 0;
+					progressBar.restart(target);
+					target.add(
+							progressBar.setModelObject(progress).setVisible(true)
+							, form.setVisible(false)
+							, upload.setEnabled(false));
+
+					ThreadHelper.startRunnable(UploadDialog.this::convertAll);
+				}
+			}
+		});
+		upload.setEnabled(false);
+		addButton(OmModalCloseButton.of("85"));
+
+		progressBar.updateInterval(Duration.ofSeconds(1)).stop(null).striped(false);
 		add(progressBar.setOutputMarkupPlaceholderTag(true).setVisible(false));
-		add(timer);
 		super.onInitialize();
 	}
 
 	@Override
-	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		if (button == null || button.match("close")) {
-			super.onClick(target, button);
-		}
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(upload, cancel);
-	}
-
-	@Override
-	public DialogButton getSubmitButton() {
-		return upload;
-	}
-
-	@Override
-	public Form<?> getForm() {
-		return form;
-	}
-
-	@Override
-	protected void onOpen(IPartialPageRequestHandler handler) {
-		setTitle(handler, getString("upload.dlg.choose.title"));
-		super.onOpen(handler);
-		upload.setEnabled(true, handler);
+	public Modal<String> show(IPartialPageRequestHandler handler) {
+		handler.add(upload.setEnabled(true));
 		uploadField.setModelObject(new ArrayList<>());
 		handler.add(form.setVisible(true), fileName);
 		handler.appendJavaScript(String.format("bindUpload('%s', '%s');", form.getMarkupId(), fileName.getMarkupId()));
-	}
-
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
-		target.add(feedback);
-	}
-
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		List<FileUpload> ful = uploadField.getFileUploads();
-		if (ful != null) {
-
-			progress = 0;
-			timer.restart(target);
-			setTitle(target, getString("upload.dlg.convert.title"));
-			target.add(progressBar.setModelObject(progress).setVisible(true), form.setVisible(false));
-
-			final Application app = Application.get();
-			final WebSession session = WebSession.get();
-			final RequestCycle rc = RequestCycle.get();
-			new Thread(() -> {
-				ThreadContext.setApplication(app);
-				ThreadContext.setSession(session);
-				ThreadContext.setRequestCycle(rc);
-				convertAll();
-				ThreadContext.detach();
-			}).start();
-		}
+		return super.show(handler);
 	}
 
 	@Override

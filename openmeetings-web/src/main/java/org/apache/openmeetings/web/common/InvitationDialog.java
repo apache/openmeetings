@@ -18,99 +18,80 @@
  */
 package org.apache.openmeetings.web.common;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.ResourceModel;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public class InvitationDialog extends AbstractFormDialog<Invitation> {
+public class InvitationDialog extends Modal<Invitation> {
 	private static final long serialVersionUID = 1L;
-	private DialogButton generate;
-	private DialogButton send;
-	private DialogButton cancel;
+	private BootstrapAjaxButton generate;
+	private BootstrapAjaxButton send;
 	private final InvitationForm form;
 
 	public InvitationDialog(String id, final InvitationForm _form) {
-		super(id, "",_form.getModel());
+		super(id, _form.getModel());
 		add(form = _form);
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("213"));
-		generate = new DialogButton("generate", getString("1526"));
-		send = new DialogButton("send", getString("218"));
-		cancel = new DialogButton("cancel", getString("lbl.cancel"));
-		super.onInitialize();
-	}
+		header(new ResourceModel("213"));
 
-	@Override
-	public int getWidth() {
-		return 500;
+		addButton(generate = new BootstrapAjaxButton("button", new ResourceModel("1526"), form, Buttons.Type.Outline_Primary) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				InvitationDialog.this.onError(target);
+			}
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				InvitationDialog.this.onClick(target, InvitationForm.Action.GENERATE);
+			}
+		});
+		addButton(send = new BootstrapAjaxButton("button", new ResourceModel("218"), form, Buttons.Type.Outline_Primary) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				InvitationDialog.this.onError(target);
+			}
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				InvitationDialog.this.onClick(target, InvitationForm.Action.SEND);
+			}
+		});
+		addButton(OmModalCloseButton.of());
+		super.onInitialize();
 	}
 
 	public void updateModel(AjaxRequestTarget target) {
 		form.updateModel(target);
-		send.setEnabled(false, target);
-		generate.setEnabled(false, target);
+		target.add(
+				send.setEnabled(false)
+				, generate.setEnabled(false)
+				);
 	}
 
-	@Override
-	protected Form<?> getForm(DialogButton button) {
-		if (button.equals(generate) || button.equals(send)) {
-			return form;
-		}
-		return super.getForm(button);
-	}
-
-	@Override
-	public InvitationForm getForm() {
-		return form;
-	}
-
-	@Override
-	public DialogButton getSubmitButton() {
-		return send;
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(generate, send, cancel);
-	}
-
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
+	protected void onError(AjaxRequestTarget target) {
 		form.onError(target);
 	}
 
-	public void onSuperClick(AjaxRequestTarget target, DialogButton button) {
-		super.onClick(target, button);
+	public void onClick(AjaxRequestTarget target, InvitationForm.Action action) {
+		form.onClick(target, action);
 	}
 
-	@Override
-	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		form.onClick(target, button);
-	}
-
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		//designed to be empty because of multiple submit buttons
-	}
-
-	public DialogButton getGenerate() {
+	public BootstrapAjaxButton getGenerate() {
 		return generate;
 	}
 
-	public DialogButton getSend() {
+	public BootstrapAjaxButton getSend() {
 		return send;
-	}
-
-	public DialogButton getCancel() {
-		return cancel;
 	}
 }

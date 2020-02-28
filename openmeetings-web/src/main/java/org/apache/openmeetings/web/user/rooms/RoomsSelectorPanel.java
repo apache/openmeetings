@@ -61,7 +61,7 @@ public class RoomsSelectorPanel extends UserBasePanel {
 	@Override
 	protected void onInitialize() {
 		add(new Label("title", getString(title)));
-		add(new Label("desc", getString(desc)));
+		add(new Label("desc", getString(desc)).setRenderBodyOnly(true));
 		super.onInitialize();
 	}
 }

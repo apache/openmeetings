@@ -20,24 +20,22 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
-	<table>
-		<tr>
-			<td><wicket:message key="165" /></td>
-			<td wicket:id="name">[name]</td>
-		</tr>
-		<tr>
-			<td><wicket:message key="1551" /></td>
-			<td wicket:id="version">[version]</td>
-		</tr>
-		<tr>
-			<td><wicket:message key="1552" /></td>
-			<td wicket:id="revision">[revision]</td>
-		</tr>
-		<tr>
-			<td><wicket:message key="1553" /></td>
-			<td wicket:id="buildDate">[buildDate]</td>
-		</tr>
-	</table>
-</wicket:panel>
+<wicket:extend>
+	<div class="row no-gutters">
+		<div class="col-6"><wicket:message key="165"/></div>
+		<div class="col-6" wicket:id="name"></div>
+	</div>
+	<div class="row no-gutters">
+		<div class="col-6"><wicket:message key="1551"/></div>
+		<div class="col-6" wicket:id="version"></div>
+	</div>
+	<div class="row no-gutters">
+		<div class="col-6"><wicket:message key="1552"/></div>
+		<div class="col-6" wicket:id="revision"></div>
+	</div>
+	<div class="row no-gutters">
+		<div class="col-6"><wicket:message key="1553"/></div>
+		<div class="col-6" wicket:id="buildDate"></div>
+	</div>
+</wicket:extend>
 </html>

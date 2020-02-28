@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -30,6 +30,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -41,38 +42,35 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.UrlTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
 /**
  * Multipurpose Calendar Dialog form. This provides the ability to ask for a user prompt,
  * for Creating, and Syncing of Calendars. Along with that also,
  * during the Creation and Deletion of Appointments.
  */
-public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
+public class CalendarDialog extends Modal<OmCalendar> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(CalendarDialog.class);
 	private CalendarPanel calendarPanel;
 
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private DialogButton save;
-	private DialogButton cancel;
-	private DialogButton delete;
+	private final NotificationPanel feedback = new NotificationPanel("feedback");
+	private BootstrapAjaxButton save;
+	private BootstrapAjaxLink<String> delete;
 	private UserCalendarForm form;
-	private MessageDialog confirmDelete;
 	private List<OmCalendar> cals; //List of calendars for syncing
 	private int calIndex = 0;
 	@SpringBean
@@ -92,31 +90,83 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	private Appointment appointment = null;
 
 	public CalendarDialog(String id, final CalendarPanel calendarPanel, CompoundPropertyModel<OmCalendar> model) {
-		super(id, "", true);
+		super(id, model);
 		this.calendarPanel = calendarPanel;
-		form = new UserCalendarForm("calform", model);
-		add(form);
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("calendar.dialogTitle"));
-		save = new DialogButton("save", getString("144"));
-		cancel = new DialogButton("cancel", getString("lbl.cancel"));
-		delete = new DialogButton("delete", getString("80"));
-		confirmDelete = new MessageDialog("confirmDelete", getString("80"), getString("833"), DialogButtons.OK_CANCEL, DialogIcon.WARN) {
+		header(new ResourceModel("calendar.dialogTitle"));
+
+		form = new UserCalendarForm("calform", getModel());
+		add(form);
+
+		addButton(save = new BootstrapAjaxButton("button", new ResourceModel("144"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				if (button != null && button.match(AbstractDialog.OK)) {
-					apptManager.deleteCalendar(form.getModelObject());
-					calendarPanel.refresh(handler);
-					calendarPanel.refreshCalendars(handler);
+			protected void onSubmit(AjaxRequestTarget target) {
+				switch (type) {
+					case UPDATE_CALENDAR:
+						OmCalendar c = form.getModelObject();
+						c.setHref(form.url.getModelObject());
+						HttpClient client = calendarPanel.getHttpClient();
+						HttpClientContext context = calendarPanel.getHttpClientContext();
+
+						if (form.gcal.getModelObject()) {
+							c.setSyncType(OmCalendar.SyncType.GOOGLE_CALENDAR);
+							c.setToken(form.username.getModelObject());
+							if (c.getId() == null) {
+								calendarPanel.populateGoogleCalendar(c, target);
+							}
+						} else if (c.getId() == null && form.username.getModelObject() != null) {
+							apptManager.provideCredentials(context, c, new UsernamePasswordCredentials(form.username.getModelObject(),
+									form.pass.getModelObject()));
+						}
+
+						apptManager.createCalendar(client, context, c);
+						calendarPanel.refreshCalendars(target);
+						calendarPanel.refresh(target);
+						break;
+					case SYNC_CALENDAR:
+						syncCalendar(form.getModelObject(), target);
+						if (setFormModelObject()) {
+							setButtons(target);
+							target.add(show(target));
+						}
+						break;
+					case UPDATE_APPOINTMENT:
+						updateAppointment(appointment);
+						calendarPanel.refresh(target);
+						break;
+					case DELETE_APPOINTMENT:
+						deleteAppointment(appointment);
+						calendarPanel.refresh(target);
+						break;
 				}
+				clearFormModel(target);
+				target.add(feedback);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				target.add(feedback);
+			}
+		});
+		save.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
+		delete = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Danger, new ResourceModel("80")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget handler) {
+				apptManager.deleteCalendar(form.getModelObject());
+				calendarPanel.refresh(handler);
+				calendarPanel.refreshCalendars(handler);
 			}
 		};
-		add(confirmDelete);
+		delete.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
+		addButton(delete.add(newOkCancelDangerConfirm(this, getString("833"))));
+		addButton(OmModalCloseButton.of());
 		super.onInitialize();
 	}
 
@@ -127,13 +177,12 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	 * @param type - the {@link DIALOG_TYPE} being opened
 	 * @param a - the {@link Appointment}
 	 */
-	public void open(IPartialPageRequestHandler handler, DIALOG_TYPE type, Appointment a) {
+	public void show(IPartialPageRequestHandler handler, DIALOG_TYPE type, Appointment a) {
 		this.type = type;
 		appointment = a;
 		if (isOwner(a)) {
 			if (setFormModelObject(a, handler)) {
-				this.open(handler);
-				handler.add(this);
+				handler.add(show(handler));
 			} else {
 				switch (type) {
 					case UPDATE_APPOINTMENT:
@@ -163,17 +212,17 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	 * @param type - the {@link DIALOG_TYPE} being opened
 	 * @param c - the {@link OmCalendar}
 	 */
-	public void open(IPartialPageRequestHandler handler, DIALOG_TYPE type, OmCalendar c) {
+	public void show(IPartialPageRequestHandler handler, DIALOG_TYPE type, OmCalendar c) {
 		this.type = type;
 		switch (type) {
 			case UPDATE_CALENDAR:
 				setFormModelObject(c);
 				setButtons(handler);
-				this.open(handler);
+				show(handler);
 				break;
 			case SYNC_CALENDAR:
 				if (setCalendarList(handler)) {
-					this.open(handler);
+					show(handler);
 					handler.add(this);
 				} else {
 					calendarPanel.refresh(handler);
@@ -186,71 +235,6 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 			default:
 				break;
 		}
-	}
-
-	@Override
-	public int getWidth() {
-		return 650;
-	}
-
-	@Override
-	public DialogButton getSubmitButton() {
-		return save;
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(save, cancel, delete);
-	}
-
-	@Override
-	public Form<?> getForm() {
-		return form;
-	}
-
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		switch (type) {
-			case UPDATE_CALENDAR:
-				OmCalendar c = form.getModelObject();
-				c.setHref(form.url.getModelObject());
-				HttpClient client = calendarPanel.getHttpClient();
-				HttpClientContext context = calendarPanel.getHttpClientContext();
-
-				if (form.gcal.getModelObject()) {
-					c.setSyncType(OmCalendar.SyncType.GOOGLE_CALENDAR);
-					c.setToken(form.username.getModelObject());
-					if (c.getId() == null) {
-						calendarPanel.populateGoogleCalendar(c, target);
-					}
-				} else if (c.getId() == null && form.username.getModelObject() != null) {
-					apptManager.provideCredentials(context, c, new UsernamePasswordCredentials(form.username.getModelObject(),
-							form.pass.getModelObject()));
-				}
-
-				apptManager.createCalendar(client, context, c);
-				calendarPanel.refreshCalendars(target);
-				calendarPanel.refresh(target);
-				break;
-			case SYNC_CALENDAR:
-				syncCalendar(form.getModelObject(), target);
-				if (setFormModelObject()) {
-					setButtons(target);
-					this.open(target);
-					target.add(this);
-				}
-				break;
-			case UPDATE_APPOINTMENT:
-				updateAppointment(appointment);
-				calendarPanel.refresh(target);
-				break;
-			case DELETE_APPOINTMENT:
-				deleteAppointment(appointment);
-				calendarPanel.refresh(target);
-				break;
-		}
-		clearFormModel(target);
-		target.add(feedback);
 	}
 
 	/**
@@ -366,52 +350,17 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 			case UPDATE_APPOINTMENT:
 			case DELETE_APPOINTMENT:
 			case SYNC_CALENDAR:
-				delete.setVisible(false, target);
-				save.setVisible(true, target);
+				target.add(delete.setVisible(false), save.setVisible(true));
 				break;
 			case UPDATE_CALENDAR:
 				OmCalendar c = form.getModelObject();
 				if (c.getId() == null) {
-					delete.setVisible(false, target);
+					target.add(delete.setVisible(false));
 				} else {
-					delete.setVisible(isOwner(c), target);
+					target.add(delete.setVisible(isOwner(c)));
 				}
-				save.setVisible(isOwner(c), target);
+				target.add(save.setVisible(isOwner(c)));
 		}
-	}
-
-	@Override
-	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		switch (type) {
-			case UPDATE_CALENDAR:
-				if (delete.equals(button)) {
-					confirmDelete.open(handler);
-				}
-				break;
-			case UPDATE_APPOINTMENT:
-				//If the Appointment to put on the server was a new one, but the user cancelled it.
-				// Then remove the calendar from the Appointment
-				if (cancel.equals(button) && appointment.getHref() == null) {
-					appointment.setCalendar(null);
-					apptDao.update(appointment, getUserId());
-					calendarPanel.refresh(handler);
-				}
-				break;
-			case DELETE_APPOINTMENT:
-				appointment = null;
-				break;
-			case SYNC_CALENDAR:
-				//If the user cancels the syncing then remove
-				// all the calendars and stop the syncing.
-				cals = null;
-				break;
-		}
-		clearFormModel(handler);
-	}
-
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
-		target.add(feedback);
 	}
 
 	private void clearFormModel(IPartialPageRequestHandler handler) {
@@ -453,7 +402,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 			}
 		};
 
-		public UserCalendarForm(String id, CompoundPropertyModel<OmCalendar> model) {
+		public UserCalendarForm(String id, IModel<OmCalendar> model) {
 			super(id, model);
 			setOutputMarkupId(true);
 		}

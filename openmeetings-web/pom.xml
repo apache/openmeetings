@@ -32,6 +32,7 @@
 	<properties>
 		<old-backups.dir>${project.build.directory}/test-data</old-backups.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
+		<autoModuleName>apache.openmeetings.web</autoModuleName>
 	</properties>
 	<profiles>
 		<profile>
@@ -658,6 +659,21 @@
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>jqplot</artifactId>
 			<version>${wickets.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.agilecoders.wicket</groupId>
+			<artifactId>wicket-bootstrap-extensions</artifactId>
+			<version>${wicket-bootstrap.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.agilecoders.wicket</groupId>
+			<artifactId>wicket-bootstrap-themes</artifactId>
+			<version>${wicket-bootstrap.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>5.12.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

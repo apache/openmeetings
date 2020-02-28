@@ -20,16 +20,9 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:head>
-	<style type="text/css">
-		.ui-autocomplete {
-			z-index: 999 !important;
-		}
-	</style>
-</wicket:head>
-<wicket:panel>
+<wicket:extend>
 	<form wicket:id="form">
-		<table style="width: 100%;">
+		<table class="w-100 private-message">
 			<tr>
 				<td colspan="2" wicket:id="feedback"></td>
 			</tr>
@@ -52,9 +45,9 @@
 			</tr>
 			<tr wicket:id="roomParamsBlock">
 				<td colspan="2" wicket:id="roomParams">
-					<table style="width: 100%">
+					<table class="w-100">
 						<tr>
-							<td style="width: 70px;">
+							<td>
 								<table>
 									<tr>
 										<td><wicket:message key="45"/></td>
@@ -70,12 +63,12 @@
 									</tr>
 								</table>
 							</td>
-							<td><div class="info-text"><wicket:message key="1221" /></div></td>
+							<td><i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="1221" /></td>
 						</tr>
 					</table>
 				</td>
 			</tr>
 		</table>
 	</form>
-</wicket:panel>
+</wicket:extend>
 </html>

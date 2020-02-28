@@ -1,33 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-.appointmentPopUp input[type="text"], .appointmentPopUp input[type="url"] {
-	width: 420px;
-}
-.appointmentPopUp input[type="password"] {
-	width: 420px;
-}
-.appointmentPopUp textarea {
-	width: 424px;
-	height: 80px;
-}
-.appointmentPopUp select {
-	width: 426px;
-}
-.appointmentPopUp td {
-	vertical-align: middle;
-}
-.appointmentPopUp .attendeeContainer {
-	background-color: #FFFFFF;
-	border: solid 1px #aacfe4;
-	width: 424px;
-	height: 100px;
-	overflow-x: scroll;
-	float: left;
-}
-.appointment.ui-dialog .ui-dialog-content {
-	padding: 0;
-}
-.cell input{
-	width: 47.5%;
+#contents #calendar .fc-gotoBtn-button::before {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+	content: "\f133";
+	font-size: 1em;
 }
 .calendarlist li {
 	list-style-type: none;

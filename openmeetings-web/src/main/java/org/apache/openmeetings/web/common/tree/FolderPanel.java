@@ -83,7 +83,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 			add(new DroppableBehavior(
 					selector
 					, new Options()
-						.set("hoverClass", Options.asString("ui-state-hover"))
+						.set("hoverClass", Options.asString("bg-light"))
 						.set("accept", Options.asString(getDefaultModelObject() instanceof Recording ? ".recorditem" : ".fileitem"))
 					, this));
 		}
@@ -91,9 +91,9 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 			add(new DraggableBehavior(
 					selector
 					, new Options()
-						.set("revert", "treeRevert")
+						.set("revert", "OmFileTree.treeRevert")
 						.set("cursor", Options.asString("move"))
-						.set("helper", "dragHelper")
+						.set("helper", "OmFileTree.dragHelper")
 						.set("cursorAt", "{left: 40, top: 18}")
 						.set("containment", Options.asString(treePanel.getContainment()))
 					, this));
@@ -185,7 +185,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 		if (f.getId() == null) {
 			style.append(CSS_CLASS_FILE).append(f.getHash().indexOf("my") > -1 ? "my " : "public ");
 		} else {
-			if (!f.exists()) {
+			if (BaseFileItem.Type.Folder != f.getType() && !f.exists()) {
 				style.append("broken ");
 			}
 			switch(f.getType()) {
@@ -221,7 +221,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 			}
 		}
 		if (treePanel.isSelected(f)) {
-			style.append("ui-state-active ");
+			style.append("active ");
 		}
 		String cls = f instanceof Recording ? "recorditem " : "fileitem ";
 		style.append(f.isReadOnly() ? "readonlyitem " : cls);

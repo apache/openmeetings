@@ -21,29 +21,33 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<div class="formelementradiobox">
-		<div wicket:id="community_settings">
-			<div>
-				<input wicket:id="everybody" type="radio" /><label style="width: 250px" wicket:for="everybody"><wicket:message key="1160"/></label>
-				<div class="clear"></div>
+	<div wicket:id="community_settings">
+		<div>
+			<div class="d-inline-block col-3"></div>
+			<div class="d-inline-block col-8">
+				<input wicket:id="everybody" type="radio" /><label wicket:for="everybody"><wicket:message key="1160"/></label>
 			</div>
-			<div>
-				<input wicket:id="contact" type="radio" /><label style="width: 250px" wicket:for="contact"><wicket:message key="1168"/></label>
-				<div class="clear"></div>
+		</div>
+		<div>
+			<div class="d-inline-block col-3"></div>
+			<div class="d-inline-block col-8">
+				<input wicket:id="contact" type="radio" /><label wicket:for="contact"><wicket:message key="1168"/></label>
 			</div>
-			<div>
-				<input wicket:id="nobody" type="radio" /><label style="width: 250px" wicket:for="nobody"><wicket:message key="1169"/></label>
-				<div class="clear"></div>
+		</div>
+		<div>
+			<div class="d-inline-block col-3"></div>
+			<div class="d-inline-block col-8">
+				<input wicket:id="nobody" type="radio" /><label wicket:for="nobody"><wicket:message key="1169"/></label>
 			</div>
 		</div>
 	</div>
 	<div class="formelement">
-		<label wicket:for="userOffers"><wicket:message key="1162" /></label>
-		<textarea wicket:id="userOffers" />
+		<label wicket:for="userOffers" class="col-3"><wicket:message key="1162" /></label>
+		<textarea wicket:id="userOffers" class="col-8"/>
 	</div>
 	<div class="formelement">
-		<label wicket:for="userSearchs"><wicket:message key="1163" /></label>
-		<textarea wicket:id="userSearchs" />
+		<label wicket:for="userSearchs" class="col-3"><wicket:message key="1163" /></label>
+		<textarea wicket:id="userSearchs" class="col-8"/>
 	</div>
 </wicket:panel>
 </html>

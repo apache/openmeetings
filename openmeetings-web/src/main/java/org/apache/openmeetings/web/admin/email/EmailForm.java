@@ -18,25 +18,29 @@
  */
 package org.apache.openmeetings.web.admin.email;
 
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
+
 import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public class EmailForm extends Form<MailMessage> {
 	private static final long serialVersionUID = 1L;
-	private final Label status;
-	private final AjaxButton reset;
-	private ConfirmableAjaxBorder delBtn;
+	private final Label status = new Label("status", Model.of(""));
+	private BootstrapAjaxButton reset;
+	private AjaxLink<Void> delBtn;
 	private final WebMarkupContainer list;
 	@SpringBean
 	private MailMessageDao emailDao;
@@ -44,7 +48,12 @@ public class EmailForm extends Form<MailMessage> {
 	public EmailForm(String id, final WebMarkupContainer list, MailMessage m) {
 		super(id, new CompoundPropertyModel<>(m));
 		this.list = list;
-		add(status = new Label("status", Model.of("")));
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(status);
 		add(new Label("subject"));
 		add(new Label("recipients"));
 		add(new Label("body").setEscapeModelStrings(false));
@@ -52,7 +61,7 @@ public class EmailForm extends Form<MailMessage> {
 		add(new DateLabel("updated"));
 		add(new Label("errorCount"));
 		add(new Label("lastError"));
-		add(reset = new AjaxButton("reset") {
+		add(reset = new BootstrapAjaxButton("reset", new ResourceModel("admin.email.reset.status"), Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -62,30 +71,25 @@ public class EmailForm extends Form<MailMessage> {
 			}
 		});
 		reset.setEnabled(false);
-	}
-
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
 		// add a cancel button that can be used to submit the form via ajax
-		delBtn = new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("833"), this) {
+		delBtn = new AjaxLink<>("btn-delete") {
 			private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				emailDao.delete(getModelObject().getId());
-				setModelObject(new MailMessage());
+			public void onClick(AjaxRequestTarget target) {
+				emailDao.delete(EmailForm.this.getModelObject().getId());
+				EmailForm.this.setModelObject(new MailMessage());
 				target.add(list, EmailForm.this);
 			}
 		};
-		add(delBtn.setOutputMarkupId(true).setEnabled(false));
+		delBtn.add(newOkCancelDangerConfirm(this, getString("833")));
+		add(delBtn.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true).setVisible(false));
 	}
 
 	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
 		MailMessage m = getModelObject();
-		delBtn.setEnabled(m.getId() != null);
+		delBtn.setVisible(m.getId() != null);
 		status.setDefaultModelObject(getString("admin.email.status." + m.getStatus().name()));
 		reset.setEnabled(m.getId() != null && MailMessage.Status.ERROR == m.getStatus());
 	}

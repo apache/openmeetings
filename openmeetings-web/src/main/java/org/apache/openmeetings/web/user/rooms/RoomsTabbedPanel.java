@@ -20,21 +20,18 @@ package org.apache.openmeetings.web.user.rooms;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.util.stream.Collectors;
+
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.user.Group;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.common.UserPanel;
-import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
 public class RoomsTabbedPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
@@ -52,28 +49,13 @@ public class RoomsTabbedPanel extends UserPanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		User u = userDao.get(getUserId());
-		add(new ListView<>("orgTabs", u.getGroupUsers()) {
+		add(new AjaxBootstrapTabbedPanel<>("orgTabs", u.getGroupUsers().stream().map(gu -> new AbstractTab(Model.of(gu.getGroup().getName())) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<GroupUser> item) {
-				Group org = item.getModelObject().getGroup();
-				item.add(new WebMarkupContainer("link")
-					.add(new Label("name", Model.of(org.getName())))
-					.add(AttributeModifier.replace("href", "#org" + org.getId())));
+			public WebMarkupContainer getPanel(String panelId) {
+				return new RoomsPanel(panelId, roomDao.getGroupRooms(gu.getGroup().getId()));
 			}
-		});
-		add(new ListView<>("orgRooms", u.getGroupUsers()) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void populateItem(ListItem<GroupUser> item) {
-				Group org = item.getModelObject().getGroup();
-				item.add(new RoomsPanel("rooms"
-					, roomDao.getGroupRooms(org.getId()))
-					.setMarkupId("org" + org.getId())).setRenderBodyOnly(true);
-			}
-		});
-		add(new JQueryBehavior("#orgTabs", "tabs"));
+		}).collect(Collectors.toList())));
 	}
 }

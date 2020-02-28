@@ -24,7 +24,6 @@ import static org.apache.openmeetings.web.pages.HashPage.APP;
 import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.showAuth;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -39,16 +38,15 @@ import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
 import org.apache.openmeetings.web.pages.HashPage;
-import org.apache.openmeetings.web.util.NonClosableDialog;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -68,27 +66,26 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.effect.JQueryEffectBehavior;
-import com.googlecode.wicket.jquery.ui.form.button.Button;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
-public class SignInDialog extends NonClosableDialog<String> {
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
+
+public class SignInDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(SignInDialog.class);
 	private Form<String> form;
-	private DialogButton loginBtn;
-	private DialogButton registerBtn;
 	private final PasswordTextField passField = new PasswordTextField("pass", Model.of(""));
 	private final RequiredTextField<String> loginField = new RequiredTextField<>("login", Model.of(""));
 	private boolean rememberMe = false;
-	private RegisterDialog r;
+	private RegisterDialog register;
 	private ForgetPasswordDialog f;
 	private LdapConfig domain;
-	private SignInPage page;
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private NotificationPanel feedback = new NotificationPanel("feedback");
 	@SpringBean
 	private ConfigurationDao cfgDao;
 	@SpringBean
@@ -96,206 +93,55 @@ public class SignInDialog extends NonClosableDialog<String> {
 	@SpringBean
 	private OAuth2Dao oauthDao;
 
-	public SignInDialog(String id, SignInPage page) {
-		super(id, "");
-		this.page = page;
-		add(form = new SignInForm("signin"));
+	public SignInDialog(String id) {
+		super(id);
 		add(new OmAjaxClientInfoBehavior());
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("108"));
-		loginBtn = new DialogButton("login", getString("112")) {
+		add(form = new SignInForm("signin"));
+		header(new ResourceModel("108"));
+		show(true);
+		setCloseOnEscapeKey(false);
+		setBackdrop(Backdrop.STATIC);
+		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("123")) {
 			private static final long serialVersionUID = 1L;
 
-			@Override
-			public boolean isIndicating() {
-				return true;
+			public void onClick(AjaxRequestTarget target) {
+				SignInDialog.this.close(target);
+				register.setClientTimeZone();
+				register.show(target);
 			}
-		};
-		registerBtn = new DialogButton("register", getString("123"));
+		});
+		addButton(new SpinnerAjaxButton("button", new ResourceModel("112"), form, Buttons.Type.Outline_Primary)); // Login
+
 		super.onInitialize();
 	}
 
+	@Override
+	protected Component createHeaderCloseButton(String id) {
+		return super.createHeaderCloseButton(id).setVisible(false);
+	}
+
 	public void setRegisterDialog(RegisterDialog r) {
-		this.r = r;
+		this.register = r;
 	}
 
 	public void setForgetPasswordDialog(ForgetPasswordDialog f) {
 		this.f = f;
 	}
 
-	@Override
-	public void onConfigure(JQueryBehavior behavior) {
-		super.onConfigure(behavior);
-		behavior.setOption("autoOpen", true);
-	}
-
-	@Override
-	public boolean isResizable() {
-		return false;
-	}
-
-	@Override
-	public boolean isDefaultCloseEventEnabled() {
-		return false;
-	}
-
-	@Override
-	public int getWidth() {
-		return page.allowOAuthLogin()? 550: 450;
-	}
-
-	@Override
-	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		if (registerBtn.equals(button)) {
-			r.setClientTimeZone();
-			r.open(handler);
-		}
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		List<DialogButton> list = new ArrayList<>();
-		if (page.allowRegister()) {
-			list.add(registerBtn);
-		}
-		list.add(loginBtn);
-		return list;
-	}
-
-	@Override
-	public DialogButton getSubmitButton() {
-		return loginBtn;
-	}
-
-	@Override
-	public Form<String> getForm() {
-		return form;
-	}
-
 	private void shake(AjaxRequestTarget target) {
 		target.appendJavaScript(JQueryEffectBehavior.toString("#" + getMarkupId(), "shake"));
 	}
 
-	@Override
-	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		if (registerBtn.equals(button) || WebSession.get().isSignedIn()) {
-			super.onClick(target, button);
-		}
-	}
-
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
-		shake(target);
-	}
-
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		final String login = String.format(domain.getAddDomainToUserName() ? "%s@%s" : "%s"
-				, loginField.getModelObject(), domain.getDomain());
-		final String password = passField.getModelObject();
-		OmAuthenticationStrategy strategy = getAuthenticationStrategy();
-		WebSession ws = WebSession.get();
-		Type type = domain.getId() > 0 ? Type.ldap : Type.user;
-		boolean signIn = false;
-		try {
-			signIn = ws.signIn(login, password, type, domain.getId());
-		} catch (OmException e) {
-			error(getString(e.getKey()));
-			target.add(feedback);
-		}
-		if (signIn) {
- 			setResponsePage(Application.get().getHomePage());
-			if (rememberMe) {
-				strategy.save(login, password, type, domain.getId());
-			} else {
-				strategy.remove();
-			}
-		} else {
-			if (!hasErrorMessage()) {
-				error(getString("error.bad.credentials"));
-				target.add(feedback);
-			}
-			// add random timeout
-			try {
-				Thread.sleep(6 + (long)(10 * Math.random() * 1000));
-			} catch (InterruptedException e) {
-				log.error("Unexpected exception while sleeping", e);
-			}
-			strategy.remove();
-			shake(target);
-		}
-	}
-
 	class SignInForm extends StatelessForm<String> {
 		private static final long serialVersionUID = 1L;
+		private final WebMarkupContainer credentials = new WebMarkupContainer("credentials");
 
 		public SignInForm(String id) {
 			super(id);
-
-			if (WebSession.get().isSignedIn()) {
-				alreadyLoggedIn();
-			}
-			add(feedback.setOutputMarkupId(true));
-			add(loginField, passField.setResetPassword(true));
-			List<LdapConfig> ldaps = ldapDao.get();
-			int selectedLdap = cfgDao.getInt(CONFIG_DEFAULT_LDAP_ID, 0);
-			domain = ldaps.get(selectedLdap < ldaps.size() && selectedLdap > 0 ? selectedLdap : 0);
-			add(new WebMarkupContainer("ldap")
-				.add(new DropDownChoice<>("domain", new PropertyModel<LdapConfig>(SignInDialog.this, "domain")
-						, ldaps, new ChoiceRenderer<LdapConfig>("name", "id"))).setVisible(ldaps.size() > 1));
-			add(new CheckBox("rememberMe", new PropertyModel<Boolean>(SignInDialog.this, "rememberMe")).setOutputMarkupId(true));
-			AjaxButton ab = new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onSubmit(AjaxRequestTarget target) {
-					SignInDialog.this.onSubmit(target, loginBtn);
-				}
-
-				@Override
-				protected void onError(AjaxRequestTarget target) {
-					SignInDialog.this.onError(target, loginBtn);
-				}
-			};
-			add(ab);
-			setDefaultButton(ab);
-			add(new AjaxLink<Void>("forget") {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onClick(AjaxRequestTarget target) {
-					SignInDialog.this.close(target, null);
-					f.open(target);
-				}
-			});
-			add(new WebMarkupContainer("netTest").add(AttributeModifier.append("href"
-					, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP, APP_TYPE_NETWORK)).toString())));
-			add(new WebMarkupContainer("oauthContainer").add(
-				new ListView<>("oauthList", oauthDao.getActive()) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void populateItem(final ListItem<OAuthServer> item) {
-						final OAuthServer s = item.getModelObject();
-						Button btn = new Button("oauthBtn") {
-							private static final long serialVersionUID = 1L;
-
-							@Override
-							public void onSubmit() {
-								showAuth(s);
-							}
-						};
-						Component lbl = new Label("label", s.getName());
-						if (!Strings.isEmpty(s.getIconUrl())) {
-							lbl.add(AttributeModifier.replace("style", String.format("background-image: url(%s)", s.getIconUrl())));
-						}
-						btn.add(lbl);
-						item.add(btn.setDefaultFormProcessing(false)); //skip all rules, go to redirect
-					}
-				}).setVisible(page.allowOAuthLogin()));
 		}
 
 		@Override
@@ -303,6 +149,87 @@ public class SignInDialog extends NonClosableDialog<String> {
 			loginField.setLabel(new ResourceModel("114"));
 			passField.setLabel(new ResourceModel("110"));
 			super.onInitialize();
+			if (WebSession.get().isSignedIn()) {
+				alreadyLoggedIn();
+			}
+			add(credentials, feedback.setOutputMarkupId(true));
+			credentials.add(loginField, passField.setResetPassword(true));
+			List<LdapConfig> ldaps = ldapDao.get();
+			final boolean showLdap = ldaps.size() > 1;
+			int selectedLdap = cfgDao.getInt(CONFIG_DEFAULT_LDAP_ID, 0);
+			domain = ldaps.get(selectedLdap < ldaps.size() && selectedLdap > 0 ? selectedLdap : 0);
+			credentials.add(new WebMarkupContainer("ldap")
+				.add(new DropDownChoice<>("domain", new PropertyModel<LdapConfig>(SignInDialog.this, "domain")
+						, ldaps, new ChoiceRenderer<LdapConfig>("name", "id"))).setVisible(showLdap));
+			credentials.add(new CheckBox("rememberMe", new PropertyModel<Boolean>(SignInDialog.this, "rememberMe")).setOutputMarkupId(true));
+			AjaxButton ab = new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onSubmit(AjaxRequestTarget target) {
+					SignInForm.this.onSubmit(target);
+				}
+
+				@Override
+				protected void onError(AjaxRequestTarget target) {
+					SignInForm.this.onError(target);
+				}
+			};
+			add(ab);
+			setDefaultButton(ab);
+			credentials.add(new AjaxLink<Void>("forget") {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick(AjaxRequestTarget target) {
+					SignInDialog.this.close(target);
+					f.show(target);
+				}
+			});
+			add(new WebMarkupContainer("netTest").add(AttributeModifier.append("href"
+					, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP, APP_TYPE_NETWORK)).toString())));
+			final boolean showOauth = ((SignInPage)getPage()).allowOAuthLogin();
+			add(new WebMarkupContainer("oauth").add(
+				new ListView<>("oauthList", oauthDao.getActive()) {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void populateItem(final ListItem<OAuthServer> item) {
+						final OAuthServer s = item.getModelObject();
+
+						BootstrapAjaxLink<String> btn = new BootstrapAjaxLink<>("oauthBtn", null, Buttons.Type.Outline_Info, Model.of(s.getName())) {
+							private static final long serialVersionUID = 1L;
+							{
+								setMarkupId("om-oauth-btn-" + s.getId());
+								setOutputMarkupId(true);
+							}
+
+							@Override
+							public void onClick(AjaxRequestTarget target) {
+								showAuth(s);
+							}
+
+							@Override
+							public void renderHead(IHeaderResponse response) {
+								if (!Strings.isEmpty(s.getIconUrl())) {
+									response.render(CssHeaderItem.forCSS("#" + this.getMarkupId() + " .provider {background-image: url(" + s.getIconUrl() + ")}", "oauth-btn-css-" + this.getMarkupId()));
+								}
+							}
+						};
+						item.add(btn.setIconType(new IconType("provider") {
+							private static final long serialVersionUID = 1L;
+
+							@Override
+							public String cssClassName() {
+								return "provider";
+							}
+						}));
+						item.setRenderBodyOnly(true);
+					}
+				}).setVisible(showOauth));
+			if (showOauth) {
+				add(AttributeModifier.append("class", "wide"));
+			}
 		}
 
 		private void alreadyLoggedIn() {
@@ -310,6 +237,57 @@ public class SignInDialog extends NonClosableDialog<String> {
 			continueToOriginalDestination();
 			// Ups, no original destination. Go to the home page
 			throw new RestartResponseException(Application.get().getHomePage());
+		}
+
+		@Override
+		protected void onError() {
+			RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(this::onError);
+		}
+
+		protected void onError(AjaxRequestTarget target) {
+			shake(target);
+		}
+
+		@Override
+		protected void onSubmit() {
+			RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(this::onSubmit);
+		}
+
+		protected void onSubmit(AjaxRequestTarget target) {
+			final String login = String.format(domain.getAddDomainToUserName() ? "%s@%s" : "%s"
+					, loginField.getModelObject(), domain.getDomain());
+			final String password = passField.getModelObject();
+			OmAuthenticationStrategy strategy = getAuthenticationStrategy();
+			WebSession ws = WebSession.get();
+			Type type = domain.getId() > 0 ? Type.ldap : Type.user;
+			boolean signIn = false;
+			try {
+				signIn = ws.signIn(login, password, type, domain.getId());
+			} catch (OmException e) {
+				error(getString(e.getKey()));
+				target.add(feedback);
+			}
+			if (signIn) {
+	 			setResponsePage(Application.get().getHomePage());
+				if (rememberMe) {
+					strategy.save(login, password, type, domain.getId());
+				} else {
+					strategy.remove();
+				}
+			} else {
+				if (!hasErrorMessage()) {
+					error(getString("error.bad.credentials"));
+					target.add(feedback);
+				}
+				// add random timeout
+				try {
+					Thread.sleep(6 + (long)(10 * Math.random() * 1000));
+				} catch (InterruptedException e) {
+					log.error("Unexpected exception while sleeping", e);
+				}
+				strategy.remove();
+				shake(target);
+			}
 		}
 	}
 }

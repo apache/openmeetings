@@ -18,20 +18,22 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public abstract class FormActionsPanel<T> extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final Form<T> form;
-	protected final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	protected final NotificationPanel feedback = new NotificationPanel("feedback");
 	private AjaxButton saveBtn;
-	private ConfirmableAjaxBorder purgeBtn;
+	private AjaxLink<Void> purgeBtn;
 
 	public FormActionsPanel(String id, Form<T> form) {
 		super(id);
@@ -63,43 +65,29 @@ public abstract class FormActionsPanel<T> extends Panel {
 		});
 
 		// add a refresh button that can be used to submit the form via ajax
-		add(new AjaxButton("btn-refresh", form) {
+		add(new AjaxLink<Void>("btn-refresh") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
+			public void onClick(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
 				setNewVisible(false);
 				onRefreshSubmit(target, form);
 			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target) {
-				// repaint the feedback panel so errors are shown
-				target.add(feedback);
-				setNewVisible(false);
-				FormActionsPanel.this.onError(target, form);
-			}
 		});
-		purgeBtn = new ConfirmableAjaxBorder("btn-purge", getString("admin.purge"), getString("admin.purge.desc"), form, null, false) {
+		purgeBtn = new AjaxLink<>("btn-purge") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
+			public void onClick(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
 				setNewVisible(false);
 				onPurgeSubmit(target, form);
 			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target) {
-				// repaint the feedback panel so errors are shown
-				target.add(feedback);
-				FormActionsPanel.this.onError(target, form);
-			}
 		};
+		purgeBtn.add(newOkCancelDangerConfirm(this, getString("admin.purge.desc")));
 		add(purgeBtn.setOutputMarkupPlaceholderTag(true).setVisible(false));
 		super.onInitialize();
 	}

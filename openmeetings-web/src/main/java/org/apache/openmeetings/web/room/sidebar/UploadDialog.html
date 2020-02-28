@@ -20,28 +20,27 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
+<wicket:extend>
 	<form wicket:id="form">
-		<div style="margin-bottom: 30px;"><wicket:message key="594"/></div>
-		<div class="fileinput fileinput-new" data-provides="fileinput" style="margin: 0;">
-			<div style="display: block;" class="fileinput-filename"></div>
-			<span class="btn btn-file ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="width: 120px;">
-				<span class="ui-button-text"><wicket:message key="596"/></span>
+		<div class="mb-4"><wicket:message key="594"/></div>
+		<div class="fileinput fileinput-new d-inline m-0" data-provides="fileinput">
+			<div class="fileinput-filename d-block"></div>
+			<span class="btn btn-file btn-outline-primary">
+				<span><wicket:message key="596"/></span>
 				<input type="file" multiple="multiple" wicket:id="file"/>
 			</span>
 		</div>
 		<div wicket:id="feedback" class="error"></div>
-		<span wicket:id="progress">[progressbar]</span>
-		<div style="margin-top: 30px;">
+		<div class="mt-3">
 			<input wicket:id="to-wb" type="checkbox"/><label wicket:for="to-wb"><wicket:message key="1312"/></label>
-			<div style="margin-left: 30px;" wicket:id="clean-block">
+			<div class="ml-3" wicket:id="clean-block">
 				<input wicket:id="clean-wb" type="checkbox"/><label wicket:for="clean-wb"><wicket:message key="62"/></label>
 			</div>
 		</div>
 	</form>
-	<div wicket:id="convProgress"></div>
+	<div wicket:id="progress"></div>
 	<form wicket:id="name-form">
 		<input type="hidden" wicket:id="name"/>
 	</form>
-</wicket:panel>
+</wicket:extend>
 </html>

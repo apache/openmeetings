@@ -34,10 +34,10 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.JQueryIcon;
-import com.googlecode.wicket.jquery.ui.markup.html.link.AjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.image.Icon;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public class Captcha extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -88,7 +88,7 @@ public class Captcha extends Panel {
 				}
 			}
 		}).setOutputMarkupId(true));
-		add(new AjaxLink<String>("refresh") {
+		add(new BootstrapAjaxLink<>("refresh", Model.of(""), Buttons.Type.Outline_Info, new ResourceModel("lbl.refresh")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -97,10 +97,8 @@ public class Captcha extends Panel {
 				target.add(captcha);
 			}
 
-			@Override
-			public void onConfigure(JQueryBehavior behavior) {
-				behavior.setOption("icon", Options.asString(JQueryIcon.REFRESH));
-				behavior.setOption("showLabel", false);
+			protected Icon newIcon(String markupId) {
+				return new Icon(markupId, FontAwesome5IconType.sync_s);
 			}
 		});
 	}

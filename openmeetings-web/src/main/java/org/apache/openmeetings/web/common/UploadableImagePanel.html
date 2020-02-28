@@ -21,13 +21,22 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-	<span class="ui-button-icon ui-icon ui-corner-all ui-icon-closethick remove clickable"
-		wicket:id="remove"></span>
-	<form wicket:id="form"><div
-		class="fileinput fileinput-new" data-provides="fileinput" style="margin: 0;"><div
-		class="fileinput-preview" data-trigger="fileinput"><img wicket:id="img"/></div><div><span
-		class="btn btn-file ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-		style="width: 120px;"><span class="ui-button-text"><wicket:message key="379"/></span><input
-		type="file" accept="image/*" wicket:id="image"/></span></div></div><span wicket:id="progress">[progressbar]</span></form>
+	<button type="button" class="btn btn-xs btn-outline-secondary remove" wicket:id="remove">
+		<span aria-hidden="true">×</span>
+	</button>
+	<form wicket:id="form" class="img-upload">
+		<div class="fileinput fileinput-new m-0" data-provides="fileinput">
+			<div class="fileinput-preview" data-trigger="fileinput">
+				<img wicket:id="img"/>
+			</div>
+			<div>
+				<span class="btn btn-file btn-xs btn-primary">
+					<wicket:message key="379"/>
+					<input type="file" accept="image/*" wicket:id="image"/>
+				</span>
+			</div>
+		</div>
+		<span wicket:id="progress">[progressbar]</span>
+	</form>
 </wicket:extend>
 </html>

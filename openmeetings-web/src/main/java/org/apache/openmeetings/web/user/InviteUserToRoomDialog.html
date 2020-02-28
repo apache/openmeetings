@@ -20,8 +20,8 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
-	<div class="rooms desc info-text"><wicket:message key="1132"/></div>
+<wicket:extend>
+	<div class="rooms desc"><i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="1132"/></div>
 	<div class="rooms title"><wicket:message key="777"/></div>
 	<div class="room list container">
 		<div wicket:id="publicRooms"></div>
@@ -31,5 +31,5 @@
 		<div wicket:id="privateRooms"></div>
 	</div>
 	<div wicket:id="inviteMsg"/>
-</wicket:panel>
+</wicket:extend>
 </html>

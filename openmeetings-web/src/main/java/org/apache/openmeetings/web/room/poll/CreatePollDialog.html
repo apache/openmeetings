@@ -20,7 +20,7 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
+<wicket:extend>
 	<form wicket:id="form">
 		<table>
 			<tr>
@@ -32,17 +32,17 @@
 			</tr>
 			<tr>
 				<td><label wicket:for="question"><wicket:message key="20" /></label></td>
-				<td><textarea wicket:id="question" style="width: 280px; height: 70px;"></textarea></td>
+				<td><textarea wicket:id="question"></textarea></td>
 			</tr>
 			<tr>
 				<td><label wicket:for="type"><wicket:message key="21" /></label></td>
 				<td><select wicket:id="type"/></td>
 			</tr>
 			<tr>
-				<td colspan="2" style="color: red;"><wicket:message key="23" /></td>
+				<td colspan="2"><wicket:message key="23" /></td>
 			</tr>
 		</table>
 		<div wicket:id="feedback"></div>
 	</form>
-</wicket:panel>
+</wicket:extend>
 </html>

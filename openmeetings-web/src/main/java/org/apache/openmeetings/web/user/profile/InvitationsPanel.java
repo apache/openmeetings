@@ -104,7 +104,7 @@ public class InvitationsPanel extends UserBasePanel {
 		Long id = i.getId();
 		StringBuilder sb = new StringBuilder(ROW_CLASS);
 		if (id != null && id.equals(selected)) {
-			sb.append(" ui-state-default");
+			sb.append(" selected");
 		}
 		return sb;
 	}

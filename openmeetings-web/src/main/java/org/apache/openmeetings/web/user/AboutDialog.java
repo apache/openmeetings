@@ -23,40 +23,25 @@ import static org.apache.openmeetings.util.Version.getBuildDate;
 import static org.apache.openmeetings.util.Version.getRevision;
 import static org.apache.openmeetings.util.Version.getVersion;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.ResourceModel;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public class AboutDialog extends AbstractDialog<String> {
+public class AboutDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
 
 	public AboutDialog(String id) {
-		super(id, "");
-
-		add(new Label("name", getApplicationName()));
-		add(new Label("version", getVersion()));
-		add(new Label("revision", getRevision()));
-		add(new Label("buildDate", getBuildDate()));
+		super(id);
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("1549"));
+		header(new ResourceModel("1549"));
 		super.onInitialize();
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return new ArrayList<>();
-	}
-
-	@Override
-	public void onClose(IPartialPageRequestHandler handler, DialogButton arg1) {
-		//no-op
+		add(new Label("name", getApplicationName()));
+		add(new Label("version", getVersion()));
+		add(new Label("revision", getRevision()));
+		add(new Label("buildDate", getBuildDate()));
 	}
 }

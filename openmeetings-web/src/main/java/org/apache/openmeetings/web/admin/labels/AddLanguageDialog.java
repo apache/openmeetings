@@ -18,9 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
-import java.util.Arrays;
 import java.util.IllformedLocaleException;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -30,36 +28,63 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public class AddLanguageDialog extends AbstractFormDialog<String> {
+public class AddLanguageDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private DialogButton add;
+	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final Form<Void> form = new Form<>("addLangForm");
 	private final RequiredTextField<String> iso = new RequiredTextField<>("iso", Model.of(""));
 	private final LangPanel langPanel;
 
 	public AddLanguageDialog(String id, final LangPanel langPanel) {
-		super(id, "");
+		super(id);
 		this.langPanel = langPanel;
-		add(form.add(feedback, iso.setOutputMarkupId(true)));
+	}
+
+	@Override
+	protected void onInitialize() {
+		header(new ResourceModel("362"));
+
+		addButton(new BootstrapAjaxButton("button", new ResourceModel("366"), form, Buttons.Type.Outline_Primary) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				try {
+					LabelDao.add(Locale.forLanguageTag(iso.getModelObject()));
+					langPanel.getLangForm().updateLanguages(target);
+					AddLanguageDialog.this.close(target);
+				} catch (Exception e) {
+					error("Failed to add, " + e.getMessage());
+					target.add(feedback);
+				}
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				target.add(feedback);
+			}
+		});
+
+		add(form.add(feedback.setOutputMarkupId(true), iso.setOutputMarkupId(true)));
 		iso.add(new IValidator<String>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void validate(IValidatable<String> s) {
 				try {
-					new Locale.Builder().setLanguageTag(s.getValue());
+					new Locale.Builder().setLanguageTag(s.getValue()).build();
 				} catch (IllformedLocaleException e) {
-					s.error(new ValidationError("Invalid code, please use "));
+					s.error(new ValidationError("Invalid code, please specify valid ISO code"));
 					return;
 				}
 				Locale l = Locale.forLanguageTag(s.getValue());
@@ -71,51 +96,13 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 				}
 			}
 		});
-	}
-
-	@Override
-	protected void onInitialize() {
-		add = new DialogButton("add", getString("366"));
-		getTitle().setObject(getString("362"));
 		super.onInitialize();
 	}
 
 	@Override
-	public Form<?> getForm() {
-		return form;
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(add);
-	}
-
-	@Override
-	public DialogButton getSubmitButton() {
-		return add;
-	}
-
-	@Override
-	protected void onOpen(IPartialPageRequestHandler handler) {
+	public Modal<String> show(IPartialPageRequestHandler handler) {
 		iso.setModelObject("");
 		handler.add(iso);
-		super.onOpen(handler);
-	}
-
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
-		target.add(feedback);
-	}
-
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		try {
-			LabelDao.add(Locale.forLanguageTag(iso.getModelObject()));
-			langPanel.getLangForm().updateLanguages(target);
-			target.appendJavaScript("$('#addLanguage').dialog('close');");
-		} catch (Exception e) {
-			error("Failed to add, " + e.getMessage());
-			target.add(feedback);
-		}
+		return super.show(handler);
 	}
 }

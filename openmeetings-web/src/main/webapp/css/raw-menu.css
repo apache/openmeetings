@@ -1,37 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-#menu .ui-menu:after {
-	content: ".";
-	display: block;
-	clear: both;
-	visibility: hidden;
-	line-height: 0;
-	height: 0;
-}
-#menu .ui-menu .ui-menu-item {
-	display: inline-block;
-	margin: 0;
-	line-height: 1.2em !important;
-	padding: .2em 2.1em .2em 1em;
-	font-weight: normal;
-}
-#menu .ui-menu .ui-menu-item, #menu .ui-menu .ui-menu-item .ui-state-active {
-	font-weight: bold;
-}
-#menu .ui-menu .ui-menu-item.sub {
-	width: 280px;
-	display: block;
-}
-#menu .ui-menu .ui-menu-item.top {
-	border: 0 !important;
-}
-#menu .ui-menu.ui-widget.ui-widget-content.ui-menu-icons {
-	border: 0;
-}
-#menu .ui-menu {
-	z-index: var(--menu-zindex);
-}
-.recording .ui-menu .ui-menu-item {
-	display: block;
+#menu .navbar {
+	padding-top: 0;
+	padding-bottom: 0;
 }
 .room-block .menu {
 	height: var(--room-menu-height);

@@ -26,7 +26,6 @@ import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -43,8 +42,8 @@ public class RoomFilePanel extends FileTreePanel {
 	@SpringBean
 	private RecordingDao recDao;
 
-	public RoomFilePanel(String id, RoomPanel room, NameDialog addFolder, ConfirmableBorderDialog trashConfirm) {
-		super(id, room.getRoom().getId(), addFolder, trashConfirm);
+	public RoomFilePanel(String id, RoomPanel room, NameDialog addFolder) {
+		super(id, room.getRoom().getId(), addFolder);
 		this.room = room;
 	}
 

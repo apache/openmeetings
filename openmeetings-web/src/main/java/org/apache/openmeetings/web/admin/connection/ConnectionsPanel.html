@@ -23,14 +23,14 @@
 <wicket:extend>
 	<div class="adminPanelColumnTable">
 		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
-		<table class="list-table">
+		<table class="list-table table-striped table-hover">
 			<thead>
-				<tr class="ui-widget-header">
+				<tr>
 					<th class="col-2"><wicket:message key="45" /></th>
 					<th class="col-2"><wicket:message key="108" /></th>
 					<th class="col-2"><wicket:message key="601" /></th>
 					<th class="col-2"><wicket:message key="602" /></th>
-					<th class="col-2" style="padding: 0 16px;"><wicket:message key="603" /></th>
+					<th class="col-2 pl-3 pr-3"><wicket:message key="603" /></th>
 					<th class="col-2"><wicket:message key="1500" /></th>
 				</tr>
 			</thead>
@@ -40,7 +40,7 @@
 					<td class="col-2" wicket:id="login"></td>
 					<td class="col-2" wicket:id="since"></td>
 					<td class="col-2" wicket:id="scope"></td>
-					<td class="col-2"><a wicket:id="kick"><wicket:message key="603" /></a></td>
+					<td class="col-2 p-0"><a wicket:id="kick" class="om-kick-btn"></a></td>
 					<td class="col-2" wicket:id="server"></td>
 				</tr>
 			</tbody>
@@ -48,7 +48,7 @@
 	</div>
 	<div class="adminPanelColumnForm" id="adminForm">
 		<div class="scrollcontent">
-			<table wicket:id="details" style="width: 100%;">
+			<table wicket:id="details" class="w-100">
 				<tr wicket:id="line"><td wicket:id="name"></td><td wicket:id="value"></td></tr>
 			</table>
 			<div class="bottom-bumper"></div>

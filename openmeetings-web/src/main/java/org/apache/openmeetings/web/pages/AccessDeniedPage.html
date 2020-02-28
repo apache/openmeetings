@@ -20,15 +20,15 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org" wicket:id="html">
 <wicket:extend>
-	<div class="ui-widget ui-corner-all ui-widget-shadow" style="margin: 4em;">
-		<div class="ui-widget-content ui-corner-all ui-state-error" style="padding: 2em;">
+	<div class="access-denied outer">
+		<div class="border text-danger inner">
 			<div>
 				<h2><wicket:message key="access.denied.header"/></h2>
 			</div>
-			<div style="text-align: center;">
+			<div class="centered">
 				<form wicket:id="form">
-					<button class="ui-state-error" wicket:id="home"><wicket:message key="124"/></button>
-					<button class="ui-state-error" wicket:id="logout"><wicket:message key="310"/></button>
+					<button wicket:id="home"></button>
+					<button wicket:id="logout"></button>
 				</form>
 			</div>
 		</div>

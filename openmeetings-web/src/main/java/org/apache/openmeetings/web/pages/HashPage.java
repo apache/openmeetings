@@ -36,7 +36,9 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.IUpdatable;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.common.OmWebSocketPanel;
+import org.apache.openmeetings.web.room.IconTextModal;
 import org.apache.openmeetings.web.room.NetTestPanel;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.VideoSettings;
@@ -44,23 +46,15 @@ import org.apache.openmeetings.web.user.record.VideoInfo;
 import org.apache.openmeetings.web.user.record.VideoPlayer;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
-
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class HashPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
@@ -74,7 +68,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	static final String HASH = "secure";
 	static final String LANG = "language";
 	private final WebMarkupContainer recContainer = new WebMarkupContainer(PANEL_RECORDING);
-	private final VideoInfo vi = new VideoInfo("info", null);
+	private final VideoInfo vi = new VideoInfo("info");
 	private final VideoPlayer vp = new VideoPlayer("player");
 	private boolean error = true;
 	private MainPanel mp = null;
@@ -208,26 +202,13 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		add(recContainer.add(vi.setShowShare(false).setOutputMarkupPlaceholderTag(true),
 				vp.setOutputMarkupPlaceholderTag(true)), new InvitationPasswordDialog("i-pass", this));
 		remove(urlParametersReceivingBehavior);
-		add(new MessageDialog("access-denied", getString("invalid.hash"), errorMsg, DialogButtons.OK,
-				DialogIcon.ERROR) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onConfigure(JQueryBehavior behavior) {
-				super.onConfigure(behavior);
-				behavior.setOption("autoOpen", error);
-			}
-
-			@Override
-			public boolean isResizable() {
-				return false;
-			}
-
-			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				// no-op
-			}
-		});
+		add(new IconTextModal("access-denied")
+				.withLabel(errorMsg)
+				.withErrorIcon()
+				.addButton(OmModalCloseButton.of("54"))
+				.header(new ResourceModel("invalid.hash"))
+				.show(error)
+				);
 	}
 
 	@Override
@@ -244,11 +225,5 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 			target.add(vi.update(target, i.getRecording()).setVisible(true)
 					, vp.update(target, i.getRecording()).setVisible(true));
 		}
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(CssHeaderItem.forCSS(".invite.om-icon{display: none !important;}", "no-invite-to-room"));
 	}
 }

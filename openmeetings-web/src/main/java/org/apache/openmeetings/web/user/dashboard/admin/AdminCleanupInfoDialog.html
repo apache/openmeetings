@@ -20,27 +20,23 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
-	<div class="ui-widget">
-		<div class="ui-widget-content ui-corner-all">
-			<div wicket:id="feedback"></div>
-			<ul wicket:id="container">
-				<li><span><wicket:message key="dashboard.widget.admin.cleanup.upload"/></span>&nbsp;&nbsp;<span wicket:id="upload-size"></span>
-					<ul>
-						<li><div wicket:id="profile"></div></li>
-						<li><div wicket:id="import"></div></li>
-						<li><div wicket:id="backup"></div></li>
-						<li><div wicket:id="files"></div></li>
-					</ul>
-				</li>
-				<li><span><wicket:message key="dashboard.widget.admin.cleanup.streams"/></span>&nbsp;&nbsp;<span wicket:id="streams-size"></span>
-					<ul>
-						<li><div wicket:id="final"></div></li>
-					</ul>
-				</li>
+<wicket:extend>
+	<div wicket:id="feedback"></div>
+	<ul wicket:id="container">
+		<li><span><wicket:message key="dashboard.widget.admin.cleanup.upload"/></span>&nbsp;&nbsp;<span wicket:id="upload-size"></span>
+			<ul>
+				<li><div wicket:id="profile"></div></li>
+				<li><div wicket:id="import"></div></li>
+				<li><div wicket:id="backup"></div></li>
+				<li><div wicket:id="files"></div></li>
 			</ul>
-			<form wicket:id="form"><div wicket:id="cleanup"></div></form>
-		</div>
-	</div>
-</wicket:panel>
+		</li>
+		<li><span><wicket:message key="dashboard.widget.admin.cleanup.streams"/></span>&nbsp;&nbsp;<span wicket:id="streams-size"></span>
+			<ul>
+				<li><div wicket:id="final"></div></li>
+			</ul>
+		</li>
+	</ul>
+	<form wicket:id="form"><button wicket:id="cleanup"></button></form>
+</wicket:extend>
 </html>

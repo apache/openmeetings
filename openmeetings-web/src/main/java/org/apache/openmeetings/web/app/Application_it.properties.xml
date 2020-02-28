@@ -615,6 +615,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="bad.password.upper"><![CDATA['Weak' password: at least 1 upper-case letter is required]]></entry>
 	<entry key="button.label.share"><![CDATA[Condividi]]></entry>
 	<entry key="calendar.addCalendar"><![CDATA[Add External Calendar]]></entry>
+	<entry key="calendar.sync"><![CDATA[Sync]]></entry>
 	<entry key="calendar.defaultTitle"><![CDATA[New Calendar]]></entry>
 	<entry key="calendar.dialogTitle"><![CDATA[Calendar Details]]></entry>
 	<entry key="calendar.error"><![CDATA[Error in making connection on the URL specified.]]></entry>
@@ -715,7 +716,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 			Per default {0} usa il database integrato {1}. Per
 			ambienti di produzione dovresti considerare l'uso di {2}, {3}, {4}, {5} or {6}
 		</blockquote>
-		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
+		<div class="ui-state-highlight ui-corner-all installer-note">
 			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
 		</div>
 	]]></entry>
@@ -821,24 +822,24 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	</ol>
 
 	<br />
-	<b> <span style="font-size: 1.2em">Se hai ulteriori
+	<b> <span class="installer-important">Se hai ulteriori
 			domande o hai bisogno di supporto sull'installazione o hosting:</span></b>
 	<br />
 	<br />
 
-	<b><span style="font-size: 1.2em">Supporto Communità:</span></b>
+	<b><span class="installer-important">Supporto Communità:</span></b>
 	<br />
 	<br />
-	<span style="font-size: 1.1em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/mailing-lists.html"
 		target="_blank">Mailing lists</a></span>
 	<br />
 	<br />
 
-	<b> <span style="font-size: 1.2em">Supporto Commerciale:</span></b>
+	<b> <span class="installer-important">Supporto Commerciale:</span></b>
 	<br />
 	<br />
-	<span style="font-size: 1.1em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/commercial-support.html"
 		target="_blank">Supporto Commerciale</a></span>
 
@@ -1004,4 +1005,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use room until moderator will join]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Wait moderator]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[Please be patient ...]]></entry>
+	<entry key="wait-moderator.message"><![CDATA[Please wait until <b>moderator</b> will enter the room]]></entry>
+	<entry key="lbl.or"><![CDATA[or]]></entry>
+	<entry key="lbl.new"><![CDATA[new]]></entry>
 </properties>

@@ -22,7 +22,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationN
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getGaCode;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.apache.openmeetings.web.app.Application.isInstalled;
-import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,22 +38,35 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.head.filter.FilteredHeaderItem;
+import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.urlfragment.AsyncUrlFragmentAwarePage;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5CssReference;
+
 public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = 1L;
 	public static final String ALIGN_LEFT = "align-left ";
 	public static final String ALIGN_RIGHT = "align-right ";
-	private final Map<String, String> options;
-	private final HeaderPanel header;
-	private final WebMarkupContainer loader = new WebMarkupContainer("main-loader");
+	public static final String CUSTOM_CSS_FILTER = "customCSS";
+	private final Map<String, String> options = new HashMap<>();
+	private HeaderPanel header;
+	private final WebMarkupContainer loader = new WebMarkupContainer("main-loader") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void renderHead(IHeaderResponse response) {
+			response.render(CssHeaderItem.forReference(new CssResourceReference(BasePage.class, "loader.css")));
+		}
+	};
 
 	public BasePage() {
 		if (isInitComplete()) {
@@ -64,9 +76,13 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		} else {
 			throw new RestartResponseException(NotInitedPage.class);
 		}
-		options = new HashMap<>();
 		options.put("fragmentIdentifierSuffix", "");
 		options.put("keyValueDelimiter", "/");
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		String appName = getApplicationName();
 
 		String code = getLanguageCode();
@@ -77,6 +93,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		add(new Label("pageTitle", appName));
 		add(header = new HeaderPanel("header", appName));
 		add(loader.setVisible(isMainPage()).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
+		add(new HeaderResponseContainer("customCSS", CUSTOM_CSS_FILTER));
 	}
 
 	public abstract boolean isRtl();
@@ -108,8 +125,6 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	protected void internalRenderHead(IHeaderResponse response) {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
 		super.renderHead(response);
-		final String suffix = DEVELOPMENT == getApplication().getConfigurationType() ? "" : ".min";
-		response.render(CssHeaderItem.forUrl(String.format("css/theme_om/jquery-ui%s.css", suffix)));
 		response.render(CssHeaderItem.forUrl("css/theme.css"));
 		if (!Strings.isEmpty(getGaCode())) {
 			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BasePage.class, "om-ga.js"))));
@@ -117,6 +132,8 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 			script.append(getGaCode()).append("');").append(isMainPage() ? "initHash()" : "init()").append(';');
 			response.render(OnDomReadyHeaderItem.forScript(script));
 		}
+		response.render(CssHeaderItem.forReference(FontAwesome5CssReference.instance()));
+		response.render(new FilteredHeaderItem(CssHeaderItem.forUrl("css/custom.css"), CUSTOM_CSS_FILTER));
 	}
 
 	@Override

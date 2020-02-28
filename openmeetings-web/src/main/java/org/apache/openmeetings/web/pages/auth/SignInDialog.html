@@ -20,44 +20,59 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
+<wicket:extend>
 	<form wicket:id="signin" class="signin">
-		<table>
-			<tr>
-				<td>
-					<table>
-						<tr>
-							<td class="desc"><wicket:message key="109" /></td>
-							<td><input wicket:id="login" type="text" value="" /></td>
-						</tr>
-						<tr>
-							<td class="desc"><wicket:message key="110" /></td>
-							<td><input wicket:id="pass" type="password" value="" /></td>
-						</tr>
-						<tr wicket:id="ldap">
-							<td class="desc"><wicket:message key="1118" /></td>
-							<td><select wicket:id="domain"></select></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td style="white-space: nowrap;"><input wicket:id="rememberMe"
-								type="checkbox" /><label wicket:for="rememberMe"><wicket:message key="288" /></label></td>
-						</tr>
-						<tr>
-							<td><a wicket:id="forget"><wicket:message key="311"/></a></td>
-							<td><a wicket:id="netTest" target="_blank"><wicket:message key="1527"/></a></td>
-						</tr>
-					</table>
-				</td>
-				<td wicket:id="oauthContainer" class="oauth-section">
-					<div wicket:id="oauthList">
-						<button wicket:id="oauthBtn"><span class="provider" wicket:id="label"></span></button>
+		<div wicket:id="credentials">
+			<div class="form-group no-gutters">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-user"></i></span>
 					</div>
-				</td>
-			</tr>
-		</table>
-		<span wicket:id="feedback" class="error"></span>
+					<input wicket:id="login" class="form-control" type="text" value="" wicket:message="placeholder:109,title:109"/>
+				</div>
+			</div>
+			<div class="form-group no-gutters">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-lock"></i></span>
+					</div>
+					<input wicket:id="pass" class="form-control" type="password" value="" wicket:message="placeholder:110,title:110"/>
+				</div>
+			</div>
+			<div class="form-group no-gutters" wicket:id="ldap">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-users"></i></span>
+					</div>
+					<select wicket:id="domain" class="form-control" wicket:message="title:1118"></select>
+				</div>
+			</div>
+			<div class="row form-group no-gutters">
+				<div class="col-6">
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" wicket:id="rememberMe" class="custom-control-input"/>
+						<label wicket:for="rememberMe" class="custom-control-label"><wicket:message key="288" /></label>
+					</div>
+				</div>
+				<div class="col-5">
+					<a class="text-primary" wicket:id="forget"><wicket:message key="311"/></a>
+				</div>
+			</div>
+		</div>
+		<div wicket:id="oauth" class="oauth-section">
+			<div class="or-seperator">
+				<i><wicket:message key="lbl.or"/></i>
+			</div>
+			<div wicket:id="oauthList">
+				<a wicket:id="oauthBtn"></a>
+			</div>
+		</div>
+		<div wicket:id="feedback" class="error"></div>
+		<div class="row no-gutters">
+			<div class="col-6"></div>
+			<div class="col-5"><a class="text-primary" wicket:id="netTest" target="_blank"><wicket:message key="1527"/></a></div>
+		</div>
 		<input type="submit" wicket:id="submit" class="invisible-form-component"/>
 	</form>
-</wicket:panel>
+</wicket:extend>
 </html>

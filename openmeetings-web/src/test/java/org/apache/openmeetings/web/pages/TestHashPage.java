@@ -54,7 +54,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
 public class TestHashPage extends AbstractWicketTester {
 	private static final Logger log = LoggerFactory.getLogger(TestHashPage.class);
@@ -69,7 +70,8 @@ public class TestHashPage extends AbstractWicketTester {
 	private void checkAccessDenied(PageParameters pp) {
 		tester.startPage(HashPage.class, pp);
 		tester.assertRenderedPage(HashPage.class);
-		MessageDialog dlg = (MessageDialog)tester.getComponentFromLastRenderedPage("access-denied");
+		@SuppressWarnings("unchecked")
+		Modal<String> dlg = (Modal<String>)tester.getComponentFromLastRenderedPage("access-denied");
 		Boolean autoOpen = ((JQueryBehavior)dlg.getBehaviors().get(0)).getOption("autoOpen");
 		assertTrue(autoOpen, "Access denied should be displayed");
 		tester.assertInvisible(PANEL_MAIN);
@@ -78,7 +80,8 @@ public class TestHashPage extends AbstractWicketTester {
 	private HashPage commonCheck(PageParameters pp) {
 		HashPage page = tester.startPage(HashPage.class, pp);
 		tester.assertRenderedPage(HashPage.class);
-		MessageDialog dlg = (MessageDialog)tester.getComponentFromLastRenderedPage("access-denied");
+		@SuppressWarnings("unchecked")
+		Modal<String> dlg = (Modal<String>)tester.getComponentFromLastRenderedPage("access-denied");
 		Boolean autoOpen = ((JQueryBehavior)dlg.getBehaviors().get(0)).getOption("autoOpen");
 		assertFalse(autoOpen, "Access denied should NOT be displayed");
 		return page;

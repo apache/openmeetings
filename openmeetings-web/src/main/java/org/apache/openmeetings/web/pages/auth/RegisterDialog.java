@@ -24,9 +24,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendRegisterE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendVerificationEmail;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -34,15 +31,13 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.Captcha;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.pages.PrivacyPage;
-import org.apache.openmeetings.web.util.NonClosableDialog;
-import org.apache.openmeetings.web.util.NonClosableMessageDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -51,25 +46,24 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidatable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
-public class RegisterDialog extends NonClosableDialog<String> {
+public class RegisterDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(RegisterDialog.class);
-	private DialogButton cancelBtn;
-	private DialogButton registerBtn;
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final IModel<String> tzModel = Model.of(WebSession.get().getClientTZCode());
-	private RegisterForm form;
+	private final RegisterForm form = new RegisterForm("form");
 	private SignInDialog s;
 	private Captcha captcha;
 	private String firstName;
@@ -79,8 +73,9 @@ public class RegisterDialog extends NonClosableDialog<String> {
 	private String email;
 	private String country;
 	private Long lang;
+	private boolean wasRegistered = false;
 
-	MessageDialog confirmRegistration;
+	private final Modal<String> registerInfo;
 	private boolean sendConfirmation = false;
 	private boolean sendEmailAtRegister = false;
 	@SpringBean
@@ -88,34 +83,20 @@ public class RegisterDialog extends NonClosableDialog<String> {
 	@SpringBean
 	private UserDao userDao;
 
-	public RegisterDialog(String id) {
-		super(id, "");
-		add(form = new RegisterForm("form"));
-		form.setOutputMarkupId(true);
+	public RegisterDialog(String id, Modal<String> registerInfo) {
+		super(id);
+		this.registerInfo = registerInfo;
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("113"));
-		cancelBtn = new DialogButton("cancel", getString("lbl.cancel"));
-		registerBtn = new DialogButton("register", getString("121")) {
-			private static final long serialVersionUID = 1L;
+		header(new ResourceModel("113"));
+		setUseCloseHandler(true);
 
-			@Override
-			public boolean isIndicating() {
-				return true;
-			}
-		};
-		confirmRegistration = new NonClosableMessageDialog("confirmRegistration", getString("235"), getString("warn.notverified")) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				s.open(handler);
-			}
-		};
+		addButton(new SpinnerAjaxButton("button", new ResourceModel("121"), form, Buttons.Type.Outline_Primary)); // register
+		addButton(OmModalCloseButton.of());
+		add(form);
 		add(new Label("register", getString("121")).setRenderBodyOnly(true), new BookmarkablePageLink<>("link", PrivacyPage.class));
-		add(confirmRegistration);
 		reset(null);
 		super.onInitialize();
 	}
@@ -128,17 +109,8 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		tzModel.setObject(WebSession.get().getClientTZCode());
 	}
 
-	@Override
-	public int getWidth() {
-		return 400;
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(registerBtn, cancelBtn);
-	}
-
 	public void reset(IPartialPageRequestHandler handler) {
+		wasRegistered = false;
 		firstName = null;
 		lastName = null;
 		login = null;
@@ -151,7 +123,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 	}
 
 	@Override
-	protected void onOpen(IPartialPageRequestHandler handler) {
+	public Modal<String> show(IPartialPageRequestHandler handler) {
 		String baseURL = getBaseUrl();
 		sendEmailAtRegister = isSendRegisterEmail();
 		sendConfirmation = !Strings.isEmpty(baseURL) && isSendVerificationEmail();
@@ -159,45 +131,18 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		if (sendConfirmation && sendEmailAtRegister) {
 			messageCode = "warn.notverified";
 		}
-		confirmRegistration.setModelObject(getString(messageCode));
+		registerInfo.setModelObject(getString(messageCode));
+		handler.add(registerInfo.get("content"));
 		reset(handler);
 		handler.add(form);
+		return super.show(handler);
 	}
 
 	@Override
-	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		if (!registerBtn.equals(button)) {
-			s.open(handler);
+	public void onClose(IPartialPageRequestHandler handler) {
+		if (!wasRegistered) {
+			s.show(handler);
 		}
-	}
-
-	@Override
-	public DialogButton getSubmitButton() {
-		return registerBtn;
-	}
-
-	@Override
-	public Form<Void> getForm() {
-		return form;
-	}
-
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
-		target.add(feedback);
-	}
-
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		try {
-			Object o = userManager.registerUser(login, password, lastName
-					, firstName, email, country, lang, tzModel.getObject());
-			if (o instanceof String) {
-				confirmRegistration.setModelObject(getString((String)o));
-			}
-		} catch (Exception e) {
-			log.error("[registerUser]", e);
-		}
-		confirmRegistration.open(target);
 	}
 
 	@Override
@@ -217,19 +162,27 @@ public class RegisterDialog extends NonClosableDialog<String> {
 
 		public RegisterForm(String id) {
 			super(id);
+			setOutputMarkupId(true);
+		}
+
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
 			add(feedback.setOutputMarkupId(true));
 			add(firstNameField = new RequiredTextField<>("firstName", new PropertyModel<String>(RegisterDialog.this, "firstName")));
 			add(lastNameField = new RequiredTextField<>("lastName", new PropertyModel<String>(RegisterDialog.this, "lastName")));
 			add(loginField = new RequiredTextField<>("login", new PropertyModel<String>(RegisterDialog.this, "login")));
 			add(passwordField = new PasswordTextField("password", new PropertyModel<String>(RegisterDialog.this, "password")));
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()).setResetPassword(true));
-			add(emailField = new RequiredTextField<>("email", new PropertyModel<String>(RegisterDialog.this, "email")));
-			add(captcha = new Captcha("captcha"));
-		}
+			add(emailField = new RequiredTextField<>("email", new PropertyModel<String>(RegisterDialog.this, "email")) {
+				private static final long serialVersionUID = 1L;
 
-		@Override
-		protected void onInitialize() {
-			super.onInitialize();
+				@Override
+				protected String[] getInputTypes() {
+					return new String[] {"email"};
+				}
+			});
+			add(captcha = new Captcha("captcha"));
 			firstNameField.setLabel(new ResourceModel("117"));
 			lastNameField.setLabel(new ResourceModel("136"));
 			loginField.add(minimumLength(getMinLoginLength())).setLabel(new ResourceModel("114"));
@@ -253,12 +206,12 @@ public class RegisterDialog extends NonClosableDialog<String> {
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					RegisterDialog.this.onSubmit(target, registerBtn);
+					RegisterForm.this.onSubmit(target);
 				}
 
 				@Override
 				protected void onError(AjaxRequestTarget target) {
-					RegisterDialog.this.onError(target, registerBtn);
+					RegisterForm.this.onError(target);
 				}
 			});
 		}
@@ -283,6 +236,36 @@ public class RegisterDialog extends NonClosableDialog<String> {
 					log.error("Unexpected exception while sleeting", e);
 				}
 			}
+		}
+
+		@Override
+		protected void onError() {
+			RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(this::onError);
+		}
+
+		private void onError(AjaxRequestTarget target) {
+			target.add(feedback);
+		}
+
+		@Override
+		protected void onSubmit() {
+			RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(this::onSubmit);
+		}
+
+		private void onSubmit(AjaxRequestTarget target) {
+			wasRegistered = true;
+			try {
+				Object o = userManager.registerUser(login, password, lastName
+						, firstName, email, country, lang, tzModel.getObject());
+				if (o instanceof String) {
+					registerInfo.setModelObject(getString((String)o));
+					target.add(registerInfo.get("content"));
+				}
+			} catch (Exception e) {
+				log.error("[registerUser]", e);
+			}
+			RegisterDialog.this.close(target);
+			registerInfo.show(target);
 		}
 	}
 }

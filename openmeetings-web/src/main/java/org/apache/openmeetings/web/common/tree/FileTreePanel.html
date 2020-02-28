@@ -21,17 +21,34 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<form wicket:id="form" class="full-height">
-	<div class="file tree item drop area">
+	<form wicket:id="form" class="h-100">
+	<div class="file-tree item drop area">
 		<div class="icons clear trash-toolbar" wicket:id="trash-toolbar" wicket:message="title:705">
 			<span wicket:id="upload" wicket:message="title:702"></span>
 			<span wicket:id="create" wicket:message="title:703"></span>
 			<span wicket:id="refresh" class="refresh om-icon big align-left clickable" wicket:message="title:lbl.refresh"></span>
 			<span wicket:id="trash"></span>
 			<div class="clear"></div>
+			<div id="om-js-trash-confirm" class="modal om-confirm-dialog" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="om-js-trash-confirm-header" aria-modal="true" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title" id="om-js-trash-confirm-header"><wicket:message key="80"/></h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						</div>
+						<div class="modal-body"><wicket:message key="713"/></div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-outline-danger ok-btn">
+								<i class="fas fa-exclamation-triangle"></i>&nbsp;<wicket:message key="54"/>
+							</button>
+							<button type="button" data-dismiss="modal" class="btn btn-outline-secondary"><wicket:message key="lbl.cancel"/></button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div wicket:id="tree-container" class="trees">
-			<div id="tree-anchor" style="height: 2px; width: 2px;"></div>
+			<div id="tree-anchor"></div>
 			<div wicket:id="tree"></div>
 		</div>
 		<div class="footer">

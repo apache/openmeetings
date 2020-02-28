@@ -8,42 +8,18 @@ var NetTest = (function() {
 	function _init(_lbls) {
 		lbls = _lbls;
 		output = $('.nettest output');
-		$('.nettest .test-container').each(function() {
-			const cont = $(this)
-				, d = cont.find('.test');
-			d.dialog({
-				closeOnEscape: false
-				, classes: {
-					'ui-dialog': 'ui-corner-all nettest-dialog'
-					, 'ui-dialog-titlebar': 'ui-corner-all no-close'
-				}
-				, autoOpen: true
-				, resizable: false
-				, draggable: false
-				, modal: false
-				, appendTo: '#' + cont.attr('id')
-				, position: {my: "left top", at: "left top", of: cont}
-				, minWidth: 190
-				, width: 190
-				, maxWidth: 190
-				, height: 100
-			});
-			d.parent().find('.ui-dialog-titlebar .ui-dialog-title')
-				.prepend($('<span class="ui-icon"></span>').addClass(d.data('icon')));
-		});
 		$('.nettest button')
-			.button()
 			.click(function() {
 				const btn = $(this);
 				btn.removeClass('complete').removeClass('not-started').addClass('started');
 				testLabel = btn.data('lbl');
 				testName = btn.data('measure');
 				tests[testName].start();
-				btn.find('.value').html('');
+				btn.parent().find('.value').html('');
 			});
 
 		net = new Network();
-		_initTests()
+		_initTests();
 		// progress can be added
 		net.upload
 			.on('start', _start)
@@ -174,7 +150,7 @@ var NetTest = (function() {
 	function _setResult(val) {
 		const btn = _btn();
 		btn.addClass('complete').removeClass('started');
-		btn.find('.value').html(val);
+		btn.parent().find('.value').html(val);
 		testNext = btn.data('next');
 		if (!testNext) {
 			bulk = false;

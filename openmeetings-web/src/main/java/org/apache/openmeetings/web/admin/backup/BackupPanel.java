@@ -25,7 +25,9 @@ import java.io.File;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.openmeetings.backup.BackupExport;
 import org.apache.openmeetings.backup.BackupImport;
@@ -33,18 +35,22 @@ import org.apache.openmeetings.backup.ProgressHolder;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
+import org.apache.openmeetings.web.util.ThreadHelper;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
-import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
-import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -52,10 +58,11 @@ import org.apache.wicket.util.lang.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
-import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.progress.UpdatableProgressBar;
+import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
 /**
  * Panel component to manage Backup Import/Export
  *
@@ -66,7 +73,7 @@ public class BackupPanel extends AdminBasePanel {
 	private static final Logger log = LoggerFactory.getLogger(BackupPanel.class);
 	private static final long serialVersionUID = 1L;
 
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	@SpringBean
 	private BackupExport backupExport;
 	@SpringBean
@@ -81,13 +88,33 @@ public class BackupPanel extends AdminBasePanel {
 	private class BackupForm extends Form<Void> {
 		private static final long serialVersionUID = 1L;
 		private final Model<Boolean> includeFilesInBackup = Model.of(true);
-		private FileUploadField fileUploadField;
-		private AbstractAjaxTimerBehavior timer;
-		private ProgressBar progressBar;
+		private final FileUploadField fileUploadField = new FileUploadField("fileInput", new IModel<List<FileUpload>>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void setObject(List<FileUpload> object) {
+				//no-op
+			}
+
+			@Override
+			public List<FileUpload> getObject() {
+				return new ArrayList<>();
+			}
+		}) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected boolean forceCloseStreamsOnDetach() {
+				return false;
+			}
+		};
+		private UpdatableProgressBar progressBar;
 		private File backupFile;
 		private Throwable th = null;
-		private boolean started = false;
-		private ProgressHolder progressHolder;
+		private boolean modeDownload = false;
+		private final ProgressHolder progressHolder = new ProgressHolder();
+		private BootstrapAjaxButton download;
+		private final WebMarkupContainer upload = new WebMarkupContainer("upload");
 
 		public BackupForm(String id) {
 			super(id);
@@ -103,16 +130,13 @@ public class BackupPanel extends AdminBasePanel {
 			DecimalFormat formatter = new DecimalFormat("#,###.00");
 			add(new Label("MaxUploadSize", formatter.format(megaBytes)));
 
-			// Add one file input field
-			fileUploadField = new FileUploadField("fileInput");
-
 			add(new CheckBox("includeFilesInBackup", includeFilesInBackup));
 
 			// Set maximum size controlled by configuration
 			setMaxSize(Bytes.bytes(maxBytes));
 
 			// Add a component to download a file without page refresh
-			final AjaxDownloadBehavior download = new AjaxDownloadBehavior(new IResource() {
+			final AjaxDownloadBehavior downloader = new AjaxDownloadBehavior(new IResource() {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -129,25 +153,24 @@ public class BackupPanel extends AdminBasePanel {
 					}.respond(attributes);
 				}
 			});
-			add(download);
+			add(downloader);
 			// add an download button
-			add(new AjaxButton("download", this) {
+			add(download = new BootstrapAjaxButton("download", new ResourceModel("1066"), this, Buttons.Type.Outline_Primary) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
+					modeDownload = true;
 					String dateString = "backup_" + CalendarPatterns.getTimeForStreamId(new Date());
 					backupFile = new File(OmFileHelper.getUploadBackupDir(), dateString + ".zip");
-					th = null;
-					started = true;
-					progressHolder = new ProgressHolder();
-
-					timer.restart(target);
-					new Thread(new BackupProcess(backupExport, includeFilesInBackup.getObject())
-						, "Openmeetings - " + dateString).start();
-
-					// repaint the feedback panel so that it is hidden
-					target.add(feedback, progressBar.setVisible(true));
+					startWithProgress(() -> {
+						try {
+							backupExport.performExport(backupFile, includeFilesInBackup.getObject(), progressHolder);
+						} catch (Exception e) {
+							log.error("Exception on panel backup download ", e);
+							th = e;
+						}
+					}, dateString, target);
 				}
 
 				@Override
@@ -156,51 +179,63 @@ public class BackupPanel extends AdminBasePanel {
 					target.add(feedback);
 				}
 			});
-			add(timer = new AbstractAjaxTimerBehavior(Duration.ofSeconds(1)) {
+			add(progressBar = new UpdatableProgressBar("progress", new Model<>(0), BackgroundColorBehavior.Color.Info, true) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected void onTimer(AjaxRequestTarget target) {
-					if (!started) {
-						timer.stop(target);
-						return;
-					}
+				protected IModel<Integer> newValue() {
+					return Model.of(progressHolder.getProgress());
+				}
+
+				@Override
+				protected void onPostProcessTarget(IPartialPageRequestHandler target) {
 					if (th != null) {
-						timer.stop(target);
-						progressBar.setVisible(false);
+						stop(target);
 						feedback.error(th.getMessage());
-						target.add(feedback);
-					} else {
-						progressBar.setModelObject(progressHolder.getProgress());
-						progressBar.refresh(target);
+						onComplete(target);
 					}
+					super.onPostProcessTarget(target);
+				}
+
+				@Override
+				protected void onComplete(IPartialPageRequestHandler target) {
+					progressBar.setVisible(false);
+					target.add(feedback);
+					updateButtons(target, true);
+					if (modeDownload) {
+						downloader.initiate(target);
+					}
+					super.onComplete(target);
 				}
 			});
-			add((progressBar = new ProgressBar("dprogress", new Model<>(0)) {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onComplete(AjaxRequestTarget target) {
-					timer.stop(target);
-					target.add(progressBar.setVisible(false));
-
-					download.initiate(target);
-				}
-			}).setVisible(false).setOutputMarkupPlaceholderTag(true));
-			add(fileUploadField.add(new AjaxFormSubmitBehavior(this, "change") {
+			progressBar.updateInterval(Duration.ofSeconds(1)).stop(null).striped(false).setVisible(false).setOutputMarkupPlaceholderTag(true);
+			upload.add(fileUploadField.add(new AjaxFormSubmitBehavior(this, "change") {
 				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
 					FileUpload upload = fileUploadField.getFileUpload();
+					modeDownload = false;
 					try {
-						if (upload == null || upload.getInputStream() == null) {
-							feedback.error("File is empty");
-							target.add(feedback);
-							return;
-						}
-						backupImport.performImport(upload.getInputStream());
-						feedback.success(getString("387") + " - " + getString("54"));
+						startWithProgress(() -> {
+							try {
+								if (upload == null || upload.getInputStream() == null) {
+									feedback.error("File is empty");
+									target.add(feedback);
+									return;
+								}
+								backupImport.performImport(upload.getInputStream(), progressHolder);
+								feedback.success(getString("387") + " - " + getString("54"));
+							} catch (Exception e) {
+								log.error("Exception on panel backup download ", e);
+								th = e;
+							} finally {
+								if (upload != null) {
+									upload.closeStreams();
+									upload.delete();
+								}
+							}
+						}, "Restore", target);
 					} catch (Exception e) {
 						log.error("Exception on panel backup upload ", e);
 						feedback.error(e);
@@ -215,8 +250,26 @@ public class BackupPanel extends AdminBasePanel {
 					target.add(feedback);
 				}
 			}));
-			add(new Label("cmdLineDesc", getString("1505")).setEscapeModelStrings(false));
+			add(upload.setOutputMarkupId(true), new Label("cmdLineDesc", getString("1505")).setEscapeModelStrings(false).setRenderBodyOnly(true));
 			super.onInitialize();
+		}
+
+		private void updateButtons(IPartialPageRequestHandler target, boolean enabled) {
+			download.setEnabled(enabled);
+			upload.add(enabled ? AttributeModifier.remove("disabled") : AttributeModifier.append("disabled", "disabled"));
+			fileUploadField.setEnabled(enabled);
+			target.add(download, upload);
+		}
+
+		private void startWithProgress(Runnable r, String label, AjaxRequestTarget target) {
+			th = null;
+			progressHolder.setProgress(0);
+
+			ThreadHelper.startRunnable(r, "Openmeetings - " + label);
+
+			// repaint the feedback panel so that it is hidden
+			updateButtons(target, false);
+			target.add(feedback, progressBar.restart(target).setModelObject(0).setVisible(true));
 		}
 
 		@Override
@@ -224,39 +277,18 @@ public class BackupPanel extends AdminBasePanel {
 			includeFilesInBackup.detach();
 			super.onDetach();
 		}
-
-		private class BackupProcess implements Runnable {
-			private BackupExport backup;
-			private boolean includeFiles;
-
-			public BackupProcess(BackupExport backup, boolean includeFiles) {
-				this.backup = backup;
-				this.includeFiles = includeFiles;
-				th = null;
-			}
-
-			@Override
-			public void run() {
-				try {
-					backup.performExport(backupFile, includeFiles, progressHolder);
-				} catch (Exception e) {
-					log.error("Exception on panel backup download ", e);
-					th = e;
-				}
-			}
-		}
 	}
 
 	public BackupPanel(String id) {
 		super(id);
+	}
 
-		add(feedback);
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(feedback.setOutputMarkupId(true));
 
-		BackupForm backupForm = new BackupForm("backupUpload");
-
-		backupForm.add(new UploadProgressBar("progress", backupForm, backupForm.fileUploadField));
-
-		add(backupForm);
+		add(new BackupForm("backupUpload"));
 		add(BootstrapFileUploadBehavior.INSTANCE);
 	}
 }

@@ -22,50 +22,59 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<div class="formelement">
-		<label wicket:for="address.email"><wicket:message key="119" /></label><input type="text" wicket:id="address.email" />
+		<label wicket:for="address.email" class="col-3 text-right"><wicket:message key="119" /></label>
+		<input type="text" wicket:id="address.email" class="col-8"/>
 	</div>
 	<div class="formelement">
-		<label wicket:for="firstname"><wicket:message key="135" /></label><select
-			wicket:id="salutation" style="width: 60px;" /><input type="text"
-			wicket:id="firstname" style="width: 216px;" />
+		<label wicket:for="firstname" class="col-3 text-right"><wicket:message key="135" /></label>
+		<select wicket:id="salutation" class="custom-select col-2"/><input type="text" wicket:id="firstname" class="col-6"/>
 	</div>
 	<div class="formelement">
-		<label wicket:for="lastname"><wicket:message key="136" /></label><input type="text" wicket:id="lastname" />
+		<label wicket:for="lastname" class="col-3 text-right"><wicket:message key="136" /></label>
+		<input type="text" wicket:id="lastname" class="col-8"/>
 	</div>
 	<div class="formelement">
-		<label wicket:for="displayName"><wicket:message key="user.label.displayName" /></label><input type="text" wicket:id="displayName" />
+		<label wicket:for="displayName" class="col-3 text-right"><wicket:message key="user.label.displayName" /></label>
+		<input type="text" wicket:id="displayName" class="col-8"/>
 	</div>
 	<div class="formelement">
-		<label wicket:for="timeZoneId"><wicket:message key="1143" /></label><select wicket:id="timeZoneId" />
+		<label wicket:for="timeZoneId" class="col-3 text-right"><wicket:message key="1143" /></label>
+		<select wicket:id="timeZoneId" class="custom-select col-8"/>
 	</div>
 	<div class="formelement">
-		<label wicket:for="languageId"><wicket:message key="59" /></label><select wicket:id="languageId" />
+		<label wicket:for="languageId" class="col-3 text-right"><wicket:message key="59" /></label>
+		<select wicket:id="languageId" class="custom-select col-8"/>
 	</div>
 	<div class="formelement">
-		<label wicket:for="address.phone"><wicket:message key="607" /></label><input type="text" wicket:id="address.phone" />
+		<label wicket:for="address.phone" class="col-3 text-right"><wicket:message key="607" /></label>
+		<input type="text" wicket:id="address.phone" class="col-8"/>
 	</div>
 	<div class="formelement">
-		<label wicket:for="age"><wicket:message key="138" /></label><input type="text" class="date time picker" wicket:id="age" style="width: 258px;" />
+		<label wicket:for="age" class="col-3 text-right"><wicket:message key="138" /></label>
+		<div class="d-inline-block col-8 p-0">
+			<input type="text" class="date time picker" wicket:id="age"/>
+		</div>
 	</div>
 	<div class="formelement">
-		<label wicket:for="address.street"><wicket:message key="139" /></label><input type="text"
-			wicket:id="address.street" style="width: 244px;" /> <input
-			type="text" wicket:id="address.additionalname" style="width: 30px;" />
+		<label wicket:for="address.street" class="col-3 text-right"><wicket:message key="139" /></label>
+		<input type="text" wicket:id="address.street" class="col-6"/>
+		<input type="text" wicket:id="address.additionalname" class="col-2"/>
 	</div>
 	<div class="formelement">
-		<label wicket:for="address.town"><wicket:message key="140" /></label><input type="text"
-			wicket:id="address.zip" style="width: 60px;" /> <input type="text"
-			wicket:id="address.town" style="width: 214px;" />
+		<label wicket:for="address.town" class="col-3 text-right"><wicket:message key="140" /></label>
+		<input type="text" wicket:id="address.zip" class="col-2"/> <input type="text" wicket:id="address.town" class="col-6"/>
 	</div>
 	<div class="formelement">
-		<label wicket:for="address.country"><wicket:message key="141" /></label><select wicket:id="address.country" />
+		<label wicket:for="address.country" class="col-3 text-right"><wicket:message key="141" /></label>
+		<select wicket:id="address.country" class="custom-select col-8"/>
 	</div>
 	<div class="formelement">
-		<label wicket:for="address.comment"><wicket:message key="142" /></label>
-		<textarea wicket:id="address.comment" />
+		<label wicket:for="address.comment" class="col-3 text-right"><wicket:message key="142" /></label>
+		<textarea wicket:id="address.comment" class="col-8"/>
 	</div>
 	<div class="formelement">
-		<label wicket:for="groupUsers"><wicket:message key="161" /></label><div class="om-select2"><select class="input" wicket:id="groupUsers"></select></div>
+		<label wicket:for="groupUsers" class="col-3 text-right"><wicket:message key="161" /></label>
+		<div class="om-select2 p-0 d-inline-block col-8"><select class="input w-100" wicket:id="groupUsers"></select></div>
 	</div>
 </wicket:panel>
 </html>

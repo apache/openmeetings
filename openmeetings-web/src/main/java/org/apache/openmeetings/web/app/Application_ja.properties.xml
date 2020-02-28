@@ -615,6 +615,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="bad.password.upper"><![CDATA[パスワード強度='弱': 1文字以上の大文字を含める必要があります。]]></entry>
 	<entry key="button.label.share"><![CDATA[共有]]></entry>
 	<entry key="calendar.addCalendar"><![CDATA[外部カレンダーを追加]]></entry>
+	<entry key="calendar.sync"><![CDATA[Sync]]></entry>
 	<entry key="calendar.defaultTitle"><![CDATA[新規カレンダー]]></entry>
 	<entry key="calendar.dialogTitle"><![CDATA[カレンダー詳細]]></entry>
 	<entry key="calendar.error"><![CDATA[エラー。指定された URL に接続できませんでした。]]></entry>
@@ -714,7 +715,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 			既定では、{0} は組み込み済みデータベース {1} を使用しますが、
 			本番環境では、下記のデータベースの使用をご検討ください: {2}, {3}, {4}, {5}, {6} 
 		</blockquote>
-		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
+		<div class="ui-state-highlight ui-corner-all installer-note">
 			<p><strong>注:</strong> 予見し難い DB ログイン名と8文字以上の強固なパスワードを使用してください。</p>
 		</div>
 
@@ -817,22 +818,22 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	</ol>
 
 	<br />
-	<b> <span style="font-size: 1.2em">インストール手順やホスティング等のお問い合わせ先:</span></b>
+	<b> <span class="installer-important">インストール手順やホスティング等のお問い合わせ先:</span></b>
 	<br />
 	<br />
 
-	<b><span style="font-size: 1.2em">コミュニティ・サポート:</span></b>
+	<b><span class="installer-important">コミュニティ・サポート:</span></b>
 	<br />
 	<br />
-	<span style="font-size: 1.1em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/mailing-lists.html"
 		target="_blank">メーリング・リスト</a></span>
 	<br />
 	<br />
-	<b> <span style="font-size: 1.2em">商用サポート:</span></b>
+	<b> <span class="installer-important">商用サポート:</span></b>
 	<br />
 	<br />
-	<span style="font-size: 1.1em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/commercial-support.html"
 		target="_blank">商用サポート</a></span>
 
@@ -1003,4 +1004,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use room until moderator will join]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Wait moderator]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[Please be patient ...]]></entry>
+	<entry key="wait-moderator.message"><![CDATA[Please wait until <b>moderator</b> will enter the room]]></entry>
+	<entry key="lbl.or"><![CDATA[or]]></entry>
+	<entry key="lbl.new"><![CDATA[new]]></entry>
 </properties>

@@ -20,74 +20,70 @@ package org.apache.openmeetings.web.user;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.openmeetings.db.dao.user.UserContactDao;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.user.profile.UserProfilePanel;
 import org.apache.openmeetings.web.util.ContactsHelper;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public class UserInfoDialog extends AbstractDialog<String> {
+public class UserInfoDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
 	private WebMarkupContainer container = new WebMarkupContainer("container");
-	private DialogButton cancel;
-	private DialogButton message;
-	private DialogButton contacts;
 	private MessageDialog newMessage;
 	private long userId;
 	@SpringBean
 	private UserContactDao contactDao;
+	private BootstrapAjaxLink<String> message;
+	private BootstrapAjaxLink<String> contacts;
 
 	public UserInfoDialog(String id, MessageDialog newMessage) {
-		super(id, "");
+		super(id);
 		this.newMessage = newMessage;
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("1235"));
-		cancel = new DialogButton("cancel", getString("lbl.cancel"));
-		message = new DialogButton("message", getString("1253"));
-		contacts = new DialogButton("contacts", getString("1186"));
+		header(new ResourceModel("1235"));
+		addButton(contacts = new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Info, new ResourceModel("1186")) {
+			private static final long serialVersionUID = 1L;
+
+			public void onClick(AjaxRequestTarget target) {
+				ContactsHelper.addUserToContactList(userId);
+				UserInfoDialog.this.close(target);
+			}
+		});
+		addButton(message = new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Primary, new ResourceModel("1253")) {
+			private static final long serialVersionUID = 1L;
+
+			public void onClick(AjaxRequestTarget target) {
+				newMessage.reset(false).show(target, userId);
+				UserInfoDialog.this.close(target);
+			}
+		});
+		addButton(OmModalCloseButton.of());
 		add(container.add(new WebMarkupContainer("body")).setOutputMarkupId(true));
 		super.onInitialize();
 	}
 
-	public void open(IPartialPageRequestHandler handler, long userId) {
+	public void show(IPartialPageRequestHandler handler, long userId) {
 		this.userId = userId;
-		contacts.setVisible(userId != getUserId() && contactDao.get(userId, getUserId()) == null, handler);
-		message.setVisible(userId != getUserId(), handler);
+		contacts.setVisible(userId != getUserId() && contactDao.get(userId, getUserId()) == null);
+		message.setVisible(userId != getUserId());
 		container.replace(new UserProfilePanel("body", userId));
-		handler.add(container);
-		open(handler);
+		handler.add(container, contacts, contacts);
+		super.show(handler);
 	}
 
 	public WebMarkupContainer getContainer() {
 		return container;
-	}
-
-	@Override
-	public int getWidth() {
-		return 600;
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(contacts, message, cancel);
-	}
-
-	@Override
-	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		if (message.equals(button)) {
-			newMessage.reset(false).open(handler, userId);
-		} else if (contacts.equals(button)) {
-			ContactsHelper.addUserToContactList(userId);
-		}
 	}
 }

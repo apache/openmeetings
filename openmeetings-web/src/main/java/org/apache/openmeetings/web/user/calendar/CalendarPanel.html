@@ -23,8 +23,8 @@
 <wicket:panel>
 	<div id="calendarlistcontainer">
 		<div class="cell">
-			<button wicket:id="submitCalendar"><span><wicket:message key="calendar.addCalendar"/></span></button>
-			<button wicket:id="syncCalendarButton"><span>Sync</span></button>
+			<button wicket:id="submitCalendar"></button>
+			<button wicket:id="syncCalendarButton">Sync</button>
 		</div>
 		<ul class="calendarlist striped-table" wicket:id="calendarListContainer">
 			<li wicket:id="items" class="ui-widget-content striped-row clickable">
@@ -39,7 +39,7 @@
 			<!-- div wicket:id="feedback"></div -->
 		</form>
 	</div>
-	<div wicket:id="appointment">[appointment]</div>
+	<div wicket:id="appointment" class="appointment">[appointment]</div>
 	<div wicket:id="calendarDialog"></div>
 	<!-- bottom section -->
 </wicket:panel>

@@ -92,7 +92,8 @@ import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
 import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
 import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
 import com.googlecode.wicket.kendo.ui.form.button.IndicatingAjaxButton;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private static final long serialVersionUID = 1L;
@@ -146,7 +147,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 	@Override
 	protected WebMarkupContainer newFeedbackPanel(String id) {
-		KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+		NotificationPanel feedback = new NotificationPanel("feedback");
 		feedback.setEscapeModelStrings(false);
 		return feedback;
 	}

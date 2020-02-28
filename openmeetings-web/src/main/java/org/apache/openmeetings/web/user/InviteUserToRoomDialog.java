@@ -21,24 +21,23 @@ package org.apache.openmeetings.web.user;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.GroupUser;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.user.rooms.RoomListPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public class InviteUserToRoomDialog extends AbstractDialog<String> {
+public class InviteUserToRoomDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
-	private DialogButton cancel;
 	private RoomListPanel publicRooms;
 	private RoomListPanel privateRooms;
 	private final InviteUserMessageDialog inviteMsg = new InviteUserMessageDialog("inviteMsg");
@@ -57,18 +56,19 @@ public class InviteUserToRoomDialog extends AbstractDialog<String> {
 
 		@Override
 		public void onRoomEnter(AjaxRequestTarget target, Long roomId) {
-			inviteMsg.open(target, roomId, userId);
+			inviteMsg.show(target, roomId, userId);
 		}
 	}
 
 	public InviteUserToRoomDialog(String id) {
-		super(id, "");
+		super(id);
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("1131"));
-		cancel = new DialogButton("cancel", getString("lbl.cancel"));
+		header(new ResourceModel("1131"));
+
+		addButton(OmModalCloseButton.of());
 		add(publicRooms = new InviteRoomListPanel("publicRooms", new ArrayList<Room>(), getString("1135")));
 		add(privateRooms = new InviteRoomListPanel("privateRooms", new ArrayList<Room>(), getString("1135")));
 		add(inviteMsg);
@@ -92,20 +92,10 @@ public class InviteUserToRoomDialog extends AbstractDialog<String> {
 		return result;
 	}
 
-	public void open(IPartialPageRequestHandler handler, Long userId) {
+	public void show(IPartialPageRequestHandler handler, Long userId) {
 		this.userId = userId;
 		publicRooms.update(handler, roomDao.getPublicRooms());
 		privateRooms.update(handler, getPrivateRooms(getUserId(), userId, roomDao));
-		open(handler);
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(cancel);
-	}
-
-	@Override
-	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		//no-op
+		super.show(handler);
 	}
 }

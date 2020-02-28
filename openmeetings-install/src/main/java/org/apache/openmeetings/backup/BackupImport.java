@@ -363,7 +363,8 @@ public class BackupImport {
 		return f;
 	}
 
-	public void performImport(InputStream is) throws Exception {
+	public void performImport(InputStream is, ProgressHolder progressHolder) throws Exception {
+		progressHolder.setProgress(0);
 		userMap.clear();
 		groupMap.clear();
 		calendarMap.clear();
@@ -387,30 +388,50 @@ public class BackupImport {
 		registry.bind(Date.class, DateConverter.class);
 
 		BackupVersion ver = getVersion(simpleSerializer, f);
+		progressHolder.setProgress(2);
 		importConfigs(f);
+		progressHolder.setProgress(7);
 		importGroups(f, simpleSerializer);
+		progressHolder.setProgress(12);
 		importLdap(f, simpleSerializer);
+		progressHolder.setProgress(17);
 		importOauth(f, simpleSerializer);
+		progressHolder.setProgress(22);
 		importUsers(f);
+		progressHolder.setProgress(27);
 		importRooms(f);
+		progressHolder.setProgress(32);
 		importRoomGroups(f);
+		progressHolder.setProgress(37);
 		importChat(f);
+		progressHolder.setProgress(42);
 		importCalendars(f);
+		progressHolder.setProgress(47);
 		importAppointments(f);
+		progressHolder.setProgress(52);
 		importMeetingMembers(f);
+		progressHolder.setProgress(57);
 		importRecordings(f);
+		progressHolder.setProgress(62);
 		importPrivateMsgFolders(f, simpleSerializer);
+		progressHolder.setProgress(67);
 		importContacts(f);
+		progressHolder.setProgress(72);
 		importPrivateMsgs(f);
+		progressHolder.setProgress(77);
 		List<FileItem> files = importFiles(f);
+		progressHolder.setProgress(82);
 		importPolls(f);
+		progressHolder.setProgress(87);
 		importRoomFiles(f);
+		progressHolder.setProgress(92);
 
 		log.info("Room files import complete, starting copy of files and folders");
 		/*
 		 * ##################### Import real files and folders
 		 */
 		importFolders(f);
+		progressHolder.setProgress(97);
 
 		if (ver.compareTo(BackupVersion.get("4.0.0")) < 0) {
 			for (BaseFileItem bfi : files) {
@@ -434,6 +455,7 @@ public class BackupImport {
 		log.info("File explorer item import complete, clearing temp files");
 
 		FileUtils.deleteDirectory(f);
+		progressHolder.setProgress(100);
 	}
 
 	private static BackupVersion getVersion(Serializer ser, File f) {

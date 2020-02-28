@@ -2,20 +2,6 @@
 if (window.hasOwnProperty('isSecureContext') === false) {
 	window.isSecureContext = window.location.protocol == 'https:' || ["localhost", "127.0.0.1"].indexOf(window.location.hostname) !== -1;
 }
-$.widget('openmeetings.iconselectmenu', $.ui.selectmenu, {
-	_renderItem: function(ul, item) {
-		ul.addClass('settings-menu');
-		const li = $('<li>'), wrapper = $('<div>', {text: item.label});
-		if (item.disabled) {
-			li.addClass('ui-state-disabled');
-		}
-		$('<span>', {
-			style: item.element.attr('data-style')
-			, 'class': 'ui-icon ' + (item.element.attr('data-class') || 'ui-icon-blank')
-		}).appendTo(wrapper);
-		return li.append(wrapper).appendTo(ul);
-	}
-});
 var RingBuffer = (function(length) {
 	const buffer = [];
 	let pos = 0;
@@ -179,95 +165,56 @@ var VideoSettings = (function() {
 	function _init(options) {
 		o = JSON.parse(JSON.stringify(options));
 		if (!!o.infoMsg) {
-			$('#jsInfo').kendoNotification({
-				autoHideAfter: 0
-				, button: true
-				, hideOnClick: false
-			}).getKendoNotification().info(o.infoMsg);
+			OmUtil.alert('info', o.infoMsg, 0);
 		}
-		OmUtil.initErrs($('#jsNotifications').kendoNotification({
-			autoHideAfter: 20000
-			, button: true
-			, hideOnClick: false
-			, stacking: 'up'
-		}));
 		vs = $('#video-settings');
 		lm = vs.find('.level-meter');
-		cam = vs.find('select.cam').iconselectmenu({
-			appendTo: '.cam-row'
-			, change: function() {
-				_readValues();
-			}
+		cam = vs.find('select.cam').change(function() {
+			_readValues();
 		});
-		mic = vs.find('select.mic').iconselectmenu({
-			appendTo: '.mic-row'
-			, change: function() {
-				_readValues();
-			}
+		mic = vs.find('select.mic').change(function() {
+			_readValues();
 		});
-		res = vs.find('select.cam-resolution').iconselectmenu({
-			appendTo: '.res-row'
-			, change: function() {
-				_readValues();
-			}
+		res = vs.find('select.cam-resolution').change(function() {
+			_readValues();
 		});
 		vidScroll = vs.find('.vid-block .video-conainer');
 		timer = vs.find('.timer');
 		vid = vidScroll.find('video');
 		recBtn = vs.find('.rec-start')
-			.button({icon: "ui-icon-bullet"})
 			.click(function() {
-				recBtn.prop('disabled', true).button('refresh');
+				recBtn.prop('disabled', true);
 				_setEnabled(true);
 				OmUtil.sendMessage({
 					id : 'wannaRecord'
 				}, MsgBase);
 			});
 		playBtn = vs.find('.play')
-			.button({icon: "ui-icon-play"})
 			.click(function() {
-				recBtn.prop('disabled', true).button('refresh');
+				recBtn.prop('disabled', true);
 				_setEnabled(true);
 				OmUtil.sendMessage({
 					id : 'wannaPlay'
 				}, MsgBase);
 			});
-		vs.dialog({
-			classes: {
-				'ui-dialog': 'ui-corner-all video'
-			}
-			, width: 640
-			, autoOpen: false
-			, buttons: [
-				{
-					text: vs.data('btn-save')
-					, icons: {
-						primary: "ui-icon-disk"
-					}
-					, click: function() {
-						_save(true);
-						_close();
-						vs.dialog("close");
-					}
-				}
-				, {
-					text: vs.data('btn-cancel')
-					, click: function() {
-						_close();
-						vs.dialog("close");
-					}
-				}
-			]
-			, close: function() {
-				_close();
-			}
+		vs.find('.btn-save').off().click(function() {
+			_save(true);
+			_close();
+			vs.modal("hide");
+		});
+		vs.find('.btn-cancel').off().click(function() {
+			_close();
+			vs.modal("hide");
+		});
+		vs.off().on('hidden.bs.modal', function (e) {
+			_close();
 		});
 		o.width = 300;
 		o.height = 200;
 		o.mode = 'settings';
 		o.rights = (o.rights || []).join();
 		delete o.keycode;
-		vs.find('input, button').prop('disabled', true);
+		vs.find('.modal-body input, .modal-body button').prop('disabled', true);
 		const rr = vs.find('.cam-resolution').parents('.sett-row');
 		if (!o.interview) {
 			rr.show();
@@ -278,7 +225,7 @@ var VideoSettings = (function() {
 		_save(); // trigger settings update
 	}
 	function _updateRec() {
-		recBtn.prop('disabled', !recAllowed || (s.video.cam < 0 && s.video.mic < 0)).button('refresh');
+		recBtn.prop('disabled', !recAllowed || (s.video.cam < 0 && s.video.mic < 0));
 	}
 	function _setCntsDimensions(cnts) {
 		const b = kurentoUtils.WebRtcPeer.browser;
@@ -391,13 +338,11 @@ var VideoSettings = (function() {
 	function _setLoading(el) {
 		el.find('option').remove();
 		el.append(OmUtil.tmpl('#settings-option-loading'));
-		el.iconselectmenu('refresh');
 	}
 	function _setDisabled(els) {
 		els.forEach(function(el) {
 			el.find('option').remove();
 			el.append(OmUtil.tmpl('#settings-option-disabled'));
-			el.iconselectmenu('refresh');
 		});
 	}
 	function _setSelectedDevice(dev, devIdx) {
@@ -472,8 +417,6 @@ var VideoSettings = (function() {
 					});
 					_setSelectedDevice(cam, s.video.cam);
 					_setSelectedDevice(mic, s.video.mic);
-					cam.iconselectmenu('refresh');
-					mic.iconselectmenu('refresh');
 					res.find('option').each(function() {
 						const o = $(this).data();
 						if (o.width === s.video.width && o.height === s.video.height) {
@@ -493,13 +436,13 @@ var VideoSettings = (function() {
 		Wicket.Event.subscribe('/websocket/message', _onWsMessage);
 		recAllowed = false;
 		timer.hide();
-		playBtn.prop('disabled', true).button('refresh');
-		vs.dialog('open');
+		playBtn.prop('disabled', true);
+		vs.modal('show');
 		_load();
 		_initDevices();
 	}
 	function _setEnabled(enabled) {
-		playBtn.prop('disabled', enabled).button('refresh');
+		playBtn.prop('disabled', enabled);
 		cam.prop('disabled', enabled);
 		mic.prop('disabled', enabled);
 		res.prop('disabled', enabled);
@@ -595,7 +538,7 @@ var VideoSettings = (function() {
 			if (msg instanceof Blob) {
 				return; //ping
 			}
-			const m = jQuery.parseJSON(msg);
+			const m = JSON.parse(msg);
 			if (m && 'kurento' === m.type) {
 				if ('test' === m.mode) {
 					_onKMessage(m);
@@ -617,7 +560,7 @@ var VideoSettings = (function() {
 		, open: _open
 		, close: function() {
 			_close();
-			vs && vs.dialog('close');
+			vs && vs.modal('hide');
 		}
 		, load: _load
 		, save: _save

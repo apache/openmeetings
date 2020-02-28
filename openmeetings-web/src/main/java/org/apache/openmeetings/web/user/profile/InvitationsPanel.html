@@ -24,9 +24,9 @@
 	<div class="adminPanel">
 	<div class="adminPanelColumnTable">
 		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
-		<table class="list-table">
+		<table class="list-table table-striped table-hover">
 			<thead>
-				<tr class="ui-widget-header">
+				<tr>
 					<th class="col-1"><span wicket:id="orderById"></span><wicket:message key="188" /></th>
 					<th class="col-3"><span wicket:id="orderByValid"></span><wicket:message key="526" /></th>
 					<th class="col-8"><span wicket:id="orderByInvitee"></span><wicket:message key="216" /></th>
@@ -44,13 +44,13 @@
 	<div class="adminPanelColumnForm">
 		<form wicket:id="form" class="adminForm">
 			<div class="actions ui-widget-header">
-				<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="ajax-cancel-button" wicket:message="title:157">
-					<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+				<div class="btn btn-outline-warning btn-sm" wicket:id="ajax-cancel-button" wicket:message="title:157">
+					<i class="fas fa-times"></i>
 				</div>
 			</div>
 			<div class="scrollcontent" id="adminForm">
-				<fieldset class="ui-widget-content">
-					<legend class="ui-widget-header"><wicket:message key="profile.invitation" /></legend>
+				<fieldset>
+					<legend><wicket:message key="profile.invitation" /></legend>
 					<div class="formelement">
 						<label><wicket:message key="188" /></label><span class="input" wicket:id="id"></span>
 						<label><wicket:message key="526" /></label><span class="input" wicket:id="valid"></span>

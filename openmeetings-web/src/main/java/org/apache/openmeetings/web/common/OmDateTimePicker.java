@@ -18,38 +18,21 @@
  */
 package org.apache.openmeetings.web.common;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Locale;
 
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.extensions.markup.html.form.datetime.LocalDateTimeTextField;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.kendo.ui.form.datetime.local.DatePicker;
-import com.googlecode.wicket.kendo.ui.form.datetime.local.DateTimePicker;
-import com.googlecode.wicket.kendo.ui.form.datetime.local.TimePicker;
-
-public class OmDateTimePicker extends DateTimePicker {
+public class OmDateTimePicker extends AbstractOmDateTimePicker<LocalDateTime> {
 	private static final long serialVersionUID = 1L;
 
 	public OmDateTimePicker(String id, IModel<LocalDateTime> model) {
-		super(id, model, WebSession.get().getLocale());
+		super(id, model, getDateTimeFormat());
 	}
 
 	@Override
-	protected DatePicker newDatePicker(String id, IModel<LocalDate> model, Locale locale, String datePattern, Options options) {
-		DatePicker dp = super.newDatePicker(id, model, locale, datePattern, options);
-		dp.setLabel(getLabel());
-		return dp;
+	protected FormComponent<LocalDateTime> newInput(String wicketId, String dateFormat) {
+		return new LocalDateTimeTextField(wicketId, getModel(), dateFormat);
 	}
-
-	@Override
-	protected TimePicker newTimePicker(String id, IModel<LocalTime> model, Locale locale, String timePattern, Options options) {
-		TimePicker tp = super.newTimePicker(id, model, locale, timePattern, options);
-		tp.setLabel(getLabel());
-		return tp;
-	}
-	//TODO render KendoCultureHeaderItem as soon as localized AM/PM will be correctly handled
 }

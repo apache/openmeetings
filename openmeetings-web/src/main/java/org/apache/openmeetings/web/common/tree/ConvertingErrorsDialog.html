@@ -20,19 +20,21 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
+<wicket:extend>
 	<div wicket:id="container" class="dialog errors">
 		<h3 wicket:id="message"></h3>
-		<table style="width: 100%">
-			<tr>
-				<th><wicket:message key="1593"/></th>
-				<th><wicket:message key="1594"/></th>
-			</tr>
-			<tr wicket:id="row">
-				<td wicket:id="exitCode"></td>
-				<td wicket:id="message" class="message"></td>
-			</tr>
-		</table>
+		<div class="scroll-container">
+			<table class="w-100">
+				<tr>
+					<th><wicket:message key="1593"/></th>
+					<th><wicket:message key="1594"/></th>
+				</tr>
+				<tr wicket:id="row">
+					<td wicket:id="exitCode"></td>
+					<td wicket:id="message" class="message"></td>
+				</tr>
+			</table>
+		</div>
 	</div>
-</wicket:panel>
+</wicket:extend>
 </html>

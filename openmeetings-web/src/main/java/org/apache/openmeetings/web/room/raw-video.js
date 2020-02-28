@@ -251,7 +251,7 @@ var Video = (function() {
 			area.append($('<div class="pod"></div>').attr('id', contId));
 			WbArea.updateAreaClass();
 		} else {
-			contSel = '.room-block .container';
+			contSel = '.room-block .room-container';
 		}
 		$(contSel).append(OmUtil.tmpl('#user-video', _id)
 				.attr('title', name)

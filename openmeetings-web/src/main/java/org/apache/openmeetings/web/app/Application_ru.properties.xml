@@ -615,6 +615,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="bad.password.upper"><![CDATA['Слабый' пароль: обязателена по крайней мере одна прописная буква]]></entry>
 	<entry key="button.label.share"><![CDATA[Поделиться]]></entry>
 	<entry key="calendar.addCalendar"><![CDATA[Add External Calendar]]></entry>
+	<entry key="calendar.sync"><![CDATA[Синхр]]></entry>
 	<entry key="calendar.defaultTitle"><![CDATA[New Calendar]]></entry>
 	<entry key="calendar.dialogTitle"><![CDATA[Calendar Details]]></entry>
 	<entry key="calendar.error"><![CDATA[Error in making connection on the URL specified.]]></entry>
@@ -715,7 +716,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 			По умолчанию {0} использует интегрированную базу данных {1}. В
 			продакшине Вы должны задуматься об использовании таких баз, как {2}, {3}, {4}, {5} or {6}
 		</blockquote>
-		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
+		<div class="ui-state-highlight ui-corner-all installer-note">
 			<p><strong>ВНИМАНИЕ</strong> Пожалуйста используйте логин БД, который трудно угадать и 'сложный' пароль с длинной не менее 8 символов.</p>
 		</div>
 	]]></entry>
@@ -819,26 +820,26 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 			</ul>
 		</li>
 	<br />
-	<b> <span style="font-size: 1.2em">Если у Вас остались
+	<b> <span class="installer-important">Если у Вас остались
 			вопросы или Вам требуется поддержка по установке или хостингу:</span></b>
 	<br />
 	<br />
 
-	<b><span style="font-size: 1.2em">Поддержка сообщества:</span></b>
+	<b><span class="installer-important">Поддержка сообщества:</span></b>
 	<br />
 	<br />
-	<span style="font-size: 1.1em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/mailing-lists.html"
 		target="_blank">Список рассылки</a></span>
 	<br />
 	<br />
 	<br />
-	<b> <span style="font-size: 1.4em">Это компании,
+	<b> <span class="installer-important">Это компании,
 		которые также оказывают коммерческую поддержку Apache OpenMeetings:</span></b>
 	<br />
 	<br />
 	<br />
-	<span style="font-size: 1.3em"><a
+	<span class="installer-less-important"><a
 		href="https://openmeetings.apache.org/commercial-support.html"
 		target="_blank">https://openmeetings.apache.org/commercial-support.html</a></span>
 	<br />
@@ -1003,4 +1004,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.room.wait-moderator.info"><![CDATA[Никто не сможет воспользоваться комнатой пока нет модератора]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Ждать модератора]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[Пожалуйста подождите ...]]></entry>
+	<entry key="wait-moderator.message"><![CDATA[Пожалуйста дождитесь появления <b>модератора</b>]]></entry>
+	<entry key="lbl.or"><![CDATA[or]]></entry>
+	<entry key="lbl.new"><![CDATA[новый]]></entry>
 </properties>

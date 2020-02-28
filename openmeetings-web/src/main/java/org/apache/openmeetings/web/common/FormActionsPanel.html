@@ -21,16 +21,16 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<div class="ui-widget-header">
-		<div class="ui-button ui-widget ui-corner-all ui-button-icon-only" wicket:id="btn-save" wicket:message="title:144">
-			<span class="ui-button-icon ui-icon ui-icon-disk"></span>&nbsp;
+	<div class="bg-white">
+		<div class="btn btn-outline-primary btn-sm" wicket:id="btn-save" wicket:message="title:144">
+			<i class="fas fa-save"></i>
 		</div>
-		<div class="ui-button ui-widget ui-corner-all ui-button-icon-only" wicket:id="btn-refresh" wicket:message="title:lbl.refresh">
-			<span class="ui-button-icon ui-icon ui-icon-refresh"></span>&nbsp;
+		<div class="btn btn-outline-primary btn-sm" wicket:id="btn-refresh" wicket:message="title:lbl.refresh">
+			<i class="fas fa-sync-alt"></i>
 		</div>
 		<wicket:child/>
-		<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="btn-purge" wicket:message="title:admin.purge">
-			<span class="ui-button-icon ui-icon ui-icon-trash"></span>&nbsp;
+		<div class="btn btn-outline-danger btn-sm" wicket:id="btn-purge" wicket:message="title:admin.purge">
+			<i class="fas fa-trash-alt"></i>
 		</div>
 	</div>
 	<div wicket:id="feedback" class="error adminFormsFeedbackPanel"></div>

@@ -22,45 +22,47 @@
 <wicket:panel>
 	<div class="actions" wicket:id="buttons"></div>
 	<div class="scrollcontent" wicket:id="adminForm" id="adminForm">
-		<fieldset class="ui-widget-content">
-			<legend class="ui-widget-header">
+		<fieldset>
+			<legend>
 				<wicket:message key="143" />
 			</legend>
 			<div class="formelement">
-				<label wicket:for="login"><wicket:message key="108" /></label><input type="text" wicket:id="login" />
+				<label wicket:for="login" class="col-3 text-right"><wicket:message key="108" /></label><input type="text" wicket:id="login" class="col-8"/>
 			</div>
 			<div class="formelement">
-				<label wicket:for="password"><wicket:message key="110" /></label><input type="password" wicket:id="password" />
+				<label wicket:for="password" class="col-3 text-right"><wicket:message key="110" /></label><input type="password" wicket:id="password" class="col-8"/>
 			</div>
 			<form wicket:id="general"></form>
 			<div class="formelement">
-				<label wicket:for="type"><wicket:message key="45" /></label><select wicket:id="type"></select>
+				<label wicket:for="type" class="col-3 text-right"><wicket:message key="45" /></label><select wicket:id="type" class="custom-select col-8"></select>
 			</div>
 			<div class="formelement" wicket:id="domain">
-				<label wicket:for="domainId"><wicket:message key="1118" /></label><select wicket:id="domainId"></select>
+				<label wicket:for="domainId" class="col-3 text-right"><wicket:message key="1118" /></label><select wicket:id="domainId" class="col-8"></select>
 			</div>
 			<div class="formelement">
-				<label><wicket:message key="1308" /></label><span wicket:id="ownerId"></span>
+				<label class="col-3 text-right"><wicket:message key="1308" /></label><span wicket:id="ownerId" class="col-8"/>
 			</div>
 			<div class="formelement">
-				<label><wicket:message key="1110" /></label><span wicket:id="inserted" />
+				<label class="col-3 text-right"><wicket:message key="1110" /></label><span wicket:id="inserted" class="col-8"/>
 			</div>
 			<div class="formelement">
-				<label><wicket:message key="1112" /></label><span wicket:id="updated" />
+				<label class="col-3 text-right"><wicket:message key="1112" /></label><span wicket:id="updated" class="col-8"/>
 			</div>
 			<div class="formelement">
-				<div class="info-text">
-					<wicket:message key="1149" />
+				<div class="col-3 d-inline-block"></div>
+				<div class="col-8 d-inline-block">
+					<i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="1149" />
 				</div>
-				<br /> <label wicket:for="forceTimeZoneCheck"><wicket:message key="1148" /></label><input class="formcheckbox" type="checkbox"
-					wicket:id="forceTimeZoneCheck" />
+				<label wicket:for="forceTimeZoneCheck" class="col-3 text-right"><wicket:message key="1148" /></label>
+				<input class="formcheckbox" type="checkbox" wicket:id="forceTimeZoneCheck"/>
 			</div>
 			<div class="formelement">
-				<label wicket:for="rights"><wicket:message key="881" /></label><div class="om-select2"><select class="input" wicket:id="rights"></select></div>
+				<label wicket:for="rights" class="col-3 text-right"><wicket:message key="881" /></label>
+				<div class="om-select2 p-0 d-inline-block col-8"><select class="input w-100" wicket:id="rights"></select></div>
 			</div>
 		</fieldset>
-		<fieldset class="ui-widget-content">
-			<legend class="ui-widget-header">
+		<fieldset>
+			<legend>
 				<wicket:message key="1159" />
 			</legend>
 			<form wicket:id="comunity"></form>

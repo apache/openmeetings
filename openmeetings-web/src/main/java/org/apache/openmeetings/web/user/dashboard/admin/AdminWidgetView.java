@@ -22,28 +22,30 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.wicketstuff.dashboard.Widget;
 import org.wicketstuff.dashboard.web.WidgetView;
 
-import com.googlecode.wicket.jquery.ui.form.button.IndicatingAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
 @AuthorizeInstantiation("Admin")
 public class AdminWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;
-	private final AdminCleanupInfoDialog cleanupDialog;
+	private AdminCleanupInfoDialog cleanupDialog;
 	final Form<Void> form = new Form<>("form");
 
 	public AdminWidgetView(String id, Model<Widget> model) {
 		super(id, model);
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		add(form);
 		form.add(cleanupDialog = new AdminCleanupInfoDialog("cleanup-dialog"));
-		form.add(new IndicatingAjaxButton("show-cleanup-dialog") {
+		form.add(new SpinnerAjaxButton("show-cleanup-dialog", new ResourceModel("dashboard.widget.admin.cleanup.show"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected boolean isDisabledOnClick() {
-				return true;
-			}
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {

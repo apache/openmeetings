@@ -75,7 +75,7 @@ import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
 /**
  * CRUD operations in form for {@link User}
@@ -93,7 +93,7 @@ public class UserForm extends AdminBaseForm<User> {
 	private final RequiredTextField<String> login = new RequiredTextField<>("login");
 	private StrongPasswordValidator passValidator;
 	private final PasswordTextField password = new PasswordTextField("password", new Model<String>());
-	private final MessageDialog warning;
+	private final Modal<String> warning;
 	private final DropDownChoice<Long> domainId = new DropDownChoice<>("domainId");
 	private final PasswordDialog adminPass = new PasswordDialog("adminPass");
 	@SpringBean
@@ -105,7 +105,7 @@ public class UserForm extends AdminBaseForm<User> {
 	@SpringBean
 	private OAuth2Dao oauthDao;
 
-	public UserForm(String id, WebMarkupContainer listContainer, final User user, MessageDialog warning) {
+	public UserForm(String id, WebMarkupContainer listContainer, final User user, Modal<String> warning) {
 		super(id, new CompoundPropertyModel<>(user));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
@@ -208,7 +208,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onPurgeSubmit(AjaxRequestTarget target, Form<?> form) {
 		if (isAdminPassRequired()) {
 			adminPass.setAction(this::purgeUser);
-			adminPass.open(target);
+			adminPass.show(target);
 		} else {
 			purgeUser(target);
 		}
@@ -218,7 +218,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		if (isAdminPassRequired()) {
 			adminPass.setAction((SerializableConsumer<AjaxRequestTarget>)t -> saveUser(t, password.getModelObject()));
-			adminPass.open(target);
+			adminPass.show(target);
 		} else {
 			saveUser(target, password.getConvertedInput());
 		}
@@ -260,7 +260,7 @@ public class UserForm extends AdminBaseForm<User> {
 		}
 		updateForm(target);
 		if (u.getGroupUsers().isEmpty()) {
-			warning.open(target);
+			warning.show(target);
 		}
 	}
 
@@ -298,7 +298,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		if (isAdminPassRequired()) {
 			adminPass.setAction(this::deleteUser);
-			adminPass.open(target);
+			adminPass.show(target);
 		} else {
 			deleteUser(target);
 		}

@@ -23,9 +23,9 @@
 <wicket:extend>
 	<div class="adminPanelColumnTable">
 		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
-		<table class="list-table">
+		<table class="list-table table-striped table-hover">
 			<thead>
-				<tr class="ui-widget-header">
+				<tr>
 					<th class="col-1"><span wicket:id="orderById"></span><wicket:message key="188" /></th>
 					<th class="col-11"><span wicket:id="orderByName"></span><wicket:message key="165" /></th>
 				</tr>
@@ -42,43 +42,56 @@
 		<form wicket:id="form" class="adminForm">
 			<div class="actions" wicket:id="buttons"></div>
 			<div class="scrollcontent" id="adminForm">
-				<fieldset class="ui-widget-content">
-					<legend class="ui-widget-header"><wicket:message key="161" /></legend>
+				<fieldset>
+					<legend><wicket:message key="161" /></legend>
 					<div class="formelement">
-						<label wicket:for="name"><wicket:message key="165" /></label><input type="text" wicket:id="name" />
+						<label wicket:for="name" class="col-3 text-right"><wicket:message key="165" /></label>
+						<input type="text" wicket:id="name" class="col-8"/>
 					</div>
 					<div class="formelement">
-						<label><wicket:message key="admin.group.form.logo" /></label><div wicket:id="logo" class="input group logo"></div>
+						<label class="col-3 text-right"><wicket:message key="admin.group.form.logo" /></label>
+						<div wicket:id="logo" class="input group logo col-3 d-inline-block"></div>
 					</div>
 					<div class="formelement">
-						<label wicket:for="tag"><wicket:message key="admin.group.form.tag" /></label><input type="text" wicket:id="tag" />
+						<label wicket:for="tag" class="col-3 text-right"><wicket:message key="admin.group.form.tag" /></label>
+						<input type="text" wicket:id="tag" class="col-8"/>
 					</div>
 					<div class="formelement">
-						<label wicket:for="user2add" style="font-weight: bold;"><wicket:message key="178" /></label><div class="om-select2"><select wicket:id="user2add" class="input"></select></div>
+						<label wicket:for="user2add" class="col-3 text-right"><strong><wicket:message key="178" /></strong></label>
+						<div class="om-select2 p-0 d-inline-block col-8"><select wicket:id="user2add" class="input w-100"></select></div>
 					</div>
 					<div class="formelement">
 						<div wicket:id="users"></div>
 					</div>
 					<div class="formelement">
-						<label wicket:for="restricted"><wicket:message key="restricted.group.files" /></label><input type="checkbox" wicket:id="restricted" />
+						<label wicket:for="restricted" class="col-3 text-right"><wicket:message key="restricted.group.files" /></label>
+						<input type="checkbox" wicket:id="restricted" />
 					</div>
 					<div class="formelement">
-						<label wicket:for="limited"><wicket:message key="admin.group.form.limited" /></label><input type="checkbox" wicket:id="limited" />
+						<label wicket:for="limited" class="col-3 text-right"><wicket:message key="admin.group.form.limited" /></label>
+						<input type="checkbox" wicket:id="limited" />
 					</div>
-					<div class="formelement" style="display:none">
-						<label wicket:for="maxFilesSize"><wicket:message key="admin.group.form.maxFilesSize" /></label><input type="number" wicket:id="maxFilesSize" /><wicket:message key="network.test.mb"/>
+					<div class="formelement d-none">
+						<label wicket:for="maxFilesSize" class="col-3 text-right"><wicket:message key="admin.group.form.maxFilesSize" /></label>
+						<input type="number" wicket:id="maxFilesSize" class="col-8"/><wicket:message key="network.test.mb"/>
 					</div>
-					<div class="formelement" style="display:none">
-						<label wicket:for="maxRecordingsSize"><wicket:message key="admin.group.form.maxRecordingsSize" /></label><input type="number" wicket:id="maxRecordingsSize" /><wicket:message key="network.test.mb"/>
+					<div class="formelement d-none">
+						<label wicket:for="maxRecordingsSize" class="col-3 text-right"><wicket:message key="admin.group.form.maxRecordingsSize" /></label>
+						<input type="number" wicket:id="maxRecordingsSize" class="col-8"/><wicket:message key="network.test.mb"/>
 					</div>
-					<div class="formelement" style="display:none">
-						<label wicket:for="maxRooms"><wicket:message key="admin.group.form.maxRooms" /></label><input type="number" wicket:id="maxRooms" />
+					<div class="formelement d-none">
+						<label wicket:for="maxRooms" class="col-3 text-right"><wicket:message key="admin.group.form.maxRooms" /></label>
+						<input type="number" wicket:id="maxRooms" class="col-8"/>
 					</div>
 					<div class="formelement">
-						<label wicket:for="recordingTtl"><wicket:message key="admin.group.form.recordingTtl" /></label><input type="number" wicket:id="recordingTtl" /><wicket:message key="admin.group.form.days"/>
+						<label wicket:for="recordingTtl" class="col-3 text-right"><wicket:message key="admin.group.form.recordingTtl" /></label>
+						<input type="number" wicket:id="recordingTtl" class="col-7"/>
+						<div class="col-1 d-inline-block"><wicket:message key="admin.group.form.days"/></div>
 					</div>
 					<div class="formelement">
-						<label wicket:for="reminderDays"><wicket:message key="admin.group.form.reminderDays" /></label><input type="number" wicket:id="reminderDays" /><wicket:message key="admin.group.form.days"/>
+						<label wicket:for="reminderDays" class="col-3 text-right"><wicket:message key="admin.group.form.reminderDays" /></label>
+						<input type="number" wicket:id="reminderDays" class="col-7"/>
+						<div class="col-1 d-inline-block"><wicket:message key="admin.group.form.days"/></div>
 					</div>
 				</fieldset>
 				<div class="bottom-bumper"></div>

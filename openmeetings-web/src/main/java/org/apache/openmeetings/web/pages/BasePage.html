@@ -23,47 +23,12 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 	<link rel="shortcut icon" href="public/favicon.png" type="image/png"/>
-	<style type="text/css">
-		.sk-chasing-dots {
-			margin: 20% auto;
-			width: 80px;
-			height: 80px;
-			position: relative;
-			text-align: center;
-			-webkit-animation: sk-chasingDotsRotate 2s infinite linear;
-			animation: sk-chasingDotsRotate 2s infinite linear;
-		}
-		.sk-chasing-dots .sk-child {
-			width: 40%;
-			height: 40%;
-			display: inline-block;
-			position: absolute;
-			top: 0;
-			background-color: #333;
-			border-radius: 100%;
-			-webkit-animation: sk-chasingDotsBounce 2s infinite ease-in-out;
-			animation: sk-chasingDotsBounce 2s infinite ease-in-out;
-		}
-		.sk-chasing-dots .sk-dot2 {
-			top: auto;
-			bottom: 0;
-			-webkit-animation-delay: -1s;
-			animation-delay: -1s;
-		}
-		@keyframes sk-chasingDotsRotate {
-			100% { transform: rotate(360deg); }
-		}
-		@keyframes sk-chasingDotsBounce {
-			0%, 100% { transform: scale(0); }
-			50% { transform: scale(1); }
-		}
-	</style>
 	<wicket:header-items/>
 	<title wicket:id="pageTitle">[title]</title>
-	<link rel="stylesheet" type="text/css" href="css/custom.css"/>
+	<wicket:container wicket:id="customCSS"></wicket:container>
 </head>
 <body>
-	<div wicket:id="main-loader" style="height: 100%;" class="ui-widget-header">
+	<div wicket:id="main-loader" class="main-loader ui-widget-header">
 		<div class="sk-chasing-dots">
 			<div class="sk-child sk-dot1"></div>
 			<div class="sk-child sk-dot2"></div>
@@ -71,5 +36,6 @@
 	</div>
 	<div wicket:id="header" id="header"></div>
 	<wicket:child />
+	<div id="alert-holder" wicket:message="data-lbl-close:85" class="mr-3 ml-3"/>
 </body>
 </html>

@@ -10,38 +10,59 @@ html[dir="rtl"] .room-block .wb-block {
 	right: calc(var(--room-sidebar-width) + var(--buffer-size));
 	left: auto;
 }
-.room-block .wb-block.ui-state-hover {
+.room-block .wb-block.droppable-hover {
 	border: 0;
 }
 .room-block .wb-block .wb-area {
 	height: 100%;
 }
-.room-block .wb-block.ui-state-hover .wb-area {
+.room-block .wb-block.droppable-hover .wb-area {
 	visibility: hidden;
 	height: 1px !important;
 }
 .room-block .wb-block .wb-drop-area {
 	display: none;
 }
-.room-block .wb-block.ui-state-hover .wb-drop-area {
-	background-image: url(images/drop.png);
+.room-block .wb-block.droppable-hover .wb-drop-area {
 	display: block;
-	background-repeat: no-repeat;
 	height: inherit;
 	background-position: center;
 }
-.room-block .wb-block .tabs.ui-tabs {
+.room-block .wb-block.droppable-hover .wb-drop-area::before {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 400;
+	font-size: 20em;
+	content: '\f358';
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+	color: var(--success);
+}
+.room-block .wb-block .tabs {
 	height: calc(100% - var(--buffer-size));
+}
+.room-block .wb-block .tabs .wb-tabbar li a {
+	position: relative;
+	padding-right: 25px;
+}
+.room-block .wb-block .tabs .wb-tabbar li a button {
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	position: absolute;
+	top: 2px;
+	right: 2px;
 }
 .room-block .wb-block .tabs.ui-tabs, .room-block .wb-block .ui-tabs-panel {
 	padding: 0;
 	background-color:transparent;
 }
-.room-block .wb-block .ui-tabs-panel {
+.room-block .wb-block .tabs .wb-tab-content {
 	height: calc(100% - var(--room-wb-tabs-height));
-}
-.room-block .wb-block .ui-tabs-panel {
 	position: relative;
+}
+.room-block .wb-block .tabs .wb-tab-content .tab-pane {
+	height: 100%;
 }
 .room-block .wb-block .tools {
 	position: relative;
@@ -146,11 +167,11 @@ html[dir="rtl"] .room-block .wb-block {
 .room-block .wb-block .tools .om-icon.big.textbox {
 	background-image: url(images/textbox.png);
 }
-.room-block .wb-block .om-icon.big.next {
-	background-image: url(images/next.png);
+.room-block .wb-block .om-icon.big.next::before {
+	content: '\f054';
 }
-.room-block .wb-block .om-icon.big.prev {
-	background-image: url(images/prev.png);
+.room-block .wb-block .om-icon.big.prev::before {
+	content: '\f053';
 }
 .wb-tool-settings, .wb-formula {
 	position: absolute;
@@ -293,16 +314,11 @@ html[dir="rtl"] .room-block .wb-block {
 .wb-tabbar .next {
 	right: 2px;
 }
-.wb-tabbar li button {
-	width: 20px;
-	height: 20px;
-	padding: 0;
-}
-.wb-area .ui-tabs-panel .scroll-container {
+.room-block .wb-block .tabs .wb-tab-content .scroll-container {
 	overflow: auto;
 	height: 100%;
 }
-.wb-area .ui-tabs-panel .scroll-container .canvas-container {
+.room-block .wb-block .tabs .wb-tab-content .scroll-container .canvas-container {
 	margin-top: 5px;
 	margin-left: 5px;
 	border: 1px solid #888888;

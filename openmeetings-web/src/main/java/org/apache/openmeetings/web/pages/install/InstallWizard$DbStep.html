@@ -22,7 +22,7 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<fieldset class="ui-widget-content" id="userData">
-		<legend class="ui-widget-header"><wicket:message key="install.wizard.db.step.field.title"/></legend>
+		<legend><wicket:message key="install.wizard.db.step.field.title"/></legend>
 		<div wicket:id="note"></div>
 		<form class="adminForm" wicket:id="form">
 			<div class="formelement">
@@ -43,7 +43,7 @@
 			<div wicket:enclosure="password" class="formelement">
 				<label wicket:for="password"><wicket:message key="install.wizard.db.step.pass" /></label> <input type="text" wicket:id="password"/>
 			</div>
-			<div class="formelement" style="max-width:860px;">
+			<div class="formelement">
 				<button class="align-right" wicket:id="check"><wicket:message key="install.wizard.db.step.check"/></button>
 			</div>
 		</form>

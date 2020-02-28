@@ -21,16 +21,16 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-	<div class="ui-button ui-widget ui-corner-all ui-button-icon-only" wicket:id="btn-new" wicket:message="title:155">
-		<span class="ui-button-icon ui-icon ui-icon-plusthick"></span>&nbsp;
+	<div class="btn btn-outline-primary btn-sm" wicket:id="btn-new" wicket:message="title:155">
+		<i class="fas fa-plus"></i>
 	</div>
-	<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-highlight" wicket:id="btn-delete" wicket:message="title:157">
-		<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+	<div class="btn btn-outline-warning btn-sm" wicket:id="btn-delete" wicket:message="title:157">
+		<i class="fas fa-times"></i>
 	</div>
-	<div class="ui-button ui-widget ui-corner-all ui-button-icon-only" wicket:id="btn-restore" wicket:message="title:admin.restore">
-		<span class="ui-button-icon ui-icon ui-icon-circle-check"></span>&nbsp;
+	<div class="btn btn-outline-success btn-sm" wicket:id="btn-restore" wicket:message="title:admin.restore">
+		<i class="far fa-check-circle"></i>
 	</div>
 	<span wicket:id="newRecord"></span>
-	<form wicket:id="form" style="display: inline;"></form>
+	<form wicket:id="form" class="d-inline"></form>
 </wicket:extend>
 </html>

@@ -20,79 +20,88 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<div id="video-settings" wicket:message="title:51, data-btn-save:144, data-btn-cancel:lbl.cancel" style="display:none;">
-		<div class="title"><wicket:message key="758"/></div>
-		<div class="sett-container">
-			<div class="opt-block">
-				<div class="cam-row sett-row">
-					<div><wicket:message key="52"/></div>
+	<div class="modal fade video" id="video-settings" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="video-settings-title" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header p-0 pr-2 pl-2">
+					<h5 class="modal-title" id="video-settings-title"><wicket:message key="51"/></h5>
+					<button type="button" class="close p-0 pr-1 pl-1" data-dismiss="modal" aria-hidden="true" wicket:message="title:85,aria-label:85">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="title"><wicket:message key="758"/></div>
+					<div class="sett-container">
+						<div class="opt-block">
+							<div class="cam-row sett-row">
+								<div><wicket:message key="52"/></div>
+								<div>
+									<select class="custom-select custom-select-sm cam"></select>
+								</div>
+							</div>
+							<div class="mic-row sett-row">
+								<div><wicket:message key="53"/></div>
+								<div>
+									<select class="custom-select custom-select-sm mic"></select>
+								</div>
+							</div>
+							<div class="res-row sett-row">
+								<div class="clear">
+									<wicket:message key="1429"/>
+									<i class="warn fas fa-exclamation-triangle text-warning" wicket:message="title:1430"></i>
+								</div>
+								<div>
+									<select class="custom-select custom-select-sm cam-resolution">
+										<option value="1" data-width="40" data-height="30">40x30 [4:3 (~6 KByte/sec)]</option>
+										<option value="2" data-width="80" data-height="60">80x60 [4:3 (~12 KByte/sec)]</option>
+										<option value="3" data-width="120" data-height="90" selected="selected">120x90 [4:3 (~20 KByte/sec)]</option>
+										<option value="4" data-width="160" data-height="120">160x120 [QQVGA 4:3 (~36 KByte/sec)]</option>
+										<option value="5" data-width="240" data-height="180">240x180 [4:3 (~40 KByte/sec)]</option>
+										<option value="6" data-width="320" data-height="240">320x240 [HVGA 4:3 (~56 KByte/sec)]</option>
+										<option value="7" data-width="480" data-height="360">480x360 [4:3  (~60 KByte/sec)]</option>
+										<option value="8" data-width="640" data-height="480">640x480 [4:3 (~68 KByte/sec)]</option>
+										<option value="9" data-width="1024" data-height="768">1024x768 [XGA 4:3]</option>
+										<option value="10" data-width="256" data-height="150">256x150 [16:9]</option>
+										<option value="11" data-width="432" data-height="240">432x240 [WQVGA 9:5]</option>
+										<option value="12" data-width="480" data-height="234">480x234 [pseudo 16:9]</option>
+										<option value="13" data-width="512" data-height="300">512x300 [16:9]</option>
+										<option value="14" data-width="640" data-height="360">640x360 [nHD 16:9]</option>
+										<option value="15" data-width="1024" data-height="600">1024x600 [16:9]</option>
+									</select>
+								</div>
+							</div>
+							<div class="sett-row right">
+								<div><button class="rec-start btn btn-outline-primary"><i class="fas fa-circle text-danger"></i>&nbsp;<wicket:message key="775"/></button></div>
+							</div>
+						</div>
+						<div class="vid-block">
+							<div class="video-conainer">
+								<video autoplay="autoplay"></video>
+							</div>
+							<canvas class="level-meter" data-orientation="horizontal" wicket:message="title:767" width="250" height="16"></canvas>
+							<div class="sett-row right">
+								<div class="timer badge badge-primary"><span class="time"></span>&nbsp;<wicket:message key="network.test.sec"/></div>
+								<div><button class="play btn btn-outline-primary"><i class="fas fa-play"></i>&nbsp;<wicket:message key="764"/></button></div>
+								<div class="clear"></div>
+							</div>
+						</div>
+					</div>
 					<div>
-						<select class="cam"></select>
+						<i class="fas fa-info-circle text-info"></i>&nbsp;<wicket:message key="765"/>
 					</div>
 				</div>
-				<div class="mic-row sett-row">
-					<div><wicket:message key="53"/></div>
-					<div>
-						<select class="mic"></select>
-					</div>
-				</div>
-				<div class="res-row sett-row">
-					<div class="clear">
-						<wicket:message key="1429"/>
-						<span class="warn ui-state-highlight" wicket:message="title:1430">
-							<span class="ui-icon ui-icon-alert"></span>
-						</span>
-					</div>
-					<div>
-						<select class="cam-resolution">
-							<option value="1" data-width="40" data-height="30" data-class="ui-icon-video">40x30 [4:3 (~6 KByte/sec)]</option>
-							<option value="2" data-width="80" data-height="60" data-class="ui-icon-video">80x60 [4:3 (~12 KByte/sec)]</option>
-							<option value="3" data-width="120" data-height="90" data-class="ui-icon-video" selected="selected">120x90 [4:3 (~20 KByte/sec)]</option>
-							<option value="4" data-width="160" data-height="120" data-class="ui-icon-video">160x120 [QQVGA 4:3 (~36 KByte/sec)]</option>
-							<option value="5" data-width="240" data-height="180" data-class="ui-icon-video">240x180 [4:3 (~40 KByte/sec)]</option>
-							<option value="6" data-width="320" data-height="240" data-class="ui-icon-video">320x240 [HVGA 4:3 (~56 KByte/sec)]</option>
-							<option value="7" data-width="480" data-height="360" data-class="ui-icon-video">480x360 [4:3  (~60 KByte/sec)]</option>
-							<option value="8" data-width="640" data-height="480" data-class="ui-icon-video">640x480 [4:3 (~68 KByte/sec)]</option>
-							<option value="9" data-width="1024" data-height="768" data-class="ui-icon-video">1024x768 [XGA 4:3]</option>
-							<option value="10" data-width="256" data-height="150" data-class="ui-icon-video">256x150 [16:9]</option>
-							<option value="11" data-width="432" data-height="240" data-class="ui-icon-video">432x240 [WQVGA 9:5]</option>
-							<option value="12" data-width="480" data-height="234" data-class="ui-icon-video">480x234 [pseudo 16:9]</option>
-							<option value="13" data-width="512" data-height="300" data-class="ui-icon-video">512x300 [16:9]</option>
-							<option value="14" data-width="640" data-height="360" data-class="ui-icon-video">640x360 [nHD 16:9]</option>
-							<option value="15" data-width="1024" data-height="600" data-class="ui-icon-video">1024x600 [16:9]</option>
-						</select>
-					</div>
-				</div>
-				<div class="sett-row right">
-					<div><button class="rec-start"><wicket:message key="775"/></button></div>
+				<div class="modal-footer">
+					<button class="btn-save btn btn-outline-primary"><i class="fas fa-save"></i>&nbsp;<wicket:message key="144"/></button>
+					<button class="btn-cancel btn btn-outline-secondary"><wicket:message key="lbl.cancel"/></button>
 				</div>
 			</div>
-			<div class="vid-block">
-				<div class="video-conainer">
-					<video autoplay="autoplay"></video>
-				</div>
-				<canvas class="level-meter" data-orientation="horizontal" wicket:message="title:767" width="250" height="16"></canvas>
-				<div class="sett-row right">
-					<div class="timer ui-widget-header"><span class="time"></span>&nbsp;<wicket:message key="network.test.sec"/></div>
-					<div><button class="play"><wicket:message key="764"/></button></div>
-					<div class="clear"></div>
-				</div>
-			</div>
-		</div>
-		<div>
-			<span style="padding: 5px;">
-				<span class="ui-icon ui-icon-info"></span>
-			</span>
-			<wicket:message key="765"/>
 		</div>
 	</div>
-	<div id="jsInfo"></div>
-	<div id="jsNotifications"></div>
-	<div wicket:id="ws-panel" style="display: none"></div>
-	<div style="display: none">
+	<div wicket:id="ws-panel" hidden="hidden"></div>
+	<div hidden="hidden">
 		<select>
-			<option id="settings-option-loading" value="-2" data-class="ui-icon-refresh"><wicket:message key="230"/></option>
-			<option id="settings-option-disabled" value="-1" data-class="ui-icon-closethick"><wicket:message key="159"/></option>
+			<option id="settings-option-loading" value="-2"><wicket:message key="230"/></option>
+			<option id="settings-option-disabled" value="-1"><wicket:message key="159"/></option>
 		</select>
 		<div id="settings-https-required"><wicket:message key="video.settings.https.required"/></div>
 	</div>

@@ -20,8 +20,8 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
-	<table style="width: 100%">
+<wicket:extend>
+	<table class="w-100">
 		<tr>
 			<td><wicket:message key="165"/></td>
 			<td wicket:id="title"></td>
@@ -47,5 +47,5 @@
 			<td><span wicket:id="owner.firstname"></span>&nbsp;<span wicket:id="owner.lastname"></span></td>
 		</tr>
 	</table>
-</wicket:panel>
+</wicket:extend>
 </html>

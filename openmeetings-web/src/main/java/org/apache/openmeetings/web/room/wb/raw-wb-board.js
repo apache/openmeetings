@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Wb = function() {
 	const ACTIVE = 'active', BUMPER = 100, wb = {id: -1, name: ''}, canvases = []
-		, area = $('.room-block .wb-block .wb-area .tabs.ui-tabs'), bar = area.find('.wb-tabbar')
+		, area = $('.room-block .wb-block .wb-area .tabs'), bar = area.find('.wb-tabbar')
 		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src', 'formula'];
-	let a, t, z, s, f, mode, slide = 0, width = 0, height = 0
+	let c, t, z, s, f, mode, slide = 0, width = 0, height = 0
 			, zoom = 1., zoomMode = 'pageWidth', role = null, scrollTimeout = null;
 
 	function _getBtn(m) {
@@ -630,7 +630,7 @@ var Wb = function() {
 			clearTimeout(scrollTimeout);
 		}
 		scrollTimeout = setTimeout(function() {
-			const sc = a.find('.scroll-container')
+			const sc = wbEl.find('.scroll-container')
 				, canvases = sc.find('.canvas-container');
 			if (Math.round(sc.height() + sc[0].scrollTop) === sc[0].scrollHeight) {
 				if (slide !== canvases.length - 1) {
@@ -648,10 +648,10 @@ var Wb = function() {
 		}, 100);
 	}
 	function showCurrentSlide() {
-		a.find('.scroll-container .canvas-container').each(function(idx) {
+		wbEl.find('.scroll-container .canvas-container').each(function(idx) {
 			if (role === PRESENTER) {
 				$(this).show();
-				const cclist = a.find('.scroll-container .canvas-container');
+				const cclist = wbEl.find('.scroll-container .canvas-container');
 				if (cclist.length > slide) {
 					cclist[slide].scrollIntoView();
 				}
@@ -702,9 +702,9 @@ var Wb = function() {
 	}
 	function addCanvas() {
 		const sl = canvases.length
-			, cid = 'can-' + a.attr('id') + '-slide-' + sl
+			, cid = 'can-' + wb.id + '-slide-' + sl
 			, c = $('<canvas></canvas>').attr('id', cid);
-		a.find('.canvases').append(c);
+		wbEl.find('.canvases').append(c);
 		const canvas = new fabric.Canvas(c.attr('id'), {
 			preserveObjectStacking: true
 		});
@@ -777,11 +777,11 @@ var Wb = function() {
 			if (__validBtn(btn)) {
 				btn.data().deactivate();
 			}
-			a.find('.tools').remove();
-			a.find('.wb-tool-settings').remove();
-			a.find('.wb-zoom').remove();
+			wbEl.find('.tools').remove();
+			wbEl.find('.wb-tool-settings').remove();
+			wbEl.find('.wb-zoom').remove();
 			role = _role;
-			const sc = a.find('.scroll-container');
+			const sc = wbEl.find('.scroll-container');
 			z = OmUtil.tmpl('#wb-zoom')
 				.attr('style', 'position: absolute; top: 0px; ' + (Settings.isRtl ? 'right' : 'left') + ': 80px;');
 			__safeRemove(t);
@@ -789,7 +789,7 @@ var Wb = function() {
 			__safeRemove(f);
 			if (role === NONE) {
 				__destroySettings();
-				t = !!Room.getOptions().questions ? OmUtil.tmpl('#wb-tools-readonly') : a.find('invalid-wb-element');
+				t = !!Room.getOptions().questions ? OmUtil.tmpl('#wb-tools-readonly') : wbEl.find('invalid-wb-element');
 				sc.off('scroll', scrollHandler);
 			} else {
 				t = OmUtil.tmpl('#wb-tools');
@@ -797,13 +797,13 @@ var Wb = function() {
 					.attr('style', 'display: none; bottom: 100px; ' + (Settings.isRtl ? 'left' : 'right') + ': 100px;');
 				f = OmUtil.tmpl('#wb-formula')
 					.attr('style', 'display: none; bottom: 100px; ' + (Settings.isRtl ? 'left' : 'right') + ': 100px;');
-				a.append(s, f);
+				wbEl.append(s, f);
 				sc.on('scroll', scrollHandler);
 			}
 			t.attr('style', 'position: absolute; top: 20px; ' + (Settings.isRtl ? 'left' : 'right') + ': 20px;');
-			a.append(t).append(z);
+			wbEl.append(t).append(z);
 			showCurrentSlide();
-			t = a.find('.tools'), s = a.find('.wb-tool-settings');
+			t = wbEl.find('.tools'), s = wbEl.find('.wb-tool-settings');
 			wb.eachCanvas(function(canvas) {
 				setHandlers(canvas);
 				canvas.forEachObject(function(__o) {
@@ -815,14 +815,14 @@ var Wb = function() {
 			internalInit();
 		}
 	};
-	wb.init = function(wbo, tid, _role) {
+	wb.init = function(wbo, tcid, _role) {
 		wb.id = wbo.wbId;
 		wb.name = wbo.name;
 		width = wbo.width;
 		height = wbo.height;
 		zoom = wbo.zoom;
 		zoomMode = wbo.zoomMode;
-		a = $('#' + tid);
+		wbEl = $('#' + tcid);
 		addCanvas();
 		wb.setRole(_role);
 	};

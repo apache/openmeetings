@@ -1,63 +1,53 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 .hash-panel-main.app {
 	width: 100%;
-	height: calc(100% - 50px);
+	height: calc(100% - var(--header-height));
 }
 .nettest {
 	padding: 20px;
-	height: calc(100% - 100px);
+	height: 100%;
 }
 .nettest .test-container {
 	display: inline-block;
 	position: relative;
 	width: 200px;
-	height: 100px;
-}
-.nettest .test-container button .value {
-	display: inline-block;
-	width: 80px;
-	height: 40px;
-}
-.nettest .test-container button .line {
-	white-space: nowrap;
-}
-.nettest .test-container button .line .value {
-	width: auto;
-	height: auto;
 }
 .nettest .test-container button.not-started
-	, .nettest .test-container button.started
+, .nettest .test-container button.started
 {
-	background-color: #cccccc;
+	color: var(--secondary);
+	border-color: var(--secondary);
 }
-.nettest .test-container button.not-started .value
-	, .nettest .test-container button.started .value
+.nettest .test-container button:hover {
+	color: var(--white);
+	border-color: transparent;
+}
+.nettest .test-container button.not-started:hover
+, .nettest .test-container button.started:hover
 {
-	background-size: 40px;
-	background-repeat: no-repeat;
-	background-position-x: 20px;
-}
-.nettest .test-container button.not-started .value {
-	background-image: url(images/notrun.png);
-}
-.nettest .test-container button.started .value {
-	background-image: url(images/ajax-loader.gif);
+	background-color: var(--secondary);
 }
 .nettest .test-container button.complete {
-	background-color: lawngreen;
+	color: var(--success);
+	border-color: var(--success);
 }
-.nettest .nettest-dialog {
-	padding: 0;
+.nettest .test-container button.complete:hover {
+	background-color: var(--success);
 }
-.nettest .nettest-dialog .test.ui-widget-content {
-	padding: 0 35px;
-	overflow: hidden;
+.nettest .test-container button.not-started i::before {
+	content: '\f04b';
+}
+.nettest .test-container button.started i::before {
+	content: '\f110';
+}
+.nettest .test-container button.complete i::before {
+	content: '\f00c';
 }
 .nettest .output {
 	border-radius: 10px;
 	border: 1px solid #cccccc;
-	min-height: calc(100% - 50px);
-	max-height: calc(100% - 50px);
+	min-height: calc(100% - 170px);
+	max-height: calc(100% - 170px);
 	margin-top: 20px;
 	overflow: auto;
 }

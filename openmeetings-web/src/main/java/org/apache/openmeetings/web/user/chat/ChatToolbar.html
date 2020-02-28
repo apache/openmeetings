@@ -20,23 +20,10 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:head>
-	<style>
-		.emt {
-			font-size: 10pt;
-		}
-		.chat.btn{
-			font-weight: bold;
-		}
-		.chat.dropdown-menu {
-			left: -50px;
-		}
-	</style>
-</wicket:head>
 <wicket:panel>
-	<div wicket:id="toolbar" class="btn-toolbar" data-role="editor-toolbar">
-		<div class="btn-group dropup">
-			<a id="emoticons" class="chat btn btn-default emt dropdown-toggle" data-toggle="dropdown" title="Emoticons"></a>
+	<div wicket:id="toolbar" class="btn-toolbar chat-toolbar" data-role="editor-toolbar">
+		<div class="dropup">
+			<a id="emoticons" class="chat btn btn-outline-secondary emt dropdown-toggle" data-toggle="dropdown" title="Emoticons"></a>
 			<ul class="chat dropdown-menu" >
 				<li>
 					<table id="emotMenuList">
@@ -44,45 +31,49 @@
 				</li>
 			</ul>
 		</div>
-		<div class="btn-group dropup">
-			<a id="fontSize" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" title="Font Size"> A <strong class="caret"></strong></a>
+		<div class="dropup">
+			<a id="fontSize" class="chat btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" role="button" title="Font Size"> A </a>
 			<ul class="dropdown-menu">
-				<li><a data-edit="fontSize 5"><span style="font-size: x-large;">Huge</span></a></li>
-				<li><a data-edit="fontSize 3"><span style="font-size: small;">Normal</span></a></li>
-				<li><a data-edit="fontSize 1"><span style="font-size: x-small;">Small</span></a></li>
+				<li><a data-edit="fontSize 5"><span class="font-huge text-center clickable">Huge</span></a></li>
+				<li><a data-edit="fontSize 3"><span class="font-small text-center clickable">Normal</span></a></li>
+				<li><a data-edit="fontSize 1"><span class="font-tiny text-center clickable">Small</span></a></li>
 			</ul>
 		</div>
-		<div class="btn-group dropup">
-			<a id="fontStyle" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" title="Font Style">
-				<span class="chat-tool-icon">&nbsp;</span>
-				<strong class="caret"></strong>
+		<div class="dropup">
+			<a id="fontStyle" class="chat btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" title="Font Style">
+				<i class="fas fa-cog"></i>
 			</a>
 			<ul class="dropdown-menu btns-only">
-				<li><a class="chat-btn chat-tool-icon btn btn-default" id="bold" data-edit="bold" title="Bold (Ctrl/Cmd+B)" style="font-weight: bold;"> B </a></li>
-				<li><a class="chat-btn chat-tool-icon btn btn-default" id="italic" data-edit="italic" title="Italic (Ctrl/Cmd+I)" style="font-style: italic;"> I </a></li>
-				<li><a class="chat-btn chat-tool-icon btn btn-default" id="strikethrough" data-edit="strikethrough" title="Strikethrough" style="text-decoration: line-through;"> S </a></li>
-				<li><a class="chat-btn chat-tool-icon btn btn-default" id="underline" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U </a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-outline-secondary bold" id="bold" data-edit="bold" title="Bold (Ctrl/Cmd+B)"> B </a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-outline-secondary italic" id="italic" data-edit="italic" title="Italic (Ctrl/Cmd+I)"> I </a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-outline-secondary strike" id="strikethrough" data-edit="strikethrough" title="Strikethrough"> S </a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-outline-secondary under" id="underline" data-edit="underline" title="Underline (Ctrl/Cmd+U)"> U </a></li>
 			</ul>
 		</div>
-		<div class="btn-group dropup">
-			<a id="hyperlink" class="chat btn chat-tool-icon btn-default dropdown-toggle" data-toggle="dropdown" title="Hyperlink">&nbsp;</a>
+		<div class="dropup">
+			<a id="hyperlink" class="chat btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" title="Hyperlink">
+				<i class="fas fa-link"></i>
+			</a>
 			<div wicket:id="hyperlink" class="dropdown-menu input-append">
 				<input class="span2" placeholder="URL" type="text" onkeypress="if (event.keyCode === 13) {$(this).parent().find('button').trigger('click');}; return event.keyCode !== 13;"/>
-				<button class="btn btn-default" type="button"><wicket:message key="1261"/></button>
+				<button class="btn btn-outline-secondary" type="button"><wicket:message key="1261"/></button>
 			</div>
 		</div>
-		<div class="btn-group dropup">
-			<a id="actions" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" wicket:message="title:635">
-				<span class="list chat-tool-icon">&nbsp;</span>
-				<strong class="caret"></strong>
+		<div class="dropup">
+			<a id="actions" class="chat btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" wicket:message="title:635">
+				<i class="fas fa-bars"></i>
 			</a>
 			<ul class="dropdown-menu btns-only">
-				<li><a class="chat-btn chat-tool-icon btn btn-default save" wicket:message="title:197" wicket:id="save"></a></li>
-				<li><a class="chat-btn chat-tool-icon btn btn-default ui-state-error" wicket:message="title:442" wicket:id="delete">
-					<span class="ui-button-icon ui-icon ui-icon-closethick"></span>
+				<li><a class="chat-btn chat-tool-icon btn btn-outline-secondary save" wicket:message="title:197" wicket:id="save">
+					<i class="fas fa-save"></i>
 				</a></li>
-				<li><a class="chat-btn chat-tool-icon btn btn-default audio" wicket:message="data-sound-enabled:sound.mute,data-sound-muted:sound.enable">&nbsp;</a></li>
-				<li><a class="chat-btn chat-tool-icon btn btn-default send-btn" wicket:message="data-send-enter:send.on.enter,data-send-ctrl:send.on.ctrl.enter"><strong>&crarr;</strong></a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-outline-danger" wicket:message="title:442" wicket:id="delete">
+					<i class="fas fa-trash-alt"></i>
+				</a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-outline-secondary audio" wicket:message="data-sound-enabled:sound.mute,data-sound-muted:sound.enable">
+					<i class="fas"></i>
+				</a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-outline-secondary send-btn" wicket:message="data-send-enter:send.on.enter,data-send-ctrl:send.on.ctrl.enter"><strong>&crarr;</strong></a></li>
 			</ul>
 		</div>
 	</div>

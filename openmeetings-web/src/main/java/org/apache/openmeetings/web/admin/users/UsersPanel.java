@@ -26,24 +26,24 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableGroupAdminDataProvider;
+import org.apache.openmeetings.web.room.IconTextModal;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.ColorBehavior;
 
 @AuthorizeInstantiation({"Admin", "GroupAdmin"})
 public class UsersPanel extends AdminBasePanel {
@@ -104,14 +104,11 @@ public class UsersPanel extends AdminBasePanel {
 
 	@Override
 	protected void onInitialize() {
-		final MessageDialog warning = new MessageDialog("warning", getString("797"), getString("warn.nogroup"), DialogButtons.OK, DialogIcon.WARN) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				//no-op
-			}
-		};
+		final Modal<String> warning = new IconTextModal("warning")
+				.withLabel(new ResourceModel("warn.nogroup"))
+				.withErrorIcon(ColorBehavior.Color.Warning)
+				.header(new ResourceModel("797"))
+				.addButton(OmModalCloseButton.of("54"));
 
 		form = new UserForm("form", listContainer, getNewUserInstance(userDao.get(getUserId())), warning);
 		form.setNewVisible(true);

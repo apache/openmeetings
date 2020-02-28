@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,17 +29,22 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.badge.BadgeBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.badge.BootstrapBadge;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public class GroupUsersPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -71,21 +76,12 @@ public class GroupUsersPanel extends Panel {
 				}));
 				User u = grpUser.getUser();
 				Label label = new Label("label", u == null ? "" : GroupForm.formatUser(u));
-				if (grpUser.getId() == null) {
-					label.add(AttributeModifier.append(ATTR_CLASS, "newItem"));
-				}
 				item.add(label);
-				item.add(new ConfirmableAjaxBorder("deleteUserBtn", getString("80"), getString("833")) {
+				BootstrapAjaxLink<String> del = new BootstrapAjaxLink<>("deleteUserBtn", Buttons.Type.Outline_Danger) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void onInitialize() {
-						super.onInitialize();
-						form.setMultiPart(true);//need to be multipart due to parent form is multipart
-					}
-
-					@Override
-					protected void onSubmit(AjaxRequestTarget target) {
+					public void onClick(AjaxRequestTarget target) {
 						if (grpUser.getId() == null) {
 							users2add.remove(grpUser);
 						} else {
@@ -95,7 +91,11 @@ public class GroupUsersPanel extends Panel {
 						}
 						target.add(GroupUsersPanel.this);
 					}
-				});
+				};
+				del.setIconType(FontAwesome5IconType.times_s)
+						.add(newOkCancelDangerConfirm(this, getString("833")));
+				item.add(del);
+				item.add(new BootstrapBadge("new", new ResourceModel("lbl.new"), BadgeBehavior.Type.Warning).setVisible((grpUser.getId() == null)));
 			}
 		};
 		add(dataView).setOutputMarkupId(true);

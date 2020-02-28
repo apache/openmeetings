@@ -21,12 +21,14 @@ package org.apache.openmeetings.web.user.rooms;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -35,15 +37,17 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.JQueryIcon;
-import com.googlecode.wicket.jquery.ui.form.button.Button;
-import com.googlecode.wicket.jquery.ui.markup.html.link.AjaxLink;
 import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public class RoomListPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -76,7 +80,7 @@ public class RoomListPanel extends Panel {
 				final Label curUsers = new Label("curUsers", new Model<>(cm.listByRoom(r.getId()).size()));
 				roomContainer.add(curUsers.setOutputMarkupId(true));
 				roomContainer.add(new Label("totalUsers", r.getCapacity()));
-				item.add(new Button("btn").add(new Label("label", label)).add(new RoomEnterBehavior(r.getId()) {
+				item.add(new WebMarkupContainer("btn").add(new Label("label", label)).add(new RoomEnterBehavior(r.getId()) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -84,24 +88,27 @@ public class RoomListPanel extends Panel {
 						onRoomEnter(target, roomId);
 					}
 				}));
-				roomContainer.add(new AjaxLink<String>("refresh") {
+				roomContainer.add(new BootstrapAjaxLink<String>("refresh", null, Buttons.Type.Outline_Info, new ResourceModel("lbl.refresh")) {
 					private static final long serialVersionUID = 1L;
+
+					{
+						setIconType(FontAwesome5IconType.sync_alt_s);
+					}
+
+					@Override
+					protected <L extends Serializable> Component newLabel(String markupId, IModel<L> model) {
+						return super.newLabel(markupId, model).setRenderBodyOnly(false).add(new CssClassNameAppender("sr-only"));
+					}
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						target.add(curUsers.setDefaultModelObject(cm.listByRoom(r.getId()).size()));
 						onRefreshClick(target, r);
 					}
-
-					@Override
-					public void onConfigure(JQueryBehavior behavior) {
-						behavior.setOption("icon", Options.asString(JQueryIcon.REFRESH));
-						behavior.setOption("showLabel", false);
-					}
-				});
+				}.add(AttributeModifier.append(ATTR_TITLE, new ResourceModel("lbl.refresh"))));
 			}
 		});
-		add(new TooltipBehavior(".info-text"));
+		add(new TooltipBehavior(".info-tooltip"));
 	}
 
 	public void update(IPartialPageRequestHandler handler, List<Room> rooms) {

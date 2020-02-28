@@ -23,9 +23,9 @@
 <wicket:extend>
 	<div class="adminPanelColumnTable rooms">
 		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
-		<table class="list-table">
+		<table class="list-table table-striped table-hover">
 			<thead>
-				<tr class="ui-widget-header">
+				<tr>
 					<th class="col-1"><span wicket:id="orderById"></span><wicket:message key="188" /></th>
 					<th class="col-9"><span wicket:id="orderByName"></span><wicket:message key="165" /></th>
 					<th class="col-2"><span wicket:id="orderByPublic"></span><wicket:message key="190" /></th>
@@ -46,111 +46,146 @@
 			<div class="scrollcontent" id="adminForm">
 
 				<!-- General -->
-				<fieldset class="ui-widget-content">
-					<legend class="ui-widget-header"><wicket:message key="187" /></legend>
+				<fieldset>
+					<legend><wicket:message key="187" /></legend>
 					<div class="formelement">
-						<label wicket:for="name"><wicket:message key="165" /></label><input type="text" wicket:id="name" />
+						<label wicket:for="name" class="col-3 text-right"><wicket:message key="165" /></label>
+						<input type="text" wicket:id="name" class="col-8"/>
 					</div>
 					<div class="formelement">
-						<label wicket:for="capacity"><wicket:message key="482" /></label><select wicket:id="capacity"/>
+						<label wicket:for="capacity" class="col-3 text-right"><wicket:message key="482" /></label>
+						<select wicket:id="capacity" class="custom-select col-8"/>
 					</div>
 					<div class="formelement">
-						<label wicket:for="type"><wicket:message key="45" /></label><select wicket:id="type"/>
+						<label wicket:for="type" class="col-3 text-right"><wicket:message key="45" /></label>
+						<select wicket:id="type" class="custom-select col-8"/>
 					</div>
 					<div class="formelement">
-						<label wicket:for="comment"><wicket:message key="196" /></label><textarea style="width: 200px; height: 100px;" wicket:id="comment"/>
+						<label wicket:for="comment" class="col-3 text-right"><wicket:message key="196" /></label>
+						<textarea wicket:id="comment" class="col-8"/>
 					</div>
 					<div class="formelement">
-						<label wicket:for="appointment"><wicket:message key="620" /></label><input type="checkbox" class="formcheckbox" wicket:id="appointment" />
+						<label wicket:for="appointment" class="col-3 text-right"><wicket:message key="620" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="appointment" />
 					</div>
 				</fieldset>
 
 				<!-- Groups -->
-				<fieldset class="ui-widget-content">
-					<legend class="ui-widget-header"><wicket:message key="126" /></legend>
+				<fieldset>
+					<legend><wicket:message key="126" /></legend>
 					<div class="formelement">
-						<label wicket:for="ispublic"><wicket:message key="190" /></label><input type="checkbox" class="formcheckbox" wicket:id="ispublic" />
+						<label wicket:for="ispublic" class="col-3 text-right"><wicket:message key="190" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="ispublic" />
 					</div>
 					<div class="formelement">
-						<div class="info-text"><wicket:message key="828" /></div>
-						<label wicket:for="groups"><wicket:message key="126" /></label><div class="om-select2"><select class="input" wicket:id="groups"></select></div>
+						<div class="col-3 d-inline-block"></div>
+						<div class="col-8 d-inline-block">
+							<i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="828" />
+						</div>
+						<label wicket:for="groups" class="col-3 text-right"><wicket:message key="126" /></label>
+						<div class="om-select2 p-0 d-inline-block col-8"><select class="input w-100" wicket:id="groups"></select></div>
 					</div>
 				</fieldset>
 
 				<!-- Limitations -->
-				<fieldset class="ui-widget-content">
-					<legend class="ui-widget-header"><wicket:message key="830" /></legend>
+				<fieldset>
+					<legend><wicket:message key="830" /></legend>
 					<div class="formelement">
-						<label wicket:for="isDemoRoom"><wicket:message key="636" /></label><input type="checkbox" class="formcheckbox" wicket:id="isDemoRoom" />
+						<label wicket:for="isDemoRoom" class="col-3 text-right"><wicket:message key="636" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="isDemoRoom" />
 					</div>
 					<div class="formelement">
-						<label wicket:for="demoTime"><wicket:message key="637" /></label><input type="text" wicket:id="demoTime" />
+						<label wicket:for="demoTime" class="col-3 text-right"><wicket:message key="637" /></label>
+						<input type="text" wicket:id="demoTime" class="col-8"/>
 					</div>
 				</fieldset>
 
 				<!-- Rights -->
-				<fieldset class="ui-widget-content">
-					<legend class="ui-widget-header"><wicket:message key="881" /></legend>
+				<fieldset>
+					<legend><wicket:message key="881" /></legend>
 					<div class="formelement">
-						<div class="info-text"><wicket:message key="880" /></div>
-						<label wicket:for="allowUserQuestions"><wicket:message key="879" /></label><input type="checkbox" class="formcheckbox" wicket:id="allowUserQuestions" />
+						<div class="col-3 d-inline-block"></div>
+						<div class="col-8 d-inline-block">
+							<i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="880" />
+						</div>
+						<label wicket:for="allowUserQuestions" class="col-3 text-right"><wicket:message key="879" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="allowUserQuestions" />
 					</div>
 					<div class="formelement">
-						<div class="info-text"><wicket:message key="1077" /></div>
-						<label wicket:for="audioOnly"><wicket:message key="1076" /></label><input type="checkbox" class="formcheckbox" wicket:id="audioOnly" />
+						<div class="col-3 d-inline-block"></div>
+						<div class="col-8 d-inline-block">
+							<i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="1077" />
+						</div>
+						<label wicket:for="audioOnly" class="col-3 text-right"><wicket:message key="1076" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="audioOnly" />
 					</div>
 					<div class="formelement">
-						<div class="info-text"><wicket:message key="1101" /></div>
-						<label wicket:for="closed"><wicket:message key="1099" /></label><input type="checkbox" class="formcheckbox" wicket:id="closed" />
+						<div class="col-3 d-inline-block"></div>
+						<div class="col-8 d-inline-block">
+							<i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="1101" />
+						</div>
+						<label wicket:for="closed" class="col-3 text-right"><wicket:message key="1099" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="closed" />
 					</div>
 					<div class="formelement">
-						<label wicket:for="redirectURL"><wicket:message key="1100" /></label><input type="text" wicket:id="redirectURL" />
+						<label wicket:for="redirectURL" class="col-3 text-right"><wicket:message key="1100" /></label>
+						<input type="text" wicket:id="redirectURL" class="col-8"/>
 					</div>
 					<div class="formelement">
-						<div class="info-text"><wicket:message key="1102" /></div>
-						<br/>
-						<label wicket:for="waitRecording"><wicket:message key="1356" /></label><input type="checkbox" class="formcheckbox" wicket:id="waitRecording" />
+						<div class="col-3 d-inline-block"></div>
+						<div class="col-8 d-inline-block">
+							<i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="1102" />
+						</div>
+						<label wicket:for="waitRecording" class="col-3 text-right"><wicket:message key="1356" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="waitRecording" />
 					</div>
 					<div class="formelement">
-						<label wicket:for="allowRecording"><wicket:message key="1355" /></label><input type="checkbox" class="formcheckbox" wicket:id="allowRecording" />
+						<label wicket:for="allowRecording" class="col-3 text-right"><wicket:message key="1355" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="allowRecording" />
 					</div>
 					<div class="formelement">
-						<label wicket:for="chatModerated"><wicket:message key="1513" /></label><input type="checkbox" class="formcheckbox" wicket:id="chatModerated" />
+						<label wicket:for="chatModerated" class="col-3 text-right"><wicket:message key="1513" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="chatModerated" />
 					</div>
 				</fieldset>
 
 				<!-- Room Layout options -->
-				<fieldset class="ui-widget-content">
-					<legend class="ui-widget-header"><wicket:message key="1443" /></legend>
+				<fieldset>
+					<legend><wicket:message key="1443" /></legend>
 					<div class="formelement">
-						<label wicket:for="hiddenElements"><wicket:message key="admin.room.hidden.elements" /></label>
-						<div class="om-select2"><select class="input" wicket:id="hiddenElements"></select></div>
+						<label wicket:for="hiddenElements" class="col-3 text-right"><wicket:message key="admin.room.hidden.elements" /></label>
+						<div class="om-select2 p-0 d-inline-block col-8"><select class="input w-100" wicket:id="hiddenElements"></select></div>
 					</div>
 					<div class="formelement">
-						<label wicket:for="chatOpened"><wicket:message key="1515" /></label><input type="checkbox" class="formcheckbox" wicket:id="chatOpened" />
+						<label wicket:for="chatOpened" class="col-3 text-right"><wicket:message key="1515" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="chatOpened" />
 					</div>
 					<div class="formelement">
-						<label wicket:for="filesOpened"><wicket:message key="1516" /></label><input type="checkbox" class="formcheckbox" wicket:id="filesOpened" />
+						<label wicket:for="filesOpened" class="col-3 text-right"><wicket:message key="1516" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="filesOpened" />
 					</div>
 				</fieldset>
 
 				<!-- Room files -->
-				<fieldset class="ui-widget-content">
-					<legend class="ui-widget-header"><wicket:message key="245" /></legend>
+				<fieldset>
+					<legend><wicket:message key="245" /></legend>
 					<div wicket:id="filesForm">
 						<div class="formelement">
-							<label wicket:for="files2add"><wicket:message key="245" /></label>
-							<div class="om-select2"><select class="input" wicket:id="files2add"></select></div>
+							<label wicket:for="files2add" class="col-3 text-right"><wicket:message key="245" /></label>
+							<div class="om-select2 p-0 d-inline-block col-8"><select class="input w-100" wicket:id="files2add"></select></div>
 						</div>
 						<div class="formelement">
-							<label wicket:for="wbidx"><wicket:message key="615" /></label>
-							<input type="number" class="input" wicket:id="wbidx"/>
+							<label wicket:for="wbidx" class="col-3 text-right"><wicket:message key="615" /></label>
+							<input type="number" wicket:id="wbidx" class="col-8"/>
 						</div>
-						<button type="button" wicket:id="addFiles"><wicket:message key="1261"/></button>
+						<div class="col-3 d-inline-block"></div>
+						<div class="col-8 d-inline-block">
+							<button type="button" wicket:id="addFiles"></button>
+						</div>
 					</div>
-					<table class="list-table small">
+					<table class="list-table small table-striped table-hover">
 						<thead>
-							<tr class="ui-widget-header">
+							<tr>
 								<th class="col-9"><wicket:message key="165" /></th>
 								<th class="col-2"><wicket:message key="615" /></th>
 								<th class="col-1"><wicket:message key=275 /></th>
@@ -158,12 +193,10 @@
 						</thead>
 						<tbody wicket:id="filesContainer">
 							<tr wicket:id="files">
-								<td class="col-9"><div class="col-wrapper" style="width: auto"><span wicket:id="name"></span></div></td>
+								<td class="col-9"><div class="col-wrapper w-auto"><span wicket:id="name"></span></div></td>
 								<td class="col-2"><span wicket:id="wbIdx"></span></td>
 								<td class="col-1">
-									<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="delete" wicket:message="title:80">
-										<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
-									</div>
+									<button wicket:id="delete" wicket:message="title:80" class="btn-sm p-0 pl-2 pr-2"></button>
 								</td>
 							</tr>
 						</tbody>
@@ -171,11 +204,11 @@
 				</fieldset>
 
 				<!-- Users in this Room -->
-				<fieldset class="ui-widget-content">
-					<legend class="ui-widget-header"><wicket:message key="407" /></legend>
-					<table class="list-table small">
+				<fieldset>
+					<legend><wicket:message key="407" /></legend>
+					<table class="list-table small table-striped table-hover">
 						<thead>
-							<tr class="ui-widget-header">
+							<tr>
 								<th class="col-1"><wicket:message key="188" /></th>
 								<th class="col-10"><wicket:message key="108" /></th>
 								<th class="col-1"><wicket:message key="275" /></th>
@@ -186,9 +219,7 @@
 								<td class="col-1"><div class="col-wrapper"><span wicket:id="clientId"></span></div></td>
 								<td class="col-10"><div class="col-wrapper"><span wicket:id="clientLogin"></span></div></td>
 								<td class="col-1">
-									<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="clientDelete" wicket:message="title:603">
-										<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
-									</div>
+									<button wicket:id="clientDelete" wicket:message="title:603" class="btn-sm p-0 pl-2 pr-2"></button>
 								</td>
 							</tr>
 						</tbody>
@@ -196,24 +227,33 @@
 				</fieldset>
 
 				<!-- Default moderators -->
-				<fieldset class="ui-widget-content">
-					<legend class="ui-widget-header"><wicket:message key="816" /></legend>
+				<fieldset>
+					<legend><wicket:message key="816" /></legend>
 					<div class="formelement">
-						<div class="info-text"><wicket:message key="823" /></div>
-						<label wicket:for="moderated"><wicket:message key="640" /></label><input type="checkbox" class="formcheckbox" wicket:id="moderated" />
+						<div class="col-3 d-inline-block"></div>
+						<div class="col-8 d-inline-block">
+							<i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="823" />
+						</div>
+						<label wicket:for="moderated" class="col-3 text-right"><wicket:message key="640" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="moderated" />
 					</div>
 					<div class="formelement">
-						<div class="info-text"><wicket:message key="admin.room.wait-moderator.info" /></div>
-						<label wicket:for="waitModerator"><wicket:message key="admin.room.wait-moderator.label" /></label><input type="checkbox" class="formcheckbox" wicket:id="waitModerator" />
+						<div class="col-3 d-inline-block"></div>
+						<div class="col-8 d-inline-block">
+							<i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="admin.room.wait-moderator.info" />
+						</div>
+						<label wicket:for="waitModerator" class="col-3 text-right"><wicket:message key="admin.room.wait-moderator.label" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="waitModerator" />
 					</div>
 					<div class="formelement">
-						<label wicket:for="moderator2add"><wicket:message key="816" /></label><div class="om-select2"><select wicket:id="moderator2add" class="input"></select></div>
+						<label wicket:for="moderator2add" class="col-3 text-right"><wicket:message key="816" /></label>
+						<div class="om-select2 p-0 d-inline-block col-8"><select wicket:id="moderator2add" class="input w-100"></select></div>
 					</div>
 					<div class="formelement" wicket:id="moderatorContainer">
-						<table class="list-table small">
+						<table class="list-table small table-striped table-hover">
 							<thead>
-								<tr class="ui-widget-header">
-									<th class="col-1" style="overflow: hidden;" wicket:message="title:817"><wicket:message key="817" /></th>
+								<tr>
+									<th class="col-1 overflow-hidden" wicket:message="title:817"><wicket:message key="817" /></th>
 									<th class="col-1"><wicket:message key="188" /></th>
 									<th class="col-4"><wicket:message key="165" /></th>
 									<th class="col-5"><wicket:message key="510" /></th>
@@ -224,12 +264,10 @@
 								<tr wicket:id="moderators">
 									<td class="col-1"><div class="col-wrapper"><input type="checkbox" wicket:id="superModerator"/></div></td>
 									<td class="col-1"><div class="col-wrapper"><span wicket:id="userId"></span></div></td>
-									<td class="col-4"><div class="col-wrapper"><span wicket:id="uName"></span></div></td>
-									<td class="col-5"><div class="col-wrapper" style="overflow: hidden;"><span wicket:id="email"></span></div></td>
+									<td class="col-4"><div class="col-wrapper"><span wicket:id="new"/><span wicket:id="uName"></span></div></td>
+									<td class="col-5"><div class="col-wrapper overflow-hidden"><span wicket:id="email"></span></div></td>
 									<td class="col-1">
-										<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="delete" wicket:message="title:80">
-											<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
-										</div>
+										<button wicket:id="delete" wicket:message="title:80" class="btn-sm p-0 pl-2 pr-2"></button>
 									</td>
 								</tr>
 							</tbody>
@@ -237,23 +275,26 @@
 					</div>
 				</fieldset>
 				<!--SIP Settings -->
-				<fieldset class="ui-widget-content">
-					<legend class="ui-widget-header"><wicket:message key="1001" /></legend>
+				<fieldset>
+					<legend><wicket:message key="1001" /></legend>
 					<div class="formelement">
-						<div class="info-text"><wicket:message key="1002" /></div>
-						<br/>
+						<i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="1002" />
 					</div>
 					<div class="formelement">
-						<label wicket:for="confno"><wicket:message key="1003" /></label><input type="text" wicket:id="confno" />
+						<label wicket:for="confno" class="col-3 text-right"><wicket:message key="1003" /></label>
+						<input type="text" wicket:id="confno" class="col-8"/>
 					</div>
 					<div class="formelement">
-						<label wicket:for="pin"><wicket:message key="1004" /></label><input type="text" wicket:id="pin" />
+						<label wicket:for="pin" class="col-3 text-right"><wicket:message key="1004" /></label>
+						<input type="text" wicket:id="pin" class="col-8"/>
 					</div>
 					<div class="formelement">
-						<label wicket:for="ownerId"><wicket:message key="1308" /></label><input type="text" wicket:id="ownerId" />
+						<label wicket:for="ownerId" class="col-3 text-right"><wicket:message key="1308" /></label>
+						<input type="text" wicket:id="ownerId" class="col-8"/>
 					</div>
 					<div class="formelement">
-						<label wicket:for="sipEnabled"><wicket:message key="1538" /></label><input type="checkbox" class="formcheckbox" wicket:id="sipEnabled" />
+						<label wicket:for="sipEnabled" class="col-3 text-right"><wicket:message key="1538" /></label>
+						<input type="checkbox" class="formcheckbox" wicket:id="sipEnabled" />
 					</div>
 				</fieldset>
 				<div class="bottom-bumper"></div>

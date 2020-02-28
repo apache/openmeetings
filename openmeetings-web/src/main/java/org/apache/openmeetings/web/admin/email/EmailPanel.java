@@ -88,7 +88,7 @@ public class EmailPanel extends AdminBasePanel {
 	private StringBuilder getRowClass(final MailMessage m) {
 		StringBuilder sb = getRowClass(m.getId(), form.getModelObject().getId());
 		if (MailMessage.Status.ERROR == m.getStatus()) {
-			sb.append(" ui-state-error");
+			sb.append(" bg-warning");
 		}
 		return sb;
 	}

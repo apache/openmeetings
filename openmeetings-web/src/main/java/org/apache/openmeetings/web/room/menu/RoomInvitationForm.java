@@ -50,8 +50,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.Select2MultiChoice;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-
 public class RoomInvitationForm extends InvitationForm {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(RoomInvitationForm.class);
@@ -118,8 +116,10 @@ public class RoomInvitationForm extends InvitationForm {
 			super.updateButtons(target);
 		} else {
 			Collection<Group> to = groups.getModelObject();
-			dialog.getSend().setEnabled(!to.isEmpty(), target);
-			dialog.getGenerate().setEnabled(false, target);
+			target.add(
+					dialog.getSend().setEnabled(!to.isEmpty())
+					, dialog.getGenerate().setEnabled(false)
+					);
 		}
 	}
 
@@ -137,8 +137,8 @@ public class RoomInvitationForm extends InvitationForm {
 	}
 
 	@Override
-	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		if (button.equals(dialog.getSend()) && Strings.isEmpty(url.getModelObject()) && rdi.getModelObject() == InviteeType.group) {
+	public void onClick(AjaxRequestTarget target, InvitationForm.Action action) {
+		if (InvitationForm.Action.SEND == action && Strings.isEmpty(url.getModelObject()) && rdi.getModelObject() == InviteeType.group) {
 			final String userbaseUrl = WebSession.get().getExtendedProperties().getBaseUrl();
 			for (Group g : groups.getModelObject()) {
 				for (GroupUser ou : groupUserDao.get(g.getId(), 0, Integer.MAX_VALUE)) {
@@ -151,6 +151,6 @@ public class RoomInvitationForm extends InvitationForm {
 				}
 			}
 		}
-		super.onClick(target, button);
+		super.onClick(target, action);
 	}
 }

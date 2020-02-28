@@ -13,33 +13,23 @@
 #chat {
 	height: calc(100% - 20px);
 }
-#chat .btn-toolbar {
-	margin-top: 2px;
-	margin-bottom: 0;
-	margin-left: 5px;
+#chat .chat-toolbar.btn-toolbar .dropdown-menu.btns-only li {
+	display: inline-block;
 }
-#chat #chatTabs.ui-tabs {
+#chat #chatTabs {
 	padding: 0;
 	height: calc(100% - var(--chat-tools-height) - var(--chat-msg-height) - var(--buffer-size));
 }
-#chat #chatTabs.ui-tabs .ui-tabs-nav {
-	padding: 0;
+#chat #chatTabs .nav.nav-tabs .nav-item {
 	max-height: var(--chat-tabs-height);
 	height: var(--chat-tabs-height);
 	overflow: hidden;
 }
-#chat #chatTabs.ui-tabs .ui-tabs-nav li {
-	margin: 0;
+#chat #chatTabs .nav.nav-tabs .nav-item .nav-link {
+	padding: 1px 0.9rem;
 }
 #chat #chatTabs.ui-tabs .ui-tabs-nav li .ui-icon.ui-icon-close {
 	float: left;
-}
-#chat #chatTabs.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
-	padding: 2px .5em;
-	float: left;
-}
-#chatPopup .control.block .ui-icon {
-	text-align: center;
 }
 #chatPopup .control.block .label {
 	display: inline-block;
@@ -63,6 +53,10 @@
 	z-index: 1;
 	left: 50px;
 }
+#chat .messageArea .icons div {
+	display: inline-block;
+	vertical-align: super;
+}
 html[dir="rtl"] #chat .messageArea .icons {
 	left: initial;
 	right: 50px;
@@ -77,14 +71,16 @@ html[dir="rtl"] #chat .messageArea .icons {
 	font-style: italic;
 	padding: 5px 0;
 }
-.ui-tabs .ui-tabs-panel.messageArea {
+#chat #chatTabs .tab-content {
 	height: calc(100% - var(--chat-tabs-height));
+}
+#chat #chatTabs .tab-content .tab-pane.messageArea {
 	overflow-y: auto;
 	padding: 0 5px;
 	position: relative;
 }
 #chatMessage {
-	margin-right: 22px;
+	width: calc(100% - 16px);
 	height: var(--chat-msg-height);
 	max-height: var(--chat-msg-height);
 }
@@ -96,27 +92,19 @@ html[dir="rtl"] #chat .messageArea .icons {
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 16px;
-	width: 20px;
-	height: 20px;
 	display: inline-block;
 }
 .list.chat-tool-icon {
 	background-image: url(images/list.png);
 }
-.sound.chat-tool-icon {
-	background-image: url(images/sound.png);
+#chat .chat-tool-icon, #chat .chat.btn {
+	font-size: 1.1em;
 }
-.sound-mute.chat-tool-icon {
-	background-image: url(images/sound_mute.png);
+#chat .sound.chat-tool-icon i::before {
+	content: '\f028';
 }
-.save.chat-tool-icon {
-	background-image: url(images/file_save_as.png);
-}
-#chat #hyperlink {
-	background-image: url(images/link.png);
-}
-#chat #fontStyle span {
-	background-image: url(images/settings.png);
+#chat .sound-mute.chat-tool-icon i::before {
+	content: '\f6a9';
 }
 .send-ctrl.chat-tool-icon {
 	background-image: url(images/key_ctrl.png);
@@ -125,18 +113,9 @@ html[dir="rtl"] #chat .messageArea .icons {
 }
 #chat .chat-btn {
 	display: inline-block;
-	float: right;
-}
-#chat .chat-btn:first-of-type {
-	margin-right: 10px;
 }
 #chat .send {
 	width: 16px;
-	display: inline-block;
-	position: absolute;
-	right: 0;
-	top: 0;
-	height: 60px;
 	padding-left: 0;
 	padding-right: 0;
 	margin-right: 0;
@@ -170,15 +149,35 @@ html[dir="rtl"] .main.room #chatPanel {
 	transform-origin: -15% 68% 0;
 	position: absolute;
 	top: 0;
-	right: -73px;
+	right: -67px;
 }
 .main.room #chatPanel.closed #chatPopup #chat {
 	display: none;
 }
-ul.dropdown-menu.btns-only, ul.dropdown-menu.btns-only li {
-	max-width: 62px;
-	min-width: 62px;
+.emt {
+	font-size: 10pt;
 }
-ul.dropdown-menu.btns-only li .chat-btn {
-	float: none !important;
+.chat-msg-container {
+	position: relative;
+}
+.chat-toolbar .font-huge, .wysiwyg-toolbar .font-huge {
+	font-size: x-large;
+}
+.chat-toolbar .font-small, .wysiwyg-toolbar .font-small {
+	font-size: small;
+}
+.chat-toolbar .font-tiny, .wysiwyg-toolbar .font-tiny {
+	font-size: small;
+}
+.chat-toolbar .chat-btn.bold, .wysiwyg-toolbar .tool-btn.bold {
+	font-weight: bold;
+}
+.chat-toolbar .chat-btn.italic, .wysiwyg-toolbar .tool-btn.italic {
+	font-style: italic;
+}
+.chat-toolbar .chat-btn.strike, .wysiwyg-toolbar .tool-btn.strike {
+	text-decoration: line-through;
+}
+.chat-toolbar .chat-btn.under, .wysiwyg-toolbar .tool-btn.under {
+	text-decoration: underline;
 }

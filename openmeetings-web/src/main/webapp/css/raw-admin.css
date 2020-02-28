@@ -34,78 +34,18 @@
 }
 .adminPanelColumnForm .adminForm .actions {
 	height: var(--actions-height);
-}
-.adminPanelColumnTable .list-table .ui-button.ui-widget {
-	padding: 0;
+	padding-top: 5px;
 }
 .adminPanelColumnForm div.scrollcontent {
 	height: calc(100% - var(--actions-height));
 	vertical-align: top;
 	overflow-y: auto;
 }
-.adminForm .btn {
-	width: 280px;
-}
-.adminForm .input, .adminForm input, .adminForm input.formcheckbox
-,.adminForm textarea, .adminForm select, .adminForm label
- {
-	display: block;
-	float: left;
-	font-size: 14px;
-	padding: 0px 0px;
-	margin: 2px 2px;
-}
-.adminForm .input {
-	border: solid 1px #aacfe4;
-	width: 280px;
-	min-height: 20px;
-	white-space: normal; /* IE */
-	white-space: initial;
-}
-.adminForm input {
-	border: solid 1px #aacfe4;
-	width: 280px;
-	height: 20px;
-}
-.adminForm input[type=checkbox], .adminForm input[type=radio] {
-	width: auto;
-}
-.adminForm input.formcheckbox {
-	border: none;
-	width: 20px;
-	height: 20px;
-}
-.adminForm fieldset {
-	margin-top: 4px;
-	padding: 4px;
-}
 .adminForm legend {
 	padding: 0.2em 0.5em;
 	margin: 0px 10px;
 	font-style: italic;
 	text-align: right;
-}
-.adminForm textarea {
-	border: solid 1px #aacfe4;
-	width: 280px;
-	height: 60px;
-}
-.adminForm div.formelement {
-	display: block;
-	clear: both;
-	max-width: 540px;
-	white-space: nowrap;
-}
-.adminForm select {
-	height: 20px;
-	border: solid 1px #aacfe4;
-	width: 282px;
-}
-.adminForm label {
-	font-weight: bold;
-	text-align: right;
-	width: 180px;
-	white-space: normal;
 }
 .adminForm .group.logo .profile img {
 	height: 16px;
@@ -129,78 +69,27 @@
 	background-repeat: no-repeat;
 	background-position: 5px;
 }
-/* generated using https://proto.io/freebies/onoff/ */
 .onoffswitch {
-	position: relative;
-	width: 50px;
-	display: inline-block;
-	margin-left:  2px;
+	display:inline-block;
 }
-.onoffswitch-checkbox {
+.onoffswitch .onoff-checkbox {
 	display: none !important;
-	float: none !important;
-	margin: 0 !important;
 }
-.onoffswitch-label {
-	display: block !important;
-	float: none !important;
-	margin: 0 !important;
-	overflow: hidden;
-	cursor: pointer;
-	border: 2px solid #999999;
-	border-radius: 0px;
-	width: auto !important;
+.onoff-label {
+	margin: 0;
 }
-.onoffswitch-inner {
-	display: block;
-	width: 200%;
-	margin-left: -100%;
-	transition: margin 0.3s ease-in 0s;
+.onoff-label::before {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+	font-size: 2.2em;
 }
-.onoffswitch-inner .before, .onoffswitch-inner .after {
-	display: block;
-	float: left;
-	width: 50%;
-	height: 20px;
-	padding: 0;
-	line-height: 20px;
-	font-size: 14px;
-	font-weight: bold;
-	box-sizing: border-box;
+.onoff-checkbox + .onoff-label::before {
+	content: '\f204';
+	color: var(--danger);
 }
-.onoffswitch-inner .before {
-	content: " ";
-	padding-left: 5px;
-	background-color: #14da33;
-}
-.onoffswitch-inner .after {
-	content: " ";
-	padding-right: 5px;
-	background-color: #ef0808;
-	text-align: right;
-}
-.onoffswitch-switch {
-	display: block;
-	width: 19px;
-	margin: 0.5px;
-	background: #A1A1A1;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 26px;
-	border: 2px solid #999999;
-	border-radius: 0px;
-	transition: all 0.3s ease-in 0s;
-}
-.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-inner {
-	margin-left: 0;
-}
-.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch {
-	right: 0px;
-	background-color: #A1A1A1;
-}
-.addLanguagePanel {
-	display: inline-block;
+.onoff-checkbox:checked + .onoff-label::before {
+	content: '\f205';
+	color: var(--success);
 }
 .addLanguagePanel select {
 	padding: 0px 0px;

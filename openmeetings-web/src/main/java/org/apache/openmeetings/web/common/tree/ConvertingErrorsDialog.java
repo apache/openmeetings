@@ -20,13 +20,13 @@ package org.apache.openmeetings.web.common.tree;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItemLog;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -37,10 +37,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
+public class ConvertingErrorsDialog extends Modal<BaseFileItem> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Label message = new Label("message", Model.of((String)null));
@@ -60,39 +59,35 @@ public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
 			}
 		}
 	};
+	private Component headerLabel;
+
 	@SpringBean
 	private FileItemLogDao fileLogDao;
 
 	public ConvertingErrorsDialog(String id, IModel<BaseFileItem> model) {
-		super(id, "", model);
-		add(container.add(message.setVisible(false), logView.setVisible(false)).setOutputMarkupId(true));
+		super(id, model);
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("887"));
+		header(new ResourceModel("887"));
+		size(Modal.Size.Large);
+
 		super.onInitialize();
+		add(container.add(message.setVisible(false), logView.setVisible(false)).setOutputMarkupId(true));
 	}
 
 	@Override
-	public int getWidth() {
-		return 600;
+	protected Component createHeaderLabel(String id, String label) {
+		headerLabel = super.createHeaderLabel(id, label);
+		return headerLabel;
 	}
 
 	@Override
-	public boolean isResizable() {
-		return true;
-	}
-
-	@Override
-	public boolean isModal() {
-		return true;
-	}
-
-	@Override
-	protected void onOpen(IPartialPageRequestHandler handler) {
+	public Modal<BaseFileItem> show(IPartialPageRequestHandler handler) {
 		BaseFileItem f = getModelObject();
-		setTitle(handler, new ResourceModel(f.getType() == BaseFileItem.Type.Recording ? "887" : "convert.errors.file"));
+		headerLabel.setDefaultModel(new ResourceModel(f.getType() == BaseFileItem.Type.Recording ? "887" : "convert.errors.file"));
+
 		List<FileItemLog> logs = fileLogDao.get(f);
 		if (f.getHash() == null) {
 			message.setVisible(true);
@@ -107,17 +102,7 @@ public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
 			logView.setVisible(false);
 			logView.setList(logs).setVisible(true);
 		}
-		handler.add(container);
-		super.onOpen(handler);
-	}
-
-	@Override
-	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		//no-op
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return new ArrayList<>();
+		handler.add(container, headerLabel);
+		return super.show(handler);
 	}
 }

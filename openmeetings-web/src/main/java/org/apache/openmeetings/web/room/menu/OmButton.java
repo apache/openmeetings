@@ -16,24 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.util;
+package org.apache.openmeetings.web.room.menu;
 
-import java.io.Serializable;
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
-public abstract class NonClosableDialog<T extends Serializable> extends AbstractFormDialog<T> {
+import com.googlecode.wicket.jquery.ui.form.button.Button;
+
+public abstract class OmButton extends Button {
 	private static final long serialVersionUID = 1L;
 
-	public NonClosableDialog(String id, String title) {
-		super(id, title);
+	public OmButton(String id) {
+		super(id);
+		add(new AjaxEventBehavior(EVT_CLICK) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				OmButton.this.onClick(target);
+			}
+		});
 	}
 
-	@Override
-	public void onConfigure(JQueryBehavior behavior) {
-		super.onConfigure(behavior);
-		behavior.setOption("closeOnEscape", false);
-		behavior.setOption("classes", "{'ui-dialog-titlebar': 'ui-corner-all no-close'}");
-	}
+	public abstract void onClick(AjaxRequestTarget target);
 }

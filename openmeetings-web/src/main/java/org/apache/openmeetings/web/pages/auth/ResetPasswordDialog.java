@@ -18,107 +18,54 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.util.NonClosableDialog;
-import org.apache.openmeetings.web.util.NonClosableMessageDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public class ResetPasswordDialog extends NonClosableDialog<String> {
+public class ResetPasswordDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
-	private DialogButton resetBtn;
 	private Form<String> form = new ResetForm("form");
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private PasswordTextField password;
 	private final User user;
-	MessageDialog confirmReset;
+	private final Modal<String> resetInfo;
+
 	@SpringBean
 	private UserDao userDao;
 
-	public ResetPasswordDialog(String id, final User user) {
-		super(id, "");
+	public ResetPasswordDialog(String id, final User user, Modal<String> resetInfo) {
+		super(id);
 		this.user = user;
+		this.resetInfo = resetInfo;
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("325"));
-		resetBtn = new DialogButton("reset", getString("327"));
-		add(form);
-		confirmReset = new NonClosableMessageDialog("confirmReset", getString("325"), getString("332")) {
-			private static final long serialVersionUID = 1L;
+		header(new ResourceModel("325"));
+		setCloseOnEscapeKey(false);
+		setBackdrop(Backdrop.STATIC);
+		show(true);
 
-			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				setResponsePage(Application.get().getSignInPageClass());
-			}
-		};
-		add(confirmReset);
+		add(form);
+		addButton(new BootstrapAjaxButton("button", new ResourceModel("327"), form, Buttons.Type.Outline_Primary) {
+			private static final long serialVersionUID = 1L;
+		}); // Reset
 
 		super.onInitialize();
-	}
-
-	@Override
-	public void onConfigure(JQueryBehavior behavior) {
-		super.onConfigure(behavior);
-		behavior.setOption("autoOpen", true);
-	}
-
-	@Override
-	protected List<DialogButton> getButtons() {
-		return Arrays.asList(resetBtn);
-	}
-
-	@Override
-	public DialogButton getSubmitButton() {
-		return resetBtn;
-	}
-
-	@Override
-	public Form<?> getForm() {
-		return form;
-	}
-
-	@Override
-	protected void onError(AjaxRequestTarget target, DialogButton btn) {
-		target.add(feedback);
-	}
-
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
-		try {
-			userDao.resetPassword(user, password.getConvertedInput());
-		} catch (Exception e) {
-			error(e.getMessage());
-		}
-	}
-
-	@Override
-	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		if (resetBtn.equals(button)) {
-			confirmReset.open(handler);
-		} else {
-			setResponsePage(Application.get().getSignInPageClass());
-		}
 	}
 
 	private class ResetForm extends Form<String> {
@@ -147,12 +94,12 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					ResetPasswordDialog.this.onSubmit(target, resetBtn);
+					ResetForm.this.onSubmit(target);
 				}
 
 				@Override
 				protected void onError(AjaxRequestTarget target) {
-					ResetPasswordDialog.this.onError(target, resetBtn);
+					ResetForm.this.onError(target);
 				}
 			});
 		}
@@ -164,6 +111,30 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 				error(getString("232"));
 			}
 			super.onValidate();
+		}
+
+		@Override
+		protected void onError() {
+			RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(this::onError);
+		}
+
+		protected void onError(AjaxRequestTarget target) {
+			target.add(feedback);
+		}
+
+		@Override
+		protected void onSubmit() {
+			RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(this::onSubmit);
+		}
+
+		protected void onSubmit(AjaxRequestTarget target) {
+			try {
+				userDao.resetPassword(user, password.getConvertedInput());
+				ResetPasswordDialog.this.close(target);
+				resetInfo.show(target);
+			} catch (Exception e) {
+				error(e.getMessage());
+			}
 		}
 	}
 }

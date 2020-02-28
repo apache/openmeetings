@@ -22,38 +22,33 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<div class="actions" wicket:id="buttons"></div>
-	<div style="height: calc(100% - 50px); overflow-y: auto;">
-		<table style="width: 100%; height: 100%">
-			<tr>
-				<td rowspan="2">
-					<fieldset class="ui-widget-content">
-						<legend class="ui-widget-header">
-							<wicket:message key="143" />
-						</legend>
-						<button type="button" wicket:id="changePwd" id="changePwd" style="margin-left: 180px;"><wicket:message key="327"/></button>
-						<div class="formelement" wicket:enclosure="passwd">
-							<label wicket:for="passwd"><wicket:message key="current.password" /></label><input type="password" wicket:id="passwd" />
-						</div>
-						<form wicket:id="general"></form>
-					</fieldset>
-				</td>
-				<td>
-					<div wicket:id="img"></div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<fieldset class="ui-widget-content">
-						<legend class="ui-widget-header">
-							<wicket:message key="1159" />
-						</legend>
-						<form wicket:id="comunity"></form>
-					</fieldset>
-				</td>
-			</tr>
-		</table>
+	<div class="profile-edit-form overflow-y-auto">
+		<div class="h-100 row m-0">
+			<div class="col-6">
+				<fieldset class="">
+					<legend class="">
+						<wicket:message key="143" />
+					</legend>
+					<button type="button" wicket:id="changePwd" id="changePwd"></button>
+					<div class="formelement" wicket:enclosure="passwd">
+						<label class="col-3 text-right" wicket:for="passwd"><wicket:message key="current.password" /></label>
+						<input type="password" wicket:id="passwd" class="col-8"/>
+					</div>
+					<form wicket:id="general"></form>
+				</fieldset>
+			</div>
+			<div class="col-6">
+				<div wicket:id="img" class="pb-5"></div>
+				<fieldset class="mt-5">
+					<legend class="">
+						<wicket:message key="1159" />
+					</legend>
+					<form wicket:id="comunity"></form>
+				</fieldset>
+			</div>
+		</div>
 	</div>
-	<div style="text-align: center; padding-top: 10px;">
+	<div class="pt-2 text-center">
 		<a wicket:id="link" target="_blank"><wicket:message key="register.privacy.statement"/></a>
 	</div>
 </wicket:panel>
