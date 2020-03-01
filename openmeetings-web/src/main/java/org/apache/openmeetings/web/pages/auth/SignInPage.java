@@ -266,6 +266,7 @@ public class SignInPage extends BaseInitedPage {
 		if (!cfgDao.getBool(CONFIG_IGNORE_BAD_SSL, false)) {
 			return;
 		}
+		/** it is not secure */
 		TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
 			@Override
 			public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
