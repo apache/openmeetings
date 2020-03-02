@@ -22,23 +22,32 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.simpleframework.xml.Element;
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.DateAdapter;
 
 @MappedSuperclass
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class HistoricalEntity implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "inserted")
-	@Element(name = "created", data = true, required = false)
+	@XmlElement(name = "created", required = false)
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date inserted;
 
 	@Column(name = "updated")
-	@Element(name = "updated", data = true, required = false)
+	@XmlElement(name = "updated", required = false)
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date updated;
 
 	@Column(name = "deleted", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "deleted", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean deleted;
 
 	public Date getInserted() {

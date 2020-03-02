@@ -89,7 +89,7 @@ public class GroupWebService extends BaseWebService {
 	@Path("/")
 	public ServiceResult add(@QueryParam("sid") @WebParam(name="sid") String sid, @QueryParam("name") @WebParam(name="name") String name) {
 		log.debug("add:: name {}", name);
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			Group o = new Group();
 			o.setName(name);
 			return new ServiceResult(String.valueOf(groupDao.update(o, sd.getUserId()).getId()), Type.SUCCESS);
@@ -106,20 +106,20 @@ public class GroupWebService extends BaseWebService {
 	@GET
 	@Path("/")
 	public List<GroupDTO> get(@QueryParam("sid") @WebParam(name="sid") String sid) {
-		return performCall(sid, User.Right.Soap, sd -> GroupDTO.list(groupDao.get(0, Integer.MAX_VALUE)));
+		return performCall(sid, User.Right.SOAP, sd -> GroupDTO.list(groupDao.get(0, Integer.MAX_VALUE)));
 	}
 
 	/**
 	 *
-	 * Add user to a certain group
+	 * Add USER to a certain group
 	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param userid
-	 *            the user id
+	 *            the USER id
 	 * @param id
 	 *            the group id
-	 * @return {@link ServiceResult} with result type, and id of the user added, or error id in case of the error as text
+	 * @return {@link ServiceResult} with result type, and id of the USER added, or error id in case of the error as text
 	 */
 	@POST
 	@Path("/{id}/users/{userid}")
@@ -129,7 +129,7 @@ public class GroupWebService extends BaseWebService {
 			, @PathParam("userid") @WebParam(name="userid") Long userid
 			)
 	{
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			if (!groupUserDao.isUserInGroup(id, userid)) {
 				User u = userDao.get(userid);
 				u.addGroup(groupDao.get(id));
@@ -141,15 +141,15 @@ public class GroupWebService extends BaseWebService {
 
 	/**
 	 *
-	 * Remove user from a certain group
+	 * Remove USER from a certain group
 	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param userid
-	 *            the user id
+	 *            the USER id
 	 * @param id
 	 *            the group id
-	 * @return {@link ServiceResult} with result type, and id of the user added, or error id in case of the error as text
+	 * @return {@link ServiceResult} with result type, and id of the USER added, or error id in case of the error as text
 	 */
 	@DELETE
 	@Path("/{id}/users/{userid}")
@@ -159,7 +159,7 @@ public class GroupWebService extends BaseWebService {
 			, @PathParam("userid") @WebParam(name="userid") Long userid
 			)
 	{
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			if (groupUserDao.isUserInGroup(id, userid)) {
 				User u = userDao.get(userid);
 				for (Iterator<GroupUser> iter = u.getGroupUsers().iterator(); iter.hasNext(); ) {
@@ -191,7 +191,7 @@ public class GroupWebService extends BaseWebService {
 			, @PathParam("roomid") @WebParam(name="roomid") Long roomid
 			)
 	{
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			Room r = roomDao.get(roomid);
 			if (r != null) {
 				if (r.getGroups() == null) {
@@ -241,7 +241,7 @@ public class GroupWebService extends BaseWebService {
 			, @QueryParam("asc") @WebParam(name="asc") boolean asc
 			)
 	{
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			SearchResult<User> result = new SearchResult<>();
 			result.setObjectName(User.class.getName());
 			result.setRecords(groupUserDao.count(id));
@@ -267,7 +267,7 @@ public class GroupWebService extends BaseWebService {
 	@DELETE
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
-		return performCall(sid, User.Right.Admin, sd -> {
+		return performCall(sid, User.Right.ADMIN, sd -> {
 			groupDao.delete(groupDao.get(id), sd.getUserId());
 
 			return new ServiceResult("Deleted", Type.SUCCESS);

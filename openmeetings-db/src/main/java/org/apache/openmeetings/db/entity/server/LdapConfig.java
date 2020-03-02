@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.server;
 
+import static org.apache.openmeetings.db.bind.Constants.LDAP_NODE;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,12 +31,16 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.user.User;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQuery(name="getNondeletedLdapConfigs", query="SELECT u FROM LdapConfig u WHERE u.deleted = false")
@@ -42,47 +48,56 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name="countNondeletedLdapConfigs", query="SELECT COUNT(c.id) FROM LdapConfig c WHERE c.deleted = false")
 @NamedQuery(name="getActiveLdapConfigs", query="SELECT c FROM LdapConfig c WHERE c.deleted = false AND c.active = :isActive ORDER BY c.id")
 @Table(name = "ldapconfig")
-@Root(name="ldapconfig")
+@XmlRootElement(name = LDAP_NODE)
 public class LdapConfig extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	@XmlTransient
 	private Long id;
 
 	@Column(name = "name")
-	@Element(data = true, required = false)
+	@XmlElement(name = "name", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name;
 
 	@Column(name = "config_file_name")
-	@Element(data = true, required = false)
+	@XmlElement(name = "configFileName", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String configFileName;
 
 	@Column(name = "add_domain_to_user_name", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "addDomainToUserName", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean addDomainToUserName;
 
 	@Column(name = "domain")
-	@Element(data = true, required = false)
+	@XmlElement(name = "domain", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String domain;
 
 	@Column(name = "is_active", nullable = false)
-	@Element(data = true, name = "isActive", required = false)
+	@XmlElement(name = "isActive", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean active;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "insertedby_id", updatable = true, insertable = true)
 	@ForeignKey(enabled = true)
+	@XmlTransient
 	private User insertedby;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "updatedby_id", updatable = true, insertable = true)
 	@ForeignKey(enabled = true)
+	@XmlTransient
 	private User updatedby;
 
 	@Lob
 	@Column(name = "comment", length = 2048)
-	@Element(data = true, required = false)
+	@XmlElement(name = "comment", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String comment;
 
 	@Override

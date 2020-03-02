@@ -108,7 +108,7 @@ public class TestUserService extends AbstractWebServiceTest {
 
 		ensureApplication(-1L); // to ensure WebSession is attached
 		WebSession ws = WebSession.get();
-		assertTrue(ws.signIn(adminUsername, userpass, User.Type.user, null));
+		assertTrue(ws.signIn(adminUsername, userpass, User.Type.USER, null));
 		Long userId0 = WebSession.getUserId();
 		ws.checkHashes(StringValue.valueOf(r1.getMessage()), StringValue.valueOf(""));
 		assertTrue(ws.isSignedIn(), "Login via secure hash should be successful");
@@ -144,7 +144,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		assertNotNull(user, "Valid UserDTO should be returned");
 		assertNotNull(user.getId(), "Id should not be NULL");
 		assertEquals(u.getLogin(), user.getLogin(), "Login should match");
-		assertEquals(User.Type.external, user.getType(), "Type should match");
+		assertEquals(User.Type.EXTERNAL, user.getType(), "Type should match");
 		assertEquals(tz, user.getTimeZoneId(), "Timezone should match");
 	}
 

@@ -58,7 +58,7 @@ public class MeetingMemberDTO implements Serializable {
 			mm.setUser(userDao.get(user.getId()));
 		} else {
 			User u = null;
-			if (User.Type.external == user.getType()) {
+			if (User.Type.EXTERNAL == user.getType()) {
 				// try to get ext. user
 				u = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
 			}
@@ -71,7 +71,7 @@ public class MeetingMemberDTO implements Serializable {
 						, owner);
 			}
 			if (u == null) {
-				user.setType(User.Type.contact);
+				user.setType(User.Type.CONTACT);
 				u = user.get(userDao, groupDao);
 				u.getRights().clear();
 			}

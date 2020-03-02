@@ -28,7 +28,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 
-@AuthorizeInstantiation({"Dashboard", "Room"})
+@AuthorizeInstantiation({"DASHBOARD", "ROOM"})
 public class ChatPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final Chat chat;

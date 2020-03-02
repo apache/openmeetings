@@ -160,7 +160,7 @@ public class ForgetPasswordDialog extends Modal<String> {
 					return true;
 				}
 			} else if (!Strings.isEmpty(username)) {
-				User us = userDao.getByLogin(username, User.Type.user, null);
+				User us = userDao.getByLogin(username, User.Type.USER, null);
 				if (us != null) {
 					sendHashByUser(us);
 					return true;

@@ -71,7 +71,7 @@ public class WbWebService extends BaseWebService {
 			)
 	{
 		log.debug("[resetWb] room id {}", id);
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			wbManager.reset(id, sd.getUserId());
 			return new ServiceResult("", Type.SUCCESS);
 		});
@@ -94,7 +94,7 @@ public class WbWebService extends BaseWebService {
 			)
 	{
 		log.debug("[cleanWb] room id {}, wb id {}", roomId, wbId);
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			wbManager.clearAll(roomId, wbId, null);
 			return new ServiceResult("", Type.SUCCESS);
 		});
@@ -119,7 +119,7 @@ public class WbWebService extends BaseWebService {
 			)
 	{
 		log.debug("[cleanSlide] room id {}, wb id {}, slide {}", roomId, wbId, slide);
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			wbManager.cleanSlide(roomId, wbId, slide, null);
 			return new ServiceResult("", Type.SUCCESS);
 		});

@@ -54,7 +54,7 @@ public class TestCalendar extends AbstractWicketTester {
 			CalendarPanel cal = (CalendarPanel)p.get(PATH_CHILD);
 			tester.executeAllTimerBehaviors(cal);
 
-			User u = userDao.getByLogin(regularUsername, User.Type.user, null);
+			User u = userDao.getByLogin(regularUsername, User.Type.USER, null);
 			//test create month
 			tester.getRequest().setParameter("allDay", String.valueOf(false));
 			tester.getRequest().setParameter("startDate", LocalDateTime.of(2017, 11, 13, 13, 13).toString());

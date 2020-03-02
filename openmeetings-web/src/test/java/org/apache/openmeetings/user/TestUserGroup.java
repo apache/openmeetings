@@ -93,7 +93,7 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 	@Test
 	public void addLdapUserWithoutGroup() throws Exception {
 		User u1 = getUser();
-		u1.setType(User.Type.ldap);
+		u1.setType(User.Type.LDAP);
 		u1.setDomainId(1L);
 		u1 = userDao.update(u1, null);
 		checkEmptyGroup("dao.getByLogin(ldap)", userDao.getByLogin(u1.getLogin(), u1.getType(), u1.getDomainId()));

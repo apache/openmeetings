@@ -147,19 +147,19 @@ public class UserManager implements IUserManager {
 		String login = u.getLogin();
 		if (!Strings.isEmpty(login) && login.length() >= getMinLoginLength()) {
 			// Check for duplicates
-			boolean checkName = userDao.checkLogin(login, User.Type.user, null, null);
+			boolean checkName = userDao.checkLogin(login, User.Type.USER, null, null);
 			String email = u.getAddress() == null ? null : u.getAddress().getEmail();
-			boolean checkEmail = Strings.isEmpty(email) || userDao.checkEmail(email, User.Type.user, null, null);
+			boolean checkEmail = Strings.isEmpty(email) || userDao.checkEmail(email, User.Type.USER, null, null);
 			if (checkName && checkEmail) {
 				String ahash = Strings.isEmpty(hash) ? randomUUID().toString() : hash;
-				if (Type.external != u.getType() && !Strings.isEmpty(email)) {
+				if (Type.EXTERNAL != u.getType() && !Strings.isEmpty(email)) {
 					emailManager.sendMail(login, email, ahash, sendConfirmation(), u.getLanguageId());
 				}
 
 				// If this user needs first to click his E-Mail verification
 				// code then set the status to 0
-				if (sendConfirmation() && u.getRights().contains(Right.Login)) {
-					u.getRights().remove(Right.Login);
+				if (sendConfirmation() && u.getRights().contains(Right.LOGIN)) {
+					u.getRights().remove(Right.LOGIN);
 				}
 
 				u.setActivatehash(ahash);
@@ -235,8 +235,8 @@ public class UserManager implements IUserManager {
 			log.error("Invalid login, please check parameters");
 			return null;
 		}
-		User u = userDao.getByLogin(user.getLogin(), Type.oauth, serverId);
-		if (!userDao.checkEmail(user.getEmail(), Type.oauth, serverId, u == null ? null : u.getId())) {
+		User u = userDao.getByLogin(user.getLogin(), Type.OAUTH, serverId);
+		if (!userDao.checkEmail(user.getEmail(), Type.OAUTH, serverId, u == null ? null : u.getId())) {
 			log.error("Another user with the same email exists");
 			return null;
 		}
@@ -244,8 +244,8 @@ public class UserManager implements IUserManager {
 		// check if the user already exists and register new one if it's needed
 		if (u == null) {
 			final User fUser = getNewUserInstance(null);
-			fUser.setType(Type.oauth);
-			fUser.getRights().remove(Right.Login);
+			fUser.setType(Type.OAUTH);
+			fUser.getRights().remove(Right.LOGIN);
 			fUser.setDomainId(serverId);
 			fUser.addGroup(groupDao.get(getDefaultGroup()));
 			for (Map.Entry<String, String> entry : user.getUserData().entrySet()) {

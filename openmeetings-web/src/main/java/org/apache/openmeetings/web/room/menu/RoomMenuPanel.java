@@ -210,7 +210,7 @@ public class RoomMenuPanel extends Panel {
 		Room r = room.getRoom();
 		boolean isInterview = Room.Type.interview == r.getType();
 		User u = room.getClient().getUser();
-		boolean notExternalUser = u.getType() != User.Type.contact;
+		boolean notExternalUser = u.getType() != User.Type.CONTACT;
 		exitMenuItem.setVisible(notExternalUser);
 		filesMenu.setVisible(!isInterview && room.getSidebar().isShowFiles());
 		boolean moder = room.getClient().hasRight(Room.Right.moderator);
@@ -245,7 +245,7 @@ public class RoomMenuPanel extends Panel {
 
 	public void exit(IPartialPageRequestHandler handler) {
 		cm.exitRoom(room.getClient());
-		if (WebSession.getRights().contains(User.Right.Dashboard)) {
+		if (WebSession.getRights().contains(User.Right.DASHBOARD)) {
 			room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
 		} else {
 			String url = cfgDao.getString(CONFIG_REDIRECT_URL_FOR_EXTERNAL, "");

@@ -222,10 +222,10 @@ public class RegisterDialog extends Modal<String> {
 					|| !passwordField.getConvertedInput().equals(confirmPassword.getConvertedInput())) {
 				error(getString("232"));
 			}
-			if (!userDao.checkEmail(emailField.getConvertedInput(), User.Type.user, null, null)) {
+			if (!userDao.checkEmail(emailField.getConvertedInput(), User.Type.USER, null, null)) {
 				error(getString("error.email.inuse"));
 			}
-			if (!userDao.checkLogin(loginField.getConvertedInput(), User.Type.user, null, null)) {
+			if (!userDao.checkLogin(loginField.getConvertedInput(), User.Type.USER, null, null)) {
 				error(getString("error.login.inuse"));
 			}
 			if (hasErrorMessage()) {

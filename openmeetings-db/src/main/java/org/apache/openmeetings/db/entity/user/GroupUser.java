@@ -28,11 +28,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.GroupAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQuery(name = "deleteGroupUsersByGroup", query = "DELETE FROM GroupUser gu WHERE gu.group.id = :id")
@@ -41,27 +45,31 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name = "getGroupUsersByGroupId", query = "SELECT gu FROM GroupUser gu WHERE gu.group.id = :id")
 @NamedQuery(name = "isUserInGroup", query = "SELECT gu FROM GroupUser gu WHERE gu.group.id = :groupId AND gu.user.id = :userId")
 @Table(name = "group_user")
-@Root(name = "user_organisation")
+@XmlRootElement(name = "user_organisation")
 public class GroupUser extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	@XmlTransient
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "group_id", insertable = true, updatable = true)
 	@ForeignKey(enabled = true)
-	@Element(name="organisation_id", required=false)
+	@XmlElement(name = "organisation_id", required = false)
+	@XmlJavaTypeAdapter(GroupAdapter.class)
 	private Group group;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
 	@ForeignKey(enabled = true)
+	@XmlTransient
 	private User user;
 
 	@Column(name = "is_moderator", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "moderator", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean moderator;
 
 	public GroupUser() {

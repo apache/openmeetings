@@ -115,7 +115,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.Backdrop;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
 
-@AuthorizeInstantiation("Room")
+@AuthorizeInstantiation("ROOM")
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(RoomPanel.class);

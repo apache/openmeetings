@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.entity.basic;
 
 import static java.lang.Boolean.TRUE;
+import static org.apache.openmeetings.db.bind.Constants.CFG_NODE;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,12 +35,18 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.ConfigTypeAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
+import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQuery(name = "forceGetConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.key LIKE :key")
@@ -53,7 +60,7 @@ import org.simpleframework.xml.Root;
 @Table(name = "configuration", indexes = {
 		@Index(name = "key_idx", columnList = "om_key", unique = true)
 })
-@Root(name = "config")
+@XmlRootElement(name = CFG_NODE)
 public class Configuration extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
@@ -66,35 +73,42 @@ public class Configuration extends HistoricalEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(name = "id", data = true, required = false)
+	@XmlElement(name = "id", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@Column(name = "type")
-	@Element(name = "type", data = true, required = false)
 	@Enumerated(EnumType.STRING)
+	@XmlElement(name = "type", required = false)
+	@XmlJavaTypeAdapter(ConfigTypeAdapter.class)
 	private Type type = Type.STRING;
 
 	@Column(name = "om_key", unique = true)
-	@Element(name = "key", data = true, required = false)
+	@XmlElement(name = "key", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String key;
 
 	@Column(name = "value")
-	@Element(name = "value", data = true, required = false)
+	@XmlElement(name = "value", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String value;
 
 	@Lob
 	@Column(name = "comment", length = 2048)
 	@Element(data = true, required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String comment;
 
 	@Column(name = "fromVersion")
 	@Element(data = true, required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String fromVersion;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	@ForeignKey(enabled = true)
-	@Element(name = "user_id", data = true, required = false)
+	@XmlElement(name = "user_id", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User user;
 
 	public String getComment() {

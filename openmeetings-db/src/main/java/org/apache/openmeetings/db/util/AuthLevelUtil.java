@@ -42,7 +42,7 @@ public class AuthLevelUtil {
 	}
 
 	public static boolean hasUserLevel(Set<User.Right> rights) {
-		return check(rights, User.Right.Room);
+		return check(rights, User.Right.ROOM);
 	}
 
 	public static Set<Room.Right> getRoomRight(User u, Room r, Appointment a, int userCount) {
@@ -92,18 +92,18 @@ public class AuthLevelUtil {
 	}
 
 	public static boolean hasAdminLevel(Set<User.Right> rights) {
-		return check(rights, User.Right.Admin);
+		return check(rights, User.Right.ADMIN);
 	}
 
 	public static boolean hasGroupAdminLevel(Set<User.Right> rights) {
-		return check(rights, User.Right.GroupAdmin);
+		return check(rights, User.Right.GROUP_ADMIN);
 	}
 
 	public static boolean hasWebServiceLevel(Set<User.Right> rights) {
-		return check(rights, User.Right.Soap);
+		return check(rights, User.Right.SOAP);
 	}
 
 	public static boolean hasLoginLevel(Set<User.Right> rights) {
-		return check(rights, User.Right.Login);
+		return check(rights, User.Right.LOGIN);
 	}
 }

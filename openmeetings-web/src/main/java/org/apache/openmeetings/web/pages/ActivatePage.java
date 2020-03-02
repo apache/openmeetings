@@ -40,7 +40,7 @@ public class ActivatePage extends BaseNotInitedPage {
 
 			if (user != null && !AuthLevelUtil.hasLoginLevel(user.getRights())) {
 				// activate
-				user.getRights().add(Right.Login);
+				user.getRights().add(Right.LOGIN);
 				user.setActivatehash(null);
 				userDao.update(user, user.getId());
 			}

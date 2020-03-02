@@ -126,9 +126,9 @@ public class InvitationsPanel extends UserBasePanel {
 
 		@Override
 		public Iterator<? extends Invitation> iterator(long first, long count) {
-			if (rights.contains(Right.Admin)) {
+			if (rights.contains(Right.ADMIN)) {
 				return getDao().get(search, first, count, getSortStr()).iterator();
-			} else if (rights.contains(Right.GroupAdmin)) {
+			} else if (rights.contains(Right.GROUP_ADMIN)) {
 				return getDao().getGroup(search, first, count, userId, getSortStr()).iterator();
 			} else {
 				return getDao().getUser(search, first, count, userId, getSortStr()).iterator();
@@ -137,9 +137,9 @@ public class InvitationsPanel extends UserBasePanel {
 
 		@Override
 		public long size() {
-			if (rights.contains(Right.Admin)) {
+			if (rights.contains(Right.ADMIN)) {
 				return getDao().count(search);
-			} else if (rights.contains(Right.GroupAdmin)) {
+			} else if (rights.contains(Right.GROUP_ADMIN)) {
 				return getDao().countGroup(search, userId);
 			} else {
 				return getDao().countUser(search, userId);

@@ -197,7 +197,7 @@ public class ImportInitvalues {
 						, VER_1_9);
 
 		addCfg(list, CONFIG_REGISTER_FRONTEND, String.valueOf(cfg.isAllowFrontendRegister()), Configuration.Type.BOOL
-				, "Is user register available on login screen", VER_1_8);
+				, "Is USER register available on login screen", VER_1_8);
 		addCfg(list, CONFIG_REGISTER_SOAP, String.valueOf(true), Configuration.Type.BOOL, "Is user register available via SOAP/REST", VER_3_0);
 		addCfg(list, CONFIG_REGISTER_OAUTH, String.valueOf(true), Configuration.Type.BOOL, "Is user register available via OAuth", VER_3_0);
 		// this group_id is the Group of users who register through the frontend or SOAP
@@ -435,9 +435,9 @@ public class ImportInitvalues {
 		cfgDao.update(c, null);
 
 		User u = getNewUserInstance(null);
-		u.setType(User.Type.user);
-		u.getRights().add(Right.Admin);
-		u.getRights().add(Right.Soap);
+		u.setType(User.Type.USER);
+		u.getRights().add(Right.ADMIN);
+		u.getRights().add(Right.SOAP);
 		u.setLogin(cfg.getUsername());
 		u.setFirstname("firstname");
 		u.setLastname("lastname");

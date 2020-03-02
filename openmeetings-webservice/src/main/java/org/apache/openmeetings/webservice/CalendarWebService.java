@@ -95,7 +95,7 @@ public class CalendarWebService extends BaseWebService {
 		log.debug("range : startdate - {} , enddate - {}"
 				, start == null ? "" : start.getTime()
 				, end == null ? "" : end.getTime());
-		return performCall(sid, User.Right.Room
+		return performCall(sid, User.Right.ROOM
 				, sd -> AppointmentDTO.list(dao.getInRange(sd.getUserId(), start.getTime(), end.getTime())));
 	}
 
@@ -125,12 +125,12 @@ public class CalendarWebService extends BaseWebService {
 		log.debug("rangeForUser : startdate - {} , enddate - {}"
 				, start == null ? "" : start.getTime()
 				, end == null ? "" : end.getTime());
-		return performCall(sid, User.Right.Soap
+		return performCall(sid, User.Right.SOAP
 				, sd -> AppointmentDTO.list(dao.getInRange(userid, start.getTime(), end.getTime())));
 	}
 
 	/**
-	 * Get the next Calendar event for the current user of the SID
+	 * Get the next Calendar event for the current USER of the SID
 	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
@@ -139,7 +139,7 @@ public class CalendarWebService extends BaseWebService {
 	@GET
 	@Path("/next")
 	public AppointmentDTO next(@QueryParam("sid") @WebParam(name="sid") String sid) {
-		return performCall(sid, User.Right.Room, sd -> {
+		return performCall(sid, User.Right.ROOM, sd -> {
 			Appointment a = dao.getNext(sd.getUserId(), new Date());
 			return a == null ? null : new AppointmentDTO(a);
 		});
@@ -158,7 +158,7 @@ public class CalendarWebService extends BaseWebService {
 	@GET
 	@Path("/next/{userid}")
 	public AppointmentDTO nextForUser(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("userid") @WebParam(name="userid") long userid) {
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			Appointment a = dao.getNext(userid, new Date());
 			return a == null ? null : new AppointmentDTO(a);
 		});
@@ -177,7 +177,7 @@ public class CalendarWebService extends BaseWebService {
 	@GET
 	@Path("/room/{roomid}")
 	public AppointmentDTO getByRoom(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("roomid") @WebParam(name="roomid") long roomid) {
-		return performCall(sid, User.Right.Room, sd -> {
+		return performCall(sid, User.Right.ROOM, sd -> {
 			Appointment a = dao.getByRoom(sd.getUserId(), roomid);
 			return a == null ? null : new AppointmentDTO(a);
 		});
@@ -196,7 +196,7 @@ public class CalendarWebService extends BaseWebService {
 	@GET
 	@Path("/title/{title}")
 	public List<AppointmentDTO> getByTitle(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("title") @WebParam(name="title") String title) {
-		return performCall(sid, User.Right.Room, sd -> AppointmentDTO.list(dao.searchByTitle(sd.getUserId(), title)));
+		return performCall(sid, User.Right.ROOM, sd -> AppointmentDTO.list(dao.searchByTitle(sd.getUserId(), title)));
 	}
 
 	/**
@@ -243,9 +243,9 @@ public class CalendarWebService extends BaseWebService {
 	 *
 	 * delete a calendar event
 	 *
-	 * If the given sid is from an Administrator or Web-Service user, the user
+	 * If the given sid is from an Administrator or Web-Service USER, the USER
 	 * can delete any appointment.
-	 * If the sid is assigned to a regular user, he can only delete appointments
+	 * If the sid is assigned to a regular USER, he can only delete appointments
 	 * where he is also the owner/creator of the appointment
 	 *
 	 * @param sid

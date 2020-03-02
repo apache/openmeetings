@@ -59,7 +59,7 @@ import org.springframework.stereotype.Service;
 /**
  *
  * Contains methods to import and upload files into the Files section of the
- * conference room and the personal drive of any user
+ * conference room and the personal drive of any USER
  *
  * @author sebawagner
  *
@@ -123,7 +123,7 @@ public class FileWebService extends BaseWebService {
 			, @WebParam(name="externalid") @PathParam("externalid") String externalId
 			)
 	{
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			FileItem f = fileDao.get(externalId, externalType);
 			fileDao.delete(f);
 			return new ServiceResult("Deleted", Type.SUCCESS);
@@ -132,7 +132,7 @@ public class FileWebService extends BaseWebService {
 
 	/**
 	 * to add a folder to the private drive, set parentId = 0 and isOwner to 1/true and
-	 * externalUserId/externalUserType to a valid user
+	 * externalUserId/externalUserType to a valid USER
 	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
@@ -151,7 +151,7 @@ public class FileWebService extends BaseWebService {
 			, @Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM, required = false) @WebParam(name="stream") InputStream stream
 			)
 	{
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			FileItem f = file == null ? null : file.get();
 			if (f == null || f.getId() != null) {
 				throw new ServiceException("Bad id");
@@ -190,17 +190,17 @@ public class FileWebService extends BaseWebService {
 			)
 	{
 		log.debug("getAllExternal::externalType {}", externalType);
-		return performCall(sid, User.Right.Soap, sd -> FileItemDTO.list(fileDao.getExternal(externalType)));
+		return performCall(sid, User.Right.SOAP, sd -> FileItemDTO.list(fileDao.getExternal(externalType)));
 	}
 
 	/**
-	 * Get a File Explorer Object by a given Room
+	 * Get a File Explorer Object by a given ROOM
 	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
 	 * @param roomId
-	 *            Room Id
-	 * @return - File Explorer Object by a given Room
+	 *            ROOM Id
+	 * @return - File Explorer Object by a given ROOM
 	 */
 	@WebMethod
 	@GET
@@ -210,7 +210,7 @@ public class FileWebService extends BaseWebService {
 			)
 	{
 		log.debug("getRoom::roomId {}", roomId);
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
 			// Home File List
@@ -246,7 +246,7 @@ public class FileWebService extends BaseWebService {
 			)
 	{
 		log.debug("getRoomByParent {}", parentId);
-		return performCall(sid, User.Right.Room, sd -> {
+		return performCall(sid, User.Right.ROOM, sd -> {
 			List<FileItem> list;
 			if (parentId < 0) {
 				if (parentId == -1) {
@@ -281,7 +281,7 @@ public class FileWebService extends BaseWebService {
 			, @WebParam(name="name") @PathParam("name") String name)
 	{
 		log.debug("rename {}", id);
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			FileItem f = fileDao.rename(id, name);
 			return f == null ? null : new FileItemDTO(f);
 		});
@@ -309,7 +309,7 @@ public class FileWebService extends BaseWebService {
 			, @WebParam(name="parentid") @PathParam("parentid") long parentId)
 	{
 		log.debug("move {}", id);
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			FileItem f = fileDao.move(id, parentId, sd.getUserId(), roomId);
 			return f == null ? null : new FileItemDTO(f);
 		});

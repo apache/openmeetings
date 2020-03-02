@@ -174,7 +174,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 
 		i.setInvitee(u);
 		i.setHash(randomUUID().toString());
-		if (Type.contact == u.getType()) {
+		if (Type.CONTACT == u.getType()) {
 			u.setLanguageId(lang.getModelObject());
 		}
 		return inviteDao.update(i);

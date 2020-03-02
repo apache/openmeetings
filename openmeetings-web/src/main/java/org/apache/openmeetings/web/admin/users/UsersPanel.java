@@ -45,7 +45,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.ColorBehavior;
 
-@AuthorizeInstantiation({"Admin", "GroupAdmin"})
+@AuthorizeInstantiation({"ADMIN", "GROUP_ADMIN"})
 public class UsersPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");

@@ -44,7 +44,7 @@ import org.apache.wicket.markup.repeater.Item;
  * @author swagner
  *
  */
-@AuthorizeInstantiation({"Admin", "GroupAdmin"})
+@AuthorizeInstantiation({"ADMIN", "GROUP_ADMIN"})
 public class GroupsPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	private GroupForm form;

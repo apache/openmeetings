@@ -64,7 +64,7 @@ public class TestUserManagerMocked {
 	public void oauthTest() throws NoSuchAlgorithmException, IOException {
 		OpenmeetingsVariables.setCryptClassName(SCryptImplementation.class.getCanonicalName());
 		when(userDao.validLogin(anyString())).thenReturn(true);
-		when(userDao.checkEmail(anyString(), eq(Type.oauth), any(Long.class), nullable(Long.class))).thenReturn(true);
+		when(userDao.checkEmail(anyString(), eq(Type.OAUTH), any(Long.class), nullable(Long.class))).thenReturn(true);
 		when(userDao.update(any(User.class), nullable(String.class), any(Long.class))).then(new Answer<User>() {
 			@Override
 			public User answer(InvocationOnMock invocation) throws Throwable {

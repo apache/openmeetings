@@ -158,7 +158,7 @@ public class KRoom {
 			recordingUser.put("firstName", u.getFirstname());
 			recordingUser.put("lastName", u.getLastname());
 			recordingUser.put("started", now.getTime());
-			Long ownerId = User.Type.contact == u.getType() ? u.getOwnerId() : u.getId();
+			Long ownerId = User.Type.CONTACT == u.getType() ? u.getOwnerId() : u.getId();
 			rec.setInsertedBy(ownerId);
 			rec.setType(BaseFileItem.Type.Recording);
 			rec.setInterview(interview);

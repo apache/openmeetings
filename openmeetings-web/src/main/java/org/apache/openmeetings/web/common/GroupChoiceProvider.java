@@ -50,7 +50,7 @@ public class GroupChoiceProvider extends ChoiceProvider<Group> {
 
 	@Override
 	public void query(String term, int page, Response<Group> response) {
-		if (WebSession.getRights().contains(User.Right.Admin)) {
+		if (WebSession.getRights().contains(User.Right.ADMIN)) {
 			List<Group> groups = groupDao.get(0, Integer.MAX_VALUE);
 			for (Group g : groups) {
 				if (Strings.isEmpty(term) || g.getName().toLowerCase(Locale.ROOT).contains(term.toLowerCase(Locale.ROOT))) {

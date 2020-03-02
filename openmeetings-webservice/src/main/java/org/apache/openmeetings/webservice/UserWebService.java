@@ -82,7 +82,7 @@ import org.springframework.stereotype.Service;
 @WebService(serviceName = USER_SERVICE_NAME, targetNamespace = TNS, portName = USER_SERVICE_PORT_NAME)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
-@Path("/user")
+@Path("/USER")
 public class UserWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(UserWebService.class);
 
@@ -94,7 +94,7 @@ public class UserWebService extends BaseWebService {
 	private GroupDao groupDao;
 
 	/**
-	 * @param user - login or email of Openmeetings user with admin or SOAP-rights
+	 * @param USER - login or email of Openmeetings USER with admin or SOAP-rights
 	 * @param pass - password
 	 *
 	 * @return - {@link ServiceResult} with error code or SID and userId
@@ -102,16 +102,16 @@ public class UserWebService extends BaseWebService {
 	@WebMethod
 	@GET
 	@Path("/login")
-	public ServiceResult login(@WebParam(name="user") @QueryParam("user") String user, @WebParam(name="pass") @QueryParam("pass") String pass) {
+	public ServiceResult login(@WebParam(name="USER") @QueryParam("USER") String user, @WebParam(name="pass") @QueryParam("pass") String pass) {
 		try {
-			log.debug("Login user");
+			log.debug("LOGIN USER");
 			User u = userDao.login(user, pass);
 			if (u == null) {
 				return new ServiceResult("error.bad.credentials", Type.ERROR);
 			}
 
 			Sessiondata sd = sessionDao.create(u.getId(), u.getLanguageId());
-			log.debug("Login user: {}", u.getId());
+			log.debug("LOGIN USER: {}", u.getId());
 			return new ServiceResult(sd.getSessionId(), Type.SUCCESS);
 		} catch (OmException oe) {
 			return oe.getKey() == null ? UNKNOWN : new ServiceResult(oe.getKey(), Type.ERROR);
@@ -133,7 +133,7 @@ public class UserWebService extends BaseWebService {
 	@GET
 	@Path("/")
 	public List<UserDTO> get(@WebParam(name="sid") @QueryParam("sid") String sid) {
-		return performCall(sid, User.Right.Soap, sd -> UserDTO.list(userDao.getAllUsers()));
+		return performCall(sid, User.Right.SOAP, sd -> UserDTO.list(userDao.getAllUsers()));
 	}
 
 	/**
@@ -142,25 +142,25 @@ public class UserWebService extends BaseWebService {
 	 *
 	 * @param sid
 	 *            The SID from getSession
-	 * @param user
-	 *            user object
+	 * @param USER
+	 *            USER object
 	 * @param confirm
 	 *            whatever or not to send email, leave empty for auto-send
 	 *
-	 * @return - id of the user added or error code
+	 * @return - id of the USER added or error code
 	 */
 	@WebMethod
 	@POST
 	@Path("/")
 	public UserDTO add(
 			@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="user") @FormParam("user") UserDTO user
+			, @WebParam(name="USER") @FormParam("USER") UserDTO user
 			, @WebParam(name="confirm") @FormParam("confirm") Boolean confirm
 			)
 	{
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			if (!isAllowRegisterSoap()) {
-				throw new ServiceException("Soap register is denied in Settings");
+				throw new ServiceException("SOAP register is denied in Settings");
 			}
 			User testUser = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
 
@@ -196,7 +196,7 @@ public class UserWebService extends BaseWebService {
 				jsonUser.addGroup(groupDao.get(getDefaultGroup()));
 				ouser = userManager.registerUser(jsonUser, user.getPassword(), null);
 			} catch (NoSuchAlgorithmException | OmException e) {
-				throw new ServiceException("Unexpected error while creating user");
+				throw new ServiceException("Unexpected error while creating USER");
 			}
 
 			if (ouser == null) {
@@ -207,11 +207,11 @@ public class UserWebService extends BaseWebService {
 
 			User u = (User)ouser;
 
-			u.getRights().add(Right.Room);
+			u.getRights().add(Right.ROOM);
 			if (Strings.isEmpty(user.getExternalId()) && Strings.isEmpty(user.getExternalType())) {
 				// activate the User
-				u.getRights().add(Right.Login);
-				u.getRights().add(Right.Dashboard);
+				u.getRights().add(Right.LOGIN);
+				u.getRights().add(Right.DASHBOARD);
 			}
 
 			u = userDao.update(u, sd.getUserId());
@@ -222,20 +222,20 @@ public class UserWebService extends BaseWebService {
 
 	/**
 	 *
-	 * Delete a certain user by its id
+	 * Delete a certain USER by its id
 	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param id
-	 *            the openmeetings user id
+	 *            the openmeetings USER id
 	 *
-	 * @return - id of the user deleted, error code otherwise
+	 * @return - id of the USER deleted, error code otherwise
 	 */
 	@WebMethod
 	@DELETE
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
-		return performCall(sid, User.Right.Admin, sd -> {
+		return performCall(sid, User.Right.ADMIN, sd -> {
 			userDao.delete(userDao.get(id), sd.getUserId());
 
 			return new ServiceResult("Deleted", Type.SUCCESS);
@@ -244,7 +244,7 @@ public class UserWebService extends BaseWebService {
 
 	/**
 	 *
-	 * Delete a certain user by its external user id
+	 * Delete a certain USER by its external USER id
 	 *
 	 * @param sid
 	 *            The SID from getSession
@@ -253,7 +253,7 @@ public class UserWebService extends BaseWebService {
 	 * @param externalType
 	 *            externalUserId
 	 *
-	 * @return - id of user deleted, or error code
+	 * @return - id of USER deleted, or error code
 	 */
 	@DELETE
 	@Path("/{externaltype}/{externalid}")
@@ -263,10 +263,10 @@ public class UserWebService extends BaseWebService {
 			, @WebParam(name="externalid") @PathParam("externalid") String externalId
 			)
 	{
-		return performCall(sid, User.Right.Admin, sd -> {
+		return performCall(sid, User.Right.ADMIN, sd -> {
 			User user = userDao.getExternalUser(externalId, externalType);
 
-			// Setting user deleted
+			// Setting USER deleted
 			userDao.delete(user, sd.getUserId());
 
 			return new ServiceResult("Deleted", Type.SUCCESS);
@@ -275,13 +275,13 @@ public class UserWebService extends BaseWebService {
 
 	/**
 	 * Description: sets the SessionObject for a certain SID, after setting this
-	 * Session-Object you can use the SID + a RoomId to enter any Room. ...
+	 * Session-Object you can use the SID + a RoomId to enter any ROOM. ...
 	 * Session-Hashs are deleted 15 minutes after the creation if not used.
 	 *
 	 * @param sid
 	 *            The SID from getSession
-	 * @param user
-	 *            user details to set
+	 * @param USER
+	 *            USER details to set
 	 * @param options
 	 *            room options to set
 	 *
@@ -292,11 +292,11 @@ public class UserWebService extends BaseWebService {
 	@Path("/hash")
 	public ServiceResult getRoomHash(
 			@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="user") @FormParam("user") ExternalUserDTO user
+			, @WebParam(name="USER") @FormParam("USER") ExternalUserDTO user
 			, @WebParam(name="options") @FormParam("options") RoomOptionsDTO options
 			)
 	{
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			if (Strings.isEmpty(user.getExternalId()) || Strings.isEmpty(user.getExternalType())) {
 				return new ServiceResult("externalId and/or externalType are not set", Type.ERROR);
 			}

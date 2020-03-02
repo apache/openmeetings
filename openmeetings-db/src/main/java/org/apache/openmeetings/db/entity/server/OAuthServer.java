@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.db.entity.server;
 
-import org.apache.openmeetings.db.entity.HistoricalEntity;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
+import static org.apache.openmeetings.db.bind.Constants.OAUTH_NODE;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -37,8 +37,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
+import org.apache.openmeetings.db.bind.adapter.OauthMapAdapter;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 
 @Entity
 @Table(name = "oauth_server")
@@ -46,67 +55,78 @@ import java.util.Map;
 @NamedQuery(name = "getOAuthServerById", query = "select s from OAuthServer as s where s.id = :id")
 @NamedQuery(name = "getAllOAuthServers", query = "SELECT s FROM OAuthServer s WHERE s.deleted = false ORDER BY s.id")
 @NamedQuery(name = "countOAuthServers", query = "select count(s) from OAuthServer s WHERE s.deleted = false")
-@Root
+@XmlRootElement(name = OAUTH_NODE)
 public class OAuthServer extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true)
+	@XmlElement(name = "id", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@Column(name = "name")
-	@Element(data = true)
+	@XmlElement(name = "name", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name;
 
 	@Column(name = "icon_url")
-	@Element(data = true)
+	@XmlElement(name = "iconUrl", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String iconUrl;
 
 	@Column(name = "enabled", nullable = false)
-	@Element(data = true)
+	@XmlElement(name = "enabled", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean enabled;
 
 	@Column(name = "client_id")
-	@Element(data = true)
+	@XmlElement(name = "clientId", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String clientId;
 
 	@Column(name = "client_secret")
-	@Element(data = true)
+	@XmlElement(name = "clientSecret", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String clientSecret;
 
 	@Column(name = "key_url")
-	@Element(data = true)
+	@XmlElement(name = "requestKeyUrl", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String requestKeyUrl;
 
 	@Column(name = "token_url")
-	@Element(data = true)
+	@XmlElement(name = "requestTokenUrl", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String requestTokenUrl;
 
 	@Column(name = "token_attributes")
-	@Element(data = true)
+	@XmlElement(name = "requestTokenAttributes", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String requestTokenAttributes;
 
 	@Column(name = "token_method")
-	@Element(data = true)
 	@Enumerated(EnumType.STRING)
+	@XmlElement(name = "requestTokenMethod", required = false)
 	private RequestTokenMethod requestTokenMethod = RequestTokenMethod.POST;
 
 	@Column(name = "info_url")
-	@Element(data = true)
+	@XmlElement(name = "requestInfoUrl", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String requestInfoUrl;
 
 	@Column(name = "info_method")
-	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
+	@XmlElement(name = "requestInfoMethod", required = false)
 	private RequestInfoMethod requestInfoMethod = RequestInfoMethod.GET;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@ElementMap(data = true, required = false)
 	@MapKeyColumn(name = "name")
 	@Column(name = "value")
 	@CollectionTable(name = "oauth_mapping", joinColumns = @JoinColumn(name = "oauth_id"))
+	//FIXME TODO @XmlElement(name = "attrMapping", required = false)
+	@XmlTransient
 	private Map<String, String> mapping = new LinkedHashMap<>();
 
 	@Override
@@ -224,6 +244,13 @@ public class OAuthServer extends HistoricalEntity {
 
 	public OAuthServer addMapping(String name, String value) {
 		mapping.put(name, value);
+		return this;
+	}
+
+	@XmlAnyElement
+	@XmlJavaTypeAdapter(OauthMapAdapter.class)
+	public OAuthServer setMapping(Map<String, String> map) {
+		mapping.putAll(map);
 		return this;
 	}
 

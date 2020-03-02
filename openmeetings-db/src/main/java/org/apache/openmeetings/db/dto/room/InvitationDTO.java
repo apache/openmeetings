@@ -229,7 +229,7 @@ public class InvitationDTO implements Serializable {
 
 		i.setInvitedBy(userDao.get(userId));
 		i.setInvitee(userDao.getContact(email, firstname, lastname, userId));
-		if (Type.contact == i.getInvitee().getType()) {
+		if (Type.CONTACT == i.getInvitee().getType()) {
 			i.getInvitee().setLanguageId(languageId);
 		}
 		i.setRoom(roomDao.get(roomId));

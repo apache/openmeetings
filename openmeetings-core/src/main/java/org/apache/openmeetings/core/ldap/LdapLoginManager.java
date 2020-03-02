@@ -197,7 +197,7 @@ public class LdapLoginManager {
 					authenticated = false;
 					break;
 			}
-			u = authenticated ? userDao.getByLogin(login, Type.ldap, domainId) : userDao.login(login, passwd);
+			u = authenticated ? userDao.getByLogin(login, Type.LDAP, domainId) : userDao.login(login, passwd);
 			log.debug("getByLogin:: authenticated ? {}, login = '{}', domain = {}, user = {}", authenticated, login, domainId, u);
 			if (u == null && Provisionning.AUTOCREATE != w.options.prov) {
 				log.error("User not found in OM DB and Provisionning.AUTOCREATE was not set");
@@ -303,7 +303,7 @@ public class LdapLoginManager {
 		while (cursor.next()) {
 			try {
 				Entry e = cursor.get();
-				User u = userDao.getByLogin(getLogin(w.config, e), Type.ldap, domainId);
+				User u = userDao.getByLogin(getLogin(w.config, e), Type.LDAP, domainId);
 				u = w.getUser(e, u);
 				if (print) {
 					log.info("Going to import user: {}", u);
@@ -340,8 +340,8 @@ public class LdapLoginManager {
 			}
 			if (u == null) {
 				u = getNewUserInstance(null);
-				u.setType(Type.ldap);
-				u.getRights().remove(Right.Login);
+				u.setType(Type.LDAP);
+				u.getRights().remove(Right.LOGIN);
 				u.setDomainId(domainId);
 				Group g = groupDao.get(getDefaultGroup());
 				if (g != null) {

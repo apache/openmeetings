@@ -175,7 +175,7 @@ public class SignInPage extends BaseInitedPage {
 		StringValue login = pp.getParameterValue("login"), password = pp.getParameterValue("password");
 		if (!login.isEmpty() && !password.isEmpty()) {
 			try {
-				if (WebSession.get().signIn(login.toString(), password.toString(), Type.user, null)) {
+				if (WebSession.get().signIn(login.toString(), password.toString(), Type.USER, null)) {
 					setResponsePage(Application.get().getHomePage());
 				} else {
 					log.error("Failed to login using POST parameters passed");

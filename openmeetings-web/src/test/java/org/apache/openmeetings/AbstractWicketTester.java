@@ -18,8 +18,19 @@
  */
 package org.apache.openmeetings;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+import static org.apache.openmeetings.web.common.OmWebSocketPanel.CONNECTED_MSG;
+import static org.apache.wicket.util.string.Strings.escapeMarkup;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Locale;
+import java.util.function.Consumer;
+
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
@@ -36,18 +47,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Locale;
-import java.util.function.Consumer;
-
-import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.apache.openmeetings.web.common.OmWebSocketPanel.CONNECTED_MSG;
-import static org.apache.wicket.util.string.Strings.escapeMarkup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
+import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 
 public class AbstractWicketTester extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(AbstractWicketTester.class);
@@ -93,9 +94,9 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 		WebSession s = WebSession.get();
 		try {
 			if (login != null && password != null) {
-				s.signIn(login, password, Type.user, null);
+				s.signIn(login, password, Type.USER, null);
 			} else {
-				s.signIn(adminUsername, userpass, Type.user, null);
+				s.signIn(adminUsername, userpass, Type.USER, null);
 			}
 		} catch (OmException e) {
 			fail(e.getMessage());
@@ -123,7 +124,7 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	}
 
 	protected void testArea(String user, Consumer<MainPage> consumer) throws OmException {
-		assertTrue(((WebSession)tester.getSession()).signIn(user, userpass, User.Type.user, null));
+		assertTrue(((WebSession)tester.getSession()).signIn(user, userpass, User.Type.USER, null));
 		MainPage page = tester.startPage(MainPage.class);
 		tester.assertRenderedPage(MainPage.class);
 		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(0));

@@ -92,8 +92,8 @@ public class RoomWebService extends BaseWebService {
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of
-	 * Room-Objects. Every Room-Object contains a Roomtype and all informations
-	 * about that Room. The List of current-users in the room is Null if you get
+	 * ROOM-Objects. Every ROOM-Object contains a Roomtype and all informations
+	 * about that ROOM. The List of current-users in the room is Null if you get
 	 * them via SOAP. The Roomtype can be 'conference', 'presentation' or 'interview'.
 	 *
 	 * @param sid
@@ -107,7 +107,7 @@ public class RoomWebService extends BaseWebService {
 	@Path("/public/{type}")
 	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("type") @WebParam(name="type") String type) {
 		Room.Type t = Strings.isEmpty(type) ? null : Room.Type.valueOf(type);
-		return performCall(sid, User.Right.Room, sd -> RoomDTO.list(roomDao.getPublicRooms(t)));
+		return performCall(sid, User.Right.ROOM, sd -> RoomDTO.list(roomDao.getPublicRooms(t)));
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/{id}")
 	public RoomDTO getRoomById(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) {
-		return performCall(sid, User.Right.Soap, sd -> new RoomDTO(roomDao.get(id)));
+		return performCall(sid, User.Right.SOAP, sd -> new RoomDTO(roomDao.get(id)));
 	}
 
 	/*
@@ -170,7 +170,7 @@ public class RoomWebService extends BaseWebService {
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
 			, @PathParam("externalid") @WebParam(name="externalid") String externalId
 			, @WebParam(name="room") @QueryParam("room") RoomDTO room) {
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			Room r = roomDao.getExternal(Room.Type.valueOf(type), externalType, externalId);
 			if (r == null) {
 				if (room == null) {
@@ -189,20 +189,20 @@ public class RoomWebService extends BaseWebService {
 	}
 
 	/**
-	 * Adds a new Room like through the Frontend
+	 * Adds a new ROOM like through the Frontend
 	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param room
 	 *            room object
 	 *
-	 * @return - id of the user added or error code
+	 * @return - id of the USER added or error code
 	 */
 	@WebMethod
 	@POST
 	@Path("/")
 	public RoomDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="room") @FormParam("room") RoomDTO room) {
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			Room r = room.get(roomDao, groupDao, fileDao);
 			r = updateRtoRoom(r, sd.getUserId());
 			return new RoomDTO(r);
@@ -221,7 +221,7 @@ public class RoomWebService extends BaseWebService {
 	@DELETE
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			Room r = roomDao.get(id);
 			if (r == null) {
 				return new ServiceResult("Not found", Type.SUCCESS);
@@ -235,7 +235,7 @@ public class RoomWebService extends BaseWebService {
 	/**
 	 * Method to remotely close rooms. If a room is closed all users
 	 * inside the room and all users that try to enter it will be redirected to
-	 * the redirectURL that is defined in the Room-Object.
+	 * the redirectURL that is defined in the ROOM-Object.
 	 *
 	 * Returns positive value if authentication was successful.
 	 *
@@ -250,7 +250,7 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/close/{id}")
 	public ServiceResult close(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			Long userId = sd.getUserId();
 			Room room = roomDao.get(id);
 			room.setClosed(true);
@@ -266,7 +266,7 @@ public class RoomWebService extends BaseWebService {
 	/**
 	 * Method to remotely open rooms. If a room is closed all users
 	 * inside the room and all users that try to enter it will be redirected to
-	 * the redirectURL that is defined in the Room-Object.
+	 * the redirectURL that is defined in the ROOM-Object.
 	 *
 	 * Returns positive value if authentication was successful.
 	 *
@@ -281,7 +281,7 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/open/{id}")
 	public ServiceResult open(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			Room room = roomDao.get(id);
 			room.setClosed(false);
 			roomDao.update(room, sd.getUserId());
@@ -298,31 +298,31 @@ public class RoomWebService extends BaseWebService {
 	 * @param id
 	 *            the room id
 	 *
-	 * @return - true if user was kicked, false otherwise
+	 * @return - true if USER was kicked, false otherwise
 	 */
 	@WebMethod
 	@GET
 	@Path("/kick/{id}")
 	public ServiceResult kickAll(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			boolean result = userManager.kickUsersByRoomId(id);
 			return new ServiceResult(result ? "Kicked" : "Not kicked", Type.SUCCESS);
 		});
 	}
 
 	/**
-	 * kick external user from given room
+	 * kick external USER from given room
 	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin with SOAP privileges
 	 * @param id
 	 *            the room id
 	 * @param externalType
-	 *            external type of user to kick
+	 *            external type of USER to kick
 	 * @param externalId
-	 *            external id of user to kick
+	 *            external id of USER to kick
 	 *
-	 * @return - true if user was kicked, false otherwise
+	 * @return - true if USER was kicked, false otherwise
 	 */
 	@WebMethod
 	@GET
@@ -332,14 +332,14 @@ public class RoomWebService extends BaseWebService {
 			, @WebParam(name="externalType") @PathParam("externalType") String externalType
 			, @WebParam(name="externalId") @PathParam("externalId") String externalId)
 	{
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			boolean result = userManager.kickExternal(id, externalType, externalId);
 			return new ServiceResult(result ? "Kicked" : "Not kicked", Type.SUCCESS);
 		});
 	}
 
 	/**
-	 * Returns the count of users currently in the Room with given id
+	 * Returns the count of users currently in the ROOM with given id
 	 *
 	 * @param sid The SID from UserService.getSession
 	 * @param roomId id of the room to get users
@@ -349,11 +349,11 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/count/{roomid}")
 	public ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
-		return performCall(sid, User.Right.Soap, sd -> new ServiceResult(String.valueOf(clientManager.listByRoom(roomId).size()), Type.SUCCESS));
+		return performCall(sid, User.Right.SOAP, sd -> new ServiceResult(String.valueOf(clientManager.listByRoom(roomId).size()), Type.SUCCESS));
 	}
 
 	/**
-	 * Returns list of users currently in the Room with given id
+	 * Returns list of users currently in the ROOM with given id
 	 *
 	 * @param sid The SID from UserService.getSession
 	 * @param roomId id of the room to get users
@@ -363,7 +363,7 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/users/{roomid}")
 	public List<UserDTO> users(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			List<UserDTO> result = new ArrayList<>();
 			for (Client c : clientManager.listByRoom(roomId)) {
 				result.add(new UserDTO(c.getUser()));
@@ -389,7 +389,7 @@ public class RoomWebService extends BaseWebService {
 			)
 	{
 		log.debug("[hash] invite {}", invite);
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			Invitation i = invite.get(sd.getUserId(), userDao, roomDao);
 			i = inviteDao.update(i);
 
@@ -426,7 +426,7 @@ public class RoomWebService extends BaseWebService {
 			)
 	{
 		log.debug("[cleanwb] room id {}", id);
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			wbManager.reset(id, sd.getUserId());
 			return new ServiceResult("", Type.SUCCESS);
 		});

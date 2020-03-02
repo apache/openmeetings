@@ -61,7 +61,7 @@ public class OmAuthenticationStrategy extends DefaultAuthenticationStrategy {
 	}
 
 	public void save(final String username, final String password, final Type type, final Long domainId) {
-		if (type != Type.oauth) {
+		if (type != Type.OAUTH) {
 			super.save(username, password, type.name(), String.valueOf(domainId));
 		}
 	}

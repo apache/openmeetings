@@ -40,7 +40,7 @@ public class TestAuthLevelUtil {
 	@Test
 	public void testAdmin() {
 		User u = new User();
-		u.setRights(new HashSet<>(Arrays.asList(User.Right.Admin)));
+		u.setRights(new HashSet<>(Arrays.asList(User.Right.ADMIN)));
 		Set<Room.Right> rights = getRoomRight(u, new Room(), null, 0);
 		assertEquals(1, rights.size(), "Result should NOT be empty");
 		assertTrue(rights.contains(Room.Right.superModerator), "Result should be super moderator");

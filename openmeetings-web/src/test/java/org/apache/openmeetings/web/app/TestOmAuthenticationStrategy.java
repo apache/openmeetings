@@ -32,10 +32,10 @@ public class TestOmAuthenticationStrategy extends AbstractWicketTester {
 	@Test
 	public void test() {
 		OmAuthenticationStrategy s = new OmAuthenticationStrategy();
-		s.save(null, null, User.Type.oauth, null);
+		s.save(null, null, User.Type.OAUTH, null);
 		assertNull(s.load(), "Wasn't saved, should not be loaded");
 
-		s.save("aa", "bb", User.Type.contact, null);
+		s.save("aa", "bb", User.Type.CONTACT, null);
 		copyCookies();
 		assertNotNull(s.load(), "Should be loaded");
 

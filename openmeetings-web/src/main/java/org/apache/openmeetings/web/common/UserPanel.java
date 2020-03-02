@@ -22,7 +22,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-@AuthorizeInstantiation("Dashboard")
+@AuthorizeInstantiation("DASHBOARD")
 public abstract class UserPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 

@@ -282,8 +282,8 @@ public class Admin {
 	}
 
 	private void processInstall(String file) throws Exception {
-		if (cmdl.hasOption("file") && (cmdl.hasOption("user") || cmdl.hasOption(OPTION_EMAIL) || cmdl.hasOption(OPTION_GROUP))) {
-			doLog("Please specify even 'file' option or 'admin user'.");
+		if (cmdl.hasOption("file") && (cmdl.hasOption("USER") || cmdl.hasOption(OPTION_EMAIL) || cmdl.hasOption(OPTION_GROUP))) {
+			doLog("Please specify even 'file' option or 'admin USER'.");
 			throw new ExitException();
 		}
 		boolean force = cmdl.hasOption("force");

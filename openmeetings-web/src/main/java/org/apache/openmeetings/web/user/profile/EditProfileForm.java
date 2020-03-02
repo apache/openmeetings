@@ -66,7 +66,7 @@ public class EditProfileForm extends Form<User> {
 		setModel(new CompoundPropertyModel<>(userDao.get(getUserId())));
 		userForm = new GeneralUserForm("general", getModel(), false);
 		this.chPwdDlg = chPwdDlg;
-		this.checkPassword = User.Type.oauth != getModelObject().getType();
+		this.checkPassword = User.Type.OAUTH != getModelObject().getType();
 	}
 
 	@Override

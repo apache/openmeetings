@@ -75,14 +75,14 @@ public class RecordingWebService extends BaseWebService {
 	@DELETE
 	@Path("/{id}")
 	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) {
-		return performCall(sid, User.Right.Soap, sd -> {
+		return performCall(sid, User.Right.SOAP, sd -> {
 			recordingDao.delete(recordingDao.get(id));
 			return new ServiceResult("Deleted", Type.SUCCESS);
 		});
 	}
 
 	/**
-	 * Gets a list of recordings created by particular external user
+	 * Gets a list of recordings created by particular external USER
 	 *
 	 * @param sid The SID of the User. This SID must be marked as Loggedin
 	 * @param externalId the externalUserId
@@ -97,7 +97,7 @@ public class RecordingWebService extends BaseWebService {
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
 			, @PathParam("externalid") @WebParam(name="externalid") String externalId) {
 		log.debug("getExternal:: type {}, id {}", externalType, externalId);
-		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(recordingDao.getByExternalUser(externalId, externalType)));
+		return performCall(sid, User.Right.SOAP, sd -> RecordingDTO.list(recordingDao.getByExternalUser(externalId, externalType)));
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class RecordingWebService extends BaseWebService {
 	@Path("/{externaltype}")
 	public List<RecordingDTO> getExternalByType(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType) {
-		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(recordingDao.getByExternalType(externalType)));
+		return performCall(sid, User.Right.SOAP, sd -> RecordingDTO.list(recordingDao.getByExternalType(externalType)));
 	}
 
 	/**
@@ -131,6 +131,6 @@ public class RecordingWebService extends BaseWebService {
 	@Path("/room/{roomid}")
 	public List<RecordingDTO> getExternalByRoom(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("roomid") @WebParam(name="roomid") Long roomId) {
-		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(recordingDao.getByRoomId(roomId)));
+		return performCall(sid, User.Right.SOAP, sd -> RecordingDTO.list(recordingDao.getByRoomId(roomId)));
 	}
 }

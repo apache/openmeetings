@@ -55,7 +55,7 @@ public class UserDTO implements Serializable {
 	private String externalId;
 	private String externalType;
 	private String pictureUri;
-	private Type type = Type.user;
+	private Type type = Type.USER;
 
 	public UserDTO() {
 		//def constructor
@@ -85,8 +85,8 @@ public class UserDTO implements Serializable {
 		u.setLanguageId(languageId);
 		u.setAddress(address);
 		u.setTimeZoneId(timeZoneId);
-		if (Type.external == type || (!Strings.isEmpty(externalId) && !Strings.isEmpty(externalType))) {
-			type = Type.external;
+		if (Type.EXTERNAL == type || (!Strings.isEmpty(externalId) && !Strings.isEmpty(externalType))) {
+			type = Type.EXTERNAL;
 			if (u.getGroupUsers().stream().filter(gu -> gu.getGroup().isExternal() && gu.getGroup().getName().equals(externalType)).count() == 0) {
 				u.addGroup(groupDao.getExternal(externalType));
 			}

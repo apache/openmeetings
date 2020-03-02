@@ -1,0 +1,34 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package org.apache.openmeetings.db.bind;
+
+public class Constants {
+	public static final String VERSION_LIST_NODE = "version";
+	public static final String VERSION_NODE = "version";
+	public static final String CFG_LIST_NODE = "configs";
+	public static final String CFG_NODE = "config";
+	public static final String GROUP_LIST_NODE = "organisations";
+	public static final String GROUP_NODE = "organisation";
+	public static final String LDAP_LIST_NODE = "ldapconfigs";
+	public static final String LDAP_NODE = "ldapconfig";
+	public static final String OAUTH_LIST_NODE = "oauth2servers";
+	public static final String OAUTH_NODE = "OAuthServer";
+	public static final String USER_LIST_NODE = "users";
+	public static final String USER_NODE = "user";
+}

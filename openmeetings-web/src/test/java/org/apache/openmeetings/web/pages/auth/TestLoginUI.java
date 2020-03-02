@@ -191,17 +191,17 @@ public class TestLoginUI extends AbstractWicketTester {
 			performRegister(uid, "warn.notverified");
 
 			// activate
-			User u = userDao.getByLogin(getLogin(uid), User.Type.user, null);
+			User u = userDao.getByLogin(getLogin(uid), User.Type.USER, null);
 			assertNotNull(u);
-			assertFalse(u.getRights().contains(User.Right.Login));
+			assertFalse(u.getRights().contains(User.Right.LOGIN));
 			tester.startPage(ActivatePage.class, new PageParameters().add(ActivatePage.ACTIVATION_PARAM, u.getActivatehash()));
 			tester.assertRenderedPage(SignInPage.class);
 
 			// check activated
-			u = userDao.getByLogin(getLogin(uid), User.Type.user, null);
+			u = userDao.getByLogin(getLogin(uid), User.Type.USER, null);
 			assertNotNull(u);
 			assertNull(u.getActivatehash());
-			assertTrue(u.getRights().contains(User.Right.Login));
+			assertTrue(u.getRights().contains(User.Right.LOGIN));
 			checkLogin(getEmail(uid), userpass);
 
 			// logout

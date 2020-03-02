@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.common;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.model.IModel;
 
-@AuthorizeInstantiation("Dashboard")
+@AuthorizeInstantiation("DASHBOARD")
 public abstract class UserBasePanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 

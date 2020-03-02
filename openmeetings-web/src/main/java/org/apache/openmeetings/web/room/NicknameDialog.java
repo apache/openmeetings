@@ -95,7 +95,7 @@ public class NicknameDialog extends Modal<User> {
 	}
 
 	private static boolean isVisible(User u) {
-		return (User.Type.contact == u.getType() || User.Type.external == u.getType())
+		return (User.Type.CONTACT == u.getType() || User.Type.EXTERNAL == u.getType())
 				&& Strings.isEmpty(u.getFirstname()) && Strings.isEmpty(u.getLastname());
 	}
 }

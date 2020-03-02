@@ -124,6 +124,6 @@ public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 	@Override
 	public void toJson(User choice, JSONStringer stringer) {
 		super.toJson(choice, stringer);
-		stringer.key("contact").value(choice.getType() == Type.contact);
+		stringer.key("contact").value(choice.getType() == Type.CONTACT);
 	}
 }

@@ -18,13 +18,6 @@
  */
 package org.apache.openmeetings.backup;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFFICE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -32,49 +25,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.entity.basic.Configuration;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestBackup extends AbstractJUnitDefaults {
-	private static final Logger log = LoggerFactory.getLogger(TestBackup.class);
-	private String cryptClass = null;
+public class TestImportOld extends AbstractTestImport {
+	private static final Logger log = LoggerFactory.getLogger(TestImportOld.class);
 
-	@Autowired
-	private BackupImport backupController;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
-
-	@Override
-	@BeforeEach
-	public void setUp() throws Exception {
-		super.setUp();
-		// Crypt class need to be preserved here to avoid overriding by backup import
-		cryptClass = getCryptClassName();
-	}
-
-	@AfterEach
-	public void tearDown() {
-		Configuration cfg = cfgDao.get(CONFIG_CRYPT);
-		assertNotNull(cfg, "Not null config should be returned");
-		cfg.setValue(cryptClass);
-		cfgDao.update(cfg, null);
-		for (String key : new String[] {CONFIG_PATH_IMAGEMAGIC, CONFIG_PATH_FFMPEG, CONFIG_PATH_OFFICE, CONFIG_PATH_SOX}) {
-			Configuration c = cfgDao.get(key);
-			assertNotNull(c, "Not null config should be returned");
-			c.setValue("");
-			cfgDao.update(c, null);
-		}
-	}
 
 	@Test
 	public void importOldVersions() {
@@ -92,9 +56,9 @@ public class TestBackup extends AbstractJUnitDefaults {
 		long meetingMembersCount = 0;
 		for (File backup : backupsHome.listFiles()) {
 			String name = backup.getName();
-			log.debug("Import of backup file : '" + name + "' is started ...");
+			log.debug("Import of backup file : '{}' is started ...", name);
 			try (InputStream is = new FileInputStream(backup)) {
-				backupController.performImport(is, new ProgressHolder());
+				backupImport.performImport(is, new ProgressHolder());
 				long newGroupCount = groupDao.count();
 				long newUserCount = userDao.count();
 				long newRoomCount = roomDao.count();
@@ -119,10 +83,5 @@ public class TestBackup extends AbstractJUnitDefaults {
 			}
 			log.debug("... Done.");
 		}
-	}
-
-	@Test
-	public void exportMain() throws Exception {
-		BackupExport.main(new String[] {File.createTempFile("gereral", "cfg").getCanonicalPath()});
 	}
 }

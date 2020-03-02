@@ -216,9 +216,9 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 
 		// soap user
 		importInitvalues.createSystemUser(getUser(randomUUID().toString()), group, soapUsername, userpass, false, u -> {
-			u.getRights().remove(User.Right.Room);
-			u.getRights().remove(User.Right.Dashboard);
-			u.getRights().add(User.Right.Soap);
+			u.getRights().remove(User.Right.ROOM);
+			u.getRights().remove(User.Right.DASHBOARD);
+			u.getRights().add(User.Right.SOAP);
 		});
 
 		// group admin

@@ -259,7 +259,7 @@ public class SignInDialog extends Modal<String> {
 			final String password = passField.getModelObject();
 			OmAuthenticationStrategy strategy = getAuthenticationStrategy();
 			WebSession ws = WebSession.get();
-			Type type = domain.getId() > 0 ? Type.ldap : Type.user;
+			Type type = domain.getId() > 0 ? Type.LDAP : Type.USER;
 			boolean signIn = false;
 			try {
 				signIn = ws.signIn(login, password, type, domain.getId());

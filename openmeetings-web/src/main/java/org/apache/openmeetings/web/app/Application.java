@@ -510,7 +510,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			if (r.isAppointment() && i.getInvitedBy().getId().equals(u.getId())) {
 				link = getRoomUrlFragment(r.getId()).getLink();
 			} else {
-				boolean allowed = Type.contact != u.getType() && Type.external != u.getType();
+				boolean allowed = Type.CONTACT != u.getType() && Type.EXTERNAL != u.getType();
 				if (allowed) {
 					allowed = get().isRoomAllowedToUser(r, u);
 				}

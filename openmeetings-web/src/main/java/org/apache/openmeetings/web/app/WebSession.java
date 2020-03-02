@@ -208,10 +208,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				if (i != null && i.isAllowEntry()) {
 					Set<Right> hrights = new HashSet<>();
 					if (i.getRoom() != null) {
-						hrights.add(Right.Room);
+						hrights.add(Right.ROOM);
 						roomId = i.getRoom().getId();
 					} else if (i.getAppointment() != null && i.getAppointment().getRoom() != null) {
-						hrights.add(Right.Room);
+						hrights.add(Right.ROOM);
 						roomId = i.getAppointment().getRoom().getId();
 					} else if (i.getRecording() != null) {
 						recordingId = i.getRecording().getId();
@@ -240,11 +240,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 						user.setFirstname(remoteUser.getFirstname());
 						user.setLastname(remoteUser.getLastname());
 						user.setLogin(remoteUser.getUsername());
-						user.setType(Type.external);
+						user.setType(Type.EXTERNAL);
 						user.setExternalId(remoteUser.getExternalUserId());
 						user.addGroup(groupDao.getExternal(remoteUser.getExternalUserType()));
 						user.getRights().clear();
-						user.getRights().add(Right.Room);
+						user.getRights().add(Right.ROOM);
 						user.getAddress().setEmail(remoteUser.getEmail());
 						user.setPictureUri(remoteUser.getPictureUrl());
 					} else {
@@ -280,7 +280,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			if (u.getGroupUsers() != null && !AuthLevelUtil.hasAdminLevel(r)) {
 				for (GroupUser gu : u.getGroupUsers()) {
 					if (gu.isModerator()) {
-						r.add(Right.GroupAdmin);
+						r.add(Right.GROUP_ADMIN);
 						break;
 					}
 				}
@@ -299,16 +299,16 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public boolean signIn(String login, String password, Type type, Long domainId) throws OmException {
 		User u;
 		switch (type) {
-			case ldap:
+			case LDAP:
 				u = ldapManager.login(login, password, domainId);
 				break;
-			case user:
+			case USER:
 				/* we will allow login against internal DB in case user 'guess' LDAP password */
 				u = userDao.login(login, password);
 				break;
-			case oauth:
+			case OAUTH:
 				// we did all the checks at this stage, just set the user
-				u = userDao.getByLogin(login, Type.oauth, domainId);
+				u = userDao.getByLogin(login, Type.OAUTH, domainId);
 				break;
 			default:
 				throw new OmException("error.unknown");
@@ -462,7 +462,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		boolean existMyRoomWidget = false, existRssWidget = false, existAdminWidget = false;
 		boolean showMyRoomConfValue = cfgDao.getBool(CONFIG_MYROOMS_ENABLED, true) && cfgDao.getBool(CONFIG_DASHBOARD_SHOW_MYROOMS, false);
 		boolean showRssConfValue = cfgDao.getBool(CONFIG_DASHBOARD_SHOW_RSS, false);
-		boolean showAdminWidget = getRights().contains(User.Right.Admin);
+		boolean showAdminWidget = getRights().contains(User.Right.ADMIN);
 		boolean save = false;
 
 		WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
+import static org.apache.openmeetings.db.bind.Constants.GROUP_NODE;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,10 +28,16 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.IntAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQuery(name = "getGroupById", query = "SELECT g FROM Group AS g WHERE g.id = :id AND g.deleted = false")
@@ -43,60 +51,73 @@ import org.simpleframework.xml.Root;
 @Table(name = "om_group", indexes = {
 		@Index(name = "group_name_idx", columnList = "name")
 })
-@Root(name = "organisation")
+@XmlRootElement(name = GROUP_NODE)
 public class Group extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true, name = "organisation_id")
+	@XmlElement(name = "organisation_id", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@Column(name = "name")
-	@Element(data = true, required = false)
+	@XmlElement(name = "name", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name;
 
 	@Column(name = "insertedby")
+	@XmlTransient
 	private Long insertedby;
 
 	@Column(name = "updatedby")
+	@XmlTransient
 	private Long updatedby;
 
 	@Column(name = "tag")
-	@Element(data = true, required = false)
+	@XmlElement(name = "tag", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String tag;
 
 	@Column(name = "limited", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "limited", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean limited;
 
 	@Column(name = "restricted", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "restricted", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean restricted;
 
 	@Column(name = "max_files_size", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "maxFilesSize", required = false)
+	@XmlJavaTypeAdapter(value = IntAdapter.class, type = int.class)
 	private int maxFilesSize;
 
 	@Column(name = "max_rec_size", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "maxRecordingsSize", required = false)
+	@XmlJavaTypeAdapter(value = IntAdapter.class, type = int.class)
 	private int maxRecordingsSize;
 
 	@Column(name = "max_rooms", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "maxRooms", required = false)
+	@XmlJavaTypeAdapter(value = IntAdapter.class, type = int.class)
 	private int maxRooms;
 
 	@Column(name = "recording_ttl", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "recordingTtl", required = false)
+	@XmlJavaTypeAdapter(value = IntAdapter.class, type = int.class)
 	private int recordingTtl;
 
 	@Column(name = "reminder_days", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "reminderDays", required = false)
+	@XmlJavaTypeAdapter(value = IntAdapter.class, type = int.class)
 	private int reminderDays;
 
 	@Column(name = "external", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "external", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean external;
 
 	public Long getInsertedby() {

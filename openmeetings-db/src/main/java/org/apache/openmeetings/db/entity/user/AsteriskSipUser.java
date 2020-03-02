@@ -28,14 +28,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.IntAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 
 @Entity
 @Table(name = "sipusers")
-@Root(name="asterisksipuser")
+@XmlRootElement(name = "asterisksipuser")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AsteriskSipUser implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -47,76 +54,93 @@ public class AsteriskSipUser implements Serializable {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Element(data = true)
+	@XmlElement(name = "id", required = false)
+	@XmlJavaTypeAdapter(value = LongAdapter.class, type = long.class)
 	private long id;
 
 	@Column(name = "type", nullable = false, length = 6)
 	@Enumerated(EnumType.STRING)
-	@Element(data = true, required = false)
+	@XmlElement(name = "type", required = false)
 	private Type type = Type.friend;
 
 	@Column(name = "name", nullable = false, length = 128)
-	@Element(data = true, required = false)
+	@XmlElement(name = "name", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name = ""; // Varchar 128
 
 	@Column(name = "secret", length = 128)
-	@Element(data = true, required = false)
+	@XmlElement(name = "secret", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String secret; // Varchar 128
 
 	@Column(name = "context", length = 128)
-	@Element(data = true, required = false)
+	@XmlElement(name = "context", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String context; // Varchar 128
 
 	@Column(name = "host", nullable = false, length = 128)
-	@Element(data = true, required = false)
+	@XmlElement(name = "host", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String host = "dynamic"; // Varchar 128
 
 	@Column(name = "ipaddr", nullable = false, length = 128)
-	@Element(data = true, required = false)
+	@XmlElement(name = "ipaddr", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String ipaddr = ""; // Varchar 128
 
 	@Column(name = "port", nullable = false, length = 8)
-	@Element(data = true, required = false)
+	@XmlElement(name = "port", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Integer port = 0; // mediumint(8)
 
 	@Column(name = "regseconds", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "regseconds", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long regseconds = 0L; // Bigint
 
 	@Column(name = "defaultuser", nullable = true, length = 128)
-	@Element(data = true, required = false)
+	@XmlElement(name = "defaultuser", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String defaultuser; // Varchar 128
 
 	@Column(name = "fullcontact", length = 512)
-	@Element(data = true, required = false)
+	@XmlElement(name = "fullcontact", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String fullcontact;
 
 	@Column(name = "regserver", nullable = true, length = 128)
-	@Element(data = true, required = false)
+	@XmlElement(name = "regserver", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String regserver; // Varchar 128
 
 	@Column(name = "useragent", nullable = true, length = 128)
-	@Element(data = true, required = false)
+	@XmlElement(name = "useragent", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String useragent; // Varchar 128
 
 	@Column(name = "lastms")
-	@Element(data = true, required = false)
+	@XmlElement(name = "lastms", required = false)
+	@XmlJavaTypeAdapter(IntAdapter.class)
 	private Integer lastms; // Integer
 
 	@Column(name = "md5secret")
-	@Element(data = true, required = false)
+	@XmlElement(name = "md5secret", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String md5secret;
 
 	@Column(name = "nat", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "nat", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String nat = "force_rport,comedia";
 
 	@Column(name = "callbackextension", nullable = true, length = 250)
-	@Element(data = true, required = false)
+	@XmlElement(name = "callbackextension", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String callbackextension;
 
 	@Column(name = "allow", nullable = false, length = 100)
-	@Element(data = true, required = false)
+	@XmlElement(name = "allow", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String allow = "ulaw;alaw;h264";
 
 	public long getId() {

@@ -87,9 +87,9 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	public static Set<Right> getDefaultRights() {
 		Set<Right> rights = new HashSet<>();
-		rights.add(Right.Login);
-		rights.add(Right.Dashboard);
-		rights.add(Right.Room);
+		rights.add(Right.LOGIN);
+		rights.add(Right.DASHBOARD);
+		rights.add(Right.ROOM);
 		return rights;
 	}
 	/**
@@ -101,7 +101,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 */
 	public static User getNewUserInstance(User currentUser) {
 		User user = new User();
-		user.setSalutation(Salutation.mr);
+		user.setSalutation(Salutation.MR);
 		user.setRights(getDefaultRights());
 		user.setLanguageId(getDefaultLang());
 		user.setTimeZoneId(getTimeZone(currentUser).getID());
@@ -130,7 +130,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	private static String getAdditionalWhere(boolean excludeContacts, Map<String, Object> params) {
 		if (excludeContacts) {
-			params.put("contact", Type.contact);
+			params.put("contact", Type.CONTACT);
 			return "u.type <> :contact";
 		}
 		return null;
@@ -139,7 +139,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	private static String getAdditionalWhere(boolean filterContacts, Long ownerId, Map<String, Object> params) {
 		if (filterContacts) {
 			params.put("ownerId", ownerId);
-			params.put("contact", Type.contact);
+			params.put("contact", Type.CONTACT);
 			return "((u.type <> :contact AND ou.group.id IN (SELECT ou.group.id FROM GroupUser ou WHERE ou.user.id = :ownerId)) "
 				+ "OR (u.type = :contact AND u.ownerId = :ownerId))";
 		}
@@ -412,7 +412,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public User getByEmail(String email) {
-		return getByEmail(email, User.Type.user, null);
+		return getByEmail(email, User.Type.USER, null);
 	}
 
 	public User getByEmail(String email, User.Type type, Long domainId) {
@@ -431,7 +431,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return single(fillLazy(em
 				, oem -> oem.createNamedQuery("getUserByHash", User.class)
 					.setParameter("resethash", hash)
-					.setParameter("type", User.Type.user)
+					.setParameter("type", User.Type.USER)
 				, FETCH_GROUP_GROUP));
 	}
 
@@ -502,11 +502,11 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	public User getContact(String email, String firstName, String lastName, Long langId, String tzId, User owner) {
 		List<User> list = em.createNamedQuery("getContactByEmailAndUser", User.class)
-				.setParameter(PARAM_EMAIL, email).setParameter("type", User.Type.contact).setParameter("ownerId", owner.getId())
+				.setParameter(PARAM_EMAIL, email).setParameter("type", User.Type.CONTACT).setParameter("ownerId", owner.getId())
 				.getResultList();
 		if (list.isEmpty()) {
 			User to = new User();
-			to.setType(Type.contact);
+			to.setType(Type.CONTACT);
 			String login = owner.getId() + "_" + email; //UserId prefix is used to ensure unique login
 			to.setLogin(login.length() < getMinLoginLength() ? randomUUID().toString() : login);
 			to.setFirstname(firstName);
@@ -579,7 +579,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				, oem -> oem.createNamedQuery("getExternalUser", User.class)
 					.setParameter("externalId", extId)
 					.setParameter("externalType", extType)
-					.setParameter("type", Type.external)
+					.setParameter("type", Type.EXTERNAL)
 				, FETCH_GROUP_GROUP));
 	}
 
@@ -596,7 +596,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 		// For direct access of linked users
 		if (id.longValue() < 0) {
-			rights.add(Right.Room);
+			rights.add(Right.ROOM);
 			return rights;
 		}
 
@@ -618,7 +618,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	public User login(String userOrEmail, String userpass) throws OmException {
 		List<User> users = em.createNamedQuery("getUserByLoginOrEmail", User.class)
 				.setParameter("userOrEmail", userOrEmail)
-				.setParameter("type", Type.user)
+				.setParameter("type", Type.USER)
 				.getResultList();
 
 		log.debug("login:: {} users were found", users.size());

@@ -155,10 +155,10 @@ public class UserForm extends AdminBaseForm<User> {
 			public void query(String term, int page, Response<Right> response) {
 				boolean isGroupAdmin = hasGroupAdminLevel(getRights());
 				for (Right r : Right.values()) {
-					if (Right.GroupAdmin == r) {
+					if (Right.GROUP_ADMIN == r) {
 						continue;
 					}
-					if (isGroupAdmin && (Right.Admin == r || Right.Soap == r)) {
+					if (isGroupAdmin && (Right.ADMIN == r || Right.SOAP == r)) {
 						continue;
 					}
 					if (Strings.isEmpty(term) || r.name().contains(term)) {
@@ -308,13 +308,13 @@ public class UserForm extends AdminBaseForm<User> {
 		User u = getModelObject();
 		final Map<Long, String> values = new HashMap<>();
 		List<Long> ids = new ArrayList<>();
-		if (u.getType() == Type.ldap) {
+		if (u.getType() == Type.LDAP) {
 			for (LdapConfig c : ldapDao.getActive()) {
 				ids.add(c.getId());
 				values.put(c.getId(), c.getName());
 			}
 		}
-		if (u.getType() == Type.oauth) {
+		if (u.getType() == Type.OAUTH) {
 			for (OAuthServer s : oauthDao.getActive()) {
 				ids.add(s.getId());
 				values.put(s.getId(), s.getName());
@@ -334,7 +334,7 @@ public class UserForm extends AdminBaseForm<User> {
 				return "" + object;
 			}
 		});
-		domain.setVisible(u.getType() == Type.ldap || u.getType() == Type.oauth);
+		domain.setVisible(u.getType() == Type.LDAP || u.getType() == Type.OAUTH);
 		if (target != null) {
 			target.add(domain);
 		}

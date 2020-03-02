@@ -82,7 +82,7 @@ public class GeneralUserForm extends Form<User> {
 
 					@Override
 					public Object getDisplayValue(Salutation object) {
-						return getString("user.salutation." + object.name());
+						return getString("USER.salutation." + object.name());
 					}
 
 					@Override

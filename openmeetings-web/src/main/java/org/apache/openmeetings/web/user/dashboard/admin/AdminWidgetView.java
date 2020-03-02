@@ -29,7 +29,7 @@ import org.wicketstuff.dashboard.web.WidgetView;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 
-@AuthorizeInstantiation("Admin")
+@AuthorizeInstantiation("ADMIN")
 public class AdminWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;
 	private AdminCleanupInfoDialog cleanupDialog;

@@ -19,24 +19,34 @@
 package org.apache.openmeetings.backup;
 
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
+import static org.apache.openmeetings.db.bind.Constants.VERSION_NODE;
 
 import java.io.Serializable;
 
-import org.apache.openmeetings.util.Version;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-@Root(name = "version")
+import org.apache.openmeetings.db.bind.adapter.IntAdapter;
+import org.apache.openmeetings.util.Version;
+
+@XmlRootElement(name = VERSION_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class BackupVersion implements Serializable, Comparable<BackupVersion> {
 	private static final long serialVersionUID = 1L;
 
-	@Element(data = true)
+	@XmlElement(name = "major")
+	@XmlJavaTypeAdapter(value = IntAdapter.class, type = int.class)
 	private int major;
 
-	@Element(data = true)
+	@XmlElement(name = "minor")
+	@XmlJavaTypeAdapter(value = IntAdapter.class, type = int.class)
 	private int minor;
 
-	@Element(data = true)
+	@XmlElement(name = "micro")
+	@XmlJavaTypeAdapter(value = IntAdapter.class, type = int.class)
 	private int micro;
 
 	public int getMajor() {

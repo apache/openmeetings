@@ -175,7 +175,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 					p.setFolderId(INBOX_FOLDER_ID);
 					msgDao.update(p, getUserId());
 					if (to.getAddress() != null) {
-						String aLinkHTML = 	(isPrivate && to.getType() == Type.user) ? "<br/><br/>" + "<a href='" + getContactsLink() + "'>"
+						String aLinkHTML = 	(isPrivate && to.getType() == Type.USER) ? "<br/><br/>" + "<a href='" + getContactsLink() + "'>"
 									+ Application.getString("1302", to.getLanguageId()) + "</a><br/>" : "";
 						String invitationLink = "";
 						if (p.isBookedRoom()) {

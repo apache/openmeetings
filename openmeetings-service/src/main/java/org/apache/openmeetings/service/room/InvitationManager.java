@@ -217,7 +217,7 @@ public class InvitationManager implements IInvitationManager {
 
 		invitation.setInvitedBy(createdBy);
 		invitation.setInvitee(inveetee);
-		if (languageId != null && Type.contact == invitation.getInvitee().getType()) {
+		if (languageId != null && Type.CONTACT == invitation.getInvitee().getType()) {
 			invitation.getInvitee().setLanguageId(languageId);
 		}
 		invitation.setRoom(room);
