@@ -67,7 +67,7 @@ public class TestImport extends AbstractTestImport {
 			cfgDao.update(def, null);
 		}
 		long ldapCount = ldapDao.count();
-		File ldaps = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/LDAP/ldapconfigs.xml").toURI());
+		File ldaps = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/ldap/ldapconfigs.xml").toURI());
 		Long id = backupImport.importLdap(ldaps.getParentFile());
 		assertEquals(ldapCount + 1, ldapDao.count(), "Ldap should be added");
 		LdapConfig ldap = ldapDao.get(id);

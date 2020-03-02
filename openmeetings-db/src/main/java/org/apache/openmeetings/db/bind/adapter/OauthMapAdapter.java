@@ -62,28 +62,60 @@ public class OauthMapAdapter extends XmlAdapter<Object, Map<String, String>> {
 		}
 	}
 
-	@Override
-	public Map<String, String> unmarshal(Object v) throws Exception {
+	private static Map<String, String> getMap(String key, String value) {
 		Map<String, String> map = new HashMap<>();
-		Element el = (Element)v;
-		if ("loginParamName".equals(el.getLocalName())) {
-			putValue(map, OAuthUser.PARAM_LOGIN, el.getTextContent());
-		} else if ("emailParamName".equals(el.getLocalName())) {
-			putValue(map, OAuthUser.PARAM_EMAIL, el.getTextContent());
-		} else if ("firstnameParamName".equals(el.getLocalName())) {
-			putValue(map, OAuthUser.PARAM_FNAME, el.getTextContent());
-		} else if ("lastnameParamName".equals(el.getLocalName())) {
-			putValue(map, OAuthUser.PARAM_LNAME, el.getTextContent());
-		} else if ("mapping".equals(el.getLocalName())) {
-			NodeList entries = el.getChildNodes();
-			for (int i = 0; i < entries.getLength(); ++i) {
-				Node entry = entries.item(i);
-				NodeList children = entry.getChildNodes();
-				if ("entry".equals(entry.getLocalName()) && children.getLength() == 2) {
-					putValue(map, children.item(0).getTextContent(), children.item(1).getTextContent());
+		putValue(map, key, value);
+		return map;
+	}
+
+	private static Map<String, String> getMap(NodeList entries) {
+		Map<String, String> map = new HashMap<>();
+		for (int i = 0; i < entries.getLength(); ++i) {
+			Node entry = entries.item(i);
+			NodeList children = entry.getChildNodes();
+			if ("entry".equals(entry.getLocalName()) && children.getLength() > 1) {
+				Node key = null;
+				Node value = null;
+				for (int j = 0; j < children.getLength(); ++j) {
+					Node n = children.item(j);
+					if (n.getNodeType() == Node.TEXT_NODE) {
+						continue;
+					}
+					if (key == null) {
+						key = n;
+						continue;
+					}
+					if (value == null) {
+						value = n;
+						break;
+					}
+				}
+				if (key != null && value != null) {
+					putValue(map, key.getTextContent(), value.getTextContent());
 				}
 			}
 		}
 		return map;
+	}
+
+	@Override
+	public Map<String, String> unmarshal(Object v) throws Exception {
+		Element el = (Element)v;
+		if ("loginParamName".equals(el.getLocalName())) {
+			return getMap(OAuthUser.PARAM_LOGIN, el.getTextContent());
+		}
+		if ("emailParamName".equals(el.getLocalName())) {
+			return getMap(OAuthUser.PARAM_EMAIL, el.getTextContent());
+		}
+		if ("firstnameParamName".equals(el.getLocalName())) {
+			return getMap(OAuthUser.PARAM_FNAME, el.getTextContent());
+		}
+		if ("lastnameParamName".equals(el.getLocalName())) {
+			return getMap(OAuthUser.PARAM_LNAME, el.getTextContent());
+		}
+		if ("mapping".equals(el.getLocalName())) {
+			return getMap(el.getChildNodes());
+		}
+		return new HashMap<>();
 	}
 }
