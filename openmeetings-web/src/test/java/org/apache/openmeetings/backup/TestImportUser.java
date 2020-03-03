@@ -39,7 +39,14 @@ public class TestImportUser extends AbstractTestImport {
 		long userCount = userDao.count();
 		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/users.xml").toURI());
 		backupImport.importUsers(configs.getParentFile());
-		assertEquals(userCount + 3, userDao.count(), "Users should be added");
-		//assertEquals(configsCount, cfgDao.count(), "No records should be added");
+		assertEquals(userCount + 7, userDao.count(), "Users should be added");
+	}
+
+	@Test
+	public void importNoLoginDeleted() throws Exception {
+		long userCount = userDao.count();
+		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/nologin_deleted/users.xml").toURI());
+		backupImport.importUsers(configs.getParentFile());
+		assertEquals(userCount, userDao.count(), "No records should be added");
 	}
 }

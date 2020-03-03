@@ -30,7 +30,7 @@ see http://openmeetings.apache.org/Upgrade.html for Details
          <age class="java.util.Date"><![CDATA[1502426202010]]></age>
          <firstname><![CDATA[Zushid]]></firstname>
          <lastname><![CDATA[Vrukyeri]]></lastname>
-         <login><![CDATA[vasya]]></login>
+         <login><![CDATA[miuw.su]]></login>
          <pass><![CDATA[1000:CJcOXllfzJK/CC3xWdVT6PrgW0y0FtGNhwKQPVREn6d6pBDqxtI973Yj6d2VUkpP+i2Z2I9IVvDZjOi+DSaaslmaXUV5mM89eLEqy631vcsgHVWmzsAphtdpuTUkri07hE6KKGROLkmfFtD+K0v+gLyQFA0H2M11DKF9suLc5W4=:xdqnah+D81hn7IRReRdMzA0H37mfIyTM+itARUQWKCHAAzM2dgjaA8E4YKV6+NO+p1q9gWGRbNtHRMnXXGfWhY8D5pE3P7mvSxiy0UbYXcICzl1ZT8q1hg+vNDJBMIuAx9/FHd640847yYpPM2VymMOT1rXJW3T9NXR2qibSwPKmKajy6eIzf9dRPvnLDFGOEddpfUAydPIbRjwsVxH/XzZbYR9BJ6S+7/RlK1bIdEWVjb8QWEB1VAO/LMH0gB7nNsAtjhvAZ+uOWPIYyCPBX6wmi4keb4RyOEwqyJVniJ9Aq+HsOKmVJtos46DcjunZPV3gghY29UFoAh1ezaAPjQ==]]></pass>
          <regdate class="java.util.Date"><![CDATA[1502426202011]]></regdate>
          <title_id><![CDATA[1]]></title_id>
@@ -50,6 +50,10 @@ see http://openmeetings.apache.org/Upgrade.html for Details
                <organisation_id><![CDATA[2]]></organisation_id>
                <moderator><![CDATA[false]]></moderator>
             </user_organisation>
+            <user_organisation>
+               <organisation_id><![CDATA[666666]]></organisation_id>
+               <moderator><![CDATA[false]]></moderator>
+            </user_organisation>
          </organisations>
          <timeZoneId><![CDATA[Europe/Berlin]]></timeZoneId>
          <forceTimeZoneCheck><![CDATA[false]]></forceTimeZoneCheck>
@@ -64,11 +68,26 @@ see http://openmeetings.apache.org/Upgrade.html for Details
             <right><![CDATA[Room]]></right>
             <right><![CDATA[Soap]]></right>
          </rights>
+         <activatehash>test</activatehash>
+         <sipUser>
+            <id><![CDATA[1]]></id>
+            <type><![CDATA[friend]]></type>
+            <name><![CDATA[miuw.su]]></name>
+            <context><![CDATA[rooms]]></context>
+            <host><![CDATA[dynamic]]></host>
+            <ipaddr><![CDATA[]]></ipaddr>
+            <port><![CDATA[0]]></port>
+            <regseconds><![CDATA[0]]></regseconds>
+            <defaultuser><![CDATA[miuw.su]]></defaultuser>
+            <md5secret><![CDATA[fee3d8da8c8ba37330ba1e3a9f613407]]></md5secret>
+            <nat><![CDATA[force_rport,comedia]]></nat>
+            <allow><![CDATA[ulaw;alaw;h264]]></allow>
+         </sipUser>
       </user>
       <user>
          <user_id><![CDATA[2]]></user_id>
-         <firstname><![CDATA[Ea]]></firstname>
-         <lastname><![CDATA[Stonejumper ]]></lastname>
+         <firstname><![CDATA[Rururca]]></firstname>
+         <lastname><![CDATA[Pogolun ]]></lastname>
          <login><![CDATA[1_rururca.pogolun@local]]></login>
          <deleted><![CDATA[false]]></deleted>
          <language_id><![CDATA[9]]></language_id>
@@ -118,6 +137,88 @@ see http://openmeetings.apache.org/Upgrade.html for Details
             <right><![CDATA[Dashboard]]></right>
             <right><![CDATA[Room]]></right>
          </rights>
+         <sipUser>
+            <type><![CDATA[friend]]></type>
+            <name><![CDATA[bond]]></name>
+            <context><![CDATA[rooms]]></context>
+            <host><![CDATA[dynamic]]></host>
+            <ipaddr><![CDATA[]]></ipaddr>
+            <port><![CDATA[0]]></port>
+            <regseconds><![CDATA[0]]></regseconds>
+            <defaultuser><![CDATA[bond]]></defaultuser>
+            <md5secret><![CDATA[9785f0d22bbf4b6ea1460e9cc7dc9759]]></md5secret>
+            <nat><![CDATA[force_rport,comedia]]></nat>
+            <allow><![CDATA[ulaw;alaw;h264]]></allow>
+         </sipUser>
+      </user>
+      <user>
+         <user_id><![CDATA[4]]></user_id>
+         <firstname><![CDATA[Thip]]></firstname>
+         <lastname><![CDATA[Tiao]]></lastname>
+         <login><![CDATA[bond]]></login>
+         <deleted><![CDATA[false]]></deleted>
+         <language_id><![CDATA[9]]></language_id>
+         <organisations class="org.apache.openjpa.util.java$util$ArrayList$proxy"/>
+         <timeZoneId><![CDATA[Europe/Berlin]]></timeZoneId>
+         <forceTimeZoneCheck><![CDATA[false]]></forceTimeZoneCheck>
+         <sendSMS>false</sendSMS>
+         <showContactData><![CDATA[false]]></showContactData>
+         <showContactDataToContacts><![CDATA[false]]></showContactDataToContacts>
+         <type><![CDATA[UsER]]></type>
+         <rights class="org.apache.openjpa.util.java$util$HashSet$proxy"/>
+      </user>
+      <user>
+         <user_id><![CDATA[5]]></user_id>
+         <firstname><![CDATA[Uezulier]]></firstname>
+         <lastname><![CDATA[Berelbir]]></lastname>
+         <login><![CDATA[uezulier.berelbir]]></login>
+         <deleted><![CDATA[false]]></deleted>
+         <language_id><![CDATA[9]]></language_id>
+         <address>
+            <country><![CDATA[GB]]></country>
+         </address>
+         <forceTimeZoneCheck><![CDATA[false]]></forceTimeZoneCheck>
+         <sendSMS>false</sendSMS>
+         <showContactData><![CDATA[false]]></showContactData>
+         <showContactDataToContacts><![CDATA[false]]></showContactDataToContacts>
+         <type><![CDATA[UsER]]></type>
+         <rights class="org.apache.openjpa.util.java$util$HashSet$proxy"/>
+      </user>
+      <user>
+         <user_id><![CDATA[6]]></user_id>
+         <firstname><![CDATA[Lem]]></firstname>
+         <lastname><![CDATA[Featherbleeder]]></lastname>
+         <login><![CDATA[lem]]></login>
+         <deleted><![CDATA[false]]></deleted>
+         <language_id><![CDATA[9]]></language_id>
+         <address>
+            <mail><![CDATA[lem.featherbleeder@local]]></mail>
+         </address>
+         <timeZoneId><![CDATA[Europe/Berlin]]></timeZoneId>
+         <forceTimeZoneCheck><![CDATA[false]]></forceTimeZoneCheck>
+         <sendSMS>false</sendSMS>
+         <showContactData><![CDATA[false]]></showContactData>
+         <showContactDataToContacts><![CDATA[false]]></showContactDataToContacts>
+         <type><![CDATA[contact]]></type>
+         <ownerId><![CDATA[1]]></ownerId>
+      </user>
+      <user>
+         <user_id><![CDATA[7]]></user_id>
+         <firstname><![CDATA[Roojasloud]]></firstname>
+         <lastname><![CDATA[Hyelzurnyevi]]></lastname>
+         <login><![CDATA[roojasloud.hyelzurnyevi]]></login>
+         <deleted><![CDATA[false]]></deleted>
+         <language_id><![CDATA[9]]></language_id>
+         <address>
+            <country><![CDATA[AF]]></country>
+            <mail><![CDATA[James.bond@local]]></mail>
+         </address>
+         <forceTimeZoneCheck><![CDATA[false]]></forceTimeZoneCheck>
+         <sendSMS>false</sendSMS>
+         <showContactData><![CDATA[false]]></showContactData>
+         <showContactDataToContacts><![CDATA[false]]></showContactDataToContacts>
+         <type><![CDATA[UsER]]></type>
+         <rights class="org.apache.openjpa.util.java$util$HashSet$proxy"/>
       </user>
    </users>
 </root>

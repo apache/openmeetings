@@ -73,6 +73,7 @@ import org.apache.openmeetings.db.bind.adapter.DateAdapter;
 import org.apache.openmeetings.db.bind.adapter.LocalDateAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.bind.adapter.SalutationAdapter;
+import org.apache.openmeetings.db.bind.adapter.UserRightAdapter;
 import org.apache.openmeetings.db.bind.adapter.UserTypeAdapter;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
@@ -285,6 +286,7 @@ public class User extends HistoricalEntity {
 	@JoinColumn(name = "user_id", insertable = true, updatable = true, nullable = false)
 	@ElementDependent
 	@XmlElementWrapper(name = "organisations", required = false)
+	@XmlElement(name = "user_organisation", required = false)
 	private List<GroupUser> groupUsers = new ArrayList<>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -361,6 +363,7 @@ public class User extends HistoricalEntity {
 	@Enumerated(EnumType.STRING)
 	@XmlElementWrapper(name = "rights", required = false)
 	@XmlElement(name = "right", required = false)
+	@XmlJavaTypeAdapter(UserRightAdapter.class)
 	private Set<Right> rights = new HashSet<>();
 
 	@Column(name = "domain_id")

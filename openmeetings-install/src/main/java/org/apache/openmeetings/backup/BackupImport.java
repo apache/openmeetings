@@ -615,7 +615,12 @@ public class BackupImport {
 			}
 			userLoginMap.put(u.getLogin(), Integer.valueOf(userLoginMap.size()));
 			if (u.getGroupUsers() != null) {
-				for (GroupUser gu : u.getGroupUsers()) {
+				for (Iterator<GroupUser> iter = u.getGroupUsers().iterator(); iter.hasNext();) {
+					GroupUser gu = iter.next();
+					if (gu.getGroup().getId() == null) {
+						iter.remove();
+						continue;
+					}
 					gu.setUser(u);
 				}
 			}

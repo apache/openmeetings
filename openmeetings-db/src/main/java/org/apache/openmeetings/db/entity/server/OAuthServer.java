@@ -242,8 +242,8 @@ public class OAuthServer extends HistoricalEntity {
 		return mapping;
 	}
 
-	public OAuthServer addMapping(String name, String value) {
-		mapping.put(name, value);
+	public OAuthServer addMapping(String pname, String pvalue) {
+		mapping.put(pname, pvalue);
 		return this;
 	}
 
