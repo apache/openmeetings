@@ -20,20 +20,20 @@ package org.apache.openmeetings.db.bind.adapter;
 
 import java.util.Map;
 
-import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.entity.room.Room;
 
-public class UserAdapter extends EntityAdapter<User> {
-	public UserAdapter() {
+public class RoomAdapter extends EntityAdapter<Room> {
+	public RoomAdapter() {
 		super();
 	}
 
-	public UserAdapter(UserDao dao, Map<Long, Long> idMap) {
+	public RoomAdapter(RoomDao dao, Map<Long, Long> idMap) {
 		super(dao, idMap);
 	}
 
 	@Override
-	protected User newEntity() {
-		return new User();
+	protected Room newEntity() {
+		return new Room();
 	}
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
+import static org.apache.openmeetings.db.bind.Constants.ROOM_GRP_NODE;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,35 +30,47 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.GroupAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
+import org.apache.openmeetings.db.bind.adapter.RoomAdapter;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.user.Group;
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQuery(name = "getAllRoomGroups", query = "SELECT rg FROM RoomGroup rg ORDER BY rg.id")
 @Table(name = "room_group")
 @Root(name="room_organisation")
+@XmlRootElement(name = ROOM_GRP_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class RoomGroup implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true, name = "rooms_organisation_id")
+	@XmlElement(name = "rooms_organisation_id", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "room_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name="rooms_id", data = true, required = false)
+	@XmlElement(name = "rooms_id", required = false)
+	@XmlJavaTypeAdapter(RoomAdapter.class)
 	private Room room;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "group_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name = "organisation_id", data = true, required = false)
+	@XmlElement(name = "organisation_id", required = false)
+	@XmlJavaTypeAdapter(GroupAdapter.class)
 	private Group group;
 
 	public RoomGroup() {

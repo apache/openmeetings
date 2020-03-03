@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.calendar;
 
+import static org.apache.openmeetings.db.bind.Constants.CALENDAR_NODE;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -30,12 +32,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
+import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.user.User;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "om_calendar")
@@ -56,7 +62,7 @@ import org.simpleframework.xml.Root;
 		+ "	)"
 		+ "	AND a.owner.id = :userId AND a.calendar.id = :calId  ")
 @NamedQuery(name = "getCalendarbyId", query = "SELECT c FROM OmCalendar c WHERE c.deleted = false AND c.id = :calId")
-@Root(name = "calendar")
+@XmlRootElement(name = CALENDAR_NODE)
 public class OmCalendar extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
@@ -67,32 +73,37 @@ public class OmCalendar extends HistoricalEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(name = "id", data = true)
+	@XmlElement(name = "id", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@Column(name = "title")
-	@Element(name = "title", data = true, required = false)
+	@XmlElement(name = "title", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String title;
 
 	// Can Also act as the Google Calendar ID for Google Calendars
 	@Column(name = "href")
-	@Element(name = "href", data = true)
+	@XmlElement(name = "href", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String href;
 
 	// Can also act as the Google API Key for Google Calendars. Note, not always needed.
 	@Column(name = "sync_token")
-	@Element(name = "token", data = true, required = false)
+	@XmlElement(name = "token", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String token;
 
 	@Column(name = "sync_type")
 	@Enumerated(EnumType.STRING)
-	@Element(name = "syncType", data = true)
+	@XmlElement(name = "syncType")
 	private SyncType syncType = SyncType.NONE;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name = "ownerId", data = true, required = false)
+	@XmlElement(name = "ownerId", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User owner;
 
 	// Getters + Setters

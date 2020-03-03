@@ -23,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 
-import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.basic.ChatDao;
+import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
@@ -37,11 +38,13 @@ public class TestImport extends AbstractTestImport {
 	@Autowired
 	private OAuth2Dao oauthDao;
 	@Autowired
-	private RoomDao roomDao;
+	private ChatDao chatDao;
+	@Autowired
+	private OmCalendarDao calendarDao;
 
 	@Test
 	public void importVersionNE() throws Exception {
-		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/config/nokey_deleted/configs.xml").toURI());
+		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/config/skip/configs.xml").toURI());
 		BackupVersion ver = BackupImport.getVersion(configs.getParentFile());
 		assertEquals(new BackupVersion(), ver);
 	}
@@ -86,10 +89,26 @@ public class TestImport extends AbstractTestImport {
 	}
 
 	@Test
-	public void importRooms() throws Exception {
-		long roomsCount = roomDao.count();
-		File rooms = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/room/rooms.xml").toURI());
-		backupImport.importRooms(rooms.getParentFile());
-		assertEquals(roomsCount + 1, roomDao.count(), "Room should be added");
+	public void importChatSkip() throws Exception {
+		long chatCount = chatDao.get(0, Integer.MAX_VALUE).size();
+		File chats = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/chat/skip/chat_messages.xml").toURI());
+		backupImport.importChat(chats.getParentFile());
+		assertEquals(chatCount, chatDao.get(0, Integer.MAX_VALUE).size(), "No Chat messages should be added");
+	}
+
+	@Test
+	public void importChat() throws Exception {
+		long chatCount = chatDao.get(0, Integer.MAX_VALUE).size();
+		File chats = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/chat/chat_messages.xml").toURI());
+		backupImport.importChat(chats.getParentFile());
+		assertEquals(chatCount + 3, chatDao.get(0, Integer.MAX_VALUE).size(), "Chat messages should be added");
+	}
+
+	@Test
+	public void importCalendars() throws Exception {
+		long calCount = calendarDao.get().size();
+		File cals = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/calendar/calendars.xml").toURI());
+		backupImport.importCalendars(cals.getParentFile());
+		assertEquals(calCount + 1, calendarDao.get().size(), "Calendars should be added");
 	}
 }

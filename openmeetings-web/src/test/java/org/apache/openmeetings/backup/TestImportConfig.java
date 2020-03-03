@@ -34,7 +34,7 @@ public class TestImportConfig extends AbstractTestImport {
 	@Test
 	public void importConfigsNoKeyDeleted() throws Exception {
 		long configsCount = cfgDao.count();
-		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/config/nokey_deleted/configs.xml").toURI());
+		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/config/skip/configs.xml").toURI());
 		backupImport.importConfigs(configs.getParentFile());
 		assertEquals(configsCount, cfgDao.count(), "No records should be added");
 	}

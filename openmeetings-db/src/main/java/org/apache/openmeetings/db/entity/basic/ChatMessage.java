@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
+import static org.apache.openmeetings.db.bind.Constants.CHAT_NODE;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,13 +34,22 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.DateAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
+import org.apache.openmeetings.db.bind.adapter.RoomAdapter;
+import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQuery(name = "getChatMessageById", query = "SELECT c FROM ChatMessage c WHERE c.id = :id")
@@ -60,7 +71,8 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name = "deleteChatUser", query = "DELETE FROM ChatMessage c WHERE c.toRoom IS NULL AND c.toUser.id = :userId")
 @NamedQuery(name = "purgeChatUserName", query = "UPDATE ChatMessage c SET c.fromName = :purged WHERE c.fromUser.id = :userId")
 @Table(name = "chat")
-@Root(name = "ChatMessage")
+@XmlRootElement(name = CHAT_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ChatMessage implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
@@ -72,47 +84,55 @@ public class ChatMessage implements IDataProviderEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(name = "id", data = true)
+	@XmlElement(name = "id", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@ManyToOne
 	@JoinColumn(name = "from_user_id")
-	@Element(name = "fromUserId", data = true, required = false)
 	@ForeignKey(enabled = true)
+	@XmlElement(name = "fromUserId", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User fromUser;
 
 	@ManyToOne
 	@JoinColumn(name = "to_room_id")
-	@Element(name = "toRoomId", data = true, required = false)
 	@ForeignKey(enabled = true)
+	@XmlElement(name = "toRoomId", required = false)
+	@XmlJavaTypeAdapter(RoomAdapter.class)
 	private Room toRoom;
 
 	@ManyToOne
 	@JoinColumn(name = "to_user_id")
-	@Element(name = "toUserId", data = true, required = false)
 	@ForeignKey(enabled = true)
+	@XmlElement(name = "toUserId", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User toUser;
 
 	@Column(name = "message")
 	@Lob
-	@Element(name = "message", data = true, required = false)
+	@XmlElement(name = "message", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String message;
 
 	@Column(name = "sent")
-	@Element(name = "sent", data = true, required = false)
+	@XmlElement(name = "sent", required = false)
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date sent;
 
 	@Column(name = "need_moderation", nullable = false)
-	@Element(name = "needModeration", data = true, required = false)
+	@XmlElement(name = "needModeration", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean needModeration;
 
 	@Column(name = "from_name")
-	@Element(name = "from_name", data = true, required = false)
+	@XmlElement(name = "from_name", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String fromName; // this is required for users with no first/last name specified
 
 	@Column(name = "status")
-	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
+	@XmlElement(name = "status", required = false)
 	private Status status;
 
 	@Override

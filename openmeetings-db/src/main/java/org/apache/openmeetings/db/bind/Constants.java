@@ -33,4 +33,10 @@ public class Constants {
 	public static final String USER_NODE = "user";
 	public static final String ROOM_LIST_NODE = "rooms";
 	public static final String ROOM_NODE = "room";
+	public static final String ROOM_GRP_LIST_NODE = "room_organisations";
+	public static final String ROOM_GRP_NODE = "room_organisation";
+	public static final String CHAT_LIST_NODE = "chat_messages";
+	public static final String CHAT_NODE = "ChatMessage";
+	public static final String CALENDAR_LIST_NODE = "calendars";
+	public static final String CALENDAR_NODE = "calendar";
 }

@@ -29,7 +29,7 @@ public class TestImportUser extends AbstractTestImport {
 	@Test
 	public void importUserNE() throws Exception {
 		Assertions.assertThrows(BackupException.class, () -> {
-			File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/config/nokey_deleted/configs.xml").toURI());
+			File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/config/skip/configs.xml").toURI());
 			backupImport.importUsers(configs.getParentFile());
 		});
 	}
@@ -45,7 +45,7 @@ public class TestImportUser extends AbstractTestImport {
 	@Test
 	public void importNoLoginDeleted() throws Exception {
 		long userCount = userDao.count();
-		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/nologin_deleted/users.xml").toURI());
+		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/skip/users.xml").toURI());
 		backupImport.importUsers(configs.getParentFile());
 		assertEquals(userCount, userDao.count(), "No records should be added");
 	}

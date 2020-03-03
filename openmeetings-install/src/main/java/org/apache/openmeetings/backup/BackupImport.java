@@ -19,12 +19,18 @@
 package org.apache.openmeetings.backup;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.db.bind.Constants.CALENDAR_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.CALENDAR_NODE;
 import static org.apache.openmeetings.db.bind.Constants.CFG_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.CFG_NODE;
+import static org.apache.openmeetings.db.bind.Constants.CHAT_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.CHAT_NODE;
 import static org.apache.openmeetings.db.bind.Constants.GROUP_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.GROUP_NODE;
 import static org.apache.openmeetings.db.bind.Constants.OAUTH_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.OAUTH_NODE;
+import static org.apache.openmeetings.db.bind.Constants.ROOM_GRP_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.ROOM_GRP_NODE;
 import static org.apache.openmeetings.db.bind.Constants.ROOM_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.ROOM_NODE;
 import static org.apache.openmeetings.db.bind.Constants.USER_LIST_NODE;
@@ -147,7 +153,6 @@ import org.apache.openmeetings.backup.converter.AppointmentConverter;
 import org.apache.openmeetings.backup.converter.AppointmentReminderTypeConverter;
 import org.apache.openmeetings.backup.converter.BaseFileItemConverter;
 import org.apache.openmeetings.backup.converter.DateConverter;
-import org.apache.openmeetings.backup.converter.GroupConverter;
 import org.apache.openmeetings.backup.converter.OmCalendarConverter;
 import org.apache.openmeetings.backup.converter.PollTypeConverter;
 import org.apache.openmeetings.backup.converter.RecordingStatusConverter;
@@ -156,6 +161,7 @@ import org.apache.openmeetings.backup.converter.UserConverter;
 import org.apache.openmeetings.backup.converter.WbConverter;
 import org.apache.openmeetings.core.converter.DocumentConverter;
 import org.apache.openmeetings.db.bind.adapter.GroupAdapter;
+import org.apache.openmeetings.db.bind.adapter.RoomAdapter;
 import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -680,26 +686,25 @@ public class BackupImport {
 	/*
 	 * ##################### Import Room Groups
 	 */
-	private void importRoomGroups(File base) throws Exception {
+	void importRoomGroups(File base) throws Exception {
 		log.info("Room import complete, starting room groups import");
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
+		Class<RoomGroup> eClazz = RoomGroup.class;
+		JAXBContext jc = JAXBContext.newInstance(eClazz);
+		Unmarshaller unmarshaller = jc.createUnmarshaller();
+		unmarshaller.setAdapter(new RoomAdapter(roomDao, roomMap));
+		unmarshaller.setAdapter(new GroupAdapter(groupDao, groupMap));
 
-		registry.bind(Group.class, new GroupConverter(groupDao, groupMap));
-		registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
-
-		readList(null, base, "rooms_organisation.xml", "room_organisations", "room_organisation", RoomGroup.class, ro -> {
-			Room r = roomDao.get(ro.getRoom().getId());
-			if (r == null || ro.getGroup() == null || ro.getGroup().getId() == null) {
+		readList(unmarshaller, base, "rooms_organisation.xml", ROOM_GRP_LIST_NODE, ROOM_GRP_NODE, eClazz, rg -> {
+			Room r = roomDao.get(rg.getRoom().getId());
+			if (r == null || rg.getGroup().getId() == null) {
 				return;
 			}
 			if (r.getGroups() == null) {
 				r.setGroups(new ArrayList<>());
 			}
-			ro.setId(null);
-			ro.setRoom(r);
-			r.getGroups().add(ro);
+			rg.setId(null);
+			rg.setRoom(r);
+			r.getGroups().add(rg);
 			roomDao.update(r, null);
 		});
 	}
@@ -707,20 +712,16 @@ public class BackupImport {
 	/*
 	 * ##################### Import Chat messages
 	 */
-	private void importChat(File base) throws Exception {
+	void importChat(File base) throws Exception {
 		log.info("Room groups import complete, starting chat messages import");
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		registry.bind(User.class, new UserConverter(userDao, userMap));
-		registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
-		registry.bind(Date.class, DateConverter.class);
-
-		readList(null, base, "chat_messages.xml", "chat_messages", "chat_message", ChatMessage.class, m -> {
+		Class<ChatMessage> eClazz = ChatMessage.class;
+		JAXBContext jc = JAXBContext.newInstance(eClazz);
+		Unmarshaller unmarshaller = jc.createUnmarshaller();
+		unmarshaller.setAdapter(new UserAdapter(userDao, userMap));
+		unmarshaller.setAdapter(new RoomAdapter(roomDao, roomMap));
+		readList(unmarshaller, base, "chat_messages.xml", CHAT_LIST_NODE, CHAT_NODE, eClazz, m -> {
 			m.setId(null);
-			if (m.getFromUser() == null
-					|| m.getFromUser().getId() == null
+			if (m.getFromUser() == null || m.getFromUser().getId() == null
 					|| (m.getToRoom() != null && m.getToRoom().getId() == null)
 					|| (m.getToUser() != null && m.getToUser().getId() == null))
 			{
@@ -733,13 +734,13 @@ public class BackupImport {
 	/*
 	 * ##################### Import Calendars
 	 */
-	private void importCalendars(File base) throws Exception {
+	void importCalendars(File base) throws Exception {
 		log.info("Chat messages import complete, starting calendar import");
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-		registry.bind(User.class, new UserConverter(userDao, userMap));
-		readList(null, base, "calendars.xml", "calendars", "calendar", OmCalendar.class, c -> {
+		Class<OmCalendar> eClazz = OmCalendar.class;
+		JAXBContext jc = JAXBContext.newInstance(eClazz);
+		Unmarshaller unmarshaller = jc.createUnmarshaller();
+		unmarshaller.setAdapter(new UserAdapter(userDao, userMap));
+		readList(unmarshaller, base, "calendars.xml", CALENDAR_LIST_NODE, CALENDAR_NODE, eClazz, c -> {
 			Long id = c.getId();
 			c.setId(null);
 			c = calendarDao.update(c);
