@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 
 import org.apache.openmeetings.db.dao.basic.ChatDao;
-import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
@@ -39,8 +38,6 @@ public class TestImport extends AbstractTestImport {
 	private OAuth2Dao oauthDao;
 	@Autowired
 	private ChatDao chatDao;
-	@Autowired
-	private OmCalendarDao calendarDao;
 
 	@Test
 	public void importVersionNE() throws Exception {
@@ -102,13 +99,5 @@ public class TestImport extends AbstractTestImport {
 		File chats = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/chat/chat_messages.xml").toURI());
 		backupImport.importChat(chats.getParentFile());
 		assertEquals(chatCount + 3, chatDao.get(0, Integer.MAX_VALUE).size(), "Chat messages should be added");
-	}
-
-	@Test
-	public void importCalendars() throws Exception {
-		long calCount = calendarDao.get().size();
-		File cals = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/calendar/calendars.xml").toURI());
-		backupImport.importCalendars(cals.getParentFile());
-		assertEquals(calCount + 1, calendarDao.get().size(), "Calendars should be added");
 	}
 }

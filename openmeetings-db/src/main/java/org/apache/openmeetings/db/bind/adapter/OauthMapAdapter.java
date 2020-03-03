@@ -23,10 +23,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.openmeetings.db.dto.user.OAuthUser;
+import org.apache.openmeetings.db.util.XmlHelper;
 import org.apache.wicket.util.string.Strings;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -37,9 +36,7 @@ public class OauthMapAdapter extends XmlAdapter<Object, Map<String, String>> {
 
 	@Override
 	public Object marshal(Map<String, String> v) throws Exception {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		Document document = db.newDocument();
+		Document document = XmlHelper.createBuilder().newDocument();
 		Element root = document.createElement("mapping");
 		document.appendChild(root);
 

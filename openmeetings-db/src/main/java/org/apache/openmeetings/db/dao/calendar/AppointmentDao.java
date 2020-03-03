@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.calendar;
 
+import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
@@ -33,6 +34,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -49,7 +51,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class AppointmentDao {
+public class AppointmentDao implements IDataProviderDao<Appointment>{
 	private static final Logger log = LoggerFactory.getLogger(AppointmentDao.class);
 	private static final String PARAM_START = "start";
 	private static final String PARAM_CALID = "calId";
@@ -68,6 +70,7 @@ public class AppointmentDao {
 	 * insert, update, delete, select
 	 */
 	// -----------------------------------------------------------------------------------------------
+	@Override
 	public Appointment get(Long id) {
 		List<Appointment> list = em.createNamedQuery("getAppointmentById", Appointment.class)
 				.setParameter("id", id).getResultList();
@@ -84,6 +87,7 @@ public class AppointmentDao {
 		return em.createNamedQuery("getAppointments", Appointment.class).getResultList();
 	}
 
+	@Override
 	public Appointment update(Appointment a, Long userId) {
 		return update(a, userId, true);
 	}
@@ -142,6 +146,7 @@ public class AppointmentDao {
 
 	// ----------------------------------------------------------------------------------------------------------
 
+	@Override
 	public void delete(Appointment a, Long userId) {
 		if (a == null || a.getId() == null) {
 			return;
@@ -178,7 +183,7 @@ public class AppointmentDao {
 
 	public List<Appointment> getInRange(Calendar start, Calendar end) {
 		TypedQuery<Appointment> q = em.createNamedQuery("appointmentsInRangeRemind", Appointment.class);
-		q.setParameter("none", Reminder.none);
+		q.setParameter("none", Reminder.NONE);
 		q.setParameter(PARAM_START, start.getTime());
 		q.setParameter("end", end.getTime());
 		return q.getResultList();
@@ -264,5 +269,25 @@ public class AppointmentDao {
 		return em.createNamedQuery("deleteAppointmentsbyCalendar", Appointment.class)
 				.setParameter(PARAM_CALID, calId)
 				.executeUpdate();
+	}
+
+	@Override
+	public List<Appointment> get(long start, long count) {
+		throw UNSUPPORTED;
+	}
+
+	@Override
+	public List<Appointment> get(String search, long start, long count, String order) {
+		throw UNSUPPORTED;
+	}
+
+	@Override
+	public long count() {
+		throw UNSUPPORTED;
+	}
+
+	@Override
+	public long count(String search) {
+		throw UNSUPPORTED;
 	}
 }

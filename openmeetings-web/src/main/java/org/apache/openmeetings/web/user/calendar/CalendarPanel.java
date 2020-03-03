@@ -400,7 +400,7 @@ public class CalendarPanel extends UserBasePanel {
 
 	private Appointment getDefault() {
 		Appointment a = new Appointment();
-		a.setReminder(Reminder.ical);
+		a.setReminder(Reminder.ICAL);
 		a.setOwner(userDao.get(getUserId()));
 		a.setTitle(getString("1444"));
 		log.debug(" -- getDefault -- Current model {}", a);

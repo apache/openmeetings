@@ -73,7 +73,7 @@ public class OmCalendar extends HistoricalEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@XmlElement(name = "id", required = false)
+	@XmlElement(name = "id")
 	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 

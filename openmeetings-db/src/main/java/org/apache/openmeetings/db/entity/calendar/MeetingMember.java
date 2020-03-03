@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.calendar;
 
+import static org.apache.openmeetings.db.bind.Constants.MMEMBER_NODE;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,13 +32,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.AppointmentAdapter;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
+import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.user.User;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "meeting_member")
@@ -45,37 +53,43 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name="getMeetingMembers", query="SELECT mm FROM MeetingMember mm ORDER BY mm.id")
 @NamedQuery(name="getMeetingMemberIdsByAppointment"
 		, query="SELECT mm.id FROM MeetingMember mm WHERE mm.deleted = false AND mm.appointment.id = :id")
-@Root(name = "meetingmember")
+@XmlRootElement(name = MMEMBER_NODE)
 public class MeetingMember extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(name = "meetingMemberId", data = true)
+	@XmlElement(name = "meetingMemberId")
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "user_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name = "userid", data = true, required = false)
+	@XmlElement(name = "userid", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User user;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "appointment_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(data = true, required = false)
+	@XmlElement(name = "appointment", required = false)
+	@XmlJavaTypeAdapter(AppointmentAdapter.class)
 	private Appointment appointment;
 
 	@Column(name = "appointment_status")
-	@Element(data = true, required = false)
+	@XmlElement(name = "appointmentStatus", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String appointmentStatus; // status of the appointment denial, acceptance, wait.
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "invitation_id", nullable = true)
 	@ForeignKey(enabled = true)
+	@XmlTransient
 	private Invitation invitation;
 
 	@Column(name = "is_connected_event", nullable = false)
+	@XmlTransient
 	private boolean connectedEvent;
 
 	@Override

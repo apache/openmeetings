@@ -358,7 +358,7 @@ public class BackupExport {
 		registry.bind(Appointment.class, AppointmentConverter.class);
 
 		writeList(serializer, zos, "meetingmembers.xml",
-				"meetingmembers", meetingMemberDao.getMeetingMembers());
+				"meetingmembers", meetingMemberDao.get());
 	}
 
 	/*

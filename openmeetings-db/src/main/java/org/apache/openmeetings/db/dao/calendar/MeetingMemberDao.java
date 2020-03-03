@@ -44,7 +44,7 @@ public class MeetingMemberDao {
 		return list.size() == 1 ? list.get(0) : null;
 	}
 
-	public List<MeetingMember> getMeetingMembers() {
+	public List<MeetingMember> get() {
 		return em.createNamedQuery("getMeetingMembers", MeetingMember.class).getResultList();
 	}
 

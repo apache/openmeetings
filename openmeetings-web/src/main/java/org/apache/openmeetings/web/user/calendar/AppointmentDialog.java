@@ -320,7 +320,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 
 			Appointment a = getModelObject();
 			if (a.getReminder() == null) {
-				a.setReminder(Reminder.none);
+				a.setReminder(Reminder.NONE);
 			}
 			if (a.getRoom() == null) {
 				a.setRoom(createAppRoom());

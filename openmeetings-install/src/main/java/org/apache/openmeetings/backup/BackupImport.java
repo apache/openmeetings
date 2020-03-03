@@ -19,6 +19,8 @@
 package org.apache.openmeetings.backup;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.db.bind.Constants.APPOINTMENT_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.APPOINTMENT_NODE;
 import static org.apache.openmeetings.db.bind.Constants.CALENDAR_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.CALENDAR_NODE;
 import static org.apache.openmeetings.db.bind.Constants.CFG_LIST_NODE;
@@ -27,6 +29,8 @@ import static org.apache.openmeetings.db.bind.Constants.CHAT_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.CHAT_NODE;
 import static org.apache.openmeetings.db.bind.Constants.GROUP_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.GROUP_NODE;
+import static org.apache.openmeetings.db.bind.Constants.MMEMBER_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.MMEMBER_NODE;
 import static org.apache.openmeetings.db.bind.Constants.OAUTH_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.OAUTH_NODE;
 import static org.apache.openmeetings.db.bind.Constants.ROOM_GRP_LIST_NODE;
@@ -149,18 +153,17 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.WordUtils;
-import org.apache.openmeetings.backup.converter.AppointmentConverter;
-import org.apache.openmeetings.backup.converter.AppointmentReminderTypeConverter;
 import org.apache.openmeetings.backup.converter.BaseFileItemConverter;
 import org.apache.openmeetings.backup.converter.DateConverter;
-import org.apache.openmeetings.backup.converter.OmCalendarConverter;
 import org.apache.openmeetings.backup.converter.PollTypeConverter;
 import org.apache.openmeetings.backup.converter.RecordingStatusConverter;
 import org.apache.openmeetings.backup.converter.RoomConverter;
 import org.apache.openmeetings.backup.converter.UserConverter;
 import org.apache.openmeetings.backup.converter.WbConverter;
 import org.apache.openmeetings.core.converter.DocumentConverter;
+import org.apache.openmeetings.db.bind.adapter.AppointmentAdapter;
 import org.apache.openmeetings.db.bind.adapter.GroupAdapter;
+import org.apache.openmeetings.db.bind.adapter.OmCalendarAdapter;
 import org.apache.openmeetings.db.bind.adapter.RoomAdapter;
 import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
@@ -205,6 +208,7 @@ import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.db.util.XmlHelper;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.StoredFile;
@@ -749,21 +753,18 @@ public class BackupImport {
 	}
 
 	/*
-	 * ##################### Import Appointements
+	 * ##################### Import Appointments
 	 */
-	private void importAppointments(File base) throws Exception {
+	void importAppointments(File base) throws Exception {
 		log.info("Calendar import complete, starting appointement import");
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
+		Class<Appointment> eClazz = Appointment.class;
+		JAXBContext jc = JAXBContext.newInstance(eClazz);
+		Unmarshaller unmarshaller = jc.createUnmarshaller();
+		unmarshaller.setAdapter(new UserAdapter(userDao, userMap));
+		unmarshaller.setAdapter(new RoomAdapter(roomDao, roomMap));
+		unmarshaller.setAdapter(new OmCalendarAdapter(calendarDao, calendarMap));
 
-		registry.bind(User.class, new UserConverter(userDao, userMap));
-		registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
-		registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
-		registry.bind(Date.class, DateConverter.class);
-		registry.bind(OmCalendar.class, new OmCalendarConverter(calendarDao, calendarMap));
-
-		readList(null, base, "appointements.xml", "appointments", "appointment", Appointment.class, a -> {
+		readList(unmarshaller, base, "appointements.xml", APPOINTMENT_LIST_NODE, APPOINTMENT_NODE, eClazz, a -> {
 			Long appId = a.getId();
 
 			// We need to reset this as openJPA reject to store them otherwise
@@ -789,15 +790,15 @@ public class BackupImport {
 	 *
 	 * Reminder Invitations will be NOT send!
 	 */
-	private void importMeetingMembers(File base) throws Exception {
+	void importMeetingMembers(File base) throws Exception {
 		log.info("Appointement import complete, starting meeting members import");
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer ser = new Persister(strategy);
+		Class<MeetingMember> eClazz = MeetingMember.class;
+		JAXBContext jc = JAXBContext.newInstance(eClazz);
+		Unmarshaller unmarshaller = jc.createUnmarshaller();
+		unmarshaller.setAdapter(new UserAdapter(userDao, userMap));
+		unmarshaller.setAdapter(new AppointmentAdapter(appointmentDao, appointmentMap));
 
-		registry.bind(User.class, new UserConverter(userDao, userMap));
-		registry.bind(Appointment.class, new AppointmentConverter(appointmentDao, appointmentMap));
-		readList(null, base, "meetingmembers.xml", "meetingmembers", "meetingmember", MeetingMember.class, ma -> {
+		readList(unmarshaller, base, "meetingmembers.xml", MMEMBER_LIST_NODE, MMEMBER_NODE, eClazz, ma -> {
 			ma.setId(null);
 			meetingMemberDao.update(ma);
 		});
@@ -1113,7 +1114,7 @@ public class BackupImport {
 				JAXBContext jc = JAXBContext.newInstance(clazz);
 				unmarshaller = jc.createUnmarshaller();
 			}
-			XMLInputFactory xif = XMLInputFactory.newFactory();
+			XMLInputFactory xif = XmlHelper.createFactory();
 			StreamSource xmlSource = new StreamSource(xml);
 			XMLStreamReader xsr = xif.createXMLStreamReader(xmlSource);
 			boolean listNodeFound = false;

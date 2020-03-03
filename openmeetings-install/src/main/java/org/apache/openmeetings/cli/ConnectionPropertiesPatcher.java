@@ -21,8 +21,6 @@ package org.apache.openmeetings.cli;
 import java.io.File;
 
 import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -33,6 +31,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.openmeetings.db.util.XmlHelper;
 import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -86,15 +85,7 @@ public abstract class ConnectionPropertiesPatcher {
 	}
 
 	private static Document getDocument(File xml) throws Exception {
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		dbFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-		dbFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-		dbFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-		dbFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-		dbFactory.setXIncludeAware(false);
-		dbFactory.setExpandEntityReferences(false);
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		return dBuilder.parse(xml);
+		return XmlHelper.createBuilder().parse(xml);
 	}
 
 	private static Attr getConnectionProperties(Document doc) throws Exception {

@@ -130,7 +130,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		ap.setConnectedEvent(false);
 
 		if (ap.getReminder() == null) {
-			ap.setReminder(Appointment.Reminder.none);
+			ap.setReminder(Appointment.Reminder.NONE);
 		}
 
 		if (r == null) {

@@ -18,9 +18,6 @@
  */
 package org.apache.openmeetings.service.quartz.scheduler;
 
-import static javax.xml.stream.XMLInputFactory.IS_NAMESPACE_AWARE;
-import static javax.xml.stream.XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES;
-import static javax.xml.stream.XMLInputFactory.IS_VALIDATING;
 import static org.apache.openmeetings.core.rss.LoadAtomRssFeed.getFeedConnection;
 
 import java.io.IOException;
@@ -40,6 +37,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.apache.openmeetings.db.util.XmlHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,13 +50,8 @@ public class AtomReader {
 	private static final String ATTR_PUBLISHED = "published";
 	private static final int MAX_ITEM_COUNT = 5;
 	private static final Map<String, Spec> specs = new HashMap<>();
-	private static final XMLInputFactory inputFactory;
+	private static final XMLInputFactory inputFactory = XmlHelper.createFactory();
 	static {
-		inputFactory = XMLInputFactory.newInstance();
-		inputFactory.setProperty(IS_REPLACING_ENTITY_REFERENCES, false);
-		inputFactory.setProperty(IS_VALIDATING, false);
-		inputFactory.setProperty(IS_NAMESPACE_AWARE, false);
-
 		add("item")
 			.add(new Field("title"))
 			.add(new Field("link"))

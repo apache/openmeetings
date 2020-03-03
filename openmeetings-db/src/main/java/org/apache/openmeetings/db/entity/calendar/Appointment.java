@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.calendar;
 
+import static org.apache.openmeetings.db.bind.Constants.APPOINTMENT_NODE;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,13 +41,23 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.AppointmentReminderAdapter;
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.DateAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
+import org.apache.openmeetings.db.bind.adapter.OmCalendarAdapter;
+import org.apache.openmeetings.db.bind.adapter.RoomAdapter;
+import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "appointment", indexes = {
@@ -117,7 +129,7 @@ import org.simpleframework.xml.Root;
 	query = "SELECT a.href FROM Appointment a WHERE a.deleted = FALSE AND a.calendar.id = :calId ORDER BY a.id")
 @NamedQuery(name = "deleteAppointmentsbyCalendar",
 	query = "UPDATE Appointment a SET a.deleted = true WHERE a.calendar.id = :calId")
-@Root(name = "appointment")
+@XmlRootElement(name = APPOINTMENT_NODE)
 public class Appointment extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	public static final int REMINDER_NONE_ID = 1;
@@ -125,7 +137,9 @@ public class Appointment extends HistoricalEntity {
 	public static final int REMINDER_ICAL_ID = 3;
 
 	public enum Reminder {
-		none(REMINDER_NONE_ID), email(REMINDER_EMAIL_ID), ical(REMINDER_ICAL_ID);
+		NONE(REMINDER_NONE_ID)
+		, EMAIL(REMINDER_EMAIL_ID)
+		, ICAL(REMINDER_ICAL_ID);
 
 		private int id;
 
@@ -146,13 +160,13 @@ public class Appointment extends HistoricalEntity {
 		}
 
 		public static Reminder get(int type) {
-			Reminder r = Reminder.none;
+			Reminder r = Reminder.NONE;
 			switch (type) {
 				case REMINDER_EMAIL_ID:
-					r = Reminder.email;
+					r = Reminder.EMAIL;
 					break;
 				case REMINDER_ICAL_ID:
-					r = Reminder.ical;
+					r = Reminder.ICAL;
 					break;
 				default:
 					// no-op
@@ -164,102 +178,126 @@ public class Appointment extends HistoricalEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(name = "appointmentId", data = true)
+	@XmlElement(name = "appointmentId")
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@Column(name = "title")
-	@Element(name = "appointmentName", data = true, required = false)
+	@XmlElement(name = "appointmentName", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String title;
 
 	@Column(name = "location")
-	@Element(name = "appointmentLocation", data = true, required = false)
+	@XmlElement(name = "appointmentLocation", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String location;
 
 	@Column(name = "app_start") // Oracle fails in case 'start' is used as column name
-	@Element(name = "appointmentStarttime", data = true)
+	@XmlElement(name = "appointmentStarttime")
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date start;
 
 	@Column(name = "app_end") // renamed to be in sync with 'app_start'
-	@Element(name = "appointmentEndtime", data = true)
+	@XmlElement(name = "appointmentEndtime")
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date end;
 
 	@Lob
 	@Column(name = "description", length = 2048)
-	@Element(name = "appointmentDescription", data = true, required = false)
+	@XmlElement(name = "appointmentDescription", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String description;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name = "users_id", data = true, required = false)
+	@XmlElement(name = "users_id", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User owner;
 
 	@Column(name = "reminder")
 	@Enumerated(EnumType.STRING)
-	@Element(name = "typId", data = true, required = false)
-	private Reminder reminder = Reminder.none;
+	@XmlElement(name = "typId", required = false)
+	@XmlJavaTypeAdapter(AppointmentReminderAdapter.class)
+	private Reminder reminder = Reminder.NONE;
 
 	@Column(name = "isdaily")
-	@Element(data = true, required = false)
+	@XmlElement(name = "isDaily", required = false)
+	@XmlJavaTypeAdapter(BooleanAdapter.class)
 	private Boolean isDaily;
 
 	@Column(name = "isweekly")
-	@Element(data = true, required = false)
+	@XmlElement(name = "isWeekly", required = false)
+	@XmlJavaTypeAdapter(BooleanAdapter.class)
 	private Boolean isWeekly;
 
 	@Column(name = "ismonthly")
-	@Element(data = true, required = false)
+	@XmlElement(name = "isMonthly", required = false)
+	@XmlJavaTypeAdapter(BooleanAdapter.class)
 	private Boolean isMonthly;
 
 	@Column(name = "isyearly")
-	@Element(data = true, required = false)
+	@XmlElement(name = "isYearly", required = false)
+	@XmlJavaTypeAdapter(BooleanAdapter.class)
 	private Boolean isYearly;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "room_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name = "room_id", data = true, required = false)
+	@XmlElement(name = "room_id", required = false)
+	@XmlJavaTypeAdapter(RoomAdapter.class)
 	private Room room;
 
 	@Column(name = "icalId")
-	@Element(data = true, required = false)
+	@XmlElement(name = "icalId", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String icalId;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "appointment_id")
+	@XmlTransient
 	private List<MeetingMember> meetingMembers;
 
 	@Column(name = "language_id")
-	@Element(name = "language_id", data = true, required = false)
+	@XmlElement(name = "language_id", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long languageId;
 
 	@Column(name = "is_password_protected", nullable = false)
-	@Element(name = "isPasswordProtected", data = true, required = false)
+	@XmlElement(name = "isPasswordProtected", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean passwordProtected;
 
 	@Column(name = "password")
-	@Element(data = true, required = false)
+	@XmlElement(name = "icalId", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String password;
 
 	@Column(name = "is_connected_event", nullable = false)
+	@XmlElement(name = "connectedEvent", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean connectedEvent;
 
 	@Column(name = "is_reminder_email_send", nullable = false)
+	@XmlTransient
 	private boolean reminderEmailSend;
 
 	//Calendar Specific fields.
 	@ManyToOne()
 	@JoinColumn(name = "calendar_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name = "calendar_id", data = true, required = false)
+	@XmlElement(name = "calendar_id", required = false)
+	@XmlJavaTypeAdapter(OmCalendarAdapter.class)
 	private OmCalendar calendar;
 
 	@Column(name = "href")
-	@Element(data = true, required = false)
+	@XmlElement(name = "href", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String href;
 
 	@Column(name = "etag")
-	@Element(data = true, required = false)
+	@XmlElement(name = "etag", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String etag;
 
 

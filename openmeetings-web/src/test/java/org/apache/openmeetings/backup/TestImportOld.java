@@ -27,7 +27,6 @@ import java.io.InputStream;
 
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +41,6 @@ public class TestImportOld extends AbstractTestImport {
 	private MeetingMemberDao meetingMemberDao;
 
 	@Test
-	@Disabled
 	public void importOldVersions() {
 		String backupsDir = System.getProperty("backups.dir", ".");
 		File backupsHome = new File(backupsDir);
@@ -66,7 +64,7 @@ public class TestImportOld extends AbstractTestImport {
 				long newRoomCount = roomDao.count();
 				long newRoomGroupCount = roomDao.getGroups().size();
 				long newApptCount = appointmentDao.get().size();
-				long newMeetingMembersCount = meetingMemberDao.getMeetingMembers().size();
+				long newMeetingMembersCount = meetingMemberDao.get().size();
 				assertTrue(newGroupCount > groupCount, "Zero groups were imported from " + name);
 				assertTrue(newUserCount > userCount, "Zero users were imported from " + name);
 				assertTrue(newRoomCount > roomCount, "Zero rooms were imported from " + name);

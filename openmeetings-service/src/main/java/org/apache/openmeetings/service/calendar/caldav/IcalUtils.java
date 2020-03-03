@@ -103,7 +103,7 @@ public class IcalUtils {
 		a.setCalendar(omCalendar);
 		a.setOwner(omCalendar.getOwner());
 		a.setRoom(createDefaultRoom());
-		a.setReminder(Appointment.Reminder.none);
+		a.setReminder(Appointment.Reminder.NONE);
 
 		return this.parseCalendartoAppointment(a, calendar, etag);
 	}
@@ -125,7 +125,7 @@ public class IcalUtils {
 			a.setOwner(owner);
 			a.setDeleted(false);
 			a.setRoom(createDefaultRoom());
-			a.setReminder(Appointment.Reminder.none);
+			a.setReminder(Appointment.Reminder.NONE);
 			a = addVEventPropertiestoAppointment(a, event);
 			appointments.add(a);
 		}

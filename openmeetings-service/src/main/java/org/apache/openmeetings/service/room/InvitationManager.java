@@ -162,7 +162,7 @@ public class InvitationManager implements IInvitationManager {
 			log.error("Appointment doesn't have reminder set!");
 			return;
 		}
-		if (Reminder.none == reminder) {
+		if (Reminder.NONE == reminder) {
 			log.error("MeetingMember should not have invitation!");
 			return;
 		}
@@ -174,7 +174,7 @@ public class InvitationManager implements IInvitationManager {
 					, mm.getUser(), a.getRoom(), a.isPasswordProtected(), a.getPassword()
 					, Valid.Period, a.getOwner(), null, a.getStart(), a.getEnd(), a));
 			if (sendMail) {
-				sendInvitionLink(a, mm, type, Reminder.ical == reminder);
+				sendInvitionLink(a, mm, type, Reminder.ICAL == reminder);
 			}
 		} catch (Exception e) {
 			log.error("Unexpected error while setting invitation", e);

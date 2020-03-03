@@ -39,4 +39,8 @@ public class Constants {
 	public static final String CHAT_NODE = "ChatMessage";
 	public static final String CALENDAR_LIST_NODE = "calendars";
 	public static final String CALENDAR_NODE = "calendar";
+	public static final String APPOINTMENT_LIST_NODE = "appointments";
+	public static final String APPOINTMENT_NODE = "appointment";
+	public static final String MMEMBER_LIST_NODE = "meetingmembers";
+	public static final String MMEMBER_NODE = "meetingmember";
 }
