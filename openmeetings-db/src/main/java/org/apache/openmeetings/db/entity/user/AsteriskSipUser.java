@@ -90,7 +90,7 @@ public class AsteriskSipUser implements Serializable {
 
 	@Column(name = "port", nullable = false, length = 8)
 	@XmlElement(name = "port", required = false)
-	@XmlJavaTypeAdapter(LongAdapter.class)
+	@XmlJavaTypeAdapter(IntAdapter.class)
 	private Integer port = 0; // mediumint(8)
 
 	@Column(name = "regseconds", nullable = false)

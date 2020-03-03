@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.backup;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
 
 import org.junit.jupiter.api.Assertions;
@@ -30,5 +32,14 @@ public class TestImportUser extends AbstractTestImport {
 			File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/config/nokey_deleted/configs.xml").toURI());
 			backupImport.importUsers(configs.getParentFile());
 		});
+	}
+
+	@Test
+	public void importUsers() throws Exception {
+		long userCount = userDao.count();
+		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/users.xml").toURI());
+		backupImport.importUsers(configs.getParentFile());
+		assertEquals(userCount + 3, userDao.count(), "Users should be added");
+		//assertEquals(configsCount, cfgDao.count(), "No records should be added");
 	}
 }

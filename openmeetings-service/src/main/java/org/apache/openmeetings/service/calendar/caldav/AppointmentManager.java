@@ -615,7 +615,9 @@ public class AppointmentManager {
 	 */
 	@PreDestroy
 	public void destroy() {
-		connmanager.shutdown();
-		connmanager = null;
+		if (connmanager != null) {
+			connmanager.shutdown();
+			connmanager = null;
+		}
 	}
 }

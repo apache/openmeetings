@@ -55,6 +55,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -283,7 +284,7 @@ public class User extends HistoricalEntity {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true, nullable = false)
 	@ElementDependent
-	@XmlElement(name = "organisations", required = false)
+	@XmlElementWrapper(name = "organisations", required = false)
 	private List<GroupUser> groupUsers = new ArrayList<>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -358,7 +359,8 @@ public class User extends HistoricalEntity {
 	@Column(name = "om_right")
 	@CollectionTable(name = "om_user_right", joinColumns = @JoinColumn(name = "user_id"))
 	@Enumerated(EnumType.STRING)
-	@XmlElement(name = "rights", required = false)
+	@XmlElementWrapper(name = "rights", required = false)
+	@XmlElement(name = "right", required = false)
 	private Set<Right> rights = new HashSet<>();
 
 	@Column(name = "domain_id")

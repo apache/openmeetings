@@ -249,6 +249,7 @@ public class BackupImport {
 		outdatedConfigKeys.put("swftools_zoom", CONFIG_DOCUMENT_DPI);
 		outdatedConfigKeys.put("swftools_jpegquality", CONFIG_DOCUMENT_QUALITY);
 		outdatedConfigKeys.put("sms.subject", CONFIG_REMINDER_MESSAGE);
+		outdatedConfigKeys.put("exclusive.audio.keycode", CONFIG_KEYCODE_MUTE_OTHERS);
 		configTypes.put(CONFIG_REGISTER_FRONTEND, Configuration.Type.BOOL);
 		configTypes.put(CONFIG_REGISTER_SOAP, Configuration.Type.BOOL);
 		configTypes.put(CONFIG_REGISTER_OAUTH, Configuration.Type.BOOL);
