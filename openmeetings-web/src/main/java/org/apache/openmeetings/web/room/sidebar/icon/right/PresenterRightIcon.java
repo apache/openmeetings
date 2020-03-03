@@ -26,7 +26,7 @@ public class PresenterRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
 	public PresenterRightIcon(String id, String uid) {
-		super(id, uid, Right.presenter);
+		super(id, uid, Right.PRESENTER);
 		mainCssClass = "right presenter bumper ";
 	}
 
@@ -38,6 +38,6 @@ public class PresenterRightIcon extends RoomRightIcon {
 	@Override
 	protected boolean visible() {
 		Room r = getRoom();
-		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.Whiteboard) && super.visible();
+		return Room.Type.INTERVIEW != r.getType() && !r.isHidden(RoomElement.WHITEBOARD) && super.visible();
 	}
 }

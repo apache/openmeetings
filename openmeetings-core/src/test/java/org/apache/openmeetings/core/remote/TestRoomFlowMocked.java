@@ -107,7 +107,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 		c.getRoom().setId(ROOM_ID);
 		c.getRoom().setAllowRecording(true);
 		assertFalse(streamProcessor.recordingAllowed(c));
-		c.allow(Room.Right.moderator);
+		c.allow(Room.Right.MODERATOR);
 		when(roomDao.get(ROOM_ID)).thenReturn(c.getRoom());
 		assertTrue(streamProcessor.recordingAllowed(c));
 	}
@@ -128,7 +128,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 	private Client getClientFull() {
 		Client c = getClientWithRoom();
 		c.getRoom().setAllowRecording(true);
-		c.allow(Room.Right.moderator);
+		c.allow(Room.Right.MODERATOR);
 		return c;
 	}
 
@@ -136,7 +136,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 	public void testWannaRecord2() throws Exception {
 		JSONObject msg = new JSONObject(MSG_BASE.toString()).put("id", "wannaRecord");
 		Client c = getClientFull();
-		c.getRoom().setType(Room.Type.interview);
+		c.getRoom().setType(Room.Type.INTERVIEW);
 		when(roomDao.get(ROOM_ID)).thenReturn(c.getRoom());
 		handler.onMessage(c, msg);
 	}

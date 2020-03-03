@@ -52,7 +52,7 @@ public class QuickPollManager {
 
 	public void start(Client c) {
 		Long roomId = c.getRoomId();
-		if (!c.hasRight(Room.Right.presenter) || isStarted(roomId)) {
+		if (!c.hasRight(Room.Right.PRESENTER) || isStarted(roomId)) {
 			return;
 		}
 		log.debug("Starting quick poll, room: {}", roomId);
@@ -80,7 +80,7 @@ public class QuickPollManager {
 
 	public void close(Client c) {
 		Long roomId = c.getRoomId();
-		if (!c.hasRight(Room.Right.presenter) || !isStarted(roomId)) {
+		if (!c.hasRight(Room.Right.PRESENTER) || !isStarted(roomId)) {
 			return;
 		}
 		map().remove(roomId);

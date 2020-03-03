@@ -45,22 +45,22 @@ public class TestRoomDao extends AbstractJUnitDefaults {
 	public void testMicStatusHidden() throws Exception {
 		Room r = roomDao.get(1);
 		assertNotNull(r, "Room must exist");
-		assertTrue(r.isHidden(RoomElement.MicrophoneStatus), "Default interview room should have mic status hidden");
+		assertTrue(r.isHidden(RoomElement.MICROPHONE_STATUS), "Default interview room should have mic status hidden");
 		r = roomDao.get(5);
 		assertNotNull(r, "Room must exist");
-		assertTrue(r.isHidden(RoomElement.MicrophoneStatus), "Default presentation room should have mic status hidden");
+		assertTrue(r.isHidden(RoomElement.MICROPHONE_STATUS), "Default presentation room should have mic status hidden");
 		r = roomDao.get(6);
 		assertNotNull(r, "Room must exist");
-		assertFalse(r.isHidden(RoomElement.MicrophoneStatus), "Default Mic room should have mic status visible");
+		assertFalse(r.isHidden(RoomElement.MICROPHONE_STATUS), "Default Mic room should have mic status visible");
 
 		User u = createUser(); //creating new User here
-		r = roomDao.getUserRoom(u.getId(), Room.Type.presentation, "bla");
+		r = roomDao.getUserRoom(u.getId(), Room.Type.PRESENTATION, "bla");
 		assertNotNull(r, "Room must exist");
-		boolean hidden = r.isHidden(RoomElement.MicrophoneStatus);
+		boolean hidden = r.isHidden(RoomElement.MICROPHONE_STATUS);
 		if (!hidden && log.isDebugEnabled()) {
 			log.debug("Invalid personal room found -> User: {}, Room: {} ... deleted ? {}", u, r, r.isDeleted());
 		}
-		assertEquals(Room.Type.presentation, r.getType(), "User presentation room should be created");
+		assertEquals(Room.Type.PRESENTATION, r.getType(), "User presentation room should be created");
 		assertTrue(hidden, "User presentation room should have mic status hidden");
 	}
 

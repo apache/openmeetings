@@ -56,8 +56,8 @@ public class RoomClientPanel extends Panel {
 		item.add(AttributeModifier.replace(ATTR_TITLE, name));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
 		actions.add(new KickIcon("kick", uid));
-		actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(c.getUserId())));
-		actions.setVisible(room.getClient().hasRight(Right.moderator));
+		actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.CHAT) && !getUserId().equals(c.getUserId())));
+		actions.setVisible(room.getClient().hasRight(Right.MODERATOR));
 		if (c.getUid().equals(room.getClient().getUid())) {
 			actions.add(new SelfIconsPanel("icons", uid, false));
 			item.add(AttributeModifier.append(ATTR_CLASS, "current"));
@@ -72,10 +72,10 @@ public class RoomClientPanel extends Panel {
 		super.onInitialize();
 		Client c = (Client)getDefaultModelObject();
 		String status, statusTitle;
-		if (c.hasRight(Right.moderator)) {
+		if (c.hasRight(Right.MODERATOR)) {
 			status = "status-mod";
 			statusTitle = "679";
-		} else if (c.hasRight(Right.whiteBoard) || c.hasRight(Right.presenter)) {
+		} else if (c.hasRight(Right.WHITEBOARD) || c.hasRight(Right.PRESENTER)) {
 			status = "status-wb";
 			statusTitle = "678";
 		} else {

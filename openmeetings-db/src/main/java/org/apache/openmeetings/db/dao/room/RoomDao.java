@@ -235,11 +235,11 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 			room.setName(name);
 			room.setType(type);
 			room.setComment("My Rooms of ownerId " + ownerId);
-			room.setCapacity(Room.Type.conference == type ? 25L : 120L);
+			room.setCapacity(Room.Type.CONFERENCE == type ? 25L : 120L);
 			room.setAllowUserQuestions(true);
 			room.setOwnerId(ownerId);
 			room.setAllowRecording(true);
-			room.hide(RoomElement.MicrophoneStatus);
+			room.hide(RoomElement.MICROPHONE_STATUS);
 
 			room = update(room, ownerId);
 			if (room.getId() != null) {
@@ -296,8 +296,8 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 
 	public List<Room> getMyRooms(Long userId, String confLbl, String restrLbl) {
 		List<Room> result = new ArrayList<>();
-		result.add(getUserRoom(userId, Room.Type.conference, confLbl));
-		result.add(getUserRoom(userId, Room.Type.presentation, restrLbl));
+		result.add(getUserRoom(userId, Room.Type.CONFERENCE, confLbl));
+		result.add(getUserRoom(userId, Room.Type.PRESENTATION, restrLbl));
 		result.addAll(getAppointedRoomsByUser(userId));
 		return result;
 	}

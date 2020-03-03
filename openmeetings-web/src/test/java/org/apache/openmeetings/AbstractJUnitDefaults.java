@@ -135,7 +135,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 
 		if (r == null) {
 			r = new Room();
-			r.setType(Room.Type.conference);
+			r.setType(Room.Type.CONFERENCE);
 			r.setAppointment(true);
 		}
 		ap.setRoom(r);

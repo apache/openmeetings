@@ -52,20 +52,20 @@ public class AuthLevelUtil {
 		}
 		if (hasAdminLevel(u.getRights())) {
 			//admin user get superModerator level, no-one can kick him/her
-			result.add(Room.Right.superModerator);
+			result.add(Room.Right.SUPER_MODERATOR);
 		} else if (r.isAppointment() && a != null && u.getId().equals(a.getOwner().getId())) {
 			// appointment owner is super moderator
-			result.add(Room.Right.superModerator);
+			result.add(Room.Right.SUPER_MODERATOR);
 		}
 		if (result.isEmpty()) {
 			if (!r.isModerated() && 1 == userCount) {
 				//room is not moderated, first user is moderator!
-				result.add(Room.Right.moderator);
+				result.add(Room.Right.MODERATOR);
 			}
 			//performing loop here to set possible 'superModerator' right
 			for (RoomModerator rm : r.getModerators()) {
 				if (u.getId().equals(rm.getUser().getId())) {
-					result.add(rm.isSuperModerator() ? Room.Right.superModerator : Room.Right.moderator);
+					result.add(rm.isSuperModerator() ? Room.Right.SUPER_MODERATOR : Room.Right.MODERATOR);
 					break;
 				}
 			}
@@ -74,7 +74,7 @@ public class AuthLevelUtil {
 				for (RoomGroup rg : r.getGroups()) {
 					for (GroupUser gu : u.getGroupUsers()) {
 						if (gu.getGroup().getId().equals(rg.getGroup().getId()) && gu.isModerator()) {
-							result.add(Room.Right.moderator);
+							result.add(Room.Right.MODERATOR);
 							break;
 						}
 					}
@@ -84,9 +84,9 @@ public class AuthLevelUtil {
 				}
 			}
 		}
-		if (Room.Type.conference == r.getType() && !result.contains(Room.Right.superModerator) && !result.contains(Room.Right.moderator) && !result.contains(Room.Right.video)) {
-			result.add(Room.Right.audio);
-			result.add(Room.Right.video);
+		if (Room.Type.CONFERENCE == r.getType() && !result.contains(Room.Right.SUPER_MODERATOR) && !result.contains(Room.Right.MODERATOR) && !result.contains(Room.Right.VIDEO)) {
+			result.add(Room.Right.AUDIO);
+			result.add(Room.Right.VIDEO);
 		}
 		return result;
 	}

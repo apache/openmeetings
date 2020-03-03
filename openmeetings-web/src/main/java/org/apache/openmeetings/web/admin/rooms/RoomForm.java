@@ -455,7 +455,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 	private static Room newRoom() {
 		Room r = new Room();
-		r.hide(RoomElement.MicrophoneStatus);
+		r.hide(RoomElement.MICROPHONE_STATUS);
 		return r;
 	}
 

@@ -286,7 +286,7 @@ public class IcalUtils {
 		Room r = new Room();
 		r.setAppointment(true);
 		if (r.getType() == null) {
-			r.setType(Room.Type.conference);
+			r.setType(Room.Type.CONFERENCE);
 		}
 		return r;
 	}

@@ -43,7 +43,7 @@ public class TestAuthLevelUtil {
 		u.setRights(new HashSet<>(Arrays.asList(User.Right.ADMIN)));
 		Set<Room.Right> rights = getRoomRight(u, new Room(), null, 0);
 		assertEquals(1, rights.size(), "Result should NOT be empty");
-		assertTrue(rights.contains(Room.Right.superModerator), "Result should be super moderator");
+		assertTrue(rights.contains(Room.Right.SUPER_MODERATOR), "Result should be super moderator");
 	}
 
 	@Test
@@ -57,7 +57,7 @@ public class TestAuthLevelUtil {
 		a.getOwner().setId(666L);
 		Set<Room.Right> rights = getRoomRight(u, r, a, 0);
 		assertEquals(1, rights.size(), "Result should NOT be empty");
-		assertTrue(rights.contains(Room.Right.superModerator), "Result should be super moderator");
+		assertTrue(rights.contains(Room.Right.SUPER_MODERATOR), "Result should be super moderator");
 	}
 
 	@Test
@@ -66,7 +66,7 @@ public class TestAuthLevelUtil {
 		Room r = new Room();
 		Set<Room.Right> rights = getRoomRight(u, r, null, 0);
 		assertEquals(2, rights.size(), "Result should NOT be empty");
-		assertTrue(rights.contains(Room.Right.audio), "Result should contains audio");
-		assertTrue(rights.contains(Room.Right.video), "Result should contains video");
+		assertTrue(rights.contains(Room.Right.AUDIO), "Result should contains audio");
+		assertTrue(rights.contains(Room.Right.VIDEO), "Result should contains video");
 	}
 }

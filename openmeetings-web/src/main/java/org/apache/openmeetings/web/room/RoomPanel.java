@@ -151,7 +151,7 @@ public class RoomPanel extends BasePanel {
 					.put("interview", interview)
 					.put("audioOnly", r.isAudioOnly())
 					.put("questions", r.isAllowUserQuestions())
-					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus));
+					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MICROPHONE_STATUS));
 			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
 				options.put("reloadUrl", r.getRedirectURL());
 			}
@@ -166,9 +166,9 @@ public class RoomPanel extends BasePanel {
 			if (r.isFilesOpened()) {
 				sidebar.setFilesActive(target);
 			}
-			if (Room.Type.presentation != r.getType()) {
-				List<Client> mods = cm.listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
-				log.debug("RoomPanel::roomEnter, mods IS EMPTY ? {}, is MOD ? {}", mods.isEmpty(), _c.hasRight(Room.Right.moderator));
+			if (Room.Type.PRESENTATION != r.getType()) {
+				List<Client> mods = cm.listByRoom(r.getId(), c -> c.hasRight(Room.Right.MODERATOR));
+				log.debug("RoomPanel::roomEnter, mods IS EMPTY ? {}, is MOD ? {}", mods.isEmpty(), _c.hasRight(Room.Right.MODERATOR));
 				if (mods.isEmpty()) {
 					showIdeaAlert(target, getString(r.isModerated() ? "641" : "498"));
 				}
@@ -261,7 +261,7 @@ public class RoomPanel extends BasePanel {
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
-		this.interview = Room.Type.interview == r.getType();
+		this.interview = Room.Type.INTERVIEW == r.getType();
 		this.wb = interview ? new InterviewWbPanel("whiteboard", this) : new WbPanel("whiteboard", this);
 	}
 
@@ -391,19 +391,19 @@ public class RoomPanel extends BasePanel {
 			final int count = cm.addToRoom(c.setRoom(getRoom()));
 			SOAPLogin soap = WebSession.get().getSoapLogin();
 			if (soap != null && soap.isModerator()) {
-				c.allow(Right.superModerator);
+				c.allow(Right.SUPER_MODERATOR);
 				cm.update(c);
 			} else {
 				Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? apptDao.getByRoom(r.getId()) : null, count);
 				if (!rr.isEmpty()) {
 					c.allow(rr);
 					cm.update(c);
-					log.info("Setting rights for client:: {} -> {}", rr, c.hasRight(Right.moderator));
+					log.info("Setting rights for client:: {} -> {}", rr, c.hasRight(Right.MODERATOR));
 				}
 			}
 			if (r.isModerated() && r.isWaitModerator()
-					&& !c.hasRight(Right.moderator)
-					&& cm.listByRoom(r.getId(), cl -> cl.hasRight(Right.moderator)).isEmpty())
+					&& !c.hasRight(Right.MODERATOR)
+					&& cm.listByRoom(r.getId(), cl -> cl.hasRight(Right.MODERATOR)).isEmpty())
 			{
 				room.setVisible(false);
 				createWaitModerator(true);
@@ -513,7 +513,7 @@ public class RoomPanel extends BasePanel {
 						sidebar.removeActivity(((TextRoomMessage)m).getText(), handler);
 						break;
 					case haveQuestion:
-						if (_c.hasRight(Room.Right.moderator) || getUserId().equals(m.getUserId())) {
+						if (_c.hasRight(Room.Right.MODERATOR) || getUserId().equals(m.getUserId())) {
 							sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.haveQuestion), handler);
 						}
 						break;
@@ -562,19 +562,19 @@ public class RoomPanel extends BasePanel {
 						menu.update(handler);
 						break;
 					case wbReload:
-						if (Room.Type.interview != r.getType()) {
+						if (Room.Type.INTERVIEW != r.getType()) {
 							wb.reloadWb(handler);
 						}
 						break;
 					case moderatorInRoom: {
 						if (!r.isModerated() || !r.isWaitModerator()) {
 							log.warn("Something weird: `moderatorInRoom` in wrong room {}", r);
-						} else if (!_c.hasRight(Room.Right.moderator)) {
+						} else if (!_c.hasRight(Room.Right.MODERATOR)) {
 							boolean moderInRoom = Boolean.TRUE.equals(Boolean.valueOf(((TextRoomMessage)m).getText()));
 							log.warn("!! moderatorInRoom: {}", moderInRoom);
 							if (room.isVisible() != moderInRoom) {
 								handler.add(room.setVisible(moderInRoom));
-								getMainPanel().getChat().toggle(handler, moderInRoom && !r.isHidden(RoomElement.Chat));
+								getMainPanel().getChat().toggle(handler, moderInRoom && !r.isHidden(RoomElement.CHAT));
 								if (room.isVisible()) {
 									handler.appendJavaScript(roomEnter.getCallbackScript());
 									handler.add(waitModerator.setVisible(false));
@@ -597,7 +597,7 @@ public class RoomPanel extends BasePanel {
 
 	private void updateInterviewRecordingButtons(IPartialPageRequestHandler handler) {
 		Client _c = getClient();
-		if (interview && _c.hasRight(Right.moderator)) {
+		if (interview && _c.hasRight(Right.MODERATOR)) {
 			if (streamProcessor.isRecording(r.getId())) {
 				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
 			} else if (streamProcessor.recordingAllowed(getClient())) {
@@ -618,7 +618,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public static boolean isModerator(ClientManager cm, long userId, long roomId) {
-		return hasRight(cm, userId, roomId, Right.moderator);
+		return hasRight(cm, userId, roomId, Right.MODERATOR);
 	}
 
 	public static boolean hasRight(ClientManager cm, long userId, long roomId, Right r) {
@@ -635,7 +635,7 @@ public class RoomPanel extends BasePanel {
 		getBasePage().getHeader().setVisible(false);
 		getMainPanel().getTopControls().setVisible(false);
 		Component loader = getBasePage().getLoader().setVisible(false);
-		if (r.isHidden(RoomElement.Chat) || !isVisible()) {
+		if (r.isHidden(RoomElement.CHAT) || !isVisible()) {
 			getMainPanel().getChat().toggle(handler, false);
 		}
 		if (handler != null) {
@@ -648,7 +648,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void show(IPartialPageRequestHandler handler) {
-		getMainPanel().getChat().toggle(handler, !r.isHidden(RoomElement.Chat));
+		getMainPanel().getChat().toggle(handler, !r.isHidden(RoomElement.CHAT));
 		handler.add(this.setVisible(true));
 		handler.appendJavaScript("Room.load();");
 	}
@@ -659,7 +659,7 @@ public class RoomPanel extends BasePanel {
 			((EventDetailDialog)eventDetail).close(handler);
 		}
 		handler.add(getBasePage().getHeader().setVisible(true), getMainPanel().getTopControls().setVisible(true));
-		if (r.isHidden(RoomElement.Chat)) {
+		if (r.isHidden(RoomElement.CHAT)) {
 			getMainPanel().getChat().toggle(handler, true);
 		}
 		handler.appendJavaScript("if (typeof(Room) !== 'undefined') { Room.unload(); }");
@@ -679,7 +679,7 @@ public class RoomPanel extends BasePanel {
 
 	public void requestRight(Right right, IPartialPageRequestHandler handler) {
 		RoomMessage.Type reqType = null;
-		List<Client> mods = cm.listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
+		List<Client> mods = cm.listByRoom(r.getId(), c -> c.hasRight(Room.Right.MODERATOR));
 		if (mods.isEmpty()) {
 			if (r.isModerated()) {
 				showIdeaAlert(handler, getString("696"));
@@ -691,28 +691,28 @@ public class RoomPanel extends BasePanel {
 		}
 		// ask
 		switch (right) {
-			case moderator:
+			case MODERATOR:
 				reqType = Type.requestRightModerator;
 				break;
-			case presenter:
+			case PRESENTER:
 				reqType = Type.requestRightPresenter;
 				break;
-			case whiteBoard:
+			case WHITEBOARD:
 				reqType = Type.requestRightWb;
 				break;
-			case share:
+			case SHARE:
 				reqType = Type.requestRightWb;
 				break;
-			case audio:
+			case AUDIO:
 				reqType = Type.requestRightA;
 				break;
-			case muteOthers:
+			case MUTE_OTHERS:
 				reqType = Type.requestRightMuteOthers;
 				break;
-			case remoteControl:
+			case REMOTE_CONTROL:
 				reqType = Type.requestRightRemote;
 				break;
-			case video:
+			case VIDEO:
 				reqType = Type.requestRightAv;
 				break;
 			default:
@@ -731,10 +731,10 @@ public class RoomPanel extends BasePanel {
 		for (Right right : rights) {
 			client.deny(right);
 		}
-		if (client.hasActivity(Client.Activity.AUDIO) && !client.hasRight(Right.audio)) {
+		if (client.hasActivity(Client.Activity.AUDIO) && !client.hasRight(Right.AUDIO)) {
 			client.remove(Client.Activity.AUDIO);
 		}
-		if (client.hasActivity(Client.Activity.VIDEO) && !client.hasRight(Right.video)) {
+		if (client.hasActivity(Client.Activity.VIDEO) && !client.hasRight(Right.VIDEO)) {
 			client.remove(Client.Activity.VIDEO);
 		}
 		rightsUpdated(client);
@@ -812,16 +812,16 @@ public class RoomPanel extends BasePanel {
 	@Override
 	protected String getCssClass() {
 		String clazz = "room " + r.getType().name();
-		if (r.isHidden(RoomElement.TopBar)) {
+		if (r.isHidden(RoomElement.TOP_BAR)) {
 			clazz += " no-menu";
 		}
-		if (r.isHidden(RoomElement.Activities)) {
+		if (r.isHidden(RoomElement.ACTIVITIES)) {
 			clazz += " no-activities";
 		}
-		if (r.isHidden(RoomElement.Chat)) {
+		if (r.isHidden(RoomElement.CHAT)) {
 			clazz += " no-chat";
 		}
-		if (!r.isHidden(RoomElement.MicrophoneStatus)) {
+		if (!r.isHidden(RoomElement.MICROPHONE_STATUS)) {
 			clazz += " mic-status";
 		}
 		return clazz;

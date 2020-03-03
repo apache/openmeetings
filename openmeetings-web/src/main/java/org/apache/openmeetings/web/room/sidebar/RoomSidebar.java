@@ -93,15 +93,15 @@ public class RoomSidebar extends Panel {
 		protected List<Client> load() {
 			Client self = room.getClient();
 			List<Client> list;
-			if (!self.hasRight(Room.Right.moderator) && room.getRoom().isHidden(RoomElement.UserCount)) {
+			if (!self.hasRight(Room.Right.MODERATOR) && room.getRoom().isHidden(RoomElement.USER_COUNT)) {
 				list = Arrays.asList(self);
 			} else {
 				list = cm.listByRoom(room.getRoom().getId());
 				list.sort(Comparator.<Client, Integer>comparing(c -> {
-							if (c.hasRight(Room.Right.moderator)) {
+							if (c.hasRight(Room.Right.MODERATOR)) {
 								return 0;
 							}
-							if (c.hasRight(Room.Right.presenter)) {
+							if (c.hasRight(Room.Right.PRESENTER)) {
 								return 1;
 							}
 							return 5;
@@ -131,7 +131,7 @@ public class RoomSidebar extends Panel {
 				cp.setSettings(new JSONObject(s.toString())).update(c);
 				if (!avInited) {
 					avInited = true;
-					if (Room.Type.conference == room.getRoom().getType()) {
+					if (Room.Type.CONFERENCE == room.getRoom().getType()) {
 						streamProcessor.toggleActivity(c, Client.Activity.AUDIO_VIDEO);
 					}
 				}
@@ -194,7 +194,7 @@ public class RoomSidebar extends Panel {
 		if (room.isInterview()) {
 			return;
 		}
-		showFiles = !room.getRoom().isHidden(RoomElement.Files) && room.getClient().hasRight(Right.presenter);
+		showFiles = !room.getRoom().isHidden(RoomElement.FILES) && room.getClient().hasRight(Right.PRESENTER);
 		roomFiles.setReadOnly(!showFiles, handler);
 	}
 
@@ -244,18 +244,18 @@ public class RoomSidebar extends Panel {
 			Action a = Action.valueOf(o.getString(PARAM_ACTION));
 			switch (a) {
 				case kick:
-					if (self.hasRight(Right.moderator)) {
+					if (self.hasRight(Right.MODERATOR)) {
 						kickedClient = cm.get(uid);
 						if (kickedClient == null) {
 							return;
 						}
-						if (!kickedClient.hasRight(Right.superModerator) && !self.getUid().equals(kickedClient.getUid())) {
+						if (!kickedClient.hasRight(Right.SUPER_MODERATOR) && !self.getUid().equals(kickedClient.getUid())) {
 							confirmKick.show(handler);
 						}
 					}
 					break;
 				case muteOthers:
-					if (room.getClient().hasRight(Right.muteOthers)) {
+					if (room.getClient().hasRight(Right.MUTE_OTHERS)) {
 						WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), self, RoomMessage.Type.muteOthers, uid));
 					}
 					break;
@@ -265,7 +265,7 @@ public class RoomSidebar extends Panel {
 					if (c == null || !c.hasActivity(Client.Activity.AUDIO)) {
 						return;
 					}
-					if (self.hasRight(Right.moderator) || self.getUid().equals(c.getUid())) {
+					if (self.hasRight(Right.MODERATOR) || self.getUid().equals(c.getUid())) {
 						WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), self, RoomMessage.Type.mute
 								, new JSONObject()
 										.put("sid", self.getSid())
@@ -287,7 +287,7 @@ public class RoomSidebar extends Panel {
 	private void toggleRight(IPartialPageRequestHandler handler, Client self, String uid, JSONObject o) {
 		try {
 			Right right = Right.valueOf(o.getString(PARAM_RIGHT));
-			if (self.hasRight(Right.moderator)) {
+			if (self.hasRight(Right.MODERATOR)) {
 				Client client = cm.get(uid);
 				if (client == null) {
 					return;
@@ -295,8 +295,8 @@ public class RoomSidebar extends Panel {
 				if (client.hasRight(right)) {
 					room.denyRight(client, right);
 				} else {
-					if (Right.video == right) {
-						room.allowRight(client, Right.audio, right);
+					if (Right.VIDEO == right) {
+						room.allowRight(client, Right.AUDIO, right);
 					} else {
 						room.allowRight(client, right);
 					}

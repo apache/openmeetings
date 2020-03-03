@@ -24,7 +24,7 @@ public class RemoteControlRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
 	public RemoteControlRightIcon(String id, String uid) {
-		super(id, uid, Right.remoteControl);
+		super(id, uid, Right.REMOTE_CONTROL);
 		mainCssClass = "right remote-control bumper ";
 	}
 

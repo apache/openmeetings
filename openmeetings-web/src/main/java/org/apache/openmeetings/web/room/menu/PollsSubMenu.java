@@ -69,7 +69,7 @@ public class PollsSubMenu implements Serializable {
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			try {
-				if (room.getRoom().isHidden(RoomElement.PollMenu)) {
+				if (room.getRoom().isHidden(RoomElement.POLL_MENU)) {
 					return;
 				}
 				String action = mp.getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString();
@@ -100,7 +100,7 @@ public class PollsSubMenu implements Serializable {
 		mp.add(createPoll = new CreatePollDialog("createPoll", room.getRoom().getId()));
 		mp.add(vote = new VoteDialog("vote"));
 		mp.add(pollResults = new PollResultsDialog("pollResults", createPoll, room.getRoom().getId()));
-		visible = !room.getRoom().isHidden(RoomElement.PollMenu);
+		visible = !room.getRoom().isHidden(RoomElement.POLL_MENU);
 	}
 
 	public void init() {
@@ -139,7 +139,7 @@ public class PollsSubMenu implements Serializable {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				pollResults.updateModel(target, room.getClient().hasRight(Room.Right.moderator));
+				pollResults.updateModel(target, room.getClient().hasRight(Room.Right.MODERATOR));
 				pollResults.show(target);
 			}
 		};
@@ -161,7 +161,7 @@ public class PollsSubMenu implements Serializable {
 		}
 		boolean pollExists = pollDao.hasPoll(r.getId());
 		pollsMenu.setVisible(moder || r.isAllowUserQuestions());
-		pollQuickMenuItem.setVisible(room.getClient().hasRight(Room.Right.presenter) && !qpollManager.isStarted(r.getId()));
+		pollQuickMenuItem.setVisible(room.getClient().hasRight(Room.Right.PRESENTER) && !qpollManager.isStarted(r.getId()));
 		pollCreateMenuItem.setVisible(moder);
 		pollVoteMenuItem.setVisible(pollExists && notExternalUser && pollDao.notVoted(r.getId(), getUserId()));
 		pollResultMenuItem.setVisible(pollExists || !pollDao.getArchived(r.getId()).isEmpty());
@@ -178,7 +178,7 @@ public class PollsSubMenu implements Serializable {
 			vote.show(handler);
 		}
 		if (pollResults.isOpened()) {
-			pollResults.updateModel(handler, room.getClient().hasRight(Room.Right.moderator));
+			pollResults.updateModel(handler, room.getClient().hasRight(Room.Right.MODERATOR));
 		}
 	}
 

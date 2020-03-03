@@ -16,25 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.sidebar.icon.right;
+package org.apache.openmeetings.db.bind.adapter;
 
-import org.apache.openmeetings.db.entity.room.Room.Right;
+import static org.apache.commons.lang3.math.NumberUtils.toInt;
+import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_BEGIN;
+import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_END;
 
-public class VideoRightIcon extends RoomRightIcon {
-	private static final long serialVersionUID = 1L;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-	public VideoRightIcon(String id, String uid) {
-		super(id, uid, Right.VIDEO);
-		mainCssClass = "right camera ";
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.wicket.util.string.Strings;
+
+public class RoomTypeAdapter extends XmlAdapter<String, Room.Type> {
+
+	@Override
+	public String marshal(Room.Type v) throws Exception {
+		return CDATA_BEGIN + v.getId() + CDATA_END;
 	}
 
 	@Override
-	protected String getTitle() {
-		return getString(String.format("ulist.right.video.%s", isSelf() ? "request" : (hasRight() ? "revoke" : "grant")));
-	}
-
-	@Override
-	protected boolean visible() {
-		return !getRoom().isAudioOnly() && super.visible();
+	public Room.Type unmarshal(String v) throws Exception {
+		return Strings.isEmpty(v) ? null : Room.Type.get(toInt(v));
 	}
 }

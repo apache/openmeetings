@@ -37,7 +37,7 @@ public class KickIcon extends ClientIcon {
 
 	@Override
 	protected boolean isClickable() {
-		return !isSelf() && roomHasRight(Right.moderator) && !hasRight(Right.superModerator);
+		return !isSelf() && roomHasRight(Right.MODERATOR) && !hasRight(Right.SUPER_MODERATOR);
 	}
 
 	@Override

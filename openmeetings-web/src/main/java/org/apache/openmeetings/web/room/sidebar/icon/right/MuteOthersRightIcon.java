@@ -24,7 +24,7 @@ public class MuteOthersRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
 	public MuteOthersRightIcon(String id, String uid) {
-		super(id, uid, Right.muteOthers);
+		super(id, uid, Right.MUTE_OTHERS);
 		mainCssClass = "mute-others ";
 	}
 

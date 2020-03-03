@@ -152,7 +152,7 @@ public class WbPanel extends AbstractWbPanel {
 	public WbPanel(String id, RoomPanel rp) {
 		super(id, rp);
 		this.roomId = rp.getRoom().getId();
-		if (rp.getRoom().isHidden(RoomElement.Whiteboard)) {
+		if (rp.getRoom().isHidden(RoomElement.WHITEBOARD)) {
 			setVisible(false);
 		} else {
 			add(new ListView<>("clipart"
@@ -219,9 +219,9 @@ public class WbPanel extends AbstractWbPanel {
 				break;
 			case downloadPdf:
 			{
-				boolean moder = c.hasRight(Room.Right.moderator);
+				boolean moder = c.hasRight(Room.Right.MODERATOR);
 				Room r = rp.getRoom();
-				if ((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions())) {
+				if ((moder && !r.isHidden(RoomElement.ACTION_MENU)) || (!moder && r.isAllowUserQuestions())) {
 					try (PDDocument doc = new PDDocument()) {
 						JSONArray arr = obj.getJSONArray("slides");
 						for (int i = 0; i < arr.length(); ++i) {
@@ -276,7 +276,7 @@ public class WbPanel extends AbstractWbPanel {
 		}
 
 		//presenter-right
-		if (c.hasRight(Right.presenter)) {
+		if (c.hasRight(Right.PRESENTER)) {
 			switch (a) {
 				case createWb:
 				{
@@ -342,7 +342,7 @@ public class WbPanel extends AbstractWbPanel {
 			}
 		}
 		//wb-right
-		if (c.hasRight(Right.presenter) || c.hasRight(Right.whiteBoard)) {
+		if (c.hasRight(Right.PRESENTER) || c.hasRight(Right.WHITEBOARD)) {
 			switch (a) {
 				case createObj:
 				{
@@ -469,10 +469,10 @@ public class WbPanel extends AbstractWbPanel {
 	@Override
 	protected String getRole() {
 		String role = ROLE_NONE;
-		if (rp.getClient().hasRight(Right.presenter)) {
-			role = Right.presenter.name();
-		} else if (rp.getClient().hasRight(Right.whiteBoard)) {
-			role = Right.whiteBoard.name();
+		if (rp.getClient().hasRight(Right.PRESENTER)) {
+			role = Right.PRESENTER.name();
+		} else if (rp.getClient().hasRight(Right.WHITEBOARD)) {
+			role = Right.WHITEBOARD.name();
 		}
 		return role;
 	}

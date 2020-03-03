@@ -133,10 +133,10 @@ public class Client implements IDataProviderEntity, IWsClient {
 	}
 
 	public boolean hasRight(Right right) {
-		if (Right.superModerator == right) {
+		if (Right.SUPER_MODERATOR == right) {
 			return rights.contains(right);
 		}
-		return rights.contains(Right.superModerator) || rights.contains(Right.moderator) || rights.contains(right);
+		return rights.contains(Right.SUPER_MODERATOR) || rights.contains(Right.MODERATOR) || rights.contains(right);
 	}
 
 	public Client allow(Right... inRights) {
@@ -470,7 +470,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 				this.swidth = 800;
 				this.sheight = 600;
 			} else if (StreamType.WEBCAM == type) {
-				boolean interview = room != null && Room.Type.interview == room.getType();
+				boolean interview = room != null && Room.Type.INTERVIEW == room.getType();
 				this.swidth = interview ? 320 : width;
 				this.sheight = interview ? 260 : height;
 			}

@@ -24,7 +24,7 @@ public class AudioRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
 	public AudioRightIcon(String id, String uid) {
-		super(id, uid, Right.audio);
+		super(id, uid, Right.AUDIO);
 		mainCssClass = "right audio bumper ";
 	}
 

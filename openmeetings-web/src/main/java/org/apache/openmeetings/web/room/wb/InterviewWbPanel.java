@@ -44,7 +44,7 @@ public class InterviewWbPanel extends AbstractWbPanel {
 
 	@Override
 	protected String getRole() {
-		return rp.getClient().hasRight(Right.moderator) ? Right.moderator.name() : ROLE_NONE;
+		return rp.getClient().hasRight(Right.MODERATOR) ? Right.MODERATOR.name() : ROLE_NONE;
 	}
 
 	@Override

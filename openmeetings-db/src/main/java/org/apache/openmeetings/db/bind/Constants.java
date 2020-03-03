@@ -31,4 +31,6 @@ public class Constants {
 	public static final String OAUTH_NODE = "OAuthServer";
 	public static final String USER_LIST_NODE = "users";
 	public static final String USER_NODE = "user";
+	public static final String ROOM_LIST_NODE = "rooms";
+	public static final String ROOM_NODE = "room";
 }

@@ -25,6 +25,8 @@ import static org.apache.openmeetings.db.bind.Constants.GROUP_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.GROUP_NODE;
 import static org.apache.openmeetings.db.bind.Constants.OAUTH_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.OAUTH_NODE;
+import static org.apache.openmeetings.db.bind.Constants.ROOM_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.ROOM_NODE;
 import static org.apache.openmeetings.db.bind.Constants.USER_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.USER_NODE;
 import static org.apache.openmeetings.db.bind.Constants.VERSION_LIST_NODE;
@@ -150,7 +152,6 @@ import org.apache.openmeetings.backup.converter.OmCalendarConverter;
 import org.apache.openmeetings.backup.converter.PollTypeConverter;
 import org.apache.openmeetings.backup.converter.RecordingStatusConverter;
 import org.apache.openmeetings.backup.converter.RoomConverter;
-import org.apache.openmeetings.backup.converter.RoomTypeConverter;
 import org.apache.openmeetings.backup.converter.UserConverter;
 import org.apache.openmeetings.backup.converter.WbConverter;
 import org.apache.openmeetings.core.converter.DocumentConverter;
@@ -652,19 +653,13 @@ public class BackupImport {
 	/*
 	 * ##################### Import Rooms
 	 */
-	private void importRooms(File base) throws Exception {
+	void importRooms(File base) throws Exception {
 		log.info("Users import complete, starting room import");
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		RegistryMatcher matcher = new RegistryMatcher();
-		Serializer ser = new Persister(strategy, matcher);
-
-		matcher.bind(Long.class, LongTransform.class);
-		matcher.bind(Integer.class, IntegerTransform.class);
-		registry.bind(User.class, new UserConverter(userDao, userMap));
-		registry.bind(Room.Type.class, RoomTypeConverter.class);
-		registry.bind(Date.class, DateConverter.class);
-		readList(null, base, "rooms.xml", "rooms", "room", Room.class, r -> {
+		Class<Room> eClazz = Room.class;
+		JAXBContext jc = JAXBContext.newInstance(eClazz);
+		Unmarshaller unmarshaller = jc.createUnmarshaller();
+		unmarshaller.setAdapter(new UserAdapter(userDao, userMap));
+		readList(unmarshaller, base, "rooms.xml", ROOM_LIST_NODE, ROOM_NODE, eClazz, r -> {
 			Long roomId = r.getId();
 
 			// We need to reset ids as openJPA reject to store them otherwise

@@ -24,7 +24,7 @@ public class ModeratorRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
 	public ModeratorRightIcon(String id, String uid) {
-		super(id, uid, Right.moderator);
+		super(id, uid, Right.MODERATOR);
 		mainCssClass = "right moderator bumper ";
 	}
 

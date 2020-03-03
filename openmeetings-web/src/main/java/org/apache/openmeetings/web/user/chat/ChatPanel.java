@@ -42,7 +42,7 @@ public class ChatPanel extends Panel {
 	}
 
 	public void roomEnter(Room r, IPartialPageRequestHandler handler) {
-		if (r.isHidden(RoomElement.Chat)) {
+		if (r.isHidden(RoomElement.CHAT)) {
 			toggle(handler, false);
 			return;
 		}
@@ -59,7 +59,7 @@ public class ChatPanel extends Panel {
 	}
 
 	public void roomExit(Room r, IPartialPageRequestHandler handler) {
-		if (r.isHidden(RoomElement.Chat)) {
+		if (r.isHidden(RoomElement.CHAT)) {
 			return;
 		}
 		handler.appendJavaScript(String.format("if (typeof(Chat) === 'object') { Chat.removeTab('%1$s%2$d'); }", ID_ROOM_PREFIX, r.getId()));

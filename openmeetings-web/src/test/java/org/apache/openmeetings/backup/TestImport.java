@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
@@ -35,6 +36,8 @@ public class TestImport extends AbstractTestImport {
 	private LdapConfigDao ldapDao;
 	@Autowired
 	private OAuth2Dao oauthDao;
+	@Autowired
+	private RoomDao roomDao;
 
 	@Test
 	public void importVersionNE() throws Exception {
@@ -80,5 +83,13 @@ public class TestImport extends AbstractTestImport {
 		File oauths = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/oauth/oauth2servers.xml").toURI());
 		backupImport.importOauth(oauths.getParentFile());
 		assertEquals(oauthCount + 2, oauthDao.count(), "OAuth should be added");
+	}
+
+	@Test
+	public void importRooms() throws Exception {
+		long roomsCount = roomDao.count();
+		File rooms = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/room/rooms.xml").toURI());
+		backupImport.importRooms(rooms.getParentFile());
+		assertEquals(roomsCount + 1, roomDao.count(), "Room should be added");
 	}
 }

@@ -59,7 +59,7 @@ public class ActionsSubMenu implements Serializable {
 		Injector.get().inject(this);
 		this.room = room;
 		this.mp = mp;
-		visible = !room.getRoom().isHidden(RoomElement.ActionMenu);
+		visible = !room.getRoom().isHidden(RoomElement.ACTION_MENU);
 	}
 
 	public void init() {
@@ -90,7 +90,7 @@ public class ActionsSubMenu implements Serializable {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				room.requestRight(Room.Right.moderator, target);
+				room.requestRight(Room.Right.MODERATOR, target);
 			}
 		};
 		applyWbMenuItem = new RoomMenuItem(mp.getString("785"), mp.getString("1492"), false) {
@@ -98,7 +98,7 @@ public class ActionsSubMenu implements Serializable {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				room.requestRight(Room.Right.whiteBoard, target);
+				room.requestRight(Room.Right.WHITEBOARD, target);
 			}
 		};
 		applyAvMenuItem = new RoomMenuItem(mp.getString("786"), mp.getString("1482"), false) {
@@ -106,7 +106,7 @@ public class ActionsSubMenu implements Serializable {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				room.requestRight(Room.Right.video, target);
+				room.requestRight(Room.Right.VIDEO, target);
 			}
 		};
 		sipDialerMenuItem = new RoomMenuItem(mp.getString("1447"), mp.getString("1488"), false) {
@@ -151,7 +151,7 @@ public class ActionsSubMenu implements Serializable {
 			.add(applyWbMenuItem)
 			.add(applyAvMenuItem)
 			.add(sipDialerMenuItem);
-		if (Room.Type.interview != room.getRoom().getType()) {
+		if (Room.Type.INTERVIEW != room.getRoom().getType()) {
 			actionsMenu
 				.add(downloadPngMenuItem)
 				.add(downloadPdfMenuItem)
@@ -165,7 +165,7 @@ public class ActionsSubMenu implements Serializable {
 			return;
 		}
 		final Room r = room.getRoom();
-		boolean isInterview = Room.Type.interview == r.getType();
+		boolean isInterview = Room.Type.INTERVIEW == r.getType();
 		downloadPngMenuItem.setVisible(!isInterview);
 		downloadPdfMenuItem.setVisible(!isInterview);
 		actionsMenu.setVisible(moder || r.isAllowUserQuestions());
@@ -173,8 +173,8 @@ public class ActionsSubMenu implements Serializable {
 		boolean shareVisible = room.screenShareAllowed();
 		shareMenuItem.setVisible(shareVisible);
 		applyModerMenuItem.setVisible(!moder);
-		applyWbMenuItem.setVisible(!room.getClient().hasRight(Room.Right.whiteBoard));
-		applyAvMenuItem.setVisible(!room.getClient().hasRight(Room.Right.audio) || !room.getClient().hasRight(Room.Right.video));
+		applyWbMenuItem.setVisible(!room.getClient().hasRight(Room.Right.WHITEBOARD));
+		applyAvMenuItem.setVisible(!room.getClient().hasRight(Room.Right.AUDIO) || !room.getClient().hasRight(Room.Right.VIDEO));
 		sipDialerMenuItem.setVisible(r.isSipEnabled() && isSipEnabled());
 		resetWb.setVisible(moder);
 	}

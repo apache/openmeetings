@@ -381,7 +381,7 @@ public class ImportInitvalues {
 		r.setDemoRoom(false);
 		r.setDemoTime(null);
 
-		r.hide(RoomElement.MicrophoneStatus);
+		r.hide(RoomElement.MICROPHONE_STATUS);
 		r.setModerated(false);
 
 		r.setDeleted(false);
@@ -403,22 +403,22 @@ public class ImportInitvalues {
 
 	public void loadDefaultRooms(boolean createRooms, long langId) {
 		if (createRooms) {
-			createRoom(LabelDao.getString("install.room.public.interview", langId), Type.interview, 16L, true, null);
-			createRoom(LabelDao.getString("install.room.public.conference", langId), Type.conference, 32L, true, null);
-			Room r = createRoom(LabelDao.getString("install.room.public.video.only", langId), Type.conference, 32L, true, null);
-			r.hide(RoomElement.Whiteboard);
+			createRoom(LabelDao.getString("install.room.public.interview", langId), Type.INTERVIEW, 16L, true, null);
+			createRoom(LabelDao.getString("install.room.public.conference", langId), Type.CONFERENCE, 32L, true, null);
+			Room r = createRoom(LabelDao.getString("install.room.public.video.only", langId), Type.CONFERENCE, 32L, true, null);
+			r.hide(RoomElement.WHITEBOARD);
 			roomDao.update(r, null);
-			createRoom(LabelDao.getString("install.room.public.video.wb", langId), Type.conference, 32L, true, null);
-			createRoom(LabelDao.getString("install.room.public.presentation", langId), Type.presentation, 100L, true, null);
-			r = createRoom(LabelDao.getString("install.room.presentation.micro", langId), Type.presentation, 100L, true, null);
+			createRoom(LabelDao.getString("install.room.public.video.wb", langId), Type.CONFERENCE, 32L, true, null);
+			createRoom(LabelDao.getString("install.room.public.presentation", langId), Type.PRESENTATION, 100L, true, null);
+			r = createRoom(LabelDao.getString("install.room.presentation.micro", langId), Type.PRESENTATION, 100L, true, null);
 			r.getHiddenElements().clear();
 			roomDao.update(r, null);
 
-			r = createRoom(LabelDao.getString("install.room.conference.micro", langId), Type.conference, 32L, true, null);
+			r = createRoom(LabelDao.getString("install.room.conference.micro", langId), Type.CONFERENCE, 32L, true, null);
 			r.getHiddenElements().clear();
 			roomDao.update(r, null);
 
-			createRoom(LabelDao.getString("install.room.private.conference", langId), Type.conference, 32L, false, 1L);
+			createRoom(LabelDao.getString("install.room.private.conference", langId), Type.CONFERENCE, 32L, false, 1L);
 		}
 	}
 

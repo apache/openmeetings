@@ -27,7 +27,7 @@ public class WhiteboardRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
 	public WhiteboardRightIcon(String id, String uid) {
-		super(id, uid, Right.whiteBoard);
+		super(id, uid, Right.WHITEBOARD);
 		mainCssClass = "right wb bumper ";
 	}
 
@@ -39,12 +39,12 @@ public class WhiteboardRightIcon extends RoomRightIcon {
 	@Override
 	protected boolean hasRight() {
 		final Client c = getClient();
-		return c != null && (c.hasRight(Right.presenter) || c.hasRight(right));
+		return c != null && (c.hasRight(Right.PRESENTER) || c.hasRight(right));
 	}
 
 	@Override
 	protected boolean visible() {
 		Room r = getRoom();
-		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.Whiteboard) && super.visible();
+		return Room.Type.INTERVIEW != r.getType() && !r.isHidden(RoomElement.WHITEBOARD) && super.visible();
 	}
 }

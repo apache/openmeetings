@@ -24,7 +24,7 @@ public class ScreenShareRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
 	public ScreenShareRightIcon(String id, String uid) {
-		super(id, uid, Right.share);
+		super(id, uid, Right.SHARE);
 		mainCssClass = "right screen-share ";
 	}
 

@@ -118,7 +118,7 @@ public class ChatWebSocketHelper extends WebSocketHelper {
 			publish(new WsMessageChat(m, msg));
 		}
 		sendRoom(m.getToRoom().getId(), msg
-				, c -> !m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Right.moderator))
+				, c -> !m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Right.MODERATOR))
 				, (o, c) -> setDates(o, m, c.getUser(), false));
 	}
 

@@ -156,7 +156,7 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 		a.setOwner(owner);
 		a.setRoom(new Room());
 		a.getRoom().setAppointment(true);
-		a.getRoom().setType(Room.Type.conference);
+		a.getRoom().setType(Room.Type.CONFERENCE);
 		for (int i = 0; i < 3; ++i) {
 			MeetingMember mm = new MeetingMember();
 			mm.setUser(getContact(randomUUID().toString(), owner.getId()));

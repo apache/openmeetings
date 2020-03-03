@@ -38,7 +38,7 @@ public class TestWbService extends AbstractWebServiceTest {
 
 	private static RoomDTO createTestRoom(final String sid) {
 		String extId = randomUUID().toString();
-		Room.Type type = Room.Type.presentation;
+		Room.Type type = Room.Type.PRESENTATION;
 		String name = "Unit Test Ext Room1";
 		String comment = "Unit Test Ext Room Comments1";
 		RoomDTO r = new RoomDTO();

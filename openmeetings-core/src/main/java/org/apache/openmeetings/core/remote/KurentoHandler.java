@@ -245,13 +245,13 @@ public class KurentoHandler {
 		boolean r = false;
 		switch (a) {
 			case AUDIO:
-				r = c.hasRight(Right.audio);
+				r = c.hasRight(Right.AUDIO);
 				break;
 			case VIDEO:
-				r = !room.isAudioOnly() && c.hasRight(Right.video);
+				r = !room.isAudioOnly() && c.hasRight(Right.VIDEO);
 				break;
 			case AUDIO_VIDEO:
-				r = !room.isAudioOnly() && c.hasRight(Right.audio) && c.hasRight(Right.video);
+				r = !room.isAudioOnly() && c.hasRight(Right.AUDIO) && c.hasRight(Right.VIDEO);
 				break;
 			default:
 				break;

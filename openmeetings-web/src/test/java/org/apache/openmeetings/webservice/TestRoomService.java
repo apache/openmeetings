@@ -47,7 +47,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 	public void testExternal() {
 		ServiceResult sr = login();
 		String extId = randomUUID().toString();
-		Room.Type type = Room.Type.presentation;
+		Room.Type type = Room.Type.PRESENTATION;
 		String name = "Unit Test Ext Room";
 		String comment = "Unit Test Ext Room Comments";
 		RoomDTO r = new RoomDTO();
@@ -62,7 +62,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 		assertNotNull(room, "Valid room should be returned");
 		assertNotNull(room.getId(), "Room ID should be not empty");
 
-		RoomDTO room1 = getClient(getRoomUrl()).path(String.format("/%s/%s/%s", Room.Type.presentation, UNIT_TEST_EXT_TYPE, extId))
+		RoomDTO room1 = getClient(getRoomUrl()).path(String.format("/%s/%s/%s", Room.Type.PRESENTATION, UNIT_TEST_EXT_TYPE, extId))
 				.query("sid", sr.getMessage())
 				.get(RoomDTO.class);
 		assertNotNull(room1, "Valid room should be returned");
@@ -72,7 +72,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 	@Test
 	public void testCreate1() {
 		String extId = randomUUID().toString();
-		Room.Type type = Room.Type.presentation;
+		Room.Type type = Room.Type.PRESENTATION;
 		String name = "Unit Test Ext Room1";
 		String comment = "Unit Test Ext Room Comments1";
 		RoomDTO r = new RoomDTO();
@@ -88,7 +88,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 
 	@Test
 	public void testCreate2() {
-		Room.Type type = Room.Type.presentation;
+		Room.Type type = Room.Type.PRESENTATION;
 		String name = "Unit Test Ext Room2";
 		String comment = "Unit Test Ext Room Comments2";
 		RoomDTO r = new RoomDTO();
@@ -102,7 +102,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 
 	@Test
 	public void testCreateWithFiles1() {
-		Room.Type type = Room.Type.presentation;
+		Room.Type type = Room.Type.PRESENTATION;
 		String name = "Unit Test Ext Room3";
 		String comment = "Unit Test Ext Room Comments3";
 		RoomDTO r = new RoomDTO();
@@ -123,7 +123,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 		//lets create real file
 		CallResult<FileItemDTO> fileCall = createVerifiedFile(getDefaultProfilePicture(), "img.png", BaseFileItem.Type.Image);
 
-		Room.Type type = Room.Type.presentation;
+		Room.Type type = Room.Type.PRESENTATION;
 		String name = "Unit Test Ext Room4";
 		String comment = "Unit Test Ext Room Comments4";
 		RoomDTO r = new RoomDTO();

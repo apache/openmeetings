@@ -497,9 +497,9 @@ public class AppointmentDialog extends Modal<Appointment> {
 	public static Room createAppRoom() {
 		Room r = new Room();
 		r.setAppointment(true);
-		r.hide(RoomElement.MicrophoneStatus);
+		r.hide(RoomElement.MICROPHONE_STATUS);
 		if (r.getType() == null) {
-			r.setType(Room.Type.conference);
+			r.setType(Room.Type.CONFERENCE);
 		}
 		return r;
 	}

@@ -118,7 +118,7 @@ public class RoomMenuPanel extends Panel {
 		setOutputMarkupPlaceholderTag(true);
 		this.room = room;
 		Room r = room.getRoom();
-		setVisible(!r.isHidden(RoomElement.TopBar));
+		setVisible(!r.isHidden(RoomElement.TOP_BAR));
 		add((roomName = new Label("roomName", r.getName())).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		String tag = getGroup().getTag();
 		add(logo, new Label("tag", tag).setVisible(!Strings.isEmpty(tag)));
@@ -208,12 +208,12 @@ public class RoomMenuPanel extends Panel {
 			return;
 		}
 		Room r = room.getRoom();
-		boolean isInterview = Room.Type.interview == r.getType();
+		boolean isInterview = Room.Type.INTERVIEW == r.getType();
 		User u = room.getClient().getUser();
 		boolean notExternalUser = u.getType() != User.Type.CONTACT;
 		exitMenuItem.setVisible(notExternalUser);
 		filesMenu.setVisible(!isInterview && room.getSidebar().isShowFiles());
-		boolean moder = room.getClient().hasRight(Room.Right.moderator);
+		boolean moder = room.getClient().hasRight(Room.Right.MODERATOR);
 		actionsSubMenu.update(moder, notExternalUser);
 		pollsSubMenu.update(moder, notExternalUser, r);
 		menuPanel.update(handler);

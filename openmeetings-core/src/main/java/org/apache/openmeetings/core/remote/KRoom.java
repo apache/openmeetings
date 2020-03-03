@@ -145,7 +145,7 @@ public class KRoom {
 		if (recordingStarted.compareAndSet(false, true)) {
 			log.debug("##REC:: recording in room {} is starting ::", roomId);
 			Room r = c.getRoom();
-			boolean interview = Room.Type.interview == r.getType();
+			boolean interview = Room.Type.INTERVIEW == r.getType();
 
 			Date now = new Date();
 

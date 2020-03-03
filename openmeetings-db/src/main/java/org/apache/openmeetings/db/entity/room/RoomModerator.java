@@ -28,12 +28,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.user.User;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQuery(name = "getRoomModeratorById", query = "select c from RoomModerator as c where c.id = :id")
@@ -42,26 +46,30 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name = "getRoomModeratorByUserAndRoomId", query = "select c from RoomModerator as c "
 		+ "where c.roomId = :roomId AND c.deleted = false AND c.user.id = :userId")
 @Table(name = "room_moderator")
-@Root(name = "room_moderator")
+@XmlRootElement(name = "room_moderator")
 public class RoomModerator extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	@XmlTransient
 	private Long id;
 
 	@Column(name = "roomId")
+	@XmlTransient
 	private Long roomId;
 
 	@Column(name = "is_supermoderator", nullable = false)
-	@Element(name = "is_supermoderator", data = true)
+	@XmlElement(name = "is_supermoderator", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean superModerator;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	@ForeignKey(enabled = true)
-	@Element(name = "user_id", data = true, required = false)
+	@XmlElement(name = "user_id", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User user;
 
 	@Override

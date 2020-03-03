@@ -140,7 +140,7 @@ public class StreamProcessor implements IStreamProcessor {
 				osd = c.getScreenStream();
 				if (recordingAllowed(c)) {
 					Room r = c.getRoom();
-					if (Room.Type.interview == r.getType()) {
+					if (Room.Type.INTERVIEW == r.getType()) {
 						log.warn("This shouldn't be called for interview room");
 						break;
 					}
@@ -213,10 +213,10 @@ public class StreamProcessor implements IStreamProcessor {
 
 		if (!activityAllowed(c, a, c.getRoom())) {
 			if (a == Activity.AUDIO || a == Activity.AUDIO_VIDEO) {
-				c.allow(Room.Right.audio);
+				c.allow(Room.Right.AUDIO);
 			}
 			if (!c.getRoom().isAudioOnly() && (a == Activity.VIDEO || a == Activity.AUDIO_VIDEO)) {
-				c.allow(Room.Right.video);
+				c.allow(Room.Right.VIDEO);
 			}
 		}
 		if (activityAllowed(c, a, c.getRoom())) {
@@ -297,7 +297,7 @@ public class StreamProcessor implements IStreamProcessor {
 			if (streams.isEmpty()) {
 				log.info("No more screen streams in the room, stopping sharing");
 				room.stopSharing();
-				if (Room.Type.interview != room.getType() && room.isRecording()) {
+				if (Room.Type.INTERVIEW != room.getType() && room.isRecording()) {
 					log.info("No more screen streams in the non-interview room, stopping recording");
 					room.stopRecording(this, null);
 				}
@@ -320,10 +320,10 @@ public class StreamProcessor implements IStreamProcessor {
 			return false;
 		}
 		Room r = c.getRoom();
-		return r != null && Room.Type.interview != r.getType()
-				&& !r.isHidden(RoomElement.ScreenSharing)
+		return r != null && Room.Type.INTERVIEW != r.getType()
+				&& !r.isHidden(RoomElement.SCREEN_SHARING)
 				&& r.isAllowRecording()
-				&& c.hasRight(Right.share);
+				&& c.hasRight(Right.SHARE);
 	}
 
 	public boolean screenShareAllowed(Client c) {
@@ -417,7 +417,7 @@ public class StreamProcessor implements IStreamProcessor {
 
 	public boolean hasRightsToRecord(Client c) {
 		Room r = c.getRoom();
-		return r != null && r.isAllowRecording() && c.hasRight(Right.moderator);
+		return r != null && r.isAllowRecording() && c.hasRight(Right.MODERATOR);
 	}
 
 	public boolean recordingAllowed(Client c) {
