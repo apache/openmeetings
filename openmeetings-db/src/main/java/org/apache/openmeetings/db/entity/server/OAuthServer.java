@@ -44,7 +44,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.bind.adapter.OauthMapAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
@@ -68,12 +67,10 @@ public class OAuthServer extends HistoricalEntity {
 
 	@Column(name = "name")
 	@XmlElement(name = "name", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name;
 
 	@Column(name = "icon_url")
 	@XmlElement(name = "iconUrl", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String iconUrl;
 
 	@Column(name = "enabled", nullable = false)
@@ -83,27 +80,22 @@ public class OAuthServer extends HistoricalEntity {
 
 	@Column(name = "client_id")
 	@XmlElement(name = "clientId", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String clientId;
 
 	@Column(name = "client_secret")
 	@XmlElement(name = "clientSecret", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String clientSecret;
 
 	@Column(name = "key_url")
 	@XmlElement(name = "requestKeyUrl", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String requestKeyUrl;
 
 	@Column(name = "token_url")
 	@XmlElement(name = "requestTokenUrl", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String requestTokenUrl;
 
 	@Column(name = "token_attributes")
 	@XmlElement(name = "requestTokenAttributes", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String requestTokenAttributes;
 
 	@Column(name = "token_method")
@@ -113,7 +105,6 @@ public class OAuthServer extends HistoricalEntity {
 
 	@Column(name = "info_url")
 	@XmlElement(name = "requestInfoUrl", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String requestInfoUrl;
 
 	@Column(name = "info_method")

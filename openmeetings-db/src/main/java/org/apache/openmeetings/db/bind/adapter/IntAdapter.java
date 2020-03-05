@@ -19,8 +19,6 @@
 package org.apache.openmeetings.db.bind.adapter;
 
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_BEGIN;
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_END;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
@@ -28,7 +26,7 @@ public class IntAdapter extends XmlAdapter<String, Integer> {
 
 	@Override
 	public String marshal(Integer v) throws Exception {
-		return CDATA_BEGIN + (v == null ? "0" : v.toString()) + CDATA_END;
+		return (v == null ? "0" : v.toString());
 	}
 
 	@Override

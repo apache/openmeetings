@@ -49,7 +49,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.DateAdapter;
 import org.apache.openmeetings.db.bind.adapter.PollTypeAdapter;
 import org.apache.openmeetings.db.bind.adapter.RoomAdapter;
@@ -112,12 +111,10 @@ public class RoomPoll implements IDataProviderEntity {
 
 	@Column(name = "name")
 	@XmlElement(name = "pollname", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name;
 
 	@Column(name = "question")
 	@XmlElement(name = "pollquestion", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String question;
 
 	@Column(name = "created")

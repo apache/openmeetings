@@ -39,7 +39,6 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.DateAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
@@ -103,12 +102,10 @@ public class RecordingChunk extends HistoricalEntity {
 
 	@Column(name = "stream_name")
 	@XmlElement(name = "streamName")
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String streamName;
 
 	@Column(name = "sid")
 	@XmlElement(name = "sid", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String sid;
 
 	@Column(name = "type")

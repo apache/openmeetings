@@ -27,7 +27,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 
 @Entity
@@ -59,7 +58,6 @@ public class FileItem extends BaseFileItem {
 
 	@Column(name = "external_id")
 	@XmlElement(name = "externalId", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String externalId;
 
 	@Override

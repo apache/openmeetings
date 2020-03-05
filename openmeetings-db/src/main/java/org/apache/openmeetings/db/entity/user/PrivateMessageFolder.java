@@ -35,7 +35,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.DateAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
@@ -55,7 +54,6 @@ public class PrivateMessageFolder implements IDataProviderEntity {
 
 	@Column(name = "folder_name")
 	@XmlElement(name = "folderName")
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String folderName;
 
 	@Column(name = "user_id")

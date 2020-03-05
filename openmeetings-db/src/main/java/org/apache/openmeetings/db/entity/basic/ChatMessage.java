@@ -42,7 +42,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.DateAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.bind.adapter.RoomAdapter;
@@ -112,7 +111,6 @@ public class ChatMessage implements IDataProviderEntity {
 	@Column(name = "message")
 	@Lob
 	@XmlElement(name = "message", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String message;
 
 	@Column(name = "sent")
@@ -127,7 +125,6 @@ public class ChatMessage implements IDataProviderEntity {
 
 	@Column(name = "from_name")
 	@XmlElement(name = "from_name", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String fromName; // this is required for users with no first/last name specified
 
 	@Column(name = "status")

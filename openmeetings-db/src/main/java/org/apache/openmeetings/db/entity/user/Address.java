@@ -27,9 +27,7 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 
 @Entity
@@ -44,48 +42,39 @@ public class Address extends HistoricalEntity {
 
 	@Column(name = "additionalname")
 	@XmlElement(name = "additionalname", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String additionalname;
 
 	@Lob
 	@Column(name = "comment", length = 2048)
 	@XmlElement(name = "comment", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String comment;
 
 	@Column(name = "fax")
 	@XmlElement(name = "fax", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String fax;
 
 	@Column(name = "country")
 	@XmlElement(name = "country", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String country;
 
 	@Column(name = "street")
 	@XmlElement(name = "street", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String street;
 
 	@Column(name = "town")
 	@XmlElement(name = "town", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String town;
 
 	@Column(name = "zip")
 	@XmlElement(name = "zip", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String zip;
 
 	@Column(name = "email")
 	@XmlElement(name = "mail", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String email;
 
 	@Column(name = "phone")
 	@XmlElement(name = "phone", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String phone;
 
 	public String getAdditionalname() {

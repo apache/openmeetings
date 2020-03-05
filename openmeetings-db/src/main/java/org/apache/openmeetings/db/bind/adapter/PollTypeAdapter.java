@@ -19,8 +19,6 @@
 package org.apache.openmeetings.db.bind.adapter;
 
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_BEGIN;
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_END;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
@@ -30,7 +28,7 @@ public class PollTypeAdapter extends XmlAdapter<String, RoomPoll.Type> {
 
 	@Override
 	public String marshal(RoomPoll.Type v) throws Exception {
-		return CDATA_BEGIN + v.getId() + CDATA_END;
+		return "" + v.getId();
 	}
 
 	@Override

@@ -18,9 +18,6 @@
  */
 package org.apache.openmeetings.db.bind.adapter;
 
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_BEGIN;
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_END;
-
 import java.util.Locale;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -32,7 +29,7 @@ public class RoomElementAdapter extends XmlAdapter<String, Room.RoomElement> {
 
 	@Override
 	public String marshal(Room.RoomElement v) throws Exception {
-		return CDATA_BEGIN + v.name().toUpperCase(Locale.ROOT) + CDATA_END;
+		return v.name().toUpperCase(Locale.ROOT);
 	}
 
 	@Override

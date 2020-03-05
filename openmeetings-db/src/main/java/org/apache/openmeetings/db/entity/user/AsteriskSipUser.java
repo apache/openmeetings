@@ -35,7 +35,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.IntAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 
@@ -65,27 +64,22 @@ public class AsteriskSipUser implements Serializable {
 
 	@Column(name = "name", nullable = false, length = 128)
 	@XmlElement(name = "name", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name = ""; // Varchar 128
 
 	@Column(name = "secret", length = 128)
 	@XmlElement(name = "secret", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String secret; // Varchar 128
 
 	@Column(name = "context", length = 128)
 	@XmlElement(name = "context", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String context; // Varchar 128
 
 	@Column(name = "host", nullable = false, length = 128)
 	@XmlElement(name = "host", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String host = "dynamic"; // Varchar 128
 
 	@Column(name = "ipaddr", nullable = false, length = 128)
 	@XmlElement(name = "ipaddr", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String ipaddr = ""; // Varchar 128
 
 	@Column(name = "port", nullable = false, length = 8)
@@ -100,22 +94,18 @@ public class AsteriskSipUser implements Serializable {
 
 	@Column(name = "defaultuser", nullable = true, length = 128)
 	@XmlElement(name = "defaultuser", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String defaultuser; // Varchar 128
 
 	@Column(name = "fullcontact", length = 512)
 	@XmlElement(name = "fullcontact", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String fullcontact;
 
 	@Column(name = "regserver", nullable = true, length = 128)
 	@XmlElement(name = "regserver", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String regserver; // Varchar 128
 
 	@Column(name = "useragent", nullable = true, length = 128)
 	@XmlElement(name = "useragent", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String useragent; // Varchar 128
 
 	@Column(name = "lastms")
@@ -125,22 +115,18 @@ public class AsteriskSipUser implements Serializable {
 
 	@Column(name = "md5secret")
 	@XmlElement(name = "md5secret", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String md5secret;
 
 	@Column(name = "nat", nullable = false)
 	@XmlElement(name = "nat", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String nat = "force_rport,comedia";
 
 	@Column(name = "callbackextension", nullable = true, length = 250)
 	@XmlElement(name = "callbackextension", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String callbackextension;
 
 	@Column(name = "allow", nullable = false, length = 100)
 	@XmlElement(name = "allow", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String allow = "ulaw;alaw;h264";
 
 	public long getId() {

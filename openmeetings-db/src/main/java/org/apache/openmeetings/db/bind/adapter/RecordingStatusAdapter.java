@@ -18,9 +18,6 @@
  */
 package org.apache.openmeetings.db.bind.adapter;
 
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_BEGIN;
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_END;
-
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -31,10 +28,9 @@ public class RecordingStatusAdapter extends XmlAdapter<String, Recording.Status>
 
 	@Override
 	public String marshal(Recording.Status v) throws Exception {
-		return CDATA_BEGIN + (v == null
+		return "" + (v == null
 				? Recording.Status.NONE.name()
-				: v.name())
-				+ CDATA_END;
+				: v.name());
 	}
 
 	@Override

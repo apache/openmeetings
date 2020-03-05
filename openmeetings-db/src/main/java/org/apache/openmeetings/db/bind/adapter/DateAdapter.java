@@ -18,9 +18,6 @@
  */
 package org.apache.openmeetings.db.bind.adapter;
 
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_BEGIN;
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_END;
-
 import java.util.Date;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -29,7 +26,7 @@ public class DateAdapter extends XmlAdapter<String, Date> {
 
 	@Override
 	public String marshal(Date v) throws Exception {
-		return CDATA_BEGIN + v.getTime() + CDATA_END;
+		return "" + v.getTime();
 	}
 
 	@Override

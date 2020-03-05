@@ -34,7 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.IntAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
@@ -64,7 +63,6 @@ public class Group extends HistoricalEntity {
 
 	@Column(name = "name")
 	@XmlElement(name = "name", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name;
 
 	@Column(name = "insertedby")
@@ -77,7 +75,6 @@ public class Group extends HistoricalEntity {
 
 	@Column(name = "tag")
 	@XmlElement(name = "tag", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String tag;
 
 	@Column(name = "limited", nullable = false)

@@ -19,8 +19,6 @@
 package org.apache.openmeetings.db.bind.adapter;
 
 import static org.apache.commons.lang3.math.NumberUtils.toLong;
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_BEGIN;
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_END;
 
 import java.util.Map;
 
@@ -44,7 +42,7 @@ public abstract class EntityAdapter<E extends IDataProviderEntity> extends XmlAd
 
 	@Override
 	public String marshal(E v) throws Exception {
-		return CDATA_BEGIN + v.getId() + CDATA_END;
+		return "" + v.getId();
 	}
 
 	@Override

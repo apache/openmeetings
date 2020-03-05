@@ -18,16 +18,13 @@
  */
 package org.apache.openmeetings.db.bind.adapter;
 
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_BEGIN;
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_END;
-
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class BooleanAdapter extends XmlAdapter<String, Boolean> {
 
 	@Override
 	public String marshal(Boolean v) throws Exception {
-		return CDATA_BEGIN + Boolean.TRUE.equals(v) + CDATA_END;
+		return "" + Boolean.TRUE.equals(v);
 	}
 
 	@Override

@@ -40,7 +40,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.ConfigTypeAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.bind.adapter.UserAdapter;
@@ -84,23 +83,19 @@ public class Configuration extends HistoricalEntity {
 
 	@Column(name = "om_key", unique = true)
 	@XmlElement(name = "key", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String key;
 
 	@Column(name = "value")
 	@XmlElement(name = "value", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String value;
 
 	@Lob
 	@Column(name = "comment", length = 2048)
 	@XmlElement(name = "comment", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String comment;
 
 	@Column(name = "fromVersion")
 	@XmlElement(name = "fromVersion", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String fromVersion;
 
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -39,7 +39,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.bind.adapter.AppointmentAdapter;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
@@ -79,7 +78,6 @@ public class MeetingMember extends HistoricalEntity {
 
 	@Column(name = "appointment_status")
 	@XmlElement(name = "appointmentStatus", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String appointmentStatus; // status of the appointment denial, acceptance, wait.
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

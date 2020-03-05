@@ -54,7 +54,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.FileTypeAdapter;
 import org.apache.openmeetings.db.bind.adapter.IntAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
@@ -100,12 +99,10 @@ public abstract class BaseFileItem extends HistoricalEntity {
 
 	@Column(name = "name")
 	@XmlElement(name = "fileName", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name;
 
 	@Column(name = "hash")
 	@XmlElement(name = "fileHash", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String hash;
 
 	@Column(name = "parent_item_id")
@@ -158,7 +155,6 @@ public abstract class BaseFileItem extends HistoricalEntity {
 
 	@Column(name = "external_type")
 	@XmlElement(name = "externalType", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String externalType;
 
 	// Not Mapped

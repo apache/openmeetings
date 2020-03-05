@@ -49,7 +49,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.bind.adapter.AppointmentReminderAdapter;
 import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.DateAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.bind.adapter.OmCalendarAdapter;
@@ -184,12 +183,10 @@ public class Appointment extends HistoricalEntity {
 
 	@Column(name = "title")
 	@XmlElement(name = "appointmentName", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String title;
 
 	@Column(name = "location")
 	@XmlElement(name = "appointmentLocation", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String location;
 
 	@Column(name = "app_start") // Oracle fails in case 'start' is used as column name
@@ -205,7 +202,6 @@ public class Appointment extends HistoricalEntity {
 	@Lob
 	@Column(name = "description", length = 2048)
 	@XmlElement(name = "appointmentDescription", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String description;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -250,7 +246,6 @@ public class Appointment extends HistoricalEntity {
 
 	@Column(name = "icalId")
 	@XmlElement(name = "icalId", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String icalId;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -270,7 +265,6 @@ public class Appointment extends HistoricalEntity {
 
 	@Column(name = "password")
 	@XmlElement(name = "icalId", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String password;
 
 	@Column(name = "is_connected_event", nullable = false)
@@ -292,12 +286,10 @@ public class Appointment extends HistoricalEntity {
 
 	@Column(name = "href")
 	@XmlElement(name = "href", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String href;
 
 	@Column(name = "etag")
 	@XmlElement(name = "etag", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String etag;
 
 

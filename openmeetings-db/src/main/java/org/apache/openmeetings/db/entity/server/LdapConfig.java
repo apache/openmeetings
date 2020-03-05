@@ -38,7 +38,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.user.User;
 
@@ -59,12 +58,10 @@ public class LdapConfig extends HistoricalEntity {
 
 	@Column(name = "name")
 	@XmlElement(name = "name", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name;
 
 	@Column(name = "config_file_name")
 	@XmlElement(name = "configFileName", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String configFileName;
 
 	@Column(name = "add_domain_to_user_name", nullable = false)
@@ -74,7 +71,6 @@ public class LdapConfig extends HistoricalEntity {
 
 	@Column(name = "domain")
 	@XmlElement(name = "domain", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String domain;
 
 	@Column(name = "is_active", nullable = false)
@@ -97,7 +93,6 @@ public class LdapConfig extends HistoricalEntity {
 	@Lob
 	@Column(name = "comment", length = 2048)
 	@XmlElement(name = "comment", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String comment;
 
 	@Override

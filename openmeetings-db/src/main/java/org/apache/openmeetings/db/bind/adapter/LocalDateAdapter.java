@@ -18,9 +18,6 @@
  */
 package org.apache.openmeetings.db.bind.adapter;
 
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_BEGIN;
-import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_END;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -34,7 +31,7 @@ public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
 
 	@Override
 	public String marshal(LocalDate v) throws Exception {
-		return CDATA_BEGIN + v.format(DateTimeFormatter.ofPattern(CalendarPatterns.ISO8601_DATE_FORMAT_STRING)) + CDATA_END;
+		return v.format(DateTimeFormatter.ofPattern(CalendarPatterns.ISO8601_DATE_FORMAT_STRING));
 	}
 
 	@Override

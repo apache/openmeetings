@@ -68,7 +68,6 @@ import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.LoadFetchGroup;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.DateAdapter;
 import org.apache.openmeetings.db.bind.adapter.LocalDateAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
@@ -211,7 +210,6 @@ public class User extends HistoricalEntity {
 
 	@Column(name = "firstname")
 	@XmlElement(name = "firstname", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String firstname;
 
 	@Column(name = "lastlogin")
@@ -220,24 +218,20 @@ public class User extends HistoricalEntity {
 
 	@Column(name = "lastname")
 	@XmlElement(name = "lastname", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String lastname;
 
 	@Column(name = "displayName")
 	@XmlElement(name = "displayName", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String displayName;
 
 	@Column(name = "login")
 	@XmlElement(name = "login", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String login;
 
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "password", length = 1024)
 	@LoadFetchGroup(FETCH_GROUP_BACKUP)
 	@XmlElement(name = "pass", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String password;
 
 	@Column(name = "regdate")
@@ -253,7 +247,6 @@ public class User extends HistoricalEntity {
 
 	@Column(name = "pictureuri")
 	@XmlElement(name = "pictureUri", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String pictureUri;
 
 	@Column(name = "language_id")
@@ -263,7 +256,6 @@ public class User extends HistoricalEntity {
 
 	@Column(name = "resethash")
 	@XmlElement(name = "resethash", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String resethash;
 
 	@Column(name = "resetdate")
@@ -273,7 +265,6 @@ public class User extends HistoricalEntity {
 
 	@Column(name = "activatehash")
 	@XmlElement(name = "activatehash", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String activatehash;
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -297,11 +288,9 @@ public class User extends HistoricalEntity {
 	// Vars to simulate external Users
 	@Column(name = "external_id")
 	@XmlElement(name = "externalUserId", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String externalId;
 
 	@XmlElement(name = "externalUserType", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	@Deprecated(since = "5.0")
 	@Transient
 	/**
@@ -314,7 +303,6 @@ public class User extends HistoricalEntity {
 	 */
 	@Column(name = "time_zone_id")
 	@XmlElement(name = "timeZoneId", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String timeZoneId;
 
 	@Transient
@@ -328,12 +316,10 @@ public class User extends HistoricalEntity {
 
 	@Column(name = "user_offers")
 	@XmlElement(name = "userOffers", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String userOffers;
 
 	@Column(name = "user_searchs")
 	@XmlElement(name = "userSearchs", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String userSearchs;
 
 	@Column(name = "show_contact_data", nullable = false)

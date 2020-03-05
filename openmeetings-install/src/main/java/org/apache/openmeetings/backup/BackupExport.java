@@ -51,7 +51,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Writer;
+import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -62,7 +62,6 @@ import java.util.zip.ZipOutputStream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
@@ -94,15 +93,12 @@ import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.XmlHelper;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
 
 /**
  *
@@ -388,35 +384,33 @@ public class BackupExport {
 	}
 
 	private static <T> void writeList(OutputStream os, String listElement, List<T> list) throws Exception {
-		XMLStreamWriter writer = XmlHelper.createOutputFactory().createXMLStreamWriter(os);
-		writer.writeStartDocument();
-		writer.writeComment(BACKUP_COMMENT);
-		writer.writeStartElement("root");
-		writer.writeStartElement(listElement);
+		try (OutputStreamWriter sw = new OutputStreamWriter(os)) {
+			sw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+			sw.write("<!--");
+			sw.write(BACKUP_COMMENT);
+			sw.write("-->\n");
+			sw.write("<root>\n");
+			sw.write("<" + listElement + ">\n");
 
-		if (list != null && !list.isEmpty()) {
-			@SuppressWarnings("unchecked")
-			Class<T> eClazz = (Class<T>)list.get(0).getClass();
-			JAXBContext jc = JAXBContext.newInstance(eClazz);
-			Marshaller marshaller = jc.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-			marshaller.setProperty(CharacterEscapeHandler.class.getName(), new CharacterEscapeHandler() {
-				@Override
-				public void escape(char[] ac, int i, int j, boolean flag, Writer writer) throws IOException {
-					writer.write(ac, i, j);
-				}
-			});
-			for (T t : list) {
-				try {
-					marshaller.marshal(t, writer);
-				} catch (Exception e) {
-					log.debug("Exception While writing node of type: " + t.getClass(), e);
+			if (list != null && !list.isEmpty()) {
+				@SuppressWarnings("unchecked")
+				Class<T> eClazz = (Class<T>)list.get(0).getClass();
+				JAXBContext jc = JAXBContext.newInstance(eClazz);
+				Marshaller marshaller = jc.createMarshaller();
+				marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+				marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+				for (T t : list) {
+					try {
+						marshaller.marshal(t, sw);
+						sw.write("\n");
+					} catch (Exception e) {
+						log.debug("Exception While writing node of type: " + t.getClass(), e);
+					}
 				}
 			}
+			sw.write("</" + listElement + ">\n");
+			sw.write("</root>\n");
 		}
-		writer.writeEndElement();
-		writer.writeEndElement();
 	}
 
 	private static void writeZip(String prefix, URI base, File file, ZipOutputStream zos) throws IOException {

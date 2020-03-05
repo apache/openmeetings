@@ -45,7 +45,6 @@ import org.apache.openjpa.persistence.FetchAttribute;
 import org.apache.openjpa.persistence.FetchGroup;
 import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.DateAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.bind.adapter.RecordingStatusAdapter;
@@ -113,7 +112,6 @@ public class Recording extends BaseFileItem {
 
 	@Column(name = "comment")
 	@XmlElement(name = "comment", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String comment;
 
 	@Column(name = "record_start")
@@ -128,7 +126,6 @@ public class Recording extends BaseFileItem {
 
 	@Column(name = "duration")
 	@XmlElement(name = "duration", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String duration;
 
 	@Column(name = "is_interview")

@@ -117,8 +117,8 @@ public class RemoteSessionObject {
 		return externalId;
 	}
 
-	public void setExternalId(String externalUserId) {
-		this.externalId = externalUserId;
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
 	}
 
 	public String getExternalType() {

@@ -37,7 +37,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
@@ -79,19 +78,16 @@ public class OmCalendar extends HistoricalEntity {
 
 	@Column(name = "title")
 	@XmlElement(name = "title", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String title;
 
 	// Can Also act as the Google Calendar ID for Google Calendars
 	@Column(name = "href")
 	@XmlElement(name = "href", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String href;
 
 	// Can also act as the Google API Key for Google Calendars. Note, not always needed.
 	@Column(name = "sync_token")
 	@XmlElement(name = "token", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String token;
 
 	@Column(name = "sync_type")

@@ -57,7 +57,6 @@ import org.apache.openjpa.persistence.FetchGroup;
 import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
-import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.IntAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.bind.adapter.RoomElementAdapter;
@@ -175,13 +174,11 @@ public class Room extends HistoricalEntity {
 
 	@Column(name = "name")
 	@XmlElement(name = "name", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name;
 
 	@Lob
 	@Column(name = "comment")
 	@XmlElement(name = "comment", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String comment;
 
 	@Column(name = "type")
@@ -208,11 +205,9 @@ public class Room extends HistoricalEntity {
 	// Vars to simulate external Room
 	@Column(name = "external_id")
 	@XmlElement(name = "externalId", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String externalId;
 
 	@XmlElement(name = "externalType", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	@Deprecated(since = "5.0")
 	@Transient
 	/**
@@ -260,7 +255,6 @@ public class Room extends HistoricalEntity {
 
 	@Column(name = "redirect_url")
 	@XmlElement(name = "redirectURL", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String redirectURL;
 
 	@Column(name = "owner_id")
@@ -319,12 +313,10 @@ public class Room extends HistoricalEntity {
 
 	@Column(name = "confno")
 	@XmlElement(name = "confno", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String confno;
 
 	@Column(name = "pin")
 	@XmlElement(name = "pin", required = false)
-	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String pin;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
