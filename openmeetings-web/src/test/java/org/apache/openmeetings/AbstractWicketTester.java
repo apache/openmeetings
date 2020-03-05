@@ -47,9 +47,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
-
 public class AbstractWicketTester extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(AbstractWicketTester.class);
 	public static final String PATH_CHILD = "main-container:main:contents:child";
@@ -104,30 +101,20 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 		assertTrue(s.isSignedIn(), "Web session is not signed in for user: " + (login != null ? login : adminUsername));
 	}
 
-	public ButtonAjaxBehavior getButtonBehavior(String path, String name) {
-		return getButtonBehavior(tester, path, name);
+	public AbstractAjaxBehavior getButtonBehavior(String path, int idx) {
+		return getButtonBehavior(tester, path, idx);
 	}
 
-	public static <T extends Serializable> ButtonAjaxBehavior getButtonBehavior(WicketTester tester, String path, String name) {
+	public static <T extends Serializable> AbstractAjaxBehavior getButtonBehavior(WicketTester tester, String path, int idx) {
 		Args.notNull(path, "path");
-		Args.notNull(name, "name");
-		@SuppressWarnings("unchecked")
-		AbstractDialog<T> dialog = (AbstractDialog<T>)tester.getComponentFromLastRenderedPage(path);
-		List<ButtonAjaxBehavior> bl = dialog.getBehaviors(ButtonAjaxBehavior.class);
-		for (ButtonAjaxBehavior bb : bl) {
-			if (name.equals(bb.getButton().getName())) {
-				return bb;
-			}
-		}
-		fail(String.format("Button '%s' not found for dialog '%s'", name, path));
-		return null;
+		return (AbstractAjaxBehavior)tester.getComponentFromLastRenderedPage(path + ":dialog:footer:buttons:" + idx + ":button").getBehaviorById(0);
 	}
 
 	protected void testArea(String user, Consumer<MainPage> consumer) throws OmException {
 		assertTrue(((WebSession)tester.getSession()).signIn(user, userpass, User.Type.USER, null));
 		MainPage page = tester.startPage(MainPage.class);
 		tester.assertRenderedPage(MainPage.class);
-		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(0));
+		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(1));
 		tester.executeBehavior((AbstractAjaxBehavior)page.get("main-container").getBehaviorById(0));
 		WebSocketTester webSocketTester = new WebSocketTester(tester, page);
 		webSocketTester.sendMessage(CONNECTED_MSG);

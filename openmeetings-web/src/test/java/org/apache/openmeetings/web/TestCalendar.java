@@ -35,8 +35,8 @@ import org.apache.wicket.util.tester.FormTester;
 import org.junit.jupiter.api.Test;
 
 import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
-import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
-import com.googlecode.wicket.jquery.ui.widget.menu.Menu;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 
 public class TestCalendar extends AbstractWicketTester {
 	private static final String PATH_APPOINTMENT_DLG = String.format("%s:appointment", PATH_CHILD);
@@ -45,10 +45,11 @@ public class TestCalendar extends AbstractWicketTester {
 	@Test
 	public void testEventCreate() throws OmException {
 		testArea(regularUsername, p -> {
-			Menu menu = (Menu)p.get(PATH_MENU);
+			Navbar menu = (Navbar)p.get(PATH_MENU);
 			assertNotNull(menu);
-			tester.getRequest().setParameter("hash", menu.getItemList().get(0).getItems().get(1).getId());
-			tester.executeBehavior((AbstractAjaxBehavior)menu.getBehaviorById(0));
+			tester.executeBehavior((AbstractAjaxBehavior)menu.get("collapse:navLeftListEnclosure:navLeftList:0:component:dropdown-menu:buttons:1:button").getBehaviorById(0));
+			//tester.getRequest().setParameter("hash", menu.getItemList().get(0).getItems().get(1).getId());
+			//tester.executeBehavior((AbstractAjaxBehavior)menu.getBehaviorById(0));
 
 			tester.assertComponent(PATH_CHILD, CalendarPanel.class);
 			CalendarPanel cal = (CalendarPanel)p.get(PATH_CHILD);
@@ -65,7 +66,7 @@ public class TestCalendar extends AbstractWicketTester {
 			//check inviteeType:groupContainer:groups is invisible for regular user
 			String title = String.format("title%s", randomUUID());
 			appTester.setValue("title", title);
-			ButtonAjaxBehavior save = getButtonBehavior(PATH_APPOINTMENT_DLG, "save");
+			AbstractAjaxBehavior save = getButtonBehavior(PATH_APPOINTMENT_DLG, 0);
 			tester.executeBehavior(save);
 
 			List<Appointment> appts = appointmentDao.searchByTitle(u.getId(), title);

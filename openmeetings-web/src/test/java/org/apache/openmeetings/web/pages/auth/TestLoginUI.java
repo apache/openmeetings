@@ -37,14 +37,13 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.ResetPage;
+import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.tester.FormTester;
 import org.junit.jupiter.api.Test;
-
-import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 
 public class TestLoginUI extends AbstractWicketTester {
 	private final static String PATH_REGISTER = "register:form";
@@ -84,7 +83,7 @@ public class TestLoginUI extends AbstractWicketTester {
 		tester.startPage(SignInPage.class);
 		tester.assertRenderedPage(SignInPage.class);
 
-		ButtonAjaxBehavior b = getButtonBehavior("signin", "register");
+		AbstractAjaxBehavior b = getButtonBehavior("signin", 1);
 		tester.executeBehavior(b);
 		return tester.newFormTester(PATH_REGISTER);
 	}
@@ -146,7 +145,7 @@ public class TestLoginUI extends AbstractWicketTester {
 	}
 
 	private void performRegister(String uid, String lbl) throws ReflectiveOperationException, SecurityException {
-		ButtonAjaxBehavior b1 = getButtonBehavior("signin", "register");
+		AbstractAjaxBehavior b1 = getButtonBehavior("signin", 1);
 		tester.executeBehavior(b1);
 		FormTester formTester = tester.newFormTester(PATH_REGISTER);
 		formTester.setValue("login", getLogin(uid));
@@ -159,7 +158,7 @@ public class TestLoginUI extends AbstractWicketTester {
 		formTester.submit("submit");
 		checkErrors(0);
 		tester.assertLabel("register:confirmRegistration:container:message", getEscapedString(lbl));
-		ButtonAjaxBehavior b2 = getButtonBehavior("register:confirmRegistration", "OK");
+		AbstractAjaxBehavior b2 = getButtonBehavior("register:confirmRegistration", 0);
 		tester.executeBehavior(b2);
 	}
 
