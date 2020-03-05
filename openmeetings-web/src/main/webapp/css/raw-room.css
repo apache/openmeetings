@@ -510,7 +510,7 @@ html[dir="rtl"] .room-block .sidebar {
 	min-width: 250px;
 	max-width: 250px;
 }
-.main.room.interview .wb-block .wb-area .rec-btn {
+.main.room.INTERVIEW .wb-block .wb-area .rec-btn {
 	z-index: 100;
 	border-radius: 30px;
 	position: absolute;
@@ -519,17 +519,17 @@ html[dir="rtl"] .room-block .sidebar {
 	width: 40px;
 	height: var(--rec-btn-height);
 }
-.main.room.interview .wb-block .wb-area .pod-area {
+.main.room.INTERVIEW .wb-block .wb-area .pod-area {
 	width: 100%;
 	height: calc(100% - var(--rec-btn-height));
 }
-.main.room.interview .wb-block .wb-area .rec-btn .ui-button-icon.ui-icon.stop
-, .main.room.interview .wb-block .wb-area .rec-btn .ui-button-icon.ui-icon.record
+.main.room.INTERVIEW .wb-block .wb-area .rec-btn .ui-button-icon.ui-icon.stop
+, .main.room.INTERVIEW .wb-block .wb-area .rec-btn .ui-button-icon.ui-icon.record
 {
 	background-image: none;
 	background-color: red;
 }
-.main.room.interview .wb-block .wb-area .rec-btn .ui-button-icon.ui-icon.record {
+.main.room.INTERVIEW .wb-block .wb-area .rec-btn .ui-button-icon.ui-icon.record {
 	border-radius: 15px;
 }
 #quick-vote {
@@ -553,14 +553,14 @@ html[dir="rtl"] .room-block .sidebar {
 #quick-vote .control.con {
 	background-image: url(images/cancel.png);
 }
-.main.room.interview #quick-vote {
+.main.room.INTERVIEW #quick-vote {
 	z-index: 100;
 	right: 10px;
 	bottom: 0;
 	padding: 0px 5px 0px 5px;
 	height: 40px;
 }
-.main.room.interview #quick-vote .close {
+.main.room.INTERVIEW #quick-vote .close {
 	display: inline-block;
 	float: right;
 }

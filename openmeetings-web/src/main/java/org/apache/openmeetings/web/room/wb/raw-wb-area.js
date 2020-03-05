@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var PRESENTER = 'presenter';
-var WHITEBOARD = 'whiteBoard';
+var PRESENTER = 'PRESENTER';
+var WHITEBOARD = 'WHITEBOARD';
 var DrawWbArea = function() {
 	const self = BaseWbArea()
 		, arrowImg = new Image(), delImg = new Image();

@@ -181,7 +181,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 						// the loaded credentials are wrong. erase them.
 						strategy.remove();
 					}
-				} catch (OmException e) {
+				} catch (Exception e) {
 					//no-op, bad credentials
 				}
 			}

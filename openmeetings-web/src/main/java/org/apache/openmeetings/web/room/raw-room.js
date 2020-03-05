@@ -214,7 +214,7 @@ var Room = (function() {
 		const close = $('#quick-vote .close');
 		if (close.length === 1) {
 			close.off();
-			if (_hasRight(['superModerator', 'moderator', 'presenter'])) {
+			if (_hasRight(['SUPER_MODERATOR', 'MODERATOR', 'PRESENTER'])) {
 				close.show().click(function() {
 					const _qconf = $('#quick-confirmation');
 					_qconf.dialog({
