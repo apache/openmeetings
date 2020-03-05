@@ -18,11 +18,7 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
-import org.apache.openmeetings.db.entity.user.User;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,41 +30,61 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.Date;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.DateAdapter;
+import org.apache.openmeetings.db.bind.adapter.IntAdapter;
+import org.apache.openmeetings.db.bind.adapter.UserAdapter;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.user.User;
 
 @Entity
 @NamedQuery(name = "notVoted", query = "SELECT rpa FROM RoomPollAnswer rpa WHERE rpa.roomPoll.room.id = :roomId "
 		+ "AND rpa.votedUser.id = :userId AND rpa.roomPoll.archived = false")
 @Table(name = "room_poll_answer")
-@Root(name="roompollanswer")
+@XmlRootElement(name = "roompollanswer")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class RoomPollAnswer implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	@XmlTransient
 	private Long id;
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	@ForeignKey(enabled = true)
-	@Element(name="voteduserid", data=false, required=false)
+	@XmlElement(name = "voteduserid", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User votedUser;
 
 	@Column(name = "answer")
-	@Element(data=false, required=false)
+	@XmlElement(name = "answer", required = false)
+	@XmlJavaTypeAdapter(BooleanAdapter.class)
 	private Boolean answer;
 
 	@Column(name = "pointList")
-	@Element(name="pointlist", data=false, required=false)
+	@XmlElement(name = "pointlist", required = false)
+	@XmlJavaTypeAdapter(IntAdapter.class)
 	private Integer pointList;
 
 	@Column(name = "voteDate")
-	@Element(name="votedate", data=false)
+	@XmlElement(name = "votedate", required = false)
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date voteDate;
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "poll_id")
+	@XmlTransient
 	private RoomPoll roomPoll;
 
 	@Override

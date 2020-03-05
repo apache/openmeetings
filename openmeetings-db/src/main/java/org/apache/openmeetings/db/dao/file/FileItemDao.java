@@ -178,7 +178,7 @@ public class FileItemDao extends BaseFileItemDao {
 	public FileItem move(long id, long parentId, long ownerId, long roomId) {
 		log.debug(".move() started");
 
-		FileItem f = get(id);
+		FileItem f = get(Long.valueOf(id));
 		if (f == null) {
 			return null;
 		}

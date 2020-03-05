@@ -27,6 +27,7 @@ import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,8 @@ public class TestImport extends AbstractTestImport {
 	private ChatDao chatDao;
 	@Autowired
 	private RecordingDao recDao;
+	@Autowired
+	private PrivateMessageFolderDao msgFolderDao;
 
 	@Test
 	public void importVersionNE() throws Exception {
@@ -110,5 +113,13 @@ public class TestImport extends AbstractTestImport {
 		File recs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/file/flvRecordings.xml").toURI());
 		backupImport.importRecordings(recs.getParentFile());
 		assertEquals(recCount + 4, recDao.get().size(), "Recordings should be added");
+	}
+
+	@Test
+	public void importMsgFolders() throws Exception {
+		long fldrCount = msgFolderDao.get(0, Integer.MAX_VALUE).size();
+		File fldrs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/msg/privateMessageFolder.xml").toURI());
+		backupImport.importPrivateMsgFolders(fldrs.getParentFile());
+		assertEquals(fldrCount + 1, msgFolderDao.get(0, Integer.MAX_VALUE).size(), "Message folders should be added");
 	}
 }

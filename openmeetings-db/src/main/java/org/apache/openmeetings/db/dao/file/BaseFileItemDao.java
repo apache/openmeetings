@@ -18,12 +18,15 @@
  */
 package org.apache.openmeetings.db.dao.file;
 
+import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
+
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -40,7 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class BaseFileItemDao {
+public class BaseFileItemDao implements IDataProviderDao<BaseFileItem> {
 	private static final Logger log = LoggerFactory.getLogger(BaseFileItemDao.class);
 	@PersistenceContext
 	protected EntityManager em;
@@ -58,6 +61,7 @@ public class BaseFileItemDao {
 		return list.size() == 1 ? list.get(0) : null;
 	}
 
+	@Override
 	public BaseFileItem get(Long id) {
 		if (id == null || id.longValue() <= 0) {
 			return null;
@@ -121,5 +125,35 @@ public class BaseFileItemDao {
 			f = em.merge(f);
 		}
 		return f;
+	}
+
+	@Override
+	public List<BaseFileItem> get(long start, long count) {
+		throw UNSUPPORTED;
+	}
+
+	@Override
+	public List<BaseFileItem> get(String search, long start, long count, String order) {
+		throw UNSUPPORTED;
+	}
+
+	@Override
+	public long count() {
+		throw UNSUPPORTED;
+	}
+
+	@Override
+	public long count(String search) {
+		throw UNSUPPORTED;
+	}
+
+	@Override
+	public BaseFileItem update(BaseFileItem entity, Long userId) {
+		throw UNSUPPORTED;
+	}
+
+	@Override
+	public void delete(BaseFileItem entity, Long userId) {
+		throw UNSUPPORTED;
 	}
 }

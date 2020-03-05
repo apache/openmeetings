@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
+import static org.apache.openmeetings.db.bind.Constants.MSG_FOLDER_NODE;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -26,34 +28,48 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.DateAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "private_message_folder")
-@Root(name="privatemessagefolder")
+@XmlRootElement(name = MSG_FOLDER_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class PrivateMessageFolder implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true, name = "privateMessageFolderId")
+	@XmlElement(name = "privateMessageFolderId")
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@Column(name = "folder_name")
-	@Element(data = true)
+	@XmlElement(name = "folderName")
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String folderName;
 
 	@Column(name = "user_id")
-	@Element(data = true)
+	@XmlElement(name = "userId")
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long userId;
 
 	@Column(name = "inserted")
+	@XmlElement(name = "inserted")
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date inserted;
 
 	@Column(name = "updated")
+	@XmlTransient
 	private Date updated;
 
 	@Override

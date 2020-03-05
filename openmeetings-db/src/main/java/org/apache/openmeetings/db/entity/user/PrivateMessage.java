@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
+import static org.apache.openmeetings.db.bind.Constants.MSG_NODE;
+
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -32,12 +34,21 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.DateAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
+import org.apache.openmeetings.db.bind.adapter.RoomAdapter;
+import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQuery(name = "getPrivateMessages", query = "SELECT c FROM PrivateMessage c ORDER BY c.id")
@@ -47,7 +58,8 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name = "deletePrivateMessages", query = "DELETE FROM PrivateMessage c WHERE c.id IN (:ids) ")
 @NamedQuery(name = "getPrivateMessagesByRoom", query = "SELECT c FROM PrivateMessage c WHERE c.room.id = :roomId ")
 @Table(name = "private_message")
-@Root(name = "privatemessage")
+@XmlRootElement(name = MSG_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class PrivateMessage implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	public static final Long INBOX_FOLDER_ID = Long.valueOf(0);
@@ -57,64 +69,77 @@ public class PrivateMessage implements IDataProviderEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true, name = "privateMessageId")
+	@XmlElement(name = "privateMessageId")
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@Column(name = "subject")
-	@Element(data = true, required = false)
+	@XmlElement(name = "subject", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String subject;
 
 	@Lob
 	@Column(name = "message")
-	@Element(data = true, required = false)
+	@XmlElement(name = "message", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String message;
 
 	@Column(name = "inserted")
-	@Element(data = true)
+	@XmlElement(name = "inserted")
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date inserted;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "from_id")
 	@ForeignKey(enabled = true)
-	@Element(data = true, required = false)
+	@XmlElement(name = "from", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User from;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "to_id")
 	@ForeignKey(enabled = true)
-	@Element(data = true, required = false)
+	@XmlElement(name = "to", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User to;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "owner_id")
 	@ForeignKey(enabled = true)
-	@Element(data = true, required = false)
+	@XmlElement(name = "owner", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User owner;
 
 	@Column(name = "booked_room", nullable = false)
-	@Element(data = true)
+	@XmlElement(name = "bookedRoom")
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean bookedRoom;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "room_id")
 	@ForeignKey(enabled = true)
-	@Element(data = true, required = false)
+	@XmlElement(name = "room", required = false)
+	@XmlJavaTypeAdapter(RoomAdapter.class)
 	private Room room;
 
 	@Column(name = "is_read", nullable = false)
-	@Element(data = true)
+	@XmlElement(name = "isRead")
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean isRead;
 
 	@Column(name = "private_message_folder_id")
-	@Element(data = true, name = "privateMessageFolderId", required = false)
+	@XmlElement(name = "privateMessageFolderId", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long folderId;
 
 	@Column(name = "is_contact_request", nullable = false)
-	@Element(data = true)
+	@XmlElement(name = "isRead")
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean isContactRequest;
 
 	@Column(name = "user_contact_id")
-	@Element(data = true, required = false)
+	@XmlElement(name = "userContactId", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long userContactId;
 
 	public PrivateMessage() {

@@ -45,4 +45,16 @@ public class Constants {
 	public static final String MMEMBER_NODE = "meetingmember";
 	public static final String RECORDING_LIST_NODE = "flvrecordings";
 	public static final String RECORDING_NODE = "flvrecording";
+	public static final String MSG_FOLDER_LIST_NODE = "privatemessagefolders";
+	public static final String MSG_FOLDER_NODE = "privatemessagefolder";
+	public static final String CONTACT_LIST_NODE = "usercontacts";
+	public static final String CONTACT_NODE = "usercontact";
+	public static final String MSG_LIST_NODE = "privatemessages";
+	public static final String MSG_NODE = "privatemessage";
+	public static final String FILE_LIST_NODE = "fileExplorerItems";
+	public static final String FILE_NODE = "fileExplorerItem";
+	public static final String POLL_LIST_NODE = "roompolls";
+	public static final String POLL_NODE = "roompoll";
+	public static final String ROOM_FILE_LIST_NODE = "RoomFiles";
+	public static final String ROOM_FILE_NODE = "RoomFile";
 }

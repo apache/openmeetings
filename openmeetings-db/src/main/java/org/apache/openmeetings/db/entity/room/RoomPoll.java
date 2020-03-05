@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
+import static org.apache.openmeetings.db.bind.Constants.POLL_NODE;
+
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,14 +38,24 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.DateAdapter;
+import org.apache.openmeetings.db.bind.adapter.PollTypeAdapter;
+import org.apache.openmeetings.db.bind.adapter.RoomAdapter;
+import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.user.User;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQuery(name = "closePoll", query = "UPDATE RoomPoll rp SET rp.archived = :archived "
@@ -58,7 +70,8 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name = "hasPoll", query = "SELECT COUNT(rp) FROM RoomPoll rp "
 		+ "WHERE rp.room.id = :roomId AND rp.archived = :archived")
 @Table(name = "room_poll")
-@Root(name = "roompoll")
+@XmlRootElement(name = POLL_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class RoomPoll implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	public static final int YES_NO_TYPE_ID = 1;
@@ -66,8 +79,8 @@ public class RoomPoll implements IDataProviderEntity {
 
 	@XmlType(namespace="org.apache.openmeetings.room.poll.type")
 	public enum Type {
-		yesNo(YES_NO_TYPE_ID)
-		, numeric(NUMERIC_TYPE_ID);
+		YES_NO(YES_NO_TYPE_ID)
+		, NUMERIC(NUMERIC_TYPE_ID);
 		private int id;
 
 		Type(int id) {
@@ -87,51 +100,60 @@ public class RoomPoll implements IDataProviderEntity {
 		}
 
 		public static Type get(int type) {
-			return type == NUMERIC_TYPE_ID ? Type.numeric : Type.yesNo;
+			return type == NUMERIC_TYPE_ID ? Type.NUMERIC : Type.YES_NO;
 		}
 	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	@XmlTransient
 	private Long id;
 
 	@Column(name = "name")
-	@Element(name = "pollname", data = true, required = false)
+	@XmlElement(name = "pollname", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name;
 
 	@Column(name = "question")
-	@Element(name = "pollquestion", data = true, required = false)
+	@XmlElement(name = "pollquestion", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String question;
 
 	@Column(name = "created")
-	@Element(data = true, required = false)
+	@XmlElement(name = "created", required = false)
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date created;
 
 	@Column(name = "archived", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "archived", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean archived;
 
 	@Column(name = "type")
-	@Element(name = "polltypeid", data = true, required = false)
 	@Enumerated(EnumType.STRING)
+	@XmlElement(name = "polltypeid", required = false)
+	@XmlJavaTypeAdapter(PollTypeAdapter.class)
 	private Type type;
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	@ForeignKey(enabled = true)
-	@Element(name = "createdbyuserid", data = true, required = false)
+	@XmlElement(name = "createdbyuserid", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User creator;
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "room_id")
 	@ForeignKey(enabled = true)
-	@Element(name = "roomid", data = true, required = false)
+	@XmlElement(name = "roomid", required = false)
+	@XmlJavaTypeAdapter(RoomAdapter.class)
 	private Room room;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "poll_id")
-	@ElementList(name = "roompollanswers", required = false)
+	@XmlElementWrapper(name = "roompollanswers", required = false)
+	@XmlElement(name = "roompollanswer", required = false)
 	private List<RoomPollAnswer> answers;
 
 	/**

@@ -96,7 +96,7 @@ public class CreatePollDialog extends Modal<RoomPoll> {
 		User u = userDao.get(getUserId());
 		p.setCreator(u);
 		p.setRoom(roomDao.get(roomId));
-		p.setType(RoomPoll.Type.yesNo);
+		p.setType(RoomPoll.Type.YES_NO);
 		setModelObject(p);
 		form.setModelObject(getModelObject());
 		target.add(form);

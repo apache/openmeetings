@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.entity.record;
 
 import static org.apache.openmeetings.db.bind.Constants.RECORDING_NODE;
+import static org.apache.openmeetings.db.dao.user.UserDao.FETCH_GROUP_BACKUP;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.RECORDING_FILE_NAME;
 
@@ -40,6 +41,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.openjpa.persistence.FetchAttribute;
+import org.apache.openjpa.persistence.FetchGroup;
+import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
 import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
 import org.apache.openmeetings.db.bind.adapter.DateAdapter;
@@ -63,6 +67,9 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
  *
  */
 @Entity
+@FetchGroups({
+	@FetchGroup(name = FETCH_GROUP_BACKUP, attributes = { @FetchAttribute(name = "chunks") })
+})
 @NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT r FROM Recording r "
 		+ "WHERE r.insertedBy = (SELECT gu.user.id FROM GroupUser gu WHERE "
 		+ "gu.group.deleted = false AND gu.group.external = true AND gu.group.name = :externalType "
@@ -78,7 +85,7 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 		+ "AND (r.parentId IS NULL OR r.parentId = 0) "
 		+ "ORDER BY r.type ASC, r.inserted")
 @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE Recording r SET r.status = :error WHERE r.status IN (:recording, :converting)")
-@NamedQuery(name = "getRecordingsAll", query = "SELECT r FROM Recording r LEFT JOIN FETCH r.chunks ORDER BY r.id")
+@NamedQuery(name = "getRecordingsAll", query = "SELECT r FROM Recording r ORDER BY r.id")
 @NamedQuery(name = "getRecordingsByRoom", query = "SELECT r FROM Recording r WHERE r.deleted = false AND r.roomId = :roomId "
 		+ "ORDER BY r.type ASC, r.inserted")
 @NamedQuery(name = "getRecordingsByParent", query = "SELECT r FROM Recording r WHERE r.deleted = false AND r.parentId = :parentId "

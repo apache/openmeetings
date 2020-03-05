@@ -16,20 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.backup;
+package org.apache.openmeetings.db.bind.adapter;
 
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
+import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_BEGIN;
+import static org.apache.openmeetings.db.bind.adapter.CDATAAdapter.CDATA_END;
 
-import org.simpleframework.xml.transform.Transform;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public class IntegerTransform implements Transform<Integer> {
+import org.apache.openmeetings.db.entity.room.RoomPoll;
+
+public class PollTypeAdapter extends XmlAdapter<String, RoomPoll.Type> {
+
 	@Override
-	public Integer read(String value) throws Exception {
-		return toInt(value, 0);
+	public String marshal(RoomPoll.Type v) throws Exception {
+		return CDATA_BEGIN + v.getId() + CDATA_END;
 	}
 
 	@Override
-	public String write(Integer value) throws Exception {
-		return String.valueOf(value);
+	public RoomPoll.Type unmarshal(String v) throws Exception {
+		return RoomPoll.Type.get(toInt(v));
 	}
 }

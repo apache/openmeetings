@@ -47,7 +47,6 @@ see http://openmeetings.apache.org/Upgrade.html for Details
          <appointmentStarttime class="java.util.Date"><![CDATA[1502681640000]]></appointmentStarttime>
          <appointmentEndtime class="java.util.Date"><![CDATA[1502685240000]]></appointmentEndtime>
          <appointmentDescription><![CDATA[test message<br>]]></appointmentDescription>
-         <users_id><![CDATA[1]]></users_id>
          <inserted class="java.util.Date"><![CDATA[1502681683111]]></inserted>
          <deleted><![CDATA[false]]></deleted>
          <typId><![CDATA[1]]></typId>

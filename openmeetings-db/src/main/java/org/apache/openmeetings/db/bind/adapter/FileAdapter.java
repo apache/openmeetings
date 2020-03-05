@@ -16,20 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.backup;
+package org.apache.openmeetings.db.bind.adapter;
 
-import static org.apache.commons.lang3.math.NumberUtils.toLong;
+import java.util.Map;
 
-import org.simpleframework.xml.transform.Transform;
+import org.apache.openmeetings.db.dao.file.BaseFileItemDao;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
 
-public class LongTransform implements Transform<Long> {
-	@Override
-	public Long read(String value) throws Exception {
-		return toLong(value);
+public class FileAdapter extends EntityAdapter<BaseFileItem> {
+	public FileAdapter() {
+		super();
+	}
+
+	public FileAdapter(BaseFileItemDao dao, Map<Long, Long> idMap) {
+		super(dao, idMap);
 	}
 
 	@Override
-	public String write(Long value) throws Exception {
-		return String.valueOf(value);
+	protected BaseFileItem newEntity() {
+		return new FileItem();
 	}
 }

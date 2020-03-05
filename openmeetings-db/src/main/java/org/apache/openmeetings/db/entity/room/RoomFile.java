@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
+import static org.apache.openmeetings.db.bind.Constants.ROOM_FILE_NODE;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,38 +29,49 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.FileAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "room_file")
-@Root(name = "RoomFile")
+@XmlRootElement(name = ROOM_FILE_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class RoomFile implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Element(data = true, required = true)
+	@XmlElement(name = "id")
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@Column(name = "room_id")
-	@Element(data = true, required = true)
+	@XmlElement(name = "roomId")
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long roomId;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "file_id", insertable = true, updatable = true, nullable = false)
 	@ForeignKey(enabled = true)
-	@Element(data = true, required = true)
+	@XmlElement(name = "file")
+	@XmlJavaTypeAdapter(FileAdapter.class)
 	private BaseFileItem file;
 
 	/*
 	 * Index of whiteboard for this file, zero based
 	 */
 	@Column(name = "wb_idx", nullable = false)
+	@XmlElement(name = "wbIdx", required = false)
+	@XmlJavaTypeAdapter(value = LongAdapter.class, type = long.class)
 	private long wbIdx = 0;
 
 	public RoomFile() {

@@ -235,7 +235,7 @@ public class User extends HistoricalEntity {
 
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "password", length = 1024)
-	@LoadFetchGroup("backupexport")
+	@LoadFetchGroup(FETCH_GROUP_BACKUP)
 	@XmlElement(name = "pass", required = false)
 	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String password;

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.record;
 
+import static org.apache.openmeetings.db.dao.user.UserDao.FETCH_GROUP_BACKUP;
+import static org.apache.openmeetings.db.util.DaoHelper.fillLazy;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 
@@ -74,7 +76,9 @@ public class RecordingDao extends BaseFileItemDao {
 	}
 
 	public List<Recording> get() {
-		return em.createNamedQuery("getRecordingsAll", Recording.class).getResultList();
+		return fillLazy(em
+				, oem -> oem.createNamedQuery("getRecordingsAll", Recording.class)
+				, FETCH_GROUP_BACKUP);
 	}
 
 	public List<Recording> getByExternalType(String externalType) {

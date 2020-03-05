@@ -72,6 +72,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5I
  */
 public class PollResultsDialog extends Modal<RoomPoll> {
 	private static final long serialVersionUID = 1L;
+	private static final String[] NUM_TICKS = new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 	private final WebMarkupContainer chartDiv = new WebMarkupContainer("chart");
 	private final Long roomId;
 	private PollSelectForm selForm;
@@ -226,8 +227,8 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 	}
 
 	private String[] getTicks(RoomPoll p) {
-		return p != null && RoomPoll.Type.numeric == p.getType()
-				? new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}
+		return p != null && RoomPoll.Type.NUMERIC == p.getType()
+				? NUM_TICKS
 				: new String[] {getString("35"), getString("34")};
 	}
 
@@ -240,10 +241,10 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 	}
 
 	private static Integer[] getValues(RoomPoll p) {
-		Integer[] values = initValues(p != null && RoomPoll.Type.numeric == p.getType() ? 10 : 2);
+		Integer[] values = initValues(p != null && RoomPoll.Type.NUMERIC == p.getType() ? 10 : 2);
 		if (p != null) {
 			for (RoomPollAnswer a : p.getAnswers()) {
-				if (RoomPoll.Type.numeric == p.getType()) {
+				if (RoomPoll.Type.NUMERIC == p.getType()) {
 					values[a.getPointList() - 1] ++;
 				} else {
 					values[Boolean.FALSE.equals(a.getAnswer()) ? 0 : 1] ++;

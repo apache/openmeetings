@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
+import static org.apache.openmeetings.db.bind.Constants.CONTACT_NODE;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -31,69 +33,79 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
+import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 
 @Entity
 @NamedQuery(name = "deleteUserContact", query = "delete from UserContact u where u.id = :id")
 @NamedQuery(name = "deleteAllUserContacts", query = "delete from UserContact u where u.owner.id = :ownerId")
 @NamedQuery(name = "getContactByUserOwner", query = "SELECT c FROM UserContact c WHERE c.contact.id = :userId AND c.owner.id = :ownerId AND c.contact.deleted = false")
-@NamedQuery(name = "getContactsByUserAndStatus", query = "select c from UserContact c " +
-		"where c.owner.id = :ownerId " +
-		"AND c.pending = :pending " +
-		"AND c.contact.deleted = false")
-@NamedQuery(name = "getContactRequestsByUserAndStatus", query = "select c from UserContact c " +
-		"where c.contact.id = :userId " +
-		"AND c.pending = :pending " +
-		"AND c.contact.deleted = false")
-@NamedQuery(name = "getContactsByUser", query = "SELECT c FROM UserContact c " +
-		"WHERE c.contact.id = :userId " +
-		"AND c.contact.deleted = false ORDER BY c.pending DESC")
-@NamedQuery(name = "countContactsByUser", query = "select COUNT(c) from UserContact c " +
-		"where c.contact.id = :userId " +
-		"AND c.contact.deleted = false")
+@NamedQuery(name = "getContactsByUserAndStatus", query = "select c from UserContact c "
+		+ "where c.owner.id = :ownerId AND c.pending = :pending AND c.contact.deleted = false")
+@NamedQuery(name = "getContactRequestsByUserAndStatus", query = "select c from UserContact c "
+		+ "where c.contact.id = :userId AND c.pending = :pending AND c.contact.deleted = false")
+@NamedQuery(name = "getContactsByUser", query = "SELECT c FROM UserContact c "
+		+ "WHERE c.contact.id = :userId AND c.contact.deleted = false ORDER BY c.pending DESC")
+@NamedQuery(name = "countContactsByUser", query = "select COUNT(c) from UserContact c "
+		+ "where c.contact.id = :userId AND c.contact.deleted = false")
 @NamedQuery(name = "getUserContactsById", query = "SELECT c FROM UserContact c WHERE c.id = :id")
 @NamedQuery(name = "getUserContacts", query = "SELECT c FROM UserContact c ORDER BY c.id")
 @Table(name = "user_contact")
-@Root(name="usercontact")
+@XmlRootElement(name = CONTACT_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class UserContact implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	@Element(data = true, name = "userContactId")
+	@Column(name = "id")
+	@XmlElement(name = "userContactId")
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="user_id")
-	@Element(data=true, required=false)
+	@JoinColumn(name = "user_id")
+	@XmlElement(name = "contact", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User contact;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="owner_id")
+	@JoinColumn(name = "owner_id")
 	@ForeignKey(enabled = true)
-	@Element(data=true, required=false)
+	@XmlElement(name = "owner", required = false)
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User owner;
 
-	@Column(name="pending", nullable = false)
-	@Element(data=true)
+	@Column(name = "pending", nullable = false)
+	@XmlElement(name = "pending")
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean pending;
 
-	@Column(name="inserted")
+	@Column(name = "inserted")
+	@XmlTransient
 	private Date inserted;
 
-	@Column(name="updated")
+	@Column(name = "updated")
+	@XmlTransient
 	private Date updated;
 
-	@Column(name="share_calendar", nullable = false)
-	@Element(data=true, required=false)
+	@Column(name = "share_calendar", nullable = false)
+	@XmlElement(name = "pending", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean shareCalendar;
 
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -101,6 +113,7 @@ public class UserContact implements Serializable {
 	public User getContact() {
 		return contact;
 	}
+
 	public void setContact(User contact) {
 		this.contact = contact;
 	}
@@ -108,6 +121,7 @@ public class UserContact implements Serializable {
 	public User getOwner() {
 		return owner;
 	}
+
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
@@ -115,6 +129,7 @@ public class UserContact implements Serializable {
 	public boolean isPending() {
 		return pending;
 	}
+
 	public void setPending(boolean pending) {
 		this.pending = pending;
 	}
@@ -122,6 +137,7 @@ public class UserContact implements Serializable {
 	public Date getInserted() {
 		return inserted;
 	}
+
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}
@@ -129,6 +145,7 @@ public class UserContact implements Serializable {
 	public Date getUpdated() {
 		return updated;
 	}
+
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
@@ -136,6 +153,7 @@ public class UserContact implements Serializable {
 	public boolean getShareCalendar() {
 		return shareCalendar;
 	}
+
 	public void setShareCalendar(boolean shareCalendar) {
 		this.shareCalendar = shareCalendar;
 	}

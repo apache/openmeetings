@@ -18,12 +18,17 @@
  */
 package org.apache.openmeetings.db.entity.file;
 
+import static org.apache.openmeetings.db.bind.Constants.FILE_NODE;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 
 @Entity
 @NamedQuery(name = "getAllFiles", query = "SELECT f FROM FileItem f ORDER BY f.id")
@@ -43,25 +48,28 @@ import org.simpleframework.xml.Root;
 @NamedQuery(name = "getFileFilteredByGroup", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.ownerId IS NULL "
 		+ "AND f.groupId = :groupId AND f.parentId IS NULL AND f.type IN :filter "
 		+ "ORDER BY f.type ASC, f.name")
-@Root
+@XmlRootElement(name = FILE_NODE)
 public class FileItem extends BaseFileItem {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "filesize")
-	@Element(data = true, required = false)
+	@XmlElement(name = "size", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long size;
 
 	@Column(name = "external_id")
+	@XmlElement(name = "externalId", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String externalId;
 
 	@Override
-	@Element(data = true, name = "fileExplorerItemId")
 	public Long getId() {
 		return super.getId();
 	}
 
 	@Override
-	@Element(data = true, name = "fileExplorerItemId")
+	@XmlElement(name = "fileExplorerItemId")
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	public void setId(Long id) {
 		super.setId(id);
 	}

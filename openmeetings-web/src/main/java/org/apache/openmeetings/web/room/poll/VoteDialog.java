@@ -115,7 +115,7 @@ public class VoteDialog extends Modal<RoomPollAnswer> {
 		a.setVotedUser(u);
 		user.setObject(getName(this, a.getRoomPoll().getCreator()));
 		form.setModelObject(a);
-		boolean typeNum = a.getRoomPoll() != null && RoomPoll.Type.numeric == a.getRoomPoll().getType();
+		boolean typeNum = a.getRoomPoll() != null && RoomPoll.Type.NUMERIC == a.getRoomPoll().getType();
 		form.typeBool.setVisible(!typeNum);
 		form.typeInt.setVisible(typeNum);
 		target.add(form);

@@ -26,7 +26,7 @@ see http://openmeetings.apache.org/Upgrade.html for Details
  --><root>
    <flvrecordings>
       <flvrecording>
-         <fileName><![CDATA[Recording 2017.08.11 11:45:30]]></fileName>
+         <fileName><![CDATA[Rec 1]]></fileName>
          <fileHash><![CDATA[flvRecording_1.flv]]></fileHash>
          <insertedBy><![CDATA[1]]></insertedBy>
          <inserted class="java.util.Date"><![CDATA[1502426730324]]></inserted>
@@ -93,8 +93,8 @@ see http://openmeetings.apache.org/Upgrade.html for Details
          <status><![CDATA[PROCESSED]]></status>
       </flvrecording>
       <flvrecording>
-         <fileName><![CDATA[Recording 2017.08.11 16:00:49]]></fileName>
-         <fileHash><![CDATA[bc0acd29-7ec7-4db0-9366-595e87aa15b2]]></fileHash>
+         <fileName><![CDATA[Rec 2]]></fileName>
+         <fileHash><![CDATA[bc0acd29-7ec7-4db0-9366-595e87aa15e2]]></fileHash>
          <insertedBy><![CDATA[1]]></insertedBy>
          <inserted class="java.util.Date"><![CDATA[1502442049021]]></inserted>
          <updated class="java.util.Date"><![CDATA[1502442351441]]></updated>
@@ -112,7 +112,7 @@ see http://openmeetings.apache.org/Upgrade.html for Details
          <notified><![CDATA[false]]></notified>
       </flvrecording>
       <flvrecording>
-         <fileName><![CDATA[TEST]]></fileName>
+         <fileName><![CDATA[TEST REC]]></fileName>
          <insertedBy><![CDATA[1]]></insertedBy>
          <inserted class="java.util.Date"><![CDATA[1502442049021]]></inserted>
          <updated class="java.util.Date"><![CDATA[1502442351441]]></updated>
@@ -123,8 +123,8 @@ see http://openmeetings.apache.org/Upgrade.html for Details
          <interview><![CDATA[false]]></interview>
       </flvrecording>
       <flvrecording>
-         <fileName><![CDATA[Recording 2017.08.11 16:00:49]]></fileName>
-         <fileHash><![CDATA[bc0acd29-7ec7-4db0-9366-595e87aa15b3]]></fileHash>
+         <fileName><![CDATA[Rec 3 (del)]]></fileName>
+         <fileHash><![CDATA[bc0acd29-7ec7-4db0-9366-595e87aa15e2]]></fileHash>
          <insertedBy><![CDATA[1]]></insertedBy>
          <inserted class="java.util.Date"><![CDATA[1502442049021]]></inserted>
          <updated class="java.util.Date"><![CDATA[1502442351441]]></updated>
@@ -142,8 +142,8 @@ see http://openmeetings.apache.org/Upgrade.html for Details
          <notified><![CDATA[false]]></notified>
       </flvrecording>
       <flvrecording>
-         <fileName><![CDATA[Recording 2017.08.11 16:00:49]]></fileName>
-         <fileHash><![CDATA[bc0acd29-7ec7-4db0-9366-595e87aa15b4]]></fileHash>
+         <fileName><![CDATA[Rec 4]]></fileName>
+         <fileHash><![CDATA[bc0acd29-7ec7-4db0-9366]]></fileHash>
          <insertedBy><![CDATA[1]]></insertedBy>
          <inserted class="java.util.Date"><![CDATA[1502442049021]]></inserted>
          <updated class="java.util.Date"><![CDATA[1502442351441]]></updated>
