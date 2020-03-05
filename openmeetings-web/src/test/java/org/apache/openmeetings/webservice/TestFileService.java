@@ -49,8 +49,8 @@ public class TestFileService extends AbstractWebServiceTest {
 			Graphics g = image.getGraphics();
 			g.drawString("Hello World!!!", 10, 20);
 			ImageIO.write(image, "jpg", img);
-			CallResult<FileItemDTO> cr = createVerifiedFile(img, "test.txt", BaseFileItem.Type.Presentation);
-			assertEquals(BaseFileItem.Type.Image, cr.getObj().getType(), "Type should be Image");
+			CallResult<FileItemDTO> cr = createVerifiedFile(img, "test.txt", BaseFileItem.Type.PRESENTATION);
+			assertEquals(BaseFileItem.Type.IMAGE, cr.getObj().getType(), "Type should be Image");
 			assertEquals(width, cr.getObj().getWidth(), "Width should be determined");
 			assertEquals(height, cr.getObj().getHeight(), "Height should be Image");
 		} finally {

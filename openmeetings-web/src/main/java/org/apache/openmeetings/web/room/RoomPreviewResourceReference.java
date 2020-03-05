@@ -46,7 +46,7 @@ public class RoomPreviewResourceReference extends RoomResourceReference {
 	@Override
 	protected FileItem getFileItem(Attributes attr) {
 		FileItem f = super.getFileItem(attr);
-		if (f != null && FileItem.Type.Video == f.getType()) {
+		if (f != null && FileItem.Type.VIDEO == f.getType()) {
 			return f;
 		}
 		return null;

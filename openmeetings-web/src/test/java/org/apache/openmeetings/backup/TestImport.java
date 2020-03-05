@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 
 import org.apache.openmeetings.db.dao.basic.ChatDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
@@ -38,6 +39,8 @@ public class TestImport extends AbstractTestImport {
 	private OAuth2Dao oauthDao;
 	@Autowired
 	private ChatDao chatDao;
+	@Autowired
+	private RecordingDao recDao;
 
 	@Test
 	public void importVersionNE() throws Exception {
@@ -99,5 +102,13 @@ public class TestImport extends AbstractTestImport {
 		File chats = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/chat/chat_messages.xml").toURI());
 		backupImport.importChat(chats.getParentFile());
 		assertEquals(chatCount + 3, chatDao.get(0, Integer.MAX_VALUE).size(), "Chat messages should be added");
+	}
+
+	@Test
+	public void importRecordings() throws Exception {
+		long recCount = recDao.get().size();
+		File recs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/file/flvRecordings.xml").toURI());
+		backupImport.importRecordings(recs.getParentFile());
+		assertEquals(recCount + 4, recDao.get().size(), "Recordings should be added");
 	}
 }

@@ -43,4 +43,6 @@ public class Constants {
 	public static final String APPOINTMENT_NODE = "appointment";
 	public static final String MMEMBER_LIST_NODE = "meetingmembers";
 	public static final String MMEMBER_NODE = "meetingmember";
+	public static final String RECORDING_LIST_NODE = "flvrecordings";
+	public static final String RECORDING_NODE = "flvrecording";
 }

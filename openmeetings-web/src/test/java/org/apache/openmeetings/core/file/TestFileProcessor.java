@@ -49,11 +49,11 @@ public class TestFileProcessor extends AbstractJUnitDefaults {
 			FileItem f = new FileItemDTO()
 					.setName(String.format(FILE_NAME_FMT, FILE_NAME, ext))
 					.setHash(randomUUID().toString())
-					.setType(BaseFileItem.Type.Recording).get();
+					.setType(BaseFileItem.Type.RECORDING).get();
 			try (InputStream is = new FileInputStream(getDefaultProfilePicture())) {
 				ProcessResultList result = processor.processFile(f, is, Optional.empty());
 				assertFalse(result.hasError(), "Conversion should be successful");
-				assertEquals(BaseFileItem.Type.Image, f.getType(), "Type should be image");
+				assertEquals(BaseFileItem.Type.IMAGE, f.getType(), "Type should be image");
 			}
 		}
 	}

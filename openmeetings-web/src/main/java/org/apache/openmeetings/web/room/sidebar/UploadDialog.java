@@ -248,7 +248,7 @@ public class UploadDialog extends Modal<String> {
 					f.setOwnerId(parent.getOwnerId());
 					f.setGroupId(parent.getGroupId());
 					if (parent.getId() != null) {
-						f.setParentId(BaseFileItem.Type.Folder == parent.getType() ? parent.getId() : parent.getParentId());
+						f.setParentId(BaseFileItem.Type.FOLDER == parent.getType() ? parent.getId() : parent.getParentId());
 					}
 				}
 				f.setInsertedBy(getUserId());

@@ -33,6 +33,8 @@ import static org.apache.openmeetings.db.bind.Constants.MMEMBER_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.MMEMBER_NODE;
 import static org.apache.openmeetings.db.bind.Constants.OAUTH_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.OAUTH_NODE;
+import static org.apache.openmeetings.db.bind.Constants.RECORDING_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.RECORDING_NODE;
 import static org.apache.openmeetings.db.bind.Constants.ROOM_GRP_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.ROOM_GRP_NODE;
 import static org.apache.openmeetings.db.bind.Constants.ROOM_LIST_NODE;
@@ -156,7 +158,6 @@ import org.apache.commons.text.WordUtils;
 import org.apache.openmeetings.backup.converter.BaseFileItemConverter;
 import org.apache.openmeetings.backup.converter.DateConverter;
 import org.apache.openmeetings.backup.converter.PollTypeConverter;
-import org.apache.openmeetings.backup.converter.RecordingStatusConverter;
 import org.apache.openmeetings.backup.converter.RoomConverter;
 import org.apache.openmeetings.backup.converter.UserConverter;
 import org.apache.openmeetings.backup.converter.WbConverter;
@@ -452,11 +453,11 @@ public class BackupImport {
 				if (bfi.isDeleted()) {
 					continue;
 				}
-				if (BaseFileItem.Type.Presentation == bfi.getType()) {
+				if (BaseFileItem.Type.PRESENTATION == bfi.getType()) {
 					convertOldPresentation((FileItem)bfi);
 					fileItemDao.updateBase(bfi);
 				}
-				if (BaseFileItem.Type.WmlFile == bfi.getType()) {
+				if (BaseFileItem.Type.WML_FILE == bfi.getType()) {
 					try {
 						Whiteboard wb = WbConverter.convert((FileItem)bfi);
 						wb.save(bfi.getFile().toPath());
@@ -837,8 +838,7 @@ public class BackupImport {
 	}
 
 	private <T extends BaseFileItem> void saveTree(
-			Serializer ser
-			, File baseDir
+			File baseDir
 			, String fileName
 			, String listNodeName
 			, String nodeName
@@ -848,7 +848,7 @@ public class BackupImport {
 			)
 	{
 		TreeMap<Long, T> items = new TreeMap<>();
-		readList(null, baseDir, fileName, listNodeName, nodeName, clazz, f -> {
+		readList(baseDir, fileName, listNodeName, nodeName, clazz, f -> {
 			items.put(f.getId(), f);
 		}, false);
 		FileTree<T> tree = new FileTree<>();
@@ -875,19 +875,10 @@ public class BackupImport {
 	/*
 	 * ##################### Import Recordings
 	 */
-	private void importRecordings(File base) throws Exception {
+	void importRecordings(File base) throws Exception {
 		log.info("Meeting members import complete, starting recordings server import");
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		RegistryMatcher matcher = new RegistryMatcher();
-		Serializer ser = new Persister(strategy, matcher);
-
-		matcher.bind(Long.class, LongTransform.class);
-		matcher.bind(Integer.class, IntegerTransform.class);
-		registry.bind(Date.class, DateConverter.class);
-		registry.bind(Recording.Status.class, RecordingStatusConverter.class);
 		final Map<Long, Long> folders = new HashMap<>();
-		saveTree(ser, base, "flvRecordings.xml", "flvrecordings", "flvrecording", Recording.class, folders, r -> {
+		saveTree(base, "flvRecordings.xml", RECORDING_LIST_NODE, RECORDING_NODE, Recording.class, folders, r -> {
 			Long recId = r.getId();
 			r.setId(null);
 			if (r.getChunks() != null) {
@@ -905,7 +896,7 @@ public class BackupImport {
 			}
 			checkHash(r, recordingDao);
 			r = recordingDao.update(r);
-			if (BaseFileItem.Type.Folder == r.getType()) {
+			if (BaseFileItem.Type.FOLDER == r.getType()) {
 				folders.put(recId, r.getId());
 			}
 			fileItemMap.put(recId, r.getId());
@@ -1010,13 +1001,13 @@ public class BackupImport {
 		matcher.bind(Integer.class, IntegerTransform.class);
 		registry.bind(Date.class, DateConverter.class);
 		final Map<Long, Long> folders = new HashMap<>();
-		saveTree(null, base, "fileExplorerItems.xml", "fileExplorerItems", "fileExplorerItem", FileItem.class, folders, file -> {
+		saveTree(base, "fileExplorerItems.xml", "fileExplorerItems", "fileExplorerItem", FileItem.class, folders, file -> {
 			Long fId = file.getId();
 			// We need to reset this as openJPA reject to store them otherwise
 			file.setId(null);
 			checkHash(file, fileItemDao);
 			file = fileItemDao.update(file);
-			if (BaseFileItem.Type.Folder == file.getType()) {
+			if (BaseFileItem.Type.FOLDER == file.getType()) {
 				folders.put(fId, file.getId());
 			}
 			result.add(file);

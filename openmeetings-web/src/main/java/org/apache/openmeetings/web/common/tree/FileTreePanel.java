@@ -158,7 +158,7 @@ public abstract class FileTreePanel extends Panel {
 
 		public void onDownlownClick(AjaxRequestTarget target, String ext) {
 			BaseFileItem fi = getLastSelected();
-			File f = ext == null && (Type.Image == fi.getType() || Type.Presentation == fi.getType())
+			File f = ext == null && (Type.IMAGE == fi.getType() || Type.PRESENTATION == fi.getType())
 					? fi.getOriginal() : fi.getFile(ext);
 			if (f != null && f.exists()) {
 				dwnldFile = f;
@@ -359,11 +359,11 @@ public abstract class FileTreePanel extends Panel {
 		f.setHash(randomUUID().toString());
 		f.setInsertedBy(getUserId());
 		f.setInserted(new Date());
-		f.setType(Type.Folder);
+		f.setType(Type.FOLDER);
 		f.setOwnerId(p.getOwnerId());
 		f.setGroupId(p.getGroupId());
 		f.setRoomId(p.getRoomId());
-		f.setParentId(Type.Folder == p.getType() ? p.getId() : null);
+		f.setParentId(Type.FOLDER == p.getType() ? p.getId() : null);
 		if (isRecording) {
 			recDao.update((Recording)f);
 		} else {
@@ -399,7 +399,7 @@ public abstract class FileTreePanel extends Panel {
 
 	void updateNode(AjaxRequestTarget target, BaseFileItem fi) {
 		if (fi != null && !fi.isDeleted() && target != null) {
-			if (Type.Folder == fi.getType()) {
+			if (Type.FOLDER == fi.getType()) {
 				tree.updateBranch(fi, target);
 			} else {
 				tree.updateNode(fi, target);
@@ -429,7 +429,7 @@ public abstract class FileTreePanel extends Panel {
 	}
 
 	private static boolean isDownloadable(BaseFileItem f) {
-		return !f.isReadOnly() && (f.getType() == Type.Presentation || f.getType() == Type.Image);
+		return !f.isReadOnly() && (f.getType() == Type.PRESENTATION || f.getType() == Type.IMAGE);
 	}
 
 	public void select(BaseFileItem fi, AjaxRequestTarget target, boolean shift, boolean ctrl) {

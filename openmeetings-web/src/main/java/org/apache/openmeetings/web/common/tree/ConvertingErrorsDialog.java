@@ -86,7 +86,7 @@ public class ConvertingErrorsDialog extends Modal<BaseFileItem> {
 	@Override
 	public Modal<BaseFileItem> show(IPartialPageRequestHandler handler) {
 		BaseFileItem f = getModelObject();
-		headerLabel.setDefaultModel(new ResourceModel(f.getType() == BaseFileItem.Type.Recording ? "887" : "convert.errors.file"));
+		headerLabel.setDefaultModel(new ResourceModel(f.getType() == BaseFileItem.Type.RECORDING ? "887" : "convert.errors.file"));
 
 		List<FileItemLog> logs = fileLogDao.get(f);
 		if (f.getHash() == null) {
@@ -94,7 +94,7 @@ public class ConvertingErrorsDialog extends Modal<BaseFileItem> {
 			message.setDefaultModelObject(getString("888"));
 		} else if (!f.exists()) {
 			message.setVisible(true);
-			message.setDefaultModelObject(getString(f.getType() == BaseFileItem.Type.Recording ? "1595" : "convert.errors.file.missing"));
+			message.setDefaultModelObject(getString(f.getType() == BaseFileItem.Type.RECORDING ? "1595" : "convert.errors.file.missing"));
 		} else {
 			message.setVisible(false);
 		}

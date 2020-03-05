@@ -73,16 +73,16 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 	protected String getMimeType(FileItem r) {
 		String mime;
 		switch (r.getType()) {
-			case WmlFile:
-				mime = "application/xml";
+			case WML_FILE:
+				mime = "application/json";
 				break;
-			case Image:
+			case IMAGE:
 				mime = PNG_MIME_TYPE;
 				break;
-			case Presentation:
+			case PRESENTATION:
 				mime = PNG_MIME_TYPE;
 				break;
-			case Video:
+			case VIDEO:
 				mime = MP4_MIME_TYPE;
 				break;
 			default:
@@ -140,7 +140,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 
 	@Override
 	protected File getFile(FileItem f, Attributes attr) {
-		String ext = f.getType() == FileItem.Type.Presentation
+		String ext = f.getType() == FileItem.Type.PRESENTATION
 				? attr.getParameters().get(ATTR_SLIDE).toString() : null;
 		return getFile(f, ext);
 	}

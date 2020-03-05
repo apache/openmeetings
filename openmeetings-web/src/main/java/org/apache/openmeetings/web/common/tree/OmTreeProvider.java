@@ -45,7 +45,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 	private static final long serialVersionUID = 1L;
-	private static final List<Type> VIDEO_TYPES = Arrays.asList(Type.Folder, Type.Video);
+	private static final List<Type> VIDEO_TYPES = Arrays.asList(Type.FOLDER, Type.VIDEO);
 	public static final String RECORDINGS_MY = "recordings-my";
 	public static final String RECORDINGS_PUBLIC = "recordings-public";
 	public static final String RECORDINGS_GROUP = "recordings-group-%s";
@@ -121,7 +121,7 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 
 	static BaseFileItem createRoot(String name, String hash, boolean rec) {
 		BaseFileItem f = rec ? new Recording() : new FileItem();
-		f.setType(Type.Folder);
+		f.setType(Type.FOLDER);
 		f.setName(name);
 		f.setHash(hash);
 		return f;
@@ -181,7 +181,7 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 
 	@Override
 	public boolean hasChildren(BaseFileItem node) {
-		return node.getId() == null || Type.Folder == node.getType();
+		return node.getId() == null || Type.FOLDER == node.getType();
 	}
 
 	@Override

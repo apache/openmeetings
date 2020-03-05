@@ -225,7 +225,7 @@ public class WbConverter {
 		}
 		add(wb, init(wb, props)
 				.put(ATTR_TYPE, TYPE_IMAGE)
-				.put(ATTR_FILE_TYPE, BaseFileItem.Type.Image.name())
+				.put(ATTR_FILE_TYPE, BaseFileItem.Type.IMAGE.name())
 				.put(ATTR_FILE_ID, fileId));
 	}
 
@@ -239,7 +239,7 @@ public class WbConverter {
 		}
 		add(wb, init(wb, props, false)
 				.put(ATTR_TYPE, TYPE_IMAGE)
-				.put(ATTR_FILE_TYPE, BaseFileItem.Type.Presentation.name())
+				.put(ATTR_FILE_TYPE, BaseFileItem.Type.PRESENTATION.name())
 				.put(ATTR_FILE_ID, fileId));
 	}
 
@@ -249,7 +249,7 @@ public class WbConverter {
 		}
 		add(wb, init(wb, props)
 				.put(ATTR_TYPE, TYPE_IMAGE)
-				.put(ATTR_FILE_TYPE, BaseFileItem.Type.Video.name())
+				.put(ATTR_FILE_TYPE, BaseFileItem.Type.VIDEO.name())
 				.put(ATTR_FILE_ID, props.get(1)));
 	}
 

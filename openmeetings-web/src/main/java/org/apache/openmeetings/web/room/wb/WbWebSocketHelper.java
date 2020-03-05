@@ -108,17 +108,17 @@ public class WbWebSocketHelper extends WebSocketHelper {
 		}
 		file.put("deleted", !fi.exists());
 		switch (fi.getType()) {
-			case Video:
+			case VIDEO:
 				ref = new RoomResourceReference();
 				file.put(PARAM__SRC, urlFor(ref, pp));
 				file.put(PARAM__POSTER, urlFor(new RoomPreviewResourceReference(), pp));
 				break;
-			case Recording:
+			case RECORDING:
 				ref = new Mp4RecordingResourceReference();
 				file.put(PARAM__SRC, urlFor(ref, pp));
 				file.put(PARAM__POSTER, urlFor(new PngRecordingResourceReference(), pp));
 				break;
-			case Presentation:
+			case PRESENTATION:
 				ref = new RoomResourceReference();
 				file.put(PARAM__SRC, urlFor(ref, pp));
 				break;
@@ -142,15 +142,15 @@ public class WbWebSocketHelper extends WebSocketHelper {
 	private static JSONObject patchUrls(BaseFileItem fi, Client c, JSONObject _f) {
 		JSONObject f = new JSONObject(_f.toString()); // deep copy to ensure thread safety
 		switch (fi.getType()) {
-			case Video:
+			case VIDEO:
 				f.put(PARAM__SRC, patchUrl(f.getString(PARAM__SRC), c));
 				f.put(PARAM__POSTER, patchUrl(f.getString(PARAM__POSTER), c));
 				break;
-			case Recording:
+			case RECORDING:
 				f.put(PARAM__SRC, patchUrl(f.getString(PARAM__SRC), c));
 				f.put(PARAM__POSTER, patchUrl(f.getString(PARAM__POSTER), c));
 				break;
-			case Presentation:
+			case PRESENTATION:
 				f.put(PARAM__SRC, patchUrl(f.getString(PARAM__SRC), c));
 				break;
 			default:

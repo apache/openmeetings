@@ -49,7 +49,7 @@ public class VideoConverter extends BaseConverter {
 	public void convertVideo(FileItem f, StoredFile sf, ProcessResultList logs, Optional<DoubleConsumer> progress) {
 		try {
 			final File mp4 = f.getFile(EXTENSION_MP4);
-			f.setType(Type.Video);
+			f.setType(Type.VIDEO);
 			final String ext = sf.getExt();
 			String input = f.getFile(ext).getCanonicalPath();
 			boolean sameExt = EXTENSION_MP4.equals(ext);

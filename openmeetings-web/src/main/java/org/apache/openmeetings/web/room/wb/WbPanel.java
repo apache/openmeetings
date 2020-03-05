@@ -252,7 +252,7 @@ public class WbPanel extends AbstractWbPanel {
 					Whiteboard wb = entry.getValue();
 					for (JSONObject o : wb.list()) {
 						String ft = o.optString(ATTR_FILE_TYPE);
-						if (BaseFileItem.Type.Recording.name().equals(ft) || BaseFileItem.Type.Video.name().equals(ft)) {
+						if (BaseFileItem.Type.RECORDING.name().equals(ft) || BaseFileItem.Type.VIDEO.name().equals(ft)) {
 							JSONObject status = o.optJSONObject(PARAM_STATUS);
 							if (status == null) {
 								continue;
@@ -530,10 +530,10 @@ public class WbPanel extends AbstractWbPanel {
 				return;
 			}
 			switch (fi.getType()) {
-				case Folder:
+				case FOLDER:
 					//do nothing
 					break;
-				case WmlFile:
+				case WML_FILE:
 				{
 					File f = fi.getFile();
 					if (f.exists() && f.isFile()) {
@@ -555,7 +555,7 @@ public class WbPanel extends AbstractWbPanel {
 					}
 				}
 					break;
-				case PollChart:
+				case POLL_CHART:
 					break;
 				default:
 				{
@@ -571,7 +571,7 @@ public class WbPanel extends AbstractWbPanel {
 							.put("uid", wuid)
 							.put(ATTR_SLIDE, wb.getSlide())
 							;
-					if (FileItem.Type.Video == fi.getType() || FileItem.Type.Recording == fi.getType()) {
+					if (FileItem.Type.VIDEO == fi.getType() || FileItem.Type.RECORDING == fi.getType()) {
 						file.put(ATTR_OMTYPE, "Video");
 						file.put(PARAM_STATUS, new JSONObject()
 								.put("paused", true)
@@ -639,7 +639,7 @@ public class WbPanel extends AbstractWbPanel {
 	public String saveWb(Long roomId, Long wbId, String name) {
 		Whiteboard wb = wbm.get(roomId).get(wbId);
 		FileItem f = new FileItem();
-		f.setType(BaseFileItem.Type.WmlFile);
+		f.setType(BaseFileItem.Type.WML_FILE);
 		f.setRoomId(roomId);
 		f.setHash(randomUUID().toString());
 		f.setName(name);

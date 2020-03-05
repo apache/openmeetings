@@ -76,13 +76,13 @@ public class FileProcessor {
 			log.debug("isAsIs: {}", sf.isAsIs());
 
 			if (sf.isImage()) {
-				f.setType(Type.Image);
+				f.setType(Type.IMAGE);
 			} else if (sf.isVideo()) {
-				f.setType(Type.Video);
+				f.setType(Type.VIDEO);
 			} else if (sf.isChart()) {
-				f.setType(Type.PollChart);
+				f.setType(Type.POLL_CHART);
 			} else if (sf.isPdf() || sf.isOffice()) {
-				f.setType(Type.Presentation);
+				f.setType(Type.PRESENTATION);
 			} else {
 				throw new UnsupportedFormatException("The file type cannot be converted :: " + f.getName());
 			}
@@ -109,22 +109,22 @@ public class FileProcessor {
 				return;
 			}
 			switch(f.getType()) {
-				case Presentation:
+				case PRESENTATION:
 					log.debug("Office document: {}", file);
 					copyFile(temp, file);
 					// convert to pdf, thumbs, swf and xml-description
 					docConverter.convertPDF(f, sf, logs, progress);
 					break;
-				case PollChart:
+				case POLL_CHART:
 					log.debug("uploaded chart file"); // NOT implemented yet
 					break;
-				case Image:
+				case IMAGE:
 					// convert it to PNG
 					log.debug("##### convert it to PNG: ");
 					copyFile(temp, file);
 					imageConverter.convertImage(f, sf, progress);
 					break;
-				case Video:
+				case VIDEO:
 					copyFile(temp, file);
 					videoConverter.convertVideo(f, sf, logs, progress);
 					break;

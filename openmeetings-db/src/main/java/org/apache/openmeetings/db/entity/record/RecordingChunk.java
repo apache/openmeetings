@@ -32,12 +32,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.DateAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 /**
  * contains data about each stream, for example if it is a screen sharing or
@@ -55,7 +60,7 @@ import org.simpleframework.xml.Root;
 		+ "AND c.type <> :screen AND c.streamStatus <> :none")
 @NamedQuery(name = "getScreenChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.type = :screen")
 @Table(name = "recording_chunk")
-@Root(name = "flvrecordingmetadata")
+@XmlRootElement(name = "flvrecordingmetadata")
 public class RecordingChunk extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	@XmlType(namespace="org.apache.openmeetings.record.chunk")
@@ -76,41 +81,47 @@ public class RecordingChunk extends HistoricalEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(name = "flvRecordingMetaDataId", data = true, required = false)
+	@XmlElement(name = "flvRecordingMetaDataId", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "recording_id", nullable = true)
 	@ForeignKey(enabled = true)
+	@XmlTransient
 	private Recording recording;
 
 	@Column(name = "start")
-	@Element(name = "recordStart", data = true)
+	@XmlElement(name = "recordStart")
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date start;
 
 	@Column(name = "end")
-	@Element(name = "recordEnd", data = true, required = false)
+	@XmlElement(name = "recordEnd", required = false)
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date end;
 
 	@Column(name = "stream_name")
-	@Element(data = true)
+	@XmlElement(name = "streamName")
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String streamName;
 
 	@Column(name = "sid")
-	@Element(data = true, required = false)
+	@XmlElement(name = "sid", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String sid;
 
 	@Column(name = "type")
-	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
+	@XmlElement(name = "type", required = false)
 	private Type type;
 
 	/**
 	 * this is only STOPPED when the asynchronous stream writer's have completed to write packets to the file.
 	 */
 	@Column(name = "stream_status")
-	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
+	@XmlElement(name = "streamStatus", required = false)
 	private Status streamStatus = Status.NONE;
 
 	@Override

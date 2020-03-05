@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.entity.record;
 
+import static org.apache.openmeetings.db.bind.Constants.RECORDING_NODE;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.RECORDING_FILE_NAME;
 
@@ -33,15 +34,18 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.openmeetings.db.bind.adapter.BooleanAdapter;
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.DateAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
+import org.apache.openmeetings.db.bind.adapter.RecordingStatusAdapter;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
 
 /**
  * An item in the file explorer in the recording section. Can be either:
@@ -87,9 +91,7 @@ import org.simpleframework.xml.Root;
 		+ "    OR r.ownerId IN (SELECT gu.user.id FROM GroupUser gu WHERE gu.group.id = :groupId)"
 		+ "    OR r.roomId IN (SELECT rg.room.id FROM RoomGroup rg WHERE rg.group.id = :groupId)"
 		+ "  ) order by r.inserted ASC")
-@Root(name = "flvrecording")
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = RECORDING_NODE)
 public class Recording extends BaseFileItem {
 	private static final long serialVersionUID = 1L;
 
@@ -103,47 +105,55 @@ public class Recording extends BaseFileItem {
 	}
 
 	@Column(name = "comment")
-	@Element(data = true, required = false)
+	@XmlElement(name = "comment", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String comment;
 
 	@Column(name = "record_start")
-	@Element(data = true, required = false)
+	@XmlElement(name = "recordStart", required = false)
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date recordStart;
 
 	@Column(name = "record_end")
-	@Element(data = true, required = false)
+	@XmlElement(name = "recordEnd", required = false)
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date recordEnd;
 
 	@Column(name = "duration")
-	@Element(data = true, required = false)
+	@XmlElement(name = "duration", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String duration;
 
 	@Column(name = "is_interview")
-	@Element(data = true, required = false)
+	@XmlElement(name = "interview", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean interview = false;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "recording_id")
-	@ElementList(name = "flvrecordingmetadatas", required = false)
+	@XmlElementWrapper(name = "flvrecordingmetadatas", required = false)
+	@XmlElement(name = "flvrecordingmetadata", required = false)
 	private List<RecordingChunk> chunks;
 
 	@Column(name = "status")
 	@Enumerated(value = EnumType.STRING)
-	@Element(data = true, required = false)
+	@XmlElement(name = "status", required = false)
+	@XmlJavaTypeAdapter(RecordingStatusAdapter.class)
 	private Status status = Status.NONE;
 
 	@Column(name = "notified")
-	@Element(data = true, required = false)
+	@XmlElement(name = "notified", required = false)
+	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean notified = false;
 
 	@Override
-	@Element(data = true, name = "flvRecordingId")
 	public Long getId() {
 		return super.getId();
 	}
 
 	@Override
-	@Element(data = true, name = "flvRecordingId")
+	@XmlElement(name = "flvRecordingId")
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	public void setId(Long id) {
 		super.setId(id);
 	}

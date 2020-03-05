@@ -49,11 +49,17 @@ import javax.persistence.InheritanceType;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.openmeetings.db.bind.adapter.CDATAAdapter;
+import org.apache.openmeetings.db.bind.adapter.FileTypeAdapter;
+import org.apache.openmeetings.db.bind.adapter.IntAdapter;
+import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.simpleframework.xml.Element;
 
 @Entity
 @NamedQuery(name = "getFileById", query = "SELECT f FROM BaseFileItem f WHERE f.deleted = false AND f.id = :id")
@@ -78,7 +84,13 @@ public abstract class BaseFileItem extends HistoricalEntity {
 	@XmlType(namespace = "org.apache.openmeetings.file")
 	public enum Type {
 		// Folder need to be alphabetically first, for correct sorting
-		Folder, Image, PollChart, Presentation, Recording, Video, WmlFile
+		FOLDER
+		, IMAGE
+		, POLL_CHART
+		, PRESENTATION
+		, RECORDING
+		, VIDEO
+		, WML_FILE
 	}
 
 	@Id
@@ -87,61 +99,75 @@ public abstract class BaseFileItem extends HistoricalEntity {
 	private Long id;
 
 	@Column(name = "name")
-	@Element(name = "fileName", data = true, required = false)
+	@XmlElement(name = "fileName", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String name;
 
 	@Column(name = "hash")
-	@Element(name = "fileHash", data = true, required = false)
+	@XmlElement(name = "fileHash", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String hash;
 
 	@Column(name = "parent_item_id")
-	@Element(data = true, name = "parentFileExplorerItemId", required = false)
+	@XmlElement(name = "parentFileExplorerItemId", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long parentId;
 
 	@Column(name = "room_id")
-	@Element(data = true, required = false, name = "room_id")
+	@XmlElement(name = "room_id", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long roomId;
 
 	// OwnerID => only set if its directly root in Owner Directory, other Folders and Files
 	// maybe are also in a Home directory but just because their parent is
 	@Column(name = "owner_id")
-	@Element(data = true, required = false)
+	@XmlElement(name = "ownerId", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long ownerId;
 
 	@Column(name = "inserted_by")
-	@Element(data = true, required = false)
+	@XmlElement(name = "insertedBy", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long insertedBy;
 
 	@Column(name = "width")
-	@Element(data = true, required = false)
+	@XmlElement(name = "width", required = false)
+	@XmlJavaTypeAdapter(IntAdapter.class)
 	private Integer width;
 
 	@Column(name = "height")
-	@Element(data = true, required = false)
+	@XmlElement(name = "height", required = false)
+	@XmlJavaTypeAdapter(IntAdapter.class)
 	private Integer height;
 
 	@Column(name = "type")
-	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
+	@XmlElement(name = "type", required = false)
+	@XmlJavaTypeAdapter(FileTypeAdapter.class)
 	private Type type;
 
 	@Column(name = "group_id")
-	@Element(data = true, required = false)
+	@XmlElement(name = "groupId", required = false)
+	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long groupId;
 
 	@Column(name = "page_count", nullable = false)
-	@Element(data = true, required = false)
+	@XmlElement(name = "count", required = false)
+	@XmlJavaTypeAdapter(value = IntAdapter.class, type = int.class)
 	private int count = 1;
 
 	@Column(name = "external_type")
-	@Element(data = true, required = false)
+	@XmlElement(name = "externalType", required = false)
+	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String externalType;
 
 	// Not Mapped
 	@Transient
+	@XmlTransient
 	private List<FileItemLog> log;
 
 	@Transient
+	@XmlTransient
 	private boolean readOnly;
 
 	@Override
@@ -279,10 +305,10 @@ public abstract class BaseFileItem extends HistoricalEntity {
 		if (!isDeleted() && getHash() != null) {
 			File d = new File(getUploadFilesDir(), getHash());
 			switch (getType()) {
-				case WmlFile:
+				case WML_FILE:
 					f = new File(getUploadWmlDir(), String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_WML : ext));
 					break;
-				case Image:
+				case IMAGE:
 					if (ext == null) {
 						f = new File(d, String.format(FILE_NAME_FMT, getHash(), EXTENSION_PNG));
 						if (!f.exists()) {
@@ -292,13 +318,13 @@ public abstract class BaseFileItem extends HistoricalEntity {
 						f = new File(d, String.format(FILE_NAME_FMT, getHash(), ext));
 					}
 					break;
-				case Recording:
+				case RECORDING:
 					f = new File(getStreamsHibernateDir(), String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_MP4 : ext));
 					break;
-				case Video:
+				case VIDEO:
 					f = new File(d, String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_MP4 : ext));
 					break;
-				case Presentation:
+				case PRESENTATION:
 					int slide;
 					if (ext == null) {
 						slide = 0;
@@ -311,8 +337,8 @@ public abstract class BaseFileItem extends HistoricalEntity {
 						f = new File(d, String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_PDF : ext));
 					}
 					break;
-				case PollChart:
-				case Folder:
+				case POLL_CHART:
+				case FOLDER:
 				default:
 			}
 		}
@@ -385,7 +411,7 @@ public abstract class BaseFileItem extends HistoricalEntity {
 		OriginalFilter() {
 			exclusions.add(EXTENSION_PNG);
 			exclusions.add("swf");
-			if (Type.Presentation == getType()) {
+			if (Type.PRESENTATION == getType()) {
 				exclusions.add(EXTENSION_PDF);
 			}
 		}

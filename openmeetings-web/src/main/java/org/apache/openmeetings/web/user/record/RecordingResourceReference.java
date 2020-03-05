@@ -92,7 +92,7 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 	private Recording getRecording(Long id, String ruid, String uid) {
 		log.debug("Recording with id {} is requested", id);
 		Recording r = recDao.get(id);
-		if (r == null || r.getType() == Type.Folder || r.isDeleted()) {
+		if (r == null || r.getType() == Type.FOLDER || r.isDeleted()) {
 			return null;
 		}
 		if (id.equals(getRecordingId())) {

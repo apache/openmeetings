@@ -20,7 +20,9 @@ package org.apache.openmeetings.db.util;
 
 import static javax.xml.stream.XMLInputFactory.IS_NAMESPACE_AWARE;
 import static javax.xml.stream.XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES;
+import static javax.xml.stream.XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES;
 import static javax.xml.stream.XMLInputFactory.IS_VALIDATING;
+import static javax.xml.stream.XMLInputFactory.SUPPORT_DTD;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -48,6 +50,8 @@ public class XmlHelper {
 		inputFactory.setProperty(IS_REPLACING_ENTITY_REFERENCES, false);
 		inputFactory.setProperty(IS_VALIDATING, false);
 		inputFactory.setProperty(IS_NAMESPACE_AWARE, false);
+		inputFactory.setProperty(IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+		inputFactory.setProperty(SUPPORT_DTD, false);
 		return inputFactory;
 	}
 }

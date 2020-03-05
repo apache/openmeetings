@@ -53,7 +53,7 @@ public class FileItemTree extends DefaultNestedTree<BaseFileItem> {
 	@Override
 	protected Component newContentComponent(String id, IModel<BaseFileItem> lm) {
 		BaseFileItem r = lm.getObject();
-		return Type.Folder == r.getType() || r.getId() == null
+		return Type.FOLDER == r.getType() || r.getId() == null
 				? new FolderPanel(id, lm, treePanel)
 				: new FileItemPanel(id, lm, treePanel);
 	}
