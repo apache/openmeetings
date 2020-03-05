@@ -22,8 +22,6 @@ import static org.apache.openmeetings.db.util.AuthLevelUtil.getRoomRight;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -40,7 +38,7 @@ public class TestAuthLevelUtil {
 	@Test
 	public void testAdmin() {
 		User u = new User();
-		u.setRights(new HashSet<>(Arrays.asList(User.Right.ADMIN)));
+		u.setRights(Set.of(User.Right.ADMIN));
 		Set<Room.Right> rights = getRoomRight(u, new Room(), null, 0);
 		assertEquals(1, rights.size(), "Result should NOT be empty");
 		assertTrue(rights.contains(Room.Right.SUPER_MODERATOR), "Result should be super moderator");

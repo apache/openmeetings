@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.util;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -35,7 +34,7 @@ public class LocaleHelper {
 	private LocaleHelper() {}
 
 	public static List<String> getCountries() {
-		return Arrays.asList(Locale.getISOCountries());
+		return List.of(Locale.getISOCountries());
 	}
 
 	public static String getCountryName(String code, Locale l) {

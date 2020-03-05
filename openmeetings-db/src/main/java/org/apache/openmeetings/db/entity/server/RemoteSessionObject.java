@@ -18,40 +18,23 @@
  */
 package org.apache.openmeetings.db.entity.server;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.openjson.JSONObject;
 
 /**
- * This Class is marshaled as an XML-Object and stored as a String in the DB to
+ * This Class is marshaled as JSON-Object and stored as a String in the DB to
  * make it more easy to extend it
  *
  * @author sebastianwagner
  *
  */
-@Root
 public class RemoteSessionObject {
-	private static final Logger log = LoggerFactory.getLogger(RemoteSessionObject.class);
-	@Element(required = false)
 	private String username;
-	@Element(required = false)
 	private String firstname;
-	@Element(required = false)
 	private String lastname;
-	@Element(required = false)
 	private String pictureUrl;
-	@Element(required = false)
 	private String email;
-	@Element
-	private String externalUserId;
-	@Element
-	private String externalUserType;
+	private String externalId;
+	private String externalType;
 
 	public RemoteSessionObject() {
 		// def constructor
@@ -72,22 +55,22 @@ public class RemoteSessionObject {
 	 *            - picture url
 	 * @param email
 	 *            - email
-	 * @param externalUserId
+	 * @param externalId
 	 *            - external user id
-	 * @param externalUserType
+	 * @param externalType
 	 *            - external user type
 	 *
 	 *            06.09.2009 17:05:48 sebastianwagner
 	 */
 	public RemoteSessionObject(String username, String firstname, String lastname, String pictureUrl, String email,
-			String externalUserId, String externalUserType) {
+			String externalId, String externalType) {
 		this.username = username;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.pictureUrl = pictureUrl;
 		this.email = email;
-		this.externalUserId = externalUserId;
-		this.externalUserType = externalUserType;
+		this.externalId = externalId;
+		this.externalType = externalType;
 	}
 
 	public String getUsername() {
@@ -130,47 +113,37 @@ public class RemoteSessionObject {
 		this.email = email;
 	}
 
-	public String getExternalUserId() {
-		return externalUserId;
+	public String getExternalId() {
+		return externalId;
 	}
 
-	public void setExternalUserId(String externalUserId) {
-		this.externalUserId = externalUserId;
+	public void setExternalId(String externalUserId) {
+		this.externalId = externalUserId;
 	}
 
-	public String getExternalUserType() {
-		return externalUserType;
+	public String getExternalType() {
+		return externalType;
 	}
 
-	public void setExternalUserType(String externalUserType) {
-		this.externalUserType = externalUserType;
+	public void setExternalType(String externalType) {
+		this.externalType = externalType;
 	}
 
-	public String toXml() {
-		StringWriter sw = new StringWriter();
-		try {
-			Serializer serializer = new Persister();
-			serializer.write(this, sw);
-		} catch (Exception e) {
-			log.error("Unexpected error while storing object to XML: " + this, e);
-		}
-		return sw.toString();
-	}
-
-	public static RemoteSessionObject fromXml(String xml) {
-		Serializer serializer = new Persister();
-		try {
-			return serializer.read(RemoteSessionObject.class, new StringReader(xml));
-		} catch (Exception e) {
-			log.error("Unexpected error while restoring object from XML: " + xml, e);
-		}
-		return null;
+	public static RemoteSessionObject fromString(String s) {
+		JSONObject o = new JSONObject(s);
+		RemoteSessionObject ro = new RemoteSessionObject();
+		ro.username = o.optString("username");
+		ro.firstname = o.optString("firstname");
+		ro.lastname = o.optString("lastname");
+		ro.pictureUrl = o.optString("pictureUrl");
+		ro.email = o.optString("email");
+		ro.externalId = o.getString("externalId");
+		ro.externalType = o.getString("externalType");
+		return ro;
 	}
 
 	@Override
 	public String toString() {
-		return "RemoteSessionObject [username=" + username + ", firstname=" + firstname + ", lastname=" + lastname
-				+ ", pictureUrl=" + pictureUrl + ", email=" + email + ", externalUserId=" + externalUserId
-				+ ", externalUserType=" + externalUserType + "]";
+		return new JSONObject(this).toString();
 	}
 }

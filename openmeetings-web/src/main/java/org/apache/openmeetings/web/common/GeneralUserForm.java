@@ -26,7 +26,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.GroupDao;
@@ -76,7 +75,7 @@ public class GeneralUserForm extends Form<User> {
 		email.setLabel(new ResourceModel("119"));
 		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new DropDownChoice<>("salutation"
-				, Arrays.asList(Salutation.values())
+				, List.of(Salutation.values())
 				, new ChoiceRenderer<Salutation>() {
 					private static final long serialVersionUID = 1L;
 

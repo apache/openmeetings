@@ -24,8 +24,8 @@ import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_USER_PREF
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 
-import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 
@@ -132,12 +132,12 @@ public class ChatForm extends Form<Void> {
 						return;
 					}
 					chatDao.update(m);
-					JSONObject msg = getChat().getMessage(Arrays.asList(m));
+					JSONObject msg = getChat().getMessage(List.of(m));
 					if (m.getToRoom() != null) {
 						ChatWebSocketHelper.sendRoom(m, msg);
 					} else if (m.getToUser() != null) {
 						ChatWebSocketHelper.sendUser(getUserId(), m, msg);
-						msg = Chat.getMessage(m.getToUser(), Arrays.asList(m));
+						msg = Chat.getMessage(m.getToUser(), List.of(m));
 						ChatWebSocketHelper.sendUser(m.getToUser().getId(), m, msg);
 					} else {
 						ChatWebSocketHelper.sendAll(m, msg);

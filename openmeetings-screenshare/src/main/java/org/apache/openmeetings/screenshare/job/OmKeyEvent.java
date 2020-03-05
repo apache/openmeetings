@@ -27,7 +27,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +45,7 @@ public class OmKeyEvent {
 	private static final Logger log = getLogger(OmKeyEvent.class);
 	private static final Map<Integer, Integer> KEY_MAP = new HashMap<>();
 	private static final Map<Character, Integer> CHAR_MAP = new HashMap<>();
-	private static final List<Character> UMLAUT_LIST = Arrays.asList('ß', 'ö', 'Ö', 'ä', 'Ä', 'ü', 'Ü');
+	private static final List<Character> UMLAUT_LIST = List.of('ß', 'ö', 'Ö', 'ä', 'Ä', 'ü', 'Ü');
 	private static final Set<Character> UMLAUTS = Collections.unmodifiableSet(UMLAUT_LIST.stream().collect(Collectors.toSet()));
 	private static final Set<Character> UNPRINTABLE = Collections.unmodifiableSet(Stream.concat(UMLAUT_LIST.stream(), Stream.of('§')).collect(Collectors.toSet()));
 	static {

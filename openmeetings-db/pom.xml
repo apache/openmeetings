@@ -73,10 +73,6 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.simpleframework</groupId>
-			<artifactId>simple-xml</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.asteriskjava</groupId>
 			<artifactId>asterisk-java</artifactId>
 			<version>${asterisk-java.version}</version>

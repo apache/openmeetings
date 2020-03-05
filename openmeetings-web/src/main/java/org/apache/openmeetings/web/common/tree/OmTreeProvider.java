@@ -23,7 +23,6 @@ import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,7 +44,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 	private static final long serialVersionUID = 1L;
-	private static final List<Type> VIDEO_TYPES = Arrays.asList(Type.FOLDER, Type.VIDEO);
+	private static final List<Type> VIDEO_TYPES = List.of(Type.FOLDER, Type.VIDEO);
 	public static final String RECORDINGS_MY = "recordings-my";
 	public static final String RECORDINGS_PUBLIC = "recordings-public";
 	public static final String RECORDINGS_GROUP = "recordings-group-%s";

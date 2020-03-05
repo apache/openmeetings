@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.util;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.entity.room.Room.Type;
@@ -31,7 +30,7 @@ public class RoomTypeDropDown extends DropDownChoice<Type> {
 
 	public RoomTypeDropDown(String id) {
 		super(id);
-		setChoices(Arrays.asList(Type.values()));
+		setChoices(List.of(Type.values()));
 		setChoiceRenderer(new IChoiceRenderer<Type>() {
 			private static final long serialVersionUID = 1L;
 

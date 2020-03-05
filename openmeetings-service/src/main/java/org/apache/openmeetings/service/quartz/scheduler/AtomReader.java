@@ -50,7 +50,7 @@ public class AtomReader {
 	private static final String ATTR_PUBLISHED = "published";
 	private static final int MAX_ITEM_COUNT = 5;
 	private static final Map<String, Spec> specs = new HashMap<>();
-	private static final XMLInputFactory inputFactory = XmlHelper.createFactory();
+	private static final XMLInputFactory inputFactory = XmlHelper.createInputFactory();
 	static {
 		add("item")
 			.add(new Field("title"))

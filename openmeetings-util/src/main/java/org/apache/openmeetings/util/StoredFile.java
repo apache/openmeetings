@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -50,14 +49,14 @@ public class StoredFile {
 	private static final String MIME_IMAGE = "image";
 	private static final String MIME_TEXT = "text";
 	private static final String MIME_APP = "application";
-	private static final Set<MediaType> CONVERT_TYPES = new HashSet<>(Arrays.asList(
+	private static final Set<MediaType> CONVERT_TYPES = Set.of(
 			application("x-tika-msoffice"), application("x-tika-ooxml"), application("msword")
-			, application("vnd.wordperfect"), application("rtf")));
+			, application("vnd.wordperfect"), application("rtf"));
 
 	private static final MediaType MIME_PNG = MediaType.parse(PNG_MIME_TYPE);
-	private static final Set<MediaType> PDF_TYPES = new HashSet<>(Arrays.asList(application("pdf"), application("postscript")));
+	private static final Set<MediaType> PDF_TYPES = Set.of(application("pdf"), application("postscript"));
 	private static final Set<MediaType> CHART_TYPES = new HashSet<>();
-	private static final Set<MediaType> AS_IS_TYPES = new HashSet<>(Arrays.asList(MIME_PNG));
+	private static final Set<MediaType> AS_IS_TYPES = Set.of(MIME_PNG);
 	private static final String ACCEPT_STRING;
 	private static TikaConfig tika;
 	static {

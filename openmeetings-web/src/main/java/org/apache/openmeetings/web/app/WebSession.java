@@ -30,7 +30,6 @@ import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import static org.apache.openmeetings.web.app.Application.isInvaldSession;
 import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -93,7 +92,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(WebSession.class);
 	public static final int MILLIS_IN_MINUTE = 60000;
-	public static final List<String> AVAILABLE_TIMEZONES = Collections.unmodifiableList(Arrays.asList(TimeZone.getAvailableIDs()));
+	public static final List<String> AVAILABLE_TIMEZONES = Collections.unmodifiableList(List.of(TimeZone.getAvailableIDs()));
 	public static final Set<String> AVAILABLE_TIMEZONE_SET = Collections.unmodifiableSet(new LinkedHashSet<>(AVAILABLE_TIMEZONES));
 	public static final String WICKET_ROOM_ID = "wicketroomid";
 	private Long userId = null;
@@ -232,17 +231,17 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		if (!soapLogin.isUsed() || soapLogin.getAllowSameURLMultipleTimes()) {
 			Sessiondata sd = sessionDao.check(soapLogin.getSessionHash());
 			if (sd.getXml() != null) {
-				RemoteSessionObject remoteUser = RemoteSessionObject.fromXml(sd.getXml());
-				if (remoteUser != null && !Strings.isEmpty(remoteUser.getExternalUserId())) {
-					User user = userDao.getExternalUser(remoteUser.getExternalUserId(), remoteUser.getExternalUserType());
+				RemoteSessionObject remoteUser = RemoteSessionObject.fromString(sd.getXml());
+				if (remoteUser != null && !Strings.isEmpty(remoteUser.getExternalId())) {
+					User user = userDao.getExternalUser(remoteUser.getExternalId(), remoteUser.getExternalType());
 					if (user == null) {
 						user = getNewUserInstance(null);
 						user.setFirstname(remoteUser.getFirstname());
 						user.setLastname(remoteUser.getLastname());
 						user.setLogin(remoteUser.getUsername());
 						user.setType(Type.EXTERNAL);
-						user.setExternalId(remoteUser.getExternalUserId());
-						user.addGroup(groupDao.getExternal(remoteUser.getExternalUserType()));
+						user.setExternalId(remoteUser.getExternalId());
+						user.addGroup(groupDao.getExternal(remoteUser.getExternalType()));
 						user.getRights().clear();
 						user.getRights().add(Right.ROOM);
 						user.getAddress().setEmail(remoteUser.getEmail());

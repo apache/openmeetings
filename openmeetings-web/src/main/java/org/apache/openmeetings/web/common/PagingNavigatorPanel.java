@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.common;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -36,7 +35,7 @@ public abstract class PagingNavigatorPanel extends Panel {
 	private final List<Integer> numbers;
 
 	public PagingNavigatorPanel(String id, final DataView<?> dataView) {
-		this(id, dataView, Arrays.asList(10, 25, 50, 75, 100, 200), 50);
+		this(id, dataView, List.of(10, 25, 50, 75, 100, 200), 50);
 	}
 
 	public PagingNavigatorPanel(String id, final DataView<?> dataView, List<Integer> numbers, int entitiesPerPage) {

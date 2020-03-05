@@ -30,7 +30,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,7 +121,7 @@ public class UserForm extends AdminBaseForm<User> {
 		login.setLabel(new ResourceModel("108"));
 		mainContainer.add(login.add(minimumLength(getMinLoginLength())));
 
-		mainContainer.add(new DropDownChoice<>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {
+		mainContainer.add(new DropDownChoice<>("type", List.of(Type.values())).add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
 			@Override

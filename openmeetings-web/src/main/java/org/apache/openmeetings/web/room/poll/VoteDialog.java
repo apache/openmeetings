@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.room.poll;
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -59,7 +58,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
  */
 public class VoteDialog extends Modal<RoomPollAnswer> {
 	private static final long serialVersionUID = 1L;
-	private static final List<Integer> answers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+	private static final List<Integer> answers = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 	private PollAnswerForm form;
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final IModel<String> user = Model.of((String)null);

@@ -542,21 +542,6 @@
 				<version>${cxf.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.simpleframework</groupId>
-				<artifactId>simple-xml</artifactId>
-				<version>${simple-xml.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>stax</groupId>
-						<artifactId>stax-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>xpp3</groupId>
-						<artifactId>xpp3</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
 				<groupId>org.codehaus.jettison</groupId>
 				<artifactId>jettison</artifactId>
 				<version>${jettison.version}</version>

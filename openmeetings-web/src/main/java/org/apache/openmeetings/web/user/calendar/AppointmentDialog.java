@@ -27,7 +27,6 @@ import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -427,7 +426,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 			//Advanced
 			add(new DropDownChoice<>(
 					"reminder"
-					, Arrays.asList(Reminder.values())
+					, List.of(Reminder.values())
 					, new IChoiceRenderer<Reminder>() {
 						private static final long serialVersionUID = 1L;
 

@@ -36,7 +36,6 @@ import java.io.File;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -163,7 +162,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private static final Set<String> STRINGS_WITH_APP = new HashSet<>();
 	private static String appName;
 	static {
-		STRINGS_WITH_APP.addAll(Arrays.asList("499", "500", "506", "511", "512", "513", "517", "532", "622", "widget.start.desc"
+		STRINGS_WITH_APP.addAll(List.of("499", "500", "506", "511", "512", "513", "517", "532", "622", "widget.start.desc"
 				, "909", "952", "978", "981", "984", "989", "990", "999", "1151", "1155", "1157", "1158", "1194"));
 	}
 	public static final String HASH_MAPPING = "/hash";

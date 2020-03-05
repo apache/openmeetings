@@ -24,7 +24,6 @@ import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -101,7 +100,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			r.setWidth(flvWidth);
 			r.setHeight(flvHeight);
 
-			String mp4path = convertToMp4(r, Arrays.asList(
+			String mp4path = convertToMp4(r, List.of(
 					"-itsoffset", formatMillis(diff(screenChunk.getStart(), r.getRecordStart())),
 					"-i", inputScreenFullFlv, "-i", wav.getCanonicalPath()
 					), logs);

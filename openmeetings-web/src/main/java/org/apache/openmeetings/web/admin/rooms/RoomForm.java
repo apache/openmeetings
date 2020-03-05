@@ -26,7 +26,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -87,7 +86,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5I
 
 public class RoomForm extends AdminBaseForm<Room> {
 	private static final long serialVersionUID = 1L;
-	private static final List<Long> DROPDOWN_NUMBER_OF_PARTICIPANTS = Arrays.asList(2L, 4L, 6L, 8L, 10L, 12L, 14L, 16L, 20L, 25L, 32L, 50L,
+	private static final List<Long> DROPDOWN_NUMBER_OF_PARTICIPANTS = List.of(2L, 4L, 6L, 8L, 10L, 12L, 14L, 16L, 20L, 25L, 32L, 50L,
 			100L, 150L, 200L, 500L, 1000L);
 	private final WebMarkupContainer roomList;
 	private final TextField<String> pin = new TextField<>("pin");

@@ -41,7 +41,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -156,7 +155,7 @@ public class WbPanel extends AbstractWbPanel {
 			setVisible(false);
 		} else {
 			add(new ListView<>("clipart"
-					, Arrays.asList(OmFileHelper.getPublicClipartsDir().list())
+					, List.of(OmFileHelper.getPublicClipartsDir().list())
 						.stream()
 						.sorted()
 						.collect(Collectors.toList()))

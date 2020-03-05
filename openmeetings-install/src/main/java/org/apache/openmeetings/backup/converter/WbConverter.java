@@ -34,7 +34,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -131,11 +130,11 @@ public class WbConverter {
 		JSONArray path = new JSONArray();
 		for (List<?> point : points) {
 			if (path.length() == 0) {
-				path.put(new JSONArray(Arrays.asList("M", getInt(point, 1), getInt(point, 2))));
+				path.put(new JSONArray(List.of("M", getInt(point, 1), getInt(point, 2))));
 			} else if (path.length() == points.size() - 1) {
-				path.put(new JSONArray(Arrays.asList("L", getInt(point, 3), getInt(point, 4))));
+				path.put(new JSONArray(List.of("L", getInt(point, 3), getInt(point, 4))));
 			} else {
-				path.put(new JSONArray(Arrays.asList("Q"
+				path.put(new JSONArray(List.of("Q"
 						, getInt(point, 1), getInt(point, 2)
 						, getInt(point, 3), getInt(point, 4))));
 			}

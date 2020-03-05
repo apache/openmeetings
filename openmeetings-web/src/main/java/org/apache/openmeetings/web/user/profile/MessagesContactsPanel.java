@@ -28,7 +28,6 @@ import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBor
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -119,7 +118,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 	private final Button unreadBtn = new Button("unreadBtn");
 	private final DropDownChoice<String> selectDropDown = new DropDownChoice<>(
 		"msgSelect", Model.of(SELECT_CHOOSE)
-		, Arrays.asList(SELECT_CHOOSE, SELECT_ALL, SELECT_NONE, SELECT_UNREAD, SELECT_READ)
+		, List.of(SELECT_CHOOSE, SELECT_ALL, SELECT_NONE, SELECT_UNREAD, SELECT_READ)
 		, new ChoiceRenderer<String>() {
 			private static final long serialVersionUID = 1L;
 
@@ -135,7 +134,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 		});
 	private PrivateMessageFolder NOT_MOVE_FOLDER = new PrivateMessageFolder();
 	private final DropDownChoice<PrivateMessageFolder> moveDropDown = new DropDownChoice<>("msgMove", Model.of(NOT_MOVE_FOLDER)
-		, Arrays.asList(NOT_MOVE_FOLDER)
+		, List.of(NOT_MOVE_FOLDER)
 		, new ChoiceRenderer<PrivateMessageFolder>() {
 			private static final long serialVersionUID = 1L;
 

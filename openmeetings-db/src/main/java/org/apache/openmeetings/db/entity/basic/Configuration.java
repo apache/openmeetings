@@ -46,7 +46,6 @@ import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.bind.adapter.UserAdapter;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.user.User;
-import org.simpleframework.xml.Element;
 
 @Entity
 @NamedQuery(name = "forceGetConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.key LIKE :key")
@@ -95,12 +94,12 @@ public class Configuration extends HistoricalEntity {
 
 	@Lob
 	@Column(name = "comment", length = 2048)
-	@Element(data = true, required = false)
+	@XmlElement(name = "comment", required = false)
 	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String comment;
 
 	@Column(name = "fromVersion")
-	@Element(data = true, required = false)
+	@XmlElement(name = "fromVersion", required = false)
 	@XmlJavaTypeAdapter(CDATAAdapter.class)
 	private String fromVersion;
 

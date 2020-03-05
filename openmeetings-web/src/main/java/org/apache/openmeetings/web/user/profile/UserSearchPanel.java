@@ -24,7 +24,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -55,7 +54,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public class UserSearchPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
-	private static final List<Integer> itemsPerPage = Arrays.asList(10, 25, 50, 75, 100, 200, 500, 1000, 2500, 5000);
+	private static final List<Integer> itemsPerPage = List.of(10, 25, 50, 75, 100, 200, 500, 1000, 2500, 5000);
 	private final TextField<String> text = new TextField<>("text", Model.of(""));
 	private final TextField<String> search = new TextField<>("search", Model.of(""));
 	private final TextField<String> offer = new TextField<>("offer", Model.of(""));

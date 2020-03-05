@@ -42,12 +42,10 @@ import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.bind.adapter.RoomAdapter;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.user.Group;
-import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQuery(name = "getAllRoomGroups", query = "SELECT rg FROM RoomGroup rg ORDER BY rg.id")
 @Table(name = "room_group")
-@Root(name="room_organisation")
 @XmlRootElement(name = ROOM_GRP_NODE)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RoomGroup implements IDataProviderEntity {

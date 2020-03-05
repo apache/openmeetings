@@ -1090,7 +1090,7 @@ public class BackupImport {
 				JAXBContext jc = JAXBContext.newInstance(clazz);
 				unmarshaller = jc.createUnmarshaller();
 			}
-			XMLInputFactory xif = XmlHelper.createFactory();
+			XMLInputFactory xif = XmlHelper.createInputFactory();
 			StreamSource xmlSource = new StreamSource(xml);
 			XMLStreamReader xsr = xif.createXMLStreamReader(xmlSource);
 			boolean listNodeFound = false;

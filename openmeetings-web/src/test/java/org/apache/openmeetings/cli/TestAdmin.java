@@ -39,7 +39,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -109,7 +108,7 @@ public class TestAdmin {
 	}
 
 	private static void performInstall(Admin admin, String... args) throws Exception {
-		List<String> params = new ArrayList<>(Arrays.asList("-i"
+		List<String> params = new ArrayList<>(List.of("-i"
 				, "-tz", "Europe/Berlin"
 				, "-email", email
 				, "-group", group

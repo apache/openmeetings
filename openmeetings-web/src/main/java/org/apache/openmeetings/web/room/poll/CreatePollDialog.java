@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.room.poll;
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.util.Arrays;
+import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -117,7 +117,7 @@ public class CreatePollDialog extends Modal<RoomPoll> {
 		protected void onInitialize() {
 			add(new RequiredTextField<String>("name").setLabel(new ResourceModel("1410")));
 			add(new TextArea<String>("question"));
-			add(new DropDownChoice<>("type", Arrays.asList(RoomPoll.Type.values())
+			add(new DropDownChoice<>("type", List.of(RoomPoll.Type.values())
 					, new ChoiceRenderer<RoomPoll.Type>() {
 						private static final long serialVersionUID = 1L;
 

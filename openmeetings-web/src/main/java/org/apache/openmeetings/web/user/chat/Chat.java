@@ -30,7 +30,6 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -82,7 +81,7 @@ public class Chat extends Panel {
 					if (m.isNeedModeration() && isModerator(cm, getUserId(), roomId)) {
 						m.setNeedModeration(false);
 						chatDao.update(m);
-						ChatWebSocketHelper.sendRoom(m, getMessage(Arrays.asList(m)).put("mode",  "accept"));
+						ChatWebSocketHelper.sendRoom(m, getMessage(List.of(m)).put("mode",  "accept"));
 					} else {
 						log.error("It seems like we are being hacked!!!!");
 					}

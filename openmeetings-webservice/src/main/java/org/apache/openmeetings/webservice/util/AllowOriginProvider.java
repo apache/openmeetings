@@ -20,7 +20,6 @@ package org.apache.openmeetings.webservice.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRestAllowOrigin;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -45,7 +44,7 @@ public class AllowOriginProvider extends AbstractOutDatabindingInterceptor {
 				headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 				outMessage.put(Message.PROTOCOL_HEADERS, headers);
 			}
-			headers.put("Access-Control-Allow-Origin", Arrays.asList(allowOrigin));
+			headers.put("Access-Control-Allow-Origin", List.of(allowOrigin));
 		}
 	}
 }

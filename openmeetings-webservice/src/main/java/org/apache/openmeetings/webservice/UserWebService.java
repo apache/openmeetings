@@ -307,9 +307,9 @@ public class UserWebService extends BaseWebService {
 
 			log.debug(remoteSessionObject.toString());
 
-			String xmlString = remoteSessionObject.toXml();
+			String xmlString = remoteSessionObject.toString();
 
-			log.debug("xmlString {}", xmlString);
+			log.debug("jsonString {}", xmlString);
 
 			String hash = soapDao.addSOAPLogin(sid, options.getRoomId(),
 					options.isModerator(), options.isShowAudioVideoTest(), options.isAllowSameURLMultipleTimes(),

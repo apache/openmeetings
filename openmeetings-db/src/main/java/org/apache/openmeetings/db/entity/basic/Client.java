@@ -22,7 +22,6 @@ import static java.util.UUID.randomUUID;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -140,7 +139,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 	}
 
 	public Client allow(Right... inRights) {
-		allow(Arrays.asList(inRights));
+		allow(List.of(inRights));
 		return this;
 	}
 
@@ -464,7 +463,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 			if (activities == null || activities.length == 0) {
 				setActivities();
 			} else {
-				sactivities.addAll(Arrays.asList(activities));
+				sactivities.addAll(List.of(activities));
 			}
 			if (StreamType.SCREEN == type) {
 				this.swidth = 800;

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.admin.configurations;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -114,7 +113,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		add(new TextArea<String>("comment"));
 		update(null);
 
-		add(new DropDownChoice<>("type", Arrays.asList(Type.values()), new IChoiceRenderer<Type>() {
+		add(new DropDownChoice<>("type", List.of(Type.values()), new IChoiceRenderer<Type>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -35,7 +35,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getVideoPreset;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -311,7 +310,7 @@ public abstract class BaseConverter {
 	}
 
 	protected List<String> addMp4OutParams(Recording r, List<String> argv, String mp4path) {
-		argv.addAll(Arrays.asList(
+		argv.addAll(List.of(
 				"-c:v", "h264", //
 				"-crf", "24",
 				"-vsync", "0",
@@ -331,7 +330,7 @@ public abstract class BaseConverter {
 
 	protected String convertToMp4(Recording r, List<String> inArgv, ProcessResultList logs) throws IOException {
 		String mp4path = r.getFile().getCanonicalPath();
-		List<String> argv = new ArrayList<>(Arrays.asList(getPathToFFMPEG(), "-y"));
+		List<String> argv = new ArrayList<>(List.of(getPathToFFMPEG(), "-y"));
 		argv.addAll(inArgv);
 		logs.add(ProcessHelper.executeScript("generate MP4", addMp4OutParams(r, argv, mp4path).toArray(new String[]{})));
 		return mp4path;

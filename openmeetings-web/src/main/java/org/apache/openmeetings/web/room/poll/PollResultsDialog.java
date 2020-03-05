@@ -23,7 +23,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.PollDao;
@@ -257,7 +256,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 	private BarChart<Integer> barChart(RoomPoll p) {
 		String[] ticks = getTicks(p);
 		BarChart<Integer> barChart = new BarChart<>(null);
-		barChart.addValue(Arrays.asList(getValues(p)));
+		barChart.addValue(List.of(getValues(p)));
 
 		barChart.getSeriesDefaults()
 				.setRendererOptions(new RendererOptions().setHighlightMouseDown(true).setShowDataLabels(true)
@@ -346,7 +345,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 			chartSimple = getString("1414");
 			chartPie = getString("1415");
 			add(name, question, count);
-			chartType = new DropDownChoice<>("chartType", Model.of(chartSimple), Arrays.asList(chartSimple, chartPie));
+			chartType = new DropDownChoice<>("chartType", Model.of(chartSimple), List.of(chartSimple, chartPie));
 			add(chartType.add(new AjaxFormComponentUpdatingBehavior("change") {
 				private static final long serialVersionUID = 1L;
 

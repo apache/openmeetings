@@ -97,7 +97,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setxFrameOption
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -186,7 +185,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		List<Configuration> result = new ArrayList<>();
 		for (String key : keys) { //iteration is necessary to fill list with all values
 			List<Configuration> r = em.createNamedQuery("getConfigurationsByKeys", Configuration.class)
-					.setParameter("keys", Arrays.asList(key))
+					.setParameter("keys", List.of(key))
 					.getResultList();
 			result.add(r.isEmpty() ? null : r.get(0));
 		}
@@ -561,7 +560,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	private static JSONObject getHotkey(String value) {
-		List<String> partList = Arrays.asList(value.split("\\+"));
+		List<String> partList = List.of(value.split("\\+"));
 		Set<String> parts = new HashSet<>(partList);
 		return new JSONObject()
 				.put("alt", parts.contains("Alt"))

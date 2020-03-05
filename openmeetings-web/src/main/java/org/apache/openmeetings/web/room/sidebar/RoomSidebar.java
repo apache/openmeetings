@@ -23,7 +23,6 @@ import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -94,7 +93,7 @@ public class RoomSidebar extends Panel {
 			Client self = room.getClient();
 			List<Client> list;
 			if (!self.hasRight(Room.Right.MODERATOR) && room.getRoom().isHidden(RoomElement.USER_COUNT)) {
-				list = Arrays.asList(self);
+				list = List.of(self);
 			} else {
 				list = cm.listByRoom(room.getRoom().getId());
 				list.sort(Comparator.<Client, Integer>comparing(c -> {

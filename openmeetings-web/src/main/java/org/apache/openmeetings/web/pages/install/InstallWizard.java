@@ -34,7 +34,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -210,7 +209,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private final TextField<String> pass = new TextField<>("password");
 		private final Form<ConnectionProperties> form = new Form<>("form", new CompoundPropertyModel<>(getProps(null))) {
 			private static final long serialVersionUID = 1L;
-			private final DropDownChoice<DbType> db = new DropDownChoice<>("dbType", Arrays.asList(DbType.values()), new ChoiceRenderer<DbType>() {
+			private final DropDownChoice<DbType> db = new DropDownChoice<>("dbType", List.of(DbType.values()), new ChoiceRenderer<DbType>() {
 				private static final long serialVersionUID = 1L;
 
 				@Override

@@ -18,7 +18,25 @@
  */
 package org.apache.openmeetings.backup;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.db.bind.Constants.APPOINTMENT_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.CALENDAR_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.CFG_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.CHAT_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.CONTACT_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.FILE_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.GROUP_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.LDAP_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.MMEMBER_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.MSG_FOLDER_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.MSG_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.OAUTH_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.POLL_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.RECORDING_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.ROOM_FILE_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.ROOM_GRP_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.ROOM_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.USER_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.VERSION_LIST_NODE;
 import static org.apache.openmeetings.util.OmFileHelper.BACKUP_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
@@ -33,28 +51,20 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.stream.XMLStreamWriter;
+
 import org.apache.commons.io.FileUtils;
-import org.apache.openmeetings.backup.converter.AppointmentConverter;
-import org.apache.openmeetings.backup.converter.AppointmentReminderTypeConverter;
-import org.apache.openmeetings.backup.converter.BaseFileItemConverter;
-import org.apache.openmeetings.backup.converter.DateConverter;
-import org.apache.openmeetings.backup.converter.GroupConverter;
-import org.apache.openmeetings.backup.converter.PollTypeConverter;
-import org.apache.openmeetings.backup.converter.RoomConverter;
-import org.apache.openmeetings.backup.converter.RoomTypeConverter;
-import org.apache.openmeetings.backup.converter.SalutationConverter;
-import org.apache.openmeetings.backup.converter.UserConverter;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -71,7 +81,6 @@ import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -85,21 +94,15 @@ import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.entity.user.User.Salutation;
+import org.apache.openmeetings.db.util.XmlHelper;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.convert.Registry;
-import org.simpleframework.xml.convert.RegistryStrategy;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.Strategy;
-import org.simpleframework.xml.stream.Format;
-import org.simpleframework.xml.stream.NodeBuilder;
-import org.simpleframework.xml.stream.OutputNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
 
 /**
  *
@@ -154,13 +157,11 @@ public class BackupExport {
 			zip.getParentFile().mkdirs();
 		}
 		try (FileOutputStream fos = new FileOutputStream(zip); ZipOutputStream zos = new ZipOutputStream(fos)) {
-			Serializer ser = new Persister();
-
 			progressHolder.setProgress(0);
 			/*
 			 * ##################### Backup Groups
 			 */
-			writeList(ser, zos, "version.xml", "version", Arrays.asList(BackupVersion.get()));
+			writeList(zos, "version.xml", VERSION_LIST_NODE, List.of(BackupVersion.get()));
 			progressHolder.setProgress(2);
 			exportGroups(zos);
 			progressHolder.setProgress(5);
@@ -178,13 +179,13 @@ public class BackupExport {
 			progressHolder.setProgress(25);
 			exportMeetingMember(zos);
 			progressHolder.setProgress(30);
-			exportLdap(zos, ser);
+			exportLdap(zos);
 			progressHolder.setProgress(35);
 			exportOauth(zos);
 			progressHolder.setProgress(45);
 			exportPrivateMsg(zos);
 			progressHolder.setProgress(50);
-			exportPrivateMsgFolder(zos, ser);
+			exportPrivateMsgFolder(zos);
 			progressHolder.setProgress(55);
 			exportContacts(zos);
 			progressHolder.setProgress(60);
@@ -228,91 +229,42 @@ public class BackupExport {
 		}
 	}
 
-	private static <T extends HistoricalEntity> void bindDate(Registry registry, List<T> list) throws Exception {
-		bindDate(registry, list, HistoricalEntity::getInserted);
-	}
-
-	private static <T> void bindDate(Registry registry, List<T> list, Function<T, ?> func) throws Exception {
-		if (list != null) {
-			for (T e : list) {
-				Object d = func.apply(e);
-				if (d != null) {
-					Class<?> dateClass = d.getClass();
-					registry.bind(dateClass, DateConverter.class);
-					break;
-				}
-			}
-		}
-	}
 	/*
 	 * ##################### Backup  Groups
 	 */
 	private void exportGroups(ZipOutputStream zos) throws Exception {
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer ser = new Persister(strategy);
 		List<Group> list = groupDao.get(0, Integer.MAX_VALUE);
-		bindDate(registry, list);
-		writeList(ser, zos, "organizations.xml", "organisations", list);
+		writeList(zos, "organizations.xml", GROUP_LIST_NODE, list);
 	}
 
 	/*
 	 * ##################### Backup Users
 	 */
 	private void exportUsers(ZipOutputStream zos) throws Exception {
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer ser = new Persister(strategy);
-
-		registry.bind(Group.class, GroupConverter.class);
-		registry.bind(Salutation.class, SalutationConverter.class);
 		List<User> list = userDao.getAllBackupUsers();
-		bindDate(registry, list);
-
-		writeList(ser, zos, "users.xml", "users", list);
+		writeList(zos, "users.xml", USER_LIST_NODE, list);
 	}
 
 	/*
 	 * ##################### Backup Room
 	 */
 	private void exportRoom(ZipOutputStream zos) throws Exception {
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		registry.bind(User.class, UserConverter.class);
-		registry.bind(Room.Type.class, RoomTypeConverter.class);
 		List<Room> list = roomDao.get();
-		bindDate(registry, list);
-		writeList(serializer, zos, "rooms.xml", "rooms", list);
+		writeList(zos, "rooms.xml", ROOM_LIST_NODE, list);
 	}
 
 	/*
 	 * ##################### Backup Room Groups
 	 */
 	private void exportRoomGroup(ZipOutputStream zos) throws Exception {
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		registry.bind(Group.class, GroupConverter.class);
-		registry.bind(Room.class, RoomConverter.class);
-
-		writeList(serializer, zos, "rooms_organisation.xml", "room_organisations", roomDao.getGroups());
+		writeList(zos, "rooms_organisation.xml", ROOM_GRP_LIST_NODE, roomDao.getGroups());
 	}
 
 	/*
 	 * ##################### Backup Room Files
 	 */
 	private void exportRoomFile(ZipOutputStream zos) throws Exception {
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		registry.bind(FileItem.class, BaseFileItemConverter.class);
-		registry.bind(Recording.class, BaseFileItemConverter.class);
-
-		writeList(serializer, zos, "roomFiles.xml", "RoomFiles", roomDao.getFiles());
+		writeList(zos, "roomFiles.xml", ROOM_FILE_LIST_NODE, roomDao.getFiles());
 	}
 
 	/*
@@ -320,13 +272,7 @@ public class BackupExport {
 	 */
 	private void exportCalendar(ZipOutputStream zos) throws Exception {
 		List<OmCalendar> list = calendarDao.get();
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-		registry.bind(User.class, UserConverter.class);
-		bindDate(registry, list);
-
-		writeList(serializer, zos, "calendars.xml", "calendars", list);
+		writeList(zos, "calendars.xml", CALENDAR_LIST_NODE, list);
 	}
 
 	/*
@@ -334,54 +280,34 @@ public class BackupExport {
 	 */
 	private void exportAppointment(ZipOutputStream zos) throws Exception {
 		List<Appointment> list = appointmentDao.get();
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		registry.bind(User.class, UserConverter.class);
-		registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
-		registry.bind(Room.class, RoomConverter.class);
-		bindDate(registry, list);
-
-		writeList(serializer, zos, "appointements.xml", "appointments", list);
+		writeList(zos, "appointements.xml", APPOINTMENT_LIST_NODE, list);
 	}
 
 	/*
 	 * ##################### Backup Meeting Members
 	 */
 	private void exportMeetingMember(ZipOutputStream zos) throws Exception {
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		registry.bind(User.class, UserConverter.class);
-		registry.bind(Appointment.class, AppointmentConverter.class);
-
-		writeList(serializer, zos, "meetingmembers.xml",
-				"meetingmembers", meetingMemberDao.get());
+		writeList(zos, "meetingmembers.xml",
+				MMEMBER_LIST_NODE, meetingMemberDao.get());
 	}
 
 	/*
 	 * ##################### LDAP Configs
 	 */
-	private void exportLdap(ZipOutputStream zos, Serializer ser) throws Exception {
+	private void exportLdap(ZipOutputStream zos) throws Exception {
 		List<LdapConfig> ldapList = ldapConfigDao.get();
 		if (!ldapList.isEmpty()) {
 			ldapList.remove(0);
 		}
-		writeList(ser, zos, "ldapconfigs.xml", "ldapconfigs", ldapList);
+		writeList(zos, "ldapconfigs.xml", LDAP_LIST_NODE, ldapList);
 	}
 
 	/*
 	 * ##################### OAuth2 servers
 	 */
 	private void exportOauth(ZipOutputStream zos) throws Exception {
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
 		List<OAuthServer> list = auth2Dao.get(0, Integer.MAX_VALUE);
-		bindDate(registry, list);
-		writeList(serializer, zos, "oauth2servers.xml", "oauth2servers", list);
+		writeList(zos, "oauth2servers.xml", OAUTH_LIST_NODE, list);
 	}
 
 	/*
@@ -389,35 +315,22 @@ public class BackupExport {
 	 */
 	private void exportPrivateMsg(ZipOutputStream zos) throws Exception {
 		List<PrivateMessage> list = privateMessageDao.get(0, Integer.MAX_VALUE);
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		registry.bind(User.class, UserConverter.class);
-		registry.bind(Room.class, RoomConverter.class);
-		bindDate(registry, list, PrivateMessage::getInserted);
-		writeList(serializer, zos, "privateMessages.xml", "privatemessages", list);
+		writeList(zos, "privateMessages.xml", MSG_LIST_NODE, list);
 	}
 
 	/*
 	 * ##################### Private Message Folders
 	 */
-	private void exportPrivateMsgFolder(ZipOutputStream zos, Serializer ser) throws Exception {
-		writeList(ser, zos, "privateMessageFolder.xml",
-				"privatemessagefolders", privateMessageFolderDao.get(0, Integer.MAX_VALUE));
+	private void exportPrivateMsgFolder(ZipOutputStream zos) throws Exception {
+		writeList(zos, "privateMessageFolder.xml",
+				MSG_FOLDER_LIST_NODE, privateMessageFolderDao.get(0, Integer.MAX_VALUE));
 	}
 
 	/*
 	 * ##################### User Contacts
 	 */
 	private void exportContacts(ZipOutputStream zos) throws Exception {
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		registry.bind(User.class, UserConverter.class);
-
-		writeList(serializer, zos, "userContacts.xml", "usercontacts", userContactDao.get());
+		writeList(zos, "userContacts.xml", CONTACT_LIST_NODE, userContactDao.get());
 	}
 
 	/*
@@ -425,12 +338,7 @@ public class BackupExport {
 	 */
 	private void exportFile(ZipOutputStream zos) throws Exception {
 		List<FileItem> list = fileItemDao.get();
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		bindDate(registry, list);
-		writeList(serializer, zos, "fileExplorerItems.xml", "fileExplorerItems", list);
+		writeList(zos, "fileExplorerItems.xml", FILE_LIST_NODE, list);
 	}
 
 	/*
@@ -438,12 +346,7 @@ public class BackupExport {
 	 */
 	private void exportRecording(ZipOutputStream zos) throws Exception {
 		List<Recording> list = recordingDao.get();
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		bindDate(registry, list);
-		writeList(serializer, zos, "flvRecordings.xml", "flvrecordings", list);
+		writeList(zos, "flvRecordings.xml", RECORDING_LIST_NODE, list);
 	}
 
 	/*
@@ -451,15 +354,7 @@ public class BackupExport {
 	 */
 	private void exportPoll(ZipOutputStream zos) throws Exception {
 		List<RoomPoll> list = pollManager.get();
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		registry.bind(User.class, UserConverter.class);
-		registry.bind(Room.class, RoomConverter.class);
-		registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
-		bindDate(registry, list, RoomPoll::getCreated);
-		writeList(serializer, zos, "roompolls.xml", "roompolls", list);
+		writeList(zos, "roompolls.xml", POLL_LIST_NODE, list);
 	}
 
 	/*
@@ -467,9 +362,7 @@ public class BackupExport {
 	 */
 	private void exportConfig(ZipOutputStream zos) throws Exception {
 		List<Configuration> list = configurationDao.get(0, Integer.MAX_VALUE);
-		Serializer serializer = getConfigSerializer(list);
-
-		writeList(serializer, zos, "configs.xml", "configs", list);
+		writeList(zos, "configs.xml", CFG_LIST_NODE, list);
 	}
 
 	/*
@@ -477,57 +370,53 @@ public class BackupExport {
 	 */
 	private void exportChat(ZipOutputStream zos) throws Exception {
 		List<ChatMessage> list = chatDao.get(0, Integer.MAX_VALUE);
-		Registry registry = new Registry();
-		registry.bind(User.class, UserConverter.class);
-		registry.bind(Room.class, RoomConverter.class);
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		bindDate(registry, list, ChatMessage::getSent);
-		writeList(serializer, zos, "chat_messages.xml", "chat_messages", list);
+		writeList(zos, "chat_messages.xml", CHAT_LIST_NODE, list);
 	}
 
-	private static Serializer getConfigSerializer(List<Configuration> list) throws Exception {
-		Registry registry = new Registry();
-		registry.bind(User.class, UserConverter.class);
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer serializer = new Persister(strategy);
-
-		bindDate(registry, list);
-		return serializer;
-	}
-
-	private static <T> ByteArrayOutputStream stream(Serializer ser, String listElement, List<T> list) throws Exception {
+	private static <T> ByteArrayOutputStream stream(String listElement, List<T> list) throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream(10 * 1024); //10K
-		writeList(ser, baos, listElement, list);
+		writeList(baos, listElement, list);
 		return baos;
 	}
 
-	private static <T> void writeList(Serializer ser, ZipOutputStream zos, String fileName, String listElement, List<T> list) throws Exception {
+	private static <T> void writeList(ZipOutputStream zos, String fileName, String listElement, List<T> list) throws Exception {
 		ZipEntry e = new ZipEntry(fileName);
 		zos.putNextEntry(e);
-		ByteArrayOutputStream baos = stream(ser, listElement, list);
+		ByteArrayOutputStream baos = stream(listElement, list);
 		zos.write(baos.toByteArray());
 		zos.closeEntry();
 	}
 
-	private static <T> void writeList(Serializer ser, OutputStream os, String listElement, List<T> list) throws Exception {
-		Format format = new Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		OutputNode doc = NodeBuilder.write(new OutputStreamWriter(os, UTF_8), format);
-		OutputNode root = doc.getChild("root");
-		root.setComment(BACKUP_COMMENT);
-		OutputNode listNode = root.getChild(listElement);
+	private static <T> void writeList(OutputStream os, String listElement, List<T> list) throws Exception {
+		XMLStreamWriter writer = XmlHelper.createOutputFactory().createXMLStreamWriter(os);
+		writer.writeStartDocument();
+		writer.writeComment(BACKUP_COMMENT);
+		writer.writeStartElement("root");
+		writer.writeStartElement(listElement);
 
-		if (list != null) {
+		if (list != null && !list.isEmpty()) {
+			@SuppressWarnings("unchecked")
+			Class<T> eClazz = (Class<T>)list.get(0).getClass();
+			JAXBContext jc = JAXBContext.newInstance(eClazz);
+			Marshaller marshaller = jc.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+			marshaller.setProperty(CharacterEscapeHandler.class.getName(), new CharacterEscapeHandler() {
+				@Override
+				public void escape(char[] ac, int i, int j, boolean flag, Writer writer) throws IOException {
+					writer.write(ac, i, j);
+				}
+			});
 			for (T t : list) {
 				try {
-					ser.write(t, listNode);
+					marshaller.marshal(t, writer);
 				} catch (Exception e) {
 					log.debug("Exception While writing node of type: " + t.getClass(), e);
 				}
 			}
 		}
-		root.commit();
+		writer.writeEndElement();
+		writer.writeEndElement();
 	}
 
 	private static void writeZip(String prefix, URI base, File file, ZipOutputStream zos) throws IOException {
@@ -558,8 +447,7 @@ public class BackupExport {
 	 */
 	public static void main(String[] args) throws Exception {
 		List<Configuration> list = ImportInitvalues.initialCfgs(new InstallationConfig());
-		Serializer ser = getConfigSerializer(list);
-		ByteArrayOutputStream baos = stream(ser, "configs", list);
+		ByteArrayOutputStream baos = stream("configs", list);
 		File f = new File(args[0]);
 		if (!f.exists() && !f.getParentFile().exists()) {
 			f.getParentFile().mkdirs();

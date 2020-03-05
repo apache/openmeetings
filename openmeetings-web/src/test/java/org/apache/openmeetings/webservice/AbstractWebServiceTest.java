@@ -18,6 +18,29 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static java.util.UUID.randomUUID;
+import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
+import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
+import static org.apache.openmeetings.AbstractJUnitDefaults.ensureSchema;
+import static org.apache.openmeetings.AbstractJUnitDefaults.soapUsername;
+import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
@@ -39,29 +62,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static java.util.UUID.randomUUID;
-import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
-import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
-import static org.apache.openmeetings.AbstractJUnitDefaults.ensureSchema;
-import static org.apache.openmeetings.AbstractJUnitDefaults.soapUsername;
-import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
-import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 public class AbstractWebServiceTest {
 	private static Tomcat tomcat;
 	private static final String HOST = "localhost";
@@ -78,7 +78,7 @@ public class AbstractWebServiceTest {
 	}
 
 	public static WebClient getClient(String url) {
-		WebClient c = WebClient.create(url, Arrays.asList(new AppointmentMessageBodyReader()))
+		WebClient c = WebClient.create(url, List.of(new AppointmentMessageBodyReader()))
 				.accept("application/json").type("application/json");
 		HTTPClientPolicy p = WebClient.getConfig(c).getHttpConduit().getClient();
 		p.setConnectionTimeout(TIMEOUT);
