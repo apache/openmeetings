@@ -24,7 +24,7 @@
 		<section name="Downloads">
 			<p>
 				All downloads should be verified using the Apache OpenMeetings code
-				signing <a href="https://www.apache.org/dist/openmeetings/KEYS">KEYS</a>, <br/>
+				signing <a href="https://downloads.apache.org/openmeetings/KEYS">KEYS</a>, <br/>
 				Here are <a href="https://www.apache.org/dyn/closer.cgi#verify">the instructions</a><br/>
 			</p>
 			<p>
@@ -41,13 +41,13 @@
 						<ul>
 							<li>
 								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M3/bin/apache-openmeetings-5.0.0-M3.zip">apache-openmeetings-5.0.0-M3.zip</a>
-								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M3/bin/apache-openmeetings-5.0.0-M3.zip.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M3/bin/apache-openmeetings-5.0.0-M3.zip.sha512">[SHA512]</a>
+								<a href="https://downloads.apache.org/openmeetings/5.0.0-M3/bin/apache-openmeetings-5.0.0-M3.zip.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/5.0.0-M3/bin/apache-openmeetings-5.0.0-M3.zip.sha512">[SHA512]</a>
 							</li>
 							<li>
 								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M3/bin/apache-openmeetings-5.0.0-M3.tar.gz">apache-openmeetings-5.0.0-M3.tar.gz</a>
-								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M3/bin/apache-openmeetings-5.0.0-M3.tar.gz.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M3/bin/apache-openmeetings-5.0.0-M3.tar.gz.sha512">[SHA512]</a>
+								<a href="https://downloads.apache.org/openmeetings/5.0.0-M3/bin/apache-openmeetings-5.0.0-M3.tar.gz.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/5.0.0-M3/bin/apache-openmeetings-5.0.0-M3.tar.gz.sha512">[SHA512]</a>
 							</li>
 						</ul>
 					</li>
@@ -56,18 +56,18 @@
 						<ul>
 							<li>
 								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M3/src/apache-openmeetings-5.0.0-M3-src.zip">apache-openmeetings-5.0.0-M3-src.zip</a>
-								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M3/src/apache-openmeetings-5.0.0-M3-src.zip.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M3/src/apache-openmeetings-5.0.0-M3-src.zip.sha512">[SHA512]</a>
+								<a href="https://downloads.apache.org/openmeetings/5.0.0-M3/src/apache-openmeetings-5.0.0-M3-src.zip.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/5.0.0-M3/src/apache-openmeetings-5.0.0-M3-src.zip.sha512">[SHA512]</a>
 							</li>
 							<li>
 								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M3/src/apache-openmeetings-5.0.0-M3-src.tar.gz">apache-openmeetings-5.0.0-M3-src.tar.gz</a>
-								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M3/src/apache-openmeetings-5.0.0-M3-src.tar.gz.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/5.0.0-M3/src/apache-openmeetings-5.0.0-M3-src.tar.gz.sha512">[SHA512]</a>
+								<a href="https://downloads.apache.org/openmeetings/5.0.0-M3/src/apache-openmeetings-5.0.0-M3-src.tar.gz.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/5.0.0-M3/src/apache-openmeetings-5.0.0-M3-src.tar.gz.sha512">[SHA512]</a>
 							</li>
 						</ul>
 					</li>
 					<li>
-						Changes: <a href="https://www.apache.org/dist/openmeetings/5.0.0-M3/CHANGELOG.md">CHANGELOG.md</a>.
+						Changes: <a href="https://downloads.apache.org/openmeetings/5.0.0-M3/CHANGELOG.md">CHANGELOG.md</a>.
 					</li>
 					<li>
 						Docker image: <a href="https://github.com/openmeetings/openmeetings-docker/tree/5.0.0-M3">https://github.com/openmeetings/openmeetings-docker/tree/5.0.0-M3</a>
@@ -87,13 +87,13 @@
 						<ul>
 							<li>
 								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.zip">apache-openmeetings-4.0.10.zip</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.zip.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.zip.sha512">[SHA512]</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.zip.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.zip.sha512">[SHA512]</a>
 							</li>
 							<li>
 								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.tar.gz">apache-openmeetings-4.0.10.tar.gz</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.tar.gz.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.tar.gz.sha512">[SHA512]</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.tar.gz.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.tar.gz.sha512">[SHA512]</a>
 							</li>
 						</ul>
 					</li>
@@ -102,18 +102,18 @@
 						<ul>
 							<li>
 								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.zip">apache-openmeetings-4.0.10-src.zip</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.zip.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.zip.sha512">[SHA512]</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.zip.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.zip.sha512">[SHA512]</a>
 							</li>
 							<li>
 								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.tar.gz">apache-openmeetings-4.0.10-src.tar.gz</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.tar.gz.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.tar.gz.sha512">[SHA512]</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.tar.gz.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.tar.gz.sha512">[SHA512]</a>
 							</li>
 						</ul>
 					</li>
 					<li>
-						Changes: <a href="https://www.apache.org/dist/openmeetings/4.0.10/CHANGELOG.md">CHANGELOG.md</a>.
+						Changes: <a href="https://downloads.apache.org/openmeetings/4.0.10/CHANGELOG.md">CHANGELOG.md</a>.
 					</li>
 					<li>
 						Docker image: <a href="https://github.com/openmeetings/openmeetings-docker/tree/4.0.10">https://github.com/openmeetings/openmeetings-docker/tree/4.0.10</a>
