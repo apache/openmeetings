@@ -381,7 +381,7 @@ public class OmFileHelper {
 
 	public static String getFileName(String name) {
 		int dotidx = name.lastIndexOf('.');
-		return dotidx < 0 ? "" : name.substring(0, dotidx);
+		return dotidx < 0 ? name : name.substring(0, dotidx);
 	}
 
 	public static String getFileExt(String name) {

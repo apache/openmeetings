@@ -95,6 +95,7 @@ public abstract class BaseFileItem extends HistoricalEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	@XmlTransient
 	private Long id;
 
 	@Column(name = "name")

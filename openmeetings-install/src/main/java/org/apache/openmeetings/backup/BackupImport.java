@@ -153,6 +153,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -500,6 +501,7 @@ public class BackupImport {
 		JAXBContext jc = JAXBContext.newInstance(eClazz);
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
 		unmarshaller.setAdapter(new UserAdapter(userDao, userMap));
+
 		readList(unmarshaller, base, "configs.xml", CFG_LIST_NODE, CFG_NODE, eClazz, c -> {
 			if (c.getKey() == null || c.isDeleted()) {
 				return;
@@ -609,6 +611,7 @@ public class BackupImport {
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
 		unmarshaller.setAdapter(new GroupAdapter(groupDao, groupMap));
 		int minLoginLength = getMinLoginLength();
+
 		readList(unmarshaller, base, "users.xml", USER_LIST_NODE, USER_NODE, eClazz, u -> {
 			if (u.getLogin() == null || u.isDeleted()) {
 				return;
@@ -672,6 +675,7 @@ public class BackupImport {
 		JAXBContext jc = JAXBContext.newInstance(eClazz);
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
 		unmarshaller.setAdapter(new UserAdapter(userDao, userMap));
+
 		readList(unmarshaller, base, "rooms.xml", ROOM_LIST_NODE, ROOM_NODE, eClazz, r -> {
 			Long roomId = r.getId();
 
@@ -726,6 +730,7 @@ public class BackupImport {
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
 		unmarshaller.setAdapter(new UserAdapter(userDao, userMap));
 		unmarshaller.setAdapter(new RoomAdapter(roomDao, roomMap));
+
 		readList(unmarshaller, base, "chat_messages.xml", CHAT_LIST_NODE, CHAT_NODE, eClazz, m -> {
 			m.setId(null);
 			if (m.getFromUser() == null || m.getFromUser().getId() == null
@@ -747,6 +752,7 @@ public class BackupImport {
 		JAXBContext jc = JAXBContext.newInstance(eClazz);
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
 		unmarshaller.setAdapter(new UserAdapter(userDao, userMap));
+
 		readList(unmarshaller, base, "calendars.xml", CALENDAR_LIST_NODE, CALENDAR_NODE, eClazz, c -> {
 			Long id = c.getId();
 			c.setId(null);
@@ -889,14 +895,13 @@ public class BackupImport {
 					chunk.setRecording(r);
 				}
 			}
-			String oldHash = r.getHash();
-			if (!Strings.isEmpty(oldHash) && oldHash.startsWith(RECORDING_FILE_NAME)) {
-				String name = getFileName(oldHash);
-				r.setHash(randomUUID().toString());
-				fileMap.put(String.format(FILE_NAME_FMT, name, EXTENSION_JPG), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_PNG));
-				fileMap.put(String.format("%s.%s.%s", name, "flv", EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
-			}
-			checkHash(r, recordingDao);
+			checkHash(r, recordingDao, (oldHash, newHash) -> {
+				if (!Strings.isEmpty(oldHash) && oldHash.startsWith(RECORDING_FILE_NAME)) {
+					String name = getFileName(oldHash);
+					fileMap.put(String.format(FILE_NAME_FMT, name, EXTENSION_JPG), String.format(FILE_NAME_FMT, newHash, EXTENSION_PNG));
+					fileMap.put(String.format("%s.%s.%s", name, "flv", EXTENSION_MP4), String.format(FILE_NAME_FMT, newHash, EXTENSION_MP4));
+				}
+			});
 			r = recordingDao.update(r);
 			if (BaseFileItem.Type.FOLDER == r.getType()) {
 				folders.put(recId, r.getId());
@@ -905,11 +910,16 @@ public class BackupImport {
 		});
 	}
 
-	private void checkHash(BaseFileItem file, BaseFileItemDao dao) {
+	private void checkHash(BaseFileItem file, BaseFileItemDao dao, BiConsumer<String, String> consumer) {
 		String oldHash = file.getHash();
 		if (Strings.isEmpty(oldHash) || !UUID_PATTERN.matcher(oldHash).matches() || dao.get(oldHash) != null) {
 			file.setHash(randomUUID().toString());
 			hashMap.put(oldHash, file.getHash());
+			if (consumer != null) {
+				consumer.accept(oldHash, file.getHash());
+			}
+		} else {
+			hashMap.put(file.getHash(), file.getHash());
 		}
 	}
 
@@ -939,7 +949,7 @@ public class BackupImport {
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
 		unmarshaller.setAdapter(new UserAdapter(userDao, userMap));
 
-		readList(base, "userContacts.xml", CONTACT_LIST_NODE, CONTACT_NODE, eClazz, uc -> {
+		readList(unmarshaller, base, "userContacts.xml", CONTACT_LIST_NODE, CONTACT_NODE, eClazz, uc -> {
 			Long ucId = uc.getId();
 			UserContact storedUC = userContactDao.get(ucId);
 
@@ -965,7 +975,7 @@ public class BackupImport {
 		unmarshaller.setAdapter(new UserAdapter(userDao, userMap));
 		unmarshaller.setAdapter(new RoomAdapter(roomDao, roomMap));
 
-		readList(base, "privateMessages.xml", MSG_LIST_NODE, MSG_NODE, eClazz, p -> {
+		readList(unmarshaller, base, "privateMessages.xml", MSG_LIST_NODE, MSG_NODE, eClazz, p -> {
 			p.setId(null);
 			p.setFolderId(messageFolderMap.get(p.getFolderId()));
 			p.setUserContactId(userContactMap.get(p.getUserContactId()));
@@ -996,7 +1006,7 @@ public class BackupImport {
 			Long fId = file.getId();
 			// We need to reset this as openJPA reject to store them otherwise
 			file.setId(null);
-			checkHash(file, fileItemDao);
+			checkHash(file, fileItemDao, null);
 			file = fileItemDao.update(file);
 			if (BaseFileItem.Type.FOLDER == file.getType()) {
 				folders.put(fId, file.getId());
@@ -1018,7 +1028,7 @@ public class BackupImport {
 		unmarshaller.setAdapter(new UserAdapter(userDao, userMap));
 		unmarshaller.setAdapter(new RoomAdapter(roomDao, roomMap));
 
-		readList(base, "roompolls.xml", POLL_LIST_NODE, POLL_NODE, eClazz, rp -> {
+		readList(unmarshaller, base, "roompolls.xml", POLL_LIST_NODE, POLL_NODE, eClazz, rp -> {
 			rp.setId(null);
 			if (rp.getRoom() == null || rp.getRoom().getId() == null) {
 				//room was deleted
@@ -1046,7 +1056,7 @@ public class BackupImport {
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
 		unmarshaller.setAdapter(new FileAdapter(fileItemDao, fileItemMap));
 
-		readList(base, "roomFiles.xml", ROOM_FILE_LIST_NODE, ROOM_FILE_NODE, eClazz, rf -> {
+		readList(unmarshaller, base, "roomFiles.xml", ROOM_FILE_LIST_NODE, ROOM_FILE_NODE, eClazz, rf -> {
 			Room r = roomDao.get(roomMap.get(rf.getRoomId()));
 			if (r == null || rf.getFile() == null || rf.getFile().getId() == null) {
 				return;

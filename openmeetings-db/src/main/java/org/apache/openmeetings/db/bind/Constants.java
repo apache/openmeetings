@@ -52,7 +52,7 @@ public class Constants {
 	public static final String MSG_LIST_NODE = "privatemessages";
 	public static final String MSG_NODE = "privatemessage";
 	public static final String FILE_LIST_NODE = "fileExplorerItems";
-	public static final String FILE_NODE = "fileExplorerItem";
+	public static final String FILE_NODE = "fileItem";
 	public static final String POLL_LIST_NODE = "roompolls";
 	public static final String POLL_NODE = "roompoll";
 	public static final String ROOM_FILE_LIST_NODE = "RoomFiles";

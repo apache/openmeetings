@@ -50,7 +50,7 @@ public class OauthMapAdapter extends XmlAdapter<Object, Map<String, String>> {
 			entry.appendChild(value);
 			root.appendChild(entry);
 		}
-		return document;
+		return root;
 	}
 
 	private static void putValue(Map<String, String> map, String key, String value) {

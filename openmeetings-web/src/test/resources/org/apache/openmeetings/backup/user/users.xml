@@ -89,6 +89,7 @@ see http://openmeetings.apache.org/Upgrade.html for Details
          <firstname><![CDATA[Rururca]]></firstname>
          <lastname><![CDATA[Pogolun ]]></lastname>
          <login><![CDATA[1_rururca.pogolun@local]]></login>
+         <age class="java.util.Date"><![CDATA[1977-11-13]]></age>
          <deleted><![CDATA[false]]></deleted>
          <language_id><![CDATA[9]]></language_id>
          <address>

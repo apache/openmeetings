@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.time.LocalDate;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -42,6 +43,7 @@ public class TestExport extends AbstractJUnitDefaults {
 	@Test
 	public void exportUser() throws Exception {
 		User u = createUser();
+		u.setAge(LocalDate.of(1977, 11, 13));
 		Group g = groupDao.get(1L);
 		u.addGroup(g);
 		Class<User> eClazz = User.class;
