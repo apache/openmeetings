@@ -66,11 +66,12 @@ import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
 public class TestMainAreas extends AbstractWicketTester {
 	private static final Logger log = LoggerFactory.getLogger(TestMainAreas.class);
@@ -91,7 +92,7 @@ public class TestMainAreas extends AbstractWicketTester {
 			log.debug("Positive test:: area: {}, type: {} for user: {}", area, type, user);
 			testArea(user, p -> {
 				tester.getRequest().setParameter(area.name(), type);
-				tester.executeBehavior((AbstractAjaxBehavior)p.getBehaviorById(1));
+				tester.executeBehavior((AbstractAjaxBehavior)p.getBehaviorById(0));
 				tester.assertComponent(PATH_CHILD, clazz);
 				if (consumer != null) {
 					consumer.accept(p);
@@ -106,7 +107,7 @@ public class TestMainAreas extends AbstractWicketTester {
 			testArea(user, p -> {
 				tester.getRequest().setParameter(area.name(), type);
 				try {
-					tester.executeBehavior((AbstractAjaxBehavior)p.getBehaviorById(1));
+					tester.executeBehavior((AbstractAjaxBehavior)p.getBehaviorById(0));
 					fail("Not authorized");
 				} catch (UnauthorizedInstantiationException e) {
 					assertTrue(true, "Exception is expected");
@@ -143,11 +144,10 @@ public class TestMainAreas extends AbstractWicketTester {
 	@Test
 	public void testRoomsProfileMessages() throws OmException {
 		checkArea(AreaKeys.profile, TYPE_MESSAGES, SettingsPanel.class, p -> {
-			TabbedPanel tp = (TabbedPanel)p.get("main-container:main:contents:child:tabs");
-			tester.executeBehavior((AbstractAjaxBehavior)tp.getBehaviorById(0)); //create behavior
-			for (int i = 0; i <= tp.getLastTabIndex(); ++i) {
-				tester.getRequest().setParameter("index", String.valueOf(i));
-				tester.executeBehavior((AbstractAjaxBehavior)tp.getBehaviorById(1)); // activate
+			@SuppressWarnings("unchecked")
+			AjaxBootstrapTabbedPanel<ITab> tp = (AjaxBootstrapTabbedPanel<ITab>)p.get("main-container:main:contents:child:tabs");
+			for (int i = 0; i < tp.getTabs().size(); ++i) {
+				tester.executeBehavior((AbstractAjaxBehavior)tp.get("tabs-container:tabs:" + i + ":link").getBehaviorById(0)); // activate
 				//add visibility check
 			}
 		}, regularUsername);
