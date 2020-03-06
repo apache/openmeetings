@@ -61,6 +61,7 @@ import org.apache.openmeetings.web.pages.BaseInitedPage;
 import org.apache.openmeetings.web.room.IconTextModal;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -107,12 +108,13 @@ public class SignInPage extends BaseInitedPage {
 		}
 	};
 	private final ForgetPasswordDialog forget = new ForgetPasswordDialog("forget", forgetInfoDialog);
-	private final Modal<String> registerInfoDialog = new TextContentModal("registerInfo", new ResourceModel("warn.notverified")) {
+	private final Modal<String> registerInfoDialog = new TextContentModal("registerInfo", Model.of("")) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();
+			setModelObject(getString("warn.notverified"));
 			get("content").setOutputMarkupId(true);
 		}
 

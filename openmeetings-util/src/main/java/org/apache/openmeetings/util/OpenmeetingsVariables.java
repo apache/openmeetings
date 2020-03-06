@@ -333,11 +333,11 @@ public class OpenmeetingsVariables {
 		minLnameLength = length;
 	}
 
-	public static boolean getChatSenndOnEnter() {
+	public static boolean isChatSendOnEnter() {
 		return chatSendOnEnter;
 	}
 
-	public static void setChatSenndOnEnter(boolean sendOnEnter) {
+	public static void setChatSendOnEnter(boolean sendOnEnter) {
 		chatSendOnEnter = sendOnEnter;
 	}
 

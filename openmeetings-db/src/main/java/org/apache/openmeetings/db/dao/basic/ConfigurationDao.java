@@ -73,11 +73,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationN
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioBitrate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioRate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setBaseUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setChatSenndOnEnter;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setChatSendOnEnter;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setContentSecurityPolicy;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultLang;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultTimezone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setDisplayNameEditable;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setGaCode;
@@ -116,7 +117,6 @@ import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.util.DaoHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -461,7 +461,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			log.error("There is no correct time zone set in the configuration of OpenMeetings for the key default.timezone or key is missing in table, using default locale!");
 			defaultTzName = TimeZone.getDefault().getID();
 		}
-		OpenmeetingsVariables.setDefaultTimezone(defaultTzName);
+		setDefaultTimezone(defaultTzName);
 	}
 
 	private void reloadRestAllowOrigin() {
@@ -493,7 +493,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	private void reloadChatSendOnEnter() {
-		setChatSenndOnEnter(getBool(CONFIG_CHAT_SEND_ON_ENTER, false));
+		setChatSendOnEnter(getBool(CONFIG_CHAT_SEND_ON_ENTER, false));
 	}
 
 	private void reloadAllowRegisterFront() {

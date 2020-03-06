@@ -21,6 +21,8 @@ package org.apache.openmeetings.web.pages.auth;
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendVerificationEmail;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSendVerificationEmail;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -50,8 +52,8 @@ public class TestLoginUI extends AbstractWicketTester {
 
 	private void checkLogin(String login, String pass) {
 		FormTester formTester = tester.newFormTester("signin:signin");
-		formTester.setValue("login", login);
-		formTester.setValue("pass", pass);
+		formTester.setValue("credentials:login", login);
+		formTester.setValue("credentials:pass", pass);
 		formTester.submit("submit");
 
 		tester.assertNoErrorMessage();
@@ -101,13 +103,19 @@ public class TestLoginUI extends AbstractWicketTester {
 		tester.assertRenderedPage(SignInPage.class);
 
 		String uid = randomUUID().toString();
-		performRegister(uid, "account.created");
+		boolean verify = isSendVerificationEmail();
+		try {
+			setSendVerificationEmail(false);
+			performRegister(uid, "account.created");
+		} finally {
+			setSendVerificationEmail(verify);
+		}
 	}
 
 	private FormTester showForget() {
 		tester.startPage(SignInPage.class);
 		tester.assertRenderedPage(SignInPage.class);
-		tester.clickLink("signin:signin:forget");
+		tester.clickLink("signin:signin:credentials:forget");
 		return tester.newFormTester("forget:form");
 	}
 
@@ -145,7 +153,7 @@ public class TestLoginUI extends AbstractWicketTester {
 	}
 
 	private void performRegister(String uid, String lbl) throws ReflectiveOperationException, SecurityException {
-		AbstractAjaxBehavior b1 = getButtonBehavior("signin", 1);
+		AbstractAjaxBehavior b1 = getButtonBehavior("signin", 0);
 		tester.executeBehavior(b1);
 		FormTester formTester = tester.newFormTester(PATH_REGISTER);
 		formTester.setValue("login", getLogin(uid));
@@ -157,8 +165,8 @@ public class TestLoginUI extends AbstractWicketTester {
 		formTester.setValue("captcha:captchaText", getCaptcha("register:form:captcha:captcha"));
 		formTester.submit("submit");
 		checkErrors(0);
-		tester.assertLabel("register:confirmRegistration:container:message", getEscapedString(lbl));
-		AbstractAjaxBehavior b2 = getButtonBehavior("register:confirmRegistration", 0);
+		tester.assertLabel("registerInfo:content", getEscapedString(lbl));
+		AbstractAjaxBehavior b2 = getButtonBehavior("registerInfo", 0);
 		tester.executeBehavior(b2);
 	}
 
@@ -170,7 +178,7 @@ public class TestLoginUI extends AbstractWicketTester {
 		forgetTester.setValue("captcha:captchaText", getCaptcha("forget:form:captcha:captcha"));
 		forgetTester.submit("submit");
 		checkErrors(0);
-		tester.assertLabel("forget:confirmDialog:container:message", getEscapedString("321"));
+		tester.assertLabel("forgetInfo:content", getEscapedString("321"));
 	}
 
 	// complex test
@@ -225,7 +233,7 @@ public class TestLoginUI extends AbstractWicketTester {
 			resetTester.setValue("confirmPassword", passwd);
 			resetTester.submit("submit");
 			checkErrors(0);
-			tester.assertLabel("resetPassword:confirmReset:container:message", getEscapedString("332"));
+			tester.assertLabel("resetInfo:content", getEscapedString("332"));
 		} finally {
 			for (Configuration c : cfgs) {
 				c.setValueB(false);

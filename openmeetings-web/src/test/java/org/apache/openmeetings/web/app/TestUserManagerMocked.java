@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setCryptClassName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,7 +38,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.service.mail.EmailManager;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.SCryptImplementation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,7 +62,7 @@ public class TestUserManagerMocked {
 
 	@Test
 	public void oauthTest() throws NoSuchAlgorithmException, IOException {
-		OpenmeetingsVariables.setCryptClassName(SCryptImplementation.class.getCanonicalName());
+		setCryptClassName(SCryptImplementation.class.getCanonicalName());
 		when(userDao.validLogin(anyString())).thenReturn(true);
 		when(userDao.checkEmail(anyString(), eq(Type.OAUTH), any(Long.class), nullable(Long.class))).thenReturn(true);
 		when(userDao.update(any(User.class), nullable(String.class), any(Long.class))).then(new Answer<User>() {

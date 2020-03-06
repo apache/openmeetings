@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.util;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getAppClass;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
@@ -33,7 +34,6 @@ import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.util.OMContextListener;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.Application;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ThreadContext;
@@ -62,7 +62,7 @@ public class ApplicationHelper {
 		if (app == null) {
 			// This is the case for non-web-app applications (command line admin)
 			try {
-				app = (WebApplication)OpenmeetingsVariables.getAppClass().getDeclaredConstructor().newInstance();
+				app = (WebApplication)getAppClass().getDeclaredConstructor().newInstance();
 				app.setName(String.format("--%s--", UUID.randomUUID())); //temporary name for temporary application
 				ServletContext sc = new MockServletContext(app, null);
 				XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();

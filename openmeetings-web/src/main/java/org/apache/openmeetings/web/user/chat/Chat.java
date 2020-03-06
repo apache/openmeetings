@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user.chat;
 import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_ROOM_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isChatSendOnEnter;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
@@ -42,7 +43,6 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -144,7 +144,7 @@ public class Chat extends Panel {
 						.put("userId", getUserId())
 						.put("all", getString("1494"))
 						.put("room", getString("406"))
-						.put("sendOnEnter", OpenmeetingsVariables.getChatSenndOnEnter()).toString())
+						.put("sendOnEnter", isChatSendOnEnter()).toString())
 				.append("); ");
 		return processGlobal(sb);
 	}

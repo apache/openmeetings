@@ -19,6 +19,8 @@
 package org.apache.openmeetings.user;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -29,7 +31,6 @@ import java.util.List;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.junit.jupiter.api.Test;
 
 public class TestUserContact extends AbstractWicketTester {
@@ -62,15 +63,15 @@ public class TestUserContact extends AbstractWicketTester {
 
 	@Test
 	public void testCreateUserWithSip() throws Exception {
-		boolean sipEnabled = OpenmeetingsVariables.isSipEnabled();
+		boolean sipEnabled = isSipEnabled();
 		try {
-			OpenmeetingsVariables.setSipEnabled(true);
+			setSipEnabled(true);
 			String uuid = randomUUID().toString();
 			User u = createUser(uuid);
 			assertTrue(userDao.verifyPassword(u.getId(), createPass()), "Password should be set as expected");
 			assertNotNull(u.getSipUser());
 		} finally {
-			OpenmeetingsVariables.setSipEnabled(sipEnabled);
+			setSipEnabled(sipEnabled);
 		}
 	}
 

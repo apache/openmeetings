@@ -164,16 +164,6 @@ public class SignInDialog extends Modal<String> {
 			credentials.add(new CheckBox("rememberMe", new PropertyModel<Boolean>(SignInDialog.this, "rememberMe")).setOutputMarkupId(true));
 			AjaxButton ab = new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onSubmit(AjaxRequestTarget target) {
-					SignInForm.this.onSubmit(target);
-				}
-
-				@Override
-				protected void onError(AjaxRequestTarget target) {
-					SignInForm.this.onError(target);
-				}
 			};
 			add(ab);
 			setDefaultButton(ab);

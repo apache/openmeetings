@@ -76,8 +76,6 @@ public class RegisterDialog extends Modal<String> {
 	private boolean wasRegistered = false;
 
 	private final Modal<String> registerInfo;
-	private boolean sendConfirmation = false;
-	private boolean sendEmailAtRegister = false;
 	@SpringBean
 	private IUserManager userManager;
 	@SpringBean
@@ -125,8 +123,8 @@ public class RegisterDialog extends Modal<String> {
 	@Override
 	public Modal<String> show(IPartialPageRequestHandler handler) {
 		String baseURL = getBaseUrl();
-		sendEmailAtRegister = isSendRegisterEmail();
-		sendConfirmation = !Strings.isEmpty(baseURL) && isSendVerificationEmail();
+		boolean sendEmailAtRegister = isSendRegisterEmail();
+		boolean sendConfirmation = !Strings.isEmpty(baseURL) && isSendVerificationEmail();
 		String messageCode = "account.created";
 		if (sendConfirmation && sendEmailAtRegister) {
 			messageCode = "warn.notverified";
@@ -201,19 +199,11 @@ public class RegisterDialog extends Modal<String> {
 			}).setLabel(new ResourceModel("110"));
 			confirmPassword.setLabel(new ResourceModel("116"));
 			emailField.add(RfcCompliantEmailAddressValidator.getInstance()).setLabel(new ResourceModel("119"));
-			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
+			AjaxButton ab = new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onSubmit(AjaxRequestTarget target) {
-					RegisterForm.this.onSubmit(target);
-				}
-
-				@Override
-				protected void onError(AjaxRequestTarget target) {
-					RegisterForm.this.onError(target);
-				}
-			});
+			};
+			add(ab);
+			setDefaultButton(ab);
 		}
 
 		@Override
