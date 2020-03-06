@@ -357,6 +357,12 @@
 									<version>4.0.4</version>
 									<type>zip</type>
 								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.openmeetings</groupId>
+									<artifactId>test-backup</artifactId>
+									<version>4.0.10</version>
+									<type>zip</type>
+								</artifactItem>
 							</artifactItems>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>false</overWriteSnapshots>
