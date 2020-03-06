@@ -38,14 +38,12 @@ import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
-import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
@@ -70,7 +68,6 @@ import org.apache.openmeetings.web.room.wb.AbstractWbPanel;
 import org.apache.openmeetings.web.room.wb.InterviewWbPanel;
 import org.apache.openmeetings.web.room.wb.WbAction;
 import org.apache.openmeetings.web.room.wb.WbPanel;
-import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -138,16 +135,10 @@ public class RoomPanel extends BasePanel {
 		protected void respond(AjaxRequestTarget target) {
 			log.debug("RoomPanel::roomEnter");
 			WebSession ws = WebSession.get();
-			ExtendedClientProperties cp = ws.getExtendedProperties();
-			confLogDao.add(
-					ConferenceLog.Type.roomEnter
-					, getUserId(), "0", r.getId()
-					, cp.getRemoteAddress()
-					, String.valueOf(r.getId()));
-			Client _c = getClient();
-			JSONObject options = VideoSettings.getInitJson(_c.getSid())
-					.put("uid", _c.getUid())
-					.put("rights", _c.toJson(true).getJSONArray("rights"))
+			Client c = getClient();
+			JSONObject options = VideoSettings.getInitJson(c.getSid())
+					.put("uid", c.getUid())
+					.put("rights", c.toJson(true).getJSONArray("rights"))
 					.put("interview", interview)
 					.put("audioOnly", r.isAudioOnly())
 					.put("questions", r.isAllowUserQuestions())
@@ -159,7 +150,7 @@ public class RoomPanel extends BasePanel {
 					.append(wb.getInitScript())
 					.append(getQuickPollJs());
 			target.appendJavaScript(sb);
-			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), _c, RoomMessage.Type.roomEnter));
+			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), c, RoomMessage.Type.roomEnter));
 			// play video from other participants
 			initVideos(target);
 			getMainPanel().getChat().roomEnter(r, target);
@@ -167,8 +158,8 @@ public class RoomPanel extends BasePanel {
 				sidebar.setFilesActive(target);
 			}
 			if (Room.Type.PRESENTATION != r.getType()) {
-				List<Client> mods = cm.listByRoom(r.getId(), c -> c.hasRight(Room.Right.MODERATOR));
-				log.debug("RoomPanel::roomEnter, mods IS EMPTY ? {}, is MOD ? {}", mods.isEmpty(), _c.hasRight(Room.Right.MODERATOR));
+				List<Client> mods = cm.listByRoom(r.getId(), cl -> cl.hasRight(Room.Right.MODERATOR));
+				log.debug("RoomPanel::roomEnter, mods IS EMPTY ? {}, is MOD ? {}", mods.isEmpty(), c.hasRight(Room.Right.MODERATOR));
 				if (mods.isEmpty()) {
 					showIdeaAlert(target, getString(r.isModerated() ? "641" : "498"));
 				}
@@ -243,8 +234,6 @@ public class RoomPanel extends BasePanel {
 
 	@SpringBean
 	private ClientManager cm;
-	@SpringBean
-	private ConferenceLogDao confLogDao;
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean

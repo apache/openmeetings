@@ -87,6 +87,11 @@ public class ClientManager implements IClientManager {
 	}
 
 	public void add(Client c) {
+		confLogDao.add(
+				ConferenceLog.Type.CLIENT_CONNECT
+				, c.getUserId(), "0", null
+				, c.getRemoteAddress()
+				, "");
 		log.debug("Adding online client: {}, room: {}", c.getUid(), c.getRoom());
 		c.setServerId(Application.get().getServerId());
 		map().put(c.getUid(), c);
@@ -131,7 +136,7 @@ public class ClientManager implements IClientManager {
 		if (roomId != null) {
 			sendRoom(new RoomMessage(roomId, c, RoomMessage.Type.roomExit));
 			confLogDao.add(
-					ConferenceLog.Type.roomLeave
+					ConferenceLog.Type.ROOM_LEAVE
 					, c.getUserId(), "0", roomId
 					, c.getRemoteAddress()
 					, String.valueOf(roomId));
@@ -141,6 +146,11 @@ public class ClientManager implements IClientManager {
 	@Override
 	public void exit(Client c) {
 		if (c != null) {
+			confLogDao.add(
+					ConferenceLog.Type.CLIENT_DISCONNECT
+					, c.getUserId(), "0", null
+					, c.getRemoteAddress()
+					, "");
 			exitRoom(c);
 			kHandler.remove(c);
 			log.debug("Removing online client: {}, roomId: {}", c.getUid(), c.getRoomId());
@@ -172,6 +182,11 @@ public class ClientManager implements IClientManager {
 	 */
 	public int addToRoom(Client c) {
 		Long roomId = c.getRoom().getId();
+		confLogDao.add(
+				ConferenceLog.Type.ROOM_ENTER
+				, c.getUserId(), "0", roomId
+				, c.getRemoteAddress()
+				, String.valueOf(roomId));
 		log.debug("Adding online room client: {}, room: {}", c.getUid(), roomId);
 		IMap<Long, Set<String>> rooms = rooms();
 		rooms.lock(roomId);

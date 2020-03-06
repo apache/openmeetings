@@ -44,7 +44,10 @@ public class ConferenceLog implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	public enum Type {
-		clientConnect, roomEnter, roomLeave, nicknameEnter
+		CLIENT_CONNECT
+		, ROOM_ENTER
+		, ROOM_LEAVE
+		, CLIENT_DISCONNECT
 	}
 
 	@Id

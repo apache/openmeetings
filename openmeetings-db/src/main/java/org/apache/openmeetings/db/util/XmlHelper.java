@@ -28,7 +28,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
 
 public class XmlHelper {
 	private XmlHelper() {
@@ -53,11 +52,6 @@ public class XmlHelper {
 		factory.setProperty(IS_NAMESPACE_AWARE, false);
 		factory.setProperty(IS_SUPPORTING_EXTERNAL_ENTITIES, false);
 		factory.setProperty(SUPPORT_DTD, false);
-		return factory;
-	}
-
-	public static XMLOutputFactory createOutputFactory() {
-		XMLOutputFactory factory = XMLOutputFactory.newInstance();
 		return factory;
 	}
 }

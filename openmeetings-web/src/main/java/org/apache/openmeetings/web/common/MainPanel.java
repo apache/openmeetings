@@ -412,14 +412,14 @@ public class MainPanel extends Panel {
 		}
 	}
 
-	private void updateContents(BasePanel panel, IPartialPageRequestHandler handler) {
-		if (panel != null) {
+	private void updateContents(BasePanel inPanel, IPartialPageRequestHandler handler) {
+		if (inPanel != null) {
 			BasePanel prev = getCurrentPanel();
 			if (prev != null) {
 				prev.cleanup(handler);
 			}
-			handler.add(contents.replace(panel), this.add(AttributeModifier.replace(ATTR_CLASS, "main " + panel.getCssClass())));
-			panel.onMenuPanelLoad(handler);
+			handler.add(contents.replace(inPanel), this.add(AttributeModifier.replace(ATTR_CLASS, "main " + inPanel.getCssClass())));
+			inPanel.onMenuPanelLoad(handler);
 		}
 	}
 

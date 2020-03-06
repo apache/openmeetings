@@ -266,7 +266,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 		Set<Long> ids = new HashSet<>();
 		//(RECENT_ROOMS_COUNT + 1) passes required to preserve the order :(
 		for (ConferenceLog l : em.createNamedQuery("getLogRecentRooms", ConferenceLog.class)
-				.setParameter("roomEnter", ConferenceLog.Type.roomEnter)
+				.setParameter("roomEnter", ConferenceLog.Type.ROOM_ENTER)
 				.setParameter(PARAM_USER_ID, userId)
 				.getResultList())
 		{

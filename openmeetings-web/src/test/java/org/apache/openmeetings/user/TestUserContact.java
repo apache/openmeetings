@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.junit.jupiter.api.Test;
 
 public class TestUserContact extends AbstractWicketTester {
@@ -60,6 +61,20 @@ public class TestUserContact extends AbstractWicketTester {
 	}
 
 	@Test
+	public void testCreateUserWithSip() throws Exception {
+		boolean sipEnabled = OpenmeetingsVariables.isSipEnabled();
+		try {
+			OpenmeetingsVariables.setSipEnabled(true);
+			String uuid = randomUUID().toString();
+			User u = createUser(uuid);
+			assertTrue(userDao.verifyPassword(u.getId(), createPass()), "Password should be set as expected");
+			assertNotNull(u.getSipUser());
+		} finally {
+			OpenmeetingsVariables.setSipEnabled(sipEnabled);
+		}
+	}
+
+	@Test
 	public void addContactByOwner() throws Exception {
 		login(null, null);
 
@@ -68,30 +83,30 @@ public class TestUserContact extends AbstractWicketTester {
 		assertFalse(users.isEmpty(), "User list should not be empty ");
 
 		User contact = createUserContact(getUserId());
-		String email = contact.getAddress().getEmail();
-		List<User> l = userDao.get(email, false, 0, 9999);
+		String cEmail = contact.getAddress().getEmail();
+		List<User> l = userDao.get(cEmail, false, 0, 9999);
 		// check that contact is visible for admin
 		assertNotNull(l, "Contact list should not be null for admin ");
 		assertFalse(l.isEmpty(), "Contact list should not be empty for admin ");
 
 		// check that contact is visible for owner
-		l = userDao.get(email, 0, 9999, null, true, getUserId());
+		l = userDao.get(cEmail, 0, 9999, null, true, getUserId());
 		assertFalse(l.isEmpty(), "Contact list should not be empty for owner ");
 		//delete contact
 		userDao.delete(contact, getUserId());
-		l = userDao.get(email, false, 0, 9999);
+		l = userDao.get(cEmail, false, 0, 9999);
 		assertTrue(l.isEmpty(), "Contact list should be empty after deletion");
 
 		User u = createUser();
 		User u1 = createUser();
 		contact = createUserContact(u.getId());
-		email = contact.getAddress().getEmail();
+		cEmail = contact.getAddress().getEmail();
 		// check that contact is not visible for user that is not owner of this contact
-		l = userDao.get(email, 0, 9999, null, true, u1.getId());
+		l = userDao.get(cEmail, 0, 9999, null, true, u1.getId());
 		assertTrue(l.isEmpty(), "Contact list should be empty for another user");
 		//delete contact
 		userDao.delete(contact, u.getId());
-		l = userDao.get(email, false, 0, 9999);
+		l = userDao.get(cEmail, false, 0, 9999);
 		assertTrue(l.isEmpty(), "Contact list should be empty after deletion");
 	}
 }

@@ -57,7 +57,13 @@ see http://openmeetings.apache.org/Upgrade.html for Details
          </room_moderators>
          <sipEnabled><![CDATA[false]]></sipEnabled>
          <hide_element class="org.apache.openjpa.util.java$util$HashSet$proxy">
+            <roomElement><![CDATA[TopBar]]></roomElement>
+            <roomElement><![CDATA[ActionMenu]]></roomElement>
+            <roomElement><![CDATA[PollMenu]]></roomElement>
+            <roomElement><![CDATA[ScreenSharing]]></roomElement>
             <roomElement><![CDATA[MicrophoneStatus]]></roomElement>
+            <roomElement><![CDATA[UserCount]]></roomElement>
+            <roomElement><![CDATA[FILES]]></roomElement>
          </hide_element>
       </room>
    </rooms>
