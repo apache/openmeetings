@@ -52,6 +52,6 @@ public class MailNotifier implements INotifier {
 	public void notify(User u, Appointment a, Invitation inv) throws Exception {
 		TimeZone tz = getTimeZone(u);
 		SubjectEmailTemplate t = AppointmentReminderTemplate.get(u, a, tz);
-		invitationManager.sendInvitationLink(inv, MessageType.Create, t.getSubject(), t.getEmail(), false, null);
+		invitationManager.sendInvitationLink(inv, MessageType.CREATE, t.getSubject(), t.getEmail(), false, null);
 	}
 }

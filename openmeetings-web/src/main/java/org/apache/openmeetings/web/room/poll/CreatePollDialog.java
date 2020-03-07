@@ -78,7 +78,7 @@ public class CreatePollDialog extends Modal<RoomPoll> {
 			protected void onSubmit(AjaxRequestTarget target) {
 				pollDao.close(roomId);
 				pollDao.update(form.getModelObject());
-				sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollCreated));
+				sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.POLL_CREATED));
 				close(target);
 			}
 

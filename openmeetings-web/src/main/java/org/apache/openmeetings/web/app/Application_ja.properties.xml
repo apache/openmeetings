@@ -918,8 +918,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="widget.start.header"><![CDATA[使用方法:]]></entry>
 	<entry key="widget.start.title"><![CDATA[さあ始めましょう]]></entry>
 	<entry key="wizard.button.finish"><![CDATA[インストール]]></entry>
-	<entry key="zoom.fullFit"><![CDATA[画面サイズに合わせる]]></entry>
-	<entry key="zoom.pageWidth"><![CDATA[ページ幅に合わせる]]></entry>
+	<entry key="zoom.FULL_FIT"><![CDATA[画面サイズに合わせる]]></entry>
+	<entry key="zoom.PAGE_WIDTH"><![CDATA[ページ幅に合わせる]]></entry>
 	<entry key="label.dock.panel"><![CDATA[クリックしてパネルを連結する]]></entry>
 	<entry key="label.undock.panel"><![CDATA[クリックしてパネルを切り離す]]></entry>
 	<entry key="activities.autoclean"><![CDATA[自動クリーンアップ]]></entry>

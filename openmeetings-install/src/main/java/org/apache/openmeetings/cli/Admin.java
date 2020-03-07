@@ -174,12 +174,12 @@ public class Admin {
 	}
 
 	private enum Command {
-		install
-		, backup
-		, restore
-		, files
-		, ldap
-		, usage
+		INSTALL
+		, BACKUP
+		, RESTORE
+		, FILES
+		, LDAP
+		, USAGE
 	}
 
 	private void usage() {
@@ -239,42 +239,42 @@ public class Admin {
 		}
 		verbose = cmdl.hasOption('v');
 
-		Command cmd = Command.usage;
+		Command cmd = Command.USAGE;
 		if (cmdl.hasOption('i')) {
-			cmd = Command.install;
+			cmd = Command.INSTALL;
 		} else if (cmdl.hasOption('b')) {
-			cmd = Command.backup;
+			cmd = Command.BACKUP;
 		} else if (cmdl.hasOption('r')) {
-			cmd = Command.restore;
+			cmd = Command.RESTORE;
 		} else if (cmdl.hasOption('f')) {
-			cmd = Command.files;
+			cmd = Command.FILES;
 		} else if (cmdl.hasOption('l')) {
-			cmd = Command.ldap;
+			cmd = Command.LDAP;
 		}
 
 		String file = cmdl.getOptionValue("file", "");
 		switch(cmd) {
-			case install:
+			case INSTALL:
 				step = "Install";
 				processInstall(file);
 				break;
-			case backup:
+			case BACKUP:
 				step = "Backup";
 				processBackup(file);
 				break;
-			case restore:
+			case RESTORE:
 				step = "Restore";
 				processRestore(checkRestoreFile(file));
 				break;
-			case files:
+			case FILES:
 				step = "Files";
 				processFiles();
 				break;
-			case ldap:
+			case LDAP:
 				step = "LDAP import";
 				processLdap();
 				break;
-			case usage:
+			case USAGE:
 			default:
 				usage();
 				break;
@@ -320,8 +320,8 @@ public class Admin {
 				|| cmdl.hasOption(OPTION_DB_PORT) || cmdl.hasOption(OPTION_DB_NAME) || cmdl.hasOption(OPTION_DB_USER)
 				|| cmdl.hasOption(OPTION_DB_PASS))
 		{
-			String dbType = cmdl.getOptionValue(OPTION_DB_TYPE, DbType.h2.name());
-			connectionProperties = ConnectionPropertiesPatcher.patch(dbType
+			String dbType = cmdl.getOptionValue(OPTION_DB_TYPE);
+			connectionProperties = ConnectionPropertiesPatcher.patch(DbType.of(dbType)
 					, cmdl.getOptionValue(OPTION_DB_HOST, "localhost")
 					, cmdl.getOptionValue(OPTION_DB_PORT, null)
 					, cmdl.getOptionValue(OPTION_DB_NAME, null)

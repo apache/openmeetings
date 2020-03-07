@@ -144,7 +144,7 @@ public class RoomInvitationForm extends InvitationForm {
 				for (GroupUser ou : groupUserDao.get(g.getId(), 0, Integer.MAX_VALUE)) {
 					Invitation i = create(ou.getUser());
 					try {
-						invitationManager.sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false, userbaseUrl);
+						invitationManager.sendInvitationLink(i, MessageType.CREATE, subject.getModelObject(), message.getModelObject(), false, userbaseUrl);
 					} catch (Exception e) {
 						log.error("error while sending invitation by Group ", e);
 					}

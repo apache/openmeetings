@@ -134,7 +134,7 @@ public class ClientManager implements IClientManager {
 		Long roomId = c.getRoomId();
 		removeFromRoom(c);
 		if (roomId != null) {
-			sendRoom(new RoomMessage(roomId, c, RoomMessage.Type.roomExit));
+			sendRoom(new RoomMessage(roomId, c, RoomMessage.Type.ROOM_EXIT));
 			confLogDao.add(
 					ConferenceLog.Type.ROOM_LEAVE
 					, c.getUserId(), "0", roomId

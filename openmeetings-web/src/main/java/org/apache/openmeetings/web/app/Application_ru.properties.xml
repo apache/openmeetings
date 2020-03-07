@@ -918,8 +918,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="widget.start.header"><![CDATA[Как участвовать в конференции]]></entry>
 	<entry key="widget.start.title"><![CDATA[Быстрый старт]]></entry>
 	<entry key="wizard.button.finish"><![CDATA[Закончить]]></entry>
-	<entry key="zoom.fullFit"><![CDATA[По размеру страницы]]></entry>
-	<entry key="zoom.pageWidth"><![CDATA[По ширине страницы]]></entry>
+	<entry key="zoom.FULL_FIT"><![CDATA[По размеру страницы]]></entry>
+	<entry key="zoom.PAGE_WIDTH"><![CDATA[По ширине страницы]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Кликните чтобы "прилепить" панель]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Кликните чтобы "отлепить" панель]]></entry>
 	<entry key="activities.autoclean"><![CDATA[Авто-очистка]]></entry>

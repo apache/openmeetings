@@ -122,13 +122,13 @@ public abstract class InvitationForm extends Form<Invitation> {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				boolean dateEnabled = InvitationForm.this.getModelObject().getValid() == Valid.Period;
+				boolean dateEnabled = InvitationForm.this.getModelObject().getValid() == Valid.PERIOD;
 				target.add(from.setEnabled(dateEnabled), to.setEnabled(dateEnabled), timeZoneId.setEnabled(dateEnabled));
 			}
 		});
-		add(valid.add(new Radio<>("one", Model.of(Valid.OneTime))
-				, new Radio<>("period", Model.of(Valid.Period))
-				, new Radio<>("endless", Model.of(Valid.Endless))));
+		add(valid.add(new Radio<>("one", Model.of(Valid.ONE_TIME))
+				, new Radio<>("period", Model.of(Valid.PERIOD))
+				, new Radio<>("endless", Model.of(Valid.ENDLESS))));
 		add(passwd);
 		Invitation i = getModelObject();
 		passwd.setLabel(new ResourceModel("110")).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
@@ -207,7 +207,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 		recipients.setModelObject(new ArrayList<User>());
 		recipients.setEnabled(true);
 		passwd.setEnabled(false);
-		final boolean isPeriod = i.getValid() == Valid.Period;
+		final boolean isPeriod = i.getValid() == Valid.PERIOD;
 		from.setEnabled(isPeriod);
 		to.setEnabled(isPeriod);
 		timeZoneId.setEnabled(isPeriod);
@@ -230,7 +230,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 				for (User u : recipients.getModelObject()) {
 					Invitation i = create(u);
 					try {
-						inviteManager.sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false, userbaseUrl);
+						inviteManager.sendInvitationLink(i, MessageType.CREATE, subject.getModelObject(), message.getModelObject(), false, userbaseUrl);
 					} catch (Exception e) {
 						log.error("error while sending invitation by User ", e);
 					}
@@ -238,7 +238,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 			} else {
 				Invitation i = getModelObject();
 				try {
-					inviteManager.sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false, userbaseUrl);
+					inviteManager.sendInvitationLink(i, MessageType.CREATE, subject.getModelObject(), message.getModelObject(), false, userbaseUrl);
 				} catch (Exception e) {
 					log.error("error while sending invitation by URL ", e);
 				}

@@ -69,7 +69,7 @@ public class ActivitiesPanel extends Panel {
 		private static final long serialVersionUID = 1L;
 
 		private TextRoomMessage getRemoveMsg(String id) {
-			return new TextRoomMessage(room.getRoom().getId(), room.getClient(), RoomMessage.Type.activityRemove, id);
+			return new TextRoomMessage(room.getRoom().getId(), room.getClient(), RoomMessage.Type.ACTIVITY_REMOVE, id);
 		}
 
 		@Override

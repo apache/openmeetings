@@ -19,24 +19,38 @@
 package org.apache.openmeetings.util;
 
 import java.io.Serializable;
+import java.util.Locale;
+
+import org.apache.wicket.util.string.Strings;
 
 public class ConnectionProperties implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum DbType {
-		db2
-		, h2
-		, mssql
-		, mysql
-		, oracle
-		, postgresql
+		DB2
+		, H2
+		, MSSQL
+		, MYSQL
+		, ORACLE
+		, POSTGRESQL;
+
+		public static DbType of(String val) {
+			if (Strings.isEmpty(val)) {
+				return DbType.H2;
+			}
+			return "sqlserver".equals(val) ? DbType.MSSQL : DbType.valueOf(val.toUpperCase(Locale.ROOT));
+		}
+
+		public String dbName() {
+			return name().toLowerCase(Locale.ROOT);
+		}
 	}
 
 	private String driver = "org.h2.Driver";
 	private String url = "jdbc:h2:./omdb";
 	private String login = "user";
 	private String password = "secret";
-	private DbType dbType = DbType.h2;
+	private DbType dbType = DbType.H2;
 
 	public String getDriver() {
 		return driver;

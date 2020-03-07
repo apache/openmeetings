@@ -257,7 +257,7 @@ public class RoomWebService extends BaseWebService {
 
 			roomDao.update(room, userId);
 
-			WebSocketHelper.sendRoom(new RoomMessage(room.getId(), userDao.get(userId),  RoomMessage.Type.roomClosed));
+			WebSocketHelper.sendRoom(new RoomMessage(room.getId(), userDao.get(userId),  RoomMessage.Type.ROOM_CLOSED));
 
 			return new ServiceResult("Closed", Type.SUCCESS);
 		});
@@ -396,7 +396,7 @@ public class RoomWebService extends BaseWebService {
 			if (i != null) {
 				if (sendmail) {
 					try {
-						inviteManager.sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false, null);
+						inviteManager.sendInvitationLink(i, MessageType.CREATE, invite.getSubject(), invite.getMessage(), false, null);
 					} catch (Exception e) {
 						throw new ServiceException(e.getMessage());
 					}

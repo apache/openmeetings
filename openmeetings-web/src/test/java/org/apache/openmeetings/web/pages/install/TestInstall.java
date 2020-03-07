@@ -46,6 +46,7 @@ import java.util.TimeZone;
 import org.apache.openmeetings.AbstractSpringTest;
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.cli.ConnectionPropertiesPatcher;
+import org.apache.openmeetings.util.ConnectionProperties.DbType;
 import org.apache.openmeetings.util.crypt.SCryptImplementation;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -80,11 +81,11 @@ public class TestInstall {
 	}
 
 	public static void setH2Home(File f) throws Exception {
-		ConnectionPropertiesPatcher.patch("h2", null, null, getH2Home(f), null, null);
+		ConnectionPropertiesPatcher.patch(DbType.H2, null, null, getH2Home(f), null, null);
 	}
 
 	public static void resetH2Home() throws Exception {
-		ConnectionPropertiesPatcher.patch("h2", null, null, null, null, null);
+		ConnectionPropertiesPatcher.patch(DbType.H2, null, null, null, null, null);
 	}
 
 	@BeforeEach

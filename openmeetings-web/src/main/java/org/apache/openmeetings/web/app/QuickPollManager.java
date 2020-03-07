@@ -60,7 +60,7 @@ public class QuickPollManager {
 		polls.lock(roomId);
 		polls.putIfAbsent(roomId, new ConcurrentHashMap<Long, Boolean>());
 		polls.unlock(roomId);
-		WebSocketHelper.sendRoom(new TextRoomMessage(roomId, c, Type.quickPollUpdated, c.getUid()));
+		WebSocketHelper.sendRoom(new TextRoomMessage(roomId, c, Type.QUICK_POLL_UPDATED, c.getUid()));
 	}
 
 	public void vote(Client c, boolean vote) {
@@ -72,7 +72,7 @@ public class QuickPollManager {
 			if (!votes.containsKey(c.getUserId())) {
 				votes.put(c.getUserId(), vote);
 				polls.put(roomId,  votes);
-				WebSocketHelper.sendRoom(new TextRoomMessage(roomId, c, Type.quickPollUpdated, c.getUid()));
+				WebSocketHelper.sendRoom(new TextRoomMessage(roomId, c, Type.QUICK_POLL_UPDATED, c.getUid()));
 			}
 		}
 		polls.unlock(roomId);
@@ -84,7 +84,7 @@ public class QuickPollManager {
 			return;
 		}
 		map().remove(roomId);
-		WebSocketHelper.sendRoom(new TextRoomMessage(roomId, c, Type.quickPollUpdated, c.getUid()));
+		WebSocketHelper.sendRoom(new TextRoomMessage(roomId, c, Type.QUICK_POLL_UPDATED, c.getUid()));
 	}
 
 	public JSONObject toJson(Long roomId) {

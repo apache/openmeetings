@@ -353,7 +353,7 @@ public class KurentoHandler {
 		}
 
 		private void notifyRooms() {
-			WebSocketHelper.sendServer(new TextRoomMessage(null, new User(), RoomMessage.Type.kurentoStatus, new JSONObject().put("connected", isConnected()).toString()));
+			WebSocketHelper.sendServer(new TextRoomMessage(null, new User(), RoomMessage.Type.KURENTO_STATUS, new JSONObject().put("connected", isConnected()).toString()));
 		}
 
 		@Override

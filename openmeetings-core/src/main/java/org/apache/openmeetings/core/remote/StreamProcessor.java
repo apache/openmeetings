@@ -96,7 +96,7 @@ public class StreamProcessor implements IStreamProcessor {
 						c.remove(Activity.VIDEO);
 					}
 					sd.setActivities();
-					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.rightUpdated, c.getUid()));
+					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 				}
 				break;
 			case "toggleActivity":
@@ -237,7 +237,7 @@ public class StreamProcessor implements IStreamProcessor {
 				if (!closed.isEmpty()) {
 					cm.update(c);
 					checkStreams(c.getRoomId());
-					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 				}
 			} else {
 				StreamDesc sd = c.addStream(StreamType.WEBCAM);
@@ -282,7 +282,7 @@ public class StreamProcessor implements IStreamProcessor {
 					}
 				});
 		}
-		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 	}
 
 	private void checkStreams(Long roomId) {
@@ -397,7 +397,7 @@ public class StreamProcessor implements IStreamProcessor {
 				c.removeStream(uid);
 				cm.update(c);
 				checkStreams(c.getRoomId());
-				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 				kHandler.sendShareUpdated(sd
 						.removeActivity(Activity.SCREEN)
 						.removeActivity(Activity.RECORD));
@@ -509,7 +509,7 @@ public class StreamProcessor implements IStreamProcessor {
 					}
 				}
 				cm.update(c);
-				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 			}
 		}
 		streamByUid.remove(uid);

@@ -83,8 +83,8 @@ public class InvitationDetails extends Form<Invitation>{
 		Valid v = i.getValid();
 		valid.setDefaultModelObject(v.name());
 		invitee.setDefaultModelObject(formatUser(i.getInvitee()));
-		from.setDefaultModelObject(Valid.Period == v ? i.getValidFrom() : null);
-		to.setDefaultModelObject(Valid.Period == v ? i.getValidTo() : null);
+		from.setDefaultModelObject(Valid.PERIOD == v ? i.getValidFrom() : null);
+		to.setDefaultModelObject(Valid.PERIOD == v ? i.getValidTo() : null);
 		delBtn.setEnabled(i.getId() != null);
 	}
 }

@@ -118,12 +118,12 @@ public class TestHashPage extends AbstractWicketTester {
 
 		// valid period of Invitation
 		switch (valid) {
-			case Period:
+			case PERIOD:
 				i.setValidFrom(new Date(from.getTime() - (5 * 60 * 1000)));
 				i.setValidTo(to);
 				break;
-			case Endless:
-			case OneTime:
+			case ENDLESS:
+			case ONE_TIME:
 			default:
 				break;
 		}
@@ -171,7 +171,7 @@ public class TestHashPage extends AbstractWicketTester {
 
 	@Test
 	public void testValidOneTimeRoom() {
-		Invitation i = get(1L, 2L, null, null, Valid.OneTime, null, null, null);
+		Invitation i = get(1L, 2L, null, null, Valid.ONE_TIME, null, null, null);
 		checkMainPanel(new PageParameters().add(INVITATION_HASH, i.getHash()), RoomPanel.class);
 	}
 
@@ -181,7 +181,7 @@ public class TestHashPage extends AbstractWicketTester {
 		Recording rec = new Recording();
 		rec.setOwnerId(1L);
 		recDao.update(rec);
-		Invitation i = get(1L, null, null, rec.getId(), Valid.OneTime, null, null, null);
+		Invitation i = get(1L, null, null, rec.getId(), Valid.ONE_TIME, null, null, null);
 		checkRecordingPanel(new PageParameters().add(INVITATION_HASH, i.getHash()), VideoInfo.class);
 	}
 }

@@ -61,18 +61,18 @@ public class Invitation extends HistoricalEntity {
 	public static final String BY_USER = BY_ALL + " AND i.invitedBy.id = :userId";
 
 	public enum MessageType {
-		Create
-		, Update
-		, Cancel
+		CREATE
+		, UPDATE
+		, CANCEL
 	}
 
 	public enum Valid {
-		OneTime
-		, Period
-		, Endless;
+		ONE_TIME
+		, PERIOD
+		, ENDLESS;
 
 		public static Valid fromInt(int valid) {
-			return valid == 1 ? Endless : (valid == 2 ? Period : OneTime);
+			return valid == 1 ? ENDLESS : (valid == 2 ? PERIOD : ONE_TIME);
 		}
 	}
 
@@ -115,7 +115,7 @@ public class Invitation extends HistoricalEntity {
 	// TimeStamp
 	@Column(name = "valid")
 	@Enumerated(EnumType.STRING)
-	private Valid valid = Valid.Period;
+	private Valid valid = Valid.PERIOD;
 
 	@Column(name = "valid_from")
 	private Date validFrom;

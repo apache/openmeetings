@@ -115,7 +115,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 				ensureApplication();
 				User u = new User();
 				u.setId(userId);
-				WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.wbReload));
+				WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.WB_RELOAD));
 			}).start();
 		} catch (InterruptedException e) {
 			log.warn("Unexpected exception while map clean-up", e);

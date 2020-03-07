@@ -90,7 +90,7 @@ public class VoteDialog extends Modal<RoomPollAnswer> {
 					a.getRoomPoll().getAnswers().add(a);
 					pollDao.update(a.getRoomPoll());
 				}
-				sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollUpdated));
+				sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.POLL_UPDATED));
 				close(target);
 			}
 

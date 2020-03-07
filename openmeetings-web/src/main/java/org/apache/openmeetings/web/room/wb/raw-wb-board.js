@@ -4,7 +4,7 @@ var Wb = function() {
 		, area = $('.room-block .wb-block .wb-area .tabs'), bar = area.find('.wb-tabbar')
 		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src', 'formula'];
 	let c, t, z, s, f, mode, slide = 0, width = 0, height = 0
-			, zoom = 1., zoomMode = 'pageWidth', role = null, scrollTimeout = null;
+			, zoom = 1., zoomMode = 'PAGE_WIDTH', role = null, scrollTimeout = null;
 
 	function _getBtn(m) {
 		return !!t ? t.find('.om-icon.' + (m || mode) + ':not(.stub)') : null;
@@ -385,21 +385,21 @@ var Wb = function() {
 					if (zoom < .1) {
 						zoom = .1;
 					}
-					zoomMode = 'zoom';
+					zoomMode = 'ZOOM';
 					_sendSetSize();
 				});
 				z.find('.zoom-in').click(function() {
 					zoom += .2;
-					zoomMode = 'zoom';
+					zoomMode = 'ZOOM';
 					_sendSetSize();
 				});
 				z.find('.zoom').change(function() {
 					const zzz = $(this).val();
-					zoomMode = 'zoom';
+					zoomMode = 'ZOOM';
 					if (isNaN(zzz)) {
 						switch (zzz) {
-							case 'fullFit':
-							case 'pageWidth':
+							case 'FULL_FIT':
+							case 'PAGE_WIDTH':
 								zoomMode = zzz;
 								break;
 							case 'custom':
@@ -727,11 +727,11 @@ var Wb = function() {
 	}
 	function _setSize() {
 		switch (zoomMode) {
-			case 'fullFit':
+			case 'FULL_FIT':
 				zoom = Math.min((area.width() - 30) / width, (area.height() - bar.height() - 30) / height);
 				z.find('.zoom').val(zoomMode);
 				break;
-			case 'pageWidth':
+			case 'PAGE_WIDTH':
 				zoom = (area.width() - 30) / width;
 				z.find('.zoom').val(zoomMode);
 				break;
@@ -850,7 +850,7 @@ var Wb = function() {
 				, collision: 'fit'
 			});
 		}
-		if (zoomMode !== 'zoom') {
+		if (zoomMode !== 'ZOOM') {
 			_setSize();
 		}
 	};

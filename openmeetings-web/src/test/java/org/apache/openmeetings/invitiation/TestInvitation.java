@@ -45,10 +45,10 @@ public class TestInvitation extends AbstractWicketTester {
 		LocalDateTime from = LocalDateTime.now().plusDays(1).withHour(12).withMinute(0).withSecond(0);
 		User invitee = userDao.getContact("sebawagner@apache.org", "Testname", "Testlastname", us.getId());
 		Invitation i = invitationManager.getInvitation(invitee, roomDao.get(1L),
-				false, "", Valid.OneTime
+				false, "", Valid.ONE_TIME
 				, us, us.getLanguageId(),
 				getDate(from, "GMT"), getDate(from.plusHours(2), "GMT"), null);
 
-		invitationManager.sendInvitationLink(i, MessageType.Create, "subject", "message", false, null);
+		invitationManager.sendInvitationLink(i, MessageType.CREATE, "subject", "message", false, null);
 	}
 }

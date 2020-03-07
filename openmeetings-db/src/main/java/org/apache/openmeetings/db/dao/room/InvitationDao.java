@@ -144,7 +144,7 @@ public class InvitationDao implements IDataProviderDao<Invitation> {
 		Invitation i = list != null && list.size() == 1 ? list.get(0) : null;
 		if (i != null) {
 			switch (i.getValid()) {
-				case OneTime:
+				case ONE_TIME:
 					// one-time invitation
 					i.setAllowEntry(!i.isUsed());
 					if (markUsed) {
@@ -153,7 +153,7 @@ public class InvitationDao implements IDataProviderDao<Invitation> {
 						em.flush(); // flash is required to eliminate 'detach' effect
 					}
 					break;
-				case Period:
+				case PERIOD:
 					String tzId = i.getInvitee().getTimeZoneId();
 					if (Strings.isEmpty(tzId) && i.getAppointment() != null) {
 						log.warn("User with NO timezone found: {}", i.getInvitee().getId());
@@ -168,7 +168,7 @@ public class InvitationDao implements IDataProviderDao<Invitation> {
 					LocalDateTime to = CalendarHelper.getDateTime(i.getValidTo(), tzId);
 					i.setAllowEntry(now.isAfter(from) && now.isBefore(to));
 					break;
-				case Endless:
+				case ENDLESS:
 				default:
 					i.setAllowEntry(true);
 					break;

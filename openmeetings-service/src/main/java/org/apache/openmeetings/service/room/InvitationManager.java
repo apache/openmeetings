@@ -84,13 +84,13 @@ public class InvitationManager implements IInvitationManager {
 		TimeZone tz = getTimeZone(mm.getUser());
 		SubjectEmailTemplate t;
 		switch (type) {
-			case Cancel:
+			case CANCEL:
 				t = CanceledAppointmentTemplate.get(mm.getUser(), a, tz, invitorName);
 				break;
-			case Create:
+			case CREATE:
 				t = CreatedAppointmentTemplate.get(mm.getUser(), a, tz, invitorName);
 				break;
-			case Update:
+			case UPDATE:
 			default:
 				t = UpdatedAppointmentTemplate.get(mm.getUser(), a, tz, invitorName);
 				break;
@@ -101,7 +101,7 @@ public class InvitationManager implements IInvitationManager {
 	@Override
 	public void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical, String baseUrl) throws Exception {
 		String invitationLink = null;
-		if (type != MessageType.Cancel) {
+		if (type != MessageType.CANCEL) {
 			IApplication app = ensureApplication(1L);
 			invitationLink = app.getOmInvitationLink(i, baseUrl);
 		}
@@ -115,7 +115,7 @@ public class InvitationManager implements IInvitationManager {
 		if (ical) {
 			String username = i.getInvitee().getLogin();
 			boolean isOwner = owner.getId().equals(i.getInvitee().getId());
-			IcalHandler handler = new IcalHandler(MessageType.Cancel == type ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST);
+			IcalHandler handler = new IcalHandler(MessageType.CANCEL == type ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST);
 
 			Map<String, String> attendeeList = handler.getAttendeeData(email, username, isOwner);
 
@@ -172,7 +172,7 @@ public class InvitationManager implements IInvitationManager {
 		try {
 			mm.setInvitation(getInvitation(mm.getInvitation()
 					, mm.getUser(), a.getRoom(), a.isPasswordProtected(), a.getPassword()
-					, Valid.Period, a.getOwner(), null, a.getStart(), a.getEnd(), a));
+					, Valid.PERIOD, a.getOwner(), null, a.getStart(), a.getEnd(), a));
 			if (sendMail) {
 				sendInvitionLink(a, mm, type, Reminder.ICAL == reminder);
 			}
@@ -203,12 +203,12 @@ public class InvitationManager implements IInvitationManager {
 
 		// valid period of Invitation
 		switch (valid) {
-			case Period:
+			case PERIOD:
 				invitation.setValidFrom(new Date(gmtTimeStart.getTime() - (5 * 60 * 1000)));
 				invitation.setValidTo(gmtTimeEnd);
 				break;
-			case Endless:
-			case OneTime:
+			case ENDLESS:
+			case ONE_TIME:
 			default:
 				break;
 		}

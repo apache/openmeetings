@@ -255,7 +255,7 @@ public class RoomSidebar extends Panel {
 					break;
 				case muteOthers:
 					if (room.getClient().hasRight(Right.MUTE_OTHERS)) {
-						WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), self, RoomMessage.Type.muteOthers, uid));
+						WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), self, RoomMessage.Type.MUTE_OTHERS, uid));
 					}
 					break;
 				case mute:
@@ -265,7 +265,7 @@ public class RoomSidebar extends Panel {
 						return;
 					}
 					if (self.hasRight(Right.MODERATOR) || self.getUid().equals(c.getUid())) {
-						WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), self, RoomMessage.Type.mute
+						WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), self, RoomMessage.Type.MUTE
 								, new JSONObject()
 										.put("sid", self.getSid())
 										.put(PARAM_UID, uid)

@@ -185,7 +185,7 @@ public class KRoom {
 			}
 
 			// Send notification to all users that the recording has been started
-			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.recordingToggled));
+			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.RECORDING_TOGGLED));
 			log.debug("##REC:: recording in room {} is started {} ::", roomId, recordingId);
 		}
 	}
@@ -216,7 +216,7 @@ public class KRoom {
 				}
 			}
 			// Send notification to all users that the recording has been started
-			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.recordingToggled));
+			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.RECORDING_TOGGLED));
 			log.debug("##REC:: recording in room {} is stopped ::", roomId);
 		}
 	}
@@ -249,7 +249,7 @@ public class KRoom {
 			sd.addActivity(a);
 			cm.update(c);
 			h.sendShareUpdated(sd);
-			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 			WebSocketHelper.sendRoomOthers(roomId, c.getUid(), newKurentoMsg()
 					.put("id", "newStream")
 					.put(PARAM_ICE, processor.getHandler().getTurnServers())

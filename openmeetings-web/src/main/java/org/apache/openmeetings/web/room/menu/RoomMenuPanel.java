@@ -86,7 +86,7 @@ public class RoomMenuPanel extends Panel {
 		@Override
 		public void onClick(AjaxRequestTarget target) {
 			Client c = room.getClient();
-			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoom().getId(), c, Type.haveQuestion, c.getUid()));
+			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoom().getId(), c, Type.HAVE_QUESTION, c.getUid()));
 		}
 	};
 	private final RoomPanel room;

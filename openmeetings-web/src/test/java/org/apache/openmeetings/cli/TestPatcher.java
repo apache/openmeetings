@@ -51,9 +51,9 @@ public class TestPatcher {
 	@Test
 	public void test() throws Exception {
 		for (DbType dbType : DbType.values()) {
-			ConnectionProperties props = ConnectionPropertiesPatcher.patch(dbType.name(), HOST, PORT, DB, USER, PASS);
+			ConnectionProperties props = ConnectionPropertiesPatcher.patch(dbType, HOST, PORT, DB, USER, PASS);
 			assertEquals(dbType, props.getDbType(), "DB type should match");
-			if (DbType.mysql == dbType) {
+			if (DbType.MYSQL == dbType) {
 				Url url = Url.parse(props.getURL());
 				PageParameters pp = new PageParametersEncoder().decodePageParameters(url);
 				StringValue tz = pp.get("serverTimezone");
@@ -64,6 +64,6 @@ public class TestPatcher {
 
 	@AfterAll
 	public static void cleanup() throws IOException {
-		Files.copy(OmFileHelper.getPersistence(DbType.h2), OmFileHelper.getPersistence());
+		Files.copy(OmFileHelper.getPersistence(DbType.H2), OmFileHelper.getPersistence());
 	}
 }

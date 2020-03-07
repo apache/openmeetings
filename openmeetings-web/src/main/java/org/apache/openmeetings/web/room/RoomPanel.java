@@ -150,7 +150,7 @@ public class RoomPanel extends BasePanel {
 					.append(wb.getInitScript())
 					.append(getQuickPollJs());
 			target.appendJavaScript(sb);
-			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), c, RoomMessage.Type.roomEnter));
+			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), c, RoomMessage.Type.ROOM_ENTER));
 			// play video from other participants
 			initVideos(target);
 			getMainPanel().getChat().roomEnter(r, target);
@@ -430,20 +430,20 @@ public class RoomPanel extends BasePanel {
 				RoomMessage m = (RoomMessage)wsEvent.getMessage();
 				IPartialPageRequestHandler handler = wsEvent.getHandler();
 				switch (m.getType()) {
-					case pollCreated:
+					case POLL_CREATED:
 						menu.updatePoll(handler, m.getUserId());
 						break;
-					case pollUpdated:
+					case POLL_UPDATED:
 						menu.updatePoll(handler, null);
 						break;
-					case recordingToggled:
+					case RECORDING_TOGGLED:
 						menu.update(handler);
 						updateInterviewRecordingButtons(handler);
 						break;
-					case sharingToggled:
+					case SHARING_TOGGLED:
 						menu.update(handler);
 						break;
-					case rightUpdated:
+					case RIGHT_UPDATED:
 						{
 							String uid = ((TextRoomMessage)m).getText();
 							Client c = cm.get(uid);
@@ -460,53 +460,53 @@ public class RoomPanel extends BasePanel {
 							updateInterviewRecordingButtons(handler);
 						}
 						break;
-					case roomEnter:
+					case ROOM_ENTER:
 						sidebar.update(handler);
 						menu.update(handler);
 						sidebar.addActivity(new Activity(m, Activity.Type.roomEnter), handler);
 						break;
-					case roomExit:
+					case ROOM_EXIT:
 						sidebar.update(handler);
 						sidebar.addActivity(new Activity(m, Activity.Type.roomExit), handler);
 						handler.appendJavaScript("Chat.removeTab('" + ID_USER_PREFIX + m.getUserId() + "');");
 						break;
-					case roomClosed:
+					case ROOM_CLOSED:
 						handler.add(room.setVisible(false));
 						roomClosed.show(handler);
 						break;
-					case requestRightModerator:
+					case REQUEST_RIGHT_MODERATOR:
 						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightModerator), handler);
 						break;
-					case requestRightPresenter:
+					case REQUEST_RIGHT_PRESENTER:
 						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightPresenter), handler);
 						break;
-					case requestRightWb:
+					case REQUEST_RIGHT_WB:
 						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightWb), handler);
 						break;
-					case requestRightShare:
+					case REQUEST_RIGHT_SHARE:
 						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightShare), handler);
 						break;
-					case requestRightRemote:
+					case REQUEST_RIGHT_REMOTE:
 						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightRemote), handler);
 						break;
-					case requestRightA:
+					case REQUEST_RIGHT_A:
 						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightA), handler);
 						break;
-					case requestRightAv:
+					case REQUEST_RIGHT_AV:
 						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightAv), handler);
 						break;
-					case requestRightMuteOthers:
+					case REQUEST_RIGHT_MUTE_OTHERS:
 						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightMuteOthers), handler);
 						break;
-					case activityRemove:
+					case ACTIVITY_REMOVE:
 						sidebar.removeActivity(((TextRoomMessage)m).getText(), handler);
 						break;
-					case haveQuestion:
+					case HAVE_QUESTION:
 						if (_c.hasRight(Room.Right.MODERATOR) || getUserId().equals(m.getUserId())) {
 							sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.haveQuestion), handler);
 						}
 						break;
-					case kick:
+					case KICK:
 						{
 							String uid = ((TextRoomMessage)m).getText();
 							if (_c.getUid().equals(uid)) {
@@ -517,7 +517,7 @@ public class RoomPanel extends BasePanel {
 							}
 						}
 						break;
-					case mute:
+					case MUTE:
 					{
 						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
 						Client c = cm.getBySid(obj.getString("sid"));
@@ -530,7 +530,7 @@ public class RoomPanel extends BasePanel {
 						}
 					}
 						break;
-					case muteOthers:
+					case MUTE_OTHERS:
 					{
 						String uid = ((TextRoomMessage)m).getText();
 						Client c = cm.get(uid);
@@ -541,21 +541,21 @@ public class RoomPanel extends BasePanel {
 						handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.muteOthers('%s');}", uid));
 					}
 						break;
-					case quickPollUpdated:
+					case QUICK_POLL_UPDATED:
 					{
 						menu.update(handler);
 						handler.appendJavaScript(getQuickPollJs());
 					}
 						break;
-					case kurentoStatus:
+					case KURENTO_STATUS:
 						menu.update(handler);
 						break;
-					case wbReload:
+					case WB_RELOAD:
 						if (Room.Type.INTERVIEW != r.getType()) {
 							wb.reloadWb(handler);
 						}
 						break;
-					case moderatorInRoom: {
+					case MODERATOR_IN_ROOM: {
 						if (!r.isModerated() || !r.isWaitModerator()) {
 							log.warn("Something weird: `moderatorInRoom` in wrong room {}", r);
 						} else if (!_c.hasRight(Room.Right.MODERATOR)) {
@@ -681,28 +681,28 @@ public class RoomPanel extends BasePanel {
 		// ask
 		switch (right) {
 			case MODERATOR:
-				reqType = Type.requestRightModerator;
+				reqType = Type.REQUEST_RIGHT_MODERATOR;
 				break;
 			case PRESENTER:
-				reqType = Type.requestRightPresenter;
+				reqType = Type.REQUEST_RIGHT_PRESENTER;
 				break;
 			case WHITEBOARD:
-				reqType = Type.requestRightWb;
+				reqType = Type.REQUEST_RIGHT_WB;
 				break;
 			case SHARE:
-				reqType = Type.requestRightWb;
+				reqType = Type.REQUEST_RIGHT_WB;
 				break;
 			case AUDIO:
-				reqType = Type.requestRightA;
+				reqType = Type.REQUEST_RIGHT_A;
 				break;
 			case MUTE_OTHERS:
-				reqType = Type.requestRightMuteOthers;
+				reqType = Type.REQUEST_RIGHT_MUTE_OTHERS;
 				break;
 			case REMOTE_CONTROL:
-				reqType = Type.requestRightRemote;
+				reqType = Type.REQUEST_RIGHT_REMOTE;
 				break;
 			case VIDEO:
-				reqType = Type.requestRightAv;
+				reqType = Type.REQUEST_RIGHT_AV;
 				break;
 			default:
 				break;
@@ -736,7 +736,7 @@ public class RoomPanel extends BasePanel {
 
 	public void broadcast(Client client) {
 		cm.update(client);
-		WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getClient(), RoomMessage.Type.rightUpdated, client.getUid()));
+		WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getClient(), RoomMessage.Type.RIGHT_UPDATED, client.getUid()));
 	}
 
 	@Override

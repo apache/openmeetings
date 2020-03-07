@@ -120,7 +120,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				errorMsg = getString("error.hash.invalid");
 			} else if (!i.isAllowEntry()) {
 				FastDateFormat sdf = FormatHelper.getDateTimeFormat(i.getInvitee());
-				errorMsg = Valid.OneTime == i.getValid()
+				errorMsg = Valid.ONE_TIME == i.getValid()
 						? getString("error.hash.used")
 						: String.format("%s %s - %s, %s", getString("error.hash.period")
 								, sdf.format(i.getValidFrom()), sdf.format(i.getValidTo())

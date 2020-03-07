@@ -50,22 +50,22 @@ public abstract class ConnectionPropertiesPatcher {
 	public static ConnectionPropertiesPatcher getPatcher(ConnectionProperties props) {
 		ConnectionPropertiesPatcher patcher;
 		switch (props.getDbType()) {
-			case db2:
+			case DB2:
 				patcher = new Db2Patcher();
 				break;
-			case mssql:
+			case MSSQL:
 				patcher = new MssqlPatcher();
 				break;
-			case mysql:
+			case MYSQL:
 				patcher = new MysqlPatcher();
 				break;
-			case oracle:
+			case ORACLE:
 				patcher = new OraclePatcher();
 				break;
-			case postgresql:
+			case POSTGRESQL:
 				patcher = new PostgresPatcher();
 				break;
-			case h2:
+			case H2:
 			default:
 				patcher = new H2Patcher();
 				break;
@@ -112,7 +112,7 @@ public abstract class ConnectionPropertiesPatcher {
 		transformer.transform(source, new StreamResult(OmFileHelper.getPersistence().getCanonicalPath())); //this constructor is used to avoid transforming path to URI
 	}
 
-	public static ConnectionProperties patch(String dbType, String host, String port, String db, String user, String pass) throws Exception {
+	public static ConnectionProperties patch(DbType dbType, String host, String port, String db, String user, String pass) throws Exception {
 		ConnectionProperties props = getConnectionProperties(OmFileHelper.getPersistence(dbType));
 		props.setLogin(user);
 		props.setPassword(pass);
@@ -165,7 +165,7 @@ public abstract class ConnectionPropertiesPatcher {
 				try {
 					//will try to "guess" dbType
 					String[] parts = prop.split(":");
-					connectionProperties.setDbType("sqlserver".equals(parts[1]) ? DbType.mssql : DbType.valueOf(parts[1]));
+					connectionProperties.setDbType(DbType.of(parts[1]));
 				} catch (Exception e) {
 					//ignore
 				}

@@ -180,7 +180,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 						String invitationLink = "";
 						if (p.isBookedRoom()) {
 							Invitation i = inviteManager.getInvitation(to, p.getRoom(),
-									false, null, Valid.Period, owner, to.getLanguageId()
+									false, null, Valid.PERIOD, owner, to.getLanguageId()
 									, CalendarHelper.getDate(start.getModelObject(), to.getTimeZoneId())
 									, CalendarHelper.getDate(end.getModelObject(), to.getTimeZoneId()), null);
 

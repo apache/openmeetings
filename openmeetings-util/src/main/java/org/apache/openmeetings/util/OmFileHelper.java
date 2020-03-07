@@ -264,15 +264,11 @@ public class OmFileHelper {
 	}
 
 	public static File getPersistence() {
-		return getPersistence((DbType) null);
-	}
-
-	public static File getPersistence(String dbType) {
-		return getPersistence(DbType.valueOf(dbType));
+		return getPersistence(null);
 	}
 
 	public static File getPersistence(DbType dbType) {
-		return new File(getWebinfDir(), dbType == null ? PERSISTENCE_NAME : String.format(DB_PERSISTENCE_NAME, dbType));
+		return new File(getWebinfDir(), dbType == null ? PERSISTENCE_NAME : String.format(DB_PERSISTENCE_NAME, dbType.dbName()));
 	}
 
 	public static File getLdapConf(String name) {

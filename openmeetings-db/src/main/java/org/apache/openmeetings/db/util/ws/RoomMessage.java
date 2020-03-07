@@ -31,31 +31,31 @@ import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
 public class RoomMessage implements IWebSocketPushMessage {
 	private static final long serialVersionUID = 1L;
 	public enum Type {
-		roomEnter
-		, roomExit
-		, roomClosed
-		, pollCreated
-		, pollUpdated
-		, recordingToggled
-		, sharingToggled
-		, rightUpdated
-		, activityRemove
-		, requestRightModerator
-		, requestRightPresenter
-		, requestRightWb
-		, requestRightShare
-		, requestRightRemote
-		, requestRightA
-		, requestRightAv
-		, requestRightMuteOthers
-		, haveQuestion
-		, kick
-		, mute
-		, muteOthers
-		, quickPollUpdated
-		, kurentoStatus
-		, wbReload
-		, moderatorInRoom
+		ROOM_ENTER
+		, ROOM_EXIT
+		, ROOM_CLOSED
+		, POLL_CREATED
+		, POLL_UPDATED
+		, RECORDING_TOGGLED
+		, SHARING_TOGGLED
+		, RIGHT_UPDATED
+		, ACTIVITY_REMOVE
+		, REQUEST_RIGHT_MODERATOR
+		, REQUEST_RIGHT_PRESENTER
+		, REQUEST_RIGHT_WB
+		, REQUEST_RIGHT_SHARE
+		, REQUEST_RIGHT_REMOTE
+		, REQUEST_RIGHT_A
+		, REQUEST_RIGHT_AV
+		, REQUEST_RIGHT_MUTE_OTHERS
+		, HAVE_QUESTION
+		, KICK
+		, MUTE
+		, MUTE_OTHERS
+		, QUICK_POLL_UPDATED
+		, KURENTO_STATUS
+		, WB_RELOAD
+		, MODERATOR_IN_ROOM
 	}
 	private final Date timestamp;
 	private final String uid;

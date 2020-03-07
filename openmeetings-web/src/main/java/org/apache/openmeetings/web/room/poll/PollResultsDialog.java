@@ -115,7 +115,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 				RoomPoll p = pollDao.get(id);
 				selForm.select.setModelObject(p);
 				dispForm.updateModel(p, true, target);
-				sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollUpdated));
+				sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.POLL_UPDATED));
 				close(target);
 			}
 		});
@@ -129,7 +129,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 				pollDao.delete(dispForm.getModelObject());
 				selForm.updateModel(target);
 				dispForm.updateModel(selForm.select.getModelObject(), true, target);
-				sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollUpdated));
+				sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.POLL_UPDATED));
 				close(target);
 			}
 		});

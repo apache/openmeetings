@@ -158,7 +158,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 						.setSubject("Health Meeting")
 						.setRoomId(rooms.get(0).getId())
 						.setMessage("Meeting")
-						.setValid(Valid.Period)
+						.setValid(Valid.PERIOD)
 						.setValidFrom("2018-03-19 02:25:12")
 						.setValidTo("2018-04-20 02:25:12")
 						.toString())

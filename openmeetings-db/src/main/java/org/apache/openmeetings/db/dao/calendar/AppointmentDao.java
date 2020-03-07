@@ -113,25 +113,25 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 			if (mmList != null){
 				for (MeetingMember mm : mmList) {
 					if (mm.getId() == null || !mmIds.contains(mm.getId())) {
-						invitationManager.processInvitation(a, mm, MessageType.Create);
+						invitationManager.processInvitation(a, mm, MessageType.CREATE);
 					} else {
 						mmIds.remove(mm.getId());
-						invitationManager.processInvitation(a, mm, MessageType.Update, sendMail);
+						invitationManager.processInvitation(a, mm, MessageType.UPDATE, sendMail);
 					}
 				}
 			}
 			for (long id : mmIds) {
-				invitationManager.processInvitation(a, meetingMemberDao.get(id), MessageType.Cancel);
+				invitationManager.processInvitation(a, meetingMemberDao.get(id), MessageType.CANCEL);
 			}
 			//notify owner
 			MeetingMember owner = new MeetingMember();
 			owner.setUser(a.getOwner());
 			if (a.getId() == null) {
-				invitationManager.processInvitation(a, owner, MessageType.Create);
+				invitationManager.processInvitation(a, owner, MessageType.CREATE);
 			} else if (a.isDeleted()) {
-				invitationManager.processInvitation(a, owner, MessageType.Cancel);
+				invitationManager.processInvitation(a, owner, MessageType.CANCEL);
 			} else if (sendMail) {
-				invitationManager.processInvitation(a, owner, MessageType.Update, sendMail);
+				invitationManager.processInvitation(a, owner, MessageType.UPDATE, sendMail);
 			}
 		}
 		if (a.getId() == null) {

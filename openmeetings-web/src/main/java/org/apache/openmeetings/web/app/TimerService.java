@@ -62,7 +62,7 @@ public class TimerService {
 					if (cm.listByRoom(roomId).isEmpty()) {
 						modCheckMap.remove(roomId);
 					} else {
-						WebSocketHelper.sendRoom(new TextRoomMessage(roomId, sysUser, RoomMessage.Type.moderatorInRoom, "" + !cm.listByRoom(roomId, c -> c.hasRight(Right.MODERATOR)).isEmpty()));
+						WebSocketHelper.sendRoom(new TextRoomMessage(roomId, sysUser, RoomMessage.Type.MODERATOR_IN_ROOM, "" + !cm.listByRoom(roomId, c -> c.hasRight(Right.MODERATOR)).isEmpty()));
 						doModCheck(roomId);
 					}
 					return null;
