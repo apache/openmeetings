@@ -30,6 +30,7 @@ import javax.xml.bind.Marshaller;
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
@@ -58,6 +59,6 @@ public class TestExport extends AbstractJUnitDefaults {
 		});
 		StringWriter writer = new StringWriter();
 		marshaller.marshal(u, writer);
-		System.err.println(writer.getBuffer());
+		Assertions.assertNotNull(writer.getBuffer());
 	}
 }

@@ -1136,12 +1136,12 @@ public class BackupImport {
 			if (EXTENSION_PNG.equals(ext)) {
 				Long id = getPrefixedId(GROUP_LOGO_PREFIX, f, groupMap);
 				if (id != null) {
-					FileUtils.moveFile(f, getGroupLogo(id, false));
+					FileUtils.copyFile(f, getGroupLogo(id, false));
 				}
 			} else if (EXTENSION_CSS.equals(ext)) {
 				Long id = getPrefixedId(GROUP_CSS_PREFIX, f, groupMap);
 				if (id != null) {
-					FileUtils.moveFile(f, getGroupCss(id, false));
+					FileUtils.copyFile(f, getGroupCss(id, false));
 				}
 			}
 		}
