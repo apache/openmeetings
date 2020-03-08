@@ -28,8 +28,8 @@ var Activities = function() {
 	}
 	function _open() {
 		if (isClosed()) {
-			$('.control.block .ui-icon', activities).removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
-			$('.control.block', activities).removeClass('ui-state-highlight');
+			$('.control.block i', activities).removeClass('fa-angle-up').addClass('fa-angle-down');
+			$('.control.block', activities).removeClass('bg-warning');
 			activities.animate(
 				{
 					height: openedHeightPx
@@ -46,7 +46,7 @@ var Activities = function() {
 	}
 	function _close() {
 		if (!isClosed()) {
-			$('.control.block .ui-icon', activities).removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-n');
+			$('.control.block i', activities).removeClass('fa-angle-down').addClass('fa-angle-up');
 			activities.animate(
 				{
 					height: closedHeight
@@ -65,12 +65,12 @@ var Activities = function() {
 		const m = '5px', t = 50, u = $('#user' + uid);
 		if (u.length === 1) {
 			u[0].scrollIntoView();
-			u.addClass('ui-state-highlight');
+			u.addClass('bg-warning');
 			for(let i = 0; i < 10; i++) {
 				u.animate({marginTop: '-='+m}, t)
 					.animate({marginTop: '+='+m}, t);
 			}
-			u.removeClass('ui-state-highlight', 1500);
+			u.removeClass('bg-warning', 1500);
 		}
 	}
 	function _hightlight() {
@@ -78,7 +78,7 @@ var Activities = function() {
 			return;
 		}
 		if (isClosed()) {
-			$('.control.block', activities).addClass('ui-state-highlight');
+			$('.control.block', activities).addClass('bg-warning');
 		}
 	}
 	function _getId(id) {

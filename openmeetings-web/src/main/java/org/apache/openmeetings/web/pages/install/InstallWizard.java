@@ -86,11 +86,11 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
+import com.googlecode.wicket.jquery.ui.form.button.IndicatingAjaxButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
 import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
 import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
-import com.googlecode.wicket.kendo.ui.form.button.IndicatingAjaxButton;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 

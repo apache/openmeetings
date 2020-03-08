@@ -3,14 +3,14 @@
 	height: var(--activities-height);
 	overflow: hidden;
 }
+.room-block.small #activities {
+	font-size: 120%;
+}
 #activities .ui-resizable-handle {
 	width: 100%;
 }
-#activities .ui-widget-header {
+#activities .control.block {
 	white-space: nowrap;
-}
-#activities .control.block .ui-icon {
-	text-align: center;
 }
 #activities .control.block .label {
 	display: inline-block;
@@ -28,13 +28,9 @@
 .activity.item {
 	position: relative;
 	padding: 5px;
-	margin-bottom: 3px
+	margin-bottom: 3px;
+	border-bottom: 1px solid var(--secondary);
 }
-.activity.item .ui-icon {
-	border-width: 1px;
-	border-style: solid;
-	margin-left: 2px;
-}
-.ui-icon.crosshair {
-	background-image: url(images/crosshair.png);
+.activity.item button {
+	padding: 0 5px;
 }

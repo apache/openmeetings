@@ -21,26 +21,33 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<div class="ui-widget-header">
-		<div onclick="Activities.toggle();" class="clickable control block ui-widget-header ui-state-active">
-			<div class="ui-icon ui-icon-carat-1-n sort-icon"></div>
-			<span class="badge">42</span>
-			<div class="label"><wicket:message key="1363"/></div>
-		</div>
+	<div class="clickable control block bg-secondary" onclick="Activities.toggle();">
+		<i class="fas ml-1 fa-angle-up"></i>
+		<span class="badge badge-secondary">42</span>
+		<div class="label"><wicket:message key="1363"/></div>
 	</div>
-	<div class="ctrl ui-widget-content">
-		<div><input type="checkbox" id="activity-auto-clean"/><label for="activity-auto-clean"><wicket:message key="activities.autoclean"/></label></div>
+	<div class="ctrl bg-white">
+		<input type="checkbox" id="activity-auto-clean"/>
+		<label class="m-0" for="activity-auto-clean"><wicket:message key="activities.autoclean"/></label>
 	</div>
-	<div class="area ui-widget-content">
+	<div class="area bg-white">
 		<div class="actions"></div>
 		<div class="activities"></div>
 	</div>
 	<div class="d-none">
 		<div id="activity-stub" class="activity item ui-helper-clearfix ui-corner-all">
-			<span class="activity-close ui-icon ui-icon-close ui-corner-all clickable" wicket:message="title:85"></span>
-			<span class="activity-accept ui-icon ui-icon-check ui-corner-all clickable" wicket:message="title:1360"></span>
-			<span class="activity-decline ui-icon ui-icon-cancel ui-corner-all clickable" wicket:message="title:1361"></span>
-			<span class="activity-find ui-icon crosshair ui-corner-all clickable" wicket:message="title:find.user"></span>
+			<button class="activity-close btn btn-outline-secondary btn-small" wicket:message="title:85">
+				<i class="fas fa-times"></i>
+			</button>
+			<button class="activity-accept btn btn-outline-secondary btn-small" wicket:message="title:1360">
+				<i class="fas fa-check"></i>
+			</button>
+			<button class="activity-decline btn btn-outline-secondary btn-small" wicket:message="title:1361">
+				<i class="fas fa-ban"></i>
+			</button>
+			<button class="activity-find btn btn-outline-secondary btn-small" wicket:message="title:find.user">
+				<i class="fas fa-crosshairs"></i>
+			</button>
 			<div class="activity-text"></div>
 		</div>
 	</div>
