@@ -246,19 +246,6 @@ var Wb = function() {
 		});
 	}
 	function internalInit() {
-		t.draggable({
-			snap: 'parent'
-			, containment: 'parent'
-			, scroll: false
-			, stop: function(event, ui) {
-				const pos = ui.helper.position();
-				if (pos.left === 0 || pos.left + ui.helper.width() === ui.helper.parent().width()) {
-					ui.helper.removeClass('horisontal').addClass('vertical');
-				} else if (pos.top === 0 || pos.top + ui.helper.height() === ui.helper.parent().height()) {
-					ui.helper.removeClass('vertical').addClass('horisontal');
-				}
-			}
-		});
 		z.draggable({
 			snap: 'parent'
 			, containment: 'parent'
@@ -777,7 +764,7 @@ var Wb = function() {
 			if (__validBtn(btn)) {
 				btn.data().deactivate();
 			}
-			wbEl.find('.tools').remove();
+			wbEl.find('.tools div').remove();
 			wbEl.find('.wb-tool-settings').remove();
 			wbEl.find('.wb-zoom').remove();
 			role = _role;
@@ -800,10 +787,10 @@ var Wb = function() {
 				wbEl.append(s, f);
 				sc.on('scroll', scrollHandler);
 			}
-			t.attr('style', 'position: absolute; top: 20px; ' + (Settings.isRtl ? 'left' : 'right') + ': 20px;');
-			wbEl.append(t).append(z);
+			wbEl.find('.tools').append(t);
+			wbEl.append(z);
 			showCurrentSlide();
-			t = wbEl.find('.tools'), s = wbEl.find('.wb-tool-settings');
+			t = wbEl.find('.tools div'), s = wbEl.find('.wb-tool-settings');
 			wb.eachCanvas(function(canvas) {
 				setHandlers(canvas);
 				canvas.forEachObject(function(__o) {
@@ -834,14 +821,6 @@ var Wb = function() {
 		_setSize();
 	}
 	wb.resize = function() {
-		if (t.length === 1 && t.position().left + t.width() > a.width()) {
-			t.position({
-				my: (Settings.isRtl ? 'left' : 'right')
-				, at: (Settings.isRtl ? 'left' : 'right') + '-20'
-				, of: '#' + a[0].id
-				, collision: 'fit'
-			});
-		}
 		if (z.position().left + z.width() > a.width()) {
 			z.position({
 				my: (Settings.isRtl ? 'right' : 'left') + ' top'

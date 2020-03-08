@@ -317,6 +317,14 @@ html[dir="rtl"] .room-block .wb-block {
 .room-block .wb-block .tabs .wb-tab-content .scroll-container {
 	overflow: auto;
 	height: 100%;
+	width: calc(100% - 40px);
+	display: inline-block;
+}
+.room-block .wb-block .tabs .wb-tab-content .tools {
+	width: 35px;
+	height: 100%;
+	display: inline-block;
+	vertical-align: top;
 }
 .room-block .wb-block .tabs .wb-tab-content .scroll-container .canvas-container {
 	margin-top: 5px;

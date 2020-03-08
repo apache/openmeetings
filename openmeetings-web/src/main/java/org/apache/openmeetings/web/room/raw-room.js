@@ -127,20 +127,10 @@ var Room = (function() {
 		_unload();
 		$(".room-block").remove();
 		$("#chatPanel").remove();
-		const dlg = $('#disconnected-dlg');
-		dlg.dialog({
-			modal: true
-			, close: _reload
-			, buttons: [
-				{
-					text: dlg.data('reload')
-					, icons: {primary: "ui-icon-refresh"}
-					, click: function() {
-						$(this).dialog("close");
-					}
-				}
-			]
-		});
+		$('#disconnected-dlg')
+			.modal('show')
+			.off('hide.bs.modal')
+			.on('hide.bs.modal', _reload);
 	}
 	function _sbAddResizable() {
 		sb.resizable({

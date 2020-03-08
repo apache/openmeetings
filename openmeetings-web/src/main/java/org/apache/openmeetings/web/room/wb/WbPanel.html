@@ -93,6 +93,7 @@
 				<div class="canvases"></div>
 				<div class="bottom-bumper"></div>
 			</div>
+			<div class="tools"></div>
 		</div>
 		<div id="wb-zoom" class="wb-zoom">
 			<div class="doc-group btn-group btn-group-xs block" role="group" aria-label="...">
@@ -132,21 +133,19 @@
 				</button>
 			</div>
 		</div>
-		<div id="wb-tools" class="tools ui-state-active vertical clear">
-			<div class="bumper"></div>
-			<div wicket:message="title:62" class="ui-widget-header clickable om-icon big clear-all"></div>
-			<div wicket:message="title:1005" class="ui-widget-header clickable om-icon big clear-slide"></div>
-			<div wicket:message="title:199" class="ui-widget-header clickable om-icon big save"></div>
-			<div wicket:message="title:70" class="ui-widget-header clickable om-icon big undo"></div>
+		<div id="wb-tools">
+			<div wicket:message="title:62" class="clickable om-icon big clear-all"></div>
+			<div wicket:message="title:1005" class="clickable om-icon big clear-slide"></div>
+			<div wicket:message="title:199" class="clickable om-icon big save"></div>
+			<div wicket:message="title:70" class="clickable om-icon big undo"></div>
 
-			<div wicket:message="title:72" class="ui-widget-header clickable om-icon big pointer"></div>
-			<div wicket:message="title:557" class="ui-widget-header clickable om-icon big apointer"></div>
-			<div wicket:message="title:wb.tool.math.formula" class="ui-widget-header clickable om-icon big math"></div>
-			<div wicket:message="title:843" class="ui-widget-header clickable om-icon big settings"></div>
+			<div wicket:message="title:72" class="clickable om-icon big pointer"></div>
+			<div wicket:message="title:557" class="clickable om-icon big apointer"></div>
+			<div wicket:message="title:wb.tool.math.formula" class="clickable om-icon big math"></div>
+			<div wicket:message="title:843" class="clickable om-icon big settings"></div>
 		</div>
-		<div id="wb-tools-readonly" class="tools readonly ui-state-active vertical clear">
-			<div class="bumper"></div>
-			<div wicket:message="title:557" class="ui-widget-header clickable om-icon big apointer"></div>
+		<div id="wb-tools-readonly">
+			<div wicket:message="title:557" class="clickable big apointer"></div>
 		</div>
 		<div id="wb-tool-settings" class="wb-tool-settings ui-corner-all ui-widget-content">
 			<div wicket:message="title:843" class="header ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle">
