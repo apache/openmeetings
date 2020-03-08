@@ -71,11 +71,13 @@ html[dir="rtl"] .room-block .sidebar {
 	padding-left: 5px;
 	height: var(--room-sidebar-header-height);
 }
-#room-sidebar-tab-users .header .ui-icon {
-	margin-top: 5px;
-	margin-left: 5px;
-	width: 32px;
-	height: 32px;
+#room-sidebar-tab-users .header .om-icon {
+	width: 34px;
+	height: 34px;
+}
+#room-sidebar-tab-users .header .om-icon::before {
+	font-size: 2.2em;
+	line-height: 1.2em;
 }
 .room-block .sidebar .user-list {
 	overflow-y: auto;
@@ -230,24 +232,24 @@ html[dir="rtl"] .room-block .sidebar {
 	background-size: auto !important; /* IE */
 	background-size: initial !important;
 }
-.settings.ui-icon, .settings.om-icon {
-	background-image: url(images/settings.png);
+.settings.om-icon::before {
+	content: '\f013';
 }
-.activity.cam.ui-icon {
-	background-image: url(images/webcam_enable.png);
+.activity.cam.om-icon::before {
+	content: '\f03d';
 }
-.activity.cam.enabled.ui-icon {
-	background-image: url(images/webcam_disable.png);
+.activity.cam.enabled.om-icon::before {
+	content: '\f4e2';
 }
-.activity.mic.ui-icon {
-	background-image: url(images/microphone_enable.png);
+.activity.mic.om-icon::before {
+	content: '\f130';
 }
 .ui-icon.disabled, .om-icon.disabled {
 	filter: grayscale(100%);
 	pointer-events: none;
 }
-.activity.mic.enabled.ui-icon {
-	background-image: url(images/microphone_disable.png);
+.activity.mic.enabled.om-icon::before {
+	content: '\f131';
 }
 .room-block .sidebar .user-list .user .user.actions .ui-icon.bumper
 , #room-sidebar-tab-users .header .ui-icon.bumper {
@@ -458,7 +460,7 @@ html[dir="rtl"] .room-block .sidebar {
 }
 .pod-area.max17, .pod-area.max25, .pod-area.max33 {
 	grid-template-columns: repeat(8, 1fr);
-	grid-template-areas: 
+	grid-template-areas:
 		"b01 b02 a a a a b03 b04"
 		"b05 b06 a a a a b07 b08"
 		"b09 b10 a a a a b11 b12"

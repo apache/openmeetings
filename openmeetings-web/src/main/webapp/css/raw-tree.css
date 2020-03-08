@@ -29,7 +29,7 @@
 	line-height: 20px;
 	color: transparent;
 	height: var(--tree-header-height);
-	padding-top: 5px;
+	padding-top: 3px;
 	overflow: hidden;
 }
 .trash-toolbar .om-confirm-dialog {
@@ -70,8 +70,7 @@
 }
 .trees .om-icon.big::before {
 	position: absolute;
-	left: -3px;
-	top: -10px;
+	left: 3px;
 }
 .trees .om-icon span {
 	white-space: nowrap;

@@ -38,7 +38,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public abstract class ClientIcon extends WebMarkupContainer {
 	protected static final String FUNC_ACTION = "OmUtil.roomAction";
 	private static final long serialVersionUID = 1L;
-	protected static final String ICON_CLASS = "ui-icon ";
+	protected static final String ICON_CLASS = "om-icon ";
 	protected static final String CLS_CLICKABLE = "clickable ";
 	private boolean self;
 	protected final String uid;

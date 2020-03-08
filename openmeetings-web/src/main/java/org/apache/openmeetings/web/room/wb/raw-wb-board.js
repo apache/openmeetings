@@ -3,17 +3,17 @@ var Wb = function() {
 	const ACTIVE = 'active', BUMPER = 100, wb = {id: -1, name: ''}, canvases = []
 		, area = $('.room-block .wb-block .wb-area .tabs'), bar = area.find('.wb-tabbar')
 		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src', 'formula'];
-	let c, t, z, s, f, mode, slide = 0, width = 0, height = 0
+	let c, tools, z, s, f, mode, slide = 0, width = 0, height = 0
 			, zoom = 1., zoomMode = 'PAGE_WIDTH', role = null, scrollTimeout = null;
 
 	function _getBtn(m) {
-		return !!t ? t.find('.om-icon.' + (m || mode) + ':not(.stub)') : null;
+		return !!tools ? tools.find('.om-icon.' + (m || mode) + ':not(.stub)') : null;
 	}
 	function _cleanActive() {
-		!!t && t.find('.om-icon.' + ACTIVE).removeClass(ACTIVE);
+		!!tools && tools.find('.om-icon.' + ACTIVE).removeClass(ACTIVE);
 	}
 	function _setActive() {
-		!!t && t.find('.om-icon.' + mode).addClass(ACTIVE);
+		!!tools && tools.find('.om-icon.' + mode).addClass(ACTIVE);
 	}
 	function __validBtn(btn) {
 		return !!btn && btn.length === 1
@@ -90,7 +90,7 @@ var Wb = function() {
 		_initGroupHandle(c);
 	}
 	function _initDrawings(sBtn) {
-		const c = _initGroup('#wb-area-drawings', t.find('.texts'));
+		const c = _initGroup('#wb-area-drawings', tools.find('.texts'));
 		_initToolBtn('eraser', false, Whiteout(wb, s, sBtn));
 		_initToolBtn('paint', false, Paint(wb, s, sBtn));
 		_initToolBtn('line', false, Line(wb, s, sBtn));
@@ -102,7 +102,7 @@ var Wb = function() {
 	}
 	function _initCliparts(sBtn) {
 		const c = OmUtil.tmpl('#wb-area-cliparts');
-		t.find('.drawings').after(c);
+		tools.find('.drawings').after(c);
 		c.find('.om-icon.clipart').each(function() {
 			const cur = $(this);
 			cur.css('background-image', 'url(' + cur.data('image') + ')')
@@ -251,8 +251,8 @@ var Wb = function() {
 			, containment: 'parent'
 			, scroll: false
 		});
-		const clearAll = t.find('.om-icon.clear-all')
-			, sBtn = t.find('.om-icon.settings');
+		const clearAll = tools.find('.om-icon.clear-all')
+			, sBtn = tools.find('.om-icon.settings');
 		let _firstToolItem = true;
 		switch (role) {
 			case PRESENTER:
@@ -311,19 +311,19 @@ var Wb = function() {
 				_initDrawings(sBtn);
 				_initToolBtn('math', _firstToolItem, TMath(wb, s, sBtn));
 				_initCliparts(sBtn);
-				t.find('.om-icon.settings').click(function() {
+				tools.find('.om-icon.settings').click(function() {
 					s.show();
 				});
-				t.find('.om-icon.math').click(function() {
+				tools.find('.om-icon.math').click(function() {
 					f.show();
 				});
-				t.find('.om-icon.clear-slide').click(function() {
+				tools.find('.om-icon.clear-slide').click(function() {
 					OmUtil.confirmDlg('clear-slide-confirm', function() { OmUtil.wbAction({action: 'clearSlide', data: {wbId: wb.id, slide: slide}}); });
 				});
-				t.find('.om-icon.save').click(function() {
+				tools.find('.om-icon.save').click(function() {
 					OmUtil.wbAction({action: 'save', data: {wbId: wb.id}});
 				});
-				t.find('.om-icon.undo').click(function() {
+				tools.find('.om-icon.undo').click(function() {
 					OmUtil.wbAction({action: 'undo', data: {wbId: wb.id}});
 				});
 				f.find('.ui-dialog-titlebar-close').click(function() {
@@ -771,15 +771,15 @@ var Wb = function() {
 			const sc = wbEl.find('.scroll-container');
 			z = OmUtil.tmpl('#wb-zoom')
 				.attr('style', 'position: absolute; top: 0px; ' + (Settings.isRtl ? 'right' : 'left') + ': 80px;');
-			__safeRemove(t);
+			__safeRemove(tools);
 			__safeRemove(s);
 			__safeRemove(f);
 			if (role === NONE) {
 				__destroySettings();
-				t = !!Room.getOptions().questions ? OmUtil.tmpl('#wb-tools-readonly') : wbEl.find('invalid-wb-element');
+				tools = !!Room.getOptions().questions ? OmUtil.tmpl('#wb-tools-readonly') : wbEl.find('invalid-wb-element');
 				sc.off('scroll', scrollHandler);
 			} else {
-				t = OmUtil.tmpl('#wb-tools');
+				tools = OmUtil.tmpl('#wb-tools');
 				s = OmUtil.tmpl('#wb-tool-settings')
 					.attr('style', 'display: none; bottom: 100px; ' + (Settings.isRtl ? 'left' : 'right') + ': 100px;');
 				f = OmUtil.tmpl('#wb-formula')
@@ -787,10 +787,10 @@ var Wb = function() {
 				wbEl.append(s, f);
 				sc.on('scroll', scrollHandler);
 			}
-			wbEl.find('.tools').append(t);
+			wbEl.find('.tools').append(tools);
 			wbEl.append(z);
 			showCurrentSlide();
-			t = wbEl.find('.tools div'), s = wbEl.find('.wb-tool-settings');
+			tools = wbEl.find('.tools div'), s = wbEl.find('.wb-tool-settings');
 			wb.eachCanvas(function(canvas) {
 				setHandlers(canvas);
 				canvas.forEachObject(function(__o) {

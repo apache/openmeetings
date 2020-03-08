@@ -69,35 +69,6 @@ html[dir="rtl"] .room-block .wb-block {
 	display: inline-block;
 	border: 0;
 }
-.room-block .wb-block .tools .bumper {
-	float: left;
-	display: inline-block;
-	background: repeating-linear-gradient(-45deg, transparent, transparent 3px, gray 3px, gray 5px);
-}
-.room-block .wb-block .tools.vertical .bumper {
-	width: 35px;
-	height: 9px;
-}
-.room-block .wb-block .tools.horisontal .bumper {
-	width: 9px;
-	height: 35px;
-}
-.room-block .wb-block .tools.vertical {
-	width: 35px;
-	height: 394px;
-}
-.room-block .wb-block .tools.readonly.vertical {
-	width: 35px;
-	height: 43px;
-}
-.room-block .wb-block .tools.horisontal {
-	width: 394px;
-	height: 35px;
-}
-.room-block .wb-block .tools.readonly.horisontal {
-	width: 44px;
-	height: 35px;
-}
 .room-block .wb-block .tools .om-icon.big {
 	float: left;
 	vertical-align: top;
@@ -106,6 +77,7 @@ html[dir="rtl"] .room-block .wb-block {
 	background-size: 27px;
 	margin: 0;
 	background-position: 4px !important;
+	position: relative;
 }
 .room-block .wb-block .tools .om-icon.big.settings {
 	border: 0 !important;
@@ -119,50 +91,63 @@ html[dir="rtl"] .room-block .wb-block {
 .room-block .wb-block .tools .dropdown-menu .om-icon.big.active {
 	border: 1px solid #6b6565;
 }
-.room-block .wb-block .tools .om-icon.big.paint {
-	background-image: url(images/paintbrush.png);
+.room-block .wb-block .tools .om-icon.big::before {
+	padding-left: 5px;
 }
-.room-block .wb-block .tools .om-icon.big.pointer {
-	background-image: url(images/pointer.png);
+.room-block .wb-block .tools .om-icon.big.paint::before {
+	content: '\f304'
+}
+.room-block .wb-block .tools .om-icon.big.pointer::before {
+	content: '\f245';
 }
 .room-block .wb-block .tools .om-icon.big.apointer {
 	background-image: url(images/wbpointer.png);
 }
-.room-block .wb-block .tools .om-icon.big.line {
-	background-image: url(images/line.png);
+.room-block .wb-block .tools .om-icon.big.line::before {
+	content: '/';
+	font-weight: 900;
+	font-size: 2.8em;
+	line-height: 1em;
+	position: absolute;
+	right: 10px;
 }
-.room-block .wb-block .tools .om-icon.big.uline {
-	background-image: url(images/uline.png);
+.room-block .wb-block .tools .om-icon.big.uline::before {
+	content: '\f591'
 }
-.room-block .wb-block .tools .om-icon.big.rect {
-	background-image: url(images/rectangle.png);
+.room-block .wb-block .tools .om-icon.big.rect::before {
+	content: '\f5cb'
 }
-.room-block .wb-block .tools .om-icon.big.ellipse {
-	background-image: url(images/ellipse.png);
+.room-block .wb-block .tools .om-icon.big.ellipse div {
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	border-radius: 50%;
+	margin: 2px;
+	background-color: var(--secondary);
 }
-.room-block .wb-block .tools .om-icon.big.text {
-	background-image: url(images/font.png);
+.room-block .wb-block .tools .om-icon.big.text::before {
+	content: 'T';
 }
-.room-block .wb-block .tools .om-icon.big.arrow {
-	background-image: url(images/arrow.png);
+.room-block .wb-block .tools .om-icon.big.arrow::before {
+	content: '\f30b';
 }
-.room-block .wb-block .tools .om-icon.big.eraser {
-	background-image: url(images/clear-icon.png);
+.room-block .wb-block .tools .om-icon.big.eraser::before {
+	content: '\f12d';
 }
-.room-block .wb-block .tools .om-icon.big.clear-all {
-	background-image: url(images/cancel.png);
+.room-block .wb-block .tools .om-icon.big.clear-all::before {
+	content: '\f2ed';
 }
-.room-block .wb-block .tools .om-icon.big.clear-slide {
-	background-image: url(images/page_delete.png);
+.room-block .wb-block .tools .om-icon.big.clear-slide::before {
+	content: '\f1c3';
 }
-.room-block .wb-block .tools .om-icon.big.save {
-	background-image: url(images/file_save_as.png);
+.room-block .wb-block .tools .om-icon.big.save::before {
+	content: '\f0c7';
 }
-.room-block .wb-block .tools .om-icon.big.undo {
-	background-image: url(images/arrow_undo.png);
+.room-block .wb-block .tools .om-icon.big.undo::before {
+	content: '\f0e2';
 }
-.room-block .wb-block .tools .om-icon.big.math {
-	background-image: url(images/math.png);
+.room-block .wb-block .tools .om-icon.big.math::before {
+	content: '\f534';
 }
 .room-block .wb-block .tools .om-icon.big.textbox {
 	background-image: url(images/textbox.png);
