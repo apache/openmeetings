@@ -50,9 +50,10 @@
 		</div>
 		<div id="chat-accept-template" class='tick om-icon clickable' wicket:message="title:1190"
 			onclick='const e=$(this);chatActivity("accept", e.data("roomid"), e.data("msgid")); e.parent().remove();'></div>
-		<span id="chat-close-block" class='ui-icon ui-icon-close' wicket:message="title:85"
-			role='presentation'></span>
-
+		<button id="chat-close-block" class="btn btn-sm btn-outline-secondary close-chat" wicket:message="title:85">
+			<i class="fas fa-times"></i>
+			<span class="sr-only"><wicket:message key="85"/></span>
+		</button>
 		<div id="chat-msg-area-template" class="messageArea bg-white tab-pane h-100" role="tabpanel">
 			<div class="clear icons actions short">
 				<div class='user clickable' wicket:message="title:1167"><i class="fas fa-address-card"></i></div>

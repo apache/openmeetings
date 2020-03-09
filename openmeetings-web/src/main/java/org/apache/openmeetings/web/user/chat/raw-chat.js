@@ -126,7 +126,25 @@ var Chat = function() {
 		return p.hasClass('closed');
 	}
 	function activateTab(id) {
-		$('#' + id).tab('show');
+		if (isClosed()) {
+			tabs.find('.nav.nav-tabs .nav-link').each(function() {
+				const self = $(this)
+					, tabId = self.attr('aria-controls')
+					, tab = $('#' + tabId);
+
+				if (tabId === id) {
+					self.addClass('active');
+					tab.addClass('active');
+					self.attr('aria-selected', true);
+				} else {
+					self.removeClass('active');
+					tab.removeClass('active');
+					self.attr('aria-selected', false);
+				}
+			});
+		} else {
+			$('#chatTabs li a[aria-controls="' + id + '"]').tab('show');
+		}
 	}
 	function _reinit(opts) {
 		userId = opts.userId;
@@ -141,21 +159,17 @@ var Chat = function() {
 		icon = $('#chatPopup .control.block i.fas');
 		editor = $('#chatMessage .wysiwyg-editor');
 		icon.removeClass(function(index, className) {
-			return (className.match (/(^|\s)ui-icon-caret-\S+/g) || []).join(' ');
+			return (className.match (/(^|\s)fa-angle-\S+/g) || []).join(' ');
 		});
 		initToolbar();
 		tabs = $("#chatTabs");
-		/*FIXME TODO.tabs({
-			activate: function(event, ui) {
-				const ct = ui.newPanel[0].id;
-				_scrollDown($('#' + ct));
-				$('#activeChatTab').val(ct).trigger('change');
-			}
-		});*/
-		// close icon: removing the tab on click
-		tabs.delegate("span.ui-icon-close", "click", function() {
-			const panelId = $(this).closest("li").remove().attr("aria-controls");
-			$("#" + panelId).remove();
+		tabs.off().on('shown.bs.tab', function (e) {
+			_scrollDown($('#' + $(e.target).attr('aria-controls')));
+		});
+		tabs.delegate(".btn.close-chat", "click", function() {
+			const panelId = $(this).closest("a").attr("aria-controls");
+			_removeTab(panelId);
+			$('#chatTabs li:last-child a').tab('show');
 		});
 		if (roomMode) {
 			icon.addClass(isClosed() ? iconOpenRoom : iconCloseRoom);
@@ -195,7 +209,7 @@ var Chat = function() {
 		inited = true;
 	}
 	function _removeTab(id) {
-		$('#chatTabs li a[aria-controls="chatTab-all"]').parent().remove();
+		$('#chatTabs li a[aria-controls="' + id + '"]').parent().remove();
 		$('#' + id).remove();
 	}
 	function _addTab(id, label) {
@@ -208,12 +222,12 @@ var Chat = function() {
 		if (!label) {
 			label = id === "chatTab-all" ? allPrefix : roomPrefix + id.substr(9);
 		}
-		const li = $('<li class="nav-item">')
-			.append($('<a class="nav-link" data-toggle="tab" role="tab">')
-				.attr('aria-controls', id)
-				.attr('href', '#' + id).text(label));
-		if (id.indexOf("chatTab-r") !== 0) {
-			li.append(OmUtil.tmpl('#chat-close-block'));
+		const link = $('<a class="nav-link" data-toggle="tab" role="tab">')
+			.attr('aria-controls', id)
+			.attr('href', '#' + id).text(label)
+			, li = $('<li class="nav-item">').append(link);
+		if (id.indexOf("chatTab-u") === 0) {
+			link.append(OmUtil.tmpl('#chat-close-block'));
 		}
 		tabs.find('.nav.nav-tabs').append(li);
 		tabs.find('.tab-content').append(OmUtil.tmpl('#chat-msg-area-template', id));

@@ -28,6 +28,10 @@
 #chat #chatTabs .nav.nav-tabs .nav-item .nav-link {
 	padding: 1px 0.9rem;
 }
+#chat #chatTabs .nav.nav-tabs .nav-item .nav-link .close-chat {
+	padding: 2px;
+	line-height:.5em
+}
 #chat #chatTabs.ui-tabs .ui-tabs-nav li .ui-icon.ui-icon-close {
 	float: left;
 }
