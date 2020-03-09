@@ -25,7 +25,7 @@ public class MuteOthersRightIcon extends RoomRightIcon {
 
 	public MuteOthersRightIcon(String id, String uid) {
 		super(id, uid, Right.MUTE_OTHERS);
-		mainCssClass = "mute-others ";
+		mainCssClass = "right mute-others ";
 	}
 
 	@Override

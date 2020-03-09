@@ -29,7 +29,7 @@ import com.github.openjson.JSONObject;
 
 public abstract class AbstractWbPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	protected static final String ROLE_NONE = "none";
+	protected static final String ROLE_NONE = "NONE";
 	protected final RoomPanel rp;
 	protected boolean inited = false;
 

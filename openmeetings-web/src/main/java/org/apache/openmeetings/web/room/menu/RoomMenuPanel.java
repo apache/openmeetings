@@ -52,6 +52,7 @@ import org.apache.openmeetings.web.room.OmTimerBehavior;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
@@ -73,7 +74,7 @@ public class RoomMenuPanel extends Panel {
 	private final Button shareBtn;
 	private final Label roomName;
 	private static final FastDateFormat df = FastDateFormat.getInstance("dd.MM.yyyy HH:mm");
-	private final OmButton askBtn = new OmButton("ask") {
+	private final AjaxLink<Void> askBtn = new AjaxLink<Void>("ask") {
 		private static final long serialVersionUID = 1L;
 
 		@Override

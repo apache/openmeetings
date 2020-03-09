@@ -69,15 +69,24 @@ html[dir="rtl"] .room-block .wb-block {
 	display: inline-block;
 	border: 0;
 }
-.room-block .wb-block .tools .om-icon.big {
-	float: left;
-	vertical-align: top;
+.room-block .wb-block .tools .btn-group, .room-block .wb-block .tools .om-icon.big {
 	width: 35px;
 	height: 35px;
+}
+.room-block .wb-block .tools .om-icon.big {
+	vertical-align: top;
 	background-size: 27px;
 	margin: 0;
 	background-position: 4px !important;
 	position: relative;
+}
+.room-block .wb-block .tools .om-icon.big.stub {
+	width: 30px;
+	height: 30px;
+}
+.room-block .wb-block .tools .dropleft .dropdown-toggle::before {
+	vertical-align: bottom;
+	margin-right: 0.1rem;
 }
 .room-block .wb-block .tools .om-icon.big.settings {
 	border: 0 !important;
@@ -100,16 +109,11 @@ html[dir="rtl"] .room-block .wb-block {
 .room-block .wb-block .tools .om-icon.big.pointer::before {
 	content: '\f245';
 }
-.room-block .wb-block .tools .om-icon.big.apointer {
-	background-image: url(images/wbpointer.png);
+.room-block .wb-block .tools .om-icon.big.apointer::before {
+	content: '\f3c5';
 }
 .room-block .wb-block .tools .om-icon.big.line::before {
-	content: '/';
-	font-weight: 900;
-	font-size: 2.8em;
-	line-height: 1em;
-	position: absolute;
-	right: 10px;
+	content: '\f715';
 }
 .room-block .wb-block .tools .om-icon.big.uline::before {
 	content: '\f591'

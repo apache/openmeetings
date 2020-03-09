@@ -176,60 +176,59 @@ html[dir="rtl"] .room-block .sidebar {
 .audio-activity.ui-icon.speaking, .ui-icon.granted {
 	opacity: 1;
 }
-.right.moderator.ui-icon {
-	background-image: url(images/user_add.png);
+.room-block .menu .details .ask {
+	padding: 0.1rem 0.4rem;
+	float: right;
 }
-.room-block .menu .details .icon.ask {
-	background-image: url(images/hand.png);
+.room-block .menu .details .ask i::before {
+	font-size: 2.2em;
+	line-height: 1.2em;
 }
-.right.moderator.ui-icon.granted {
-	background-image: url(images/user_delete.png);
+.right.om-icon {
+	position: relative;
 }
-.right.presenter.ui-icon {
-	background-image: url(images/wand_add.png);
+.right.om-icon i {
+	position: absolute;
+	bottom: 1px;
+	right: 1px;
+	font-size: 1.2em;
 }
-.right.presenter.ui-icon.granted {
-	background-image: url(images/wand_delete.png);
+.right.om-icon i::before {
+	color: var(--success);
+	content: "\f055";
 }
-.right.wb.ui-icon {
-	background-image: url(images/pencil_add.png);
+.right.om-icon.granted i::before {
+	color: var(--danger);
+	content: "\f056";
 }
-.right.wb.ui-icon.granted {
-	background-image: url(images/pencil_delete.png);
+.right.moderator.om-icon::before {
+	content: "\f007";
 }
-.right.screen-share.ui-icon {
-	background-image: url(images/monitor_add.png);
+.right.presenter.om-icon::before {
+	content: "\f0d0";
 }
-.right.screen-share.ui-icon.granted {
-	background-image: url(images/monitor_delete.png);
+.right.wb.om-icon::before {
+	content: "\f303";
 }
-.right.remote-control.ui-icon {
-	background-image: url(images/mouse_add.png);
+.right.screen-share.om-icon::before {
+	content: "\f108";
 }
-.right.remote-control.ui-icon.granted {
-	background-image: url(images/mouse_delete.png);
+.right.remote-control.om-icon::before {
+	content: "\f8cc";
 }
-.right.audio.ui-icon {
-	background-image: url(images/microphone_add.png);
+.right.audio.om-icon::before {
+	content: "\f130";
 }
-.right.audio.ui-icon.granted {
-	background-image: url(images/microphone_delete.png);
+.right.camera.om-icon::before {
+	content: '\f03d';
 }
-.right.camera.ui-icon {
-	background-image: url(images/webcam_add.png);
+.right.mute-others.om-icon::before {
+	content: '\f6a9';
 }
 .room-block .sidebar .user-list .user .kick.ui-icon {
-	background-size: auto; /* IE */
 	background-size: initial;
 }
-.right.camera.ui-icon.granted {
-	background-image: url(images/webcam_delete.png);
-}
-.ui-icon.mute-others {
-	background-image: url(images/microphone_muteothers.png);
-}
 .restart.ui-icon {
-	background-size: auto !important; /* IE */
 	background-size: initial !important;
 }
 .settings.om-icon::before {
