@@ -42,7 +42,7 @@
 		<!-- plugin versions -->
 		<maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
-		<maven-site-plugin.version>3.7.1</maven-site-plugin.version>
+		<maven-site-plugin.version>3.8.2</maven-site-plugin.version>
 		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
 		<maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
@@ -50,7 +50,7 @@
 		<checksum-maven-plugin.version>1.8</checksum-maven-plugin.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 		<license-maven-plugin.version>1.16</license-maven-plugin.version>
-		<reflow-maven-skin.version>2.2.0</reflow-maven-skin.version>
+		<reflow-maven-skin.version>2.3.0</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>

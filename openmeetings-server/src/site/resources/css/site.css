@@ -1,15 +1,31 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+body {
+	/* prevent jump page on load (before calculation top navbar) */
+	padding-top: 56px;
+}
+
 iframe {
 	width: 100%;
 	min-height: 700px;
+}
+
+.apachecon-banner {
+  float: left;
+  margin: 5px;
 }
 .apachecon-banner.bannerRight img {
 	max-width: 250px;
 	height: initial !important;
 }
+
 .bannerRight img, .bannerLeft img {
 	height: 80px !important;
 }
+
+.header {
+  padding-top: 3rem;
+}
+
 .color-highlight {
 	color: #cb2533;
 	text-transform: uppercase;
