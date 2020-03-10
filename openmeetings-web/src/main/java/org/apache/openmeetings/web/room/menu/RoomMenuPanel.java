@@ -74,7 +74,7 @@ public class RoomMenuPanel extends Panel {
 	private final Button shareBtn;
 	private final Label roomName;
 	private static final FastDateFormat df = FastDateFormat.getInstance("dd.MM.yyyy HH:mm");
-	private final AjaxLink<Void> askBtn = new AjaxLink<Void>("ask") {
+	private final AjaxLink<Void> askBtn = new AjaxLink<>("ask") {
 		private static final long serialVersionUID = 1L;
 
 		@Override

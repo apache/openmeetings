@@ -105,7 +105,7 @@
 		<mssql.version>8.2.1.jre11</mssql.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<xstream.version>1.4.11.1</xstream.version>
-		<api-all.version>2.0.0.AM2</api-all.version>
+		<api-all.version>2.0.0</api-all.version>
 		<caldav4j.version>1.0.0-rc.2</caldav4j.version>
 		<tika-parsers.version>1.23</tika-parsers.version>
 		<commons-text.version>1.8</commons-text.version>
