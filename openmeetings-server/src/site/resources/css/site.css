@@ -3,12 +3,10 @@ body {
 	/* prevent jump page on load (before calculation top navbar) */
 	padding-top: 56px;
 }
-
 iframe {
 	width: 100%;
 	min-height: 700px;
 }
-
 .apachecon-banner {
   float: left;
   margin: 5px;
@@ -17,15 +15,12 @@ iframe {
 	max-width: 250px;
 	height: initial !important;
 }
-
 .bannerRight img, .bannerLeft img {
 	height: 80px !important;
 }
-
 .header {
-  padding-top: 3rem;
+  padding-top: .5rem;
 }
-
 .color-highlight {
 	color: #cb2533;
 	text-transform: uppercase;
