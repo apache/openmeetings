@@ -303,11 +303,17 @@ html[dir="rtl"] .room-block .wb-block {
 .wb-tabbar .next {
 	right: 2px;
 }
+.room-block .wb-block .tabs .wb-tab-content .wb-with-zoom {
+	width: calc(100% - 40px);
+	height: 100%;
+	display: inline-block;
+}
 .room-block .wb-block .tabs .wb-tab-content .scroll-container {
 	overflow: auto;
-	height: 100%;
-	width: calc(100% - 40px);
-	display: inline-block;
+	height: calc(100% - var(--wb-zoom-height));
+}
+.room-block .wb-block .tabs .wb-tab-content .wb-zoom-block {
+	height: var(--wb-zoom-height);
 }
 .room-block .wb-block .tabs .wb-tab-content .tools {
 	width: 35px;
@@ -321,33 +327,9 @@ html[dir="rtl"] .room-block .wb-block {
 	border: 1px solid #888888;
 	box-shadow: 5px 5px 5px #888888;
 }
-.wb-area .wb-zoom {
-	display: inline-block;
-	padding: 1px 10px;
-	border-radius: 2px;
-	position: absolute;
-	cursor: default;
-}
-.wb-area .wb-zoom, .wb-area .wb-zoom .btn-group button {
-	background-color: grey;
-	line-height: 12px;
-	font-size: 12px;
-}
-.wb-area .wb-zoom .block {
-	display: inline-block;
-}
-.wb-area .wb-zoom button {
-	width: 28px;
-	height: 20px;
-	background-repeat: no-repeat;
-	background-position: 5px 0px;
-}
 .wb-area .wb-zoom input {
 	width: 50px
 }
-.wb-area .wb-zoom button.down {
-	background-image: url(images/page_down.png);
-}
-.wb-area .wb-zoom button.up {
-	background-image: url(images/page_up.png);
+.wb-area .wb-zoom .settings-group {
+	display: none;
 }

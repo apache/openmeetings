@@ -246,11 +246,6 @@ var Wb = function() {
 		});
 	}
 	function internalInit() {
-		zoomBar.draggable({
-			snap: 'parent'
-			, containment: 'parent'
-			, scroll: false
-		});
 		const clearAll = tools.find('.om-icon.clear-all')
 			, sBtn = tools.find('.om-icon.settings');
 		let _firstToolItem = true;
@@ -769,8 +764,7 @@ var Wb = function() {
 			wbEl.find('.wb-zoom').remove();
 			role = _role;
 			const sc = wbEl.find('.scroll-container');
-			zoomBar = OmUtil.tmpl('#wb-zoom')
-				.attr('style', 'position: absolute; top: 0px; ' + (Settings.isRtl ? 'right' : 'left') + ': 80px;');
+			zoomBar = OmUtil.tmpl('#wb-zoom');
 			__safeRemove(tools);
 			__safeRemove(settings);
 			__safeRemove(math);
@@ -788,7 +782,7 @@ var Wb = function() {
 				sc.on('scroll', scrollHandler);
 			}
 			wbEl.find('.tools').append(tools);
-			wbEl.append(zoomBar);
+			wbEl.find('.wb-zoom-block').append(zoomBar);
 			showCurrentSlide();
 			tools = wbEl.find('.tools>div');
 			settings = wbEl.find('.wb-tool-settings');
@@ -822,14 +816,6 @@ var Wb = function() {
 		_setSize();
 	};
 	wb.resize = function() {
-		if (zoomBar.position().left + zoomBar.width() > a.width()) {
-			zoomBar.position({
-				my: (Settings.isRtl ? 'right' : 'left') + ' top'
-				, at: 'center top'
-				, of: '#' + a[0].id
-				, collision: 'fit'
-			});
-		}
 		if (zoomMode !== 'ZOOM') {
 			_setSize();
 		}
