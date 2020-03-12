@@ -21,15 +21,21 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<span wicket:id="status" class="ui-icon"></span>
+	<span wicket:id="status" class="om-icon user-status"></span>
 	<span wicket:id="refresh"></span>
-	<span class="ui-icon align-right typing-activity big"></span>
+	<span class="align-right typing-activity">
+		<i class="fas fa-pen-fancy"></i>
+	</span>
 	<div wicket:id="name" class="user name"></div>
 	<span wicket:id="user-speaks"></span>
 	<div wicket:id="actions" class="user actions">
 		<span wicket:id="icons"></span>
-		<div wicket:id="kick">&nbsp;</div>
-		<span wicket:id="privateChat" class="ui-icon align-right clickable private-chat" wicket:message="title:1493" onclick="startPrivateChat($(this));"></span>
+		<div wicket:id="kick">
+			<i class="fas fa-ban text-danger"></i>
+		</div>
+		<span wicket:id="privateChat" class="om-icon align-right clickable private-chat" wicket:message="title:1493" onclick="startPrivateChat($(this));">
+			<i class="fas fa-edit"></i>
+		</span>
 		<div class="clear"></div>
 	</div>
 </wicket:panel>

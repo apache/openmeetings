@@ -251,9 +251,14 @@ var Wb = function() {
 		let _firstToolItem = true;
 		switch (role) {
 			case PRESENTER:
-				clearAll.click(function() {
-					OmUtil.confirmDlg('clear-all-confirm', function() { OmUtil.wbAction({action: 'clearAll', data: {wbId: wb.id}}); });
-				}).removeClass('disabled');
+				clearAll
+					.confirmation('destroy')
+					.confirmation({
+						confirmationEvent: 'bla'
+						, onConfirm: function() {
+							OmUtil.wbAction({action: 'clearAll', data: {wbId: wb.id}});
+						}
+					}).removeClass('disabled');
 				zoomBar.find('.curr-slide').change(function() {
 					_setSlide($(this).val() - 1);
 					showCurrentSlide();
@@ -312,9 +317,14 @@ var Wb = function() {
 				tools.find('.om-icon.math').click(function() {
 					math.show();
 				});
-				tools.find('.om-icon.clear-slide').click(function() {
-					OmUtil.confirmDlg('clear-slide-confirm', function() { OmUtil.wbAction({action: 'clearSlide', data: {wbId: wb.id, slide: slide}}); });
-				});
+				tools.find('.om-icon.clear-slide')
+					.confirmation('destroy')
+					.confirmation({
+						confirmationEvent: 'bla'
+						, onConfirm: function() {
+							OmUtil.wbAction({action: 'clearSlide', data: {wbId: wb.id, slide: slide}});
+						}
+					});
 				tools.find('.om-icon.save').click(function() {
 					OmUtil.wbAction({action: 'save', data: {wbId: wb.id}});
 				});

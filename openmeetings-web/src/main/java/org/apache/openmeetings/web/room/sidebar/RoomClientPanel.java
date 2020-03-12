@@ -73,13 +73,13 @@ public class RoomClientPanel extends Panel {
 		Client c = (Client)getDefaultModelObject();
 		String status, statusTitle;
 		if (c.hasRight(Right.MODERATOR)) {
-			status = "status-mod";
+			status = "mod";
 			statusTitle = "679";
 		} else if (c.hasRight(Right.WHITEBOARD) || c.hasRight(Right.PRESENTER)) {
-			status = "status-wb";
+			status = "wb";
 			statusTitle = "678";
 		} else {
-			status = "status-user";
+			status = "user";
 			statusTitle = "677";
 		}
 		status = String.format("%s %s", status, ((BasePage)getPage()).isRtl() ? ALIGN_LEFT : ALIGN_RIGHT);

@@ -327,7 +327,7 @@ function sipKeyUp(evt) {
 	}
 }
 function typingActivity(uid, active) {
-	const u = $('#user' + uid + ' .typing-activity.ui-icon');
+	const u = $('#user' + uid + ' .typing-activity');
 	if (active) {
 		u.addClass("typing");
 	} else {

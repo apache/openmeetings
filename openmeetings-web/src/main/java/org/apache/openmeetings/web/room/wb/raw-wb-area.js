@@ -130,13 +130,11 @@ var DrawWbArea = function() {
 			return;
 		}
 		const link = li.find('a')
-			, wbId = link.data('wb-id')
-			, closeId = `wb-tab-${wbId}-close-btn`;
-		link.append(OmUtil.tmpl('#wb-tab-close', closeId));
+			, wbId = link.data('wb-id');
+		link.append(OmUtil.tmpl('#wb-tab-close'));
 		li.find('button')
 			.confirmation({
-				rootSelector: closeId
-				, confirmationEvent: 'bla'
+				confirmationEvent: 'bla'
 				, onConfirm: function() {
 					OmUtil.wbAction({action: 'removeWb', data: {wbId: wbId}});
 				}

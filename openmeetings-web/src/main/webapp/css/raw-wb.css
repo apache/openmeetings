@@ -333,3 +333,6 @@ html[dir="rtl"] .room-block .wb-block {
 .wb-area .wb-zoom .settings-group {
 	display: none;
 }
+#wb-rename-menu {
+	display: none;
+}

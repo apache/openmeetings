@@ -3,20 +3,21 @@
 	width: 100%;
 	height: 100%;
 }
-.room-block .menu .ui-icon.exit {
-	background-image: url(images/exit_button.png);
-	background-repeat: no-repeat;
-	background-size: 16px 16px;
-	margin-left: 5px;
+.room-block .sidebar .user-list .user .om-icon.user-status {
+	border-radius: 50%;
+	width: 14px;
+	height: 14px;
+	min-height: 14px;
+	margin-right: 2px;
 }
-.ui-icon.status-user {
-	background-image: url(images/status-user.png);
+.room-block .sidebar .user-list .user .om-icon.user-status.user {
+	background-color: var(--success);
 }
-.ui-icon.status-wb {
-	background-image: url(images/status-wb.png);
+.room-block .sidebar .user-list .user .om-icon.user-status.wb {
+	background-color: var(--warning);
 }
-.ui-icon.status-mod {
-	background-image: url(images/status-mod.png);
+.room-block .sidebar .user-list .user .om-icon.user-status.mod {
+	background-color: var(--danger);
 }
 .room-block .event-details.modal {
 	position: absolute;
@@ -98,7 +99,7 @@ html[dir="rtl"] .room-block .sidebar {
 	min-height: 80px;
 }
 .room-block .sidebar .user-list .user:hover .user.name {
-	padding: 0px;
+	padding: 0;
 	margin-top: 84px;
 	min-height: 18px;
 }
@@ -132,10 +133,10 @@ html[dir="rtl"] .room-block .sidebar {
 .room-block .sidebar .user-list .user .ui-icon {
 	background-size: 16px;
 }
-.room-block .sidebar .user-list .user .ui-icon.audio-activity {
+.room-block .sidebar .user-list .user .om-icon.audio-activity {
 	position: absolute;
-	bottom: 0px;
-	right: 3px;
+	bottom: 2px;
+	right: 2px;
 }
 .room-block .sidebar .user-list .user .ui-icon.big {
 	background-size: 32px;
@@ -159,22 +160,44 @@ html[dir="rtl"] .room-block .sidebar {
 .room-block .sidebar.closed .tab-content .tab-pane {
 	display: none;
 }
-.audio-activity.ui-icon {
+.audio-activity.om-icon {
 	opacity: 0.2;
-	background-image: url(images/speaking.png);
+	border-radius: 50%;
+	width: 14px;
+	height: 14px;
+	background-color: var(--success);
+	border: 1px solid var(--gray-dark);
 }
-.typing-activity.ui-icon {
+.typing-activity {
 	display: none;
-	width: 30px;
-	background-image: url(images/typing.gif);
+	width: 20px;
+	position: relative;
 }
-.typing-activity.ui-icon.typing {
+.typing-activity i {
+	position: absolute;
+	left: 0;
+	x-transition: all 2s ease-in-out;
+	animation: typing-ani 2s infinite;
+	color: var(--primary);
+}
+@keyframes typing-ani {
+	0% {
+		left: 0;
+	}
+	50% {
+		left: 10px;
+	}
+	100% {
+		left: 0;
+	}
+}
+.typing-activity.typing {
 	display: inline-block;
 }
 .private-chat.ui-icon {
 	background-image: url(images/page_edit.png);
 }
-.audio-activity.ui-icon.speaking, .ui-icon.granted {
+.audio-activity.om-icon.speaking {
 	opacity: 1;
 }
 .room-block .menu .details .ask {
@@ -188,11 +211,14 @@ html[dir="rtl"] .room-block .sidebar {
 .right.om-icon {
 	position: relative;
 }
+#room-sidebar-tab-users .header .om-icon i {
+	font-size: 1.2em;
+}
 .right.om-icon i {
 	position: absolute;
 	bottom: 1px;
 	right: 1px;
-	font-size: 1.2em;
+	font-size: .8em;
 }
 .right.om-icon i::before {
 	color: var(--success);
@@ -226,8 +252,8 @@ html[dir="rtl"] .room-block .sidebar {
 .right.mute-others.om-icon::before {
 	content: '\f6a9';
 }
-.room-block .sidebar .user-list .user .kick.ui-icon {
-	background-size: initial;
+.room-block .sidebar .user-list .user .kick i {
+	font-size: 1.5em;
 }
 .restart.ui-icon {
 	background-size: initial !important;
@@ -257,7 +283,7 @@ html[dir="rtl"] .room-block .sidebar {
 }
 .room-block .sidebar .user-list .user.current {
 	font-weight: bold;
-	background-color: #00FF00;
+	background-color: var(--light);
 }
 .dropdown-menu.video.volume, .dropdown-menu.video.volume li {
 	width: 20px;
