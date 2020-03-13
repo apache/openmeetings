@@ -7,7 +7,7 @@ var OmFileTree = (function() {
 				s = $('.file.active.ui-draggable.ui-draggable-handle, .recording.active.ui-draggable.ui-draggable-handle');
 			}
 			const c = $('<div/>').attr('id', 'draggingContainer').addClass('drag-container').width(80).height(36)
-				, h = $('<div class="border ui-widget-header"/>').append(s.clone()).width(s.width());
+				, h = $('<div class="border"/>').append(s.clone()).width(s.width());
 			return c.append(h);
 		}
 		, treeRevert: function(dropped) {

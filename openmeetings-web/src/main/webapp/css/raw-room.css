@@ -200,14 +200,6 @@ html[dir="rtl"] .room-block .sidebar {
 .audio-activity.om-icon.speaking {
 	opacity: 1;
 }
-.room-block .menu .details .ask {
-	padding: 0.1rem 0.4rem;
-	float: right;
-}
-.room-block .menu .details .ask i::before {
-	font-size: 2.2em;
-	line-height: 1.2em;
-}
 .right.om-icon {
 	position: relative;
 }
@@ -574,12 +566,26 @@ html[dir="rtl"] .room-block .sidebar {
 	background-repeat: no-repeat;
 	background-size: 35px;
 	position: relative;
+	font-size: 1.5em;
 }
-#quick-vote .control.pro {
-	background-image: url(images/add.png);
+#quick-vote .control .badge {
+	position: absolute;
+	right: 0;
+	bottom: 0;
 }
-#quick-vote .control.con {
-	background-image: url(images/cancel.png);
+#quick-vote .control i::before {
+	font-size: 2.2em;
+	line-height: 1.2em;
+}
+#quick-vote .control.pro i::before {
+	color: var(--success);
+}
+#quick-vote .control.con i::before {
+	color: var(--danger);
+}
+#quick-vote .close-btn {
+	float: right;
+	padding: 0 0.4rem;
 }
 .main.room.INTERVIEW #quick-vote {
 	z-index: 100;
@@ -588,9 +594,8 @@ html[dir="rtl"] .room-block .sidebar {
 	padding: 0px 5px 0px 5px;
 	height: 40px;
 }
-.main.room.INTERVIEW #quick-vote .close {
-	display: inline-block;
-	float: right;
+#sharer .alert {
+	display: none;
 }
 #sharer .label {
 	width: 215px;

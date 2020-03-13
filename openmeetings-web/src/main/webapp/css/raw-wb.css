@@ -88,9 +88,6 @@ html[dir="rtl"] .room-block .wb-block {
 	vertical-align: bottom;
 	margin-right: 0.1rem;
 }
-.room-block .wb-block .tools .om-icon.big.settings {
-	border: 0 !important;
-}
 .room-block .wb-block .tools .dropdown-menu .om-icon.big {
 	float: none;
 }

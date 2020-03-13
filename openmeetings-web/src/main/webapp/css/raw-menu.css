@@ -6,10 +6,6 @@
 .room-block .menu {
 	height: var(--room-menu-height);
 }
-.room-block .menu .ui-menu .ui-menu-item {
-	padding-left: 5px;
-	padding-right: 0;
-}
 .room-block .menu .top.exit {
 	padding-left: 0;
 }
@@ -43,11 +39,23 @@
 	float: right;
 	padding: 0;
 }
-.room-block .menu .details .icon.share {
-	background-image: url(images/monitor_go.png);
+.room-block .menu .details .detail-btn {
+	padding: 0.1rem 0.4rem;
+	float: right;
+	position: relative;
 }
-.room-block .menu .details .icon.shared {
-	background-image: url(images/shared.png);
+.room-block .menu .details .detail-btn i::before {
+	font-size: 2.2em;
+	line-height: 1.2em;
+}
+.room-block .menu .details .detail-btn.shared {
+	display: none;
+}
+.room-block .menu .details .detail-btn i.add-on {
+	position: absolute;
+	left: 5px;
+	color: var(--warning);
+	bottom:  0;
 }
 .room-block .menu .details .icon .profile {
 	margin-top: 3px;

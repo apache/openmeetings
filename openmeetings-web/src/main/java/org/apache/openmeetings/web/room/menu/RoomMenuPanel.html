@@ -23,12 +23,16 @@
 <wicket:panel>
 	<div wicket:id="menu"></div>
 	<div class="details">
-		<span class="icon shared ui-button ui-corner-all ui-widget d-none" wicket:message="data-user:692, data-text:850, data-view:848"
-				role="button"></span>
-		<span wicket:id="ask" class="btn btn-outline-secondary ask">
+		<span class="detail-btn btn btn-outline-secondary shared" wicket:message="data-user:692, data-text:850, data-view:848">
+			<i class="fas fa-desktop m-0"></i>
+			<i class="fas fa-hand-holding add-on"></i>
+		</span>
+		<span wicket:id="ask" class="detail-btn btn btn-outline-secondary ask">
 			<i class="fas fa-hand-paper m-0"></i>
 		</span>
-		<span wicket:id="share" class="icon share" wicket:message="title:732" onclick="Sharer.open();"></span>
+		<span wicket:id="share" class="detail-btn btn btn-outline-secondary share" wicket:message="title:732" onclick="Sharer.open();">
+			<i class="fas fa-desktop m-0"></i>
+		</span>
 		<span wicket:id="roomName" class="room name"></span>
 		<span wicket:id="tag" class="room name"></span>
 		<span wicket:id="logo" class="icon"></span>

@@ -162,10 +162,6 @@ var Room = (function() {
 		if (typeof(VideoManager) === 'object') {
 			VideoManager.destroy();
 		}
-		const _qconf = $('#quick-confirmation');
-		if (_qconf.dialog('instance')) {
-			_qconf.dialog('destroy');
-		}
 		$('.ui-dialog.user-video').remove();
 		$(window).off('keyup.openmeetings');
 		$(window).off('keydown.openmeetings');
@@ -201,34 +197,20 @@ var Room = (function() {
 		return false;
 	}
 	function _setQuickPollRights() {
-		const close = $('#quick-vote .close');
+		const close = $('#quick-vote .close-btn');
 		if (close.length === 1) {
-			close.off();
 			if (_hasRight(['SUPER_MODERATOR', 'MODERATOR', 'PRESENTER'])) {
-				close.show().click(function() {
-					const _qconf = $('#quick-confirmation');
-					_qconf.dialog({
-						resizable: false
-						, height: "auto"
-						, width: 400
-						, modal: true
-						, buttons: [
-							{
-								text: _qconf.data('btn-ok')
-								, click: function() {
-									quickPollAction('close');
-									$(this).dialog('close');
-								}
-							}
-							, {
-								text: _qconf.data('btn-cancel')
-								, click: function() {
-									$(this).dialog('close');
-								}
-							}
-						]
+				close.show();
+				if (typeof(close.data('bs.confirmation')) === 'object') {
+					return;
+				}
+				close
+					.confirmation({
+						confirmationEvent: 'bla'
+						, onConfirm: function() {
+							quickPollAction('close');
+						}
 					});
-				});
 			} else {
 				close.hide();
 			}

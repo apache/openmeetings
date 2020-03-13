@@ -251,14 +251,12 @@ var Wb = function() {
 		let _firstToolItem = true;
 		switch (role) {
 			case PRESENTER:
-				clearAll
-					.confirmation('destroy')
-					.confirmation({
-						confirmationEvent: 'bla'
-						, onConfirm: function() {
-							OmUtil.wbAction({action: 'clearAll', data: {wbId: wb.id}});
-						}
-					}).removeClass('disabled');
+				clearAll.confirmation({
+					confirmationEvent: 'bla'
+					, onConfirm: function() {
+						OmUtil.wbAction({action: 'clearAll', data: {wbId: wb.id}});
+					}
+				}).removeClass('disabled');
 				zoomBar.find('.curr-slide').change(function() {
 					_setSlide($(this).val() - 1);
 					showCurrentSlide();
@@ -278,28 +276,16 @@ var Wb = function() {
 					function isNumeric(n) {
 						return !isNaN(parseInt(n)) && isFinite(n);
 					}
-					wbs.dialog({
-						buttons: [
-							{
-								text: wbs.data('btn-ok')
-								, click: function() {
-									const __w = wbsw.val(), __h = wbsh.val();
-									if (isNumeric(__w) && isNumeric(__h)) {
-										width = parseInt(__w);
-										height = parseInt(__h);
-										_sendSetSize();
-									}
-									$(this).dialog("close");
-								}
-							}
-							, {
-								text: wbs.data('btn-cancel')
-								, click: function() {
-									$(this).dialog("close");
-								}
-							}
-						]
-					});
+					wbs.modal('show');
+					wbs.find('.btn-primary').off().click(function() {
+						const __w = wbsw.val(), __h = wbsh.val();
+						if (isNumeric(__w) && isNumeric(__h)) {
+							width = parseInt(__w);
+							height = parseInt(__h);
+							_sendSetSize();
+						}
+						wbs.modal('hide');
+					})
 				});
 			case WHITEBOARD:
 				if (role === WHITEBOARD) {
@@ -318,7 +304,6 @@ var Wb = function() {
 					math.show();
 				});
 				tools.find('.om-icon.clear-slide')
-					.confirmation('destroy')
 					.confirmation({
 						confirmationEvent: 'bla'
 						, onConfirm: function() {
@@ -757,10 +742,7 @@ var Wb = function() {
 		}
 	}
 	function __destroySettings() {
-		const wbs = $('#wb-settings');
-		if (wbs.dialog('instance')) {
-			wbs.dialog('destroy');
-		}
+		$('#wb-settings').modal('dispose');
 	}
 
 	wb.setRole = function(_role) {

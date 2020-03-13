@@ -55,6 +55,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -63,7 +64,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
@@ -71,7 +71,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5I
 public class RoomMenuPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private MenuPanel menuPanel;
-	private final Button shareBtn;
+	private final WebMarkupContainer shareBtn;
 	private final Label roomName;
 	private static final FastDateFormat df = FastDateFormat.getInstance("dd.MM.yyyy HH:mm");
 	private final AjaxLink<Void> askBtn = new AjaxLink<>("ask") {
@@ -123,7 +123,7 @@ public class RoomMenuPanel extends Panel {
 		add((roomName = new Label("roomName", r.getName())).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		String tag = getGroup().getTag();
 		add(logo, new Label("tag", tag).setVisible(!Strings.isEmpty(tag)));
-		add(shareBtn = new Button("share"));
+		add(shareBtn = new WebMarkupContainer("share"));
 		shareBtn.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		pollsSubMenu = new PollsSubMenu(room, this);
 		actionsSubMenu = new ActionsSubMenu(room, this);
