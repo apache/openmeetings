@@ -165,21 +165,27 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 		dispForm.updateModel(p, false, target);
 		StringBuilder builder = new StringBuilder();
 		builder.append("$('#").append(PollResultsDialog.this.getMarkupId()).append("').on('dialogopen', function( event, ui ) {");
-		builder.append(getScript(barChart(p)));
+		builder.append(getScript(barChart(p), true));
 		builder.append("});");
 
 		target.appendJavaScript(builder.toString());
 	}
 
-	private StringBuilder getScript(Chart<?> chart) {
-		StringBuilder builder = new StringBuilder();
-		builder.append("$('#").append(chartDiv.getMarkupId()).append("').html(''); ");
-		builder.append("$.jqplot('").append(chartDiv.getMarkupId()).append("', ");
-		builder.append(chart.getChartData().toJsonString());
-		builder.append(", ");
-		builder.append(JqPlotUtils.jqPlotToJson(chart.getChartConfiguration()));
-		builder.append(");");
-		return builder;
+	private StringBuilder getScript(Chart<?> chart, boolean onShow) {
+		StringBuilder sb = new StringBuilder()
+				.append("$('#").append(chartDiv.getMarkupId()).append("').html(''); ");
+		if (onShow) {
+			sb.append("$('#").append(getMarkupId()).append("').on('shown.bs.modal', function (e) {\n");
+		}
+		sb.append("$.jqplot('").append(chartDiv.getMarkupId()).append("', ")
+				.append(chart.getChartData().toJsonString())
+				.append(", ")
+				.append(JqPlotUtils.jqPlotToJson(chart.getChartConfiguration()))
+				.append(");");
+		if (onShow) {
+			sb.append("});");
+		}
+		return sb;
 	}
 
 	@Override
@@ -212,7 +218,9 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 	@Override
 	public Modal<RoomPoll> show(IPartialPageRequestHandler handler) {
 		opened = true;
-		return super.show(handler);
+		super.show(handler);
+		dispForm.redraw(handler, true);
+		return this;
 	}
 
 	@Override
@@ -351,7 +359,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
-					redraw(target);
+					redraw(target, false);
 				}
 			}));
 			super.onInitialize();
@@ -368,14 +376,14 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 			delete.setVisible(moderator);
 			handler.add(close, clone, delete);
 			if (redraw) {
-				redraw(handler);
+				redraw(handler, false);
 			}
 		}
 
-		private void redraw(IPartialPageRequestHandler handler) {
+		private void redraw(IPartialPageRequestHandler handler, boolean onShow) {
 			RoomPoll poll = getModelObject();
 			Chart<?> chart = chartSimple.equals(chartType.getModelObject()) ? barChart(poll) : pieChart(poll);
-			handler.appendJavaScript(getScript(chart));
+			handler.appendJavaScript(getScript(chart, onShow));
 		}
 
 		private PieChart<Integer> pieChart(RoomPoll p) {
@@ -396,7 +404,8 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 			h.setShowTooltip(true);
 			h.setUseAxesFormatters(false);
 
-			pieChart.getChartConfiguration().setLegend(null).setHighlighter(h);
+			pieChart.getChartConfiguration()
+				.setLegend(null).setHighlighter(h);
 			return pieChart;
 		}
 	}
