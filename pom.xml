@@ -658,7 +658,7 @@
 			<dependency>
 				<groupId>org.jodconverter</groupId>
 				<artifactId>jodconverter-local</artifactId>
-				<version>4.2.4</version>
+				<version>4.3.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
