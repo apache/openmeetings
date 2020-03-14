@@ -162,7 +162,7 @@ public class RoomMenuPanel extends Panel {
 
 				@Override
 				protected void onTimer(int remain) {
-					getComponent().add(AttributeModifier.replace(ATTR_TITLE, getText("639", remain)));
+					getComponent().add(AttributeModifier.replace(ATTR_TITLE, getText(getString("637"), remain)));
 				}
 
 				@Override

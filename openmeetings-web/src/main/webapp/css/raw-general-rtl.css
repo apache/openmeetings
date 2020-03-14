@@ -19,9 +19,6 @@ html[dir="rtl"] #busy-indicator {
 	right: initial !important;
 	left: 0 !important;
 }
-html[dir="rtl"] .ui-tabs .ui-tabs-nav li {
-	float: right !important;
-}
 html[dir="rtl"] .start_step1
 , html[dir="rtl"] .start_step2
 , html[dir="rtl"] .start_step3
@@ -42,16 +39,6 @@ html[dir="rtl"] .start_step3 {
 html[dir="rtl"] .start_step4 {
 	margin-left: initial !important;
 	margin-right: 60px !important;
-}
-html[dir="rtl"] .ui-dialog .ui-dialog-title {
-	float: right !important;
-}
-html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
-	right: initial !important;
-	left: .3em;
-}
-html[dir="rtl"] .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
-	float: left !important;
 }
 html[dir="rtl"] .room-block .menu .details {
 	right: initial !important;

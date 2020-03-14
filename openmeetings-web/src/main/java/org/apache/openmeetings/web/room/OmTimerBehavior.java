@@ -37,7 +37,8 @@ public abstract class OmTimerBehavior extends AbstractAjaxTimerBehavior {
 	}
 
 	protected static String getTime(int remain) {
-		return Duration.ofSeconds(remain).toString();
+		Duration d = Duration.ofSeconds(remain);
+		return String.format("%d:%02d:%02d", d.toHours(), d.toMinutesPart(), d.toSecondsPart());
 	}
 
 	public static String getText(String text, int remain) {

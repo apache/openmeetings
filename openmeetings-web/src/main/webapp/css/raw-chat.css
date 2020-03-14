@@ -32,9 +32,6 @@
 	padding: 2px;
 	line-height:.5em
 }
-#chat #chatTabs.ui-tabs .ui-tabs-nav li .ui-icon.ui-icon-close {
-	float: left;
-}
 #chatPopup .control.block .label {
 	display: inline-block;
 	width: 70px;

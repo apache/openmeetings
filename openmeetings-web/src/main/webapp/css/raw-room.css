@@ -66,9 +66,6 @@ html[dir="rtl"] .room-block .sidebar {
 	background-color: #b6bdca;
 	border-color: #bebec3;
 }
-.room-block .sidebar .ui-tabs .ui-tabs-panel {
-	padding: 0;
-}
 #room-sidebar-tab-users .header {
 	padding-left: 5px;
 	height: var(--room-sidebar-header-height);
@@ -126,20 +123,10 @@ html[dir="rtl"] .room-block .sidebar {
 .room-block.small .sidebar .user-list .user.name {
 	display: none;
 }
-.room-block .sidebar .user-list .user .user.actions .ui-icon {
-	margin-right: 2px;
-	margin-top: 0;
-}
-.room-block .sidebar .user-list .user .ui-icon {
-	background-size: 16px;
-}
 .room-block .sidebar .user-list .user .om-icon.audio-activity {
 	position: absolute;
 	bottom: 2px;
 	right: 2px;
-}
-.room-block .sidebar .user-list .user .ui-icon.big {
-	background-size: 32px;
 }
 .room-block .sidebar .icon-undock, .room-block .sidebar .icon-dock {
 	font-size: 1.6em;
@@ -194,9 +181,6 @@ html[dir="rtl"] .room-block .sidebar {
 .typing-activity.typing {
 	display: inline-block;
 }
-.private-chat.ui-icon {
-	background-image: url(images/page_edit.png);
-}
 .audio-activity.om-icon.speaking {
 	opacity: 1;
 }
@@ -247,9 +231,6 @@ html[dir="rtl"] .room-block .sidebar {
 .room-block .sidebar .user-list .user .kick i {
 	font-size: 1.5em;
 }
-.restart.ui-icon {
-	background-size: initial !important;
-}
 .settings.om-icon::before {
 	content: '\f013';
 }
@@ -262,16 +243,13 @@ html[dir="rtl"] .room-block .sidebar {
 .activity.mic.om-icon::before {
 	content: '\f130';
 }
-.ui-icon.disabled, .om-icon.disabled {
+.om-icon.disabled {
 	filter: grayscale(100%);
 	pointer-events: none;
+	opacity: .2;
 }
 .activity.mic.enabled.om-icon::before {
 	content: '\f131';
-}
-.room-block .sidebar .user-list .user .user.actions .ui-icon.bumper
-, #room-sidebar-tab-users .header .ui-icon.bumper {
-	padding-right: 5px;
 }
 .room-block .sidebar .user-list .user.current {
 	font-weight: bold;
@@ -300,10 +278,6 @@ html[dir="rtl"] .room-block .sidebar {
 }
 .sip .button-row #sip-dialer-btn-erase {
 	margin-left: 5px;
-}
-.sip .button-row #sip-dialer-btn-erase .ui-button-text {
-	padding: .1em .7em;
-	font-weight: bolder;
 }
 .room-block .sidebar .tab.om-icon.big {
 	line-height: 30px;

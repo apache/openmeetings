@@ -223,7 +223,7 @@ var VideoManager = (function() {
 		return $(VID_SEL + ' div[data-client-uid="' + uid + '"][data-client-type="WEBCAM"]');
 	}
 	function _userSpeaks(uid, active) {
-		const u = $('#user' + uid + ' .audio-activity.ui-icon')
+		const u = $('#user' + uid + ' .audio-activity')
 			, v = _find(uid).parent();
 		if (active) {
 			u.addClass('speaking');
