@@ -52,7 +52,6 @@ module apache.openmeetings.db {
 	requires transitive org.apache.wicket.request;
 	requires transitive org.apache.wicket.websocket.core;
 	requires transitive spring.beans;
-	requires transitive simple.xml;
 	requires transitive spring.web;
 	requires transitive spring.core;
 
