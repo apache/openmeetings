@@ -22,11 +22,24 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<h3><wicket:message key="widget.start.header"/></h3>
-	<div><div wicket:id="step1" class="clickable start_step1"><wicket:message key="768"/></div></div>
-	<div><div wicket:id="step2" class="clickable start_step2"><wicket:message key="771"/></div></div>
-	<div><div wicket:id="step3" class="start_step3"><a wicket:id="avTest"
-		target="_blank" rel="noopener noreferrer"><wicket:message key="772"/></a></div></div>
-	<div><div wicket:id="step4" class="clickable start_step4"><wicket:message key="773"/></div></div>
+	<div wicket:id="step1" class="clickable start_step1">
+		<span class="badge badge-pill badge-secondary">1</span>
+		<wicket:message key="768"/>
+	</div>
+	<div wicket:id="step2" class="clickable start_step2">
+		<span class="badge badge-pill badge-secondary">2</span>
+		<wicket:message key="771"/>
+	</div>
+	<div wicket:id="step3" class="start_step3">
+		<a wicket:id="avTest" target="_blank" rel="noopener noreferrer">
+			<span class="badge badge-pill badge-secondary">3</span>
+			<wicket:message key="772"/>
+		</a>
+	</div>
+	<div wicket:id="step4" class="clickable start_step4">
+		<span class="badge badge-pill badge-secondary">4</span>
+		<wicket:message key="773"/>
+	</div>
 	<table>
 		<tr>
 			<td><div wicket:id="123msg"></div></td>

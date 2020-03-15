@@ -70,15 +70,11 @@ html, body {
 #busy-indicator {
 	display: none;
 	z-index: 1000;
-	width: 30px;
-	height: 30px;
-	border: 0;
 	position: absolute;
 	right: 0;
 	margin: 2px;
-	background-image: url(images/ajax-loader.gif);
-	background-repeat: no-repeat;
-	background-size: 28px 28px;
+	font-size: 2em;
+	line-height: 1.2em;
 }
 .clickable {
 	cursor: pointer;
@@ -169,26 +165,15 @@ html, body {
 	box-shadow: 3px 3px 4px #000;
 }
 .start_step1, .start_step2, .start_step3, .start_step4 {
-	padding-left: 30px;
-	background-position: left top;
 	margin: 5px 0px 5px 0px;
-	background-size: contain;
-	background-repeat: no-repeat;
-	display: inline-block;
-}
-.start_step1 {
-	background-image: url(images/wizzard_button_1.png);
 }
 .start_step2 {
-	background-image: url(images/wizzard_button_2.png);
 	margin-left: 20px;
 }
 .start_step3 {
-	background-image: url(images/wizzard_button_3.png);
 	margin-left: 40px;
 }
 .start_step4 {
-	background-image: url(images/wizzard_button_4.png);
 	margin-left: 60px;
 }
 .widget {
