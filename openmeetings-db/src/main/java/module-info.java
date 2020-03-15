@@ -57,7 +57,7 @@ module apache.openmeetings.db {
 
 	requires spring.tx;
 	requires spring.context;
-	requires java.persistence;
+	requires javax.persistence;
 	requires openjpa;
 	requires asterisk.java;
 	requires java.xml.bind;
