@@ -82,7 +82,7 @@ html[dir="rtl"] .room-block .wb-block {
 }
 .room-block .wb-block .tools .dropleft .dropdown-toggle::before {
 	vertical-align: bottom;
-	margin-right: 0.1rem;
+	margin-right: 0;
 }
 .room-block .wb-block .tools .dropdown-menu .om-icon.big {
 	float: none;

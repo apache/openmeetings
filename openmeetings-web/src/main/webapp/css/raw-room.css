@@ -531,7 +531,7 @@ html[dir="rtl"] .room-block .sidebar {
 	right: 40px;
 	bottom: 40px;
 	padding: 5px;
-	background-color: aquamarine;
+	background-color: var(--info);
 }
 #quick-vote .control {
 	display: inline-block;
