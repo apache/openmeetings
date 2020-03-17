@@ -184,9 +184,6 @@ html[dir="rtl"] .room-block .sidebar {
 .audio-activity.om-icon.speaking {
 	opacity: 1;
 }
-.right.om-icon {
-	position: relative;
-}
 #room-sidebar-tab-users .header .om-icon i {
 	font-size: 1.2em;
 }

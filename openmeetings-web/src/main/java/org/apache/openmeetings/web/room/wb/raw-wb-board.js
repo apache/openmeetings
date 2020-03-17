@@ -437,11 +437,11 @@ var Wb = function() {
 	}
 	function _createHandler(_o) {
 		switch (_o.fileType) {
-			case 'Video':
-			case 'Recording':
+			case 'VIDEO':
+			case 'RECORDING':
 				//no-op
 				break;
-			case 'Presentation':
+			case 'PRESENTATION':
 			{
 				const ccount = canvases.length;
 				for (let i = 0; i < _o.count; ++i) {
@@ -820,7 +820,7 @@ var Wb = function() {
 		const arr = [], del = [], _arr = Array.isArray(obj) ? obj : [obj];
 		for (let i = 0; i < _arr.length; ++i) {
 			const o = _arr[i];
-			if (!!o.deleted && 'Presentation' !== o.fileType) {
+			if (!!o.deleted && 'PRESENTATION' !== o.fileType) {
 				del.push(o);
 				continue;
 			}

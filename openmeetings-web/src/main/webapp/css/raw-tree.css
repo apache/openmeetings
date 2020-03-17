@@ -83,6 +83,13 @@
 .file-tree .trees .om-icon.active {
 	background-color: var(--info);
 }
+.file-tree .trees .om-icon i {
+	display: none;
+	position: absolute;
+	bottom: 1px;
+	left: 5px;
+	font-size: .8em;
+}
 .refresh.om-icon::before {
 	content: '\f2f1';
 }
@@ -101,8 +108,8 @@
 .broken.om-icon::before {
 	color: var(--danger);
 }
-.processing.om-icon {
-	color: var(--info);
+.file-tree .trees .processing.om-icon i {
+	display: block;
 }
 .file.om-icon, .recording.om-icon {
 	padding-left: 34px;

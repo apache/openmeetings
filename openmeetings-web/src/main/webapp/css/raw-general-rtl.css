@@ -97,9 +97,6 @@ html[dir="rtl"] @media screen and (max-width: 1280px) {
 		padding-left: 0 !important;
 	}
 }
-html[dir="rtl"] .om-icon.big {
-	background-position: right 1px top 1px !important;
-}
 html[dir="rtl"] .room-block .sidebar .user-list .user {
 	background-position: right 2px top 2px !important;
 }

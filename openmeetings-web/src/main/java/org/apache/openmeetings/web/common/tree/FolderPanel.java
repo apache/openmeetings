@@ -138,13 +138,13 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 		});
 	}
 
-	private void moveAll(final FileTreePanel treePanel, AjaxRequestTarget target, BaseFileItem p) {
+	private void moveAll(AjaxRequestTarget target, BaseFileItem p) {
 		for (Entry<String, BaseFileItem> e : treePanel.getSelected().entrySet()) {
-			move(treePanel, target, p, e.getValue());
+			move(target, p, e.getValue());
 		}
 	}
 
-	private void move(final FileTreePanel treePanel, AjaxRequestTarget target, BaseFileItem p, BaseFileItem f) {
+	private void move(AjaxRequestTarget target, BaseFileItem p, BaseFileItem f) {
 		Long pid = p.getId();
 		if (pid != null && pid.equals(f.getId())) {
 			return;
@@ -270,9 +270,9 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 			BaseFileItem p = (BaseFileItem)getDefaultModelObject();
 			BaseFileItem f = (BaseFileItem)o;
 			if (treePanel.isSelected(f)) {
-				moveAll(treePanel, target, p);
+				moveAll(target, p);
 			} else {
-				move(treePanel, target, p, f);
+				move(target, p, f);
 			}
 			treePanel.updateNode(target, p);
 		}
