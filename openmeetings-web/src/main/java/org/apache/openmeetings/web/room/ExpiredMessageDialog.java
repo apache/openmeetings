@@ -18,43 +18,34 @@
  */
 package org.apache.openmeetings.web.room;
 
+import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.model.ResourceModel;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-
-public class ExpiredMessageDialog extends MessageDialog {
+public class ExpiredMessageDialog extends IconTextModal {
 	private static final long serialVersionUID = 1L;
 	private final RoomMenuPanel menu;
 
 	public ExpiredMessageDialog(String id, String message, RoomMenuPanel menu) {
-		super(id, "", message, DialogButtons.OK, DialogIcon.ERROR);
+		super(id);
+		withLabel(message);
 		this.menu = menu;
 	}
 
 	@Override
 	protected void onInitialize() {
-		getTitle().setObject(getString("204"));
 		super.onInitialize();
+		withErrorIcon();
+		header(new ResourceModel("204"));
+		setBackdrop(Backdrop.TRUE);
+		show(true);
+		setUseCloseHandler(true);
+		addButton(OmModalCloseButton.of("54"));
 	}
 
 	@Override
-	public boolean isModal() {
-		return true;
-	}
-
-	@Override
-	public void onConfigure(JQueryBehavior behavior) {
-		super.onConfigure(behavior);
-		behavior.setOption("autoOpen", true);
-	}
-
-	@Override
-	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		menu.exit(handler);
+	protected void onClose(IPartialPageRequestHandler target) {
+		menu.exit(target);
 	}
 }
