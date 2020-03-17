@@ -498,7 +498,7 @@ var Wb = function() {
 				canvas.requestRenderAll();
 			});
 		});
-	};
+	}
 
 	function toOmJson(o) {
 		const r = o.toJSON(extraProps);
@@ -533,7 +533,7 @@ var Wb = function() {
 			wbId: wb.id
 			, obj: json
 		}});
-	};
+	}
 	function objAddedHandler(e) {
 		const o = e.target;
 		if (o.loaded === true) {
@@ -550,7 +550,7 @@ var Wb = function() {
 				o.selectable = this.selection;
 				break;
 		}
-	};
+	}
 	function objModifiedHandler(e) {
 		const o = e.target, items = [];
 		if (role === NONE && o.omType !== 'pointer') {
@@ -573,7 +573,7 @@ var Wb = function() {
 			wbId: wb.id
 			, obj: items
 		}});
-	};
+	}
 	function objSelectedHandler(e) {
 		const o = e.target;
 		settings.find('.wb-dim-x').val(o.left);
@@ -601,7 +601,7 @@ var Wb = function() {
 		o.path.slide = this.slide;
 		o.path.omType = 'freeDraw';
 		objCreatedHandler(o.path);
-	};
+	}
 	function scrollHandler() {
 		if (scrollTimeout !== null) {
 			clearTimeout(scrollTimeout);

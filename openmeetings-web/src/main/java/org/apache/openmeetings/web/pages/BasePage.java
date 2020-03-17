@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationN
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getGaCode;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.apache.openmeetings.web.app.Application.isInstalled;
+import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -125,6 +126,8 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	protected void internalRenderHead(IHeaderResponse response) {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
 		super.renderHead(response);
+		final String suffix = DEVELOPMENT == getApplication().getConfigurationType() ? "" : ".min";
+		response.render(CssHeaderItem.forUrl(String.format("css/theme_om/jquery-ui%s.css", suffix)));
 		response.render(CssHeaderItem.forUrl("css/theme.css"));
 		if (!Strings.isEmpty(getGaCode())) {
 			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BasePage.class, "om-ga.js"))));

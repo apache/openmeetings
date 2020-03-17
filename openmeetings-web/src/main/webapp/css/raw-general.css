@@ -201,6 +201,9 @@ html, body {
 	clear: both;
 }
 .om-icon {
+	background-repeat: no-repeat !important;
+	background-position: 0 0 !important;
+	background-size: 16px;
 	width: 18px;
 	height: 18px;
 	border: none;

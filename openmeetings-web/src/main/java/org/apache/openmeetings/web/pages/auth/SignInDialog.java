@@ -66,8 +66,6 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.wicket.jquery.ui.effect.JQueryEffectBehavior;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
@@ -130,10 +128,6 @@ public class SignInDialog extends Modal<String> {
 
 	public void setForgetPasswordDialog(ForgetPasswordDialog f) {
 		this.f = f;
-	}
-
-	private void shake(AjaxRequestTarget target) {
-		target.appendJavaScript(JQueryEffectBehavior.toString("#" + getMarkupId(), "shake"));
 	}
 
 	class SignInForm extends StatelessForm<String> {
@@ -235,7 +229,7 @@ public class SignInDialog extends Modal<String> {
 		}
 
 		protected void onError(AjaxRequestTarget target) {
-			shake(target);
+			target.add(feedback);
 		}
 
 		@Override
@@ -276,7 +270,6 @@ public class SignInDialog extends Modal<String> {
 					log.error("Unexpected exception while sleeping", e);
 				}
 				strategy.remove();
-				shake(target);
 			}
 		}
 	}
