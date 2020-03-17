@@ -146,6 +146,7 @@ public class EditProfileForm extends Form<User> {
 					Thread.sleep(6 + (long)(10 * Math.random() * 1000));
 				} catch (InterruptedException e) {
 					log.error("Unexpected exception while sleeping", e);
+					Thread.currentThread().interrupt();
 				}
 			}
 		}

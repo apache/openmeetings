@@ -3,7 +3,7 @@ var Wb = function() {
 	const ACTIVE = 'active', BUMPER = 100, wb = {id: -1, name: ''}, canvases = []
 		, area = $('.room-block .wb-block .wb-area .tabs'), bar = area.find('.wb-tabbar')
 		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src', 'formula'];
-	let tools, zoomBar, settings, math, mode, slide = 0, width = 0, height = 0
+	let wbEl, tools, zoomBar, settings, math, mode, slide = 0, width = 0, height = 0
 			, zoom = 1., zoomMode = 'PAGE_WIDTH', role = null, scrollTimeout = null;
 
 	function _getBtn(m) {

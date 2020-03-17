@@ -97,6 +97,7 @@ public class Captcha extends Panel {
 				target.add(captcha);
 			}
 
+			@Override
 			protected Icon newIcon(String markupId) {
 				return new Icon(markupId, FontAwesome5IconType.sync_s);
 			}

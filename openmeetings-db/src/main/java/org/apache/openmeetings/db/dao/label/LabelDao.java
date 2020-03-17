@@ -50,6 +50,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.label.OmLanguage;
 import org.apache.openmeetings.db.entity.label.StringLabel;
+import org.apache.openmeetings.db.util.XmlHelper;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.XmlExport;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
@@ -106,8 +107,8 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	public static void initLanguageMap() {
-		SAXReader reader = new SAXReader();
 		try {
+			SAXReader reader = XmlHelper.createSaxReader();
 			appClass = getAppClass();
 			Document document = reader.read(getLangFile());
 			Element root = document.getRootElement();

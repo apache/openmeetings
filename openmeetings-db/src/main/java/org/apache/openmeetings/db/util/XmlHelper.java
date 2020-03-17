@@ -29,14 +29,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLInputFactory;
 
+import org.dom4j.io.SAXReader;
+import org.xml.sax.SAXException;
+
 public class XmlHelper {
+	private static final String NO_DOCTYPE = "http://apache.org/xml/features/disallow-doctype-decl";
 	private XmlHelper() {
 		//no access
 	}
 
 	public static DocumentBuilder createBuilder() throws ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		dbFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+		dbFactory.setFeature(NO_DOCTYPE, true);
 		dbFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
 		dbFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 		dbFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
@@ -53,5 +57,11 @@ public class XmlHelper {
 		factory.setProperty(IS_SUPPORTING_EXTERNAL_ENTITIES, false);
 		factory.setProperty(SUPPORT_DTD, false);
 		return factory;
+	}
+
+	public static SAXReader createSaxReader() throws SAXException {
+		SAXReader reader = new SAXReader();
+		reader.setFeature(NO_DOCTYPE, true);
+		return reader;
 	}
 }

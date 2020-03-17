@@ -119,6 +119,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 			}).start();
 		} catch (InterruptedException e) {
 			log.warn("Unexpected exception while map clean-up", e);
+			Thread.currentThread().interrupt();
 		}
 	}
 

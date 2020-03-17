@@ -224,6 +224,7 @@ public class RegisterDialog extends Modal<String> {
 					Thread.sleep((long)(10 * Math.random() * 1000));
 				} catch (InterruptedException e) {
 					log.error("Unexpected exception while sleeting", e);
+					Thread.currentThread().interrupt();
 				}
 			}
 		}

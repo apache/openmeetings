@@ -214,7 +214,7 @@ public class Whiteboard implements Serializable {
 		for (Entry<String, String> e : roomItems.entrySet()) {
 			JSONObject o = new JSONObject(e.getValue());
 			//filtering
-			if ("Clipart".equals(o.opt("omType"))) {
+			if ("Clipart".equals(o.opt(ATTR_OMTYPE))) {
 				if (o.has(PARAM__SRC)) {
 					o.put(PARAM_SRC, o.get(PARAM__SRC));
 				}
