@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room;
 
 import static java.time.Duration.ZERO;
+import static java.util.Comparator.naturalOrder;
 import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -29,6 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -138,6 +140,7 @@ public class RoomPanel extends BasePanel {
 			Client c = getClient();
 			JSONObject options = VideoSettings.getInitJson(c.getSid())
 					.put("uid", c.getUid())
+					.put("userId", c.getUserId())
 					.put("rights", c.toJson(true).getJSONArray("rights"))
 					.put("interview", interview)
 					.put("audioOnly", r.isAudioOnly())
@@ -149,8 +152,26 @@ public class RoomPanel extends BasePanel {
 			StringBuilder sb = new StringBuilder("Room.init(").append(options.toString(new NullStringer())).append(");")
 					.append(wb.getInitScript())
 					.append(getQuickPollJs());
+			if (c.hasRight(Room.Right.MODERATOR) || !r.isHidden(RoomElement.USER_COUNT)) {
+				List<Client> list = cm.listByRoom(r.getId());
+				list.sort(Comparator.<Client, Integer>comparing(cl -> {
+					if (cl.hasRight(Room.Right.MODERATOR)) {
+						return 0;
+					}
+					if (cl.hasRight(Room.Right.PRESENTER)) {
+						return 1;
+					}
+					return 5;
+				}, naturalOrder())
+						.thenComparing(cl -> cl.getUser().getDisplayName(), String::compareToIgnoreCase));
+				sb.append("Room.addClient([");
+				list.stream().forEach(cl -> sb.append(cl.toJson(false).toString(new NullStringer())).append(","));
+				sb.deleteCharAt(sb.length() - 1).append("]);");
+
+			}
 			target.appendJavaScript(sb);
-			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), c, RoomMessage.Type.ROOM_ENTER));
+
+			WebSocketHelper.sendRoom(new TextRoomMessage(r.getId(), c, RoomMessage.Type.ROOM_ENTER, c.getUid()));
 			// play video from other participants
 			initVideos(target);
 			getMainPanel().getChat().roomEnter(r, target);
@@ -452,7 +473,7 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							boolean self = _c.getUid().equals(c.getUid());
-							handler.appendJavaScript(String.format("VideoManager.update(%s);"
+							handler.appendJavaScript(String.format("Room.updateClient(%s);"
 									, c.toJson(self).toString(new NullStringer())));
 							sidebar.update(handler);
 							menu.update(handler);
@@ -461,14 +482,30 @@ public class RoomPanel extends BasePanel {
 						}
 						break;
 					case ROOM_ENTER:
-						sidebar.update(handler);
-						menu.update(handler);
-						sidebar.addActivity(new Activity(m, Activity.Type.roomEnter), handler);
+						{
+							sidebar.update(handler);
+							menu.update(handler);
+							String uid = ((TextRoomMessage)m).getText();
+							Client c = cm.get(uid);
+							if (c == null) {
+								log.error("Not existing user in rightUpdated {} !!!!", uid);
+								return;
+							}
+							if (c.hasRight(Room.Right.MODERATOR) || !r.isHidden(RoomElement.USER_COUNT)) {
+								boolean self = _c.getUid().equals(c.getUid());
+								handler.appendJavaScript(String.format("Room.addClient([%s]);"
+										, c.toJson(self).toString(new NullStringer())));
+							}
+							sidebar.addActivity(new Activity(m, Activity.Type.roomEnter), handler);
+						}
 						break;
 					case ROOM_EXIT:
-						sidebar.update(handler);
-						sidebar.addActivity(new Activity(m, Activity.Type.roomExit), handler);
-						handler.appendJavaScript("Chat.removeTab('" + ID_USER_PREFIX + m.getUserId() + "');");
+						{
+							String uid = ((TextRoomMessage)m).getText();
+							sidebar.update(handler);
+							sidebar.addActivity(new Activity(m, Activity.Type.roomExit), handler);
+							handler.appendJavaScript("Room.removeClient('" + uid + "'); Chat.removeTab('" + ID_USER_PREFIX + m.getUserId() + "');");
+						}
 						break;
 					case ROOM_CLOSED:
 						handler.add(room.setVisible(false));

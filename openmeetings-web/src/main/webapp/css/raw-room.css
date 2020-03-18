@@ -236,6 +236,7 @@ html[dir="rtl"] .room-block .sidebar {
 }
 .activity.cam.enabled.om-icon::before {
 	content: '\f4e2';
+	color: var(--warning);
 }
 .activity.mic.om-icon::before {
 	content: '\f130';
@@ -247,6 +248,7 @@ html[dir="rtl"] .room-block .sidebar {
 }
 .activity.mic.enabled.om-icon::before {
 	content: '\f131';
+	color: var(--warning);
 }
 .room-block .sidebar .user-list .user.current {
 	font-weight: bold;

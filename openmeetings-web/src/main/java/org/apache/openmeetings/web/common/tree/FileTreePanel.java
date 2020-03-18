@@ -25,6 +25,8 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -80,12 +82,10 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5I
 
 public abstract class FileTreePanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final String ALIGN_LEFT_CLASS = " align-left";
-	private static final String ALIGN_RIGHT_CLASS = " align-right";
 	private static final String BASE_CLASS = " om-icon big clickable";
-	private static final String UPLOAD_CLASS = "add" + BASE_CLASS + ALIGN_LEFT_CLASS;
-	private static final String CREATE_DIR_CLASS = "folder-create" + BASE_CLASS + ALIGN_LEFT_CLASS;
-	private static final String TRASH_CLASS = "trash" + BASE_CLASS + ALIGN_RIGHT_CLASS;
+	private static final String UPLOAD_CLASS = "add" + BASE_CLASS + ALIGN_LEFT;
+	private static final String CREATE_DIR_CLASS = "folder-create" + BASE_CLASS + ALIGN_LEFT;
+	private static final String TRASH_CLASS = "trash" + BASE_CLASS + ALIGN_RIGHT;
 	private static final String DISABLED_CLASS = " disabled";
 	final WebMarkupContainer trees = new WebMarkupContainer("tree-container");
 	private final WebMarkupContainer sizes = new WebMarkupContainer("sizes");

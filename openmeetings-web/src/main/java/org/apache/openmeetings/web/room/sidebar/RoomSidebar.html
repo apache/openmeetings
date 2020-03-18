@@ -26,7 +26,7 @@
 			<li class="nav-item">
 				<a href="#room-sidebar-tab-users" class="nav-link active om-icon big tab user" id="room-sidebar-users-tab" data-toggle="tab" role="tab" aria-controls="room-sidebar-tab-users" wicket:message="title:398">
 					<i class="fas fa-users"></i>
-					<span class="label"><wicket:message key="398"/>&nbsp;</span><span wicket:id="user-count" class="badge badge-info">42</span>
+					<span class="label"><wicket:message key="398"/>&nbsp;</span><span class="badge badge-info user-count">42</span>
 				</a>
 			</li>
 			<li class="nav-item" wicket:enclosure="file-tab">
@@ -42,12 +42,13 @@
 		</ul>
 		<div class="tab-content">
 			<div id="room-sidebar-tab-users" class="tab-pane fade show active" role="tabpanel" aria-labelledby="room-sidebar-users-tab">
-				<div wicket:id="icons" class="header"></div>
+				<div class="header">
+					<span class="om-icon align-left settings clickable" onclick="VideoSettings.open();" wicket:message="title:306"></span>
+					<span class="om-icon align-left activity cam clickable" onclick="VideoManager.toggleActivity('VIDEO');" wicket:message="data-on:camera.on,data-off:camera.off"></span>
+					<span class="om-icon align-left activity mic bumper clickable" onclick="VideoManager.toggleActivity('AUDIO');" wicket:message="data-on:microphone.on,data-off:microphone.off"></span>
+				</div>
 				<div class="user-list clear"> <!-- auto-scrollable -->
-					<div wicket:id="user-list"> <!-- content -->
-						<div wicket:id="user" class="user entry">
-							<div wicket:id="user"></div>
-						</div>
+					<div class="users"> <!-- content -->
 					</div>
 				</div>
 			</div>
@@ -61,5 +62,51 @@
 	<div wicket:id="upload"></div>
 	<div wicket:id="confirm-kick" />
 	<div wicket:id="settings" />
+	<div hidden="hidden">
+		<div id="user-entry-stub" class="user entry clearfix" >
+			<span class="om-icon user-status align-right " wicket:message="data-mod:679,data-wb:678,data-user:677"></span>
+			<span class="align-right typing-activity">
+				<i class="fas fa-pen-fancy"></i>
+			</span>
+			<div class="user name"></div>
+			<span class="om-icon audio-activity" wicket:message="data-speaks:ulist.user.speaks,data-mute:ulist.user.muteothers"></span>
+			<div class="user actions clearfix">
+			</div>
+		</div>
+		<div id="user-av-restart">
+			<span class="om-icon align-right restart clickable" wicket:message="title:lbl.refresh">
+				<i class="fas fa-sync-alt"></i>
+			</span>
+		</div>
+		<div id="user-actions-stub">
+			<span class="om-icon align-left right camera clickable" wicket:message="data-request:ulist.right.video.request,data-revoke:ulist.right.video.revoke,data-grant:ulist.right.video.grant">
+				<i class="fas"></i>
+			</span>
+			<span class="om-icon align-left right audio bumper clickable" wicket:message="data-request:ulist.right.audio.request,data-revoke:ulist.right.audio.revoke,data-grant:ulist.right.audio.grant">
+				<i class="fas"></i>
+			</span>
+			<span class="om-icon align-left right presenter bumper clickable" wicket:message="data-request:ulist.right.presenter.request,data-revoke:ulist.right.presenter.revoke,data-grant:ulist.right.presenter.grant">
+				<i class="fas"></i>
+			</span>
+			<span class="om-icon align-left right wb bumper clickable" wicket:message="data-request:ulist.right.wb.request,data-revoke:ulist.right.wb.revoke,data-grant:ulist.right.wb.grant">
+				<i class="fas"></i>
+			</span>
+			<span class="om-icon align-left right screen-share bumper clickable" wicket:message="data-request:ulist.right.share.request,data-revoke:ulist.right.share.revoke,data-grant:ulist.right.share.grant">
+				<i class="fas"></i>
+			</span>
+			<span class="om-icon align-left right remote-control bumper clickable" wicket:message="data-request:ulist.right.remote.request,data-revoke:ulist.right.remote.revoke,data-grant:ulist.right.remote.grant">
+				<i class="fas"></i>
+			</span>
+			<span class="om-icon align-left right moderator bumper clickable" wicket:message="data-request:ulist.right.moderator.request,data-revoke:ulist.right.moderator.revoke,data-grant:ulist.right.moderator.grant">
+				<i class="fas"></i>
+			</span>
+			<span class="om-icon align-left kick bumper clickable" wicket:message="title:603">
+				<i class="fas fa-ban text-danger"></i>
+			</span>
+			<span class="om-icon align-right private-chat clickable" wicket:message="title:1493">
+				<i class="fas fa-edit"></i>
+			</span>
+		</div>
+	</div>
 </wicket:panel>
 </html>

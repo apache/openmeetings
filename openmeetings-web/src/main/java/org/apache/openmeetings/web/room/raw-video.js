@@ -440,7 +440,7 @@ var Video = (function() {
 		}
 	}
 	function _setRights() {
-		if (Room.hasRight(['SUPER_MODERATOR', 'MODERATOR', 'MUTE_OTHERS']) && VideoUtil.hasAudio(sd)) {
+		if (Room.hasRight(['MUTE_OTHERS']) && VideoUtil.hasAudio(sd)) {
 			muteOthers.addClass('enabled').click(function() {
 				VideoManager.clickMuteOthers(sd.uid);
 			});

@@ -18,13 +18,9 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import static java.util.Comparator.naturalOrder;
 import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
-
-import java.util.Comparator;
-import java.util.List;
 
 import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -50,12 +46,7 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
@@ -76,48 +67,13 @@ public class RoomSidebar extends Panel {
 	private final RoomPanel room;
 	private UploadDialog upload;
 	private RoomFilePanel roomFiles;
-	private final WebMarkupContainer userList = new WebMarkupContainer("user-list");
 	private final WebMarkupContainer fileTab = new WebMarkupContainer("file-tab");
-	private final SelfIconsPanel selfRights;
 	private ConfirmationDialog confirmKick;
 	private boolean showFiles;
 	private boolean avInited = false;
 	private Client kickedClient;
 	private VideoSettings settings = new VideoSettings("settings");
 	private ActivitiesPanel activities;
-	private final ListView<Client> users = new ListView<>("user", new LoadableDetachableModel<List<Client>>() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected List<Client> load() {
-			Client self = room.getClient();
-			List<Client> list;
-			if (!self.hasRight(Room.Right.MODERATOR) && room.getRoom().isHidden(RoomElement.USER_COUNT)) {
-				list = List.of(self);
-			} else {
-				list = cm.listByRoom(room.getRoom().getId());
-				list.sort(Comparator.<Client, Integer>comparing(c -> {
-							if (c.hasRight(Room.Right.MODERATOR)) {
-								return 0;
-							}
-							if (c.hasRight(Room.Right.PRESENTER)) {
-								return 1;
-							}
-							return 5;
-						}, naturalOrder())
-						.thenComparing(c -> c.getUser().getDisplayName(), String::compareToIgnoreCase));
-			}
-			userCount.setDefaultModelObject(list.size());
-			return list;
-		}
-	}) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void populateItem(ListItem<Client> item) {
-			item.add(new RoomClientPanel("user", item, room));
-		}
-	};
 	private final AbstractDefaultAjaxBehavior avSettings = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
@@ -139,7 +95,6 @@ public class RoomSidebar extends Panel {
 			}
 		}
 	};
-	private final Label userCount = new Label("user-count", Model.of(""));
 
 	@SpringBean
 	private ClientManager cm;
@@ -149,7 +104,6 @@ public class RoomSidebar extends Panel {
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);
 		this.room = room;
-		selfRights = new SelfIconsPanel("icons", room.getUid(), true);
 	}
 
 	@Override
@@ -165,10 +119,9 @@ public class RoomSidebar extends Panel {
 			}
 		};
 		roomFiles = new RoomFilePanel("tree", room, addFolder);
-		add(selfRights, userList.add(users).setOutputMarkupId(true)
-				, fileTab.setVisible(!room.isInterview()), roomFiles.setVisible(!room.isInterview()));
+		add(fileTab.setVisible(!room.isInterview()), roomFiles.setVisible(!room.isInterview()));
 
-		add(addFolder, settings, userCount.setOutputMarkupId(true));
+		add(addFolder, settings);
 		add(avSettings);
 		add(confirmKick = new ConfirmationDialog("confirm-kick", new ResourceModel("603"), new ResourceModel("605")) {
 			private static final long serialVersionUID = 1L;
@@ -202,7 +155,6 @@ public class RoomSidebar extends Panel {
 			return;
 		}
 		updateShowFiles(handler);
-		handler.add(selfRights.update(handler), userList, userCount);
 	}
 
 	public void updateFiles(IPartialPageRequestHandler handler) {

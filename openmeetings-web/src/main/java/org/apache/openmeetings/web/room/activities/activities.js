@@ -153,7 +153,7 @@ var Activities = function() {
 			const _id = _getId(obj.id);
 			(obj.action ? modArea : area).append(OmUtil.tmpl('#activity-stub', _id).data(obj));
 			const a = $('#' + _id).addClass(obj.cssClass);
-			a.find('.activity-close,.activity-accept,.activity-decline,.activity-find').addClass(Settings.isRtl ? 'align-left' : 'align-right');
+			a.find('.activity-close,.activity-accept,.activity-decline,.activity-find').addClass('align-right');
 			const acpt = a.find('.activity-accept');
 			if (obj.accept) {
 				acpt.click(function() { _action('accept', obj.id); });

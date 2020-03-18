@@ -152,8 +152,6 @@ var VideoManager = (function() {
 			}
 		});
 		if (c.uid === Room.getOptions().uid) {
-			Room.setRights(c.rights);
-			Room.setActivities(c.activities);
 			const windows = $(VID_SEL + ' .ui-dialog-content');
 			for (let i = 0; i < windows.length; ++i) {
 				const w = $(windows[i]);

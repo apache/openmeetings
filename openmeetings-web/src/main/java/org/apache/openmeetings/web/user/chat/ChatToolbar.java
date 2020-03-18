@@ -38,7 +38,6 @@ import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.ClientManager;
-import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -180,8 +179,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		BasePage page = (BasePage)getPage();
-		add(toolbar.add(new WebMarkupContainer("hyperlink").add(AttributeModifier.append("class", page.isRtl() ? "dropdown-menu-left" : "dropdown-menu-right"))));
+		add(toolbar);
 		add(download);
 		delBtn = new AjaxButton("delete", chatForm) {
 			private static final long serialVersionUID = 1L;

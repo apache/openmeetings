@@ -187,10 +187,20 @@ var Room = (function() {
 			]
 		});
 	}
-	function _hasRight(_rights) {
-		const rights = Array.isArray(_rights) ? _rights : [];
+	function _hasRight(_inRights, _ref) {
+		const ref = _ref || options.rights;
+		let _rights;
+		if (Array.isArray(_inRights)) {
+			_rights = _inRights;
+		} else {
+			if ('SUPER_MODERATOR' === _inRights) {
+				return ref.includes(_inRights);
+			}
+			_rights = [_inRights];
+		}
+		const rights = ['SUPER_MODERATOR', 'MODERATOR', ..._rights];
 		for (let i = 0; i < rights.length; ++i) {
-			if (options.rights.includes(rights[i])) {
+			if (ref.includes(rights[i])) {
 				return true;
 			}
 		}
@@ -199,7 +209,7 @@ var Room = (function() {
 	function _setQuickPollRights() {
 		const close = $('#quick-vote .close-btn');
 		if (close.length === 1) {
-			if (_hasRight(['SUPER_MODERATOR', 'MODERATOR', 'PRESENTER'])) {
+			if (_hasRight(['PRESENTER'])) {
 				close.show();
 				if (typeof(close.data('bs.confirmation')) === 'object') {
 					return;
@@ -248,17 +258,183 @@ var Room = (function() {
 		}
 		OmUtil.tmpl('#quick-vote-template', 'quick-vote');
 	}
+	function __activityAVIcon(c, elem, selector, predicate, onfunc, disabledfunc) {
+		let icon = elem.find(selector);
+		if (predicate()) {
+			icon.show();
+			const on = onfunc()
+				, disabled = disabledfunc();;
+			if (disabled) {
+				icon.addClass('disabled');
+			} else {
+				icon.removeClass('disabled');
+				if (on) {
+					icon.addClass('enabled');
+				} else {
+					icon.removeClass('enabled');
+				}
+			}
+			icon.attr('title', icon.data(on ? 'off' :'on'));
+		} else {
+			icon.hide();
+		}
+	}
+	function __activityIcon(c, elem, selector, predicate, action) {
+		let icon = elem.find(selector);
+		if (predicate()) {
+			if (icon.length === 0) {
+				icon = OmUtil.tmpl('#user-actions-stub ' + selector);
+				elem.append(icon);
+			}
+			icon.off().click(action);
+		} else {
+			icon.hide();
+		}
+	}
+	function __rightIcon(c, elem, rights, selector, predicate) {
+		const self = c.uid === options.uid
+			, hasRight = _hasRight(rights, c.rights);
+		let icon = elem.find(selector);
+		if (predicate() && !_hasRight('SUPER_MODERATOR', c.rights) && (
+			(self && options.questions && !hasRight)
+			|| (!self && _hasRight('MODERATOR'))
+		)) {
+			if (icon.length === 0) {
+				icon = OmUtil.tmpl('#user-actions-stub ' + selector);
+				elem.append(icon);
+			}
+			if (hasRight) {
+				icon.addClass('granted');
+			} else {
+				icon.removeClass('granted')
+			}
+			icon.attr('title', icon.data(self ? 'request' : (hasRight ? 'revoke' : 'grant')));
+			icon.off().click(function() {
+				OmUtil.roomAction({action: 'toggleRight', right: rights[0], uid: c.uid});
+			});
+		} else {
+			icon.remove();
+		}
+	}
+	function __rightAudioIcon(c, elem) {
+		__rightIcon(c, elem, ['AUDIO'], '.right.audio', () => true);
+	}
+	function __rightVideoIcon(c, elem) {
+		__rightIcon(c, elem, ['VIDEO'], '.right.camera', () => !options.audioOnly);
+	}
+	function __rightOtherIcons(c, elem) {
+		__rightIcon(c, elem, ['PRESENTER'], '.right.presenter', () => !options.interview && $('.wb-area').is(':visible'));
+		__rightIcon(c, elem, ['WHITEBOARD', 'PRESENTER'], '.right.wb', () => !options.interview && $('.wb-area').is(':visible'));
+		__rightIcon(c, elem, ['SHARE'], '.right.screen-share', () => true); //FIXME TODO getRoomPanel().screenShareAllowed()
+		__rightIcon(c, elem, ['REMOTE_CONTROL'], '.right.remote-control', () => true); //FIXME TODO getRoomPanel().screenShareAllowed()
+		__rightIcon(c, elem, ['MODERRATOR'], '.right.moderator', () => true);
+	}
+	function __setStatus(c, le) {
+		const status = le.find('.user-status');
+		status.removeClass('mod wb user');
+		if (_hasRight('MODERATOR', c.rights)) {
+			status.attr('title', status.data('mod')).addClass('mod');;
+		} else if (_hasRight('WHITEBOARD', c.rights)) {
+			status.attr('title', status.data('wb')).addClass('wb');;
+		} else {
+			status.attr('title', status.data('user')).addClass('user');;
+		}
+	}
+	function __updateCount() {
+		$('#room-sidebar-users-tab .user-count').text($('#room-sidebar-tab-users .user-list .users .user.entry').length);
+	}
+	function _addClient(_clients) {
+		const clients = Array.isArray(_clients) ? _clients : [_clients];
+		clients.forEach(c => {
+			const self = c.uid === options.uid;
+			let le = $('#user' + c.uid);
+			if (le.length === 0) {
+				le = OmUtil.tmpl('#user-entry-stub', 'user' + c.uid);
+				le.attr('id', 'user' + c.uid)
+					.attr('data-userid', c.user.id)
+					.attr('data-uid', c.uid);
+				if (self) {
+					le.addClass('current');
+				}
+				// FIXME TODO sort + .insertAfter(...)
+				$('#room-sidebar-tab-users .user-list .users').append(le);
+			}
+			_updateClient(c);
+		});
+		__updateCount();
+	}
+	function _updateClient(c) {
+		const self = c.uid === options.uid
+			, le = $('#user' + c.uid)
+			, hasAudio = VideoUtil.hasAudio(c)
+			, hasVideo = VideoUtil.hasVideo(c)
+			, speaks = le.find('.audio-activity');
+		if (le.length === 0) {
+			return;
+		}
+		__setStatus(c, le);
+		//FIXME TODO move-on-change-order: $('#nodeToMove').insertAfter('#insertAfterThisElement');
+		if (hasVideo || hasAudio) {
+			if (le.find('.restart').length === 0) {
+				le.prepend(OmUtil.tmpl('#user-av-restart').click(function () {
+					VideoManager.refresh(c.uid);
+				}));
+			}
+		} else {
+			le.find('.restart').remove();
+		}
+		speaks.hide().removeClass('clickable').attr('title', speaks.data('speaks')).off();
+		if (hasAudio) {
+			speaks.show();
+			if(_hasRight('MUTE_OTHERS')) {
+				speaks.addClass('clickable').click(function () {
+					VideoManager.clickMuteOthers(c.uid);
+				}).attr('title', speaks.attr('title') + speaks.data('mute'));
+			}
+		}
+		le.attr('title', c.user.displayName)
+			.css('background-image', 'url(' + c.user.pictureUri + ')')
+			.find('.user.name').text(c.user.displayName);
+
+		const actions = le.find('.user.actions');
+		__rightVideoIcon(c, actions);
+		__rightAudioIcon(c, actions);
+		__rightOtherIcons(c, actions);
+		__activityIcon(c, actions, '.kick'
+			, () => !self && _hasRight('MODERATOR') && !_hasRight('SUPER_MODERATOR', c.rights)
+			, function() { OmUtil.roomAction({action: 'kick', uid: c.uid}); });
+		__activityIcon(c, actions, '.private-chat'
+				, () => options.userId !== c.user.id && $('#chatPanel').is(':visible')
+				, function() {
+					Chat.addTab('chatTab-u' + c.user.id, c.user.displayName);
+					Chat.open();
+					$('#chatMessage .wysiwyg-editor').click();
+				});
+		if (self) {
+			options.rights = c.rights;
+			_setQuickPollRights();
+			options.activities = c.activities;
+			const header = $('#room-sidebar-tab-users .header');
+			__rightVideoIcon(c, header);
+			__activityAVIcon(c, header, '.activity.cam', () => !options.audioOnly && _hasRight('VIDEO')
+				, () => hasVideo
+				, () => Settings.load().video.cam < 0);
+			__rightAudioIcon(c, header);
+			__activityAVIcon(c, header, '.activity.mic', () => _hasRight('AUDIO')
+				, () => hasAudio
+				, () => Settings.load().video.mic < 0);
+			__rightOtherIcons(c, header);
+		}
+		VideoManager.update(c)
+	}
+	function _removeClient(uid) {
+		$('#user' + uid).remove();
+		__updateCount();
+	}
 
 	self.init = _init;
 	self.getMenuHeight = function() { return menuHeight; };
 	self.getOptions = function() { return typeof(options) === 'object' ? JSON.parse(JSON.stringify(options)) : {}; };
-	self.setRights = function(_r) {
-		options.rights = _r;
-		_setQuickPollRights();
-	};
-	self.setActivities = function(_a) {
-		options.activities = _a;
-	};
 	self.load = _load;
 	self.unload = _unload;
 	self.showClipboard = _showClipboard;
@@ -267,13 +443,11 @@ var Room = (function() {
 	self.setCssVar = function(key, val) {
 		($('.main.room')[0]).style.setProperty(key, val);
 	};
+	self.addClient = _addClient;
+	self.updateClient = _updateClient;
+	self.removeClient = _removeClient;
 	return self;
 })();
-function startPrivateChat(el) {
-	Chat.addTab('chatTab-u' + el.parent().parent().data("userid"), el.parent().parent().find('.user.name').text());
-	Chat.open();
-	$('#chatMessage .wysiwyg-editor').click();
-}
 /***** functions required by SIP   ******/
 function sipBtnClick() {
 	const txt = $('.sip-number');

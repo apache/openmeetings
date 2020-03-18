@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Chat = function() {
-	const align = Settings.isRtl ? 'align-right' : 'align-left'
-		, alignIco = Settings.isRtl ? 'align-left' : 'align-right'
+	const align = 'align-left'
+		, alignIco = 'align-right'
 		, msgIdPrefix = 'chat-msg-id-'
 		, closedSize = 20
 		, closedSizePx = closedSize + "px"

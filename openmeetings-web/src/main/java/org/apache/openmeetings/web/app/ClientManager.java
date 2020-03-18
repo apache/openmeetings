@@ -34,11 +34,13 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.apache.openmeetings.core.remote.KurentoHandler;
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,7 +136,7 @@ public class ClientManager implements IClientManager {
 		Long roomId = c.getRoomId();
 		removeFromRoom(c);
 		if (roomId != null) {
-			sendRoom(new RoomMessage(roomId, c, RoomMessage.Type.ROOM_EXIT));
+			sendRoom(new TextRoomMessage(roomId, c, RoomMessage.Type.ROOM_EXIT, c.getUid()));
 			confLogDao.add(
 					ConferenceLog.Type.ROOM_LEAVE
 					, c.getUserId(), "0", roomId
