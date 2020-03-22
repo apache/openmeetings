@@ -45,6 +45,7 @@ import java.util.Set;
 import javax.websocket.WebSocketContainer;
 
 import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.core.util.ChatWebSocketHelper;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -200,8 +201,16 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			if (serverId.equals(hazelcast.getName())) {
 				return;
 			}
-			WbWebSocketHelper.send(msg.getMessageObject());
+			IClusterWsMessage wsMsg = msg.getMessageObject();
+			if (WbWebSocketHelper.send(wsMsg)) {
+				return;
+			}
+			if (ChatWebSocketHelper.send(msg.getMessageObject())) {
+				return;
+			}
+			WebSocketHelper.send(msg.getMessageObject());
 		});
+		//FIXME TODO hazelcast.getConfig().getProperties().getProperty("server.url")
 		hazelcast.getCluster().addMembershipListener(new MembershipListener() {
 			@Override
 			public void memberRemoved(MembershipEvent evt) {

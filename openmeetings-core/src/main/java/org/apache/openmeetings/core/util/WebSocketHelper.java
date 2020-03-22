@@ -95,7 +95,7 @@ public class WebSocketHelper {
 		}
 	}
 
-	public static void send(IClusterWsMessage msg) {
+	public static boolean send(IClusterWsMessage msg) {
 		if (msg instanceof WsMessageRoomMsg) {
 			sendRoom(((WsMessageRoomMsg)msg).getMsg(), false);
 		} else if (msg instanceof WsMessageRoomOthers) {
@@ -110,6 +110,7 @@ public class WebSocketHelper {
 		} else if (msg instanceof WsMessageAll) {
 			sendAll(((WsMessageAll)msg).getMsg(), false);
 		}
+		return true;
 	}
 
 	public static void sendRoom(final RoomMessage m) {

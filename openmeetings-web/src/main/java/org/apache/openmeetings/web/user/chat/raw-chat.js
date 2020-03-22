@@ -145,6 +145,7 @@ var Chat = function() {
 		} else {
 			$('#chatTabs li a[aria-controls="' + id + '"]').tab('show');
 		}
+		$('#activeChatTab').val(id).trigger('change');
 	}
 	function _reinit(opts) {
 		userId = opts.userId;
@@ -164,7 +165,9 @@ var Chat = function() {
 		initToolbar();
 		tabs = $("#chatTabs");
 		tabs.off().on('shown.bs.tab', function (e) {
-			_scrollDown($('#' + $(e.target).attr('aria-controls')));
+			const ct = $(e.target).attr('aria-controls');
+			_scrollDown($('#' + ct));
+			$('#activeChatTab').val(ct).trigger('change');
 		});
 		tabs.delegate(".btn.close-chat", "click", function() {
 			const panelId = $(this).closest("a").attr("aria-controls");

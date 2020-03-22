@@ -327,7 +327,7 @@ var Room = (function() {
 		__rightIcon(c, elem, ['WHITEBOARD', 'PRESENTER'], '.right.wb', () => !options.interview && $('.wb-area').is(':visible'));
 		__rightIcon(c, elem, ['SHARE'], '.right.screen-share', () => true); //FIXME TODO getRoomPanel().screenShareAllowed()
 		__rightIcon(c, elem, ['REMOTE_CONTROL'], '.right.remote-control', () => true); //FIXME TODO getRoomPanel().screenShareAllowed()
-		__rightIcon(c, elem, ['MODERRATOR'], '.right.moderator', () => true);
+		__rightIcon(c, elem, ['MODERATOR'], '.right.moderator', () => true);
 	}
 	function __setStatus(c, le) {
 		const status = le.find('.user-status');

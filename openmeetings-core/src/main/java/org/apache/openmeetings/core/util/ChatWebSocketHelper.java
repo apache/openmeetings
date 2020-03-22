@@ -81,7 +81,7 @@ public class ChatWebSocketHelper extends WebSocketHelper {
 			.put("msg", arr);
 	}
 
-	public static void send(IClusterWsMessage msg) {
+	public static boolean send(IClusterWsMessage msg) {
 		if (msg instanceof WsMessageChat) {
 			if (msg instanceof WsMessageChat2User) {
 				WsMessageChat2User m = (WsMessageChat2User)msg;
@@ -93,9 +93,9 @@ public class ChatWebSocketHelper extends WebSocketHelper {
 				WsMessageChat m = (WsMessageChat)msg;
 				sendRoom(m.getChatMessage(), m.getMsg(), false);
 			}
-		} else {
-			WebSocketHelper.send(msg);
+			return true;
 		}
+		return false;
 	}
 
 	public static void sendRoom(ChatMessage m, JSONObject msg) {

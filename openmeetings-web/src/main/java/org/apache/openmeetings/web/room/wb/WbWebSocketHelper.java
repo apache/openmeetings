@@ -44,7 +44,7 @@ public class WbWebSocketHelper extends WebSocketHelper {
 	public static final String PARAM_OBJ = "obj";
 	private static final String PARAM__POSTER = "_poster";
 
-	public static void send(IClusterWsMessage _m) {
+	public static boolean send(IClusterWsMessage _m) {
 		if (_m instanceof WsMessageWb) {
 			WsMessageWb m = (WsMessageWb)_m;
 			if (m.getUid() == null) {
@@ -52,12 +52,13 @@ public class WbWebSocketHelper extends WebSocketHelper {
 			} else {
 				sendWbOthers(m.getRoomId(), m.getMeth(), m.getObj(), m.getUid(), false);
 			}
+			return true;
 		} else if (_m instanceof WsMessageWbFile) {
 			WsMessageWbFile m = (WsMessageWbFile)_m;
 			sendWbFile(m.getRoomId(), m.getWbId(), m.getRoomUid(), m.getFile(), m.getFileItem(), false);
-		} else {
-			WebSocketHelper.send(_m);
+			return true;
 		}
+		return false;
 	}
 
 	public static void sendWbAll(Long roomId, WbAction meth, JSONObject obj) {

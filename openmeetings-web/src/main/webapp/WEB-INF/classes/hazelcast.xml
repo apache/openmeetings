@@ -79,4 +79,8 @@
 			<interface>192.168.1.*</interface>
 		</interfaces>
 	</network-->
+	<properties>
+		<property name="hazelcast.logging.type">slf4j</property>
+		<property name="server.url">https://myhost:myport/ctx</property> <!-- MAKE SURE THIS PUBLIC SERVER ADDRESS, USE IP with care: certificate may be not valid for IP -->
+	</properties>
 </hazelcast>
