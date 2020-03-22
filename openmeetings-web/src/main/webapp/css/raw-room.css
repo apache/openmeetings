@@ -5,10 +5,6 @@
 }
 .room-block .sidebar .user-list .user .om-icon.user-status {
 	border-radius: 50%;
-	width: 14px;
-	height: 14px;
-	min-height: 14px;
-	margin-right: 2px;
 }
 .room-block .sidebar .user-list .user .om-icon.user-status.user {
 	background-color: var(--success);
@@ -47,7 +43,7 @@
 	padding: 5px 0 0 0;
 }
 .room-block .sidebar .tab i {
-	font-size: 2.2em;
+	font-size: 2.0em;
 	vertical-align: top;
 }
 html[dir="rtl"] .room-block .sidebar {
@@ -75,7 +71,7 @@ html[dir="rtl"] .room-block .sidebar {
 	height: 34px;
 }
 #room-sidebar-tab-users .header .om-icon::before {
-	font-size: 2.2em;
+	font-size: 2.0em;
 	line-height: 1.2em;
 }
 .room-block .sidebar .user-list {
@@ -103,7 +99,7 @@ html[dir="rtl"] .room-block .sidebar {
 .room-block .sidebar .user-list .user .user.actions {
 	display: none;
 }
-.room-block.small .sidebar .user-list .user:hover .user.actions {
+.room-block.narrow .sidebar .user-list .user:hover .user.actions {
 	margin-top: 84px;
 }
 .room-block .sidebar .user-list .user:hover .user.actions {
@@ -120,7 +116,7 @@ html[dir="rtl"] .room-block .sidebar {
 	margin-right: 20px;
 	overflow: hidden;
 }
-.room-block.small .sidebar .user-list .user.name {
+.room-block.narrow .sidebar .user-list .user.name {
 	display: none;
 }
 .room-block .sidebar .user-list .user .om-icon.audio-activity {
@@ -147,11 +143,16 @@ html[dir="rtl"] .room-block .sidebar {
 .room-block .sidebar.closed .tab-content .tab-pane {
 	display: none;
 }
+.om-icon.ulist-small {
+	width: 14px;
+	height: 14px;
+	min-height: 14px;
+	margin-right: 2px;
+	margin-left: unset;
+}
 .audio-activity.om-icon {
 	opacity: 0.2;
 	border-radius: 50%;
-	width: 14px;
-	height: 14px;
 	background-color: var(--success);
 	border: 1px solid var(--gray-dark);
 }
@@ -183,6 +184,50 @@ html[dir="rtl"] .room-block .sidebar {
 }
 .audio-activity.om-icon.speaking {
 	opacity: 1;
+}
+.om-icon.volume-control a:hover {
+	text-decoration: none;
+}
+.om-icon.volume-control a.volume-on::before {
+	content: "\f027";
+	font-size: 1.2em;
+	color: var(--secondary);
+}
+.om-icon.volume-control a.volume-off::before {
+	content: "\f6a9";
+	font-size: 1.2em;
+	color: var(--danger);
+}
+.om-icon.volume-control .dropdown-menu {
+	width: 20px;
+	min-width: 20px;
+	border-radius: 0;
+	border: 0;
+	box-shadow: initial;
+	background-color: transparent;
+}
+.om-icon.volume-control .dropdown-menu .slider {
+	border-radius: 0;
+	background-color: white;
+	border-color: var(--secondary);
+}
+.om-icon.volume-control .dropdown-menu .slider .ui-slider-range {
+	border-radius: 0;
+	background-color: var(--light);
+}
+.om-icon.volume-control .dropdown-menu .slider .handle {
+	border-radius: 0;
+	background-color: var(--light);
+	border-color: var(--secondary);
+	color: var(--secondary);
+}
+.user-video .om-icon.volume-control {
+	background-color: var(--white);
+	border: 1px solid var(--secondary);
+	margin:  0;
+	width: 20px;
+	height: 20px;
+	padding: 1px;
 }
 #room-sidebar-tab-users .header .om-icon i {
 	font-size: 1.2em;
@@ -296,16 +341,16 @@ html[dir="rtl"] .room-block .sidebar {
 	overflow: hidden;
 	white-space: nowrap;
 }
-.room-block.small .sidebar .tab.om-icon.big {
+.room-block.narrow .sidebar .tab.om-icon.big {
 	max-width: 40px;
 	width: 40px;
 	padding-right: 0;
 }
-.room-block.small .sidebar .tab.om-icon.big .label {
+.room-block.narrow .sidebar .tab.om-icon.big .label {
 	display: none;
 }
-.room-block.small .sidebar .file-tree .file.item .name
-	, .room-block.small .sidebar .file-tree .file.item .name span
+.room-block.narrow .sidebar .file-tree .file.item .name
+	, .room-block.narrow .sidebar .file-tree .file.item .name span
 {
 	width: 40px;
 }
@@ -313,9 +358,6 @@ html[dir="rtl"] .room-block .sidebar {
 	position: fixed;
 	bottom: 30px;
 	right: 30px;
-}
-.room-block.small .wait-moder {
-	font-size: 120%;
 }
 .room-block .wait-moder strong {
 	display: block;
@@ -547,7 +589,7 @@ html[dir="rtl"] .room-block .sidebar {
 	bottom: 0;
 }
 #quick-vote .control i::before {
-	font-size: 2.2em;
+	font-size: 2.0em;
 	line-height: 1.2em;
 }
 #quick-vote .control.pro i::before {

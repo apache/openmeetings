@@ -2,8 +2,7 @@
 var Video = (function() {
 	const self = {}
 		, AudioCtx = window.AudioContext || window.webkitAudioContext;
-	let sd, v, vc, t, f, size, vol, slider, handle, video, iceServers
-		, lastVolume = 50, muted = false
+	let sd, v, vc, t, f, size, vol, video, iceServers
 		, lm, level, userSpeaks = false, muteOthers;
 
 	function _resizeDlgArea(_w, _h) {
@@ -72,9 +71,7 @@ var Video = (function() {
 			navigator.mediaDevices.getUserMedia(cnts)
 				.then(function(stream) {
 					let _stream = stream;
-					__createVideo();
 					if (stream.getAudioTracks().length !== 0) {
-						vol.show();
 						lm = vc.find('.level-meter');
 						lm.show();
 						const data = {};
@@ -95,8 +92,7 @@ var Video = (function() {
 								_stream.addTrack(track);
 							});
 						}
-						video.data(data);
-						_handleVolume(lastVolume);
+						__createVideo(data);
 					}
 					callback(msg, cnts, _stream);
 				})
@@ -204,44 +200,6 @@ var Video = (function() {
 			t.removeClass('ui-state-highlight');
 		}
 	}
-	function _handleVolume(val) {
-		handle.text(val);
-		if (sd.self) {
-			const data = video.data();
-			if (data.gainNode) {
-				data.gainNode.gain.value = val / 100;
-			}
-		} else {
-			video[0].volume = val / 100;
-		}
-		const ico = vol.find('.ui-icon');
-		if (val > 0 && ico.hasClass('ui-icon-volume-off')) {
-			ico.toggleClass('ui-icon-volume-off ui-icon-volume-on');
-			vol.removeClass('ui-state-error');
-			_handleMicStatus(true);
-		} else if (val === 0 && ico.hasClass('ui-icon-volume-on')) {
-			ico.toggleClass('ui-icon-volume-on ui-icon-volume-off');
-			vol.addClass('ui-state-error');
-			_handleMicStatus(false);
-		}
-	}
-	function _mute(mute) {
-		if (!slider) {
-			return;
-		}
-		muted = mute;
-		if (mute) {
-			const val = slider.slider('option', 'value');
-			if (val > 0) {
-				lastVolume = val;
-			}
-			slider.slider('option', 'value', 0);
-			_handleVolume(0);
-		} else {
-			slider.slider('option', 'value', lastVolume);
-			_handleVolume(lastVolume);
-		}
-	}
 	function _initContainer(_id, name, opts) {
 		let contSel;
 		if (opts.interview) {
@@ -290,25 +248,7 @@ var Video = (function() {
 	}
 	function _initCamDialog() {
 		v.parent().find('.ui-dialog-titlebar-buttonpane')
-			.append($('#video-volume-btn').children().clone())
 			.append($('#video-refresh-btn').children().clone());
-		const volume = v.parent().find('.dropdown-menu.video.volume');
-		slider = v.parent().find('.slider');
-		vol = v.parent().find('.ui-dialog-titlebar-volume')
-			.on('mouseenter', function(e) {
-				e.stopImmediatePropagation();
-				volume.toggle();
-			})
-			.click(function(e) {
-				e.stopImmediatePropagation();
-				OmUtil.roomAction({action: 'mute', uid: sd.uid, mute: !muted});
-				_mute(!muted);
-				volume.hide();
-				return false;
-			}).dblclick(function(e) {
-				e.stopImmediatePropagation();
-				return false;
-			});
 		v.parent().find('.ui-dialog-titlebar-refresh')
 			.click(function(e) {
 				e.stopImmediatePropagation();
@@ -318,27 +258,10 @@ var Video = (function() {
 				e.stopImmediatePropagation();
 				return false;
 			});
-		volume.on('mouseleave', function() {
-			$(this).hide();
-		});
-		handle = v.parent().find('.slider .handle');
-		slider.slider({
-			orientation: 'vertical'
-			, range: 'min'
-			, min: 0
-			, max: 100
-			, value: lastVolume
-			, create: function() {
-				handle.text($(this).slider('value'));
-			}
-			, slide: function(event, ui) {
-				_handleVolume(ui.value);
-			}
-		});
-		vol.hide();
 	}
 	function _init(msg) {
 		sd = msg.stream;
+		vol = Volume();
 		iceServers = msg.iceServers;
 		sd.activities = sd.activities.sort();
 		size = {width: sd.width, height: sd.height};
@@ -401,7 +324,7 @@ var Video = (function() {
 			_refresh();
 		}
 	}
-	function __createVideo() {
+	function __createVideo(data) {
 		const _id = VideoUtil.getVid(sd.uid);
 		const hasVideo = VideoUtil.hasVideo(sd) || VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd);
 		_resizeDlgArea(hasVideo ? size.width : 120
@@ -409,6 +332,9 @@ var Video = (function() {
 		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 			.width(vc.width()).height(vc.height())
 			.prop('autoplay', true).prop('controls', false);
+		if (data) {
+			video.data(data);
+		}
 		if (hasVideo) {
 			vc.removeClass('audio-only').css('background-image', '');;
 			vc.parents('.ui-dialog').removeClass('audio-only');
@@ -418,14 +344,11 @@ var Video = (function() {
 			vc.addClass('audio-only').css('background-image', 'url(' + sd.user.pictureUri + ')');
 		}
 		vc.append(video);
-		if (vol) {
-			if (VideoUtil.hasAudio(sd)) {
-				vol.show();
-				_mute(muted);
-			} else {
-				vol.hide();
-				v.parent().find('.dropdown-menu.video.volume').hide();
-			}
+		if (VideoUtil.hasAudio(sd)) {
+			v.parent().find('.ui-dialog-titlebar-buttonpane')
+				.append(vol.create(self));
+		} else {
+			vol.destroy();
 		}
 	}
 	function _refresh(_msg) {
@@ -508,8 +431,12 @@ var Video = (function() {
 
 	self.update = _update;
 	self.refresh = _refresh;
-	self.mute = _mute;
-	self.isMuted = function() { return muted; };
+	self.mute = function(_mute) {
+		vol.mute(_mute);
+	};
+	self.isMuted = function() {
+		return vol.muted();
+	};
 	self.init = _init;
 	self.stream = function() { return sd; };
 	self.setRights = _setRights;
@@ -525,5 +452,9 @@ var Video = (function() {
 		});
 	};
 	self.reattachStream = _reattachStream;
+	self.video = function() {
+		return video;
+	};
+	self.handleMicStatus = _handleMicStatus;
 	return self;
 });

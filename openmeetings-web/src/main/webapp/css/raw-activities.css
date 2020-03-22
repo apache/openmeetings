@@ -3,9 +3,6 @@
 	height: var(--activities-height);
 	overflow: hidden;
 }
-.room-block.small #activities {
-	font-size: 120%;
-}
 #activities .ui-resizable-handle {
 	width: 100%;
 }

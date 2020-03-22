@@ -64,20 +64,26 @@
 	<div wicket:id="settings" />
 	<div hidden="hidden">
 		<div id="user-entry-stub" class="user entry clearfix" >
-			<span class="om-icon user-status align-right " wicket:message="data-mod:679,data-wb:678,data-user:677"></span>
+			<span class="om-icon ulist-small user-status align-right " wicket:message="data-mod:679,data-wb:678,data-user:677"></span>
 			<span class="align-right typing-activity">
 				<i class="fas fa-pen-fancy"></i>
 			</span>
 			<div class="user name"></div>
-			<span class="om-icon audio-activity" wicket:message="data-speaks:ulist.user.speaks,data-mute:ulist.user.muteothers"></span>
+			<span class="om-icon ulist-small audio-activity" wicket:message="data-speaks:ulist.user.speaks,data-mute:ulist.user.muteothers"></span>
 			<div class="user actions clearfix">
 			</div>
 		</div>
-		<div id="user-av-restart">
-			<span class="om-icon align-right restart clickable" wicket:message="title:lbl.refresh">
-				<i class="fas fa-sync-alt"></i>
-			</span>
-		</div>
+		<span id="volume-control-stub" class="om-icon dropdown dropright volume-control align-right">
+			<a class="fas volume-on" type="button" href="#" wicket:message="title:volume.label"></a>
+			<div class="dropdown-menu">
+				<div class="slider" wicket:message="title:volume.label">
+					<div class="ui-slider-handle handle"></div>
+				</div>
+			</div>
+		</span>
+		<span id="user-av-restart" class="om-icon align-right restart clickable" wicket:message="title:lbl.refresh">
+			<i class="fas fa-sync-alt"></i>
+		</span>
 		<div id="user-actions-stub">
 			<span class="om-icon align-left right camera clickable" wicket:message="data-request:ulist.right.video.request,data-revoke:ulist.right.video.revoke,data-grant:ulist.right.video.grant">
 				<i class="fas"></i>

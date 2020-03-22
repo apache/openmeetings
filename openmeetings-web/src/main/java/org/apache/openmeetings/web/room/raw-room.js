@@ -111,9 +111,9 @@ var Room = (function() {
 			, holder = $('.room-block');
 		($('.main.room')[0]).style.setProperty('--room-sidebar-width', sbW + 'px');
 		if (sbW > 285) {
-			holder.addClass('big').removeClass('small');
+			holder.addClass('big').removeClass('narrow');
 		} else {
-			holder.removeClass('big').addClass('small');
+			holder.removeClass('big').addClass('narrow');
 		}
 	}
 	function _reload() {
