@@ -57,14 +57,12 @@
 		</div>
 	</div>
 	<div hidden="hidden">
-		<div id="user-video">
+		<div id="user-video" class="video-container">
 			<div class="video">
 				<canvas width="10" class="level-meter" wicket:message="title:767"></canvas>
-				<div class="mute-others" wicket:message="title:video.muteothers"></div>
+				<div class="om-icon mute-others" wicket:message="title:video.muteothers"></div>
 			</div>
-			<div class="footer bg-warning">
-				<div class="on"><wicket:message key="video.mic.on"/></div>
-				<div class="off"><wicket:message key="video.mic.off"/></div>
+			<div class="footer" wicket:message="data-on:video.mic.on,data-off:video.mic.off">
 			</div>
 		</div>
 		<div id="video-refresh-btn">

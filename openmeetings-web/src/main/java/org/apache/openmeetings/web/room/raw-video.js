@@ -2,7 +2,7 @@
 var Video = (function() {
 	const self = {}
 		, AudioCtx = window.AudioContext || window.webkitAudioContext;
-	let sd, v, vc, t, f, size, vol, video, iceServers
+	let sd, v, vc, t, footer, size, vol, video, iceServers
 		, lm, level, userSpeaks = false, muteOthers;
 
 	function _resizeDlgArea(_w, _h) {
@@ -55,7 +55,7 @@ var Video = (function() {
 	}
 	function _getVideoStream(msg, callback) {
 		VideoSettings.constraints(sd, function(cnts) {
-			if ((VideoUtil.hasVideo(sd) && !cnts.video) || (VideoUtil.hasAudio(sd) && !cnts.audio)) {
+			if ((VideoUtil.hasCam(sd) && !cnts.video) || (VideoUtil.hasMic(sd) && !cnts.audio)) {
 				VideoManager.sendMessage({
 					id : 'devicesAltered'
 					, uid: sd.uid
@@ -71,10 +71,10 @@ var Video = (function() {
 			navigator.mediaDevices.getUserMedia(cnts)
 				.then(function(stream) {
 					let _stream = stream;
+					const data = {};
 					if (stream.getAudioTracks().length !== 0) {
 						lm = vc.find('.level-meter');
 						lm.show();
-						const data = {};
 						data.aCtx = new AudioCtx();
 						data.gainNode = data.aCtx.createGain();
 						data.analyser = data.aCtx.createAnalyser();
@@ -92,8 +92,8 @@ var Video = (function() {
 								_stream.addTrack(track);
 							});
 						}
-						__createVideo(data);
 					}
+					__createVideo(data);
 					callback(msg, cnts, _stream);
 				})
 				.catch(function(err) {
@@ -185,37 +185,44 @@ var Video = (function() {
 			});
 	}
 	function _handleMicStatus(state) {
-		if (!f || !f.is(':visible')) {
+		if (!footer || !footer.is(':visible')) {
 			return;
 		}
 		if (state) {
-			f.find('.off').hide();
-			f.find('.on').show();
-			f.addClass('ui-state-highlight');
-			t.addClass('ui-state-highlight');
+			footer.text(footer.data('on'));
+			footer.addClass('mic-on');
+			t.addClass('mic-on');
 		} else {
-			f.find('.off').show();
-			f.find('.on').hide();
-			f.removeClass('ui-state-highlight');
-			t.removeClass('ui-state-highlight');
+			footer.text(footer.data('off'));
+			footer.removeClass('mic-on');
+			t.removeClass('mic-on');
 		}
 	}
 	function _initContainer(_id, name, opts) {
+		const hasVideo = VideoUtil.hasVideo(sd);
 		let contSel;
-		if (opts.interview) {
-			const area = $('.pod-area');
-			const contId = uuidv4();
-			contSel = '#' + contId;
-			area.append($('<div class="pod"></div>').attr('id', contId));
-			WbArea.updateAreaClass();
+		if (hasVideo) {
+			if (opts.interview) {
+				const area = $('.pod-area');
+				const contId = uuidv4();
+				contSel = '#' + contId;
+				area.append($('<div class="pod"></div>').attr('id', contId));
+				WbArea.updateAreaClass();
+			} else {
+				contSel = '.room-block .room-container';
+			}
 		} else {
-			contSel = '.room-block .room-container';
+			contSel = '#user' + sd.cuid;
 		}
 		$(contSel).append(OmUtil.tmpl('#user-video', _id)
 				.attr('title', name)
 				.attr('data-client-uid', sd.cuid)
 				.attr('data-client-type', sd.type)
 				.data(self));
+		v = $('#' + _id);
+		vc = v.find('.video');
+		muteOthers = vc.find('.mute-others');
+		_setRights();
 		return contSel;
 	}
 	function _initDialog(v, opts) {
@@ -271,17 +278,20 @@ var Video = (function() {
 			, _h = sd.height
 			, isSharing = VideoUtil.isSharing(sd)
 			, isRecording = VideoUtil.isRecording(sd)
+			, hasVideo = VideoUtil.hasVideo(sd)
 			, opts = Room.getOptions();
 		sd.self = sd.cuid === opts.uid;
 		const contSel = _initContainer(_id, name, opts);
-		v = $('#' + _id);
-		f = v.find('.footer');
+		footer = v.find('.footer');
+		if (!opts.showMicStatus) {
+			footer.hide();
+		}
 		if (!sd.self && isSharing) {
 			Sharer.close();
 		}
 		if (sd.self && (isSharing || isRecording)) {
 			v.hide();
-		} else {
+		} else if (hasVideo) {
 			v.dialog({
 				classes: {
 					'ui-dialog': 'ui-corner-all video user-video' + (opts.showMicStatus ? ' mic-status' : '')
@@ -296,14 +306,14 @@ var Video = (function() {
 			});
 			_initDialog(v, opts);
 		}
-		if (!isSharing && !isRecording) {
+		if (hasVideo && !isSharing && !isRecording) {
 			_initCamDialog();
 		}
 		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
 		v.on('remove', _cleanup);
-		vc = v.find('.video');
-		vc.width(_w).height(_h);
-		muteOthers = vc.find('.mute-others');
+		if (hasVideo) {
+			vc.width(_w).height(_h);
+		}
 
 		_refresh(msg);
 
@@ -317,8 +327,11 @@ var Video = (function() {
 		sd.activities = _c.activities.sort();
 		sd.user.firstName = _c.user.firstName;
 		sd.user.lastName = _c.user.lastName;
-		const name = sd.user.displayName;
-		v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
+		const name = sd.user.displayName
+			, hasVideo = VideoUtil.hasVideo(sd);
+		if (hasVideo) {
+			v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
+		}
 		const same = prevA.length === sd.activities.length && prevA.every(function(value, index) { return value === sd.activities[index]})
 		if (sd.self && !same) {
 			_refresh();
@@ -326,7 +339,7 @@ var Video = (function() {
 	}
 	function __createVideo(data) {
 		const _id = VideoUtil.getVid(sd.uid);
-		const hasVideo = VideoUtil.hasVideo(sd) || VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd);
+		const hasVideo = VideoUtil.hasVideo(sd);
 		_resizeDlgArea(hasVideo ? size.width : 120
 			, hasVideo ? size.height : 90);
 		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
@@ -340,13 +353,17 @@ var Video = (function() {
 			vc.parents('.ui-dialog').removeClass('audio-only');
 			video.attr('poster', sd.user.pictureUri);
 		} else {
-			vc.parents('.ui-dialog').addClass('audio-only');
-			vc.addClass('audio-only').css('background-image', 'url(' + sd.user.pictureUri + ')');
+			vc.addClass('audio-only');
 		}
 		vc.append(video);
-		if (VideoUtil.hasAudio(sd)) {
-			v.parent().find('.ui-dialog-titlebar-buttonpane')
-				.append(vol.create(self));
+		if (VideoUtil.hasMic(sd)) {
+			const volIco = vol.create(self)
+			if (hasVideo) {
+				v.parent().find('.ui-dialog-titlebar-buttonpane').append(volIco);
+			} else {
+				volIco.addClass('ulist-small');
+				volIco.insertAfter('#user' + sd.cuid + ' .typing-activity');
+			}
 		} else {
 			vol.destroy();
 		}
@@ -354,7 +371,7 @@ var Video = (function() {
 	function _refresh(_msg) {
 		const msg = _msg || {iceServers: iceServers};
 		_cleanup();
-		const hasAudio = VideoUtil.hasAudio(sd);
+		const hasAudio = VideoUtil.hasMic(sd);
 		if (sd.self) {
 			_createSendPeer(msg);
 			_handleMicStatus(hasAudio);
@@ -363,7 +380,7 @@ var Video = (function() {
 		}
 	}
 	function _setRights() {
-		if (Room.hasRight(['MUTE_OTHERS']) && VideoUtil.hasAudio(sd)) {
+		if (Room.hasRight(['MUTE_OTHERS']) && VideoUtil.hasMic(sd)) {
 			muteOthers.addClass('enabled').click(function() {
 				VideoManager.clickMuteOthers(sd.uid);
 			});

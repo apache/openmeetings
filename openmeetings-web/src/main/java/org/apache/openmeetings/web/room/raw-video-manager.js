@@ -143,7 +143,7 @@ var VideoManager = (function() {
 				return;
 			}
 			const _id = VideoUtil.getVid(sd.uid)
-				, av = VideoUtil.hasAudio(sd) || VideoUtil.hasVideo(sd)
+				, av = VideoUtil.hasMic(sd) || VideoUtil.hasCam(sd)
 				, v = $('#' + _id);
 			if (av && v.length === 1) {
 				v.data().update(sd);

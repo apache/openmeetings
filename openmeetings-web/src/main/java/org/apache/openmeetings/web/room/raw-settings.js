@@ -250,7 +250,7 @@ var VideoSettings = (function() {
 	function _constraints(sd, callback) {
 		_getDevConstraints(function(devCnts){
 			const cnts = {};
-			if (devCnts.video && false === o.audioOnly && VideoUtil.hasVideo(sd) && s.video.cam > -1) {
+			if (devCnts.video && false === o.audioOnly && VideoUtil.hasCam(sd) && s.video.cam > -1) {
 				cnts.video = {
 					frameRate: o.camera.fps
 				};
@@ -263,7 +263,7 @@ var VideoSettings = (function() {
 			} else {
 				cnts.video = false;
 			}
-			if (devCnts.audio && VideoUtil.hasAudio(sd) && s.video.mic > -1) {
+			if (devCnts.audio && VideoUtil.hasMic(sd) && s.video.mic > -1) {
 				cnts.audio = {
 					sampleRate: o.microphone.rate
 					, echoCancellation: o.microphone.echo

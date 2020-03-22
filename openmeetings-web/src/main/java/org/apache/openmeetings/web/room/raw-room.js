@@ -51,7 +51,7 @@ var Room = (function() {
 		const vw = $('#video' + Room.getOptions().uid);
 		if (vw.length > 0) {
 			const v = vw.data();
-			if (VideoUtil.hasAudio(v.stream())) {
+			if (VideoUtil.hasMic(v.stream())) {
 				return v;
 			}
 		}
@@ -366,8 +366,8 @@ var Room = (function() {
 	function _updateClient(c) {
 		const self = c.uid === options.uid
 			, le = $('#user' + c.uid)
-			, hasAudio = VideoUtil.hasAudio(c)
-			, hasVideo = VideoUtil.hasVideo(c)
+			, hasAudio = VideoUtil.hasMic(c)
+			, hasVideo = VideoUtil.hasCam(c)
 			, speaks = le.find('.audio-activity');
 		if (le.length === 0) {
 			return;

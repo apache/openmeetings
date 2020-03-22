@@ -78,33 +78,32 @@ html[dir="rtl"] .room-block .sidebar {
 	overflow-y: auto;
 	height: calc(100% - var(--room-sidebar-header-height) - var(--buffer-size));
 }
-.room-block .sidebar .user-list .user {
-	min-height: 40px;
+.room-block .sidebar .user-list .user.entry {
+	min-height: 60px;
 	padding-left: 5px;
 	padding-top: 5px;
-	background-size: 40px 40px;
+	background-size: 60px 60px;
 	background-repeat: no-repeat;
 	background-position: 2px 2px;
 	position: relative;
 }
-.room-block .sidebar .user-list .user:hover {
+.room-block .sidebar .user-list .user.entry:hover {
 	background-size: 80px 80px;
 	min-height: 80px;
 }
-.room-block .sidebar .user-list .user:hover .user.name {
+.room-block .sidebar .user-list .user.entry:hover .user.name {
 	padding: 0;
 	margin-top: 84px;
 	min-height: 18px;
 }
-.room-block .sidebar .user-list .user .user.actions {
+.room-block .sidebar .user-list .user.entry .user.actions {
 	display: none;
 }
-.room-block.narrow .sidebar .user-list .user:hover .user.actions {
+.room-block.narrow .sidebar .user-list .user.entry:hover .user.actions {
 	margin-top: 84px;
 }
-.room-block .sidebar .user-list .user:hover .user.actions {
+.room-block .sidebar .user-list .user.entry:hover .user.actions {
 	display: block;
-	min-height: 18px;
 	padding: 0;
 	margin-right: 35px;
 }
@@ -119,10 +118,30 @@ html[dir="rtl"] .room-block .sidebar {
 .room-block.narrow .sidebar .user-list .user.name {
 	display: none;
 }
-.room-block .sidebar .user-list .user .om-icon.audio-activity {
+.room-block .sidebar .user-list .user.entry .om-icon.audio-activity {
 	position: absolute;
 	bottom: 2px;
 	right: 2px;
+}
+.user-list .user.entry:hover .video-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.user-list .user.entry:hover .video-container
+, .user-list .user.entry:hover .video-container .video.audio-only
+{
+	width: 80px;
+	height: 80px;
+}
+.user-list .user.entry .video-container
+, .user-list .user.entry .video-container .video.audio-only
+{
+	width: 50px;
+	height: 50px;
+}
+.user-list .user.entry .video-container .footer {
+	display: none !important;
 }
 .room-block .sidebar .icon-undock, .room-block .sidebar .icon-dock {
 	font-size: 1.6em;
@@ -236,7 +255,7 @@ html[dir="rtl"] .room-block .sidebar {
 	position: absolute;
 	bottom: 1px;
 	right: 1px;
-	font-size: .8em;
+	font-size: .6em;
 }
 .right.om-icon i::before {
 	color: var(--success);
@@ -270,7 +289,7 @@ html[dir="rtl"] .room-block .sidebar {
 .right.mute-others.om-icon::before {
 	content: '\f6a9';
 }
-.room-block .sidebar .user-list .user .kick i {
+.room-block .sidebar .user-list .user.entry .kick i {
 	font-size: 1.5em;
 }
 .settings.om-icon::before {
@@ -295,7 +314,7 @@ html[dir="rtl"] .room-block .sidebar {
 	content: '\f131';
 	color: var(--warning);
 }
-.room-block .sidebar .user-list .user.current {
+.room-block .sidebar .user-list .user.entry.current {
 	font-weight: bold;
 	background-color: var(--light);
 }
@@ -365,6 +384,9 @@ html[dir="rtl"] .room-block .sidebar {
 }
 
 /************ VIDEO **************/
+.mic-on {
+	background-color: var(--warning);
+}
 .ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .ui-dialog-content {
 	padding: 0;
 }
@@ -377,7 +399,7 @@ html[dir="rtl"] .room-block .sidebar {
 .ui-dialog.video.user-video.user-speaks {
 	box-shadow: 3px 3px 4px green;
 }
-.ui-dialog.user-video .level-meter {
+.video-container .level-meter {
 	display: inline-block;
 	position: absolute;
 	bottom: 5px;
@@ -640,6 +662,18 @@ html[dir="rtl"] .room-block .sidebar {
 	z-index: 2;
 	display: none;
 }
+.video.audio-only .mute-others {
+	top: calc(50% - 16px);
+	left: calc(50% - 10px);
+	width: 32px;
+	height: 32px;
+}
+.video .mute-others::before {
+	content: '\f3c9';
+	color: var(--warning);
+	line-height: 1em;
+	font-size: 2.5em;
+}
 .video:hover .mute-others.enabled {
 	display: block;
 }
@@ -658,7 +692,7 @@ html[dir="rtl"] .room-block .sidebar {
 	height: 100% !important;
 	width: 100% !important;
 }
-.user-video.ui-dialog .ui-dialog-content .video .level-meter {
+.video-container .video .level-meter {
 	height: calc(100% - 10px) !important;
 }
 .user-video.ui-dialog .ui-dialog-content .footer {

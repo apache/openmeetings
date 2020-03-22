@@ -17,11 +17,14 @@ var VideoUtil = (function() {
 	function _isRecording(sd) {
 		return !!sd && 'SCREEN' === sd.type && sd.activities.includes(REC_ACTIVITY);
 	}
-	function _hasAudio(sd) {
+	function _hasMic(sd) {
 		return !sd || sd.activities.includes(MIC_ACTIVITY);
 	}
-	function _hasVideo(sd) {
+	function _hasCam(sd) {
 		return !sd || sd.activities.includes(CAM_ACTIVITY);
+	}
+	function _hasVideo(sd) {
+		return _hasCam(sd) || _isSharing(sd) || _isRecording(sd);
 	}
 	function _getRects(sel, excl) {
 		const list = [], elems = $(sel);
@@ -137,7 +140,9 @@ var VideoUtil = (function() {
 		return b.name === 'Edge';
 	}
 	function _setPos(v, pos) {
-		v.dialog('widget').css(pos);
+		if (v.dialog('instance')) {
+			v.dialog('widget').css(pos);
+		}
 	}
 	function _askPermission(callback) {
 		const perm = $('#ask-permission');
@@ -190,7 +195,8 @@ var VideoUtil = (function() {
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
 	self.isRecording = _isRecording;
-	self.hasAudio = _hasAudio;
+	self.hasMic = _hasMic;
+	self.hasCam = _hasCam;
 	self.hasVideo = _hasVideo;
 	self.getRects = _getRects;
 	self.getPos = _getPos;
@@ -275,7 +281,7 @@ var Volume = (function() {
 		});
 		_handle(lastVolume);
 		_mute(muted);
-		return vol.hide();
+		return vol;
 	}
 	function _handle(val) {
 		handleEl.text(val);
@@ -323,7 +329,10 @@ var Volume = (function() {
 			return muted;
 		}
 		, destroy: function() {
-			vol.remove();
+			if (vol) {
+				vol.remove();
+				vol = null;
+			}
 		}
 	};
 });
