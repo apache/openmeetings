@@ -576,7 +576,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				DocumentConverter.createOfficeManager(officePath.getValue(), null);
 				reportSuccess(officePath);
 			} catch (Exception ex) {
-				officePath.error(err = ex.getMessage().replaceAll(REGEX, ""));
+				String msg = ex.getMessage();
+				officePath.error(err = (msg == null ? "" : msg.replaceAll(REGEX, "")));
 			}
 			return err.isEmpty();
 		}
