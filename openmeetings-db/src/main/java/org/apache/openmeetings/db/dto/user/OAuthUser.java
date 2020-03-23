@@ -95,7 +95,11 @@ public class OAuthUser implements Serializable {
 	}
 
 	private static JSONObject getJSON(String str, String prop) {
-		JSONObject json = new JSONObject(str);
+		JSONObject res = getJSON(new JSONObject(str), prop);
+		return res == null ? new JSONObject() : res;
+	}
+
+	private static JSONObject getJSON(JSONObject json, String prop) {
 		if (json.has(prop)) {
 			return json;
 		}
@@ -107,17 +111,19 @@ public class OAuthUser implements Serializable {
 				//Assuming here array consist of objects
 				for (int i = 0; i < ja.length(); ++i) {
 					JSONObject jao = ja.getJSONObject(i);
-					if (jao.has(prop)) {
-						return jao;
+					JSONObject res = getJSON(jao, prop);
+					if (res != null) {
+						return res;
 					}
 				}
 			} else if (o instanceof JSONObject) {
 				JSONObject jo = (JSONObject)o;
-				if (jo.has(prop)) {
-					return jo;
+				JSONObject res = getJSON(jo, prop);
+				if (res != null) {
+					return res;
 				}
 			}
 		}
-		return new JSONObject();
+		return null;
 	}
 }
