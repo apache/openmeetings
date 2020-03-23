@@ -136,7 +136,7 @@ public class TestOAuthUser {
 				"        }\n" +
 				"    }\n" +
 				"}", server);
-		assertEquals("xxxxx", user.getLogin(), "Login should be correct");
+		assertEquals("Login should be correct", "xxxxx", user.getLogin());
 	}
 
 	@Test
