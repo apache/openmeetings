@@ -146,8 +146,6 @@ public class TestInstall {
 		checkErrors(tester, 0);
 		wizardTester.setValue("view:docDpi", "150");
 		wizardTester.setValue("view:docQuality", "90");
-		log.info("Checking tester is null ? {}", (tester == null));
-		log.info("Checking next is null ? {}", (next == null));
 		tester.executeBehavior(next); //crypt step
 		// not checking errors
 		if (countErrors(tester) > 0) {
