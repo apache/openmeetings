@@ -61,6 +61,8 @@ import org.apache.openmeetings.web.pages.BaseInitedPage;
 import org.apache.openmeetings.web.room.IconTextModal;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.IRequestParameters;
@@ -209,6 +211,16 @@ public class SignInPage extends BaseInitedPage {
 				.addButton(OmModalCloseButton.of("54"))
 				.setUseCloseHandler(true)
 		);
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(OnDomReadyHeaderItem.forScript(""
+				+ "$('#signin-dialog, #register-dialog, #forget-dialog').on('shown.bs.modal', function () {\n"
+				+ "	$(this).find('.auto-focus').trigger('focus');\n"
+				+ "})"
+				));
 	}
 
 	boolean allowRegister() {

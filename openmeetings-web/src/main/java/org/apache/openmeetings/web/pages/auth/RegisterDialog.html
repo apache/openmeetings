@@ -23,8 +23,22 @@
 <wicket:extend>
 	<form wicket:id="form">
 		<div class="row form-group no-gutters">
-			<div class="col-6"><input wicket:id="firstName" type="text" wicket:message="placeholder:117" value=""/></div>
-			<div class="col-6"><input wicket:id="lastName" type="text" wicket:message="placeholder:136" value=""/></div>
+			<div class="col-6">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-user"></i></span>
+					</div>
+					<input wicket:id="firstName" class="form-control auto-focus" type="text" wicket:message="placeholder:117" value=""/>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-user"></i></span>
+					</div>
+					<input wicket:id="lastName" class="form-control" type="text" wicket:message="placeholder:136" value=""/>
+				</div>
+			</div>
 		</div>
 		<div class="row form-group no-gutters">
 			<div class="col-6">
@@ -32,7 +46,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="fa fa-user"></i></span>
 					</div>
-					<input wicket:id="login" type="text" wicket:message="placeholder:114" value=""/>
+					<input wicket:id="login" class="form-control" type="text" wicket:message="placeholder:114" value=""/>
 				</div>
 			</div>
 			<div class="col-6">
@@ -40,7 +54,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="fa fa-at"></i></span>
 					</div>
-					<input wicket:id="email" type="email" wicket:message="placeholder:119" value=""/>
+					<input wicket:id="email" class="form-control" type="email" wicket:message="placeholder:119" value=""/>
 				</div>
 			</div>
 		</div>
@@ -50,7 +64,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="fa fa-lock"></i></span>
 					</div>
-					<input wicket:id="password" type="password" wicket:message="placeholder:110" value=""/>
+					<input wicket:id="password" class="form-control" type="password" wicket:message="placeholder:110" value=""/>
 				</div>
 			</div>
 			<div class="col-6">
@@ -58,7 +72,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="fa fa-lock"></i></span>
 					</div>
-					<input wicket:id="confirmPassword" type="password" wicket:message="placeholder:116" value=""/>
+					<input wicket:id="confirmPassword" class="form-control" type="password" wicket:message="placeholder:116" value=""/>
 				</div>
 			</div>
 		</div>
