@@ -20,7 +20,6 @@ package org.apache.openmeetings.db.manager;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.openmeetings.db.entity.basic.Client;
 
@@ -33,12 +32,4 @@ public interface IClientManager {
 	Collection<Client> listByUser(Long userId);
 	Client update(Client c);
 	void exit(Client c);
-
-
-	/**
-	 * Get a list of all rooms with users in the system.
-	 *
-	 * @return a set, a roomId can be only one time in this list
-	 */
-	Set<Long> getActiveRoomIds();
 }

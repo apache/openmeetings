@@ -29,7 +29,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -176,11 +175,6 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 				.setParameter("start", startCal.getTime())
 				.setParameter("end", endCal.getTime())
 				.getResultList();
-	}
-
-	public long getRoomsCapacityByIds(Collection<Long> ids) {
-		return ids == null || ids.isEmpty() ? 0L
-			: em.createNamedQuery("getRoomsCapacityByIds", Long.class).setParameter("ids", ids).getSingleResult();
 	}
 
 	private String getSipNumber(long roomId) {

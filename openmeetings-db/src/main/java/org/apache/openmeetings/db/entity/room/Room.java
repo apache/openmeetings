@@ -84,7 +84,6 @@ import org.apache.openmeetings.db.entity.user.Group;
 @NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.id IN :ids")
 @NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false")
 @NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.id")
-@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.capacity) FROM Room r WHERE r.deleted = false AND r.id IN :ids")
 @NamedQuery(name = "getGroupRooms", query = "SELECT DISTINCT rg.room FROM RoomGroup rg LEFT JOIN FETCH rg.room "
 		+ "WHERE rg.group.id = :groupId AND rg.room.deleted = false AND rg.room.appointment = false "
 		+ "ORDER BY rg.room.name ASC")

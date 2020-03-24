@@ -35,7 +35,6 @@ import static org.wicketstuff.dashboard.DashboardContextInitializer.DASHBOARD_CO
 import java.io.File;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -159,6 +158,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private static final String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
 	private static final String SERVER_CONTAINER_SERVLET_CONTEXT_ATTRIBUTE = "javax.websocket.server.ServerContainer";
 	public static final String NAME_ATTR_KEY = "name";
+	public static final String SERVER_URL_ATTR_KEY = "server.url";
 	//additional maps for faster searching should be created
 	private static final Set<String> STRINGS_WITH_APP = new HashSet<>();
 	private static String appName;
@@ -171,6 +171,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static final String NOTINIT_MAPPING = "/notinited";
 	final HazelcastInstance hazelcast = Hazelcast.getOrCreateHazelcastInstance(new XmlConfigBuilder().build());
 	private ITopic<IClusterWsMessage> hazelWsTopic;
+	private String serverId;
 
 	@Autowired
 	private ApplicationContext ctx;
@@ -194,11 +195,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this, ctx, true));
 
-		hazelcast.getCluster().getLocalMember().setStringAttribute(NAME_ATTR_KEY, hazelcast.getName());
+		serverId = hazelcast.getName();
+		hazelcast.getCluster().getLocalMember().setStringAttribute(NAME_ATTR_KEY, serverId);
+		hazelcast.getCluster().getMembers().forEach(m -> {
+			cm.serverAdded(m.getStringAttribute(NAME_ATTR_KEY), m.getStringAttribute(SERVER_URL_ATTR_KEY));
+		});
 		hazelWsTopic = hazelcast.getTopic("default");
 		hazelWsTopic.addMessageListener(msg -> {
-			String serverId = msg.getPublishingMember().getStringAttribute(NAME_ATTR_KEY);
-			if (serverId.equals(hazelcast.getName())) {
+			String mServerId = msg.getPublishingMember().getStringAttribute(NAME_ATTR_KEY);
+			if (mServerId.equals(serverId)) {
 				return;
 			}
 			IClusterWsMessage wsMsg = msg.getMessageObject();
@@ -210,23 +215,18 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			}
 			WebSocketHelper.send(msg.getMessageObject());
 		});
-		//FIXME TODO hazelcast.getConfig().getProperties().getProperty("server.url")
 		hazelcast.getCluster().addMembershipListener(new MembershipListener() {
 			@Override
 			public void memberRemoved(MembershipEvent evt) {
 				//server down, need to remove all online clients, process persistent addresses
 				String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
-				cm.clean(serverId);
+				cm.serverRemoved(serverId);
 				updateJpaAddresses();
 			}
 
 			@Override
 			public void memberAttributeChanged(MemberAttributeEvent evt) {
 				//no-op
-			}
-
-			@Override
-			public void memberAdded(MembershipEvent evt) {
 				//server added, need to process persistent addresses
 				updateJpaAddresses();
 				//check for duplicate instance-names
@@ -238,10 +238,17 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					String serverId = m.getStringAttribute(NAME_ATTR_KEY);
 					names.add(serverId);
 				}
-				String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
-				if (names.contains(serverId)) {
-					log.warn("Duplicate cluster instance with name {} found {}", serverId, evt.getMember());
+				String newServerId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
+				log.warn("Name added: {}", newServerId);
+				cm.serverAdded(newServerId, evt.getMember().getStringAttribute(SERVER_URL_ATTR_KEY));
+				if (names.contains(newServerId)) {
+					log.warn("Duplicate cluster instance with name {} found {}", newServerId, evt.getMember());
 				}
+			}
+
+			@Override
+			public void memberAdded(MembershipEvent evt) {
+				//no-op due to name is not set
 			}
 		});
 		setPageManagerProvider(new DefaultPageManagerProvider(this) {
@@ -615,11 +622,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	@Override
 	public String getServerId() {
-		return hazelcast.getName();
-	}
-
-	public List<Member> getServers() {
-		return new ArrayList<>(hazelcast.getCluster().getMembers());
+		return serverId;
 	}
 
 	@Override

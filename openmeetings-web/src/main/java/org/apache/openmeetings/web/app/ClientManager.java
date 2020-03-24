@@ -20,12 +20,14 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
@@ -34,10 +36,10 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.apache.openmeetings.core.remote.KurentoHandler;
-import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
@@ -59,9 +61,11 @@ public class ClientManager implements IClientManager {
 	private static final Logger log = LoggerFactory.getLogger(ClientManager.class);
 	private static final String ROOMS_KEY = "ROOMS_KEY";
 	private static final String ONLINE_USERS_KEY = "ONLINE_USERS_KEY";
+	private static final String SERVERS_KEY = "SERVERS_KEY";
 	private static final String UID_BY_SID_KEY = "UID_BY_SID_KEY";
 	private final Map<String, Client> onlineClients = new ConcurrentHashMap<>();
 	private final Map<Long, Set<String>> onlineRooms = new ConcurrentHashMap<>();
+	private final Map<String, ServerInfo> onlineServers = new ConcurrentHashMap<>();
 
 	@Autowired
 	private ConferenceLogDao confLogDao;
@@ -82,10 +86,22 @@ public class ClientManager implements IClientManager {
 		return app.hazelcast.getMap(ROOMS_KEY);
 	}
 
+	private IMap<String, ServerInfo> servers() {
+		return app.hazelcast.getMap(SERVERS_KEY);
+	}
+
 	@PostConstruct
 	void init() {
 		map().addEntryListener(new ClientListener(), true);
 		rooms().addEntryListener(new RoomListener(), true);
+		servers().addEntryListener(new EntryUpdatedListener<String, ServerInfo>() {
+
+			@Override
+			public void entryUpdated(EntryEvent<String, ServerInfo> event) {
+				log.trace("ServerListener::Update");
+				onlineServers.put(event.getKey(), event.getValue());
+			}
+		}, true);
 	}
 
 	public void add(Client c) {
@@ -162,18 +178,21 @@ public class ClientManager implements IClientManager {
 		}
 	}
 
-	public void clean(String serverId) {
+	public void serverAdded(String serverId, String url) {
+		ServerInfo si = new ServerInfo(url);
+		servers().put(serverId, si);
+		onlineServers.put(serverId, si);
+	}
+
+	public void serverRemoved(String serverId) {
 		Map<String, Client> clients = map();
 		for (Map.Entry<String, Client> e : clients.entrySet()) {
 			if (serverId.equals(e.getValue().getServerId())) {
 				exit(e.getValue());
 			}
 		}
-	}
-
-	@Override
-	public Set<Long> getActiveRoomIds() {
-		return onlineRooms.keySet();
+		servers().remove(serverId);
+		onlineServers.remove(serverId);
 	}
 
 	/**
@@ -183,7 +202,8 @@ public class ClientManager implements IClientManager {
 	 * @return count of users in room _after_ adding
 	 */
 	public int addToRoom(Client c) {
-		Long roomId = c.getRoom().getId();
+		Room r = c.getRoom();
+		Long roomId = r.getId();
 		confLogDao.add(
 				ConferenceLog.Type.ROOM_ENTER
 				, c.getUserId(), "0", roomId
@@ -199,6 +219,16 @@ public class ClientManager implements IClientManager {
 		rooms.put(roomId, set);
 		onlineRooms.put(roomId, set);
 		rooms.unlock(roomId);
+		String serverId = c.getServerId();
+		if (!onlineServers.get(serverId).getRooms().contains(roomId)) {
+			IMap<String, ServerInfo> servers = servers();
+			servers.lock(serverId);
+			ServerInfo si = servers.get(serverId);
+			si.add(r);
+			servers.put(serverId, si);
+			onlineServers.put(serverId, si);
+			servers.unlock(serverId);
+		}
 		update(c);
 		return count;
 	}
@@ -216,6 +246,16 @@ public class ClientManager implements IClientManager {
 				onlineRooms.put(roomId, clients);
 			}
 			rooms.unlock(roomId);
+			if (clients == null || clients.isEmpty()) {
+				String serverId = c.getServerId();
+				IMap<String, ServerInfo> servers = servers();
+				servers.lock(serverId);
+				ServerInfo si = servers.get(serverId);
+				si.remove(c.getRoom());
+				servers.put(serverId, si);
+				onlineServers.put(serverId, si);
+				servers.unlock(serverId);
+			}
 			kHandler.leaveRoom(c);
 			c.setRoom(null);
 			c.clear();
@@ -306,6 +346,24 @@ public class ClientManager implements IClientManager {
 		}
 	}
 
+	public String getServerUrl(Long roomId) {
+		if (roomId == null || onlineServers.size() == 1) {
+			return null;
+		}
+		final String curServerId = app.getServerId();
+		Optional<Map.Entry<String, ServerInfo>> existing = onlineServers.entrySet().stream()
+				.filter(e -> e.getValue().getRooms().contains(roomId))
+				.findFirst();
+		if (existing.isPresent()) {
+			String serverId = existing.get().getKey();
+			return curServerId.equals(serverId) ? null : existing.get().getValue().getUrl();
+		}
+		Optional<Map.Entry<String, ServerInfo>> min = onlineServers.entrySet().stream()
+				.min((e1, e2) -> e1.getValue().getCapacity() - e2.getValue().getCapacity());
+		String serverId = min.get().getKey();
+		return curServerId.equals(serverId) ? null : min.get().getValue().getUrl();
+	}
+
 	public class ClientListener implements
 			EntryAddedListener<String, Client>
 			, EntryUpdatedListener<String, Client>
@@ -358,6 +416,41 @@ public class ClientManager implements IClientManager {
 		public void entryRemoved(EntryEvent<Long, Set<String>> event) {
 			log.trace("RoomListener::Remove");
 			onlineRooms.remove(event.getKey(), event.getValue());
+		}
+	}
+
+	private static class ServerInfo implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private int capacity = 0;
+		private final String url;
+		private final Set<Long> rooms = new HashSet<>();
+
+		public ServerInfo(String url) {
+			this.url = url;
+		}
+
+		public void add(Room r) {
+			if (rooms.add(r.getId())) {
+				capacity += r.getCapacity();
+			}
+		}
+
+		public void remove(Room r) {
+			if (rooms.remove(r.getId())) {
+				capacity -= r.getCapacity();
+			}
+		}
+
+		public String getUrl() {
+			return url;
+		}
+
+		public int getCapacity() {
+			return capacity;
+		}
+
+		public Set<Long> getRooms() {
+			return rooms;
 		}
 	}
 }

@@ -58,7 +58,17 @@
 			<cache-local-entries>true</cache-local-entries>
 		</near-cache>
 	</map>
+	<map name="SERVERS_KEY">
+		<near-cache>
+			<eviction eviction-policy="NONE"/>
+			<in-memory-format>OBJECT</in-memory-format>
+			<cache-local-entries>true</cache-local-entries>
+		</near-cache>
+	</map>
 	<instance-name>server-1</instance-name><!-- MAKE SURE THIS ONE IS UNIQUE -->
+	<member-attributes>
+		<attribute name="server.url">https://127.0.0.1:5443/openmeetings</attribute><!-- MAKE SURE THIS PUBLIC SERVER ADDRESS, USE IP with care: certificate may be not valid for IP -->
+	</member-attributes>
 	<network>
 		<join>
 			<multicast enabled="false"/>
@@ -81,6 +91,5 @@
 	</network-->
 	<properties>
 		<property name="hazelcast.logging.type">slf4j</property>
-		<property name="server.url">https://myhost:myport/ctx</property> <!-- MAKE SURE THIS PUBLIC SERVER ADDRESS, USE IP with care: certificate may be not valid for IP -->
 	</properties>
 </hazelcast>

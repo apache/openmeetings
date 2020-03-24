@@ -40,6 +40,7 @@ import org.apache.openmeetings.web.admin.oauth.OAuthPanel;
 import org.apache.openmeetings.web.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.admin.users.UsersPanel;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.user.calendar.CalendarPanel;
@@ -47,6 +48,7 @@ import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
 import org.apache.openmeetings.web.user.profile.SettingsPanel;
 import org.apache.openmeetings.web.user.record.RecordingsPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 
 public class OmUrlFragment implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -253,6 +255,7 @@ public class OmUrlFragment implements Serializable {
 					Long roomId = Long.valueOf(type);
 					Room r = Application.get().getBean(RoomDao.class).get(roomId);
 					if (r != null) {
+						moveToServer(roomId);
 						basePanel = new RoomPanel(CHILD_ID, r);
 					}
 				} catch(NumberFormatException ne) {
@@ -288,5 +291,15 @@ public class OmUrlFragment implements Serializable {
 
 	public String getLink() {
 		return getBaseUrl() + "#" + getArea().name() + "/" + getType();
+	}
+
+	private static void moveToServer(Long roomId) {
+		if (roomId == null) {
+			return;
+		}
+		String url = Application.get().getBean(ClientManager.class).getServerUrl(roomId);
+		if (url != null) {
+			throw new RedirectToUrlException(url);
+		}
 	}
 }
