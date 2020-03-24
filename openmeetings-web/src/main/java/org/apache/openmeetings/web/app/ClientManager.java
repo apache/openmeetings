@@ -358,28 +358,31 @@ public class ClientManager implements IClientManager {
 		}
 	}
 
-	public String getServerUrl(Room r) {
-		if (onlineServers.size() == 1) {
-			return null;
-		}
+	private String getServerUrl(Map.Entry<String, ServerInfo> e, Room r) {
 		final String curServerId = app.getServerId();
-		Optional<Map.Entry<String, ServerInfo>> existing = onlineServers.entrySet().stream()
-				.filter(e -> e.getValue().getRooms().contains(r.getId()))
-				.findFirst();
-		if (existing.isPresent()) {
-			String serverId = existing.get().getKey();
-			return curServerId.equals(serverId) ? null : existing.get().getValue().getUrl();
-		}
-		Optional<Map.Entry<String, ServerInfo>> min = onlineServers.entrySet().stream()
-				.min((e1, e2) -> e1.getValue().getCapacity() - e2.getValue().getCapacity());
-		String serverId = min.get().getKey();
+		String serverId = e.getKey();
 		if (!curServerId.equals(serverId)) {
 			addRoomToServer(serverId, r);
 			String uuid = UUID.randomUUID().toString();
 			tokens().put(uuid, new InstantToken(getUserId(), r.getId()));
-			return min.get().getValue().getUrl() + "?token=" + uuid;
+			return e.getValue().getUrl() + "?token=" + uuid;
 		}
 		return null;
+	}
+
+	public String getServerUrl(Room r) {
+		if (onlineServers.size() == 1) {
+			return null;
+		}
+		Optional<Map.Entry<String, ServerInfo>> existing = onlineServers.entrySet().stream()
+				.filter(e -> e.getValue().getRooms().contains(r.getId()))
+				.findFirst();
+		if (existing.isPresent()) {
+			return getServerUrl(existing.get(), r);
+		}
+		Optional<Map.Entry<String, ServerInfo>> min = onlineServers.entrySet().stream()
+				.min((e1, e2) -> e1.getValue().getCapacity() - e2.getValue().getCapacity());
+		return getServerUrl(min.get(), r);
 	}
 
 	Optional<InstantToken> getToken(StringValue uuid) {
