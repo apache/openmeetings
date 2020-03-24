@@ -216,6 +216,7 @@
 							<jsSourceFiles>
 								<jsSourceFile>raw-video-util.js</jsSourceFile>
 								<jsSourceFile>raw-settings.js</jsSourceFile>
+								<jsSourceFile>adapter-latest.js</jsSourceFile>
 								<jsSourceFile>kurento-utils.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>settings.js</jsFinalFile>
@@ -273,6 +274,7 @@
 						**/fileinput.js,
 						**/fileinput.css,
 						**/jquery.dialogextend.js,
+						**/adapter-latest.js,
 						**/kurento-utils.js,
 						**/network.js
 					</packagingExcludes>
@@ -284,6 +286,7 @@
 						**/fileinput.js,
 						**/fileinput.css,
 						**/jquery.dialogextend.js,
+						**/adapter-latest.js,
 						**/kurento-utils.js,
 						**/network.js
 					</warSourceExcludes>
@@ -414,6 +417,7 @@
 										<exclude>**/fileinput.js</exclude>
 										<exclude>**/fileinput.css</exclude>
 										<exclude>**/jquery.dialogextend.js</exclude>
+										<exclude>**/adapter-latest.js</exclude>
 										<exclude>**/kurento-utils.js</exclude>
 										<exclude>**/network.js</exclude>
 									</excludes>
@@ -449,6 +453,7 @@
 										<exclude>**/fileinput.js</exclude>
 										<exclude>**/fileinput.css</exclude>
 										<exclude>**/jquery.dialogextend.js</exclude>
+										<exclude>**/adapter-latest.js</exclude>
 										<exclude>**/kurento-utils.js</exclude>
 										<exclude>**/network.js</exclude>
 									</excludes>
