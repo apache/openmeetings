@@ -326,7 +326,8 @@ public class ImportInitvalues {
 
 		// oauth2 params
 		addCfg(list, CONFIG_IGNORE_BAD_SSL, String.valueOf(false), Configuration.Type.BOOL,
-				"Set \"yes\" or \"no\" to enable/disable ssl certifications checking for OAuth2", VER_3_0);
+				"Set \"yes\" or \"no\" to enable/disable ssl certifications checking for OAuth2\n"
+				+ "WARNING: it is not secure", VER_3_0);
 
 		addCfg(list, CONFIG_REDIRECT_URL_FOR_EXTERNAL, "", Configuration.Type.STRING,
 				"Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost", VER_3_0);
