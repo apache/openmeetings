@@ -183,7 +183,6 @@ html[dir="rtl"] .room-block .sidebar {
 .typing-activity i {
 	position: absolute;
 	left: 0;
-	x-transition: all 2s ease-in-out;
 	animation: typing-ani 2s infinite;
 	color: var(--primary);
 }

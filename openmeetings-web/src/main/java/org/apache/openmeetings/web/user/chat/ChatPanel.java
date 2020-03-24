@@ -86,7 +86,7 @@ public class ChatPanel extends Panel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		if (!chat.isShowDashboardChat()) {
-			response.render(OnDomReadyHeaderItem.forScript("$('#chatPanel,#chat').hide();"));
+			response.render(OnDomReadyHeaderItem.forScript("$('#chatPanel').hide();"));
 		}
 	}
 }
