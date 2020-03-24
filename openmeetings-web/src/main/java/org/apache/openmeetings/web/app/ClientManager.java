@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -44,6 +46,7 @@ import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
+import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +65,7 @@ public class ClientManager implements IClientManager {
 	private static final String ROOMS_KEY = "ROOMS_KEY";
 	private static final String ONLINE_USERS_KEY = "ONLINE_USERS_KEY";
 	private static final String SERVERS_KEY = "SERVERS_KEY";
+	private static final String INSTANT_TOKENS_KEY = "INSTANT_TOKENS_KEY";
 	private static final String UID_BY_SID_KEY = "UID_BY_SID_KEY";
 	private final Map<String, Client> onlineClients = new ConcurrentHashMap<>();
 	private final Map<Long, Set<String>> onlineRooms = new ConcurrentHashMap<>();
@@ -88,6 +92,10 @@ public class ClientManager implements IClientManager {
 
 	private IMap<String, ServerInfo> servers() {
 		return app.hazelcast.getMap(SERVERS_KEY);
+	}
+
+	private IMap<String, InstantToken> tokens() {
+		return app.hazelcast.getMap(INSTANT_TOKENS_KEY);
 	}
 
 	@PostConstruct
@@ -220,7 +228,13 @@ public class ClientManager implements IClientManager {
 		onlineRooms.put(roomId, set);
 		rooms.unlock(roomId);
 		String serverId = c.getServerId();
-		if (!onlineServers.get(serverId).getRooms().contains(roomId)) {
+		addRoomToServer(serverId, r);
+		update(c);
+		return count;
+	}
+
+	private void addRoomToServer(String serverId, Room r) {
+		if (!onlineServers.get(serverId).getRooms().contains(r.getId())) {
 			IMap<String, ServerInfo> servers = servers();
 			servers.lock(serverId);
 			ServerInfo si = servers.get(serverId);
@@ -229,8 +243,6 @@ public class ClientManager implements IClientManager {
 			onlineServers.put(serverId, si);
 			servers.unlock(serverId);
 		}
-		update(c);
-		return count;
 	}
 
 	public Client removeFromRoom(Client c) {
@@ -346,13 +358,13 @@ public class ClientManager implements IClientManager {
 		}
 	}
 
-	public String getServerUrl(Long roomId) {
-		if (roomId == null || onlineServers.size() == 1) {
+	public String getServerUrl(Room r) {
+		if (onlineServers.size() == 1) {
 			return null;
 		}
 		final String curServerId = app.getServerId();
 		Optional<Map.Entry<String, ServerInfo>> existing = onlineServers.entrySet().stream()
-				.filter(e -> e.getValue().getRooms().contains(roomId))
+				.filter(e -> e.getValue().getRooms().contains(r.getId()))
 				.findFirst();
 		if (existing.isPresent()) {
 			String serverId = existing.get().getKey();
@@ -361,7 +373,17 @@ public class ClientManager implements IClientManager {
 		Optional<Map.Entry<String, ServerInfo>> min = onlineServers.entrySet().stream()
 				.min((e1, e2) -> e1.getValue().getCapacity() - e2.getValue().getCapacity());
 		String serverId = min.get().getKey();
-		return curServerId.equals(serverId) ? null : min.get().getValue().getUrl();
+		if (!curServerId.equals(serverId)) {
+			addRoomToServer(serverId, r);
+			String uuid = UUID.randomUUID().toString();
+			tokens().put(uuid, new InstantToken(getUserId(), r.getId()));
+			return min.get().getValue().getUrl() + "?token=" + uuid;
+		}
+		return null;
+	}
+
+	Optional<InstantToken> getToken(StringValue uuid) {
+		return uuid.isEmpty() ? Optional.empty() : Optional.ofNullable(tokens().remove(uuid.toString()));
 	}
 
 	public class ClientListener implements
@@ -451,6 +473,27 @@ public class ClientManager implements IClientManager {
 
 		public Set<Long> getRooms() {
 			return rooms;
+		}
+	}
+
+	public static class InstantToken implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private final long userId;
+		private final long roomId;
+		private final long created;
+
+		InstantToken(long userId, long roomId) {
+			this.userId = userId;
+			this.roomId = roomId;
+			created = System.currentTimeMillis();
+		}
+
+		public long getUserId() {
+			return userId;
+		}
+
+		public long getRoomId() {
+			return roomId;
 		}
 	}
 }

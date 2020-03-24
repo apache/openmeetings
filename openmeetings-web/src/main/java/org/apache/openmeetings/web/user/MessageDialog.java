@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.user;
 
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.Application.getContactsLink;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -228,7 +228,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 				target.add(bookedRoom, roomParamsBlock);
 			}
 		}));
-		bookedRoom.setVisible(cfgDao.getBool(CONFIG_MYROOMS_ENABLED, true));
+		bookedRoom.setVisible(isMyRoomsEnabled());
 		roomParamsBlock.add(roomParams);
 		roomParams.add(new RoomTypeDropDown("room.type"));
 		roomParams.add(start);

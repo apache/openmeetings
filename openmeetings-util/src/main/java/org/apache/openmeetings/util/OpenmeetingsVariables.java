@@ -142,6 +142,7 @@ public class OpenmeetingsVariables {
 	private static String contentSecurityPolicy = HEADER_CSP_SELF;
 	private static String xFrameOptions = HEADER_XFRAME_SELF;
 	private static boolean displayNameEditable = false;
+	private static boolean myRoomsEnabled = true;
 
 	private OpenmeetingsVariables() {}
 
@@ -403,5 +404,13 @@ public class OpenmeetingsVariables {
 
 	public static void setDisplayNameEditable(boolean editable) {
 		displayNameEditable = editable;
+	}
+
+	public static boolean isMyRoomsEnabled() {
+		return myRoomsEnabled;
+	}
+
+	public static void setMyRoomsEnabled(boolean enabled) {
+		myRoomsEnabled = enabled;
 	}
 }

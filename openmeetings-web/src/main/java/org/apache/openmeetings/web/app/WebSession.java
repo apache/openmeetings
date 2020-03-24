@@ -23,8 +23,8 @@ import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT_STRING;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import static org.apache.openmeetings.web.app.Application.isInvaldSession;
@@ -37,6 +37,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -62,6 +63,7 @@ import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.db.util.LocaleHelper;
 import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.web.app.ClientManager.InstantToken;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidget;
@@ -70,6 +72,7 @@ import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.admin.AdminWidget;
 import org.apache.openmeetings.web.user.dashboard.admin.AdminWidgetDescriptor;
+import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.UserDashboard;
@@ -78,6 +81,7 @@ import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSessio
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
@@ -164,6 +168,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	@Override
 	public boolean isSignedIn() {
+		Optional<InstantToken> token = cm.getToken(RequestCycle.get().getRequest().getQueryParameters().getParameterValue("token"));
+		if (token.isPresent()) {
+			signIn(userDao.get(token.get().getUserId()));
+			area = RoomEnterBehavior.getRoomUrlFragment(token.get().getRoomId());
+		}
 		if (userId == null) {
 			IAuthenticationStrategy strategy = getAuthenticationStrategy();
 			// get username and password from persistence store
@@ -459,7 +468,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		DashboardContext dashboardContext = getDashboardContext();
 		dashboard = (UserDashboard)dashboardContext.getDashboardPersister().load();
 		boolean existMyRoomWidget = false, existRssWidget = false, existAdminWidget = false;
-		boolean showMyRoomConfValue = cfgDao.getBool(CONFIG_MYROOMS_ENABLED, true) && cfgDao.getBool(CONFIG_DASHBOARD_SHOW_MYROOMS, false);
+		boolean showMyRoomConfValue = isMyRoomsEnabled() && cfgDao.getBool(CONFIG_DASHBOARD_SHOW_MYROOMS, false);
 		boolean showRssConfValue = cfgDao.getBool(CONFIG_DASHBOARD_SHOW_RSS, false);
 		boolean showAdminWidget = getRights().contains(User.Right.ADMIN);
 		boolean save = false;

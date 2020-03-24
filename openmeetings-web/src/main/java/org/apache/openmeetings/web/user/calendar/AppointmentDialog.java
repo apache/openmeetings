@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
@@ -309,7 +309,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 			super(id, model);
 			setOutputMarkupId(true);
 
-			myRoomsAllowed = cfgDao.getBool(CONFIG_MYROOMS_ENABLED, true);
+			myRoomsAllowed = isMyRoomsEnabled();
 			createRoom = myRoomsAllowed;
 		}
 

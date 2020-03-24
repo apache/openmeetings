@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.MESSAGES_TAB_ID;
 
@@ -255,7 +255,7 @@ public class OmUrlFragment implements Serializable {
 					Long roomId = Long.valueOf(type);
 					Room r = Application.get().getBean(RoomDao.class).get(roomId);
 					if (r != null) {
-						moveToServer(roomId);
+						moveToServer(r);
 						basePanel = new RoomPanel(CHILD_ID, r);
 					}
 				} catch(NumberFormatException ne) {
@@ -269,7 +269,7 @@ public class OmUrlFragment implements Serializable {
 				MenuParams params = MenuParams.publicTabButton;
 				if (TYPE_GROUP.equals(type)) {
 					params = MenuParams.privateTabButton;
-				} else if (Application.get().getBean(ConfigurationDao.class).getBool(CONFIG_MYROOMS_ENABLED, true) && TYPE_MY.equals(type)) {
+				} else if (isMyRoomsEnabled() && TYPE_MY.equals(type)) {
 					params = MenuParams.myTabButton;
 				}
 				basePanel = new RoomsSelectorPanel(CHILD_ID, params);
@@ -293,11 +293,8 @@ public class OmUrlFragment implements Serializable {
 		return getBaseUrl() + "#" + getArea().name() + "/" + getType();
 	}
 
-	private static void moveToServer(Long roomId) {
-		if (roomId == null) {
-			return;
-		}
-		String url = Application.get().getBean(ClientManager.class).getServerUrl(roomId);
+	private static void moveToServer(Room r) {
+		String url = Application.get().getBean(ClientManager.class).getServerUrl(r);
 		if (url != null) {
 			throw new RedirectToUrlException(url);
 		}

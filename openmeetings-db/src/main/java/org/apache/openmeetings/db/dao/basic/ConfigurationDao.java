@@ -50,6 +50,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_RATE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_BITRATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_VIDEO_PRESET;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
@@ -87,6 +88,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinFnameLeng
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinLnameLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinPasswdLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setMyRoomsEnabled;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRestAllowOrigin;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRoomSettings;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setSendRegisterEmail;
@@ -393,6 +395,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_DISPLAY_NAME_EDITABLE:
 				reloadDisplayNameEditable();
 				break;
+			case CONFIG_MYROOMS_ENABLED:
+				reloadMyRoomsEnabled();
+				break;
 		}
 		return entity;
 	}
@@ -528,6 +533,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setDisplayNameEditable(getBool(CONFIG_DISPLAY_NAME_EDITABLE, false));
 	}
 
+	private void reloadMyRoomsEnabled() {
+		setMyRoomsEnabled(getBool(CONFIG_MYROOMS_ENABLED, true));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -557,6 +566,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadXFrameOptions();
 		reloadContentSecurityPolicy();
 		reloadDisplayNameEditable();
+		reloadMyRoomsEnabled();
 	}
 
 	private static JSONObject getHotkey(String value) {
