@@ -436,6 +436,7 @@ var Video = (function() {
 			level = null;
 		}
 		vc.find('audio,video').remove();
+		vol.destroy();
 	}
 	function _reattachStream() {
 		if (video && video.length > 0) {
