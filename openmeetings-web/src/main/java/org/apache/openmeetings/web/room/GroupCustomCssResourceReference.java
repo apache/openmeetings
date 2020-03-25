@@ -70,7 +70,7 @@ public class GroupCustomCssResourceReference extends FileSystemResourceReference
 					rr.setFileName(file.getName());
 					return rr;
 				} else {
-					log.debug("Custom CSS was not found was found");
+					log.debug("Custom CSS was not found");
 					return null;
 				}
 			}

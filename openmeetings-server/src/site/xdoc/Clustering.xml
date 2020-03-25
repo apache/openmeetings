@@ -163,10 +163,9 @@
 					</li>
 					<li>Do the same with only two users but go to _different_ rooms. The calculation should send
 						both users to different servers, cause based on the calculation two different rooms on a cluster
-						with two nodes should go exactly one room for each node. You can now loggin really to node1
+						with two nodes should go exactly one room for each node. You can now login really to node1
 						and node2 of your cluster while those users are loggedin and go to <tt>Administration &gt; Connections</tt>
-						and check in the column "Server Name" where they are located. They should be on different server.<br/>
-						Additionally client details, available on click, should show different servers <tt>tcUrl</tt> for clients with "Stream ID"
+						and check in the column "Server Name" where they are located. They should be on different server.
 					</li>
 				</ul>
 				<img src="images/cluster2.png" alt="" width="650" height="369" />
