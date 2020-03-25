@@ -48,7 +48,7 @@
 					<li>Check your network interface supports multicast by running the following
 						command in a terminal window: <source>ifconfig -a</source>
 						When you see <tt>MULTICAST</tt> against your network interface, it means your
-						kernel is complied with Multicast option and your network interface supports it.
+						kernel is compiled with Multicast option and your network interface supports it.
 					</li>
 					<li>Check if multicast routing is configured:
 						<source>netstat -nr</source>
@@ -89,10 +89,12 @@
 				<p>If files and recordings using the same physical folders the files and recordings will be available for
 				each node. You can do this using Samba or NFS, for example. For using NFS do the following:</p>
 				<ul>
+					<li>
+						To ease upgrade process set OM data dir to some external folder: for ex. /opt/omdata
+					</li>
 					<li>Install NFS to the data server. In the file <tt>/etc/exports</tt> add the following lines:
 						<source>
-/opt/om/webapps/openmeetings/upload 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
-/opt/om/webapps/openmeetings/streams 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
+/opt/omdata 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
 						</source>
 						Here 10.1.1.2 - is node ip for NFS remote access. Add these lines for all nodes except node with
 						folders.
@@ -100,10 +102,7 @@
 					<li>
 						Install NFS common tools to other nodes. In the file <tt>/etc/fstab</tt> do the following:
 						<source>
-10.1.1.1:/opt/om/webapps/openmeetings/upload/
-/opt/om/webapps/openmeetings/upload nfs timeo=50,hard,intr
-10.1.1.1:/opt/om/webapps/openmeetings/streams/
-/opt/om/webapps/openmeetings/streams nfs timeo=50,hard,intr
+10.1.1.1:/opt/omdata /opt/omdata nfs timeo=50,hard,intr
 						</source>
 						Here 10.1.1.1 – data server ip. And run the command:
 						<source>mount -a</source>
@@ -116,6 +115,7 @@
 						<p>In the file <tt>/opt/om/webapps/openmeetings/WEB-INF/classes/hazelcast.xml</tt>:</p>
 						<ul>
 							<li>Set <tt>instance-name</tt> for each server to unique value</li>
+							<li>Set <tt>server.url</tt> for each server to full <strong>public</strong> URL of this server (please NOTE using of numeric IP address might broke HTTPS))</li>
 							<li>
 								Comment out/delete following block:
 								<source><![CDATA[
@@ -129,8 +129,26 @@
 								]]></source>
 							</li>
 							<li>
+								Un-comment following block (ensure it contains valip parameters):
+								<source><![CDATA[
+	<network>
+		<join>
+			<multicast enabled="true">
+				<multicast-group>224.0.0.0</multicast-group>
+				<multicast-port>54327</multicast-port>
+				<multicast-time-to-live>32</multicast-time-to-live>
+				<multicast-timeout-seconds>2</multicast-timeout-seconds>
+			</multicast>
+		</join>
+		<interfaces enabled="true">
+			<interface>192.168.1.*</interface>
+		</interfaces>
+	</network>
+								]]></source>
+							</li>
+							<li>
 								In case there are more than one network interface with multicast support and/or additional hazelcast configuration is required
-								Based on the following documentation: <a href="http://docs.hazelcast.org/docs/3.10.1/manual/html-single/index.html">http://docs.hazelcast.org/docs/3.10.1/manual/html-single/index.html</a>
+								Based on the following documentation: <a href="https://docs.hazelcast.org/docs/4.0/manual/html-single/index.html">https://docs.hazelcast.org/docs/4.0/manual/html-single/index.html</a>
 							</li>
 						</ul>
 					</li>
@@ -138,7 +156,7 @@
 			</subsection>
 			<subsection name="Ensure everything works as expected">
 				<ul>
-					<li>Set up the cluster and loggin with two users, go to the same room (also check before room
+					<li>Set up the cluster and login with two users, go to the same room (also check before room
 						entering that the status page with the room list shows the correct number of participants before
 						entering the room). You should login to the same server initially, the server will redirect you
 						for the conference room to the appropriate server automatically. Both users should be in the same room.
