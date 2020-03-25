@@ -470,9 +470,9 @@ select.messages.selector {
 	overflow-y: auto;
 }
 .overflow-x-hidden {
-	overflow-y: hidden;
+	overflow-x: hidden;
 }
-..user.info.panel legend {
+.user.info.panel legend {
 	font-style: italic;
 	text-align: right;
 }

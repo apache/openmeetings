@@ -40,17 +40,15 @@
 		<div class="formelement">
 			<label><wicket:message key="407" /></label>
 		</div>
-		<div class="tableWrapper" id="adminTable">
-			<table class="list-table full-width">
-				<tbody wicket:id="clientsContainer">
-					<tr wicket:id="clients">
-						<td><img wicket:id="clientImage"/></td>
-						<td>
-							<div ><span wicket:id="clientLogin"></span>&nbsp;<wicket:message key="408"/>&nbsp;<span wicket:id="from"></span></div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+		<div class="tableWrapper overflow-y-auto" id="adminTable" wicket:id="clientsContainer">
+			<div class="row no-gutters" wicket:id="clients">
+				<div class="col-2">
+					<img class="img-fluid" wicket:id="clientImage"/>
+				</div>
+				<div class="col-10">
+					<span wicket:id="clientLogin"></span>&nbsp;<wicket:message key="408"/>&nbsp;<span wicket:id="from"></span>
+				</div>
+			</div>
 		</div>
 	</div>
 </wicket:panel>
