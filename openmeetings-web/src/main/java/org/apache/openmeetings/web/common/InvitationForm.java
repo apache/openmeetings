@@ -142,7 +142,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 			}
 		});
 		add(url.setOutputMarkupId(true));
-		add(lang, feedback);
+		add(lang, feedback.setOutputMarkupId(true));
 		super.onInitialize();
 	}
 
