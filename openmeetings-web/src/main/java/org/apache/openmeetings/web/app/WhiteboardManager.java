@@ -83,6 +83,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 	@PostConstruct
 	void init() {
 		map().addEntryListener(new WbListener(), true);
+		map().entrySet().forEach(e -> onlineWbs.put(e.getKey(), e.getValue()));
 	}
 
 	private static String getDefaultName(Long langId, int num) {
