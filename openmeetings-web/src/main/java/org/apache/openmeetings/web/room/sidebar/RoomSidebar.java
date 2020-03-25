@@ -87,7 +87,9 @@ public class RoomSidebar extends Panel {
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.CONFERENCE == room.getRoom().getType()) {
-						streamProcessor.toggleActivity(c, Client.Activity.AUDIO_VIDEO);
+						streamProcessor.toggleActivity(c, room.getRoom().isAudioOnly()
+								? Client.Activity.AUDIO
+								: Client.Activity.AUDIO_VIDEO);
 					}
 				}
 				cm.update(c);
