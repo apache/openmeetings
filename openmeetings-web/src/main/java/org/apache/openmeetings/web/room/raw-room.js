@@ -9,6 +9,7 @@ var Room = (function() {
 		const menu = $('.room-block .room-container .menu');
 		activities = $('#activities');
 		sb = $('.room-block .sidebar');
+		sb.width(sb.width()); // this is required to 'fix' the width so it will not depend on CSS var
 		dock = sb.find('.btn-dock').click(function() {
 			const offset = parseInt(sb.css(sbSide));
 			if (offset < 0) {

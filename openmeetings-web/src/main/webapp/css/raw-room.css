@@ -704,7 +704,6 @@ html[dir="rtl"] .room-block .sidebar {
 	}
 	.room-block.big .sidebar .tab.om-icon.big {
 		max-width: 80px;
-		padding: 0em 1em 0 2.5em;
 	}
 	.room-block .sidebar .user-list .user.name {
 		display: none;
