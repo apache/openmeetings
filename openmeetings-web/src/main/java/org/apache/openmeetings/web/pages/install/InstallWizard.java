@@ -147,7 +147,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	@Override
 	protected WebMarkupContainer newFeedbackPanel(String id) {
 		NotificationPanel feedback = new NotificationPanel("feedback");
-		feedback.setEscapeModelStrings(false);
+		feedback.setEscapeModelStrings(false).setOutputMarkupId(true);
 		return feedback;
 	}
 
