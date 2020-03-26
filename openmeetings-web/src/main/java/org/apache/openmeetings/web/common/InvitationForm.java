@@ -132,7 +132,9 @@ public abstract class InvitationForm extends Form<Invitation> {
 		add(passwd);
 		Invitation i = getModelObject();
 		passwd.setLabel(new ResourceModel("110")).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
-		add(from.setOutputMarkupId(true), to.setOutputMarkupId(true), timeZoneId.setOutputMarkupId(true));
+		add(from.setLabel(new ResourceModel("530")).setOutputMarkupId(true)
+				, to.setLabel(new ResourceModel("531")).setOutputMarkupId(true)
+				, timeZoneId.setOutputMarkupId(true));
 		timeZoneId.add(new AjaxFormComponentUpdatingBehavior("change") {
 			private static final long serialVersionUID = 1L;
 

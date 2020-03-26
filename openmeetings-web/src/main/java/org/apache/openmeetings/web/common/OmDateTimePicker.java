@@ -19,20 +19,52 @@
 package org.apache.openmeetings.web.common;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.Locale;
 
 import org.apache.wicket.extensions.markup.html.form.datetime.LocalDateTimeTextField;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.convert.converter.LocalDateTimeConverter;
 
 public class OmDateTimePicker extends AbstractOmDateTimePicker<LocalDateTime> {
 	private static final long serialVersionUID = 1L;
+	private final LocalDateTimeConverter converter;
 
 	public OmDateTimePicker(String id, IModel<LocalDateTime> model) {
-		super(id, model, getDateTimeFormat());
+		this(id, model, getDateTimeFormat());
+	}
+
+	private OmDateTimePicker(String id, IModel<LocalDateTime> model, final String pattern) {
+		super(id, model, pattern);
+		this.converter = new LocalDateTimeConverter() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public DateTimeFormatter getDateTimeFormatter(Locale locale)
+			{
+				return new DateTimeFormatterBuilder()
+						.parseCaseInsensitive()
+						.appendPattern(pattern)
+						.toFormatter(locale);
+			}
+		};
 	}
 
 	@Override
 	protected FormComponent<LocalDateTime> newInput(String wicketId, String dateFormat) {
-		return new LocalDateTimeTextField(wicketId, getModel(), dateFormat);
+		return new LocalDateTimeTextField(wicketId, getModel(), dateFormat) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected IConverter<?> createConverter(Class<?> clazz) {
+				if (LocalDateTime.class.isAssignableFrom(clazz)) {
+					return converter;
+				}
+				return null;
+			}
+		};
 	}
 }
