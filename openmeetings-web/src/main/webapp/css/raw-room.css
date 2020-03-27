@@ -294,14 +294,14 @@ html[dir="rtl"] .room-block .sidebar {
 .settings.om-icon::before {
 	content: '\f013';
 }
-.activity.cam.om-icon::before {
+.activity.cam.enabled.om-icon::before {
 	content: '\f03d';
 }
-.activity.cam.enabled.om-icon::before {
+.activity.cam.om-icon::before {
 	content: '\f4e2';
 	color: var(--warning);
 }
-.activity.mic.om-icon::before {
+.activity.mic.enabled.om-icon::before {
 	content: '\f130';
 }
 .om-icon.disabled {
@@ -309,7 +309,7 @@ html[dir="rtl"] .room-block .sidebar {
 	pointer-events: none;
 	opacity: .2;
 }
-.activity.mic.enabled.om-icon::before {
+.activity.mic.om-icon::before {
 	content: '\f131';
 	color: var(--warning);
 }
