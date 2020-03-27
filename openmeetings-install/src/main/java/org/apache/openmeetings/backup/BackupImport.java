@@ -661,6 +661,10 @@ public class BackupImport {
 			if (AuthLevelUtil.hasLoginLevel(u.getRights()) && !Strings.isEmpty(u.getActivatehash())) {
 				u.setActivatehash(null);
 			}
+			if (u.getExternalType() != null) {
+				Group g = groupDao.getExternal(u.getExternalType());
+				u.addGroup(g);
+			}
 			userDao.update(u, Long.valueOf(-1));
 			userMap.put(userId, u.getId());
 		});

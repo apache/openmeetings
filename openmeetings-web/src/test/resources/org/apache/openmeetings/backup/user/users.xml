@@ -221,5 +221,25 @@ see http://openmeetings.apache.org/Upgrade.html for Details
          <type><![CDATA[UsER]]></type>
          <rights class="org.apache.openjpa.util.java$util$HashSet$proxy"/>
       </user>
+      <user>
+         <user_id><![CDATA[8]]></user_id>
+         <firstname><![CDATA[Bogin]]></firstname>
+         <lastname><![CDATA[Mig]]></lastname>
+         <login><![CDATA[bogin.mig]]></login>
+         <deleted><![CDATA[false]]></deleted>
+         <language_id><![CDATA[3]]></language_id>
+         <address>
+            <country><![CDATA[DE]]></country>
+            <mail><![CDATA[bogin.mig@local]]></mail>
+         </address>
+         <forceTimeZoneCheck><![CDATA[false]]></forceTimeZoneCheck>
+         <sendSMS>false</sendSMS>
+         <showContactData><![CDATA[false]]></showContactData>
+         <showContactDataToContacts><![CDATA[false]]></showContactDataToContacts>
+         <type><![CDATA[eXtErNaL]]></type>
+         <rights class="org.apache.openjpa.util.java$util$HashSet$proxy"/>
+         <externalUserId>234</externalUserId>
+         <externalUserType>TheBestCms</externalUserType>
+      </user>
    </users>
 </root>

@@ -19,9 +19,11 @@
 package org.apache.openmeetings.backup;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 
+import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +41,9 @@ public class TestImportUser extends AbstractTestImport {
 		long userCount = userDao.count();
 		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/users.xml").toURI());
 		backupImport.importUsers(configs.getParentFile());
-		assertEquals(userCount + 7, userDao.count(), "Users should be added");
+		assertEquals(userCount + 8, userDao.count(), "Users should be added");
+		User ext = userDao.getExternalUser("234", "TheBestCms");
+		assertNotNull(ext, "External user should be imported");
 	}
 
 	@Test
