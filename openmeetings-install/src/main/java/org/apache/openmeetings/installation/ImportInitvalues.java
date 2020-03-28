@@ -53,6 +53,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_A
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE_RESIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE_OTHERS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_QUICKPOLL;
@@ -357,6 +358,8 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_KEYCODE_QUICKPOLL, "Ctrl+Alt+KeyQ", Configuration.Type.HOTKEY
 				, "A hot key code to start quick poll", "4.0.10");
 		addCfg(list, CONFIG_AUTO_OPEN_SHARING, String.valueOf(false), Configuration.Type.BOOL, "Whether shared screen should be auto-opened.", VER_5_0_0);
+		addCfg(list, CONFIG_KEYCODE_ARRANGE_RESIZE, "Ctrl+Shift+KeyA", Configuration.Type.HOTKEY
+				, "A hot key code to arrange video windows bottom-to-top with resize to 120x90", VER_5_0_0);
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {

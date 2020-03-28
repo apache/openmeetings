@@ -97,6 +97,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_DISPLAY_NAME_EDITABLE = "display.name.editable";
 	public static final String CONFIG_KEYCODE_QUICKPOLL = "start.quickpoll.keycode";
 	public static final String CONFIG_AUTO_OPEN_SHARING = "auto.open.sharing";
+	public static final String CONFIG_KEYCODE_ARRANGE_RESIZE = "video.arrange.resize.keycode";
 
 	public static final String HEADER_XFRAME_SELF = "'self'";
 	public static final String HEADER_CSP_SELF = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; media-src 'self' blob:;";

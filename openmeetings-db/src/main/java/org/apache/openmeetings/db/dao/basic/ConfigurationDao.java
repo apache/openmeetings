@@ -38,6 +38,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FNAME_MI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE_RESIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE_OTHERS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_QUICKPOLL;
@@ -308,6 +309,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_KEYCODE_MUTE_OTHERS:
 			case CONFIG_KEYCODE_MUTE:
 			case CONFIG_KEYCODE_QUICKPOLL:
+			case CONFIG_KEYCODE_ARRANGE_RESIZE:
 			case CONFIG_AUTO_OPEN_SHARING:
 				reloadRoomSettings();
 				break;
@@ -584,6 +586,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			setRoomSettings(new JSONObject()
 					.put("keycode", new JSONObject()
 							.put("arrange", getHotkey(getString(CONFIG_KEYCODE_ARRANGE, "Shift+F8")))
+							.put("arrangeresize", getHotkey(getString(CONFIG_KEYCODE_ARRANGE_RESIZE, "Ctrl+Shift+KeyA")))
 							.put("muteothers", getHotkey(getString(CONFIG_KEYCODE_MUTE_OTHERS, "Shift+F12")))
 							.put("mute", getHotkey(getString(CONFIG_KEYCODE_MUTE, "Shift+F7")))
 							.put("quickpoll", getHotkey(getString(CONFIG_KEYCODE_QUICKPOLL, "Ctrl+Alt+KeyQ")))
