@@ -1,7 +1,8 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const WB_AREA_SEL = '.room-block .wb-block';
-const WBA_WB_SEL = '.room-block .wb-block .ui-tabs-panel.ui-corner-bottom.ui-widget-content:visible';
-const VID_SEL = '.video-container';
+const WBA_WB_SEL = '.room-block .wb-block .wb-tab-content';
+const VIDWIN_SEL = '.video.user-video';
+const VID_SEL = '.video-container[id!=user-video]';
 const CAM_ACTIVITY = 'VIDEO';
 const MIC_ACTIVITY = 'AUDIO';
 const SCREEN_ACTIVITY = 'SCREEN';
@@ -44,7 +45,7 @@ var VideoUtil = (function() {
 	}
 	function _container() {
 		const a = $(WB_AREA_SEL);
-		const c = a.find('.wb-area .tabs .ui-tabs-panel');
+		const c = a.find('.wb-area .tabs .wb-tab-content');
 		return c.length > 0 ? $(WBA_WB_SEL) : a;
 	}
 	function _getPos(list, w, h) {
@@ -76,7 +77,7 @@ var VideoUtil = (function() {
 			};
 		let minY = area.bottom, posFound;
 		do {
-			posFound = true
+			posFound = true;
 			for (let i = 0; i < list.length; ++i) {
 				const rect = list[i];
 				minY = Math.min(minY, rect.bottom);
@@ -100,7 +101,7 @@ var VideoUtil = (function() {
 		return {left: rectNew.left, top: rectNew.top};
 	}
 	function _arrange() {
-		const list = [], elems = $(VID_SEL);
+		const list = [], elems = $(VIDWIN_SEL);
 		for (let i = 0; i < elems.length; ++i) {
 			const v = $(elems[i]);
 			v.css(_getPos(list, v.width(), v.height()));
@@ -108,7 +109,7 @@ var VideoUtil = (function() {
 		}
 	}
 	function _arrangeResize() {
-		const list = [], elems = $(VID_SEL);
+		const list = [], elems = $(VIDWIN_SEL);
 		for (let i = 0; i < elems.length; ++i) {
 			const v = $(elems[i]);
 			v.css(_getPos(list, v.width(), v.height()));

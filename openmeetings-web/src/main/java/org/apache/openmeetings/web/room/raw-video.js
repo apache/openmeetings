@@ -329,7 +329,7 @@ var Video = (function() {
 		_refresh(msg);
 
 		if (!isSharing && !isRecording) {
-			VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), sd.width, sd.height + 25));
+			VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VIDWIN_SEL), sd.width, sd.height + 25));
 		}
 		return v;
 	}

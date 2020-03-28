@@ -58,7 +58,7 @@ var VideoManager = (function() {
 	function _onKMessage(m) {
 		switch (m.id) {
 			case 'clientLeave':
-				$(VID_SEL + ' div[data-client-uid="' + m.uid + '"]').each(function() {
+				$(VID_SEL + '[data-client-uid="' + m.uid + '"]').each(function() {
 					_closeV($(this));
 				});
 				if (share.data('cuid') === m.uid) {
@@ -152,11 +152,9 @@ var VideoManager = (function() {
 			}
 		});
 		if (c.uid === Room.getOptions().uid) {
-			const windows = $(VID_SEL + ' .ui-dialog-content');
-			for (let i = 0; i < windows.length; ++i) {
-				const w = $(windows[i]);
-				w.data().setRights(c.rights);
-			}
+			$(VID_SEL).each(function() {
+				$(this).data().setRights(c.rights);
+			});
 		}
 		$('[data-client-uid="' + c.cuid + '"]').each(function() {
 			const sd = $(this).data().stream();
@@ -270,11 +268,10 @@ var VideoManager = (function() {
 		}
 	}
 	function _muteOthers(uid) {
-		const windows = $(VID_SEL + ' .ui-dialog-content');
-		for (let i = 0; i < windows.length; ++i) {
-			const w = $(windows[i]);
+		$(VID_SEL).each(function() {
+			const w= $(this);
 			w.data().mute('room' + uid !== w.data('client-uid'));
-		}
+		});
 	}
 	function _toggleActivity(activity) {
 		self.sendMessage({
