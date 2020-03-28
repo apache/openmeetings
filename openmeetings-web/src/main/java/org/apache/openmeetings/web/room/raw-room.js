@@ -79,6 +79,8 @@ var Room = (function() {
 	function _keyHandler(e) {
 		if (__keyPressed(options.keycode.arrange, e)) {
 			VideoUtil.arrange();
+		} else if (__keyPressed(options.keycode.arrangeresize, e)) {
+			VideoUtil.arrangeResize();
 		} else if (__keyPressed(options.keycode.muteothers, e)) {
 			const v = _getSelfAudioClient();
 			if (v !== null) {

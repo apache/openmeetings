@@ -46,7 +46,7 @@ var Shape = function(wb, sBtn) {
 			});
 		});
 		shape.internalActivate();
-		VideoUtil.highlight(sBtn.removeClass('disabled'), 5);
+		VideoUtil.highlight(sBtn.removeClass('disabled'), 'bg-warning', 5);
 	};
 	shape.deactivate = function() {
 		wb.eachCanvas(function(canvas) {

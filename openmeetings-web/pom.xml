@@ -194,7 +194,6 @@
 							<charset>UTF-8</charset>
 							<jsSourceDir>../java/org/apache/openmeetings/web/room</jsSourceDir>
 							<jsSourceFiles>
-								<jsSourceFile>jquery.dialogextend.js</jsSourceFile>
 								<jsSourceFile>raw-video.js</jsSourceFile>
 								<jsSourceFile>raw-video-manager.js</jsSourceFile>
 								<jsSourceFile>raw-sharer.js</jsSourceFile>
@@ -272,7 +271,6 @@
 						**/MathJax*.js,
 						**/fileinput.js,
 						**/fileinput.css,
-						**/jquery.dialogextend.js,
 						**/kurento-utils.js,
 						**/network.js
 					</packagingExcludes>
@@ -283,7 +281,6 @@
 						**/MathJax*.js,
 						**/fileinput.js,
 						**/fileinput.css,
-						**/jquery.dialogextend.js,
 						**/kurento-utils.js,
 						**/network.js
 					</warSourceExcludes>
@@ -413,7 +410,6 @@
 										<exclude>**/MathJax*.js</exclude>
 										<exclude>**/fileinput.js</exclude>
 										<exclude>**/fileinput.css</exclude>
-										<exclude>**/jquery.dialogextend.js</exclude>
 										<exclude>**/kurento-utils.js</exclude>
 										<exclude>**/network.js</exclude>
 									</excludes>
@@ -448,7 +444,6 @@
 										<exclude>**/MathJax*.js</exclude>
 										<exclude>**/fileinput.js</exclude>
 										<exclude>**/fileinput.css</exclude>
-										<exclude>**/jquery.dialogextend.js</exclude>
 										<exclude>**/kurento-utils.js</exclude>
 										<exclude>**/network.js</exclude>
 									</excludes>

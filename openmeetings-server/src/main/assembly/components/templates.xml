@@ -37,7 +37,6 @@
 				<exclude>**/MathJax*.js</exclude>
 				<exclude>**/fileinput.js</exclude>
 				<exclude>**/fileinput.css</exclude>
-				<exclude>**/jquery.dialogextend.js</exclude>
 				<exclude>**/kurento-utils.js</exclude>
 				<exclude>**/network.js</exclude>
 			</excludes>

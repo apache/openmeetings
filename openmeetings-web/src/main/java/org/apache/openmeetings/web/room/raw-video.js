@@ -229,11 +229,6 @@ var Video = (function() {
 		if (opts.interview) {
 			v.dialog('option', 'draggable', false);
 			v.dialog('option', 'resizable', false);
-			v.dialogExtend({
-				closable: false
-				, collapsable: false
-				, dblclick: false
-			});
 			$('.pod-area').sortable('refresh');
 		} else {
 			v.dialog('option', 'draggable', true);
@@ -243,28 +238,47 @@ var Video = (function() {
 					VideoManager.close(sd.uid, true);
 				});
 			}
-			v.dialogExtend({
-				icons: {
-					'collapse': 'ui-icon-minus'
-				}
-				, closable: VideoUtil.isSharing(sd)
-				, collapsable: true
-				, dblclick: 'collapse'
+		}
+		_initDialogBtns(opts);
+	}
+	function _initDialogBtns(opts) {
+		function noDblClick(e) {
+			e.dblclick(function(e) {
+				e.stopImmediatePropagation();
+				return false;
 			});
 		}
-	}
-	function _initCamDialog() {
-		v.parent().find('.ui-dialog-titlebar-buttonpane')
-			.append($('#video-refresh-btn').children().clone());
-		v.parent().find('.ui-dialog-titlebar-refresh')
-			.click(function(e) {
+		v.parent().find('.ui-dialog-titlebar-close').remove();
+		v.parent().find('.ui-dialog-titlebar').append(OmUtil.tmpl('#video-button-bar'));
+		const refresh = v.parent().find('.btn-refresh')
+			, tgl = v.parent().find('.btn-toggle')
+			, cls = v.parent().find('.btn-wclose');
+		if (VideoUtil.isSharing(sd)) {
+			cls.click(function (e) {
+				v.dialog('close');
+				return false;
+			});
+			noDblClick(cls);
+			refresh.remove();
+		} else {
+			cls.remove();
+			refresh.click(function(e) {
 				e.stopImmediatePropagation();
 				_refresh();
 				return false;
-			}).dblclick(function(e) {
+			});
+		}
+		if (opts.interview) {
+			tgl.remove();
+		} else {
+			tgl.click(function (e) {
 				e.stopImmediatePropagation();
+				$(this).toggleClass('minimized');
+				v.toggle();
 				return false;
 			});
+			noDblClick(tgl);
+		}
 	}
 	function _init(msg) {
 		sd = msg.stream;
@@ -294,8 +308,8 @@ var Video = (function() {
 		} else if (hasVideo) {
 			v.dialog({
 				classes: {
-					'ui-dialog': 'ui-corner-all video user-video' + (opts.showMicStatus ? ' mic-status' : '')
-					, 'ui-dialog-titlebar': 'ui-corner-all' + (opts.showMicStatus ? ' ui-state-highlight' : '')
+					'ui-dialog': 'video user-video' + (opts.showMicStatus ? ' mic-status' : '')
+					, 'ui-dialog-titlebar': '' + (opts.showMicStatus ? ' ui-state-highlight' : '')
 				}
 				, width: _w
 				, minWidth: 40
@@ -305,9 +319,6 @@ var Video = (function() {
 				, appendTo: contSel
 			});
 			_initDialog(v, opts);
-		}
-		if (hasVideo && !isSharing && !isRecording) {
-			_initCamDialog();
 		}
 		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
 		v.on('remove', _cleanup);
@@ -359,7 +370,7 @@ var Video = (function() {
 		if (VideoUtil.hasMic(sd)) {
 			const volIco = vol.create(self)
 			if (hasVideo) {
-				v.parent().find('.ui-dialog-titlebar-buttonpane').append(volIco);
+				v.parent().find('.buttonpane').append(volIco);
 			} else {
 				volIco.addClass('ulist-small');
 				volIco.insertAfter('#user' + sd.cuid + ' .typing-activity');

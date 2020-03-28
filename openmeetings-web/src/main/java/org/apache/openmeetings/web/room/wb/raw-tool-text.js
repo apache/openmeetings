@@ -90,7 +90,7 @@ var Text = function(wb, s, sBtn) {
 			i.removeClass('ui-state-active selected');
 		}
 		text._onActivate();
-		VideoUtil.highlight(sBtn.removeClass('disabled'), 5);
+		VideoUtil.highlight(sBtn.removeClass('disabled'), 'bg-warning', 5);
 	};
 	text.deactivate = function() {
 		wb.eachCanvas(function(canvas) {

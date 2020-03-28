@@ -9,8 +9,13 @@ var Sharer = (function() {
 
 	function _init() {
 		sharer = $('#sharer').dialog({
-			width: 450
+			classes: {
+				'ui-dialog': 'sharer'
+				, 'ui-dialog-titlebar': ''
+			}
+			, width: 450
 			, autoOpen: false
+			, resizable: false
 		});
 		if (!VideoUtil.sharingSupported()) {
 			sharer.find('.container').remove();
@@ -18,17 +23,9 @@ var Sharer = (function() {
 		} else {
 			type = sharer.find('select.type');
 			const b = kurentoUtils.WebRtcPeer.browser;
-			type.selectmenu({
-				width: 150
-				, disabled: _typeDisabled(b)
-			});
-			fps = sharer.find('select.fps').selectmenu({
-				width: 120
-				, disabled: VideoUtil.isEdge(b)
-			});
-			sbtn = sharer.find('.share-start-stop').button({
-				icon: 'ui-icon-image'
-			}).off().click(function() {
+			fps = sharer.find('select.fps');
+			_disable(fps, VideoUtil.isEdge(b));
+			sbtn = sharer.find('.share-start-stop').off().click(function() {
 				if (shareState === SHARE_STOPED) {
 					_setShareState(SHARE_STARTING);
 					VideoManager.sendMessage({
@@ -47,9 +44,7 @@ var Sharer = (function() {
 			});
 			width = sharer.find('.width');
 			height = sharer.find('.height');
-			rbtn = sharer.find('.record-start-stop').button({
-				icon: 'ui-icon-bullet'
-			}).off().click(function() {
+			rbtn = sharer.find('.record-start-stop').off().click(function() {
 				if (recState === SHARE_STOPED) {
 					_setRecState(SHARE_STARTING);
 					VideoManager.sendMessage({
@@ -68,45 +63,41 @@ var Sharer = (function() {
 			});
 		}
 	}
+	function _disable(e, state) {
+		e.prop('disabled', state);
+		if (state) {
+			e.addClass('disabled');
+		} else {
+			e.removeClass('disabled');
+		}
+	}
 	function _typeDisabled(_b) {
 		const b = _b || kurentoUtils.WebRtcPeer.browser;
 		return VideoUtil.isEdge(b) || VideoUtil.isChrome(b);
 	}
-	function _setShareState(state) {
-		shareState = state;
+	function _setBtnState(btn, state) {
 		const dis = SHARE_STOPED !== state
 			, typeDis = _typeDisabled();
-		type.selectmenu('option', 'disabled', dis || typeDis);
-		fps.selectmenu('option', 'disabled', dis || typeDis);
-		width.prop('disabled', dis);
-		height.prop('disabled', dis);
-		sbtn.text(sbtn.data(dis ? 'stop' : 'start'));
-		sbtn.button('option', 'icon', dis ? 'ui-icon-stop' : 'ui-icon-image');
-		if (state === SHARE_STARTING) {
-			sbtn.button('disable');
-			rbtn.button('disable');
+		_disable(type, dis || typeDis);
+		_disable(fps, dis || typeDis);
+		_disable(width, dis);
+		_disable(height, dis);
+		btn.find('span').text(btn.data(dis ? 'stop' : 'start'));
+		if (dis) {
+			btn.addClass('stop');
 		} else {
-			sbtn.button('enable');
-			rbtn.button('enable');
+			btn.removeClass('stop');
 		}
+		_disable(btn, state === SHARE_STARTING);
+		_disable(btn, state === SHARE_STARTING);
+	}
+	function _setShareState(state) {
+		shareState = state;
+		_setBtnState(sbtn, state);
 	}
 	function _setRecState(state) {
 		recState = state;
-		const dis = SHARE_STOPED !== state
-			, typeDis = _typeDisabled();
-		type.selectmenu('option', 'disabled', dis || typeDis);
-		fps.selectmenu('option', 'disabled', dis || typeDis);
-		width.prop('disabled', dis);
-		height.prop('disabled', dis);
-		rbtn.text(rbtn.data(dis ? 'stop' : 'start'));
-		rbtn.button('option', 'icon', dis ? 'ui-icon-stop' : 'ui-icon-image');
-		if (state === SHARE_STARTING) {
-			sbtn.button('disable');
-			rbtn.button('disable');
-		} else {
-			sbtn.button('enable');
-			rbtn.button('enable');
-		}
+		_setBtnState(rbtn, state);
 	}
 	function _getShareUid() {
 		const v = $('div[data-client-uid="' + Room.getOptions().uid + '"][data-client-type="SCREEN"]');

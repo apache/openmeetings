@@ -49,7 +49,7 @@
 					<wicket:message key="556"/>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">
+					<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
 						<i class="fas fa-sync-alt"></i>&nbsp;<wicket:message key="753"/>
 					</button>
 				</div>
@@ -60,14 +60,22 @@
 		<div id="user-video" class="video-container">
 			<div class="video">
 				<canvas width="10" class="level-meter" wicket:message="title:767"></canvas>
-				<div class="om-icon mute-others" wicket:message="title:video.muteothers"></div>
+				<div class="om-icon mute-others clickable" wicket:message="title:video.muteothers"></div>
 			</div>
 			<div class="footer" wicket:message="data-on:video.mic.on,data-off:video.mic.off">
 			</div>
 		</div>
-		<div id="video-refresh-btn">
-			<a class="ui-dialog-titlebar-refresh ui-corner-all ui-state-default" href="#" wicket:message="title:lbl.refresh" role="button">
-				<span class="ui-icon ui-icon-refresh"><wicket:message key="lbl.refresh"/></span>
+		<div id="video-button-bar" class="buttonpane align-right">
+			<a class="btn btn-refresh btn-outline-secondary btn-sm" href="#" wicket:message="title:lbl.refresh" role="button">
+				<i class="fas fa-sync-alt"></i>
+				<span class="sr-only"><wicket:message key="lbl.refresh"/></span>
+			</a>
+			<a class="btn btn-toggle btn-outline-secondary btn-sm" href="#" role="button">
+				<i class="fas"></i>
+			</a>
+			<a class="btn btn-wclose btn-outline-secondary btn-sm" href="#" wicket:message="title:85" role="button">
+				<i class="fas fa-times"></i>
+				<span class="sr-only"><wicket:message key="85"/></span>
 			</a>
 		</div>
 		<div id="muteothers-confirm" wicket:message="title:ulist.right.muteothers.grant, data-btn-ok:54, data-btn-cancel:lbl.cancel">
@@ -99,24 +107,24 @@
 		<div id="sharer" wicket:message="title:730">
 			<h2 class="alert">Screen-sharing is not supported in your browser</h2>
 			<div class="container p-0 m-0">
-				<div>
-					<span class="label"><wicket:message key="734"/></span>
-					<select name="type" class="type">
+				<div class="row-no-gutters">
+					<label class="col-7"><wicket:message key="734"/></label>
+					<select name="type" class="type col-4 custom-select">
 						<option value="screen">Screen</option>
 						<option value="window">Window</option>
 					</select>
 				</div>
-				<div>
-					<span class="label"><wicket:message key="740"/></span>
-					<input class="width" type="number" value="800"/>
+				<div class="row-no-gutters">
+					<label class="col-7"><wicket:message key="740"/></label>
+					<input class="width col-4" type="number" value="800"/>
 				</div>
-				<div>
-					<span class="label"><wicket:message key="741"/></span>
-					<input class="height" type="number" value="600"/>
+				<div class="row-no-gutters">
+					<label class="col-7"><wicket:message key="741"/></label>
+					<input class="height col-4" type="number" value="600"/>
 				</div>
-				<div>
-					<span class="label"><wicket:message key="1089"/></span>
-					<select name="fps" class="fps">
+				<div class="row-no-gutters">
+					<label class="col-7"><wicket:message key="1089"/></label>
+					<select name="fps" class="fps col-4 custom-select">
 						<option value="2">2 FPS</option>
 						<option value="5">5 FPS</option>
 						<option value="10" selected>10 FPS</option>
@@ -127,8 +135,12 @@
 					</select>
 				</div>
 				<hr/>
-				<button class="share-start-stop" wicket:message="data-start:732, data-stop:733"><wicket:message key="732"/></button>
-				<button class="record-start-stop ui-state-error" wicket:message="data-start:871, data-stop:872"><wicket:message key="871"/></button>
+				<button class="share-start-stop btn btn-outline-primary" wicket:message="data-start:732, data-stop:733">
+					<i class="fas"></i>&nbsp;<span><wicket:message key="732"/></span>
+				</button>
+				<button class="record-start-stop btn btn-outline-danger" wicket:message="data-start:871, data-stop:872">
+					<i class="fas"></i>&nbsp;<span><wicket:message key="871"/></span>
+				</button>
 			</div>
 		</div>
 		<div id="ask-permission" wicket:message="title:video.permission.title, data-btn-ok:54">

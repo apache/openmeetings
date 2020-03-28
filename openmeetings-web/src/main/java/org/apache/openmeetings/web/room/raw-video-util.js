@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const WB_AREA_SEL = '.room-block .wb-block';
 const WBA_WB_SEL = '.room-block .wb-block .ui-tabs-panel.ui-corner-bottom.ui-widget-content:visible';
-const VID_SEL = '.video.user-video';
+const VID_SEL = '.video-container';
 const CAM_ACTIVITY = 'VIDEO';
 const MIC_ACTIVITY = 'AUDIO';
 const SCREEN_ACTIVITY = 'SCREEN';
@@ -107,6 +107,14 @@ var VideoUtil = (function() {
 			list.push(_getRect(v));
 		}
 	}
+	function _arrangeResize() {
+		const list = [], elems = $(VID_SEL);
+		for (let i = 0; i < elems.length; ++i) {
+			const v = $(elems[i]);
+			v.css(_getPos(list, v.width(), v.height()));
+			list.push(_getRect(v));
+		}
+	}
 	function _cleanStream(stream) {
 		if (!!stream) {
 			stream.getTracks().forEach(function(track) {
@@ -181,14 +189,16 @@ var VideoUtil = (function() {
 			|| (b.name === 'Chrome')
 			|| (b.name === 'Chromium');
 	}
-	function _highlight(el, count) {
+	function _highlight(el, clazz, count) {
 		if (!el || el.length < 1 || el.hasClass('disabled') || count < 0) {
 			return;
 		}
-		el.addClass('ui-state-highlight', 2000, function() {
-			el.removeClass('ui-state-highlight', 2000, function() {
-				_highlight(el, --count);
+		el.addClass(clazz).delay(2000).queue(function(next) {
+			el.removeClass(clazz).delay(2000).queue(function(next1) {
+				_highlight(el, clazz, --count);
+				next1();
 			});
+			next();
 		});
 	}
 
@@ -202,6 +212,7 @@ var VideoUtil = (function() {
 	self.getPos = _getPos;
 	self.container = _container;
 	self.arrange = _arrange;
+	self.arrangeResize = _arrangeResize;
 	self.cleanStream = _cleanStream;
 	self.cleanPeer = _cleanPeer;
 	self.addIceServers = function(opts, m) {

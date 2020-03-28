@@ -239,13 +239,31 @@ html[dir="rtl"] .room-block .sidebar {
 	border-color: var(--secondary);
 	color: var(--secondary);
 }
-.user-video .om-icon.volume-control {
-	background-color: var(--white);
-	border: 1px solid var(--secondary);
-	margin:  0;
+.user-video .om-icon.volume-control
+, .user-video .btn.btn-refresh
+, .user-video .btn.btn-toggle
+, .user-video .btn.btn-wclose
+{
 	width: 20px;
 	height: 20px;
+}
+.user-video .om-icon.volume-control {
+	border-radius: 0.2rem;
+	border: 1px solid var(--secondary);
+	margin-top: 3px;
 	padding: 1px;
+}
+.user-video .btn.btn-refresh
+, .user-video .btn.btn-toggle
+, .user-video .btn.btn-wclose
+{
+	padding: 0;
+}
+.user-video .btn.btn-toggle i::before {
+	content: '\f2d1';
+}
+.user-video .btn.btn-toggle.minimized i::before {
+	content: '\f2d2';
 }
 #room-sidebar-tab-users .header .om-icon i {
 	font-size: 1.2em;
@@ -296,6 +314,7 @@ html[dir="rtl"] .room-block .sidebar {
 }
 .activity.cam.enabled.om-icon::before {
 	content: '\f03d';
+	color: var(--secondary);
 }
 .activity.cam.om-icon::before {
 	content: '\f4e2';
@@ -303,6 +322,7 @@ html[dir="rtl"] .room-block .sidebar {
 }
 .activity.mic.enabled.om-icon::before {
 	content: '\f130';
+	color: var(--secondary);
 }
 .om-icon.disabled {
 	filter: grayscale(100%);
@@ -386,14 +406,30 @@ html[dir="rtl"] .room-block .sidebar {
 .mic-on {
 	background-color: var(--warning);
 }
-.ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .ui-dialog-content {
+.ui-dialog.video
+, .ui-dialog.sharer
+, .ui-dialog.video .ui-dialog-titlebar
+, .ui-dialog.video .ui-dialog-content
+{
 	padding: 0;
+}
+.user-video .ui-dialog-titlebar
+, .sharer .ui-dialog-titlebar
+, .user-video .ui-dialog-titlebar .buttonpane
+{
+	background-color: var(--white);
+}
+.user-video .ui-dialog-titlebar .buttonpane {
+	position: absolute;
+	right: 2px;
+	top: 2px
 }
 .ui-dialog.video .ui-dialog-content {
 	overflow: hidden;
 }
 .ui-dialog.video .ui-dialog-titlebar {
-	padding-left: 10px
+	padding-left: 10px;
+	border: none;
 }
 .ui-dialog.video.user-video.user-speaks {
 	box-shadow: 3px 3px 4px green;
@@ -479,6 +515,9 @@ html[dir="rtl"] .room-block .sidebar {
 	background-repeat: no-repeat;
 	background-size: auto 100%;
 	background-position: center;
+}
+.room-block .room-container .btn.shared {
+	display: none;
 }
 .pod-area {
 	display: inline-grid;
@@ -633,12 +672,19 @@ html[dir="rtl"] .room-block .sidebar {
 #sharer .alert {
 	display: none;
 }
-#sharer .label {
-	width: 215px;
-	display: inline-block;
-}
 #sharer input {
 	width: 75px;
+}
+.sharer .share-start-stop i::before {
+	content: '\f03e';
+}
+.sharer .share-start-stop.stop i::before
+, .sharer .record-start-stop i::before
+{
+	content: '\f28d';
+}
+.sharer .record-start-stop i::before {
+	content: '\f111';
 }
 #room-sidebar-tabs.tabs .btn-dock {
 	display: inline-block;
