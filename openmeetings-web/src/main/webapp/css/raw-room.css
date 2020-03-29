@@ -314,7 +314,7 @@ html[dir="rtl"] .room-block .sidebar {
 }
 .activity.cam.enabled.om-icon::before {
 	content: '\f03d';
-	color: var(--secondary);
+	color: var(--success);
 }
 .activity.cam.om-icon::before {
 	content: '\f4e2';

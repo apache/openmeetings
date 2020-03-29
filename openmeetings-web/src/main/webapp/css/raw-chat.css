@@ -37,6 +37,18 @@
 	width: 70px;
 	padding-left: 5px;
 }
+#chatPanel #chatPopup .control.block i::before {
+	content: "\f107";
+}
+#chatPanel.closed #chatPopup .control.block i::before {
+	content: "\f106";
+}
+.main.room #chatPanel #chatPopup .control.block i::before {
+	content: "\f105";
+}
+.main.room #chatPanel.closed #chatPopup .control.block i::before {
+	content: "\f104";
+}
 #chat .messageArea .time {
 	margin-right: 5px;
 	font-style: italic;

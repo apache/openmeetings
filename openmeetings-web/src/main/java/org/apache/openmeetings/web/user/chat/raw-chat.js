@@ -7,13 +7,9 @@ var Chat = function() {
 		, closedSizePx = closedSize + "px"
 		, emoticon = new CSSEmoticon()
 		, doneTypingInterval = 5000 //time in ms, 5 second for example
-		, iconOpen = 'fa-angle-up'
-		, iconOpenRoom = 'fa-angle-' + (Settings.isRtl ? 'left' : 'right')
-		, iconClose = 'fa-angle-down'
-		, iconCloseRoom = 'fa-angle-' + (Settings.isRtl ? 'right' : 'left')
 		, SEND_ENTER = 'enter', SEND_CTRL = 'ctrl'
 		;
-	let p, pp, ctrl, icon, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
+	let p, pp, ctrl, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
 		, roomPrefix = "Room ", typingTimer, audio, roomMode = false, globalWidth = 600
 		, editor = $('#chatMessage .wysiwyg-editor'), muted = false, sendOn, DEF_SEND
 		, userId, inited = false
@@ -157,11 +153,7 @@ var Chat = function() {
 		clearTimeout(p.data('timeout'));
 		pp = $('#chatPanel, #chatPopup');
 		ctrl = $('#chatPopup .control.block');
-		icon = $('#chatPopup .control.block i.fas');
 		editor = $('#chatMessage .wysiwyg-editor');
-		icon.removeClass(function(index, className) {
-			return (className.match (/(^|\s)fa-angle-\S+/g) || []).join(' ');
-		});
 		initToolbar();
 		tabs = $("#chatTabs");
 		tabs.off().on('shown.bs.tab', function (e) {
@@ -175,11 +167,9 @@ var Chat = function() {
 			$('#chatTabs li:last-child a').tab('show');
 		});
 		if (roomMode) {
-			icon.addClass(isClosed() ? iconOpenRoom : iconCloseRoom);
 			_removeResize();
 		} else {
 			ctrl.attr('title', '');
-			icon.addClass(iconOpen);
 			p.removeClass('room opened').addClass('closed')
 				.off('mouseenter mouseleave')
 				.resizable({
@@ -339,7 +329,6 @@ var Chat = function() {
 	}
 	function _open(handler) {
 		if (isClosed()) {
-			icon.removeClass(roomMode ? iconOpenRoom : iconOpen).addClass(roomMode ? iconCloseRoom : iconClose);
 			ctrl.removeClass('bg-warning');
 			let opts;
 			if (roomMode) {
@@ -366,7 +355,6 @@ var Chat = function() {
 	}
 	function _close(handler) {
 		if (!isClosed()) {
-			icon.removeClass(roomMode ? iconCloseRoom : iconClose).addClass(roomMode ? iconOpenRoom : iconOpen);
 			let opts;
 			if (roomMode) {
 				opts = {width: closedSizePx};

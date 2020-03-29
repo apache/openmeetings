@@ -96,6 +96,11 @@ html[dir="rtl"] .room-block .wb-block {
 .room-block .wb-block .tools .om-icon.big::before {
 	padding-left: 5px;
 }
+.room-block .wb-block .tools .drawings .om-icon.big.stub::before
+, .room-block .wb-block .tools .om-icon.big.math::before
+{
+	font-size: 1.5em;
+}
 .room-block .wb-block .tools .om-icon.big.paint::before {
 	content: '\f304'
 }
@@ -114,13 +119,8 @@ html[dir="rtl"] .room-block .wb-block {
 .room-block .wb-block .tools .om-icon.big.rect::before {
 	content: '\f5cb'
 }
-.room-block .wb-block .tools .om-icon.big.ellipse div {
-	width: 30px;
-	height: 30px;
-	display: inline-block;
-	border-radius: 50%;
-	margin: 2px;
-	background-color: var(--secondary);
+.room-block .wb-block .tools .om-icon.big.ellipse::before {
+	content: '\f111'
 }
 .room-block .wb-block .tools .om-icon.big.text::before {
 	content: 'T';
