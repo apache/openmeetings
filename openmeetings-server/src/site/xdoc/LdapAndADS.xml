@@ -63,7 +63,7 @@ TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
 			</div>
 		</section>
 		<section name="LDAP and Active Directory Integration">
-			<p> In: $OM_HOME/webapps/openmeetings/conf<br/>
+			<p> In: $OM_HOME/webapps/openmeetings/data/conf<br/>
 				you will find sample configurations for LDAP and Active Directory. The
 				nature of those Directory Servers are that they are individual for
 				every organization, so you have to modify of course at least the
