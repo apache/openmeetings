@@ -48,33 +48,10 @@ var VideoUtil = (function() {
 		const c = a.find('.wb-area .tabs .wb-tab-content');
 		return c.length > 0 ? $(WBA_WB_SEL) : a;
 	}
-	function _getPos(list, w, h) {
-		if (Room.getOptions().interview) {
-			return {left: 0, top: 0};
-		}
-		const wba = _container(), woffset = wba.offset()
-			, offsetX = 20, offsetY = 10
-			, area = {left: woffset.left, top: woffset.top, right: woffset.left + wba.width(), bottom: woffset.top + wba.height()};
-		const rectNew = {
-				_left: area.left
-				, _top: area.top
-				, right: area.left + w
-				, bottom: area.top + h
-				, get left() {
-					return this._left
-				}
-				, set left(l) {
-					this._left = l;
-					this.right = l + w;
-				}
-				, get top() {
-					return this._top
-				}
-				, set top(t) {
-					this._top = t;
-					this.bottom = t + h;
-				}
-			};
+	function __processTopToBottom(area, rectNew, list) {
+		const offsetX = 20
+			, offsetY = 10;
+
 		let minY = area.bottom, posFound;
 		do {
 			posFound = true;
@@ -100,21 +77,94 @@ var VideoUtil = (function() {
 		} while (!posFound);
 		return {left: rectNew.left, top: rectNew.top};
 	}
+	function __processEqualsBottomToTop(area, rectNew, list) {
+		const offsetX = 20
+			, offsetY = 10;
+
+		rectNew.bottom = area.bottom;
+		let minY = area.bottom, posFound;
+		do {
+			posFound = true;
+			for (let i = 0; i < list.length; ++i) {
+				const rect = list[i];
+				minY = Math.min(minY, rect.top);
+
+				if (rectNew.left < rect.right && rectNew.right > rect.left && rectNew.top < rect.bottom && rectNew.bottom > rect.top) {
+					rectNew.left = rect.right + offsetX;
+					posFound = false;
+				}
+				if (rectNew.right >= area.right) {
+					rectNew.left = area.left;
+					rectNew.bottom = Math.min(minY, rectNew.top) - offsetY;
+					posFound = false;
+				}
+				if (rectNew.top <= area.top) {
+					rectNew.top = area.top;
+					posFound = true;
+					break;
+				}
+			}
+		} while (!posFound);
+		return {left: rectNew.left, top: rectNew.top};
+	}
+	function _getPos(list, w, h, _processor) {
+		if (Room.getOptions().interview) {
+			return {left: 0, top: 0};
+		}
+		const wba = _container()
+			, woffset = wba.offset()
+			, area = {left: woffset.left, top: woffset.top, right: woffset.left + wba.width(), bottom: woffset.top + wba.height()}
+			, rectNew = {
+				_left: area.left
+				, _top: area.top
+				, _right: area.left + w
+				, _bottom: area.top + h
+				, get left() {
+					return this._left;
+				}
+				, set left(l) {
+					this._left = l;
+					this._right = l + w;
+				}
+				, get right() {
+					return this._right;
+				}
+				, get top() {
+					return this._top;
+				}
+				, set top(t) {
+					this._top = t;
+					this._bottom = t + h;
+				}
+				, set bottom(b) {
+					this._bottom = b;
+					this._top = b - h;
+				}
+				, get bottom() {
+					return this._bottom;
+				}
+			};
+		const processor = _processor || __processTopToBottom;
+		return processor(area, rectNew, list);
+	}
 	function _arrange() {
-		const list = [], elems = $(VIDWIN_SEL);
-		for (let i = 0; i < elems.length; ++i) {
-			const v = $(elems[i]);
+		const list = [];
+		$(VIDWIN_SEL).each(function() {
+			const v = $(this);
 			v.css(_getPos(list, v.width(), v.height()));
 			list.push(_getRect(v));
-		}
+		});
 	}
 	function _arrangeResize() {
-		const list = [], elems = $(VIDWIN_SEL);
-		for (let i = 0; i < elems.length; ++i) {
-			const v = $(elems[i]);
-			v.css(_getPos(list, v.width(), v.height()));
+		const list = [];
+		$(VIDWIN_SEL).each(function() {
+			const v = $(this);
+			v.find('.video-container.ui-dialog-content')
+				.dialog('option', 'width', 120)
+				.dialog('option', 'height', 90);
+			v.css(_getPos(list, v.width(), v.height(), __processEqualsBottomToTop));
 			list.push(_getRect(v));
-		}
+		});
 	}
 	function _cleanStream(stream) {
 		if (!!stream) {

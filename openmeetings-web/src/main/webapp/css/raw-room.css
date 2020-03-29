@@ -415,6 +415,7 @@ html[dir="rtl"] .room-block .sidebar {
 }
 .user-video .ui-dialog-titlebar
 , .sharer .ui-dialog-titlebar
+, .wb-tool-settings .ui-dialog-titlebar
 , .user-video .ui-dialog-titlebar .buttonpane
 {
 	background-color: var(--white);
