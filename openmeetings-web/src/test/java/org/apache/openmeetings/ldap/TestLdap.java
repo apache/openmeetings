@@ -29,6 +29,7 @@ import static org.apache.openmeetings.core.ldap.LdapOptions.CONFIGKEY_LDAP_SEARC
 import static org.apache.openmeetings.core.ldap.LdapOptions.CONFIGKEY_LDAP_SEARCH_SCOPE;
 import static org.apache.openmeetings.util.OmFileHelper.getLdapConf;
 import static org.apache.openmeetings.util.OmFileHelper.loadLdapConf;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -125,6 +126,11 @@ public class TestLdap extends AbstractWicketTester {
 	public void testSbndSessionLogin() throws OmException {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
 		assertTrue(WebSession.get().signIn(USER1, userpass, User.Type.LDAP, cfg.getId()), "Login should be successful");
+		//do login second time
+		WebSession.get().invalidateNow();
+		assertTrue(WebSession.get().signIn(USER1, userpass, User.Type.LDAP, cfg.getId()), "Login should be successful");
+		//check DB
+		assertEquals(1, userDao.count(USER1), "There should be exactly one user after multiple logins");
 	}
 
 	@Test
