@@ -678,7 +678,7 @@ public class RoomPanel extends BasePanel {
 
 	public static boolean hasRight(long userId, long roomId, Right r) {
 		for (Client c : getBean(ClientManager.class).listByRoom(roomId)) {
-			if (c.getUserId().equals(userId) && c.hasRight(r)) {
+			if (c.sameUserId(userId) && c.hasRight(r)) {
 				return true;
 			}
 		}

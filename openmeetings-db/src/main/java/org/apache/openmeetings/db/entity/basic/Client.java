@@ -120,7 +120,11 @@ public class Client implements IClient {
 
 	@Override
 	public Long getUserId() {
-		return user.getId();
+		return user == null ? null : user.getId();
+	}
+
+	public boolean sameUserId(Long userId) {
+		return getUserId() == null ? false : getUserId().equals(userId);
 	}
 
 	@Override
