@@ -109,7 +109,11 @@ public class Client implements IDataProviderEntity, IWsClient {
 	}
 
 	public Long getUserId() {
-		return user.getId();
+		return user == null ? null : user.getId();
+	}
+
+	public boolean sameUserId(Long userId) {
+		return getUserId() == null ? false : getUserId().equals(userId);
 	}
 
 	public String getPictureUri() {
@@ -437,7 +441,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 
 	@Override
 	public String toString() {
-		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + user.getId() + ", room=" + (room == null ? null : room.getId())
+		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + getUserId() + ", room=" + getRoomId()
 				+ ", rights=" + rights + ", sactivities=" + activities + ", connectedSince=" + connectedSince + "]";
 	}
 

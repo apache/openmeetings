@@ -279,7 +279,7 @@ public class ClientManager implements IClientManager {
 	public boolean isOnline(Long userId) {
 		boolean isUserOnline = false;
 		for (Map.Entry<String, Client> e : map().entrySet()) {
-			if (e.getValue().getUserId().equals(userId)) {
+			if (e.getValue().sameUserId(userId)) {
 				isUserOnline = true;
 				break;
 			}
@@ -323,7 +323,7 @@ public class ClientManager implements IClientManager {
 		for (Entry<Long, Set<String>> me : onlineRooms.entrySet()) {
 			for (String uid : me.getValue()) {
 				Client c = get(uid);
-				if (c != null && c.getUserId().equals(userId)) {
+				if (c != null && c.sameUserId(userId)) {
 					result.add(me.getKey());
 				}
 			}
@@ -336,7 +336,7 @@ public class ClientManager implements IClientManager {
 		if (clients != null) {
 			for (String uid : clients) {
 				Client c = get(uid);
-				if (c != null && c.getUserId().equals(userId)) {
+				if (c != null && c.sameUserId(userId)) {
 					return true;
 				}
 			}
@@ -346,7 +346,7 @@ public class ClientManager implements IClientManager {
 
 	private List<Client> getByKeys(Long userId, String sessionId) {
 		return map().values().stream()
-				.filter(c -> c.getUserId().equals(userId) && c.getSessionId().equals(sessionId))
+				.filter(c -> c.sameUserId(userId) && c.getSessionId().equals(sessionId))
 				.collect(Collectors.toList());
 	}
 

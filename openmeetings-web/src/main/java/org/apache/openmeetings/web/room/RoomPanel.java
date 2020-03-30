@@ -649,7 +649,7 @@ public class RoomPanel extends BasePanel {
 
 	public static boolean hasRight(ClientManager cm, long userId, long roomId, Right r) {
 		for (Client c : cm.listByRoom(roomId)) {
-			if (c.getUserId().equals(userId) && c.hasRight(r)) {
+			if (c.sameUserId(userId) && c.hasRight(r)) {
 				return true;
 			}
 		}
