@@ -132,7 +132,7 @@ public class Admin {
 			.addOption(new OmOption("b", 1, "b", "backup", false, "Backups OM"))
 			.addOption(new OmOption("r", 2, "r", "restore", false, "Restores OM"))
 			.addOption(new OmOption("i", 3, "i", "install", false, "Fill DB table, and make OM usable"))
-			.addOption(new OmOption("l", 3, "l", "LDAP", false, "Import LDAP users into DB"))
+			.addOption(new OmOption("l", 3, "l", "ldap", false, "Import LDAP users into DB"))
 			.addOption(new OmOption("f", 4, "f", "files", false, "File operations - statictics/cleanup"));
 		group.setRequired(true);
 		options.addOptionGroup(group);
