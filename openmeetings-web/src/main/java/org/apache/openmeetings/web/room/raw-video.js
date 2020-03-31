@@ -112,6 +112,26 @@ var Video = (function() {
 				});
 		});
 	}
+	function __attachListener(rtcPeer) {
+		if (rtcPeer) {
+			const pc = rtcPeer.peerConnection;
+			pc.onconnectionstatechange = function(event) {
+				console.warn(`!!RTCPeerConnection state changed: ${pc.connectionState}`, event);
+				switch(pc.connectionState) {
+					case "connected":
+						// The connection has become fully connected
+						break;
+					case "disconnected":
+					case "failed":
+						// One or more transports has terminated unexpectedly or in an error
+						break;
+					case "closed":
+						// The connection has been closed
+						break;
+				}
+			}
+		}
+	}
 	function __createSendPeer(msg, cnts, stream) {
 		const options = {
 			videoStream: stream
@@ -150,6 +170,7 @@ var Video = (function() {
 					}
 				});
 			});
+		__attachListener(data.rtcPeer);
 	}
 	function _createSendPeer(msg) {
 		if (VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd)) {
@@ -183,6 +204,7 @@ var Video = (function() {
 					});
 				});
 			});
+		__attachListener(data.rtcPeer);
 	}
 	function _handleMicStatus(state) {
 		if (!footer || !footer.is(':visible')) {
