@@ -80,6 +80,13 @@
 				<groupId>com.samaxes.maven</groupId>
 				<artifactId>minify-maven-plugin</artifactId>
 				<version>${minify-maven-plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.google.javascript</groupId>
+						<artifactId>closure-compiler</artifactId>
+						<version>v20170521</version>
+					</dependency>
+				</dependencies>
 				<executions>
 					<execution>
 						<id>theme-minify</id>
