@@ -116,7 +116,7 @@ var Video = (function() {
 		if (rtcPeer) {
 			const pc = rtcPeer.peerConnection;
 			pc.onconnectionstatechange = function(event) {
-				console.warn(`!!RTCPeerConnection state changed: ${pc.connectionState}`, event);
+				console.warn(`!!RTCPeerConnection state changed: ${pc.connectionState}`);
 				switch(pc.connectionState) {
 					case "connected":
 						// The connection has become fully connected
