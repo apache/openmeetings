@@ -33,6 +33,7 @@ import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
@@ -111,7 +112,7 @@ public class SignInDialog extends Modal<String> {
 				register.setClientTimeZone();
 				register.show(target);
 			}
-		});
+		}.setVisible(OpenmeetingsVariables.isAllowRegisterFrontend()));
 		addButton(new SpinnerAjaxButton("button", new ResourceModel("112"), form, Buttons.Type.Outline_Primary)); // Login
 
 		super.onInitialize();
