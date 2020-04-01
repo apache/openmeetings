@@ -94,7 +94,7 @@ public class TestLoginUI extends AbstractWicketTester {
 	public void testEmptyRegister() {
 		FormTester formTester = showRegister();
 		formTester.submit("submit");
-		checkErrors(8);
+		assertTrue(countErrors(tester) > 7, "There should be at least 8 errors");
 	}
 
 	@Test
