@@ -322,7 +322,7 @@ html[dir="rtl"] .room-block .sidebar {
 }
 .activity.mic.enabled.om-icon::before {
 	content: '\f130';
-	color: var(--secondary);
+	color: var(--success);
 }
 .om-icon.disabled {
 	filter: grayscale(100%);
