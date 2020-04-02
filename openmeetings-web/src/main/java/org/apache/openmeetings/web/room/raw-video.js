@@ -119,11 +119,18 @@ var Video = (function() {
 				console.warn(`!!RTCPeerConnection state changed: ${pc.connectionState}`);
 				switch(pc.connectionState) {
 					case "connected":
-						// The connection has become fully connected
+						if (sd.self) {
+							// The connection has become fully connected
+							OmUtil.alert('info', `Connection to Media server has been established`, 3000);//notify user
+						}
 						break;
 					case "disconnected":
 					case "failed":
-						// One or more transports has terminated unexpectedly or in an error
+						if (sd.self) {
+							//connection has been dropped
+							OmUtil.alert('warning', `Media server connection is ${pc.connectionState}, will try to re-connect`, 3000);//notify user
+							_refresh();
+						}
 						break;
 					case "closed":
 						// The connection has been closed
