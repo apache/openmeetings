@@ -716,7 +716,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 			Standardm&auml;&szlig;ig verwendet {0} die integrierte
 			{1} Datenbank. In Produktivumgebungen wird jedoch der Einsatz von {2}, {3}, {4}, {5} or {6} empfohlen.
 		</blockquote>
-		<div class="ui-state-highlight ui-corner-all installer-note">
+		<div class="alert alert-warning" role="alert">
 			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
 		</div>
 	]]></entry>

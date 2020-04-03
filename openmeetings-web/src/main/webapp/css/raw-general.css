@@ -762,3 +762,7 @@ select.messages.selector {
 .popover.confirmation.show {
 	z-index: 3000; /* FIXME TODO move this to variables */
 }
+.installer {
+	overflow-y: auto;
+	height: calc(100% - var(--header-height));
+}

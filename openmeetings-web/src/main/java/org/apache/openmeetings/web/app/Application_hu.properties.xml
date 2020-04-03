@@ -715,7 +715,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 			Az {0} alapértelmezette a beépített {1} adatbázist használja.
 			További lehetőségként használható a {2}, {3}, {4}, {5} or {6}
 		</blockquote>
-		<div class="ui-state-highlight ui-corner-all installer-note">
+		<div class="alert alert-warning" role="alert">
 			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
 		</div>
 	]]></entry>

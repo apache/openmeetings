@@ -716,7 +716,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 			По умолчанию {0} использует интегрированную базу данных {1}. В
 			продакшине Вы должны задуматься об использовании таких баз, как {2}, {3}, {4}, {5} or {6}
 		</blockquote>
-		<div class="ui-state-highlight ui-corner-all installer-note">
+		<div class="alert alert-warning" role="alert">
 			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
 		</div>
 	]]></entry>

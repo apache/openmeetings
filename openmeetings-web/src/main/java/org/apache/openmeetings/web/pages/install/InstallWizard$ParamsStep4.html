@@ -21,49 +21,38 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<fieldset class="ui-widget-content" id="userConf2">
+	<fieldset class="" id="userConf2">
 		<legend><wicket:message key="install.wizard.params.step4.crypt"/></legend>
-		<ul class="paramList">
-			<li>
-				<label wicket:for="cryptClassName"><wicket:message key="install.wizard.params.step4.cryptClassName"/>
-					<span class="info-title" wicket:message="title:install.wizard.params.step4.cryptClassName.text,alt:install.wizard.params.step4.cryptClassName.text"></span>
-				</label>
-				<input wicket:id="cryptClassName" type="text"
-					wicket:message="title:install.wizard.params.step4.cryptClassName.title" />
-			</li>
-		</ul>
+		<div class="formelement">
+			<label wicket:for="cryptClassName" class="col-3 text-right"><wicket:message key="install.wizard.params.step4.cryptClassName"/>
+				<i class="fas fa-info-circle m-1 text-info" wicket:message="title:install.wizard.params.step4.cryptClassName.text,alt:install.wizard.params.step4.cryptClassName.text"></i>
+			</label>
+			<input wicket:id="cryptClassName" type="text" wicket:message="title:install.wizard.params.step4.cryptClassName.title" class="col-3"/>
+		</div>
 	</fieldset>
-	<fieldset class="ui-widget-content" id="sip">
+	<fieldset class="" id="sip">
 		<legend><wicket:message key="install.wizard.params.step4.sip"/></legend>
-		<ul class="paramList">
-			<li>
-				<label wicket:for="sipEnable"><wicket:message key="install.wizard.params.step4.sipEnable"/>
-					<span class="info-title" wicket:message="title:install.wizard.params.step4.sipEnable.text,alt:install.wizard.params.step4.sipEnable.text"></span>
-				</label>
-				<div class="onoffswitch">
-					<input type="checkbox" class="onoffswitch-checkbox" wicket:id="sipEnable">
-					<label class="onoffswitch-label" wicket:for="sipEnable">
-						<span class="onoffswitch-inner">
-							<span class="before"></span>
-							<span class="after"></span>
-						</span>
-						<span class="onoffswitch-switch"></span>
-					</label>
-				</div>
-			</li>
-			<li>
-				<label wicket:for="sipRoomPrefix"><wicket:message key="install.wizard.params.step4.sipRoomPrefix"/>
-					<span class="info-title" wicket:message="title:install.wizard.params.step4.sipRoomPrefix.text,alt:install.wizard.params.step4.sipRoomPrefix.text"></span>
-				</label>
-				<input wicket:id="sipRoomPrefix" type="text" />
-			</li>
-			<li>
-				<label wicket:for="sipExtenContext"><wicket:message key="install.wizard.params.step4.sipExtenContext"/>
-					<span class="info-title" wicket:message="title:install.wizard.params.step4.sipExtenContext.text,alt:install.wizard.params.step4.sipExtenContext.text"></span>
-				</label>
-				<input wicket:id="sipExtenContext" type="text" />
-			</li>
-		</ul>
+		<div class="formelement">
+			<label wicket:for="sipEnable" class="col-3 text-right"><wicket:message key="install.wizard.params.step4.sipEnable"/>
+				<i class="fas fa-info-circle m-1 text-info" wicket:message="title:install.wizard.params.step4.sipEnable.text,alt:install.wizard.params.step4.sipEnable.text"></i>
+			</label>
+			<div class="onoffswitch">
+				<input type="checkbox" class="onoff-checkbox" wicket:id="sipEnable"/>
+				<label class="onoff-label" wicket:for="sipEnable"></label>
+			</div>
+		</div>
+		<div class="formelement">
+			<label wicket:for="sipRoomPrefix" class="col-3 text-right"><wicket:message key="install.wizard.params.step4.sipRoomPrefix"/>
+				<i class="fas fa-info-circle m-1 text-info" wicket:message="title:install.wizard.params.step4.sipRoomPrefix.text,alt:install.wizard.params.step4.sipRoomPrefix.text"></i>
+			</label>
+			<input wicket:id="sipRoomPrefix" type="text" class="col-3"/>
+		</div>
+		<div class="formelement">
+			<label wicket:for="sipExtenContext" class="col-3 text-right"><wicket:message key="install.wizard.params.step4.sipExtenContext"/>
+				<i class="fas fa-info-circle m-1 text-info" wicket:message="title:install.wizard.params.step4.sipExtenContext.text,alt:install.wizard.params.step4.sipExtenContext.text"></i>
+			</label>
+			<input wicket:id="sipExtenContext" type="text" class="col-3"/>
+		</div>
 	</fieldset>
 </wicket:panel>
 </html>

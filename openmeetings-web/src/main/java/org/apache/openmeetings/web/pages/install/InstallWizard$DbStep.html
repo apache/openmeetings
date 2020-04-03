@@ -21,30 +21,36 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<fieldset class="ui-widget-content" id="userData">
+	<fieldset class="" id="userData">
 		<legend><wicket:message key="install.wizard.db.step.field.title"/></legend>
 		<div wicket:id="note"></div>
 		<form class="adminForm" wicket:id="form">
 			<div class="formelement">
-				<label wicket:for="dbType"><wicket:message key="install.wizard.db.step.dbtype" /></label> <select wicket:id="dbType"></select>
+				<label wicket:for="dbType" class="col-3 text-right"><wicket:message key="install.wizard.db.step.dbtype" /></label>
+				<select wicket:id="dbType" class="custom-select col-3"></select>
 			</div>
 			<div wicket:enclosure="host" class="formelement">
-				<label wicket:for="host"><wicket:message key="install.wizard.db.step.host" /></label> <input type="text" wicket:id="host"/>
+				<label wicket:for="host" class="col-3 text-right"><wicket:message key="install.wizard.db.step.host" /></label>
+				<input type="text" wicket:id="host" class="col-3"/>
 			</div>
 			<div wicket:enclosure="port" class="formelement">
-				<label wicket:for="port"><wicket:message key="install.wizard.db.step.port" /></label> <input type="text" wicket:id="port"/>
+				<label wicket:for="port" class="col-3 text-right"><wicket:message key="install.wizard.db.step.port" /></label>
+				<input type="text" wicket:id="port" class="col-3"/>
 			</div>
 			<div class="formelement">
-				<label wicket:for="dbname"><wicket:message key="install.wizard.db.step.dbname" /></label> <input type="text" wicket:id="dbname"/>
+				<label wicket:for="dbname" class="col-3 text-right"><wicket:message key="install.wizard.db.step.dbname" /></label>
+				<input type="text" wicket:id="dbname" class="col-3"/>
 			</div>
 			<div wicket:enclosure="login" class="formelement">
-				<label wicket:for="login"><wicket:message key="install.wizard.db.step.user" /></label> <input type="text" wicket:id="login"/>
+				<label wicket:for="login" class="col-3 text-right"><wicket:message key="install.wizard.db.step.user" /></label>
+				<input type="text" wicket:id="login" class="col-3"/>
 			</div>
 			<div wicket:enclosure="password" class="formelement">
-				<label wicket:for="password"><wicket:message key="install.wizard.db.step.pass" /></label> <input type="text" wicket:id="password"/>
+				<label wicket:for="password" class="col-3 text-right"><wicket:message key="install.wizard.db.step.pass" /></label>
+				<input type="text" wicket:id="password" class="col-3"/>
 			</div>
 			<div class="formelement">
-				<button class="align-right" wicket:id="check"><wicket:message key="install.wizard.db.step.check"/></button>
+				<button class="align-right" wicket:id="check"></button>
 			</div>
 		</form>
 	</fieldset>

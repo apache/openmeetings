@@ -714,7 +714,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 		<blockquote>
 			默认 {0} 使用集成 {1} 数据库。对于生产环境，你应该考虑使用 {2}，{3}，{4}，{5} 或 {6}
 		</blockquote>
-		<div class="ui-state-highlight ui-corner-all installer-note">
+		<div class="alert alert-warning" role="alert">
 			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
 		</div>
 

@@ -54,15 +54,22 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ErrorMessagePanel;
 import org.apache.openmeetings.web.common.OmLabel;
-import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
+import org.apache.wicket.extensions.wizard.IWizard;
+import org.apache.wicket.extensions.wizard.WizardButton;
+import org.apache.wicket.extensions.wizard.WizardButtonBar;
 import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardModel;
 import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
 import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -76,6 +83,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -83,37 +91,50 @@ import org.slf4j.LoggerFactory;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
-import com.googlecode.wicket.jquery.ui.form.button.IndicatingAjaxButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
 import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
-import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.ButtonBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons.Type;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.progress.UpdatableProgressBar;
+import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
+import de.agilecoders.wicket.extensions.wizard.BootstrapWizard;
 
-public class InstallWizard extends AbstractWizard<InstallationConfig> {
+public class InstallWizard extends BootstrapWizard {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(InstallWizard.class);
-	private final IDynamicWizardStep welcomeStep;
-	private final IDynamicWizardStep dbStep;
-	private final ParamsStep1 paramsStep1;
-	private final IDynamicWizardStep paramsStep2;
-	private final IDynamicWizardStep paramsStep3;
-	private final IDynamicWizardStep paramsStep4;
-	private final InstallStep installStep;
+	private IDynamicWizardStep welcomeStep;
+	private IDynamicWizardStep dbStep;
+	private ParamsStep1 paramsStep1;
+	private IDynamicWizardStep paramsStep2;
+	private IDynamicWizardStep paramsStep3;
+	private IDynamicWizardStep paramsStep4;
+	private InstallStep installStep;
 	private Throwable th = null;
 	private DbType initDbType = null;
 	private DbType dbType = null;
+	private NotificationPanel feedback;
+	private final CompoundPropertyModel<InstallationConfig> model;
+	private final List<Button> buttons = new ArrayList<>(4);
+
 	@SpringBean
 	private ImportInitvalues initvalues;
 
 	//onInit, applyState
 	public InstallWizard(String id, String title) {
-		super(id, title, new CompoundPropertyModel<>(new InstallationConfig()), true);
-		setTitle(Model.of(getModelObject().getAppName()));
+		super(id);
+		setOutputMarkupPlaceholderTag(true);
+		setOutputMarkupId(true);
+		model = new CompoundPropertyModel<>(new InstallationConfig());
+		setDefaultModel(model);
+	}
+
+	@Override
+	protected void onInitialize() {
 		welcomeStep = new WelcomeStep();
 		dbStep = new DbStep();
 		paramsStep1 = new ParamsStep1();
@@ -121,11 +142,12 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		paramsStep3 = new ParamsStep3();
 		paramsStep4 = new ParamsStep4();
 		installStep = new InstallStep();
-
 		DynamicWizardModel wmodel = new DynamicWizardModel(welcomeStep);
 		wmodel.setCancelVisible(false);
 		wmodel.setLastVisible(true);
 		init(wmodel);
+
+		super.onInitialize();
 	}
 
 	public void initTzDropDown() {
@@ -133,32 +155,73 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	}
 
 	@Override
-	public void onConfigure(JQueryBehavior behavior) {
-		super.onConfigure(behavior);
-		behavior.setOption("closeOnEscape", false);
-		behavior.setOption("classes", "{'ui-dialog-titlebar': 'ui-corner-all no-close'}");
-	}
-
-	@Override
-	public boolean isResizable() {
-		return false;
-	}
-
-	@Override
 	protected WebMarkupContainer newFeedbackPanel(String id) {
-		NotificationPanel feedback = new NotificationPanel("feedback");
+		feedback = (NotificationPanel)super.newFeedbackPanel(id);
 		feedback.setEscapeModelStrings(false).setOutputMarkupId(true);
 		return feedback;
 	}
 
 	@Override
-	public int getWidth() {
-		return 1000;
-	}
+	protected Component newButtonBar(String id) {
+		return new WizardButtonBar(id, this) {
+			private static final long serialVersionUID = 1L;
 
-	@Override
-	protected boolean closeOnFinish() {
-		return false;
+			@Override
+			protected WizardButton newCancelButton(String id, IWizard wizard) {
+				WizardButton button = super.newCancelButton(id, wizard);
+				button.add(new ButtonBehavior(Type.Outline_Warning, Buttons.Size.Medium));
+				return button;
+			}
+
+			@Override
+			protected WizardButton newFinishButton(String id, IWizard wizard) {
+				WizardButton button = super.newFinishButton(id, wizard);
+				button.add(new ButtonBehavior(Type.Outline_Success, Buttons.Size.Medium));
+				button.add(new AjaxFormSubmitBehavior("click") {
+					private static final long serialVersionUID = 1L;
+
+
+					@Override
+					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+						super.updateAjaxAttributes(attributes);
+
+						// do not allow normal form submit to happen
+						attributes.setPreventDefault(true);
+					}
+
+					@Override
+					protected void onSubmit(AjaxRequestTarget target) {
+						button.onSubmit();
+					}
+				});
+				buttons.add(button);
+				return button;
+			}
+
+			@Override
+			protected WizardButton newLastButton(String id, IWizard wizard) {
+				WizardButton button = super.newLastButton(id, wizard);
+				button.add(new ButtonBehavior(Type.Outline_Secondary, Buttons.Size.Medium));
+				buttons.add(button);
+				return button;
+			}
+
+			@Override
+			protected WizardButton newNextButton(String id, IWizard wizard) {
+				WizardButton button = super.newNextButton(id, wizard);
+				button.add(new ButtonBehavior(Type.Outline_Secondary, Buttons.Size.Medium));
+				buttons.add(button);
+				return button;
+			}
+
+			@Override
+			protected WizardButton newPreviousButton(String id, IWizard wizard) {
+				WizardButton button = super.newPreviousButton(id, wizard);
+				button.add(new ButtonBehavior(Type.Outline_Secondary, Buttons.Size.Medium));
+				buttons.add(button);
+				return button;
+			}
+		};
 	}
 
 	private abstract class BaseStep extends DynamicWizardStep {
@@ -166,13 +229,13 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 		public BaseStep(IDynamicWizardStep prev) {
 			super(prev);
-			setSummaryModel(Model.of(""));
 		}
 
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();
-			InstallWizard.this.setTitle(Model.of(getModelObject().getAppName() + " - " + getString("install.wizard.install.header")));
+			setSummaryModel(Model.of(""));
+			setTitleModel(Model.of(model.getObject().getAppName() + " - " + getString("install.wizard.install.header")));
 		}
 	}
 
@@ -231,22 +294,22 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
-						target.add(getFeedbackPanel());
+						target.add(feedback);
 						initForm(true, target);
 					}
 				}));
 				add(host, port, dbname, user, pass);
-				add(new IndicatingAjaxButton("check") {
+				add(new SpinnerAjaxButton("check", new ResourceModel("install.wizard.db.step.check"), Buttons.Type.Outline_Primary) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
-						target.add(getFeedbackPanel());
+						target.add(feedback);
 					}
 
 					@Override
 					protected void onError(AjaxRequestTarget target) {
-						target.add(getFeedbackPanel());
+						target.add(feedback);
 					}
 				});
 			}
@@ -319,9 +382,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 		public DbStep() {
 			super(welcomeStep);
-			add(form.setOutputMarkupId(true));
-			initDbType = form.getModelObject().getDbType();
-			initForm(false, null);
 		}
 
 		private ConnectionProperties getProps(DbType type) {
@@ -393,7 +453,10 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();
-			add(new OmLabel("note", "install.wizard.db.step.note", getModelObject().getAppName(), getString("install.wizard.db.step.instructions.h2")
+			add(form.setOutputMarkupId(true));
+			initDbType = form.getModelObject().getDbType();
+			initForm(false, null);
+			add(new OmLabel("note", "install.wizard.db.step.note", model.getObject().getAppName(), getString("install.wizard.db.step.instructions.h2")
 					, getString("install.wizard.db.step.instructions.mysql"), getString("install.wizard.db.step.instructions.postgresql")
 					, getString("install.wizard.db.step.instructions.db2"), getString("install.wizard.db.step.instructions.mssql")
 					, getString("install.wizard.db.step.instructions.oracle")).setEscapeModelStrings(false));
@@ -412,16 +475,16 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 	private final class ParamsStep1 extends BaseStep {
 		private static final long serialVersionUID = 1L;
-		private final TzDropDown tzDropDown;
+		private final TzDropDown tzDropDown = new TzDropDown("timeZone");
 
 		public ParamsStep1() {
 			super(dbStep);
-			add(tzDropDown = new TzDropDown("timeZone"));
 		}
 
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();
+			add(tzDropDown);
 			add(new RequiredTextField<String>("username").setLabel(new ResourceModel("install.wizard.params.step1.username")).add(minimumLength(USER_LOGIN_MINIMUM_LENGTH)));
 			add(new PasswordTextField("password")
 					.setResetPassword(false).setLabel(new ResourceModel("install.wizard.params.step1.password"))
@@ -456,6 +519,11 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 		public ParamsStep2() {
 			super(paramsStep1);
+		}
+
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
 			add(new CheckBox("allowFrontendRegister"));
 			add(new CheckBox("sendEmailAtRegister"));
 			add(new CheckBox("sendEmailWithVerficationCode"));
@@ -509,40 +577,40 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			add(officePath.setLabel(new ResourceModel("install.wizard.params.step3.officePath")));
 			add(new TextField<Integer>("docDpi").setRequired(true).add(range(50, 600)));
 			add(new TextField<Integer>("docQuality").setRequired(true).add(range(1, 100)));
-			add(new AjaxButton("validateImageMagic") {
+			add(new BootstrapAjaxButton("validateImageMagic", new ResourceModel("install.wizard.db.step.check"), Buttons.Type.Outline_Primary) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
 					checkMagicPath();
-					target.add(getFeedbackPanel());
+					target.add(feedback);
 				}
 			});
-			add(new AjaxButton("validateFfmpeg") {
+			add(new BootstrapAjaxButton("validateFfmpeg", new ResourceModel("install.wizard.db.step.check"), Buttons.Type.Outline_Primary) {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
 					checkFfmpegPath();
-					target.add(getFeedbackPanel());
+					target.add(feedback);
 				}
 			});
-			add(new AjaxButton("validateSox") {
+			add(new BootstrapAjaxButton("validateSox", new ResourceModel("install.wizard.db.step.check"), Buttons.Type.Outline_Primary) {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
 					checkSoxPath();
-					target.add(getFeedbackPanel());
+					target.add(feedback);
 				}
 			});
-			add(new AjaxButton("validateOffice") {
+			add(new BootstrapAjaxButton("validateOffice", new ResourceModel("install.wizard.db.step.check"), Buttons.Type.Outline_Primary) {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
 					checkOfficePath();
-					target.add(getFeedbackPanel());
+					target.add(feedback);
 				}
 			});
-			add(new TooltipBehavior(".info-title"));
+			add(new TooltipBehavior(".text-info"));
 		}
 
 		private void reportSuccess(TextField<String> path) {
@@ -632,6 +700,11 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 		public ParamsStep4() {
 			super(paramsStep3);
+		}
+
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
 			add(new RequiredTextField<String>("cryptClassName")); //Validate class
 
 			add(new CheckBox("sipEnable"));
@@ -639,7 +712,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			add(new TextField<String>("sipExtenContext"));
 			Options options = new Options();
 			options.set("content", "function () { return $(this).prop('title'); }");
-			add(new TooltipBehavior(".info-title", options));
+			add(new TooltipBehavior(".text-info", options));
 		}
 
 		@Override
@@ -665,68 +738,72 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 	private final class InstallStep extends BaseStep {
 		private static final long serialVersionUID = 1L;
-		private final CongratulationsPanel congrat;
+		private final CongratulationsPanel congrat = new CongratulationsPanel("status");
 		private final WebMarkupContainer container = new WebMarkupContainer("container");
-		private final AbstractAjaxTimerBehavior timer;
-		private final ProgressBar progressBar;
+		private final UpdatableProgressBar progressBar = new UpdatableProgressBar("progress", new Model<>(0), BackgroundColorBehavior.Color.Info, true) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected IModel<Integer> newValue() {
+				return Model.of(initvalues.getProgress());
+			}
+
+			@Override
+			protected void onPostProcessTarget(IPartialPageRequestHandler target) {
+				if (!started) {
+					stop(target);
+					return;
+				}
+				if (th != null) {
+					stop(target);
+					progressBar.setVisible(false);
+					target.add(container.replace(new ErrorMessagePanel("status", getString("install.wizard.install.failed"), th))
+						, desc.setVisible(false)
+						);
+				} else {
+					//onComplete(target);
+				}
+				super.onPostProcessTarget(target);
+			}
+
+			@Override
+			protected void onComplete(IPartialPageRequestHandler target) {
+				stop(target);
+				progressBar.setVisible(false);
+				congrat.show(initDbType != dbType);
+				target.add(container, desc.setVisible(false));
+			}
+		};
 		private final Label desc = new Label("desc", "");
 		private boolean started = false;
 
 		public InstallStep() {
 			super(paramsStep4);
-
-			// Timer //
-			container.add(timer = new AbstractAjaxTimerBehavior(Duration.ofSeconds(1)) {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onTimer(AjaxRequestTarget target) {
-					if (!started) {
-						timer.stop(target);
-						return;
-					}
-					if (th != null) {
-						timer.stop(target);
-						progressBar.setVisible(false);
-						target.add(container.replace(new ErrorMessagePanel("status", getString("install.wizard.install.failed"), th))
-							, desc.setVisible(false)
-							);
-					} else {
-						progressBar.setModelObject(initvalues.getProgress());
-						progressBar.refresh(target);
-					}
-				}
-			});
-			container.add(progressBar = new ProgressBar("progress", new Model<>(0)) {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onComplete(AjaxRequestTarget target) {
-					timer.stop(target);
-					progressBar.setVisible(false);
-					congrat.show(initDbType != dbType);
-					target.add(container, desc.setVisible(false));
-				}
-			});
-
-			container.add(congrat = new CongratulationsPanel("status"));
-			congrat.setVisible(false);
-
-			add(container.setOutputMarkupId(true));
 		}
 
-		public void startInstallation(AjaxRequestTarget target) {
+		@Override
+		public void applyState() {
 			started = true;
-			timer.restart(target);
 			new Thread(new InstallProcess(initvalues)
 				, "Openmeetings - Installation").start();
 			desc.setDefaultModelObject(getString("install.wizard.install.started"));
-			target.add(desc, container);
+			RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(target -> {
+				progressBar.restart(target).setModelObject(0);
+				buttons.forEach(b -> {
+					target.add(b.setEnabled(false));
+				});
+				target.add(desc, container);
+			});
 		}
 
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();
+			progressBar.updateInterval(Duration.ofSeconds(1)).stop(null).striped(false).setOutputMarkupId(true);
+			container.add(progressBar, congrat);
+			congrat.setVisible(false);
+
+			add(container.setOutputMarkupId(true));
 			desc.setDefaultModelObject(getString("install.wizard.install.desc"));
 			add(desc.setOutputMarkupId(true));
 		}
@@ -753,7 +830,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		@Override
 		public void run() {
 			try {
-				installer.loadAll(getModelObject(), true);
+				installer.loadAll(model.getObject(), true);
 			} catch (Exception e) {
 				th = e;
 			}
@@ -779,7 +856,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 		WizardDropDown(String id) {
 			super(id);
-			propModel = ((CompoundPropertyModel<InstallationConfig>)InstallWizard.this.getModel()).bind(id);
+			propModel = model.bind(id);
 			setModel(new PropertyModel<T>(this, "option"));
 		}
 
@@ -856,7 +933,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					option = op;
 				}
 				list.add(op);
-				if (option == null && me.getKey().intValue() == InstallWizard.this.getModelObject().getDefaultLangId()) {
+				if (option == null && me.getKey().intValue() == model.getObject().getDefaultLangId()) {
 					option = op;
 				}
 			}
@@ -865,10 +942,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	}
 
 	@Override
-	protected void onFinish(AjaxRequestTarget target) {
-		for (DialogButton b : getButtons()) {
-			b.setEnabled(false, target);
-		}
-		installStep.startInstallation(target);
+	protected void onDetach() {
+		model.detach();
+		super.onDetach();
 	}
 }

@@ -45,7 +45,7 @@
 	vertical-align: top;
 	overflow-y: auto;
 }
-.adminForm legend {
+.adminForm legend, .installer legend {
 	padding: 0.2em 0.5em;
 	margin: 0px 10px;
 	font-style: italic;

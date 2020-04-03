@@ -715,7 +715,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 			既定では、{0} は組み込み済みデータベース {1} を使用しますが、
 			本番環境では、下記のデータベースの使用をご検討ください: {2}, {3}, {4}, {5}, {6} 
 		</blockquote>
-		<div class="ui-state-highlight ui-corner-all installer-note">
+		<div class="alert alert-warning" role="alert">
 			<p><strong>注:</strong> 予見し難い DB ログイン名と8文字以上の強固なパスワードを使用してください。</p>
 		</div>
 

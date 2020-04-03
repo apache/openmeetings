@@ -27,13 +27,18 @@ import org.apache.wicket.protocol.http.request.WebClientInfo;
 
 public class InstallWizardPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 1L;
-	private final InstallWizard wizard;
 
 	public InstallWizardPage() {
 		if (Application.isInstalled()) {
 			throw new RestartResponseException(Application.get().getHomePage());
 		}
-		add(wizard = new InstallWizard("wizard", getString("install.wizard.install.header")));
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		final InstallWizard wizard = new InstallWizard("wizard", getString("install.wizard.install.header"));
+		add(wizard.setEnabled(false));
 		// This code is required to detect time zone offset
 		add(new AjaxClientInfoBehavior() {
 			private static final long serialVersionUID = 1L;
@@ -42,7 +47,7 @@ public class InstallWizardPage extends BaseNotInitedPage {
 			protected void onClientInfo(AjaxRequestTarget target, WebClientInfo clientInfo) {
 				super.onClientInfo(target, clientInfo);
 				wizard.initTzDropDown();
-				wizard.open(target);
+				target.add(wizard.setEnabled(true));
 			}
 		});
 	}
