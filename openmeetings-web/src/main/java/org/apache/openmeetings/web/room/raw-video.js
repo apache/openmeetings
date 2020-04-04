@@ -379,8 +379,10 @@ var Video = (function() {
 	function _update(_c) {
 		const prevA = sd.activities;
 		sd.activities = _c.activities.sort();
+		sd.level = _c.level;
 		sd.user.firstName = _c.user.firstName;
 		sd.user.lastName = _c.user.lastName;
+		sd.user.displayName = _c.user.displayName;
 		const name = sd.user.displayName
 			, hasVideo = VideoUtil.hasVideo(sd);
 		if (hasVideo) {

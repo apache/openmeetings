@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room;
 
 import static java.time.Duration.ZERO;
-import static java.util.Comparator.naturalOrder;
 import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -30,7 +29,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -152,23 +150,7 @@ public class RoomPanel extends BasePanel {
 			StringBuilder sb = new StringBuilder("Room.init(").append(options.toString(new NullStringer())).append(");")
 					.append(wb.getInitScript())
 					.append(getQuickPollJs());
-			if (c.hasRight(Room.Right.MODERATOR) || !r.isHidden(RoomElement.USER_COUNT)) {
-				List<Client> list = cm.listByRoom(r.getId());
-				list.sort(Comparator.<Client, Integer>comparing(cl -> {
-					if (cl.hasRight(Room.Right.MODERATOR)) {
-						return 0;
-					}
-					if (cl.hasRight(Room.Right.PRESENTER)) {
-						return 1;
-					}
-					return 5;
-				}, naturalOrder())
-						.thenComparing(cl -> cl.getUser().getDisplayName(), String::compareToIgnoreCase));
-				sb.append("Room.addClient([");
-				list.stream().forEach(cl -> sb.append(cl.toJson(false).toString(new NullStringer())).append(","));
-				sb.deleteCharAt(sb.length() - 1).append("]);");
-
-			}
+			sb.append(sendClientsOnInit());
 			target.appendJavaScript(sb);
 
 			WebSocketHelper.sendRoom(new TextRoomMessage(r.getId(), c, RoomMessage.Type.ROOM_ENTER, c.getUid()));
@@ -473,8 +455,11 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							boolean self = _c.getUid().equals(c.getUid());
-							handler.appendJavaScript(String.format("Room.updateClient(%s);"
-									, c.toJson(self).toString(new NullStringer())));
+							StringBuilder sb = new StringBuilder("Room.updateClient(")
+									.append(c.toJson(self).toString(new NullStringer()))
+									.append(");")
+									.append(sendClientsOnUpdate());
+							handler.appendJavaScript(sb);
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);
@@ -491,8 +476,8 @@ public class RoomPanel extends BasePanel {
 								log.error("Not existing user in rightUpdated {} !!!!", uid);
 								return;
 							}
-							if (c.hasRight(Room.Right.MODERATOR) || !r.isHidden(RoomElement.USER_COUNT)) {
-								boolean self = _c.getUid().equals(c.getUid());
+							boolean self = _c.getUid().equals(c.getUid());
+							if (self || _c.hasRight(Room.Right.MODERATOR) || !r.isHidden(RoomElement.USER_COUNT)) {
 								handler.appendJavaScript(String.format("Room.addClient([%s]);"
 										, c.toJson(self).toString(new NullStringer())));
 							}
@@ -856,9 +841,43 @@ public class RoomPanel extends BasePanel {
 	private void showIdeaAlert(IPartialPageRequestHandler handler, String msg) {
 		showAlert(handler, "info", msg, "far fa-lightbulb");
 	}
+
 	private void showAlert(IPartialPageRequestHandler handler, String type, String msg, String icon) {
 		handler.appendJavaScript("OmUtil.alert('" + type + "', '<i class=\"" + icon + "\"></i>&nbsp;"
 				+ StringEscapeUtils.escapeEcmaScript(msg)
 				+ "', 10000)");
+	}
+
+	private CharSequence createAddClientJs(Client c) {
+		JSONArray arr = new JSONArray();
+		cm.listByRoom(r.getId()).stream().forEach(cl -> {
+			arr.put(cl.toJson(c.getUid().equals(cl.getUid())));
+		});
+		return new StringBuilder()
+				.append("Room.addClient(")
+				.append(arr.toString(new NullStringer()))
+				.append(");");
+	}
+
+	private CharSequence sendClientsOnInit() {
+		Client c = getClient();
+		StringBuilder res = new StringBuilder();
+		if (c.hasRight(Room.Right.MODERATOR) || !r.isHidden(RoomElement.USER_COUNT)) {
+			res.append(createAddClientJs(c));
+		}
+		return res;
+	}
+
+	private CharSequence sendClientsOnUpdate() {
+		Client c = getClient();
+		StringBuilder res = new StringBuilder();
+		if (r.isHidden(RoomElement.USER_COUNT)) {
+			if (c.hasRight(Room.Right.MODERATOR)) {
+				res.append(createAddClientJs(c));
+			} else {
+				res.append("Room.removeOthers();");
+			}
+		}
+		return res;
 	}
 }

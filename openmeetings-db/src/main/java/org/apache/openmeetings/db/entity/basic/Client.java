@@ -553,6 +553,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 					.put("width", swidth)
 					.put("height", sheight)
 					.put("activities", new JSONArray(sactivities))
+					.put("level", hasRight(Right.MODERATOR) ? 5 : (hasRight(Right.WHITEBOARD) ? 3 : 1))
 					.put("cuid", uid));
 		}
 

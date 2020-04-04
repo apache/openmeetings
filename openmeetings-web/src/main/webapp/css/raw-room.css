@@ -316,6 +316,9 @@ html[dir="rtl"] .room-block .sidebar {
 	content: '\f03d';
 	color: var(--success);
 }
+.activity.cam.om-icon, .activity.mic.om-icon {
+	display: none;
+}
 .activity.cam.om-icon::before {
 	content: '\f4e2';
 	color: var(--warning);

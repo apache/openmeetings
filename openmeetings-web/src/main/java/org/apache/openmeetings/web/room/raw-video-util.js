@@ -160,23 +160,10 @@ var VideoUtil = (function() {
 		function __getDialog(_v) {
 			return $(_v).find('.video-container.ui-dialog-content');
 		}
-		function __getClient(_v) {
-			return Room.getClient(__getDialog(_v).data('clientUid'));
-		}
-		function __getClient(_v) {
-			return Room.getClient(__getDialog(_v).data('clientUid'));
-		}
-		function __getMod(c) {
-			return c.find('.user-status').hasClass('mod') ? 1 : 0;
-		}
 		$(VIDWIN_SEL).toArray().sort((v1, v2) => {
-			const c1 = __getClient(v1)
-				, c2 = __getClient(v2)
-				, m1 = __getMod(c1)
-				, m2 = __getMod(c2)
-				, name1 = c1.attr('title')
-				, name2 = c2.attr('title');
-			return m1 - m2 || name1.localeCompare(name2);
+			const c1 = __getDialog(v1).data().stream()
+				, c2 = __getDialog(v2).data().stream();
+			return c1.level - c2.level || c1.user.displayName.localeCompare(c2.user.displayName);
 		}).forEach(_v => {
 			const v = $(_v);
 			__getDialog(v)

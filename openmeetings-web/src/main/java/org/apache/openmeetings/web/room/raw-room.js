@@ -430,10 +430,6 @@ var Room = (function() {
 		}
 		VideoManager.update(c)
 	}
-	function _removeClient(uid) {
-		Room.getClient(uid).remove();
-		__updateCount();
-	}
 
 	self.init = _init;
 	self.getMenuHeight = function() { return menuHeight; };
@@ -448,7 +444,20 @@ var Room = (function() {
 	};
 	self.addClient = _addClient;
 	self.updateClient = _updateClient;
-	self.removeClient = _removeClient;
+	self.removeClient = function(uid) {
+		Room.getClient(uid).remove();
+		__updateCount();
+	};
+	self.removeOthers = function() {
+		const selfUid = Room.getOptions().uid;
+		$('.user-list .user.entry').each(function() {
+			const c = $(this);
+			if (c.data('uid') !== selfUid) {
+				c.remove();
+			}
+		});
+		__updateCount();
+	};
 	self.getClient = function(uid) {
 		return $('#user' + uid);
 	};
