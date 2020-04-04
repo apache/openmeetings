@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
+import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed;
 import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
@@ -87,7 +88,13 @@ public class RoomSidebar extends Panel {
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.CONFERENCE == room.getRoom().getType()) {
-						streamProcessor.toggleActivity(c, room.getRoom().isAudioOnly()
+						if (!activityAllowed(c, Client.Activity.AUDIO, c.getRoom())) {
+							c.allow(Room.Right.AUDIO);
+						}
+						if (!c.getRoom().isAudioOnly() && !activityAllowed(c, Client.Activity.VIDEO, c.getRoom())) {
+							c.allow(Room.Right.VIDEO);
+						}
+						streamProcessor.toggleActivity(c, c.getRoom().isAudioOnly()
 								? Client.Activity.AUDIO
 								: Client.Activity.AUDIO_VIDEO);
 					}

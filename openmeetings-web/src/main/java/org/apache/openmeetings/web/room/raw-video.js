@@ -153,6 +153,9 @@ var Video = (function() {
 			VideoUtil.addIceServers(options, msg)
 			, function (error) {
 				if (error) {
+					if (true === this.cleaned) {
+						return;
+					}
 					return OmUtil.error(error);
 				}
 				if (data.analyser) {
@@ -161,6 +164,9 @@ var Video = (function() {
 				}
 				this.generateOffer(function(error, offerSdp) {
 					if (error) {
+						if (true === this.cleaned) {
+							return;
+						}
 						return OmUtil.error('Sender sdp offer error ' + error);
 					}
 					OmUtil.log('Invoking Sender SDP offer callback function');
@@ -196,11 +202,17 @@ var Video = (function() {
 		data.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
 			options
 			, function(error) {
-				if (!this.cleaned && error) {
+				if (error) {
+					if (true === this.cleaned) {
+						return;
+					}
 					return OmUtil.error(error);
 				}
 				this.generateOffer(function(error, offerSdp) {
-					if (!this.cleaned && error) {
+					if (error) {
+						if (true === this.cleaned) {
+							return;
+						}
 						return OmUtil.error('Receiver sdp offer error ' + error);
 					}
 					OmUtil.log('Invoking Receiver SDP offer callback function');
@@ -311,7 +323,9 @@ var Video = (function() {
 	}
 	function _init(msg) {
 		sd = msg.stream;
-		vol = Volume();
+		if (!vol) {
+			vol = Volume();
+		}
 		iceServers = msg.iceServers;
 		sd.activities = sd.activities.sort();
 		size = {width: sd.width, height: sd.height};
@@ -374,7 +388,9 @@ var Video = (function() {
 		}
 		const same = prevA.length === sd.activities.length && prevA.every(function(value, index) { return value === sd.activities[index]})
 		if (sd.self && !same) {
-			_refresh();
+			_cleanup();
+			v.remove();
+			_init({stream: sd, iceServers: iceServers});
 		}
 	}
 	function __createVideo(data) {

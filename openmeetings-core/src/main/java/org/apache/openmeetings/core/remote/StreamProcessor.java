@@ -211,14 +211,6 @@ public class StreamProcessor implements IStreamProcessor {
 	public void toggleActivity(Client c, Activity a) {
 		log.info("PARTICIPANT {}: trying to toggle activity {}", c, a);
 
-		if (!activityAllowed(c, a, c.getRoom())) {
-			if (a == Activity.AUDIO || a == Activity.AUDIO_VIDEO) {
-				c.allow(Room.Right.AUDIO);
-			}
-			if (!c.getRoom().isAudioOnly() && (a == Activity.VIDEO || a == Activity.AUDIO_VIDEO)) {
-				c.allow(Room.Right.VIDEO);
-			}
-		}
 		if (activityAllowed(c, a, c.getRoom())) {
 			boolean wasBroadcasting = isBroadcasting(c);
 			if (a == Activity.AUDIO && !c.isMicEnabled()) {

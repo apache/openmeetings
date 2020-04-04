@@ -189,7 +189,11 @@ var VideoUtil = (function() {
 	function _cleanStream(stream) {
 		if (!!stream) {
 			stream.getTracks().forEach(function(track) {
-				track.stop();
+				try {
+					track.stop();
+				} catch(e) {
+					//no-op
+				}
 			});
 		}
 	}
@@ -206,7 +210,11 @@ var VideoUtil = (function() {
 			} catch(e) {
 				OmUtil.log('Failed to clean peer' + e);
 			}
-			peer.dispose();
+			try {
+				peer.dispose();
+			} catch(e) {
+				//no-op
+			}
 			peer = null;
 		}
 	}
