@@ -47,11 +47,13 @@ import org.apache.openmeetings.core.ldap.LdapLoginManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
@@ -64,6 +66,7 @@ import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.db.util.LocaleHelper;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.ClientManager.InstantToken;
+import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidget;
@@ -80,8 +83,11 @@ import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
@@ -130,6 +136,8 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private LdapLoginManager ldapManager;
 	@SpringBean
 	private ConfigurationDao cfgDao;
+	@SpringBean
+	private RoomDao roomDao;
 
 	public WebSession(Request request) {
 		super(request);
@@ -198,6 +206,26 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return userId != null && userId.longValue() > 0;
 	}
 
+	private void redirectHash(Room r, Runnable nullAction) {
+		if (r != null) {
+			String url = cm.getServerUrl(r, baseUrl -> {
+				PageParameters params = new PageParameters();
+				IRequestParameters reqParams = RequestCycle.get().getRequest().getQueryParameters();
+				reqParams.getParameterNames().forEach(name -> {
+					params.add(name, reqParams.getParameterValue(name));
+				});
+				return Application.urlForPage(HashPage.class
+						, params
+						, baseUrl);
+			});
+			if (url == null) {
+				nullAction.run();
+			} else {
+				throw new RedirectToUrlException(url);
+			}
+		}
+	}
+
 	public void checkHashes(StringValue secure, StringValue invitation) {
 		try {
 			if (!secure.isEmpty() && (soap == null || !soap.getHash().equals(secure.toString()))) {
@@ -212,21 +240,27 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				if (isSignedIn()) {
 					invalidateNow();
 				}
-				i = inviteDao.getByHash(invitation.toString(), false, true);
+				i = inviteDao.getByHash(invitation.toString(), false);
+				Room r = null;
 				if (i != null && i.isAllowEntry()) {
 					Set<Right> hrights = new HashSet<>();
 					if (i.getRoom() != null) {
-						hrights.add(Right.ROOM);
-						roomId = i.getRoom().getId();
+						r = i.getRoom();
 					} else if (i.getAppointment() != null && i.getAppointment().getRoom() != null) {
-						hrights.add(Right.ROOM);
-						roomId = i.getAppointment().getRoom().getId();
+						r = i.getAppointment().getRoom();
 					} else if (i.getRecording() != null) {
 						recordingId = i.getRecording().getId();
+					}
+					if (r != null) {
+						redirectHash(r, () -> inviteDao.markUsed(i));
+						hrights.add(Right.ROOM);
+						roomId = r.getId();
 					}
 					setUser(i.getInvitee(), hrights);
 				}
 			}
+		} catch (RedirectToUrlException e) {
+			throw e;
 		} catch (Exception e) {
 			log.error("Unexpected exception while checking hashes", e);
 		}
@@ -242,6 +276,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			if (sd.getXml() != null) {
 				RemoteSessionObject remoteUser = RemoteSessionObject.fromString(sd.getXml());
 				if (remoteUser != null && !Strings.isEmpty(remoteUser.getExternalId())) {
+					Room r = roomDao.get(soapLogin.getRoomId());
+					if (r == null) {
+						return false;
+					}
+					redirectHash(r, () -> {});
 					User user = userDao.getExternalUser(remoteUser.getExternalId(), remoteUser.getExternalType());
 					if (user == null) {
 						user = getNewUserInstance(null);

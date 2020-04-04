@@ -268,7 +268,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		assertEquals(1, dto.getMeetingMembers().size(), "DTO should have 1 attendees");
 
 		assertNull(mmDao.get(mmId), "Meeting member should deleted");
-		assertNull(getBean(InvitationDao.class).getByHash(hash, true, false), "Invitation should deleted");
+		assertNull(getBean(InvitationDao.class).getByHash(hash, true), "Invitation should deleted");
 		User uc = getBean(UserDao.class).get(mmUserId);
 		assertNotNull(uc, "Meeting member user should not be deleted");
 		assertFalse(uc.isDeleted(), "Meeting member user should not be deleted");

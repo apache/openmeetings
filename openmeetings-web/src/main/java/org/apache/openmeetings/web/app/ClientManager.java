@@ -32,6 +32,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
@@ -358,31 +360,34 @@ public class ClientManager implements IClientManager {
 		}
 	}
 
-	private String getServerUrl(Map.Entry<String, ServerInfo> e, Room r) {
+	private String getServerUrl(Map.Entry<String, ServerInfo> e, Room r, Function<String, String> generator) {
 		final String curServerId = app.getServerId();
 		String serverId = e.getKey();
 		if (!curServerId.equals(serverId)) {
 			addRoomToServer(serverId, r);
-			String uuid = UUID.randomUUID().toString();
-			tokens().put(uuid, new InstantToken(getUserId(), r.getId()));
-			return e.getValue().getUrl() + "?token=" + uuid;
+			return generator.apply(e.getValue().getUrl());
 		}
 		return null;
 	}
 
-	public String getServerUrl(Room r) {
+	public String getServerUrl(Room r, Function<String, String> inGenerator) {
 		if (onlineServers.size() == 1) {
 			return null;
 		}
+		Function<String, String> generator = inGenerator == null ? baseUrl -> {
+			String uuid = UUID.randomUUID().toString();
+			tokens().put(uuid, new InstantToken(getUserId(), r.getId()));
+			return Application.urlForPage(Application.get().getHomePage(), new PageParameters().add("token", uuid), baseUrl);
+		} : inGenerator;
 		Optional<Map.Entry<String, ServerInfo>> existing = onlineServers.entrySet().stream()
 				.filter(e -> e.getValue().getRooms().contains(r.getId()))
 				.findFirst();
 		if (existing.isPresent()) {
-			return getServerUrl(existing.get(), r);
+			return getServerUrl(existing.get(), r, generator);
 		}
 		Optional<Map.Entry<String, ServerInfo>> min = onlineServers.entrySet().stream()
 				.min((e1, e2) -> e1.getValue().getCapacity() - e2.getValue().getCapacity());
-		return getServerUrl(min.get(), r);
+		return getServerUrl(min.get(), r, generator);
 	}
 
 	Optional<InstantToken> getToken(StringValue uuid) {

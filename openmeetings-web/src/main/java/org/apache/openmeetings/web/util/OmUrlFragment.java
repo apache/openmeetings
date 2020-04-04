@@ -294,7 +294,7 @@ public class OmUrlFragment implements Serializable {
 	}
 
 	private static void moveToServer(Room r) {
-		String url = Application.get().getBean(ClientManager.class).getServerUrl(r);
+		String url = Application.get().getBean(ClientManager.class).getServerUrl(r, null);
 		if (url != null) {
 			throw new RedirectToUrlException(url);
 		}

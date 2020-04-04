@@ -602,6 +602,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		RequestCycle rc = RequestCycle.get();
 		String baseUrl = isUrlValid(inBaseUrl) ? inBaseUrl
 				: (isUrlValid(getBaseUrl()) ? getBaseUrl() : "");
+		if (!Strings.isEmpty(baseUrl) && !baseUrl.endsWith("/")) {
+			baseUrl += "/";
+		}
 		return rc.getUrlRenderer().renderFullUrl(Url.parse(baseUrl + rc.mapUrlFor(clazz, pp)));
 	}
 
