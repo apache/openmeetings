@@ -350,7 +350,7 @@ var Room = (function() {
 		const clients = Array.isArray(_clients) ? _clients : [_clients];
 		clients.forEach(c => {
 			const self = c.uid === options.uid;
-			let le = $('#user' + c.uid);
+			let le = Room.getClient(c.uid);
 			if (le.length === 0) {
 				le = OmUtil.tmpl('#user-entry-stub', 'user' + c.uid);
 				le.attr('id', 'user' + c.uid)
@@ -368,7 +368,7 @@ var Room = (function() {
 	}
 	function _updateClient(c) {
 		const self = c.uid === options.uid
-			, le = $('#user' + c.uid)
+			, le = Room.getClient(c.uid)
 			, hasAudio = VideoUtil.hasMic(c)
 			, hasVideo = VideoUtil.hasCam(c)
 			, speaks = le.find('.audio-activity');
@@ -431,7 +431,7 @@ var Room = (function() {
 		VideoManager.update(c)
 	}
 	function _removeClient(uid) {
-		$('#user' + uid).remove();
+		Room.getClient(uid).remove();
 		__updateCount();
 	}
 
@@ -449,6 +449,9 @@ var Room = (function() {
 	self.addClient = _addClient;
 	self.updateClient = _updateClient;
 	self.removeClient = _removeClient;
+	self.getClient = function(uid) {
+		return $('#user' + uid);
+	};
 	return self;
 })();
 /***** functions required by SIP   ******/
@@ -486,7 +489,7 @@ function sipKeyUp(evt) {
 	}
 }
 function typingActivity(uid, active) {
-	const u = $('#user' + uid + ' .typing-activity');
+	const u = Room.getClient(uid).find('.typing-activity');
 	if (active) {
 		u.addClass("typing");
 	} else {

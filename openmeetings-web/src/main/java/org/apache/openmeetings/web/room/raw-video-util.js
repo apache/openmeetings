@@ -157,9 +157,29 @@ var VideoUtil = (function() {
 	}
 	function _arrangeResize() {
 		const list = [];
-		$(VIDWIN_SEL).each(function() {
-			const v = $(this);
-			v.find('.video-container.ui-dialog-content')
+		function __getDialog(_v) {
+			return $(_v).find('.video-container.ui-dialog-content');
+		}
+		function __getClient(_v) {
+			return Room.getClient(__getDialog(_v).data('clientUid'));
+		}
+		function __getClient(_v) {
+			return Room.getClient(__getDialog(_v).data('clientUid'));
+		}
+		function __getMod(c) {
+			return c.find('.user-status').hasClass('mod') ? 1 : 0;
+		}
+		$(VIDWIN_SEL).toArray().sort((v1, v2) => {
+			const c1 = __getClient(v1)
+				, c2 = __getClient(v2)
+				, m1 = __getMod(c1)
+				, m2 = __getMod(c2)
+				, name1 = c1.attr('title')
+				, name2 = c2.attr('title');
+			return m1 - m2 || name1.localeCompare(name2);
+		}).forEach(_v => {
+			const v = $(_v);
+			__getDialog(v)
 				.dialog('option', 'width', 120)
 				.dialog('option', 'height', 90);
 			v.css(_getPos(list, v.width(), v.height(), __processEqualsBottomToTop));
