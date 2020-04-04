@@ -75,7 +75,7 @@
 		<forbiddenapis.version>2.7</forbiddenapis.version>
 		<!-- dependency versions -->
 		<junit.version>5.6.1</junit.version>
-		<wicket.version>9.0.0-M5</wicket.version>
+		<wicket.version>9.0.0-M5-SNAPSHOT</wicket.version>
 		<wicketju.version>9.0.0-M4</wicketju.version>
 		<wickets.version>9.0.0-M5-SNAPSHOT</wickets.version>
 		<wicket-bootstrap.version>5.0.0-M1</wicket-bootstrap.version>
