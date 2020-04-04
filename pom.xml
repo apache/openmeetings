@@ -735,6 +735,9 @@
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
+				<configuration>
+					<skip>${om.quick.build}</skip>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -1035,6 +1038,7 @@
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>${maven-project-info-reports-plugin.version}</version>
 				<configuration>
+					<skip>${om.quick.build}</skip>
 					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
 					<showAvatarImages>true</showAvatarImages>
 				</configuration>
@@ -1073,6 +1077,9 @@
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
+				<configuration>
+					<skip>${om.quick.build}</skip>
+				</configuration>
 				<reportSets>
 					<reportSet>
 						<reports>
