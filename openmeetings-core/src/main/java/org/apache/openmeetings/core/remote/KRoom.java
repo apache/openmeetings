@@ -175,7 +175,7 @@ public class KRoom {
 				osd.get().addActivity(Activity.RECORD);
 				processor.getClientManager().update(c);
 				rec.setWidth(osd.get().getWidth());
-				rec.setHeight(osd.get().getWidth());
+				rec.setHeight(osd.get().getHeight());
 			}
 			rec = processor.getRecordingDao().update(rec);
 			// Receive recordingId

@@ -309,7 +309,11 @@ public abstract class BaseConverter {
 		return getDimensions(r, 'x');
 	}
 
-	protected List<String> addMp4OutParams(Recording r, List<String> argv, String mp4path) {
+	protected List<String> additionalMp4OutParams(Recording r) {
+		return List.of();
+	}
+
+	private List<String> addMp4OutParams(Recording r, List<String> argv, String mp4path) {
 		argv.addAll(List.of(
 				"-c:v", "h264", //
 				"-crf", "24",
@@ -321,10 +325,10 @@ public abstract class BaseConverter {
 				"-movflags", "faststart",
 				"-c:a", "aac",
 				"-ar", String.valueOf(getAudioRate()),
-				"-b:a", getAudioBitrate(),
-				"-s", getDimensions(r), //
-				mp4path
+				"-b:a", getAudioBitrate()
 				));
+		argv.addAll(additionalMp4OutParams(r));
+		argv.add(mp4path);
 		return argv;
 	}
 
@@ -349,7 +353,13 @@ public abstract class BaseConverter {
 		logs.add(ProcessHelper.executeScript(String.format("generate preview PNG :: %s", f.getHash()), argv));
 	}
 
-	protected static Dimension getDimension(String txt) {
+	/**
+	 * Parse the width height from the FFMPEG output
+	 *
+	 * @param txt FFMPEG output
+	 * @return {@link Dimension} parsed
+	 */
+	protected static Dimension getDimension(String txt, Dimension def) {
 		Matcher matcher = p.matcher(txt);
 
 		if (matcher.find()) {
@@ -358,7 +368,7 @@ public abstract class BaseConverter {
 			return new Dimension(toInt(resolutions[0]), toInt(resolutions[1]));
 		}
 
-		return new Dimension(100, 100); // will return 100x100 for non-video to be able to play
+		return def;
 	}
 
 	protected void finalizeRec(Recording r, String mp4path, ProcessResultList logs) throws IOException {

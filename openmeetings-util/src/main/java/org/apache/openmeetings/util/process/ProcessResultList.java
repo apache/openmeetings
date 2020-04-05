@@ -35,6 +35,10 @@ public class ProcessResultList {
 		jobs.add(res);
 	}
 
+	public ProcessResult getLast() {
+		return jobs.isEmpty() ? null : jobs.get(jobs.size() - 1);
+	}
+
 	/**
 	 * checks if process was successful
 	 *

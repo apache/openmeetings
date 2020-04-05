@@ -87,7 +87,7 @@ public class VideoConverter extends BaseConverter {
 			}
 			progress.ifPresent(theProgress -> theProgress.accept(STEP));
 			//Parse the width height from the FFMPEG output
-			Dimension dim = getDimension(res.getError());
+			Dimension dim = getDimension(res.getError(), new Dimension(100, 100)); // will return 100x100 for non-video to be able to play
 			progress.ifPresent(theProgress -> theProgress.accept(STEP));
 			f.setWidth(dim.getWidth());
 			f.setHeight(dim.getHeight());
