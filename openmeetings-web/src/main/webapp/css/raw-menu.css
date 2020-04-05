@@ -2,6 +2,9 @@
 #menu .navbar {
 	padding-top: 0;
 	padding-bottom: 0;
+	position: absolute;
+    z-index: 1000;
+    width: 100%;
 }
 .room-block .menu {
 	height: var(--room-menu-height);

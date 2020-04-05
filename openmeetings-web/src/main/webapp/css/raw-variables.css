@@ -42,6 +42,7 @@ body.no-menu {
 }
 .main.room {
 	--header-height: 0px;
+	--room-menu-height: 34px;
 	--room-sidebar-width: 315px;
 	--room-wb-tabs-height: 45px;
 	--room-sidebar-header-height: 37px;
