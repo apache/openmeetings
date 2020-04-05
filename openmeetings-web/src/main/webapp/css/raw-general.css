@@ -183,6 +183,7 @@ html, body {
 	min-width: 150px;
 }
 #contents {
+	padding-top: var(--menu-height);
 	height: calc(100% - var(--menu-height));
 }
 #feedcontainer {

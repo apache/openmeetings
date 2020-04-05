@@ -6,7 +6,12 @@
     z-index: 2010;
     width: 100%;
 }
+
 .room-block .menu {
+	top: 0px;
+	position: absolute;
+    z-index: 1010;
+    width: 100%;
 	height: var(--room-menu-height);
 }
 .room-block .menu .top.exit {
