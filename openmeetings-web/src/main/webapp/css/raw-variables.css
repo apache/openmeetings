@@ -42,7 +42,7 @@ body.no-menu {
 }
 .main.room {
 	--header-height: 0px;
-	--room-menu-height: 34px;
+	--room-menu-height: calc(22px + 1rem);
 	--room-sidebar-width: 315px;
 	--room-wb-tabs-height: 45px;
 	--room-sidebar-header-height: 37px;
@@ -52,6 +52,7 @@ body.no-menu {
 	--vdialog-titlebar-height: 27px;
 	--vdialog-footer-height: 0px;
 	--wb-zoom-height: 33px;
+	--menu-height: 0px;
 }
 .main.room.INTERVIEW {
 	--rec-btn-height: 40px;
