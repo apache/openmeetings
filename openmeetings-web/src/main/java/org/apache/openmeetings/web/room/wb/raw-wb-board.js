@@ -277,7 +277,7 @@ var Wb = function() {
 						return !isNaN(parseInt(n)) && isFinite(n);
 					}
 					wbs.modal('show');
-					wbs.find('.btn-primary').off().click(function() {
+					wbs.find('.btn-ok').off().click(function() {
 						const __w = wbsw.val(), __h = wbsh.val();
 						if (isNumeric(__w) && isNumeric(__h)) {
 							width = parseInt(__w);

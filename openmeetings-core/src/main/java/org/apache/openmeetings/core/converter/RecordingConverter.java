@@ -85,25 +85,15 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			// -i 65318fb5c54b1bc1b1bca077b493a914_28_12_2009_23_38_17.flv
 			// final1.flv
 
-			int flvWidth = r.getWidth();
-			int flvHeight = r.getHeight();
-
-			log.debug("flvWidth -1- {}", flvWidth);
-			log.debug("flvHeight -1- {}", flvHeight);
-
-			flvWidth = (int)(16. * flvWidth / 16);
-			flvHeight = (int)(16. * flvHeight / 16);
-
-			log.debug("flvWidth -2- {}", flvWidth);
-			log.debug("flvHeight -2- {}", flvHeight);
-
-			r.setWidth(flvWidth);
-			r.setHeight(flvHeight);
-
 			String mp4path = convertToMp4(r, List.of(
 					"-itsoffset", formatMillis(diff(screenChunk.getStart(), r.getRecordStart())),
 					"-i", inputScreenFullFlv, "-i", wav.getCanonicalPath()
 					), logs);
+			Dimension dim = getDimension(logs.getLast().getError(), null); // will return 100x100 for non-video to be able to play
+			if (dim != null) {
+				r.setWidth(dim.getWidth());
+				r.setHeight(dim.getHeight());
+			}
 
 			finalizeRec(r, mp4path, logs);
 		} catch (Exception err) {

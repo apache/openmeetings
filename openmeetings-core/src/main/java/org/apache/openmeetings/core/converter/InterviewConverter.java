@@ -258,6 +258,11 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 		return args;
 	}
 
+	@Override
+	protected List<String> additionalMp4OutParams(Recording r) {
+		return List.of("-s", getDimensions(r));
+	}
+
 	private static class PodPart {
 		final String file;
 		final long duration;

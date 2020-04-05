@@ -61,7 +61,7 @@ var DrawWbArea = function() {
 	}
 
 	function getActive() {
-		const tab = tabs.find('.wb-tab-content .active');
+		const tab = tabs.find('.wb-tab-content .wb-tab.active');
 		if (tab.length === 1) {
 			return tab;
 		}
@@ -106,7 +106,7 @@ var DrawWbArea = function() {
 			if (role !== PRESENTER) {
 				$('.wb-tabbar ul.nav-tabs a.nav-link').removeClass('active');
 				link.addClass('active');
-				$('.wb-tab-content.tab-content .tab-pane').removeClass('active');
+				$('.wb-tab-content .wb-tab').removeClass('active');
 				$('#' + link.attr('aria-controls')).addClass('active');
 			}
 			link[0].scrollIntoView();
@@ -223,7 +223,7 @@ var DrawWbArea = function() {
 			self.removeDeleteHandler();
 		}
 		__initTab(tabsNav.find('li'));
-		tabs.find('.wb-tab-content .tab-pane').each(function() {
+		tabs.find('.wb-tab-content .wb-tab').each(function() {
 			$(this).data().setRole(role);
 		});
 	}
