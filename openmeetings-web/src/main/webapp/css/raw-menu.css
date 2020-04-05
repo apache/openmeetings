@@ -3,7 +3,7 @@
 	padding-top: 0;
 	padding-bottom: 0;
 	position: absolute;
-    z-index: 1000;
+    z-index: 2010;
     width: 100%;
 }
 .room-block .menu {
