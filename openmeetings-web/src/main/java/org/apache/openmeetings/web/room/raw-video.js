@@ -3,7 +3,7 @@ var Video = (function() {
 	const self = {}
 		, AudioCtx = window.AudioContext || window.webkitAudioContext;
 	let sd, v, vc, t, footer, size, vol, video, iceServers
-		, lm, level, userSpeaks = false, muteOthers;
+		, lm, level, userSpeaks = false, muteOthers, hasVideo;
 
 	function _resizeDlgArea(_w, _h) {
 		if (Room.getOptions().interview) {
@@ -240,8 +240,8 @@ var Video = (function() {
 		}
 	}
 	function _initContainer(_id, name, opts) {
-		const hasVideo = VideoUtil.hasVideo(sd);
-		let contSel;
+		let contSel = '#user' + sd.cuid;
+		hasVideo = VideoUtil.hasVideo(sd) || $(contSel).length < 1;
 		if (hasVideo) {
 			if (opts.interview) {
 				const area = $('.pod-area');
@@ -252,8 +252,6 @@ var Video = (function() {
 			} else {
 				contSel = '.room-block .room-container';
 			}
-		} else {
-			contSel = '#user' + sd.cuid;
 		}
 		$(contSel).append(OmUtil.tmpl('#user-video', _id)
 				.attr('title', name)
@@ -335,7 +333,6 @@ var Video = (function() {
 			, _h = sd.height
 			, isSharing = VideoUtil.isSharing(sd)
 			, isRecording = VideoUtil.isRecording(sd)
-			, hasVideo = VideoUtil.hasVideo(sd)
 			, opts = Room.getOptions();
 		sd.self = sd.cuid === opts.uid;
 		const contSel = _initContainer(_id, name, opts);
@@ -383,8 +380,7 @@ var Video = (function() {
 		sd.user.firstName = _c.user.firstName;
 		sd.user.lastName = _c.user.lastName;
 		sd.user.displayName = _c.user.displayName;
-		const name = sd.user.displayName
-			, hasVideo = VideoUtil.hasVideo(sd);
+		const name = sd.user.displayName;
 		if (hasVideo) {
 			v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
 		}
@@ -397,7 +393,6 @@ var Video = (function() {
 	}
 	function __createVideo(data) {
 		const _id = VideoUtil.getVid(sd.uid);
-		const hasVideo = VideoUtil.hasVideo(sd);
 		_resizeDlgArea(hasVideo ? size.width : 120
 			, hasVideo ? size.height : 90);
 		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
