@@ -116,7 +116,7 @@ var Video = (function() {
 		if (rtcPeer) {
 			const pc = rtcPeer.peerConnection;
 			pc.onconnectionstatechange = function(event) {
-				console.warn(`!!RTCPeerConnection state changed: ${pc.connectionState}`);
+				console.warn(`!!RTCPeerConnection state changed: ${pc.connectionState}, user: ${sd.user.displayName}, uid: ${sd.uid}`);
 				switch(pc.connectionState) {
 					case "connected":
 						if (sd.self) {
@@ -126,11 +126,9 @@ var Video = (function() {
 						break;
 					case "disconnected":
 					case "failed":
-						if (sd.self) {
-							//connection has been dropped
-							OmUtil.alert('warning', `Media server connection is ${pc.connectionState}, will try to re-connect`, 3000);//notify user
-							_refresh();
-						}
+						//connection has been dropped
+						OmUtil.alert('warning', `Media server connection for user ${sd.user.displayName} is ${pc.connectionState}, will try to re-connect`, 3000);//notify user
+						_refresh();
 						break;
 					case "closed":
 						// The connection has been closed
