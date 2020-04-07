@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONObject;
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 
 @Component
 public class QuickPollManager {

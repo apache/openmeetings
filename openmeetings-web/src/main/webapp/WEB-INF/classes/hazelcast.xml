@@ -74,6 +74,7 @@
 	</map>
 	<instance-name>server-1</instance-name><!-- MAKE SURE THIS ONE IS UNIQUE -->
 	<member-attributes>
+		<attribute name="name">server-1</attribute><!-- MAKE SURE THIS ONE IS SAME AS ABOVE -->
 		<attribute name="server.url">https://127.0.0.1:5443/openmeetings</attribute><!-- MAKE SURE THIS PUBLIC SERVER ADDRESS, USE IP with care: certificate may be not valid for IP -->
 	</member-attributes>
 	<network>

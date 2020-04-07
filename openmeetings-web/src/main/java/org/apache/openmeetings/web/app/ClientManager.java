@@ -55,7 +55,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hazelcast.core.EntryEvent;
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 import com.hazelcast.map.listener.EntryAddedListener;
 import com.hazelcast.map.listener.EntryRemovedListener;
 import com.hazelcast.map.listener.EntryUpdatedListener;

@@ -136,14 +136,13 @@ import org.wicketstuff.dashboard.web.DashboardSettings;
 import org.wicketstuff.datastores.hazelcast.HazelcastDataStore;
 
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.WysiwygLibrarySettings;
+import com.hazelcast.cluster.Member;
+import com.hazelcast.cluster.MembershipEvent;
+import com.hazelcast.cluster.MembershipListener;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.ITopic;
-import com.hazelcast.core.Member;
-import com.hazelcast.core.MemberAttributeEvent;
-import com.hazelcast.core.MembershipEvent;
-import com.hazelcast.core.MembershipListener;
+import com.hazelcast.topic.ITopic;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
@@ -196,13 +195,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this, ctx, true));
 
 		serverId = hazelcast.getName();
-		hazelcast.getCluster().getLocalMember().setStringAttribute(NAME_ATTR_KEY, serverId);
 		hazelcast.getCluster().getMembers().forEach(m -> {
-			cm.serverAdded(m.getStringAttribute(NAME_ATTR_KEY), m.getStringAttribute(SERVER_URL_ATTR_KEY));
+			cm.serverAdded(m.getAttribute(NAME_ATTR_KEY), m.getAttribute(SERVER_URL_ATTR_KEY));
 		});
 		hazelWsTopic = hazelcast.getTopic("default");
 		hazelWsTopic.addMessageListener(msg -> {
-			String mServerId = msg.getPublishingMember().getStringAttribute(NAME_ATTR_KEY);
+			String mServerId = msg.getPublishingMember().getAttribute(NAME_ATTR_KEY);
 			if (mServerId.equals(serverId)) {
 				return;
 			}
@@ -219,13 +217,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			@Override
 			public void memberRemoved(MembershipEvent evt) {
 				//server down, need to remove all online clients, process persistent addresses
-				String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
+				String serverId = evt.getMember().getAttribute(NAME_ATTR_KEY);
 				cm.serverRemoved(serverId);
 				updateJpaAddresses();
 			}
 
 			@Override
-			public void memberAttributeChanged(MemberAttributeEvent evt) {
+			public void memberAdded(MembershipEvent evt) {
 				//no-op
 				//server added, need to process persistent addresses
 				updateJpaAddresses();
@@ -235,20 +233,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					if (evt.getMember().getUuid().equals(m.getUuid())) {
 						continue;
 					}
-					String serverId = m.getStringAttribute(NAME_ATTR_KEY);
+					String serverId = m.getAttribute(NAME_ATTR_KEY);
 					names.add(serverId);
 				}
-				String newServerId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
+				String newServerId = evt.getMember().getAttribute(NAME_ATTR_KEY);
 				log.warn("Name added: {}", newServerId);
-				cm.serverAdded(newServerId, evt.getMember().getStringAttribute(SERVER_URL_ATTR_KEY));
+				cm.serverAdded(newServerId, evt.getMember().getAttribute(SERVER_URL_ATTR_KEY));
 				if (names.contains(newServerId)) {
 					log.warn("Duplicate cluster instance with name {} found {}", newServerId, evt.getMember());
 				}
-			}
-
-			@Override
-			public void memberAdded(MembershipEvent evt) {
-				//no-op due to name is not set
 			}
 		});
 		setPageManagerProvider(new DefaultPageManagerProvider(this) {
