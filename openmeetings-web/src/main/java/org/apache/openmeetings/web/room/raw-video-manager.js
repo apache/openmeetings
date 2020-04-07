@@ -5,24 +5,30 @@ var VideoManager = (function() {
 
 	function _onVideoResponse(m) {
 		const w = $('#' + VideoUtil.getVid(m.uid))
-			, v = w.data();
+			, v = w.data()
+			, peer = v.getPeer();
 
-		v.getPeer().processAnswer(m.sdpAnswer, function (error) {
-			if (error) {
-				return OmUtil.error(error);
-			}
-			const vidEls = w.find('audio, video')
-				, vidEl = vidEls.length === 1 ? vidEls[0] : null;
-			if (vidEl && vidEl.paused) {
-				vidEl.play().catch(function(err) {
-					if ('NotAllowedError' === err.name) {
-						VideoUtil.askPermission(function() {
-							vidEl.play();
-						});
+		if (peer) {
+			peer.processAnswer(m.sdpAnswer, function (error) {
+				if (error) {
+					if (true === this.cleaned) {
+						return;
 					}
-				});
-			}
-		});
+					return OmUtil.error(error);
+				}
+				const vidEls = w.find('audio, video')
+					, vidEl = vidEls.length === 1 ? vidEls[0] : null;
+				if (vidEl && vidEl.paused) {
+					vidEl.play().catch(function (err) {
+						if ('NotAllowedError' === err.name) {
+							VideoUtil.askPermission(function () {
+								vidEl.play();
+							});
+						}
+					});
+				}
+			});
+		}
 	}
 	function _onBroadcast(msg) {
 		const sd = msg.stream
@@ -78,13 +84,19 @@ var VideoManager = (function() {
 				{
 					const w = $('#' + VideoUtil.getVid(m.uid))
 						, v = w.data()
+						, peer = v.getPeer();
 
-					v.getPeer().addIceCandidate(m.candidate, function (error) {
-						if (error) {
-							OmUtil.error('Error adding candidate: ' + error);
-							return;
-						}
-					});
+					if (peer) {
+						peer.addIceCandidate(m.candidate, function (error) {
+							if (error) {
+								if (true === this.cleaned) {
+									return;
+								}
+								OmUtil.error('Error adding candidate: ' + error);
+								return;
+							}
+						});
+					}
 				}
 				break;
 			case 'newStream':

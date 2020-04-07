@@ -315,6 +315,9 @@ var VideoSettings = (function() {
 						}
 						rtcPeer.generateOffer(function(error, _offerSdp) {
 							if (error) {
+								if (true === this.cleaned) {
+									return;
+								}
 								return OmUtil.error('Error generating the offer');
 							}
 							if (typeof(func) === 'function') {
@@ -477,11 +480,17 @@ var VideoSettings = (function() {
 					rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
 						options
 						, function(error) {
-							if (!this.cleaned && error) {
+							if (error) {
+								if (true === this.cleaned) {
+									return;
+								}
 								return OmUtil.error(error);
 							}
 							rtcPeer.generateOffer(function(error, offerSdp) {
-								if (!this.cleaned && error) {
+								if (error) {
+									if (true === this.cleaned) {
+										return;
+									}
 									return OmUtil.error('Error generating the offer');
 								}
 								OmUtil.sendMessage({
@@ -496,6 +505,9 @@ var VideoSettings = (function() {
 				OmUtil.log('Play SDP answer received from server. Processing ...');
 				rtcPeer.processAnswer(m.sdpAnswer, function(error) {
 					if (error) {
+						if (true === this.cleaned) {
+							return;
+						}
 						return OmUtil.error(error);
 					}
 					lm.show();
@@ -507,6 +519,9 @@ var VideoSettings = (function() {
 				OmUtil.log('SDP answer received from server. Processing ...');
 				rtcPeer.processAnswer(m.sdpAnswer, function(error) {
 					if (error) {
+						if (true === this.cleaned) {
+							return;
+						}
 						return OmUtil.error(error);
 					}
 				});
@@ -514,6 +529,9 @@ var VideoSettings = (function() {
 			case 'iceCandidate':
 				rtcPeer.addIceCandidate(m.candidate, function(error) {
 					if (error) {
+						if (true === this.cleaned) {
+							return;
+						}
 						return OmUtil.error('Error adding candidate: ' + error);
 					}
 				});
@@ -523,7 +541,7 @@ var VideoSettings = (function() {
 				break;
 			case 'recStopped':
 				timer.hide();
-				_onStop()
+				_onStop();
 				break;
 			case 'playStopped':
 				_onStop();
