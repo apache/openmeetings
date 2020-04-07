@@ -227,10 +227,13 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	public void checkHashes(StringValue secure, StringValue invitation) {
+		log.debug("checkHashes, secure: '{}', invitation: '{}'", secure, invitation);
 		try {
+			log.debug("checkHashes, has soap in session ? '{}'", (soap != null));
 			if (!secure.isEmpty() && (soap == null || !soap.getHash().equals(secure.toString()))) {
 				// otherwise already logged-in with the same hash
 				if (isSignedIn()) {
+					log.debug("secure: Session is authorized, going to invalidate");
 					invalidateNow();
 				}
 				signIn(secure.toString(), true);
@@ -238,6 +241,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			if (!invitation.isEmpty() && (i == null || !i.getHash().equals(invitation.toString()))) {
 				// otherwise already logged-in with the same hash
 				if (isSignedIn()) {
+					log.debug("invitation: Session is authorized, going to invalidate");
 					invalidateNow();
 				}
 				i = inviteDao.getByHash(invitation.toString(), false);
@@ -269,15 +273,20 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public boolean signIn(String secureHash, boolean markUsed) {
 		SOAPLogin soapLogin = soapDao.get(secureHash);
 		if (soapLogin == null) {
+			log.warn("Secure hash not found in DB");
 			return false;
 		}
+		log.debug("Secure hash found, is used ? {}", soapLogin.isUsed());
 		if (!soapLogin.isUsed() || soapLogin.getAllowSameURLMultipleTimes()) {
 			Sessiondata sd = sessionDao.check(soapLogin.getSessionHash());
+			log.debug("Do we have data for hash ? {}", (sd.getXml() != null));
 			if (sd.getXml() != null) {
 				RemoteSessionObject remoteUser = RemoteSessionObject.fromString(sd.getXml());
+				log.debug("Hash data was parsed successfuly ? {}, containg exterlaId ? {}", (remoteUser != null), !Strings.isEmpty(remoteUser.getExternalId()));
 				if (remoteUser != null && !Strings.isEmpty(remoteUser.getExternalId())) {
 					Room r = roomDao.get(soapLogin.getRoomId());
 					if (r == null) {
+						log.warn("Room was not found");
 						return false;
 					}
 					redirectHash(r, () -> {});
@@ -312,10 +321,12 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 					setUser(user, null);
 					recordingId = soapLogin.getRecordingId();
 					soap = soapLogin;
+					log.info("Hash was authorized");
 					return true;
 				}
 			}
 		}
+		log.warn("Hash was NOT authorized");
 		return false;
 	}
 
