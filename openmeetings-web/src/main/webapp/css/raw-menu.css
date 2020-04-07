@@ -3,9 +3,6 @@
 	padding-top: 0;
 	padding-bottom: 0;
 }
-.room-block .menu {
-	height: var(--room-menu-height);
-}
 .room-block .menu .top.exit {
 	padding-left: 0;
 }
@@ -26,9 +23,7 @@
 	font-weight: bold;
 }
 .room-block .menu .details .room.name.screen {
-	color: red;
-}
-.room-block .menu .details .room.demo {
+	color: var(--danger);
 }
 .room-block .menu .details .icon {
 	width: 30px;
