@@ -102,13 +102,17 @@ public class ClientManager implements IClientManager {
 
 	@PostConstruct
 	void init() {
+		log.debug("Cluster:: PostConstruct");
+		onlineClients.putAll(map());
+		onlineRooms.putAll(rooms());
+		onlineServers.putAll(servers());
 		map().addEntryListener(new ClientListener(), true);
 		rooms().addEntryListener(new RoomListener(), true);
 		servers().addEntryListener(new EntryUpdatedListener<String, ServerInfo>() {
 
 			@Override
 			public void entryUpdated(EntryEvent<String, ServerInfo> event) {
-				log.trace("ServerListener::Update");
+				log.debug("Cluster:: Server was updated {} -> {}", event.getKey(), event.getValue());
 				onlineServers.put(event.getKey(), event.getValue());
 			}
 		}, true);
@@ -189,9 +193,12 @@ public class ClientManager implements IClientManager {
 	}
 
 	public void serverAdded(String serverId, String url) {
-		ServerInfo si = new ServerInfo(url);
-		servers().put(serverId, si);
-		onlineServers.put(serverId, si);
+		if (!onlineServers.containsKey(serverId)) {
+			ServerInfo si = new ServerInfo(url);
+			servers().put(serverId, si);
+			log.debug("Cluster:: server with id '{}' was added", serverId);
+			onlineServers.put(serverId, si);
+		}
 	}
 
 	public void serverRemoved(String serverId) {
@@ -201,6 +208,7 @@ public class ClientManager implements IClientManager {
 				exit(e.getValue());
 			}
 		}
+		log.debug("Cluster:: server with id '{}' was removed", serverId);
 		servers().remove(serverId);
 		onlineServers.remove(serverId);
 	}
@@ -237,6 +245,7 @@ public class ClientManager implements IClientManager {
 
 	private void addRoomToServer(String serverId, Room r) {
 		if (!onlineServers.get(serverId).getRooms().contains(r.getId())) {
+			log.debug("Cluster:: room {} was not found for server '{}', adding ...", r.getId(), serverId);
 			IMap<String, ServerInfo> servers = servers();
 			servers.lock(serverId);
 			ServerInfo si = servers.get(serverId);
@@ -372,6 +381,7 @@ public class ClientManager implements IClientManager {
 
 	public String getServerUrl(Room r, Function<String, String> inGenerator) {
 		if (onlineServers.size() == 1) {
+			log.debug("Cluster:: The only server found");
 			return null;
 		}
 		Function<String, String> generator = inGenerator == null ? baseUrl -> {
@@ -463,12 +473,14 @@ public class ClientManager implements IClientManager {
 
 		public void add(Room r) {
 			if (rooms.add(r.getId())) {
+				log.debug("Cluster:: room {} is added to server, whole list {}", r.getId(), rooms);
 				capacity += r.getCapacity();
 			}
 		}
 
 		public void remove(Room r) {
 			if (rooms.remove(r.getId())) {
+				log.debug("Cluster:: room {} is removed from server, whole list {}", r.getId(), rooms);
 				capacity -= r.getCapacity();
 			}
 		}
@@ -483,6 +495,11 @@ public class ClientManager implements IClientManager {
 
 		public Set<Long> getRooms() {
 			return rooms;
+		}
+
+		@Override
+		public String toString() {
+			return "ServerInfo[rooms: " + rooms + "]";
 		}
 	}
 
