@@ -78,10 +78,6 @@ public class MainPage extends BaseInitedPage {
 	private OmUrlFragment uf = null;
 	private boolean loaded = false;
 
-	public MainPage() {
-		super();
-	}
-
 	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler) {
 		main.updateContents(f, handler);
 	}

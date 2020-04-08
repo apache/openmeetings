@@ -399,8 +399,7 @@ public class ClientManager implements IClientManager {
 			, EntryUpdatedListener<String, Client>
 			, EntryRemovedListener<String, Client>
 	{
-		@Override
-		public void entryAdded(EntryEvent<String, Client> event) {
+		private void process(EntryEvent<String, Client> event) {
 			final String uid = event.getKey();
 			synchronized (onlineClients) {
 				if (onlineClients.containsKey(uid)) {
@@ -412,10 +411,13 @@ public class ClientManager implements IClientManager {
 		}
 
 		@Override
+		public void entryAdded(EntryEvent<String, Client> event) {
+			process(event);
+		}
+
+		@Override
 		public void entryUpdated(EntryEvent<String, Client> event) {
-			synchronized (onlineClients) {
-				onlineClients.get(event.getKey()).merge(event.getValue());
-			}
+			process(event);
 		}
 
 		@Override
