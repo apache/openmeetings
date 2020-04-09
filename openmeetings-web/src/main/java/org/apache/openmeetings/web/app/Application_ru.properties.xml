@@ -999,7 +999,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="upload.dlg.choose.title"><![CDATA[Выбор файла]]></entry>
 	<entry key="upload.dlg.convert.title"><![CDATA[Преобразование...]]></entry>
 	<entry key="lbl.settings.whiteboard"><![CDATA[Настройки доски]]></entry>
-	<entry key="video.settings.https.required"><![CDATA[Камера/Микрофон скорее всего не будут работать без HTTPS.]]></entry>
+	<entry key="video.settings.https.required"><![CDATA[Камера/Микрофон скорее всего не будут работать без HTTPS. Перейдите на HTTPS]]></entry>
 	<entry key="reset.whiteboard"><![CDATA[Восстановить начальную доску]]></entry>
 	<entry key="admin.room.wait-moderator.info"><![CDATA[Никто не сможет воспользоваться комнатой пока нет модератора]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Ждать модератора]]></entry>
