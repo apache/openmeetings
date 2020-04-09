@@ -357,6 +357,11 @@ var VideoSettings = (function() {
 	}
 	function _getDevConstraints(callback) {
 		const devCnts = {audio: false, video: false};
+		if (navigator.mediaDevices === undefined) {
+			OmUtil.error('Brower multimedia devices are blocked by security settings. Try https.');
+			callback(devCnts);
+			return;
+		}
 		navigator.mediaDevices.enumerateDevices()
 			.then(function(devices) {
 				devices.forEach(function(device) {
