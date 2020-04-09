@@ -357,9 +357,11 @@ var VideoSettings = (function() {
 	}
 	function _getDevConstraints(callback) {
 		const devCnts = {audio: false, video: false};
-		if (navigator.mediaDevices === undefined) {
-			OmUtil.error('Browser multimedia devices are blocked by security settings. Try https.');
-			callback(devCnts);
+		if (window.isSecureContext === false) {
+			OmUtil.error($('#settings-https-required').text());
+		}
+		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+			OmUtil.error('enumerateDevices() not supported.');
 			return;
 		}
 		navigator.mediaDevices.enumerateDevices()
