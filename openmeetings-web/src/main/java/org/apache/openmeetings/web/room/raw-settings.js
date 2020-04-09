@@ -359,6 +359,7 @@ var VideoSettings = (function() {
 		const devCnts = {audio: false, video: false};
 		if (window.isSecureContext === false) {
 			OmUtil.error($('#settings-https-required').text());
+			return;
 		}
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
 			OmUtil.error('enumerateDevices() not supported.');
@@ -383,6 +384,7 @@ var VideoSettings = (function() {
 	function _initDevices() {
 		if (window.isSecureContext === false) {
 			OmUtil.error($('#settings-https-required').text());
+			return;
 		}
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
 			OmUtil.error('enumerateDevices() not supported.');
