@@ -357,6 +357,14 @@ var VideoSettings = (function() {
 	}
 	function _getDevConstraints(callback) {
 		const devCnts = {audio: false, video: false};
+		if (window.isSecureContext === false) {
+			OmUtil.error($('#settings-https-required').text());
+			return;
+		}
+		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+			OmUtil.error('enumerateDevices() not supported.');
+			return;
+		}
 		navigator.mediaDevices.enumerateDevices()
 			.then(function(devices) {
 				devices.forEach(function(device) {
@@ -376,6 +384,7 @@ var VideoSettings = (function() {
 	function _initDevices() {
 		if (window.isSecureContext === false) {
 			OmUtil.error($('#settings-https-required').text());
+			return;
 		}
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
 			OmUtil.error('enumerateDevices() not supported.');

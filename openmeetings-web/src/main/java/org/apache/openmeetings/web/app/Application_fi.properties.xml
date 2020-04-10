@@ -999,7 +999,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="upload.dlg.choose.title"><![CDATA[Valitse tiedosto]]></entry>
 	<entry key="upload.dlg.convert.title"><![CDATA[Converting...]]></entry>
 	<entry key="lbl.settings.whiteboard"><![CDATA[Whiteboard Settings]]></entry>
-	<entry key="video.settings.https.required"><![CDATA[Camera/microphone most probably will not work in insecure environment.]]></entry>
+	<entry key="video.settings.https.required"><![CDATA[Camera/microphone most probably will not work in insecure environment. Try using https.]]></entry>
 	<entry key="reset.whiteboard"><![CDATA[Reset Whiteboard]]></entry>
 	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use room until moderator will join]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Wait moderator]]></entry>
