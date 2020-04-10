@@ -117,7 +117,7 @@
 			<item name="Source Code" href="/scm.html" />
 			<item name="Bugs / Issues" href="/issue-management.html" />
 			<item name="Dependencies" href="/dependencies.html" />
-			<item name="Continuous Integration" href="/integration.html" />
+			<item name="Continuous Integration" href="/ci-management.html" />
 			<item name="Build Instructions" href="/BuildInstructions.html" />
 			<item name="JUnit Testing" href="/JUnitTesting.html" />
 			<item name="Manual Testing" href="/ManualTesting.html" />
