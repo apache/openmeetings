@@ -176,11 +176,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	@Override
 	public boolean isSignedIn() {
-		Optional<InstantToken> token = cm.getToken(RequestCycle.get().getRequest().getQueryParameters().getParameterValue("token"));
-		if (token.isPresent()) {
-			signIn(userDao.get(token.get().getUserId()));
-			area = RoomEnterBehavior.getRoomUrlFragment(token.get().getRoomId());
-		}
 		if (userId == null) {
 			IAuthenticationStrategy strategy = getAuthenticationStrategy();
 			// get username and password from persistence store
@@ -267,6 +262,16 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			throw e;
 		} catch (Exception e) {
 			log.error("Unexpected exception while checking hashes", e);
+		}
+	}
+
+	public void checkToken(StringValue intoken) {
+		Optional<InstantToken> token = cm.getToken(intoken);
+		if (token.isPresent()) {
+			invalidateNow();
+			signIn(userDao.get(token.get().getUserId()));
+			log.debug("Cluster:: Token for room {} is found, signedIn ? {}", token.get().getRoomId(), userId != null);
+			area = RoomEnterBehavior.getRoomUrlFragment(token.get().getRoomId());
 		}
 	}
 

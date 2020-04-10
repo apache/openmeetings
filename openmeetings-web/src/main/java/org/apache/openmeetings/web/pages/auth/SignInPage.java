@@ -83,6 +83,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
 public class SignInPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(SignInPage.class);
+	public static final String TOKEN_PARAM = "token";
 	private SignInDialog signin;
 	private final Modal<String> kick = new IconTextModal("kick") {
 		private static final long serialVersionUID = 1L;
@@ -146,6 +147,10 @@ public class SignInPage extends BaseInitedPage {
 
 	public SignInPage(PageParameters p) {
 		super();
+		WebSession.get().checkToken(p.get(TOKEN_PARAM));
+		if (WebSession.get().isSignedIn()) {
+			setResponsePage(Application.get().getHomePage());
+		}
 		StringValue oauthid = p.get("oauthid");
 		if (!oauthid.isEmpty()) { // oauth2 login
 			try {

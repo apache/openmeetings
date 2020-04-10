@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.pages.auth.SignInPage.TOKEN_PARAM;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.string.StringValue;
@@ -387,7 +389,7 @@ public class ClientManager implements IClientManager {
 		Function<String, String> generator = inGenerator == null ? baseUrl -> {
 			String uuid = UUID.randomUUID().toString();
 			tokens().put(uuid, new InstantToken(getUserId(), r.getId()));
-			return Application.urlForPage(Application.get().getHomePage(), new PageParameters().add("token", uuid), baseUrl);
+			return Application.urlForPage(SignInPage.class, new PageParameters().add(TOKEN_PARAM, uuid), baseUrl);
 		} : inGenerator;
 		Optional<Map.Entry<String, ServerInfo>> existing = onlineServers.entrySet().stream()
 				.filter(e -> e.getValue().getRooms().contains(r.getId()))
@@ -401,6 +403,7 @@ public class ClientManager implements IClientManager {
 	}
 
 	Optional<InstantToken> getToken(StringValue uuid) {
+		log.debug("Cluster:: Checking token {}, full list: {}", uuid, tokens().entrySet());
 		return uuid.isEmpty() ? Optional.empty() : Optional.ofNullable(tokens().remove(uuid.toString()));
 	}
 
