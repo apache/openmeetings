@@ -891,7 +891,7 @@ var Wb = function() {
 	};
 	wb.clearAll = function() {
 		for (let i = 1; i < canvases.length; ++i) {
-			const cc = $('#can-wb-tab-' + wb.id + '-slide-' + i).closest('.canvas-container');
+			const cc = $('#can-' + wb.id + '-slide-' + i).closest('.canvas-container');
 			cc.remove();
 			canvases[i].dispose();
 		}
