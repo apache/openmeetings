@@ -49,6 +49,9 @@
 .main.room #chatPanel.closed #chatPopup .control.block i::before {
 	content: "\f104";
 }
+#chat .messageArea .msg-row.need-moderation {
+	background-color: var(--warning);
+}
 #chat .messageArea .time {
 	margin-right: 5px;
 	font-style: italic;
@@ -69,6 +72,7 @@
 #chat .messageArea .icons div {
 	display: inline-block;
 	vertical-align: super;
+	margin-right: 2px;
 }
 html[dir="rtl"] #chat .messageArea .icons {
 	left: initial;

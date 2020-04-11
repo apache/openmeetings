@@ -41,30 +41,25 @@
 		<div id="chat-date-template" class='date-row'></div>
 		<div id="chat-msg-template" class='msg-row'>
 			<div class='user-row'>
-				<div class='from'></div>
-				<span class='time'></span>
+				<div class='from align-left'></div>
+				<span class='time align-right'></span>
 				<div class="clear"></div>
 			</div>
-			<div class='msg'></div>
+			<div class='msg align-left'></div>
 			<div class="clear"></div>
 		</div>
-		<div id="chat-accept-template" class='tick om-icon clickable' wicket:message="title:1190"
-			onclick='const e=$(this);chatActivity("accept", e.data("roomid"), e.data("msgid")); e.parent().remove();'></div>
+		<div id="chat-actions-short-template" class='user clickable' wicket:message="title:1167"><i class="fas fa-address-card"></i></div>
+		<div id="chat-actions-others-template">
+			<div class='add clickable' wicket:message="title:1186"><i class="fas fa-plus-circle"></i></div>
+			<div class='new-email clickable' wicket:message="title:1253"><i class="fas fa-envelope"></i></div>
+			<div class='invite clickable' wicket:message="title:1131"><i class="fas fa-link"></i></div>
+		</div>
+		<div id="chat-actions-accept-template" class='accept clickable' wicket:message="title:1190"><i class="fas fa-check"></i></div>
 		<button id="chat-close-block" class="btn btn-sm btn-outline-secondary close-chat" wicket:message="title:85">
 			<i class="fas fa-times"></i>
 			<span class="sr-only"><wicket:message key="85"/></span>
 		</button>
-		<div id="chat-msg-area-template" class="messageArea bg-white tab-pane h-100" role="tabpanel">
-			<div class="clear icons actions short">
-				<div class='user clickable' wicket:message="title:1167"><i class="fas fa-address-card"></i></div>
-			</div>
-			<div class="clear icons actions full">
-				<div class='user clickable' wicket:message="title:1167"><i class="fas fa-address-card"></i></div>
-				<div class='add clickable' wicket:message="title:1186"><i class="fas fa-plus-circle"></i></div>
-				<div class='new-email clickable' wicket:message="title:1253"><i class="fas fa-envelope"></i></div>
-				<div class='invite clickable' wicket:message="title:1131"><i class="fas fa-link"></i></div>
-			</div>
-		</div>
+		<div id="chat-msg-area-template" class="messageArea bg-white tab-pane h-100" role="tabpanel"></div>
 	</div>
 </wicket:panel>
 </html>

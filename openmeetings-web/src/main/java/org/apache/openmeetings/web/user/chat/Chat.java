@@ -63,8 +63,8 @@ import com.github.openjson.JSONObject;
 public class Chat extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(Chat.class);
-	private static final String PARAM_MSG_ID = "msgid";
-	private static final String PARAM_ROOM_ID = "roomid";
+	private static final String PARAM_MSG_ID = "msgId";
+	private static final String PARAM_ROOM_ID = "roomId";
 	private static final String PARAM_TYPE = "type";
 	private boolean showDashboardChat;
 	private final AbstractDefaultAjaxBehavior chatActivity = new AbstractDefaultAjaxBehavior() {

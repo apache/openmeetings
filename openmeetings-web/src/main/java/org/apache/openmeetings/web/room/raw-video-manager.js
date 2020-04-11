@@ -68,7 +68,7 @@ var VideoManager = (function() {
 					_closeV($(this));
 				});
 				if (share.data('cuid') === m.uid) {
-					share.off('click').hide();
+					share.off().hide();
 				}
 				break;
 			case 'broadcastStopped':
@@ -206,7 +206,7 @@ var VideoManager = (function() {
 						.data('cuid', sd.cuid)
 						.show()
 					, 'btn-outline-warning', 10);
-				share.tooltip().off('click').click(function() {
+				share.tooltip().off().click(function() {
 					_playSharing(sd, iceServers);
 				});
 				if (Room.getOptions().autoOpenSharing === true) {
@@ -225,7 +225,7 @@ var VideoManager = (function() {
 			_closeV(v);
 		}
 		if (!showShareBtn && uid === share.data('uid')) {
-			share.off('click').hide();
+			share.off().hide();
 		}
 	}
 	function _find(uid) {

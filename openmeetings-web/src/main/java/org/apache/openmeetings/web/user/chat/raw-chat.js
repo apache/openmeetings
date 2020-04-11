@@ -1,8 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Chat = function() {
-	const align = 'align-left'
-		, alignIco = 'align-right'
-		, msgIdPrefix = 'chat-msg-id-'
+	const msgIdPrefix = 'chat-msg-id-'
 		, closedSize = 20
 		, closedSizePx = closedSize + "px"
 		, emoticon = new CSSEmoticon()
@@ -187,7 +185,7 @@ var Chat = function() {
 				});
 			__setCssHeight(closedSize);
 		}
-		ctrl.off('click').click(Chat.toggle);
+		ctrl.off().click(Chat.toggle);
 		$('#chatMessage').off().on('input propertychange paste', function () {
 			const room = $('.room-block .room-container');
 			if (room.length) {
@@ -229,24 +227,43 @@ var Chat = function() {
 			link.append(OmUtil.tmpl('#chat-close-block'));
 		}
 		tabs.find('.nav.nav-tabs').append(li);
-		tabs.find('.tab-content').append(OmUtil.tmpl('#chat-msg-area-template', id));
+		const msgArea = OmUtil.tmpl('#chat-msg-area-template', id);
+		tabs.find('.tab-content').append(msgArea);
+		msgArea.append($('<div class="clear icons actions align-left">').addClass('short')
+				.append(OmUtil.tmpl('#chat-actions-short-template')));
+		msgArea.append($('<div class="clear icons actions align-left">').addClass('short-mod')
+				.append(OmUtil.tmpl('#chat-actions-short-template'))
+				.append(OmUtil.tmpl('#chat-actions-accept-template')));
+		msgArea.append($('<div class="clear icons actions align-left">').addClass('full')
+				.append(OmUtil.tmpl('#chat-actions-short-template'))
+				.append(OmUtil.tmpl('#chat-actions-others-template').children().clone()));
+		msgArea.append($('<div class="clear icons actions align-left">').addClass('full-mod')
+				.append(OmUtil.tmpl('#chat-actions-short-template'))
+				.append(OmUtil.tmpl('#chat-actions-others-template').children().clone())
+				.append(OmUtil.tmpl('#chat-actions-accept-template')));
 		const actions = __hideActions();
-		actions.addClass(align);
-		actions.find('.user').off('click').click(function() {
+		actions.find('.user').off().click(function() {
 			const e = $(this).parent();
 			showUserInfo(e.data("userId"));
 		});
-		actions.find('.add').off('click').click(function() {
+		actions.find('.add').off().click(function() {
 			const e = $(this).parent();
 			addContact(e.data("userId"));
 		});
-		actions.find('.new-email').off('click').click(function() {
+		actions.find('.new-email').off().click(function() {
 			const e = $(this).parent();
 			privateMessage(e.data("userId"));
 		});
-		actions.find('.invite').off('click').click(function() {
+		actions.find('.invite').off().click(function() {
 			const e = $(this).parent();
 			inviteUser(e.data("userId"));
+		});
+		actions.find('.accept').off().click(function() {
+			const e = $(this).parent()
+				, msgId = e.data('msgId');
+			chatActivity('accept', e.data('roomId'), msgId);
+			__hideActions();
+			$('#chat-msg-id-' + msgId).remove();
 		});
 		activateTab(id);
 	}
@@ -254,7 +271,7 @@ var Chat = function() {
 		return $('#chat .tab-content .messageArea .icons').hide();
 	}
 	function __getActions(row) {
-		return row.closest('.messageArea').find('.actions.' + ('full' === row.data('actions') ? 'full' : 'short'));
+		return row.closest('.messageArea').find('.actions.' + row.data('actions'));
 	}
 	function _addMessage(m) {
 		if ($('#chat').length > 0 && m && m.type === "chat") {
@@ -264,22 +281,30 @@ var Chat = function() {
 				if (cm.from.id !== userId) {
 					notify = true;
 				}
+				const actions = ('full' === cm.actions ? 'full' : 'short') + (cm.needModeration ? '-mod' : '');
 				msg = OmUtil.tmpl('#chat-msg-template', msgIdPrefix + cm.id)
-				msg.find('.user-row')
+				const row = msg.find('.user-row')
 					.data('userId', cm.from.id)
-					.data('actions', cm.actions)
+					.data('actions', actions)
 					.mouseenter(function() {
 						__hideActions();
 						__getActions($(this))
 							.data('userId', $(this).data('userId'))
+							.data('roomId', $(this).data('roomId'))
+							.data('msgId', $(this).data('msgId'))
 							.css('top', ($(this).closest('.msg-row')[0].offsetTop + 20) + 'px')
 							.show();
 					});
+				if (cm.needModeration) {
+					row.parent().addClass('need-moderation');
+					row.data('roomId', cm.scope.substring(9))
+						.data('msgId', cm.id);
+				}
 				area.mouseleave(function() {
 					__hideActions();
 				});
-				msg.find('.from').addClass(align).data('user-id', cm.from.id).html(cm.from.name || cm.from.displayName);
-				msg.find('.time').addClass(alignIco).html(cm.time).attr('title', cm.sent);
+				msg.find('.from').data('user-id', cm.from.id).html(cm.from.name || cm.from.displayName);
+				msg.find('.time').html(cm.time).attr('title', cm.sent);
 				if (!area.length) {
 					_addTab(cm.scope, cm.scopeName);
 					area = $('#' + cm.scope);
@@ -297,7 +322,7 @@ var Chat = function() {
 				area.append(msg);
 				msg.find('.user-row')[0].style.backgroundImage = 'url(' + (!!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now()) + ')';
 
-				msg.find('.msg').addClass(align).html(emoticon.emoticonize(!!cm.message ? cm.message : ""));
+				msg.find('.msg').html(emoticon.emoticonize(!!cm.message ? cm.message : ""));
 				if (btm) {
 					_scrollDown(area);
 				}
@@ -344,6 +369,7 @@ var Chat = function() {
 				p.resizable("option", "disabled", false);
 			}
 			p.removeClass('closed').animate(opts, 1000, function() {
+				__hideActions();
 				p.removeClass('closed');
 				p.css({'height': '', 'width': ''});
 				if (typeof(handler) === 'function') {
