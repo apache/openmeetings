@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -122,11 +121,11 @@ public class UserSearchPanel extends UserBasePanel {
 				item.add(new Label("tz", getTimeZone(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
-				item.add(new WebMarkupContainer("view").add(addOnClick(String.format("showUserInfo(%s);", userId))));
+				item.add(new WebMarkupContainer("view").add(AttributeModifier.append("data-user-id", userId)));
 				item.add(new WebMarkupContainer("add").setVisible(userId != getUserId() && !contactDao.isContact(userId, getUserId()))
-						.add(addOnClick(String.format("addContact(%s);", userId))));
-				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(addOnClick(String.format("privateMessage(%s);", userId))));
-				item.add(new WebMarkupContainer("invite").setVisible(userId != getUserId()).add(addOnClick(String.format("inviteUser(%s);", userId))));
+						.add(AttributeModifier.append("data-user-id", userId)));
+				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(AttributeModifier.append("data-user-id", userId)));
+				item.add(new WebMarkupContainer("invite").setVisible(userId != getUserId()).add(AttributeModifier.append("data-user-id", userId)));
 			}
 		};
 
@@ -142,6 +141,10 @@ public class UserSearchPanel extends UserBasePanel {
 
 	private void refresh(IPartialPageRequestHandler handler) {
 		handler.add(container);
+		handler.appendJavaScript("$('#searchUsersTable .contact-add.om-icon.clickable').off().click(function() {addContact($(this).data('user-id'));});");
+		handler.appendJavaScript("$('#searchUsersTable .new-msg.om-icon.clickable').off().click(function() {privateMessage($(this).data('user-id'));});");
+		handler.appendJavaScript("$('#searchUsersTable .profile.om-icon.clickable').off().click(function() {showUserInfo($(this).data('user-id'));});");
+		handler.appendJavaScript("$('#searchUsersTable .invite.om-icon.clickable').off().click(function() {inviteUser($(this).data('user-id'));});");
 	}
 
 	private static String getName(User u) {

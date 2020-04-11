@@ -199,6 +199,12 @@ var Chat = function() {
 				typingTimer = setTimeout(doneTyping, doneTypingInterval);
 			}
 		});
+		$('#chat .chat-toolbar .link-field').off().on('keypress', function() {
+			if (event.keyCode === 13) {
+				$(this).parent().find('button').trigger('click');
+			};
+			return event.keyCode !== 13;
+		});
 		inited = true;
 	}
 	function _removeTab(id) {

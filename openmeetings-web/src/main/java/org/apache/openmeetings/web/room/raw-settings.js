@@ -304,6 +304,9 @@ var VideoSettings = (function() {
 					options
 					, function(error) {
 						if (error) {
+							if (true === this.cleaned) {
+								return;
+							}
 							return OmUtil.error(error);
 						}
 						if (cnts.audio) {

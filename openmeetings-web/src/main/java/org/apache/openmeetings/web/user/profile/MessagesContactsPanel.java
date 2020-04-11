@@ -25,7 +25,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -480,8 +479,8 @@ public class MessagesContactsPanel extends UserBasePanel {
 						updateContacts(target);
 					}
 				}).setVisible(uc.isPending()));
-				item.add(new WebMarkupContainer("view").add(addOnClick(String.format("showUserInfo(%s);", userId))));
-				item.add(new WebMarkupContainer("message").add(addOnClick(String.format("privateMessage(%s);", userId))).setVisible(!uc.isPending()));
+				item.add(new WebMarkupContainer("view").add(AttributeModifier.append("data-user-id", userId)));
+				item.add(new WebMarkupContainer("message").add(AttributeModifier.append("data-user-id", userId)).setVisible(!uc.isPending()));
 				BootstrapAjaxLink<String> del = new BootstrapAjaxLink<>("delete", Buttons.Type.Outline_Danger) {
 					private static final long serialVersionUID = 1L;
 
@@ -626,7 +625,15 @@ public class MessagesContactsPanel extends UserBasePanel {
 		allContacts.setDefaultModelObject(contactDao.getContactsByUserAndStatus(getUserId(), false).size());
 		if (target != null) {
 			target.add(contacts);
+			target.appendJavaScript("$('.messages .user.om-icon.clickable').off().click(function() {showUserInfo($(this).data('user-id'));});");
+			target.appendJavaScript("$('.messages .new-email.om-icon.clickable').click(function() {privateMessage($(this).data('user-id'));});");
 		}
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(OnDomReadyHeaderItem.forScript("$('.email.new.btn').click(privateMessage)"));
 	}
 
 	@Override

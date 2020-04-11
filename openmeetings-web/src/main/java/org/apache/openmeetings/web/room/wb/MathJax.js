@@ -994,6 +994,9 @@ MathJax.cdnFileVersions = {};  // can be used to specify revisions for individua
     //  and values).
     //
     Styles: function (styles,callback) {
+      callback = BASE.Callback(callback);
+      callback();
+      /* MODIFIED BY SOLOMAX TO COMPLY WITH CSP
       var styleString = this.StyleString(styles);
       if (styleString === "") {
         callback = BASE.Callback(callback);
@@ -1008,7 +1011,7 @@ MathJax.cdnFileVersions = {};  // can be used to specify revisions for individua
           style.appendChild(document.createTextNode(styleString));
         }
         callback = this.timer.create.call(this,callback,style);
-      }
+      }*/
       return callback;
     },
 

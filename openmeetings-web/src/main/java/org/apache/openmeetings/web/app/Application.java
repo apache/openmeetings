@@ -50,7 +50,6 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -103,9 +102,6 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler;
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
-import org.apache.wicket.csp.CSPDirective;
-import org.apache.wicket.csp.CSPDirectiveSrcValue;
-import org.apache.wicket.csp.CSPHeaderConfiguration;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.FilteringHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderResponseDecorator;
@@ -184,8 +180,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private ClientManager cm;
 	@Autowired
 	private AppointmentDao appointmentDao;
-	@Autowired
-	private OAuth2Dao oauthDao;
 
 	@Override
 	protected void init() {
@@ -256,7 +250,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//chain of Resource Loaders, if not found it will search in Wicket's internal
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
-		final CSPHeaderConfiguration cspConfig = getCspConfig().strict();
 		getRequestCycleListeners().add(new WebSocketAwareCsrfPreventionRequestCycleListener() {
 			@Override
 			public void onEndRequest(RequestCycle cycle) {
@@ -267,13 +260,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 						wresp.setHeader("X-XSS-Protection", "1; mode=block");
 						wresp.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
 						wresp.setHeader("X-Content-Type-Options", "nosniff");
-						/*Url reqUrl = cycle.getRequest().getUrl();
-						wresp.setHeader("Content-Security-Policy"
-								, String.format("%s; connect-src 'self' %s; frame-src %s;"
-										, getContentSecurityPolicy(), getWsUrl(reqUrl)
-										, getxFrameOptions()
-								));
-						*/
 					}
 				}
 			}
@@ -343,16 +329,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			setExtProcessTtl(cfgDao.getInt(CONFIG_EXT_PROCESS_TTL, getExtProcessTtl()));
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
-
-			getCspSettings().blocking().disabled(); //FIXME TODO due to `reporting-only enabled`
-			oauthDao.getActive().forEach(oauth -> {
-				if (!Strings.isEmpty(oauth.getIconUrl())) {
-					cspConfig.add(CSPDirective.IMG_SRC, oauth.getIconUrl());
-				}
-			});
-			cspConfig.add(CSPDirective.STYLE_SRC, "https://fonts.googleapis.com/css"); //Roboto font FIXME TODO should this be moved to configs???
-			cspConfig.add(CSPDirective.FONT_SRC, "https://fonts.gstatic.com"); //Roboto font FIXME TODO should this be moved to configs???
-			cspConfig.add(CSPDirective.MEDIA_SRC, CSPDirectiveSrcValue.SELF);
 			setInitComplete(true);
 		} catch (Exception err) {
 			log.error("[appStart]", err);
@@ -381,10 +357,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				return super.mapHandler(requestHandler);
 			}
 		}
-	}
-
-	public CSPHeaderConfiguration getCspConfig() {
-		return getCspSettings().reporting();
 	}
 
 	public static OmAuthenticationStrategy getAuthenticationStrategy() {
@@ -643,22 +615,5 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	public void publishWsTopic(IClusterWsMessage msg) {
 		hazelWsTopic.publish(msg);
-	}
-
-	private static String getWsUrl(Url reqUrl) {
-		final boolean insecure = "http".equalsIgnoreCase(reqUrl.getProtocol());
-		String delim = ":";
-		String port = reqUrl.getPort() == null || reqUrl.getPort() < 0 ? "" : String.valueOf(reqUrl.getPort());
-		if (!port.isEmpty() && ((insecure && 80 == reqUrl.getPort()) || (!insecure && 443 == reqUrl.getPort()))) {
-			port = "";
-		}
-		if (port.isEmpty()) {
-			delim = "";
-		}
-		return String.format("%s://%s%s%s;"
-			, insecure ? "ws" : "wss"
-			, reqUrl.getHost()
-			, delim
-			, port);
 	}
 }

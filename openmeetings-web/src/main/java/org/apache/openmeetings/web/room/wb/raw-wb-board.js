@@ -766,10 +766,14 @@ var Wb = function() {
 				sc.off('scroll', scrollHandler);
 			} else {
 				tools = OmUtil.tmpl('#wb-tools');
-				settings = OmUtil.tmpl('#wb-tool-settings')
-					.attr('style', 'display: none; bottom: 100px; ' + (Settings.isRtl ? 'left' : 'right') + ': 100px;');
-				math = OmUtil.tmpl('#wb-formula')
-					.attr('style', 'display: none; bottom: 100px; ' + (Settings.isRtl ? 'left' : 'right') + ': 100px;');
+				settings = OmUtil.tmpl('#wb-tool-settings');
+				settings[0].style.display = 'none';
+				settings[0].style.bottom = '100px';
+				settings[0].style[(Settings.isRtl ? 'left' : 'right')] = '100px';
+				math = OmUtil.tmpl('#wb-formula');
+				math[0].style.display = 'none';
+				math[0].style.bottom = '100px';
+				math[0].style[(Settings.isRtl ? 'left' : 'right')] = '100px';
 				wbEl.append(settings, math);
 				sc.on('scroll', scrollHandler);
 			}

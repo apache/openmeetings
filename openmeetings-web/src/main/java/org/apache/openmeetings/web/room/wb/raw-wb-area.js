@@ -176,7 +176,7 @@ var DrawWbArea = function() {
 			elems.find('button').remove();
 		}
 		links.off()
-			.on('click', function(e) {
+			.click(function(e) {
 				e.preventDefault();
 				if (role === PRESENTER) {
 					_actionActivateWb($(this).data('wb-id'));

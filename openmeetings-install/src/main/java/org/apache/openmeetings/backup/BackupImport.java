@@ -88,6 +88,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_FRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
@@ -265,6 +266,7 @@ public class BackupImport {
 		outdatedConfigKeys.put("swftools_jpegquality", CONFIG_DOCUMENT_QUALITY);
 		outdatedConfigKeys.put("sms.subject", CONFIG_REMINDER_MESSAGE);
 		outdatedConfigKeys.put("exclusive.audio.keycode", CONFIG_KEYCODE_MUTE_OTHERS);
+		outdatedConfigKeys.put("header.csp.frame.options", CONFIG_CSP_FRAME);
 		configTypes.put(CONFIG_REGISTER_FRONTEND, Configuration.Type.BOOL);
 		configTypes.put(CONFIG_REGISTER_SOAP, Configuration.Type.BOOL);
 		configTypes.put(CONFIG_REGISTER_OAUTH, Configuration.Type.BOOL);

@@ -111,6 +111,7 @@ var Activities = function() {
 				return;
 			}
 			activities = $('#activities');
+			activities.find('.control.block').off().click(Activities.toggle);
 			activities.resizable({
 				handles: 'n'
 				, disabled: isClosed()

@@ -26,7 +26,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_AUTO_OPE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHAT_SEND_ON_ENTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_XFRAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_FONT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_FRAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_IMAGE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_MEDIA;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_SCRIPT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_STYLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
@@ -36,7 +41,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE_RESIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
@@ -61,12 +65,20 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENAB
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_EXTEN_CONTEXT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CSP_FONT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CSP_IMAGE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CSP_STYLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_SIP_CONTEXT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SELF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getCspFontSrc;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getCspFrameSrc;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getCspImageSrc;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getCspMediaSrc;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getCspScriptSrc;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getCspStyleSrc;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getGaCode;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAllowRegisterFrontend;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAllowRegisterOauth;
@@ -76,8 +88,13 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioBitrate
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioRate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setChatSendOnEnter;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setContentSecurityPolicy;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setCspFontSrc;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setCspFrameSrc;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setCspImageSrc;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setCspMediaSrc;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setCspScriptSrc;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setCspStyleSrc;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultTimezone;
@@ -97,7 +114,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setSendVerifica
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipContext;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipEnabled;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setVideoPreset;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setxFrameOptions;
+import static org.apache.wicket.csp.CSPDirectiveSrcValue.SELF;
+import static org.apache.wicket.csp.CSPDirectiveSrcValue.STRICT_DYNAMIC;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -117,10 +135,16 @@ import org.apache.openjpa.event.TCPRemoteCommitProvider;
 import org.apache.openjpa.persistence.OpenJPAEntityManagerSPI;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
+import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.util.DaoHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
+import org.apache.wicket.Application;
+import org.apache.wicket.csp.CSPDirective;
+import org.apache.wicket.csp.CSPHeaderConfiguration;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,6 +178,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private OAuth2Dao oauthDao;
 
 	public void updateClusterAddresses(String addresses) throws UnknownHostException {
 		OpenJPAConfiguration cfg = ((OpenJPAEntityManagerSPI)OpenJPAPersistence.cast(em)).getConfiguration();
@@ -328,15 +354,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_SIP_ENABLED:
 				reloadSipEnabled();
 				break;
-			case CONFIG_GOOGLE_ANALYTICS_CODE:
-				reloadGaCode();
-				break;
-			case CONFIG_CSP_XFRAME:
-				reloadXFrameOptions();
-				break;
-			case CONFIG_HEADER_CSP:
-				reloadContentSecurityPolicy();
-				break;
 			case CONFIG_EXT_PROCESS_TTL:
 				setExtProcessTtl(toInt(value));
 				break;
@@ -400,6 +417,15 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_MYROOMS_ENABLED:
 				reloadMyRoomsEnabled();
 				break;
+			case CONFIG_GOOGLE_ANALYTICS_CODE:
+			case CONFIG_CSP_FONT:
+			case CONFIG_CSP_FRAME:
+			case CONFIG_CSP_IMAGE:
+			case CONFIG_CSP_MEDIA:
+			case CONFIG_CSP_SCRIPT:
+			case CONFIG_CSP_STYLE:
+				updateCsp();
+				break;
 		}
 		return entity;
 	}
@@ -436,10 +462,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	private void reloadSipEnabled() {
 		setSipEnabled(getBool(CONFIG_SIP_ENABLED, false));
-	}
-
-	private void reloadGaCode() {
-		setGaCode(getString(CONFIG_GOOGLE_ANALYTICS_CODE, null));
 	}
 
 	private void reloadDefaultLang() {
@@ -523,14 +545,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setSendRegisterEmail(getBool(CONFIG_EMAIL_AT_REGISTER, false));
 	}
 
-	private void reloadXFrameOptions() {
-		setxFrameOptions(getString(CONFIG_CSP_XFRAME, HEADER_XFRAME_SELF));
-	}
-
-	private void reloadContentSecurityPolicy() {
-		setContentSecurityPolicy(getString(CONFIG_HEADER_CSP, HEADER_CSP_SELF));
-	}
-
 	private void reloadDisplayNameEditable() {
 		setDisplayNameEditable(getBool(CONFIG_DISPLAY_NAME_EDITABLE, false));
 	}
@@ -546,7 +560,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadDefaultLang();
 		reloadBaseUrl();
 		reloadSipEnabled();
-		reloadGaCode();
 		reloadAudioRate();
 		reloadAudioBitrate();
 		reloadVideoPreset();
@@ -565,10 +578,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadAllowRegisterOauth();
 		reloadSendVerificationEmail();
 		reloadSendRegisterEmail();
-		reloadXFrameOptions();
-		reloadContentSecurityPolicy();
 		reloadDisplayNameEditable();
 		reloadMyRoomsEnabled();
+
+		updateCsp();
 	}
 
 	private static JSONObject getHotkey(String value) {
@@ -603,5 +616,51 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			log.error("Unexpected exception while reloading room settings: ", e);
 		}
 		return getRoomSettings();
+	}
+
+	private void addCspRule(CSPHeaderConfiguration cspConfig, CSPDirective key, String val) {
+		addCspRule(cspConfig, key, val, true);
+	}
+
+	private void addCspRule(CSPHeaderConfiguration cspConfig, CSPDirective key, String val, boolean remove) {
+		if (!Strings.isEmpty(val)) {
+			for(String str : val.split(",")) {
+				if (!Strings.isEmpty(str)) {
+					cspConfig.add(key, str.trim());
+				}
+			}
+		} else if (remove) {
+			cspConfig.remove(key);
+		}
+	}
+
+	public void updateCsp() {
+		setGaCode(getString(CONFIG_GOOGLE_ANALYTICS_CODE, null));
+
+		setCspFontSrc(getString(CONFIG_CSP_FONT, DEFAULT_CSP_FONT));
+		setCspFrameSrc(getString(CONFIG_CSP_FRAME, SELF.getValue()));
+		setCspImageSrc(getString(CONFIG_CSP_IMAGE, DEFAULT_CSP_IMAGE));
+		setCspMediaSrc(getString(CONFIG_CSP_MEDIA, SELF.getValue()));
+		setCspScriptSrc(getString(CONFIG_CSP_SCRIPT, STRICT_DYNAMIC.getValue()));
+		setCspStyleSrc(getString(CONFIG_CSP_STYLE, DEFAULT_CSP_STYLE));
+		if (Application.exists()) {
+			final CSPHeaderConfiguration cspConfig = WebApplication.get().getCspSettings().blocking().strict();
+			addCspRule(cspConfig, CSPDirective.FONT_SRC, getCspFontSrc());
+			addCspRule(cspConfig, CSPDirective.FRAME_SRC, getCspFrameSrc());
+			addCspRule(cspConfig, CSPDirective.IMG_SRC, getCspImageSrc());
+			addCspRule(cspConfig, CSPDirective.MEDIA_SRC, getCspMediaSrc());
+			addCspRule(cspConfig, CSPDirective.SCRIPT_SRC, getCspScriptSrc());
+			addCspRule(cspConfig, CSPDirective.STYLE_SRC, getCspStyleSrc());
+			if (!Strings.isEmpty(getGaCode())) {
+				// https://developers.google.com/tag-manager/web/csp#universal_analytics_google_analytics
+				addCspRule(cspConfig, CSPDirective.IMG_SRC, "https://www.google-analytics.com");
+				addCspRule(cspConfig, CSPDirective.SCRIPT_SRC, "https://www.google-analytics.com, https://ssl.google-analytics.com");
+			}
+			oauthDao.getActive().forEach(oauth -> {
+				if (!Strings.isEmpty(oauth.getIconUrl())) {
+					addCspRule(cspConfig, CSPDirective.IMG_SRC, oauth.getIconUrl(), false);
+				}
+			});
+		}
 	}
 }

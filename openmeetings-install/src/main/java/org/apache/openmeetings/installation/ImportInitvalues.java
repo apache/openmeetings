@@ -31,7 +31,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHAT_SEND_ON_ENTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_XFRAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_FONT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_FRAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_IMAGE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_MEDIA;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_SCRIPT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_STYLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
@@ -50,7 +55,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE_RESIZE;
@@ -95,16 +99,19 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CSP_FONT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CSP_IMAGE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CSP_STYLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MINUTES_REMINDER_SEND;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SELF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioRate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
+import static org.apache.wicket.csp.CSPDirectiveSrcValue.SELF;
+import static org.apache.wicket.csp.CSPDirectiveSrcValue.STRICT_DYNAMIC;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -333,7 +340,6 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_REDIRECT_URL_FOR_EXTERNAL, "", Configuration.Type.STRING,
 				"Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost", VER_3_0);
 		addCfg(list, CONFIG_GOOGLE_ANALYTICS_CODE, null, Configuration.Type.STRING, "Code for Google Analytics", "3.1.0");
-		addCfg(list, CONFIG_HEADER_CSP, HEADER_CSP_SELF, Configuration.Type.STRING, String.format("Value for 'Content-Security-Policy' header (default: %s), have to be modified to enable Google analytics site: https://content-security-policy.com/", HEADER_CSP_SELF), VER_3_3_0);
 		addCfg(list, CONFIG_EXT_PROCESS_TTL, String.valueOf(getExtProcessTtl()), Configuration.Type.NUMBER, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", getExtProcessTtl()), VER_3_3_0);
 		addCfg(list, CONFIG_MYROOMS_ENABLED, String.valueOf(true), Configuration.Type.BOOL, "Users are allowed to create personal rooms", "3.3.2");
 		addCfg(list, CONFIG_REMINDER_MESSAGE, null, Configuration.Type.STRING, "Reminder message to notify about upcoming appointment, generated message will be used if not set", VER_2_0);
@@ -353,13 +359,25 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_MIC_RATE, "22", Configuration.Type.NUMBER, "The rate at which the microphone should capture sound, in kHz. The default value is 22 kHz.", VER_5_0_0);
 		addCfg(list, CONFIG_MIC_ECHO, String.valueOf(true), Configuration.Type.BOOL, "Whether or not echo cancellation is preferred and/or required.", VER_5_0_0);
 		addCfg(list, CONFIG_MIC_NOISE, String.valueOf(true), Configuration.Type.BOOL, "Whether noise suppression is preferred and/or required.", VER_5_0_0);
-		addCfg(list, CONFIG_CSP_XFRAME, HEADER_XFRAME_SELF, Configuration.Type.STRING, String.format("Value for 'frame-src' directive of 'Content-Security-Policy' header (default: %s), more info: https://w3c.github.io/webappsec-csp/", HEADER_XFRAME_SELF), VER_5_0_0);
 		addCfg(list, CONFIG_DISPLAY_NAME_EDITABLE, String.valueOf(false), Configuration.Type.BOOL, "Is user will be able to edit his/her display name (default false).", "4.0.7");
 		addCfg(list, CONFIG_KEYCODE_QUICKPOLL, "Ctrl+Alt+KeyQ", Configuration.Type.HOTKEY
 				, "A hot key code to start quick poll", "4.0.10");
 		addCfg(list, CONFIG_AUTO_OPEN_SHARING, String.valueOf(false), Configuration.Type.BOOL, "Whether shared screen should be auto-opened.", VER_5_0_0);
 		addCfg(list, CONFIG_KEYCODE_ARRANGE_RESIZE, "Ctrl+Shift+KeyA", Configuration.Type.HOTKEY
 				, "A hot key code to arrange video windows bottom-to-top with resize to 120x90", VER_5_0_0);
+		final String cspMore = ", more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy";
+		addCfg(list, CONFIG_CSP_FONT, DEFAULT_CSP_FONT, Configuration.Type.STRING, String.format("Value for 'font-src' directive of 'Content-Security-Policy' header (default: %s)"
+				+ cspMore, DEFAULT_CSP_FONT), VER_5_0_0);
+		addCfg(list, CONFIG_CSP_FRAME, SELF.getValue(), Configuration.Type.STRING, String.format("Value for 'frame-src' directive of 'Content-Security-Policy' header (default: %s)"
+				+ cspMore, SELF), VER_5_0_0);
+		addCfg(list, CONFIG_CSP_IMAGE, DEFAULT_CSP_IMAGE, Configuration.Type.STRING, String.format("Value for 'image-src' directive of 'Content-Security-Policy' header (default: %s)"
+				+ cspMore, DEFAULT_CSP_IMAGE), VER_5_0_0);
+		addCfg(list, CONFIG_CSP_MEDIA, SELF.getValue(), Configuration.Type.STRING, String.format("Value for 'media-src' directive of 'Content-Security-Policy' header (default: %s)"
+				+ cspMore, SELF), VER_5_0_0);
+		addCfg(list, CONFIG_CSP_SCRIPT, STRICT_DYNAMIC.getValue(), Configuration.Type.STRING, String.format("Value for 'script-src' directive of 'Content-Security-Policy' header (default: %s)"
+				+ cspMore, STRICT_DYNAMIC), VER_5_0_0);
+		addCfg(list, CONFIG_CSP_STYLE, DEFAULT_CSP_STYLE, Configuration.Type.STRING, String.format("Value for 'style-src' directive of 'Content-Security-Policy' header (default: %s)"
+				+ cspMore, DEFAULT_CSP_STYLE), VER_5_0_0);
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {

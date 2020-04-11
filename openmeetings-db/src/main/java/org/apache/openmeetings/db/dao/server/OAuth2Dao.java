@@ -30,8 +30,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.util.DaoHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +43,8 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 	private static final String[] searchFields = {"name"};
 	@PersistenceContext
 	private EntityManager em;
+	@Autowired
+	private ConfigurationDao cfgDao;;
 
 	public List<OAuthServer> getActive() {
 		if (!isAllowRegisterOauth()) {
@@ -90,6 +94,7 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 			server.setUpdated(new Date());
 			server = em.merge(server);
 		}
+		cfgDao.updateCsp();
 		return server;
 	}
 

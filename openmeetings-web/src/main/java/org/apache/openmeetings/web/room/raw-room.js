@@ -26,6 +26,14 @@ var Room = (function() {
 				});
 		});
 		__dockSetMode(true);
+		const header = $('#room-sidebar-tab-users .header');
+		header.find('.om-icon.settings').off().click(VideoSettings.open);
+		header.find('.om-icon.activity.cam').off().click(function() {
+			VideoManager.toggleActivity('VIDEO');
+		});
+		header.find('.om-icon.activity.mic').off().click(function() {
+			VideoManager.toggleActivity('AUDIO');
+		});
 		menuHeight = menu.length === 0 ? 0 : menu.height();
 		VideoManager.init();
 		if (typeof(Activities) !== 'undefined') {
@@ -505,3 +513,8 @@ function typingActivity(uid, active) {
 		u.removeClass("typing");
 	}
 }
+$(function() {
+	$('.sip').on('keydown', sipKeyDown).on('keyup', sipKeyUp);
+	$('.sip .button-row button').button().click(sipBtnClick);
+	$('#sip-dialer-btn-erase').button().click(sipBtnEraseClick);
+});
