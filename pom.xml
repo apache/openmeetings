@@ -146,7 +146,7 @@
 	</issueManagement>
 	<ciManagement>
 		<system>jenkins</system>
-		<url>https://builds.apache.org/view/M-R/view/OpenMeetings/job/OpenMeetings 4.0.x/</url>
+		<url>https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings/</url>
 	</ciManagement>
 	<developers>
 		<developer>
