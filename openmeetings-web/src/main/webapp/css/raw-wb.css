@@ -45,7 +45,8 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 	position: relative;
 	padding-right: 25px;
 }
-.room-block .sb-wb .wb-block .tabs .wb-tabbar li a button {
+.wb-tab-close {
+	color: var(--secondary);
 	width: 20px;
 	height: 20px;
 	padding: 0;

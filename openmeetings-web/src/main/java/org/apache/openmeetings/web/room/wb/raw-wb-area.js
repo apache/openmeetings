@@ -131,6 +131,14 @@ var DrawWbArea = function() {
 		}
 		const link = li.find('a')
 			, wbId = link.data('wb-id');
+		// Apply right click menu only to the text item
+		li.find(".nav-link").find("span").first().contextmenu(
+			function(e) {
+				e.preventDefault();
+				$('#wb-rename-menu').show().data('wb-id', wbId)
+					.position({my: 'left top', collision: 'none', of: _getWbTab(wbId)});
+			});
+		
 		link.append(OmUtil.tmpl('#wb-tab-close'));
 		li.find('button')
 			.confirmation({
@@ -248,7 +256,8 @@ var DrawWbArea = function() {
 			callback();
 		}
 		$('#wb-rename-menu').menu().find('.wb-rename').click(function() {
-			_getWbTab($(this).parent().data('wb-id')).find('a span').trigger('dblclick');
+			const textSpan = _getWbTab($(this).parent().data('wb-id')).find('.wb-nav-tab-text').first();
+			textSpan.trigger('dblclick');
 		});
 	}
 
@@ -268,14 +277,6 @@ var DrawWbArea = function() {
 			, tcid = __getWbContentId(obj.wbId)
 			, wb = OmUtil.tmpl('#wb-area', tcid).attr('aria-labelledby', tid)
 			, li = OmUtil.tmpl('#wb-area-tab')
-				.contextmenu(function(e) {
-					if (role !== PRESENTER) {
-						return;
-					}
-					e.preventDefault();
-					$('#wb-rename-menu').show().data('wb-id', obj.wbId)
-						.position({my: 'left top', collision: 'none', of: _getWbTab(obj.wbId)});
-				})
 			, link = li.find('a');
 		link.attr('id', tid).attr('data-wb-id', obj.wbId).attr('href', '#' + tcid).attr('aria-controls', tcid);
 		_setTabName(link, obj.name)
