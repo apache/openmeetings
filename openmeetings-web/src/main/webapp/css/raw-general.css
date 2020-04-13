@@ -766,3 +766,6 @@ select.messages.selector {
 	overflow-y: auto;
 	height: calc(100% - var(--header-height));
 }
+.overflow-break-word {
+	overflow-wrap: break-word;
+}
