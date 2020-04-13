@@ -625,15 +625,19 @@ public class MessagesContactsPanel extends UserBasePanel {
 		allContacts.setDefaultModelObject(contactDao.getContactsByUserAndStatus(getUserId(), false).size());
 		if (target != null) {
 			target.add(contacts);
-			target.appendJavaScript("$('.messages .user.om-icon.clickable').off().click(function() {showUserInfo($(this).data('user-id'));});");
-			target.appendJavaScript("$('.messages .new-email.om-icon.clickable').click(function() {privateMessage($(this).data('user-id'));});");
+			target.appendJavaScript(getContactClickHandlers());
 		}
+	}
+
+	private CharSequence getContactClickHandlers() {
+		return "$('.messages .user.om-icon.clickable').off().click(function() {showUserInfo($(this).data('user-id'));});"
+				+ "$('.messages .new-email.om-icon.clickable').click(function() {privateMessage($(this).data('user-id'));});";
 	}
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(OnDomReadyHeaderItem.forScript("$('.email.new.btn').click(privateMessage)"));
+		response.render(OnDomReadyHeaderItem.forScript("$('.email.new.btn').click(function() {privateMessage();});" + getContactClickHandlers()));
 	}
 
 	@Override
