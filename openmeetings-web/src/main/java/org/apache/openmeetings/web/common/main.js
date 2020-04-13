@@ -122,6 +122,9 @@ var OmUtil = (function() {
 	self.setCssVar = function(key, val) {
 		($('body')[0]).style.setProperty(key, val);
 	};
+	self.ping = function(callback) {
+		setTimeout(callback, 30000);
+	} ;
 	return self;
 })();
 Wicket.BrowserInfo.collectExtraInfo = function(info) {

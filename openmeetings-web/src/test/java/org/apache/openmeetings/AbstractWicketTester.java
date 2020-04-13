@@ -114,7 +114,7 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 		assertTrue(((WebSession)tester.getSession()).signIn(user, userpass, User.Type.USER, null));
 		MainPage page = tester.startPage(MainPage.class);
 		tester.assertRenderedPage(MainPage.class);
-		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(1));
+		tester.executeBehavior((AbstractAjaxBehavior)page.get("main-container:main").getBehaviorById(0));
 		tester.executeBehavior((AbstractAjaxBehavior)page.get("main-container").getBehaviorById(0));
 		WebSocketTester webSocketTester = new WebSocketTester(tester, page);
 		webSocketTester.sendMessage(CONNECTED_MSG);

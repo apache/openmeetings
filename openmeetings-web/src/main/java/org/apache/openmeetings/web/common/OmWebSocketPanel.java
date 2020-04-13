@@ -22,7 +22,6 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.KURENTO_TYPE;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.openmeetings.core.remote.KurentoHandler;
@@ -30,10 +29,11 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
@@ -55,90 +55,9 @@ public abstract class OmWebSocketPanel extends Panel {
 	private static final Logger log = LoggerFactory.getLogger(OmWebSocketPanel.class);
 	public static final String CONNECTED_MSG = "socketConnected";
 	private final AtomicBoolean connected = new AtomicBoolean();
-	private final AbstractAjaxTimerBehavior pingTimer = new AbstractAjaxTimerBehavior(Duration.ofSeconds(30)) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void onTimer(AjaxRequestTarget target) {
-			log.debug("Sending WebSocket PING");
-			WebSocketHelper.sendClient(getWsClient(), new byte[]{getUserId() == null ? 0 : getUserId().byteValue()});
-		}
-	};
-	private final WebSocketBehavior wsBehavior = new WebSocketBehavior() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void renderHead(Component component, IHeaderResponse response) {
-			super.renderHead(component, response);
-			response.render(JavaScriptHeaderItem.forScript(
-					String.format("Wicket.Event.subscribe(Wicket.Event.Topic.WebSocket.Opened, function() {Wicket.WebSocket.send('%s');});",CONNECTED_MSG)
-					, "ws-connected-script"));
-		}
-
-		@Override
-		protected void onConnect(ConnectedMessage message) {
-			super.onConnect(message);
-			OmWebSocketPanel.this.onConnect(message);
-		}
-
-		@Override
-		protected void onMessage(WebSocketRequestHandler handler, TextMessage msg) {
-			if (CONNECTED_MSG.equals(msg.getText())) {
-				if (connected.compareAndSet(false, true)) {
-					OmWebSocketPanel.this.onConnect(handler);
-					log.debug("WebSocketBehavior:: pingTimer is attached");
-					pingTimer.restart(handler);
-				}
-			} else {
-				final JSONObject m;
-				try {
-					m = new JSONObject(msg.getText());
-					switch(m.optString("type", "")) {
-						case KURENTO_TYPE:
-							kHandler.onMessage(getWsClient(), m);
-							break;
-						case "mic":
-						{
-							IWsClient _c = getWsClient();
-							if (!(_c instanceof Client)) {
-								break;
-							}
-							Client c = (Client)_c;
-							if (c.getRoomId() == null) {
-								break;
-							}
-							WebSocketHelper.sendRoomOthers(c.getRoomId(), c.getUid(), m.put("uid", c.getUid()));
-						}
-							break;
-						default:
-							OmWebSocketPanel.this.onMessage(handler, m);
-					}
-				} catch (Exception e) {
-					log.error("Error while processing incoming message", e);
-				}
-			}
-		}
-
-		@Override
-		protected void onAbort(AbortedMessage msg) {
-			super.onAbort(msg);
-			closeHandler(msg);
-		}
-
-		@Override
-		protected void onClose(ClosedMessage msg) {
-			super.onClose(msg);
-			closeHandler(msg);
-		}
-
-		@Override
-		protected void onError(WebSocketRequestHandler handler, ErrorMessage msg) {
-			super.onError(handler, msg);
-			closeHandler(msg);
-		}
-	};
 	@SpringBean
 	private KurentoHandler kHandler;
+	private boolean pingable = false;
 
 	public OmWebSocketPanel(String id) {
 		super(id);
@@ -147,8 +66,104 @@ public abstract class OmWebSocketPanel extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(pingTimer, wsBehavior);
-		pingTimer.stop(null);
+		add(newWsBehavior(), new AbstractDefaultAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				if (!pingable) {
+					log.debug("pingTimer is attached");
+					pingable = true;
+					super.renderHead(component, response);
+					response.render(OnDomReadyHeaderItem.forScript(getJs()));
+				}
+			}
+
+			private CharSequence getJs() {
+				return "OmUtil.ping(function(){" + getCallbackScript() + "});";
+			}
+
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				log.debug("Sending WebSocket PING");
+				target.appendJavaScript(getJs());
+				WebSocketHelper.sendClient(getWsClient(), new byte[]{getUserId() == null ? 0 : getUserId().byteValue()});
+			}
+		});
+	}
+
+	private WebSocketBehavior newWsBehavior() {
+		return new WebSocketBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.render(JavaScriptHeaderItem.forScript(
+						String.format("Wicket.Event.subscribe(Wicket.Event.Topic.WebSocket.Opened, function() {Wicket.WebSocket.send('%s');});",CONNECTED_MSG)
+						, "ws-connected-script"));
+			}
+
+			@Override
+			protected void onConnect(ConnectedMessage message) {
+				super.onConnect(message);
+				OmWebSocketPanel.this.onConnect(message);
+			}
+
+			@Override
+			protected void onMessage(WebSocketRequestHandler handler, TextMessage msg) {
+				if (CONNECTED_MSG.equals(msg.getText())) {
+					if (connected.compareAndSet(false, true)) {
+						OmWebSocketPanel.this.onConnect(handler);
+					}
+				} else {
+					final JSONObject m;
+					try {
+						m = new JSONObject(msg.getText());
+						switch(m.optString("type", "")) {
+							case KURENTO_TYPE:
+								kHandler.onMessage(getWsClient(), m);
+								break;
+							case "mic":
+							{
+								IWsClient _c = getWsClient();
+								if (!(_c instanceof Client)) {
+									break;
+								}
+								Client c = (Client)_c;
+								if (c.getRoomId() == null) {
+									break;
+								}
+								WebSocketHelper.sendRoomOthers(c.getRoomId(), c.getUid(), m.put("uid", c.getUid()));
+							}
+								break;
+							default:
+								OmWebSocketPanel.this.onMessage(handler, m);
+						}
+					} catch (Exception e) {
+						log.error("Error while processing incoming message", e);
+					}
+				}
+			}
+
+			@Override
+			protected void onAbort(AbortedMessage msg) {
+				super.onAbort(msg);
+				closeHandler(msg);
+			}
+
+			@Override
+			protected void onClose(ClosedMessage msg) {
+				super.onClose(msg);
+				closeHandler(msg);
+			}
+
+			@Override
+			protected void onError(WebSocketRequestHandler handler, ErrorMessage msg) {
+				super.onError(handler, msg);
+				closeHandler(msg);
+			}
+		};
 	}
 
 	protected abstract IWsClient getWsClient();

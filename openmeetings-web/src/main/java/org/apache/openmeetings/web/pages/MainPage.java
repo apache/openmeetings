@@ -25,7 +25,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -41,41 +40,9 @@ public class MainPage extends BaseInitedPage {
 	private static final Logger log = LoggerFactory.getLogger(MainPage.class);
 	private static final String MAIN_PANEL_ID = "main";
 	private final WebMarkupContainer mainContainer = new WebMarkupContainer("main-container");
-	private final AbstractDefaultAjaxBehavior areaBehavior = new AbstractDefaultAjaxBehavior() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void respond(AjaxRequestTarget target) {
-			loaded = true;
-			log.debug("MainPage::areaBehavior");
-			if (uf == null) {
-				uf = WebSession.get().getArea();
-			}
-			main.updateContents(uf == null ? OmUrlFragment.get() : uf, target);
-			WebSession.get().setArea(null);
-		}
-	};
-	private final MainPanel main = new MainPanel(MAIN_PANEL_ID);
-	private final AbstractDefaultAjaxBehavior delayedLoad = new AbstractDefaultAjaxBehavior() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void respond(AjaxRequestTarget target) {
-			log.debug("MainPage::delayedLoad");
-			mainContainer.replace(main);
-			target.add(
-				mainContainer.add(areaBehavior, new Behavior() {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void renderHead(Component component, IHeaderResponse response) {
-						internalRenderHead(response);
-						response.render(OnDomReadyHeaderItem.forScript(areaBehavior.getCallbackScript()));
-					}
-				}));
-		}
-	};
+	private MainPanel main;
 	private OmUrlFragment uf = null;
+	private boolean inited = false;
 	private boolean loaded = false;
 
 	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler) {
@@ -86,8 +53,59 @@ public class MainPage extends BaseInitedPage {
 	protected void onInitialize() {
 		super.onInitialize();
 		getHeader().setVisible(false);
-		add(mainContainer.add(new EmptyPanel(MAIN_PANEL_ID)).setOutputMarkupId(true));
-		add(delayedLoad);
+		final EmptyPanel temp = new EmptyPanel(MAIN_PANEL_ID);
+		add(newDelayedLoad());
+		add(mainContainer.add(temp).setOutputMarkupId(true));
+	}
+
+	private AbstractDefaultAjaxBehavior newDelayedLoad() {
+		return new AbstractDefaultAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				log.debug("MainPage::delayedLoad");
+				main = new MainPanel(MAIN_PANEL_ID);
+				target.add(mainContainer.replace(main).add(newAreaBehavior()));
+			}
+
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				if (!inited) {
+					log.debug("renderHead:: newDelayedLoad");
+					inited = true;
+					super.renderHead(component, response);
+					response.render(OnDomReadyHeaderItem.forScript(getCallbackScript()));
+				}
+			}
+		};
+	}
+
+	private AbstractDefaultAjaxBehavior newAreaBehavior() {
+		return new AbstractDefaultAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				loaded = true;
+				log.debug("MainPage::areaBehavior");
+				if (uf == null) {
+					uf = WebSession.get().getArea();
+				}
+				main.updateContents(uf == null ? OmUrlFragment.get() : uf, target);
+				WebSession.get().setArea(null);
+			}
+
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				if (!loaded) {
+					log.debug("renderHead:: newAreaBehavior");
+					super.renderHead(component, response);
+					internalRenderHead(response);
+					response.render(OnDomReadyHeaderItem.forScript(getCallbackScript()));
+				}
+			}
+		};
 	}
 
 	@Override
@@ -105,10 +123,5 @@ public class MainPage extends BaseInitedPage {
 		if (loaded && newf != null) {
 			main.updateContents(newf, target, false);
 		}
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		response.render(OnDomReadyHeaderItem.forScript(delayedLoad.getCallbackScript()));
 	}
 }
