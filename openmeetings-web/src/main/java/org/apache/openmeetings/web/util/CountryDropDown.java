@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.util;
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountries;
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -35,7 +36,11 @@ public class CountryDropDown extends DropDownChoice<String>  {
 	}
 
 	public CountryDropDown(String id, IModel<String> model) {
-		super(id, model, getCountries());
+		super(id);
+		setDefaultModel(model);
+		List<String> countries = new ArrayList<>(getCountries());
+		countries.sort((c1, c2) -> getCountryName(c1, getLocale()).compareTo(getCountryName(c2, getLocale())));
+		setChoices(countries);
 		setChoiceRenderer(new IChoiceRenderer<String>() {
 			private static final long serialVersionUID = 1L;
 
