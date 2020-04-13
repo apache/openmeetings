@@ -57,9 +57,9 @@ var Room = (function() {
 		}
 	}
 	function _getSelfAudioClient() {
-		const vw = $('#video' + Room.getOptions().uid);
+		const vw = $('.video-container[data-client-type=WEBCAM][data-client-uid=' + Room.getOptions().uid + ']');
 		if (vw.length > 0) {
-			const v = vw.data();
+			const v = vw.first().data();
 			if (VideoUtil.hasMic(v.stream())) {
 				return v;
 			}
