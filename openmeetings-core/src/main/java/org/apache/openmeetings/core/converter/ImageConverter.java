@@ -181,6 +181,7 @@ public class ImageConverter extends BaseConverter {
 		String[] argv = new String[] {
 			getPathToConvert()
 			, "-density", getDpi()
+			, "-define", "pdf:use-cropbox=true"
 			, pdf.getCanonicalPath()
 			, "+profile", "'*'"
 			, "-quality", getQuality()
