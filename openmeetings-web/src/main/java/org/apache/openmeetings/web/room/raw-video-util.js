@@ -163,7 +163,7 @@ var VideoUtil = (function() {
 		$(VIDWIN_SEL).toArray().sort((v1, v2) => {
 			const c1 = __getDialog(v1).data().stream()
 				, c2 = __getDialog(v2).data().stream();
-			return c1.level - c2.level || c1.user.displayName.localeCompare(c2.user.displayName);
+			return c2.level - c1.level || c1.user.displayName.localeCompare(c2.user.displayName);
 		}).forEach(_v => {
 			const v = $(_v);
 			__getDialog(v)

@@ -341,18 +341,22 @@ var Room = (function() {
 		__rightIcon(c, elem, ['MODERATOR'], '.right.moderator', () => true);
 	}
 	function __setStatus(c, le) {
-		const status = le.find('.user-status');
+		const status = le.find('.user-status')
+			, mode = c.level == 5 ? 'mod' : (c.level == 3 ? 'wb' : 'user');
 		status.removeClass('mod wb user');
-		if (_hasRight('MODERATOR', c.rights)) {
-			status.attr('title', status.data('mod')).addClass('mod');;
-		} else if (_hasRight('WHITEBOARD', c.rights)) {
-			status.attr('title', status.data('wb')).addClass('wb');;
-		} else {
-			status.attr('title', status.data('user')).addClass('user');;
-		}
+		status.attr('title', status.data(mode)).addClass(mode);
+		le.data('level', c.level);
 	}
 	function __updateCount() {
 		$('#room-sidebar-users-tab .user-count').text($('#room-sidebar-tab-users .user-list .users .user.entry').length);
+	}
+	function __sortUserList() {
+		const container = $('#room-sidebar-tab-users .user-list .users');
+		container.find('.user.entry').sort((_u1, _u2) => {
+			const u1 = $(_u1)
+				, u2 = $(_u2);
+			return u2.data('level') - u1.data('level') || u1.attr('title').localeCompare(u2.attr('title'));
+		}).appendTo(container);
 	}
 	function _addClient(_clients) {
 		const clients = Array.isArray(_clients) ? _clients : [_clients];
@@ -373,6 +377,7 @@ var Room = (function() {
 			_updateClient(c);
 		});
 		__updateCount();
+		__sortUserList();
 	}
 	function _updateClient(c) {
 		const self = c.uid === options.uid
@@ -451,7 +456,10 @@ var Room = (function() {
 		($('.main.room')[0]).style.setProperty(key, val);
 	};
 	self.addClient = _addClient;
-	self.updateClient = _updateClient;
+	self.updateClient = function(c) {
+		_updateClient(c);
+		__sortUserList();
+	};
 	self.removeClient = function(uid) {
 		Room.getClient(uid).remove();
 		__updateCount();

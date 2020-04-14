@@ -383,7 +383,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	right: 2px;
 }
 .room-block .sb-wb .sidebar .tab.om-icon.big .label {
-	max-width: 50px;
+	max-width: 45px;
 	display: inline-block;
 	text-overflow: ellipsis;
 	overflow: hidden;

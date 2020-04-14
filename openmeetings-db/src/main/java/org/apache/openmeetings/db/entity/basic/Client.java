@@ -360,7 +360,8 @@ public class Client implements IDataProviderEntity, IWsClient {
 				a.put("country", user.getAddress().getCountry());
 			}
 		}
-		return o.put("user", u);
+		return o.put("user", u)
+				.put("level", hasRight(Right.MODERATOR) ? 5 : (hasRight(Right.WHITEBOARD) ? 3 : 1));
 	}
 
 	public JSONObject toJson(boolean self) {
@@ -553,7 +554,6 @@ public class Client implements IDataProviderEntity, IWsClient {
 					.put("width", swidth)
 					.put("height", sheight)
 					.put("activities", new JSONArray(sactivities))
-					.put("level", hasRight(Right.MODERATOR) ? 5 : (hasRight(Right.WHITEBOARD) ? 3 : 1))
 					.put("cuid", uid));
 		}
 
