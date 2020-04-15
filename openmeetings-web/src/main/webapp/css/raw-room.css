@@ -683,9 +683,6 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 #sharer .alert {
 	display: none;
 }
-#sharer input {
-	width: 75px;
-}
 .sharer .share-start-stop i::before {
 	content: '\f03e';
 }
