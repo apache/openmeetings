@@ -45,13 +45,16 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 	position: relative;
 	padding-right: 25px;
 }
-.room-block .sb-wb .wb-block .tabs .wb-tabbar li a button {
+.wb-tab-close {
 	width: 20px;
 	height: 20px;
 	padding: 0;
 	position: absolute;
 	top: 2px;
 	right: 2px;
+}
+.btn-no-border {
+	border: none;
 }
 .room-block .sb-wb .wb-block .tabs .wb-tab-content {
 	height: calc(100% - var(--room-wb-tabs-height));
