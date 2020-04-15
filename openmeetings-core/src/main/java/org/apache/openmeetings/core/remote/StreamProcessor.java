@@ -314,7 +314,6 @@ public class StreamProcessor implements IStreamProcessor {
 		Room r = c.getRoom();
 		return r != null && Room.Type.INTERVIEW != r.getType()
 				&& !r.isHidden(RoomElement.SCREEN_SHARING)
-				&& r.isAllowRecording()
 				&& c.hasRight(Right.SHARE);
 	}
 

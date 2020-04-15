@@ -44,23 +44,28 @@ var Sharer = (function() {
 			});
 			width = sharer.find('.width');
 			height = sharer.find('.height');
-			rbtn = sharer.find('.record-start-stop').off().click(function() {
-				if (recState === SHARE_STOPED) {
-					_setRecState(SHARE_STARTING);
-					VideoManager.sendMessage({
-						id: 'wannaRecord'
-						, shareType: type.val()
-						, fps: fps.val()
-						, width: width.val()
-						, height: height.val()
-					});
-				} else {
-					VideoManager.sendMessage({
-						id: 'stopRecord'
-						, uid: _getShareUid()
-					});
-				}
-			});
+			rbtn = sharer.find('.record-start-stop').off();
+			if (Room.getOptions().allowRecording) {
+				rbtn.show().click(function() {
+					if (recState === SHARE_STOPED) {
+						_setRecState(SHARE_STARTING);
+						VideoManager.sendMessage({
+							id: 'wannaRecord'
+							, shareType: type.val()
+							, fps: fps.val()
+							, width: width.val()
+							, height: height.val()
+						});
+					} else {
+						VideoManager.sendMessage({
+							id: 'stopRecord'
+							, uid: _getShareUid()
+						});
+					}
+				});
+			} else {
+				rbtn.hide();
+			}
 		}
 	}
 	function _disable(e, state) {
@@ -78,7 +83,7 @@ var Sharer = (function() {
 	function _setBtnState(btn, state) {
 		const dis = SHARE_STOPED !== state
 			, typeDis = _typeDisabled();
-		_disable(type, dis || typeDis);
+		_disable(type, dis);
 		_disable(fps, dis || typeDis);
 		_disable(width, dis);
 		_disable(height, dis);
