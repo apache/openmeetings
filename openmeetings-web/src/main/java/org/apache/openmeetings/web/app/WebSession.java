@@ -292,9 +292,9 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 					Room r = roomDao.get(soapLogin.getRoomId());
 					if (r == null) {
 						log.warn("Room was not found");
-						return false;
+					} else {
+						redirectHash(r, () -> {});
 					}
-					redirectHash(r, () -> {});
 					User user = userDao.getExternalUser(remoteUser.getExternalId(), remoteUser.getExternalType());
 					if (user == null) {
 						user = getNewUserInstance(null);
