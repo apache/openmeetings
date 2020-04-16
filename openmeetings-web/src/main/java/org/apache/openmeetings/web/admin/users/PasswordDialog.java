@@ -50,7 +50,7 @@ public class PasswordDialog extends Modal<String> {
 	}
 
 	public UserForm getUserForm() {
-		return findParent(UserForm.class);
+		return (UserForm)findParent(UsersPanel.class).get("form");
 	}
 
 	@Override
@@ -78,6 +78,8 @@ public class PasswordDialog extends Modal<String> {
 						form.error(getString("error.bad.password"));
 						target.add(feedback);
 					}
+				} else {
+					PasswordDialog.this.close(target);
 				}
 			}
 		}); // OK

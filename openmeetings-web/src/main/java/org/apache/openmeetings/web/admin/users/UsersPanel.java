@@ -49,13 +49,17 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.ColorBehavior;
 public class UsersPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+	private final PasswordDialog adminPass = new PasswordDialog("adminPass");
 	private UserForm form;
 	@SpringBean
 	private UserDao userDao;
 
 	public UsersPanel(String id) {
 		super(id);
+	}
 
+	@Override
+	protected void onInitialize() {
 		final SearchableDataView<User> dataView = new SearchableDataView<>("userList", new SearchableGroupAdminDataProvider<>(UserDao.class)) {
 			private static final long serialVersionUID = 1L;
 
@@ -99,18 +103,14 @@ public class UsersPanel extends AdminBasePanel {
 			.addLink(new OmOrderByBorder<>("orderByFirstName", "firstname", container))
 			.addLink(new OmOrderByBorder<>("orderByLastName", "lastname", container));
 		add(container.getLinks());
-		add(navigator);
-	}
-
-	@Override
-	protected void onInitialize() {
+		add(navigator, adminPass);
 		final Modal<String> warning = new IconTextModal("warning")
 				.withLabel(new ResourceModel("warn.nogroup"))
 				.withErrorIcon(ColorBehavior.Color.Warning)
 				.header(new ResourceModel("797"))
 				.addButton(OmModalCloseButton.of("54"));
 
-		form = new UserForm("form", listContainer, getNewUserInstance(userDao.get(getUserId())), warning);
+		form = new UserForm("form", listContainer, getNewUserInstance(userDao.get(getUserId())), adminPass, warning);
 		form.setNewVisible(true);
 		add(form, warning);
 		super.onInitialize();

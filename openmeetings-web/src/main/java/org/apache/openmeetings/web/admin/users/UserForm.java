@@ -94,7 +94,7 @@ public class UserForm extends AdminBaseForm<User> {
 	private final PasswordTextField password = new PasswordTextField("password", new Model<String>());
 	private final Modal<String> warning;
 	private final DropDownChoice<Long> domainId = new DropDownChoice<>("domainId");
-	private final PasswordDialog adminPass = new PasswordDialog("adminPass");
+	private final PasswordDialog adminPass;
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean
@@ -104,11 +104,12 @@ public class UserForm extends AdminBaseForm<User> {
 	@SpringBean
 	private OAuth2Dao oauthDao;
 
-	public UserForm(String id, WebMarkupContainer listContainer, final User user, Modal<String> warning) {
+	public UserForm(String id, WebMarkupContainer listContainer, final User user, final PasswordDialog adminPass, Modal<String> warning) {
 		super(id, new CompoundPropertyModel<>(user));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 		this.warning = warning;
+		this.adminPass = adminPass;
 	}
 
 	@Override
@@ -172,7 +173,6 @@ public class UserForm extends AdminBaseForm<User> {
 			}
 		}));
 		mainContainer.add(new ComunityUserForm("comunity", getModel()));
-		add(adminPass);
 		remove(validationBehavior);
 	}
 

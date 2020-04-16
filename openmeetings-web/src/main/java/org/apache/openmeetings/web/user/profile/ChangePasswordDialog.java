@@ -24,6 +24,7 @@ import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.Model;
@@ -102,11 +103,22 @@ public class ChangePasswordDialog extends Modal<String> {
 		addButton(OmModalCloseButton.of());
 		passValidator = new StrongPasswordValidator(userDao.get(getUserId()));
 		add(form.add(
-				current.setLabel(new ResourceModel("current.password")).setRequired(true)
-				, pass.setLabel(new ResourceModel("328")).add(passValidator)
-				, pass2.setLabel(new ResourceModel("116"))
+				current.setLabel(new ResourceModel("current.password")).setRequired(true).setOutputMarkupId(true)
+				, pass.setLabel(new ResourceModel("328")).add(passValidator).setOutputMarkupId(true)
+				, pass2.setLabel(new ResourceModel("116")).setOutputMarkupId(true)
 				, feedback.setOutputMarkupId(true)
 				));
 		super.onInitialize();
+	}
+
+	@Override
+	public Modal<String> show(IPartialPageRequestHandler target) {
+		target.add(
+			current.setModelObject("")
+			, pass.setModelObject("")
+			, pass2.setModelObject("")
+			, feedback
+		);
+		return super.show(target);
 	}
 }
