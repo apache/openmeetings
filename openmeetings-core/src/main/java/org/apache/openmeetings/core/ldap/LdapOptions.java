@@ -52,7 +52,7 @@ public class LdapOptions {
 	private static final String CONFIGKEY_LDAP_USERDN_FORMAT = "ldap_userdn_format";
 	private static final String CONFIGKEY_LDAP_GROUP_QUERY = "ldap_group_query";
 	private static final String CONFIGKEY_LDAP_IMPORT_QUERY = "ldap_import_query";
-	private static final String CONFIGKEY_LDAP_PICTURE_URI = "ldap_user_picture_uri";
+	public static final String CONFIGKEY_LDAP_PICTURE_URI = "ldap_user_picture_uri";
 
 	AuthType type = AuthType.SIMPLEBIND;
 	Provisionning prov = Provisionning.AUTOCREATE;

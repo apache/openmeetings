@@ -20,16 +20,19 @@ package org.apache.openmeetings.ldap;
 
 import static org.apache.directory.server.constants.ServerDNConstants.ADMIN_SYSTEM_DN;
 import static org.apache.directory.server.core.api.partition.PartitionNexus.ADMIN_PASSWORD_BYTES;
+import static org.apache.openmeetings.core.ldap.LdapLoginManager.CONFIGKEY_LDAP_KEY_PICTURE;
 import static org.apache.openmeetings.core.ldap.LdapOptions.CONFIGKEY_LDAP_ADMIN_DN;
 import static org.apache.openmeetings.core.ldap.LdapOptions.CONFIGKEY_LDAP_ADMIN_PASSWD;
 import static org.apache.openmeetings.core.ldap.LdapOptions.CONFIGKEY_LDAP_AUTH_TYPE;
 import static org.apache.openmeetings.core.ldap.LdapOptions.CONFIGKEY_LDAP_HOST;
+import static org.apache.openmeetings.core.ldap.LdapOptions.CONFIGKEY_LDAP_PICTURE_URI;
 import static org.apache.openmeetings.core.ldap.LdapOptions.CONFIGKEY_LDAP_PORT;
 import static org.apache.openmeetings.core.ldap.LdapOptions.CONFIGKEY_LDAP_SEARCH_BASE;
 import static org.apache.openmeetings.core.ldap.LdapOptions.CONFIGKEY_LDAP_SEARCH_SCOPE;
 import static org.apache.openmeetings.util.OmFileHelper.getLdapConf;
 import static org.apache.openmeetings.util.OmFileHelper.loadLdapConf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -72,6 +75,8 @@ public class TestLdap extends AbstractWicketTester {
 	private static final String CFG_SEARCH_BIND = UUID.randomUUID().toString();
 	private static final String BAD_PASSWORD = "bad password";
 	private static final String USER1 = "ldaptest1";
+	private static final String USER2 = "ldaptest2";
+	private static final String USER3 = "ldaptest3";
 	private static final Map<String, LdapConfig> CFG_MAP = new HashMap<>();
 	private static final Properties PROPS = new Properties();
 	@Autowired
@@ -90,6 +95,8 @@ public class TestLdap extends AbstractWicketTester {
 		PROPS.put(CONFIGKEY_LDAP_ADMIN_PASSWD, new String(ADMIN_PASSWORD_BYTES));
 		PROPS.put(CONFIGKEY_LDAP_SEARCH_BASE, "dc=test,dc=openmeetings,dc=apache,dc=org");
 		PROPS.put(CONFIGKEY_LDAP_SEARCH_SCOPE, SearchScope.SUBTREE.name());
+		PROPS.put(CONFIGKEY_LDAP_KEY_PICTURE, "photo");
+		PROPS.put(CONFIGKEY_LDAP_PICTURE_URI, "profile.png"); // this one is for Jenkins
 	}
 
 	private void createSbnd() throws FileNotFoundException, IOException {
@@ -131,6 +138,24 @@ public class TestLdap extends AbstractWicketTester {
 		assertTrue(WebSession.get().signIn(USER1, userpass, User.Type.LDAP, cfg.getId()), "Login should be successful");
 		//check DB
 		assertEquals(1, userDao.count(USER1), "There should be exactly one user after multiple logins");
+	}
+
+	@Test
+	public void testPhoto1() throws OmException {
+		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
+		assertTrue(WebSession.get().signIn(USER2, userpass, User.Type.LDAP, cfg.getId()), "Login should be successful");
+		User u = userDao.getByLogin(USER2, User.Type.LDAP, cfg.getId());
+		assertNotNull(u);
+		assertEquals("profile.png", u.getPictureUri());
+	}
+
+	@Test
+	public void testPhoto2() throws OmException {
+		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
+		assertTrue(WebSession.get().signIn(USER3, userpass, User.Type.LDAP, cfg.getId()), "Login should be successful");
+		User u = userDao.getByLogin(USER3, User.Type.LDAP, cfg.getId());
+		assertNotNull(u);
+		assertEquals("user.jpg", u.getPictureUri());
 	}
 
 	@Test

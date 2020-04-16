@@ -26,8 +26,12 @@ import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OmFileHelper.loadLdapConf;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 
+import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.directory.api.ldap.model.cursor.CursorException;
 import org.apache.directory.api.ldap.model.cursor.CursorLdapReferralException;
 import org.apache.directory.api.ldap.model.cursor.EntryCursor;
@@ -51,6 +56,7 @@ import org.apache.directory.api.ldap.model.name.Dn;
 import org.apache.directory.ldap.client.api.EntryCursorImpl;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
+import org.apache.openmeetings.core.converter.ImageConverter;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -62,6 +68,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.util.StoredFile;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,8 +97,8 @@ public class LdapLoginManager {
 	private static final String CONFIGKEY_LDAP_KEY_COUNTRY = "ldap_user_attr_country";
 	private static final String CONFIGKEY_LDAP_KEY_TOWN = "ldap_user_attr_town";
 	private static final String CONFIGKEY_LDAP_KEY_PHONE = "ldap_user_attr_phone";
-	private static final String CONFIGKEY_LDAP_KEY_PICTURE = "ldap_user_attr_picture";
 	private static final String CONFIGKEY_LDAP_KEY_GROUP = "ldap_group_attr";
+	public static final String CONFIGKEY_LDAP_KEY_PICTURE = "ldap_user_attr_picture";
 
 	// LDAP default attributes mapping
 	private static final String LDAP_KEY_LOGIN = "uid";
@@ -131,6 +138,8 @@ public class LdapLoginManager {
 	private UserDao userDao;
 	@Autowired
 	private GroupDao groupDao;
+	@Autowired
+	private ImageConverter imageConverter;
 
 	private static void bindAdmin(LdapConnection conn, LdapOptions options) throws LdapException {
 		if (!Strings.isEmpty(options.adminDn)) {
@@ -217,6 +226,7 @@ public class LdapLoginManager {
 						u.updatePassword(passwd);
 					}
 					u = userDao.update(u, null);
+					u = w.setUserPicture(entry, u);
 					break;
 				case NONE:
 				default:
@@ -333,6 +343,43 @@ public class LdapLoginManager {
 			conn = new LdapNetworkConnection(options.host, options.port, options.secure);
 		}
 
+		public User setUserPicture(Entry entry, User inUser) throws LdapInvalidAttributeValueException {
+			Attribute a = getAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE, "");
+			User u = inUser;
+			if (a != null) {
+				Value val = a.get();
+				if (val != null && val.getBytes() != null) {
+					InputStream is = new ByteArrayInputStream(val.getBytes());
+					StoredFile sf = new StoredFile("picture", is);
+					if (sf.isImage()) {
+						Path tempImage = null;
+						try {
+							tempImage = Files.createTempFile("omLdap", "img");
+							FileUtils.copyToFile(is, tempImage.toFile());
+							imageConverter.convertImageUserProfile(tempImage.toFile(), inUser.getId(), sf.isAsIs());
+							u = userDao.get(inUser.getId());
+						} catch (Exception e) {
+							log.error("Unable to store binary image from LDAP", e);
+						} finally {
+							if (tempImage != null) {
+								try {
+									Files.deleteIfExists(tempImage);
+								} catch (IOException e) {
+									log.error("Unexpected error while clean-up", e);
+								}
+							}
+						}
+					} else {
+						u.setPictureUri(val.getString());
+					}
+				}
+			}
+			if (Strings.isEmpty(u.getPictureUri()) && !Strings.isEmpty(options.pictureUri)) {
+				u.setPictureUri(options.pictureUri);
+			}
+			return userDao.update(u, null);
+		}
+
 		public User getUser(Entry entry, User u) throws LdapException, CursorException, OmException, IOException {
 			if (entry == null) {
 				log.error("LDAP entry is null, search or lookup by Dn failed");
@@ -368,10 +415,6 @@ public class LdapLoginManager {
 			u.getAddress().setCountry(validateCountry(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_COUNTRY, LDAP_KEY_COUNTRY)));
 			u.getAddress().setTown(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_TOWN, LDAP_KEY_TOWN));
 			u.getAddress().setPhone(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_PHONE, LDAP_KEY_PHONE));
-			u.setPictureUri(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE, ""));
-			if (Strings.isEmpty(u.getPictureUri()) && !Strings.isEmpty(options.pictureUri)) {
-				u.setPictureUri(options.pictureUri);
-			}
 			String tz = getStringAttr(config, entry, LdapOptions.CONFIGKEY_LDAP_TIMEZONE_NAME, LDAP_KEY_TIMEZONE);
 			if (tz == null) {
 				tz = options.tz;
