@@ -39,6 +39,7 @@ import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
 import org.apache.openmeetings.web.pages.HashPage;
+import org.apache.openmeetings.web.pages.PrivacyPage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
@@ -55,6 +56,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
@@ -173,6 +175,7 @@ public class SignInDialog extends Modal<String> {
 			});
 			add(new WebMarkupContainer("netTest").add(AttributeModifier.append("href"
 					, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP, APP_TYPE_NETWORK)).toString())));
+			add(new BookmarkablePageLink<>("privacy", PrivacyPage.class));
 			final boolean showOauth = ((SignInPage)getPage()).allowOAuthLogin();
 			add(new WebMarkupContainer("oauth").add(
 				new ListView<>("oauthList", oauthDao.getActive()) {
