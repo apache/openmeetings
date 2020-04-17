@@ -167,6 +167,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	final HazelcastInstance hazelcast = Hazelcast.getOrCreateHazelcastInstance(new XmlConfigBuilder().build());
 	private ITopic<IClusterWsMessage> hazelWsTopic;
 	private String serverId;
+	private String wsUrl;
 
 	@Autowired
 	private ApplicationContext ctx;
@@ -260,6 +261,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 						wresp.setHeader("X-XSS-Protection", "1; mode=block");
 						wresp.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
 						wresp.setHeader("X-Content-Type-Options", "nosniff");
+						if (wsUrl == null) {
+							wsUrl = getWsUrl(cycle.getRequest().getUrl());
+							if (wsUrl != null) {
+								cfgDao.updateCsp();
+							}
+						}
 					}
 				}
 			}
@@ -615,5 +622,26 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	public void publishWsTopic(IClusterWsMessage msg) {
 		hazelWsTopic.publish(msg);
+	}
+
+	@Override
+	public String getWsUrl() {
+		return wsUrl;
+	}
+
+	private static String getWsUrl(Url reqUrl) {
+		if (!reqUrl.isFull()) {
+			return null;
+		}
+		final boolean insecure = "http".equalsIgnoreCase(reqUrl.getProtocol());
+		String delim = ":";
+		String port = reqUrl.getPort() == null || reqUrl.getPort() < 0 ? "" : String.valueOf(reqUrl.getPort());
+		if (!port.isEmpty() && ((insecure && 80 == reqUrl.getPort()) || (!insecure && 443 == reqUrl.getPort()))) {
+			port = "";
+		}
+		if (port.isEmpty()) {
+			delim = "";
+		}
+		return String.format("%s://%s%s%s", insecure ? "ws" : "wss", reqUrl.getHost(), delim, port);
 	}
 }

@@ -134,6 +134,7 @@ import org.apache.openjpa.event.RemoteCommitProvider;
 import org.apache.openjpa.event.TCPRemoteCommitProvider;
 import org.apache.openjpa.persistence.OpenJPAEntityManagerSPI;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -180,6 +181,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private UserDao userDao;
 	@Autowired
 	private OAuth2Dao oauthDao;
+	@Autowired
+	private IApplication app;
 
 	public void updateClusterAddresses(String addresses) throws UnknownHostException {
 		OpenJPAConfiguration cfg = ((OpenJPAEntityManagerSPI)OpenJPAPersistence.cast(em)).getConfiguration();
@@ -651,6 +654,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			addCspRule(cspConfig, CSPDirective.MEDIA_SRC, getCspMediaSrc());
 			addCspRule(cspConfig, CSPDirective.SCRIPT_SRC, getCspScriptSrc());
 			addCspRule(cspConfig, CSPDirective.STYLE_SRC, getCspStyleSrc());
+			addCspRule(cspConfig, CSPDirective.CONNECT_SRC, app.getWsUrl(), false); // special code for Safari browser
 			if (!Strings.isEmpty(getGaCode())) {
 				// https://developers.google.com/tag-manager/web/csp#universal_analytics_google_analytics
 				addCspRule(cspConfig, CSPDirective.IMG_SRC, "https://www.google-analytics.com");

@@ -48,4 +48,5 @@ public interface IApplication {
 
 	//WS
 	void publishWsTopic(IClusterWsMessage msg);
+	String getWsUrl();
 }
