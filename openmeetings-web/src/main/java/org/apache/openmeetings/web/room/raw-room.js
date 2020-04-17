@@ -269,7 +269,7 @@ var Room = (function() {
 		}
 		OmUtil.tmpl('#quick-vote-template', 'quick-vote');
 	}
-	function __activityAVIcon(c, elem, selector, predicate, onfunc, disabledfunc) {
+	function __activityAVIcon(elem, selector, predicate, onfunc, disabledfunc) {
 		let icon = elem.find(selector);
 		if (predicate()) {
 			icon.show();
@@ -285,12 +285,12 @@ var Room = (function() {
 					icon.removeClass('enabled');
 				}
 			}
-			icon.attr('title', icon.data(on ? 'off' :'on'));
+			icon.attr('title', icon.data(on ? 'on' :'off'));
 		} else {
 			icon.hide();
 		}
 	}
-	function __activityIcon(c, elem, selector, predicate, action) {
+	function __activityIcon(elem, selector, predicate, action) {
 		let icon = elem.find(selector);
 		if (predicate()) {
 			if (icon.length === 0) {
@@ -371,7 +371,6 @@ var Room = (function() {
 				if (self) {
 					le.addClass('current');
 				}
-				// FIXME TODO sort + .insertAfter(...)
 				$('#room-sidebar-tab-users .user-list .users').append(le);
 			}
 			_updateClient(c);
@@ -389,7 +388,6 @@ var Room = (function() {
 			return;
 		}
 		__setStatus(c, le);
-		//FIXME TODO move-on-change-order: $('#nodeToMove').insertAfter('#insertAfterThisElement');
 		if (hasVideo || hasAudio) {
 			if (le.find('.restart').length === 0) {
 				le.prepend(OmUtil.tmpl('#user-av-restart').click(function () {
@@ -416,10 +414,10 @@ var Room = (function() {
 		__rightVideoIcon(c, actions);
 		__rightAudioIcon(c, actions);
 		__rightOtherIcons(c, actions);
-		__activityIcon(c, actions, '.kick'
+		__activityIcon(actions, '.kick'
 			, () => !self && _hasRight('MODERATOR') && !_hasRight('SUPER_MODERATOR', c.rights)
 			, function() { OmUtil.roomAction({action: 'kick', uid: c.uid}); });
-		__activityIcon(c, actions, '.private-chat'
+		__activityIcon(actions, '.private-chat'
 				, () => options.userId !== c.user.id && $('#chatPanel').is(':visible')
 				, function() {
 					Chat.addTab('chatTab-u' + c.user.id, c.user.displayName);
@@ -432,11 +430,11 @@ var Room = (function() {
 			options.activities = c.activities;
 			const header = $('#room-sidebar-tab-users .header');
 			__rightVideoIcon(c, header);
-			__activityAVIcon(c, header, '.activity.cam', () => !options.audioOnly && _hasRight('VIDEO')
+			__activityAVIcon(header, '.activity.cam', () => !options.audioOnly && _hasRight('VIDEO')
 				, () => hasVideo
 				, () => Settings.load().video.cam < 0);
 			__rightAudioIcon(c, header);
-			__activityAVIcon(c, header, '.activity.mic', () => _hasRight('AUDIO')
+			__activityAVIcon(header, '.activity.mic', () => _hasRight('AUDIO')
 				, () => hasAudio
 				, () => Settings.load().video.mic < 0);
 			__rightOtherIcons(c, header);

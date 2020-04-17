@@ -979,10 +979,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.video"><![CDATA[requests permission to turn on camera]]></entry>
 	<entry key="activities.request.right.muteothers"><![CDATA[requests permission to mute others]]></entry>
 	<entry key="activities.ask.question"><![CDATA[would like to ask a question]]></entry>
-	<entry key="camera.on"><![CDATA[Turn on camera]]></entry>
-	<entry key="camera.off"><![CDATA[Turn off camera]]></entry>
-	<entry key="microphone.on"><![CDATA[Turn on microphone]]></entry>
-	<entry key="microphone.off"><![CDATA[Turn off microphone]]></entry>
+	<entry key="camera.on"><![CDATA[Camera is on. Click to turn off.]]></entry>
+	<entry key="camera.off"><![CDATA[Camera is off. Click to turn on.]]></entry>
+	<entry key="microphone.on"><![CDATA[Microphone is on. Click to turn off.]]></entry>
+	<entry key="microphone.off"><![CDATA[Microphone is off. Click to turn on.]]></entry>
 	<entry key="profile.invitations"><![CDATA[Invitations]]></entry>
 	<entry key="profile.invitation"><![CDATA[Invitation]]></entry>
 	<entry key="poll.clone"><![CDATA[Clone]]></entry>

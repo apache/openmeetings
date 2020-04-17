@@ -974,10 +974,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.video"><![CDATA[запрашивает право включать камеру]]></entry>
 	<entry key="activities.request.right.muteothers"><![CDATA[запрашивает право выключать звук у остальных]]></entry>
 	<entry key="activities.ask.question"><![CDATA[хочет задать вопрос]]></entry>
-	<entry key="camera.on"><![CDATA[Включить камеру]]></entry>
-	<entry key="camera.off"><![CDATA[Выключить камеру]]></entry>
-	<entry key="microphone.on"><![CDATA[Включить микрофон]]></entry>
-	<entry key="microphone.off"><![CDATA[Выключить микрофон]]></entry>
+	<entry key="camera.on"><![CDATA[Камера включена. Нажмите чтобы выключить.]]></entry>
+	<entry key="camera.off"><![CDATA[Камера выключена. Нажмите чтобы включить.]]></entry>
+	<entry key="microphone.on"><![CDATA[Микрофон включен. Нажмите чтобы выключить.]]></entry>
+	<entry key="microphone.off"><![CDATA[Микрофон выключен. Нажмите чтобы включить.]]></entry>
 	<entry key="profile.invitations"><![CDATA[Приглашения]]></entry>
 	<entry key="profile.invitation"><![CDATA[Приглашение]]></entry>
 	<entry key="poll.clone"><![CDATA[Клонировать]]></entry>
