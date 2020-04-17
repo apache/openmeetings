@@ -54,6 +54,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.openmeetings.db.bind.adapter.FileTypeAdapter;
 import org.apache.openmeetings.db.bind.adapter.IntAdapter;
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
@@ -296,7 +297,31 @@ public abstract class BaseFileItem extends HistoricalEntity {
 	public void setExternalType(String externalType) {
 		this.externalType = externalType;
 	}
+	
+	/**
+	 * Generates a link to download. As opposed to display it on the Whiteboard.
+	 * 
+	 * @param ext
+	 * @return
+	 */
+	public final File getDownloadFile(String ext) {
+		// passing in null for PRESENTATION won't return the original
+		if (ext == null && getType() != null && getType().equals(Type.PRESENTATION)) {
+			// could by either a Doc/XLS/PPT or just a PDF
+			return getFile(FilenameUtils.getExtension(getName()));
+		}
+		// for other file types passing in null should return original
+		return getFile(ext);
+	}
 
+	/**
+	 * Returns a file. But mostly to get a link for the Whiteboard.
+	 * 
+	 * In case of a Presentation it will try to assume the first slide if passing in null.
+	 * 
+	 * @param ext
+	 * @return
+	 */
 	public final File getFile(String ext) {
 		File f = null;
 		if (!isDeleted() && getHash() != null) {

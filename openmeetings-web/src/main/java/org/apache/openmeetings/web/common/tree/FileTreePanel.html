@@ -52,11 +52,16 @@
 			<div wicket:id="tree"></div>
 		</div>
 		<div class="footer">
-			<span wicket:id="download" wicket:message="title:867"></span>
+			<span class="download" wicket:id="download" wicket:message="title:867"></span>
+			<div class="sizes">
+			    <span class="size font-weight-bold"><wicket:message key="923"/></span>
+				<span class="font-weight-bold">/</span>
+				<span class="font-weight-bold"><wicket:message key="924"/></span>
+			</div>
 			<div wicket:id="sizes" class="sizes">
 				<span class="size" wicket:message="title:923" wicket:id="homeSize"></span>
-				<span class="size">/</span>
-				<span class="size" wicket:message="title:924" wicket:id="publicSize"></span>
+				<span>/</span>
+				<span wicket:message="title:924" wicket:id="publicSize"></span>
 			</div>
 		</div>
 		<div wicket:id="errors"></div>

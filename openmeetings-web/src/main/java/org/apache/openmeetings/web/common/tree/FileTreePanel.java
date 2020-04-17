@@ -158,8 +158,7 @@ public abstract class FileTreePanel extends Panel {
 
 		public void onDownlownClick(AjaxRequestTarget target, String ext) {
 			BaseFileItem fi = getLastSelected();
-			File f = ext == null && (Type.IMAGE == fi.getType() || Type.PRESENTATION == fi.getType())
-					? fi.getOriginal() : fi.getFile(ext);
+			File f = fi.getDownloadFile(ext);
 			if (f != null && f.exists()) {
 				dwnldFile = f;
 				downloader.initiate(target);
@@ -192,7 +191,7 @@ public abstract class FileTreePanel extends Panel {
 		final OmTreeProvider tp = new OmTreeProvider(roomId);
 		select(tp.getRoot(), null, false, false);
 		form.add(tree = new FileItemTree("tree", this, tp));
-		form.add(download.setVisible(false).setOutputMarkupPlaceholderTag(true));
+		form.add(download.setEnabled(false).setOutputMarkupPlaceholderTag(true));
 		add(form.add(downloader));
 	}
 
@@ -467,7 +466,7 @@ public abstract class FileTreePanel extends Panel {
 		}
 		updateSelected(target); //all finally selected are in the update list
 		if (target != null) {
-			target.add(trashBorder, download.setVisible(isDownloadable(lastSelected)));
+			target.add(trashBorder, download.setEnabled(isDownloadable(lastSelected)));
 		}
 	}
 

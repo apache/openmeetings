@@ -17,6 +17,12 @@
 }
 .file-tree .footer {
 	height: var(--tree-footer-height);
+	display: flex;
+    flex-direction: column;
+}
+.file-tree .footer .download {
+	padding-left: 5px;
+	padding-right: 5px;
 }
 .file-tree .footer .sizes {
 	display: inline-block;
