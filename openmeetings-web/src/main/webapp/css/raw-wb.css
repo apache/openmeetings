@@ -48,13 +48,13 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 .wb-tab-close {
 	width: 20px;
 	height: 20px;
-	padding: 0;
 	position: absolute;
-	top: 2px;
+	top: 0px;
 	right: 2px;
 }
-.btn-no-border {
+.btn-outline-secondary.btn-no-border {
 	border: none;
+	padding: 0;
 }
 .room-block .sb-wb .wb-block .tabs .wb-tab-content {
 	height: calc(100% - var(--room-wb-tabs-height));
