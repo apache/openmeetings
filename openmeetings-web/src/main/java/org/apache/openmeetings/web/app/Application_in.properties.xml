@@ -902,9 +902,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="template.recording.expiring.greetings"><![CDATA[Dear {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[Recording will be deleted]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- Room[{0}]]]></entry>
-	<entry key="user.salutation.DR"><![CDATA[Dr.]]></entry>
+	<entry key="user.salutation.DR"><![CDATA[Dr]]></entry>
 	<entry key="user.salutation.MR"><![CDATA[Tuan.]]></entry>
-	<entry key="user.salutation.MRS"><![CDATA[Mrs.]]></entry>
+	<entry key="user.salutation.MRS"><![CDATA[Mrs]]></entry>
 	<entry key="user.salutation.MS"><![CDATA[Nyonya.]]></entry>
 	<entry key="user.salutation.PROF"><![CDATA[Prof]]></entry>
 	<entry key="video.mic.off"><![CDATA[Microphone is muted]]></entry>

@@ -128,12 +128,6 @@ var Sharer = (function() {
 				frameRate: {
 					ideal: sd.fps
 				}
-				, width: {
-					ideal: sd.width
-				}
-				, height: {
-					ideal: sd.height
-				}
 			}
 			, audio: false
 		};
