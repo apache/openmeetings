@@ -352,7 +352,7 @@ public class ImportInitvalues {
 				"Number of chars needed in a user last name", "4.0.4");
 		addCfg(list, CONFIG_CHAT_SEND_ON_ENTER, String.valueOf(false), Configuration.Type.BOOL,
 				"Controls if chat message will be set on Enter (default: send on Ctrl+Enter)", "4.0.5");
-		addCfg(list, CONFIG_MP4_VIDEO_PRESET, "medium", Configuration.Type.BOOL,
+		addCfg(list, CONFIG_MP4_VIDEO_PRESET, "medium", Configuration.Type.STRING,
 				"Preset (encoder optimization settings) to be used while performing mp4 conversion."
 					+ "Valid values are: ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow", "4.0.5");
 		addCfg(list, CONFIG_CAM_FPS, "30", Configuration.Type.NUMBER, "Camera FPS, should be positive number in range (0, 60]", VER_5_0_0);
