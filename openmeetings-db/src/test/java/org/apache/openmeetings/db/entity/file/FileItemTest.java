@@ -51,7 +51,7 @@ public class FileItemTest {
 		
 		// Setup path to be local test resources
 		mockStatic(OmFileHelper.class);
-		when(OmFileHelper.getUploadFilesDir()).thenReturn(new File("src/test/resources"));
+		when(OmFileHelper.getUploadFilesDir()).thenReturn(new File("src/test/resources/org/apache/openmeetings/db/entity/file"));
 	}
 	
 	@Test
