@@ -343,7 +343,7 @@ public abstract class BaseFileItem extends HistoricalEntity {
 	}
 
 	public final File getOriginal() {
-		File f = getFile(null);
+		File f = getFile(Type.PRESENTATION == type ? EXTENSION_PDF : null);
 		if (f != null) {
 			File p = f.getParentFile();
 			if (p != null && p.exists()) {
