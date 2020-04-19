@@ -26,7 +26,7 @@
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
-	<version>5.0.0-M4-SNAPSHOT</version>
+	<version>5.0.0-M4</version>
 	<packaging>pom</packaging>
 	<name>Openmeetings</name>
 	<description>Parent project for all OpenMeetings Maven modules. Required to hold general settings</description>
@@ -318,7 +318,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/apache/openmeetings.git</connection>
 		<developerConnection>scm:git:https://github.com/apache/openmeetings.git</developerConnection>
-		<url>https://github.com/apache/openmeetings.git</url>
+		<url>https://github.com/apache/openmeetings/tree/5.0.0-M4</url>
 		<tag>HEAD</tag>
 	</scm>
 	<mailingLists>
