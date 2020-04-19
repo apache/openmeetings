@@ -6,6 +6,76 @@ See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number 
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
 
+Release Notes - Openmeetings - Version 5.0.0-M4
+================================================================================================================
+
+* Sub-task
+    * [OPENMEETINGS-2187] - WB content should be synced on server start
+    * [OPENMEETINGS-2203] - Invitation/Secure room hashes should be opened at correct node
+    * [OPENMEETINGS-2241] - Complex scenario
+
+* Bug
+    * [OPENMEETINGS-816] - Create Sign Up UI tests using Selenium
+    * [OPENMEETINGS-2154] - Export of OM Calendars is broken
+    * [OPENMEETINGS-2156] - cross links in services javadocs need to be fixed
+    * [OPENMEETINGS-2160] - 'closed' room attribute is not being mapped to entity
+    * [OPENMEETINGS-2177] - Backup import is broken
+    * [OPENMEETINGS-2186] - Clustering does nothing in version 5.0-M3
+    * [OPENMEETINGS-2189] - Audio/Video is broken in Safari
+    * [OPENMEETINGS-2195] - mic not enabled in audio-only room in chrome, other errors
+    * [OPENMEETINGS-2196] - Australian date-time failed to parse
+    * [OPENMEETINGS-2202] - NPE while invalidating session
+    * [OPENMEETINGS-2206] - Recording Stops alone after some minutes
+    * [OPENMEETINGS-2207] - CAM AND AUDIO WINDOW CLOSING
+    * [OPENMEETINGS-2208] - Login-screen "registration" unvsible when in configuration this feature is disabled
+    * [OPENMEETINGS-2219] - Backup and Import
+    * [OPENMEETINGS-2221] - invitation only with email-address -> no OK button and icorrect window
+    * [OPENMEETINGS-2223] - Can't import language file. (Internal error message)
+    * [OPENMEETINGS-2225] - UI issue in Mobile view - Navigation bar hidden behind room
+    * [OPENMEETINGS-2226] - Final recording dimensions should be stored in DB
+    * [OPENMEETINGS-2240] - sort user list is missing in current master-branch
+    * [OPENMEETINGS-2250] - Moderated Chat is broken
+    * [OPENMEETINGS-2252] - Does not work hotkeys mute.keycode and mute.others.keycode.
+    * [OPENMEETINGS-2254] - Connection overview - overlapping characters if username too long
+    * [OPENMEETINGS-2263] - Disallow Recording but allow Screen Sharing
+    * [OPENMEETINGS-2269] - Administration app hungs after add / change user - F5 refresh helps
+    * [OPENMEETINGS-2272] - Wrong type with mp4.video.preset
+
+* Improvement
+    * [OPENMEETINGS-2010] - Private chats will not be removed
+    * [OPENMEETINGS-2021] - Widget in Chat Log
+    * [OPENMEETINGS-2072] - "wait-picture" before moderator enter room
+    * [OPENMEETINGS-2153] - Multimedia connection shouldn't be immediately dropped
+    * [OPENMEETINGS-2155] - Managment avatars in whiteboard
+    * [OPENMEETINGS-2157] - MD5 crypt mechanism should be dropped
+    * [OPENMEETINGS-2165] - OM should be more mobile friendly
+    * [OPENMEETINGS-2167] - arrange automatically video-pictures
+    * [OPENMEETINGS-2188] - OAuth works with 2 level mappings only
+    * [OPENMEETINGS-2197] - rooms side panel undock button doesn't works
+    * [OPENMEETINGS-2209] - Connection state changes should be handled
+    * [OPENMEETINGS-2230] - Developer Experience - Adding some more quick build options
+    * [OPENMEETINGS-2245] - navigator.mediaDevices can be null
+    * [OPENMEETINGS-2248] - Fix up some parts of website
+    * [OPENMEETINGS-2251] - Whiteboard tab menu right click and edit does not work and focus on wrong html element
+    * [OPENMEETINGS-2256] - Some PDFs have wrong width in generated images
+    * [OPENMEETINGS-2257] - Order of Countries in list box
+    * [OPENMEETINGS-2258] - LDAP documentation is incomplete
+    * [OPENMEETINGS-2261] - Screen Sharing - Windows for Width and Height to small for 4 digit values
+    * [OPENMEETINGS-2262] - LDAP attribute mapping for ldap_user_attr_picture doesn't'work with Active Directory
+    * [OPENMEETINGS-2268] - Confusing Icons
+    * [OPENMEETINGS-2271] - Link to privacy statement should be added to sign-in dialog
+
+* Test
+    * [OPENMEETINGS-2183] - How to upgrade the newer tomcat version  9.0.31
+    * [OPENMEETINGS-2259] - Can't run OM-5 M4 build #3122
+    * [OPENMEETINGS-2270] - REcording and changing size or fps
+
+* Task
+    * [OPENMEETINGS-2151] - Library versions need to be updated (5.0.0-M4)
+    * [OPENMEETINGS-2176] - Sonar issues need to be addressed (M4)
+    * [OPENMEETINGS-2247] - CSP should be re-worked
+
+
 Release Notes - Openmeetings - Version 5.0.0-M3
 ================================================================================================================
 
