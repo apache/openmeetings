@@ -40,7 +40,7 @@
 		<autoModuleName>apache.openmeetings.parent</autoModuleName>
 		<jdk.version>11</jdk.version>
 		<!-- plugin versions -->
-		<maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+		<maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
 		<maven-site-plugin.version>3.9.0</maven-site-plugin.version>
 		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
