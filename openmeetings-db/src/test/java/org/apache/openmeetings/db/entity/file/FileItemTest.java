@@ -51,6 +51,9 @@ public class FileItemTest {
 		
 		// Setup path to be local test resources
 		mockStatic(OmFileHelper.class);
+		when(OmFileHelper.getFileExt("6594186e-c6bb-49d5-9f66-829e45599aaa.pdf")).thenReturn("pdf");
+		when(OmFileHelper.getFileExt("page-0000.png")).thenReturn("png");
+		when(OmFileHelper.getFileExt("page-0001.png")).thenReturn("png");
 		when(OmFileHelper.getUploadFilesDir()).thenReturn(new File("src/test/resources/org/apache/openmeetings/db/entity/file"));
 	}
 	
