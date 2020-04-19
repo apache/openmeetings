@@ -14,3 +14,5 @@ target
 openmeetings-server/red5-server
 openmeetings-server/web-server
 
+# OSX files
+.DS_Store
