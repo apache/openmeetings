@@ -347,9 +347,18 @@ public abstract class BaseFileItem extends HistoricalEntity {
 		if (f != null) {
 			File p = f.getParentFile();
 			if (p != null && p.exists()) {
+				File original = null;
 				File[] ff = p.listFiles(new OriginalFilter());
 				if (ff != null && ff.length > 0) {
-					f = ff[0];
+					original = ff[0];
+				}
+				// Special handling for PDFs, they can't be found
+				if (original == null) {
+					if (Type.PRESENTATION == type) {
+						f = getFile(EXTENSION_PDF);
+					}
+				} else {
+					f = original;
 				}
 			}
 		}
