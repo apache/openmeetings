@@ -1,5 +1,6 @@
 package org.apache.openmeetings.db.entity.file;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -30,15 +31,27 @@ public class FileItemTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		
+		// Setup path to be local test resources
+		mockStatic(OmFileHelper.class);
+		when(OmFileHelper.getUploadFilesDir()).thenReturn(new File("src/test/resources"));
+	}
+	
+	@Test
+	public void testGetFileShouldReturnFirstSlideWithPDF() {
+		// Setup file
+		fileItem.setDeleted(false);
+		fileItem.setHash("6594186e-c6bb-49d5-9f66-829e45599aaa");
+		fileItem.setName("mypresentation.pdf");
+		fileItem.setType(BaseFileItem.Type.PRESENTATION);
+		
+		File f = fileItem.getFile(null);
+		
+		assertTrue(f.getName().endsWith("png"));
+		assertEquals(f.getName(), "page-0000.png");
 	}
 	
 	@Test
 	public void testGetOriginalWithPDFWithOriginalName() {
-		
-		// Setup path to be local test resources
-		mockStatic(OmFileHelper.class);
-		when(OmFileHelper.getUploadFilesDir()).thenReturn(new File("src/test/resources"));
-		
 		// Setup file
 		fileItem.setDeleted(false);
 		fileItem.setHash("6594186e-c6bb-49d5-9f66-829e45599aaa");
@@ -48,15 +61,11 @@ public class FileItemTest {
 		File f = fileItem.getOriginal();
 		
 		assertTrue(f.getName().endsWith("pdf"));
+		assertEquals(f.getName(), "6594186e-c6bb-49d5-9f66-829e45599aaa.pdf");
 	}
 	
 	@Test
 	public void testGetOriginalWithPDFWithChangedName() {
-		
-		// Setup path to be local test resources
-		mockStatic(OmFileHelper.class);
-		when(OmFileHelper.getUploadFilesDir()).thenReturn(new File("src/test/resources"));
-		
 		// Setup file
 		fileItem.setDeleted(false);
 		fileItem.setHash("6594186e-c6bb-49d5-9f66-829e45599aaa");
@@ -66,6 +75,7 @@ public class FileItemTest {
 		File f = fileItem.getOriginal();
 		
 		assertTrue(f.getName().endsWith("pdf"));
+		assertEquals(f.getName(), "6594186e-c6bb-49d5-9f66-829e45599aaa.pdf");
 	}
 
 }
