@@ -21,7 +21,7 @@
 	display: inline-block;
 	vertical-align: top;
 	height: 100%;
-	width: var(--list-width);
+	min-width: var(--list-width);
 }
 .adminPanelColumnTable.label .lblNav {
 	height: var(--lbl-nav-height);
