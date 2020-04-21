@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.admin.connection;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelConfirm;
 
 import java.lang.reflect.Field;
@@ -90,7 +91,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 				Client c = item.getModelObject();
 				item.add(new Label("type", "html5"));
 				item.add(new Label("login", c.getUser().getLogin()));
-				item.add(new Label("since", c.getConnectedSince()));
+				item.add(new Label("since", getDateFormat().format(c.getConnectedSince())));
 				item.add(new Label("scope", c.getRoom() == null ? "html5" : "" + c.getRoom().getId()));
 				item.add(new Label("server", c.getServerId()));
 				item.add(new BootstrapAjaxLink<String>("kick", null, Buttons.Type.Outline_Danger, new ResourceModel("603")) {
