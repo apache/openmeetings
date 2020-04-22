@@ -102,7 +102,6 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 
 		add(selForm = new PollSelectForm("selForm"));
 		add(dispForm = new PollResultsForm("dispForm"));
-		addButton(OmModalCloseButton.of());
 		addButton(close = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Danger, new ResourceModel("1418")) {
 			private static final long serialVersionUID = 1L;
 
@@ -155,6 +154,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 			}
 		});
 		clone.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
+		addButton(OmModalCloseButton.of());
 		super.onInitialize();
 	}
 
