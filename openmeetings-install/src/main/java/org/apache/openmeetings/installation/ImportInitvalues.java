@@ -329,8 +329,10 @@ public class ImportInitvalues {
 
 		addCfg(list, CONFIG_DEFAULT_LANDING_ZONE, "user/dashboard", Configuration.Type.STRING
 				, "Area to be shown to the user after login. Possible values are: "
-						+ "user/dashboard, user/calendar, user/record, rooms/my, rooms/group, rooms/public, admin/user, admin/connection"
-						+ ", admin/group, admin/room, admin/config, admin/lang, admin/ldap, admin/backup, admin/server, admin/oauth2", "2.1.x");
+						+ "user/dashboard, user/calendar, user/record, rooms/my, rooms/group, rooms/public"
+						+ ", profile/messages, profile/edit, profile/search, profile/invitation, profile/widget"
+						+ ", admin/user, admin/connection"
+						+ ", admin/group, admin/room, admin/config, admin/lang, admin/ldap, admin/oauth2, admin/backup, admin/email", "2.1.x");
 
 		// oauth2 params
 		addCfg(list, CONFIG_IGNORE_BAD_SSL, String.valueOf(false), Configuration.Type.BOOL,

@@ -22,21 +22,18 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
-import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 public class MainMenuItem extends OmMenuItem {
 	private static final long serialVersionUID = 1L;
 	private MenuActions action;
-	private MenuParams params;
 
-	public MainMenuItem(String lbl, String title, MenuActions action, MenuParams param) {
+	public MainMenuItem(String lbl, String title, MenuActions action) {
 		super(Application.getString(lbl), Application.getString(title));
 		this.action = action;
-		this.params = param != null ? param : MenuParams.publicTabButton;
 	}
 
 	public void onClick(MainPanel main, AjaxRequestTarget target) {
-		main.updateContents(new OmUrlFragment(action, params), target);
+		main.updateContents(new OmUrlFragment(action), target);
 	}
 }

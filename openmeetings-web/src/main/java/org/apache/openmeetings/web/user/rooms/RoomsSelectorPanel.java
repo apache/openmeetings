@@ -18,48 +18,46 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_GROUP;
+import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_MY;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.UserBasePanel;
-import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class RoomsSelectorPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final String PANEL_ID = "rooms";
-	private String title;
-	private String desc;
+	private final String type;
 	@SpringBean
 	private RoomDao roomDao;
 
-	public RoomsSelectorPanel(String id, MenuParams param) {
+	public RoomsSelectorPanel(String id, String type) {
 		super(id);
-
-		switch (param) {
-			case myTabButton:
-				title = "781";
-				desc = "782";
-				add(new RoomsPanel(PANEL_ID, roomDao.getMyRooms(getUserId(), Application.getString("my.room.conference"), Application.getString("my.room.presentation"))));
-				break;
-			case privateTabButton:
-				title = "779";
-				desc = "780";
-				add(new RoomsTabbedPanel(PANEL_ID));
-				break;
-			case publicTabButton:
-			default:
-				title = "777";
-				desc = "778";
-				add(new RoomsPanel(PANEL_ID, roomDao.getPublicRooms()));
-				break;
-		}
+		this.type = type;
 	}
 
 	@Override
 	protected void onInitialize() {
+		String title;
+		String desc;
+		if (TYPE_GROUP.equals(type)) {
+			title = "779";
+			desc = "780";
+			add(new RoomsTabbedPanel(PANEL_ID));
+		} else if (isMyRoomsEnabled() && TYPE_MY.equals(type)) {
+			title = "781";
+			desc = "782";
+			add(new RoomsPanel(PANEL_ID, roomDao.getMyRooms(getUserId(), Application.getString("my.room.conference"), Application.getString("my.room.presentation"))));
+		} else {
+			title = "777";
+			desc = "778";
+			add(new RoomsPanel(PANEL_ID, roomDao.getPublicRooms()));
+		}
 		add(new Label("title", getString(title)));
 		add(new Label("desc", getString(desc)).setRenderBodyOnly(true));
 		super.onInitialize();

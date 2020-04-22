@@ -60,18 +60,16 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.wb.AbstractWbPanel;
 import org.apache.openmeetings.web.user.calendar.CalendarPanel;
 import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
-import org.apache.openmeetings.web.user.profile.SettingsPanel;
+import org.apache.openmeetings.web.user.profile.EditProfilePanel;
+import org.apache.openmeetings.web.user.profile.MessagesContactsPanel;
 import org.apache.openmeetings.web.user.record.RecordingsPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
 public class TestMainAreas extends AbstractWicketTester {
 	private static final Logger log = LoggerFactory.getLogger(TestMainAreas.class);
@@ -142,20 +140,13 @@ public class TestMainAreas extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testRoomsProfileMessages() throws OmException {
-		checkArea(AreaKeys.profile, TYPE_MESSAGES, SettingsPanel.class, p -> {
-			@SuppressWarnings("unchecked")
-			AjaxBootstrapTabbedPanel<ITab> tp = (AjaxBootstrapTabbedPanel<ITab>)p.get("main-container:main:contents:child:tabs");
-			for (int i = 0; i < tp.getTabs().size(); ++i) {
-				tester.executeBehavior((AbstractAjaxBehavior)tp.get("tabs-container:tabs:" + i + ":link").getBehaviorById(0)); // activate
-				//add visibility check
-			}
-		}, regularUsername);
+	public void testProfileMessages() throws OmException {
+		checkArea(AreaKeys.profile, TYPE_MESSAGES, MessagesContactsPanel.class, regularUsername);
 	}
 
 	@Test
-	public void testRoomsProfileEdit() throws OmException {
-		checkArea(AreaKeys.profile, TYPE_EDIT, SettingsPanel.class, regularUsername);
+	public void testProfileEdit() throws OmException {
+		checkArea(AreaKeys.profile, TYPE_EDIT, EditProfilePanel.class, regularUsername);
 	}
 
 	@Test

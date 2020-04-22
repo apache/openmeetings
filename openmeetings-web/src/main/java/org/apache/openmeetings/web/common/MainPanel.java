@@ -28,8 +28,6 @@ import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBor
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
-import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
-import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
@@ -64,7 +62,6 @@ import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
-import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -194,22 +191,6 @@ public class MainPanel extends Panel {
 		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
 		add(contents.add(getClient() == null || panel == null ? EMPTY : panel).setOutputMarkupId(true).setMarkupId("contents"));
 		topControls.add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
-		topLinks.add(new AjaxLink<Void>("messages") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				updateContents(PROFILE_MESSAGES, target);
-			}
-		});
-		topLinks.add(new AjaxLink<Void>("profile") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				updateContents(PROFILE_EDIT, target);
-			}
-		});
 		final AboutDialog about = new AboutDialog("aboutDialog");
 		topLinks.add(new AjaxLink<Void>("about") {
 			private static final long serialVersionUID = 1L;
@@ -309,8 +290,8 @@ public class MainPanel extends Panel {
 		topLinks.add(logout);
 	}
 
-	private OmMenuItem getSubItem(String lbl, String title, MenuActions action, MenuParams param) {
-		return new MainMenuItem(lbl, title, action, param) {
+	private OmMenuItem getSubItem(String lbl, String title, MenuActions action) {
+		return new MainMenuItem(lbl, title, action) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -325,17 +306,17 @@ public class MainPanel extends Panel {
 		{
 			// Dashboard Menu Points
 			List<INavbarComponent> l = new ArrayList<>();
-			l.add(getSubItem("290", "1450", MenuActions.dashboardModuleStartScreen, null));
-			l.add(getSubItem("291", "1451", MenuActions.dashboardModuleCalendar, null));
+			l.add(getSubItem("290", "1450", MenuActions.DASHBOARD_START));
+			l.add(getSubItem("291", "1451", MenuActions.DASHBOARD_CALENDAR));
 			mmenu.add(new OmMenuItem(getString("124"), l));
 		}
 		{
 			// Conference Menu Points
 			List<INavbarComponent> l = new ArrayList<>();
-			l.add(getSubItem("777", "1506", MenuActions.conferenceModuleRoomList, MenuParams.publicTabButton));
-			l.add(getSubItem("779", "1507", MenuActions.conferenceModuleRoomList, MenuParams.privateTabButton));
+			l.add(getSubItem("777", "1506", MenuActions.ROOMS_PUBLIC));
+			l.add(getSubItem("779", "1507", MenuActions.ROOMS_GROUP));
 			if (isMyRoomsEnabled()) {
-				l.add(getSubItem("781", "1508", MenuActions.conferenceModuleRoomList, MenuParams.myTabButton));
+				l.add(getSubItem("781", "1508", MenuActions.ROOMS_MY));
 			}
 			List<Room> recent = roomDao.getRecent(getUserId());
 			if (!recent.isEmpty()) {
@@ -357,27 +338,37 @@ public class MainPanel extends Panel {
 		{
 			// Recording Menu Points
 			List<INavbarComponent> l = new ArrayList<>();
-			l.add(getSubItem("395", "1452", MenuActions.recordModule, null));
+			l.add(getSubItem("395", "1452", MenuActions.RECORD));
 			mmenu.add(new OmMenuItem(getString("395"), l));
+		}
+		{
+			// Settings Menu Points
+			List<INavbarComponent> l = new ArrayList<>();
+			l.add(getSubItem("1188", "1188", MenuActions.PROFILE_MESSAGE));
+			l.add(getSubItem("377", "377", MenuActions.PROFILE_EDIT));
+			l.add(getSubItem("1172", "1172", MenuActions.PROFILE_SEARCH));
+			l.add(getSubItem("profile.invitations", "profile.invitations", MenuActions.PROFILE_INVITATION));
+			l.add(getSubItem("1548", "1548", MenuActions.PROFILE_WIDGET));
+			mmenu.add(new OmMenuItem(getString("4"), l));
 		}
 		Set<Right> r = WebSession.getRights();
 		boolean isAdmin = hasAdminLevel(r);
 		if (isAdmin || hasGroupAdminLevel(r)) {
 			// Administration Menu Points
 			List<INavbarComponent> l = new ArrayList<>();
-			l.add(getSubItem("125", "1454", MenuActions.adminModuleUser, null));
+			l.add(getSubItem("125", "1454", MenuActions.ADMIN_USER));
 			if (isAdmin) {
-				l.add(getSubItem("597", "1455", MenuActions.adminModuleConnections, null));
+				l.add(getSubItem("597", "1455", MenuActions.ADMIN_CONNECTION));
 			}
-			l.add(getSubItem("126", "1456", MenuActions.adminModuleOrg, null));
-			l.add(getSubItem("186", "1457", MenuActions.adminModuleRoom, null));
+			l.add(getSubItem("126", "1456", MenuActions.ADMIN_GROUP));
+			l.add(getSubItem("186", "1457", MenuActions.ADMIN_ROOM));
 			if (isAdmin) {
-				l.add(getSubItem("263", "1458", MenuActions.adminModuleConfiguration, null));
-				l.add(getSubItem("348", "1459", MenuActions.adminModuleLanguages, null));
-				l.add(getSubItem("1103", "1454", MenuActions.adminModuleLDAP, null));
-				l.add(getSubItem("1571", "1572", MenuActions.adminModuleOAuth, null));
-				l.add(getSubItem("367", "1461", MenuActions.adminModuleBackup, null));
-				l.add(getSubItem("main.menu.admin.email", "main.menu.admin.email.desc", MenuActions.adminModuleEmail, null));
+				l.add(getSubItem("263", "1458", MenuActions.ADMIN_CONFIG));
+				l.add(getSubItem("348", "1459", MenuActions.ADMIN_LABEL));
+				l.add(getSubItem("1103", "1454", MenuActions.ADMIN_LDAP));
+				l.add(getSubItem("1571", "1572", MenuActions.ADMIN_OAUTH));
+				l.add(getSubItem("367", "1461", MenuActions.ADMIN_BACKUP));
+				l.add(getSubItem("main.menu.admin.email", "main.menu.admin.email.desc", MenuActions.ADMIN_EMAIL));
 			}
 			mmenu.add(new OmMenuItem(getString("6"), l));
 		}
