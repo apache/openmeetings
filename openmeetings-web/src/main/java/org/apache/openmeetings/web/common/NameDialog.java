@@ -54,7 +54,6 @@ public abstract class NameDialog extends Modal<String> {
 	protected void onInitialize() {
 		header(getTitle());
 
-		addButton(OmModalCloseButton.of());
 		addButton(new BootstrapAjaxButton("button", getAddBtnLabel(), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
@@ -68,6 +67,7 @@ public abstract class NameDialog extends Modal<String> {
 				NameDialog.this.onError(target);
 			}
 		}); // add
+		addButton(OmModalCloseButton.of());
 		form.add(new Label("label", getLabel())
 				, title = new RequiredTextField<>("title", getModel())
 				, feedback.setOutputMarkupId(true)
