@@ -359,4 +359,12 @@ public class KStream extends AbstractStream {
 	public boolean contains(String uid) {
 		return this.uid.equals(uid) || listeners.containsKey(uid);
 	}
+
+	@Override
+	public String toString() {
+		return "KStream [room=" + room + ", streamType=" + streamType + ", profile=" + profile + ", recorder="
+				+ recorder + ", outgoingMedia=" + outgoingMedia + ", listeners=" + listeners + ", flowoutFuture="
+				+ flowoutFuture + ", chunkId=" + chunkId + ", type=" + type + ", sid=" + sid + ", uid=" + uid + "]";
+	}
+	
 }

@@ -56,6 +56,7 @@ import org.kurento.client.KurentoConnectionListener;
 import org.kurento.client.MediaObject;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.ObjectCreatedEvent;
+import org.kurento.client.ObjectDestroyedEvent;
 import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.RecorderEndpoint;
 import org.kurento.client.Tag;
@@ -120,7 +121,8 @@ public class KurentoHandler {
 			try {
 				kuid = randomUUID().toString();
 				client = KurentoClient.create(kurentoWsUrl, new KConnectionListener(kuid));
-				client.getServerManager().addObjectCreatedListener(new KWatchDog());
+				client.getServerManager().addObjectCreatedListener(new KWatchDogCreate());
+				client.getServerManager().addObjectDestroyedListener(new KWatchDogDestroy());
 			} catch (Exception e) {
 				log.warn("Fail to create Kurento client, will re-try in {} ms", checkTimeout);
 				kmsRecheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
@@ -384,17 +386,26 @@ public class KurentoHandler {
 			notifyRooms();
 		}
 	}
+	
+	private class KWatchDogDestroy implements EventListener<ObjectDestroyedEvent> {
 
-	private class KWatchDog implements EventListener<ObjectCreatedEvent> {
+		@Override
+		public void onEvent(ObjectDestroyedEvent event) {
+			log.debug("Kurento::ObjectDestroyedEvent objectId {}, tags {}, source {}", event.getObjectId(), event.getTags(), event.getSource());
+		}
+		
+	}
+
+	private class KWatchDogCreate implements EventListener<ObjectCreatedEvent> {
 		private ScheduledExecutorService scheduler;
 
-		public KWatchDog() {
+		public KWatchDogCreate() {
 			scheduler = Executors.newScheduledThreadPool(watchThreadCount);
 		}
 
 		@Override
 		public void onEvent(ObjectCreatedEvent evt) {
-			log.debug("Kurento::ObjectCreated -> {}", evt.getObject());
+			log.debug("Kurento::ObjectCreated -> {}, source {}", evt.getObject(), evt.getSource());
 			if (evt.getObject() instanceof MediaPipeline) {
 				// room created
 				final String roid = evt.getObject().getId();
@@ -444,6 +455,7 @@ public class KurentoHandler {
 					}
 					Map<String, String> tags = tagsAsMap(point);
 					KStream stream = streamProcessor.getByUid(tags.get("outUid"));
+					log.debug("New Endpoint {} detected, tags: {}, kStream: {}", point.getId(), tags, stream);
 					if (stream != null && stream.contains(tags.get("uid"))) {
 						return;
 					}
