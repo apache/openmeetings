@@ -33,6 +33,8 @@ import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.pages.PrivacyPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -156,5 +158,11 @@ public class EditProfileForm extends Form<User> {
 	@Override
 	protected IMarkupSourcingStrategy newMarkupSourcingStrategy() {
 		return new PanelMarkupSourcingStrategy(false);
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(OnDomReadyHeaderItem.forScript("$('.profile-edit-form .my-info').off().click(function() {showUserInfo(" + getUserId() + ");});"));
 	}
 }

@@ -26,7 +26,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.common.ProfileImagePanel;
 import org.apache.openmeetings.web.common.UserBasePanel;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -46,10 +45,6 @@ public class UserProfilePanel extends UserBasePanel {
 	public UserProfilePanel(String id, long userId) {
 		super(id);
 		setDefaultModel(new CompoundPropertyModel<>(userDao.get(userId)));
-	}
-
-	public UserProfilePanel(String id, CompoundPropertyModel<User> model) {
-		super(id, model);
 	}
 
 	@Override
@@ -83,10 +78,5 @@ public class UserProfilePanel extends UserBasePanel {
 
 		add(infoPanel.setOutputMarkupId(true));
 		super.onInitialize();
-	}
-
-	void update(AjaxRequestTarget target) {
-		setDefaultModelObject(userDao.get(getUserId()));
-		target.add(infoPanel);
 	}
 }
