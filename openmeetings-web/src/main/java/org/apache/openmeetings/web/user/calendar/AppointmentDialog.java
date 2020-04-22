@@ -62,6 +62,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -222,12 +223,14 @@ public class AppointmentDialog extends Modal<Appointment> {
 			}
 		});
 		enterRoom.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
+		enterRoom.add(AttributeAppender.append("data-dismiss", "modal"));
 		delete = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Danger, new ResourceModel("80")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget handler) {
 				deleteAppointment(handler);
+				AppointmentDialog.this.close(handler);
 			}
 		};
 		delete.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);

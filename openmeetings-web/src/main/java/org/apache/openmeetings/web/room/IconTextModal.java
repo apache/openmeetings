@@ -59,6 +59,10 @@ public class IconTextModal extends Modal<String> {
 		return this;
 	}
 
+	public Label getLabel() {
+		return label;
+	}
+
 	public IconTextModal withErrorIcon() {
 		return withErrorIcon(ColorBehavior.Color.Danger);
 	}
