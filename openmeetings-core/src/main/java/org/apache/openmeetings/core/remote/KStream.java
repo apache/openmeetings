@@ -118,7 +118,7 @@ public class KStream extends AbstractStream {
 		outgoingMedia = createEndpoint(processor, sd.getSid(), sd.getUid());
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
 		outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
-			log.info("Media Flow STATE :: {}", evt.getState());
+			log.info("Media Flow STATE :: {}, type {}, evt {}", evt.getState(), evt.getType(), evt.getMediaType());
 			switch (evt.getState()) {
 				case NOT_FLOWING:
 					log.warn("FlowOut Future is created");

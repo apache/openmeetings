@@ -433,8 +433,10 @@ public class StreamProcessor implements IStreamProcessor {
 			return;
 		}
 		kHandler.getRoom(c.getRoomId()).stopRecording(this, c);
+		
+		// In case this user wasn't shareing his screen we also need to close that one
 		Optional<StreamDesc> osd = c.getScreenStream();
-		if (osd.isPresent()) {
+		if (osd.isPresent() && !osd.get().hasActivity(Activity.SCREEN)) {
 			pauseSharing(c, osd.get().getUid()); 
 		}
 	}
