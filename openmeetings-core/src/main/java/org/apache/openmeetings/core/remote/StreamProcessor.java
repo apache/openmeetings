@@ -25,6 +25,7 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -464,6 +465,10 @@ public class StreamProcessor implements IStreamProcessor {
 
 	void addStream(KStream stream) {
 		streamByUid.put(stream.getUid(), stream);
+	}
+	
+	public Collection<KStream> getStreams() {
+		return streamByUid.values();
 	}
 
 	Client getBySid(String sid) {

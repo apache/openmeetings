@@ -25,14 +25,19 @@ import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBor
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.openmeetings.core.remote.KStream;
 import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.admin.connection.dto.ConnectionListItem;
+import org.apache.openmeetings.web.admin.connection.dto.ConnectionListKStreamItem;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
@@ -57,55 +62,104 @@ public class ConnectionsPanel extends AdminBasePanel {
 	private KurentoHandler scm;
 	@SpringBean
 	private IUserManager userManager;
+	
+	protected List<ConnectionListItem> getConnections() {
+		
+		List<ConnectionListItem> connections = new ArrayList<>();
+		List<Client> clients = cm.list();
+		Collection<KStream> streams = scm.getAllStreams();
+		
+		connections.addAll(
+				clients.stream()
+					.map(client -> new ConnectionListItem(client, null))
+					.collect(Collectors.toList())
+				);
+		connections.addAll(
+				streams.stream()
+					.map(stream -> new ConnectionListItem(null, 
+							new ConnectionListKStreamItem(
+								stream.getSid(),
+								stream.getUid(),
+								(stream.getRoom() == null) ? null : stream.getRoom().getRoomId(),
+								stream.getConnectedSince(),
+								stream.getStreamType(),
+								stream.getProfile().toString(),
+								(stream.getRecorder() == null) ? null : stream.getRecorder().toString(),
+								stream.getChunkId(),
+								stream.getType()
+							)))
+					.collect(Collectors.toList())
+				);
+		return connections;
+	}
 
 	public ConnectionsPanel(String id) {
 		super(id);
 
-		SearchableDataProvider<Client> sdp = new SearchableDataProvider<>(null) {
+		SearchableDataProvider<ConnectionListItem> sdp = new SearchableDataProvider<>(null) {
 			private static final long serialVersionUID = 1L;
 
-			private List<Client> list() {
-				List<Client> l = new ArrayList<>();
-				l.addAll(cm.list());
-				return l;
-			}
-
 			@Override
-			public Iterator<? extends Client> iterator(long first, long count) {
-				List<Client> l = list();
+			public Iterator<? extends ConnectionListItem> iterator(long first, long count) {
+				List<ConnectionListItem> l = getConnections();
 				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
 			}
 
 			@Override
 			public long size() {
-				return list().size();
+				return getConnections().size();
 			}
 		};
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		final WebMarkupContainer details = new WebMarkupContainer("details");
-		SearchableDataView<Client> dataView = new SearchableDataView<>("clientList", sdp) {
+		SearchableDataView<ConnectionListItem> dataView = new SearchableDataView<>("clientList", sdp) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(final Item<Client> item) {
-				Client c = item.getModelObject();
-				item.add(new Label("type", "html5"));
-				item.add(new Label("login", c.getUser().getLogin()));
-				item.add(new Label("since", getDateFormat().format(c.getConnectedSince())));
-				item.add(new Label("scope", c.getRoom() == null ? "html5" : "" + c.getRoom().getId()));
-				item.add(new Label("server", c.getServerId()));
-				item.add(new BootstrapAjaxLink<String>("kick", null, Buttons.Type.Outline_Danger, new ResourceModel("603")) {
-					private static final long serialVersionUID = 1L;
-					{
-						setSize(Buttons.Size.Small);
-					}
-
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						cm.invalidate(c.getUserId(), c.getSessionId());
-						target.add(container, details.setVisible(false));
-					}
-				}.add(newOkCancelConfirm(this, getString("605"))));
+			protected void populateItem(final Item<ConnectionListItem> item) {
+				ConnectionListItem connection = item.getModelObject();
+				
+				if (connection.getStream() != null) {
+					ConnectionListKStreamItem kStream = connection.getStream();
+					item.add(new Label("type", kStream.getType()));
+					item.add(new Label("login", kStream.getUid()));
+					item.add(new Label("since", getDateFormat().format(kStream.getConnectedSince())));
+					item.add(new Label("scope", kStream.getStreamType()));
+					item.add(new Label("server", ""));
+					item.add(new BootstrapAjaxLink<String>("kick", null, Buttons.Type.Outline_Danger, new ResourceModel("603")) {
+						private static final long serialVersionUID = 1L;
+						{
+							setSize(Buttons.Size.Small);
+						}
+	
+						@Override
+						public void onClick(AjaxRequestTarget target) {
+							// TODO come up with method to kick off this KStream
+							target.add(container, details.setVisible(false));
+						}
+					}.add(newOkCancelConfirm(this, getString("605"))));
+				}
+				if (connection.getClient() != null) {
+					Client c = connection.getClient();
+					item.add(new Label("type", "html5"));
+					item.add(new Label("login", c.getUser().getLogin()));
+					item.add(new Label("since", getDateFormat().format(c.getConnectedSince())));
+					item.add(new Label("scope", c.getRoom() == null ? "html5" : "" + c.getRoom().getId()));
+					item.add(new Label("server", c.getServerId()));
+					item.add(new BootstrapAjaxLink<String>("kick", null, Buttons.Type.Outline_Danger, new ResourceModel("603")) {
+						private static final long serialVersionUID = 1L;
+						{
+							setSize(Buttons.Size.Small);
+						}
+	
+						@Override
+						public void onClick(AjaxRequestTarget target) {
+							cm.invalidate(c.getUserId(), c.getSessionId());
+							target.add(container, details.setVisible(false));
+						}
+					}.add(newOkCancelConfirm(this, getString("605"))));
+				}
+				
 				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
@@ -113,28 +167,33 @@ public class ConnectionsPanel extends AdminBasePanel {
 					protected void onEvent(AjaxRequestTarget target) {
 						Field[] ff = item.getModelObject().getClass().getDeclaredFields();
 						RepeatingView lines = new RepeatingView("line");
-						Client c = item.getModelObject();
-						for (Field f : ff) {
-							int mod = f.getModifiers();
-							if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) {
-								continue;
+						ConnectionListItem connection = item.getModelObject();
+						
+						if (connection.getClient() != null) {
+							Client c = connection.getClient();
+							for (Field f : ff) {
+								int mod = f.getModifiers();
+								if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) {
+									continue;
+								}
+								WebMarkupContainer line = new WebMarkupContainer(lines.newChildId());
+								line.add(new Label("name", f.getName()));
+								String val = "";
+								try {
+									f.setAccessible(true);
+									val = "" + f.get(c);
+								} catch (Exception e) {
+									//noop
+								}
+								line.add(new Label("value", val));
+								lines.add(line);
 							}
-							WebMarkupContainer line = new WebMarkupContainer(lines.newChildId());
-							line.add(new Label("name", f.getName()));
-							String val = "";
-							try {
-								f.setAccessible(true);
-								val = "" + f.get(c);
-							} catch (Exception e) {
-								//noop
-							}
-							line.add(new Label("value", val));
-							lines.add(line);
+							details.addOrReplace(lines);
+							target.add(details.setVisible(true));
 						}
-						details.addOrReplace(lines);
-						target.add(details.setVisible(true));
 					}
 				});
+				
 				item.add(AttributeModifier.append(ATTR_CLASS, ROW_CLASS));
 			}
 		};

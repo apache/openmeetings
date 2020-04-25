@@ -24,7 +24,9 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -235,6 +237,47 @@ public class KurentoHandler {
 		}
 		log.debug("Room {} found!", roomId);
 		return room;
+	}
+	
+	public Collection<KRoom> getRooms() {
+		return rooms.values();
+	}
+	
+	/**
+	 * This needs to combine two lists as we currently hold a reference to the KStream in two places:
+	 * <ul>
+	 * <li>{@link StreamProcessor#getStreams()}}</li>
+	 * <li>{@link KRoom#getParticipants()}</li>
+	 * </ul>
+	 * Both are singletons and hold a reference to a stream list and can get out of sync or leak.
+	 * 
+	 * TODO: Investigate if we can have 1 source of truth.
+	 *
+	 * @return list of KStreams registered
+	 */
+	public Collection<KStream> getAllStreams() {
+		Collection<KStream> allStreams = new ArrayList<>();
+		
+		allStreams.addAll(streamProcessor.getStreams());
+		
+		log.info("Retrieve all Streams, StreamProcessor has {} of streams", allStreams.size());
+		
+		// Add any streams from the KRoom that are not in the StreamProcessor 
+		getRooms().forEach(
+			room -> {
+				log.info("Retrieve room {}, participants {}", room, room.getParticipants().size());
+				room.getParticipants().forEach(
+					participant -> {
+						if (!allStreams.contains(participant)) {
+							log.warn("Stream was in KRoom but not in StreamProcessor, stream {}", participant);
+							allStreams.add(participant);
+						}
+					}
+				);
+			}
+		);
+		
+		return allStreams;
 	}
 
 	static JSONObject newKurentoMsg() {
