@@ -22,12 +22,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
+import java.util.List;
 
+import org.apache.openmeetings.db.dao.server.LdapConfigDao;
+import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestImportUser extends AbstractTestImport {
+	@Autowired
+	private LdapConfigDao ldapDao;
+
 	@Test
 	public void importUserNE() throws Exception {
 		Assertions.assertThrows(BackupException.class, () -> {
@@ -39,8 +46,8 @@ public class TestImportUser extends AbstractTestImport {
 	@Test
 	public void importUsers() throws Exception {
 		long userCount = userDao.count();
-		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/users.xml").toURI());
-		backupImport.importUsers(configs.getParentFile());
+		File users = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/users.xml").toURI());
+		backupImport.importUsers(users.getParentFile());
 		assertEquals(userCount + 8, userDao.count(), "Users should be added");
 		User ext = userDao.getExternalUser("234", "TheBestCms");
 		assertNotNull(ext, "External user should be imported");
@@ -49,8 +56,42 @@ public class TestImportUser extends AbstractTestImport {
 	@Test
 	public void importNoLoginDeleted() throws Exception {
 		long userCount = userDao.count();
-		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/skip/users.xml").toURI());
-		backupImport.importUsers(configs.getParentFile());
+		File users = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/skip/users.xml").toURI());
+		backupImport.importUsers(users.getParentFile());
 		assertEquals(userCount, userDao.count(), "No records should be added");
 	}
+
+	@Test
+	public void importLdap() throws Exception {
+		final String login = "omLdap2294";
+		// OPENMEETINGS-2294
+		//clean-up
+		for (LdapConfig cfg : ldapDao.get(0, Integer.MAX_VALUE)) {
+			ldapDao.delete(cfg, null);
+		}
+		File users = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/ldap/users.xml").toURI());
+		backupImport.cleanup();
+		backupImport.importLdap(users.getParentFile());
+		List<LdapConfig> ldapConfigs = ldapDao.get("om_2294_ldap", 0, 100, null);
+		assertEquals(1, ldapConfigs.size(), "There should be exactly one config");
+		LdapConfig ldap = ldapConfigs.get(0);
+
+		//clean-up
+		User u = userDao.getByLogin(login, User.Type.LDAP, ldap.getId());
+		if (u != null) {
+			userDao.purge(u, null);
+		}
+
+		//will create existing user:
+		u = getUser();
+		u.setLogin(login);
+		u.setType(User.Type.LDAP);
+		u.setDomainId(ldap.getId());
+		userDao.update(u, null);
+
+		backupImport.importUsers(users.getParentFile());
+		u = userDao.getByLogin(login, User.Type.LDAP, ldap.getId());
+		assertNotNull(u, "User should be imported");
+	}
+
 }

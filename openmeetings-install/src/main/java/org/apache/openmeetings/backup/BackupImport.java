@@ -149,10 +149,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -342,6 +345,8 @@ public class BackupImport {
 	@Autowired
 	private DocumentConverter docConverter;
 
+	private final Map<Long, Long> ldapMap = new HashMap<>();
+	private final Map<Long, Long> oauthMap = new HashMap<>();
 	private final Map<Long, Long> userMap = new HashMap<>();
 	private final Map<Long, Long> groupMap = new HashMap<>();
 	private final Map<Long, Long> calendarMap = new HashMap<>();
@@ -392,15 +397,7 @@ public class BackupImport {
 
 	public void performImport(InputStream is, ProgressHolder progressHolder) throws Exception {
 		progressHolder.setProgress(0);
-		userMap.clear();
-		groupMap.clear();
-		calendarMap.clear();
-		appointmentMap.clear();
-		roomMap.clear();
-		messageFolderMap.clear();
-		userContactMap.clear();
-		fileMap.clear();
-		hashMap.clear();
+		cleanup();
 		messageFolderMap.put(INBOX_FOLDER_ID, INBOX_FOLDER_ID);
 		messageFolderMap.put(SENT_FOLDER_ID, SENT_FOLDER_ID);
 		messageFolderMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
@@ -475,7 +472,25 @@ public class BackupImport {
 		log.info("File explorer item import complete, clearing temp files");
 
 		FileUtils.deleteDirectory(f);
+		cleanup();
 		progressHolder.setProgress(100);
+	}
+
+	void cleanup() {
+		ldapMap.clear();
+		oauthMap.clear();
+		userMap.clear();
+		groupMap.clear();
+		calendarMap.clear();
+		appointmentMap.clear();
+		roomMap.clear();
+		messageFolderMap.clear();
+		userContactMap.clear();
+		fileMap.clear();
+		hashMap.clear();
+		messageFolderMap.put(INBOX_FOLDER_ID, INBOX_FOLDER_ID);
+		messageFolderMap.put(SENT_FOLDER_ID, SENT_FOLDER_ID);
+		messageFolderMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
 	}
 
 	static BackupVersion getVersion(File base) {
@@ -570,10 +585,14 @@ public class BackupImport {
 			if (Strings.isEmpty(c.getName()) || "local DB [internal]".equals(c.getName())) {
 				return;
 			}
+			Long oldId = c.getId();
 			c.setId(null);
 			c = ldapConfigDao.update(c, null);
 			if (defaultLdapId[0] == null) {
 				defaultLdapId[0] = c.getId();
+			}
+			if (oldId != null) {
+				ldapMap.put(oldId, c.getId());
 			}
 		});
 		return defaultLdapId[0];
@@ -586,8 +605,12 @@ public class BackupImport {
 		log.info("Ldap config import complete, starting OAuth2 server import");
 		readList(base, "oauth2servers.xml", OAUTH_LIST_NODE, OAUTH_NODE, OAuthServer.class
 				, s -> {
+					Long oldId = s.getId();
 					s.setId(null);
-					auth2Dao.update(s, null);
+					s = auth2Dao.update(s, null);
+					if (oldId != null) {
+						oauthMap.put(oldId, s.getId());
+					}
 				}, false);
 	}
 
@@ -599,14 +622,13 @@ public class BackupImport {
 		String jNameTimeZone = getDefaultTimezone();
 		//add existent emails from database
 		List<User>  users = userDao.getAllUsers();
-		final Map<String, Integer> userEmailMap = new HashMap<>();
-		final Map<String, Integer> userLoginMap = new HashMap<>();
+		final Set<String> userEmails = new HashSet<>();
+		final Set<UserKey> userLogins = new HashSet<>();
 		for (User u : users){
-			if (u.getAddress() == null || u.getAddress().getEmail() == null || User.Type.USER != u.getType()) {
-				continue;
+			if (u.getAddress() != null && !Strings.isEmpty(u.getAddress().getEmail())) {
+				userEmails.add(u.getAddress().getEmail());
 			}
-			userEmailMap.put(u.getAddress().getEmail(), Integer.valueOf(-1));
-			userLoginMap.put(u.getLogin(), Integer.valueOf(-1));
+			userLogins.add(new UserKey(u));
 		}
 		Class<User> eClazz = User.class;
 		JAXBContext jc = JAXBContext.newInstance(eClazz);
@@ -620,19 +642,33 @@ public class BackupImport {
 			}
 			// check that email is unique
 			if (u.getAddress() != null && u.getAddress().getEmail() != null && User.Type.USER == u.getType()) {
-				if (userEmailMap.containsKey(u.getAddress().getEmail())) {
+				if (userEmails.contains(u.getAddress().getEmail())) {
 					log.warn("Email is duplicated for user {}", u);
 					String updateEmail = String.format("modified_by_import_<%s>%s", randomUUID(), u.getAddress().getEmail());
 					u.getAddress().setEmail(updateEmail);
 				}
-				userEmailMap.put(u.getAddress().getEmail(), Integer.valueOf(userEmailMap.size()));
+				userEmails.add(u.getAddress().getEmail());
 			}
-			if (userLoginMap.containsKey(u.getLogin())) {
+			if (u.getType() == User.Type.LDAP) {
+				if (u.getDomainId() != null && ldapMap.containsKey(u.getDomainId())) {
+					u.setDomainId(ldapMap.get(u.getDomainId()));
+				} else {
+					log.error("Unable to find Domain for ID: {}", u.getDomainId());
+				}
+			}
+			if (u.getType() == User.Type.OAUTH) {
+				if (u.getDomainId() != null && oauthMap.containsKey(u.getDomainId())) {
+					u.setDomainId(oauthMap.get(u.getDomainId()));
+				} else {
+					log.error("Unable to find Domain for ID: {}", u.getDomainId());
+				}
+			}
+			if (userLogins.contains(new UserKey(u))) {
 				log.warn("LOGIN is duplicated for USER {}", u);
 				String updateLogin = String.format("modified_by_import_<%s>%s", randomUUID(), u.getLogin());
 				u.setLogin(updateLogin);
 			}
-			userLoginMap.put(u.getLogin(), Integer.valueOf(userLoginMap.size()));
+			userLogins.add(new UserKey(u));
 			if (u.getGroupUsers() != null) {
 				for (Iterator<GroupUser> iter = u.getGroupUsers().iterator(); iter.hasNext();) {
 					GroupUser gu = iter.next();
@@ -1277,6 +1313,38 @@ public class BackupImport {
 			} catch (Exception e) {
 				log.error("Unexpected exception while converting OLD format presentations", e);
 			}
+		}
+	}
+
+	private static class UserKey {
+		private final String login;
+		private final User.Type type;
+		private final Long domainId;
+
+		UserKey(User u) {
+			this.login = u.getLogin();
+			this.type = u.getType();
+			this.domainId = u.getDomainId();
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(domainId, login, type);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			UserKey other = (UserKey) obj;
+			return Objects.equals(domainId, other.domainId) && Objects.equals(login, other.login) && type == other.type;
 		}
 	}
 }

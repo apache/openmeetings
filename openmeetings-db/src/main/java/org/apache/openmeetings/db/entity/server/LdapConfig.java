@@ -53,7 +53,7 @@ public class LdapConfig extends HistoricalEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@XmlTransient
+	@XmlElement(name = "id", required = false)
 	private Long id;
 
 	@Column(name = "name")
