@@ -25,10 +25,10 @@ import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.entity.record.RecordingChunk.Type;
 
 /**
- * A KStream for the Wicket UI to display. This object is can be serialized, otherwise 
+ * A KStream for the Wicket UI to display. This object can be serialized, otherwise 
  * Wicket won't render it.
  * 
- * So It contains NO reference to kurento client objects.
+ * So It contains NO reference to Kurento client objects.
  * 
  * @author sebawagner
  *
@@ -39,6 +39,8 @@ public class ConnectionListKStreamItem implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/** StreamProcessor or KurentoHandler list */
+	private String source; 
 	
 	private String sid;
 	private String uid;
@@ -50,9 +52,10 @@ public class ConnectionListKStreamItem implements Serializable {
 	private Long chunkId;
 	private Type type;
 	
-	public ConnectionListKStreamItem(String sid, String uid, Long roomId, Date connectedSince, StreamType streamType,
-			String profile, String recorder, Long chunkId, Type type) {
+	public ConnectionListKStreamItem(String source, String sid, String uid, Long roomId, Date connectedSince,
+			StreamType streamType, String profile, String recorder, Long chunkId, Type type) {
 		super();
+		this.source = source;
 		this.sid = sid;
 		this.uid = uid;
 		this.roomId = roomId;
@@ -63,7 +66,12 @@ public class ConnectionListKStreamItem implements Serializable {
 		this.chunkId = chunkId;
 		this.type = type;
 	}
-	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	public String getSource() {
+		return source;
+	}
 	public String getSid() {
 		return sid;
 	}
@@ -92,6 +100,4 @@ public class ConnectionListKStreamItem implements Serializable {
 		return type;
 	}
 	
-	
-
 }

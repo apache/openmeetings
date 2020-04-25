@@ -25,12 +25,12 @@ import org.apache.openmeetings.db.entity.basic.Client;
 
 /**
  * Wrapper object for the UI display as the list item might be a client (that 
- * may have also has KStreams referenced).<br>
+ * may have also has ConnectionListKStreamItem(KStream) referenced).<br>
  * Or<br>
- * A single KStream.<br>
+ * A single ConnectionListKStreamItem(KStream).<br>
  * 
  * We want to see a total list of connections, a client represents a WebSocket and session.
- * A KStream is a MediaStream.
+ * A ConnectionListKStreamItem is a wrapper of KStream (which is a MediaStream).
  * 
  * @author sebawagner
  *
@@ -58,7 +58,7 @@ public class ConnectionListItem implements IDataProviderEntity, Serializable {
 	}
 	@Override
 	public Long getId() {
-		// TODO Auto-generated method stub
+		if (client != null) return client.getId();
 		return null;
 	}
 	@Override
