@@ -237,7 +237,7 @@ public class KRoom {
 			sd = c.addStream(StreamType.SCREEN, a);
 			sd.setWidth(msg.getInt("width")).setHeight(msg.getInt("height"));
 			cm.update(c);
-			log.debug("User {}: has started sharing, with stream: {}", sd.getUid(), a);
+			log.debug("Stream.UID {}: sharing has been started, activity: {}", sd.getUid(), a);
 			h.sendClient(sd.getSid(), newKurentoMsg()
 					.put("id", "broadcast")
 					.put("stream", sd.toJson()
