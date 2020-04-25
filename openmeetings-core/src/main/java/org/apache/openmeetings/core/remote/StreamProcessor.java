@@ -174,7 +174,8 @@ public class StreamProcessor implements IStreamProcessor {
 				KRoom room = kHandler.getRoom(c.getRoomId());
 				sender = room.join(sd);
 			}
-			sender.startBroadcast(this, sd, msg.getString("sdpOffer"));
+			startBroadcast(sender, sd, msg.getString("sdpOffer"));
+			//sender.startBroadcast(this, sd, msg.getString("sdpOffer"));
 			if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !isRecording(c.getRoomId())) {
 				startRecording(c);
 			}
@@ -187,6 +188,10 @@ public class StreamProcessor implements IStreamProcessor {
 			sendError(c, "Failed to start broadcast: " + e.getMessage());
 			log.error("Failed to start broadcast", e);
 		}
+	}
+	
+	public KStream startBroadcast(KStream stream, StreamDesc sd, String sdpOffer) {
+		return stream.startBroadcast(this, sd, sdpOffer);
 	}
 
 	private static boolean isBroadcasting(final Client c) {

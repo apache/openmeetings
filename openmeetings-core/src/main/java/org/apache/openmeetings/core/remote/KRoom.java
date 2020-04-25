@@ -96,7 +96,7 @@ public class KRoom {
 	}
 
 	public KStream join(final StreamDesc sd) {
-		log.info("ROOM {}: join client {}, stream: {}", roomId, sd.getClient().getUser().getLogin(), sd.getUid());
+		log.info("ROOM {}: join client {}, stream: {}", roomId, sd.getClient(), sd.getUid());
 		final KStream stream = new KStream(sd, this);
 		streams.put(stream.getUid(), stream);
 		return stream;
