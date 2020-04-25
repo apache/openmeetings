@@ -47,9 +47,8 @@ var VideoManager = (function() {
 			, uid = sd.uid
 			, w = $('#' + VideoUtil.getVid(uid))
 			, v = w.data();
-		if (!VideoUtil.isSharing(sd) && !VideoUtil.isRecording(sd)) {
-			VideoManager.close(uid, false);
-		} else {
+		if (VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd)) {
+			// Update activities in the current data object
 			v.stream().activities = sd.activities;
 		}
 		Sharer.setShareState(VideoUtil.isSharing(sd) ? SHARE_STARTED : SHARE_STOPED);

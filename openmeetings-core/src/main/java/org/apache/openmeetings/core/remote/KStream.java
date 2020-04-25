@@ -118,7 +118,7 @@ public class KStream extends AbstractStream {
 		outgoingMedia = createEndpoint(processor, sd.getSid(), sd.getUid());
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
 		outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
-			log.info("Media Flow STATE :: {}", evt.getState());
+			log.info("Media Flow STATE :: {}, type {}, evt {}", evt.getState(), evt.getType(), evt.getMediaType());
 			switch (evt.getState()) {
 				case NOT_FLOWING:
 					log.warn("FlowOut Future is created");
@@ -359,4 +359,12 @@ public class KStream extends AbstractStream {
 	public boolean contains(String uid) {
 		return this.uid.equals(uid) || listeners.containsKey(uid);
 	}
+
+	@Override
+	public String toString() {
+		return "KStream [room=" + room + ", streamType=" + streamType + ", profile=" + profile + ", recorder="
+				+ recorder + ", outgoingMedia=" + outgoingMedia + ", listeners=" + listeners + ", flowoutFuture="
+				+ flowoutFuture + ", chunkId=" + chunkId + ", type=" + type + ", sid=" + sid + ", uid=" + uid + "]";
+	}
+	
 }

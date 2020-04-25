@@ -373,6 +373,8 @@ public class StreamProcessor implements IStreamProcessor {
 		StreamDesc sd = doStopSharing(c.getSid(), uid);
 		if (sender != null && sd != null) {
 			sender.stopBroadcast(this);
+		} else {
+			log.warn("Could not stop broadcast - could be a KStream leak and lead to ghost KStream, client: {}, uid: {} ", c, uid);
 		}
 	}
 
@@ -431,6 +433,13 @@ public class StreamProcessor implements IStreamProcessor {
 			return;
 		}
 		kHandler.getRoom(c.getRoomId()).stopRecording(this, c);
+		
+		// In case this user wasn't shareing his screen we also need to close that one
+		c.getScreenStream().ifPresent(sd -> {
+			if (!sd.hasActivity(Activity.SCREEN)) {
+				pauseSharing(c, sd.getUid());
+			}
+		});
 	}
 
 	void startConvertion(Recording rec) {
