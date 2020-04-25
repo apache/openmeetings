@@ -122,7 +122,12 @@ public class KurentoHandler {
 				kuid = randomUUID().toString();
 				client = KurentoClient.create(kurentoWsUrl, new KConnectionListener(kuid));
 				client.getServerManager().addObjectCreatedListener(new KWatchDogCreate());
-				client.getServerManager().addObjectDestroyedListener(new KWatchDogDestroy());
+				client.getServerManager().addObjectDestroyedListener(new EventListener<>() {
+					@Override
+					public void onEvent(ObjectDestroyedEvent event) {
+						log.debug("Kurento::ObjectDestroyedEvent objectId {}, tags {}, source {}", event.getObjectId(), event.getTags(), event.getSource());
+					}
+				});
 			} catch (Exception e) {
 				log.warn("Fail to create Kurento client, will re-try in {} ms", checkTimeout);
 				kmsRecheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
@@ -385,15 +390,6 @@ public class KurentoHandler {
 			connected = true;
 			notifyRooms();
 		}
-	}
-	
-	private class KWatchDogDestroy implements EventListener<ObjectDestroyedEvent> {
-
-		@Override
-		public void onEvent(ObjectDestroyedEvent event) {
-			log.debug("Kurento::ObjectDestroyedEvent objectId {}, tags {}, source {}", event.getObjectId(), event.getTags(), event.getSource());
-		}
-		
 	}
 
 	private class KWatchDogCreate implements EventListener<ObjectCreatedEvent> {
