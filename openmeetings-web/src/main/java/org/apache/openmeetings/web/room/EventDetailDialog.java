@@ -45,7 +45,7 @@ public class EventDetailDialog extends Modal<Appointment> {
 
 		super.onInitialize();
 		add(new Label("title"));
-		add(new Label("description"));
+		add(new Label("description").setEscapeModelStrings(false));
 		add(new Label("owner.timeZoneId"));
 		add(new Label("start", getDateFormat().format(getModelObject().getStart())));
 		add(new Label("end", getDateFormat().format(getModelObject().getEnd())));

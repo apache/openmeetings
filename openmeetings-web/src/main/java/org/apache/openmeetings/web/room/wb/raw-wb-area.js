@@ -437,11 +437,10 @@ var DrawWbArea = function() {
 		if (!_inited) {
 			return;
 		}
-		tabs.find('li').each(function() {
-			const wbId = $(this).data('wb-id')
-				, tabId = self.getWbTabId(wbId);
-			$(this).remove();
-			$('#' + tabId).remove();
+		tabs.find('li a').each(function() {
+			const wbId = $(this).data('wb-id');
+			_getWbTab(wbId).remove();
+			_getWbContent(wbId).remove();
 		});
 	};
 	return self;

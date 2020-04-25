@@ -20,9 +20,6 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
-import static org.apache.openmeetings.web.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
-import static org.apache.openmeetings.web.user.profile.SettingsPanel.MESSAGES_TAB_ID;
 
 import java.io.Serializable;
 
@@ -45,7 +42,11 @@ import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.user.calendar.CalendarPanel;
 import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
-import org.apache.openmeetings.web.user.profile.SettingsPanel;
+import org.apache.openmeetings.web.user.profile.EditProfilePanel;
+import org.apache.openmeetings.web.user.profile.InvitationsPanel;
+import org.apache.openmeetings.web.user.profile.MessagesContactsPanel;
+import org.apache.openmeetings.web.user.profile.UserSearchPanel;
+import org.apache.openmeetings.web.user.profile.WidgetsPanel;
 import org.apache.openmeetings.web.user.record.RecordingsPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
@@ -72,6 +73,9 @@ public class OmUrlFragment implements Serializable {
 	public static final String TYPE_BACKUP = "backup";
 	public static final String TYPE_OAUTH2 = "oauth2";
 	public static final String TYPE_EMAIL = "email";
+	public static final String TYPE_SEARCH = "search";
+	public static final String TYPE_INVITATION = "invitation";
+	public static final String TYPE_WIDGET = "widget";
 	public static final OmUrlFragment DASHBOARD = new OmUrlFragment(AreaKeys.user, TYPE_DASHBOARD);
 	public static final OmUrlFragment PROFILE_EDIT = new OmUrlFragment(AreaKeys.profile, TYPE_EDIT);
 	public static final OmUrlFragment PROFILE_MESSAGES = new OmUrlFragment(AreaKeys.profile, TYPE_MESSAGES);
@@ -87,26 +91,27 @@ public class OmUrlFragment implements Serializable {
 	}
 
 	public enum MenuActions {
-		dashboardModuleStartScreen
-		, dashboardModuleCalendar
-		, recordModule
-		, conferenceModuleRoomList
-		, adminModuleUser
-		, adminModuleConnections
-		, adminModuleOrg
-		, adminModuleRoom
-		, adminModuleConfiguration
-		, adminModuleLanguages
-		, adminModuleLDAP
-		, adminModuleBackup
-		, adminModuleOAuth
-		, adminModuleEmail
-	}
-
-	public enum MenuParams {
-		publicTabButton
-		, privateTabButton
-		, myTabButton
+		DASHBOARD_START
+		, DASHBOARD_CALENDAR
+		, RECORD
+		, ROOMS_PUBLIC
+		, ROOMS_GROUP
+		, ROOMS_MY
+		, ADMIN_USER
+		, ADMIN_CONNECTION
+		, ADMIN_GROUP
+		, ADMIN_ROOM
+		, ADMIN_CONFIG
+		, ADMIN_LABEL
+		, ADMIN_LDAP
+		, ADMIN_BACKUP
+		, ADMIN_OAUTH
+		, ADMIN_EMAIL
+		, PROFILE_MESSAGE
+		, PROFILE_EDIT
+		, PROFILE_SEARCH
+		, PROFILE_INVITATION
+		, PROFILE_WIDGET
 	}
 
 	public OmUrlFragment(AreaKeys area, String type) {
@@ -115,76 +120,90 @@ public class OmUrlFragment implements Serializable {
 	}
 
 	public OmUrlFragment(MenuActions action) {
-		this(action, MenuParams.myTabButton);
-	}
-
-	public OmUrlFragment(MenuActions action, MenuParams params) {
 		switch(action) {
-			case dashboardModuleStartScreen:
+			case DASHBOARD_START:
 				setArea(AreaKeys.user);
 				setType(TYPE_DASHBOARD);
 				break;
-			case dashboardModuleCalendar:
+			case DASHBOARD_CALENDAR:
 				setArea(AreaKeys.user);
 				setType(TYPE_CALENDAR);
 				break;
-			case recordModule:
+			case RECORD:
 				setArea(AreaKeys.user);
 				setType(TYPE_RECORDINGS);
 				break;
-			case conferenceModuleRoomList:
+			case ROOMS_PUBLIC:
 				setArea(AreaKeys.rooms);
-				switch (params) {
-					case myTabButton:
-						setType(TYPE_MY);
-						break;
-					case privateTabButton:
-						setType(TYPE_GROUP);
-						break;
-					case publicTabButton:
-						setType(TYPE_PUBLIC);
-						break;
-				}
+				setType(TYPE_PUBLIC);
 				break;
-			case adminModuleUser:
+			case ROOMS_GROUP:
+				setArea(AreaKeys.rooms);
+				setType(TYPE_GROUP);
+				break;
+			case ROOMS_MY:
+				setArea(AreaKeys.rooms);
+				setType(TYPE_MY);
+				break;
+			case ADMIN_USER:
 				setArea(AreaKeys.admin);
 				setType(TYPE_USER);
 				break;
-			case adminModuleConnections:
+			case ADMIN_CONNECTION:
 				setArea(AreaKeys.admin);
 				setType(TYPE_CONNECTION);
 				break;
-			case adminModuleOrg:
+			case ADMIN_GROUP:
 				setArea(AreaKeys.admin);
 				setType(TYPE_GROUP);
 				break;
-			case adminModuleRoom:
+			case ADMIN_ROOM:
 				setArea(AreaKeys.admin);
 				setType(TYPE_ROOM);
 				break;
-			case adminModuleConfiguration:
+			case ADMIN_CONFIG:
 				setArea(AreaKeys.admin);
 				setType(TYPE_CONFIG);
 				break;
-			case adminModuleLanguages:
+			case ADMIN_LABEL:
 				setArea(AreaKeys.admin);
 				setType(TYPE_LANG);
 				break;
-			case adminModuleLDAP:
+			case ADMIN_LDAP:
 				setArea(AreaKeys.admin);
 				setType(TYPE_LDAP);
 				break;
-			case adminModuleBackup:
+			case ADMIN_BACKUP:
 				setArea(AreaKeys.admin);
 				setType(TYPE_BACKUP);
 				break;
-			case adminModuleOAuth:
+			case ADMIN_OAUTH:
 				setArea(AreaKeys.admin);
 				setType(TYPE_OAUTH2);
 				break;
-			case adminModuleEmail:
+			case ADMIN_EMAIL:
 				setArea(AreaKeys.admin);
 				setType(TYPE_EMAIL);
+				break;
+			case PROFILE_MESSAGE:
+				setArea(AreaKeys.profile);
+				setType(TYPE_MESSAGES);
+				break;
+			case PROFILE_EDIT:
+				setArea(AreaKeys.profile);
+				setType(TYPE_EDIT);
+				break;
+			case PROFILE_SEARCH:
+				setArea(AreaKeys.profile);
+				setType(TYPE_SEARCH);
+				break;
+			case PROFILE_INVITATION:
+				setArea(AreaKeys.profile);
+				setType(TYPE_INVITATION);
+				break;
+			case PROFILE_WIDGET:
+				setArea(AreaKeys.profile);
+				setType(TYPE_WIDGET);
 				break;
 		}
 	}
@@ -245,9 +264,15 @@ public class OmUrlFragment implements Serializable {
 				break;
 			case profile:
 				if (TYPE_MESSAGES.equals(type)) {
-					basePanel = new SettingsPanel(CHILD_ID, MESSAGES_TAB_ID);
+					basePanel = new MessagesContactsPanel(CHILD_ID);
 				} else if (TYPE_EDIT.equals(type)) {
-					basePanel = new SettingsPanel(CHILD_ID, EDIT_PROFILE_TAB_ID);
+					basePanel = new EditProfilePanel(CHILD_ID);
+				} else if (TYPE_SEARCH.equals(type)) {
+					basePanel = new UserSearchPanel(CHILD_ID);
+				} else if (TYPE_INVITATION.equals(type)) {
+					basePanel = new InvitationsPanel(CHILD_ID);
+				} else if (TYPE_WIDGET.equals(type)) {
+					basePanel = new WidgetsPanel(CHILD_ID);
 				}
 				break;
 			case room:
@@ -266,13 +291,7 @@ public class OmUrlFragment implements Serializable {
 				}
 				break;
 			case rooms:
-				MenuParams params = MenuParams.publicTabButton;
-				if (TYPE_GROUP.equals(type)) {
-					params = MenuParams.privateTabButton;
-				} else if (isMyRoomsEnabled() && TYPE_MY.equals(type)) {
-					params = MenuParams.myTabButton;
-				}
-				basePanel = new RoomsSelectorPanel(CHILD_ID, params);
+				basePanel = new RoomsSelectorPanel(CHILD_ID, type);
 				break;
 			case user:
 				if (TYPE_CALENDAR.equals(type)) {

@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
 import org.apache.openmeetings.web.user.dashboard.RssWidget;
 import org.apache.openmeetings.web.user.dashboard.admin.AdminWidget;
@@ -38,7 +39,6 @@ import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.dashboard.Dashboard;
@@ -46,14 +46,18 @@ import org.wicketstuff.dashboard.Widget;
 import org.wicketstuff.dashboard.WidgetDescriptor;
 import org.wicketstuff.dashboard.web.DashboardContext;
 
-public class WidgetsPanel extends Panel {
+public class WidgetsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	@SpringBean
 	private ConfigurationDao cfgDao;
 
 	public WidgetsPanel(String id) {
 		super(id);
+	}
 
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		boolean confShowMyRooms = cfgDao.getBool(CONFIG_DASHBOARD_SHOW_MYROOMS, false);
 		boolean confShowRss = cfgDao.getBool(CONFIG_DASHBOARD_SHOW_RSS, false);
 		List<WidgetDescriptor> widgets = new ArrayList<>(getDashboardContext().getWidgetRegistry().getWidgetDescriptors());

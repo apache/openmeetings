@@ -41,19 +41,6 @@ public class InvitationDialog extends Modal<Invitation> {
 	protected void onInitialize() {
 		header(new ResourceModel("213"));
 
-		addButton(generate = new BootstrapAjaxButton("button", new ResourceModel("1526"), form, Buttons.Type.Outline_Primary) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onError(AjaxRequestTarget target) {
-				InvitationDialog.this.onError(target);
-			}
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				InvitationDialog.this.onClick(target, InvitationForm.Action.GENERATE);
-			}
-		});
 		addButton(send = new BootstrapAjaxButton("button", new ResourceModel("218"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
@@ -65,6 +52,19 @@ public class InvitationDialog extends Modal<Invitation> {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				InvitationDialog.this.onClick(target, InvitationForm.Action.SEND);
+			}
+		});
+		addButton(generate = new BootstrapAjaxButton("button", new ResourceModel("1526"), form, Buttons.Type.Outline_Primary) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				InvitationDialog.this.onError(target);
+			}
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				InvitationDialog.this.onClick(target, InvitationForm.Action.GENERATE);
 			}
 		});
 		addButton(OmModalCloseButton.of());

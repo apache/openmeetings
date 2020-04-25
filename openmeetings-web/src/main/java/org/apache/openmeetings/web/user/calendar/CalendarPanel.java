@@ -43,6 +43,7 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserBasePanel;
+import org.apache.openmeetings.web.util.TouchPunchResourceReference;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -344,6 +345,7 @@ public class CalendarPanel extends UserBasePanel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(JavaScriptHeaderItem.forReference(CALJS));
+		response.render(JavaScriptHeaderItem.forReference(TouchPunchResourceReference.instance()));
 	}
 
 	// Client creation here, because the client is not created until necessary

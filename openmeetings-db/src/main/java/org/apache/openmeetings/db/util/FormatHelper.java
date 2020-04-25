@@ -26,7 +26,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.wicket.util.string.Strings;
 
 public class FormatHelper {
 	/**
@@ -76,11 +75,10 @@ public class FormatHelper {
 	public static String formatUser(User u, boolean isHTMLEscape) {
 		String user = "";
 		if (u != null) {
-			String email = u.getAddress() == null ? "" : u.getAddress().getEmail();
-			if (Strings.isEmpty(u.getFirstname()) && Strings.isEmpty(u.getLastname())) {
-				user = email;
+			if (User.Type.CONTACT == u.getType() && u.getAddress() != null) {
+				user = String.format("\"%s\" <%s>", u.getDisplayName(), u.getAddress().getEmail());
 			} else {
-				user = String.format("\"%s %s\" <%s>", u.getFirstname(), u.getLastname(), email);
+				user = String.format("\"%s\" [%s]", u.getDisplayName(), u.getLogin());
 			}
 			user = isHTMLEscape ? escapeHtml4(user) : user;
 		}

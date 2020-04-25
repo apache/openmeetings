@@ -153,7 +153,7 @@ public class TestLoginUI extends AbstractWicketTester {
 	}
 
 	private void performRegister(String uid, String lbl) throws ReflectiveOperationException, SecurityException {
-		AbstractAjaxBehavior b1 = getButtonBehavior("signin", 0);
+		AbstractAjaxBehavior b1 = getButtonBehavior("signin", 1);
 		tester.executeBehavior(b1);
 		FormTester formTester = tester.newFormTester(PATH_REGISTER);
 		formTester.setValue("login", getLogin(uid));

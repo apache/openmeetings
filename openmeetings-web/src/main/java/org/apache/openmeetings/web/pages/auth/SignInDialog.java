@@ -106,6 +106,7 @@ public class SignInDialog extends Modal<String> {
 		show(true);
 		setCloseOnEscapeKey(false);
 		setBackdrop(Backdrop.STATIC);
+		addButton(new SpinnerAjaxButton("button", new ResourceModel("112"), form, Buttons.Type.Outline_Primary)); // Login
 		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("123")) {
 			private static final long serialVersionUID = 1L;
 
@@ -115,7 +116,6 @@ public class SignInDialog extends Modal<String> {
 				register.show(target);
 			}
 		}.setVisible(OpenmeetingsVariables.isAllowRegisterFrontend()));
-		addButton(new SpinnerAjaxButton("button", new ResourceModel("112"), form, Buttons.Type.Outline_Primary)); // Login
 
 		super.onInitialize();
 	}

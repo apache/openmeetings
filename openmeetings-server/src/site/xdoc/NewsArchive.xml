@@ -20,6 +20,52 @@
 	</properties>
 
 	<body>
+		<section name="Release 5.0.0-M3">
+			<div class="bd-callout bd-callout-info">
+				<h4>Version 5.0.0-M3 released!</h4>
+				<div>Release 5.0.0-M3, provides following improvements:<br/>
+					This release provides WebRTC audio/video/screen-sharing in the Room
+					<div class="bd-callout bd-callout-info">Flash plugin is no more required in the browser<br/>
+						<br/>
+						Please NOTE: this version might be not production ready<br/>
+						<br/>
+						IMPORTANT: Java 11 is required
+					</div>
+					Backup/Restore:
+					<ul>
+						<li>Multiple issues with restore were fixed</li>
+						<li>Confirmation of backup import was added</li>
+						<li>File/recording hashes are preserved when possible</li>
+					</ul>
+					White board:
+					<ul>
+						<li>Document upload/conversion is improved</li>
+						<li>Whiteboards are not auto-created on room enter</li>
+						<li>Keyboard shortcut for quick poll is added</li>
+					</ul>
+					Room:
+					<ul>
+						<li>User list is now sorted</li>
+					</ul>
+					Audio/Video:
+					<ul>
+						<li>Multiple issues with audio/video/screen sharing are fixed</li>
+					</ul>
+
+					<br/>
+					Other fixes and improvements
+				</div>
+				<br/>
+
+				<span>
+					36 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/5.0.0-M3/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12345741">Detailed list</a>
+				</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/5.0.0-M3">Archived download</a>.</span>
+				<span class="date">(2019-12-15)</span>
+			</div>
+		</section>
 		<section name="Release 5.0.0-M2">
 			<div class="bd-callout bd-callout-info">
 				<h4>Version 5.0.0-M2 released!</h4>

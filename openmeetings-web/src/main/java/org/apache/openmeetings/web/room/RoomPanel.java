@@ -68,6 +68,7 @@ import org.apache.openmeetings.web.room.wb.AbstractWbPanel;
 import org.apache.openmeetings.web.room.wb.InterviewWbPanel;
 import org.apache.openmeetings.web.room.wb.WbAction;
 import org.apache.openmeetings.web.room.wb.WbPanel;
+import org.apache.openmeetings.web.util.TouchPunchResourceReference;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -684,6 +685,7 @@ public class RoomPanel extends BasePanel {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(interview ? INTERVIEWWB_JS_REFERENCE : WB_JS_REFERENCE)));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "room.js"))));
+		response.render(JavaScriptHeaderItem.forReference(TouchPunchResourceReference.instance()));
 		if (room.isVisible()) {
 			response.render(OnDomReadyHeaderItem.forScript(roomEnter.getCallbackScript()));
 		}

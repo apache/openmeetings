@@ -57,6 +57,41 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+5.0.0-M4
+-----
+[Release 5.0.0-M4](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M4), provides following improvements:
+
+This release provides WebRTC audio/video/screen-sharing in the Room
+IMPORTANT: Java 11 is required
+Flash plugin is no more required in the browser
+
+UI:
+* Main UI library has been changed Jquery-UI -> Bootstrap
+* Hotkey to resize&arrage "video" windows is added
+* Camera/Microphone on/off icons are less confusing
+* The room can be blocked until moderator will enter
+* Room sidebar dock button works as expected
+* Right-click menu for WB tab is fixed
+* Link to privacy statement is added to sign-in dialog
+
+Audio/Video:
+* Audio-only clients doesn't create "video" windows
+* Audio/Video stream tries to re-connect in case of any issue
+
+Backup/Restore:
+* Backup/restore was re-worked and better covered with tests
+* Multiple other issues are addressed
+
+Integration:
+* OAuth: user attributes retrieval is improved
+* LDAP documentation is improved
+* User picture can be retrieved from LDAP
+
+Please NOTE: this version might be not production ready
+
+Some other fixes and improvements, 56 issues were addressed
+
+
 5.0.0-M3
 -----
 [Release 5.0.0-M3](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M3), provides following improvements:

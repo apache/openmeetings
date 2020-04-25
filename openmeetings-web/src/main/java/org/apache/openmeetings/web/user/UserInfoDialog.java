@@ -53,14 +53,6 @@ public class UserInfoDialog extends Modal<String> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("1235"));
-		addButton(contacts = new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Info, new ResourceModel("1186")) {
-			private static final long serialVersionUID = 1L;
-
-			public void onClick(AjaxRequestTarget target) {
-				ContactsHelper.addUserToContactList(userId);
-				UserInfoDialog.this.close(target);
-			}
-		});
 		addButton(message = new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Primary, new ResourceModel("1253")) {
 			private static final long serialVersionUID = 1L;
 
@@ -69,6 +61,15 @@ public class UserInfoDialog extends Modal<String> {
 				UserInfoDialog.this.close(target);
 			}
 		});
+		addButton(contacts = new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Info, new ResourceModel("1186")) {
+			private static final long serialVersionUID = 1L;
+
+			public void onClick(AjaxRequestTarget target) {
+				ContactsHelper.addUserToContactList(userId);
+				UserInfoDialog.this.close(target);
+			}
+		});
+		contacts.setOutputMarkupId(true);
 		addButton(OmModalCloseButton.of());
 		add(container.add(new WebMarkupContainer("body")).setOutputMarkupId(true));
 		super.onInitialize();
@@ -79,7 +80,7 @@ public class UserInfoDialog extends Modal<String> {
 		contacts.setVisible(userId != getUserId() && contactDao.get(userId, getUserId()) == null);
 		message.setVisible(userId != getUserId());
 		container.replace(new UserProfilePanel("body", userId));
-		handler.add(container, contacts, contacts);
+		handler.add(container, contacts);
 		super.show(handler);
 	}
 

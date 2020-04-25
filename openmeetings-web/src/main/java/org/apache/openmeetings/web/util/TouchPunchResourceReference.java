@@ -16,24 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.common.menu;
+package org.apache.openmeetings.web.util;
 
-import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.MainPanel;
-import org.apache.openmeetings.web.util.OmUrlFragment;
-import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 
-public class MainMenuItem extends OmMenuItem {
-	private static final long serialVersionUID = 1L;
-	private MenuActions action;
+public class TouchPunchResourceReference extends WebjarsCssResourceReference {
+    private static final long serialVersionUID = 1L;
 
-	public MainMenuItem(String lbl, String title, MenuActions action) {
-		super(Application.getString(lbl), Application.getString(title));
-		this.action = action;
-	}
+    /**
+     * Singleton instance of this reference
+     */
+    private static final class Holder {
 
-	public void onClick(MainPanel main, AjaxRequestTarget target) {
-		main.updateContents(new OmUrlFragment(action), target);
+        private static final TouchPunchResourceReference INSTANCE = new TouchPunchResourceReference();
+    }
+
+    /**
+     * @return the single instance of the resource reference
+     */
+    public static TouchPunchResourceReference instance() {
+        return Holder.INSTANCE;
+    }
+
+    /**
+     * Private constructor.
+     */
+	private TouchPunchResourceReference() {
+		super("jquery-ui-touch-punch/current/jquery.ui.touch-punch.js");
 	}
 }
