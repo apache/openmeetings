@@ -175,7 +175,6 @@ public class StreamProcessor implements IStreamProcessor {
 				sender = room.join(sd);
 			}
 			startBroadcast(sender, sd, msg.getString("sdpOffer"));
-			//sender.startBroadcast(this, sd, msg.getString("sdpOffer"));
 			if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !isRecording(c.getRoomId())) {
 				startRecording(c);
 			}
