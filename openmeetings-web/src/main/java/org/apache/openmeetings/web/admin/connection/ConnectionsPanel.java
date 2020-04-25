@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.openmeetings.core.remote.KRoom;
-import org.apache.openmeetings.core.remote.KStream;
 import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.db.dao.user.IUserManager;
