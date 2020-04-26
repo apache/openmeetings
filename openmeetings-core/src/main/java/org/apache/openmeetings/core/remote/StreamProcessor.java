@@ -189,7 +189,16 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 	}
 	
-	public KStream startBroadcast(KStream stream, StreamDesc sd, String sdpOffer) {
+	/**
+	 *  Method to start broadcasting.  Externalised for mocking purpose to be able to
+	 *  prevent calling webRTC methods.
+	 *  
+	 * @param stream Stream to start
+	 * @param sd StreamDesc to start
+	 * @param sdpOffer the sdpOffer
+	 * @return the current KStream
+	 */
+	KStream startBroadcast(KStream stream, StreamDesc sd, String sdpOffer) {
 		return stream.startBroadcast(this, sd, sdpOffer);
 	}
 
@@ -349,6 +358,14 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 	}
 
+	/**
+	 * Execute Pausing of sharing.
+	 * 
+	 * Invoked and overwritten by Mock, hance package private.
+	 * 
+	 * @param c client
+	 * @param uid the uid
+	 */
 	void pauseSharing(Client c, String uid) {
 		if (!hasRightsToShare(c)) {
 			return;
@@ -446,7 +463,13 @@ public class StreamProcessor implements IStreamProcessor {
 		});
 	}
 
-	public boolean startConvertion(Recording rec) {
+	/**
+	 * Used for mocking. Requires a return value in order to be mocked.
+	 * 
+	 * @param rec
+	 * @return
+	 */
+	boolean startConvertion(Recording rec) {
 		IRecordingConverter conv = rec.isInterview() ? interviewConverter : recordingConverter;
 		taskExecutor.execute(() -> conv.startConversion(rec));
 		return true;
