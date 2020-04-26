@@ -43,8 +43,6 @@ import org.kurento.client.MediaPipeline;
 import org.kurento.client.Transaction;
 import org.mockito.BDDMockito;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 

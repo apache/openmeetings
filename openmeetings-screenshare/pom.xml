@@ -38,6 +38,7 @@
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<jnlp.out.dir>${project.build.directory}/jnlp</jnlp.out.dir>
 		<autoModuleName>apache.openmeetings.screenshare</autoModuleName>
+		<checkstyle.config.location>${project.parent.basedir}/src/config/openmeetings_checkstyle.xml</checkstyle.config.location>
 	</properties>
 	<dependencies>
 		<dependency>

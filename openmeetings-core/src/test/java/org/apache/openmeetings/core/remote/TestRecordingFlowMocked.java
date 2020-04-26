@@ -29,7 +29,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Locale;
-import java.util.logging.StreamHandler;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -48,8 +47,6 @@ import org.kurento.client.MediaPipeline;
 import org.kurento.client.Transaction;
 import org.mockito.BDDMockito;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 

@@ -126,6 +126,7 @@
 		<jacoco.binary.path>${project.basedir}/../target/jacoco.exec</jacoco.binary.path>
 		<db_user></db_user>
 		<db_pass></db_pass>
+		<checkstyle.config.location>${project.basedir}/src/config/openmeetings_checkstyle.xml</checkstyle.config.location>
 	</properties>
 	<url>https://openmeetings.apache.org</url>
 	<inceptionYear>2012</inceptionYear>
@@ -804,6 +805,25 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<configLocation>${checkstyle.config.location}</configLocation>
+					<includeTestSourceDirectory>true</includeTestSourceDirectory>
+					<encoding>UTF-8</encoding>
+     				<consoleOutput>true</consoleOutput>
+     				<failsOnError>true</failsOnError>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
  		<pluginManagement>
 			<plugins>
@@ -1084,6 +1104,22 @@
 					</reportSet>
 				</reportSets>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<skip>${om.quick.build}</skip>
+					<includeTestSourceDirectory>true</includeTestSourceDirectory>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>checkstyle</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+        	</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
