@@ -174,7 +174,7 @@ public class StreamProcessor implements IStreamProcessor {
 				KRoom room = kHandler.getRoom(c.getRoomId());
 				sender = room.join(sd);
 			}
-			sender.startBroadcast(this, sd, msg.getString("sdpOffer"));
+			startBroadcast(sender, sd, msg.getString("sdpOffer"));
 			if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !isRecording(c.getRoomId())) {
 				startRecording(c);
 			}
@@ -187,6 +187,19 @@ public class StreamProcessor implements IStreamProcessor {
 			sendError(c, "Failed to start broadcast: " + e.getMessage());
 			log.error("Failed to start broadcast", e);
 		}
+	}
+	
+	/**
+	 *  Method to start broadcasting.  Externalised for mocking purpose to be able to
+	 *  prevent calling webRTC methods.
+	 *  
+	 * @param stream Stream to start
+	 * @param sd StreamDesc to start
+	 * @param sdpOffer the sdpOffer
+	 * @return the current KStream
+	 */
+	KStream startBroadcast(KStream stream, StreamDesc sd, String sdpOffer) {
+		return stream.startBroadcast(this, sd, sdpOffer);
 	}
 
 	private static boolean isBroadcasting(final Client c) {
@@ -345,7 +358,15 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 	}
 
-	private void pauseSharing(Client c, String uid) {
+	/**
+	 * Execute Pausing of sharing.
+	 * 
+	 * Invoked and overwritten by Mock, hance package private.
+	 * 
+	 * @param c client
+	 * @param uid the uid
+	 */
+	void pauseSharing(Client c, String uid) {
 		if (!hasRightsToShare(c)) {
 			return;
 		}
@@ -442,9 +463,16 @@ public class StreamProcessor implements IStreamProcessor {
 		});
 	}
 
-	void startConvertion(Recording rec) {
+	/**
+	 * Used for mocking. Requires a return value in order to be mocked.
+	 * 
+	 * @param rec
+	 * @return
+	 */
+	boolean startConvertion(Recording rec) {
 		IRecordingConverter conv = rec.isInterview() ? interviewConverter : recordingConverter;
 		taskExecutor.execute(() -> conv.startConversion(rec));
+		return true;
 	}
 
 	public boolean isRecording(Long roomId) {
