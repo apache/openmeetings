@@ -191,18 +191,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 					item.add(new Label("since", getDateFormat().format(kStream.getConnectedSince())));
 					item.add(new Label("scope", kStream.getStreamType()));
 					item.add(new Label("server", kStream.getSource()));
-					item.add(new BootstrapAjaxLink<String>("kick", null, Buttons.Type.Outline_Danger, new ResourceModel("603")) {
-						private static final long serialVersionUID = 1L;
-						{
-							setSize(Buttons.Size.Small);
-						}
-	
-						@Override
-						public void onClick(AjaxRequestTarget target) {
-							// TODO come up with method to kick off this KStream
-							target.add(container, details.setVisible(false));
-						}
-					}.add(newOkCancelConfirm(this, getString("605"))));
+					item.add(new Label("kick", ""));
 				}
 				if (connection.getClient() != null) {
 					Client c = connection.getClient();
