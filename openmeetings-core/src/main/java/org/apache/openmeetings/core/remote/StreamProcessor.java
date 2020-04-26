@@ -349,7 +349,7 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 	}
 
-	private void pauseSharing(Client c, String uid) {
+	void pauseSharing(Client c, String uid) {
 		if (!hasRightsToShare(c)) {
 			return;
 		}
@@ -446,9 +446,10 @@ public class StreamProcessor implements IStreamProcessor {
 		});
 	}
 
-	void startConvertion(Recording rec) {
+	public boolean startConvertion(Recording rec) {
 		IRecordingConverter conv = rec.isInterview() ? interviewConverter : recordingConverter;
 		taskExecutor.execute(() -> conv.startConversion(rec));
+		return true;
 	}
 
 	public boolean isRecording(Long roomId) {
