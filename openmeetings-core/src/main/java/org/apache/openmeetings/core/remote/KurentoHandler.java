@@ -25,6 +25,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -242,6 +243,10 @@ public class KurentoHandler {
 		}
 		log.debug("Room {} found!", roomId);
 		return room;
+	}
+	
+	public Collection<KRoom> getRooms() {
+		return rooms.values();
 	}
 
 	static JSONObject newKurentoMsg() {

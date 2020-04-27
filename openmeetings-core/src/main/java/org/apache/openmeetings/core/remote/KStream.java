@@ -31,6 +31,7 @@ import static org.apache.openmeetings.util.OmFileHelper.getRecUri;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
 import java.util.Map.Entry;
+import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,6 +62,7 @@ public class KStream extends AbstractStream {
 	private static final Logger log = LoggerFactory.getLogger(KStream.class);
 
 	private final KRoom room;
+	private final Date connectedSince;
 	private final StreamType streamType;
 	private MediaProfileSpecType profile;
 	private RecorderEndpoint recorder;
@@ -74,6 +76,7 @@ public class KStream extends AbstractStream {
 		super(sd.getSid(), sd.getUid());
 		this.room = room;
 		streamType = sd.getType();
+		this.connectedSince = new Date();
 		//TODO Min/MaxVideoSendBandwidth
 		//TODO Min/Max Audio/Video RecvBandwidth
 	}
@@ -354,6 +357,38 @@ public class KStream extends AbstractStream {
 	@Override
 	public String getUid() {
 		return uid;
+	}
+	
+	public Date getConnectedSince() {
+		return connectedSince;
+	}
+	
+	public KRoom getRoom() {
+		return room;
+	}
+
+	public StreamType getStreamType() {
+		return streamType;
+	}
+
+	public MediaProfileSpecType getProfile() {
+		return profile;
+	}
+
+	public RecorderEndpoint getRecorder() {
+		return recorder;
+	}
+
+	public WebRtcEndpoint getOutgoingMedia() {
+		return outgoingMedia;
+	}
+
+	public Long getChunkId() {
+		return chunkId;
+	}
+
+	public Type getType() {
+		return type;
 	}
 
 	public boolean contains(String uid) {
