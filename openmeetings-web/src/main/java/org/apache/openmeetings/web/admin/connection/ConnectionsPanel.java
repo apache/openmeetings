@@ -30,15 +30,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.openmeetings.core.remote.KRoom;
 import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.admin.connection.dto.ConnectionListItem;
-import org.apache.openmeetings.web.admin.connection.dto.ConnectionListKStreamItem;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
@@ -65,108 +63,47 @@ public class ConnectionsPanel extends AdminBasePanel {
 	@SpringBean
 	private ClientManager cm;
 	@SpringBean
-	private KurentoHandler scm;
+	private KurentoHandler kHandler;
 	@SpringBean
 	private StreamProcessor streamProcessor;
 	@SpringBean
 	private IUserManager userManager;
 
-	/**
-	 * This needs to combine two lists as we currently hold a reference to the KStream in two places:
-	 * <ul>
-	 * <li>{@link StreamProcessor#getStreams()}}</li>
-	 * <li>{@link KRoom#getParticipants()}</li>
-	 * </ul>
-	 * Both are singletons and hold a reference to a stream list and can get out of sync or leak.
-	 *
-	 * TODO: Investigate if we can have 1 source of truth.
-	 *
-	 * @return list of KStreams registered
-	 */
-	public Collection<ConnectionListKStreamItem> getAllStreams() {
-		Collection<ConnectionListKStreamItem> allStreams = new ArrayList<>();
-
-		allStreams.addAll(
-				streamProcessor.getStreams().stream()
-					.map(stream -> new ConnectionListKStreamItem(
-								streamProcessor.getClass().getSimpleName(),
-								stream.getSid(),
-								stream.getUid(),
-								(stream.getRoom() == null) ? null : stream.getRoom().getRoomId(),
-								stream.getConnectedSince(),
-								stream.getStreamType(),
-								stream.getProfile().toString(),
-								(stream.getRecorder() == null) ? null : stream.getRecorder().toString(),
-								stream.getChunkId(),
-								stream.getType()
-							))
-					.collect(Collectors.toList())
-				);
-
-		log.info("Retrieve all Streams, StreamProcessor has {} of streams", allStreams.size());
-
-		// Add any streams from the KRoom that are not in the StreamProcessor
-		scm.getRooms().forEach(
-			room -> {
-				log.info("Retrieve room {}, participants {}", room, room.getParticipants().size());
-				room.getParticipants().forEach(
-					participant -> {
-						if (!streamProcessor.getStreams().contains(participant)) {
-							log.warn("Stream was in KRoom but not in StreamProcessor, stream {}", participant);
-							allStreams.add(new ConnectionListKStreamItem(
-									scm.getClass().getSimpleName(),
-									participant.getSid(),
-									participant.getUid(),
-									(participant.getRoom() == null) ? null : participant.getRoom().getRoomId(),
-									participant.getConnectedSince(),
-									participant.getStreamType(),
-									participant.getProfile().toString(),
-									(participant.getRecorder() == null) ? null : participant.getRecorder().toString(),
-									participant.getChunkId(),
-									participant.getType()
-								));
-						}
-					}
-				);
-			}
-		);
-
-		return allStreams;
-	}
-
-	/**
-	 * Combine lists for Client and KStream
-	 *
-	 * @return
-	 */
-	protected List<ConnectionListItem> getConnections() {
-
-		List<ConnectionListItem> connections = new ArrayList<>();
-		List<Client> clients = cm.list();
-		Collection<ConnectionListKStreamItem> streams = getAllStreams();
-
-		connections.addAll(
-				clients.stream()
-					.map(client -> new ConnectionListItem(client, null))
-					.collect(Collectors.toList())
-				);
-		connections.addAll(
-				streams.stream()
-					.map(stream -> new ConnectionListItem(null, stream))
-					.collect(Collectors.toList())
-				);
-		return connections;
-	}
-
 	public ConnectionsPanel(String id) {
 		super(id);
+	}
 
-		SearchableDataProvider<ConnectionListItem> sdp = new SearchableDataProvider<>(null) {
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+
+		SearchableDataProvider<IDataProviderEntity> sdp = new SearchableDataProvider<>(null) {
 			private static final long serialVersionUID = 1L;
 
+			private List<IDataProviderEntity> getConnections() {
+				List<IDataProviderEntity> l = new ArrayList<>();
+				l.addAll(cm.list());
+				Collection<KStreamDto> streams = streamProcessor.getStreams()
+						.stream()
+						.map(kStream -> new KStreamDto("processor", kStream))
+						.collect(Collectors.toList());
+				l.addAll(streams);
+				log.info("Retrieve all Streams, StreamProcessor has {} of streams", streams.size());
+
+				List<KStreamDto> missing = kHandler.getRooms()
+						.stream()
+						.flatMap(room -> room.getParticipants().stream())
+						.filter(stream -> !streamProcessor.hasStream(stream.getUid()))
+						.map(kStream -> new KStreamDto("KRoom", kStream))
+						.collect(Collectors.toList());
+				l.addAll(missing);
+				log.warn("Following streams were in KRoom but not in StreamProcessor: {}", missing);
+				return l;
+			}
+
 			@Override
-			public Iterator<? extends ConnectionListItem> iterator(long first, long count) {
-				List<ConnectionListItem> l = getConnections();
+			public Iterator<? extends IDataProviderEntity> iterator(long first, long count) {
+				List<IDataProviderEntity> l = getConnections();
 				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
 			}
 
@@ -177,24 +114,22 @@ public class ConnectionsPanel extends AdminBasePanel {
 		};
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		final WebMarkupContainer details = new WebMarkupContainer("details");
-		SearchableDataView<ConnectionListItem> dataView = new SearchableDataView<>("clientList", sdp) {
+		SearchableDataView<IDataProviderEntity> dataView = new SearchableDataView<>("clientList", sdp) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(final Item<ConnectionListItem> item) {
-				ConnectionListItem connection = item.getModelObject();
-
-				if (connection.getStream() != null) {
-					ConnectionListKStreamItem kStream = connection.getStream();
-					item.add(new Label("type", kStream.getType()));
+			protected void populateItem(final Item<IDataProviderEntity> item) {
+				if (item.getModelObject() instanceof KStreamDto) {
+					KStreamDto kStream = (KStreamDto)item.getModelObject();
+					item.add(new Label("type", kStream.getType() + " " + kStream.getStreamType()));
 					item.add(new Label("login", kStream.getUid()));
 					item.add(new Label("since", getDateFormat().format(kStream.getConnectedSince())));
-					item.add(new Label("scope", kStream.getStreamType()));
-					item.add(new Label("server", kStream.getSource()));
+					item.add(new Label("scope", kStream.getRoomId()));
+					item.add(new Label("server", ""));
 					item.add(new Label("kick", ""));
 				}
-				if (connection.getClient() != null) {
-					Client c = connection.getClient();
+				if (item.getModelObject() instanceof Client) {
+					Client c = (Client)item.getModelObject();
 					item.add(new Label("type", "html5"));
 					item.add(new Label("login", c.getUser().getLogin()));
 					item.add(new Label("since", getDateFormat().format(c.getConnectedSince())));
@@ -219,23 +154,9 @@ public class ConnectionsPanel extends AdminBasePanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-
+						Field[] ff = (item.getModelObject() instanceof KStreamDto ? KStreamDto.class : Client.class).getDeclaredFields();
 						RepeatingView lines = new RepeatingView("line");
-						ConnectionListItem connection = item.getModelObject();
-
-						Field[] ff;
-						Object c;
-
-						if (connection.getStream() != null) {
-							ff = connection.getStream().getClass().getDeclaredFields();
-							c = connection.getStream();
-						} else if (connection.getClient() != null) {
-							ff = connection.getClient().getClass().getDeclaredFields();
-							c = connection.getClient();
-						} else {
-							log.warn("Should be either Client or ConnectionListItem, modelObject {}", item.getModelObject());
-							return;
-						}
+						Object c = item.getModelObject();
 
 						for (Field f : ff) {
 							int mod = f.getModifiers();

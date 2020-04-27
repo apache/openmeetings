@@ -512,6 +512,10 @@ public class StreamProcessor implements IStreamProcessor {
 		return cm.getBySid(sid);
 	}
 
+	public boolean hasStream(String uid) {
+		return streamByUid.get(uid) != null;
+	}
+
 	KStream getByUid(String uid) {
 		return uid == null ? null : streamByUid.get(uid);
 	}

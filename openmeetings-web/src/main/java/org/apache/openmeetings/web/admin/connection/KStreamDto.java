@@ -16,11 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.admin.connection.dto;
+package org.apache.openmeetings.web.admin.connection;
 
-import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.openmeetings.core.remote.KStream;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.entity.record.RecordingChunk.Type;
 
@@ -33,7 +34,7 @@ import org.apache.openmeetings.db.entity.record.RecordingChunk.Type;
  * @author sebawagner
  *
  */
-public class ConnectionListKStreamItem implements Serializable {
+public class KStreamDto implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	/** StreamProcessor or KurentoHandler list */
 	private String source;
@@ -48,19 +49,17 @@ public class ConnectionListKStreamItem implements Serializable {
 	private Long chunkId;
 	private Type type;
 
-	public ConnectionListKStreamItem(String source, String sid, String uid, Long roomId, Date connectedSince,
-			StreamType streamType, String profile, String recorder, Long chunkId, Type type) {
-		super();
+	public KStreamDto(String source, KStream kStream) {
 		this.source = source;
-		this.sid = sid;
-		this.uid = uid;
-		this.roomId = roomId;
-		this.connectedSince = connectedSince;
-		this.streamType = streamType;
-		this.profile = profile;
-		this.recorder = recorder;
-		this.chunkId = chunkId;
-		this.type = type;
+		this.sid = kStream.getSid();
+		this.uid = kStream.getUid();
+		this.roomId = (kStream.getRoom() == null) ? null : kStream.getRoom().getRoomId();
+		this.connectedSince = kStream.getConnectedSince();
+		this.streamType = kStream.getStreamType();
+		this.profile = kStream.getProfile().toString();
+		this.recorder = (kStream.getRecorder() == null) ? null : kStream.getRecorder().toString();
+		this.chunkId = kStream.getChunkId();
+		this.type = kStream.getType();
 	}
 
 	public static long getSerialversionuid() {
@@ -105,5 +104,15 @@ public class ConnectionListKStreamItem implements Serializable {
 
 	public Type getType() {
 		return type;
+	}
+
+	@Override
+	public Long getId() {
+		return null;
+	}
+
+	@Override
+	public void setId(Long id) {
+		// no-op
 	}
 }
