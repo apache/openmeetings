@@ -32,7 +32,6 @@
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<autoModuleName>apache.openmeetings.core</autoModuleName>
-		<checkstyle.config.location>${project.parent.basedir}/src/config/openmeetings_checkstyle.xml</checkstyle.config.location>
 	</properties>
 	<build>
 		<plugins>

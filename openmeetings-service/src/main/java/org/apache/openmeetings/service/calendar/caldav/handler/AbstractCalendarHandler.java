@@ -50,8 +50,7 @@ public abstract class AbstractCalendarHandler implements CalendarHandler {
 	protected AppointmentDao appointmentDao;
 
 	public AbstractCalendarHandler(String path, OmCalendar calendar, HttpClient client,
-	                               HttpClientContext context, AppointmentDao appointmentDao,
-	                               IcalUtils utils)
+			HttpClientContext context, AppointmentDao appointmentDao, IcalUtils utils)
 	{
 		this.path = path;
 		this.calendar = calendar;

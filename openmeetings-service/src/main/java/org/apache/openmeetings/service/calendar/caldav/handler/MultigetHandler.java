@@ -65,9 +65,9 @@ public class MultigetHandler extends AbstractCalendarHandler {
 	private boolean isMultigetDisabled = false, onlyEtag = false;
 
 	public MultigetHandler(List<String> hrefs, boolean onlyEtag, String path,
-	                       OmCalendar calendar, HttpClient client,
-	                       HttpClientContext context, AppointmentDao appointmentDao,
-	                       IcalUtils utils) {
+			OmCalendar calendar, HttpClient client, HttpClientContext context, AppointmentDao appointmentDao,
+			IcalUtils utils)
+	{
 		super(path, calendar, client, context, appointmentDao, utils);
 		this.onlyEtag = onlyEtag;
 
@@ -89,8 +89,7 @@ public class MultigetHandler extends AbstractCalendarHandler {
 	}
 
 	public MultigetHandler(List<String> hrefs, String path, OmCalendar calendar,
-	                       HttpClient client, HttpClientContext context,
-	                       AppointmentDao appointmentDao, IcalUtils utils)
+			HttpClient client, HttpClientContext context, AppointmentDao appointmentDao, IcalUtils utils)
 	{
 		this(hrefs, false, path, calendar, client, context, appointmentDao, utils);
 	}

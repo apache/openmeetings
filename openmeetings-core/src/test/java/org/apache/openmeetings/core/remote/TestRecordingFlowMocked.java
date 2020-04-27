@@ -19,9 +19,9 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -64,11 +64,11 @@ public class TestRecordingFlowMocked extends BaseMockedTest {
 	private RecordingDao recDao;
 	@Mock
 	private IClientManager cm;
-	
+
 	//This variable holds a reference to the current client in the room
 	private Client c;
-	
-	//This variable hold a reference to the UID of the StreamDesc that will be created 
+
+	//This variable hold a reference to the UID of the StreamDesc that will be created
 	private String streamDescUID;
 
 	@Override
@@ -87,57 +87,57 @@ public class TestRecordingFlowMocked extends BaseMockedTest {
 			r.setId(1L);
 			return r;
 		});
-		
+
 		PowerMockito.mockStatic(LabelDao.class);
 		BDDMockito.given(LabelDao.getLanguage(any(Long.class))).willReturn(new OmLanguage(Locale.ENGLISH));
-		
+
 		// init client object for this test
 		c = getClientFull();
 		when(roomDao.get(ROOM_ID)).thenReturn(c.getRoom());
-		
+
 		// Mock out the methods that do webRTC
 		doReturn(null).when(streamProcessor).startBroadcast(any(), any(), any());
-		
+
 	}
-	
+
 	private Client getClient() {
 		return new Client("sessionId", 0, userDao.get(USER_ID), "");
 	}
-	
+
 	private Client getClientWithRoom() {
 		Client c = getClient();
 		c.setRoom(new Room());
 		c.getRoom().setId(ROOM_ID);
 		return c;
 	}
-	
+
 	private Client getClientFull() {
 		Client c = getClientWithRoom();
 		c.getRoom().setAllowRecording(true);
 		c.allow(Room.Right.MODERATOR);
 		return c;
 	}
-	
+
 	@Test
 	public void testRecordingFlow() throws Exception {
-		
+
 		// start recording and simulate broadcast starting
 		testStartRecordWhenSharingWasNot();
-		
+
 		// stop recording
 		testStopRecordingWhenNoSharingStarted();
 	}
-	
+
 	/**
-	 * Start the recording. 
-	 * 
-	 * This should enable the sharing, but for enabling recording it should wait for 
+	 * Start the recording.
+	 *
+	 * This should enable the sharing, but for enabling recording it should wait for
 	 * the event that broadcast was started..
-	 * 
+	 *
 	 * Then simulate that the broadcast has started. And check both sharing and recording is true.
-	 * 
+	 *
 	 * But the permissions on the stream should still be recording only. Not sharing.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private void testStartRecordWhenSharingWasNot() throws Exception {
@@ -149,19 +149,19 @@ public class TestRecordingFlowMocked extends BaseMockedTest {
 				.put("fps", "fps")
 				;
 		handler.onMessage(c, msg);
-		
-		// This should enable the sharing, but for enabling recording it should wait for 
+
+		// This should enable the sharing, but for enabling recording it should wait for
 		// the event that broadcast was started
 		assertFalse(streamProcessor.isRecording(ROOM_ID));
 		assertTrue(streamProcessor.isSharing(ROOM_ID));
-		
+
 		// Get current Stream, there should be only 1 KStream created as result of this
 		assertTrue(c.getStreams().size() == 1);
 		StreamDesc streamDesc = c.getStreams().get(0);
-		
+
 		//save UID for stopping the stream later
 		streamDescUID = streamDesc.getUid();
-		
+
 		JSONObject msgBroadcastStarted = new JSONObject(MSG_BASE.toString())
 				.put("id", "broadcastStarted")
 				.put("type", "kurento")
@@ -169,45 +169,45 @@ public class TestRecordingFlowMocked extends BaseMockedTest {
 				.put("sdpOffer", "SDP-OFFER")
 				;
 		handler.onMessage(c, msgBroadcastStarted);
-		
+
 		// Assert that stream AND recording is true
 		assertTrue(streamProcessor.isRecording(ROOM_ID));
 		assertTrue(streamProcessor.isSharing(ROOM_ID));
-		
+
 		//verify startBroadcast has been invoked
 		verify(streamProcessor).startBroadcast(any(), any(), any());
-		
+
 		// Assert that there is still just 1 stream and has only the activities to Record assigned
 		assertTrue(c.getStreams().size() == 1);
 		streamDesc = c.getStreams().get(0);
 		assertEquals(1, streamDesc.getActivities().size());
 		assertEquals(Activity.RECORD, streamDesc.getActivities().get(0));
 	}
-	
+
 	/**
 	 * This should stop the recording. AND stop the sharing, as the sharing wasn't initially started.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private void testStopRecordingWhenNoSharingStarted() throws Exception {
-		
+
 		// Mock out the methods that would produce the Recording
 		Recording rec = new Recording();
 		when(recDao.get(Long.valueOf(1L))).thenReturn(rec);
-		
+
 		// Mock out the method that would start recording
 		doReturn(true).when(streamProcessor).startConvertion(any(Recording.class));
-		
+
 		// Needed for stopping, needs to stop by sid
 		doReturn(c).when(streamProcessor).getBySid(c.getSid());
-				
+
 		JSONObject msg = new JSONObject(MSG_BASE.toString())
 				.put("id", "stopRecord")
 				.put("type", "kurento")
 				.put("uid", streamDescUID)
 				;
 		handler.onMessage(c, msg);
-		
+
 		// Verify it did also stop the sharing stream
 		verify(streamProcessor).pauseSharing(any(), any());
 		// Verify all streams gone

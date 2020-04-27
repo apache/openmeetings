@@ -19,11 +19,11 @@
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
 
-import static com.github.caldav4j.util.CalDAVStatus.SC_INSUFFICIENT_SPACE_ON_RESOURCE;
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 import static javax.servlet.http.HttpServletResponse.SC_PRECONDITION_FAILED;
+import static org.apache.jackrabbit.webdav.DavServletResponse.SC_INSUFFICIENT_SPACE_ON_RESOURCE;
 
 import java.io.IOException;
 import java.util.Map;
@@ -63,8 +63,8 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 			SyncReportInfo.NAMESPACE);
 
 	public WebDAVSyncHandler(String path, OmCalendar calendar, HttpClient client,
-	                         HttpClientContext context, AppointmentDao appointmentDao,
-	                         IcalUtils utils) {
+			HttpClientContext context, AppointmentDao appointmentDao, IcalUtils utils)
+	{
 		super(path, calendar, client, context, appointmentDao, utils);
 	}
 

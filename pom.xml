@@ -73,6 +73,7 @@
 		<sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.versoin>0.8.5</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>2.7</forbiddenapis.version>
+		<maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
 		<!-- dependency versions -->
 		<junit.version>5.6.2</junit.version>
 		<wicket.version>9.0.0-M5</wicket.version>
@@ -126,7 +127,6 @@
 		<jacoco.binary.path>${project.basedir}/../target/jacoco.exec</jacoco.binary.path>
 		<db_user></db_user>
 		<db_pass></db_pass>
-		<checkstyle.config.location>${project.basedir}/src/config/openmeetings_checkstyle.xml</checkstyle.config.location>
 	</properties>
 	<url>https://openmeetings.apache.org</url>
 	<inceptionYear>2012</inceptionYear>
@@ -808,13 +808,31 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.1.1</version>
+				<version>${maven-checkstyle-plugin.version}</version>
 				<configuration>
-					<configLocation>${checkstyle.config.location}</configLocation>
+					<checkstyleRules>
+						<module name = "Checker">
+							<property name="fileExtensions" value="java,js,css,xml"/>
+						
+							<module name="TreeWalker">
+								<module name="UnusedImports"></module>
+						
+								<module name="RegexpSinglelineJava">
+									<property name="format" value="^\t* "/>
+									<property name="message" value="Indent must use tab characters"/>
+									<property name="ignoreComments" value="true"/>
+								</module>
+							</module>
+							<module name="RegexpSingleline">
+								<property name="format" value="\s+$"/>
+								<property name="message" value="Line has trailing spaces."/>
+							</module>
+						</module>
+					</checkstyleRules>
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
 					<encoding>UTF-8</encoding>
-     				<consoleOutput>true</consoleOutput>
-     				<failsOnError>true</failsOnError>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>true</failsOnError>
 				</configuration>
 				<executions>
 					<execution>
@@ -1104,10 +1122,10 @@
 					</reportSet>
 				</reportSets>
 			</plugin>
-			<plugin>
+			<!-- plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.1.1</version>
+				<version>${maven-checkstyle-plugin.version}</version>
 				<configuration>
 					<skip>${om.quick.build}</skip>
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
@@ -1119,7 +1137,7 @@
 						</reports>
 					</reportSet>
 				</reportSets>
-        	</plugin>
+			</plugin-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>

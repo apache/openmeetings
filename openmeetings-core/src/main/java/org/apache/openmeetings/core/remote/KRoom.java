@@ -225,7 +225,7 @@ public class KRoom {
 	 * This method will return true, even if the sharing is not enabled. But just recording.
 	 * Cause in order to record you need to have a Screensharing enabled. Doesn't mean that other
 	 * users see that screenshare yet (permissions have not been granted).
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isSharing() {

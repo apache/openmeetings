@@ -41,7 +41,6 @@
 		<root.webapp>webapps/ROOT</root.webapp>
 		<server-file.dir>web-server</server-file.dir>
 		<autoModuleName>apache.openmeetings.server</autoModuleName>
-		<checkstyle.config.location>${project.parent.basedir}/src/config/openmeetings_checkstyle.xml</checkstyle.config.location>
 	</properties>
 	<url>https://openmeetings.apache.org</url>
 	<scm>

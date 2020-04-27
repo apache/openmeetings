@@ -31,54 +31,64 @@ import de.agilecoders.wicket.core.util.References;
 
 /**
  * A behavior that shows a popover with OK/Cancel buttons to confirm an action.
+ *
  * @since 0.9.12
  */
 public class ConfirmationBehavior extends BootstrapJavascriptBehavior {
-    /** serialVersionUID. */
-    private static final long serialVersionUID = 1L;
-    /** Configuration. */
-    private final ConfirmationConfig config;
-    /** Jquery Selector (if you don't want to use the one of the component for singleton for example). */
-    private final String selector;
+	/** serialVersionUID. */
+	private static final long serialVersionUID = 1L;
+	/** Configuration. */
+	private final ConfirmationConfig config;
+	/**
+	 * Jquery Selector (if you don't want to use the one of the component for
+	 * singleton for example).
+	 */
+	private final String selector;
 
-    /**
-     * Constructor that uses the default configuration
-     */
-    public ConfirmationBehavior() {
-        this(null, new ConfirmationConfig());
-    }
+	/**
+	 * Constructor that uses the default configuration
+	 */
+	public ConfirmationBehavior() {
+		this(null, new ConfirmationConfig());
+	}
 
-    /**
-     * Constructor that uses a custom configuration
-     * @param config configuration to use
-     */
-    public ConfirmationBehavior(ConfirmationConfig config) {
-        this(null, config);
-    }
+	/**
+	 * Constructor that uses a custom configuration
+	 *
+	 * @param config
+	 *            configuration to use
+	 */
+	public ConfirmationBehavior(ConfirmationConfig config) {
+		this(null, config);
+	}
 
-    /**
-     * Constructor that uses a custom configuration
-     * @param config configuration to use
-     * @param selector Jquery selector to use instead of the one of the component (for singleton's option)
-     */
-    public ConfirmationBehavior(String selector, ConfirmationConfig config) {
-        this.config = Args.notNull(config, "config");
-        this.selector = selector;
-    }
+	/**
+	 * Constructor that uses a custom configuration
+	 *
+	 * @param config
+	 *            configuration to use
+	 * @param selector
+	 *            Jquery selector to use instead of the one of the component
+	 *            (for singleton's option)
+	 */
+	public ConfirmationBehavior(String selector, ConfirmationConfig config) {
+		this.config = Args.notNull(config, "config");
+		this.selector = selector;
+	}
 
-    @Override
-    public void renderHead(Component component, IHeaderResponse response) {
-        super.renderHead(component, response);
+	@Override
+	public void renderHead(Component component, IHeaderResponse response) {
+		super.renderHead(component, response);
 
-        References.renderWithFilter(response, JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(ConfirmationBehavior.class, "bootstrap-confirmation.js")));
+		References.renderWithFilter(response, JavaScriptHeaderItem
+				.forReference(new JQueryPluginResourceReference(ConfirmationBehavior.class, "bootstrap-confirmation.js")));
 
-
-        if (selector == null) {
-            config.withRootSelector(component.getMarkupId());
-            response.render($(component).chain("confirmation", config).asDomReadyScript());
-        } else {
-            config.withRootSelector(selector);
-            response.render($(selector).chain("confirmation", config).asDomReadyScript());
-        }
-    }
+		if (selector == null) {
+			config.withRootSelector(component.getMarkupId());
+			response.render($(component).chain("confirmation", config).asDomReadyScript());
+		} else {
+			config.withRootSelector(selector);
+			response.render($(selector).chain("confirmation", config).asDomReadyScript());
+		}
+	}
 }
