@@ -24,7 +24,6 @@ import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +65,7 @@ public class GeneralUserForm extends Form<User> {
 		super(id, model);
 		this.isAdminForm = isAdminForm;
 		updateModelObject(getModelObject(), isAdminForm);
+		setOutputMarkupId(true);
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class GeneralUserForm extends Form<User> {
 		add(new LanguageDropDown("languageId"));
 		add(new TextField<String>("address.phone"));
 		final AjaxOmDatePicker bday = new AjaxOmDatePicker("age");
-		bday.getConfig().withMaxDate(LocalDate.now());
+		//bday.getConfig().withMaxDate(LocalDate.now()); // FIXME TODO not working so far
 		add(bday);
 		add(new TextField<String>("address.street"));
 		add(new TextField<String>("address.additionalname"));
