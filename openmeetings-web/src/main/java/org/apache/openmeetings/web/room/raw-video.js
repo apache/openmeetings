@@ -3,7 +3,8 @@ var Video = (function() {
 	const self = {}
 		, AudioCtx = window.AudioContext || window.webkitAudioContext;
 	let sd, v, vc, t, footer, size, vol, video, iceServers
-		, lm, level, userSpeaks = false, muteOthers, hasVideo;
+		, lm, level, userSpeaks = false, muteOthers
+		, hasVideo, isSharing, isRecording;
 
 	function _resizeDlgArea(_w, _h) {
 		if (Room.getOptions().interview) {
@@ -143,7 +144,7 @@ var Video = (function() {
 			, mediaConstraints: cnts
 			, onicecandidate: self.onIceCandidate
 		};
-		if (!VideoUtil.isSharing(sd)) {
+		if (!isSharing) {
 			options.localVideo = video[0];
 		}
 		const data = video.data();
@@ -173,10 +174,10 @@ var Video = (function() {
 						, uid: sd.uid
 						, sdpOffer: offerSdp
 					});
-					if (VideoUtil.isSharing(sd)) {
+					if (isSharing) {
 						Sharer.setShareState(SHARE_STARTED);
 					}
-					if (VideoUtil.isRecording(sd)) {
+					if (isRecording) {
 						Sharer.setRecState(SHARE_STARTED);
 					}
 				});
@@ -184,7 +185,7 @@ var Video = (function() {
 		__attachListener(data.rtcPeer);
 	}
 	function _createSendPeer(msg) {
-		if (VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd)) {
+		if (isSharing || isRecording) {
 			_getScreenStream(msg, __createSendPeer);
 		} else {
 			_getVideoStream(msg, __createSendPeer);
@@ -270,7 +271,7 @@ var Video = (function() {
 		} else {
 			v.dialog('option', 'draggable', true);
 			v.dialog('option', 'resizable', true);
-			if (VideoUtil.isSharing(sd)) {
+			if (isSharing) {
 				v.on('dialogclose', function() {
 					VideoManager.close(sd.uid, true);
 				});
@@ -290,7 +291,7 @@ var Video = (function() {
 		const refresh = v.parent().find('.btn-refresh')
 			, tgl = v.parent().find('.btn-toggle')
 			, cls = v.parent().find('.btn-wclose');
-		if (VideoUtil.isSharing(sd)) {
+		if (isSharing) {
 			cls.click(function (e) {
 				v.dialog('close');
 				return false;
@@ -325,12 +326,12 @@ var Video = (function() {
 		iceServers = msg.iceServers;
 		sd.activities = sd.activities.sort();
 		size = {width: sd.width, height: sd.height};
+		isSharing = VideoUtil.isSharing(sd);
+		isRecording = VideoUtil.isRecording(sd);
 		const _id = VideoUtil.getVid(sd.uid)
 			, name = sd.user.displayName
 			, _w = sd.width
 			, _h = sd.height
-			, isSharing = VideoUtil.isSharing(sd)
-			, isRecording = VideoUtil.isRecording(sd)
 			, opts = Room.getOptions();
 		sd.self = sd.cuid === opts.uid;
 		const contSel = _initContainer(_id, name, opts);
@@ -365,10 +366,6 @@ var Video = (function() {
 		}
 
 		_refresh(msg);
-
-		if (!isSharing && !isRecording) {
-			VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VIDWIN_SEL), sd.width, sd.height + 25));
-		}
 		return v;
 	}
 	function _update(_c) {
@@ -393,6 +390,9 @@ var Video = (function() {
 		const _id = VideoUtil.getVid(sd.uid);
 		_resizeDlgArea(hasVideo ? size.width : 120
 			, hasVideo ? size.height : 90);
+		if (hasVideo && !isSharing && !isRecording) {
+			VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VIDWIN_SEL), sd.width, sd.height + 25));
+		}
 		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 			.width(vc.width()).height(vc.height())
 			.prop('autoplay', true).prop('controls', false);
