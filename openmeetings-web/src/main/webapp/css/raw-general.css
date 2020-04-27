@@ -453,6 +453,9 @@ select.messages.selector {
 	height: 100%;
 	overflow-y: auto;
 }
+.rooms-table .room-row .container {
+	margin: 0;
+}
 .rooms.title {
 	font-weight: bold;
 	padding: 10px;
