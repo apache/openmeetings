@@ -21,26 +21,26 @@ package org.apache.openmeetings.web.util;
 import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 
 public class TouchPunchResourceReference extends WebjarsCssResourceReference {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Singleton instance of this reference
-     */
-    private static final class Holder {
+	/**
+	 * Singleton instance of this reference
+	 */
+	private static final class Holder {
 
-        private static final TouchPunchResourceReference INSTANCE = new TouchPunchResourceReference();
-    }
+		private static final TouchPunchResourceReference INSTANCE = new TouchPunchResourceReference();
+	}
 
-    /**
-     * @return the single instance of the resource reference
-     */
-    public static TouchPunchResourceReference instance() {
-        return Holder.INSTANCE;
-    }
+	/**
+	 * @return the single instance of the resource reference
+	 */
+	public static TouchPunchResourceReference instance() {
+		return Holder.INSTANCE;
+	}
 
-    /**
-     * Private constructor.
-     */
+	/**
+	 * Private constructor.
+	 */
 	private TouchPunchResourceReference() {
 		super("jquery-ui-touch-punch/current/jquery.ui.touch-punch.js");
 	}

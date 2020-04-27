@@ -256,7 +256,7 @@ public class SignInDialog extends Modal<String> {
 				target.add(feedback);
 			}
 			if (signIn) {
-	 			setResponsePage(Application.get().getHomePage());
+				setResponsePage(Application.get().getHomePage());
 				if (rememberMe) {
 					strategy.save(login, password, type, domain.getId());
 				} else {

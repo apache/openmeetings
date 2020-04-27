@@ -38,34 +38,34 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(OmFileHelper.class)
 public class FileItemTest {
-	
+
 	@Mock
 	private OmFileHelper omFileHelper;
-	
+
 	@InjectMocks
 	private FileItem fileItem;
-	
+
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		
+
 		// Setup path to be local test resources
 		mockStatic(OmFileHelper.class);
-		
+
 		// PDF file tests
 		when(OmFileHelper.getFileExt("6594186e-c6bb-49d5-9f66-829e45599aaa.pdf")).thenReturn("pdf");
-		
+
 		// DOCX file tests
 		when(OmFileHelper.getFileExt("d44ab2c5-fd5d-4903-8fa7-292286d72a5f.docx")).thenReturn("docx");
 		when(OmFileHelper.getFileExt("d44ab2c5-fd5d-4903-8fa7-292286d72a5f.pdf")).thenReturn("pdf");
-		
+
 		// Generic
 		when(OmFileHelper.getFileExt("page-0000.png")).thenReturn("png");
 		when(OmFileHelper.getFileExt("page-0001.png")).thenReturn("png");
-		
+
 		when(OmFileHelper.getUploadFilesDir()).thenReturn(new File("src/test/resources/org/apache/openmeetings/db/entity/file"));
 	}
-	
+
 	@Test
 	public void testGetFileShouldReturnFirstSlideWithPDF() {
 		// Setup file
@@ -73,13 +73,13 @@ public class FileItemTest {
 		fileItem.setHash("6594186e-c6bb-49d5-9f66-829e45599aaa");
 		fileItem.setName("mypresentation.pdf");
 		fileItem.setType(BaseFileItem.Type.PRESENTATION);
-		
+
 		File f = fileItem.getFile(null);
-		
+
 		assertTrue(f.getName().endsWith("png"));
 		assertEquals(f.getName(), "page-0000.png");
 	}
-	
+
 	@Test
 	public void testGetOriginalWithPDFWithOriginalName() {
 		// Setup file
@@ -87,13 +87,13 @@ public class FileItemTest {
 		fileItem.setHash("6594186e-c6bb-49d5-9f66-829e45599aaa");
 		fileItem.setName("mypresentation.pdf");
 		fileItem.setType(BaseFileItem.Type.PRESENTATION);
-		
+
 		File f = fileItem.getOriginal();
-		
+
 		assertTrue(f.getName().endsWith("pdf"));
 		assertEquals(f.getName(), "6594186e-c6bb-49d5-9f66-829e45599aaa.pdf");
 	}
-	
+
 	@Test
 	public void testGetOriginalWithPDFWithChangedName() {
 		// Setup file
@@ -101,13 +101,13 @@ public class FileItemTest {
 		fileItem.setHash("6594186e-c6bb-49d5-9f66-829e45599aaa");
 		fileItem.setName("randomName");
 		fileItem.setType(BaseFileItem.Type.PRESENTATION);
-		
+
 		File f = fileItem.getOriginal();
-		
+
 		assertTrue(f.getName().endsWith("pdf"));
 		assertEquals(f.getName(), "6594186e-c6bb-49d5-9f66-829e45599aaa.pdf");
 	}
-	
+
 	@Test
 	public void testGetOriginalWithDOCXWithOriginalName() {
 		// Setup file
@@ -115,13 +115,13 @@ public class FileItemTest {
 		fileItem.setHash("d44ab2c5-fd5d-4903-8fa7-292286d72a5f");
 		fileItem.setName("Sample Document.docx");
 		fileItem.setType(BaseFileItem.Type.PRESENTATION);
-		
+
 		File f = fileItem.getOriginal();
-		
+
 		assertTrue(f.getName().endsWith("docx"));
 		assertEquals(f.getName(), "d44ab2c5-fd5d-4903-8fa7-292286d72a5f.docx");
 	}
-	
+
 	@Test
 	public void testGetOriginalWithDOCXWithChangedName() {
 		// Setup file
@@ -129,13 +129,13 @@ public class FileItemTest {
 		fileItem.setHash("d44ab2c5-fd5d-4903-8fa7-292286d72a5f");
 		fileItem.setName("Random Name");
 		fileItem.setType(BaseFileItem.Type.PRESENTATION);
-		
+
 		File f = fileItem.getOriginal();
-		
+
 		assertTrue(f.getName().endsWith("docx"));
 		assertEquals(f.getName(), "d44ab2c5-fd5d-4903-8fa7-292286d72a5f.docx");
 	}
-	
+
 	@Test
 	public void testGetFileShouldReturnFirstSlideWithDOCX() {
 		// Setup file
@@ -143,13 +143,13 @@ public class FileItemTest {
 		fileItem.setHash("d44ab2c5-fd5d-4903-8fa7-292286d72a5f");
 		fileItem.setName("Sample Document.docx");
 		fileItem.setType(BaseFileItem.Type.PRESENTATION);
-		
+
 		File f = fileItem.getFile(null);
-		
+
 		assertTrue(f.getName().endsWith("png"));
 		assertEquals(f.getName(), "page-0000.png");
 	}
-	
+
 	@Test
 	public void testGetFileShouldReturnPDFWhenRequested() {
 		// Setup file
@@ -157,9 +157,9 @@ public class FileItemTest {
 		fileItem.setHash("d44ab2c5-fd5d-4903-8fa7-292286d72a5f");
 		fileItem.setName("Sample Document.docx");
 		fileItem.setType(BaseFileItem.Type.PRESENTATION);
-		
+
 		File f = fileItem.getFile("pdf");
-		
+
 		assertTrue(f.getName().endsWith("pdf"));
 		assertEquals(f.getName(), "d44ab2c5-fd5d-4903-8fa7-292286d72a5f.pdf");
 	}

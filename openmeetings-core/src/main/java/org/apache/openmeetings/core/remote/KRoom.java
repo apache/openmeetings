@@ -34,7 +34,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
-import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
@@ -226,7 +225,7 @@ public class KRoom {
 	 * This method will return true, even if the sharing is not enabled. But just recording.
 	 * Cause in order to record you need to have a Screensharing enabled. Doesn't mean that other
 	 * users see that screenshare yet (permissions have not been granted).
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isSharing() {

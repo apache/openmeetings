@@ -189,11 +189,11 @@ public class StreamProcessor implements IStreamProcessor {
 			log.error("Failed to start broadcast", e);
 		}
 	}
-	
+
 	/**
 	 *  Method to start broadcasting.  Externalised for mocking purpose to be able to
 	 *  prevent calling webRTC methods.
-	 *  
+	 *
 	 * @param stream Stream to start
 	 * @param sd StreamDesc to start
 	 * @param sdpOffer the sdpOffer
@@ -361,9 +361,9 @@ public class StreamProcessor implements IStreamProcessor {
 
 	/**
 	 * Execute Pausing of sharing.
-	 * 
+	 *
 	 * Invoked and overwritten by Mock, hance package private.
-	 * 
+	 *
 	 * @param c client
 	 * @param uid the uid
 	 */
@@ -455,7 +455,7 @@ public class StreamProcessor implements IStreamProcessor {
 			return;
 		}
 		kHandler.getRoom(c.getRoomId()).stopRecording(this, c);
-		
+
 		// In case this user wasn't shareing his screen we also need to close that one
 		c.getScreenStream().ifPresent(sd -> {
 			if (!sd.hasActivity(Activity.SCREEN)) {
@@ -466,7 +466,7 @@ public class StreamProcessor implements IStreamProcessor {
 
 	/**
 	 * Used for mocking. Requires a return value in order to be mocked.
-	 * 
+	 *
 	 * @param rec
 	 * @return
 	 */

@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
-import com.github.caldav4j.CalDAVConstants;
-import com.github.caldav4j.methods.HttpPropFindMethod;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+
+import java.io.IOException;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -38,9 +40,8 @@ import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
-import static javax.servlet.http.HttpServletResponse.SC_OK;
+import com.github.caldav4j.CalDAVConstants;
+import com.github.caldav4j.methods.HttpPropFindMethod;
 
 /**
  * Class for Syncing through the help of Ctags.
@@ -56,8 +57,8 @@ public class CtagHandler extends AbstractCalendarHandler {
 	public static final DavPropertyName DNAME_GETCTAG = DavPropertyName.create("getctag", NAMESPACE_CALSERVER);
 
 	public CtagHandler(String path, OmCalendar calendar, HttpClient client,
-	                   HttpClientContext context, AppointmentDao appointmentDao,
-	                   IcalUtils utils) {
+			HttpClientContext context, AppointmentDao appointmentDao, IcalUtils utils)
+	{
 		super(path, calendar, client, context, appointmentDao, utils);
 	}
 
