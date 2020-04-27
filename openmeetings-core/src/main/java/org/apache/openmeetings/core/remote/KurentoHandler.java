@@ -244,7 +244,7 @@ public class KurentoHandler {
 		log.debug("Room {} found!", roomId);
 		return room;
 	}
-	
+
 	public Collection<KRoom> getRooms() {
 		return rooms.values();
 	}

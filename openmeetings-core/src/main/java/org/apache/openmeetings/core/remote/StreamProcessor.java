@@ -503,7 +503,7 @@ public class StreamProcessor implements IStreamProcessor {
 	void addStream(KStream stream) {
 		streamByUid.put(stream.getUid(), stream);
 	}
-	
+
 	public Collection<KStream> getStreams() {
 		return streamByUid.values();
 	}

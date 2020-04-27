@@ -58,9 +58,9 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public class ConnectionsPanel extends AdminBasePanel {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(ConnectionsPanel.class);
-	
+
 	private static final long serialVersionUID = 1L;
 	@SpringBean
 	private ClientManager cm;
@@ -70,7 +70,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 	private StreamProcessor streamProcessor;
 	@SpringBean
 	private IUserManager userManager;
-	
+
 	/**
 	 * This needs to combine two lists as we currently hold a reference to the KStream in two places:
 	 * <ul>
@@ -78,14 +78,14 @@ public class ConnectionsPanel extends AdminBasePanel {
 	 * <li>{@link KRoom#getParticipants()}</li>
 	 * </ul>
 	 * Both are singletons and hold a reference to a stream list and can get out of sync or leak.
-	 * 
+	 *
 	 * TODO: Investigate if we can have 1 source of truth.
 	 *
 	 * @return list of KStreams registered
 	 */
 	public Collection<ConnectionListKStreamItem> getAllStreams() {
 		Collection<ConnectionListKStreamItem> allStreams = new ArrayList<>();
-		
+
 		allStreams.addAll(
 				streamProcessor.getStreams().stream()
 					.map(stream -> new ConnectionListKStreamItem(
@@ -102,10 +102,10 @@ public class ConnectionsPanel extends AdminBasePanel {
 							))
 					.collect(Collectors.toList())
 				);
-		
+
 		log.info("Retrieve all Streams, StreamProcessor has {} of streams", allStreams.size());
-		
-		// Add any streams from the KRoom that are not in the StreamProcessor 
+
+		// Add any streams from the KRoom that are not in the StreamProcessor
 		scm.getRooms().forEach(
 			room -> {
 				log.info("Retrieve room {}, participants {}", room, room.getParticipants().size());
@@ -130,21 +130,21 @@ public class ConnectionsPanel extends AdminBasePanel {
 				);
 			}
 		);
-		
+
 		return allStreams;
 	}
-	
+
 	/**
 	 * Combine lists for Client and KStream
-	 * 
+	 *
 	 * @return
 	 */
 	protected List<ConnectionListItem> getConnections() {
-		
+
 		List<ConnectionListItem> connections = new ArrayList<>();
 		List<Client> clients = cm.list();
 		Collection<ConnectionListKStreamItem> streams = getAllStreams();
-		
+
 		connections.addAll(
 				clients.stream()
 					.map(client -> new ConnectionListItem(client, null))
@@ -183,7 +183,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 			@Override
 			protected void populateItem(final Item<ConnectionListItem> item) {
 				ConnectionListItem connection = item.getModelObject();
-				
+
 				if (connection.getStream() != null) {
 					ConnectionListKStreamItem kStream = connection.getStream();
 					item.add(new Label("type", kStream.getType()));
@@ -205,7 +205,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 						{
 							setSize(Buttons.Size.Small);
 						}
-	
+
 						@Override
 						public void onClick(AjaxRequestTarget target) {
 							cm.invalidate(c.getUserId(), c.getSessionId());
@@ -213,19 +213,19 @@ public class ConnectionsPanel extends AdminBasePanel {
 						}
 					}.add(newOkCancelConfirm(this, getString("605"))));
 				}
-				
+
 				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						
+
 						RepeatingView lines = new RepeatingView("line");
 						ConnectionListItem connection = item.getModelObject();
-						
+
 						Field[] ff;
 						Object c;
-						
+
 						if (connection.getStream() != null) {
 							ff = connection.getStream().getClass().getDeclaredFields();
 							c = connection.getStream();
@@ -236,7 +236,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 							log.warn("Should be either Client or ConnectionListItem, modelObject {}", item.getModelObject());
 							return;
 						}
-						
+
 						for (Field f : ff) {
 							int mod = f.getModifiers();
 							if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) {
@@ -258,7 +258,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 						target.add(details.setVisible(true));
 					}
 				});
-				
+
 				item.add(AttributeModifier.append(ATTR_CLASS, ROW_CLASS));
 			}
 		};

@@ -30,8 +30,8 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.util.OmFileHelper.getRecUri;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
-import java.util.Map.Entry;
 import java.util.Date;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -358,11 +358,11 @@ public class KStream extends AbstractStream {
 	public String getUid() {
 		return uid;
 	}
-	
+
 	public Date getConnectedSince() {
 		return connectedSince;
 	}
-	
+
 	public KRoom getRoom() {
 		return room;
 	}
