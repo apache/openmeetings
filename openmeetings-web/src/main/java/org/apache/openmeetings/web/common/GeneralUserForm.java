@@ -55,6 +55,7 @@ public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
 	private final RequiredTextField<String> email = new RequiredTextField<>("address.email");
 	private final List<GroupUser> grpUsers = new ArrayList<>();
+	private final AjaxOmDatePicker bday = new AjaxOmDatePicker("age");
 	private final boolean isAdminForm;
 	@SpringBean
 	private GroupDao groupDao;
@@ -95,8 +96,6 @@ public class GeneralUserForm extends Form<User> {
 		add(new DropDownChoice<>("timeZoneId", AVAILABLE_TIMEZONES));
 		add(new LanguageDropDown("languageId"));
 		add(new TextField<String>("address.phone"));
-		final AjaxOmDatePicker bday = new AjaxOmDatePicker("age");
-		//bday.getConfig().withMaxDate(LocalDate.now()); // FIXME TODO not working so far
 		add(bday);
 		add(new TextField<String>("address.street"));
 		add(new TextField<String>("address.additionalname"));
@@ -140,6 +139,9 @@ public class GeneralUserForm extends Form<User> {
 	}
 
 	public void updateModelObject(User u, boolean isAdminForm) {
+		/*bday.getConfig()
+			.withDate(u.getAge() == null ? LocalDate.now() : u.getAge())
+			.withMaxDate(LocalDate.now());*/
 		grpUsers.clear();
 		grpUsers.addAll(u.getGroupUsers());
 		if (isAdminForm) {
