@@ -715,7 +715,7 @@ public class RoomPanel extends BasePanel {
 				reqType = Type.REQUEST_RIGHT_WB;
 				break;
 			case SHARE:
-				reqType = Type.REQUEST_RIGHT_WB;
+				reqType = Type.REQUEST_RIGHT_SHARE;
 				break;
 			case AUDIO:
 				reqType = Type.REQUEST_RIGHT_A;
