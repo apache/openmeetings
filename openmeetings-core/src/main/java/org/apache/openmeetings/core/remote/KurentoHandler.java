@@ -142,7 +142,7 @@ public class KurentoHandler {
 			kuid = randomUUID().toString(); // will be changed to prevent double events
 			client.destroy();
 			for (Entry<Long, KRoom> e : rooms.entrySet()) {
-				e.getValue().close(streamProcessor);
+				e.getValue().close();
 			}
 			testProcessor.destroy();
 			streamProcessor.destroy();
@@ -238,7 +238,7 @@ public class KurentoHandler {
 			pipe.addTag(t, TAG_KUID, kuid);
 			pipe.addTag(t, TAG_ROOM, String.valueOf(roomId));
 			t.commit();
-			room = new KRoom(r, pipe, chunkDao);
+			room = new KRoom(streamProcessor, r, pipe, chunkDao);
 			rooms.put(roomId, room);
 		}
 		log.debug("Room {} found!", roomId);
@@ -426,7 +426,7 @@ public class KurentoHandler {
 							return;
 						} else if (r != null) {
 							rooms.remove(r.getRoomId());
-							r.close(streamProcessor);
+							r.close();
 						}
 					}
 					log.warn("Invalid MediaPipeline {} detected, will be dropped, tags: {}", pipe.getId(), tags);

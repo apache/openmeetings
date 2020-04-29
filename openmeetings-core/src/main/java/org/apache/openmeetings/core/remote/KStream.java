@@ -144,7 +144,7 @@ public class KStream extends AbstractStream {
 			}
 		});
 		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media FlowIn :: {}", evt));
-		processor.addStream(this);
+		// processor.addStream(this);
 		addListener(processor, sd.getSid(), sd.getUid(), sdpOffer);
 		if (room.isRecording()) {
 			startRecord(processor);

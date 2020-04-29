@@ -126,4 +126,5 @@ public class TestStreamProcessor implements IStreamProcessor {
 		}
 		streamByUid.clear();
 	}
+
 }
