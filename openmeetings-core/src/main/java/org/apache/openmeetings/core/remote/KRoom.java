@@ -56,7 +56,9 @@ import com.github.openjson.JSONObject;
  *
  */
 public class KRoom {
+
 	private static final Logger log = LoggerFactory.getLogger(KRoom.class);
+
 	/**
 	 * Not injected by annotation but by constructor.
 	 */
