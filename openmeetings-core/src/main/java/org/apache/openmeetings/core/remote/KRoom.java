@@ -60,7 +60,7 @@ public class KRoom {
 	/**
 	 * Not injected by annotation but by constructor.
 	 */
-	private final StreamProcessor streamProcessor;
+	private final StreamProcessor processor;
 	private final MediaPipeline pipeline;
 	private final Long roomId;
 	private final Room.Type type;
@@ -71,8 +71,8 @@ public class KRoom {
 	private JSONObject recordingUser = new JSONObject();
 	private JSONObject sharingUser = new JSONObject();
 
-	public KRoom(StreamProcessor streamProcessor, Room r, MediaPipeline pipeline, RecordingChunkDao chunkDao) {
-		this.streamProcessor = streamProcessor;
+	public KRoom(StreamProcessor processor, Room r, MediaPipeline pipeline, RecordingChunkDao chunkDao) {
+		this.processor = processor;
 		this.roomId = r.getId();
 		this.type = r.getType();
 		this.pipeline = pipeline;
@@ -103,16 +103,16 @@ public class KRoom {
 	public KStream join(final StreamDesc sd) {
 		log.info("ROOM {}: join client {}, stream: {}", roomId, sd.getClient(), sd.getUid());
 		final KStream stream = new KStream(sd, this);
-		streamProcessor.addStream(stream);
+		processor.addStream(stream);
 		return stream;
 	}
 
 	public Collection<KStream> getParticipants() {
-		return streamProcessor.getStreamsByRoom(this.getRoomId());
+		return processor.getStreamsByRoom(this.getRoomId());
 	}
 
 	public void onStopBroadcast(KStream stream) {
-		streamProcessor.release(stream);
+		processor.release(stream);
 		WebSocketHelper.sendAll(newKurentoMsg()
 				.put("id", "broadcastStopped")
 				.put("uid", stream.getUid())
@@ -162,15 +162,15 @@ public class KRoom {
 			Optional<StreamDesc> osd = c.getScreenStream();
 			if (osd.isPresent()) {
 				osd.get().addActivity(Activity.RECORD);
-				streamProcessor.getClientManager().update(c);
+				processor.getClientManager().update(c);
 				rec.setWidth(osd.get().getWidth());
 				rec.setHeight(osd.get().getHeight());
 			}
-			rec = streamProcessor.getRecordingDao().update(rec);
+			rec = processor.getRecordingDao().update(rec);
 			// Receive recordingId
 			recordingId = rec.getId();
-			streamProcessor.getStreamsByRoom(this.getRoomId()).forEach(
-					stream -> stream.startRecord(streamProcessor)
+			processor.getStreamsByRoom(this.getRoomId()).forEach(
+					stream -> stream.startRecord(processor)
 			);
 
 			// Send notification to all users that the recording has been started
@@ -182,16 +182,16 @@ public class KRoom {
 	public void stopRecording(Client c) {
 		if (recordingStarted.compareAndSet(true, false)) {
 			log.debug("##REC:: recording in room {} is stopping {} ::", roomId, recordingId);
-			streamProcessor.getStreamsByRoom(this.getRoomId()).forEach(
+			processor.getStreamsByRoom(this.getRoomId()).forEach(
 					stream -> stream.stopRecord()
 			);
-			Recording rec = streamProcessor.getRecordingDao().get(recordingId);
+			Recording rec = processor.getRecordingDao().get(recordingId);
 			rec.setRecordEnd(new Date());
-			rec = streamProcessor.getRecordingDao().update(rec);
+			rec = processor.getRecordingDao().update(rec);
 			recordingUser = new JSONObject();
 			recordingId = null;
 
-			streamProcessor.startConvertion(rec);
+			processor.startConvertion(rec);
 			User u;
 			if (c == null) {
 				u = new User();
@@ -200,8 +200,8 @@ public class KRoom {
 				Optional<StreamDesc> osd = c.getScreenStream();
 				if (osd.isPresent()) {
 					osd.get().removeActivity(Activity.RECORD);
-					streamProcessor.getClientManager().update(c);
-					streamProcessor.getHandler().sendShareUpdated(osd.get());
+					processor.getClientManager().update(c);
+					processor.getHandler().sendShareUpdated(osd.get());
 				}
 			}
 			// Send notification to all users that the recording has been started
@@ -260,8 +260,8 @@ public class KRoom {
 	}
 
 	public void close() {
-		streamProcessor.getStreamsByRoom(this.getRoomId()).forEach(
-				stream -> stream.release(streamProcessor)
+		processor.getStreamsByRoom(this.getRoomId()).forEach(
+				stream -> stream.release(processor)
 		);
 		pipeline.release(new Continuation<Void>() {
 			@Override
