@@ -223,6 +223,6 @@ public class KTestStream extends AbstractStream {
 		}
 		releasePlayer();
 		releaseRecorder();
-		processor.release(this);
+		processor.release(this, true);
 	}
 }

@@ -541,9 +541,11 @@ public class StreamProcessor implements IStreamProcessor {
 	}
 
 	@Override
-	public void release(AbstractStream stream) {
+	public void release(AbstractStream stream, boolean releaseStream) {
 		final String uid = stream.getUid();
-		stream.release(this);
+		if (releaseStream) {
+			stream.release(this);
+		}
 		Client c = cm.getBySid(stream.getSid());
 		if (c != null) {
 			StreamDesc sd = c.getStream(uid);

@@ -114,7 +114,7 @@ public class KRoom {
 	}
 
 	public void onStopBroadcast(KStream stream) {
-		processor.release(stream);
+		processor.release(stream, true);
 		WebSocketHelper.sendAll(newKurentoMsg()
 				.put("id", "broadcastStopped")
 				.put("uid", stream.getUid())

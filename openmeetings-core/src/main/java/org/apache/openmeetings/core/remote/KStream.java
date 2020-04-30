@@ -320,7 +320,7 @@ public class KStream extends AbstractStream {
 		}
 		releaseRecorder();
 		if (remove) {
-			processor.release(this);
+			processor.release(this, false);
 		}
 	}
 

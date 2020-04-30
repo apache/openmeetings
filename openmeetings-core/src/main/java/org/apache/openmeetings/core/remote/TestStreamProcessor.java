@@ -114,7 +114,7 @@ public class TestStreamProcessor implements IStreamProcessor {
 	}
 
 	@Override
-	public void release(AbstractStream stream) {
+	public void release(AbstractStream stream, boolean releaseStream) {
 		streamByUid.remove(stream.getUid());
 	}
 
