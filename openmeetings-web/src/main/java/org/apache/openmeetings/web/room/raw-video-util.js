@@ -316,6 +316,7 @@ var Volume = (function() {
 
 	function _create(_video) {
 		video = _video;
+		_destroy();
 		const uid = video.stream().uid
 			, volId = 'volume-' + uid;
 		vol = OmUtil.tmpl('#volume-control-stub', volId)
@@ -397,6 +398,12 @@ var Volume = (function() {
 			_handle(lastVolume);
 		}
 	}
+	function _destroy() {
+		if (vol) {
+			vol.remove();
+			vol = null;
+		}
+	}
 
 	return {
 		create: _create
@@ -405,11 +412,6 @@ var Volume = (function() {
 		, muted: function() {
 			return muted;
 		}
-		, destroy: function() {
-			if (vol) {
-				vol.remove();
-				vol = null;
-			}
-		}
+		, destroy: _destroy
 	};
 });
