@@ -130,7 +130,7 @@ public class KStream extends AbstractStream {
 						if (StreamType.SCREEN == streamType) {
 							processor.doStopSharing(sid, uid);
 						}
-						stopBroadcast(processor);
+						stopBroadcast();
 						return null;
 					}, delayedExecutor(getFlowoutTimeout(), TimeUnit.SECONDS)));
 					break;
@@ -281,8 +281,8 @@ public class KStream extends AbstractStream {
 		}
 	}
 
-	public void stopBroadcast(final StreamProcessor processor) {
-		room.onStopBroadcast(this, processor);
+	public void stopBroadcast() {
+		room.onStopBroadcast(this);
 	}
 
 	public void pauseSharing() {

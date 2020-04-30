@@ -218,7 +218,7 @@ public class StreamProcessor implements IStreamProcessor {
 			.forEach(lsd -> {
 				KStream s = getByUid(lsd.getUid());
 				if (s != null) {
-					s.stopBroadcast(this);
+					s.stopBroadcast();
 				}
 				c.removeStream(lsd.getUid());
 				closed.add(lsd.getUid());
@@ -288,7 +288,7 @@ public class StreamProcessor implements IStreamProcessor {
 					KStream stream = streamByUid.get(sd.getUid());
 					if (stream != null) {
 						KRoom room = kHandler.getRoom(c.getRoomId());
-						room.onStopBroadcast(stream, this);
+						room.onStopBroadcast(stream);
 					}
 				});
 		}
@@ -398,7 +398,7 @@ public class StreamProcessor implements IStreamProcessor {
 		KStream sender = getByUid(uid);
 		StreamDesc sd = doStopSharing(c.getSid(), uid);
 		if (sender != null && sd != null) {
-			sender.stopBroadcast(this);
+			sender.stopBroadcast();
 		} else {
 			log.warn("Could not stop broadcast - could be a KStream leak and lead to ghost KStream, client: {}, uid: {} ", c, uid);
 		}
@@ -543,6 +543,7 @@ public class StreamProcessor implements IStreamProcessor {
 	@Override
 	public void release(AbstractStream stream) {
 		final String uid = stream.getUid();
+		stream.release(this);
 		Client c = cm.getBySid(stream.getSid());
 		if (c != null) {
 			StreamDesc sd = c.getStream(uid);

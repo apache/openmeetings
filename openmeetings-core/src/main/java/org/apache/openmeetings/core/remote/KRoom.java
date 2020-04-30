@@ -111,9 +111,8 @@ public class KRoom {
 		return streamProcessor.getStreamsByRoom(this.getRoomId());
 	}
 
-	public void onStopBroadcast(KStream stream, final StreamProcessor processor) {
+	public void onStopBroadcast(KStream stream) {
 		streamProcessor.release(stream);
-		stream.release(processor);
 		WebSocketHelper.sendAll(newKurentoMsg()
 				.put("id", "broadcastStopped")
 				.put("uid", stream.getUid())
