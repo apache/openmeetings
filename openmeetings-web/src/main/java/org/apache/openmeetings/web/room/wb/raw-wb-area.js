@@ -6,7 +6,7 @@ var DrawWbArea = function() {
 		, arrowImg = new Image(), delImg = new Image();
 	arrowImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAICAYAAADqSp8ZAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAygAAAMoBawMUsgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFsSURBVCiRrdI/SEJRFMfx37lPGxqKoGwxKJoaImhpCf8NEUFL9WgLUrPnIyEIa6reVEPQn0GeWDS4NDQETQ2JT4waojUoHBqCoJKWINB3720yIhGl+q7ncj5nuIQ6jWiaq1xmU4IwBACQ5GCAU5D8IECRAkUQzt8V++wmlSrX20e1BoFIrFdwHidIIQhH5O68sgzD/vnOF4m0QyijJGgMQIHZtJdJJ4oNg6qqNr20dKwBaOWKvZFPpZ7qXV3JH4wNSMbjJHGZ7XIlYRiiFkiBsL4CphwLwbck5E7uwMw3ClXD2iRImYYUq9lD886nLXZbyd2HL9AbXpglySOQeFVstpRJJ+5/i1UajkbbHCXahMS1ZAiS2+W1DMNmqqoqBLFMYIME1uxkvPRXDAAuTPMNhCwIGiT62eOzAQDkD+nbAjQDxudy+8mT/8C+FwjNjwuwdQnqY7b0kCesT7DC7allWVU/8D/zh3SdC/R8Aq9QhRc3h8LfAAAAAElFTkSuQmCC';
 	delImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAAGgrv1cAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADNQTFRFAAAA4j094j094j094j094j094j094j094j094j094j094j094j094j094j094j094j09hIdAxgAAABB0Uk5TABAgMEBQYHCAj5+vv8/f7yMagooAAADXSURBVBgZBcEBYoQgDACw1DJETmz//9olwGn6AAAbBxoiSACTpCTtJd02smg+MPoef7UgnpPQeVM42Vg02kl+qAPeE2B19wYAgO83xi6ggRMoBfuvsUSxp+vPjag98VqwC8oI9ozC5rMnUVbw5ITID94Fo4D4umsAwN/+urvfOwDg6d8FiFUnALPnkwCs6zvg+UKcSmD3ZBWyL4hTye4J3s16AXG6J+D+uD/A7vtUAutFT9g9EacSURNX33ZPQJzKqAW8lQCIXyWAVfUM5Hz7vQAAMcZIAP9DvgiOL2K6DwAAAABJRU5ErkJggg==';
-	let container, area, tabs, scroll, role = NONE, _inited = false;
+	let scroll, role = NONE, _inited = false;
 
 	// Fabric overrides (should be kept up-to-date on fabric.js updates)
 	if ('function' !== typeof(window.originalDrawControl)) {
@@ -61,7 +61,7 @@ var DrawWbArea = function() {
 	}
 
 	function getActive() {
-		const tab = tabs.find('.wb-tab-content .wb-tab.active');
+		const tab = $('.room-block .wb-block .tabs .wb-tab-content .wb-tab.active');
 		if (tab.length === 1) {
 			return tab;
 		}
@@ -203,6 +203,7 @@ var DrawWbArea = function() {
 			return;
 		}
 		role = _role;
+		const tabs = $('.room-block .wb-block .tabs');
 		const tabsNav = tabs.find('ul.nav-tabs');
 		tabsNav.sortable(role === PRESENTER ? 'enable' : 'disable');
 		const prev = tabs.find('.prev.om-icon'), next = tabs.find('.next.om-icon');
@@ -239,15 +240,13 @@ var DrawWbArea = function() {
 		OmUtil.wbAction({action: 'activateWb', data: {wbId: _wbId}});
 	}
 	function _doInit(callback) {
-		container = $('.room-block .wb-block');
-		tabs = container.find('.tabs');
+		const tabs = $('.room-block .wb-block .tabs');
 		if (tabs.length === 0) {
 			setTimeout(_doInit, 100, callback);
 			return;
 		}
 		scroll = tabs.find('.scroll-container');
-		area = container.find('.wb-area');
-		tabs.find('ul.nav-tabs').sortable({
+		$('.room-block .wb-block .tabs ul.nav-tabs').sortable({
 			axis: 'x'
 		});
 		_inited = true;
@@ -303,6 +302,7 @@ var DrawWbArea = function() {
 					});
 			});
 
+		const tabs = $('.room-block .wb-block .tabs');
 		tabs.find('ul.nav-tabs').append(li);
 		tabs.find('.wb-tab-content').append(wb);
 		__initTab(li);
@@ -437,7 +437,7 @@ var DrawWbArea = function() {
 		if (!_inited) {
 			return;
 		}
-		tabs.find('li a').each(function() {
+		$('.room-block .wb-block .tabs li a').each(function() {
 			const wbId = $(this).data('wb-id');
 			_getWbTab(wbId).remove();
 			_getWbContent(wbId).remove();

@@ -126,6 +126,12 @@ public class UploadDialog extends Modal<String> {
 		}
 
 		@Override
+		protected void onPostProcessTarget(IPartialPageRequestHandler target) {
+			super.onPostProcessTarget(target);
+			target.appendJavaScript("Ladda.create(document.getElementById('" + upload.getMarkupId() + "')).start()");
+		}
+
+		@Override
 		protected void onComplete(IPartialPageRequestHandler target) {
 			progressBar.setVisible(false);
 			room.getSidebar().updateFiles(target);
@@ -199,8 +205,7 @@ public class UploadDialog extends Modal<String> {
 					progressBar.restart(target);
 					target.add(
 							progressBar.setModelObject(progress).setVisible(true)
-							, form.setVisible(false)
-							, upload.setEnabled(false));
+							, form.setVisible(false));
 
 					ThreadHelper.startRunnable(UploadDialog.this::convertAll);
 				}
