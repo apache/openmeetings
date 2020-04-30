@@ -268,7 +268,7 @@ public class RoomPanel extends BasePanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		//let's refresh user in client
-		cm.update(getClient().updateUser(userDao));
+		Client c = getClient().updateUser(userDao);
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
 
 		room.setOutputMarkupPlaceholderTag(true);
@@ -332,8 +332,8 @@ public class RoomPanel extends BasePanel {
 						}
 					}
 					if (allowed) {
-						Calendar c = WebSession.getCalendar();
-						if (isOwner || c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
+						Calendar cal = WebSession.getCalendar();
+						if (isOwner || cal.getTime().after(a.getStart()) && cal.getTime().before(a.getEnd())) {
 							eventDetail = new EventDetailDialog(EVENT_DETAILS_ID, a);
 						} else {
 							allowed = false;
@@ -345,7 +345,7 @@ public class RoomPanel extends BasePanel {
 				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()));
 				log.debug("public ? {}, ownedId ? {} {}", r.getIspublic(), r.getOwnerId(), allowed);
 				if (!allowed) {
-					User u = getClient().getUser();
+					User u = c.getUser();
 					for (RoomGroup ro : r.getGroups()) {
 						for (GroupUser ou : u.getGroupUsers()) {
 							if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
@@ -381,17 +381,14 @@ public class RoomPanel extends BasePanel {
 				groupstyles.add(groupstyle);
 			}
 			//We are setting initial rights here
-			Client c = getClient();
 			final int count = cm.addToRoom(c.setRoom(getRoom()));
 			SOAPLogin soap = WebSession.get().getSoapLogin();
 			if (soap != null && soap.isModerator()) {
 				c.allow(Right.SUPER_MODERATOR);
-				cm.update(c);
 			} else {
 				Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? apptDao.getByRoom(r.getId()) : null, count);
 				if (!rr.isEmpty()) {
 					c.allow(rr);
-					cm.update(c);
 					log.info("Setting rights for client:: {} -> {}", rr, c.hasRight(Right.MODERATOR));
 				}
 			}
@@ -407,6 +404,7 @@ public class RoomPanel extends BasePanel {
 		} else {
 			add(new WebMarkupContainer("nickname").setVisible(false));
 		}
+		cm.update(c);
 		if (waitModerator == null) {
 			createWaitModerator(false);
 		}
