@@ -40,7 +40,7 @@ public abstract class AbstractOmDateTimePicker<T> extends AbstractDateTimePicker
 
 	public AbstractOmDateTimePicker(String id, IModel<T> model, String format) {
 		super(id, model, new DatetimePickerConfig()
-				.useLocale(WebSession.get().getLocale().toLanguageTag())
+				//.useLocale(WebSession.get().getLocale().toLanguageTag())
 				.withFormat(format)
 				.with(new DatetimePickerIconConfig()
 						.useDateIcon(FontAwesome5IconType.calendar_s)

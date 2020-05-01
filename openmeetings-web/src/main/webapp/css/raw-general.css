@@ -493,7 +493,6 @@ select.messages.selector {
 }
 .date.time.picker {
 	font-size: 12px;
-	white-space: nowrap;
 }
 .profile .remove {
 	position: absolute;

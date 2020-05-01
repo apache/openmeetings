@@ -48,7 +48,7 @@ public class OmDateTimePicker extends AbstractOmDateTimePicker<LocalDateTime> {
 				return new DateTimeFormatterBuilder()
 						.parseCaseInsensitive()
 						.appendPattern(pattern)
-						.toFormatter(locale);
+						.toFormatter(Locale.ENGLISH);
 			}
 		};
 	}

@@ -18,11 +18,13 @@
  */
 package org.apache.openmeetings.util;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -49,5 +51,26 @@ public class TestDateTime {
 		dt = LocalDateTime.parse(dateStr
 				, DateTimeFormatter.ofPattern(pattern.replace("y", "yy"), loc));
 		assertEquals(2019, dt.getYear(), "4 digit year expected");
+	}
+
+	@Test
+	public void test2() throws Exception {
+		final String dateStr = "2020-05-12, 6:43 a.m.";
+		final String jsDateStr = "2020-05-12, 6:43 AM";
+		final String pattern = "y-MM-dd, h:mm a";
+		final Locale loc = new Locale.Builder()
+				.setLanguage("en")
+				.setRegion("CA")
+				.build();
+		DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+				.parseCaseInsensitive()
+				.appendPattern(pattern)
+				.toFormatter(loc);
+		assertNotNull(formatter.parse(dateStr));
+		DateTimeFormatter formatter1 = new DateTimeFormatterBuilder()
+				.parseCaseInsensitive()
+				.appendPattern(pattern)
+				.toFormatter(Locale.ENGLISH);
+		assertNotNull(formatter1.parse(jsDateStr));
 	}
 }
