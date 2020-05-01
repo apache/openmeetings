@@ -375,6 +375,7 @@ public class KurentoHandler {
 
 		@Override
 		public void disconnected() {
+			log.info("Kurento disconnected");
 			if (lkuid.equals(kuid)) {
 				log.warn("Disconnected, will re-try in {} ms", checkTimeout);
 				connected = false;
@@ -386,6 +387,7 @@ public class KurentoHandler {
 
 		@Override
 		public void connectionFailed() {
+			log.info("Kurento connection failed");
 			// this handled seems to be called multiple times
 		}
 
