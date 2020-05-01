@@ -813,10 +813,11 @@
 					<checkstyleRules>
 						<module name = "Checker">
 							<property name="fileExtensions" value="java,js,css,xml"/>
-						
+							<module name="NewlineAtEndOfFile">
+								<property name="fileExtensions" value="java"/>
+							</module>
 							<module name="TreeWalker">
 								<module name="UnusedImports"></module>
-						
 								<module name="RegexpSinglelineJava">
 									<property name="format" value="^\t* "/>
 									<property name="message" value="Indent must use tab characters"/>
