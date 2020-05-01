@@ -510,7 +510,7 @@ public class StreamProcessor implements IStreamProcessor {
 		return streamByUid.values();
 	}
 
-	Collection<KStream> getStreamsByRoom(Long roomId) {
+	Collection<KStream> getByRoom(Long roomId) {
 		return streamByUid.values().stream()
 				.filter(stream -> stream.getRoom() != null && stream.getRoom().getRoomId().equals(roomId))
 				.collect(Collectors.toCollection(ArrayList::new));

@@ -110,7 +110,7 @@ public class KRoom {
 	}
 
 	public Collection<KStream> getParticipants() {
-		return processor.getStreamsByRoom(this.getRoomId());
+		return processor.getByRoom(this.getRoomId());
 	}
 
 	public void onStopBroadcast(KStream stream) {
@@ -171,7 +171,7 @@ public class KRoom {
 			rec = processor.getRecordingDao().update(rec);
 			// Receive recordingId
 			recordingId = rec.getId();
-			processor.getStreamsByRoom(this.getRoomId()).forEach(
+			processor.getByRoom(this.getRoomId()).forEach(
 					stream -> stream.startRecord(processor)
 			);
 
@@ -184,9 +184,7 @@ public class KRoom {
 	public void stopRecording(Client c) {
 		if (recordingStarted.compareAndSet(true, false)) {
 			log.debug("##REC:: recording in room {} is stopping {} ::", roomId, recordingId);
-			processor.getStreamsByRoom(this.getRoomId()).forEach(
-					stream -> stream.stopRecord()
-			);
+			processor.getByRoom(this.getRoomId()).forEach(KStream::stopRecord);
 			Recording rec = processor.getRecordingDao().get(recordingId);
 			rec.setRecordEnd(new Date());
 			rec = processor.getRecordingDao().update(rec);
@@ -262,7 +260,7 @@ public class KRoom {
 	}
 
 	public void close() {
-		processor.getStreamsByRoom(this.getRoomId()).forEach(
+		processor.getByRoom(this.getRoomId()).forEach(
 				stream -> stream.release(processor)
 		);
 		pipeline.release(new Continuation<Void>() {
