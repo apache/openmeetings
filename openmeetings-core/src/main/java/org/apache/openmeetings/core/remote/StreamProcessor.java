@@ -25,7 +25,6 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -513,7 +512,7 @@ public class StreamProcessor implements IStreamProcessor {
 	Collection<KStream> getByRoom(Long roomId) {
 		return streamByUid.values().stream()
 				.filter(stream -> stream.getRoom() != null && stream.getRoom().getRoomId().equals(roomId))
-				.collect(Collectors.toCollection(ArrayList::new));
+				.collect(Collectors.toList());
 	}
 
 	Client getBySid(String sid) {
