@@ -175,6 +175,7 @@ public class MainPanel extends Panel {
 
 			@Override
 			protected void closeHandler(AbstractClientMessage msg) {
+				log.debug("WebSocketBehavior::closeHandler uid - {}", uid);
 				super.closeHandler(msg);
 				if (uid != null) {
 					cm.exit(getClient());

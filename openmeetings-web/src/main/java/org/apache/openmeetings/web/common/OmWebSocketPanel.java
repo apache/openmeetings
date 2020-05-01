@@ -148,19 +148,16 @@ public abstract class OmWebSocketPanel extends Panel {
 
 			@Override
 			protected void onAbort(AbortedMessage msg) {
-				super.onAbort(msg);
 				closeHandler(msg);
 			}
 
 			@Override
 			protected void onClose(ClosedMessage msg) {
-				super.onClose(msg);
 				closeHandler(msg);
 			}
 
 			@Override
 			protected void onError(WebSocketRequestHandler handler, ErrorMessage msg) {
-				super.onError(handler, msg);
 				closeHandler(msg);
 			}
 		};

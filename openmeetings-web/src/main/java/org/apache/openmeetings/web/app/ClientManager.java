@@ -165,9 +165,39 @@ public class ClientManager implements IClientManager {
 	}
 
 	public void exitRoom(Client c) {
+		exitRoom(c, true);
+	}
+
+	public void exitRoom(Client c, boolean update) {
 		Long roomId = c.getRoomId();
-		removeFromRoom(c);
+		log.debug("Removing online room client: {}, room: {}", c.getUid(), roomId);
 		if (roomId != null) {
+			IMap<Long, Set<String>> rooms = rooms();
+			rooms.lock(roomId);
+			Set<String> clients = rooms.get(roomId);
+			if (clients != null) {
+				clients.remove(c.getUid());
+				rooms.put(roomId, clients);
+				onlineRooms.put(roomId, clients);
+			}
+			rooms.unlock(roomId);
+			if (clients == null || clients.isEmpty()) {
+				String serverId = c.getServerId();
+				IMap<String, ServerInfo> servers = servers();
+				servers.lock(serverId);
+				ServerInfo si = servers.get(serverId);
+				si.remove(c.getRoom());
+				servers.put(serverId, si);
+				onlineServers.put(serverId, si);
+				servers.unlock(serverId);
+			}
+			kHandler.leaveRoom(c);
+			c.setRoom(null);
+			c.clear();
+			if (update) {
+				update(c);
+			}
+
 			sendRoom(new TextRoomMessage(roomId, c, RoomMessage.Type.ROOM_EXIT, c.getUid()));
 			confLogDao.add(
 					ConferenceLog.Type.ROOM_LEAVE
@@ -185,7 +215,7 @@ public class ClientManager implements IClientManager {
 					, c.getUserId(), "0", null
 					, c.getRemoteAddress()
 					, "");
-			exitRoom(c);
+			exitRoom(c, false);
 			kHandler.remove(c);
 			log.debug("Removing online client: {}, roomId: {}", c.getUid(), c.getRoomId());
 			map().remove(c.getUid());
@@ -256,37 +286,6 @@ public class ClientManager implements IClientManager {
 			onlineServers.put(serverId, si);
 			servers.unlock(serverId);
 		}
-	}
-
-	public Client removeFromRoom(Client c) {
-		Long roomId = c.getRoomId();
-		log.debug("Removing online room client: {}, room: {}", c.getUid(), roomId);
-		if (roomId != null) {
-			IMap<Long, Set<String>> rooms = rooms();
-			rooms.lock(roomId);
-			Set<String> clients = rooms.get(roomId);
-			if (clients != null) {
-				clients.remove(c.getUid());
-				rooms.put(roomId, clients);
-				onlineRooms.put(roomId, clients);
-			}
-			rooms.unlock(roomId);
-			if (clients == null || clients.isEmpty()) {
-				String serverId = c.getServerId();
-				IMap<String, ServerInfo> servers = servers();
-				servers.lock(serverId);
-				ServerInfo si = servers.get(serverId);
-				si.remove(c.getRoom());
-				servers.put(serverId, si);
-				onlineServers.put(serverId, si);
-				servers.unlock(serverId);
-			}
-			kHandler.leaveRoom(c);
-			c.setRoom(null);
-			c.clear();
-			update(c);
-		}
-		return c;
 	}
 
 	public boolean isOnline(Long userId) {
@@ -412,12 +411,15 @@ public class ClientManager implements IClientManager {
 			, EntryUpdatedListener<String, Client>
 			, EntryRemovedListener<String, Client>
 	{
-		private void process(EntryEvent<String, Client> event) {
+		private void process(EntryEvent<String, Client> event, boolean shouldAdd) {
+			if (event.getMember().localMember()) {
+				return;
+			}
 			final String uid = event.getKey();
 			synchronized (onlineClients) {
 				if (onlineClients.containsKey(uid)) {
 					onlineClients.get(uid).merge(event.getValue());
-				} else {
+				} else if (shouldAdd) {
 					onlineClients.put(uid, event.getValue());
 				}
 			}
@@ -425,12 +427,12 @@ public class ClientManager implements IClientManager {
 
 		@Override
 		public void entryAdded(EntryEvent<String, Client> event) {
-			process(event);
+			process(event, true);
 		}
 
 		@Override
 		public void entryUpdated(EntryEvent<String, Client> event) {
-			process(event);
+			process(event, false);
 		}
 
 		@Override
