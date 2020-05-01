@@ -90,14 +90,6 @@ public class ConnectionsPanel extends AdminBasePanel {
 				l.addAll(streams);
 				log.info("Retrieve all Streams, StreamProcessor has {} of streams", streams.size());
 
-				List<KStreamDto> missing = kHandler.getRooms()
-						.stream()
-						.flatMap(room -> room.getParticipants().stream())
-						.filter(stream -> !streamProcessor.hasStream(stream.getUid()))
-						.map(kStream -> new KStreamDto("KRoom", kStream))
-						.collect(Collectors.toList());
-				l.addAll(missing);
-				log.warn("Following streams were in KRoom but not in StreamProcessor: {}", missing);
 				return l;
 			}
 

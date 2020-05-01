@@ -19,6 +19,6 @@
 package org.apache.openmeetings.core.remote;
 
 public interface IStreamProcessor {
-	void release(AbstractStream stream);
+	void release(AbstractStream stream, boolean releaseStream);
 	void destroy();
 }

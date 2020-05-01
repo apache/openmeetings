@@ -130,7 +130,7 @@ public class KStream extends AbstractStream {
 						if (StreamType.SCREEN == streamType) {
 							processor.doStopSharing(sid, uid);
 						}
-						stopBroadcast(processor);
+						stopBroadcast();
 						return null;
 					}, delayedExecutor(getFlowoutTimeout(), TimeUnit.SECONDS)));
 					break;
@@ -144,7 +144,6 @@ public class KStream extends AbstractStream {
 			}
 		});
 		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media FlowIn :: {}", evt));
-		processor.addStream(this);
 		addListener(processor, sd.getSid(), sd.getUid(), sdpOffer);
 		if (room.isRecording()) {
 			startRecord(processor);
@@ -282,8 +281,8 @@ public class KStream extends AbstractStream {
 		}
 	}
 
-	public void stopBroadcast(final StreamProcessor processor) {
-		room.onStopBroadcast(this, processor);
+	public void stopBroadcast() {
+		room.onStopBroadcast(this);
 	}
 
 	public void pauseSharing() {
@@ -321,7 +320,7 @@ public class KStream extends AbstractStream {
 		}
 		releaseRecorder();
 		if (remove) {
-			processor.release(this);
+			processor.release(this, false);
 		}
 	}
 

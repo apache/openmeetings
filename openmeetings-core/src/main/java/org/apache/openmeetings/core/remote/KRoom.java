@@ -27,9 +27,7 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -53,10 +51,18 @@ import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
+/**
+ * Bean object dynamically created representing a conference room on the MediaServer
+ *
+ */
 public class KRoom {
+
 	private static final Logger log = LoggerFactory.getLogger(KRoom.class);
 
-	private final Map<String, KStream> streams = new ConcurrentHashMap<>();
+	/**
+	 * Not injected by annotation but by constructor.
+	 */
+	private final StreamProcessor processor;
 	private final MediaPipeline pipeline;
 	private final Long roomId;
 	private final Room.Type type;
@@ -67,7 +73,8 @@ public class KRoom {
 	private JSONObject recordingUser = new JSONObject();
 	private JSONObject sharingUser = new JSONObject();
 
-	public KRoom(Room r, MediaPipeline pipeline, RecordingChunkDao chunkDao) {
+	public KRoom(StreamProcessor processor, Room r, MediaPipeline pipeline, RecordingChunkDao chunkDao) {
+		this.processor = processor;
 		this.roomId = r.getId();
 		this.type = r.getType();
 		this.pipeline = pipeline;
@@ -98,17 +105,16 @@ public class KRoom {
 	public KStream join(final StreamDesc sd) {
 		log.info("ROOM {}: join client {}, stream: {}", roomId, sd.getClient(), sd.getUid());
 		final KStream stream = new KStream(sd, this);
-		streams.put(stream.getUid(), stream);
+		processor.addStream(stream);
 		return stream;
 	}
 
 	public Collection<KStream> getParticipants() {
-		return streams.values();
+		return processor.getByRoom(this.getRoomId());
 	}
 
-	public void onStopBroadcast(KStream stream, final StreamProcessor processor) {
-		streams.remove(stream.getUid());
-		stream.release(processor);
+	public void onStopBroadcast(KStream stream) {
+		processor.release(stream, true);
 		WebSocketHelper.sendAll(newKurentoMsg()
 				.put("id", "broadcastStopped")
 				.put("uid", stream.getUid())
@@ -116,21 +122,6 @@ public class KRoom {
 			);
 		//FIXME TODO check close on stop sharing
 		//FIXME TODO permission can be removed, some listener might be required
-	}
-
-	public void leave(final StreamProcessor processor, final Client c) {
-		for (Map.Entry<String, KStream> e : streams.entrySet()) {
-			e.getValue().remove(c);
-		}
-		for (StreamDesc sd : c.getStreams()) {
-			if (StreamType.SCREEN == sd.getType()) {
-
-			}
-			KStream stream = streams.remove(sd.getUid());
-			if (stream != null) {
-				stream.release(processor);
-			}
-		}
 	}
 
 	public boolean isRecording() {
@@ -141,7 +132,7 @@ public class KRoom {
 		return new JSONObject(recordingUser.toString());
 	}
 
-	public void startRecording(StreamProcessor processor, Client c) {
+	public void startRecording(Client c) {
 		if (recordingStarted.compareAndSet(false, true)) {
 			log.debug("##REC:: recording in room {} is starting ::", roomId);
 			Room r = c.getRoom();
@@ -180,9 +171,9 @@ public class KRoom {
 			rec = processor.getRecordingDao().update(rec);
 			// Receive recordingId
 			recordingId = rec.getId();
-			for (final KStream stream : streams.values()) {
-				stream.startRecord(processor);
-			}
+			processor.getByRoom(this.getRoomId()).forEach(
+					stream -> stream.startRecord(processor)
+			);
 
 			// Send notification to all users that the recording has been started
 			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.RECORDING_TOGGLED));
@@ -190,12 +181,10 @@ public class KRoom {
 		}
 	}
 
-	public void stopRecording(final StreamProcessor processor, Client c) {
+	public void stopRecording(Client c) {
 		if (recordingStarted.compareAndSet(true, false)) {
 			log.debug("##REC:: recording in room {} is stopping {} ::", roomId, recordingId);
-			for (final KStream stream : streams.values()) {
-				stream.stopRecord();
-			}
+			processor.getByRoom(this.getRoomId()).forEach(KStream::stopRecord);
 			Recording rec = processor.getRecordingDao().get(recordingId);
 			rec.setRecordEnd(new Date());
 			rec = processor.getRecordingDao().update(rec);
@@ -270,11 +259,10 @@ public class KRoom {
 		}
 	}
 
-	public void close(final StreamProcessor processor) {
-		for (final KStream stream : streams.values()) {
-			stream.release(processor);
-		}
-		streams.clear();
+	public void close() {
+		processor.getByRoom(this.getRoomId()).forEach(
+				stream -> stream.release(processor)
+		);
 		pipeline.release(new Continuation<Void>() {
 			@Override
 			public void onSuccess(Void result) throws Exception {

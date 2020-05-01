@@ -65,6 +65,9 @@ import com.github.openjson.JSONObject;
 @Component
 public class StreamProcessor implements IStreamProcessor {
 	private static final Logger log = LoggerFactory.getLogger(StreamProcessor.class);
+	/**
+	 * Holds a reference to the current streams available on the server instance
+	 */
 	private final Map<String, KStream> streamByUid = new ConcurrentHashMap<>();
 
 	@Autowired
@@ -214,7 +217,7 @@ public class StreamProcessor implements IStreamProcessor {
 			.forEach(lsd -> {
 				KStream s = getByUid(lsd.getUid());
 				if (s != null) {
-					s.stopBroadcast(this);
+					s.stopBroadcast();
 				}
 				c.removeStream(lsd.getUid());
 				closed.add(lsd.getUid());
@@ -284,7 +287,7 @@ public class StreamProcessor implements IStreamProcessor {
 					KStream stream = streamByUid.get(sd.getUid());
 					if (stream != null) {
 						KRoom room = kHandler.getRoom(c.getRoomId());
-						room.onStopBroadcast(stream, this);
+						room.onStopBroadcast(stream);
 					}
 				});
 		}
@@ -305,7 +308,7 @@ public class StreamProcessor implements IStreamProcessor {
 				room.stopSharing();
 				if (Room.Type.INTERVIEW != room.getType() && room.isRecording()) {
 					log.info("No more screen streams in the non-interview room, stopping recording");
-					room.stopRecording(this, null);
+					room.stopRecording(null);
 				}
 			}
 		}
@@ -315,7 +318,7 @@ public class StreamProcessor implements IStreamProcessor {
 					.collect(Collectors.toList());
 			if (streams.isEmpty()) {
 				log.info("No more streams in the room, stopping recording");
-				room.stopRecording(this, null);
+				room.stopRecording(null);
 			}
 		}
 	}
@@ -394,7 +397,7 @@ public class StreamProcessor implements IStreamProcessor {
 		KStream sender = getByUid(uid);
 		StreamDesc sd = doStopSharing(c.getSid(), uid);
 		if (sender != null && sd != null) {
-			sender.stopBroadcast(this);
+			sender.stopBroadcast();
 		} else {
 			log.warn("Could not stop broadcast - could be a KStream leak and lead to ghost KStream, client: {}, uid: {} ", c, uid);
 		}
@@ -447,14 +450,14 @@ public class StreamProcessor implements IStreamProcessor {
 		if (!kHandler.isConnected() || !hasRightsToRecord(c)) {
 			return;
 		}
-		kHandler.getRoom(c.getRoomId()).startRecording(this, c);
+		kHandler.getRoom(c.getRoomId()).startRecording(c);
 	}
 
 	public void stopRecording(Client c) {
 		if (!kHandler.isConnected() || !hasRightsToRecord(c)) {
 			return;
 		}
-		kHandler.getRoom(c.getRoomId()).stopRecording(this, c);
+		kHandler.getRoom(c.getRoomId()).stopRecording(c);
 
 		// In case this user wasn't shareing his screen we also need to close that one
 		c.getScreenStream().ifPresent(sd -> {
@@ -494,8 +497,6 @@ public class StreamProcessor implements IStreamProcessor {
 			}
 		}
 		if (c.getRoomId() != null) {
-			KRoom room = kHandler.getRoom(c.getRoomId());
-			room.leave(this, c);
 			checkStreams(c.getRoomId());
 		}
 	}
@@ -506,6 +507,12 @@ public class StreamProcessor implements IStreamProcessor {
 
 	public Collection<KStream> getStreams() {
 		return streamByUid.values();
+	}
+
+	Collection<KStream> getByRoom(Long roomId) {
+		return streamByUid.values().stream()
+				.filter(stream -> stream.getRoom() != null && stream.getRoom().getRoomId().equals(roomId))
+				.collect(Collectors.toList());
 	}
 
 	Client getBySid(String sid) {
@@ -533,8 +540,11 @@ public class StreamProcessor implements IStreamProcessor {
 	}
 
 	@Override
-	public void release(AbstractStream stream) {
+	public void release(AbstractStream stream, boolean releaseStream) {
 		final String uid = stream.getUid();
+		if (releaseStream) {
+			stream.release(this);
+		}
 		Client c = cm.getBySid(stream.getSid());
 		if (c != null) {
 			StreamDesc sd = c.getStream(uid);
