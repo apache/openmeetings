@@ -1,13 +1,22 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var SHARE_STARTING = 'starting';
 var SHARE_STARTED = 'started';
-var SHARE_STOPED = 'stoped';
+var SHARE_STOPED = 'stopped';
 var Sharer = (function() {
 	const self = {};
 	let sharer, type, fps, sbtn, rbtn, width, height
 		, shareState = SHARE_STOPED, recState = SHARE_STOPED;
 
+	/**
+	 * Re-entering the room should reset settings.
+	 */
+	function reset() {
+		shareState = SHARE_STOPED;
+		recState = SHARE_STOPED;
+	}
+	
 	function _init() {
+		reset();
 		sharer = $('#sharer').dialog({
 			classes: {
 				'ui-dialog': 'sharer'
