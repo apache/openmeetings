@@ -33,6 +33,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -57,7 +59,6 @@ import org.kurento.client.KurentoConnectionListener;
 import org.kurento.client.MediaObject;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.ObjectCreatedEvent;
-import org.kurento.client.ObjectDestroyedEvent;
 import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.RecorderEndpoint;
 import org.kurento.client.Tag;
@@ -117,27 +118,33 @@ public class KurentoHandler {
 		return connctd;
 	}
 
+	@PostConstruct
 	public void init() {
 		check = () -> {
 			try {
+				if (isConnected()) {
+					return;
+				}
 				kuid = randomUUID().toString();
 				client = KurentoClient.create(kurentoWsUrl, new KConnectionListener(kuid));
 				client.getServerManager().addObjectCreatedListener(new KWatchDogCreate());
-				client.getServerManager().addObjectDestroyedListener(new EventListener<>() {
-					@Override
-					public void onEvent(ObjectDestroyedEvent event) {
-						log.debug("Kurento::ObjectDestroyedEvent objectId {}, tags {}, source {}", event.getObjectId(), event.getTags(), event.getSource());
-					}
-				});
+				client.getServerManager().addObjectDestroyedListener(event ->
+					log.debug("Kurento::ObjectDestroyedEvent objectId {}, tags {}, source {}", event.getObjectId(), event.getTags(), event.getSource())
+				);
 			} catch (Exception e) {
 				log.warn("Fail to create Kurento client, will re-try in {} ms", checkTimeout);
-				kmsRecheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
 			}
 		};
-		check.run();
+		kmsRecheckScheduler.scheduleAtFixedRate(check, 0L, checkTimeout, MILLISECONDS);
 	}
 
+	@PreDestroy
 	public void destroy() {
+		clean();
+		kmsRecheckScheduler.shutdownNow();
+	}
+
+	private void clean() {
 		if (client != null) {
 			kuid = randomUUID().toString(); // will be changed to prevent double events
 			client.destroy();
@@ -377,11 +384,9 @@ public class KurentoHandler {
 		public void disconnected() {
 			log.info("Kurento disconnected");
 			if (lkuid.equals(kuid)) {
-				log.warn("Disconnected, will re-try in {} ms", checkTimeout);
 				connected = false;
 				notifyRooms();
-				destroy();
-				kmsRecheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
+				clean();
 			}
 		}
 

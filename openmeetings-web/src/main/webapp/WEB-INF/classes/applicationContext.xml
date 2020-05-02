@@ -144,7 +144,7 @@
 	</bean>
 
 	<!-- Kurento -->
-	<bean id="kurentoHandler" class="org.apache.openmeetings.core.remote.KurentoHandler" init-method="init" destroy-method="destroy"
+	<bean id="kurentoHandler" class="org.apache.openmeetings.core.remote.KurentoHandler"
 			p:kurentoWsUrl="ws://127.0.0.1:8888/kurento"
 			p:checkTimeout="10000"
 			p:watchThreadCount="10"
