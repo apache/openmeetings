@@ -81,7 +81,7 @@
 		</div>
 		<div id="wb-area" class="wb-tab tab-pane" role="tabpanel">
 			<div class="wb-with-zoom">
-				<div class="wb-zoom-block pr-3 pl-3"></div>
+				<div class="wb-zoom-block"></div>
 				<div class="scroll-container">
 					<div class="canvases"></div>
 					<div class="bottom-bumper"></div>
@@ -90,7 +90,7 @@
 			<div class="tools"></div>
 		</div>
 		<div id="wb-zoom" class="wb-zoom row no-gutters">
-			<div class="col">
+			<div class="col-auto">
 				<div class="doc-group input-group input-group-sm" aria-label="...">
 					<div class="input-group-prepend">
 						<button type="button" class="btn btn-outline-secondary up" wicket:message="title:256">
@@ -105,39 +105,41 @@
 						<div class="last-page input-group-text">1</div>
 					</div>
 					<div class="input-group-append">
-						<button type="button" class="btn btn-outline-secondary down" wicket:message="title:257">
+						<button type="button" class="btn-outline-secondary down" wicket:message="title:257">
 							<i class="fas fa-share"></i>
 						</button>
 					</div>
 				</div>
 			</div>
-			<div class="col input-group input-group-sm" aria-label="...">
-				<div class="input-group-prepend">
-					<button type="button" class="btn btn-outline-secondary zoom-out" wicket:message="title:259">
-						<i class="fas fa-search-minus"></i>
-					</button>
-				</div>
-				<select class="zoom" data-custom-val="1.20">
-					<option value="FULL_FIT"><wicket:message key="zoom.FULL_FIT"/></option>
-					<option value="PAGE_WIDTH"><wicket:message key="zoom.PAGE_WIDTH"/></option>
-					<option value="custom">120%</option>
-					<option value="0.50">50%</option>
-					<option value="0.75">75%</option>
-					<option value="1.00">100%</option>
-					<option value="1.25">125%</option>
-					<option value="1.50">150%</option>
-					<option value="2.00">200%</option>
-					<option value="3.00">300%</option>
-					<option value="4.00">400%</option>
-				</select>
-				<div class="input-group-append">
-					<button type="button" class="btn btn-outline-secondary zoom-in" wicket:message="title:260">
-						<i class="fas fa-search-plus"></i>
-					</button>
+			<div class="col-auto">
+				<div class="zoom-group input-group input-group-sm" aria-label="...">
+					<div class="input-group-prepend">
+						<button type="button" class="btn btn-outline-secondary zoom-out" wicket:message="title:259">
+							<i class="fas fa-search-minus"></i>
+						</button>
+					</div>
+					<select class="zoom text-dark" data-custom-val="1.20">
+						<option value="FULL_FIT"><wicket:message key="zoom.FULL_FIT"/></option>
+						<option value="PAGE_WIDTH"><wicket:message key="zoom.PAGE_WIDTH"/></option>
+						<option value="custom">120%</option>
+						<option value="0.50">50%</option>
+						<option value="0.75">75%</option>
+						<option value="1.00">100%</option>
+						<option value="1.25">125%</option>
+						<option value="1.50">150%</option>
+						<option value="2.00">200%</option>
+						<option value="3.00">300%</option>
+						<option value="4.00">400%</option>
+					</select>
+					<div class="input-group-append">
+						<button type="button" class="btn btn-outline-secondary zoom-in" wicket:message="title:260">
+							<i class="fas fa-search-plus"></i>
+						</button>
+					</div>
 				</div>
 			</div>
-			<div class="col settings-group">
-				<button type="button" class="btn btn-outline-secondary btn-sm settings" wicket:message="title:lbl.settings.whiteboard">
+			<div class="col-auto settings-group">
+				<button type="button" class="btn-outline-secondary btn-sm settings" wicket:message="title:lbl.settings.whiteboard">
 					<i class="fas fa-cog"></i>
 				</button>
 			</div>
