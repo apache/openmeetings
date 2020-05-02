@@ -72,6 +72,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -89,6 +90,7 @@ import org.wicketstuff.urlfragment.UrlFragment;
 import com.github.openjson.JSONObject;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
+import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 
 public class MainPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -289,6 +291,12 @@ public class MainPanel extends Panel {
 		};
 		logout.add(newOkCancelConfirm(this, getString("634")));
 		topLinks.add(logout);
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance()))); //this one should go before jquery-ui
+		super.renderHead(response);
 	}
 
 	private OmMenuItem getSubItem(String lbl, String title, MenuActions action) {

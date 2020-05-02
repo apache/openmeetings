@@ -128,6 +128,9 @@ public class StreamProcessor implements IStreamProcessor {
 				if (sender != null) {
 					Client sendClient = cm.getBySid(sender.getSid());
 					sd = sendClient.getStream(sender.getUid());
+					if (sd == null) {
+						break;
+					}
 					if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !sd.hasActivity(Activity.SCREEN)) {
 						break;
 					}
