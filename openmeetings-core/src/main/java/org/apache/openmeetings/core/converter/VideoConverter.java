@@ -69,7 +69,9 @@ public class VideoConverter extends BaseConverter {
 			args.addAll(List.of("-i", input //
 					, "-c:v", "h264" //
 					, "-c:a", "aac" //
-					, "-pix_fmt", "yuv420p"));
+					, "-pix_fmt", "yuv420p"
+					, "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2"
+					));
 			if (sf.isAudio()) {
 				args.add("-shortest");
 			}

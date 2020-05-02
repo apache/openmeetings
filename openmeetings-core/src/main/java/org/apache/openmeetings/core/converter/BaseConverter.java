@@ -315,17 +315,18 @@ public abstract class BaseConverter {
 
 	private List<String> addMp4OutParams(Recording r, List<String> argv, String mp4path) {
 		argv.addAll(List.of(
-				"-c:v", "h264", //
-				"-crf", "24",
-				"-vsync", "0",
-				"-pix_fmt", "yuv420p",
-				"-preset", getVideoPreset(),
-				"-profile:v", "baseline",
-				"-level", "3.0",
-				"-movflags", "faststart",
-				"-c:a", "aac",
-				"-ar", String.valueOf(getAudioRate()),
-				"-b:a", getAudioBitrate()
+				"-c:v", "h264" //
+				, "-crf", "24"
+				, "-vsync", "0"
+				, "-pix_fmt", "yuv420p"
+				, "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2"
+				, "-preset", getVideoPreset()
+				, "-profile:v", "baseline"
+				, "-level", "3.0"
+				, "-movflags", "faststart"
+				, "-c:a", "aac"
+				, "-ar", String.valueOf(getAudioRate())
+				, "-b:a", getAudioBitrate()
 				));
 		argv.addAll(additionalMp4OutParams(r));
 		argv.add(mp4path);
