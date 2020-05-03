@@ -81,9 +81,9 @@ public class RoomSidebar extends Panel {
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			StringValue s = getRequest().getRequestParameters().getParameterValue(PARAM_SETTINGS);
-			if (!s.isEmpty()) {
+			Client c = room.getClient();
+			if (!s.isEmpty() && c != null) {
 				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
-				Client c = room.getClient();
 				cp.setSettings(new JSONObject(s.toString())).update(c);
 				if (!avInited) {
 					avInited = true;

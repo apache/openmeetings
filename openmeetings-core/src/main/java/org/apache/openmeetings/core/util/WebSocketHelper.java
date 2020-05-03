@@ -55,31 +55,45 @@ import com.github.openjson.JSONObject;
 public class WebSocketHelper {
 	private static final Logger log = LoggerFactory.getLogger(WebSocketHelper.class);
 
-	public static void sendClient(final IWsClient inC, byte[] b) {
-		if (inC != null) {
-			sendClient(inC, c -> {
+	public static void sendClient(final IWsClient omClient, byte[] b) {
+		if (omClient != null) {
+			sendClient(omClient, c -> {
 				try {
 					c.sendMessage(b, 0, b.length);
-				} catch (IOException e) {
+				} catch (Throwable e) {
 					log.error("Error while sending binary message to client", e);
 				}
+				checkClosed(c, omClient);
 			});
 		}
 	}
 
-	public static void sendClient(final IWsClient inC, JSONObject msg) {
-		log.trace("Sending WebSocket message to Client: {} -> {}", inC, msg);
-		if (inC != null) {
-			sendClient(inC, c -> {
+	public static void sendClient(final IWsClient omClient, JSONObject msg) {
+		log.trace("Sending WebSocket message to Client: {} -> {}", omClient, msg);
+		if (omClient != null) {
+			sendClient(omClient, c -> {
 				try {
 					c.sendMessage(msg.toString());
-				} catch (IOException e) {
+				} catch (Throwable e) {
 					log.error("Error while sending message to client", e);
 				}
+				checkClosed(c, omClient);
 			});
 		}
 	}
 
+	private static void checkClosed(IWebSocketConnection c, final IWsClient omClient) {
+		if (c.isOpen()) {
+			return;
+		}
+		log.error("!!!!WS connection is closed in sendMessage");
+		WebSocketSettings settings = WebSocketSettings.Holder.get((Application)getApp());
+		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
+		reg.removeConnection(c.getApplication(), c.getSessionId(), c.getKey());
+		if (omClient instanceof Client) {
+			getApp().getBean(IClientManager.class).exit((Client)omClient);
+		}
+	}
 	public static IApplication getApp() {
 		return (IApplication)Application.get(getWicketApplicationName());
 	}
