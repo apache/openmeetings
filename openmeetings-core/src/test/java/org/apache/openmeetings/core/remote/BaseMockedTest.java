@@ -21,6 +21,7 @@ package org.apache.openmeetings.core.remote;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
@@ -67,9 +68,9 @@ public class BaseMockedTest {
 		MockitoAnnotations.initMocks(this);
 		mockStatic(KurentoClient.class);
 		mockStatic(WebSocketHelper.class);
-		when(client.getServerManager()).thenReturn(kServerManager);
+		doReturn(kServerManager).when(client).getServerManager();
 		when(KurentoClient.create(nullable(String.class), any(KurentoConnectionListener.class))).thenReturn(client);
-		when(client.beginTransaction()).thenReturn(new TransactionImpl(romManager));
+		doReturn(new TransactionImpl(romManager)).when(client).beginTransaction();
 		handler.init();
 	}
 }
