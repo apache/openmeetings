@@ -44,6 +44,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.junit.Test;
 import org.kurento.client.MediaPipeline;
+import org.kurento.client.ServerManager;
 import org.kurento.client.Transaction;
 import org.mockito.BDDMockito;
 import org.mockito.Mock;
@@ -74,6 +75,7 @@ public class TestRecordingFlowMocked extends BaseMockedTest {
 	@Override
 	public void setup() {
 		super.setup();
+		when(client.getServerManager()).thenReturn(mock(ServerManager.class));
 		when(client.createMediaPipeline(any(Transaction.class))).thenReturn(mock(MediaPipeline.class));
 		User u = new User();
 		u.setId(USER_ID);
