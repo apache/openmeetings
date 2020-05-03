@@ -380,8 +380,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[タイムゾーン]]></entry>
 	<entry key="1146"><![CDATA[概要]]></entry>
 	<entry key="1147"><![CDATA[作成者]]></entry>
-	<entry key="1148"><![CDATA[タイムゾーン設定を推奨]]></entry>
-	<entry key="1149"><![CDATA[次回ログイン時にタイムゾーン設定を行うことを勧めるメッセージを表示する場合にチェックを入れてください。]]></entry>
 	<entry key="1151"><![CDATA[{0}会議が設定されました:]]></entry>
 	<entry key="1152"><![CDATA[詳細:]]></entry>
 	<entry key="1153"><![CDATA[開始時刻:]]></entry>

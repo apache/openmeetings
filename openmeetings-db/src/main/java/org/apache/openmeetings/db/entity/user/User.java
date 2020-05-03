@@ -309,11 +309,6 @@ public class User extends HistoricalEntity {
 	@XmlTransient
 	private Sessiondata sessionData;
 
-	@Column(name = "forceTimeZoneCheck", nullable = false)
-	@XmlElement(name = "forceTimeZoneCheck", required = false)
-	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
-	private boolean forceTimeZoneCheck;
-
 	@Column(name = "user_offers")
 	@XmlElement(name = "userOffers", required = false)
 	private String userOffers;
@@ -590,14 +585,6 @@ public class User extends HistoricalEntity {
 	}
 	public void setTimeZoneId(String timeZoneId) {
 		this.timeZoneId = timeZoneId;
-	}
-
-	public boolean getForceTimeZoneCheck() {
-		return forceTimeZoneCheck;
-	}
-
-	public void setForceTimeZoneCheck(boolean forceTimeZoneCheck) {
-		this.forceTimeZoneCheck = forceTimeZoneCheck;
 	}
 
 	public String getUserOffers() {

@@ -686,9 +686,6 @@ public class BackupImport {
 			String tz = u.getTimeZoneId();
 			if (tz == null) {
 				u.setTimeZoneId(jNameTimeZone);
-				u.setForceTimeZoneCheck(true);
-			} else {
-				u.setForceTimeZoneCheck(false);
 			}
 
 			Long userId = u.getId();
