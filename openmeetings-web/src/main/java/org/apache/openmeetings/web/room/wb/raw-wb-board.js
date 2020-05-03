@@ -116,14 +116,24 @@ var Wb = function() {
 	function _updateZoomPanel() {
 		const ccount = canvases.length;
 		if (ccount > 1 && role === PRESENTER) {
-			zoomBar.find('.doc-group').show();
+			zoomBar.find('.doc-group input').prop("disabled", false);
+			zoomBar.find('.doc-group button').prop("disabled", false);
+			zoomBar.find('.doc-group .curr-slide').removeClass("text-muted");
+			zoomBar.find('.doc-group .curr-slide').addClass("text-dark");
+			zoomBar.find('.doc-group .input-group-text').removeClass("text-muted");
 			const ns = 1 * slide;
 			zoomBar.find('.doc-group .curr-slide').val(ns + 1).attr('max', ccount);
 			zoomBar.find('.doc-group .up').prop('disabled', ns < 1);
 			zoomBar.find('.doc-group .down').prop('disabled', ns > ccount - 2);
 			zoomBar.find('.doc-group .last-page').text(ccount);
 		} else {
-			zoomBar.find('.doc-group').hide();
+			zoomBar.find('.doc-group .curr-slide').val(0);
+			zoomBar.find('.doc-group .last-page').text("-");
+			zoomBar.find('.doc-group .curr-slide').addClass("text-muted");
+			zoomBar.find('.doc-group .curr-slide').removeClass("text-dark");
+			zoomBar.find('.doc-group .input-group-text').addClass("text-muted");
+			zoomBar.find('.doc-group input').prop("disabled", true);
+			zoomBar.find('.doc-group button').prop("disabled", true);
 		}
 	}
 	function _setSlide(_sld) {

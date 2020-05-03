@@ -232,6 +232,7 @@ var DrawWbArea = function() {
 			self.removeDeleteHandler();
 		}
 		__initTab(tabsNav.find('li'));
+		console.log("this", tabs, tabs.find('.wb-tab-content .wb-tab'));
 		tabs.find('.wb-tab-content .wb-tab').each(function() {
 			$(this).data().setRole(role);
 		});
