@@ -26,7 +26,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 import org.apache.openmeetings.db.entity.basic.WsClient;
@@ -57,16 +56,16 @@ public class TestSetupFlowMocked extends BaseMockedTest {
 
 	@Test
 	public void testMsgTestRecord1() throws Exception {
-		when(client.createMediaPipeline(any(Transaction.class))).thenReturn(mock(MediaPipeline.class));
+		doReturn(mock(MediaPipeline.class)).when(client).createMediaPipeline(any(Transaction.class));
 		WebRtcEndpoint.Builder builder = mock(WebRtcEndpoint.Builder.class);
 		whenNew(WebRtcEndpoint.Builder.class).withArguments(any(MediaPipeline.class)).thenReturn(builder);
-		when(builder.build()).thenReturn(mock(WebRtcEndpoint.class));
+		doReturn(mock(WebRtcEndpoint.class)).when(builder).build();
 
 		RecorderEndpoint.Builder recBuilder = mock(RecorderEndpoint.Builder.class);
 		whenNew(RecorderEndpoint.Builder.class).withArguments(any(MediaPipeline.class), anyString()).thenReturn(recBuilder);
-		when(recBuilder.stopOnEndOfStream()).thenReturn(recBuilder);
-		when(recBuilder.withMediaProfile(any(MediaProfileSpecType.class))).thenReturn(recBuilder);
-		when(recBuilder.build()).thenReturn(mock(RecorderEndpoint.class));
+		doReturn(recBuilder).when(recBuilder).stopOnEndOfStream();
+		doReturn(recBuilder).when(recBuilder).withMediaProfile(any(MediaProfileSpecType.class));
+		doReturn(mock(RecorderEndpoint.class)).when(recBuilder).build();
 
 		WsClient c = new WsClient("sessionId", 0);
 		for (boolean audio : new boolean[] {true, false}) {
@@ -88,7 +87,7 @@ public class TestSetupFlowMocked extends BaseMockedTest {
 		handler.onMessage(c, iceMsg);
 		PlayerEndpoint.Builder playBuilder = mock(PlayerEndpoint.Builder.class);
 		whenNew(PlayerEndpoint.Builder.class).withArguments(any(MediaPipeline.class), anyString()).thenReturn(playBuilder);
-		when(playBuilder.build()).thenReturn(mock(PlayerEndpoint.class));
+		doReturn(mock(PlayerEndpoint.class)).when(playBuilder).build();
 		handler.onMessage(c, new JSONObject(MSG_BASE.toString())
 				.put("id", "play")
 				.put("sdpOffer", "sdpOffer"));

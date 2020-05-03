@@ -64,12 +64,12 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 	@Override
 	public void setup() {
 		super.setup();
-		when(client.createMediaPipeline(any(Transaction.class))).thenReturn(mock(MediaPipeline.class));
+		doReturn(mock(MediaPipeline.class)).when(client).createMediaPipeline(any(Transaction.class));
 		User u = new User();
 		u.setId(USER_ID);
 		u.setFirstname("firstname");
 		u.setLastname("lastname");
-		when(userDao.get(USER_ID)).thenReturn(u);
+		doReturn(u).when(userDao).get(USER_ID);
 		doReturn(true).when(handler).isConnected();
 		when(recDao.update(any(Recording.class))).thenAnswer((invocation) ->  {
 			Object[] args = invocation.getArguments();
@@ -103,7 +103,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 		c.getRoom().setAllowRecording(true);
 		assertFalse(streamProcessor.recordingAllowed(c));
 		c.allow(Room.Right.MODERATOR);
-		when(roomDao.get(ROOM_ID)).thenReturn(c.getRoom());
+		doReturn(c.getRoom()).when(roomDao).get(ROOM_ID);
 		assertTrue(streamProcessor.recordingAllowed(c));
 	}
 
@@ -132,7 +132,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 		JSONObject msg = new JSONObject(MSG_BASE.toString()).put("id", "wannaRecord");
 		Client c = getClientFull();
 		c.getRoom().setType(Room.Type.INTERVIEW);
-		when(roomDao.get(ROOM_ID)).thenReturn(c.getRoom());
+		doReturn(c.getRoom()).when(roomDao).get(ROOM_ID);
 		handler.onMessage(c, msg);
 	}
 
@@ -148,7 +148,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 				.put("fps", "fps")
 				;
 		Client c = getClientFull();
-		when(roomDao.get(ROOM_ID)).thenReturn(c.getRoom());
+		doReturn(c.getRoom()).when(roomDao).get(ROOM_ID);
 		handler.onMessage(c, msg);
 		assertTrue(streamProcessor.isSharing(ROOM_ID));
 		handler.onMessage(c, msg);

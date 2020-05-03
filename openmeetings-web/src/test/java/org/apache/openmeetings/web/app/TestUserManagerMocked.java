@@ -25,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -63,8 +64,8 @@ public class TestUserManagerMocked {
 	@Test
 	public void oauthTest() throws NoSuchAlgorithmException, IOException {
 		setCryptClassName(SCryptImplementation.class.getCanonicalName());
-		when(userDao.validLogin(anyString())).thenReturn(true);
-		when(userDao.checkEmail(anyString(), eq(Type.OAUTH), any(Long.class), nullable(Long.class))).thenReturn(true);
+		doReturn(true).when(userDao).validLogin(anyString());
+		doReturn(true).when(userDao).checkEmail(anyString(), eq(Type.OAUTH), any(Long.class), nullable(Long.class));
 		when(userDao.update(any(User.class), nullable(String.class), any(Long.class))).then(new Answer<User>() {
 			@Override
 			public User answer(InvocationOnMock invocation) throws Throwable {
