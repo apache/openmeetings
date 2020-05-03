@@ -35,7 +35,6 @@ import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaProfileSpecType;
 import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.RecorderEndpoint;
-import org.kurento.client.ServerManager;
 import org.kurento.client.Transaction;
 import org.kurento.client.WebRtcEndpoint;
 
@@ -58,7 +57,6 @@ public class TestSetupFlowMocked extends BaseMockedTest {
 
 	@Test
 	public void testMsgTestRecord1() throws Exception {
-		when(client.getServerManager()).thenReturn(mock(ServerManager.class));
 		when(client.createMediaPipeline(any(Transaction.class))).thenReturn(mock(MediaPipeline.class));
 		WebRtcEndpoint.Builder builder = mock(WebRtcEndpoint.Builder.class);
 		whenNew(WebRtcEndpoint.Builder.class).withArguments(any(MediaPipeline.class)).thenReturn(builder);
