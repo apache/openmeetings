@@ -323,11 +323,19 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 	border: 1px solid #888888;
 	box-shadow: 5px 5px 5px #888888;
 }
+.wb-area .wb-zoom {
+	display: flex;
+	padding-top: 2px;
+	min-width: 360px
+}
+.wb-area .wb-zoom .doc-group
+, .wb-area .wb-zoom .zoom-group
+, .wb-area .wb-zoom .settings-group
+{
+	width: auto;
+}
 .wb-area .wb-zoom input {
 	width: 50px
-}
-.wb-area .wb-zoom {
-	min-width: 360px
 }
 .wb-area .wb-zoom .settings-group {
 	display: none;
@@ -338,9 +346,6 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 }
 .wb-area .wb-zoom .zoom-group {
 	margin-left: 2px;
-}
-.wb-area .wb-zoom {
-	padding-top: 2px;
 }
 #wb-rename-menu {
 	display: none;
