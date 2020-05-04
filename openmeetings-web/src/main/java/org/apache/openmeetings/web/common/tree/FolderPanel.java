@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import java.util.Map.Entry;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
@@ -66,6 +67,8 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 	private RecordingDao recDao;
 	@SpringBean
 	private FileItemDao fileDao;
+	@SpringBean
+	private FileItemLogDao fileLogDao;
 
 	public FolderPanel(String id, final IModel<BaseFileItem> model, final FileTreePanel treePanel) {
 		super(id, model);
@@ -225,6 +228,19 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 		}
 		String cls = f instanceof Recording ? "recorditem " : "fileitem ";
 		style.append(f.isReadOnly() ? "readonlyitem " : cls);
+
+		long errorCount = fileLogDao.countErrors(f);
+		boolean hasError = errorCount != 0;
+		if (BaseFileItem.Type.RECORDING == f.getType()) {
+			Recording r = (Recording)f;
+			hasError |= (Status.RECORDING != r.getStatus() && Status.CONVERTING != r.getStatus() && !f.exists());
+		} else {
+			hasError |= !f.exists();
+		}
+		if (hasError) {
+			style.append("error");
+		}
+
 		return style;
 	}
 
