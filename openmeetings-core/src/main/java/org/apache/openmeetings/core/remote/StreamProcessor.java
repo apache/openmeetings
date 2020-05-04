@@ -174,8 +174,11 @@ public class StreamProcessor implements IStreamProcessor {
 	}
 
 	private void handleBroadcastStarted(Client c, final String uid, JSONObject msg) {
+		if (!kHandler.isConnected()) {
+			return;
+		}
 		StreamDesc sd = c.getStream(uid);
-		KStream sender= getByUid(uid);
+		KStream sender = getByUid(uid);
 		try {
 			if (sender == null) {
 				KRoom room = kHandler.getRoom(c.getRoomId());
@@ -230,6 +233,9 @@ public class StreamProcessor implements IStreamProcessor {
 
 	public void toggleActivity(Client c, Activity a) {
 		log.info("PARTICIPANT {}: trying to toggle activity {}", c, a);
+		if (!kHandler.isConnected()) {
+			return;
+		}
 
 		if (activityAllowed(c, a, c.getRoom())) {
 			boolean wasBroadcasting = isBroadcasting(c);
@@ -567,6 +573,8 @@ public class StreamProcessor implements IStreamProcessor {
 
 	@Override
 	public void destroy() {
-		streamByUid.clear();
+		for (Map.Entry<String, KStream> e : streamByUid.entrySet()) {
+			release(e.getValue(), true);
+		}
 	}
 }

@@ -122,16 +122,19 @@ public class KurentoHandler {
 	public void init() {
 		check = () -> {
 			try {
-				if (isConnected()) {
+				if (client != null) {
 					return;
 				}
+				log.debug("Reconnecting KMS");
 				kuid = randomUUID().toString();
-				client = KurentoClient.create(kurentoWsUrl, new KConnectionListener(kuid));
+				client = KurentoClient.create(kurentoWsUrl, new KConnectionListener());
 				client.getServerManager().addObjectCreatedListener(new KWatchDogCreate());
 				client.getServerManager().addObjectDestroyedListener(event ->
 					log.debug("Kurento::ObjectDestroyedEvent objectId {}, tags {}, source {}", event.getObjectId(), event.getTags(), event.getSource())
 				);
 			} catch (Exception e) {
+				connected = false;
+				clean();
 				log.warn("Fail to create Kurento client, will re-try in {} ms", checkTimeout);
 			}
 		};
@@ -146,15 +149,19 @@ public class KurentoHandler {
 
 	private void clean() {
 		if (client != null) {
-			kuid = randomUUID().toString(); // will be changed to prevent double events
-			client.destroy();
+			KurentoClient copy = client;
+			client = null;
+			testProcessor.destroy();
+			streamProcessor.destroy();
 			for (Entry<Long, KRoom> e : rooms.entrySet()) {
 				e.getValue().close();
 			}
-			testProcessor.destroy();
-			streamProcessor.destroy();
 			rooms.clear();
-			client = null;
+			if (copy != null && !copy.isClosed()) {
+				log.debug("Client will destroyed ...");
+				copy.destroy();
+				log.debug(".... Client is destroyed");
+			}
 		}
 	}
 
@@ -223,7 +230,7 @@ public class KurentoHandler {
 	}
 
 	public void remove(IWsClient c) {
-		if (!isConnected() ||c == null) {
+		if (!isConnected() || c == null) {
 			return;
 		}
 		if (!(c instanceof Client)) {
@@ -365,12 +372,6 @@ public class KurentoHandler {
 	}
 
 	private class KConnectionListener implements KurentoConnectionListener {
-		final String lkuid;
-
-		private KConnectionListener(final String lkuid) {
-			this.lkuid = lkuid;
-		}
-
 		private void notifyRooms() {
 			WebSocketHelper.sendServer(new TextRoomMessage(null, new User(), RoomMessage.Type.KURENTO_STATUS, new JSONObject().put("connected", isConnected()).toString()));
 		}
@@ -383,11 +384,9 @@ public class KurentoHandler {
 		@Override
 		public void disconnected() {
 			log.info("Kurento disconnected");
-			if (lkuid.equals(kuid)) {
-				connected = false;
-				notifyRooms();
-				clean();
-			}
+			connected = false;
+			notifyRooms();
+			clean();
 		}
 
 		@Override
