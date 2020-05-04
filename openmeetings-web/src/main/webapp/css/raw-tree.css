@@ -1,7 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 .file-tree {
 	vertical-align: top;
-	max-width: 350px;
 	height: 100%;
 	width: 100%;
 	display: inline-block;
@@ -23,6 +22,12 @@
 }
 .file-tree .footer .sizes .size {
 	padding-left: 5px;
+}
+.file-tree .file.item .name
+	, .file-tree .file.item .name span
+{
+	max-width: calc(var(--room-sidebar-width) - 100px);
+	min-width: 60px;
 }
 .trash-toolbar {
 	font-weight: bold;
@@ -155,8 +160,6 @@
 .file.item .name, .file.item .name span {
 	color: black;
 	display: block;
-	width: 230px;
-	max-width: 230px;
 	/* Required for text-overflow to do anything */
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -171,6 +174,8 @@
 	right: 0px;
 	width: 32px;
 	height: 32px;
+	margin: 0px;
+	padding: 0px;
 }
 .file.item .errors::before {
 	color: var(--warning);
