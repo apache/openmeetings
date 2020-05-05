@@ -22,8 +22,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
+import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_GROUP;
+import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_MY;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
 import java.util.ArrayList;
@@ -248,7 +251,14 @@ public class RoomMenuPanel extends Panel {
 	public void exit(IPartialPageRequestHandler handler) {
 		cm.exitRoom(room.getClient());
 		if (WebSession.getRights().contains(User.Right.DASHBOARD)) {
-			room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
+			final Room r = room.getRoom();
+			if (isMyRoomsEnabled() && r != null && getUserId().equals(r.getOwnerId())) {
+				room.getMainPanel().updateContents(ROOMS_MY, handler);
+			} else if (r != null && !r.getIspublic()) {
+				room.getMainPanel().updateContents(ROOMS_GROUP, handler);
+			} else {
+				room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
+			}
 		} else {
 			String url = cfgDao.getString(CONFIG_REDIRECT_URL_FOR_EXTERNAL, "");
 			throw new RedirectToUrlException(Strings.isEmpty(url) ? getBaseUrl() : url);

@@ -81,6 +81,8 @@ public class OmUrlFragment implements Serializable {
 	public static final OmUrlFragment PROFILE_MESSAGES = new OmUrlFragment(AreaKeys.profile, TYPE_MESSAGES);
 	public static final OmUrlFragment CALENDAR = new OmUrlFragment(AreaKeys.user, TYPE_CALENDAR);
 	public static final OmUrlFragment ROOMS_PUBLIC = new OmUrlFragment(AreaKeys.rooms, TYPE_PUBLIC);
+	public static final OmUrlFragment ROOMS_GROUP = new OmUrlFragment(AreaKeys.rooms, TYPE_GROUP);
+	public static final OmUrlFragment ROOMS_MY = new OmUrlFragment(AreaKeys.rooms, TYPE_MY);
 
 	public enum AreaKeys {
 		user
