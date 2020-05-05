@@ -397,19 +397,6 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 .room-block.narrow .sidebar .tab.om-icon.big .label {
 	display: none;
 }
-/*.room-block.narrow .sidebar .file-tree .file.item .name
-	, .room-block.narrow .sidebar .file-tree .file.item .name span
-{
-	width: calc(var(--room-sidebar-width) + var(--buffer-size));
-	width: 40px;
-}
-.room-block .sidebar .file-tree .file.item .name
-	, .room-block .sidebar .file-tree .file.item .name span
-{
-	max-width: calc(var(--room-sidebar-width) - 100px);
-	min-width: 60px;
-}
-*/
 .room-block .wait-moder {
 	position: fixed;
 	bottom: 30px;
