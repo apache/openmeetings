@@ -23,53 +23,89 @@
 .file-tree .footer .sizes .size {
 	padding-left: 5px;
 }
+/* Calc width with default for max level of 7 */
 .file-tree .file.item .name
 	, .file-tree .file.item .name span
 {
-	max-width: calc(var(--room-sidebar-width) - 58px);
+	max-width: calc(var(--room-sidebar-width) - 26px);
 	min-width: 60px;
 }
 .file-tree .tree-subtree .file.item .name
 	, .file-tree .tree-subtree .file.item .name span
 {
-	max-width: calc(var(--room-sidebar-width) - 76px);
-	min-width: 60px;
+	max-width: calc(var(--room-sidebar-width) - 44px);
 }
 .file-tree .tree-subtree .tree-subtree .file.item .name
 	, .file-tree .tree-subtree .tree-subtree .file.item .name span
 {
-	max-width: calc(var(--room-sidebar-width) - 94px);
-	min-width: 60px;
+	max-width: calc(var(--room-sidebar-width) - 62px);
 }
 .file-tree .tree-subtree .tree-subtree .tree-subtree .file.item .name
 	, .file-tree .tree-subtree .tree-subtree .tree-subtree .file.item .name span
 {
-	max-width: calc(var(--room-sidebar-width) - 112px);
-	min-width: 60px;
+	max-width: calc(var(--room-sidebar-width) - 80px);
 }
 .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name
 	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name span
 {
-	max-width: calc(var(--room-sidebar-width) - 130px);
-	min-width: 60px;
+	max-width: calc(var(--room-sidebar-width) - 98px);
 }
 .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name
 	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name span
 {
-	max-width: calc(var(--room-sidebar-width) - 148px);
-	min-width: 60px;
+	max-width: calc(var(--room-sidebar-width) - 116px);
 }
 .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name
 	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name span
 {
-	max-width: calc(var(--room-sidebar-width) - 166px);
-	min-width: 60px;
+	max-width: calc(var(--room-sidebar-width) - 134px);
 }
 .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name
 	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name span
 {
-	max-width: calc(var(--room-sidebar-width) - 184px);
+	max-width: calc(var(--room-sidebar-width) - 152px);
+}
+/* adding 32px extra space in case "broken" symbol is on same row*/
+.file-tree .broken .file.item .name
+	, .file-tree .broken .file.item .name span
+{
+	max-width: calc(var(--room-sidebar-width) - 58px);
 	min-width: 60px;
+}
+.file-tree .tree-subtree .broken .file.item .name
+	, .file-tree .tree-subtree .broken .file.item .name span
+{
+	max-width: calc(var(--room-sidebar-width) - 76px);
+}
+.file-tree .tree-subtree .tree-subtree .broken .file.item .name
+	, .file-tree .tree-subtree .tree-subtree .broken .file.item .name span
+{
+	max-width: calc(var(--room-sidebar-width) - 94px);
+}
+.file-tree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name
+	, .file-tree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name span
+{
+	max-width: calc(var(--room-sidebar-width) - 112px);
+}
+.file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name
+	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name span
+{
+	max-width: calc(var(--room-sidebar-width) - 130px);
+}
+.file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name
+	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name span
+{
+	max-width: calc(var(--room-sidebar-width) - 148px);
+}
+.file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name
+	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name span
+{
+	max-width: calc(var(--room-sidebar-width) - 166px);
+}
+.file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name
+	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name span
+{
+	max-width: calc(var(--room-sidebar-width) - 184px);
 }
 .trash-toolbar {
 	font-weight: bold;
