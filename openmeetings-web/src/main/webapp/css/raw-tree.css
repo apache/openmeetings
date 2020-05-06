@@ -7,7 +7,8 @@
 }
 .file-tree .trees {
 	height: calc(100% - var(--tree-header-height) - var(--tree-footer-height));
-	overflow-x: hidden;
+	width: var(--room-sidebar-width);
+	overflow-x: auto;
 	overflow-y: auto;
 }
 .file-tree .trees #tree-anchor {
