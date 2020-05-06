@@ -397,11 +397,6 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 .room-block.narrow .sidebar .tab.om-icon.big .label {
 	display: none;
 }
-.room-block.narrow .sidebar .file-tree .file.item .name
-	, .room-block.narrow .sidebar .file-tree .file.item .name span
-{
-	width: 40px;
-}
 .room-block .wait-moder {
 	position: fixed;
 	bottom: 30px;
