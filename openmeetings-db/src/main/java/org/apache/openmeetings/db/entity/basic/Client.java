@@ -37,7 +37,6 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONArray;
@@ -68,8 +67,8 @@ public class Client implements IDataProviderEntity, IWsClient {
 	private final String uid;
 	private final String sid;
 	private String remoteAddress;
-	private final Set<Right> rights = new ConcurrentHashSet<>();
-	private final Set<Activity> activities = new ConcurrentHashSet<>();
+	private final Set<Right> rights = ConcurrentHashMap.newKeySet();
+	private final Set<Activity> activities = ConcurrentHashMap.newKeySet();
 	private final Map<String, StreamDesc> streams = new ConcurrentHashMap<>();
 	private final Date connectedSince;
 	private int cam = -1;
@@ -448,7 +447,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 
 	public class StreamDesc implements Serializable {
 		private static final long serialVersionUID = 1L;
-		private final Set<Activity> sactivities = new ConcurrentHashSet<>();
+		private final Set<Activity> sactivities = ConcurrentHashMap.newKeySet();
 		private final String uuid;
 		private final StreamType type;
 		private int swidth;

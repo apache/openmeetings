@@ -49,7 +49,6 @@ import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -262,7 +261,7 @@ public class ClientManager implements IClientManager {
 		log.debug("Adding online room client: {}, room: {}", c.getUid(), roomId);
 		IMap<Long, Set<String>> rooms = rooms();
 		rooms.lock(roomId);
-		rooms.putIfAbsent(roomId, new ConcurrentHashSet<String>());
+		rooms.putIfAbsent(roomId, ConcurrentHashMap.newKeySet());
 		Set<String> set = rooms.get(roomId);
 		set.add(c.getUid());
 		final int count = set.size();

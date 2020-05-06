@@ -63,7 +63,6 @@ public class WebSocketHelper {
 				} catch (Throwable e) {
 					log.error("Error while sending binary message to client", e);
 				}
-				checkClosed(c, omClient);
 			});
 		}
 	}
@@ -77,36 +76,25 @@ public class WebSocketHelper {
 				} catch (Throwable e) {
 					log.error("Error while sending message to client", e);
 				}
-				checkClosed(c, omClient);
 			});
 		}
 	}
 
-	private static void checkClosed(IWebSocketConnection c, final IWsClient omClient) {
-		if (c.isOpen()) {
-			return;
-		}
-		log.error("!!!!WS connection is closed in sendMessage");
-		WebSocketSettings settings = WebSocketSettings.Holder.get((Application)getApp());
-		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-		reg.removeConnection(c.getApplication(), c.getSessionId(), c.getKey());
-		if (omClient instanceof Client) {
-			getApp().getBean(IClientManager.class).exit((Client)omClient);
-		}
-	}
 	public static IApplication getApp() {
 		return (IApplication)Application.get(getWicketApplicationName());
 	}
 
 	private static void sendClient(IWsClient client, Consumer<IWebSocketConnection> wsc) {
-		Application app = (Application)getApp();
-		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
-		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-		Executor executor = settings.getWebSocketPushMessageExecutor();
-		final IWebSocketConnection wc = reg.getConnection(app, client.getSessionId(), new PageIdKey(client.getPageId()));
-		if (wc != null && wc.isOpen()) {
-			executor.run(() -> wsc.accept(wc));
-		}
+		new Thread(() -> {
+			Application app = (Application)getApp();
+			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
+			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
+			Executor executor = settings.getWebSocketPushMessageExecutor();
+			final IWebSocketConnection wc = reg.getConnection(app, client.getSessionId(), new PageIdKey(client.getPageId()));
+			if (wc != null && wc.isOpen()) {
+				executor.run(() -> wsc.accept(wc));
+			}
+		}).start();
 	}
 
 	public static boolean send(IClusterWsMessage msg) {
@@ -205,8 +193,10 @@ public class WebSocketHelper {
 			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
 			Executor executor = settings.getWebSocketPushMessageExecutor();
-			for (IWebSocketConnection c : reg.getConnections(app)) {
-				executor.run(() -> sender.accept(c));
+			for (IWebSocketConnection wc : reg.getConnections(app)) {
+				if (wc != null && wc.isOpen()) {
+					executor.run(() -> sender.accept(wc));
+				}
 			}
 		}).start();
 	}
