@@ -66,6 +66,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_SMTP_PASS = "mail.smtp.pass";
 	public static final String CONFIG_SMTP_SYSTEM_EMAIL = "mail.smtp.system.email";
 	public static final String CONFIG_SMTP_TLS = "mail.smtp.starttls.enable";
+	public static final String CONFIG_SMTP_SSL = "mail.smtp.ssl.enable";
 	public static final String CONFIG_SMTP_TIMEOUT_CON = "mail.smtp.connection.timeout";
 	public static final String CONFIG_SMTP_TIMEOUT = "mail.smtp.timeout";
 	public static final String CONFIG_PATH_IMAGEMAGIC = "path.imagemagick";
@@ -156,6 +157,16 @@ public class OpenmeetingsVariables {
 	private static String cspMediaSrc = SELF.getValue();
 	private static String cspScriptSrc = STRICT_DYNAMIC.getValue();
 	private static String cspStyleSrc = DEFAULT_CSP_STYLE;
+	private static String smtpServer;
+	private static int smtpPort;
+	private static boolean smtpUseTls;
+	private static boolean smtpUseSsl;
+	private static String smtpUser;
+	private static String smtpPass;
+	private static int smtpTimeOut;
+	private static int smtpConnectionTimeOut;
+	private static String mailFrom;
+	private static boolean mailAddReplyTo;
 
 	private OpenmeetingsVariables() {}
 
@@ -457,5 +468,86 @@ public class OpenmeetingsVariables {
 
 	public static void setCspStyleSrc(String src) {
 		cspStyleSrc = src;
+	}
+
+
+	public static String getSmtpServer() {
+		return smtpServer;
+	}
+
+	public static void setSmtpServer(String server) {
+		smtpServer = server;
+	}
+
+	public static int getSmtpPort() {
+		return smtpPort;
+	}
+
+	public static void setSmtpPort(int port) {
+		smtpPort = port;
+	}
+
+	public static boolean isSmtpUseTls() {
+		return smtpUseTls;
+	}
+
+	public static void setSmtpUseTls(boolean useTls) {
+		smtpUseTls = useTls;
+	}
+
+	public static boolean isSmtpUseSsl() {
+		return smtpUseSsl;
+	}
+
+	public static void setSmtpUseSsl(boolean useSsl) {
+		smtpUseSsl = useSsl;
+	}
+
+	public static String getSmtpUser() {
+		return smtpUser;
+	}
+
+	public static void setSmtpUser(String user) {
+		smtpUser = user;
+	}
+
+	public static String getSmtpPass() {
+		return smtpPass;
+	}
+
+	public static void setSmtpPass(String pass) {
+		smtpPass = pass;
+	}
+
+	public static int getSmtpTimeOut() {
+		return smtpTimeOut;
+	}
+
+	public static void setSmtpTimeOut(int timeOut) {
+		smtpTimeOut = timeOut;
+	}
+
+	public static int getSmtpConnectionTimeOut() {
+		return smtpConnectionTimeOut;
+	}
+
+	public static void setSmtpConnectionTimeOut(int timeOut) {
+		smtpConnectionTimeOut = timeOut;
+	}
+
+	public static String getMailFrom() {
+		return mailFrom;
+	}
+
+	public static void setMailFrom(String from) {
+		mailFrom = from;
+	}
+
+	public static boolean isMailAddReplyTo() {
+		return mailAddReplyTo;
+	}
+
+	public static void setMailAddReplyTo(boolean addReplyTo) {
+		mailAddReplyTo = addReplyTo;
 	}
 }

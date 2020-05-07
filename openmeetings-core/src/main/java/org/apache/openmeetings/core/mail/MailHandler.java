@@ -19,16 +19,17 @@
 package org.apache.openmeetings.core.mail;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REPLY_TO_ORGANIZER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SYSTEM_EMAIL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT_CON;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMailFrom;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getSmtpConnectionTimeOut;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getSmtpPass;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getSmtpPort;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getSmtpServer;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getSmtpTimeOut;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getSmtpUser;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMailAddReplyTo;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSmtpUseSsl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSmtpUseTls;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -54,7 +55,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.db.entity.basic.MailMessage.Status;
@@ -70,7 +70,7 @@ import org.springframework.stereotype.Component;
  *
  * @author swagner
  *
- * For a documentation about Javax mail please see fro example:
+ * For a documentation about Javax mail please see for example:
  * http://connector.sourceforge.net/doc-files/Properties.html
  *
  */
@@ -81,43 +81,9 @@ public class MailHandler {
 	private static final int MAXIMUM_ERROR_COUNT = 5;
 
 	@Autowired
-	private ConfigurationDao cfgDao;
-	@Autowired
 	private TaskExecutor taskExecutor;
 	@Autowired
 	private MailMessageDao mailMessageDao;
-
-	private String smtpServer;
-	private int smtpPort;
-	private String from;
-	private String mailAuthUser;
-	private String mailAuthPass;
-	private boolean mailTls;
-	private boolean mailAddReplyTo;
-	private int smtpConnectionTimeOut;
-	private int smtpTimeOut;
-
-	private void init() {
-		smtpServer = cfgDao.getString(CONFIG_SMTP_SERVER, null);
-		smtpPort = cfgDao.getInt(CONFIG_SMTP_PORT, 25);
-		from = cfgDao.getString(CONFIG_SMTP_SYSTEM_EMAIL, null);
-		mailAuthUser = cfgDao.getString(CONFIG_SMTP_USER, null);
-		mailAuthPass = cfgDao.getString(CONFIG_SMTP_PASS, null);
-		mailTls = cfgDao.getBool(CONFIG_SMTP_TLS, false);
-		mailAddReplyTo = cfgDao.getBool(CONFIG_REPLY_TO_ORGANIZER, true);
-		smtpConnectionTimeOut = cfgDao.getInt(CONFIG_SMTP_TIMEOUT_CON, 30000);
-		smtpTimeOut = cfgDao.getInt(CONFIG_SMTP_TIMEOUT, 30000);
-	}
-
-	public void init(String smtpServer, int smtpPort, String from, String mailAuthUser, String mailAuthPass, boolean mailTls, boolean mailAddReplyTo) {
-		this.smtpServer = smtpServer;
-		this.smtpPort = smtpPort;
-		this.from = from;
-		this.mailAuthUser = mailAuthUser;
-		this.mailAuthPass = mailAuthPass;
-		this.mailTls = mailTls;
-		this.mailAddReplyTo = mailAddReplyTo;
-	}
 
 	protected MimeMessage appendIcsBody(MimeMessage msg, MailMessage m) throws Exception {
 		log.debug("setMessageBody for iCal message");
@@ -167,31 +133,36 @@ public class MailHandler {
 		return msg;
 	}
 
+	// this method should be public for tests
 	public MimeMessage getBasicMimeMessage() throws Exception {
 		log.debug("getBasicMimeMessage");
-		if (smtpServer == null) {
-			init();
+		if (getSmtpServer() == null) {
+			throw new IllegalStateException("SMTP settings were not provided");
 		}
 		Properties props = new Properties(System.getProperties());
 
-		props.put("mail.smtp.host", smtpServer);
-		props.put("mail.smtp.port", smtpPort);
-		if (mailTls) {
-			props.put("mail.smtp.ssl.trust", smtpServer);
-			props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", getSmtpServer());
+		props.put("mail.smtp.port", getSmtpPort());
+		if (isSmtpUseTls() || isSmtpUseSsl()) {
+			props.put("mail.smtp.ssl.trust", getSmtpServer());
 		}
-		props.put("mail.smtp.connectiontimeout", smtpConnectionTimeOut);
-		props.put("mail.smtp.timeout", smtpTimeOut);
+		if (isSmtpUseTls() && isSmtpUseSsl()) {
+			log.warn("Both SSL and TLS are enabled, TLS will be started");
+		}
+		props.put("mail.smtp.starttls.enable", isSmtpUseTls());
+		props.put("mail.smtp.ssl.enable", isSmtpUseSsl());
+		props.put("mail.smtp.connectiontimeout", getSmtpConnectionTimeOut());
+		props.put("mail.smtp.timeout", getSmtpTimeOut());
 
 		// Check for Authentication
 		Session session;
-		if (!Strings.isEmpty(mailAuthUser) && !Strings.isEmpty(mailAuthPass)) {
+		if (!Strings.isEmpty(getSmtpUser()) && !Strings.isEmpty(getSmtpPass())) {
 			// use SMTP Authentication
-			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.auth", true);
 			session = Session.getDefaultInstance(props, new Authenticator() {
 				@Override
 				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(mailAuthUser, mailAuthPass);
+					return new PasswordAuthentication(getSmtpUser(), getSmtpPass());
 				}
 			});
 		} else {
@@ -201,7 +172,7 @@ public class MailHandler {
 
 		// Building MimeMessage
 		MimeMessage msg = new MimeMessage(session);
-		msg.setFrom(new InternetAddress(from));
+		msg.setFrom(new InternetAddress(getMailFrom()));
 		return msg;
 	}
 
@@ -211,7 +182,7 @@ public class MailHandler {
 		MimeMessage msg = getBasicMimeMessage();
 		msg.setSubject(m.getSubject(), UTF_8.name());
 		String replyTo = m.getReplyTo();
-		if (replyTo != null && mailAddReplyTo) {
+		if (replyTo != null && isMailAddReplyTo()) {
 			log.debug("setReplyTo {}", replyTo);
 			if (MailUtil.isValid(replyTo)) {
 				msg.setReplyTo(new InternetAddress[]{new InternetAddress(replyTo)});
@@ -280,7 +251,6 @@ public class MailHandler {
 	}
 
 	public void sendMails() {
-		init();
 		log.trace("sendMails enter ...");
 		List<MailMessage> list = mailMessageDao.get(0, 1, MailMessage.Status.NONE);
 		if (!list.isEmpty()) {
