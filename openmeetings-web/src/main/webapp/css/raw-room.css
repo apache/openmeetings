@@ -374,7 +374,9 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 .room-block .sb-wb .sidebar .tab.om-icon.big {
 	line-height: 30px;
 	width: auto;
-	max-width: 80px;
+	padding-left: 10px;
+	min-width: 100px;
+	max-width: 120px;
 	position: relative;
 }
 .room-block .sb-wb .sidebar .tab .badge {
@@ -383,7 +385,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	right: 2px;
 }
 .room-block .sb-wb .sidebar .tab.om-icon.big .label {
-	max-width: 45px;
+	max-width: 60px;
 	display: inline-block;
 	text-overflow: ellipsis;
 	overflow: hidden;
@@ -391,7 +393,9 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 .room-block.narrow .sidebar .tab.om-icon.big {
 	max-width: 40px;
+	min-width: auto;
 	width: 40px;
+	padding-left: 6px;
 	padding-right: 0;
 }
 .room-block.narrow .sidebar .tab.om-icon.big .label {
