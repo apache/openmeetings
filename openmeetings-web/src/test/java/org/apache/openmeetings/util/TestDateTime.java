@@ -29,6 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.openmeetings.web.common.AbstractOmDateTimePicker;
 import org.junit.jupiter.api.Test;
 
 public class TestDateTime {
@@ -72,5 +73,17 @@ public class TestDateTime {
 				.appendPattern(pattern)
 				.toFormatter(Locale.ENGLISH);
 		assertNotNull(formatter1.parse(jsDateStr));
+	}
+
+	@Test
+	public void test3() throws Exception {
+		final Locale loc = new Locale.Builder()
+				.setLanguage("fr")
+				.setRegion("CA")
+				.build();
+		String format = AbstractOmDateTimePicker.getDateTimeFormat(loc);
+		assertEquals("yy-MM-dd HH [h] mm", AbstractOmDateTimePicker.patch(format));
+		format = AbstractOmDateTimePicker.getDateTimeFormat(Locale.ENGLISH);
+		assertEquals(format, AbstractOmDateTimePicker.patch(format));
 	}
 }

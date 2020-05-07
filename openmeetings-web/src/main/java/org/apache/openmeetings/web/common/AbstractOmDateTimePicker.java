@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.common;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.model.IModel;
@@ -41,7 +42,7 @@ public abstract class AbstractOmDateTimePicker<T> extends AbstractDateTimePicker
 	public AbstractOmDateTimePicker(String id, IModel<T> model, String format) {
 		super(id, model, new DatetimePickerConfig()
 				//.useLocale(WebSession.get().getLocale().toLanguageTag())
-				.withFormat(format)
+				.withFormat(patch(format))
 				.with(new DatetimePickerIconConfig()
 						.useDateIcon(FontAwesome5IconType.calendar_s)
 						.useTimeIcon(FontAwesome5IconType.clock_s)
@@ -56,8 +57,18 @@ public abstract class AbstractOmDateTimePicker<T> extends AbstractDateTimePicker
 		setRenderBodyOnly(false);
 	}
 
+	public static String patch(String format) {
+		// in Java free text is escaped with single-quotes
+		// moment.js uses []
+		return format.replaceFirst("(.*)([']{1}(.*)[']{1})(.*)", "$1\\[$3\\]$4");
+	}
+
 	public static String getDateTimeFormat() {
-		DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, WebSession.get().getLocale());
+		return getDateTimeFormat(WebSession.get().getLocale());
+	}
+
+	public static String getDateTimeFormat(Locale loc) {
+		DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, loc);
 		if (fmt instanceof SimpleDateFormat) {
 			return ((SimpleDateFormat)fmt).toPattern();
 		}
@@ -65,7 +76,11 @@ public abstract class AbstractOmDateTimePicker<T> extends AbstractDateTimePicker
 	}
 
 	public static String getDateFormat() {
-		DateFormat fmt = DateFormat.getDateInstance(DateFormat.SHORT, WebSession.get().getLocale());
+		return getDateFormat(WebSession.get().getLocale());
+	}
+
+	public static String getDateFormat(Locale loc) {
+		DateFormat fmt = DateFormat.getDateInstance(DateFormat.SHORT, loc);
 		if (fmt instanceof SimpleDateFormat) {
 			return ((SimpleDateFormat)fmt).toPattern();
 		}
