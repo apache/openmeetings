@@ -365,7 +365,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1110"><![CDATA[Inserted]]></entry>
 	<entry key="1111"><![CDATA[Inserted by]]></entry>
 	<entry key="1112"><![CDATA[Updated]]></entry>
-	<entry key="1114"><![CDATA[The config files are in the folder webapps/openmeetings/conf. You need to manually upload the files to this folder. Changes to the config file are immediately online.]]></entry>
+	<entry key="1114"><![CDATA[The config files are in the folder ${data_folder}/conf. You need to manually upload the files to this folder. Changes to the config file are immediately online.]]></entry>
 	<entry key="1115"><![CDATA[Config file name]]></entry>
 	<entry key="1116"><![CDATA[If you enable "Add Domain to user name" the value of the field "domain" is added to each login that the user enters in the login box. This is useful if the login in the LDAP is stored including the domain name. Example: user enters "hans" domain is specified as "localhost.com", login that is verified against LDAP is: hans@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[Add domain to user name]]></entry>
@@ -380,6 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Timezone]]></entry>
 	<entry key="1146"><![CDATA[Description]]></entry>
 	<entry key="1147"><![CDATA[Created by]]></entry>
+	<entry key="1148"><![CDATA[]]></entry>
+	<entry key="1149"><![CDATA[]]></entry>
 	<entry key="1151"><![CDATA[New {0} conference:]]></entry>
 	<entry key="1152"><![CDATA[Details:]]></entry>
 	<entry key="1153"><![CDATA[Start:]]></entry>
@@ -428,13 +430,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1222"><![CDATA[आवक मंजूषा]]></entry>
 	<entry key="1223"><![CDATA[भेजा हुआ]]></entry>
 	<entry key="1224"><![CDATA[कूड़ेदान]]></entry>
-	<entry key="1234"><![CDATA[Delete contact from list]]></entry>
-	<entry key="1235"><![CDATA[User profile]]></entry>
-	<entry key="1236"><![CDATA[Show user profile]]></entry>
-	<entry key="1239"><![CDATA[Select all]]></entry>
-	<entry key="1240"><![CDATA[Select none]]></entry>
-	<entry key="1241"><![CDATA[Select unread]]></entry>
-	<entry key="1242"><![CDATA[Select read]]></entry>
+	<entry key="1234"><![CDATA[संपर्क सूची से हटाएं]]></entry>
+	<entry key="1235"><![CDATA[प्रयोक्ता प्रालेख]]></entry>
+	<entry key="1236"><![CDATA[प्रयोक्ता-प्रालेख दिखायें]]></entry>
+	<entry key="1239"><![CDATA[सबकुछ चुनें]]></entry>
+	<entry key="1240"><![CDATA[कुछ भी न चुने]]></entry>
+	<entry key="1241"><![CDATA[न पढ़े हुए को चुनें]]></entry>
+	<entry key="1242"><![CDATA[पढ़े हुए को चुनें]]></entry>
 	<entry key="1243"><![CDATA[Move to folder ...]]></entry>
 	<entry key="1247"><![CDATA[Mark unread]]></entry>
 	<entry key="1248"><![CDATA[Mark read]]></entry>
@@ -457,7 +459,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1313"><![CDATA[Do you really want to remove this whiteboard? This action cannot be undone.]]></entry>
 	<entry key="1315"><![CDATA[Do not forget to 'Start recording', if you want have the meeting recorded.]]></entry>
 	<entry key="1316"><![CDATA[Start recording]]></entry>
-	<entry key="1323"><![CDATA[Cliparts]]></entry>
+	<entry key="1323"><![CDATA[Clip arts]]></entry>
 	<entry key="1340"><![CDATA[Do you really want to delete the complete content on the whiteboard?]]></entry>
 	<entry key="1355"><![CDATA[Allow recording]]></entry>
 	<entry key="1356"><![CDATA[Wait for recording]]></entry>
@@ -505,15 +507,15 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1472"><![CDATA[सहभाजन पट को नीचे ले जाने के पहले उसकी ऊंचाई कम करें.]]></entry>
 	<entry key="1473"><![CDATA[Reduce the x of the SharingScreen before you try to make it wider]]></entry>
 	<entry key="1474"><![CDATA[Reduce the y of the SharingScreen before you try to make it higher]]></entry>
-	<entry key="1475"><![CDATA[Fill these settings stream your screen data to 3th party providers like justin.tv]]></entry>
-	<entry key="1476"><![CDATA[Please start Screen sharing to be able to publish it]]></entry>
-	<entry key="1477"><![CDATA[Moderator permission required to start recording]]></entry>
-	<entry key="1479"><![CDATA[Upload new file to file explorer]]></entry>
-	<entry key="1480"><![CDATA[Open new dialog with sharing settings]]></entry>
-	<entry key="1481"><![CDATA[An existing moderator must approve it]]></entry>
-	<entry key="1482"><![CDATA[Ask moderator to share your webcam/microphone]]></entry>
-	<entry key="1483"><![CDATA[Gather feedback by creating a poll]]></entry>
-	<entry key="1484"><![CDATA[Past and current poll results as charts]]></entry>
+	<entry key="1475"><![CDATA[अपने प्रदर्शन पटल के छवि और आँकड़ों को अन्य प्रदाताओं जैसे जस्टिन.टीवी पर प्रसारित करने के लिए इन विन्यासों को पूरित करें]]></entry>
+	<entry key="1476"><![CDATA[कृपया इसे साझा करने के लिए प्रदर्शन पटल का सहभाजन प्रारंभ करें]]></entry>
+	<entry key="1477"><![CDATA[श्रव्य-दृश्यांकन शुरू करने के लिए सभापति की अनुमति आवश्यक है]]></entry>
+	<entry key="1479"><![CDATA[नई फाइल को फाइल-अन्वेषक में दाखिल करें]]></entry>
+	<entry key="1480"><![CDATA[सहभाजन-विन्यास सहित नया संवाद शुरू करें]]></entry>
+	<entry key="1481"><![CDATA[एक मौजूदा सभापति द्वारा इसका अनुमोदन आवश्यक है]]></entry>
+	<entry key="1482"><![CDATA[अपने वेब कैमरा/ध्वनिग्राहक को साझा करने के लिए सभापति से आज्ञा लें]]></entry>
+	<entry key="1483"><![CDATA[एक मतग्राहक बनाकर प्रतिक्रिया इकट्ठा करें]]></entry>
+	<entry key="1484"><![CDATA[पूर्वकालिक एवं वर्त्तमान मतों के परिणामों के लेखाचित्र]]></entry>
 	<entry key="1485"><![CDATA[Vote if there is a poll for this conference room]]></entry>
 	<entry key="1488"><![CDATA[Call external people via VoIP/SIP]]></entry>
 	<entry key="1489"><![CDATA[Send an email with a direct link to this room]]></entry>
@@ -613,13 +615,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.oauth.attr.oauth"><![CDATA[OAuth User attribute]]></entry>
 	<entry key="admin.oauth.attr.om"><![CDATA[OM User attribute]]></entry>
 	<entry key="admin.oauth.req.info.method"><![CDATA[Request info method]]></entry>
-	<entry key="admin.oauth.req.token.method"><![CDATA[Request token method]]></entry>
+	<entry key="admin.oauth.req.token.method"><![CDATA[टोकन विधि का अनुरोध करें]]></entry>
 	<entry key="admin.oauth.user.mapping"><![CDATA[प्रयोक्ता निर्दिष्टीकरण]]></entry>
 	<entry key="admin.purge"><![CDATA[Purge]]></entry>
 	<entry key="admin.purge.desc"><![CDATA[क्या आप इसे पूर्णतः नष्ट करना चाहते हैं? यह क्रिया अपरिवर्तनीय है!]]></entry>
 	<entry key="admin.restore"><![CDATA[Restore]]></entry>
 	<entry key="admin.room.hidden.elements"><![CDATA[Hidden room elements]]></entry>
-	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use room until moderator has joined]]></entry>
+	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use the room until moderator has joined]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Wait for a moderator]]></entry>
 	<entry key="appointment.reminder.EMAIL"><![CDATA[simple email]]></entry>
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal email]]></entry>
@@ -642,7 +644,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="calendar.googleID"><![CDATA[Google Calendar ID]]></entry>
 	<entry key="calendar.googleKey"><![CDATA[Google Calendar API key]]></entry>
 	<entry key="calendar.sync"><![CDATA[Sync]]></entry>
-	<entry key="calendar.url"><![CDATA[External CalDAV Calendar URL]]></entry>
+	<entry key="calendar.url"><![CDATA[बाहरी कैलडेव कैलेंडर का एकीकृत संसूचना संकेतक]]></entry>
 	<entry key="camera.off"><![CDATA[Camera is off. Click to turn on.]]></entry>
 	<entry key="camera.on"><![CDATA[Camera is on. Click to turn off.]]></entry>
 	<entry key="captcha.text"><![CDATA[Captcha text]]></entry>
@@ -726,7 +728,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.instructions.oracle"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/OracleConfig.html">Oracle</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.postgresql"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/PostgresConfig.html">PostgreSql</a>]]></entry>
 	<entry key="install.wizard.db.step.mssql.name"><![CDATA[MSSQL]]></entry>
-	<entry key="install.wizard.db.step.mysql.name"><![CDATA[MySQL]]></entry>
+	<entry key="install.wizard.db.step.mysql.name"><![CDATA[माईएसक्यूएल]]></entry>
 	<entry key="install.wizard.db.step.nodriver"><![CDATA[Cannot load the proper DB driver. Please download the corresponding jar file and restart the OM server. Instructions: {0}]]></entry>
 	<entry key="install.wizard.db.step.note"><![CDATA[<h4>
 			<a id="Recommendation_for_production_environment"></a>Recommendation
@@ -750,7 +752,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.user"><![CDATA[Specify DB user]]></entry>
 	<entry key="install.wizard.db.step.valid"><![CDATA[Database check was successfull]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[Please click "Finish" button to start installation!]]></entry>
-	<entry key="install.wizard.install.failed"><![CDATA[Installation is failed]]></entry>
+	<entry key="install.wizard.install.failed"><![CDATA[Installation has failed]]></entry>
 	<entry key="install.wizard.install.header"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[Please wait, installation in progress]]></entry>
 	<entry key="install.wizard.params.step1.email"><![CDATA[EMail]]></entry>
@@ -767,7 +769,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Allow self-registering]]></entry>
 	<entry key="install.wizard.params.step2.configuration"><![CDATA[Configuration]]></entry>
 	<entry key="install.wizard.params.step2.createDefaultObjects"><![CDATA[Default DB objects of all types will be created (including Rooms, OAuth2 servers etc.)]]></entry>
-	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[Default Language]]></entry>
+	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[डिफ़ॉल्ट भाषा]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-Username]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[Enter the mail-username]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP-Userpass]]></entry>
@@ -807,7 +809,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step4.crypt"><![CDATA[Crypt Type]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName"><![CDATA[Crypt Class]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[You can use this default crypt type which is equal to
-		PHP-MD5 function or BSD-Style encryption by using:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+	RFC 7914 - The scrypt Password-Based Key Derivation Function:<b>org.apache.openmeetings.util.crypt.SCryptImplementation</b>
 		for more information or to write your own Crypt-Style see: <a
 		href="https://openmeetings.apache.org/CustomCryptMechanism.html"
 		target="_blank">Custom Crypt Mechanism</a> You can edit this
@@ -875,7 +877,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="lbl.update"><![CDATA[Update]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
-	<entry key="menu.polls"><![CDATA[Polls]]></entry>
+	<entry key="menu.polls"><![CDATA[मतदान]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[Gather feedback without creating a poll]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[Create Quick Poll]]></entry>
 	<entry key="messages.btn.reply"><![CDATA[Reply]]></entry>
@@ -884,7 +886,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="microphone.on"><![CDATA[Microphone is on. Click to turn off.]]></entry>
 	<entry key="my.room.conference"><![CDATA[My conference room (for 1-16 users)]]></entry>
 	<entry key="my.room.presentation"><![CDATA[My presentation room (for 1-120 users)]]></entry>
-	<entry key="network.test.click.play"><![CDATA[Click a play button to run a test]]></entry>
+	<entry key="network.test.click.play"><![CDATA[Click the play button to run a test]]></entry>
 	<entry key="network.test.copy.log"><![CDATA[Copy the log to the clipboard]]></entry>
 	<entry key="network.test.dwn"><![CDATA[Download speed]]></entry>
 	<entry key="network.test.dwn.bytes"><![CDATA[Bytes downloaded]]></entry>
@@ -939,7 +941,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[Regards,<br/>
 	{0} Support Team.]]></entry>
-	<entry key="template.recording.expiring.greetings"><![CDATA[Dear {0}]]></entry>
+	<entry key="template.recording.expiring.greetings"><![CDATA[Hello {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[Recording will be deleted]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- Room[{0}]]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>
@@ -994,7 +996,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="wb.tool.white-out"><![CDATA[White-Out]]></entry>
 	<entry key="widget.recent.desc"><![CDATA[This sections displays rooms recently opened by you]]></entry>
 	<entry key="widget.recent.title"><![CDATA[Recent Rooms]]></entry>
-	<entry key="widget.start.desc"><![CDATA[{0}, your web conferencing platform. You can either follow the 1-2-3 steps to enter a conference room directly or you choose the Calendar to set up and plan a meeting.]]></entry>
+	<entry key="widget.start.desc"><![CDATA[{0}, your web conferencing platform. You can either follow the 1-2-3 steps to enter a conference room directly, or choose the Calendar to set up and plan a meeting.]]></entry>
 	<entry key="widget.start.header"><![CDATA[Create a conference, quickly!]]></entry>
 	<entry key="widget.start.title"><![CDATA[शुरू हो रही है]]></entry>
 	<entry key="wizard.button.finish"><![CDATA[Finish]]></entry>

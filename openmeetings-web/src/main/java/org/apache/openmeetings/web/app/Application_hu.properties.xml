@@ -380,6 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Időzóna]]></entry>
 	<entry key="1146"><![CDATA[Leírás]]></entry>
 	<entry key="1147"><![CDATA[Létrehozta]]></entry>
+	<entry key="1148"><![CDATA[Időzóna üzenet]]></entry>
+	<entry key="1149"><![CDATA[Ellenőrizze az "TimeZone Message" a profiljában, amit a felhasználók a belépéskor látni fognak.]]></entry>
 	<entry key="1151"><![CDATA[új {0} konferencia:]]></entry>
 	<entry key="1152"><![CDATA[Részletek:]]></entry>
 	<entry key="1153"><![CDATA[Kezdődik:]]></entry>
@@ -619,7 +621,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.purge.desc"><![CDATA[Do you really want to purge this item? This can't be undone!]]></entry>
 	<entry key="admin.restore"><![CDATA[Restore]]></entry>
 	<entry key="admin.room.hidden.elements"><![CDATA[Hidden room elements]]></entry>
-	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use room until moderator has joined]]></entry>
+	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use the room until moderator has joined]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Wait for a moderator]]></entry>
 	<entry key="appointment.reminder.EMAIL"><![CDATA[egyszerű e-mail]]></entry>
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal email]]></entry>
@@ -750,7 +752,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.user"><![CDATA[Specify DB user]]></entry>
 	<entry key="install.wizard.db.step.valid"><![CDATA[Database check was successfull]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[Kattintson a "Befejezés" gombra a telepítés folytatásához]]></entry>
-	<entry key="install.wizard.install.failed"><![CDATA[Installation is failed]]></entry>
+	<entry key="install.wizard.install.failed"><![CDATA[Installation has failed]]></entry>
 	<entry key="install.wizard.install.header"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[Please wait, installation in progress]]></entry>
 	<entry key="install.wizard.params.step1.email"><![CDATA[EMail]]></entry>
@@ -873,7 +875,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="microphone.on"><![CDATA[Microphone is on. Click to turn off.]]></entry>
 	<entry key="my.room.conference"><![CDATA[Konferencia szobáim (1-16 résztvevő)]]></entry>
 	<entry key="my.room.presentation"><![CDATA[My presentation room (for 1-120 users)]]></entry>
-	<entry key="network.test.click.play"><![CDATA[Click a play button to run a test]]></entry>
+	<entry key="network.test.click.play"><![CDATA[Click the play button to run a test]]></entry>
 	<entry key="network.test.copy.log"><![CDATA[Copy the log to the clipboard]]></entry>
 	<entry key="network.test.dwn"><![CDATA[Download speed]]></entry>
 	<entry key="network.test.dwn.bytes"><![CDATA[Bytes downloaded]]></entry>
@@ -928,7 +930,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[Regards,<br/>
 	{0} Support Team.]]></entry>
-	<entry key="template.recording.expiring.greetings"><![CDATA[Dear {0}]]></entry>
+	<entry key="template.recording.expiring.greetings"><![CDATA[Hello {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[Recording will be deleted]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- Room[{0}]]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>

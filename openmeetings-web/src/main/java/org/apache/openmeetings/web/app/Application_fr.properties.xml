@@ -380,6 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Fus. horaire]]></entry>
 	<entry key="1146"><![CDATA[Description]]></entry>
 	<entry key="1147"><![CDATA[Créé par]]></entry>
+	<entry key="1148"><![CDATA[Message du fus. hor.]]></entry>
+	<entry key="1149"><![CDATA[Vérifiez "le message du fuseau horaire" pour transmettre aux utilisateurs un message la fois prochaine qu'ils se connectent.]]></entry>
 	<entry key="1151"><![CDATA[Nouvelle conférence {0} :]]></entry>
 	<entry key="1152"><![CDATA[Détails :]]></entry>
 	<entry key="1153"><![CDATA[Début :]]></entry>
@@ -457,7 +459,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1313"><![CDATA[Voulez-vous vraiment supprimer ce tableau blanc ? Cette action ne peut être annulée !]]></entry>
 	<entry key="1315"><![CDATA[N'oubliez pas de commencer l'enregistrement ! Un utilisateur par salle doit toujours le commencer si vous souhaitez avoir l'enregistrement par la suite.]]></entry>
 	<entry key="1316"><![CDATA[Commencer l'enregistrement]]></entry>
-	<entry key="1323"><![CDATA[Cliparts]]></entry>
+	<entry key="1323"><![CDATA[Clip arts]]></entry>
 	<entry key="1340"><![CDATA[Voulez-vous vraiment effacer le contenu entier du tableau blanc ?]]></entry>
 	<entry key="1355"><![CDATA[Autoriser l'enregistrement]]></entry>
 	<entry key="1356"><![CDATA[Attendre l'enregistrement]]></entry>
@@ -619,7 +621,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.purge.desc"><![CDATA[Do you really want to purge this item? This can't be undone!]]></entry>
 	<entry key="admin.restore"><![CDATA[Restore]]></entry>
 	<entry key="admin.room.hidden.elements"><![CDATA[Hidden room elements]]></entry>
-	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use room until moderator has joined]]></entry>
+	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use the room until moderator has joined]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Wait for a moderator]]></entry>
 	<entry key="appointment.reminder.EMAIL"><![CDATA[courriel simple]]></entry>
 	<entry key="appointment.reminder.ICAL"><![CDATA[courriel iCal]]></entry>
@@ -885,7 +887,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="microphone.on"><![CDATA[Microphone is on. Click to turn off.]]></entry>
 	<entry key="my.room.conference"><![CDATA[Ma salle de conférence (pour 1-16 utilisateurs)]]></entry>
 	<entry key="my.room.presentation"><![CDATA[My presentation room (for 1-120 users)]]></entry>
-	<entry key="network.test.click.play"><![CDATA[Click a play button to run a test]]></entry>
+	<entry key="network.test.click.play"><![CDATA[Click the play button to run a test]]></entry>
 	<entry key="network.test.copy.log"><![CDATA[Copy the log to the clipboard]]></entry>
 	<entry key="network.test.dwn"><![CDATA[Download speed]]></entry>
 	<entry key="network.test.dwn.bytes"><![CDATA[Bytes downloaded]]></entry>
@@ -940,7 +942,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[Regards,<br/>
 	{0} Support Team.]]></entry>
-	<entry key="template.recording.expiring.greetings"><![CDATA[Dear {0}]]></entry>
+	<entry key="template.recording.expiring.greetings"><![CDATA[Hello {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[Recording will be deleted]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- Room[{0}]]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>

@@ -380,6 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Fuso horário]]></entry>
 	<entry key="1146"><![CDATA[Descrição]]></entry>
 	<entry key="1147"><![CDATA[Criado por]]></entry>
+	<entry key="1148"><![CDATA[Mensagem Fuso Horário]]></entry>
+	<entry key="1149"><![CDATA[Marque a opção "Mensagem do Fuso Horário" para apresentar aos usuários uma mensagem na próxima vez entrarem para atualizar o perfil.]]></entry>
 	<entry key="1151"><![CDATA[Nova conferência {0}]]></entry>
 	<entry key="1152"><![CDATA[Detalhes:]]></entry>
 	<entry key="1153"><![CDATA[Inicio:]]></entry>
@@ -457,7 +459,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1313"><![CDATA[Você realmente deseja remover esta lousa? Essa ação não pode ser desfeita!]]></entry>
 	<entry key="1315"><![CDATA[Não se esqueça de "Iniciar gravação", se você quiser ter a reunião gravada.]]></entry>
 	<entry key="1316"><![CDATA[Iniciar gravação]]></entry>
-	<entry key="1323"><![CDATA[Cliparts]]></entry>
+	<entry key="1323"><![CDATA[Clip arts]]></entry>
 	<entry key="1340"><![CDATA[Você realmente deseja excluir todo o conteúdo da lousa?]]></entry>
 	<entry key="1355"><![CDATA[Permitir gravação]]></entry>
 	<entry key="1356"><![CDATA[Espere para gravação]]></entry>
@@ -505,7 +507,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1472"><![CDATA[Reduzir a altura da tela compartilhada antes de tentar movê-lo para o fundo]]></entry>
 	<entry key="1473"><![CDATA[Reduzir o x da tela compartilhada antes de tentar torná-la mais ampla]]></entry>
 	<entry key="1474"><![CDATA[Reduzir o y da tela compartilhada antes de tentar torná-la maior]]></entry>
-	<entry key="1475"><![CDATA[Fill these settings stream your screen data to 3th party providers like justin.tv]]></entry>
+	<entry key="1475"><![CDATA[Fill in these settings to stream your screen data to 3th party providers like justin.tv]]></entry>
 	<entry key="1476"><![CDATA[Favor iniciar o compartilhamento de tela para publicar isto]]></entry>
 	<entry key="1477"><![CDATA[É necessária permissão de moderador para iniciar a gravação]]></entry>
 	<entry key="1479"><![CDATA[Carregar novo arquivo para a pasta de arquivos]]></entry>
@@ -619,7 +621,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.purge.desc"><![CDATA[Do you really want to purge this item? This can't be undone!]]></entry>
 	<entry key="admin.restore"><![CDATA[Restore]]></entry>
 	<entry key="admin.room.hidden.elements"><![CDATA[Hidden room elements]]></entry>
-	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use room until moderator has joined]]></entry>
+	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use the room until moderator has joined]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Wait for a moderator]]></entry>
 	<entry key="appointment.reminder.EMAIL"><![CDATA[simple email]]></entry>
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal email]]></entry>
@@ -750,7 +752,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.user"><![CDATA[Specify DB user]]></entry>
 	<entry key="install.wizard.db.step.valid"><![CDATA[Database check was successfull]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[Please click "Finish" button to start installation!]]></entry>
-	<entry key="install.wizard.install.failed"><![CDATA[Installation is failed]]></entry>
+	<entry key="install.wizard.install.failed"><![CDATA[Installation has failed]]></entry>
 	<entry key="install.wizard.install.header"><![CDATA[Instalação]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[Please wait, installation in progress]]></entry>
 	<entry key="install.wizard.params.step1.email"><![CDATA[EMail]]></entry>
@@ -807,7 +809,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step4.crypt"><![CDATA[Crypt Type]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName"><![CDATA[Crypt Class]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[You can use this default crypt type which is equal to
-		PHP-MD5 function or BSD-Style encryption by using:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+	RFC 7914 - The scrypt Password-Based Key Derivation Function:<b>org.apache.openmeetings.util.crypt.SCryptImplementation</b>
 		for more information or to write your own Crypt-Style see: <a
 		href="https://openmeetings.apache.org/CustomCryptMechanism.html"
 		target="_blank">Custom Crypt Mechanism</a> You can edit this
@@ -884,7 +886,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="microphone.on"><![CDATA[Microfone ligado. Clique para desligar.]]></entry>
 	<entry key="my.room.conference"><![CDATA[Minha sala de conferência (de 1-16 usuários)]]></entry>
 	<entry key="my.room.presentation"><![CDATA[My presentation room (for 1-120 users)]]></entry>
-	<entry key="network.test.click.play"><![CDATA[Click a play button to run a test]]></entry>
+	<entry key="network.test.click.play"><![CDATA[Click the play button to run a test]]></entry>
 	<entry key="network.test.copy.log"><![CDATA[Copy the log to the clipboard]]></entry>
 	<entry key="network.test.dwn"><![CDATA[Velocidade de download]]></entry>
 	<entry key="network.test.dwn.bytes"><![CDATA[Bytes downloaded]]></entry>
@@ -939,7 +941,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[Regards,<br/>
 	{0} Support Team.]]></entry>
-	<entry key="template.recording.expiring.greetings"><![CDATA[Dear {0}]]></entry>
+	<entry key="template.recording.expiring.greetings"><![CDATA[Hello {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[Recording will be deleted]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- Room[{0}]]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>

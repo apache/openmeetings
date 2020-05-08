@@ -380,6 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Fuso orario]]></entry>
 	<entry key="1146"><![CDATA[Descrizione]]></entry>
 	<entry key="1147"><![CDATA[Creato da]]></entry>
+	<entry key="1148"><![CDATA[Messaggio Fuso Orario]]></entry>
+	<entry key="1149"><![CDATA[Seleziona "Messaggio Fuso Orario" per dare un messaggio agli utenti al  prossimo accesso per aggiornare il Fuso Orario.]]></entry>
 	<entry key="1151"><![CDATA[{0} nuove conferenze:]]></entry>
 	<entry key="1152"><![CDATA[Dettagli:]]></entry>
 	<entry key="1153"><![CDATA[Inizio:]]></entry>
@@ -457,7 +459,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1313"><![CDATA[Confermi la rimozione di questa lavagna? Questa azione non potrà essere annullata!]]></entry>
 	<entry key="1315"><![CDATA[Non dimenticare di avviare la registrazione! Un utente per stanza deve sempre avviarla per avere la registrazione archiviata.]]></entry>
 	<entry key="1316"><![CDATA[Avvia Registrazione]]></entry>
-	<entry key="1323"><![CDATA[Cliparts]]></entry>
+	<entry key="1323"><![CDATA[Clip arts]]></entry>
 	<entry key="1340"><![CDATA[Vuoi cancellare veramente il contenuto completo della lavagna?]]></entry>
 	<entry key="1355"><![CDATA[Permetti registrazione]]></entry>
 	<entry key="1356"><![CDATA[Attesa per registrazione]]></entry>
@@ -619,7 +621,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.purge.desc"><![CDATA[Vuoi veramente eliminare quest'oggetto? Non potrà essere ripristinato!]]></entry>
 	<entry key="admin.restore"><![CDATA[Ripristina]]></entry>
 	<entry key="admin.room.hidden.elements"><![CDATA[Elementi nascosti stanza]]></entry>
-	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use room until moderator has joined]]></entry>
+	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use the room until moderator has joined]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[In attesa del moderatore]]></entry>
 	<entry key="appointment.reminder.EMAIL"><![CDATA[email semplice]]></entry>
 	<entry key="appointment.reminder.ICAL"><![CDATA[email con iCal]]></entry>
@@ -941,7 +943,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[Regards,<br/>
 	{0} Support Team.]]></entry>
-	<entry key="template.recording.expiring.greetings"><![CDATA[Dear {0}]]></entry>
+	<entry key="template.recording.expiring.greetings"><![CDATA[Hello {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[La registrazione sarà eliminata]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- Room[{0}]]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Consenti a questo utente di utilizzare il microfono]]></entry>

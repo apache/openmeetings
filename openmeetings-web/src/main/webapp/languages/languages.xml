@@ -46,11 +46,12 @@
 	<lang id="25" code="pl">polish</lang>
 	<lang id="26" code="el">greek</lang>
 	<lang id="27" code="nl">dutch</lang>
-	<lang id="28" code="he">hebrew</lang>
+	<lang id="28" code="iw">hebrew</lang>
 	<lang id="29" code="ca">catalan</lang>
 	<lang id="30" code="bg">bulgarian</lang>
 	<lang id="31" code="da">danish</lang>
 	<lang id="32" code="sk">slovak</lang>
 	<lang id="33" code="bn">bengali</lang>
 	<lang id="34" code="hi">hindi</lang>
+	<lang id="35" code="ta">tamil</lang>
 </language>

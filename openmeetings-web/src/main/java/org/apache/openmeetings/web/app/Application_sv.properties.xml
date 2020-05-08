@@ -67,7 +67,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="82"><![CDATA[Flexible textbox]]></entry>
 	<entry key="84"><![CDATA[Jag har en fråga]]></entry>
 	<entry key="85"><![CDATA[Stäng]]></entry>
-	<entry key="86"><![CDATA[italic]]></entry>
+	<entry key="86"><![CDATA[kursiv]]></entry>
 	<entry key="87"><![CDATA[fetstil]]></entry>
 	<entry key="98"><![CDATA[Moderator]]></entry>
 	<entry key="99"><![CDATA[Rummet är fullt]]></entry>
@@ -137,7 +137,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="269"><![CDATA[uppdaterat av]]></entry>
 	<entry key="271"><![CDATA[Värde]]></entry>
 	<entry key="274"><![CDATA[Radera användare från användargruppen]]></entry>
-	<entry key="275"><![CDATA[radera]]></entry>
+	<entry key="275"><![CDATA[R]]></entry>
 	<entry key="277"><![CDATA[Nyheter]]></entry>
 	<entry key="281"><![CDATA[Hjälp och support]]></entry>
 	<entry key="282"><![CDATA[https://openmeetings.apache.org/
@@ -202,7 +202,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[Om du har problem med länken, var vänlig kopiera och klistra in detta i din webbläsare:]]></entry>
 	<entry key="506"><![CDATA[{0} Kontodetaljer]]></entry>
 	<entry key="507"><![CDATA[Dina kontodetaljer]]></entry>
-	<entry key="510"><![CDATA[Epost]]></entry>
+	<entry key="510"><![CDATA[E-postadress]]></entry>
 	<entry key="511"><![CDATA[{0}-Team]]></entry>
 	<entry key="512"><![CDATA[{0} Registrering]]></entry>
 	<entry key="513"><![CDATA[{0} - Återställ Lösenord]]></entry>
@@ -246,7 +246,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Vill du verkligen avregistrera användaren från detta rum?]]></entry>
 	<entry key="606"><![CDATA[Din session har avslutats av en administratör eller moderator.]]></entry>
 	<entry key="607"><![CDATA[Telefon]]></entry>
-	<entry key="615"><![CDATA[Whiteboard]]></entry>
+	<entry key="615"><![CDATA[Vit tavla]]></entry>
 	<entry key="619"><![CDATA[Typ av rum]]></entry>
 	<entry key="620"><![CDATA[Tidsbokat rum]]></entry>
 	<entry key="634"><![CDATA[Är du säker på att du vill logga ut?]]></entry>
@@ -270,7 +270,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="711"><![CDATA[Edit Name]]></entry>
 	<entry key="712"><![CDATA[Ny mapp]]></entry>
 	<entry key="713"><![CDATA[Är du säker att du vill radera detta?]]></entry>
-	<entry key="714"><![CDATA[Search]]></entry>
+	<entry key="714"><![CDATA[Sök]]></entry>
 	<entry key="730"><![CDATA[Skrivbordsdelare]]></entry>
 	<entry key="731"><![CDATA[Click Start to publish your screen]]></entry>
 	<entry key="732"><![CDATA[Börja dela]]></entry>
@@ -283,7 +283,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="740"><![CDATA[Bredd:]]></entry>
 	<entry key="741"><![CDATA[Höjd:]]></entry>
 	<entry key="742"><![CDATA[Anslutningen bröts av servern]]></entry>
-	<entry key="753"><![CDATA[Reload]]></entry>
+	<entry key="753"><![CDATA[Ladda om]]></entry>
 	<entry key="758"><![CDATA[Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.]]></entry>
 	<entry key="764"><![CDATA[SPELA]]></entry>
 	<entry key="765"><![CDATA[You may proceed without testing if you do not plan to publish your voice or picture. Participants without Audio or Video can still use the Whiteboard, share their Desktop or write Chat messages.]]></entry>
@@ -303,8 +303,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="785"><![CDATA[Apply for whiteboard access]]></entry>
 	<entry key="786"><![CDATA[Ansök om tillgång till audio/video]]></entry>
 	<entry key="788"><![CDATA[START]]></entry>
-	<entry key="792"><![CDATA[Rooms]]></entry>
-	<entry key="793"><![CDATA[Choose a room for a meeting]]></entry>
+	<entry key="792"><![CDATA[Rum]]></entry>
+	<entry key="793"><![CDATA[Välj ett rum för mötet]]></entry>
 	<entry key="797"><![CDATA[Varning]]></entry>
 	<entry key="799"><![CDATA[Dag]]></entry>
 	<entry key="800"><![CDATA[Vecka]]></entry>
@@ -366,33 +366,35 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1110"><![CDATA[Inserted]]></entry>
 	<entry key="1111"><![CDATA[Inserted by]]></entry>
 	<entry key="1112"><![CDATA[Uppdaterad]]></entry>
-	<entry key="1114"><![CDATA[The config files are in the folder webapps/openmeetings/conf. You need to manually upload the files to this folder. Changes to the config file are immediately online.]]></entry>
+	<entry key="1114"><![CDATA[Konfigurationsfilerna finns i mappen webapps/openmeetings/conf/. Du måste ladda upp filer manuellt till denna mapp. Ändringar i konfugrationsfilen kommer online omedelbart.]]></entry>
 	<entry key="1115"><![CDATA[Konfigurationsfilnamn]]></entry>
 	<entry key="1116"><![CDATA[If you enable "Add Domain to username" the value of the field "domain" is added to each login that the user enters in the login box. This is useful if the Login in the Ldap is stored including the domain name. Example: User enters "hans" domain is specified as "localhost.com", login that is verified against Ldap is: hans@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[Add Domain to username]]></entry>
 	<entry key="1118"><![CDATA[Domän]]></entry>
 	<entry key="1121"><![CDATA[Remote clipboard text]]></entry>
-	<entry key="1131"><![CDATA[Invite user to conference room]]></entry>
-	<entry key="1132"><![CDATA[Choose a conference room. The invited user will get a message with your name and a link to the room.]]></entry>
-	<entry key="1134"><![CDATA[Enter room after sending invitation]]></entry>
-	<entry key="1135"><![CDATA[Invite]]></entry>
+	<entry key="1131"><![CDATA[Bjud in användaren till konferensrummet.]]></entry>
+	<entry key="1132"><![CDATA[Välj ett konferensrum. Den inbjudna användaren kommer att få ett meddelande med ditt namn och en länk till rummet.]]></entry>
+	<entry key="1134"><![CDATA[Gå in i rummet efter att ha skickat inbjudan]]></entry>
+	<entry key="1135"><![CDATA[Bjud in]]></entry>
 	<entry key="1137"><![CDATA[vill bjuda in dig till detta konferensrum:]]></entry>
 	<entry key="1138"><![CDATA[Inbjudningsmeddelande]]></entry>
 	<entry key="1143"><![CDATA[Tidszon]]></entry>
 	<entry key="1146"><![CDATA[Beskrivning]]></entry>
 	<entry key="1147"><![CDATA[Skapad av]]></entry>
+	<entry key="1148"><![CDATA[Tidzonsmeddelande]]></entry>
+	<entry key="1149"><![CDATA[Bocka "Tidzonsmeddelande" för att ge användarna ett meddelande nästa gång de loggar in för att uppdatera sin profil.]]></entry>
 	<entry key="1151"><![CDATA[Ny {0} konferens:]]></entry>
 	<entry key="1152"><![CDATA[Detaljer:]]></entry>
-	<entry key="1153"><![CDATA[Start:]]></entry>
-	<entry key="1154"><![CDATA[End:]]></entry>
-	<entry key="1155"><![CDATA[Changed {0} conference:]]></entry>
-	<entry key="1156"><![CDATA[Organizer:]]></entry>
-	<entry key="1157"><![CDATA[Canceled {0} conference:]]></entry>
+	<entry key="1153"><![CDATA[Början:]]></entry>
+	<entry key="1154"><![CDATA[Slut:]]></entry>
+	<entry key="1155"><![CDATA[{0}-konferensen ändrades:]]></entry>
+	<entry key="1156"><![CDATA[Organisatör:]]></entry>
+	<entry key="1157"><![CDATA[{0}-konferensen ställdes in:]]></entry>
 	<entry key="1158"><![CDATA[{0} konferenspåminnelse:]]></entry>
 	<entry key="1159"><![CDATA[Community settings]]></entry>
-	<entry key="1160"><![CDATA[Show contact data to everybody]]></entry>
-	<entry key="1162"><![CDATA[My offerings]]></entry>
-	<entry key="1163"><![CDATA[My interests]]></entry>
+	<entry key="1160"><![CDATA[Visa kontaktdata till alla]]></entry>
+	<entry key="1162"><![CDATA[Mina erbjudanden]]></entry>
+	<entry key="1163"><![CDATA[Mina intressen]]></entry>
 	<entry key="1166"><![CDATA[Intresseområden]]></entry>
 	<entry key="1167"><![CDATA[Kontaktinformation]]></entry>
 	<entry key="1168"><![CDATA[Visa kontaktuppgifterna bara till kontakter]]></entry>
@@ -400,8 +402,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1170"><![CDATA[Min profil]]></entry>
 	<entry key="1171"><![CDATA[Redigera inställningar]]></entry>
 	<entry key="1172"><![CDATA[Sök användare]]></entry>
-	<entry key="1177"><![CDATA[User offers]]></entry>
-	<entry key="1178"><![CDATA[User looks for]]></entry>
+	<entry key="1177"><![CDATA[Användaren erbjuder]]></entry>
+	<entry key="1178"><![CDATA[Användaren söker]]></entry>
 	<entry key="1179"><![CDATA[Freetext]]></entry>
 	<entry key="1182"><![CDATA[Offers]]></entry>
 	<entry key="1183"><![CDATA[Searchs]]></entry>
@@ -409,7 +411,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1186"><![CDATA[Add to contacts]]></entry>
 	<entry key="1188"><![CDATA[Contacts and Messages]]></entry>
 	<entry key="1189"><![CDATA[Pending contacts]]></entry>
-	<entry key="1190"><![CDATA[Accept]]></entry>
+	<entry key="1190"><![CDATA[Acceptera]]></entry>
 	<entry key="1191"><![CDATA[Vägra]]></entry>
 	<entry key="1192"><![CDATA[Hej,]]></entry>
 	<entry key="1193"><![CDATA[skulle vilja lägga till dig som kontakt.]]></entry>
@@ -418,7 +420,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1198"><![CDATA[confirmed you as contact!]]></entry>
 	<entry key="1202"><![CDATA[Från]]></entry>
 	<entry key="1205"><![CDATA[]]></entry>
-	<entry key="1206"><![CDATA[Messages]]></entry>
+	<entry key="1206"><![CDATA[Meddelanden]]></entry>
 	<entry key="1207"><![CDATA[New Mail]]></entry>
 	<entry key="1208"><![CDATA[Klicka för att skriva ett nytt meddelande till någon av dina kontakter]]></entry>
 	<entry key="1209"><![CDATA[Skriv nytt meddelande]]></entry>
@@ -458,14 +460,14 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1313"><![CDATA[Vill du verkligen ta bort vita tavlan? Detta kan inte ångras efteråt. ]]></entry>
 	<entry key="1315"><![CDATA[Glöm inte att 'Börja spela in' om du vill ha mötet inspelat.]]></entry>
 	<entry key="1316"><![CDATA[Börja spela in]]></entry>
-	<entry key="1323"><![CDATA[Cliparts]]></entry>
+	<entry key="1323"><![CDATA[Clipart]]></entry>
 	<entry key="1340"><![CDATA[Vill du verkligen radera allt innehåll från vita tavlan?]]></entry>
 	<entry key="1355"><![CDATA[Tillåt inspelning]]></entry>
 	<entry key="1356"><![CDATA[Vänta för inspelning]]></entry>
 	<entry key="1359"><![CDATA[Do you really want to delete the content on the current slide?]]></entry>
 	<entry key="1360"><![CDATA[Acceptera och bevilja rättigheten till användaren]]></entry>
 	<entry key="1361"><![CDATA[Deny]]></entry>
-	<entry key="1362"><![CDATA[I]]></entry>
+	<entry key="1362"><![CDATA[Jag]]></entry>
 	<entry key="1363"><![CDATA[Aktiviteter och handlingar]]></entry>
 	<entry key="1410"><![CDATA[Enkätens namn]]></entry>
 	<entry key="1411"><![CDATA[Du]]></entry>
@@ -478,16 +480,16 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1420"><![CDATA[Delete Poll]]></entry>
 	<entry key="1421"><![CDATA[Are you sure you want to delete this Poll? The results will be deleted as well.]]></entry>
 	<entry key="1422"><![CDATA[Language ISO Code]]></entry>
-	<entry key="1429"><![CDATA[Cam resolution]]></entry>
+	<entry key="1429"><![CDATA[Webcamresolution]]></entry>
 	<entry key="1430"><![CDATA[Changing the resolution affects bandwidth, bigger picture needs more bandwith!]]></entry>
 	<entry key="1443"><![CDATA[Layout options]]></entry>
-	<entry key="1444"><![CDATA[New Event]]></entry>
-	<entry key="1445"><![CDATA[Password protected are the links to the conference that are send to the participents when you save the calendar event, not the room! That means if you save the event multiple times but with different passwords every participent receives a new link that has a different password. But old links still work once send!]]></entry>
+	<entry key="1444"><![CDATA[Nytt evenemang]]></entry>
+	<entry key="1445"><![CDATA[Det är länkarna till konferensen som skickas till användarna när du sparar ett evenemang i kalendern, som krypteras, inte själva rummet! Detta innebär att, om du sparar flera gånger med olika lösenord, varje användare får en ny länk med ett annat lösenord, men gamla länkar som skickats tidigare fungerar fortfarnde!]]></entry>
 	<entry key="1447"><![CDATA[Show sip dialer]]></entry>
-	<entry key="1448"><![CDATA[Call]]></entry>
-	<entry key="1450"><![CDATA[Your home!]]></entry>
-	<entry key="1451"><![CDATA[Plan your meetings]]></entry>
-	<entry key="1452"><![CDATA[Se inspelning och intervjuer]]></entry>
+	<entry key="1448"><![CDATA[Ring]]></entry>
+	<entry key="1450"><![CDATA[Ditt hem!]]></entry>
+	<entry key="1451"><![CDATA[Planera dina möten]]></entry>
+	<entry key="1452"><![CDATA[Se inspelningar och intervjuer]]></entry>
 	<entry key="1454"><![CDATA[Hantera användare och rättigheter]]></entry>
 	<entry key="1455"><![CDATA[Hantera anslutningar och sparka användare]]></entry>
 	<entry key="1456"><![CDATA[Hantera användargrupper]]></entry>
@@ -498,7 +500,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1461"><![CDATA[Exportera/importera säkerhetskopior av systemet]]></entry>
 	<entry key="1465"><![CDATA[Publish]]></entry>
 	<entry key="1466"><![CDATA[Start Publish]]></entry>
-	<entry key="1467"><![CDATA[Stop Publish]]></entry>
+	<entry key="1467"><![CDATA[Sluta publicera]]></entry>
 	<entry key="1468"><![CDATA[Värd]]></entry>
 	<entry key="1469"><![CDATA[Publish App]]></entry>
 	<entry key="1470"><![CDATA[Publish Id]]></entry>
@@ -506,21 +508,21 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1472"><![CDATA[Minska höjden av delningsskärmen innan du försöker flytta den till botten.]]></entry>
 	<entry key="1473"><![CDATA[Minska den delade skärmens x innan du försöker göra den bredare]]></entry>
 	<entry key="1474"><![CDATA[Reduce the y of the SharingScreen before you try to make it higher]]></entry>
-	<entry key="1475"><![CDATA[Fill these settings stream your screen data to 3th party providers like justin.tv]]></entry>
+	<entry key="1475"><![CDATA[Fyll i dessa inställningar för att strömma dina skärmdata till tredjepartsleverantörer som justin.tv]]></entry>
 	<entry key="1476"><![CDATA[Vänligen starta skärmdelning för att kunna publicera det]]></entry>
 	<entry key="1477"><![CDATA[Moderatorns tillstånd behövs för att påbörja inspelning]]></entry>
 	<entry key="1479"><![CDATA[Ladda upp en ny fil till filhanteraren]]></entry>
-	<entry key="1480"><![CDATA[Open new dialog with sharing settings]]></entry>
+	<entry key="1480"><![CDATA[Öppna ny dialog med delningsinställningar]]></entry>
 	<entry key="1481"><![CDATA[En befintlig moderator måste godkänna det]]></entry>
 	<entry key="1482"><![CDATA[Be moderatorn dela din webcam/mikrofon]]></entry>
 	<entry key="1483"><![CDATA[Skaffa feedback genom att skapa en enkät]]></entry>
 	<entry key="1484"><![CDATA[Tidigare och aktuella enkäters resultat som diagram]]></entry>
 	<entry key="1485"><![CDATA[Rösta om det finns en enkät för detta konferensrum]]></entry>
-	<entry key="1488"><![CDATA[Call external people via VoIP/SIP]]></entry>
+	<entry key="1488"><![CDATA[Ring externa personer via VoIP/SIP]]></entry>
 	<entry key="1489"><![CDATA[Skicka e-post med en direktlänk till detta rum]]></entry>
 	<entry key="1491"><![CDATA[Max uppladdningsstorlek]]></entry>
 	<entry key="1492"><![CDATA[Be moderatorn dela din vita tavla]]></entry>
-	<entry key="1493"><![CDATA[Start Private Chat]]></entry>
+	<entry key="1493"><![CDATA[Börja privat chat]]></entry>
 	<entry key="1494"><![CDATA[Alla]]></entry>
 	<entry key="1500"><![CDATA[Värdnamn]]></entry>
 	<entry key="1504"><![CDATA[Publicerar. Användare:]]></entry>
@@ -529,12 +531,12 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1507"><![CDATA[Rum gemensamma till den aktuella användargruppen]]></entry>
 	<entry key="1508"><![CDATA[Den aktuella användarens rum]]></entry>
 	<entry key="1509"><![CDATA[Skapa/ändra ett mötes eget rum]]></entry>
-	<entry key="1513"><![CDATA[Is chat moderated]]></entry>
+	<entry key="1513"><![CDATA[Chatten är modererad]]></entry>
 	<entry key="1515"><![CDATA[Chat panel opened by default]]></entry>
 	<entry key="1516"><![CDATA[Files panel opened by default]]></entry>
 	<entry key="1526"><![CDATA[Skapa URL]]></entry>
 	<entry key="1527"><![CDATA[Nätverkstest]]></entry>
-	<entry key="1536"><![CDATA[System import]]></entry>
+	<entry key="1536"><![CDATA[Systemimport]]></entry>
 	<entry key="1537"><![CDATA[Inkludera uppladdade filer och inspelningar i säkerhetskopian]]></entry>
 	<entry key="1538"><![CDATA[Aktivera SIP-tranport i rummet]]></entry>
 	<entry key="1546"><![CDATA[Välkommen]]></entry>
@@ -543,8 +545,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1549"><![CDATA[Om]]></entry>
 	<entry key="1551"><![CDATA[Version]]></entry>
 	<entry key="1552"><![CDATA[Revision]]></entry>
-	<entry key="1553"><![CDATA[Build date]]></entry>
-	<entry key="1555"><![CDATA[today]]></entry>
+	<entry key="1553"><![CDATA[Kompilationsdatum]]></entry>
+	<entry key="1555"><![CDATA[idag]]></entry>
 	<entry key="1556"><![CDATA[jan]]></entry>
 	<entry key="1557"><![CDATA[feb]]></entry>
 	<entry key="1558"><![CDATA[mar]]></entry>
@@ -567,17 +569,17 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1580"><![CDATA[Request info URL]]></entry>
 	<entry key="1581"><![CDATA[OAuth2-konfiguration]]></entry>
 	<entry key="1586"><![CDATA[Request token attributes]]></entry>
-	<entry key="1587"><![CDATA[Redirect uri]]></entry>
-	<entry key="1588"><![CDATA[You can enter email address in the format: firstname1 lastname1 <email1> or "firstname2 lastname2" <email2> or 'firstname3 lastname3' <email3> or email]]></entry>
-	<entry key="1589"><![CDATA[Notify on disconnect]]></entry>
+	<entry key="1587"><![CDATA[URI för omdirigering]]></entry>
+	<entry key="1588"><![CDATA[Du kan ange e-postadresser i något av följande format: förnamn1 efternamn1 <e-postatadress1> eller "förnamn2 efternamn2 <e-postatadress2>" eller 'förnamn3 efternamn3 <e-postatadress3>' eller e-postadress4]]></entry>
+	<entry key="1589"><![CDATA[Meddela vid bortkoppling]]></entry>
 	<entry key="1590"><![CDATA[Display]]></entry>
 	<entry key="1592"><![CDATA[Slutdatumet som angivits är tidigare än startdatumet.]]></entry>
 	<entry key="1593"><![CDATA[Exit value]]></entry>
 	<entry key="1594"><![CDATA[Conversion messages]]></entry>
-	<entry key="1595"><![CDATA[Recording file is not found]]></entry>
+	<entry key="1595"><![CDATA[Inspelningsfilen hittades inte]]></entry>
 	<entry key="1598"><![CDATA[Säkerhet]]></entry>
 	<entry key="1599"><![CDATA[Tillgång nekad. Du har inte rätt att gå in i detta rum.]]></entry>
-	<entry key="1600"><![CDATA[Re-convert]]></entry>
+	<entry key="1600"><![CDATA[Konvertera om]]></entry>
 	<entry key="access.denied.header"><![CDATA[Åtkomst vägrad. Du är inte auktoriserad att utföra denna handling.]]></entry>
 	<entry key="account.created"><![CDATA[Ditt konto har skapats. Du kan nu logga in.]]></entry>
 	<entry key="activities.ask.question"><![CDATA[skulle vilja ställa en fråga]]></entry>
@@ -588,22 +590,22 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.moderator"><![CDATA[ber om tillstånd att bli moderator]]></entry>
 	<entry key="activities.request.right.muteothers"><![CDATA[ber om tillstånd att tysta andra]]></entry>
 	<entry key="activities.request.right.presenter"><![CDATA[ber om tillstånd att bli presentatör]]></entry>
-	<entry key="activities.request.right.remote"><![CDATA[requests permission to control screen during screen sharing]]></entry>
+	<entry key="activities.request.right.remote"><![CDATA[ber om tillstånd att kontrollera skärmen under skärmdelningen]]></entry>
 	<entry key="activities.request.right.share"><![CDATA[ber om tillstånd att dela/spela in skärmen]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[ber om tillstånd att slå på kameran]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[ber om tillstånd att rita på vita tavlan]]></entry>
-	<entry key="admin.email.body"><![CDATA[Body]]></entry>
-	<entry key="admin.email.errorCount"><![CDATA[Error Count]]></entry>
+	<entry key="admin.email.body"><![CDATA[Meddelandetext]]></entry>
+	<entry key="admin.email.errorCount"><![CDATA[Antal fel]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[E-postmeddelande]]></entry>
-	<entry key="admin.email.lastError"><![CDATA[Last Error]]></entry>
+	<entry key="admin.email.lastError"><![CDATA[Sista felet]]></entry>
 	<entry key="admin.email.recipients"><![CDATA[Mottagare]]></entry>
-	<entry key="admin.email.reset.status"><![CDATA[Reset Status]]></entry>
+	<entry key="admin.email.reset.status"><![CDATA[Återställ status]]></entry>
 	<entry key="admin.email.status.DONE"><![CDATA[Gjort]]></entry>
-	<entry key="admin.email.status.ERROR"><![CDATA[Error]]></entry>
+	<entry key="admin.email.status.ERROR"><![CDATA[Fel]]></entry>
 	<entry key="admin.email.status.NONE"><![CDATA[None]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[Sänder]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[dagar]]></entry>
-	<entry key="admin.group.form.limited"><![CDATA[Limits enabled]]></entry>
+	<entry key="admin.group.form.limited"><![CDATA[Begränsningar aktiverade]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[Logga]]></entry>
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[Maximal filstorlek]]></entry>
 	<entry key="admin.group.form.maxRecordingsSize"><![CDATA[Maximal storlek för inspelningar]]></entry>
@@ -614,8 +616,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.oauth.attr.oauth"><![CDATA[OAuth-användarattibut]]></entry>
 	<entry key="admin.oauth.attr.om"><![CDATA[OM-användarattribut]]></entry>
 	<entry key="admin.oauth.req.info.method"><![CDATA[Request info method]]></entry>
-	<entry key="admin.oauth.req.token.method"><![CDATA[Request token method]]></entry>
-	<entry key="admin.oauth.user.mapping"><![CDATA[User mapping]]></entry>
+	<entry key="admin.oauth.req.token.method"><![CDATA[Begär tokenmetod]]></entry>
+	<entry key="admin.oauth.user.mapping"><![CDATA[Användarmappning]]></entry>
 	<entry key="admin.purge"><![CDATA[Purge]]></entry>
 	<entry key="admin.purge.desc"><![CDATA[Vill du verkligen ta bort detta? Det kan inte ångras efteråt!]]></entry>
 	<entry key="admin.restore"><![CDATA[Återställ]]></entry>
@@ -627,27 +629,27 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="appointment.reminder.NONE"><![CDATA[skicka inte notifikation]]></entry>
 	<entry key="appointment.tab.advanced"><![CDATA[Advanced]]></entry>
 	<entry key="appointment.tab.general"><![CDATA[Allmänt]]></entry>
-	<entry key="bad.captcha.text"><![CDATA[You have entered incorrect captcha text]]></entry>
+	<entry key="bad.captcha.text"><![CDATA[Du angav captchatexten felaktigt]]></entry>
 	<entry key="bad.password.digit"><![CDATA['Svagt' lösenord: det krävs minst en siffra]]></entry>
 	<entry key="bad.password.lower"><![CDATA['Svagt' lösenord: det krävs åtminstone en gemen]]></entry>
 	<entry key="bad.password.short"><![CDATA['Svagt' lösenord: minsta lösenordslängd är ${0}]]></entry>
 	<entry key="bad.password.special"><![CDATA['Svagt' lösenord: det krävs minst ett specialtecken '!@#$%^&*][' ]]></entry>
-	<entry key="bad.password.stop"><![CDATA['Weak' password: it shouldn't contain part of the user's email address or username]]></entry>
+	<entry key="bad.password.stop"><![CDATA['Svagt' lösenord: det borde inte innehålla del av användarens e-postadress eller användarnamn]]></entry>
 	<entry key="bad.password.upper"><![CDATA['Svagt' lösenord: det krävs minst en versal]]></entry>
 	<entry key="button.label.share"><![CDATA[Dela]]></entry>
-	<entry key="calendar.addCalendar"><![CDATA[Add External Calendar]]></entry>
+	<entry key="calendar.addCalendar"><![CDATA[Lägg till extern kalender]]></entry>
 	<entry key="calendar.defaultTitle"><![CDATA[Ny kalender]]></entry>
 	<entry key="calendar.dialogTitle"><![CDATA[Kalenderdetaljer]]></entry>
-	<entry key="calendar.error"><![CDATA[Error in making connection on the URL specified.]]></entry>
+	<entry key="calendar.error"><![CDATA[Fel vid anslutning till den angivna URL:en.]]></entry>
 	<entry key="calendar.gcal"><![CDATA[Google Calendar]]></entry>
 	<entry key="calendar.googleID"><![CDATA[ID för Google Calendar]]></entry>
 	<entry key="calendar.googleKey"><![CDATA[Google Calendar API-nyckel]]></entry>
-	<entry key="calendar.sync"><![CDATA[Sync]]></entry>
+	<entry key="calendar.sync"><![CDATA[Synkronisera]]></entry>
 	<entry key="calendar.url"><![CDATA[URL till extern CalDAV-kalender]]></entry>
 	<entry key="camera.off"><![CDATA[Kameran är av. Klicka för att sätta den på.]]></entry>
 	<entry key="camera.on"><![CDATA[Kameran är på. Klicka för att stänga av den.]]></entry>
-	<entry key="captcha.text"><![CDATA[Captcha text]]></entry>
-	<entry key="close.settings.tab"><![CDATA[After saving your audio and video settings you may close this browser tab.]]></entry>
+	<entry key="captcha.text"><![CDATA[Captchatext]]></entry>
+	<entry key="close.settings.tab"><![CDATA[När du har sprat dina audio- och videoinställningar kan du stänga detta fönster.]]></entry>
 	<entry key="convert.errors.file"><![CDATA[Fel inträffade under behandlingen av filen]]></entry>
 	<entry key="convert.errors.file.missing"><![CDATA[Filen hittades inte]]></entry>
 	<entry key="current.password"><![CDATA[Nuvarande lösenord]]></entry>
@@ -674,9 +676,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="error.bad.credentials"><![CDATA[Felaktigt användarnamn/e-postadress och/eller lösenord.]]></entry>
 	<entry key="error.bad.password"><![CDATA[Ogiltigt Lösenord!]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[En konfiguration med den angivna nyckeln finns redan, vänligen ange en annan nyckel eller redigera den befintliga konfigurationen]]></entry>
-	<entry key="error.contact.added"><![CDATA[This user is already in your contact list or has received an invitation to your contact list that is not answered yet.]]></entry>
-	<entry key="error.contact.approved"><![CDATA[The user is already approved.]]></entry>
-	<entry key="error.contact.denied"><![CDATA[The user is already denied.]]></entry>
+	<entry key="error.contact.added"><![CDATA[Denna användare är redan i din kontaktlista eller har fått en inbjudan till din kontaktlista som han ännu inte har svarat på. ]]></entry>
+	<entry key="error.contact.approved"><![CDATA[Användaren har redan godkänts]]></entry>
+	<entry key="error.contact.denied"><![CDATA[Användaren har redan nekats]]></entry>
 	<entry key="error.email.inuse"><![CDATA[Denna epostadress är redan registrerad]]></entry>
 	<entry key="error.hash.invalid"><![CDATA[Inbjudningskoden är inte giltig.]]></entry>
 	<entry key="error.hash.period"><![CDATA[Din inbjudningskod är ogiltig; koden är bara giltig för detta bestämda datum och tid:]]></entry>
@@ -700,21 +702,18 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="goto.next"><![CDATA[Gå till nästa]]></entry>
 	<entry key="goto.prev"><![CDATA[Gå till föregående]]></entry>
 	<entry key="install.room.conference.micro"><![CDATA[Conference room with microphone option set]]></entry>
-	<entry key="install.room.presentation.micro"><![CDATA[Presentation room with microphone option set]]></entry>
+	<entry key="install.room.presentation.micro"><![CDATA[Presentationsrum med mikrofonoption]]></entry>
 	<entry key="install.room.private.conference"><![CDATA[Privat konferensrum]]></entry>
-	<entry key="install.room.public.conference"><![CDATA[Public Conference Room]]></entry>
+	<entry key="install.room.public.conference"><![CDATA[Publikt konferensrum]]></entry>
 	<entry key="install.room.public.interview"><![CDATA[Public Interview Room]]></entry>
-	<entry key="install.room.public.presentation"><![CDATA[Public Presentation Room]]></entry>
-	<entry key="install.room.public.video.only"><![CDATA[Public Video Only Room]]></entry>
-	<entry key="install.room.public.video.wb"><![CDATA[Public Video And Whiteboard Room]]></entry>
-	<entry key="install.wizard.congrats.commercial"><![CDATA[Det finns ett antal företag
-			som också erbjuder kommersiell support 
-för Apache Openmeetings:
-]]></entry>
+	<entry key="install.room.public.presentation"><![CDATA[Publik presentationsrum]]></entry>
+	<entry key="install.room.public.video.only"><![CDATA[Publikt rum med endast video]]></entry>
+	<entry key="install.room.public.video.wb"><![CDATA[Publikt rum med video och vit tavla]]></entry>
+	<entry key="install.wizard.congrats.commercial"><![CDATA[Det finns ett antal företag som erbjuder kommersiell support för Apache Openmeetings:]]></entry>
 	<entry key="install.wizard.congrats.enter"><![CDATA[Enter the Application]]></entry>
 	<entry key="install.wizard.congrats.mail"><![CDATA[Mailing list]]></entry>
 	<entry key="install.wizard.congrats.restart"><![CDATA[Databasen ändrades, vänligen starta om applikationen för att undvika potentiella problem]]></entry>
-	<entry key="install.wizard.db.step.check"><![CDATA[Check]]></entry>
+	<entry key="install.wizard.db.step.check"><![CDATA[Kontrollera]]></entry>
 	<entry key="install.wizard.db.step.db2.name"><![CDATA[IBM DB2]]></entry>
 	<entry key="install.wizard.db.step.dbname"><![CDATA[Ange databasens namn]]></entry>
 	<entry key="install.wizard.db.step.dbtype"><![CDATA[Välj databastyp]]></entry>
@@ -754,20 +753,20 @@ för Apache Openmeetings:
 	<entry key="install.wizard.db.step.user"><![CDATA[Ange databasanvändare]]></entry>
 	<entry key="install.wizard.db.step.valid"><![CDATA[Database check was successfull]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[Vänligen klicka "Slutför" för att starta installationen! ]]></entry>
-	<entry key="install.wizard.install.failed"><![CDATA[Installation is failed]]></entry>
+	<entry key="install.wizard.install.failed"><![CDATA[Installation has failed]]></entry>
 	<entry key="install.wizard.install.header"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[Please wait, installation in progress]]></entry>
-	<entry key="install.wizard.params.step1.email"><![CDATA[EMail]]></entry>
+	<entry key="install.wizard.params.step1.email"><![CDATA[E-post]]></entry>
 	<entry key="install.wizard.params.step1.email.title"><![CDATA[Enter a EMail]]></entry>
-	<entry key="install.wizard.params.step1.group"><![CDATA[Name]]></entry>
-	<entry key="install.wizard.params.step1.group.title"><![CDATA[Enter a default Group]]></entry>
+	<entry key="install.wizard.params.step1.group"><![CDATA[Namn]]></entry>
+	<entry key="install.wizard.params.step1.group.title"><![CDATA[Ange en förvald grupp]]></entry>
 	<entry key="install.wizard.params.step1.groupdata"><![CDATA[Group(Domains)]]></entry>
 	<entry key="install.wizard.params.step1.password"><![CDATA[Userpass]]></entry>
 	<entry key="install.wizard.params.step1.password.title"><![CDATA[Ange ett lösenord]]></entry>
 	<entry key="install.wizard.params.step1.tz"><![CDATA[Användarens tidszon]]></entry>
 	<entry key="install.wizard.params.step1.userdata"><![CDATA[Användardata]]></entry>
 	<entry key="install.wizard.params.step1.username"><![CDATA[Användarnamn]]></entry>
-	<entry key="install.wizard.params.step1.username.title"><![CDATA[Enter a username]]></entry>
+	<entry key="install.wizard.params.step1.username.title"><![CDATA[Ange ett användarnamn]]></entry>
 	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Allow self-registering]]></entry>
 	<entry key="install.wizard.params.step2.configuration"><![CDATA[Konfiguration]]></entry>
 	<entry key="install.wizard.params.step2.createDefaultObjects"><![CDATA[Standarddatabasobjekten av alla typer kommer att skapas (inklusive rum, OAuth2-servrar etc)]]></entry>
@@ -775,13 +774,12 @@ för Apache Openmeetings:
 	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-användarnamn]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[Ange e-postanvändarnamnet]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP-användarens lösenord]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthPass.title"><![CDATA[Enter the mail-userpass]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthPass.title"><![CDATA[Ange e-postanvändarens uppgifter]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[Mail-Referer]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[Enter a Referer]]></entry>
 	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[Aktivera TLS i mailserverautentisering]]></entry>
-	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Set inviter's email
-					address as ReplyTo in email invitations]]></entry>
-	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Send Email to new registered Users]]></entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Sätt inbjudarens e-postadress som Reply-to i inbjudningsmailen]]></entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Skicka e-post till nyregistrerade användare]]></entry>
 	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[Nya användare måste verifiera sin e-postadress]]></entry>
 	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[SMTP-serverport (förvald SMTP-serverport är 25)]]></entry>
 	<entry key="install.wizard.params.step2.smtpPort.title"><![CDATA[Ange SMTP-serverns port, normallt 25]]></entry>
@@ -790,15 +788,15 @@ för Apache Openmeetings:
 	<entry key="install.wizard.params.step3.converters"><![CDATA[Konverterare]]></entry>
 	<entry key="install.wizard.params.step3.docDpi"><![CDATA[DPI för dokumentkonvertering]]></entry>
 	<entry key="install.wizard.params.step3.docDpi.text"><![CDATA[DPI för ImageMagic att använda vid konvertering av PDF till bild (förval är 150)]]></entry>
-	<entry key="install.wizard.params.step3.docDpi.title"><![CDATA[Enter the dpi that ImageMagic will use for PDF to image conversion]]></entry>
+	<entry key="install.wizard.params.step3.docDpi.title"><![CDATA[Ange DPI som ImageMagick ska använda vid omvandling av PDF till bild.]]></entry>
 	<entry key="install.wizard.params.step3.docQuality"><![CDATA[JPEG-kvalitet för dokumentomformattering]]></entry>
 	<entry key="install.wizard.params.step3.docQuality.text"><![CDATA[Ange kvaliteten för inbäddade jpeg-bilder. 0 är sämst (små), 100 är bäst (stora). (förval: 90)]]></entry>
 	<entry key="install.wizard.params.step3.docQuality.title"><![CDATA[Ange kvaliteten för inbäddade jpegbilder. 0 är sämst (små), 100 är bäst (stora). (förval: 90)]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath"><![CDATA[Sökväg till FFMPEG]]></entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Install fresh and up-to-date FFMpeg.]]></entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.title"><![CDATA[Ange sökvägen till FFMPEG eller lämna tom om FFMPEG är korrekt installerat i systemets sökväg]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Installera en aktuell och uppdaterad FFMpeg.]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.title"><![CDATA[Ange sökvägen till FFMPEG eller lämna tom om FFMPEG är installerat i systemets sökväg]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[Sökväg till ImageMagick]]></entry>
-	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Installera ImageMagick på servern. Du kan få mer information på http://www.imagemagick.org beträffande installationen. Installationsinstruktioner finns på http://www.imagemagick.org/script/binary-releases.php, men på de flesta linuxsystem kan det installeras genom systemets packethanterare (apt-get, yum, dnf etc)]]></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Installera ImageMagick på servern. Du kan få mer information på http://www.imagemagick.org beträffande installationen. Installationsinstruktioner finns på http://www.imagemagick.org/script/binary-releases.php, men på de flesta linuxsystem kan det installeras genom systemets pakethanterare (apt-get, yum, dnf etc)]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[Ange sökvägen till ImageMagick, lämna tomt om ImageMagick är korrekt installerad i systemsökvägen]]></entry>
 	<entry key="install.wizard.params.step3.installation"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice/LibreOffice sökväg för jodconverter]]></entry>
@@ -808,50 +806,48 @@ för Apache Openmeetings:
 	<entry key="install.wizard.params.step3.soxPath"><![CDATA[Sökväg till SoX]]></entry>
 	<entry key="install.wizard.params.step3.soxPath.text"><![CDATA[Installera SoX, http://sox.sourceforge.net/ . Du bör installera SoX i en aktuell version! SoX 12.xx fungerar INTE!]]></entry>
 	<entry key="install.wizard.params.step3.soxPath.title"><![CDATA[Enter the path to SoX, leave blank if SoX is successfully installed to system-path]]></entry>
-	<entry key="install.wizard.params.step4.crypt"><![CDATA[Crypt Type]]></entry>
-	<entry key="install.wizard.params.step4.cryptClassName"><![CDATA[Crypt Class]]></entry>
-	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[You can use this default crypt type which is equal to
-		PHP-MD5 function or BSD-Style encryption by using:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
-		for more information or to write your own Crypt-Style see: <a
-		href="https://openmeetings.apache.org/CustomCryptMechanism.html"
-		target="_blank">Custom Crypt Mechanism</a> You can edit this
-		value later BUT previous created Users and Sessions might be not
-		usable anymore
-	]]></entry>
-	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Enter the Class name of the Encryption Class. DO NOT ALTER THIS IF YOU ARE NOT SURE]]></entry>
+	<entry key="install.wizard.params.step4.crypt"><![CDATA[Krypteringstyp]]></entry>
+	<entry key="install.wizard.params.step4.cryptClassName"><![CDATA[Krypteringsklass]]></entry>
+	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[Dy kan använda den förvalda krypteringstypen som är samma som
+PHP-MD5-funktionen eller kryptering i BSD-stil genom att använda:
+<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+För mer information eller om du vill skriva din egen krypteringsstil, se:
+<a href="https://openmeetings.apache.org/CustomCryptMechanism.html"
+target="_blank">Custom Crypt Mechanism</a>. Du kan redigera denna 
+inställning senare, MEN användare och sessioner som har skapats fram 
+till dess kan bli oanvändbara. 
+ ]]></entry>
+	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Ange klassnamnet för krypteringsklassen. ÄNDRA INTE DETTA OM DU INTE ÄR SÄKER]]></entry>
 	<entry key="install.wizard.params.step4.sip"><![CDATA[red5SIP-konfiguration]]></entry>
 	<entry key="install.wizard.params.step4.sipEnable"><![CDATA[Aktivera SIP]]></entry>
-	<entry key="install.wizard.params.step4.sipEnable.text"><![CDATA[Enable red5SIP integration]]></entry>
-	<entry key="install.wizard.params.step4.sipExtenContext"><![CDATA[SIP extensions context]]></entry>
-	<entry key="install.wizard.params.step4.sipExtenContext.text"><![CDATA[Context of Asterisk extensions]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable.text"><![CDATA[Aktivera red5SIP-integration]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext"><![CDATA[Kontext för SIP-anslutningar]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext.text"><![CDATA[Kontext för Asteriskankytningar]]></entry>
 	<entry key="install.wizard.params.step4.sipRoomPrefix"><![CDATA[SIP-rumprefix]]></entry>
 	<entry key="install.wizard.params.step4.sipRoomPrefix.text"><![CDATA[Prefix for phone number of conference rooms]]></entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[<ol>
 		<li><h4>
-				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Enabling
-				import of PDFs into whiteboard<a
+				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Aktiverar PDF-import till vita tavlan<a
 					href="#Enabling_import_of_PDFs_into_whiteboard"
 					class="section_anchor"></a>
 			</h4>
 			<ul>
-				<li>Install <strong>GhostScript</strong> on the server, you can
-					get more information on <a target="_blank"
+				<li>Installera <strong>GhostScript</strong> på servern, du kan
+					få mer information på <a target="_blank"
 					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
-					regarding installation. The instructions for installation can be
-					found there, however on most linux systems you can get it via your
-					favorite package managers (apt-get it).
+					beträffande installationen. Installationsinstruktioner finns där, men på de flesta linuxsystem kan du installera den med din favoritpakethanterare (apt-get o dyl).
 				</li>
 			</ul>
 		</li>
 	</ol>
 
 	<br />
-	<b> <span class="installer-important">If you have further
-			questions or need support in installation or hosting:</span></b>
+	<b> <span class="installer-important">Om du har frågor eller behöver support med installationen eller If you have further
+			questions or need support in installation eller hosting:</span></b>
 	<br />
 	<br />
 
-	<b><span class="installer-important">Community-Support:</span></b>
+	<b><span class="installer-important">Community support:</span></b>
 	<br />
 	<br />
 	<span class="installer-less-important"><a
@@ -859,7 +855,7 @@ för Apache Openmeetings:
 		target="_blank">Mailing lists</a></span>
 	<br />
 	<br />
-	<b> <span class="installer-important">Commercial-Support:</span></b>
+	<b> <span class="installer-important">Kommersiell support:</span></b>
 	<br />
 	<br />
 	<span class="installer-less-important"><a
@@ -867,7 +863,7 @@ för Apache Openmeetings:
 		target="_blank">Commercial-Support</a></span>
 
 	<br />
-	]]></entry>
+ ]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
@@ -882,13 +878,13 @@ för Apache Openmeetings:
 	<entry key="menu.polls"><![CDATA[Enkäter]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[Skaffa feedback utan att skapa en enkät]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[Skapa snabbenkät]]></entry>
-	<entry key="messages.btn.reply"><![CDATA[Reply]]></entry>
+	<entry key="messages.btn.reply"><![CDATA[Svara]]></entry>
 	<entry key="messages.subject.re"><![CDATA[Re:]]></entry>
 	<entry key="microphone.off"><![CDATA[Mikrofonen är av. Klicka för att sätta den på. ]]></entry>
 	<entry key="microphone.on"><![CDATA[Mikrofonen är på. Klicka för att stänga av.]]></entry>
 	<entry key="my.room.conference"><![CDATA[Mitt konfgerensrum (för 1-16 användare)]]></entry>
 	<entry key="my.room.presentation"><![CDATA[Mitt presentationsrum (för 1-120 användare)]]></entry>
-	<entry key="network.test.click.play"><![CDATA[Click a play button to run a test]]></entry>
+	<entry key="network.test.click.play"><![CDATA[Click the play button to run a test]]></entry>
 	<entry key="network.test.copy.log"><![CDATA[Kopiera loggen till urklipp]]></entry>
 	<entry key="network.test.dwn"><![CDATA[Nedladdningshastighet]]></entry>
 	<entry key="network.test.dwn.bytes"><![CDATA[Nedladdade bytes]]></entry>
@@ -897,8 +893,8 @@ för Apache Openmeetings:
 	<entry key="network.test.jitter"><![CDATA[Jitter]]></entry>
 	<entry key="network.test.jitter.avg"><![CDATA[Genomsnittlig tid]]></entry>
 	<entry key="network.test.jitter.avgAbbr"><![CDATA[Genomsnitt]]></entry>
-	<entry key="network.test.jitter.max"><![CDATA[Max time]]></entry>
-	<entry key="network.test.jitter.min"><![CDATA[Min time]]></entry>
+	<entry key="network.test.jitter.max"><![CDATA[Maxtid]]></entry>
+	<entry key="network.test.jitter.min"><![CDATA[Mintid]]></entry>
 	<entry key="network.test.mb"><![CDATA[Mb]]></entry>
 	<entry key="network.test.ms"><![CDATA[ms]]></entry>
 	<entry key="network.test.ping"><![CDATA[Ping]]></entry>
@@ -907,18 +903,18 @@ för Apache Openmeetings:
 	<entry key="network.test.ping.lost"><![CDATA[Tappade paket]]></entry>
 	<entry key="network.test.ping.rcv"><![CDATA[Mottagna paket]]></entry>
 	<entry key="network.test.port"><![CDATA[Port]]></entry>
-	<entry key="network.test.port.avail"><![CDATA[port is available]]></entry>
+	<entry key="network.test.port.avail"><![CDATA[porten är disponibel]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[stoppad]]></entry>
-	<entry key="network.test.report"><![CDATA[report]]></entry>
+	<entry key="network.test.report"><![CDATA[rapport]]></entry>
 	<entry key="network.test.report.con.err"><![CDATA[anslutningsfel]]></entry>
 	<entry key="network.test.report.error"><![CDATA[Fel]]></entry>
-	<entry key="network.test.report.start"><![CDATA[start test...]]></entry>
+	<entry key="network.test.report.start"><![CDATA[börja testen...]]></entry>
 	<entry key="network.test.sec"><![CDATA[sek]]></entry>
 	<entry key="network.test.upl"><![CDATA[Uppladdningshastighet]]></entry>
 	<entry key="network.test.upl.bytes"><![CDATA[Uppladdade bytes]]></entry>
-	<entry key="network.test.upl.speed"><![CDATA[Upload speed]]></entry>
+	<entry key="network.test.upl.speed"><![CDATA[Uppladdningshastighet]]></entry>
 	<entry key="network.test.upl.time"><![CDATA[Uppladningstid]]></entry>
-	<entry key="poll.clone"><![CDATA[Clone]]></entry>
+	<entry key="poll.clone"><![CDATA[Klona]]></entry>
 	<entry key="poll.type.NUMERIC"><![CDATA[Numerisk 1-10]]></entry>
 	<entry key="poll.type.YES_NO"><![CDATA[Ja/Nej]]></entry>
 	<entry key="profile.invitation"><![CDATA[Inbjudan]]></entry>
@@ -926,44 +922,44 @@ för Apache Openmeetings:
 	<entry key="recordings.root.group"><![CDATA[Gruppinspelningar]]></entry>
 	<entry key="register.privacy.accept"><![CDATA[Genom att klicka "${register}", accepterar du våra ${link}.]]></entry>
 	<entry key="register.privacy.statement"><![CDATA[dataskyddspolicy]]></entry>
-	<entry key="reset.whiteboard"><![CDATA[Reset Whiteboard]]></entry>
+	<entry key="reset.whiteboard"><![CDATA[Återställ vita tavlan]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="room.type.CONFERENCE"><![CDATA[konferens (1-25 användare)]]></entry>
 	<entry key="room.type.CONFERENCE.desc"><![CDATA["demokratisk" enligt förval, varje användare kan aktivera audio/video direkt utan att behöva fråga]]></entry>
 	<entry key="room.type.INTERVIEW"><![CDATA[intervju (1:1-möte med inspelning)]]></entry>
-	<entry key="room.type.INTERVIEW.desc"><![CDATA[only 2 users can have audio/video enabled (more users can be in the room and you can switch the audio/video between them of course)]]></entry>
+	<entry key="room.type.INTERVIEW.desc"><![CDATA[bara två användare kan ha audio/video aktiverade (det kan naturligtvis finnas fler användare i rummet och du kan växla audio/video mellan dem)]]></entry>
 	<entry key="room.type.PRESENTATION"><![CDATA[presentation (1-150 användare)]]></entry>
-	<entry key="room.type.PRESENTATION.desc"><![CDATA["restricted" by default: Every regular user will need to ask if he wants to share audio/video]]></entry>
+	<entry key="room.type.PRESENTATION.desc"><![CDATA["skyddad" enligt förval, varje ordinarie användare måste be om tillstånd för att dela audio/video]]></entry>
 	<entry key="save.success"><![CDATA[Saved successfully]]></entry>
 	<entry key="send.on.ctrl.enter"><![CDATA[Skicka med <Ctrl>+<enter>]]></entry>
 	<entry key="send.on.enter"><![CDATA[Skicka när <enter> pressas]]></entry>
 	<entry key="sound.enable"><![CDATA[Aktivera ljud]]></entry>
-	<entry key="sound.mute"><![CDATA[Mute sound]]></entry>
+	<entry key="sound.mute"><![CDATA[Tysta ljudet]]></entry>
 	<entry key="template.recording.expiring.body"><![CDATA[Din inspelning {0} nyligen blir automatiskt raderad 
 		efter {1} dagar. Om du vill spara inspelningen, 
 vänligen ladda ned den dessförrinnan. ]]></entry>
-	<entry key="template.recording.expiring.footer"><![CDATA[Regards,<br/>
-	{0} Support Team.]]></entry>
-	<entry key="template.recording.expiring.greetings"><![CDATA[Dear {0}]]></entry>
+	<entry key="template.recording.expiring.footer"><![CDATA[Med vänlig hälsning,<br/>
+   {0}  Supportteam]]></entry>
+	<entry key="template.recording.expiring.greetings"><![CDATA[Hej {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[Inspelningen kommer att raderas]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ Rum[{0}]]]></entry>
-	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>
+	<entry key="ulist.right.audio.grant"><![CDATA[Tillåt denna användare att använda mikrofonen]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[Be om tillstånd att använda mikrofonen]]></entry>
 	<entry key="ulist.right.audio.revoke"><![CDATA[Tysta användare och ta bort hans rätt att sätta på sin mikrofon]]></entry>
 	<entry key="ulist.right.moderator.grant"><![CDATA[Tillåt denna användare att vara moderator]]></entry>
 	<entry key="ulist.right.moderator.request"><![CDATA[Begär moderatorrättigheter]]></entry>
 	<entry key="ulist.right.moderator.revoke"><![CDATA[Ta bort moderatorrättigheterna från denna användare]]></entry>
-	<entry key="ulist.right.muteothers.grant"><![CDATA[Allow this user to mute others]]></entry>
+	<entry key="ulist.right.muteothers.grant"><![CDATA[Tillåt denna användare att tysta andra]]></entry>
 	<entry key="ulist.right.muteothers.request"><![CDATA[Be om tillstånd att tysta andra]]></entry>
 	<entry key="ulist.right.muteothers.revoke"><![CDATA[Ta bort denna användares rätt att tysta andra]]></entry>
-	<entry key="ulist.right.presenter.grant"><![CDATA[Allow this user to be a presenter]]></entry>
-	<entry key="ulist.right.presenter.request"><![CDATA[Request presenter permissions]]></entry>
+	<entry key="ulist.right.presenter.grant"><![CDATA[Tillåt denna användare att vara presentatör]]></entry>
+	<entry key="ulist.right.presenter.request"><![CDATA[Begär presentatörsrättigheter]]></entry>
 	<entry key="ulist.right.presenter.revoke"><![CDATA[Ta bort presentatörsrättigheterna från denna användare]]></entry>
 	<entry key="ulist.right.remote.grant"><![CDATA[Tillåt fjärrkontroll (under skärmdelning)]]></entry>
 	<entry key="ulist.right.remote.request"><![CDATA[Begär tillstånd för frjärrkontroll (medan skärmdelning pågår)]]></entry>
-	<entry key="ulist.right.remote.revoke"><![CDATA[Remove user's Remote Control permission (during screen sharing)]]></entry>
+	<entry key="ulist.right.remote.revoke"><![CDATA[Ta bort användarens rätt till fjärrkontroll]]></entry>
 	<entry key="ulist.right.share.grant"><![CDATA[Tillåt användaren att dela skärm/spela in]]></entry>
-	<entry key="ulist.right.share.request"><![CDATA[Request permission to share/record screen]]></entry>
+	<entry key="ulist.right.share.request"><![CDATA[De om tillstånd att dela/spela in skärmen]]></entry>
 	<entry key="ulist.right.share.revoke"><![CDATA[Ta bort användarens skärmdelnings- / inspelningstillstånd]]></entry>
 	<entry key="ulist.right.video.grant"><![CDATA[Tillåt användaren att använda kamera]]></entry>
 	<entry key="ulist.right.video.request"><![CDATA[Be om tillstånd att använda kamera]]></entry>
@@ -979,15 +975,15 @@ vänligen ladda ned den dessförrinnan. ]]></entry>
 	<entry key="user.label.displayName"><![CDATA[Display name]]></entry>
 	<entry key="user.salutation.DR"><![CDATA[Dr]]></entry>
 	<entry key="user.salutation.MR"><![CDATA[Herr]]></entry>
-	<entry key="user.salutation.MRS"><![CDATA[Mrs]]></entry>
+	<entry key="user.salutation.MRS"><![CDATA[Fru]]></entry>
 	<entry key="user.salutation.MS"><![CDATA[Fröken]]></entry>
 	<entry key="user.salutation.PROF"><![CDATA[Prof]]></entry>
 	<entry key="video.mic.off"><![CDATA[Mikrofonen är tystad]]></entry>
-	<entry key="video.mic.on"><![CDATA[Microphone is on!]]></entry>
-	<entry key="video.muteothers"><![CDATA[Mute microphone of others]]></entry>
+	<entry key="video.mic.on"><![CDATA[Mikrofonen är på!]]></entry>
+	<entry key="video.muteothers"><![CDATA[Tysta andras mikrofon]]></entry>
 	<entry key="video.permission.text"><![CDATA[Särskild tillåtelse behövs för att spela video.</br>Klicka OK för att tillåta spelning.]]></entry>
 	<entry key="video.permission.title"><![CDATA[Tillstånd krävs]]></entry>
-	<entry key="video.settings.https.required"><![CDATA[Camera/microphone most probably will not work in insecure environment. Try using https.]]></entry>
+	<entry key="video.settings.https.required"><![CDATA[Kamera/mikrofon kommer förmodligen inte att fungera över osäkrade anslutningar. Försök använda https.]]></entry>
 	<entry key="volume.label"><![CDATA[Reglera volym]]></entry>
 	<entry key="wait-moderator.message"><![CDATA[Vänligen vänta tills en <b>moderator</b> kommer in i rummet]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[Vänligen avvakta...]]></entry>
@@ -999,7 +995,7 @@ vänligen ladda ned den dessförrinnan. ]]></entry>
 	<entry key="wb.tool.white-out"><![CDATA[White-Out]]></entry>
 	<entry key="widget.recent.desc"><![CDATA[Denna sektion visar rum nyligen skapade av dig]]></entry>
 	<entry key="widget.recent.title"><![CDATA[Senaste rum]]></entry>
-	<entry key="widget.start.desc"><![CDATA[{0}, your web conferencing platform. You can either follow the 1-2-3 steps to enter a conference room directly or you choose the Calendar to set up and plan a meeting.]]></entry>
+	<entry key="widget.start.desc"><![CDATA[{0}, din webbkonferensplattform. Du kan antingen följa 1-2-3-stegen för att gå direkt in i ett konferensrum, eller välja kalendern för att planera och sätta upp ett möte.]]></entry>
 	<entry key="widget.start.header"><![CDATA[Skapa en konferens snabbt!]]></entry>
 	<entry key="widget.start.title"><![CDATA[Getting Started]]></entry>
 	<entry key="wizard.button.finish"><![CDATA[Avsluta]]></entry>

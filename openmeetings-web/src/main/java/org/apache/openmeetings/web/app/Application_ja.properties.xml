@@ -380,6 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[タイムゾーン]]></entry>
 	<entry key="1146"><![CDATA[概要]]></entry>
 	<entry key="1147"><![CDATA[作成者]]></entry>
+	<entry key="1148"><![CDATA[タイムゾーン設定を推奨]]></entry>
+	<entry key="1149"><![CDATA[次回ログイン時にタイムゾーン設定を行うことを勧めるメッセージを表示する場合にチェックを入れてください。]]></entry>
 	<entry key="1151"><![CDATA[{0}会議が設定されました:]]></entry>
 	<entry key="1152"><![CDATA[詳細:]]></entry>
 	<entry key="1153"><![CDATA[開始時刻:]]></entry>
@@ -619,7 +621,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.purge.desc"><![CDATA[この項目を完全削除してよろしいですか？この作業は元に戻せません!]]></entry>
 	<entry key="admin.restore"><![CDATA[復元]]></entry>
 	<entry key="admin.room.hidden.elements"><![CDATA[非表示エレメント]]></entry>
-	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use room until moderator has joined]]></entry>
+	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use the room until moderator has joined]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Wait for a moderator]]></entry>
 	<entry key="appointment.reminder.EMAIL"><![CDATA[電子メール]]></entry>
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal メール]]></entry>

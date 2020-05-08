@@ -365,7 +365,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1110"><![CDATA[Inserted]]></entry>
 	<entry key="1111"><![CDATA[Inserted by]]></entry>
 	<entry key="1112"><![CDATA[Updated]]></entry>
-	<entry key="1114"><![CDATA[The config files are in the folder webapps/openmeetings/conf. You need to manually upload the files to this folder. Changes to the config file are immediately online.]]></entry>
+	<entry key="1114"><![CDATA[The config files are in the folder ${data_folder}/conf. You need to manually upload the files to this folder. Changes to the config file are immediately online.]]></entry>
 	<entry key="1115"><![CDATA[Config file name]]></entry>
 	<entry key="1116"><![CDATA[If you enable "Add Domain to user name" the value of the field "domain" is added to each login that the user enters in the login box. This is useful if the login in the LDAP is stored including the domain name. Example: user enters "hans" domain is specified as "localhost.com", login that is verified against LDAP is: hans@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[Add domain to user name]]></entry>
@@ -380,6 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Timezone]]></entry>
 	<entry key="1146"><![CDATA[Description]]></entry>
 	<entry key="1147"><![CDATA[Created by]]></entry>
+	<entry key="1148"><![CDATA[]]></entry>
+	<entry key="1149"><![CDATA[]]></entry>
 	<entry key="1151"><![CDATA[New {0} conference:]]></entry>
 	<entry key="1152"><![CDATA[Details:]]></entry>
 	<entry key="1153"><![CDATA[Start:]]></entry>
@@ -457,7 +459,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1313"><![CDATA[Do you really want to remove this whiteboard? This action cannot be undone.]]></entry>
 	<entry key="1315"><![CDATA[Do not forget to 'Start recording', if you want have the meeting recorded.]]></entry>
 	<entry key="1316"><![CDATA[Start recording]]></entry>
-	<entry key="1323"><![CDATA[Cliparts]]></entry>
+	<entry key="1323"><![CDATA[Clip arts]]></entry>
 	<entry key="1340"><![CDATA[Do you really want to delete the complete content on the whiteboard?]]></entry>
 	<entry key="1355"><![CDATA[Allow recording]]></entry>
 	<entry key="1356"><![CDATA[Wait for recording]]></entry>
@@ -497,7 +499,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1461"><![CDATA[Export/Import System Backups]]></entry>
 	<entry key="1465"><![CDATA[Publish]]></entry>
 	<entry key="1466"><![CDATA[Start Publish]]></entry>
-	<entry key="1467"><![CDATA[Stop Publish]]></entry>
+	<entry key="1467"><![CDATA[Stop Publishing]]></entry>
 	<entry key="1468"><![CDATA[Host]]></entry>
 	<entry key="1469"><![CDATA[Publish App]]></entry>
 	<entry key="1470"><![CDATA[Publish Id]]></entry>
@@ -505,7 +507,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1472"><![CDATA[Reduce the height of the SharingScreen before you try to move it bottom]]></entry>
 	<entry key="1473"><![CDATA[Reduce the x of the SharingScreen before you try to make it wider]]></entry>
 	<entry key="1474"><![CDATA[Reduce the y of the SharingScreen before you try to make it higher]]></entry>
-	<entry key="1475"><![CDATA[Fill these settings stream your screen data to 3th party providers like justin.tv]]></entry>
+	<entry key="1475"><![CDATA[Fill in these settings to stream your screen data to 3th party providers like justin.tv]]></entry>
 	<entry key="1476"><![CDATA[Please start Screen sharing to be able to publish it]]></entry>
 	<entry key="1477"><![CDATA[Moderator permission required to start recording]]></entry>
 	<entry key="1479"><![CDATA[Upload new file to file explorer]]></entry>
@@ -619,7 +621,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.purge.desc"><![CDATA[Do you really want to purge this item? This can't be undone!]]></entry>
 	<entry key="admin.restore"><![CDATA[Restore]]></entry>
 	<entry key="admin.room.hidden.elements"><![CDATA[Hidden room elements]]></entry>
-	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use room until moderator has joined]]></entry>
+	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use the room until moderator has joined]]></entry>
 	<entry key="admin.room.wait-moderator.label"><![CDATA[Wait for a moderator]]></entry>
 	<entry key="appointment.reminder.EMAIL"><![CDATA[simple email]]></entry>
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal email]]></entry>
@@ -750,7 +752,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.user"><![CDATA[Specify DB user]]></entry>
 	<entry key="install.wizard.db.step.valid"><![CDATA[Database check was successfull]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[Please click "Finish" button to start installation!]]></entry>
-	<entry key="install.wizard.install.failed"><![CDATA[Installation is failed]]></entry>
+	<entry key="install.wizard.install.failed"><![CDATA[Installation has failed]]></entry>
 	<entry key="install.wizard.install.header"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[Please wait, installation in progress]]></entry>
 	<entry key="install.wizard.params.step1.email"><![CDATA[EMail]]></entry>
@@ -807,7 +809,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step4.crypt"><![CDATA[Crypt Type]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName"><![CDATA[Crypt Class]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[You can use this default crypt type which is equal to
-		PHP-MD5 function or BSD-Style encryption by using:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+	RFC 7914 - The scrypt Password-Based Key Derivation Function:<b>org.apache.openmeetings.util.crypt.SCryptImplementation</b>
 		for more information or to write your own Crypt-Style see: <a
 		href="https://openmeetings.apache.org/CustomCryptMechanism.html"
 		target="_blank">Custom Crypt Mechanism</a> You can edit this
@@ -884,7 +886,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="microphone.on"><![CDATA[Microphone is on. Click to turn off.]]></entry>
 	<entry key="my.room.conference"><![CDATA[My conference room (for 1-16 users)]]></entry>
 	<entry key="my.room.presentation"><![CDATA[My presentation room (for 1-120 users)]]></entry>
-	<entry key="network.test.click.play"><![CDATA[Click a play button to run a test]]></entry>
+	<entry key="network.test.click.play"><![CDATA[Click the play button to run a test]]></entry>
 	<entry key="network.test.copy.log"><![CDATA[Copy the log to the clipboard]]></entry>
 	<entry key="network.test.dwn"><![CDATA[Download speed]]></entry>
 	<entry key="network.test.dwn.bytes"><![CDATA[Bytes downloaded]]></entry>
@@ -939,7 +941,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[Regards,<br/>
 	{0} Support Team.]]></entry>
-	<entry key="template.recording.expiring.greetings"><![CDATA[Dear {0}]]></entry>
+	<entry key="template.recording.expiring.greetings"><![CDATA[Hello {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[Recording will be deleted]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- Room[{0}]]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>
@@ -994,7 +996,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="wb.tool.white-out"><![CDATA[White-Out]]></entry>
 	<entry key="widget.recent.desc"><![CDATA[This sections displays rooms recently opened by you]]></entry>
 	<entry key="widget.recent.title"><![CDATA[Recent Rooms]]></entry>
-	<entry key="widget.start.desc"><![CDATA[{0}, your web conferencing platform. You can either follow the 1-2-3 steps to enter a conference room directly or you choose the Calendar to set up and plan a meeting.]]></entry>
+	<entry key="widget.start.desc"><![CDATA[{0}, your web conferencing platform. You can either follow the 1-2-3 steps to enter a conference room directly, or choose the Calendar to set up and plan a meeting.]]></entry>
 	<entry key="widget.start.header"><![CDATA[Create a conference, quickly!]]></entry>
 	<entry key="widget.start.title"><![CDATA[Getting Started]]></entry>
 	<entry key="wizard.button.finish"><![CDATA[Finish]]></entry>
