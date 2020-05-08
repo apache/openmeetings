@@ -271,17 +271,17 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="713"><![CDATA[您确定要删除此项目？]]></entry>
 	<entry key="714"><![CDATA[搜索]]></entry>
 	<entry key="730"><![CDATA[桌面共享器]]></entry>
-	<entry key="731"><![CDATA[单击开始发布您的屏幕]]></entry>
+
 	<entry key="732"><![CDATA[开始分享]]></entry>
 	<entry key="733"><![CDATA[暂停分享]]></entry>
 	<entry key="734"><![CDATA[选择你的屏幕区域：]]></entry>
-	<entry key="735"><![CDATA[改变宽度]]></entry>
-	<entry key="737"><![CDATA[改变高度]]></entry>
-	<entry key="738"><![CDATA[横向偏移]]></entry>
-	<entry key="739"><![CDATA[纵向偏移]]></entry>
+
+
+
+
 	<entry key="740"><![CDATA[宽：]]></entry>
 	<entry key="741"><![CDATA[高：]]></entry>
-	<entry key="742"><![CDATA[连接被服务器关闭]]></entry>
+
 	<entry key="753"><![CDATA[重新载入]]></entry>
 	<entry key="758"><![CDATA[你在进入会议室前，可以使用音频视频测试来录制几秒钟的声音图像。然后通过回放你的录像录音来检查你的声音图像是否正常。]]></entry>
 	<entry key="764"><![CDATA[播放]]></entry>
@@ -303,7 +303,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="786"><![CDATA[申请使用音频视频权限]]></entry>
 	<entry key="788"><![CDATA[开始]]></entry>
 	<entry key="792"><![CDATA[会议室]]></entry>
-	<entry key="793"><![CDATA[选择会议室]]></entry>
+
 	<entry key="797"><![CDATA[警告]]></entry>
 	<entry key="799"><![CDATA[日]]></entry>
 	<entry key="800"><![CDATA[周]]></entry>
@@ -318,7 +318,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="832"><![CDATA[你确认吗？]]></entry>
 	<entry key="833"><![CDATA[你真的确认需要删除这个项目吗？你需要点击保存按钮来保存更改！]]></entry>
 	<entry key="843"><![CDATA[Tool Properties]]></entry>
-	<entry key="844"><![CDATA[在共享器中显示鼠标位置]]></entry>
+
 	<entry key="848"><![CDATA[显示屏幕]]></entry>
 	<entry key="850"><![CDATA[想分享他的屏幕。你想看到它吗？]]></entry>
 	<entry key="860"><![CDATA[私有会议记录]]></entry>
@@ -326,11 +326,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="864"><![CDATA[长度]]></entry>
 	<entry key="865"><![CDATA[日期]]></entry>
 	<entry key="867"><![CDATA[下载]]></entry>
-	<entry key="869"><![CDATA[录制]]></entry>
-	<entry key="870"><![CDATA[你可以同时录制和分享你的屏幕。你可以点击上面的开始按钮来让其他与会者看到你的屏幕。如果仅仅是录制会话，那点击开始录制按钮就足够了。]]></entry>
+
+
 	<entry key="871"><![CDATA[开始录制]]></entry>
 	<entry key="872"><![CDATA[停止录制]]></entry>
-	<entry key="878"><![CDATA[停止分享]]></entry>
+
 	<entry key="879"><![CDATA[允许所有用户发问]]></entry>
 	<entry key="880"><![CDATA[关闭这个功能可以防止任何用户在你会议室捣乱。影响效果是向主持人发问的按钮是不可见的。]]></entry>
 	<entry key="881"><![CDATA[权利]]></entry>
@@ -349,10 +349,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1076"><![CDATA[只有音频]]></entry>
 	<entry key="1077"><![CDATA[勾选此项可以使得会议室只能有音频功能有利于节省带宽]]></entry>
 	<entry key="1089"><![CDATA[共享屏幕的质量:]]></entry>
-	<entry key="1090"><![CDATA[超高清晰]]></entry>
-	<entry key="1091"><![CDATA[高清晰]]></entry>
-	<entry key="1092"><![CDATA[一般清晰]]></entry>
-	<entry key="1093"><![CDATA[低清晰度]]></entry>
+
+
+
+
 	<entry key="1098"><![CDATA[会议已经关闭，您将重定向到其它网址]]></entry>
 	<entry key="1099"><![CDATA[关闭会议室]]></entry>
 	<entry key="1100"><![CDATA[关闭后展示给用户的地址URL]]></entry>
@@ -380,8 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[时区]]></entry>
 	<entry key="1146"><![CDATA[详细描述]]></entry>
 	<entry key="1147"><![CDATA[创建者]]></entry>
-	<entry key="1148"><![CDATA[时区信息]]></entry>
-	<entry key="1149"><![CDATA[勾选“时区”选项使得用户在下次登录时可以让他们更新用户资料信息]]></entry>
+
+
 	<entry key="1151"><![CDATA[新会议:]]></entry>
 	<entry key="1152"><![CDATA[详细情况]]></entry>
 	<entry key="1153"><![CDATA[开始时间:]]></entry>
@@ -418,7 +418,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1196"><![CDATA[联系人列表]]></entry>
 	<entry key="1198"><![CDATA[已经确认了您的请求!]]></entry>
 	<entry key="1202"><![CDATA[来自]]></entry>
-	<entry key="1205"><![CDATA[]]></entry>
+
 	<entry key="1206"><![CDATA[消息]]></entry>
 	<entry key="1207"><![CDATA[新的邮件]]></entry>
 	<entry key="1208"><![CDATA[给所有联系人发送新消息]]></entry>
@@ -497,19 +497,19 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1459"><![CDATA[管理标签及文字]]></entry>
 	<entry key="1460"><![CDATA[管理LDAP及ADS配置]]></entry>
 	<entry key="1461"><![CDATA[输出／输入系统备份]]></entry>
-	<entry key="1465"><![CDATA[发布]]></entry>
-	<entry key="1466"><![CDATA[开始发布]]></entry>
-	<entry key="1467"><![CDATA[停止发布]]></entry>
-	<entry key="1468"><![CDATA[主机]]></entry>
-	<entry key="1469"><![CDATA[发布 App]]></entry>
-	<entry key="1470"><![CDATA[发布 Id]]></entry>
-	<entry key="1471"><![CDATA[在你把屏幕共享移动到左端之前减少它的宽度]]></entry>
-	<entry key="1472"><![CDATA[在你把屏幕共享移动到下部之前减少它的高度]]></entry>
-	<entry key="1473"><![CDATA[在你把屏幕共享扩大之前减少X的值]]></entry>
-	<entry key="1474"><![CDATA[在你把屏幕共享扩大之前减少y的值]]></entry>
-	<entry key="1475"><![CDATA[填补这些设置将你的屏幕数据传送第三方供应商像Justin.tv]]></entry>
-	<entry key="1476"><![CDATA[请启动屏幕共享能够发布它]]></entry>
-	<entry key="1477"><![CDATA[需要主持人的允许才可以开始录音]]></entry>
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<entry key="1479"><![CDATA[将新文件上载到文件资源管理器]]></entry>
 	<entry key="1480"><![CDATA[用共享设置打开新的对话框]]></entry>
 	<entry key="1481"><![CDATA[一个现有的主持人必须批准它]]></entry>
@@ -561,8 +561,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[oauth2配置管理]]></entry>
 	<entry key="1575"><![CDATA[链接图标]]></entry>
-	<entry key="1576"><![CDATA[_客户id]]></entry>
-	<entry key="1577"><![CDATA[_客户密码]]></entry>
+
+
 	<entry key="1578"><![CDATA[请求密钥网址]]></entry>
 	<entry key="1579"><![CDATA[请求令牌网址]]></entry>
 	<entry key="1580"><![CDATA[请求信息网址]]></entry>
@@ -570,13 +570,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[请求令牌属性]]></entry>
 	<entry key="1587"><![CDATA[重定向URL]]></entry>
 	<entry key="1588"><![CDATA[您可以按照此格式中输入邮件地址: 名1 姓1 <email1> 或 "名2 姓2 "  <email2> 或'名3 姓3 ' <email3> 或 email]]></entry>
-	<entry key="1589"><![CDATA[断开连接时通知]]></entry>
+
 	<entry key="1590"><![CDATA[显示]]></entry>
 	<entry key="1592"><![CDATA[输入的结束日期早于开始日期.]]></entry>
 	<entry key="1593"><![CDATA[退出值]]></entry>
 	<entry key="1594"><![CDATA[转换消息]]></entry>
 	<entry key="1595"><![CDATA[未找到记录文件]]></entry>
-	<entry key="1598"><![CDATA[安全]]></entry>
+
 	<entry key="1599"><![CDATA[拒绝访问。你无权进入这个房间.]]></entry>
 	<entry key="1600"><![CDATA[再转换]]></entry>
 	<entry key="access.denied.header"><![CDATA[Access denied. You are not authorized to perform this action.]]></entry>
@@ -908,9 +908,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.port"><![CDATA[Port]]></entry>
 	<entry key="network.test.port.avail"><![CDATA[port is available]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[stopped]]></entry>
-	<entry key="network.test.report"><![CDATA[report]]></entry>
-	<entry key="network.test.report.con.err"><![CDATA[connection error]]></entry>
-	<entry key="network.test.report.error"><![CDATA[Error]]></entry>
+
+
+
 	<entry key="network.test.report.start"><![CDATA[start test...]]></entry>
 	<entry key="network.test.sec"><![CDATA[sec]]></entry>
 	<entry key="network.test.upl"><![CDATA[Upload speed]]></entry>

@@ -271,17 +271,17 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="713"><![CDATA[Er du sikker på at du vil slette dette emne?]]></entry>
 	<entry key="714"><![CDATA[Søg]]></entry>
 	<entry key="730"><![CDATA[Fremviser til deling af skærm]]></entry>
-	<entry key="731"><![CDATA[Klik på start for at dele din skærm]]></entry>
+
 	<entry key="732"><![CDATA[Start deling af skærm]]></entry>
 	<entry key="733"><![CDATA[Stop deling af skærm]]></entry>
 	<entry key="734"><![CDATA[Vælg skærm område:]]></entry>
-	<entry key="735"><![CDATA[Ændre bredde]]></entry>
-	<entry key="737"><![CDATA[Ændre højde]]></entry>
-	<entry key="738"><![CDATA[X-Offset]]></entry>
-	<entry key="739"><![CDATA[Y-Offset]]></entry>
+
+
+
+
 	<entry key="740"><![CDATA[Bredde:]]></entry>
 	<entry key="741"><![CDATA[Højde:]]></entry>
-	<entry key="742"><![CDATA[Forbindelsen blev lukket af serveren]]></entry>
+
 	<entry key="753"><![CDATA[Indlæs igen]]></entry>
 	<entry key="758"><![CDATA[Kontroller mikrofon og kameraindstillinger inden du går ind i et rum ved at optage i et par sek. Du kan efterflg. se din optagelse for at kontrollere din lyd samt dit kamerabillede.]]></entry>
 	<entry key="764"><![CDATA[AFSPIL]]></entry>
@@ -303,7 +303,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="786"><![CDATA[Ansøg om kamera/mikrofon adgang]]></entry>
 	<entry key="788"><![CDATA[START]]></entry>
 	<entry key="792"><![CDATA[Rum]]></entry>
-	<entry key="793"><![CDATA[Vælg rum til et møde]]></entry>
+
 	<entry key="797"><![CDATA[Advarsel]]></entry>
 	<entry key="799"><![CDATA[dag]]></entry>
 	<entry key="800"><![CDATA[uge]]></entry>
@@ -318,7 +318,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="832"><![CDATA[Er du sikker?]]></entry>
 	<entry key="833"><![CDATA[Vil du virkelig slette dette emne? Du skal klikke på Gem knappen for at gemme ændringerne!]]></entry>
 	<entry key="843"><![CDATA[Tool Properties]]></entry>
-	<entry key="844"><![CDATA[Vis musens position for brugerne]]></entry>
+
 	<entry key="848"><![CDATA[Se skærm]]></entry>
 	<entry key="850"><![CDATA[ønsker at dele sin skærm. Vil du se?]]></entry>
 	<entry key="860"><![CDATA[Mine optagelser]]></entry>
@@ -326,11 +326,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="864"><![CDATA[Længde]]></entry>
 	<entry key="865"><![CDATA[Dato]]></entry>
 	<entry key="867"><![CDATA[Download]]></entry>
-	<entry key="869"><![CDATA[Optager]]></entry>
-	<entry key="870"><![CDATA[Du kan optage og dele din skærm samtidigt. For at gøre det muligt for andre at se din skærm, skal du bare klikke på Start knappen i toppen. For kun at optage sessionen er det nok at klikke på Start optagelse.]]></entry>
+
+
 	<entry key="871"><![CDATA[Start optagelse]]></entry>
 	<entry key="872"><![CDATA[Stop optagelse]]></entry>
-	<entry key="878"><![CDATA[Stop deling]]></entry>
+
 	<entry key="879"><![CDATA[Tillad bruger spørgsmål]]></entry>
 	<entry key="880"><![CDATA[Slå fra for at forhindre at brugere kan forstyrre dig i dette rum. Effekten er, at knappen som anvendes til moderation ("Jeg har et spørgsmål") ikke vil være synlig.]]></entry>
 	<entry key="881"><![CDATA[Rettigheder]]></entry>
@@ -349,10 +349,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1076"><![CDATA[Audio only room]]></entry>
 	<entry key="1077"><![CDATA[Turn this Flag on and the users will have only the Audio-Option and no Video in a conference room. This can by good to save bandwidth.]]></entry>
 	<entry key="1089"><![CDATA[Quality of the ScreenShare:]]></entry>
-	<entry key="1090"><![CDATA[Very high Quality]]></entry>
-	<entry key="1091"><![CDATA[High Quality]]></entry>
-	<entry key="1092"><![CDATA[Medium Quality]]></entry>
-	<entry key="1093"><![CDATA[Low Quality]]></entry>
+
+
+
+
 	<entry key="1098"><![CDATA[The webinar is already closed, you will be redirected to some interesting offerings in]]></entry>
 	<entry key="1099"><![CDATA[Close Room]]></entry>
 	<entry key="1100"><![CDATA[Exit URL]]></entry>
@@ -365,7 +365,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1110"><![CDATA[Inserted]]></entry>
 	<entry key="1111"><![CDATA[Inserted by]]></entry>
 	<entry key="1112"><![CDATA[Updated]]></entry>
-	<entry key="1114"><![CDATA[The config files are in the folder ${data_folder}/conf. You need to manually upload the files to this folder. Changes to the config file are immediately online.]]></entry>
+	<entry key="1114"><![CDATA[The config files are in the folder OM_DATA_FOLDER/conf. You need to manually upload the files to this folder. Changes to the config file are immediately online.]]></entry>
 	<entry key="1115"><![CDATA[Config file name]]></entry>
 	<entry key="1116"><![CDATA[If you enable "Add Domain to username" the value of the field "domain" is added to each login that the user enters in the login box. This is useful if the Login in the Ldap is stored including the domain name. Example: User enters "hans" domain is specified as "localhost.com", login that is verified against Ldap is: hans@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[Add Domain to username]]></entry>
@@ -380,8 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Timezone]]></entry>
 	<entry key="1146"><![CDATA[Description]]></entry>
 	<entry key="1147"><![CDATA[Created by]]></entry>
-	<entry key="1148"><![CDATA[TimeZone Message]]></entry>
-	<entry key="1149"><![CDATA[Check "TimeZone Message" to give users a message next time they login to update their profile.]]></entry>
+
+
 	<entry key="1151"><![CDATA[New {0} conference:]]></entry>
 	<entry key="1152"><![CDATA[Details:]]></entry>
 	<entry key="1153"><![CDATA[Start:]]></entry>
@@ -418,7 +418,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1196"><![CDATA[Your contact list]]></entry>
 	<entry key="1198"><![CDATA[confirmed you as contact!]]></entry>
 	<entry key="1202"><![CDATA[From]]></entry>
-	<entry key="1205"><![CDATA[]]></entry>
+
 	<entry key="1206"><![CDATA[Messages]]></entry>
 	<entry key="1207"><![CDATA[New Mail]]></entry>
 	<entry key="1208"><![CDATA[Click to write a new message to any of your contacts]]></entry>
@@ -497,19 +497,19 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1459"><![CDATA[Manage labels and wording]]></entry>
 	<entry key="1460"><![CDATA[Manage LDAP and ADS configurations]]></entry>
 	<entry key="1461"><![CDATA[Export/Import System Backups]]></entry>
-	<entry key="1465"><![CDATA[Publish]]></entry>
-	<entry key="1466"><![CDATA[Start Publish]]></entry>
-	<entry key="1467"><![CDATA[Stop Publishing]]></entry>
-	<entry key="1468"><![CDATA[Host]]></entry>
-	<entry key="1469"><![CDATA[Publish App]]></entry>
-	<entry key="1470"><![CDATA[Publish Id]]></entry>
-	<entry key="1471"><![CDATA[Reduce the width of the SharingScreen before you try to move it left]]></entry>
-	<entry key="1472"><![CDATA[Reduce the height of the SharingScreen before you try to move it bottom]]></entry>
-	<entry key="1473"><![CDATA[Reduce the x of the SharingScreen before you try to make it wider]]></entry>
-	<entry key="1474"><![CDATA[Reduce the y of the SharingScreen before you try to make it higher]]></entry>
-	<entry key="1475"><![CDATA[Fill in these settings to stream your screen data to 3th party providers like justin.tv]]></entry>
-	<entry key="1476"><![CDATA[Please start Screen sharing to be able to publish it]]></entry>
-	<entry key="1477"><![CDATA[Moderator permission required to start recording]]></entry>
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<entry key="1479"><![CDATA[Upload new file to file explorer]]></entry>
 	<entry key="1480"><![CDATA[Open new dialog with sharing settings]]></entry>
 	<entry key="1481"><![CDATA[An existing moderator must approve it]]></entry>
@@ -561,8 +561,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[Manage OAuth2 configurations]]></entry>
 	<entry key="1575"><![CDATA[Icon URL]]></entry>
-	<entry key="1576"><![CDATA[client_id]]></entry>
-	<entry key="1577"><![CDATA[client_secret]]></entry>
+
+
 	<entry key="1578"><![CDATA[Request key URL]]></entry>
 	<entry key="1579"><![CDATA[Request token URL]]></entry>
 	<entry key="1580"><![CDATA[Request info URL]]></entry>
@@ -570,13 +570,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[Request token attributes]]></entry>
 	<entry key="1587"><![CDATA[Redirect uri]]></entry>
 	<entry key="1588"><![CDATA[You can enter email address in the format: firstname1 lastname1 <email1> or "firstname2 lastname2" <email2> or 'firstname3 lastname3' <email3> or email]]></entry>
-	<entry key="1589"><![CDATA[Notify on disconnect]]></entry>
+
 	<entry key="1590"><![CDATA[Display]]></entry>
 	<entry key="1592"><![CDATA[End date entered is earlier than start date.]]></entry>
 	<entry key="1593"><![CDATA[Exit value]]></entry>
 	<entry key="1594"><![CDATA[Conversion messages]]></entry>
 	<entry key="1595"><![CDATA[Recording file is not found]]></entry>
-	<entry key="1598"><![CDATA[Security]]></entry>
+
 	<entry key="1599"><![CDATA[Access denied. You have no rights to enter this room.]]></entry>
 	<entry key="1600"><![CDATA[Re-convert]]></entry>
 	<entry key="access.denied.header"><![CDATA[Access denied. You are not authorized to perform this action.]]></entry>
@@ -907,9 +907,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.port"><![CDATA[Port]]></entry>
 	<entry key="network.test.port.avail"><![CDATA[port is available]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[stopped]]></entry>
-	<entry key="network.test.report"><![CDATA[report]]></entry>
-	<entry key="network.test.report.con.err"><![CDATA[connection error]]></entry>
-	<entry key="network.test.report.error"><![CDATA[Error]]></entry>
+
+
+
 	<entry key="network.test.report.start"><![CDATA[start test...]]></entry>
 	<entry key="network.test.sec"><![CDATA[sec]]></entry>
 	<entry key="network.test.upl"><![CDATA[Upload speed]]></entry>

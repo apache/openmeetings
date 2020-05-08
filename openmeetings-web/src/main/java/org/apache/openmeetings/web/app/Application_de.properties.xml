@@ -271,17 +271,17 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="713"><![CDATA[Sind Sie sicher, dass Sie dieses Element löschen wollen?]]></entry>
 	<entry key="714"><![CDATA[Suche]]></entry>
 	<entry key="730"><![CDATA[Desktop-Teiler]]></entry>
-	<entry key="731"><![CDATA[Drücken Sie Start, um ihren Desktop freizugeben]]></entry>
+
 	<entry key="732"><![CDATA[Start]]></entry>
 	<entry key="733"><![CDATA[Anhalten]]></entry>
 	<entry key="734"><![CDATA[Wählen Sie einen Bildschirmbereich aus:]]></entry>
-	<entry key="735"><![CDATA[Breite ändern]]></entry>
-	<entry key="737"><![CDATA[Höhe ändern]]></entry>
-	<entry key="738"><![CDATA[X-Abstand]]></entry>
-	<entry key="739"><![CDATA[Y-Abstand]]></entry>
+
+
+
+
 	<entry key="740"><![CDATA[Breite:]]></entry>
 	<entry key="741"><![CDATA[Höhe:]]></entry>
-	<entry key="742"><![CDATA[Die Verbindung wurde vom Server abgebrochen.]]></entry>
+
 	<entry key="753"><![CDATA[Nachladen]]></entry>
 	<entry key="758"><![CDATA[Überprüfen Sie Ihre Mikrofon- und Kameraeinstellungen bevor Sie einen Raum betreten und Aufzeichnungen durchführen. Sie können Ihre Aufnahmen im Nachhinein abspielen.]]></entry>
 	<entry key="764"><![CDATA[Abspielen]]></entry>
@@ -303,7 +303,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="786"><![CDATA[WebCam/Mikrofon beantragen]]></entry>
 	<entry key="788"><![CDATA[START]]></entry>
 	<entry key="792"><![CDATA[Räume]]></entry>
-	<entry key="793"><![CDATA[Wählen Sie einen Raum für die Konferenz aus]]></entry>
+
 	<entry key="797"><![CDATA[Warnung]]></entry>
 	<entry key="799"><![CDATA[Tag]]></entry>
 	<entry key="800"><![CDATA[Woche]]></entry>
@@ -318,7 +318,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="832"><![CDATA[Sind Sie sicher?]]></entry>
 	<entry key="833"><![CDATA[Wirklich löschen? Diese Aktion kann nicht wiederufen werden.]]></entry>
 	<entry key="843"><![CDATA[Eigenschaften des Werkzeugs]]></entry>
-	<entry key="844"><![CDATA[Teilnehmern Mauszeiger anzeigen]]></entry>
+
 	<entry key="848"><![CDATA[Bildschirm zeigen]]></entry>
 	<entry key="850"><![CDATA[möchte den Bildschirm übertragen. Wollen Sie ihn sehen?]]></entry>
 	<entry key="860"><![CDATA[Meine Aufnahmen]]></entry>
@@ -326,11 +326,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="864"><![CDATA[Länge]]></entry>
 	<entry key="865"><![CDATA[Datum]]></entry>
 	<entry key="867"><![CDATA[Download]]></entry>
-	<entry key="869"><![CDATA[Aufnahmen]]></entry>
-	<entry key="870"><![CDATA[Sie können gleichzeitig ihren Bildschirm teilen ode die komplette Session aufnehmen. Wenn Sie nur den Bildschirm teilen wollen genügt es auf Start zu drücken. Die fertige Aufnahme befindet sich bei den anderen Aufnahmen im öffentlichen Ordner.]]></entry>
+
+
 	<entry key="871"><![CDATA[Aufnahme starten]]></entry>
 	<entry key="872"><![CDATA[Aufnahme stoppen]]></entry>
-	<entry key="878"><![CDATA[Bildschirm teilen stoppen]]></entry>
+
 	<entry key="879"><![CDATA[Benutzerfragen erlauben]]></entry>
 	<entry key="880"><![CDATA[Wenn Sie diese Option aktivieren ist die Schaltfläche zum beantragen der Moderation für andere Teilnehmer sichtbar und Sie können in ihrem Vortrag gestört werden.]]></entry>
 	<entry key="881"><![CDATA[Rechte]]></entry>
@@ -349,10 +349,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1076"><![CDATA[Raum nur mit Audio]]></entry>
 	<entry key="1077"><![CDATA[Mit dieser Funktion erlauben Sie im Raum nur Audioübertragung und schalten Video ab. Dies kann sinnvoll sein, um Bandbreite zu reduzieren.]]></entry>
 	<entry key="1089"><![CDATA[Qualität der Übertragung:]]></entry>
-	<entry key="1090"><![CDATA[Sehr hohe Qualität]]></entry>
-	<entry key="1091"><![CDATA[Hohe Qualität]]></entry>
-	<entry key="1092"><![CDATA[Mittlere Qualität]]></entry>
-	<entry key="1093"><![CDATA[Niedrige Qualität]]></entry>
+
+
+
+
 	<entry key="1098"><![CDATA[Das Webinar ist bereits beendet. Weitere interessante Angebote befinden sich in]]></entry>
 	<entry key="1099"><![CDATA[Raum schließen]]></entry>
 	<entry key="1100"><![CDATA[Ausgang (URL)]]></entry>
@@ -380,8 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Zeitzone]]></entry>
 	<entry key="1146"><![CDATA[Beschreibung]]></entry>
 	<entry key="1147"><![CDATA[Erstellt von]]></entry>
-	<entry key="1148"><![CDATA[Hinweis zur Zeitzone]]></entry>
-	<entry key="1149"><![CDATA["Hinweis zur Zeitzone" geben wenn Nutzer sich das nächste Mal einloggt, damit diese das Nutzerprofil aktualisieren.]]></entry>
+
+
 	<entry key="1151"><![CDATA[Neue {0} Konferenz:]]></entry>
 	<entry key="1152"><![CDATA[Details:]]></entry>
 	<entry key="1153"><![CDATA[Start:]]></entry>
@@ -418,7 +418,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1196"><![CDATA[Ihre Kontaktliste]]></entry>
 	<entry key="1198"><![CDATA[hat Sie als Kontakt bestätigt]]></entry>
 	<entry key="1202"><![CDATA[Von]]></entry>
-	<entry key="1205"><![CDATA[1205]]></entry>
+
 	<entry key="1206"><![CDATA[Nachrichten]]></entry>
 	<entry key="1207"><![CDATA[Neue Mail]]></entry>
 	<entry key="1208"><![CDATA[Neue Nachricht an meine Kontakte schreiben]]></entry>
@@ -497,19 +497,19 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1459"><![CDATA[Sprachen verwalten]]></entry>
 	<entry key="1460"><![CDATA[LDAP und ADS Konfiguration]]></entry>
 	<entry key="1461"><![CDATA[Export/Import von Systemsicherungen]]></entry>
-	<entry key="1465"><![CDATA[Veröffentlichen]]></entry>
-	<entry key="1466"><![CDATA[veröffentlichen]]></entry>
-	<entry key="1467"><![CDATA[nicht veröffentlichen]]></entry>
-	<entry key="1468"><![CDATA[Host]]></entry>
-	<entry key="1469"><![CDATA[Veröffentlichungs App]]></entry>
-	<entry key="1470"><![CDATA[Veröffentlichungs ID]]></entry>
-	<entry key="1471"><![CDATA[Reduzieren Sie die Breite des Sharing-Screens, bevor Sie versuchen ihn nach links zu verschieben.]]></entry>
-	<entry key="1472"><![CDATA[Reduzieren Sie die Höhe des Sharing-Screens, bevor Sie versuchen ihn nach unten zu verschieben.]]></entry>
-	<entry key="1473"><![CDATA[Reduzieren Sie x des Sharing-Screens, bevor Sie versuchen ihn zu erweitern.]]></entry>
-	<entry key="1474"><![CDATA[Reduzieren Sie y des Sharing-Screens, bevor Sie versuchen die Höhe zu verändern.]]></entry>
-	<entry key="1475"><![CDATA[Tragen Sie hier die Einstellungen zu Ihren Bildschirmdaten für Drittanbeiter wie justin.tv ein.]]></entry>
-	<entry key="1476"><![CDATA[Bitte starten Sie das Screen-Sharing, um den Bildschirm zu veröffentlichen.]]></entry>
-	<entry key="1477"><![CDATA[Moderator Berechtigung erforderliche, um die Aufnahme zu starten.]]></entry>
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<entry key="1479"><![CDATA[neue Datei in Datei-Explorer hochladen]]></entry>
 	<entry key="1480"><![CDATA[Öffne neuen Dialog mit Sharing-Einstellungen]]></entry>
 	<entry key="1481"><![CDATA[Ein existierender Moderator muss dies genehmigen]]></entry>
@@ -561,8 +561,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[OAuth2 Konfigurationen]]></entry>
 	<entry key="1575"><![CDATA[Icon URL]]></entry>
-	<entry key="1576"><![CDATA[client_id]]></entry>
-	<entry key="1577"><![CDATA[client_secret]]></entry>
+
+
 	<entry key="1578"><![CDATA[Schlüssel URL anfragen]]></entry>
 	<entry key="1579"><![CDATA[Token URL anfragen]]></entry>
 	<entry key="1580"><![CDATA[Info URL anfragen]]></entry>
@@ -570,13 +570,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[Token Attribute anfordern]]></entry>
 	<entry key="1587"><![CDATA[Redirect uri]]></entry>
 	<entry key="1588"><![CDATA[E-Mail Adressen können in folgende Formaten eingetragen werden: Vorname1 Nachname1 <email1> oder "Vorname2 Nachname2" <email2> oder 'Vorname3 Nachname3' <email3> oder email]]></entry>
-	<entry key="1589"><![CDATA[Bei Verbindungsabbruch benachrichtigen]]></entry>
+
 	<entry key="1590"><![CDATA[Anzeige]]></entry>
 	<entry key="1592"><![CDATA[Das Enddatum liegt vor dem Anfangsdatum.]]></entry>
 	<entry key="1593"><![CDATA[Rückgabewert]]></entry>
 	<entry key="1594"><![CDATA[Nachrichten]]></entry>
 	<entry key="1595"><![CDATA[Aufnahme nicht gefunden]]></entry>
-	<entry key="1598"><![CDATA[Sicherheit]]></entry>
+
 	<entry key="1599"><![CDATA[Zugriff verweigert. Sie haben nicht die nötigen rechte für diesen Raum.]]></entry>
 	<entry key="1600"><![CDATA[neu konvertieren]]></entry>
 	<entry key="access.denied.header"><![CDATA[Zugriff verweigert. Sie sind nicht bevollmächtigt, diese Aktion auszuführen.]]></entry>
@@ -913,9 +913,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.port"><![CDATA[Port]]></entry>
 	<entry key="network.test.port.avail"><![CDATA[Port ist verfügbar]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[gestoppt]]></entry>
-	<entry key="network.test.report"><![CDATA[Bericht]]></entry>
-	<entry key="network.test.report.con.err"><![CDATA[Verbindungsfehler]]></entry>
-	<entry key="network.test.report.error"><![CDATA[Fehler!]]></entry>
+
+
+
 	<entry key="network.test.report.start"><![CDATA[Test starten...]]></entry>
 	<entry key="network.test.sec"><![CDATA[sec]]></entry>
 	<entry key="network.test.upl"><![CDATA[Upload-Geschwindigkeit]]></entry>

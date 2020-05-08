@@ -101,8 +101,8 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		add(new CheckBox("isEnabled"));
 		add(new RequiredTextField<String>("name").setLabel(new ResourceModel("165")));
 		add(new TextField<String>("iconUrl").setLabel(new ResourceModel("1575")));
-		add(new RequiredTextField<String>("clientId").setLabel(new ResourceModel("1576")));
-		add(new RequiredTextField<String>("clientSecret").setLabel(new ResourceModel("1577")));
+		add(new RequiredTextField<String>("clientId").setLabel(Model.of("client_id")));
+		add(new RequiredTextField<String>("clientSecret").setLabel(Model.of("client_secret")));
 		add(redirectUriText = (TextField<String>) new TextField<>("redirectUri", Model.of("")).setLabel(new ResourceModel("1587")));
 		add(new RequiredTextField<String>("requestKeyUrl").setLabel(new ResourceModel("1578")));
 		add(new DropDownChoice<>("requestTokenMethod", List.of(RequestTokenMethod.values()), new ChoiceRenderer<RequestTokenMethod>("name", "name")));

@@ -271,17 +271,17 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="713"><![CDATA[مطمئن هستید می خواهید این آیتم را حذف کنید؟]]></entry>
 	<entry key="714"><![CDATA[جستجو]]></entry>
 	<entry key="730"><![CDATA[به اشتراک گذارنده دسکتاپ]]></entry>
-	<entry key="731"><![CDATA[برای انتشار صفحه خود دکمه شروع را کلیک کنید]]></entry>
+
 	<entry key="732"><![CDATA[شروع به اشتراک گذاری]]></entry>
 	<entry key="733"><![CDATA[توقف اشتراک گذاری]]></entry>
 	<entry key="734"><![CDATA[محدوده صفحه خود را مشخص کنید:]]></entry>
-	<entry key="735"><![CDATA[تغییر عرض]]></entry>
-	<entry key="737"><![CDATA[تغییر ارتفاع]]></entry>
-	<entry key="738"><![CDATA[X-Offset]]></entry>
-	<entry key="739"><![CDATA[Y-Offset]]></entry>
+
+
+
+
 	<entry key="740"><![CDATA[پهنا:]]></entry>
 	<entry key="741"><![CDATA[ارتفاع:]]></entry>
-	<entry key="742"><![CDATA[اتصال توسط سرور بسته شد]]></entry>
+
 	<entry key="753"><![CDATA[بارگذاری دوباره]]></entry>
 	<entry key="758"><![CDATA[تنظیمات میکروفن و دوربین را قبل از ورود به اتاق از طریق چند ثانیه ضبط بررسی کنید.سپس ضبط خود را پخش کنید و صدا و تصویر را بررسی کنید]]></entry>
 	<entry key="764"><![CDATA[نمایش]]></entry>
@@ -303,7 +303,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="786"><![CDATA[درخواست برای دسترسی به دوربین/میکروفن]]></entry>
 	<entry key="788"><![CDATA[شروع]]></entry>
 	<entry key="792"><![CDATA[اتاق ها]]></entry>
-	<entry key="793"><![CDATA[انتخاب اتاق برای جلسه]]></entry>
+
 	<entry key="797"><![CDATA[هشدار]]></entry>
 	<entry key="799"><![CDATA[روز]]></entry>
 	<entry key="800"><![CDATA[هفته]]></entry>
@@ -318,7 +318,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="832"><![CDATA[مطمئن هستید؟]]></entry>
 	<entry key="833"><![CDATA[آیا واقعاً می خواهید این آیتم را حذف کنید؟برای ذخیره تغییرات دکمه ذخیره را فشار دهید.]]></entry>
 	<entry key="843"><![CDATA[ویژگی ها]]></entry>
-	<entry key="844"><![CDATA[وضعیت موس را به تماشاچیان نشان دهید]]></entry>
+
 	<entry key="848"><![CDATA[مشاهده صفحه]]></entry>
 	<entry key="850"><![CDATA[میخواهد صفحه اش را به اشتراک بگذارد.آیا می خواهید آن را ببینید؟]]></entry>
 	<entry key="860"><![CDATA[ضبط های من]]></entry>
@@ -326,11 +326,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="864"><![CDATA[مدت]]></entry>
 	<entry key="865"><![CDATA[تاریخ]]></entry>
 	<entry key="867"><![CDATA[دریافت]]></entry>
-	<entry key="869"><![CDATA[ضبط]]></entry>
-	<entry key="870"><![CDATA[شما میتوانید صفحه خود را به طور همزمان ضبط کنید یا به اشتراک بگذارید.برای دیدن صفحه خود توسط دیگران دکمه شروع در بالا را فشار دهید.برای ضبط جلسه دکمه شروع ضبط را فشار دهید.]]></entry>
+
+
 	<entry key="871"><![CDATA[شروع ضبط]]></entry>
 	<entry key="872"><![CDATA[توقف ضبط]]></entry>
-	<entry key="878"><![CDATA[توقف اشتراک]]></entry>
+
 	<entry key="879"><![CDATA[کاربر اجازه سوال کردن دارد]]></entry>
 	<entry key="880"><![CDATA[خاموش کنید تا کاربر دیگردر اتاق جلسه مزاحم نشود.یعنی دکمه برای درخواست هماهنگ کننده ("سوال دارم") قابل مشاهده نیست.]]></entry>
 	<entry key="881"><![CDATA[حقوق]]></entry>
@@ -349,10 +349,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1076"><![CDATA[اتاق فقط صوتی]]></entry>
 	<entry key="1077"><![CDATA[این علامت را روشن کنید و کابران تنها گزینه صوتی را خواهند داشت و گزینه ویدیو در اتاق کنفرانس را نخواهند داشت.به این صورت پهنای باند ذخیره می شود.]]></entry>
 	<entry key="1089"><![CDATA[کیفیت به اشتراک گذاری صفحه:]]></entry>
-	<entry key="1090"><![CDATA[کیفیت عالی]]></entry>
-	<entry key="1091"><![CDATA[کیفیت بالا]]></entry>
-	<entry key="1092"><![CDATA[کیفیت متوسط]]></entry>
-	<entry key="1093"><![CDATA[کیفیت پایین]]></entry>
+
+
+
+
 	<entry key="1098"><![CDATA[The webinar is already closed, you will be redirected to some interesting offerings in]]></entry>
 	<entry key="1099"><![CDATA[اتاق بسته]]></entry>
 	<entry key="1100"><![CDATA[خروج از URL]]></entry>
@@ -380,8 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[منطقه زمانی]]></entry>
 	<entry key="1146"><![CDATA[توضیح]]></entry>
 	<entry key="1147"><![CDATA[ایجاد شده توسط]]></entry>
-	<entry key="1148"><![CDATA[پیام منطقه زمانی]]></entry>
-	<entry key="1149"><![CDATA["پیام منطقه زمانی" را بررسی کنیدتا به کاربران در زمان ورود  برای بروز کردن پوشه پیغام دهد.]]></entry>
+
+
 	<entry key="1151"><![CDATA[کنفرانس جدید:]]></entry>
 	<entry key="1152"><![CDATA[جزییات:]]></entry>
 	<entry key="1153"><![CDATA[شروع:]]></entry>
@@ -418,7 +418,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1196"><![CDATA[لیست تماس شما]]></entry>
 	<entry key="1198"><![CDATA[تأیید به عنوان تماس!]]></entry>
 	<entry key="1202"><![CDATA[از]]></entry>
-	<entry key="1205"><![CDATA[]]></entry>
+
 	<entry key="1206"><![CDATA[پیام ها]]></entry>
 	<entry key="1207"><![CDATA[پست الکترونیک جدید]]></entry>
 	<entry key="1208"><![CDATA[برای نوشتن پیام جدید به هر یک از تماس ها کلیک کنید]]></entry>
@@ -497,19 +497,19 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1459"><![CDATA[مدیریت برچسب ها و اصطلاحات]]></entry>
 	<entry key="1460"><![CDATA[مدیریت پیکربندی LDAP و ADSL]]></entry>
 	<entry key="1461"><![CDATA[خروج/ورود پشتیبان های سیستم]]></entry>
-	<entry key="1465"><![CDATA[انتشار]]></entry>
-	<entry key="1466"><![CDATA[شروع انتشار]]></entry>
-	<entry key="1467"><![CDATA[توقف انتشار]]></entry>
-	<entry key="1468"><![CDATA[میزبان]]></entry>
-	<entry key="1469"><![CDATA[برنامه انتشار]]></entry>
-	<entry key="1470"><![CDATA[انتشار id]]></entry>
-	<entry key="1471"><![CDATA[عرض صفحه اشتراک را قبل از انتقال آن به پایین صفحه کم کنید.]]></entry>
-	<entry key="1472"><![CDATA[طول صفحه اشتراک را قبل از انتقال به پایین کاهش دهید.]]></entry>
-	<entry key="1473"><![CDATA[میزان x صفحه اشتراک را قبل از عریض تر کردن آن کاهش دهید.]]></entry>
-	<entry key="1474"><![CDATA[مقدار y صفحه اشتراک را قبل از بلندترکردن کاهش دهید.]]></entry>
-	<entry key="1475"><![CDATA[تنظیمات را تکمیل کنید.داده صفحه را به 23 بخش فراهم کننده مثل judtin.tv تقسیم کنید]]></entry>
-	<entry key="1476"><![CDATA[شروع انتشار توسط اشتراک صفحه]]></entry>
-	<entry key="1477"><![CDATA[برای شروع ضبط اجازه مدیر لازم است.]]></entry>
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<entry key="1479"><![CDATA[فایل جدید را در جستجوگرفایل بارگذاری کنید]]></entry>
 	<entry key="1480"><![CDATA[بازکردن گفتگوی جدید با تنظیمات اشتراک]]></entry>
 	<entry key="1481"><![CDATA[تأیید توسط مدیر فعلی]]></entry>
@@ -561,8 +561,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[پیکربندی OAuth2 را مدیریت کنید]]></entry>
 	<entry key="1575"><![CDATA[آیکون URL]]></entry>
-	<entry key="1576"><![CDATA[شناسه کاربر]]></entry>
-	<entry key="1577"><![CDATA[کاربر-پنهان]]></entry>
+
+
 	<entry key="1578"><![CDATA[کلید درخواست URL]]></entry>
 	<entry key="1579"><![CDATA[رمز درخواست URL]]></entry>
 	<entry key="1580"><![CDATA[اطلاعات درخواست URL]]></entry>
@@ -570,13 +570,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[درخواست ویژگی های رمز]]></entry>
 	<entry key="1587"><![CDATA[تغییر مسیر uri]]></entry>
 	<entry key="1588"><![CDATA[شما می توانید آدرس پست الکترونیک را به این شکل وارد کنید: firstname1 lastname1 <email1> or "firstname2 lastname2" <email2> or 'firstname3 lastname3' <email3> or email]]></entry>
-	<entry key="1589"><![CDATA[پیغام در صورت عدم اتصال]]></entry>
+
 	<entry key="1590"><![CDATA[نمایش]]></entry>
 	<entry key="1592"><![CDATA[تاریخ پایان وارد شده زودتر از تاریخ شروع است]]></entry>
 	<entry key="1593"><![CDATA[مقدار خروجی]]></entry>
 	<entry key="1594"><![CDATA[پیام های گفتگو:]]></entry>
 	<entry key="1595"><![CDATA[پوشه ضبط یافت نمی شود]]></entry>
-	<entry key="1598"><![CDATA[امنیت]]></entry>
+
 	<entry key="1599"><![CDATA[عدم مجوز ورود به اتاق]]></entry>
 	<entry key="1600"><![CDATA[تبدیل دوباره]]></entry>
 	<entry key="access.denied.header"><![CDATA[عدم دسترسی.شما مجوز اجرای این کار را ندارید]]></entry>
@@ -904,9 +904,9 @@ target="_blank">Custom Crypt Mechanism</a>
 	<entry key="network.test.port"><![CDATA[درگاه]]></entry>
 	<entry key="network.test.port.avail"><![CDATA[درگاه در دسترس است]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[متوقف]]></entry>
-	<entry key="network.test.report"><![CDATA[گزارش]]></entry>
-	<entry key="network.test.report.con.err"><![CDATA[خطای اتصال]]></entry>
-	<entry key="network.test.report.error"><![CDATA[خطا]]></entry>
+
+
+
 	<entry key="network.test.report.start"><![CDATA[شروع تست]]></entry>
 	<entry key="network.test.sec"><![CDATA[ثانیه]]></entry>
 	<entry key="network.test.upl"><![CDATA[سرعت بارگذاری]]></entry>

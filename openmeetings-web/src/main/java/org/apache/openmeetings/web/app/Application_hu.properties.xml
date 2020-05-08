@@ -271,17 +271,17 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="713"><![CDATA[Biztosan törli ezt az elemet?]]></entry>
 	<entry key="714"><![CDATA[Keresés]]></entry>
 	<entry key="730"><![CDATA[Képernyő megosztó]]></entry>
-	<entry key="731"><![CDATA[Kattintson a Start-ra a képernyő megosztásához]]></entry>
+
 	<entry key="732"><![CDATA[Megosztás indítása]]></entry>
 	<entry key="733"><![CDATA[Megosztás leállítása]]></entry>
 	<entry key="734"><![CDATA[Válassza ki a megosztandó területet:]]></entry>
-	<entry key="735"><![CDATA[Szélesség megadása]]></entry>
-	<entry key="737"><![CDATA[Magasság megosztása]]></entry>
-	<entry key="738"><![CDATA[X-eltolás]]></entry>
-	<entry key="739"><![CDATA[Y-eltolás]]></entry>
+
+
+
+
 	<entry key="740"><![CDATA[Szélesség:]]></entry>
 	<entry key="741"><![CDATA[Magasság:]]></entry>
-	<entry key="742"><![CDATA[A kapcsolat lezárult a szerverrel]]></entry>
+
 	<entry key="753"><![CDATA[Újratölt]]></entry>
 	<entry key="758"><![CDATA[Teztelje a kameráját/mikrofonját pár másodperces felvétellel, mielőtt belépne a konferencia terembe. Visszajátszuk a felvételt, hogy ellenőrizhesse a működést.]]></entry>
 	<entry key="764"><![CDATA[Lejátszás]]></entry>
@@ -303,7 +303,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="786"><![CDATA[Kamera/mikrofon használat megadása]]></entry>
 	<entry key="788"><![CDATA[Indítás]]></entry>
 	<entry key="792"><![CDATA[Termek]]></entry>
-	<entry key="793"><![CDATA[Válassza ki a termet az előadáshoz]]></entry>
+
 	<entry key="797"><![CDATA[Figyelmeztetés]]></entry>
 	<entry key="799"><![CDATA[Nap]]></entry>
 	<entry key="800"><![CDATA[Hét]]></entry>
@@ -318,7 +318,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="832"><![CDATA[Megerősíti?]]></entry>
 	<entry key="833"><![CDATA[Valóban törli ezt az elemet? Kattintson a mentés gomba a változások végrehajtásához!]]></entry>
 	<entry key="843"><![CDATA[Tool Properties]]></entry>
-	<entry key="844"><![CDATA[Mutasd az egér pozíciót a nézőknek]]></entry>
+
 	<entry key="848"><![CDATA[Képernyő nézete]]></entry>
 	<entry key="850"><![CDATA[megosztotta a képernyőjét. Megnézi?]]></entry>
 	<entry key="860"><![CDATA[Felvételeim]]></entry>
@@ -326,11 +326,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="864"><![CDATA[Hossz]]></entry>
 	<entry key="865"><![CDATA[Dátum]]></entry>
 	<entry key="867"><![CDATA[Lejátszás]]></entry>
-	<entry key="869"><![CDATA[Felvétel]]></entry>
-	<entry key="870"><![CDATA[Megoszthatja képernyőjét, rögzítheti az előadást. Hogy mások láthassák a képernyőjét, kattintson fent a megosztás gombra. Ha csak rögzíteni szeretné az előadást, kattintson a felvétel indítása gombra.]]></entry>
+
+
 	<entry key="871"><![CDATA[Felvétel indítása]]></entry>
 	<entry key="872"><![CDATA[Felvétel vége]]></entry>
-	<entry key="878"><![CDATA[Megosztás leállítása]]></entry>
+
 	<entry key="879"><![CDATA[Engedéylezi a felhasználók kérdését]]></entry>
 	<entry key="880"><![CDATA[Kapcsolja ki, ha nem akarja, hogy kérdésekkel zavarják. A moderátor ilyenkor nem kapja a ("Kérdésem van") üzenetet.]]></entry>
 	<entry key="881"><![CDATA[Rendben]]></entry>
@@ -349,10 +349,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1076"><![CDATA[Csak Audio szoba]]></entry>
 	<entry key="1077"><![CDATA[Kapcsolja be az opciót és a látogatók csak audio eszközt használhatnak, video-t nem. Jó megoldás alacsony sávszélesség esetén.]]></entry>
 	<entry key="1089"><![CDATA[Képernyőmegosztás minősége:]]></entry>
-	<entry key="1090"><![CDATA[Nagyon jó minőség]]></entry>
-	<entry key="1091"><![CDATA[Jü minőség]]></entry>
-	<entry key="1092"><![CDATA[Közepes minőség]]></entry>
-	<entry key="1093"><![CDATA[Alacsony minőség]]></entry>
+
+
+
+
 	<entry key="1098"><![CDATA[Ez az előadás lezárásra került, átirányítás.]]></entry>
 	<entry key="1099"><![CDATA[Szoba lezárása]]></entry>
 	<entry key="1100"><![CDATA[Kilépő URL]]></entry>
@@ -380,8 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Időzóna]]></entry>
 	<entry key="1146"><![CDATA[Leírás]]></entry>
 	<entry key="1147"><![CDATA[Létrehozta]]></entry>
-	<entry key="1148"><![CDATA[Időzóna üzenet]]></entry>
-	<entry key="1149"><![CDATA[Ellenőrizze az "TimeZone Message" a profiljában, amit a felhasználók a belépéskor látni fognak.]]></entry>
+
+
 	<entry key="1151"><![CDATA[új {0} konferencia:]]></entry>
 	<entry key="1152"><![CDATA[Részletek:]]></entry>
 	<entry key="1153"><![CDATA[Kezdődik:]]></entry>
@@ -418,7 +418,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1196"><![CDATA[Kapcsolataid]]></entry>
 	<entry key="1198"><![CDATA[hagyd jóvá a kapcsolatod!]]></entry>
 	<entry key="1202"><![CDATA[Küldő]]></entry>
-	<entry key="1205"><![CDATA[]]></entry>
+
 	<entry key="1206"><![CDATA[Üzenet]]></entry>
 	<entry key="1207"><![CDATA[Új email]]></entry>
 	<entry key="1208"><![CDATA[Kattintson az új üzenet írásához a kapcsolatai számára]]></entry>
@@ -497,19 +497,19 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1459"><![CDATA[Cimkék és szavak kezelése]]></entry>
 	<entry key="1460"><![CDATA[LDAP és ADS konfigurációs beállítások]]></entry>
 	<entry key="1461"><![CDATA[Rendszer biztonsági mentés Export/Import]]></entry>
-	<entry key="1465"><![CDATA[Publikáció]]></entry>
-	<entry key="1466"><![CDATA[Publikálás indítása]]></entry>
-	<entry key="1467"><![CDATA[Publikáció befejezése]]></entry>
-	<entry key="1468"><![CDATA[Host]]></entry>
-	<entry key="1469"><![CDATA[Publikációs alkalmazás]]></entry>
-	<entry key="1470"><![CDATA[Publikációs Id]]></entry>
-	<entry key="1471"><![CDATA[Csökkentse a megosztási kép szélességét mielőtt odébb húzza.]]></entry>
-	<entry key="1472"><![CDATA[Csökkentse a megosztási magasságot, mielőtt lejebb húzza]]></entry>
-	<entry key="1473"><![CDATA[Csökkenti a megoszási képernyő X méretét mielőtt megpróbálja szélesíteni]]></entry>
-	<entry key="1474"><![CDATA[Csökkenti a megoszási képernyő Y méretét mielőtt megpróbálja magasítani]]></entry>
-	<entry key="1475"><![CDATA[Töltse fel a meosztási streamet külső alkalmazásba(3rd.) pl.: justin.tv]]></entry>
-	<entry key="1476"><![CDATA[Indítsa el a képernyőmegosztást a publikáláshoz]]></entry>
-	<entry key="1477"><![CDATA[Moderátornak kell lennie a felvétel indításához]]></entry>
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<entry key="1479"><![CDATA[Új file feltöltése]]></entry>
 	<entry key="1480"><![CDATA[Megosztási beállítások megnyitása]]></entry>
 	<entry key="1481"><![CDATA[Moderátor alkalmazhatja]]></entry>
@@ -561,8 +561,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[Manage OAuth2 configurations]]></entry>
 	<entry key="1575"><![CDATA[Icon URL]]></entry>
-	<entry key="1576"><![CDATA[client_id]]></entry>
-	<entry key="1577"><![CDATA[client_secret]]></entry>
+
+
 	<entry key="1578"><![CDATA[Request key URL]]></entry>
 	<entry key="1579"><![CDATA[Request token URL]]></entry>
 	<entry key="1580"><![CDATA[Request info URL]]></entry>
@@ -570,13 +570,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[Request token attributes]]></entry>
 	<entry key="1587"><![CDATA[Redirect uri]]></entry>
 	<entry key="1588"><![CDATA[You can enter email address in the format: firstname1 lastname1 <email1> or "firstname2 lastname2" <email2> or 'firstname3 lastname3' <email3> or email]]></entry>
-	<entry key="1589"><![CDATA[Notify on disconnect]]></entry>
+
 	<entry key="1590"><![CDATA[Display]]></entry>
 	<entry key="1592"><![CDATA[End date entered is earlier than start date.]]></entry>
 	<entry key="1593"><![CDATA[Exit value]]></entry>
 	<entry key="1594"><![CDATA[Conversion messages]]></entry>
 	<entry key="1595"><![CDATA[Recording file is not found]]></entry>
-	<entry key="1598"><![CDATA[Security]]></entry>
+
 	<entry key="1599"><![CDATA[Access denied. You have no rights to enter this room.]]></entry>
 	<entry key="1600"><![CDATA[Re-convert]]></entry>
 	<entry key="access.denied.header"><![CDATA[Access denied. You are not authorized to perform this action.]]></entry>
@@ -896,9 +896,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.port"><![CDATA[Port]]></entry>
 	<entry key="network.test.port.avail"><![CDATA[port is available]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[stopped]]></entry>
-	<entry key="network.test.report"><![CDATA[report]]></entry>
-	<entry key="network.test.report.con.err"><![CDATA[connection error]]></entry>
-	<entry key="network.test.report.error"><![CDATA[Error]]></entry>
+
+
+
 	<entry key="network.test.report.start"><![CDATA[start test...]]></entry>
 	<entry key="network.test.sec"><![CDATA[sec]]></entry>
 	<entry key="network.test.upl"><![CDATA[Upload speed]]></entry>

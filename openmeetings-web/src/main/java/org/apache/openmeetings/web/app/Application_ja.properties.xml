@@ -271,17 +271,17 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="713"><![CDATA[このアイテムを消去してよろしいですか?]]></entry>
 	<entry key="714"><![CDATA[検索]]></entry>
 	<entry key="730"><![CDATA[デスクトップ共有]]></entry>
-	<entry key="731"><![CDATA[開始をクリックして画面を共有します]]></entry>
+
 	<entry key="732"><![CDATA[共有を開始する]]></entry>
 	<entry key="733"><![CDATA[共有を停止する]]></entry>
 	<entry key="734"><![CDATA[共有する画面領域を選択してください:]]></entry>
-	<entry key="735"><![CDATA[幅を変更する]]></entry>
-	<entry key="737"><![CDATA[高さを変更する]]></entry>
-	<entry key="738"><![CDATA[X オフセット]]></entry>
-	<entry key="739"><![CDATA[Y オフセット]]></entry>
+
+
+
+
 	<entry key="740"><![CDATA[幅:]]></entry>
 	<entry key="741"><![CDATA[高さ:]]></entry>
-	<entry key="742"><![CDATA[サーバによって接続が切断されました。]]></entry>
+
 	<entry key="753"><![CDATA[リロード]]></entry>
 	<entry key="758"><![CDATA[入室する前に、マイクとカメラの設定を確認してください。まず録画・録音を数秒間実施してください。続いてそれを再生し、録画・録音状態が適正であることをご確認ください。]]></entry>
 	<entry key="764"><![CDATA[再生]]></entry>
@@ -303,7 +303,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="786"><![CDATA[カメラ・マイクへのアクセスを許可]]></entry>
 	<entry key="788"><![CDATA[開始]]></entry>
 	<entry key="792"><![CDATA[会議室]]></entry>
-	<entry key="793"><![CDATA[会議室を選択してください。]]></entry>
+
 	<entry key="797"><![CDATA[警告]]></entry>
 	<entry key="799"><![CDATA[日表示]]></entry>
 	<entry key="800"><![CDATA[週表示]]></entry>
@@ -318,7 +318,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="832"><![CDATA[よろしいですか?]]></entry>
 	<entry key="833"><![CDATA[選択された項目を削除してよろしいですか？変更した内容は、保存する必要があります。続いて保存ボタンを押してください。]]></entry>
 	<entry key="843"><![CDATA[プロパティ]]></entry>
-	<entry key="844"><![CDATA[ビューア上でマウス・ポインタを表示する]]></entry>
+
 	<entry key="848"><![CDATA[デスクトップを表示する]]></entry>
 	<entry key="850"><![CDATA[デスクトップ共有を要求してます。表示しますか?]]></entry>
 	<entry key="860"><![CDATA[私の録画]]></entry>
@@ -326,11 +326,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="864"><![CDATA[全長]]></entry>
 	<entry key="865"><![CDATA[日時]]></entry>
 	<entry key="867"><![CDATA[再生]]></entry>
-	<entry key="869"><![CDATA[録画]]></entry>
-	<entry key="870"><![CDATA[デスクトップの共有だけでなく録画もできます。デスクトップを公開するためには「共有を開始する」ボタンを押してください。録画をするためには「録画を開始する」をクリックしてください。]]></entry>
+
+
 	<entry key="871"><![CDATA[録画を開始する]]></entry>
 	<entry key="872"><![CDATA[録画を停止する]]></entry>
-	<entry key="878"><![CDATA[共有を停止する]]></entry>
+
 	<entry key="879"><![CDATA[質疑を許可する]]></entry>
 	<entry key="880"><![CDATA[質疑を許可すると、「質問があります」ボタンが表示されます。]]></entry>
 	<entry key="881"><![CDATA[権限]]></entry>
@@ -349,10 +349,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1076"><![CDATA[音声のみの会議室]]></entry>
 	<entry key="1077"><![CDATA[このフラッグをオンにすると、ユーザーは会議室で音声のみ使用できるようになります(ビデオ無し)。これにより、ネットワーク帯域を節約することができます。]]></entry>
 	<entry key="1089"><![CDATA[画面共有の品質:]]></entry>
-	<entry key="1090"><![CDATA[超高品質]]></entry>
-	<entry key="1091"><![CDATA[高品質]]></entry>
-	<entry key="1092"><![CDATA[中品質]]></entry>
-	<entry key="1093"><![CDATA[低品質]]></entry>
+
+
+
+
 	<entry key="1098"><![CDATA[ウェビナーは既に終了しています。]]></entry>
 	<entry key="1099"><![CDATA[会議室を閉鎖する]]></entry>
 	<entry key="1100"><![CDATA[終了URL]]></entry>
@@ -380,8 +380,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[タイムゾーン]]></entry>
 	<entry key="1146"><![CDATA[概要]]></entry>
 	<entry key="1147"><![CDATA[作成者]]></entry>
-	<entry key="1148"><![CDATA[タイムゾーン設定を推奨]]></entry>
-	<entry key="1149"><![CDATA[次回ログイン時にタイムゾーン設定を行うことを勧めるメッセージを表示する場合にチェックを入れてください。]]></entry>
+
+
 	<entry key="1151"><![CDATA[{0}会議が設定されました:]]></entry>
 	<entry key="1152"><![CDATA[詳細:]]></entry>
 	<entry key="1153"><![CDATA[開始時刻:]]></entry>
@@ -418,7 +418,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1196"><![CDATA[コンタクト・リスト]]></entry>
 	<entry key="1198"><![CDATA[さんが、あなたをコンタクトとして承認しました!]]></entry>
 	<entry key="1202"><![CDATA[<nobr>送信者</nobr>]]></entry>
-	<entry key="1205"><![CDATA[]]></entry>
+
 	<entry key="1206"><![CDATA[メッセージ]]></entry>
 	<entry key="1207"><![CDATA[新規メール]]></entry>
 	<entry key="1208"><![CDATA[コンタクトに送信するメッセージを新規に作成します]]></entry>
@@ -497,19 +497,19 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1459"><![CDATA[画面上のラベルを管理する]]></entry>
 	<entry key="1460"><![CDATA[LDAP/ADS構成を管理する]]></entry>
 	<entry key="1461"><![CDATA[システム・バックアップをエクスポート／インポートする]]></entry>
-	<entry key="1465"><![CDATA[共有画面公開]]></entry>
-	<entry key="1466"><![CDATA[共有画面を公開開始]]></entry>
-	<entry key="1467"><![CDATA[共有画面を公開終了]]></entry>
-	<entry key="1468"><![CDATA[ホスト]]></entry>
-	<entry key="1469"><![CDATA[公開アプリ]]></entry>
-	<entry key="1470"><![CDATA[公開ID]]></entry>
-	<entry key="1471"><![CDATA[共有画面を左に移動するには、共有画面幅を縮小してください。]]></entry>
-	<entry key="1472"><![CDATA[共有画面を下に移動するには、共有画面高を縮小してください。]]></entry>
-	<entry key="1473"><![CDATA[共有画面の幅を拡大するためには、共有画面を左に移動してください。]]></entry>
-	<entry key="1474"><![CDATA[共有画面の高さを拡大するためには、共有画面を上に移動してください。]]></entry>
-	<entry key="1475"><![CDATA[外部プロバイダー向けストリーミングのための設定を行ってください。]]></entry>
-	<entry key="1476"><![CDATA[画面を公開するには、画面共有を開始してください。]]></entry>
-	<entry key="1477"><![CDATA[録画を開始するには、モデレータ（司会者）権限が必要です。]]></entry>
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<entry key="1479"><![CDATA[ファイルをファイル・エクスプローラにアップロード]]></entry>
 	<entry key="1480"><![CDATA[共有設定画面を開く]]></entry>
 	<entry key="1481"><![CDATA[モデレータ（司会者）による許可が必要]]></entry>
@@ -561,8 +561,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[OAuth2設定]]></entry>
 	<entry key="1575"><![CDATA[アイコンURL]]></entry>
-	<entry key="1576"><![CDATA[クライアントID]]></entry>
-	<entry key="1577"><![CDATA[クライアント秘密鍵]]></entry>
+
+
 	<entry key="1578"><![CDATA[鍵のURL]]></entry>
 	<entry key="1579"><![CDATA[リクエストトークンURL]]></entry>
 	<entry key="1580"><![CDATA[リクエスト情報URL]]></entry>
@@ -570,13 +570,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[トークン属性値]]></entry>
 	<entry key="1587"><![CDATA[リダイレクトURI]]></entry>
 	<entry key="1588"><![CDATA[電子メール・アドレスを入力します: firstname1 lastname1 <email1>, "firstname2 lastname2" <email2>, 'firstname3 lastname3' <email3>, email]]></entry>
-	<entry key="1589"><![CDATA[通信切断時の処理]]></entry>
+
 	<entry key="1590"><![CDATA[表示]]></entry>
 	<entry key="1592"><![CDATA[終了日をご確認ください]]></entry>
 	<entry key="1593"><![CDATA[終了値]]></entry>
 	<entry key="1594"><![CDATA[変換メッセージ]]></entry>
 	<entry key="1595"><![CDATA[録音データがみつかりません]]></entry>
-	<entry key="1598"><![CDATA[セキュリティ]]></entry>
+
 	<entry key="1599"><![CDATA[この会議室へは入れません]]></entry>
 	<entry key="1600"><![CDATA[再変換]]></entry>
 	<entry key="access.denied.header"><![CDATA[アクセスが拒否されました。このアクションの実行権限がありません。]]></entry>
@@ -908,9 +908,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.port"><![CDATA[ポート]]></entry>
 	<entry key="network.test.port.avail"><![CDATA[ポートは利用可能です]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[停止]]></entry>
-	<entry key="network.test.report"><![CDATA[レポート]]></entry>
-	<entry key="network.test.report.con.err"><![CDATA[接続エラー]]></entry>
-	<entry key="network.test.report.error"><![CDATA[エラー]]></entry>
+
+
+
 	<entry key="network.test.report.start"><![CDATA[テスト開始...]]></entry>
 	<entry key="network.test.sec"><![CDATA[秒]]></entry>
 	<entry key="network.test.upl"><![CDATA[アップロード速度]]></entry>

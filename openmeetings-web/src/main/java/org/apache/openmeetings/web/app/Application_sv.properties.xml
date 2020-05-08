@@ -272,17 +272,17 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="713"><![CDATA[Är du säker att du vill radera detta?]]></entry>
 	<entry key="714"><![CDATA[Sök]]></entry>
 	<entry key="730"><![CDATA[Skrivbordsdelare]]></entry>
-	<entry key="731"><![CDATA[Click Start to publish your screen]]></entry>
+
 	<entry key="732"><![CDATA[Börja dela]]></entry>
 	<entry key="733"><![CDATA[Sluta dela]]></entry>
 	<entry key="734"><![CDATA[Select your screen area:]]></entry>
-	<entry key="735"><![CDATA[Ändra bredden]]></entry>
-	<entry key="737"><![CDATA[Ändra höjden]]></entry>
-	<entry key="738"><![CDATA[X-Offset]]></entry>
-	<entry key="739"><![CDATA[Y-Offset]]></entry>
+
+
+
+
 	<entry key="740"><![CDATA[Bredd:]]></entry>
 	<entry key="741"><![CDATA[Höjd:]]></entry>
-	<entry key="742"><![CDATA[Anslutningen bröts av servern]]></entry>
+
 	<entry key="753"><![CDATA[Ladda om]]></entry>
 	<entry key="758"><![CDATA[Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.]]></entry>
 	<entry key="764"><![CDATA[SPELA]]></entry>
@@ -304,7 +304,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="786"><![CDATA[Ansök om tillgång till audio/video]]></entry>
 	<entry key="788"><![CDATA[START]]></entry>
 	<entry key="792"><![CDATA[Rum]]></entry>
-	<entry key="793"><![CDATA[Välj ett rum för mötet]]></entry>
+
 	<entry key="797"><![CDATA[Varning]]></entry>
 	<entry key="799"><![CDATA[Dag]]></entry>
 	<entry key="800"><![CDATA[Vecka]]></entry>
@@ -319,7 +319,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="832"><![CDATA[Är du säker?]]></entry>
 	<entry key="833"><![CDATA[Vill du verkligen radera detta?]]></entry>
 	<entry key="843"><![CDATA[Verktygegenskaper]]></entry>
-	<entry key="844"><![CDATA[Visa pekarpositionen till tittarna]]></entry>
+
 	<entry key="848"><![CDATA[Visa skärmen]]></entry>
 	<entry key="850"><![CDATA[wants to share its screen. Do you want to see it?]]></entry>
 	<entry key="860"><![CDATA[My Recordings]]></entry>
@@ -327,11 +327,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="864"><![CDATA[Längd]]></entry>
 	<entry key="865"><![CDATA[Datum]]></entry>
 	<entry key="867"><![CDATA[PLAY]]></entry>
-	<entry key="869"><![CDATA[Inspelning]]></entry>
-	<entry key="870"><![CDATA[You may record and share your screen at the same time. To enable others to see your screen just hit the start button on the top. To only record the Session it is sufficient to click start recording.]]></entry>
+
+
 	<entry key="871"><![CDATA[Start Recording]]></entry>
 	<entry key="872"><![CDATA[Stop Recording]]></entry>
-	<entry key="878"><![CDATA[Stäng]]></entry>
+
 	<entry key="879"><![CDATA[Tillåt frågor från användarna]]></entry>
 	<entry key="880"><![CDATA[Slå detta av för att hindra användarna att störa dig i detta rum]]></entry>
 	<entry key="881"><![CDATA[Rättigheter]]></entry>
@@ -350,10 +350,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1076"><![CDATA[Rum med bara audio]]></entry>
 	<entry key="1077"><![CDATA[Om denna flagga är på, har användarna bara ljud och ingen video i konferensrummet. Detta kan vara bra för att spara bandbredd.]]></entry>
 	<entry key="1089"><![CDATA[Quality of the ScreenShare:]]></entry>
-	<entry key="1090"><![CDATA[Mycket hög kvalitet]]></entry>
-	<entry key="1091"><![CDATA[Hög kvalitet]]></entry>
-	<entry key="1092"><![CDATA[Medelkvalitet]]></entry>
-	<entry key="1093"><![CDATA[Låg kvalitet]]></entry>
+
+
+
+
 	<entry key="1098"><![CDATA[Denna webinar är redan stängd, du blir omdirigerad till några intressanta erbjudanden på]]></entry>
 	<entry key="1099"><![CDATA[Stäng rummet]]></entry>
 	<entry key="1100"><![CDATA[Exit URL]]></entry>
@@ -381,8 +381,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Tidszon]]></entry>
 	<entry key="1146"><![CDATA[Beskrivning]]></entry>
 	<entry key="1147"><![CDATA[Skapad av]]></entry>
-	<entry key="1148"><![CDATA[Tidzonsmeddelande]]></entry>
-	<entry key="1149"><![CDATA[Bocka "Tidzonsmeddelande" för att ge användarna ett meddelande nästa gång de loggar in för att uppdatera sin profil.]]></entry>
+
+
 	<entry key="1151"><![CDATA[Ny {0} konferens:]]></entry>
 	<entry key="1152"><![CDATA[Detaljer:]]></entry>
 	<entry key="1153"><![CDATA[Början:]]></entry>
@@ -419,7 +419,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1196"><![CDATA[Din kontaktlista]]></entry>
 	<entry key="1198"><![CDATA[confirmed you as contact!]]></entry>
 	<entry key="1202"><![CDATA[Från]]></entry>
-	<entry key="1205"><![CDATA[]]></entry>
+
 	<entry key="1206"><![CDATA[Meddelanden]]></entry>
 	<entry key="1207"><![CDATA[New Mail]]></entry>
 	<entry key="1208"><![CDATA[Klicka för att skriva ett nytt meddelande till någon av dina kontakter]]></entry>
@@ -498,19 +498,19 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1459"><![CDATA[Hantera etiketter och uttryck]]></entry>
 	<entry key="1460"><![CDATA[Hantera LDAP- och ADS-konfigurationer]]></entry>
 	<entry key="1461"><![CDATA[Exportera/importera säkerhetskopior av systemet]]></entry>
-	<entry key="1465"><![CDATA[Publish]]></entry>
-	<entry key="1466"><![CDATA[Start Publish]]></entry>
-	<entry key="1467"><![CDATA[Sluta publicera]]></entry>
-	<entry key="1468"><![CDATA[Värd]]></entry>
-	<entry key="1469"><![CDATA[Publish App]]></entry>
-	<entry key="1470"><![CDATA[Publish Id]]></entry>
-	<entry key="1471"><![CDATA[Minska bredden av delningsskärmen innan du försöker flytta den till vänster.]]></entry>
-	<entry key="1472"><![CDATA[Minska höjden av delningsskärmen innan du försöker flytta den till botten.]]></entry>
-	<entry key="1473"><![CDATA[Minska den delade skärmens x innan du försöker göra den bredare]]></entry>
-	<entry key="1474"><![CDATA[Reduce the y of the SharingScreen before you try to make it higher]]></entry>
-	<entry key="1475"><![CDATA[Fyll i dessa inställningar för att strömma dina skärmdata till tredjepartsleverantörer som justin.tv]]></entry>
-	<entry key="1476"><![CDATA[Vänligen starta skärmdelning för att kunna publicera det]]></entry>
-	<entry key="1477"><![CDATA[Moderatorns tillstånd behövs för att påbörja inspelning]]></entry>
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<entry key="1479"><![CDATA[Ladda upp en ny fil till filhanteraren]]></entry>
 	<entry key="1480"><![CDATA[Öppna ny dialog med delningsinställningar]]></entry>
 	<entry key="1481"><![CDATA[En befintlig moderator måste godkänna det]]></entry>
@@ -562,8 +562,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[Hantera OAuth2-konfigurationer]]></entry>
 	<entry key="1575"><![CDATA[Icon URL]]></entry>
-	<entry key="1576"><![CDATA[client_id]]></entry>
-	<entry key="1577"><![CDATA[client_secret]]></entry>
+
+
 	<entry key="1578"><![CDATA[Request key URL]]></entry>
 	<entry key="1579"><![CDATA[Request token URL]]></entry>
 	<entry key="1580"><![CDATA[Request info URL]]></entry>
@@ -571,13 +571,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[Request token attributes]]></entry>
 	<entry key="1587"><![CDATA[URI för omdirigering]]></entry>
 	<entry key="1588"><![CDATA[Du kan ange e-postadresser i något av följande format: förnamn1 efternamn1 <e-postatadress1> eller "förnamn2 efternamn2 <e-postatadress2>" eller 'förnamn3 efternamn3 <e-postatadress3>' eller e-postadress4]]></entry>
-	<entry key="1589"><![CDATA[Meddela vid bortkoppling]]></entry>
+
 	<entry key="1590"><![CDATA[Display]]></entry>
 	<entry key="1592"><![CDATA[Slutdatumet som angivits är tidigare än startdatumet.]]></entry>
 	<entry key="1593"><![CDATA[Exit value]]></entry>
 	<entry key="1594"><![CDATA[Conversion messages]]></entry>
 	<entry key="1595"><![CDATA[Inspelningsfilen hittades inte]]></entry>
-	<entry key="1598"><![CDATA[Säkerhet]]></entry>
+
 	<entry key="1599"><![CDATA[Tillgång nekad. Du har inte rätt att gå in i detta rum.]]></entry>
 	<entry key="1600"><![CDATA[Konvertera om]]></entry>
 	<entry key="access.denied.header"><![CDATA[Åtkomst vägrad. Du är inte auktoriserad att utföra denna handling.]]></entry>
@@ -905,9 +905,9 @@ till dess kan bli oanvändbara.
 	<entry key="network.test.port"><![CDATA[Port]]></entry>
 	<entry key="network.test.port.avail"><![CDATA[porten är disponibel]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[stoppad]]></entry>
-	<entry key="network.test.report"><![CDATA[rapport]]></entry>
-	<entry key="network.test.report.con.err"><![CDATA[anslutningsfel]]></entry>
-	<entry key="network.test.report.error"><![CDATA[Fel]]></entry>
+
+
+
 	<entry key="network.test.report.start"><![CDATA[börja testen...]]></entry>
 	<entry key="network.test.sec"><![CDATA[sek]]></entry>
 	<entry key="network.test.upl"><![CDATA[Uppladdningshastighet]]></entry>
