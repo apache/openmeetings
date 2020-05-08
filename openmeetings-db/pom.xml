@@ -109,11 +109,6 @@
 			<version>${mssql.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.mina</groupId>
-			<artifactId>mina-core</artifactId>
-			<version>${mina.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-util</artifactId>
 			<version>${project.version}</version>
