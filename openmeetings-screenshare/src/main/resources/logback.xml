@@ -39,7 +39,6 @@
 		</encoder>
 	</appender>
 	<logger name="org.apache.openmeetings" level="DEBUG"/>
-	<logger name="org.red5.server.net.rtmp.codec.RTMPProtocolDecoder" level="OFF"/>
 	<root level="INFO">
 		<appender-ref ref="FILE" />
 		<appender-ref ref="CONSOLE" />

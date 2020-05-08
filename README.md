@@ -7,7 +7,7 @@
  - [x] **collaborative document editing**
  - [x] **other groupware tools**
 
-It uses API functions of Media Server for Remoting and Streaming ([Red5](http://red5.org/) or [Kurento](https://www.kurento.org)).
+It uses API functions of Media Server for Remoting and Streaming [Kurento](https://www.kurento.org)).
 
 Getting Started
 ===============

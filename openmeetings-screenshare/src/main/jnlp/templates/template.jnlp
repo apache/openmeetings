@@ -33,7 +33,6 @@
 	</security>
 	<resources>
 		<j2se version='1.8+'/>
-		<jar href="bcprov-jdk15on-1.65.jar" main="true"/>
 		<jar href="openmeetings-screenshare-${project.version}-full.jar" main="true"/>
 	</resources>
 	<application-desc main-class='org.apache.openmeetings.screenshare.Core'>
