@@ -270,7 +270,7 @@ public class KStream extends AbstractStream {
 	}
 
 	public void stopRecord() {
-		releaseRecorder();
+		releaseRecorder(true);
 		chunkId = null;
 	}
 
@@ -296,6 +296,17 @@ public class KStream extends AbstractStream {
 			log.trace("PARTICIPANT {}: Released incoming EP for {}", uid, inUid);
 
 			final WebRtcEndpoint ep = entry.getValue();
+			outgoingMedia.disconnect(ep, new Continuation<Void>() {
+				@Override
+				public void onSuccess(Void result) throws Exception {
+					log.trace("PARTICIPANT {}: Disconnected successfully incoming EP for {}", KStream.this.uid, inUid);
+				}
+
+				@Override
+				public void onError(Throwable cause) throws Exception {
+					log.warn("PARTICIPANT {}: Could not disconnect incoming EP for {}", KStream.this.uid, inUid);
+				}
+			});
 			ep.release(new Continuation<Void>() {
 				@Override
 				public void onSuccess(Void result) throws Exception {
@@ -315,19 +326,64 @@ public class KStream extends AbstractStream {
 	public void release(IStreamProcessor processor, boolean remove) {
 		if (outgoingMedia != null) {
 			releaseListeners();
-			outgoingMedia.release();
+			outgoingMedia.release(new Continuation<Void>() {
+				@Override
+				public void onSuccess(Void result) throws Exception {
+					log.trace("PARTICIPANT {}: Released successfully", KStream.this.uid);
+				}
+
+				@Override
+				public void onError(Throwable cause) throws Exception {
+					log.warn("PARTICIPANT {}: Could not release", KStream.this.uid, cause);
+				}
+			});
+			releaseRecorder(false);
 			outgoingMedia = null;
 		}
-		releaseRecorder();
 		if (remove) {
 			processor.release(this, false);
 		}
 	}
 
-	private void releaseRecorder() {
+	private void releaseRecorder(boolean wait) {
 		if (recorder != null) {
-			recorder.stopAndWait();
-			recorder.release();
+			if (wait) {
+				recorder.stopAndWait();
+			} else {
+				recorder.stop(new Continuation<Void>() {
+					@Override
+					public void onSuccess(Void result) throws Exception {
+						log.trace("PARTICIPANT {}: Recording stopped", KStream.this.uid);
+					}
+
+					@Override
+					public void onError(Throwable cause) throws Exception {
+						log.warn("PARTICIPANT {}: Could not stop recording", KStream.this.uid, cause);
+					}
+				});
+			}
+			outgoingMedia.disconnect(recorder, new Continuation<Void>() {
+				@Override
+				public void onSuccess(Void result) throws Exception {
+					log.trace("PARTICIPANT {}: Recorder disconnected successfully", KStream.this.uid);
+				}
+
+				@Override
+				public void onError(Throwable cause) throws Exception {
+					log.warn("PARTICIPANT {}: Could not disconnect recorder", KStream.this.uid, cause);
+				}
+			});
+			recorder.release(new Continuation<Void>() {
+				@Override
+				public void onSuccess(Void result) throws Exception {
+					log.trace("PARTICIPANT {}: Recorder released successfully", KStream.this.uid);
+				}
+
+				@Override
+				public void onError(Throwable cause) throws Exception {
+					log.warn("PARTICIPANT {}: Could not release recorder", KStream.this.uid, cause);
+				}
+			});
 			recorder = null;
 		}
 	}
