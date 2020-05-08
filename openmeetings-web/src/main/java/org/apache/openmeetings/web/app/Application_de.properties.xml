@@ -85,7 +85,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Home]]></entry>
 	<entry key="125"><![CDATA[Benutzer]]></entry>
 	<entry key="126"><![CDATA[Gruppen]]></entry>
-	<entry key="131"><![CDATA[Betreten]]></entry>
+	<entry key="lbl.enter"><![CDATA[Betreten]]></entry>
 	<entry key="135"><![CDATA[Vorname]]></entry>
 	<entry key="136"><![CDATA[Nachname]]></entry>
 	<entry key="138"><![CDATA[Geburtstag]]></entry>
@@ -201,7 +201,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[Wenn der Link fehlerhaft dargestellt wird, kopieren Sie bitte folgenden Link in die Adresszeile ihres Browsers:]]></entry>
 	<entry key="506"><![CDATA[{0} Registrierung]]></entry>
 	<entry key="507"><![CDATA[Ihre Benutzerdaten:]]></entry>
-	<entry key="510"><![CDATA[E-Mail:]]></entry>
+	<entry key="lbl.email"><![CDATA[E-Mail:]]></entry>
 	<entry key="511"><![CDATA[{0}-Team]]></entry>
 	<entry key="512"><![CDATA[{0} Registrierung]]></entry>
 	<entry key="513"><![CDATA[{0} - Passwort zurücksetzen]]></entry>
@@ -449,7 +449,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1262"><![CDATA[Ordner löschen]]></entry>
 	<entry key="1268"><![CDATA[Der Nutzer veröffentlicht die persönlichen Kontaktdaten nicht.]]></entry>
 	<entry key="1269"><![CDATA[Der Nutzer zeigt die persönlichen Kontaktdaten nur seinen bestätigten Kontakten.]]></entry>
-	<entry key="1282"><![CDATA[Raum betreten]]></entry>
+
 	<entry key="1287"><![CDATA[Spitznamen wählen]]></entry>
 	<entry key="1296"><![CDATA[Mitglied seit]]></entry>
 	<entry key="1301"><![CDATA[Neue private Nachrichten:]]></entry>
@@ -754,9 +754,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.valid"><![CDATA[Datenbank-Check war erfolgreich]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[Bitte klicken Sie auf "Finish" um die Installation zu starten!]]></entry>
 	<entry key="install.wizard.install.failed"><![CDATA[Installation fehlgeschlagen]]></entry>
-	<entry key="install.wizard.install.header"><![CDATA[Installation]]></entry>
+	<entry key="install.wizard.installation"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[Bitte warten, Installation läuft]]></entry>
-	<entry key="install.wizard.params.step1.email"><![CDATA[E-Mail]]></entry>
+
 	<entry key="install.wizard.params.step1.email.title"><![CDATA[Geben Sie eine E-Mail-Adresse ein]]></entry>
 	<entry key="install.wizard.params.step1.group"><![CDATA[Name]]></entry>
 	<entry key="install.wizard.params.step1.group.title"><![CDATA[Geben Sie den Namen Ihrer Organisation ein]]></entry>
@@ -799,7 +799,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick-Pfad]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Installieren Sie ImageMagick auf dem Server. Weitere Informationen unter http://www.imagemagick.org. Anleitungen f&uuml;r die Installation finden Sie unter http://www.imagemagick.org/script/binary-releases.php, in den meisten Linux-Distributionen l&auml;sst es sich jedoch bequem per Paketmanager (z.B. apt-get) installieren.]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[Geben Sie den Pfad zu ImageMagick an, falls es sich nicht im Systempfad befindet.]]></entry>
-	<entry key="install.wizard.params.step3.installation"><![CDATA[Installation]]></entry>
+
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice-/LibreOffice-Pfad f&uuml;r jodconverter]]></entry>
 	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[Der Pfad zu OpenOffice/LibreOffice (optional). Bitte geben Sie den richtigen Pfad an, falls jodconverter die OpenOffice-/LibreOffice-Installation nicht automatisch findet.]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[Der Pfad zu OpenOffice/LibreOffice (optional). Bitte geben Sie den echten Pfad an, falls jodconverter die OpenOffice-/LibreOffice-Installation nicht automatisch findet.]]></entry>

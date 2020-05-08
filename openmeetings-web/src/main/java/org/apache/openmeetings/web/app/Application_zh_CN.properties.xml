@@ -85,7 +85,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[首页]]></entry>
 	<entry key="125"><![CDATA[用户管理]]></entry>
 	<entry key="126"><![CDATA[群组管理]]></entry>
-	<entry key="131"><![CDATA[进入]]></entry>
+	<entry key="lbl.enter"><![CDATA[进入]]></entry>
 	<entry key="135"><![CDATA[姓]]></entry>
 	<entry key="136"><![CDATA[名]]></entry>
 	<entry key="138"><![CDATA[生日]]></entry>
@@ -201,7 +201,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[如果你在此链接遇到问题, 请拷贝并粘贴此链接到浏览器中:]]></entry>
 	<entry key="506"><![CDATA[{0}——注册]]></entry>
 	<entry key="507"><![CDATA[你的用户数据:]]></entry>
-	<entry key="510"><![CDATA[邮件:]]></entry>
+	<entry key="lbl.email"><![CDATA[邮件:]]></entry>
 	<entry key="511"><![CDATA[{0}——团队]]></entry>
 	<entry key="512"><![CDATA[{0}——注册]]></entry>
 	<entry key="513"><![CDATA[{0}——重置密码]]></entry>
@@ -449,7 +449,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1262"><![CDATA[删除文件夹]]></entry>
 	<entry key="1268"><![CDATA[用户没有共享个人信息]]></entry>
 	<entry key="1269"><![CDATA[用户只对他的联系人共享信息]]></entry>
-	<entry key="1282"><![CDATA[进入会议室]]></entry>
+
 	<entry key="1287"><![CDATA[选择您的昵称]]></entry>
 	<entry key="1296"><![CDATA[成为成员的时间]]></entry>
 	<entry key="1301"><![CDATA[新的私人消息:]]></entry>
@@ -754,9 +754,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.valid"><![CDATA[数据库检查成功]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[请按“完成”按钮开始安装！]]></entry>
 	<entry key="install.wizard.install.failed"><![CDATA[安装失败]]></entry>
-	<entry key="install.wizard.install.header"><![CDATA[Installation]]></entry>
+	<entry key="install.wizard.installation"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[请等待，安装在进行中]]></entry>
-	<entry key="install.wizard.params.step1.email"><![CDATA[电子邮件]]></entry>
+
 	<entry key="install.wizard.params.step1.email.title"><![CDATA[输入电子邮件]]></entry>
 	<entry key="install.wizard.params.step1.group"><![CDATA[名称]]></entry>
 	<entry key="install.wizard.params.step1.group.title"><![CDATA[输入默认组织]]></entry>
@@ -799,7 +799,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick 路径]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[安装 ImageMagick 在服务器上，你可以得到更多的信息在 http://www.imagemagick.org 关于安装. 安装的说明可以在这里找到 http://www.imagemagick.org/script/binary-releases.php, 然而，在大多数linux系统中，您可以通过您最喜爱的软件包管理器来获得它(apt-get it)]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[输入ImageMagick的路径, 如果ImageMagick成功安装到系统路径，就不用填写这个字段]]></entry>
-	<entry key="install.wizard.params.step3.installation"><![CDATA[安装]]></entry>
+
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice和LibreOffice使用jodconverter的路径]]></entry>
 	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[OpenOffice和LibreOffice的路径（可选），请把它指向真实路径，以防 jodconverter不能自动找到OpenOffice/LibreOffice 安装]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[OpenOffice和LibreOffice的路径（可选），请把它指向真实路径，以防 jodconverter不能自动找到OpenOffice/LibreOffice 安装]]></entry>

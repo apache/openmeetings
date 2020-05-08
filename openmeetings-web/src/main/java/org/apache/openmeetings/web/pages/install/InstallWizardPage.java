@@ -37,7 +37,7 @@ public class InstallWizardPage extends BaseNotInitedPage {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		final InstallWizard wizard = new InstallWizard("wizard", getString("install.wizard.install.header"));
+		final InstallWizard wizard = new InstallWizard("wizard", getString("install.wizard.installation"));
 		add(wizard.setEnabled(false));
 		// This code is required to detect time zone offset
 		add(new AjaxClientInfoBehavior() {

@@ -85,7 +85,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[На главную]]></entry>
 	<entry key="125"><![CDATA[Пользователи]]></entry>
 	<entry key="126"><![CDATA[Группы]]></entry>
-	<entry key="131"><![CDATA[Вход]]></entry>
+	<entry key="lbl.enter"><![CDATA[Вход]]></entry>
 	<entry key="135"><![CDATA[Имя]]></entry>
 	<entry key="136"><![CDATA[Фамилия]]></entry>
 	<entry key="138"><![CDATA[Дата рождения]]></entry>
@@ -201,7 +201,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[Если не удаётся перейти по ссылке, скопируйте этот URL в браузер:]]></entry>
 	<entry key="506"><![CDATA[{0} регистрация]]></entry>
 	<entry key="507"><![CDATA[Ваши пользовательские данные:]]></entry>
-	<entry key="510"><![CDATA[e-mail:]]></entry>
+	<entry key="lbl.email"><![CDATA[e-mail:]]></entry>
 	<entry key="511"><![CDATA[{0}-Команда]]></entry>
 	<entry key="512"><![CDATA[Регистрация в {0}]]></entry>
 	<entry key="513"><![CDATA[{0}: Переустановить пароль]]></entry>
@@ -449,7 +449,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1262"><![CDATA[Удалить папку]]></entry>
 	<entry key="1268"><![CDATA[Пользователь не дал совместного доступа к его персональным данным.]]></entry>
 	<entry key="1269"><![CDATA[Пользователь разрешил доступ к своим персональным данным только контактам.]]></entry>
-	<entry key="1282"><![CDATA[Войти в комнату]]></entry>
+
 	<entry key="1287"><![CDATA[Выберите ваш ник]]></entry>
 	<entry key="1296"><![CDATA[Зарегистрирован]]></entry>
 	<entry key="1301"><![CDATA[Новое приватное сообщение:]]></entry>
@@ -754,9 +754,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.valid"><![CDATA[Проверка БД прошла успешно]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[Пожалуйста нажмите кнопку "Закончить" для запуска установки!]]></entry>
 	<entry key="install.wizard.install.failed"><![CDATA[Ошибка установки]]></entry>
-	<entry key="install.wizard.install.header"><![CDATA[Установка]]></entry>
+	<entry key="install.wizard.installation"><![CDATA[Установка]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[Пожалуйста подождите, идёт установка]]></entry>
-	<entry key="install.wizard.params.step1.email"><![CDATA[Электронная почта]]></entry>
+
 	<entry key="install.wizard.params.step1.email.title"><![CDATA[Введите адрес электронной почты]]></entry>
 	<entry key="install.wizard.params.step1.group"><![CDATA[Наименование]]></entry>
 	<entry key="install.wizard.params.step1.group.title"><![CDATA[Введите группу по умолчанию]]></entry>
@@ -799,7 +799,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick Путь]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Установите ImageMagick на Ваш сервер, более подробную информацию касающуюся установки можно посмотреть тут http://www.imagemagick.org Инструкцию по установке Вы можете найти здесь http://www.imagemagick.org/script/binary-releases.php, однако в большинстве систем Линукс Вы можете установить его через Ваш менеджер пакетов (apt-get it)]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[Укажите путь к ImageMagick, или не заполняйте данное поле если ImageMagick установлен в путях Вашей системы]]></entry>
-	<entry key="install.wizard.params.step3.installation"><![CDATA[Установка]]></entry>
+
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice/LibreOffice Путь для jodconverter]]></entry>
 	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[Путь к OpenOffice/LibreOffice (не обязательный) пожалуйста установите этот путь в случае когда jodconverter не в состоянии найти путь к установленному OpenOffice/LibreOffice]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[Путь к OpenOffice/LibreOffice (не обязательный) пожалуйста установите этот путь в случае когда jodconverter не в состоянии найти автоматически путь к  установленному OpenOffice/LibreOffice]]></entry>

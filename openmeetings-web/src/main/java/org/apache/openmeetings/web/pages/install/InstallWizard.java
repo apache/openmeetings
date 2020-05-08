@@ -235,7 +235,7 @@ public class InstallWizard extends BootstrapWizard {
 		protected void onInitialize() {
 			super.onInitialize();
 			setSummaryModel(Model.of(""));
-			setTitleModel(Model.of(model.getObject().getAppName() + " - " + getString("install.wizard.install.header")));
+			setTitleModel(Model.of(model.getObject().getAppName() + " - " + getString("install.wizard.installation")));
 		}
 	}
 
@@ -489,7 +489,7 @@ public class InstallWizard extends BootstrapWizard {
 			add(new PasswordTextField("password")
 					.setResetPassword(false).setLabel(new ResourceModel("install.wizard.params.step1.password"))
 					.add(new StrongPasswordValidator(new User())));
-			add(new RequiredTextField<String>("email").setLabel(new ResourceModel("install.wizard.params.step1.email")).add(RfcCompliantEmailAddressValidator.getInstance()));
+			add(new RequiredTextField<String>("email").setLabel(new ResourceModel("lbl.email")).add(RfcCompliantEmailAddressValidator.getInstance()));
 			add(new RequiredTextField<String>("group").setLabel(new ResourceModel("install.wizard.params.step1.group")));
 		}
 

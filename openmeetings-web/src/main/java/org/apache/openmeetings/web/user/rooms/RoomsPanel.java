@@ -102,7 +102,7 @@ public class RoomsPanel extends UserPanel {
 
 	@Override
 	protected void onInitialize() {
-		add(new RoomListPanel("list", rooms, getString("131")) {
+		add(new RoomListPanel("list", rooms, getString("lbl.enter")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

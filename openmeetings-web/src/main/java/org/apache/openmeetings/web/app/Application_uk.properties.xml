@@ -85,7 +85,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[На головну]]></entry>
 	<entry key="125"><![CDATA[Користувачі]]></entry>
 	<entry key="126"><![CDATA[Групи]]></entry>
-	<entry key="131"><![CDATA[Вхід]]></entry>
+	<entry key="lbl.enter"><![CDATA[Вхід]]></entry>
 	<entry key="135"><![CDATA[Ім'я]]></entry>
 	<entry key="136"><![CDATA[Прізвище]]></entry>
 	<entry key="138"><![CDATA[Дата народження]]></entry>
@@ -201,7 +201,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[Якщо ви має проблему з даним посилання, будь-ласка скопіюйте його і вставте в свій браузер:]]></entry>
 	<entry key="506"><![CDATA[{0} SignUp]]></entry>
 	<entry key="507"><![CDATA[Ваші дані користувача:]]></entry>
-	<entry key="510"><![CDATA[E-mail:]]></entry>
+	<entry key="lbl.email"><![CDATA[E-mail:]]></entry>
 	<entry key="511"><![CDATA[Команда {0}]]></entry>
 	<entry key="512"><![CDATA[{0} Sign-Up]]></entry>
 	<entry key="513"><![CDATA[{0} - Відновити пароль]]></entry>
@@ -449,7 +449,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1262"><![CDATA[Видалити теку]]></entry>
 	<entry key="1268"><![CDATA[Користувач не дав спільного доступу до його персональних даних.]]></entry>
 	<entry key="1269"><![CDATA[Користувач дозволив доступ до своїх персональних даних лише контактів.]]></entry>
-	<entry key="1282"><![CDATA[Увійти в кімнату]]></entry>
+
 	<entry key="1287"><![CDATA[Виберіть ваш нік]]></entry>
 	<entry key="1296"><![CDATA[Записаний з]]></entry>
 	<entry key="1301"><![CDATA[Нове приватне повідомлення:]]></entry>
@@ -754,9 +754,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.valid"><![CDATA[Перевірка БД пройшла успішно]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[будь Ласка, натисніть кнопку "Готово" для інсталяції!]]></entry>
 	<entry key="install.wizard.install.failed"><![CDATA[Помилка установки]]></entry>
-	<entry key="install.wizard.install.header"><![CDATA[Установка]]></entry>
+	<entry key="install.wizard.installation"><![CDATA[Установка]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[зачекайте, йде установка]]></entry>
-	<entry key="install.wizard.params.step1.email"><![CDATA[пошта]]></entry>
+
 	<entry key="install.wizard.params.step1.email.title"><![CDATA[Введіть адресу електронної пошти]]></entry>
 	<entry key="install.wizard.params.step1.group"><![CDATA[Назва]]></entry>
 	<entry key="install.wizard.params.step1.group.title"><![CDATA[Введіть організацію за замовчуванням]]></entry>
@@ -799,7 +799,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick Шлях]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Установите ImageMagick на Ваш сервер, более подробную информацию касающуюся установки можно посмотреть тут http://www.imagemagick.org Инструкцию по установке Вы можете найти здесь http://www.imagemagick.org/script/binary-releases.php, однако в большинстве систем Линукс Вы можете установить его через Ваш менеджер пакетов (apt-get it)]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[Вкажіть шлях до ImageMagick, або не заповнюйте це поле якщо ImageMagick встановлений в шляхах Вашої системи]]></entry>
-	<entry key="install.wizard.params.step3.installation"><![CDATA[Установка]]></entry>
+
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice/LibreOffice Шлях для jodconverter]]></entry>
 	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[Шлях до OpenOffice/LibreOffice (не обов'язковий) будь ласка, встановіть цей шлях у разі коли jodconverter не в змозі знайти шлях до встановленого OpenOffice/LibreOffice]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[Шлях до OpenOffice/LibreOffice (не обов'язковий) будь ласка, встановіть цей шлях, у разі коли jodconverter не в змозі знайти автоматично шлях до встановленого OpenOffice/LibreOffice]]></entry>

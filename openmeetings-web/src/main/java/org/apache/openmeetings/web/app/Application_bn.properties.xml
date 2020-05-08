@@ -85,7 +85,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[হোম]]></entry>
 	<entry key="125"><![CDATA[ইউজারসমূহ]]></entry>
 	<entry key="126"><![CDATA[গ্রুপসমূহ]]></entry>
-	<entry key="131"><![CDATA[প্রবেশ করুন]]></entry>
+	<entry key="lbl.enter"><![CDATA[প্রবেশ করুন]]></entry>
 	<entry key="135"><![CDATA[উপাধি / নামের প্রথমাংশ]]></entry>
 	<entry key="136"><![CDATA[নামের শেষাংশ]]></entry>
 	<entry key="138"><![CDATA[জন্মদিন]]></entry>
@@ -201,7 +201,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[যদি আপনার লিঙ্কে সমস্যা থাকে, তাহলে দয়া করে আপনার ব্রাউজারে কপি এবং পেস্ট করুন:]]></entry>
 	<entry key="506"><![CDATA[{0} অ্যাকাউন্ট বিবরণ]]></entry>
 	<entry key="507"><![CDATA[আপনার অ্যাকাউন্ট বিবরণ]]></entry>
-	<entry key="510"><![CDATA[ইমেইল]]></entry>
+	<entry key="lbl.email"><![CDATA[ইমেইল]]></entry>
 	<entry key="511"><![CDATA[{0} - দল]]></entry>
 	<entry key="512"><![CDATA[আপনার {0} অ্যাকাউন্টের বিবরণ]]></entry>
 	<entry key="513"><![CDATA[{0} - পাসওয়ার্ড পুনরায় সেট করুন]]></entry>
@@ -449,7 +449,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1262"><![CDATA[Delete folder]]></entry>
 	<entry key="1268"><![CDATA[The user does not share his personal contact data.]]></entry>
 	<entry key="1269"><![CDATA[The user shares their personal contact data only to contacts.]]></entry>
-	<entry key="1282"><![CDATA[Enter room]]></entry>
+
 	<entry key="1287"><![CDATA[Choose your nick name]]></entry>
 	<entry key="1296"><![CDATA[Member since]]></entry>
 	<entry key="1301"><![CDATA[New private message:]]></entry>
@@ -753,9 +753,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.valid"><![CDATA[Database check was successfull]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[Please click "Finish" button to start installation!]]></entry>
 	<entry key="install.wizard.install.failed"><![CDATA[Installation has failed]]></entry>
-	<entry key="install.wizard.install.header"><![CDATA[Installation]]></entry>
+	<entry key="install.wizard.installation"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[Please wait, installation in progress]]></entry>
-	<entry key="install.wizard.params.step1.email"><![CDATA[EMail]]></entry>
+
 	<entry key="install.wizard.params.step1.email.title"><![CDATA[Enter a EMail]]></entry>
 	<entry key="install.wizard.params.step1.group"><![CDATA[Name]]></entry>
 	<entry key="install.wizard.params.step1.group.title"><![CDATA[Enter a default Group]]></entry>
@@ -798,7 +798,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick Path]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Install ImageMagick on the server, you can get more information on http://www.imagemagick.org regarding installation. The instructions for installation can be found here http://www.imagemagick.org/script/binary-releases.php, however on most linux systems you can get it via the system's package manager (apt-get, dnf, yum etc)]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[Enter the path to ImageMagick, leave blank if ImageMagick is successfully installed to system-path]]></entry>
-	<entry key="install.wizard.params.step3.installation"><![CDATA[Installation]]></entry>
+
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice/LibreOffice Path for jodconverter]]></entry>
 	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically]]></entry>

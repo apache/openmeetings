@@ -214,7 +214,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 				target.add(feedback);
 			}
 		});
-		addButton(enterRoom = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Success, new ResourceModel("1282")) {
+		addButton(enterRoom = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Success, new ResourceModel("lbl.enter")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

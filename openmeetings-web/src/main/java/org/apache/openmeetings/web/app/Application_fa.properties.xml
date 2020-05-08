@@ -85,7 +85,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[صفحه اصلی]]></entry>
 	<entry key="125"><![CDATA[كاربر]]></entry>
 	<entry key="126"><![CDATA[گروه ها]]></entry>
-	<entry key="131"><![CDATA[ورود]]></entry>
+	<entry key="lbl.enter"><![CDATA[ورود]]></entry>
 	<entry key="135"><![CDATA[نام:]]></entry>
 	<entry key="136"><![CDATA[نام خانوادگی:]]></entry>
 	<entry key="138"><![CDATA[تاریخ تولد:]]></entry>
@@ -201,7 +201,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[اگر با مسیر ارتباطی مشکلی دارید لطفا لینک را کپی کرده و آنرا در مرورگر خود اجرا کنید:]]></entry>
 	<entry key="506"><![CDATA[جزییات حساب کاربری]]></entry>
 	<entry key="507"><![CDATA[جزییات حساب کاربری شما:]]></entry>
-	<entry key="510"><![CDATA[ایمیل:]]></entry>
+	<entry key="lbl.email"><![CDATA[ایمیل:]]></entry>
 	<entry key="511"><![CDATA[تیم-{0}]]></entry>
 	<entry key="512"><![CDATA[جزییات حساب کاربری شما]]></entry>
 	<entry key="513"><![CDATA[تنظیم دوباره رمز عبور-{0}]]></entry>
@@ -449,7 +449,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1262"><![CDATA[حذف پوشه]]></entry>
 	<entry key="1268"><![CDATA[کاربر اطلاعات شخص تماس خود را به اشتراک نمی گذارد]]></entry>
 	<entry key="1269"><![CDATA[کاربر اطلاعات شخصی تماس خود را فقط با لیست تماس خود به اشتراک می گذارد.]]></entry>
-	<entry key="1282"><![CDATA[ورود به اتاق]]></entry>
+
 	<entry key="1287"><![CDATA[انتخاب نام مستعار]]></entry>
 	<entry key="1296"><![CDATA[عضویت از]]></entry>
 	<entry key="1301"><![CDATA[پیام خصوصی جدید:]]></entry>
@@ -753,9 +753,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.valid"><![CDATA[مسیر ImageMagick]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[لطفاً دکمه پایان را کلیک را برای شروع نصب کلیک کنید!]]></entry>
 	<entry key="install.wizard.install.failed"><![CDATA[شکست نصب]]></entry>
-	<entry key="install.wizard.install.header"><![CDATA[نصب]]></entry>
+	<entry key="install.wizard.installation"><![CDATA[نصب]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[منتظر بمانید،نصب در حال اجراست]]></entry>
-	<entry key="install.wizard.params.step1.email"><![CDATA[پست الکترونیک]]></entry>
+
 	<entry key="install.wizard.params.step1.email.title"><![CDATA[یک پست الکترونیک وارد کنید]]></entry>
 	<entry key="install.wizard.params.step1.group"><![CDATA[نام]]></entry>
 	<entry key="install.wizard.params.step1.group.title"><![CDATA[وارد کردن گروه پیش فرض]]></entry>
@@ -797,7 +797,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[مسیر ImageMagick]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[ImageMagick را بر روی سرور نصب کنید، شما می توانید اطلاعات بیشتر را در http://www.ImageMagick.org با توجه به نصب دریافت کنید. دستورات نصب در آدرس http://www.ImageMagick.org/Script/binary-releases.php، یافت می شود، با این حال در اکثر سیستم های لینوکس میتوانید آنرا از طریق بسته مدیریتی دلخواه دریافت کنید.]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[مسیر را در وارد کنید ImageMagick, اگر ImageMagick به طور موفق در مسیر سیستم نصب شده است مسیر را خالی بگذارید]]></entry>
-	<entry key="install.wizard.params.step3.installation"><![CDATA[نصب]]></entry>
+
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice/LibreOffice Path for jodconverter]]></entry>
 	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[در صورتیکه مبدل jod قادر نیست نصب OpenOffice  را بیابد ، لطفا آنرا در مسیر واقعی تنظیم کنید]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[درصورتیکه مبدل jod قادر به یافتن نصب OpenOffice/LibreOffice به طور خودکار نمی باشد،لطفاًآنرا در مسیر واقعی تنظیم کنید]]></entry>
