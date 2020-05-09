@@ -20,6 +20,18 @@
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 	<body>
+		<section name="How to improve translations">
+			<p>We are using <a href="https://poeditor.com/join/project/6UF8Mhql61" rel="nofollow">POEditor</a> to manage translations.</p>
+			<ul>
+				<li><a href="https://poeditor.com/join/project/6UF8Mhql61" rel="nofollow">Join</a> our project!<br/>
+					Once you join the project, you can access it via Dashboard page at POEditor site.
+				</li>
+				<li><a href="https://poeditor.com/projects/view?id=333773" rel="nofollow">View</a> our project<br/>
+					This page lists translation status for each language and provides additional controls.<br/>
+					<em>Note</em>: Accessing this page requires additional privileges. If you do not have them, an error 404 is shown after your sign-in.
+				</li>
+			</ul>
+		</section>
 		<section name="Where to find language files">
 			<p>You can find all current language files here: </p>
 			<p>

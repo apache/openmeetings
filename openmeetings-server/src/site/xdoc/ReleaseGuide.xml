@@ -104,6 +104,10 @@
 						Check site is <tt>green</tt> here <a href="https://whimsy.apache.org/site/project/openmeetings">https://whimsy.apache.org/site/project/openmeetings</a>
 					</li>
 					<li>
+						Ensure All contributed translations are imported to our codebase<br/>
+						(More info and examples <a href="https://github.com/solomax/om-poeditor">is here</a>))
+					</li>
+					<li>
 						Update following files in OM documentation:<br/>
 						<tt>openmeetings-server/src/site/xdoc/index.xml</tt><br/>
 						<tt>openmeetings-server/src/site/xdoc/NewsArchive.xml</tt><br/>
