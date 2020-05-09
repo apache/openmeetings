@@ -4,6 +4,7 @@ body {
 	--menu-height: 36px;
 	--level-color: #ADFF2F;
 	--rooms-header-height: 70px;
+	--room-sidebar-width: 315px;
 	--tabs-height: 45px;
 	--buffer-size: 4px;
 	--menu-zindex: 10000000;
