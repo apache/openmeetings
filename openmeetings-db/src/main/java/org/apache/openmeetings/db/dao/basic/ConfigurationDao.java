@@ -481,6 +481,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setSmtpUser(getString(CONFIG_SMTP_USER, null));
 		setSmtpPass(getString(CONFIG_SMTP_PASS, null));
 		setSmtpUseTls(getBool(CONFIG_SMTP_TLS, false));
+		setSmtpUseSsl(getBool(CONFIG_SMTP_SSL, false));
 		setSmtpTimeOut(getInt(CONFIG_SMTP_TIMEOUT, 30000));
 		setSmtpConnectionTimeOut(getInt(CONFIG_SMTP_TIMEOUT_CON, 30000));
 		setMailFrom(getString(CONFIG_SMTP_SYSTEM_EMAIL, null));
