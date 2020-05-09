@@ -47,7 +47,7 @@
 
 				<!-- General -->
 				<fieldset>
-					<legend><wicket:message key="187" /></legend>
+					<legend><wicket:message key="lbl.general" /></legend>
 					<div class="formelement">
 						<label wicket:for="name" class="col-3 text-right"><wicket:message key="165" /></label>
 						<input type="text" wicket:id="name" class="col-8"/>
@@ -67,6 +67,10 @@
 					<div class="formelement">
 						<label wicket:for="appointment" class="col-3 text-right"><wicket:message key="620" /></label>
 						<input type="checkbox" class="formcheckbox" wicket:id="appointment" />
+					</div>
+					<div class="formelement">
+						<label wicket:for="ownerId" class="col-3 text-right"><wicket:message key="1308" /></label>
+						<input type="text" wicket:id="ownerId" class="col-8" readonly="readonly"/>
 					</div>
 				</fieldset>
 
@@ -287,10 +291,6 @@
 					<div class="formelement">
 						<label wicket:for="pin" class="col-3 text-right"><wicket:message key="1004" /></label>
 						<input type="text" wicket:id="pin" class="col-8"/>
-					</div>
-					<div class="formelement">
-						<label wicket:for="ownerId" class="col-3 text-right"><wicket:message key="1308" /></label>
-						<input type="text" wicket:id="ownerId" class="col-8"/>
 					</div>
 					<div class="formelement">
 						<label wicket:for="sipEnabled" class="col-3 text-right"><wicket:message key="1538" /></label>

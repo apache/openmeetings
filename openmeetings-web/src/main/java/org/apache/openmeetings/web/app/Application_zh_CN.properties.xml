@@ -85,7 +85,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[首页]]></entry>
 	<entry key="125"><![CDATA[用户管理]]></entry>
 	<entry key="126"><![CDATA[群组管理]]></entry>
-	<entry key="lbl.enter"><![CDATA[进入]]></entry>
 	<entry key="135"><![CDATA[姓]]></entry>
 	<entry key="136"><![CDATA[名]]></entry>
 	<entry key="138"><![CDATA[生日]]></entry>
@@ -104,7 +103,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="177"><![CDATA[用户]]></entry>
 	<entry key="178"><![CDATA[添加用户]]></entry>
 	<entry key="186"><![CDATA[会议室]]></entry>
-	<entry key="187"><![CDATA[会议室]]></entry>
+
 	<entry key="188"><![CDATA[编号]]></entry>
 	<entry key="190"><![CDATA[公开]]></entry>
 	<entry key="196"><![CDATA[备注]]></entry>
@@ -201,7 +200,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[如果你在此链接遇到问题, 请拷贝并粘贴此链接到浏览器中:]]></entry>
 	<entry key="506"><![CDATA[{0}——注册]]></entry>
 	<entry key="507"><![CDATA[你的用户数据:]]></entry>
-	<entry key="lbl.email"><![CDATA[邮件:]]></entry>
 	<entry key="511"><![CDATA[{0}——团队]]></entry>
 	<entry key="512"><![CDATA[{0}——注册]]></entry>
 	<entry key="513"><![CDATA[{0}——重置密码]]></entry>
@@ -221,9 +219,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="547"><![CDATA[y]]></entry>
 	<entry key="548"><![CDATA[y轴]]></entry>
 	<entry key="549"><![CDATA[w]]></entry>
-	<entry key="550"><![CDATA[宽]]></entry>
+
 	<entry key="551"><![CDATA[h]]></entry>
-	<entry key="552"><![CDATA[高]]></entry>
+
 	<entry key="553"><![CDATA[改变透明度]]></entry>
 	<entry key="556"><![CDATA[与服务器的连接已丢失. 你需要重新载入程序或检查网络.]]></entry>
 	<entry key="557"><![CDATA[指针]]></entry>
@@ -271,17 +269,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="713"><![CDATA[您确定要删除此项目？]]></entry>
 	<entry key="714"><![CDATA[搜索]]></entry>
 	<entry key="730"><![CDATA[桌面共享器]]></entry>
-
 	<entry key="732"><![CDATA[开始分享]]></entry>
 	<entry key="733"><![CDATA[暂停分享]]></entry>
 	<entry key="734"><![CDATA[选择你的屏幕区域：]]></entry>
-
-
-
-
-	<entry key="740"><![CDATA[宽：]]></entry>
-	<entry key="741"><![CDATA[高：]]></entry>
-
+	<entry key="740"><![CDATA[宽]]></entry>
+	<entry key="741"><![CDATA[高]]></entry>
 	<entry key="753"><![CDATA[重新载入]]></entry>
 	<entry key="758"><![CDATA[你在进入会议室前，可以使用音频视频测试来录制几秒钟的声音图像。然后通过回放你的录像录音来检查你的声音图像是否正常。]]></entry>
 	<entry key="764"><![CDATA[播放]]></entry>
@@ -303,7 +295,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="786"><![CDATA[申请使用音频视频权限]]></entry>
 	<entry key="788"><![CDATA[开始]]></entry>
 	<entry key="792"><![CDATA[会议室]]></entry>
-
 	<entry key="797"><![CDATA[警告]]></entry>
 	<entry key="799"><![CDATA[日]]></entry>
 	<entry key="800"><![CDATA[周]]></entry>
@@ -318,7 +309,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="832"><![CDATA[你确认吗？]]></entry>
 	<entry key="833"><![CDATA[你真的确认需要删除这个项目吗？你需要点击保存按钮来保存更改！]]></entry>
 	<entry key="843"><![CDATA[Tool Properties]]></entry>
-
 	<entry key="848"><![CDATA[显示屏幕]]></entry>
 	<entry key="850"><![CDATA[想分享他的屏幕。你想看到它吗？]]></entry>
 	<entry key="860"><![CDATA[私有会议记录]]></entry>
@@ -326,11 +316,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="864"><![CDATA[长度]]></entry>
 	<entry key="865"><![CDATA[日期]]></entry>
 	<entry key="867"><![CDATA[下载]]></entry>
-
-
 	<entry key="871"><![CDATA[开始录制]]></entry>
 	<entry key="872"><![CDATA[停止录制]]></entry>
-
 	<entry key="879"><![CDATA[允许所有用户发问]]></entry>
 	<entry key="880"><![CDATA[关闭这个功能可以防止任何用户在你会议室捣乱。影响效果是向主持人发问的按钮是不可见的。]]></entry>
 	<entry key="881"><![CDATA[权利]]></entry>
@@ -349,10 +336,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1076"><![CDATA[只有音频]]></entry>
 	<entry key="1077"><![CDATA[勾选此项可以使得会议室只能有音频功能有利于节省带宽]]></entry>
 	<entry key="1089"><![CDATA[共享屏幕的质量:]]></entry>
-
-
-
-
 	<entry key="1098"><![CDATA[会议已经关闭，您将重定向到其它网址]]></entry>
 	<entry key="1099"><![CDATA[关闭会议室]]></entry>
 	<entry key="1100"><![CDATA[关闭后展示给用户的地址URL]]></entry>
@@ -380,8 +363,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[时区]]></entry>
 	<entry key="1146"><![CDATA[详细描述]]></entry>
 	<entry key="1147"><![CDATA[创建者]]></entry>
-
-
 	<entry key="1151"><![CDATA[新会议:]]></entry>
 	<entry key="1152"><![CDATA[详细情况]]></entry>
 	<entry key="1153"><![CDATA[开始时间:]]></entry>
@@ -418,7 +399,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1196"><![CDATA[联系人列表]]></entry>
 	<entry key="1198"><![CDATA[已经确认了您的请求!]]></entry>
 	<entry key="1202"><![CDATA[来自]]></entry>
-
 	<entry key="1206"><![CDATA[消息]]></entry>
 	<entry key="1207"><![CDATA[新的邮件]]></entry>
 	<entry key="1208"><![CDATA[给所有联系人发送新消息]]></entry>
@@ -449,7 +429,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1262"><![CDATA[删除文件夹]]></entry>
 	<entry key="1268"><![CDATA[用户没有共享个人信息]]></entry>
 	<entry key="1269"><![CDATA[用户只对他的联系人共享信息]]></entry>
-
 	<entry key="1287"><![CDATA[选择您的昵称]]></entry>
 	<entry key="1296"><![CDATA[成为成员的时间]]></entry>
 	<entry key="1301"><![CDATA[新的私人消息:]]></entry>
@@ -497,19 +476,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1459"><![CDATA[管理标签及文字]]></entry>
 	<entry key="1460"><![CDATA[管理LDAP及ADS配置]]></entry>
 	<entry key="1461"><![CDATA[输出／输入系统备份]]></entry>
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<entry key="1479"><![CDATA[将新文件上载到文件资源管理器]]></entry>
 	<entry key="1480"><![CDATA[用共享设置打开新的对话框]]></entry>
 	<entry key="1481"><![CDATA[一个现有的主持人必须批准它]]></entry>
@@ -561,8 +527,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[oauth2配置管理]]></entry>
 	<entry key="1575"><![CDATA[链接图标]]></entry>
-
-
 	<entry key="1578"><![CDATA[请求密钥网址]]></entry>
 	<entry key="1579"><![CDATA[请求令牌网址]]></entry>
 	<entry key="1580"><![CDATA[请求信息网址]]></entry>
@@ -570,13 +534,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[请求令牌属性]]></entry>
 	<entry key="1587"><![CDATA[重定向URL]]></entry>
 	<entry key="1588"><![CDATA[您可以按照此格式中输入邮件地址: 名1 姓1 <email1> 或 "名2 姓2 "  <email2> 或'名3 姓3 ' <email3> 或 email]]></entry>
-
 	<entry key="1590"><![CDATA[显示]]></entry>
 	<entry key="1592"><![CDATA[输入的结束日期早于开始日期.]]></entry>
 	<entry key="1593"><![CDATA[退出值]]></entry>
 	<entry key="1594"><![CDATA[转换消息]]></entry>
 	<entry key="1595"><![CDATA[未找到记录文件]]></entry>
-
 	<entry key="1599"><![CDATA[拒绝访问。你无权进入这个房间.]]></entry>
 	<entry key="1600"><![CDATA[再转换]]></entry>
 	<entry key="access.denied.header"><![CDATA[Access denied. You are not authorized to perform this action.]]></entry>
@@ -627,7 +589,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal电子邮件]]></entry>
 	<entry key="appointment.reminder.NONE"><![CDATA[不发送通知]]></entry>
 	<entry key="appointment.tab.advanced"><![CDATA[Advanced]]></entry>
-	<entry key="appointment.tab.general"><![CDATA[General]]></entry>
+	<entry key="lbl.general"><![CDATA[General]]></entry>
 	<entry key="bad.captcha.text"><![CDATA[You have entered incorrect captcha text]]></entry>
 	<entry key="bad.password.digit"><![CDATA['Weak' password: at least 1 digit is required]]></entry>
 	<entry key="bad.password.lower"><![CDATA['Weak' password: at least 1 lower-case letter is required]]></entry>
@@ -754,9 +716,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.valid"><![CDATA[数据库检查成功]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[请按“完成”按钮开始安装！]]></entry>
 	<entry key="install.wizard.install.failed"><![CDATA[安装失败]]></entry>
-	<entry key="install.wizard.installation"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[请等待，安装在进行中]]></entry>
-
+	<entry key="install.wizard.installation"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.params.step1.email.title"><![CDATA[输入电子邮件]]></entry>
 	<entry key="install.wizard.params.step1.group"><![CDATA[名称]]></entry>
 	<entry key="install.wizard.params.step1.group.title"><![CDATA[输入默认组织]]></entry>
@@ -799,7 +760,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick 路径]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[安装 ImageMagick 在服务器上，你可以得到更多的信息在 http://www.imagemagick.org 关于安装. 安装的说明可以在这里找到 http://www.imagemagick.org/script/binary-releases.php, 然而，在大多数linux系统中，您可以通过您最喜爱的软件包管理器来获得它(apt-get it)]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[输入ImageMagick的路径, 如果ImageMagick成功安装到系统路径，就不用填写这个字段]]></entry>
-
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice和LibreOffice使用jodconverter的路径]]></entry>
 	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[OpenOffice和LibreOffice的路径（可选），请把它指向真实路径，以防 jodconverter不能自动找到OpenOffice/LibreOffice 安装]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[OpenOffice和LibreOffice的路径（可选），请把它指向真实路径，以防 jodconverter不能自动找到OpenOffice/LibreOffice 安装]]></entry>
@@ -871,6 +831,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[取消]]></entry>
+	<entry key="lbl.email"><![CDATA[邮件:]]></entry>
+	<entry key="lbl.enter"><![CDATA[进入]]></entry>
 	<entry key="lbl.new"><![CDATA[new]]></entry>
 	<entry key="lbl.or"><![CDATA[or]]></entry>
 	<entry key="lbl.refresh"><![CDATA[刷新]]></entry>
@@ -908,9 +870,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.port"><![CDATA[Port]]></entry>
 	<entry key="network.test.port.avail"><![CDATA[port is available]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[stopped]]></entry>
-
-
-
 	<entry key="network.test.report.start"><![CDATA[start test...]]></entry>
 	<entry key="network.test.sec"><![CDATA[sec]]></entry>
 	<entry key="network.test.upl"><![CDATA[Upload speed]]></entry>

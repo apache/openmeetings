@@ -85,7 +85,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Αρχική Σελίδα]]></entry>
 	<entry key="125"><![CDATA[Χρήστες]]></entry>
 	<entry key="126"><![CDATA[Ομάδες]]></entry>
-	<entry key="lbl.enter"><![CDATA[Είσοδος]]></entry>
 	<entry key="135"><![CDATA[Όνομα]]></entry>
 	<entry key="136"><![CDATA[Επώνυμο]]></entry>
 	<entry key="138"><![CDATA[Γενέθλια]]></entry>
@@ -104,7 +103,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="177"><![CDATA[Χρήστης]]></entry>
 	<entry key="178"><![CDATA[Προσθήκη Χρήστη]]></entry>
 	<entry key="186"><![CDATA[Δωμάτια Συνδιασκέψεων]]></entry>
-	<entry key="187"><![CDATA[Δωμάτιο Συνδιάσκέψεων]]></entry>
+
 	<entry key="188"><![CDATA[Αριθμός]]></entry>
 	<entry key="190"><![CDATA[Δημόσιο]]></entry>
 	<entry key="196"><![CDATA[Σχόλιο]]></entry>
@@ -201,7 +200,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[Αν έχετε προβλήματα με το Σύνδεσμο, παρακαλούμε αντιγράψτε και επικολλήστε αυτό στο Φυλλομετρητή σας:]]></entry>
 	<entry key="506"><![CDATA[Εγγραφή στο {0}]]></entry>
 	<entry key="507"><![CDATA[Τα Στοιχεία Σας:]]></entry>
-	<entry key="lbl.email"><![CDATA[Email:]]></entry>
 	<entry key="511"><![CDATA[{0} - Ομάδα]]></entry>
 	<entry key="512"><![CDATA[{0} - Εγγραφή Μέλους]]></entry>
 	<entry key="513"><![CDATA[{0} - Αλλαγή Κωδικού]]></entry>
@@ -221,9 +219,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="547"><![CDATA[y]]></entry>
 	<entry key="548"><![CDATA[Άξονας-y]]></entry>
 	<entry key="549"><![CDATA[π]]></entry>
-	<entry key="550"><![CDATA[Πλάτος]]></entry>
+
 	<entry key="551"><![CDATA[υ]]></entry>
-	<entry key="552"><![CDATA[Ύψος]]></entry>
+
 	<entry key="553"><![CDATA[Αλλαγή Βαθμού Διαφάνειας]]></entry>
 	<entry key="556"><![CDATA[Η Σύνδεση με το Διακομιστή χάθηκε. Πρέπει να φορτώσετε ξανά την Εφαρμογή ή/και να ελέγξετε το Δίκτυό σας.]]></entry>
 	<entry key="557"><![CDATA[Δείκτης]]></entry>
@@ -271,17 +269,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="713"><![CDATA[Θέλετε σίγουρα να διαγράψετε το συγκεκριμένο Στοιχείο;]]></entry>
 	<entry key="714"><![CDATA[Αναζήτηση]]></entry>
 	<entry key="730"><![CDATA[Διαμοιραστής Επιφάνειας Εργασίας]]></entry>
-
 	<entry key="732"><![CDATA[Έναρξη Διαμοίρασης]]></entry>
 	<entry key="733"><![CDATA[Τερματισμός Διαμοίρασης]]></entry>
 	<entry key="734"><![CDATA[Επιλογή Περιοχής Οθόνης:]]></entry>
-
-
-
-
-	<entry key="740"><![CDATA[Πλάτος:]]></entry>
-	<entry key="741"><![CDATA[Ύψος:]]></entry>
-
+	<entry key="740"><![CDATA[Πλάτος]]></entry>
+	<entry key="741"><![CDATA[Ύψος]]></entry>
 	<entry key="753"><![CDATA[Επαναφόρτωση]]></entry>
 	<entry key="758"><![CDATA[Ελέγξτε την εγκατάσταση του Μικροφώνου και της Κάμεράς σας πριν εισέλθετε σε κάποιο Δωμάτιο, μαγνητοσκοπώντας για κάποια δευτερόλεπτα.]]></entry>
 	<entry key="764"><![CDATA[PLAY]]></entry>
@@ -303,7 +295,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="786"><![CDATA[Αίτηση Πρόσβασης σε Κάμερα/Μικρόφωνο]]></entry>
 	<entry key="788"><![CDATA[ΕΝΑΡΞΗ]]></entry>
 	<entry key="792"><![CDATA[Δωμάτια]]></entry>
-
 	<entry key="797"><![CDATA[Προειδοποίηση]]></entry>
 	<entry key="799"><![CDATA[Μέρα]]></entry>
 	<entry key="800"><![CDATA[Εβδομάδα]]></entry>
@@ -318,7 +309,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="832"><![CDATA[Είστε σίγουρος;]]></entry>
 	<entry key="833"><![CDATA[Θέλετε πραγματικά να διαγράψετε το συγκεκριμένο Στοιχείο; Πρέπει να πατήσετε το κουμπί αποθήκευσης για να αποθηκευτούν οι αλλαγές!]]></entry>
 	<entry key="843"><![CDATA[Tool Properties]]></entry>
-
 	<entry key="848"><![CDATA[View Screen]]></entry>
 	<entry key="850"><![CDATA[wants to share its screen. Do you want to see it?]]></entry>
 	<entry key="860"><![CDATA[My Recordings]]></entry>
@@ -326,11 +316,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="864"><![CDATA[Length]]></entry>
 	<entry key="865"><![CDATA[Date]]></entry>
 	<entry key="867"><![CDATA[PLAY]]></entry>
-
-
 	<entry key="871"><![CDATA[Start Recording]]></entry>
 	<entry key="872"><![CDATA[Stop Recording]]></entry>
-
 	<entry key="879"><![CDATA[Allow User Questions]]></entry>
 	<entry key="880"><![CDATA[Turn this off to prevent that any user is disturbing you in this room. Effect is that the Button to ask for Moderation ("I have a question") is not visible.]]></entry>
 	<entry key="881"><![CDATA[Rights]]></entry>
@@ -349,10 +336,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1076"><![CDATA[Audio only room]]></entry>
 	<entry key="1077"><![CDATA[Turn this Flag on and the users will have only the Audio-Option and no Video in a conference room. This can by good to save bandwidth.]]></entry>
 	<entry key="1089"><![CDATA[Quality of the ScreenShare:]]></entry>
-
-
-
-
 	<entry key="1098"><![CDATA[The webinar is already closed, you will be redirected to some interesting offerings in]]></entry>
 	<entry key="1099"><![CDATA[Close Room]]></entry>
 	<entry key="1100"><![CDATA[Exit URL]]></entry>
@@ -380,8 +363,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Timezone]]></entry>
 	<entry key="1146"><![CDATA[Description]]></entry>
 	<entry key="1147"><![CDATA[Created by]]></entry>
-
-
 	<entry key="1151"><![CDATA[New {0} conference:]]></entry>
 	<entry key="1152"><![CDATA[Details:]]></entry>
 	<entry key="1153"><![CDATA[Start:]]></entry>
@@ -418,7 +399,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1196"><![CDATA[Your contact list]]></entry>
 	<entry key="1198"><![CDATA[confirmed you as contact!]]></entry>
 	<entry key="1202"><![CDATA[From]]></entry>
-
 	<entry key="1206"><![CDATA[Messages]]></entry>
 	<entry key="1207"><![CDATA[New Mail]]></entry>
 	<entry key="1208"><![CDATA[Click to write a new message to any of your contacts]]></entry>
@@ -449,7 +429,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1262"><![CDATA[Delete folder]]></entry>
 	<entry key="1268"><![CDATA[The user does not share his personal contact data.]]></entry>
 	<entry key="1269"><![CDATA[The user shares their personal contact data only to contacts.]]></entry>
-
 	<entry key="1287"><![CDATA[Choose your nickname]]></entry>
 	<entry key="1296"><![CDATA[Member since]]></entry>
 	<entry key="1301"><![CDATA[New private message:]]></entry>
@@ -497,19 +476,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1459"><![CDATA[Manage labels and wording]]></entry>
 	<entry key="1460"><![CDATA[Manage LDAP and ADS configurations]]></entry>
 	<entry key="1461"><![CDATA[Export/Import System Backups]]></entry>
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<entry key="1479"><![CDATA[Upload new file to file explorer]]></entry>
 	<entry key="1480"><![CDATA[Open new dialog with sharing settings]]></entry>
 	<entry key="1481"><![CDATA[An existing moderator must approve it]]></entry>
@@ -561,8 +527,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[Manage OAuth2 configurations]]></entry>
 	<entry key="1575"><![CDATA[Icon URL]]></entry>
-
-
 	<entry key="1578"><![CDATA[Request key URL]]></entry>
 	<entry key="1579"><![CDATA[Request token URL]]></entry>
 	<entry key="1580"><![CDATA[Request info URL]]></entry>
@@ -570,13 +534,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[Request token attributes]]></entry>
 	<entry key="1587"><![CDATA[Redirect uri]]></entry>
 	<entry key="1588"><![CDATA[You can enter email address in the format: firstname1 lastname1 <email1> or "firstname2 lastname2" <email2> or 'firstname3 lastname3' <email3> or email]]></entry>
-
 	<entry key="1590"><![CDATA[Display]]></entry>
 	<entry key="1592"><![CDATA[End date entered is earlier than start date.]]></entry>
 	<entry key="1593"><![CDATA[Exit value]]></entry>
 	<entry key="1594"><![CDATA[Conversion messages]]></entry>
 	<entry key="1595"><![CDATA[Recording file is not found]]></entry>
-
 	<entry key="1599"><![CDATA[Access denied. You have no rights to enter this room.]]></entry>
 	<entry key="1600"><![CDATA[Re-convert]]></entry>
 	<entry key="access.denied.header"><![CDATA[Access denied. You are not authorized to perform this action.]]></entry>
@@ -627,7 +589,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal email]]></entry>
 	<entry key="appointment.reminder.NONE"><![CDATA[do not send notification]]></entry>
 	<entry key="appointment.tab.advanced"><![CDATA[Advanced]]></entry>
-	<entry key="appointment.tab.general"><![CDATA[General]]></entry>
+	<entry key="lbl.general"><![CDATA[General]]></entry>
 	<entry key="bad.captcha.text"><![CDATA[You have entered incorrect captcha text]]></entry>
 	<entry key="bad.password.digit"><![CDATA['Weak' password: at least 1 digit is required]]></entry>
 	<entry key="bad.password.lower"><![CDATA['Weak' password: at least 1 lower-case letter is required]]></entry>
@@ -753,9 +715,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.valid"><![CDATA[Database check was successfull]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[Please click "Finish" button to start installation!]]></entry>
 	<entry key="install.wizard.install.failed"><![CDATA[Installation has failed]]></entry>
-	<entry key="install.wizard.installation"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[Please wait, installation in progress]]></entry>
-
+	<entry key="install.wizard.installation"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.params.step1.email.title"><![CDATA[Enter a EMail]]></entry>
 	<entry key="install.wizard.params.step1.group"><![CDATA[Name]]></entry>
 	<entry key="install.wizard.params.step1.group.title"><![CDATA[Enter a default Group]]></entry>
@@ -798,7 +759,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick Path]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Install ImageMagick on the server, you can get more information on http://www.imagemagick.org regarding installation. The instructions for installation can be found here http://www.imagemagick.org/script/binary-releases.php, however on most linux systems you can get it via the system's package manager (apt-get, dnf, yum etc)]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[Enter the path to ImageMagick, leave blank if ImageMagick is successfully installed to system-path]]></entry>
-
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice/LibreOffice Path for jodconverter]]></entry>
 	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically]]></entry>
@@ -870,6 +830,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Ακύρωση]]></entry>
+	<entry key="lbl.email"><![CDATA[Email:]]></entry>
+	<entry key="lbl.enter"><![CDATA[Είσοδος]]></entry>
 	<entry key="lbl.new"><![CDATA[new]]></entry>
 	<entry key="lbl.or"><![CDATA[or]]></entry>
 	<entry key="lbl.refresh"><![CDATA[Ανανέωση]]></entry>
@@ -907,9 +869,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.port"><![CDATA[Port]]></entry>
 	<entry key="network.test.port.avail"><![CDATA[port is available]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[stopped]]></entry>
-
-
-
 	<entry key="network.test.report.start"><![CDATA[start test...]]></entry>
 	<entry key="network.test.sec"><![CDATA[sec]]></entry>
 	<entry key="network.test.upl"><![CDATA[Upload speed]]></entry>

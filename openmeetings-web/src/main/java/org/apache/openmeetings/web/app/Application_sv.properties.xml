@@ -85,7 +85,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Hem]]></entry>
 	<entry key="125"><![CDATA[Användare]]></entry>
 	<entry key="126"><![CDATA[Grupper]]></entry>
-	<entry key="lbl.enter"><![CDATA[Anslut]]></entry>
 	<entry key="135"><![CDATA[Titel/förnamn]]></entry>
 	<entry key="136"><![CDATA[Efternamn]]></entry>
 	<entry key="138"><![CDATA[Födelsedag]]></entry>
@@ -104,7 +103,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="177"><![CDATA[Användare]]></entry>
 	<entry key="178"><![CDATA[Lägg till användare]]></entry>
 	<entry key="186"><![CDATA[Konferensrum]]></entry>
-	<entry key="187"><![CDATA[Konferensrum]]></entry>
+
 	<entry key="188"><![CDATA[Id]]></entry>
 	<entry key="190"><![CDATA[Publik]]></entry>
 	<entry key="196"><![CDATA[Kommentar]]></entry>
@@ -202,7 +201,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[Om du har problem med länken, var vänlig kopiera och klistra in detta i din webbläsare:]]></entry>
 	<entry key="506"><![CDATA[{0} Kontodetaljer]]></entry>
 	<entry key="507"><![CDATA[Dina kontodetaljer]]></entry>
-	<entry key="lbl.email"><![CDATA[E-postadress]]></entry>
 	<entry key="511"><![CDATA[{0}-Team]]></entry>
 	<entry key="512"><![CDATA[{0} Registrering]]></entry>
 	<entry key="513"><![CDATA[{0} - Återställ Lösenord]]></entry>
@@ -222,9 +220,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="547"><![CDATA[y]]></entry>
 	<entry key="548"><![CDATA[y-axel]]></entry>
 	<entry key="549"><![CDATA[b]]></entry>
-	<entry key="550"><![CDATA[bredd]]></entry>
+
 	<entry key="551"><![CDATA[h]]></entry>
-	<entry key="552"><![CDATA[höjd]]></entry>
+
 	<entry key="553"><![CDATA[Ändra Genomskinlighet]]></entry>
 	<entry key="556"><![CDATA[Anslutningen till Servern är förlorad. Du måste ladda om Applikationen och/eller kolla din Nätverksanslutning.]]></entry>
 	<entry key="557"><![CDATA[Pekare]]></entry>
@@ -272,17 +270,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="713"><![CDATA[Är du säker att du vill radera detta?]]></entry>
 	<entry key="714"><![CDATA[Sök]]></entry>
 	<entry key="730"><![CDATA[Skrivbordsdelare]]></entry>
-
 	<entry key="732"><![CDATA[Börja dela]]></entry>
 	<entry key="733"><![CDATA[Sluta dela]]></entry>
 	<entry key="734"><![CDATA[Select your screen area:]]></entry>
-
-
-
-
-	<entry key="740"><![CDATA[Bredd:]]></entry>
-	<entry key="741"><![CDATA[Höjd:]]></entry>
-
+	<entry key="740"><![CDATA[Bredd]]></entry>
+	<entry key="741"><![CDATA[Höjd]]></entry>
 	<entry key="753"><![CDATA[Ladda om]]></entry>
 	<entry key="758"><![CDATA[Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.]]></entry>
 	<entry key="764"><![CDATA[SPELA]]></entry>
@@ -304,7 +296,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="786"><![CDATA[Ansök om tillgång till audio/video]]></entry>
 	<entry key="788"><![CDATA[START]]></entry>
 	<entry key="792"><![CDATA[Rum]]></entry>
-
 	<entry key="797"><![CDATA[Varning]]></entry>
 	<entry key="799"><![CDATA[Dag]]></entry>
 	<entry key="800"><![CDATA[Vecka]]></entry>
@@ -319,7 +310,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="832"><![CDATA[Är du säker?]]></entry>
 	<entry key="833"><![CDATA[Vill du verkligen radera detta?]]></entry>
 	<entry key="843"><![CDATA[Verktygegenskaper]]></entry>
-
 	<entry key="848"><![CDATA[Visa skärmen]]></entry>
 	<entry key="850"><![CDATA[wants to share its screen. Do you want to see it?]]></entry>
 	<entry key="860"><![CDATA[My Recordings]]></entry>
@@ -327,11 +317,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="864"><![CDATA[Längd]]></entry>
 	<entry key="865"><![CDATA[Datum]]></entry>
 	<entry key="867"><![CDATA[PLAY]]></entry>
-
-
 	<entry key="871"><![CDATA[Start Recording]]></entry>
 	<entry key="872"><![CDATA[Stop Recording]]></entry>
-
 	<entry key="879"><![CDATA[Tillåt frågor från användarna]]></entry>
 	<entry key="880"><![CDATA[Slå detta av för att hindra användarna att störa dig i detta rum]]></entry>
 	<entry key="881"><![CDATA[Rättigheter]]></entry>
@@ -350,10 +337,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1076"><![CDATA[Rum med bara audio]]></entry>
 	<entry key="1077"><![CDATA[Om denna flagga är på, har användarna bara ljud och ingen video i konferensrummet. Detta kan vara bra för att spara bandbredd.]]></entry>
 	<entry key="1089"><![CDATA[Quality of the ScreenShare:]]></entry>
-
-
-
-
 	<entry key="1098"><![CDATA[Denna webinar är redan stängd, du blir omdirigerad till några intressanta erbjudanden på]]></entry>
 	<entry key="1099"><![CDATA[Stäng rummet]]></entry>
 	<entry key="1100"><![CDATA[Exit URL]]></entry>
@@ -381,8 +364,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Tidszon]]></entry>
 	<entry key="1146"><![CDATA[Beskrivning]]></entry>
 	<entry key="1147"><![CDATA[Skapad av]]></entry>
-
-
 	<entry key="1151"><![CDATA[Ny {0} konferens:]]></entry>
 	<entry key="1152"><![CDATA[Detaljer:]]></entry>
 	<entry key="1153"><![CDATA[Början:]]></entry>
@@ -419,7 +400,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1196"><![CDATA[Din kontaktlista]]></entry>
 	<entry key="1198"><![CDATA[confirmed you as contact!]]></entry>
 	<entry key="1202"><![CDATA[Från]]></entry>
-
 	<entry key="1206"><![CDATA[Meddelanden]]></entry>
 	<entry key="1207"><![CDATA[New Mail]]></entry>
 	<entry key="1208"><![CDATA[Klicka för att skriva ett nytt meddelande till någon av dina kontakter]]></entry>
@@ -450,7 +430,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1262"><![CDATA[Radera mapp]]></entry>
 	<entry key="1268"><![CDATA[Användaren delar inte sina personliga data.]]></entry>
 	<entry key="1269"><![CDATA[Användaren delar sina personliga data endast med sina kontakter.]]></entry>
-
 	<entry key="1287"><![CDATA[Choose your nickname]]></entry>
 	<entry key="1296"><![CDATA[Medlem sedan]]></entry>
 	<entry key="1301"><![CDATA[Nytt privatmeddelande:]]></entry>
@@ -498,19 +477,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1459"><![CDATA[Hantera etiketter och uttryck]]></entry>
 	<entry key="1460"><![CDATA[Hantera LDAP- och ADS-konfigurationer]]></entry>
 	<entry key="1461"><![CDATA[Exportera/importera säkerhetskopior av systemet]]></entry>
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<entry key="1479"><![CDATA[Ladda upp en ny fil till filhanteraren]]></entry>
 	<entry key="1480"><![CDATA[Öppna ny dialog med delningsinställningar]]></entry>
 	<entry key="1481"><![CDATA[En befintlig moderator måste godkänna det]]></entry>
@@ -562,8 +528,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[Hantera OAuth2-konfigurationer]]></entry>
 	<entry key="1575"><![CDATA[Icon URL]]></entry>
-
-
 	<entry key="1578"><![CDATA[Request key URL]]></entry>
 	<entry key="1579"><![CDATA[Request token URL]]></entry>
 	<entry key="1580"><![CDATA[Request info URL]]></entry>
@@ -571,13 +535,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[Request token attributes]]></entry>
 	<entry key="1587"><![CDATA[URI för omdirigering]]></entry>
 	<entry key="1588"><![CDATA[Du kan ange e-postadresser i något av följande format: förnamn1 efternamn1 <e-postatadress1> eller "förnamn2 efternamn2 <e-postatadress2>" eller 'förnamn3 efternamn3 <e-postatadress3>' eller e-postadress4]]></entry>
-
 	<entry key="1590"><![CDATA[Display]]></entry>
 	<entry key="1592"><![CDATA[Slutdatumet som angivits är tidigare än startdatumet.]]></entry>
 	<entry key="1593"><![CDATA[Exit value]]></entry>
 	<entry key="1594"><![CDATA[Conversion messages]]></entry>
 	<entry key="1595"><![CDATA[Inspelningsfilen hittades inte]]></entry>
-
 	<entry key="1599"><![CDATA[Tillgång nekad. Du har inte rätt att gå in i detta rum.]]></entry>
 	<entry key="1600"><![CDATA[Konvertera om]]></entry>
 	<entry key="access.denied.header"><![CDATA[Åtkomst vägrad. Du är inte auktoriserad att utföra denna handling.]]></entry>
@@ -628,7 +590,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal-epost]]></entry>
 	<entry key="appointment.reminder.NONE"><![CDATA[skicka inte notifikation]]></entry>
 	<entry key="appointment.tab.advanced"><![CDATA[Advanced]]></entry>
-	<entry key="appointment.tab.general"><![CDATA[Allmänt]]></entry>
+	<entry key="lbl.general"><![CDATA[Allmänt]]></entry>
 	<entry key="bad.captcha.text"><![CDATA[Du angav captchatexten felaktigt]]></entry>
 	<entry key="bad.password.digit"><![CDATA['Svagt' lösenord: det krävs minst en siffra]]></entry>
 	<entry key="bad.password.lower"><![CDATA['Svagt' lösenord: det krävs åtminstone en gemen]]></entry>
@@ -754,9 +716,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.valid"><![CDATA[Database check was successfull]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[Vänligen klicka "Slutför" för att starta installationen! ]]></entry>
 	<entry key="install.wizard.install.failed"><![CDATA[Installation has failed]]></entry>
-	<entry key="install.wizard.installation"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[Please wait, installation in progress]]></entry>
-
+	<entry key="install.wizard.installation"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.params.step1.email.title"><![CDATA[Enter a EMail]]></entry>
 	<entry key="install.wizard.params.step1.group"><![CDATA[Namn]]></entry>
 	<entry key="install.wizard.params.step1.group.title"><![CDATA[Ange en förvald grupp]]></entry>
@@ -798,7 +759,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[Sökväg till ImageMagick]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Installera ImageMagick på servern. Du kan få mer information på http://www.imagemagick.org beträffande installationen. Installationsinstruktioner finns på http://www.imagemagick.org/script/binary-releases.php, men på de flesta linuxsystem kan det installeras genom systemets pakethanterare (apt-get, yum, dnf etc)]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[Ange sökvägen till ImageMagick, lämna tomt om ImageMagick är korrekt installerad i systemsökvägen]]></entry>
-
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice/LibreOffice sökväg för jodconverter]]></entry>
 	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[Sökvägen till OpenOffice/LibreOffice (optionell). Vänligen sätt detta till den korrekta sökvägen ifall jodconverter inte kan hitta OpenOffice/LibreOfficeinstallationen]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[Sökvägen till OpenOffice/LibreOffice (optionell). Vänligen sätt detta till den riktiga sökvägen ifall jodconverter misslyckas hitta OpenOffice/LibreOffice-installationen automatiskt]]></entry>
@@ -868,6 +828,8 @@ till dess kan bli oanvändbara.
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Avbryt]]></entry>
+	<entry key="lbl.email"><![CDATA[E-postadress]]></entry>
+	<entry key="lbl.enter"><![CDATA[Anslut]]></entry>
 	<entry key="lbl.new"><![CDATA[new]]></entry>
 	<entry key="lbl.or"><![CDATA[eller]]></entry>
 	<entry key="lbl.refresh"><![CDATA[Uppdatera]]></entry>
@@ -905,9 +867,6 @@ till dess kan bli oanvändbara.
 	<entry key="network.test.port"><![CDATA[Port]]></entry>
 	<entry key="network.test.port.avail"><![CDATA[porten är disponibel]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[stoppad]]></entry>
-
-
-
 	<entry key="network.test.report.start"><![CDATA[börja testen...]]></entry>
 	<entry key="network.test.sec"><![CDATA[sek]]></entry>
 	<entry key="network.test.upl"><![CDATA[Uppladdningshastighet]]></entry>

@@ -85,7 +85,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Home]]></entry>
 	<entry key="125"><![CDATA[Benutzer]]></entry>
 	<entry key="126"><![CDATA[Gruppen]]></entry>
-	<entry key="lbl.enter"><![CDATA[Betreten]]></entry>
 	<entry key="135"><![CDATA[Vorname]]></entry>
 	<entry key="136"><![CDATA[Nachname]]></entry>
 	<entry key="138"><![CDATA[Geburtstag]]></entry>
@@ -104,7 +103,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="177"><![CDATA[Benutzer]]></entry>
 	<entry key="178"><![CDATA[Benutzer hinzufügen]]></entry>
 	<entry key="186"><![CDATA[Konferenzräume]]></entry>
-	<entry key="187"><![CDATA[Konferenzräume]]></entry>
+
 	<entry key="188"><![CDATA[ID]]></entry>
 	<entry key="190"><![CDATA[öffentlich]]></entry>
 	<entry key="196"><![CDATA[Kommentar]]></entry>
@@ -201,7 +200,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[Wenn der Link fehlerhaft dargestellt wird, kopieren Sie bitte folgenden Link in die Adresszeile ihres Browsers:]]></entry>
 	<entry key="506"><![CDATA[{0} Registrierung]]></entry>
 	<entry key="507"><![CDATA[Ihre Benutzerdaten:]]></entry>
-	<entry key="lbl.email"><![CDATA[E-Mail:]]></entry>
 	<entry key="511"><![CDATA[{0}-Team]]></entry>
 	<entry key="512"><![CDATA[{0} Registrierung]]></entry>
 	<entry key="513"><![CDATA[{0} - Passwort zurücksetzen]]></entry>
@@ -221,9 +219,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="547"><![CDATA[y]]></entry>
 	<entry key="548"><![CDATA[y-Achse]]></entry>
 	<entry key="549"><![CDATA[w]]></entry>
-	<entry key="550"><![CDATA[Breite]]></entry>
+
 	<entry key="551"><![CDATA[h]]></entry>
-	<entry key="552"><![CDATA[Höhe]]></entry>
+
 	<entry key="553"><![CDATA[Transparenz ändern]]></entry>
 	<entry key="556"><![CDATA[Die Verbindung zum Server ist abgebrochen. Prüfen Sie ihre Netzwerk-Verbindung und starten Sie die Anwendung neu.]]></entry>
 	<entry key="557"><![CDATA[Zeiger]]></entry>
@@ -242,7 +240,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="601"><![CDATA[Verbunden seit]]></entry>
 	<entry key="602"><![CDATA[Raum / Bereich]]></entry>
 	<entry key="603"><![CDATA[Ausloggen]]></entry>
-	<entry key="605"><![CDATA[Wollen Sie diesen Benutzer wirklich von dieser Verbingung entfernen?<br/> Diese Maßnahme entfernt den Benutzer lediglich aus dem Raum. Der Benutzer kann sich wieder einloggen.]]></entry>
+	<entry key="605"><![CDATA[Wollen Sie diesen Benutzer wirklich von dieser Verbindung entfernen?<br/> Diese Maßnahme entfernt den Benutzer lediglich aus dem Raum. Der Benutzer kann sich wieder einloggen.]]></entry>
 	<entry key="606"><![CDATA[Ihre Sitzung wurde beendet.]]></entry>
 	<entry key="607"><![CDATA[Telefon]]></entry>
 	<entry key="615"><![CDATA[Zeichenbrett]]></entry>
@@ -271,17 +269,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="713"><![CDATA[Sind Sie sicher, dass Sie dieses Element löschen wollen?]]></entry>
 	<entry key="714"><![CDATA[Suche]]></entry>
 	<entry key="730"><![CDATA[Desktop-Teiler]]></entry>
-
 	<entry key="732"><![CDATA[Start]]></entry>
 	<entry key="733"><![CDATA[Anhalten]]></entry>
 	<entry key="734"><![CDATA[Wählen Sie einen Bildschirmbereich aus:]]></entry>
-
-
-
-
-	<entry key="740"><![CDATA[Breite:]]></entry>
-	<entry key="741"><![CDATA[Höhe:]]></entry>
-
+	<entry key="740"><![CDATA[Breite]]></entry>
+	<entry key="741"><![CDATA[Höhe]]></entry>
 	<entry key="753"><![CDATA[Nachladen]]></entry>
 	<entry key="758"><![CDATA[Überprüfen Sie Ihre Mikrofon- und Kameraeinstellungen bevor Sie einen Raum betreten und Aufzeichnungen durchführen. Sie können Ihre Aufnahmen im Nachhinein abspielen.]]></entry>
 	<entry key="764"><![CDATA[Abspielen]]></entry>
@@ -303,7 +295,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="786"><![CDATA[WebCam/Mikrofon beantragen]]></entry>
 	<entry key="788"><![CDATA[START]]></entry>
 	<entry key="792"><![CDATA[Räume]]></entry>
-
 	<entry key="797"><![CDATA[Warnung]]></entry>
 	<entry key="799"><![CDATA[Tag]]></entry>
 	<entry key="800"><![CDATA[Woche]]></entry>
@@ -313,12 +304,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="816"><![CDATA[Default Moderatoren]]></entry>
 	<entry key="817"><![CDATA[Super]]></entry>
 	<entry key="823"><![CDATA[In einem moderierten Raum sind Nutzer mit den Rollen Level-Moderator oder Administrator beim Betreten des Raums automatisch Moderatoren. Um dies abzuschalten, verwenden Sie die Funktion Default-Moderator.]]></entry>
-	<entry key="828"><![CDATA[Wenn eine Organisation einen Raum zugewiesen wird, haben nur Mitglieder der Organisation Zugang. (Dies gilt nur wenn die Einstellung isPublic auf false gesetzt wurde!)]]></entry>
+	<entry key="828"><![CDATA[Wenn Sie einem Raum eine Organisation  zuweisen, haben nur Mitglieder der Organisation Zugang. (Dies gilt nur wenn die Einstellung isPublic auf false gesetzt wurde!)]]></entry>
 	<entry key="830"><![CDATA[Begrenzungen]]></entry>
 	<entry key="832"><![CDATA[Sind Sie sicher?]]></entry>
-	<entry key="833"><![CDATA[Wirklich löschen? Diese Aktion kann nicht wiederufen werden.]]></entry>
+	<entry key="833"><![CDATA[Wirklich löschen? Diese Aktion kann nicht widerrufen werden.]]></entry>
 	<entry key="843"><![CDATA[Eigenschaften des Werkzeugs]]></entry>
-
 	<entry key="848"><![CDATA[Bildschirm zeigen]]></entry>
 	<entry key="850"><![CDATA[möchte den Bildschirm übertragen. Wollen Sie ihn sehen?]]></entry>
 	<entry key="860"><![CDATA[Meine Aufnahmen]]></entry>
@@ -326,11 +316,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="864"><![CDATA[Länge]]></entry>
 	<entry key="865"><![CDATA[Datum]]></entry>
 	<entry key="867"><![CDATA[Download]]></entry>
-
-
 	<entry key="871"><![CDATA[Aufnahme starten]]></entry>
 	<entry key="872"><![CDATA[Aufnahme stoppen]]></entry>
-
 	<entry key="879"><![CDATA[Benutzerfragen erlauben]]></entry>
 	<entry key="880"><![CDATA[Wenn Sie diese Option aktivieren ist die Schaltfläche zum beantragen der Moderation für andere Teilnehmer sichtbar und Sie können in ihrem Vortrag gestört werden.]]></entry>
 	<entry key="881"><![CDATA[Rechte]]></entry>
@@ -349,10 +336,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1076"><![CDATA[Raum nur mit Audio]]></entry>
 	<entry key="1077"><![CDATA[Mit dieser Funktion erlauben Sie im Raum nur Audioübertragung und schalten Video ab. Dies kann sinnvoll sein, um Bandbreite zu reduzieren.]]></entry>
 	<entry key="1089"><![CDATA[Qualität der Übertragung:]]></entry>
-
-
-
-
 	<entry key="1098"><![CDATA[Das Webinar ist bereits beendet. Weitere interessante Angebote befinden sich in]]></entry>
 	<entry key="1099"><![CDATA[Raum schließen]]></entry>
 	<entry key="1100"><![CDATA[Ausgang (URL)]]></entry>
@@ -380,8 +363,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[Zeitzone]]></entry>
 	<entry key="1146"><![CDATA[Beschreibung]]></entry>
 	<entry key="1147"><![CDATA[Erstellt von]]></entry>
-
-
 	<entry key="1151"><![CDATA[Neue {0} Konferenz:]]></entry>
 	<entry key="1152"><![CDATA[Details:]]></entry>
 	<entry key="1153"><![CDATA[Start:]]></entry>
@@ -418,7 +399,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1196"><![CDATA[Ihre Kontaktliste]]></entry>
 	<entry key="1198"><![CDATA[hat Sie als Kontakt bestätigt]]></entry>
 	<entry key="1202"><![CDATA[Von]]></entry>
-
 	<entry key="1206"><![CDATA[Nachrichten]]></entry>
 	<entry key="1207"><![CDATA[Neue Mail]]></entry>
 	<entry key="1208"><![CDATA[Neue Nachricht an meine Kontakte schreiben]]></entry>
@@ -449,7 +429,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1262"><![CDATA[Ordner löschen]]></entry>
 	<entry key="1268"><![CDATA[Der Nutzer veröffentlicht die persönlichen Kontaktdaten nicht.]]></entry>
 	<entry key="1269"><![CDATA[Der Nutzer zeigt die persönlichen Kontaktdaten nur seinen bestätigten Kontakten.]]></entry>
-
 	<entry key="1287"><![CDATA[Spitznamen wählen]]></entry>
 	<entry key="1296"><![CDATA[Mitglied seit]]></entry>
 	<entry key="1301"><![CDATA[Neue private Nachrichten:]]></entry>
@@ -497,19 +476,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1459"><![CDATA[Sprachen verwalten]]></entry>
 	<entry key="1460"><![CDATA[LDAP und ADS Konfiguration]]></entry>
 	<entry key="1461"><![CDATA[Export/Import von Systemsicherungen]]></entry>
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<entry key="1479"><![CDATA[neue Datei in Datei-Explorer hochladen]]></entry>
 	<entry key="1480"><![CDATA[Öffne neuen Dialog mit Sharing-Einstellungen]]></entry>
 	<entry key="1481"><![CDATA[Ein existierender Moderator muss dies genehmigen]]></entry>
@@ -561,8 +527,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[OAuth2 Konfigurationen]]></entry>
 	<entry key="1575"><![CDATA[Icon URL]]></entry>
-
-
 	<entry key="1578"><![CDATA[Schlüssel URL anfragen]]></entry>
 	<entry key="1579"><![CDATA[Token URL anfragen]]></entry>
 	<entry key="1580"><![CDATA[Info URL anfragen]]></entry>
@@ -570,13 +534,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[Token Attribute anfordern]]></entry>
 	<entry key="1587"><![CDATA[Redirect uri]]></entry>
 	<entry key="1588"><![CDATA[E-Mail Adressen können in folgende Formaten eingetragen werden: Vorname1 Nachname1 <email1> oder "Vorname2 Nachname2" <email2> oder 'Vorname3 Nachname3' <email3> oder email]]></entry>
-
 	<entry key="1590"><![CDATA[Anzeige]]></entry>
 	<entry key="1592"><![CDATA[Das Enddatum liegt vor dem Anfangsdatum.]]></entry>
 	<entry key="1593"><![CDATA[Rückgabewert]]></entry>
 	<entry key="1594"><![CDATA[Nachrichten]]></entry>
 	<entry key="1595"><![CDATA[Aufnahme nicht gefunden]]></entry>
-
 	<entry key="1599"><![CDATA[Zugriff verweigert. Sie haben nicht die nötigen rechte für diesen Raum.]]></entry>
 	<entry key="1600"><![CDATA[neu konvertieren]]></entry>
 	<entry key="access.denied.header"><![CDATA[Zugriff verweigert. Sie sind nicht bevollmächtigt, diese Aktion auszuführen.]]></entry>
@@ -627,7 +589,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal E-Mail]]></entry>
 	<entry key="appointment.reminder.NONE"><![CDATA[keine Erinnerung senden]]></entry>
 	<entry key="appointment.tab.advanced"><![CDATA[Fortgeschritten]]></entry>
-	<entry key="appointment.tab.general"><![CDATA[Generell]]></entry>
+	<entry key="lbl.general"><![CDATA[Generell]]></entry>
 	<entry key="bad.captcha.text"><![CDATA[Sie haben ein falsches Captcha eingegeben.]]></entry>
 	<entry key="bad.password.digit"><![CDATA['Weiches' Passwort: Mindestens eine Zahl ist erforderlich.]]></entry>
 	<entry key="bad.password.lower"><![CDATA['Weiches' Passwort: mindestens 1 Kleinbuchstabe ist erforderlich]]></entry>
@@ -754,9 +716,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.valid"><![CDATA[Datenbank-Check war erfolgreich]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[Bitte klicken Sie auf "Finish" um die Installation zu starten!]]></entry>
 	<entry key="install.wizard.install.failed"><![CDATA[Installation fehlgeschlagen]]></entry>
-	<entry key="install.wizard.installation"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[Bitte warten, Installation läuft]]></entry>
-
+	<entry key="install.wizard.installation"><![CDATA[Installation]]></entry>
 	<entry key="install.wizard.params.step1.email.title"><![CDATA[Geben Sie eine E-Mail-Adresse ein]]></entry>
 	<entry key="install.wizard.params.step1.group"><![CDATA[Name]]></entry>
 	<entry key="install.wizard.params.step1.group.title"><![CDATA[Geben Sie den Namen Ihrer Organisation ein]]></entry>
@@ -799,7 +760,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick-Pfad]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Installieren Sie ImageMagick auf dem Server. Weitere Informationen unter http://www.imagemagick.org. Anleitungen f&uuml;r die Installation finden Sie unter http://www.imagemagick.org/script/binary-releases.php, in den meisten Linux-Distributionen l&auml;sst es sich jedoch bequem per Paketmanager (z.B. apt-get) installieren.]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[Geben Sie den Pfad zu ImageMagick an, falls es sich nicht im Systempfad befindet.]]></entry>
-
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice-/LibreOffice-Pfad f&uuml;r jodconverter]]></entry>
 	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[Der Pfad zu OpenOffice/LibreOffice (optional). Bitte geben Sie den richtigen Pfad an, falls jodconverter die OpenOffice-/LibreOffice-Installation nicht automatisch findet.]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[Der Pfad zu OpenOffice/LibreOffice (optional). Bitte geben Sie den echten Pfad an, falls jodconverter die OpenOffice-/LibreOffice-Installation nicht automatisch findet.]]></entry>
@@ -876,6 +836,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="label.dock.panel"><![CDATA[Klicken, um das Panel anzudocken]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Klicken, um das Panel abzudocken]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Abbrechen]]></entry>
+	<entry key="lbl.email"><![CDATA[E-Mail:]]></entry>
+	<entry key="lbl.enter"><![CDATA[Betreten]]></entry>
 	<entry key="lbl.new"><![CDATA[neu]]></entry>
 	<entry key="lbl.or"><![CDATA[oder]]></entry>
 	<entry key="lbl.refresh"><![CDATA[Neu laden]]></entry>
@@ -913,9 +875,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.port"><![CDATA[Port]]></entry>
 	<entry key="network.test.port.avail"><![CDATA[Port ist verfügbar]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[gestoppt]]></entry>
-
-
-
 	<entry key="network.test.report.start"><![CDATA[Test starten...]]></entry>
 	<entry key="network.test.sec"><![CDATA[sec]]></entry>
 	<entry key="network.test.upl"><![CDATA[Upload-Geschwindigkeit]]></entry>

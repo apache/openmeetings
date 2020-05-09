@@ -85,7 +85,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[صفحه اصلی]]></entry>
 	<entry key="125"><![CDATA[كاربر]]></entry>
 	<entry key="126"><![CDATA[گروه ها]]></entry>
-	<entry key="lbl.enter"><![CDATA[ورود]]></entry>
 	<entry key="135"><![CDATA[نام:]]></entry>
 	<entry key="136"><![CDATA[نام خانوادگی:]]></entry>
 	<entry key="138"><![CDATA[تاریخ تولد:]]></entry>
@@ -104,7 +103,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="177"><![CDATA[كاربر]]></entry>
 	<entry key="178"><![CDATA[اضافه کردن کاربر]]></entry>
 	<entry key="186"><![CDATA[اتاق کنفرانس]]></entry>
-	<entry key="187"><![CDATA[اتاق کنفرانس]]></entry>
+
 	<entry key="188"><![CDATA[شناسه]]></entry>
 	<entry key="190"><![CDATA[همگاني]]></entry>
 	<entry key="196"><![CDATA[نظر]]></entry>
@@ -201,7 +200,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[اگر با مسیر ارتباطی مشکلی دارید لطفا لینک را کپی کرده و آنرا در مرورگر خود اجرا کنید:]]></entry>
 	<entry key="506"><![CDATA[جزییات حساب کاربری]]></entry>
 	<entry key="507"><![CDATA[جزییات حساب کاربری شما:]]></entry>
-	<entry key="lbl.email"><![CDATA[ایمیل:]]></entry>
 	<entry key="511"><![CDATA[تیم-{0}]]></entry>
 	<entry key="512"><![CDATA[جزییات حساب کاربری شما]]></entry>
 	<entry key="513"><![CDATA[تنظیم دوباره رمز عبور-{0}]]></entry>
@@ -221,9 +219,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="547"><![CDATA[y]]></entry>
 	<entry key="548"><![CDATA[y-axis]]></entry>
 	<entry key="549"><![CDATA[w]]></entry>
-	<entry key="550"><![CDATA[پهنا]]></entry>
+
 	<entry key="551"><![CDATA[h]]></entry>
-	<entry key="552"><![CDATA[ارتفاع]]></entry>
+
 	<entry key="553"><![CDATA[تغییر شفافیت]]></entry>
 	<entry key="556"><![CDATA[عدم اتصال به سرور.درخواست را دوباره بارگذاری کنید یا/و شبکه را چک کنید.]]></entry>
 	<entry key="557"><![CDATA[اشاره گر]]></entry>
@@ -271,17 +269,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="713"><![CDATA[مطمئن هستید می خواهید این آیتم را حذف کنید؟]]></entry>
 	<entry key="714"><![CDATA[جستجو]]></entry>
 	<entry key="730"><![CDATA[به اشتراک گذارنده دسکتاپ]]></entry>
-
 	<entry key="732"><![CDATA[شروع به اشتراک گذاری]]></entry>
 	<entry key="733"><![CDATA[توقف اشتراک گذاری]]></entry>
 	<entry key="734"><![CDATA[محدوده صفحه خود را مشخص کنید:]]></entry>
-
-
-
-
-	<entry key="740"><![CDATA[پهنا:]]></entry>
-	<entry key="741"><![CDATA[ارتفاع:]]></entry>
-
+	<entry key="740"><![CDATA[پهنا]]></entry>
+	<entry key="741"><![CDATA[ارتفاع]]></entry>
 	<entry key="753"><![CDATA[بارگذاری دوباره]]></entry>
 	<entry key="758"><![CDATA[تنظیمات میکروفن و دوربین را قبل از ورود به اتاق از طریق چند ثانیه ضبط بررسی کنید.سپس ضبط خود را پخش کنید و صدا و تصویر را بررسی کنید]]></entry>
 	<entry key="764"><![CDATA[نمایش]]></entry>
@@ -303,7 +295,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="786"><![CDATA[درخواست برای دسترسی به دوربین/میکروفن]]></entry>
 	<entry key="788"><![CDATA[شروع]]></entry>
 	<entry key="792"><![CDATA[اتاق ها]]></entry>
-
 	<entry key="797"><![CDATA[هشدار]]></entry>
 	<entry key="799"><![CDATA[روز]]></entry>
 	<entry key="800"><![CDATA[هفته]]></entry>
@@ -318,7 +309,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="832"><![CDATA[مطمئن هستید؟]]></entry>
 	<entry key="833"><![CDATA[آیا واقعاً می خواهید این آیتم را حذف کنید؟برای ذخیره تغییرات دکمه ذخیره را فشار دهید.]]></entry>
 	<entry key="843"><![CDATA[ویژگی ها]]></entry>
-
 	<entry key="848"><![CDATA[مشاهده صفحه]]></entry>
 	<entry key="850"><![CDATA[میخواهد صفحه اش را به اشتراک بگذارد.آیا می خواهید آن را ببینید؟]]></entry>
 	<entry key="860"><![CDATA[ضبط های من]]></entry>
@@ -326,11 +316,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="864"><![CDATA[مدت]]></entry>
 	<entry key="865"><![CDATA[تاریخ]]></entry>
 	<entry key="867"><![CDATA[دریافت]]></entry>
-
-
 	<entry key="871"><![CDATA[شروع ضبط]]></entry>
 	<entry key="872"><![CDATA[توقف ضبط]]></entry>
-
 	<entry key="879"><![CDATA[کاربر اجازه سوال کردن دارد]]></entry>
 	<entry key="880"><![CDATA[خاموش کنید تا کاربر دیگردر اتاق جلسه مزاحم نشود.یعنی دکمه برای درخواست هماهنگ کننده ("سوال دارم") قابل مشاهده نیست.]]></entry>
 	<entry key="881"><![CDATA[حقوق]]></entry>
@@ -349,10 +336,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1076"><![CDATA[اتاق فقط صوتی]]></entry>
 	<entry key="1077"><![CDATA[این علامت را روشن کنید و کابران تنها گزینه صوتی را خواهند داشت و گزینه ویدیو در اتاق کنفرانس را نخواهند داشت.به این صورت پهنای باند ذخیره می شود.]]></entry>
 	<entry key="1089"><![CDATA[کیفیت به اشتراک گذاری صفحه:]]></entry>
-
-
-
-
 	<entry key="1098"><![CDATA[The webinar is already closed, you will be redirected to some interesting offerings in]]></entry>
 	<entry key="1099"><![CDATA[اتاق بسته]]></entry>
 	<entry key="1100"><![CDATA[خروج از URL]]></entry>
@@ -380,8 +363,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[منطقه زمانی]]></entry>
 	<entry key="1146"><![CDATA[توضیح]]></entry>
 	<entry key="1147"><![CDATA[ایجاد شده توسط]]></entry>
-
-
 	<entry key="1151"><![CDATA[کنفرانس جدید:]]></entry>
 	<entry key="1152"><![CDATA[جزییات:]]></entry>
 	<entry key="1153"><![CDATA[شروع:]]></entry>
@@ -418,7 +399,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1196"><![CDATA[لیست تماس شما]]></entry>
 	<entry key="1198"><![CDATA[تأیید به عنوان تماس!]]></entry>
 	<entry key="1202"><![CDATA[از]]></entry>
-
 	<entry key="1206"><![CDATA[پیام ها]]></entry>
 	<entry key="1207"><![CDATA[پست الکترونیک جدید]]></entry>
 	<entry key="1208"><![CDATA[برای نوشتن پیام جدید به هر یک از تماس ها کلیک کنید]]></entry>
@@ -449,7 +429,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1262"><![CDATA[حذف پوشه]]></entry>
 	<entry key="1268"><![CDATA[کاربر اطلاعات شخص تماس خود را به اشتراک نمی گذارد]]></entry>
 	<entry key="1269"><![CDATA[کاربر اطلاعات شخصی تماس خود را فقط با لیست تماس خود به اشتراک می گذارد.]]></entry>
-
 	<entry key="1287"><![CDATA[انتخاب نام مستعار]]></entry>
 	<entry key="1296"><![CDATA[عضویت از]]></entry>
 	<entry key="1301"><![CDATA[پیام خصوصی جدید:]]></entry>
@@ -497,19 +476,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1459"><![CDATA[مدیریت برچسب ها و اصطلاحات]]></entry>
 	<entry key="1460"><![CDATA[مدیریت پیکربندی LDAP و ADSL]]></entry>
 	<entry key="1461"><![CDATA[خروج/ورود پشتیبان های سیستم]]></entry>
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<entry key="1479"><![CDATA[فایل جدید را در جستجوگرفایل بارگذاری کنید]]></entry>
 	<entry key="1480"><![CDATA[بازکردن گفتگوی جدید با تنظیمات اشتراک]]></entry>
 	<entry key="1481"><![CDATA[تأیید توسط مدیر فعلی]]></entry>
@@ -561,8 +527,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[پیکربندی OAuth2 را مدیریت کنید]]></entry>
 	<entry key="1575"><![CDATA[آیکون URL]]></entry>
-
-
 	<entry key="1578"><![CDATA[کلید درخواست URL]]></entry>
 	<entry key="1579"><![CDATA[رمز درخواست URL]]></entry>
 	<entry key="1580"><![CDATA[اطلاعات درخواست URL]]></entry>
@@ -570,13 +534,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[درخواست ویژگی های رمز]]></entry>
 	<entry key="1587"><![CDATA[تغییر مسیر uri]]></entry>
 	<entry key="1588"><![CDATA[شما می توانید آدرس پست الکترونیک را به این شکل وارد کنید: firstname1 lastname1 <email1> or "firstname2 lastname2" <email2> or 'firstname3 lastname3' <email3> or email]]></entry>
-
 	<entry key="1590"><![CDATA[نمایش]]></entry>
 	<entry key="1592"><![CDATA[تاریخ پایان وارد شده زودتر از تاریخ شروع است]]></entry>
 	<entry key="1593"><![CDATA[مقدار خروجی]]></entry>
 	<entry key="1594"><![CDATA[پیام های گفتگو:]]></entry>
 	<entry key="1595"><![CDATA[پوشه ضبط یافت نمی شود]]></entry>
-
 	<entry key="1599"><![CDATA[عدم مجوز ورود به اتاق]]></entry>
 	<entry key="1600"><![CDATA[تبدیل دوباره]]></entry>
 	<entry key="access.denied.header"><![CDATA[عدم دسترسی.شما مجوز اجرای این کار را ندارید]]></entry>
@@ -627,7 +589,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal پست الکترونیک]]></entry>
 	<entry key="appointment.reminder.NONE"><![CDATA[اخطار نفرست]]></entry>
 	<entry key="appointment.tab.advanced"><![CDATA[پیشرفته]]></entry>
-	<entry key="appointment.tab.general"><![CDATA[کلی]]></entry>
+	<entry key="lbl.general"><![CDATA[کلی]]></entry>
 	<entry key="bad.captcha.text"><![CDATA[متن captcha نادرست است]]></entry>
 	<entry key="bad.password.digit"><![CDATA[رمز عبور ضعیف: حداقل 1 عدد لازم است]]></entry>
 	<entry key="bad.password.lower"><![CDATA[رمز عبور "ضعیف": حداقل 1 حرف کوچک ضروریست:]]></entry>
@@ -753,9 +715,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.valid"><![CDATA[مسیر ImageMagick]]></entry>
 	<entry key="install.wizard.install.desc"><![CDATA[لطفاً دکمه پایان را کلیک را برای شروع نصب کلیک کنید!]]></entry>
 	<entry key="install.wizard.install.failed"><![CDATA[شکست نصب]]></entry>
-	<entry key="install.wizard.installation"><![CDATA[نصب]]></entry>
 	<entry key="install.wizard.install.started"><![CDATA[منتظر بمانید،نصب در حال اجراست]]></entry>
-
+	<entry key="install.wizard.installation"><![CDATA[نصب]]></entry>
 	<entry key="install.wizard.params.step1.email.title"><![CDATA[یک پست الکترونیک وارد کنید]]></entry>
 	<entry key="install.wizard.params.step1.group"><![CDATA[نام]]></entry>
 	<entry key="install.wizard.params.step1.group.title"><![CDATA[وارد کردن گروه پیش فرض]]></entry>
@@ -797,7 +758,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[مسیر ImageMagick]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[ImageMagick را بر روی سرور نصب کنید، شما می توانید اطلاعات بیشتر را در http://www.ImageMagick.org با توجه به نصب دریافت کنید. دستورات نصب در آدرس http://www.ImageMagick.org/Script/binary-releases.php، یافت می شود، با این حال در اکثر سیستم های لینوکس میتوانید آنرا از طریق بسته مدیریتی دلخواه دریافت کنید.]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[مسیر را در وارد کنید ImageMagick, اگر ImageMagick به طور موفق در مسیر سیستم نصب شده است مسیر را خالی بگذارید]]></entry>
-
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice/LibreOffice Path for jodconverter]]></entry>
 	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[در صورتیکه مبدل jod قادر نیست نصب OpenOffice  را بیابد ، لطفا آنرا در مسیر واقعی تنظیم کنید]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[درصورتیکه مبدل jod قادر به یافتن نصب OpenOffice/LibreOffice به طور خودکار نمی باشد،لطفاًآنرا در مسیر واقعی تنظیم کنید]]></entry>
@@ -867,6 +827,8 @@ target="_blank">Custom Crypt Mechanism</a>
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[انصراف]]></entry>
+	<entry key="lbl.email"><![CDATA[ایمیل:]]></entry>
+	<entry key="lbl.enter"><![CDATA[ورود]]></entry>
 	<entry key="lbl.new"><![CDATA[new]]></entry>
 	<entry key="lbl.or"><![CDATA[or]]></entry>
 	<entry key="lbl.refresh"><![CDATA[باز بینی]]></entry>
@@ -904,9 +866,6 @@ target="_blank">Custom Crypt Mechanism</a>
 	<entry key="network.test.port"><![CDATA[درگاه]]></entry>
 	<entry key="network.test.port.avail"><![CDATA[درگاه در دسترس است]]></entry>
 	<entry key="network.test.port.stopped"><![CDATA[متوقف]]></entry>
-
-
-
 	<entry key="network.test.report.start"><![CDATA[شروع تست]]></entry>
 	<entry key="network.test.sec"><![CDATA[ثانیه]]></entry>
 	<entry key="network.test.upl"><![CDATA[سرعت بارگذاری]]></entry>
