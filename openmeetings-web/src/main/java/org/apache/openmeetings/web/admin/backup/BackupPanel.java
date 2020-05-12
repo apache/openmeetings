@@ -130,7 +130,7 @@ public class BackupPanel extends AdminBasePanel {
 			DecimalFormat formatter = new DecimalFormat("#,###.00");
 			add(new Label("MaxUploadSize", formatter.format(megaBytes)));
 
-			add(new CheckBox("includeFilesInBackup", includeFilesInBackup));
+			add(new CheckBox("includeFilesInBackup", includeFilesInBackup).setOutputMarkupId(true));
 
 			// Set maximum size controlled by configuration
 			setMaxSize(Bytes.bytes(maxBytes));
