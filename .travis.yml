@@ -15,7 +15,6 @@
 
 dist: bionic
 language: java
-sudo: false
 
 notifications:
   email:
