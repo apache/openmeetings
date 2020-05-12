@@ -24,7 +24,7 @@
 }
 .room-block .sb-wb .sidebar {
 	min-width: 155px;
-	width: var(--room-sidebar-width);
+	width: var(--sidebar-width);
 	position: absolute;
 	height: 100%;
 	top: 0;

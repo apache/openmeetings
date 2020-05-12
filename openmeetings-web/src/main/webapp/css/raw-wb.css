@@ -2,12 +2,12 @@
 .room-block .sb-wb .wb-block {
 	position: absolute;
 	height: 100%;
-	width: calc(100% - var(--room-sidebar-width) - var(--buffer-size));
+	width: calc(100% - var(--sidebar-width) - var(--buffer-size));
 	top: 0;
-	left: calc(var(--room-sidebar-width) + var(--buffer-size));
+	left: calc(var(--sidebar-width) + var(--buffer-size));
 }
 html[dir="rtl"] .room-block .sb-wb .wb-block {
-	right: calc(var(--room-sidebar-width) + var(--buffer-size));
+	right: calc(var(--sidebar-width) + var(--buffer-size));
 	left: auto;
 }
 .room-block .sb-wb .wb-block.droppable-hover {
