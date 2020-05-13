@@ -4,7 +4,7 @@ body {
 	--menu-height: 36px;
 	--level-color: #ADFF2F;
 	--rooms-header-height: 70px;
-	--room-sidebar-width: 315px;
+	--sidebar-width: 315px;
 	--tabs-height: 45px;
 	--buffer-size: 4px;
 	--menu-zindex: 10000000;
@@ -44,7 +44,6 @@ body.no-menu {
 .main.room {
 	--header-height: 0px;
 	--room-menu-height: calc(22px + 1rem);
-	--room-sidebar-width: 315px;
 	--room-wb-tabs-height: 45px;
 	--room-sidebar-header-height: 37px;
 	--chat-width: 20px;
@@ -72,6 +71,6 @@ body.no-menu {
 }
 @media screen and (max-width: 1280px) {
 	.main.room {
-		--room-sidebar-width: 155px;
+		--sidebar-width: 155px;
 	}
 }
