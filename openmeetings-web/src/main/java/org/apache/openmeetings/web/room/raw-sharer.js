@@ -87,7 +87,7 @@ var Sharer = (function() {
 	}
 	function _typeDisabled(_b) {
 		const b = _b || kurentoUtils.WebRtcPeer.browser;
-		return VideoUtil.isEdge(b) || VideoUtil.isChrome(b);
+		return VideoUtil.isEdge(b) || VideoUtil.isChrome(b) || VideoUtil.isEdgeChromium(b);
 	}
 	function _setBtnState(btn, state) {
 		const dis = SHARE_STOPPED !== state

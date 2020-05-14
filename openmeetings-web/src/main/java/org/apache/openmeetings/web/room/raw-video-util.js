@@ -211,7 +211,11 @@ var VideoUtil = (function() {
 	}
 	function _isEdge(_b) {
 		const b = _b || kurentoUtils.WebRtcPeer.browser;
-		return b.name === 'Edge';
+		return b.name === 'Edge' && "MSGestureEvent" in window;
+	}
+	function _isEdgeChromium(_b) {
+		const b = _b || kurentoUtils.WebRtcPeer.browser;
+		return b.name === 'Edge' && !("MSGestureEvent" in window);
 	}
 	function _setPos(v, pos) {
 		if (v.dialog('instance')) {
@@ -288,6 +292,7 @@ var VideoUtil = (function() {
 		return opts;
 	};
 	self.isEdge = _isEdge;
+	self.isEdgeChromium = _isEdgeChromium;
 	self.isChrome = _isChrome;
 	self.setPos = _setPos;
 	self.askPermission = _askPermission;
