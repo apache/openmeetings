@@ -32,17 +32,13 @@ var Video = (function() {
 			cnts = {
 				video: true
 			};
-			if (b.major > 80) {
-				promise = navigator.mediaDevices.getDisplayMedia(cnts);
-			} else {
-				promise = navigator.getDisplayMedia(cnts);
-			}
+			promise = navigator.getDisplayMedia(cnts);
 		} else if (b.name === 'Firefox') {
 			// https://mozilla.github.io/webrtc-landing/gum_test.html
 			cnts = Sharer.baseConstraints(sd);
 			cnts.video.mediaSource = sd.shareType;
 			promise = navigator.mediaDevices.getUserMedia(cnts);
-		} else if (VideoUtil.isChrome(b)) {
+		} else if (VideoUtil.isChrome(b) || VideoUtil.isEdgeChromium(b)) {
 			cnts = {
 				video: true
 			};
