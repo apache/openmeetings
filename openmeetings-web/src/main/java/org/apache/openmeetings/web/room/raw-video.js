@@ -287,7 +287,7 @@ var Video = (function() {
 			});
 		}
 		v.parent().find('.ui-dialog-titlebar-close').remove();
-		v.parent().find('.ui-dialog-titlebar').append(OmUtil.tmpl('#video-button-bar'));
+		v.parent().append(OmUtil.tmpl('#video-button-bar'));
 		const refresh = v.parent().find('.btn-refresh')
 			, tgl = v.parent().find('.btn-toggle')
 			, cls = v.parent().find('.btn-wclose');
