@@ -29,12 +29,7 @@ var Sharer = (function() {
 		
 		// Fix to move the close icon on top of the .ui-dialog-titlebar cause otherwise 
 		// touch-events are broken and you won't be able to close the dialog
-		var closeIcon = sharer.parent().find('.ui-dialog-titlebar-close').clone();
-		sharer.parent().append(closeIcon);
-		sharer.parent().find('.ui-dialog-titlebar-close').first().remove();
-		sharer.parent().find('.ui-dialog-titlebar-close').click(function() {
-			sharer.dialog('close');
-		});
+		sharer.parent().find('.ui-dialog-titlebar-close').appendTo(sharer.parent())
 		
 		if (!VideoUtil.sharingSupported()) {
 			sharer.find('.container').remove();
