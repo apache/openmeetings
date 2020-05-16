@@ -429,6 +429,10 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 {
 	background-color: var(--white);
 }
+.sharer .ui-dialog-titlebar-close {
+	position: absolute;
+	top: 20px
+}
 .user-video .ui-dialog-titlebar .buttonpane {
 	position: absolute;
 	right: 2px;
