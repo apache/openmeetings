@@ -31,7 +31,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.MediaPipeline;
@@ -54,7 +53,7 @@ public class TestStreamProcessor implements IStreamProcessor {
 			case "wannaRecord":
 				WebSocketHelper.sendClient(c, newTestKurentoMsg()
 						.put("id", "canRecord")
-						.put(PARAM_ICE, kHandler.getTurnServers((Client)c, true))
+						.put(PARAM_ICE, kHandler.getTurnServers(null, true))
 						);
 				break;
 			case "record":
@@ -75,7 +74,7 @@ public class TestStreamProcessor implements IStreamProcessor {
 			case "wannaPlay":
 				WebSocketHelper.sendClient(c, newTestKurentoMsg()
 						.put("id", "canPlay")
-						.put(PARAM_ICE, kHandler.getTurnServers((Client)c, true))
+						.put(PARAM_ICE, kHandler.getTurnServers(null, true))
 						);
 				break;
 			case "play":
