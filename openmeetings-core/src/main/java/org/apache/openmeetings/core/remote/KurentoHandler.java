@@ -349,9 +349,19 @@ public class KurentoHandler {
 					turn.put("username", turnUser)
 						.put("credential", turnSecret);
 				}
-				final String fturnUrl = "turn:" + turnUrl;
-				turn.put("url", fturnUrl); // old-school
-				turn.put("urls", fturnUrl);
+
+				JSONArray urls = new JSONArray();
+				final String[] turnUrls = turnUrl.split(",");
+				for (int i = 0; i < turnUrls.length; i++) {
+					final String url = turnUrls[i];
+					if (!url.startsWith("stun:") && !url.startsWith("stuns:") && !url.startsWith("turn:") && !url.startsWith("turns:")) {
+						urls.put("turn:" + url);
+					} else {
+						urls.put(url);
+					}
+				}
+				turn.put("urls", urls);
+
 				arr.put(turn);
 			} catch (NoSuchAlgorithmException|InvalidKeyException e) {
 				log.error("Unexpected error while creating turn", e);
