@@ -37,8 +37,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -101,7 +99,6 @@ public class ClientManager implements IClientManager {
 		return app.hazelcast.getMap(INSTANT_TOKENS_KEY);
 	}
 
-	@PostConstruct
 	void init() {
 		log.debug("Cluster:: PostConstruct");
 		onlineClients.putAll(map());

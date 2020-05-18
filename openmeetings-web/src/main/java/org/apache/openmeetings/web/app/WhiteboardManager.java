@@ -35,8 +35,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
@@ -80,7 +78,6 @@ public class WhiteboardManager implements IWhiteboardManager {
 		return app.hazelcast.getMap(WBS_KEY);
 	}
 
-	@PostConstruct
 	void init() {
 		map().addEntryListener(new WbListener(), true);
 		map().entrySet().forEach(e -> onlineWbs.put(e.getKey(), e.getValue()));

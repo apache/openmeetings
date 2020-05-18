@@ -135,6 +135,7 @@ import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.WysiwygLibrarySe
 import com.hazelcast.cluster.Member;
 import com.hazelcast.cluster.MembershipEvent;
 import com.hazelcast.cluster.MembershipListener;
+import com.hazelcast.config.Config;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -164,7 +165,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static final String HASH_MAPPING = "/hash";
 	public static final String SIGNIN_MAPPING = "/signin";
 	public static final String NOTINIT_MAPPING = "/notinited";
-	final HazelcastInstance hazelcast = Hazelcast.getOrCreateHazelcastInstance(new XmlConfigBuilder().build());
+	HazelcastInstance hazelcast;
 	private ITopic<IClusterWsMessage> hazelWsTopic;
 	private String serverId;
 	private String wsUrl;
@@ -180,6 +181,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Autowired
 	private ClientManager cm;
 	@Autowired
+	private WhiteboardManager wbManager;
+	@Autowired
 	private AppointmentDao appointmentDao;
 
 	@Override
@@ -189,6 +192,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this, ctx, true));
 
+		Config cfg = new XmlConfigBuilder().build();
+		cfg.setClassLoader(getClass().getClassLoader());
+		hazelcast = Hazelcast.getOrCreateHazelcastInstance(cfg);
 		serverId = hazelcast.getName();
 		hazelcast.getCluster().getMembers().forEach(m -> {
 			cm.serverAdded(m.getAttribute(NAME_ATTR_KEY), m.getAttribute(SERVER_URL_ATTR_KEY));
@@ -330,6 +336,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 			// Init all global config properties
 			cfgDao.reinit();
+			wbManager.init();
+			cm.init();
 
 			// Init properties
 			updateJpaAddresses();

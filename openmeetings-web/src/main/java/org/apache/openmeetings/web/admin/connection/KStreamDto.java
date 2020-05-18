@@ -36,8 +36,6 @@ import org.apache.openmeetings.db.entity.record.RecordingChunk.Type;
  */
 public class KStreamDto implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
-	/** StreamProcessor or KurentoHandler list */
-	private String source;
 
 	private String sid;
 	private String uid;
@@ -49,8 +47,7 @@ public class KStreamDto implements IDataProviderEntity {
 	private Long chunkId;
 	private Type type;
 
-	public KStreamDto(String source, KStream kStream) {
-		this.source = source;
+	public KStreamDto(KStream kStream) {
 		this.sid = kStream.getSid();
 		this.uid = kStream.getUid();
 		this.roomId = (kStream.getRoom() == null) ? null : kStream.getRoom().getRoomId();
@@ -64,10 +61,6 @@ public class KStreamDto implements IDataProviderEntity {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-
-	public String getSource() {
-		return source;
 	}
 
 	public String getSid() {

@@ -49,16 +49,11 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public class ConnectionsPanel extends AdminBasePanel {
-
-	private static final Logger log = LoggerFactory.getLogger(ConnectionsPanel.class);
-
 	private static final long serialVersionUID = 1L;
 	@SpringBean
 	private ClientManager cm;
@@ -85,11 +80,9 @@ public class ConnectionsPanel extends AdminBasePanel {
 				l.addAll(cm.list());
 				Collection<KStreamDto> streams = streamProcessor.getStreams()
 						.stream()
-						.map(kStream -> new KStreamDto("processor", kStream))
+						.map(KStreamDto::new)
 						.collect(Collectors.toList());
 				l.addAll(streams);
-				log.info("Retrieve all Streams, StreamProcessor has {} of streams", streams.size());
-
 				return l;
 			}
 
