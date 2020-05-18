@@ -242,6 +242,7 @@ var Wb = function() {
 		});
 		settings.draggable({
 			scroll: false
+			, handle: '.ui-dialog-titlebar'
 			, containment: 'body'
 			, start: function() {
 				if (!!settings.css('bottom')) {
