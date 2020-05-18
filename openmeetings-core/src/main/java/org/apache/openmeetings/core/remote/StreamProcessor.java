@@ -506,6 +506,7 @@ public class StreamProcessor implements IStreamProcessor {
 			}
 		}
 		if (c.getRoomId() != null) {
+			getByRoom(c.getRoomId()).stream().forEach(stream -> stream.remove(c)); // listeners of existing streams should be cleaned-up
 			checkStreams(c.getRoomId());
 		}
 	}
