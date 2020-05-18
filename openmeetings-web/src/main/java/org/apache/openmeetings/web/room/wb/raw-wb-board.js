@@ -351,6 +351,7 @@ var Wb = function() {
 				}).parent().css('text-align', Settings.isRtl ? 'left' : 'right');
 				math.draggable({
 					scroll: false
+					, handle: '.ui-dialog-titlebar'
 					, containment: 'body'
 					, start: function() {
 						if (!!math.css('bottom')) {
@@ -362,7 +363,8 @@ var Wb = function() {
 							return false;
 						}
 					}
-				}).resizable({
+				});
+				math.resizable({
 					alsoResize: math.find('.text-container')
 				});
 			case NONE:
