@@ -432,7 +432,8 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	position: absolute;
 	top: 20px
 }
-.user-video .ui-dialog-titlebar .buttonpane {
+.user-video .buttonpane {
+	background-color: var(--white);
 	position: absolute;
 	right: 2px;
 	top: 2px
