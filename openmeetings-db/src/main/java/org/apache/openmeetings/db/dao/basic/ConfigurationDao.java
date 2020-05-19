@@ -334,6 +334,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_CSP_MEDIA:
 			case CONFIG_CSP_SCRIPT:
 			case CONFIG_CSP_STYLE:
+			case CONFIG_CSP_ENABLED:
 				updateCsp();
 				break;
 			case CONFIG_SMTP_SERVER:
@@ -572,6 +573,11 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	public void updateCsp() {
 		setGaCode(getString(CONFIG_GOOGLE_ANALYTICS_CODE, null));
+
+		if (!getBool(CONFIG_CSP_ENABLED, true)) {
+			WebApplication.get().getCspSettings().blocking().disabled();
+			return;
+		}
 
 		setCspFontSrc(getString(CONFIG_CSP_FONT, DEFAULT_CSP_FONT));
 		setCspFrameSrc(getString(CONFIG_CSP_FRAME, SELF.getValue()));

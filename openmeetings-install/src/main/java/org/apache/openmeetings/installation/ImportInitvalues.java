@@ -37,6 +37,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_IMAG
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_MEDIA;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_SCRIPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_STYLE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CSP_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
@@ -382,6 +383,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_CSP_STYLE, DEFAULT_CSP_STYLE, Configuration.Type.STRING, String.format("Value for 'style-src' directive of 'Content-Security-Policy' header (default: %s)"
 				+ cspMore, DEFAULT_CSP_STYLE), VER_5_0_0);
 		addCfg(list, CONFIG_SMTP_SSL, String.valueOf(false), Configuration.Type.BOOL, "Enable SSL", VER_5_0_0);
+		addCfg(list, CONFIG_CSP_ENABLED, String.valueOf(true), Configuration.Type.BOOL, "Whether or not CSP secure headers are enabled", VER_5_0_0);
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {
