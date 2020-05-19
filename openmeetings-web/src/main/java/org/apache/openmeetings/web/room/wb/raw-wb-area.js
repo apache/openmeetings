@@ -411,6 +411,10 @@ var DrawWbArea = function() {
 					width: 350
 					, appendTo: '.room-block .wb-block'
 				});
+				// Fix to move the close icon on top of the .ui-dialog-titlebar cause otherwise 
+				// touch-events are broken and you won't be able to close the dialog
+				dlg.parent().find('.ui-dialog-titlebar-close').appendTo(dlg.parent());
+				
 			} catch (e) {
 				console.error(e);
 			}
