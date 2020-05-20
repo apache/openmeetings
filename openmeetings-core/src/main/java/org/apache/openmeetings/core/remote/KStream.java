@@ -153,7 +153,7 @@ public class KStream extends AbstractStream {
 		if (hasAudio || hasVideo || hasScreen) {
 			WebSocketHelper.sendRoomOthers(room.getRoomId(), c.getUid(), newKurentoMsg()
 					.put("id", "newStream")
-					.put(PARAM_ICE, processor.getHandler().getTurnServers())
+					.put(PARAM_ICE, processor.getHandler().getTurnServers(c))
 					.put("stream", sd.toJson()));
 		}
 		return this;
