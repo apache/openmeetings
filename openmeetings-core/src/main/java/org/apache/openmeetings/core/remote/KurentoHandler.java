@@ -353,10 +353,10 @@ public class KurentoHandler {
 				JSONArray urls = new JSONArray();
 				final String[] turnUrls = turnUrl.split(",");
 				for (String url : turnUrls) {
-					if (!url.startsWith("stun:") && !url.startsWith("stuns:") && !url.startsWith("turn:") && !url.startsWith("turns:")) {
-						urls.put("turn:" + url);
-					} else {
+					if (url.startsWith("stun:") || url.startsWith("stuns:") || url.startsWith("turn:") || url.startsWith("turns:")) {
 						urls.put(url);
+					} else {
+						urls.put("turn:" + url);
 					}
 				}
 				turn.put("urls", urls);
