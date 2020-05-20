@@ -132,6 +132,11 @@ Wicket.BrowserInfo.collectExtraInfo = function(info) {
 	info.codebase = l.origin + l.pathname;
 	info.settings = Settings.load();
 };
+//Fix to move the close icon on top of the .ui-dialog-titlebar cause otherwise 
+// touch-events are broken and you won't be able to close the dialog
+function fixJQueryUIDialogTouch (dialog) {
+    dialog.parent().find('.ui-dialog-titlebar-close').appendTo(dialog.parent());
+}
 function showBusyIndicator() {
 	$('#busy-indicator').show();
 }
