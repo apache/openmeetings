@@ -58,6 +58,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FNAME_MI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE_NEXT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE_RESIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE_OTHERS;
@@ -384,6 +385,8 @@ public class ImportInitvalues {
 				+ cspMore, DEFAULT_CSP_STYLE), VER_5_0_0);
 		addCfg(list, CONFIG_SMTP_SSL, String.valueOf(false), Configuration.Type.BOOL, "Enable SSL", VER_5_0_0);
 		addCfg(list, CONFIG_CSP_ENABLED, String.valueOf(true), Configuration.Type.BOOL, "Whether or not CSP secure headers are enabled", VER_5_0_0);
+		addCfg(list, CONFIG_KEYCODE_ARRANGE_NEXT, "Ctrl+Shift+KeyX", Configuration.Type.HOTKEY
+				, "A hot key code for cyclic change of video windows arrangement mode", VER_5_0_0);
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {

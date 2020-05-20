@@ -11492,6 +11492,7 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
      */
     _onResize: function () {
       this.calcOffset();
+      VideoUtil.arrange();
     },
 
     /**

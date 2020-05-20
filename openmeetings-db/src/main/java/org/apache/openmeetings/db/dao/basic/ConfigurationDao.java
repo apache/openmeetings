@@ -247,6 +247,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_KEYCODE_MUTE:
 			case CONFIG_KEYCODE_QUICKPOLL:
 			case CONFIG_KEYCODE_ARRANGE_RESIZE:
+			case CONFIG_KEYCODE_ARRANGE_NEXT:
 			case CONFIG_AUTO_OPEN_SHARING:
 				reloadRoomSettings();
 				break;
@@ -537,6 +538,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			setRoomSettings(new JSONObject()
 					.put("keycode", new JSONObject()
 							.put("arrange", getHotkey(getString(CONFIG_KEYCODE_ARRANGE, "Shift+F8")))
+							.put("arrangenext", getHotkey(getString(CONFIG_KEYCODE_ARRANGE_NEXT, "Ctrl+Shift+KeyX")))
 							.put("arrangeresize", getHotkey(getString(CONFIG_KEYCODE_ARRANGE_RESIZE, "Ctrl+Shift+KeyA")))
 							.put("muteothers", getHotkey(getString(CONFIG_KEYCODE_MUTE_OTHERS, "Shift+F12")))
 							.put("mute", getHotkey(getString(CONFIG_KEYCODE_MUTE, "Shift+F7")))

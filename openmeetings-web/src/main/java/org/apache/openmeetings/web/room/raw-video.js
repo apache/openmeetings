@@ -351,8 +351,8 @@ var Video = (function() {
 					, 'ui-dialog-titlebar': '' + (opts.showMicStatus ? ' ui-state-highlight' : '')
 				}
 				, width: _w
-				, minWidth: 40
-				, minHeight: 50
+				, minWidth: 72
+				, minHeight: 60
 				, autoOpen: true
 				, modal: false
 				, appendTo: contSel
@@ -391,7 +391,7 @@ var Video = (function() {
 		_resizeDlgArea(hasVideo ? size.width : 120
 			, hasVideo ? size.height : 90);
 		if (hasVideo && !isSharing && !isRecording) {
-			VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VIDWIN_SEL), sd.width, sd.height + 25));
+			VideoUtil.arrange();
 		}
 		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 			.width(vc.width()).height(vc.height())
@@ -488,6 +488,7 @@ var Video = (function() {
 		}
 		vc.find('audio,video').remove();
 		vol.destroy();
+		VideoUtil.arrange();
 	}
 	function _reattachStream() {
 		if (video && video.length > 0) {
