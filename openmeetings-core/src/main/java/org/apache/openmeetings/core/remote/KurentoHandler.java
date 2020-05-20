@@ -338,7 +338,7 @@ public class KurentoHandler {
 					StringBuilder user = new StringBuilder()
 							.append((test ? 60 : turnTtl * 60) + System.currentTimeMillis() / 1000L);
 					final String uid = c.getUid();
-					if (uid != null && !Strings.isEmpty(uid)) {
+					if (!Strings.isEmpty(uid)) {
 						user.append(':').append(uid);
 					} else if (!Strings.isEmpty(turnUser)) {
 						user.append(':').append(turnUser);
@@ -352,8 +352,7 @@ public class KurentoHandler {
 
 				JSONArray urls = new JSONArray();
 				final String[] turnUrls = turnUrl.split(",");
-				for (int i = 0; i < turnUrls.length; i++) {
-					final String url = turnUrls[i];
+				for (String url : turnUrls) {
 					if (!url.startsWith("stun:") && !url.startsWith("stuns:") && !url.startsWith("turn:") && !url.startsWith("turns:")) {
 						urls.put("turn:" + url);
 					} else {
