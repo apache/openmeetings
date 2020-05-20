@@ -106,6 +106,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_CSP_MEDIA = "header.csp.media";
 	public static final String CONFIG_CSP_SCRIPT = "header.csp.script";
 	public static final String CONFIG_CSP_STYLE = "header.csp.style";
+	public static final String CONFIG_CSP_ENABLED = "header.csp.enabled";
 
 	public static final int RECENT_ROOMS_COUNT = 5;
 	public static final int USER_LOGIN_MINIMUM_LENGTH = 4;

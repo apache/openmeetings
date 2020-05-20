@@ -58,7 +58,7 @@ public class Version {
 		return buildDate;
 	}
 
-	private static void getLine(StringBuilder sb, String text, char fill) {
+	public static void getLine(StringBuilder sb, String text, char fill) {
 		sb.append("\t#");
 		int l = text.length();
 		int headLength = (TOTAL_LENGTH - l) / 2;
