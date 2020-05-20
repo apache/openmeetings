@@ -21,6 +21,7 @@ package org.apache.openmeetings.db.dao.basic;
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.*;
+import static org.apache.openmeetings.util.Version.getLine;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.SELF;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.STRICT_DYNAMIC;
 
@@ -575,6 +576,12 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setGaCode(getString(CONFIG_GOOGLE_ANALYTICS_CODE, null));
 
 		if (!getBool(CONFIG_CSP_ENABLED, true)) {
+			StringBuilder sb = new StringBuilder("\n");
+			getLine(sb, "", '#');
+			getLine(sb, "CSP headers are DISABLED", ' ');
+			getLine(sb, "Disabling CSP can lead to XSS attacks! Use this mode only if you must!", ' ');
+			getLine(sb, "", '#');
+			log.warn(sb.toString());
 			WebApplication.get().getCspSettings().blocking().disabled();
 			return;
 		}
