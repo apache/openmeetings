@@ -266,7 +266,7 @@ public class StreamProcessor implements IStreamProcessor {
 						.put("id", "broadcast")
 						.put("stream", sd.toJson())
 						.put("cleanup", new JSONArray(closed))
-						.put(PARAM_ICE, kHandler.getTurnServers(false)));
+						.put(PARAM_ICE, kHandler.getTurnServers(c, false)));
 			}
 		}
 	}

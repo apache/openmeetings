@@ -323,11 +323,11 @@ public class KurentoHandler {
 		return r;
 	}
 
-	public JSONArray getTurnServers() {
-		return getTurnServers(false);
+	public JSONArray getTurnServers(Client c) {
+		return getTurnServers(c, false);
 	}
 
-	JSONArray getTurnServers(final boolean test) {
+	JSONArray getTurnServers(Client c, final boolean test) {
 		JSONArray arr = new JSONArray();
 		if (!Strings.isEmpty(turnUrl)) {
 			try {
@@ -337,7 +337,10 @@ public class KurentoHandler {
 					mac.init(new SecretKeySpec(turnSecret.getBytes(), HMAC_SHA1_ALGORITHM));
 					StringBuilder user = new StringBuilder()
 							.append((test ? 60 : turnTtl * 60) + System.currentTimeMillis() / 1000L);
-					if (!Strings.isEmpty(turnUser)) {
+					final String uid = c == null ? null : c.getUid();
+					if (!Strings.isEmpty(uid)) {
+						user.append(':').append(uid);
+					} else if (!Strings.isEmpty(turnUser)) {
 						user.append(':').append(turnUser);
 					}
 					turn.put("username", user)
@@ -346,9 +349,18 @@ public class KurentoHandler {
 					turn.put("username", turnUser)
 						.put("credential", turnSecret);
 				}
-				final String fturnUrl = "turn:" + turnUrl;
-				turn.put("url", fturnUrl); // old-school
-				turn.put("urls", fturnUrl);
+
+				JSONArray urls = new JSONArray();
+				final String[] turnUrls = turnUrl.split(",");
+				for (String url : turnUrls) {
+					if (url.startsWith("stun:") || url.startsWith("stuns:") || url.startsWith("turn:") || url.startsWith("turns:")) {
+						urls.put(url);
+					} else {
+						urls.put("turn:" + url);
+					}
+				}
+				turn.put("urls", urls);
+
 				arr.put(turn);
 			} catch (NoSuchAlgorithmException|InvalidKeyException e) {
 				log.error("Unexpected error while creating turn", e);

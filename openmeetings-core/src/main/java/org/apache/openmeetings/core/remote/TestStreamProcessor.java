@@ -53,7 +53,7 @@ public class TestStreamProcessor implements IStreamProcessor {
 			case "wannaRecord":
 				WebSocketHelper.sendClient(c, newTestKurentoMsg()
 						.put("id", "canRecord")
-						.put(PARAM_ICE, kHandler.getTurnServers(true))
+						.put(PARAM_ICE, kHandler.getTurnServers(null, true))
 						);
 				break;
 			case "record":
@@ -74,7 +74,7 @@ public class TestStreamProcessor implements IStreamProcessor {
 			case "wannaPlay":
 				WebSocketHelper.sendClient(c, newTestKurentoMsg()
 						.put("id", "canPlay")
-						.put(PARAM_ICE, kHandler.getTurnServers(true))
+						.put(PARAM_ICE, kHandler.getTurnServers(null, true))
 						);
 				break;
 			case "play":

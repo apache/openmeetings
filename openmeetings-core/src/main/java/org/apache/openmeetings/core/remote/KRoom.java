@@ -239,7 +239,7 @@ public class KRoom {
 					.put("stream", sd.toJson()
 							.put("shareType", msg.getString("shareType"))
 							.put("fps", msg.getString("fps")))
-					.put(PARAM_ICE, h.getTurnServers()));
+					.put(PARAM_ICE, h.getTurnServers(c)));
 		} else if (osd.isPresent() && !osd.get().hasActivity(a)) {
 			sd = osd.get();
 			sd.addActivity(a);
@@ -248,7 +248,7 @@ public class KRoom {
 			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 			WebSocketHelper.sendRoomOthers(roomId, c.getUid(), newKurentoMsg()
 					.put("id", "newStream")
-					.put(PARAM_ICE, processor.getHandler().getTurnServers())
+					.put(PARAM_ICE, processor.getHandler().getTurnServers(c))
 					.put("stream", sd.toJson()));
 		}
 	}

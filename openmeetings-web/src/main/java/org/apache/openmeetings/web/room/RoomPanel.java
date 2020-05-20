@@ -184,7 +184,7 @@ public class RoomPanel extends BasePanel {
 				}
 			}
 			if (streams.length() > 0) {
-				sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers()).append(");");
+				sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers(getClient())).append(");");
 			}
 			if (interview && streamProcessor.recordingAllowed(getClient())) {
 				sb.append("WbArea.setRecEnabled(true);");
