@@ -337,7 +337,7 @@ public class KurentoHandler {
 					mac.init(new SecretKeySpec(turnSecret.getBytes(), HMAC_SHA1_ALGORITHM));
 					StringBuilder user = new StringBuilder()
 							.append((test ? 60 : turnTtl * 60) + System.currentTimeMillis() / 1000L);
-					final String uid = c.getUid();
+					final String uid = c == null ? null : c.getUid();
 					if (!Strings.isEmpty(uid)) {
 						user.append(':').append(uid);
 					} else if (!Strings.isEmpty(turnUser)) {
