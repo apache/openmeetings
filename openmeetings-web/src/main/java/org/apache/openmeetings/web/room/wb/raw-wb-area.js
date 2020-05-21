@@ -411,6 +411,7 @@ var DrawWbArea = function() {
 					width: 350
 					, appendTo: '.room-block .wb-block'
 				});
+				fixJQueryUIDialogTouch(dlg);
 			} catch (e) {
 				console.error(e);
 			}
