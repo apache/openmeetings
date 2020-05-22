@@ -261,7 +261,7 @@ var VideoSettings = (function() {
 					};
 				} else {
 					cnts.video.facingMode = {
-						ideal: "user"
+						ideal: 'user'
 					}
 				}
 			} else {
