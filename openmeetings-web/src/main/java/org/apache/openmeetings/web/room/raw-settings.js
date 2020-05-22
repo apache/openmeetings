@@ -259,6 +259,10 @@ var VideoSettings = (function() {
 					cnts.video.deviceId = {
 						ideal: s.video.camDevice
 					};
+				} else {
+					cnts.video.facingMode = {
+						ideal: "user"
+					}
 				}
 			} else {
 				cnts.video = false;
