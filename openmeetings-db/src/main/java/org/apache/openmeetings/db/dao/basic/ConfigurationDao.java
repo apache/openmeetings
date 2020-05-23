@@ -564,7 +564,11 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		if (!Strings.isEmpty(val)) {
 			for(String str : val.split(",")) {
 				if (!Strings.isEmpty(str)) {
+					try {
 					cspConfig.add(key, str.trim());
+					} catch (Exception e) {
+						log.error("Enexpected error while adding CSP rule: key '{}', value '{}', part '{}'", key, val, str, e);
+					}
 				}
 			}
 		} else if (remove) {
