@@ -106,7 +106,7 @@ public class AbstractWebServiceTest {
 		AbstractSpringTest.init();
 		tomcat = new Tomcat();
 		Connector connector = new Connector("HTTP/1.1");
-		connector.setAttribute("address", InetAddress.getByName(HOST).getHostAddress());
+		connector.setProperty("address", InetAddress.getByName(HOST).getHostAddress());
 		connector.setPort(0);
 		tomcat.getService().addConnector(connector);
 		tomcat.setConnector(connector);

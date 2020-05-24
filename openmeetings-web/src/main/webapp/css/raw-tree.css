@@ -24,6 +24,10 @@
 .file-tree .footer .sizes .size {
 	padding-left: 5px;
 }
+.file-tree .footer .buttons .other-buttons {
+	display: inline-block;
+	margin: 0 2px;
+}
 /* Calc width with default for max level of 7 */
 .file-tree .file.item .name
 	, .file-tree .file.item .name span

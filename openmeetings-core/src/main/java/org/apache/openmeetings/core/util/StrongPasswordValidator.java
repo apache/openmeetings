@@ -25,7 +25,6 @@ import java.util.Map;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.wicket.util.collections.MicroMap;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -124,7 +123,7 @@ public class StrongPasswordValidator implements IValidator<String> {
 	@Override
 	public void validate(IValidatable<String> pass) {
 		if (badLength(pass.getValue())) {
-			error(pass, "bad.password.short", new MicroMap<String, Object>("0", getMinPasswdLength()));
+			error(pass, "bad.password.short", Map.of("0", getMinPasswdLength()));
 		}
 		if (noLowerCase(pass.getValue())) {
 			error(pass, "bad.password.lower");

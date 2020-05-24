@@ -199,7 +199,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				error = false;
 			}
 		}
-		add(recContainer.add(vi.setShowShare(false).setOutputMarkupPlaceholderTag(true),
+		add(recContainer.add(vi.setOutputMarkupPlaceholderTag(true),
 				vp.setOutputMarkupPlaceholderTag(true)), new InvitationPasswordDialog("i-pass", this));
 		remove(urlParametersReceivingBehavior);
 		add(new IconTextModal("access-denied")

@@ -19,24 +19,51 @@
 package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
+import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.openmeetings.core.converter.IRecordingConverter;
+import org.apache.openmeetings.core.converter.InterviewConverter;
+import org.apache.openmeetings.core.converter.RecordingConverter;
+import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.record.Recording.Status;
+import org.apache.openmeetings.db.entity.record.RecordingChunk;
+import org.apache.openmeetings.web.common.InvitationDialog;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public class RecordingsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final VideoPlayer video = new VideoPlayer("video");
 	private final VideoInfo info = new VideoInfo("info");
 	private FileTreePanel fileTree;
+	private InvitationDialog invite;
+	private RecordingInvitationForm rif = new RecordingInvitationForm("form");
+
 	@SpringBean
 	private RecordingDao recDao;
+	@SpringBean
+	private InterviewConverter interviewConverter;
+	@SpringBean
+	private RecordingConverter recordingConverter;
+	@SpringBean
+	private RecordingChunkDao chunkDao;
 
 	public RecordingsPanel(String id) {
 		super(id);
@@ -70,8 +97,71 @@ public class RecordingsPanel extends UserBasePanel {
 				video.update(target, f);
 				info.update(target, f);
 			}
+
+			@Override
+			protected List<AbstractLink> newOtherButtons(String markupId) {
+				return List.of(new BootstrapAjaxLink<>(markupId, Model.of(""), Buttons.Type.Outline_Warning, new ResourceModel("1600")) {
+					private static final long serialVersionUID = 1L;
+					private boolean isInterview = false;
+
+					@Override
+					protected void onConfigure() {
+						super.onConfigure();
+						boolean enabled = false;
+						isInterview = false;
+						if (getSelected().size() == 1 && BaseFileItem.Type.RECORDING == getLastSelected().getType()) {
+							Recording r = (Recording)getLastSelected();
+							isInterview = r.isInterview();
+
+							if (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()) && r.getStatus() != Status.RECORDING && r.getStatus() != Status.CONVERTING) {
+								List<RecordingChunk> chunks = chunkDao.getByRecording(r.getId())
+										.stream()
+										.filter(chunk -> r.getRoomId() == null || !getRecordingChunk(r.getRoomId(), chunk.getStreamName()).exists())
+										.collect(Collectors.toList());
+								enabled = !chunks.isEmpty();
+							}
+						}
+						setEnabled(enabled);
+					}
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						final IRecordingConverter converter = isInterview ? interviewConverter : recordingConverter;
+						new Thread() {
+							@Override
+							public void run() {
+								converter.startConversion((Recording)getLastSelected());
+							}
+						}.start();
+					}
+				}, new BootstrapAjaxLink<>(markupId, Model.of(""), Buttons.Type.Outline_Success, new ResourceModel("button.label.share")) {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onConfigure() {
+						super.onConfigure();
+						boolean enabled = false;
+						if (getSelected().size() == 1 && BaseFileItem.Type.RECORDING == getLastSelected().getType()) {
+							Recording r = (Recording)getLastSelected();
+							if (!r.isReadOnly() && r.exists()) {
+								enabled = true;
+							}
+						}
+						setEnabled(enabled);
+					}
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						rif.setRecordingId(getLastSelected().getId());
+						invite.updateModel(target);
+						invite.show(target);
+					}
+				});
+			}
 		});
 		add(video, info, addFolder);
+		add(invite = new InvitationDialog("invitation", rif));
+		rif.setDialog(invite);
 
 		super.onInitialize();
 	}
