@@ -280,6 +280,9 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 .wb-tabbar .scroll-container {
 	overflow: hidden;
 }
+.wb-tabbar .scroll-container .scrollable {
+	width: max-content;
+}
 .wb-tabbar .scroll-container .scrollable, .wb-tabbar .scroll-container .scrollable li {
 	display: flex;
 }
