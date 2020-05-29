@@ -83,6 +83,8 @@
 				<li>(*) Perform DB backup using tools available for your database</li>
 				<li><tt>./admin.sh -v -b -file ../backup_today.zip</tt></li>
 				<li>Delete/move folder with existing installation of OM</li>
+				<li>Drop existing OM database</li>
+				<li>Create empty Database with same name and UTF-8 support</li>
 				<li>Unzip new version of OM into the same folder</li>
 				<li><tt>./admin.sh -v -i -file ../backup_today.zip --drop --skip-default-objects</tt> (Optionally you can specify
 					additional parameters like DB host/user/pass/instance etc.)</li>
