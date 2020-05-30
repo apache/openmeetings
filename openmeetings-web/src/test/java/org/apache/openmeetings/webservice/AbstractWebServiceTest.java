@@ -140,15 +140,19 @@ public class AbstractWebServiceTest {
 		return createAndValidate(null, r);
 	}
 
+	protected static RoomDTO create(String sid, RoomDTO r) {
+		return getClient(getRoomUrl())
+				.query("sid", sid)
+				.type(APPLICATION_FORM_URLENCODED)
+				.post(new Form().param("room", r.toString()), RoomDTO.class);
+	}
+
 	protected static CallResult<RoomDTO> createAndValidate(String sid, RoomDTO r) {
 		if (sid == null) {
 			ServiceResult sr = login();
 			sid = sr.getMessage();
 		}
-		RoomDTO room = getClient(getRoomUrl())
-				.query("sid", sid)
-				.type(APPLICATION_FORM_URLENCODED)
-				.post(new Form().param("room", r.toString()), RoomDTO.class);
+		RoomDTO room = create(sid, r);
 		assertNotNull(room, "Valid room should be returned");
 		assertNotNull(room.getId(), "Room ID should be not empty");
 
