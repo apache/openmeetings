@@ -321,6 +321,9 @@ public class RoomDTO implements Serializable {
 		r.name = o.optString("name");
 		r.comment = o.optString("comment");
 		r.type = optEnum(Room.Type.class, o, "type");
+		if (r.type == null) {
+			throw new IllegalArgumentException("Room should have valid type");
+		}
 		r.capacity = o.optLong("capacity", 4);
 		r.appointment = o.optBoolean("appointment", false);
 		r.confno = o.optString("confno");
