@@ -1,4 +1,14 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+html[dir="rtl"] body {
+	text-align: right;
+}
+html[dir="rtl"] .mr-auto, .mx-auto {
+	margin-left: auto !important;
+	margin-right: initial !important;
+}
+html[dir="rtl"] .modal-header .close {
+	margin: -1rem auto -1rem -1rem;
+}
 html[dir="rtl"] #header {
 	padding-left: initial !important;
 	padding-right: 150px;
@@ -40,6 +50,16 @@ html[dir="rtl"] .start_step4 {
 	margin-left: initial !important;
 	margin-right: 60px !important;
 }
+html[dir="rtl"] .room-list .room-row button.enter {
+	left: 10px;
+	right: initial;
+}
+html[dir="rtl"] .align-left {
+	float: right;
+}
+html[dir="rtl"] .align-right {
+	float: left;
+}
 html[dir="rtl"] .room-block .menu .details {
 	right: initial !important;
 	left: 0;
@@ -50,7 +70,7 @@ html[dir="rtl"] .room-block .menu .details .icon
 	float: left !important;
 }
 html[dir="rtl"] #activities {
-	right: 10px !important;
+	right: 0;
 	left: initial !important;
 }
 html[dir="rtl"] #activities .control.block .label
@@ -79,18 +99,19 @@ html[dir="rtl"] #chat .chat-btn:last-of-type {
 }
 html[dir="rtl"] #chatMessage {
 	margin-right: initial !important;
-	margin-left: 22px;
 }
 html[dir="rtl"] #chat .send {
 	right: initial !important;
 	left: 0;
+	border-top-left-radius: 0.25rem;
+	border-bottom-left-radius: 0.25rem;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
 }
 html[dir="rtl"] #chat .messageArea .user-row {
 	padding-left: initial !important;
 	padding-right: 40px !important;
-}
-html[dir="rtl"] .room-block .sidebar .tab.om-icon.big {
-	padding: 0em 2.5em 0 1em !important;
+	background-position-x: 100%;
 }
 html[dir="rtl"] @media screen and (max-width: 1280px) {
 	.room-block .sidebar .tab.om-icon.big {
@@ -130,4 +151,20 @@ html[dir="rtl"] .adminForm label
 }
 html[dir="rtl"] #alert-holder {
 	left: 0;
+}
+html[dir="rtl"] #room-sidebar-tabs.tabs .btn-dock {
+	right: auto;
+	left: 5px;
+}
+html[dir="rtl"] .room-block .sb-wb .sidebar .tab .badge {
+	right: auto;
+	left: 2px;
+}
+html[dir="rtl"] .room-block .sb-wb .wb-block .tabs .wb-tabbar li a .wb-tab-close {
+	position: absolute;
+	left: 0;
+	right: auto;
+}
+html[dir="rtl"] #video-settings .close {
+	margin: 0 auto 0 0;
 }
