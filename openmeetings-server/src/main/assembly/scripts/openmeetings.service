@@ -40,5 +40,7 @@ UMask=0007
 RestartSec=10
 Restart=always
 
+TasksMax=infinity
+
 [Install]
 WantedBy=multi-user.target
