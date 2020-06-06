@@ -631,7 +631,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Ви впевнені, що хочете видалити всі тимчасові файли? Цю операцію не можна буде скасувати.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[Основні адміністративні фукції]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[Адміністративні функції]]></entry>
-	<entry key="download.image.steps"><![CDATA[Please right click the image and choose "Save image as"]]></entry>
 	<entry key="download.pdf"><![CDATA[Завантажити як PDF]]></entry>
 	<entry key="download.png"><![CDATA[Завантажити як PNG]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[Username/email and/or password are incorrect.]]></entry>

@@ -631,7 +631,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[全ての一時ファイルを削除してよろしいですか？（この作業は実行後、元に戻せません）]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[一般管理機能]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[管理機能]]></entry>
-	<entry key="download.image.steps"><![CDATA[Please right click the image and choose "Save image as"]]></entry>
 	<entry key="download.pdf"><![CDATA[PDFとしてダウンロード]]></entry>
 	<entry key="download.png"><![CDATA[PNGとしてダウンロード]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[ユーザー名/電子メール・アドレス、またはパスワードが不正です。]]></entry>

@@ -392,30 +392,38 @@ var DrawWbArea = function() {
 		if (!_inited) {
 			return;
 		}
-		const wb = getActive().data();
+		const wb = getActive().data()
+			, url = location.pathname.substring(0, location.pathname.indexOf('/', 1)) + '/services/wb/uploadwb/'
+			, arr = [];
+		let type;
 		if ('pdf' === fmt) {
-			const arr = [];
 			wb.eachCanvas(function(cnv) {
 				arr.push(_getImage(cnv));
 			});
-			OmUtil.wbAction({action: 'downloadPdf', data: {
-				slides: arr
-			}});
+			type = 'pdf';
 		} else {
-			const cnv = wb.getCanvas()
-				, dataUri = _getImage(cnv);
-			try {
-				const dlg = $('#download-png');
-				dlg.find('img').attr('src', dataUri);
-				dlg.dialog({
-					width: 350
-					, appendTo: '.room-block .wb-block'
-				});
-				fixJQueryUIDialogTouch(dlg);
-			} catch (e) {
-				console.error(e);
-			}
+			const cnv = wb.getCanvas();
+			arr.push(_getImage(cnv));
+			type = 'png';
 		}
+		$.ajax({
+			type: "POST"
+			, url: url + type + '?sid=' + Room.getOptions().sid
+			, data: {data: JSON.stringify(arr)}
+			, dataType: 'json'
+			, cache: false
+		}).done(function(res) {
+			if ('SUCCESS' === res.serviceResult.type) {
+				OmUtil.wbAction({action: 'download', data: {
+					type: type
+					, fuid: res.serviceResult.message
+				}});
+			} else {
+				OmUtil.error(res.serviceResult.message);
+			}
+		}).fail(function(err) {
+			OmUtil.error(err);
+		});
 	}
 	self.videoStatus = _videoStatus;
 	self.loadVideos = function() {

@@ -632,7 +632,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Är du säker att du vill radera alla temporära filer? Denna operation kan inte ångras.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[Allmänna administrativa funktioner]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[Administrativa funktioner]]></entry>
-	<entry key="download.image.steps"><![CDATA[Vänligen högerklicka på bilden och välj "Spara bilden som"]]></entry>
 	<entry key="download.pdf"><![CDATA[Ladda ner som PDF]]></entry>
 	<entry key="download.png"><![CDATA[Ladda ner som PNG]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[Felaktigt användarnamn/e-postadress och/eller lösenord.]]></entry>

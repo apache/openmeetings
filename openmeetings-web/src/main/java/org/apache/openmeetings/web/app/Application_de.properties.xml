@@ -631,7 +631,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Wollen sie wirklich alle Temporären Dateien löschen? Diese Vorgang kann nicht rückgängig gemacht werden.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[Allgemeine Admin-Funktionen]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[Admin-Funktionen]]></entry>
-	<entry key="download.image.steps"><![CDATA[Bitte Rechtsklick auf das Bild und "Speichere Bild als" wählen]]></entry>
 	<entry key="download.pdf"><![CDATA[Download als PDF]]></entry>
 	<entry key="download.png"><![CDATA[Download als PNG]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[Benutzername/E-Mail und/oder Passwort ist/sind falsch.]]></entry>

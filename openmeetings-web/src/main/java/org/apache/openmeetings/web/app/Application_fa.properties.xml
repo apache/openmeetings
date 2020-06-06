@@ -631,7 +631,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[مطمئن هستید می خواهید تمام پوشه های جاری را حذف کنید؟این عملیات نمی تواند انجام نشده بماند.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[عملیات کلی مدیر]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[عملکردهای مدیر]]></entry>
-	<entry key="download.image.steps"><![CDATA[Please right click the image and choose "Save image as"]]></entry>
 	<entry key="download.pdf"><![CDATA[دریافت به عنوان PDF]]></entry>
 	<entry key="download.png"><![CDATA[بارگذاری به عنوان PNG]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[نام کاربری/پست الکترونیک و/یا رمز عبور صحیح نیست]]></entry>
