@@ -303,7 +303,7 @@ var Chat = function() {
 				area.mouseleave(function() {
 					__hideActions();
 				});
-				msg.find('.from').data('user-id', cm.from.id).html(cm.from.name || cm.from.displayName);
+				msg.find('.from').data('user-id', cm.from.id).html(cm.from.displayName || cm.from.name);
 				msg.find('.time').html(cm.time).attr('title', cm.sent);
 				if (!area.length) {
 					_addTab(cm.scope, cm.scopeName);
