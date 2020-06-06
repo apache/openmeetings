@@ -49,6 +49,7 @@ import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
+import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -94,6 +95,7 @@ public class UserForm extends AdminBaseForm<User> {
 	private final Modal<String> warning;
 	private final DropDownChoice<Long> domainId = new DropDownChoice<>("domainId");
 	private final PasswordDialog adminPass;
+	private final UploadableProfileImagePanel avatar = new UploadableProfileImagePanel("avatar", null);
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean
@@ -115,6 +117,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onInitialize() {
 		super.onInitialize();
 		add(mainContainer);
+		mainContainer.add(avatar.setOutputMarkupPlaceholderTag(true));
 		mainContainer.add(generalForm = new GeneralUserForm("general", getModel(), true));
 		mainContainer.add(password.setResetPassword(false).setLabel(new ResourceModel("110")).setRequired(false)
 				.add(passValidator = new StrongPasswordValidator(getModelObject())));
@@ -338,6 +341,8 @@ public class UserForm extends AdminBaseForm<User> {
 
 	public void update(AjaxRequestTarget target) {
 		updateDomain(target);
+		avatar.setUserId(getModelObject().getId());
+		avatar.update();
 		if (target != null) {
 			target.add(this, listContainer);
 		}

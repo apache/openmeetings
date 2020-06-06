@@ -27,21 +27,28 @@ import java.io.File;
 
 import org.apache.openmeetings.core.converter.ImageConverter;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class UploadableProfileImagePanel extends UploadableImagePanel {
 	private static final long serialVersionUID = 1L;
-	private final long userId;
+	private Long userId;
 	@SpringBean
 	private ImageConverter converter;
 	@SpringBean
 	private UserDao userDao;
 
-	public UploadableProfileImagePanel(String id, final long userId) {
+	public UploadableProfileImagePanel(String id, final Long userId) {
 		super(id, false);
 		this.userId = userId;
+	}
+
+	@Override
+	protected void onConfigure() {
+		super.onConfigure();
+		setVisible(userDao.get(userId) != null);
 	}
 
 	@Override
@@ -59,6 +66,11 @@ public class UploadableProfileImagePanel extends UploadableImagePanel {
 
 	@Override
 	protected String getImageUrl() {
-		return getUrl(getRequestCycle(), userDao.get(userId));
+		User u = userDao.get(userId);
+		return u == null ? "" : getUrl(getRequestCycle(), u);
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }
