@@ -199,8 +199,20 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onRestoreSubmit(AjaxRequestTarget target, Form<?> form) {
-		getModelObject().setDeleted(false);
-		onSaveSubmit(target, form);
+		User u = getModelObject();
+		u.setDeleted(false);
+		if (!userDao.checkLogin(u.getLogin(), u.getType(), u.getDomainId(), u.getId())) {
+			error(getString("error.login.inuse"));
+		}
+		if (u.getAddress() != null && !userDao.checkEmail(u.getAddress().getEmail(), u.getType(), u.getDomainId(), u.getId())) {
+			error(getString("error.email.inuse"));
+		}
+		if (hasError()) {
+			u.setDeleted(true);
+			target.add(this);
+		} else {
+			onSaveSubmit(target, form);
+		}
 	}
 
 	@Override
@@ -351,7 +363,7 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onValidate() {
 		User u = getModelObject();
-		if(!userDao.checkLogin(login.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
+		if (!userDao.checkLogin(login.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
 			error(getString("error.login.inuse"));
 		}
 		super.onValidate();
