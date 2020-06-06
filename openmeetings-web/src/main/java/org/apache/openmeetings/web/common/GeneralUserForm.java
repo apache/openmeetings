@@ -161,7 +161,7 @@ public class GeneralUserForm extends Form<User> {
 	@Override
 	protected void onValidate() {
 		User u = getModelObject();
-		if(!userDao.checkEmail(email.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
+		if (!userDao.checkEmail(email.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
 			error(getString("error.email.inuse"));
 		}
 		super.onValidate();
