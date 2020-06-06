@@ -543,14 +543,14 @@ public class MessagesContactsPanel extends UserBasePanel {
 		target.add(buttons);
 	}
 
-	private static String getEmail(User u) {
-		return u == null || u.getAddress() == null ? "" : u.getAddress().getEmail();
+	private static String getDisplayName(User u) {
+		return u == null ? "" : u.getDisplayName();
 	}
 
 	private void selectMessage(long id, AjaxRequestTarget target) {
 		PrivateMessage msg = msgDao.get(id);
-		selectedMessage.addOrReplace(new Label("from", msg == null ? "" : getEmail(msg.getFrom())));
-		selectedMessage.addOrReplace(new Label("to", msg == null ? "" : getEmail(msg.getTo())));
+		selectedMessage.addOrReplace(new Label("from", msg == null ? "" : getDisplayName(msg.getFrom())));
+		selectedMessage.addOrReplace(new Label("to", msg == null ? "" : getDisplayName(msg.getTo())));
 		selectedMessage.addOrReplace(new Label("subj", msg == null ? "" : msg.getSubject()));
 		selectedMessage.addOrReplace(new Label("body", msg == null ? "" : msg.getMessage()).setEscapeModelStrings(false));
 		if (msg == null) {
@@ -604,13 +604,6 @@ public class MessagesContactsPanel extends UserBasePanel {
 		if (target != null) {
 			target.add(unread);
 		}
-	}
-
-	private static String getDisplayName(User u) {
-		return new StringBuilder().append(u.getFirstname()).append(" ")
-				.append(u.getLastname()).append(" ")
-				.append("<").append(getEmail(u)).append(">")
-				.toString();
 	}
 
 	private void updateMoveModel() {
