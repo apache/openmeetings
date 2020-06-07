@@ -262,7 +262,7 @@ public class TestMainAreas extends AbstractWicketTester {
 	private void testRoom(Long id) throws OmException {
 		checkArea(AreaKeys.room, String.valueOf(id), RoomPanel.class, p -> {
 			RoomPanel rp = (RoomPanel)p.get(PATH_CHILD);
-			tester.executeBehavior((AbstractAjaxBehavior)rp.getBehaviorById(0)); //room enter
+			tester.executeBehavior((AbstractAjaxBehavior)rp.get("roomContainer").getBehaviorById(0)); //room enter
 			tester.assertComponent(PATH_CHILD + ":roomContainer:wb-area:whiteboard", AbstractWbPanel.class);
 		}, regularUsername);
 	}
