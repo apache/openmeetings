@@ -24,7 +24,7 @@ Along with the developer mailing list archive:
     
 System Requirements
 ===================
-You need a platform that supports [Oracle Java SE 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
+You need a platform that supports [Java SE 11](https://www.oracle.com/java/technologies/javase-downloads.html).
 
 
 Building and running
@@ -62,7 +62,9 @@ see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 [Release 5.0.0-M4](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M4), provides following improvements:
 
 This release provides WebRTC audio/video/screen-sharing in the Room
+
 IMPORTANT: Java 11 is required
+
 Flash plugin is no more required in the browser
 
 UI:
@@ -97,7 +99,9 @@ Some other fixes and improvements, 56 issues were addressed
 [Release 5.0.0-M3](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M3), provides following improvements:
 
 This release provides WebRTC audio/video/screen-sharing in the Room
+
 IMPORTANT: Java 11 is required
+
 Flash plugin is no more required in the browser
 
 Backup/Restore:
@@ -126,7 +130,9 @@ Some other fixes and improvements, 36 issues were addressed
 [Release 5.0.0-M2](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M2), provides following improvements:
 
 This release provides WebRTC audio/video/screen-sharing in the Room
+
 IMPORTANT: Java 11 is required
+
 Flash plugin is no more required in the browser
 
 Backup/Restore:
@@ -172,6 +178,7 @@ Other fixes and improvements, 19 issues were addressed
 [Release 5.0.0-M1](https://archive.apache.org/dist/openmeetings/5.0.0-M1), provides following improvements:
 
 This release provides WebRTC audio/video/screen-sharing in the Room
+
 Flash plugin is no more required in the browser
 
 Please NOTE: this version might be not production ready
