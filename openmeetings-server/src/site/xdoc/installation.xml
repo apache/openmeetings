@@ -66,7 +66,7 @@
 					</script>
 				</div>
 				<p>
-					<i>Note: Openmeetings requires JRE 8, JRE 6/7 are NOT compatible!</i><br />
+					<i>Note: Openmeetings requires JRE 11, JRE 6/7/8 are NOT compatible!</i><br />
 					<i>
 						Since Version 2.0 you can also install OpenMeetings from command line. Just cd to the unpacked
 						archive and type ./admin.sh or admin.bat, please see
