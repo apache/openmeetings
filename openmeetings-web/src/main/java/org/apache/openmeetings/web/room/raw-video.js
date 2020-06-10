@@ -240,7 +240,9 @@ var Video = (function() {
 	}
 	function _initContainer(_id, name, opts) {
 		let contSel = '#user' + sd.cuid;
-		hasVideo = VideoUtil.hasVideo(sd) || $(contSel).length < 1;
+		const _hasVideo = VideoUtil.hasVideo(sd)
+		size = {width: _hasVideo ? sd.width : 120, height: _hasVideo ? sd.height : 90};
+		hasVideo = _hasVideo || $(contSel).length < 1;
 		if (hasVideo) {
 			if (opts.interview) {
 				const area = $('.pod-area');
@@ -325,7 +327,6 @@ var Video = (function() {
 		}
 		iceServers = msg.iceServers;
 		sd.activities = sd.activities.sort();
-		size = {width: sd.width, height: sd.height};
 		isSharing = VideoUtil.isSharing(sd);
 		isRecording = VideoUtil.isRecording(sd);
 		const _id = VideoUtil.getVid(sd.uid)
@@ -388,8 +389,7 @@ var Video = (function() {
 	}
 	function __createVideo(data) {
 		const _id = VideoUtil.getVid(sd.uid);
-		_resizeDlgArea(hasVideo ? size.width : 120
-			, hasVideo ? size.height : 90);
+		_resizeDlgArea(size.width, size.height);
 		if (hasVideo && !isSharing && !isRecording) {
 			VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VIDWIN_SEL), sd.width, sd.height + 25));
 		}
