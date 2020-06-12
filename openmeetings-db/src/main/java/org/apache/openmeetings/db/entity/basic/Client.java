@@ -31,6 +31,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
@@ -243,6 +244,11 @@ public class Client implements IDataProviderEntity, IWsClient {
 		return streams.values().stream()
 				.filter(sd -> StreamType.SCREEN == sd.getType())
 				.findFirst();
+	}
+
+	public Stream<StreamDesc> getCamStreams() {
+		return streams.values().stream()
+				.filter(sd -> StreamType.WEBCAM == sd.getType());
 	}
 
 	public Client restoreActivities(StreamDesc sd) {

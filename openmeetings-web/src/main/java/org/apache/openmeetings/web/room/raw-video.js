@@ -370,17 +370,28 @@ var Video = (function() {
 		return v;
 	}
 	function _update(_c) {
-		const prevA = sd.activities;
+		const prevA = sd.activities
+			, prevW = sd.width
+			, prevH = sd.height
+			, prevCam = sd.cam
+			, prevMic = sd.mic;
 		sd.activities = _c.activities.sort();
 		sd.level = _c.level;
 		sd.user.firstName = _c.user.firstName;
 		sd.user.lastName = _c.user.lastName;
 		sd.user.displayName = _c.user.displayName;
+		sd.width = _c.width;
+		sd.height = _c.height;
+		sd.cam = _c.cam;
+		sd.mic = _c.mic;
 		const name = sd.user.displayName;
 		if (hasVideo) {
 			v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
 		}
-		const same = prevA.length === sd.activities.length && prevA.every(function(value, index) { return value === sd.activities[index]})
+		const same = prevA.length === sd.activities.length
+			&& prevA.every(function(value, index) { return value === sd.activities[index]})
+			&& prevW === sd.width && prevH === sd.height
+			&& prevCam == sd.cam && prevMic === sd.mic;
 		if (sd.self && !same) {
 			_cleanup();
 			v.remove();

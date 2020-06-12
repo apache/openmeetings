@@ -127,14 +127,13 @@ var VideoSettings = (function() {
 		}
 		return s;
 	}
-	function _save(refr) {
-		const _s = Settings.save(s);
-		if (typeof(avSettings) === 'function') {
-			avSettings(_s);
-		}
-		if (refr && typeof(VideoManager) === 'object' && o.uid) {
-			VideoManager.refresh(o.uid);
-		}
+	function _save() {
+		Settings.save(s);
+		OmUtil.sendMessage({
+			type: 'av'
+			, area: 'room'
+			, settings: s
+		});
 	}
 	function _clear(_ms) {
 		const ms = _ms || (vid && vid.length === 1 ? vid[0].srcObject : null);
@@ -198,7 +197,7 @@ var VideoSettings = (function() {
 				}, MsgBase);
 			});
 		vs.find('.btn-save').off().click(function() {
-			_save(true);
+			_save();
 			_close();
 			vs.modal("hide");
 		});

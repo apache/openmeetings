@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room;
 
 import static java.time.Duration.ZERO;
+import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed;
 import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
@@ -69,6 +70,7 @@ import org.apache.openmeetings.web.room.wb.AbstractWbPanel;
 import org.apache.openmeetings.web.room.wb.InterviewWbPanel;
 import org.apache.openmeetings.web.room.wb.WbAction;
 import org.apache.openmeetings.web.room.wb.WbPanel;
+import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.openmeetings.web.util.TouchPunchResourceReference;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -231,6 +233,7 @@ public class RoomPanel extends BasePanel {
 		}
 	};
 	Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
+	private boolean avInited = false;
 
 	@SpringBean
 	private ClientManager cm;
@@ -767,6 +770,28 @@ public class RoomPanel extends BasePanel {
 				wb.processWbAction(a, o.optJSONObject("data"), handler);
 			} else if ("room".equals(type)) {
 				sidebar.roomAction(handler, o);
+			} else if ("av".equals(type)) {
+				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
+				Client c = cp.setSettings(o.optJSONObject("settings")).update(getClient());
+				if (!avInited) {
+					avInited = true;
+					if (Room.Type.CONFERENCE == r.getType()) {
+						if (!activityAllowed(c, Client.Activity.AUDIO, c.getRoom())) {
+							c.allow(Room.Right.AUDIO);
+						}
+						if (!c.getRoom().isAudioOnly() && !activityAllowed(c, Client.Activity.VIDEO, c.getRoom())) {
+							c.allow(Room.Right.VIDEO);
+						}
+						streamProcessor.toggleActivity(c, c.getRoom().isAudioOnly()
+								? Client.Activity.AUDIO
+								: Client.Activity.AUDIO_VIDEO);
+					}
+				}
+				c.getCamStreams().forEach(sd -> {
+					sd.setWidth(c.getWidth());
+					sd.setHeight(c.getHeight());
+				});
+				broadcast(c);
 			}
 		}
 	}

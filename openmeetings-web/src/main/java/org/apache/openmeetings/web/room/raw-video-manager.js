@@ -150,6 +150,8 @@ var VideoManager = (function() {
 		c.streams.forEach(function(sd) {
 			streamMap[sd.uid] = sd.uid;
 			sd.self = c.self;
+			sd.cam = c.cam;
+			sd.mic = c.mic;
 			if (VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd)) {
 				return;
 			}

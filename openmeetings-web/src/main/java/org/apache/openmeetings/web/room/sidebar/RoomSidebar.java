@@ -18,21 +18,16 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed;
 import static org.apache.openmeetings.web.app.Application.kickUser;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
-import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.web.app.ClientManager;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.confirmation.ConfirmationDialog;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -40,17 +35,12 @@ import org.apache.openmeetings.web.room.RoomPanel.Action;
 import org.apache.openmeetings.web.room.VideoSettings;
 import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
 import org.apache.openmeetings.web.room.activities.Activity;
-import org.apache.openmeetings.web.util.ExtendedClientProperties;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,39 +61,9 @@ public class RoomSidebar extends Panel {
 	private final WebMarkupContainer fileTab = new WebMarkupContainer("file-tab");
 	private ConfirmationDialog confirmKick;
 	private boolean showFiles;
-	private boolean avInited = false;
 	private Client kickedClient;
 	private VideoSettings settings = new VideoSettings("settings");
 	private ActivitiesPanel activities;
-	private final AbstractDefaultAjaxBehavior avSettings = new AbstractDefaultAjaxBehavior() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void respond(AjaxRequestTarget target) {
-			StringValue s = getRequest().getRequestParameters().getParameterValue(PARAM_SETTINGS);
-			Client c = room.getClient();
-			if (!s.isEmpty() && c != null) {
-				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
-				cp.setSettings(new JSONObject(s.toString())).update(c);
-				if (!avInited) {
-					avInited = true;
-					if (Room.Type.CONFERENCE == room.getRoom().getType()) {
-						if (!activityAllowed(c, Client.Activity.AUDIO, c.getRoom())) {
-							c.allow(Room.Right.AUDIO);
-						}
-						if (!c.getRoom().isAudioOnly() && !activityAllowed(c, Client.Activity.VIDEO, c.getRoom())) {
-							c.allow(Room.Right.VIDEO);
-						}
-						streamProcessor.toggleActivity(c, c.getRoom().isAudioOnly()
-								? Client.Activity.AUDIO
-								: Client.Activity.AUDIO_VIDEO);
-					}
-				}
-				cm.update(c);
-				room.broadcast(c);
-			}
-		}
-	};
 
 	@SpringBean
 	private ClientManager cm;
@@ -131,7 +91,6 @@ public class RoomSidebar extends Panel {
 		add(fileTab.setVisible(!room.isInterview()), roomFiles.setVisible(!room.isInterview()));
 
 		add(addFolder, settings);
-		add(avSettings);
 		add(confirmKick = new ConfirmationDialog("confirm-kick", new ResourceModel("603"), new ResourceModel("605")) {
 			private static final long serialVersionUID = 1L;
 
@@ -143,12 +102,6 @@ public class RoomSidebar extends Panel {
 		add(upload = new UploadDialog("upload", room, roomFiles));
 		updateShowFiles(null);
 		add(activities = new ActivitiesPanel("activities", room));
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_SETTINGS, avSettings, explicit(PARAM_SETTINGS))));
 	}
 
 	private void updateShowFiles(IPartialPageRequestHandler handler) {
