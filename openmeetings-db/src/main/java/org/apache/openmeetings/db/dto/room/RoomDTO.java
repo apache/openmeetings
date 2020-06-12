@@ -49,6 +49,7 @@ public class RoomDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String name;
+	private String tag;
 	private String comment;
 	private Room.Type type;
 	private Long capacity = Long.valueOf(4);
@@ -77,6 +78,7 @@ public class RoomDTO implements Serializable {
 	public RoomDTO(Room r) {
 		id = r.getId();
 		name = r.getName();
+		tag = r.getTag();
 		comment = r.getComment();
 		type = r.getType();
 		capacity = r.getCapacity();
@@ -103,6 +105,7 @@ public class RoomDTO implements Serializable {
 		Room r = id == null ? new Room() : roomDao.get(id);
 		r.setId(id);
 		r.setName(name);
+		r.setTag(tag);
 		r.setComment(comment);
 		r.setType(type);
 		r.setCapacity(capacity);
@@ -144,6 +147,14 @@ public class RoomDTO implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 
 	public String getComment() {
@@ -319,6 +330,7 @@ public class RoomDTO implements Serializable {
 		RoomDTO r = new RoomDTO();
 		r.id = optLong(o, "id");
 		r.name = o.optString("name");
+		r.tag = o.optString("tag");
 		r.comment = o.optString("comment");
 		r.type = optEnum(Room.Type.class, o, "type");
 		if (r.type == null) {

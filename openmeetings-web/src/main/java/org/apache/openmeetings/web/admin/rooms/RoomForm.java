@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
+import static org.apache.wicket.validation.validator.StringValidator.maximumLength;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -139,8 +140,12 @@ public class RoomForm extends AdminBaseForm<Room> {
 	protected void onInitialize() {
 		super.onInitialize();
 		RequiredTextField<String> name = new RequiredTextField<>("name");
-		name.setLabel(new Model<>(getString("165")));
+		name.setLabel(new ResourceModel("165"));
 		add(name);
+		TextField<String> tag = new TextField<>("tag");
+		tag.add(maximumLength(10));
+		tag.setLabel(new ResourceModel("admin.group.form.tag"));
+		add(tag);
 
 		add(new DropDownChoice<>("capacity", //
 				DROPDOWN_NUMBER_OF_PARTICIPANTS, //

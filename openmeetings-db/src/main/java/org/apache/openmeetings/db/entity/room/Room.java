@@ -81,6 +81,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 @NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC")
 @NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id = :id")
 @NamedQuery(name = "getRoomsByIds", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id IN :ids")
+@NamedQuery(name = "getRoomByTag", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.tag = :tag")
 @NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.id IN :ids")
 @NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false")
 @NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.id")
@@ -174,6 +175,10 @@ public class Room extends HistoricalEntity {
 	@Column(name = "name")
 	@XmlElement(name = "name", required = false)
 	private String name;
+
+	@Column(name = "tag", length = 10)
+	@XmlElement(name = "tag", required = false)
+	private String tag;
 
 	@Lob
 	@Column(name = "comment")
@@ -344,6 +349,14 @@ public class Room extends HistoricalEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 
 	@Override

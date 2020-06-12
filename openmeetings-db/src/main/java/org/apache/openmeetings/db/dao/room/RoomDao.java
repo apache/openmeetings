@@ -49,6 +49,7 @@ import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.util.DaoHelper;
+import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +81,18 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 					, "roomModerators", "roomGroups", "roomFiles"));
 		} else {
 			log.info("[get]: No room id given");
+		}
+		return r;
+	}
+
+	public Room get(String tag) {
+		Room r = null;
+		if (!Strings.isEmpty(tag)) {
+			r = single(fillLazy(em
+					, oem -> oem.createNamedQuery("getRoomByTag", Room.class).setParameter("tag", tag)
+					, "roomModerators", "roomGroups", "roomFiles"));
+		} else {
+			log.info("[get]: No room tag given");
 		}
 		return r;
 	}

@@ -277,20 +277,21 @@ public class OmUrlFragment implements Serializable {
 					basePanel = new WidgetsPanel(CHILD_ID);
 				}
 				break;
-			case room:
+			case room: {
+				Room r = null;
 				try {
 					Long roomId = Long.valueOf(type);
-					Room r = Application.get().getBean(RoomDao.class).get(roomId);
-					if (r != null) {
-						moveToServer(r);
-						basePanel = new RoomPanel(CHILD_ID, r);
-					}
+					r = Application.get().getBean(RoomDao.class).get(roomId);
 				} catch(NumberFormatException ne) {
-					//skip it, bad roomid passed
+					r = Application.get().getBean(RoomDao.class).get(type);
 				}
-				if (basePanel == null) {
+				if (r != null) {
+					moveToServer(r);
+					basePanel = new RoomPanel(CHILD_ID, r);
+				} else {
 					basePanel = new OmDashboardPanel(CHILD_ID);
 				}
+			}
 				break;
 			case rooms:
 				basePanel = new RoomsSelectorPanel(CHILD_ID, type);
