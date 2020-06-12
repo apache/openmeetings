@@ -118,7 +118,7 @@
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.13.1</kurento.version>
 		<!--  Exclude all generated code  -->
-		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/fabric.js, file:**/cssemoticons.js, file:**/adapter-latest.js, file:**/kurento-utils.js, file:**/fileinput*.js, file:**/MathJax.js, file:**/network.js</sonar.exclusions>
+		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/fabric.js, file:**/cssemoticons.js, file:**/adapter-latest.js, file:**/kurento-utils.js, file:**/NoSleep.js, file:**/fileinput*.js, file:**/MathJax.js, file:**/network.js</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
@@ -991,6 +991,7 @@
 									<pattern>Licensed under the MIT license</pattern>
 									<pattern>MIT/GPL2 Licensed</pattern>
 									<pattern>licensed under the MIT and GPL</pattern>
+									<pattern>MIT license</pattern>
 								</patterns>
 							</license>
 							<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">

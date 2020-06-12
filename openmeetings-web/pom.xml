@@ -201,6 +201,7 @@
 							<charset>UTF-8</charset>
 							<jsSourceDir>../java/org/apache/openmeetings/web/room</jsSourceDir>
 							<jsSourceFiles>
+								<jsSourceFile>NoSleep.js</jsSourceFile>
 								<jsSourceFile>raw-video.js</jsSourceFile>
 								<jsSourceFile>raw-video-manager.js</jsSourceFile>
 								<jsSourceFile>raw-sharer.js</jsSourceFile>
@@ -281,6 +282,7 @@
 						**/fileinput.css,
 						**/adapter-latest.js,
 						**/kurento-utils.js,
+						**/NoSleep.js,
 						**/network.js
 					</packagingExcludes>
 					<warSourceExcludes>
@@ -292,6 +294,7 @@
 						**/fileinput.css,
 						**/adapter-latest.js,
 						**/kurento-utils.js,
+						**/NoSleep.js,
 						**/network.js
 					</warSourceExcludes>
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>

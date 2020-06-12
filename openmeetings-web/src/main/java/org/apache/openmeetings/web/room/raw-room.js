@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Room = (function() {
 	const self = {}, sbSide = Settings.isRtl ? 'right' : 'left';
-	let options, menuHeight, sb, dock, activities;
+	let options, menuHeight, sb, dock, activities, noSleep;
 
 	function _init(_options) {
 		options = _options;
@@ -158,6 +158,18 @@ var Room = (function() {
 		$(window).on('keydown.openmeetings', _preventKeydown);
 		$(window).on('keyup.openmeetings', _keyHandler);
 		$(document).click(_mouseHandler);
+		_addNoSleep();
+	}
+	function _addNoSleep() {
+		_removeNoSleep();
+		noSleep = new NoSleep();
+		noSleep.enable();
+	}
+	function _removeNoSleep() {
+		if (noSleep) {
+			noSleep.disable();
+			noSleep = null;
+		}
 	}
 	function _unload() {
 		$('body').removeClass('no-header');
@@ -179,6 +191,7 @@ var Room = (function() {
 		$(document).off('click', _mouseHandler);
 		sb = undefined;
 		Sharer.close();
+		_removeNoSleep();
 	}
 	function _showClipboard(txt) {
 		const dlg = $('#clipboard-dialog');

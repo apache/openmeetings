@@ -119,7 +119,7 @@ public class OpenmeetingsVariables {
 	public static final String DEFAULT_SIP_CONTEXT = "rooms";
 	public static final String DEFAULT_CSP_FONT = "https://fonts.gstatic.com";
 	public static final String DEFAULT_CSP_STYLE = "https://fonts.googleapis.com/css";
-	public static final String DEFAULT_CSP_IMAGE = "data:";
+	public static final String DEFAULT_CSP_DATA = SELF.getValue() + ",data:";
 
 	private static String cryptClassName = null;
 	private static String wicketApplicationName = null;
@@ -154,8 +154,8 @@ public class OpenmeetingsVariables {
 	private static boolean myRoomsEnabled = true;
 	private static String cspFontSrc = DEFAULT_CSP_FONT;
 	private static String cspFrameSrc = SELF.getValue();
-	private static String cspImageSrc = DEFAULT_CSP_IMAGE;
-	private static String cspMediaSrc = SELF.getValue();
+	private static String cspImageSrc = DEFAULT_CSP_DATA;
+	private static String cspMediaSrc = DEFAULT_CSP_DATA;
 	private static String cspScriptSrc = STRICT_DYNAMIC.getValue();
 	private static String cspStyleSrc = DEFAULT_CSP_STYLE;
 	private static String smtpServer;

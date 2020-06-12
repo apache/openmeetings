@@ -592,8 +592,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 		setCspFontSrc(getString(CONFIG_CSP_FONT, DEFAULT_CSP_FONT));
 		setCspFrameSrc(getString(CONFIG_CSP_FRAME, SELF.getValue()));
-		setCspImageSrc(getString(CONFIG_CSP_IMAGE, DEFAULT_CSP_IMAGE));
-		setCspMediaSrc(getString(CONFIG_CSP_MEDIA, SELF.getValue()));
+		setCspImageSrc(getString(CONFIG_CSP_IMAGE, DEFAULT_CSP_DATA));
+		setCspMediaSrc(getString(CONFIG_CSP_MEDIA, DEFAULT_CSP_DATA));
 		setCspScriptSrc(getString(CONFIG_CSP_SCRIPT, STRICT_DYNAMIC.getValue()));
 		setCspStyleSrc(getString(CONFIG_CSP_STYLE, DEFAULT_CSP_STYLE));
 		if (Application.exists()) {
