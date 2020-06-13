@@ -1,1163 +1,8 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.kurentoUtils = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-var freeice = require('freeice');
-var inherits = require('inherits');
-var UAParser = require('ua-parser-js');
-window.uuidv4 = require('uuid/v4');
-var hark = require('hark');
-var EventEmitter = require('events').EventEmitter;
-var recursive = require('merge').recursive.bind(undefined, true);
-var sdpTranslator = require('sdp-translator');
-var logger = window.Logger || console;
-try {
-    require('kurento-browser-extensions');
-} catch (error) {
-    if (typeof getScreenConstraints === 'undefined') {
-        logger.warn('screen sharing is not available');
-        getScreenConstraints = function getScreenConstraints(sendSource, callback) {
-            callback(new Error('This library is not enabled for screen sharing'));
-        };
-    }
-}
-var MEDIA_CONSTRAINTS = {
-        audio: true,
-        video: {
-            width: 640,
-            framerate: 15
-        }
-    };
-var ua = window && window.navigator ? window.navigator.userAgent : '';
-var parser = new UAParser(ua);
-var browser = parser.getBrowser();
-var usePlanB = false;
-if (browser.name === 'Chrome' || browser.name === 'Chromium') {
-    logger.debug(browser.name + ': using SDP PlanB');
-    usePlanB = true;
-}
-function noop(error) {
-    if (error)
-        logger.error(error);
-}
-function trackStop(track) {
-    track.stop && track.stop();
-}
-function streamStop(stream) {
-    stream.getTracks().forEach(trackStop);
-}
-var dumpSDP = function (description) {
-    if (typeof description === 'undefined' || description === null) {
-        return '';
-    }
-    return 'type: ' + description.type + '\r\n' + description.sdp;
-};
-function bufferizeCandidates(pc, onerror) {
-    var candidatesQueue = [];
-    function setSignalingstatechangeAccordingWwebBrowser(functionToExecute, pc) {
-        if (typeof AdapterJS !== 'undefined' && AdapterJS.webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9) {
-            pc.onsignalingstatechange = functionToExecute;
-        } else {
-            pc.addEventListener('signalingstatechange', functionToExecute);
-        }
-    }
-    var signalingstatechangeFunction = function () {
-        if (pc.signalingState === 'stable') {
-            while (candidatesQueue.length) {
-                var entry = candidatesQueue.shift();
-                pc.addIceCandidate(entry.candidate, entry.callback, entry.callback);
-            }
-        }
-    };
-    setSignalingstatechangeAccordingWwebBrowser(signalingstatechangeFunction, pc);
-    return function (candidate, callback) {
-        callback = callback || onerror;
-        switch (pc.signalingState) {
-        case 'closed':
-            callback(new Error('PeerConnection object is closed'));
-            break;
-        case 'stable':
-            if (pc.remoteDescription) {
-                pc.addIceCandidate(candidate, callback, callback);
-                break;
-            }
-        default:
-            candidatesQueue.push({
-                candidate: candidate,
-                callback: callback
-            });
-        }
-    };
-}
-function removeFIDFromOffer(sdp) {
-    var n = sdp.indexOf('a=ssrc-group:FID');
-    if (n > 0) {
-        return sdp.slice(0, n);
-    } else {
-        return sdp;
-    }
-}
-function getSimulcastInfo(videoStream) {
-    var videoTracks = videoStream.getVideoTracks();
-    if (!videoTracks.length) {
-        logger.warn('No video tracks available in the video stream');
-        return '';
-    }
-    var lines = [
-            'a=x-google-flag:conference',
-            'a=ssrc-group:SIM 1 2 3',
-            'a=ssrc:1 cname:localVideo',
-            'a=ssrc:1 msid:' + videoStream.id + ' ' + videoTracks[0].id,
-            'a=ssrc:1 mslabel:' + videoStream.id,
-            'a=ssrc:1 label:' + videoTracks[0].id,
-            'a=ssrc:2 cname:localVideo',
-            'a=ssrc:2 msid:' + videoStream.id + ' ' + videoTracks[0].id,
-            'a=ssrc:2 mslabel:' + videoStream.id,
-            'a=ssrc:2 label:' + videoTracks[0].id,
-            'a=ssrc:3 cname:localVideo',
-            'a=ssrc:3 msid:' + videoStream.id + ' ' + videoTracks[0].id,
-            'a=ssrc:3 mslabel:' + videoStream.id,
-            'a=ssrc:3 label:' + videoTracks[0].id
-        ];
-    lines.push('');
-    return lines.join('\n');
-}
-function sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 10000000; i++) {
-        if (new Date().getTime() - start > milliseconds) {
-            break;
-        }
-    }
-}
-function setIceCandidateAccordingWebBrowser(functionToExecute, pc) {
-    if (typeof AdapterJS !== 'undefined' && AdapterJS.webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9) {
-        pc.onicecandidate = functionToExecute;
-    } else {
-        pc.addEventListener('icecandidate', functionToExecute);
-    }
-}
-function WebRtcPeer(mode, options, callback) {
-    if (!(this instanceof WebRtcPeer)) {
-        return new WebRtcPeer(mode, options, callback);
-    }
-    WebRtcPeer.super_.call(this);
-    if (options instanceof Function) {
-        callback = options;
-        options = undefined;
-    }
-    options = options || {};
-    callback = (callback || noop).bind(this);
-    var self = this;
-    var localVideo = options.localVideo;
-    var remoteVideo = options.remoteVideo;
-    var videoStream = options.videoStream;
-    var audioStream = options.audioStream;
-    var mediaConstraints = options.mediaConstraints;
-    var connectionConstraints = options.connectionConstraints;
-    var pc = options.peerConnection;
-    var sendSource = options.sendSource || 'webcam';
-    var dataChannelConfig = options.dataChannelConfig;
-    var useDataChannels = options.dataChannels || false;
-    var dataChannel;
-    var guid = uuidv4();
-    var configuration = recursive({ iceServers: freeice() }, options.configuration);
-    var onicecandidate = options.onicecandidate;
-    if (onicecandidate)
-        this.on('icecandidate', onicecandidate);
-    var oncandidategatheringdone = options.oncandidategatheringdone;
-    if (oncandidategatheringdone) {
-        this.on('candidategatheringdone', oncandidategatheringdone);
-    }
-    var simulcast = options.simulcast;
-    var multistream = options.multistream;
-    var interop = new sdpTranslator.Interop();
-    var candidatesQueueOut = [];
-    var candidategatheringdone = false;
-    Object.defineProperties(this, {
-        'peerConnection': {
-            get: function () {
-                return pc;
-            }
-        },
-        'id': {
-            value: options.id || guid,
-            writable: false
-        },
-        'remoteVideo': {
-            get: function () {
-                return remoteVideo;
-            }
-        },
-        'localVideo': {
-            get: function () {
-                return localVideo;
-            }
-        },
-        'dataChannel': {
-            get: function () {
-                return dataChannel;
-            }
-        },
-        'currentFrame': {
-            get: function () {
-                if (!remoteVideo)
-                    return;
-                if (remoteVideo.readyState < remoteVideo.HAVE_CURRENT_DATA)
-                    throw new Error('No video stream data available');
-                var canvas = document.createElement('canvas');
-                canvas.width = remoteVideo.videoWidth;
-                canvas.height = remoteVideo.videoHeight;
-                canvas.getContext('2d').drawImage(remoteVideo, 0, 0);
-                return canvas;
-            }
-        }
-    });
-    if (!pc) {
-        pc = new RTCPeerConnection(configuration);
-        if (useDataChannels && !dataChannel) {
-            var dcId = 'WebRtcPeer-' + self.id;
-            var dcOptions = undefined;
-            if (dataChannelConfig) {
-                dcId = dataChannelConfig.id || dcId;
-                dcOptions = dataChannelConfig.options;
-            }
-            dataChannel = pc.createDataChannel(dcId, dcOptions);
-            if (dataChannelConfig) {
-                dataChannel.onopen = dataChannelConfig.onopen;
-                dataChannel.onclose = dataChannelConfig.onclose;
-                dataChannel.onmessage = dataChannelConfig.onmessage;
-                dataChannel.onbufferedamountlow = dataChannelConfig.onbufferedamountlow;
-                dataChannel.onerror = dataChannelConfig.onerror || noop;
-            }
-        }
-    }
-    if (!pc.getLocalStreams && pc.getSenders) {
-        pc.getLocalStreams = function () {
-            var stream = new MediaStream();
-            pc.getSenders().forEach(function (sender) {
-                stream.addTrack(sender.track);
-            });
-            return [stream];
-        };
-    }
-    if (!pc.getRemoteStreams && pc.getReceivers) {
-        pc.getRemoteStreams = function () {
-            var stream = new MediaStream();
-            pc.getReceivers().forEach(function (sender) {
-                stream.addTrack(sender.track);
-            });
-            return [stream];
-        };
-    }
-    var iceCandidateFunction = function (event) {
-        var candidate = event.candidate;
-        if (EventEmitter.listenerCount(self, 'icecandidate') || EventEmitter.listenerCount(self, 'candidategatheringdone')) {
-            if (candidate) {
-                var cand;
-                if (multistream && usePlanB) {
-                    cand = interop.candidateToUnifiedPlan(candidate);
-                } else {
-                    cand = candidate;
-                }
-                if (typeof AdapterJS === 'undefined') {
-                    self.emit('icecandidate', cand);
-                }
-                candidategatheringdone = false;
-            } else if (!candidategatheringdone) {
-                if (typeof AdapterJS !== 'undefined' && AdapterJS.webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9) {
-                    EventEmitter.prototype.emit('candidategatheringdone', cand);
-                } else {
-                    self.emit('candidategatheringdone');
-                }
-                candidategatheringdone = true;
-            }
-        } else if (!candidategatheringdone) {
-            candidatesQueueOut.push(candidate);
-            if (!candidate)
-                candidategatheringdone = true;
-        }
-    };
-    setIceCandidateAccordingWebBrowser(iceCandidateFunction, pc);
-    pc.onaddstream = options.onaddstream;
-    pc.onnegotiationneeded = options.onnegotiationneeded;
-    this.on('newListener', function (event, listener) {
-        if (event === 'icecandidate' || event === 'candidategatheringdone') {
-            while (candidatesQueueOut.length) {
-                var candidate = candidatesQueueOut.shift();
-                if (!candidate === (event === 'candidategatheringdone')) {
-                    listener(candidate);
-                }
-            }
-        }
-    });
-    var addIceCandidate = bufferizeCandidates(pc);
-    this.addIceCandidate = function (iceCandidate, callback) {
-        var candidate;
-        if (multistream && usePlanB) {
-            candidate = interop.candidateToPlanB(iceCandidate);
-        } else {
-            candidate = new RTCIceCandidate(iceCandidate);
-        }
-        logger.debug('Remote ICE candidate received', iceCandidate);
-        callback = (callback || noop).bind(this);
-        addIceCandidate(candidate, callback);
-    };
-    this.generateOffer = function (callback) {
-        callback = callback.bind(this);
-        if (mode === 'recvonly') {
-            var useAudio = mediaConstraints && typeof mediaConstraints.audio === 'boolean' ? mediaConstraints.audio : true;
-            var useVideo = mediaConstraints && typeof mediaConstraints.video === 'boolean' ? mediaConstraints.video : true;
-            if (useAudio) {
-                pc.addTransceiver('audio', { direction: 'recvonly' });
-            }
-            if (useVideo) {
-                pc.addTransceiver('video', { direction: 'recvonly' });
-            }
-        }
-        if (typeof AdapterJS !== 'undefined' && AdapterJS.webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9) {
-            var setLocalDescriptionOnSuccess = function () {
-                sleep(1000);
-                var localDescription = pc.localDescription;
-                logger.debug('Local description set\n', localDescription.sdp);
-                if (multistream && usePlanB) {
-                    localDescription = interop.toUnifiedPlan(localDescription);
-                    logger.debug('offer::origPlanB->UnifiedPlan', dumpSDP(localDescription));
-                }
-                callback(null, localDescription.sdp, self.processAnswer.bind(self));
-            };
-            var createOfferOnSuccess = function (offer) {
-                logger.debug('Created SDP offer');
-                logger.debug('Local description set\n', pc.localDescription);
-                pc.setLocalDescription(offer, setLocalDescriptionOnSuccess, callback);
-            };
-            pc.createOffer(createOfferOnSuccess, callback);
-        } else {
-            pc.createOffer().then(function (offer) {
-                logger.debug('Created SDP offer');
-                offer = mangleSdpToAddSimulcast(offer);
-                return pc.setLocalDescription(offer);
-            }).then(function () {
-                var localDescription = pc.localDescription;
-                logger.debug('Local description set\n', localDescription.sdp);
-                if (multistream && usePlanB) {
-                    localDescription = interop.toUnifiedPlan(localDescription);
-                    logger.debug('offer::origPlanB->UnifiedPlan', dumpSDP(localDescription));
-                }
-                callback(null, localDescription.sdp, self.processAnswer.bind(self));
-            }).catch(callback);
-        }
-    };
-    this.getLocalSessionDescriptor = function () {
-        return pc.localDescription;
-    };
-    this.getRemoteSessionDescriptor = function () {
-        return pc.remoteDescription;
-    };
-    function setRemoteVideo() {
-        if (remoteVideo) {
-            remoteVideo.pause();
-            var stream = pc.getRemoteStreams()[0];
-            remoteVideo.srcObject = stream;
-            logger.debug('Remote stream:', stream);
-            if (typeof AdapterJS !== 'undefined' && AdapterJS.webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9) {
-                remoteVideo = attachMediaStream(remoteVideo, stream);
-            } else {
-                remoteVideo.load();
-            }
-        }
-    }
-    this.showLocalVideo = function () {
-        localVideo.srcObject = videoStream;
-        localVideo.muted = true;
-        if (typeof AdapterJS !== 'undefined' && AdapterJS.webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9) {
-            localVideo = attachMediaStream(localVideo, videoStream);
-        }
-    };
-    this.send = function (data) {
-        if (dataChannel && dataChannel.readyState === 'open') {
-            dataChannel.send(data);
-        } else {
-            logger.warn('Trying to send data over a non-existing or closed data channel');
-        }
-    };
-    this.processAnswer = function (sdpAnswer, callback) {
-        callback = (callback || noop).bind(this);
-        var answer = new RTCSessionDescription({
-                type: 'answer',
-                sdp: sdpAnswer
-            });
-        if (multistream && usePlanB) {
-            var planBAnswer = interop.toPlanB(answer);
-            logger.debug('asnwer::planB', dumpSDP(planBAnswer));
-            answer = planBAnswer;
-        }
-        logger.debug('SDP answer received, setting remote description');
-        if (pc.signalingState === 'closed') {
-            return callback('PeerConnection is closed');
-        }
-        pc.setRemoteDescription(answer, function () {
-            setRemoteVideo();
-            callback();
-        }, callback);
-    };
-    this.processOffer = function (sdpOffer, callback) {
-        callback = callback.bind(this);
-        var offer = new RTCSessionDescription({
-                type: 'offer',
-                sdp: sdpOffer
-            });
-        if (multistream && usePlanB) {
-            var planBOffer = interop.toPlanB(offer);
-            logger.debug('offer::planB', dumpSDP(planBOffer));
-            offer = planBOffer;
-        }
-        logger.debug('SDP offer received, setting remote description');
-        if (pc.signalingState === 'closed') {
-            return callback('PeerConnection is closed');
-        }
-        pc.setRemoteDescription(offer).then(function () {
-            return setRemoteVideo();
-        }).then(function () {
-            return pc.createAnswer();
-        }).then(function (answer) {
-            answer = mangleSdpToAddSimulcast(answer);
-            logger.debug('Created SDP answer');
-            return pc.setLocalDescription(answer);
-        }).then(function () {
-            var localDescription = pc.localDescription;
-            if (multistream && usePlanB) {
-                localDescription = interop.toUnifiedPlan(localDescription);
-                logger.debug('answer::origPlanB->UnifiedPlan', dumpSDP(localDescription));
-            }
-            logger.debug('Local description set\n', localDescription.sdp);
-            callback(null, localDescription.sdp);
-        }).catch(callback);
-    };
-    function mangleSdpToAddSimulcast(answer) {
-        if (simulcast) {
-            if (browser.name === 'Chrome' || browser.name === 'Chromium') {
-                logger.debug('Adding multicast info');
-                answer = new RTCSessionDescription({
-                    'type': answer.type,
-                    'sdp': removeFIDFromOffer(answer.sdp) + getSimulcastInfo(videoStream)
-                });
-            } else {
-                logger.warn('Simulcast is only available in Chrome browser.');
-            }
-        }
-        return answer;
-    }
-    function start() {
-        if (pc.signalingState === 'closed') {
-            callback('The peer connection object is in "closed" state. This is most likely due to an invocation of the dispose method before accepting in the dialogue');
-        }
-        if (videoStream && localVideo) {
-            self.showLocalVideo();
-        }
-        if (videoStream) {
-            videoStream.getTracks().forEach(function (track) {
-                pc.addTrack(track, videoStream);
-            });
-        }
-        if (audioStream) {
-            audioStream.getTracks().forEach(function (track) {
-                pc.addTrack(track, audioStream);
-            });
-        }
-        var browser = parser.getBrowser();
-        if (mode === 'sendonly' && (browser.name === 'Chrome' || browser.name === 'Chromium') && browser.major === 39) {
-            mode = 'sendrecv';
-        }
-        callback();
-    }
-    if (mode !== 'recvonly' && !videoStream && !audioStream) {
-        function getMedia(constraints) {
-            if (constraints === undefined) {
-                constraints = MEDIA_CONSTRAINTS;
-            }
-            if (typeof AdapterJS !== 'undefined' && AdapterJS.webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9) {
-                navigator.getUserMedia(constraints, function (stream) {
-                    videoStream = stream;
-                    start();
-                }, callback);
-            } else {
-                navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-                    videoStream = stream;
-                    start();
-                }).catch(callback);
-            }
-        }
-        if (sendSource === 'webcam') {
-            getMedia(mediaConstraints);
-        } else {
-            getScreenConstraints(sendSource, function (error, constraints_) {
-                if (error)
-                    return callback(error);
-                constraints = [mediaConstraints];
-                constraints.unshift(constraints_);
-                getMedia(recursive.apply(undefined, constraints));
-            }, guid);
-        }
-    } else {
-        setTimeout(start, 0);
-    }
-    this.on('_dispose', function () {
-        if (localVideo) {
-            localVideo.pause();
-            localVideo.srcObject = null;
-            if (typeof AdapterJS === 'undefined') {
-                localVideo.load();
-            }
-            localVideo.muted = false;
-        }
-        if (remoteVideo) {
-            remoteVideo.pause();
-            remoteVideo.srcObject = null;
-            if (typeof AdapterJS === 'undefined') {
-                remoteVideo.load();
-            }
-        }
-        self.removeAllListeners();
-        if (window.cancelChooseDesktopMedia !== undefined) {
-            window.cancelChooseDesktopMedia(guid);
-        }
-    });
-}
-inherits(WebRtcPeer, EventEmitter);
-function createEnableDescriptor(type) {
-    var method = 'get' + type + 'Tracks';
-    return {
-        enumerable: true,
-        get: function () {
-            if (!this.peerConnection)
-                return;
-            var streams = this.peerConnection.getLocalStreams();
-            if (!streams.length)
-                return;
-            for (var i = 0, stream; stream = streams[i]; i++) {
-                var tracks = stream[method]();
-                for (var j = 0, track; track = tracks[j]; j++)
-                    if (!track.enabled)
-                        return false;
-            }
-            return true;
-        },
-        set: function (value) {
-            function trackSetEnable(track) {
-                track.enabled = value;
-            }
-            this.peerConnection.getLocalStreams().forEach(function (stream) {
-                stream[method]().forEach(trackSetEnable);
-            });
-        }
-    };
-}
-Object.defineProperties(WebRtcPeer.prototype, {
-    'enabled': {
-        enumerable: true,
-        get: function () {
-            return this.audioEnabled && this.videoEnabled;
-        },
-        set: function (value) {
-            this.audioEnabled = this.videoEnabled = value;
-        }
-    },
-    'audioEnabled': createEnableDescriptor('Audio'),
-    'videoEnabled': createEnableDescriptor('Video')
-});
-WebRtcPeer.prototype.getLocalStream = function (index) {
-    if (this.peerConnection) {
-        return this.peerConnection.getLocalStreams()[index || 0];
-    }
-};
-WebRtcPeer.prototype.getRemoteStream = function (index) {
-    if (this.peerConnection) {
-        return this.peerConnection.getRemoteStreams()[index || 0];
-    }
-};
-WebRtcPeer.prototype.dispose = function () {
-    logger.debug('Disposing WebRtcPeer');
-    var pc = this.peerConnection;
-    var dc = this.dataChannel;
-    try {
-        if (dc) {
-            if (dc.signalingState === 'closed')
-                return;
-            dc.close();
-        }
-        if (pc) {
-            if (pc.signalingState === 'closed')
-                return;
-            pc.getLocalStreams().forEach(streamStop);
-            pc.close();
-        }
-    } catch (err) {
-        logger.warn('Exception disposing webrtc peer ' + err);
-    }
-    if (typeof AdapterJS === 'undefined') {
-        this.emit('_dispose');
-    }
-};
-function WebRtcPeerRecvonly(options, callback) {
-    if (!(this instanceof WebRtcPeerRecvonly)) {
-        return new WebRtcPeerRecvonly(options, callback);
-    }
-    WebRtcPeerRecvonly.super_.call(this, 'recvonly', options, callback);
-}
-inherits(WebRtcPeerRecvonly, WebRtcPeer);
-function WebRtcPeerSendonly(options, callback) {
-    if (!(this instanceof WebRtcPeerSendonly)) {
-        return new WebRtcPeerSendonly(options, callback);
-    }
-    WebRtcPeerSendonly.super_.call(this, 'sendonly', options, callback);
-}
-inherits(WebRtcPeerSendonly, WebRtcPeer);
-function WebRtcPeerSendrecv(options, callback) {
-    if (!(this instanceof WebRtcPeerSendrecv)) {
-        return new WebRtcPeerSendrecv(options, callback);
-    }
-    WebRtcPeerSendrecv.super_.call(this, 'sendrecv', options, callback);
-}
-inherits(WebRtcPeerSendrecv, WebRtcPeer);
-function harkUtils(stream, options) {
-    return hark(stream, options);
-}
-exports.bufferizeCandidates = bufferizeCandidates;
-exports.WebRtcPeerRecvonly = WebRtcPeerRecvonly;
-exports.WebRtcPeerSendonly = WebRtcPeerSendonly;
-exports.WebRtcPeerSendrecv = WebRtcPeerSendrecv;
-exports.hark = harkUtils;
-exports.browser = browser;
-},{"events":4,"freeice":5,"hark":8,"inherits":9,"kurento-browser-extensions":10,"merge":11,"sdp-translator":18,"ua-parser-js":21,"uuid/v4":24}],2:[function(require,module,exports){
-if (window.addEventListener)
-    module.exports = require('./index');
-},{"./index":3}],3:[function(require,module,exports){
-var WebRtcPeer = require('./WebRtcPeer');
-exports.WebRtcPeer = WebRtcPeer;
-},{"./WebRtcPeer":1}],4:[function(require,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+require('kurento-utils')
+{}
 
-var objectCreate = Object.create || objectCreatePolyfill
-var objectKeys = Object.keys || objectKeysPolyfill
-var bind = Function.prototype.bind || functionBindPolyfill
-
-function EventEmitter() {
-  if (!this._events || !Object.prototype.hasOwnProperty.call(this, '_events')) {
-    this._events = objectCreate(null);
-    this._eventsCount = 0;
-  }
-
-  this._maxListeners = this._maxListeners || undefined;
-}
-module.exports = EventEmitter;
-
-// Backwards-compat with node 0.10.x
-EventEmitter.EventEmitter = EventEmitter;
-
-EventEmitter.prototype._events = undefined;
-EventEmitter.prototype._maxListeners = undefined;
-
-// By default EventEmitters will print a warning if more than 10 listeners are
-// added to it. This is a useful default which helps finding memory leaks.
-var defaultMaxListeners = 10;
-
-var hasDefineProperty;
-try {
-  var o = {};
-  if (Object.defineProperty) Object.defineProperty(o, 'x', { value: 0 });
-  hasDefineProperty = o.x === 0;
-} catch (err) { hasDefineProperty = false }
-if (hasDefineProperty) {
-  Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
-    enumerable: true,
-    get: function() {
-      return defaultMaxListeners;
-    },
-    set: function(arg) {
-      // check whether the input is a positive number (whose value is zero or
-      // greater and not a NaN).
-      if (typeof arg !== 'number' || arg < 0 || arg !== arg)
-        throw new TypeError('"defaultMaxListeners" must be a positive number');
-      defaultMaxListeners = arg;
-    }
-  });
-} else {
-  EventEmitter.defaultMaxListeners = defaultMaxListeners;
-}
-
-// Obviously not all Emitters should be limited to 10. This function allows
-// that to be increased. Set to zero for unlimited.
-EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
-  if (typeof n !== 'number' || n < 0 || isNaN(n))
-    throw new TypeError('"n" argument must be a positive number');
-  this._maxListeners = n;
-  return this;
-};
-
-function $getMaxListeners(that) {
-  if (that._maxListeners === undefined)
-    return EventEmitter.defaultMaxListeners;
-  return that._maxListeners;
-}
-
-EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
-  return $getMaxListeners(this);
-};
-
-// These standalone emit* functions are used to optimize calling of event
-// handlers for fast cases because emit() itself often has a variable number of
-// arguments and can be deoptimized because of that. These functions always have
-// the same number of arguments and thus do not get deoptimized, so the code
-// inside them can execute faster.
-function emitNone(handler, isFn, self) {
-  if (isFn)
-    handler.call(self);
-  else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-    for (var i = 0; i < len; ++i)
-      listeners[i].call(self);
-  }
-}
-function emitOne(handler, isFn, self, arg1) {
-  if (isFn)
-    handler.call(self, arg1);
-  else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-    for (var i = 0; i < len; ++i)
-      listeners[i].call(self, arg1);
-  }
-}
-function emitTwo(handler, isFn, self, arg1, arg2) {
-  if (isFn)
-    handler.call(self, arg1, arg2);
-  else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-    for (var i = 0; i < len; ++i)
-      listeners[i].call(self, arg1, arg2);
-  }
-}
-function emitThree(handler, isFn, self, arg1, arg2, arg3) {
-  if (isFn)
-    handler.call(self, arg1, arg2, arg3);
-  else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-    for (var i = 0; i < len; ++i)
-      listeners[i].call(self, arg1, arg2, arg3);
-  }
-}
-
-function emitMany(handler, isFn, self, args) {
-  if (isFn)
-    handler.apply(self, args);
-  else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-    for (var i = 0; i < len; ++i)
-      listeners[i].apply(self, args);
-  }
-}
-
-EventEmitter.prototype.emit = function emit(type) {
-  var er, handler, len, args, i, events;
-  var doError = (type === 'error');
-
-  events = this._events;
-  if (events)
-    doError = (doError && events.error == null);
-  else if (!doError)
-    return false;
-
-  // If there is no 'error' event listener then throw.
-  if (doError) {
-    if (arguments.length > 1)
-      er = arguments[1];
-    if (er instanceof Error) {
-      throw er; // Unhandled 'error' event
-    } else {
-      // At least give some kind of context to the user
-      var err = new Error('Unhandled "error" event. (' + er + ')');
-      err.context = er;
-      throw err;
-    }
-    return false;
-  }
-
-  handler = events[type];
-
-  if (!handler)
-    return false;
-
-  var isFn = typeof handler === 'function';
-  len = arguments.length;
-  switch (len) {
-      // fast cases
-    case 1:
-      emitNone(handler, isFn, this);
-      break;
-    case 2:
-      emitOne(handler, isFn, this, arguments[1]);
-      break;
-    case 3:
-      emitTwo(handler, isFn, this, arguments[1], arguments[2]);
-      break;
-    case 4:
-      emitThree(handler, isFn, this, arguments[1], arguments[2], arguments[3]);
-      break;
-      // slower
-    default:
-      args = new Array(len - 1);
-      for (i = 1; i < len; i++)
-        args[i - 1] = arguments[i];
-      emitMany(handler, isFn, this, args);
-  }
-
-  return true;
-};
-
-function _addListener(target, type, listener, prepend) {
-  var m;
-  var events;
-  var existing;
-
-  if (typeof listener !== 'function')
-    throw new TypeError('"listener" argument must be a function');
-
-  events = target._events;
-  if (!events) {
-    events = target._events = objectCreate(null);
-    target._eventsCount = 0;
-  } else {
-    // To avoid recursion in the case that type === "newListener"! Before
-    // adding it to the listeners, first emit "newListener".
-    if (events.newListener) {
-      target.emit('newListener', type,
-          listener.listener ? listener.listener : listener);
-
-      // Re-assign `events` because a newListener handler could have caused the
-      // this._events to be assigned to a new object
-      events = target._events;
-    }
-    existing = events[type];
-  }
-
-  if (!existing) {
-    // Optimize the case of one listener. Don't need the extra array object.
-    existing = events[type] = listener;
-    ++target._eventsCount;
-  } else {
-    if (typeof existing === 'function') {
-      // Adding the second element, need to change to array.
-      existing = events[type] =
-          prepend ? [listener, existing] : [existing, listener];
-    } else {
-      // If we've already got an array, just append.
-      if (prepend) {
-        existing.unshift(listener);
-      } else {
-        existing.push(listener);
-      }
-    }
-
-    // Check for listener leak
-    if (!existing.warned) {
-      m = $getMaxListeners(target);
-      if (m && m > 0 && existing.length > m) {
-        existing.warned = true;
-        var w = new Error('Possible EventEmitter memory leak detected. ' +
-            existing.length + ' "' + String(type) + '" listeners ' +
-            'added. Use emitter.setMaxListeners() to ' +
-            'increase limit.');
-        w.name = 'MaxListenersExceededWarning';
-        w.emitter = target;
-        w.type = type;
-        w.count = existing.length;
-        if (typeof console === 'object' && console.warn) {
-          console.warn('%s: %s', w.name, w.message);
-        }
-      }
-    }
-  }
-
-  return target;
-}
-
-EventEmitter.prototype.addListener = function addListener(type, listener) {
-  return _addListener(this, type, listener, false);
-};
-
-EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-EventEmitter.prototype.prependListener =
-    function prependListener(type, listener) {
-      return _addListener(this, type, listener, true);
-    };
-
-function onceWrapper() {
-  if (!this.fired) {
-    this.target.removeListener(this.type, this.wrapFn);
-    this.fired = true;
-    switch (arguments.length) {
-      case 0:
-        return this.listener.call(this.target);
-      case 1:
-        return this.listener.call(this.target, arguments[0]);
-      case 2:
-        return this.listener.call(this.target, arguments[0], arguments[1]);
-      case 3:
-        return this.listener.call(this.target, arguments[0], arguments[1],
-            arguments[2]);
-      default:
-        var args = new Array(arguments.length);
-        for (var i = 0; i < args.length; ++i)
-          args[i] = arguments[i];
-        this.listener.apply(this.target, args);
-    }
-  }
-}
-
-function _onceWrap(target, type, listener) {
-  var state = { fired: false, wrapFn: undefined, target: target, type: type, listener: listener };
-  var wrapped = bind.call(onceWrapper, state);
-  wrapped.listener = listener;
-  state.wrapFn = wrapped;
-  return wrapped;
-}
-
-EventEmitter.prototype.once = function once(type, listener) {
-  if (typeof listener !== 'function')
-    throw new TypeError('"listener" argument must be a function');
-  this.on(type, _onceWrap(this, type, listener));
-  return this;
-};
-
-EventEmitter.prototype.prependOnceListener =
-    function prependOnceListener(type, listener) {
-      if (typeof listener !== 'function')
-        throw new TypeError('"listener" argument must be a function');
-      this.prependListener(type, _onceWrap(this, type, listener));
-      return this;
-    };
-
-// Emits a 'removeListener' event if and only if the listener was removed.
-EventEmitter.prototype.removeListener =
-    function removeListener(type, listener) {
-      var list, events, position, i, originalListener;
-
-      if (typeof listener !== 'function')
-        throw new TypeError('"listener" argument must be a function');
-
-      events = this._events;
-      if (!events)
-        return this;
-
-      list = events[type];
-      if (!list)
-        return this;
-
-      if (list === listener || list.listener === listener) {
-        if (--this._eventsCount === 0)
-          this._events = objectCreate(null);
-        else {
-          delete events[type];
-          if (events.removeListener)
-            this.emit('removeListener', type, list.listener || listener);
-        }
-      } else if (typeof list !== 'function') {
-        position = -1;
-
-        for (i = list.length - 1; i >= 0; i--) {
-          if (list[i] === listener || list[i].listener === listener) {
-            originalListener = list[i].listener;
-            position = i;
-            break;
-          }
-        }
-
-        if (position < 0)
-          return this;
-
-        if (position === 0)
-          list.shift();
-        else
-          spliceOne(list, position);
-
-        if (list.length === 1)
-          events[type] = list[0];
-
-        if (events.removeListener)
-          this.emit('removeListener', type, originalListener || listener);
-      }
-
-      return this;
-    };
-
-EventEmitter.prototype.removeAllListeners =
-    function removeAllListeners(type) {
-      var listeners, events, i;
-
-      events = this._events;
-      if (!events)
-        return this;
-
-      // not listening for removeListener, no need to emit
-      if (!events.removeListener) {
-        if (arguments.length === 0) {
-          this._events = objectCreate(null);
-          this._eventsCount = 0;
-        } else if (events[type]) {
-          if (--this._eventsCount === 0)
-            this._events = objectCreate(null);
-          else
-            delete events[type];
-        }
-        return this;
-      }
-
-      // emit removeListener for all listeners on all events
-      if (arguments.length === 0) {
-        var keys = objectKeys(events);
-        var key;
-        for (i = 0; i < keys.length; ++i) {
-          key = keys[i];
-          if (key === 'removeListener') continue;
-          this.removeAllListeners(key);
-        }
-        this.removeAllListeners('removeListener');
-        this._events = objectCreate(null);
-        this._eventsCount = 0;
-        return this;
-      }
-
-      listeners = events[type];
-
-      if (typeof listeners === 'function') {
-        this.removeListener(type, listeners);
-      } else if (listeners) {
-        // LIFO order
-        for (i = listeners.length - 1; i >= 0; i--) {
-          this.removeListener(type, listeners[i]);
-        }
-      }
-
-      return this;
-    };
-
-function _listeners(target, type, unwrap) {
-  var events = target._events;
-
-  if (!events)
-    return [];
-
-  var evlistener = events[type];
-  if (!evlistener)
-    return [];
-
-  if (typeof evlistener === 'function')
-    return unwrap ? [evlistener.listener || evlistener] : [evlistener];
-
-  return unwrap ? unwrapListeners(evlistener) : arrayClone(evlistener, evlistener.length);
-}
-
-EventEmitter.prototype.listeners = function listeners(type) {
-  return _listeners(this, type, true);
-};
-
-EventEmitter.prototype.rawListeners = function rawListeners(type) {
-  return _listeners(this, type, false);
-};
-
-EventEmitter.listenerCount = function(emitter, type) {
-  if (typeof emitter.listenerCount === 'function') {
-    return emitter.listenerCount(type);
-  } else {
-    return listenerCount.call(emitter, type);
-  }
-};
-
-EventEmitter.prototype.listenerCount = listenerCount;
-function listenerCount(type) {
-  var events = this._events;
-
-  if (events) {
-    var evlistener = events[type];
-
-    if (typeof evlistener === 'function') {
-      return 1;
-    } else if (evlistener) {
-      return evlistener.length;
-    }
-  }
-
-  return 0;
-}
-
-EventEmitter.prototype.eventNames = function eventNames() {
-  return this._eventsCount > 0 ? Reflect.ownKeys(this._events) : [];
-};
-
-// About 1.5x faster than the two-arg version of Array#splice().
-function spliceOne(list, index) {
-  for (var i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1)
-    list[i] = list[k];
-  list.pop();
-}
-
-function arrayClone(arr, n) {
-  var copy = new Array(n);
-  for (var i = 0; i < n; ++i)
-    copy[i] = arr[i];
-  return copy;
-}
-
-function unwrapListeners(arr) {
-  var ret = new Array(arr.length);
-  for (var i = 0; i < ret.length; ++i) {
-    ret[i] = arr[i].listener || arr[i];
-  }
-  return ret;
-}
-
-function objectCreatePolyfill(proto) {
-  var F = function() {};
-  F.prototype = proto;
-  return new F;
-}
-function objectKeysPolyfill(obj) {
-  var keys = [];
-  for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k)) {
-    keys.push(k);
-  }
-  return k;
-}
-function functionBindPolyfill(context) {
-  var fn = this;
-  return function () {
-    return fn.apply(context, arguments);
-  };
-}
-
-},{}],5:[function(require,module,exports){
+},{"kurento-utils":9}],2:[function(require,module,exports){
 /* jshint node: true */
 'use strict';
 
@@ -1265,7 +110,7 @@ var freeice = function(opts) {
 };
 
 module.exports = freeice;
-},{"./stun.json":6,"./turn.json":7,"normalice":12}],6:[function(require,module,exports){
+},{"./stun.json":3,"./turn.json":4,"normalice":11}],3:[function(require,module,exports){
 module.exports=[
   "stun.l.google.com:19302",
   "stun1.l.google.com:19302",
@@ -1282,10 +127,10 @@ module.exports=[
   "stun.voxgratia.org"
 ]
 
-},{}],7:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 module.exports=[]
 
-},{}],8:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var WildEmitter = require('wildemitter');
 
 function getMaxVolume (analyser, fftBins) {
@@ -1430,7 +275,7 @@ module.exports = function(stream, options) {
   return harker;
 }
 
-},{"wildemitter":25}],9:[function(require,module,exports){
+},{"wildemitter":24}],6:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -1459,10 +304,961 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],10:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 // Does nothing at all.
 
-},{}],11:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
+/*
+ * (C) Copyright 2014-2015 Kurento (http://kurento.org/)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+var freeice = require('freeice')
+var inherits = require('inherits')
+var UAParser = require('ua-parser-js')
+var uuidv4 = require('uuid/v4')
+var hark = require('hark')
+
+var EventEmitter = require('events').EventEmitter
+var recursive = require('merge').recursive.bind(undefined, true)
+var sdpTranslator = require('sdp-translator')
+var logger = window.Logger || console
+
+// var gUM = navigator.mediaDevices.getUserMedia || function (constraints) {
+//   return new Promise(navigator.getUserMedia(constraints, function (stream) {
+//     videoStream = stream
+//     start()
+//   }).eror(callback));
+// }
+
+try {
+  require('kurento-browser-extensions')
+} catch (error) {
+  if (typeof getScreenConstraints === 'undefined') {
+    logger.warn('screen sharing is not available')
+
+    getScreenConstraints = function getScreenConstraints(sendSource, callback) {
+      callback(new Error("This library is not enabled for screen sharing"))
+    }
+  }
+}
+
+var MEDIA_CONSTRAINTS = {
+  audio: true,
+  video: {
+    width: 640,
+    framerate: 15
+  }
+}
+
+// Somehow, the UAParser constructor gets an empty window object.
+// We need to pass the user agent string in order to get information
+var ua = (window && window.navigator) ? window.navigator.userAgent : ''
+var parser = new UAParser(ua)
+var browser = parser.getBrowser()
+
+function insertScriptSrcInHtmlDom(scriptSrc) {
+  //Create a script tag
+  var script = document.createElement('script');
+  // Assign a URL to the script element
+  script.src = scriptSrc;
+  // Get the first script tag on the page (we'll insert our new one before it)
+  var ref = document.querySelector('script');
+  // Insert the new node before the reference node
+  ref.parentNode.insertBefore(script, ref);
+}
+
+function importScriptsDependsOnBrowser() {
+  if (browser.name === 'IE') {
+    insertScriptSrcInHtmlDom(
+      "https://cdn.temasys.io/adapterjs/0.15.x/adapter.debug.js");
+  }
+}
+
+importScriptsDependsOnBrowser();
+var usePlanB = false
+if (browser.name === 'Chrome' || browser.name === 'Chromium') {
+  logger.debug(browser.name + ": using SDP PlanB")
+  usePlanB = true
+}
+
+function noop(error) {
+  if (error) logger.error(error)
+}
+
+function trackStop(track) {
+  track.stop && track.stop()
+}
+
+function streamStop(stream) {
+  stream.getTracks().forEach(trackStop)
+}
+
+/**
+ * Returns a string representation of a SessionDescription object.
+ */
+var dumpSDP = function (description) {
+  if (typeof description === 'undefined' || description === null) {
+    return ''
+  }
+
+  return 'type: ' + description.type + '\r\n' + description.sdp
+}
+
+function bufferizeCandidates(pc, onerror) {
+  var candidatesQueue = []
+
+  function setSignalingstatechangeAccordingWwebBrowser(functionToExecute, pc) {
+    if (typeof AdapterJS !== 'undefined' && AdapterJS.webrtcDetectedBrowser ===
+      'IE' && AdapterJS.webrtcDetectedVersion >= 9) {
+      pc.onsignalingstatechange = functionToExecute;
+    } else {
+      pc.addEventListener('signalingstatechange', functionToExecute);
+    }
+
+  }
+
+  var signalingstatechangeFunction = function () {
+    if (pc.signalingState === 'stable') {
+      while (candidatesQueue.length) {
+        var entry = candidatesQueue.shift();
+        pc.addIceCandidate(entry.candidate, entry.callback, entry.callback);
+      }
+    }
+  };
+
+  setSignalingstatechangeAccordingWwebBrowser(signalingstatechangeFunction, pc);
+  return function (candidate, callback) {
+    callback = callback || onerror;
+    switch (pc.signalingState) {
+    case 'closed':
+      callback(new Error('PeerConnection object is closed'));
+      break;
+    case 'stable':
+      if (pc.remoteDescription) {
+        pc.addIceCandidate(candidate, callback, callback);
+        break;
+
+      }
+      default:
+        candidatesQueue.push({
+          candidate: candidate,
+          callback: callback
+
+        });
+    }
+  };
+}
+
+/* Simulcast utilities */
+
+function removeFIDFromOffer(sdp) {
+  var n = sdp.indexOf("a=ssrc-group:FID");
+
+  if (n > 0) {
+    return sdp.slice(0, n);
+  } else {
+    return sdp;
+  }
+}
+
+function getSimulcastInfo(videoStream) {
+  var videoTracks = videoStream.getVideoTracks();
+  if (!videoTracks.length) {
+    logger.warn('No video tracks available in the video stream')
+    return ''
+  }
+  var lines = [
+    'a=x-google-flag:conference',
+    'a=ssrc-group:SIM 1 2 3',
+    'a=ssrc:1 cname:localVideo',
+    'a=ssrc:1 msid:' + videoStream.id + ' ' + videoTracks[0].id,
+    'a=ssrc:1 mslabel:' + videoStream.id,
+    'a=ssrc:1 label:' + videoTracks[0].id,
+    'a=ssrc:2 cname:localVideo',
+    'a=ssrc:2 msid:' + videoStream.id + ' ' + videoTracks[0].id,
+    'a=ssrc:2 mslabel:' + videoStream.id,
+    'a=ssrc:2 label:' + videoTracks[0].id,
+    'a=ssrc:3 cname:localVideo',
+    'a=ssrc:3 msid:' + videoStream.id + ' ' + videoTracks[0].id,
+    'a=ssrc:3 mslabel:' + videoStream.id,
+    'a=ssrc:3 label:' + videoTracks[0].id
+  ];
+
+  lines.push('');
+
+  return lines.join('\n');
+}
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds) {
+      break;
+    }
+  }
+}
+
+function setIceCandidateAccordingWebBrowser(functionToExecute, pc) {
+  if (typeof AdapterJS !== 'undefined' && AdapterJS.webrtcDetectedBrowser ===
+    'IE' && AdapterJS.webrtcDetectedVersion >= 9) {
+    pc.onicecandidate = functionToExecute;
+  } else {
+    pc.addEventListener('icecandidate', functionToExecute);
+  }
+
+}
+
+/**
+ * Wrapper object of an RTCPeerConnection. This object is aimed to simplify the
+ * development of WebRTC-based applications.
+ *
+ * @constructor module:kurentoUtils.WebRtcPeer
+ *
+ * @param {String} mode Mode in which the PeerConnection will be configured.
+ *  Valid values are: 'recvonly', 'sendonly', and 'sendrecv'
+ * @param localVideo Video tag for the local stream
+ * @param remoteVideo Video tag for the remote stream
+ * @param {MediaStream} videoStream Stream to be used as primary source
+ *  (typically video and audio, or only video if combined with audioStream) for
+ *  localVideo and to be added as stream to the RTCPeerConnection
+ * @param {MediaStream} audioStream Stream to be used as second source
+ *  (typically for audio) for localVideo and to be added as stream to the
+ *  RTCPeerConnection
+ */
+function WebRtcPeer(mode, options, callback) {
+  if (!(this instanceof WebRtcPeer)) {
+    return new WebRtcPeer(mode, options, callback)
+  }
+
+  WebRtcPeer.super_.call(this)
+
+  if (options instanceof Function) {
+    callback = options
+    options = undefined
+  }
+
+  options = options || {}
+  callback = (callback || noop).bind(this)
+
+  var self = this
+  var localVideo = options.localVideo
+  var remoteVideo = options.remoteVideo
+  var videoStream = options.videoStream
+  var audioStream = options.audioStream
+  var mediaConstraints = options.mediaConstraints
+
+  var connectionConstraints = options.connectionConstraints
+  var pc = options.peerConnection
+  var sendSource = options.sendSource || 'webcam'
+
+  var dataChannelConfig = options.dataChannelConfig
+  var useDataChannels = options.dataChannels || false
+  var dataChannel
+
+  var guid = uuidv4()
+  var configuration = recursive({
+      iceServers: freeice()
+    },
+    options.configuration)
+
+  var onicecandidate = options.onicecandidate
+  if (onicecandidate) this.on('icecandidate', onicecandidate)
+
+  var oncandidategatheringdone = options.oncandidategatheringdone
+  if (oncandidategatheringdone) {
+    this.on('candidategatheringdone', oncandidategatheringdone)
+  }
+
+  var simulcast = options.simulcast
+  var multistream = options.multistream
+  var interop = new sdpTranslator.Interop()
+  var candidatesQueueOut = []
+  var candidategatheringdone = false
+
+  Object.defineProperties(this, {
+    'peerConnection': {
+      get: function () {
+        return pc
+      }
+    },
+
+    'id': {
+      value: options.id || guid,
+      writable: false
+    },
+
+    'remoteVideo': {
+      get: function () {
+        return remoteVideo
+      }
+    },
+
+    'localVideo': {
+      get: function () {
+        return localVideo
+      }
+    },
+
+    'dataChannel': {
+      get: function () {
+        return dataChannel
+      }
+    },
+
+    /**
+     * @member {(external:ImageData|undefined)} currentFrame
+     */
+    'currentFrame': {
+      get: function () {
+        // [ToDo] Find solution when we have a remote stream but we didn't set
+        // a remoteVideo tag
+        if (!remoteVideo) return;
+
+        if (remoteVideo.readyState < remoteVideo.HAVE_CURRENT_DATA)
+          throw new Error('No video stream data available')
+
+        var canvas = document.createElement('canvas')
+        canvas.width = remoteVideo.videoWidth
+        canvas.height = remoteVideo.videoHeight
+
+        canvas.getContext('2d').drawImage(remoteVideo, 0, 0)
+
+        return canvas
+      }
+    }
+  })
+
+  // Init PeerConnection
+  if (!pc) {
+    pc = new RTCPeerConnection(configuration);
+    if (useDataChannels && !dataChannel) {
+      var dcId = 'WebRtcPeer-' + self.id
+      var dcOptions = undefined
+      if (dataChannelConfig) {
+        dcId = dataChannelConfig.id || dcId
+        dcOptions = dataChannelConfig.options
+      }
+      dataChannel = pc.createDataChannel(dcId, dcOptions);
+      if (dataChannelConfig) {
+        dataChannel.onopen = dataChannelConfig.onopen;
+        dataChannel.onclose = dataChannelConfig.onclose;
+        dataChannel.onmessage = dataChannelConfig.onmessage;
+        dataChannel.onbufferedamountlow = dataChannelConfig.onbufferedamountlow;
+        dataChannel.onerror = dataChannelConfig.onerror || noop;
+      }
+    }
+  }
+
+  // Shims over the now deprecated getLocalStreams() and getRemoteStreams()
+  // (usage of these methods should be dropped altogether)
+  if (!pc.getLocalStreams && pc.getSenders) {
+    pc.getLocalStreams = function () {
+      var stream = new MediaStream();
+      pc.getSenders().forEach(function (sender) {
+        stream.addTrack(sender.track);
+      });
+      return [stream];
+    };
+  }
+  if (!pc.getRemoteStreams && pc.getReceivers) {
+    pc.getRemoteStreams = function () {
+      var stream = new MediaStream();
+      pc.getReceivers().forEach(function (sender) {
+        stream.addTrack(sender.track);
+      });
+      return [stream];
+    };
+  }
+
+  var iceCandidateFunction = function (event) {
+    var candidate = event.candidate;
+    if (EventEmitter.listenerCount(self, 'icecandidate') || EventEmitter
+      .listenerCount(self, 'candidategatheringdone')) {
+      if (candidate) {
+        var cand;
+        if (multistream && usePlanB) {
+          cand = interop.candidateToUnifiedPlan(candidate);
+        } else {
+          cand = candidate;
+        }
+        if (typeof AdapterJS === 'undefined') {
+          self.emit('icecandidate', cand);
+
+        }
+        candidategatheringdone = false;
+      } else if (!candidategatheringdone) {
+        if (typeof AdapterJS !== 'undefined' && AdapterJS
+          .webrtcDetectedBrowser === 'IE' && AdapterJS
+          .webrtcDetectedVersion >= 9) {
+          EventEmitter.prototype.emit('candidategatheringdone', cand);
+        } else {
+          self.emit('candidategatheringdone');
+        }
+        candidategatheringdone = true;
+      }
+    } else if (!candidategatheringdone) {
+      candidatesQueueOut.push(candidate);
+      if (!candidate)
+        candidategatheringdone = true;
+
+    }
+  };
+
+  setIceCandidateAccordingWebBrowser(iceCandidateFunction, pc);
+  pc.onaddstream = options.onaddstream
+  pc.onnegotiationneeded = options.onnegotiationneeded
+  this.on('newListener', function (event, listener) {
+    if (event === 'icecandidate' || event === 'candidategatheringdone') {
+      while (candidatesQueueOut.length) {
+        var candidate = candidatesQueueOut.shift()
+
+        if (!candidate === (event === 'candidategatheringdone')) {
+          listener(candidate)
+        }
+      }
+    }
+  })
+
+  var addIceCandidate = bufferizeCandidates(pc)
+
+  /**
+   * Callback function invoked when an ICE candidate is received. Developers are
+   * expected to invoke this function in order to complete the SDP negotiation.
+   *
+   * @function module:kurentoUtils.WebRtcPeer.prototype.addIceCandidate
+   *
+   * @param iceCandidate - Literal object with the ICE candidate description
+   * @param callback - Called when the ICE candidate has been added.
+   */
+  this.addIceCandidate = function (iceCandidate, callback) {
+    var candidate
+
+    if (multistream && usePlanB) {
+      candidate = interop.candidateToPlanB(iceCandidate)
+    } else {
+      candidate = new RTCIceCandidate(iceCandidate)
+    }
+
+    logger.debug('Remote ICE candidate received', iceCandidate)
+    callback = (callback || noop).bind(this)
+    addIceCandidate(candidate, callback)
+  }
+
+  this.generateOffer = function (callback) {
+    callback = callback.bind(this)
+
+    if (mode === 'recvonly') {
+      /* Add reception tracks on the RTCPeerConnection. Send tracks are
+       * unconditionally added to "sendonly" and "sendrecv" modes, in the
+       * constructor's "start()" method, but nothing is done for "recvonly".
+       *
+       * Here, we add new transceivers to receive audio and/or video, so the
+       * SDP Offer that will be generated by the PC includes these medias
+       * with the "a=recvonly" attribute.
+       */
+      var useAudio =
+        (mediaConstraints && typeof mediaConstraints.audio === 'boolean') ?
+        mediaConstraints.audio : true
+      var useVideo =
+        (mediaConstraints && typeof mediaConstraints.video === 'boolean') ?
+        mediaConstraints.video : true
+
+      if (useAudio) {
+        pc.addTransceiver('audio', {
+          direction: 'recvonly'
+        });
+      }
+
+      if (useVideo) {
+        pc.addTransceiver('video', {
+          direction: 'recvonly'
+        });
+      }
+    }
+
+    if (typeof AdapterJS !== 'undefined' && AdapterJS
+      .webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9
+    ) {
+      var setLocalDescriptionOnSuccess = function () {
+        sleep(1000);
+        var localDescription = pc.localDescription;
+        logger.debug('Local description set\n', localDescription.sdp);
+        if (multistream && usePlanB) {
+          localDescription = interop.toUnifiedPlan(localDescription);
+          logger.debug('offer::origPlanB->UnifiedPlan', dumpSDP(
+            localDescription));
+        }
+        callback(null, localDescription.sdp, self.processAnswer.bind(self));
+      };
+      var createOfferOnSuccess = function (offer) {
+        logger.debug('Created SDP offer');
+        logger.debug('Local description set\n', pc.localDescription);
+        pc.setLocalDescription(offer, setLocalDescriptionOnSuccess,
+          callback);
+      };
+      pc.createOffer(createOfferOnSuccess, callback);
+    } else {
+      pc.createOffer()
+        .then(function (offer) {
+          logger.debug('Created SDP offer');
+          offer = mangleSdpToAddSimulcast(offer);
+          return pc.setLocalDescription(offer);
+        })
+        .then(function () {
+          var localDescription = pc.localDescription;
+          logger.debug('Local description set\n', localDescription.sdp);
+          if (multistream && usePlanB) {
+            localDescription = interop.toUnifiedPlan(localDescription);
+            logger.debug('offer::origPlanB->UnifiedPlan', dumpSDP(
+              localDescription));
+          }
+          callback(null, localDescription.sdp, self.processAnswer.bind(
+            self));
+        })
+        .catch(callback);
+    }
+  }
+
+  this.getLocalSessionDescriptor = function () {
+    return pc.localDescription
+  }
+
+  this.getRemoteSessionDescriptor = function () {
+    return pc.remoteDescription
+  }
+
+  function setRemoteVideo() {
+    if (remoteVideo) {
+      remoteVideo.pause()
+
+      var stream = pc.getRemoteStreams()[0]
+      remoteVideo.srcObject = stream
+      logger.debug('Remote stream:', stream)
+
+      if (typeof AdapterJS !== 'undefined' && AdapterJS
+        .webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9
+      ) {
+        remoteVideo = attachMediaStream(remoteVideo, stream);
+      } else {
+        remoteVideo.load();
+      }
+    }
+  }
+
+  this.showLocalVideo = function () {
+    localVideo.srcObject = videoStream
+    localVideo.muted = true
+
+    if (typeof AdapterJS !== 'undefined' && AdapterJS
+      .webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9
+    ) {
+      localVideo = attachMediaStream(localVideo, videoStream);
+    }
+  };
+  this.send = function (data) {
+    if (dataChannel && dataChannel.readyState === 'open') {
+      dataChannel.send(data)
+    } else {
+      logger.warn(
+        'Trying to send data over a non-existing or closed data channel')
+    }
+  }
+
+  /**
+   * Callback function invoked when a SDP answer is received. Developers are
+   * expected to invoke this function in order to complete the SDP negotiation.
+   *
+   * @function module:kurentoUtils.WebRtcPeer.prototype.processAnswer
+   *
+   * @param sdpAnswer - Description of sdpAnswer
+   * @param callback -
+   *            Invoked after the SDP answer is processed, or there is an error.
+   */
+  this.processAnswer = function (sdpAnswer, callback) {
+    callback = (callback || noop).bind(this)
+
+    var answer = new RTCSessionDescription({
+      type: 'answer',
+      sdp: sdpAnswer
+    })
+
+    if (multistream && usePlanB) {
+      var planBAnswer = interop.toPlanB(answer)
+      logger.debug('asnwer::planB', dumpSDP(planBAnswer))
+      answer = planBAnswer
+    }
+
+    logger.debug('SDP answer received, setting remote description')
+
+    if (pc.signalingState === 'closed') {
+      return callback('PeerConnection is closed')
+    }
+
+    pc.setRemoteDescription(answer, function () {
+        setRemoteVideo()
+
+        callback()
+      },
+      callback)
+  }
+
+  /**
+   * Callback function invoked when a SDP offer is received. Developers are
+   * expected to invoke this function in order to complete the SDP negotiation.
+   *
+   * @function module:kurentoUtils.WebRtcPeer.prototype.processOffer
+   *
+   * @param sdpOffer - Description of sdpOffer
+   * @param callback - Called when the remote description has been set
+   *  successfully.
+   */
+  this.processOffer = function (sdpOffer, callback) {
+    callback = callback.bind(this)
+
+    var offer = new RTCSessionDescription({
+      type: 'offer',
+      sdp: sdpOffer
+    })
+
+    if (multistream && usePlanB) {
+      var planBOffer = interop.toPlanB(offer)
+      logger.debug('offer::planB', dumpSDP(planBOffer))
+      offer = planBOffer
+    }
+
+    logger.debug('SDP offer received, setting remote description')
+
+    if (pc.signalingState === 'closed') {
+      return callback('PeerConnection is closed')
+    }
+
+    pc.setRemoteDescription(offer).then(function () {
+      return setRemoteVideo()
+    }).then(function () {
+      return pc.createAnswer()
+    }).then(function (answer) {
+      answer = mangleSdpToAddSimulcast(answer)
+      logger.debug('Created SDP answer')
+      return pc.setLocalDescription(answer)
+    }).then(function () {
+      var localDescription = pc.localDescription
+      if (multistream && usePlanB) {
+        localDescription = interop.toUnifiedPlan(localDescription)
+        logger.debug('answer::origPlanB->UnifiedPlan', dumpSDP(
+          localDescription))
+      }
+      logger.debug('Local description set\n', localDescription.sdp)
+      callback(null, localDescription.sdp)
+    }).catch(callback)
+  }
+
+  function mangleSdpToAddSimulcast(answer) {
+    if (simulcast) {
+      if (browser.name === 'Chrome' || browser.name === 'Chromium') {
+        logger.debug('Adding multicast info')
+        answer = new RTCSessionDescription({
+          'type': answer.type,
+          'sdp': removeFIDFromOffer(answer.sdp) + getSimulcastInfo(
+            videoStream)
+        })
+      } else {
+        logger.warn('Simulcast is only available in Chrome browser.')
+      }
+    }
+
+    return answer
+  }
+
+  /**
+   * This function creates the RTCPeerConnection object taking into account the
+   * properties received in the constructor. It starts the SDP negotiation
+   * process: generates the SDP offer and invokes the onsdpoffer callback. This
+   * callback is expected to send the SDP offer, in order to obtain an SDP
+   * answer from another peer.
+   */
+  function start() {
+    if (pc.signalingState === 'closed') {
+      callback(
+        'The peer connection object is in "closed" state. This is most likely due to an invocation of the dispose method before accepting in the dialogue'
+      )
+    }
+
+    if (videoStream && localVideo) {
+      self.showLocalVideo()
+    }
+
+    if (videoStream) {
+      videoStream.getTracks().forEach(function (track) {
+        pc.addTrack(track, videoStream);
+      });
+    }
+
+    if (audioStream) {
+      audioStream.getTracks().forEach(function (track) {
+        pc.addTrack(track, audioStream);
+      });
+    }
+
+    // [Hack] https://code.google.com/p/chromium/issues/detail?id=443558
+    var browser = parser.getBrowser()
+    if (mode === 'sendonly' &&
+      (browser.name === 'Chrome' || browser.name === 'Chromium') &&
+      browser.major === 39) {
+      mode = 'sendrecv'
+    }
+
+    callback()
+  }
+
+  if (mode !== 'recvonly' && !videoStream && !audioStream) {
+    function getMedia(constraints) {
+      if (constraints === undefined) {
+        constraints = MEDIA_CONSTRAINTS
+      }
+      if (typeof AdapterJS !== 'undefined' && AdapterJS
+        .webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9
+      ) {
+        navigator.getUserMedia(constraints, function (stream) {
+          videoStream = stream;
+          start();
+        }, callback);
+      } else {
+        navigator.mediaDevices.getUserMedia(constraints).then(function (
+          stream) {
+          videoStream = stream;
+
+          start();
+        }).catch(callback);
+      }
+    }
+    if (sendSource === 'webcam') {
+      getMedia(mediaConstraints)
+    } else {
+      getScreenConstraints(sendSource, function (error, constraints_) {
+        if (error)
+          return callback(error)
+
+        constraints = [mediaConstraints]
+        constraints.unshift(constraints_)
+        getMedia(recursive.apply(undefined, constraints))
+      }, guid)
+    }
+  } else {
+    setTimeout(start, 0)
+  }
+
+  this.on('_dispose', function () {
+    if (localVideo) {
+      localVideo.pause();
+      localVideo.srcObject = null;
+
+      if (typeof AdapterJS === 'undefined') {
+        localVideo.load();
+      }
+      localVideo.muted = false;
+
+    }
+    if (remoteVideo) {
+      remoteVideo.pause();
+      remoteVideo.srcObject = null;
+      if (typeof AdapterJS === 'undefined') {
+        remoteVideo.load();
+
+      }
+    }
+    self.removeAllListeners();
+
+    if (window.cancelChooseDesktopMedia !== undefined) {
+      window.cancelChooseDesktopMedia(guid)
+    }
+  })
+}
+inherits(WebRtcPeer, EventEmitter)
+
+function createEnableDescriptor(type) {
+  var method = 'get' + type + 'Tracks'
+
+  return {
+    enumerable: true,
+    get: function () {
+      // [ToDo] Should return undefined if not all tracks have the same value?
+
+      if (!this.peerConnection) return
+
+      var streams = this.peerConnection.getLocalStreams()
+      if (!streams.length) return
+
+      for (var i = 0, stream; stream = streams[i]; i++) {
+        var tracks = stream[method]()
+        for (var j = 0, track; track = tracks[j]; j++)
+          if (!track.enabled) return false
+      }
+
+      return true
+    },
+    set: function (value) {
+      function trackSetEnable(track) {
+        track.enabled = value
+      }
+
+      this.peerConnection.getLocalStreams().forEach(function (stream) {
+        stream[method]().forEach(trackSetEnable)
+      })
+    }
+  }
+}
+
+Object.defineProperties(WebRtcPeer.prototype, {
+  'enabled': {
+    enumerable: true,
+    get: function () {
+      return this.audioEnabled && this.videoEnabled
+    },
+    set: function (value) {
+      this.audioEnabled = this.videoEnabled = value
+    }
+  },
+  'audioEnabled': createEnableDescriptor('Audio'),
+  'videoEnabled': createEnableDescriptor('Video')
+})
+
+WebRtcPeer.prototype.getLocalStream = function (index) {
+  if (this.peerConnection) {
+    return this.peerConnection.getLocalStreams()[index || 0]
+  }
+}
+
+WebRtcPeer.prototype.getRemoteStream = function (index) {
+  if (this.peerConnection) {
+    return this.peerConnection.getRemoteStreams()[index || 0]
+  }
+}
+
+/**
+ * @description This method frees the resources used by WebRtcPeer.
+ *
+ * @function module:kurentoUtils.WebRtcPeer.prototype.dispose
+ */
+WebRtcPeer.prototype.dispose = function () {
+  logger.debug('Disposing WebRtcPeer')
+
+  var pc = this.peerConnection
+  var dc = this.dataChannel
+  try {
+    if (dc) {
+      if (dc.signalingState === 'closed') return
+
+      dc.close()
+    }
+
+    if (pc) {
+      if (pc.signalingState === 'closed') return
+
+      pc.getLocalStreams().forEach(streamStop)
+
+      // FIXME This is not yet implemented in firefox
+      // if(videoStream) pc.removeStream(videoStream);
+      // if(audioStream) pc.removeStream(audioStream);
+
+      pc.close()
+    }
+  } catch (err) {
+    logger.warn('Exception disposing webrtc peer ' + err)
+  }
+
+  if (typeof AdapterJS === 'undefined') {
+    this.emit('_dispose');
+  }
+
+}
+
+//
+// Specialized child classes
+//
+
+function WebRtcPeerRecvonly(options, callback) {
+  if (!(this instanceof WebRtcPeerRecvonly)) {
+    return new WebRtcPeerRecvonly(options, callback)
+  }
+
+  WebRtcPeerRecvonly.super_.call(this, 'recvonly', options, callback)
+}
+inherits(WebRtcPeerRecvonly, WebRtcPeer)
+
+function WebRtcPeerSendonly(options, callback) {
+  if (!(this instanceof WebRtcPeerSendonly)) {
+    return new WebRtcPeerSendonly(options, callback)
+  }
+
+  WebRtcPeerSendonly.super_.call(this, 'sendonly', options, callback)
+}
+inherits(WebRtcPeerSendonly, WebRtcPeer)
+
+function WebRtcPeerSendrecv(options, callback) {
+  if (!(this instanceof WebRtcPeerSendrecv)) {
+    return new WebRtcPeerSendrecv(options, callback)
+  }
+
+  WebRtcPeerSendrecv.super_.call(this, 'sendrecv', options, callback)
+}
+inherits(WebRtcPeerSendrecv, WebRtcPeer)
+
+function harkUtils(stream, options) {
+  return hark(stream, options);
+}
+
+exports.bufferizeCandidates = bufferizeCandidates
+
+exports.WebRtcPeerRecvonly = WebRtcPeerRecvonly
+exports.WebRtcPeerSendonly = WebRtcPeerSendonly
+exports.WebRtcPeerSendrecv = WebRtcPeerSendrecv
+exports.hark = harkUtils
+
+},{"events":undefined,"freeice":2,"hark":5,"inherits":6,"kurento-browser-extensions":7,"merge":10,"sdp-translator":17,"ua-parser-js":20,"uuid/v4":23}],9:[function(require,module,exports){
+/*
+ * (C) Copyright 2014 Kurento (http://kurento.org/)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+/**
+ * This module contains a set of reusable components that have been found useful
+ * during the development of the WebRTC applications with Kurento.
+ * 
+ * @module kurentoUtils
+ * 
+ * @copyright 2014 Kurento (http://kurento.org/)
+ * @license ALv2
+ */
+
+var WebRtcPeer = require('./WebRtcPeer');
+
+exports.WebRtcPeer = WebRtcPeer;
+
+},{"./WebRtcPeer":8}],10:[function(require,module,exports){
 /*!
  * @name JavaScript/NodeJS Merge v1.2.1
  * @author yeikos
@@ -1640,7 +1436,7 @@ if (typeof Object.create === 'function') {
 	}
 
 })(typeof module === 'object' && module && typeof module.exports === 'object' && module.exports);
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /**
   # normalice
 
@@ -1702,7 +1498,7 @@ module.exports = function(input) {
   return output;
 };
 
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var grammar = module.exports = {
   v: [{
       name: 'version',
@@ -1961,7 +1757,7 @@ Object.keys(grammar).forEach(function (key) {
   });
 });
 
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var parser = require('./parser');
 var writer = require('./writer');
 
@@ -1971,7 +1767,7 @@ exports.parseFmtpConfig = parser.parseFmtpConfig;
 exports.parsePayloads = parser.parsePayloads;
 exports.parseRemoteCandidates = parser.parseRemoteCandidates;
 
-},{"./parser":15,"./writer":16}],15:[function(require,module,exports){
+},{"./parser":14,"./writer":15}],14:[function(require,module,exports){
 var toIntIfInt = function (v) {
   return String(Number(v)) === v ? Number(v) : v;
 };
@@ -2066,7 +1862,7 @@ exports.parseRemoteCandidates = function (str) {
   return candidates;
 };
 
-},{"./grammar":13}],16:[function(require,module,exports){
+},{"./grammar":12}],15:[function(require,module,exports){
 var grammar = require('./grammar');
 
 // customized util.format - discards excess arguments and can void middle ones
@@ -2182,7 +1978,7 @@ module.exports = function (session, opts) {
   return sdp.join('\r\n') + '\r\n';
 };
 
-},{"./grammar":13}],17:[function(require,module,exports){
+},{"./grammar":12}],16:[function(require,module,exports){
 /* Copyright @ 2015 Atlassian Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -2223,7 +2019,7 @@ module.exports = function arrayEquals(array) {
 };
 
 
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /* Copyright @ 2015 Atlassian Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -2241,7 +2037,7 @@ module.exports = function arrayEquals(array) {
 
 exports.Interop = require('./interop');
 
-},{"./interop":19}],19:[function(require,module,exports){
+},{"./interop":18}],18:[function(require,module,exports){
 /* Copyright @ 2015 Atlassian Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -3126,7 +2922,7 @@ Interop.prototype.toUnifiedPlan = function(desc) {
     //#endregion
 };
 
-},{"./array-equals":17,"./transform":20}],20:[function(require,module,exports){
+},{"./array-equals":16,"./transform":19}],19:[function(require,module,exports){
 /* Copyright @ 2015 Atlassian Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -3240,7 +3036,7 @@ exports.parse = function(sdp) {
 };
 
 
-},{"sdp-transform":14}],21:[function(require,module,exports){
+},{"sdp-transform":13}],20:[function(require,module,exports){
 /*!
  * UAParser.js v0.7.21
  * Lightweight JavaScript-based User-Agent string parser
@@ -4150,7 +3946,7 @@ exports.parse = function(sdp) {
 
 })(typeof window === 'object' ? window : this);
 
-},{}],22:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /**
  * Convert array of 16 byte values to UUID string format of the form:
  * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
@@ -4178,7 +3974,7 @@ function bytesToUuid(buf, offset) {
 
 module.exports = bytesToUuid;
 
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 // Unique ID creation requires a high quality random # generator.  In the
 // browser this is a little complicated due to unknown quality of Math.random()
 // and inconsistent support for the `crypto` API.  We do the best we can via
@@ -4214,7 +4010,7 @@ if (getRandomValues) {
   };
 }
 
-},{}],24:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 var rng = require('./lib/rng');
 var bytesToUuid = require('./lib/bytesToUuid');
 
@@ -4245,7 +4041,7 @@ function v4(options, buf, offset) {
 
 module.exports = v4;
 
-},{"./lib/bytesToUuid":22,"./lib/rng":23}],25:[function(require,module,exports){
+},{"./lib/bytesToUuid":21,"./lib/rng":22}],24:[function(require,module,exports){
 /*
 WildEmitter.js is a slim little event emitter by @henrikjoreteg largely based
 on @visionmedia's Emitter from UI Kit.
@@ -4402,5 +4198,5 @@ WildEmitter.mixin = function (constructor) {
 
 WildEmitter.mixin(WildEmitter);
 
-},{}]},{},[2])(2)
+},{}]},{},[1])(1)
 });
