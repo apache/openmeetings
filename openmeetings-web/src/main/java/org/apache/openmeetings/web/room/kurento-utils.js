@@ -7,7 +7,7 @@ var hark = require('hark');
 var EventEmitter = require('events').EventEmitter;
 var recursive = require('merge').recursive.bind(undefined, true);
 var sdpTranslator = require('sdp-translator');
-var logger = window.Logger || console;
+var logger = typeof window === 'undefined' ? console : window.Logger || console;
 try {
     require('kurento-browser-extensions');
 } catch (error) {
@@ -25,7 +25,7 @@ var MEDIA_CONSTRAINTS = {
             framerate: 15
         }
     };
-var ua = window && window.navigator ? window.navigator.userAgent : '';
+var ua = typeof window !== 'undefined' && window.navigator ? window.navigator.userAgent : '';
 var parser = new UAParser(ua);
 var browser = parser.getBrowser();
 var usePlanB = false;
@@ -151,7 +151,6 @@ function WebRtcPeer(mode, options, callback) {
     var videoStream = options.videoStream;
     var audioStream = options.audioStream;
     var mediaConstraints = options.mediaConstraints;
-    var connectionConstraints = options.connectionConstraints;
     var pc = options.peerConnection;
     var sendSource = options.sendSource || 'webcam';
     var dataChannelConfig = options.dataChannelConfig;
@@ -393,7 +392,7 @@ function WebRtcPeer(mode, options, callback) {
         if (pc.signalingState === 'closed') {
             return callback('PeerConnection is closed');
         }
-        pc.setRemoteDescription(answer, function () {
+        pc.setRemoteDescription(answer).then(function () {
             setRemoteVideo();
             callback();
         }, callback);
@@ -516,7 +515,7 @@ function WebRtcPeer(mode, options, callback) {
             }
         }
         self.removeAllListeners();
-        if (window.cancelChooseDesktopMedia !== undefined) {
+        if (typeof window !== 'undefined' && window.cancelChooseDesktopMedia !== undefined) {
             window.cancelChooseDesktopMedia(guid);
         }
     });
@@ -579,7 +578,7 @@ WebRtcPeer.prototype.dispose = function () {
     var dc = this.dataChannel;
     try {
         if (dc) {
-            if (dc.signalingState === 'closed')
+            if (dc.readyState === 'closed')
                 return;
             dc.close();
         }
