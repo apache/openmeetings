@@ -155,6 +155,7 @@
 			<div wicket:message="title:72" class="clickable om-icon big pointer"></div>
 			<div wicket:message="title:557" class="clickable om-icon big apointer"></div>
 			<div wicket:message="title:wb.tool.math.formula" class="clickable om-icon big math"></div>
+			<div wicket:message="title:wb.tool.dweet" class="clickable om-icon big dweet"></div>
 			<div wicket:message="title:843" class="clickable om-icon big settings"></div>
 		</div>
 		<div id="wb-tools-readonly">
@@ -205,6 +206,34 @@
 			<div>
 				<a class="latex-guide" wicket:message="href:wb.tool.math.guide.url" target="_blank"><wicket:message key="wb.tool.math.guide.lbl"/></a>
 				<button class="update-btn"><wicket:message key="lbl.update"/></button>
+			</div>
+			<div class="status"></div>
+		</div>
+		<div id="wb-dweet" class="wb-formula ui-corner-all ui-widget-content">
+			<div wicket:message="title:wb.tool.dweet" class="header ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle">
+				<span class="ui-dialog-title"><wicket:message key="wb.tool.dweet"/></span>
+			</div>
+			<button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" wicket:message="title:85">
+				<span class="ui-button-icon ui-icon ui-icon-closethick"></span>
+				<span class="ui-button-icon-space"> </span>
+				<wicket:message key="85"/>
+			</button>
+			<div>
+				<div class="text-container">
+					<div class="block lbl" wicket:message="title:wb.tool.dweet"><wicket:message key="wb.tool.dweet.param1"/></div>
+					<div class="block input"><input class="wb-dim-x" type="text" /></div>
+				</div>
+				<div class="text-container">
+					<div class="block lbl" wicket:message="title:wb.tool.dweet"><wicket:message key="wb.tool.dweet.param2"/></div>
+					<div class="block input"><input class="wb-dim-x" type="text" /></div>
+				</div>
+				<div class="text-container">
+					<div class="block lbl" wicket:message="title:wb.tool.dweet"><wicket:message key="wb.tool.dweet.param3"/></div>
+					<div class="block input"><input class="wb-dim-x" type="text" /></div>
+				</div>
+			</div>
+			<div>				
+				<button class="update-btn dweet-btn"><wicket:message key="lbl.update"/></button>
 			</div>
 			<div class="status"></div>
 		</div>

@@ -960,4 +960,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="wizard.button.finish"><![CDATA[Finish]]></entry>
 	<entry key="zoom.FULL_FIT"><![CDATA[Full-Fit]]></entry>
 	<entry key="zoom.PAGE_WIDTH"><![CDATA[Page Width]]></entry>
+	<entry key="wb.tool.dweet"><![CDATA[Dweet]]></entry>
+	<entry key="wb.tool.dweet.param1"><![CDATA[Param1]]></entry>
+	<entry key="wb.tool.dweet.param2"><![CDATA[Param2]]></entry>
+	<entry key="wb.tool.dweet.param3"><![CDATA[Param3]]></entry>
 </properties>

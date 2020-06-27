@@ -1,1 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+.room-block .sb-wb .wb-block .tools .om-icon.big.dweet::before {
+	content: '\f1e6';
+	color: red;
+}
+.dweet-btn {
+	float: right;
+	margin: 10px;
+}

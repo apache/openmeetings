@@ -260,6 +260,7 @@ var Wb = function() {
 		const clearAll = tools.find('.om-icon.clear-all')
 			, sBtn = tools.find('.om-icon.settings');
 		let _firstToolItem = true;
+		let dweetIDCount = 1;
 		switch (role) {
 			case PRESENTER:
 				clearAll.confirmation({
@@ -369,6 +370,36 @@ var Wb = function() {
 					minHeight: 140
 					, minWidth: 255
 				});
+				tools.find('.om-icon.dweet').click(function(){					
+			        dweet = OmUtil.tmpl("#wb-dweet");			        
+			       	dweet[0].id='wb-dweet' + dweetIDCount++;        
+			        dweet[0].style.bottom = '100px';
+			        dweet[0].style.position= 'absolute';
+			        dweet[0].style[(Settings.isRtl ? 'left' : 'right')] = '100px';        			        					      	         
+					dweet.find('.ui-dialog-titlebar-close').click(function() {
+						let id = $(this.parentElement).attr('id');
+						$("#"+id).remove();
+					});
+					dweet.draggable({
+					scroll: false
+					, handle: '.ui-dialog-titlebar'
+					, containment: 'body'
+					, start: function() {
+						if (!!dweet.css('bottom')) {
+							dweet.css('bottom', '').css(Settings.isRtl ? 'left' : 'right', '');
+						}
+					}
+					, drag: function() {
+						if (dweet.position().x + dweet.width() >= dweet.parent().width()) {
+							return false;
+						}
+					}
+				});
+				dweet.resizable({
+					alsoResize: dweet.find('.text-container')
+				});			
+					wbEl.append(dweet);						      
+				});			
 			case NONE:
 				_updateZoomPanel();
 				zoomBar.find('.zoom-out').click(function() {
@@ -788,7 +819,12 @@ var Wb = function() {
 				math[0].style.display = 'none';
 				math[0].style.bottom = '100px';
 				math[0].style[(Settings.isRtl ? 'left' : 'right')] = '100px';
-				wbEl.append(settings, math);
+				dweet = OmUtil.tmpl("#wb-dweet");
+				console.log(dweet);
+				dweet[0].style.display = 'none';
+				dweet[0].style.bottom = '100px';
+				dweet[0].style[(Settings.isRtl ? 'left' : 'right')] = '100px';				
+				wbEl.append(settings, math, dweet);
 				sc.on('scroll', scrollHandler);
 			}
 			wbEl.find('.tools').append(tools);
