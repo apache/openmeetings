@@ -43,10 +43,7 @@
 		</encoder>
 	</appender>
 	<logger name="com.mchange.v2" level="ERROR" />
-	<logger name="org.apache.axiom" level="ERROR" />
-	<logger name="org.apache.commons.httpclient" level="ERROR" />
 	<logger name="de.hunsicker.jalopy.io" level="ERROR" />
-	<logger name="httpclient.wire.header" level="ERROR" />
 	<logger name="org.apache.mina.filter.ssl.SslFilter" level="ERROR" />
 	<logger name="org.apache.openmeetings" level="DEBUG" />
 	<logger name="org.apache.cxf.services" level="WARN" /> <!-- no payload -->

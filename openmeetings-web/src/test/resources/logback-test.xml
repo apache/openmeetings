@@ -18,7 +18,7 @@
   under the License.
 
 -->
-<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" debug="true">
 	<contextName>${current_openmeetings_context_name}</contextName>
 
 	<jmxConfigurator contextName="${current_openmeetings_context_name}" />
@@ -43,12 +43,10 @@
 		</encoder>
 	</appender>
 	<logger name="com.mchange.v2" level="ERROR" />
-	<logger name="org.apache.axiom" level="ERROR" />
-	<logger name="org.apache.commons.httpclient" level="ERROR" />
 	<logger name="de.hunsicker.jalopy.io" level="ERROR" />
-	<logger name="httpclient.wire.header" level="ERROR" />
 	<logger name="org.apache.mina.filter.ssl.SslFilter" level="ERROR" />
 	<logger name="org.apache.openmeetings" level="DEBUG" />
+	<logger name="org.apache.cxf.services" level="DEBUG" /> <!-- for payload -->
 	<root level="INFO">
 		<appender-ref ref="FILE" />
 		<appender-ref ref="CONSOLE" />

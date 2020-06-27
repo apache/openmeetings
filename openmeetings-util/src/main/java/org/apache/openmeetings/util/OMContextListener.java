@@ -47,8 +47,17 @@ public class OMContextListener implements ServletContextListener {
 			JoranConfigurator configurator = new JoranConfigurator();
 			configurator.setContext(context);
 			context.reset();
-			try (InputStream cfgIs = getClass().getResourceAsStream("/logback-config.xml")) {
+			boolean configured = false;
+			try (InputStream cfgIs = getClass().getResourceAsStream("/logback-test.xml")) {
 				configurator.doConfigure(cfgIs);
+				configured = true;
+			} catch (Exception e) {
+				// no-op
+			}
+			if (!configured) {
+				try (InputStream cfgIs = getClass().getResourceAsStream("/logback-config.xml")) {
+					configurator.doConfigure(cfgIs);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
