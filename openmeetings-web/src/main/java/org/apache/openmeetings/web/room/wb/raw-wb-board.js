@@ -385,12 +385,12 @@ var Wb = function() {
 					, handle: '.ui-dialog-titlebar'
 					, containment: 'body'
 					, start: function() {
-						if (!!dweet.css('bottom')) {
-							dweet.css('bottom', '').css(Settings.isRtl ? 'left' : 'right', '');
+						if (!!$(this).css('bottom')) {
+							$(this).css('bottom', '').css(Settings.isRtl ? 'left' : 'right', '');
 						}
 					}
 					, drag: function() {
-						if (dweet.position().x + dweet.width() >= dweet.parent().width()) {
+						if ($(this).position().x + $(this).width() >= $(this).parent().width()) {
 							return false;
 						}
 					}
