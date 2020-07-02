@@ -259,6 +259,7 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 .wb-formula .text-container {
 	margin: 0 5px 5px 0;
 	padding: 5px;
+	height: calc(100% - 90px);
 }
 .wb-formula .status {
 	min-height: 16px;

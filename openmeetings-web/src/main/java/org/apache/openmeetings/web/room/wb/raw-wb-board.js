@@ -366,7 +366,8 @@ var Wb = function() {
 					}
 				});
 				math.resizable({
-					alsoResize: math.find('.text-container')
+					minHeight: 140
+					, minWidth: 255
 				});
 			case NONE:
 				_updateZoomPanel();
