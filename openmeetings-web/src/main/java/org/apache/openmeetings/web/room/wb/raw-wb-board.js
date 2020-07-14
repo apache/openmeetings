@@ -397,7 +397,20 @@ var Wb = function() {
 				});
 				dweet.resizable({
 					alsoResize: dweet.find('.text-container')
-				});			
+				});		
+				dweet.find('.update-btn').button().click(function() {
+					var id = $(this.parentElement.parentElement).attr('id');
+					var thing = $("#" + id).find('input').val();
+					var content = $("#" + id).find('textarea').val();
+					content = JSON.parse(content);
+					if(thing){
+						dweetio.dweet_for(thing, content, function(err, dweet){
+						    console.log(dweet.thing); // "my-thing"
+						    console.log(dweet.content); // The content of the dweet
+						    console.log(dweet.created); // The create date of the dweet
+						});						
+					}
+				});	
 					wbEl.append(dweet);						      
 				});			
 			case NONE:

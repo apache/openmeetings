@@ -7,3 +7,14 @@
 	float: right;
 	margin: 10px;
 }
+.dweet-input {
+	resize: vertical !important;
+}
+
+.dweet-inline {
+	display: inline-block;
+}
+
+.dweet-inline.input {
+	padding-left: 1rem;
+}
