@@ -78,7 +78,7 @@
 		<junit.version>5.6.2</junit.version>
 		<wicket.version>9.0.0</wicket.version>
 		<wicketju.version>9.0.0-M5.1</wicketju.version>
-		<wickets.version>9.0.0-M5.1</wickets.version>
+		<wickets.version>9.0.0</wickets.version>
 		<wicket-bootstrap.version>5.0.0-M2</wicket-bootstrap.version>
 		<spring.version>5.2.7.RELEASE</spring.version>
 		<tomcat.version>9.0.37</tomcat.version>
@@ -89,7 +89,7 @@
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
 		<h2.version>1.4.200</h2.version>
-		<commons-lang3.version>3.10</commons-lang3.version>
+		<commons-lang3.version>3.11</commons-lang3.version>
 		<javax.mail.version>1.6.2</javax.mail.version>
 		<openjpa.version>3.1.2</openjpa.version>
 		<asterisk-java.version>3.5.0</asterisk-java.version>
@@ -110,7 +110,7 @@
 		<commons-text.version>1.8</commons-text.version>
 		<slf4j.version>1.7.30</slf4j.version>
 		<logback.version>1.2.3</logback.version>
-		<jetty.version>9.4.20.v20190813</jetty.version>
+		<jetty.version>9.4.30.v20200611</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.66</bcprov-jdk15on.version>
 		<mockito.version>3.3.3</mockito.version>
