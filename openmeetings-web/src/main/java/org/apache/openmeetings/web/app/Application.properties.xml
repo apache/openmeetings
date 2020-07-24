@@ -963,4 +963,5 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="wb.tool.dweet"><![CDATA[Dweet]]></entry>
 	<entry key="wb.tool.dweet.mything"><![CDATA[MyThing]]></entry>
 	<entry key="wb.tool.dweet.context"><![CDATA[Data]]></entry>
+	<entry key="wb.tool.dweet.response"><![CDATA[Response]]></entry>
 </properties>

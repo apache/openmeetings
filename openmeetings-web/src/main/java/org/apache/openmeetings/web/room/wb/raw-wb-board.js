@@ -396,7 +396,8 @@ var Wb = function() {
 					}
 				});
 				dweet.resizable({
-					alsoResize: dweet.find('.text-container')
+					minHeight: 140
+					, minWidth: 255
 				});		
 				dweet.find('.update-btn').button().click(function() {
 					var id = $(this.parentElement.parentElement).attr('id');
@@ -405,9 +406,11 @@ var Wb = function() {
 					content = JSON.parse(content);
 					if(thing){
 						dweetio.dweet_for(thing, content, function(err, dweet){
-						    console.log(dweet.thing); // "my-thing"
-						    console.log(dweet.content); // The content of the dweet
-						    console.log(dweet.created); // The create date of the dweet
+							let responseContainer = $("#"+id).find('.dweet-response');
+							if(err){
+								responseContainer.val(dweet.thing +"\n"+dweet.content+"\n"+dweet.created);	
+							}						   						    
+						    responseContainer.val(dweet.thing +"\n"+dweet.content+"\n"+dweet.created);
 						});						
 					}
 				});	
