@@ -49,8 +49,10 @@ public class OMContextListener implements ServletContextListener {
 			context.reset();
 			boolean configured = false;
 			try (InputStream cfgIs = getClass().getResourceAsStream("/logback-test.xml")) {
-				configurator.doConfigure(cfgIs);
-				configured = true;
+				if (cfgIs != null) {
+					configurator.doConfigure(cfgIs);
+					configured = true;
+				}
 			} catch (Exception e) {
 				// no-op
 			}
