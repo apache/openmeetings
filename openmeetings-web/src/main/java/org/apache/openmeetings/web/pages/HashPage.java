@@ -49,7 +49,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
+import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -180,22 +180,20 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 						}
 
 						@Override
-						protected IWsClient getWsClient() {
-							return c;
-						}
-					})
-					.add(new OmAjaxClientInfoBehavior() {
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						protected void onClientInfo(AjaxRequestTarget target, WebClientInfo info) {
-							super.onClientInfo(target, info);
-							target.appendJavaScript(
+						protected void onConnect(WebSocketRequestHandler handler) {
+							super.onConnect(handler);
+							handler.appendJavaScript(
 									String.format("VideoSettings.init(%s);VideoSettings.open();"
 											, VideoSettings.getInitJson("noclient")
 												.put("infoMsg", getString("close.settings.tab"))));
 						}
-					}));
+
+						@Override
+						protected IWsClient getWsClient() {
+							return c;
+						}
+					})
+					.add(new OmAjaxClientInfoBehavior()));
 				error = false;
 			}
 		}
