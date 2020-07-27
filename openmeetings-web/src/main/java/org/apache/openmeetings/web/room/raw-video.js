@@ -410,6 +410,7 @@ var Video = (function() {
 			VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VIDWIN_SEL), sd.width, sd.height + 25));
 		}
 		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
+			.attr('playsinline', 'playsinline')
 			.width(vc.width()).height(vc.height())
 			.prop('autoplay', true).prop('controls', false);
 		if (data) {

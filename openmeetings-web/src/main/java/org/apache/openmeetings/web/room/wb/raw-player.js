@@ -84,6 +84,7 @@ var Player = (function() {
 	player.create = function(canvas, _o, wb) {
 		const vid = $('<video>').hide()
 			.attr('class', 'wb-video slide-' + canvas.slide)
+			.attr('playsinline', 'playsinline')
 			.attr('id', 'wb-video-' + _o.uid)
 			.attr("width", _o.width)
 			.attr("height", _o.height)
