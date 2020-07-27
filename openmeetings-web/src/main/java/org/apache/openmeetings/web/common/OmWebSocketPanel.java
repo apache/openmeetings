@@ -29,8 +29,7 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -66,7 +65,7 @@ public abstract class OmWebSocketPanel extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(newWsBehavior(), new AbstractDefaultAjaxBehavior() {
+		add(newWsBehavior(), new Behavior() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -75,19 +74,8 @@ public abstract class OmWebSocketPanel extends Panel {
 					log.debug("pingTimer is attached");
 					pingable = true;
 					super.renderHead(component, response);
-					response.render(OnDomReadyHeaderItem.forScript(getJs()));
+					response.render(OnDomReadyHeaderItem.forScript("OmUtil.ping();"));
 				}
-			}
-
-			private CharSequence getJs() {
-				return "OmUtil.ping(function(){" + getCallbackScript() + "});";
-			}
-
-			@Override
-			protected void respond(AjaxRequestTarget target) {
-				log.debug("Sending WebSocket PING");
-				target.appendJavaScript(getJs());
-				WebSocketHelper.sendClient(getWsClient(), new byte[]{getUserId() == null ? 0 : getUserId().byteValue()});
 			}
 		});
 	}
@@ -136,6 +124,11 @@ public abstract class OmWebSocketPanel extends Panel {
 								}
 								WebSocketHelper.sendRoomOthers(c.getRoomId(), c.getUid(), m.put("uid", c.getUid()));
 							}
+								break;
+							case "ping":
+								log.debug("Sending WebSocket PING");
+								handler.appendJavaScript("OmUtil.ping();");
+								WebSocketHelper.sendClient(getWsClient(), new byte[]{getUserId() == null ? 0 : getUserId().byteValue()});
 								break;
 							default:
 								OmWebSocketPanel.this.onMessage(handler, m);

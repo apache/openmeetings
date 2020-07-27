@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -35,7 +36,6 @@ import org.kurento.client.internal.TransactionImpl;
 import org.kurento.client.internal.client.RomManager;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -65,7 +65,7 @@ public class BaseMockedTest {
 
 	@Before
 	public void setup() {
-		MockitoAnnotations.initMocks(this);
+		initMocks(this);
 		mockStatic(KurentoClient.class);
 		mockStatic(WebSocketHelper.class);
 		doReturn(kServerManager).when(client).getServerManager();

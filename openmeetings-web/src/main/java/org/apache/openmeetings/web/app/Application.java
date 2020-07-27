@@ -78,6 +78,7 @@ import org.apache.openmeetings.web.pages.install.InstallWizardPage;
 import org.apache.openmeetings.web.room.GroupCustomCssResourceReference;
 import org.apache.openmeetings.web.room.RoomPreviewResourceReference;
 import org.apache.openmeetings.web.room.RoomResourceReference;
+import org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference;
 import org.apache.openmeetings.web.room.wb.WbWebSocketHelper;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RecentRoomsWidgetDescriptor;
@@ -321,6 +322,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountResource("/recordings/png/${id}", new PngRecordingResourceReference()); //should be in sync with VideoPlayer
 		mountResource("/room/file/${id}", new RoomResourceReference());
 		mountResource("/room/preview/${id}", new RoomPreviewResourceReference());
+		mountResource("/room/file/upload", new RoomFileUploadResourceReference());
 		mountResource("/profile/${id}", new ProfileImageResourceReference());
 		mountResource("/group/${id}", new GroupLogoResourceReference());
 		mountResource("/group/customcss/${id}", new GroupCustomCssResourceReference());

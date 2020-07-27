@@ -127,12 +127,7 @@ public class RecordingsPanel extends UserBasePanel {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						final IRecordingConverter converter = isInterview ? interviewConverter : recordingConverter;
-						new Thread() {
-							@Override
-							public void run() {
-								converter.startConversion((Recording)getLastSelected());
-							}
-						}.start();
+						new Thread(() -> converter.startConversion((Recording)getLastSelected())).start();
 					}
 				}, new BootstrapAjaxLink<>(markupId, Model.of(""), Buttons.Type.Outline_Success, new ResourceModel("button.label.share")) {
 					private static final long serialVersionUID = 1L;

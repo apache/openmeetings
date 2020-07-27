@@ -21,26 +21,25 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-	<form wicket:id="form">
+	<form wicket:id="form" id="room-upload-form" method="post" enctype="multipart/form-data">
 		<div class="mb-4"><wicket:message key="594"/></div>
 		<div class="fileinput fileinput-new d-inline m-0" data-provides="fileinput">
 			<div class="fileinput-filename d-block"></div>
 			<span class="btn btn-file btn-outline-primary">
 				<span><wicket:message key="596"/></span>
-				<input type="file" multiple="multiple" wicket:id="file"/>
+				<input type="file" multiple="multiple" id="room-upload-file" name="room-upload-file"/>
 			</span>
 		</div>
-		<div wicket:id="feedback" class="error"></div>
+		<div class="error"></div>
 		<div class="mt-3">
-			<input wicket:id="to-wb" type="checkbox"/><label wicket:for="to-wb"><wicket:message key="1312"/></label>
-			<div class="ml-3" wicket:id="clean-block">
-				<input wicket:id="clean-wb" type="checkbox"/><label wicket:for="clean-wb"><wicket:message key="62"/></label>
+			<input id="room-upload-to-wb" name="room-upload-to-wb" type="checkbox" value="true"/>&nbsp;<label for="room-upload-to-wb"><wicket:message key="1312"/></label>
+			<div class="ml-3 d-none" id="room-upload-clean-block">
+				<input id="room-upload-clean" name="room-upload-clean" type="checkbox" value="true"/>&nbsp;<label for="room-upload-clean"><wicket:message key="62"/></label>
 			</div>
 		</div>
+		<input wicket:id="sid" name="room-upload-sid" type="hidden"/>
+		<input wicket:id="lastSelected" name="room-upload-last-selected" type="hidden" value=""/>
 	</form>
-	<div wicket:id="progress"></div>
-	<form wicket:id="name-form">
-		<input type="hidden" wicket:id="name"/>
-	</form>
+	<div id="progress"></div>
 </wicket:extend>
 </html>
