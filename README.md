@@ -13,15 +13,15 @@ Getting Started
 ===============
 Please visit the project website for the latest information:
   - https://openmeetings.apache.org/
-    
+
 Documentation for Installation and Upgrade:
   - https://openmeetings.apache.org/installation.html
   - https://openmeetings.apache.org/Upgrade.html
 
 Along with the developer mailing list archive:
   - https://openmeetings.apache.org/mail-lists.html
-    
-    
+
+
 System Requirements
 ===================
 You need a platform that supports [Java SE 11](https://www.oracle.com/java/technologies/javase-downloads.html).
@@ -55,6 +55,38 @@ Release Notes
 =============
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
+
+5.0.0
+-----
+[Release 5.0.0](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0), provides following improvements:
+
+This release provides WebRTC audio/video/screen-sharing in the Room
+
+IMPORTANT: Java 11 is required
+
+Flash plugin is no more required in the browser
+
+Security:
+* Libraries are updated with latest versions
+* More strict CSP is implemented
+* User accounts are hidden for regular users
+* User email addresses are hidden
+
+UI:
+* Support for touch events is added (mobiles, tablets)
+* Better support for new MS Edge browser
+* Direct link for entering the room with room name (not ID)
+* Front camera is being used by default
+* User avatar is editable at Admin->Users
+
+Audio/Video:
+* Stability is improved
+* Connection to KMS is auto-recovering
+* Camera resolution is taken over immediately
+* Multiple client-side JS errors are fixed
+
+Some other fixes and improvements, 74 issues were addressed
+
 
 5.0.0-M4
 -----
