@@ -60,7 +60,7 @@
 		<section name="Check dependencies">
 			<source>mvn org.apache.maven.plugins:maven-dependency-plugin:analyze-only</source>
 		</section>
-		<section name="Incremental Build and Run Embedded Jetty">
+		<section name="Tips and Gotchas">
 			<p>Eclipse ANSI colors plugin for colors in console</p>
 			<source><![CDATA[
 MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded
