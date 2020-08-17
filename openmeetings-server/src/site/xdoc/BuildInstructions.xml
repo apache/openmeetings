@@ -23,8 +23,8 @@
 		<section name="Nightly Builds">
 			<p>
 				You can find Nightly Builds of the software at:
-				<a href="https://builds.apache.org/view/M-R/view/OpenMeetings/" rel="nofollow" target="_blank">
-					https://builds.apache.org/view/M-R/view/OpenMeetings/
+				<a href="https://ci-builds.apache.org/job/OpenMeetings/" rel="nofollow" target="_blank">
+					https://ci-builds.apache.org/job/OpenMeetings/
 				</a>
 			</p>
 		</section>
