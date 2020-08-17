@@ -103,7 +103,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="177"><![CDATA[كاربر]]></entry>
 	<entry key="178"><![CDATA[اضافه کردن کاربر]]></entry>
 	<entry key="186"><![CDATA[اتاق کنفرانس]]></entry>
-
 	<entry key="188"><![CDATA[شناسه]]></entry>
 	<entry key="190"><![CDATA[همگاني]]></entry>
 	<entry key="196"><![CDATA[نظر]]></entry>
@@ -219,9 +218,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="547"><![CDATA[y]]></entry>
 	<entry key="548"><![CDATA[y-axis]]></entry>
 	<entry key="549"><![CDATA[w]]></entry>
-
 	<entry key="551"><![CDATA[h]]></entry>
-
 	<entry key="553"><![CDATA[تغییر شفافیت]]></entry>
 	<entry key="556"><![CDATA[عدم اتصال به سرور.درخواست را دوباره بارگذاری کنید یا/و شبکه را چک کنید.]]></entry>
 	<entry key="557"><![CDATA[اشاره گر]]></entry>
@@ -589,7 +586,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal پست الکترونیک]]></entry>
 	<entry key="appointment.reminder.NONE"><![CDATA[اخطار نفرست]]></entry>
 	<entry key="appointment.tab.advanced"><![CDATA[پیشرفته]]></entry>
-	<entry key="lbl.general"><![CDATA[کلی]]></entry>
 	<entry key="bad.captcha.text"><![CDATA[متن captcha نادرست است]]></entry>
 	<entry key="bad.password.digit"><![CDATA[رمز عبور ضعیف: حداقل 1 عدد لازم است]]></entry>
 	<entry key="bad.password.lower"><![CDATA[رمز عبور "ضعیف": حداقل 1 حرف کوچک ضروریست:]]></entry>
@@ -828,6 +824,7 @@ target="_blank">Custom Crypt Mechanism</a>
 	<entry key="lbl.cancel"><![CDATA[انصراف]]></entry>
 	<entry key="lbl.email"><![CDATA[ایمیل:]]></entry>
 	<entry key="lbl.enter"><![CDATA[ورود]]></entry>
+	<entry key="lbl.general"><![CDATA[کلی]]></entry>
 	<entry key="lbl.new"><![CDATA[new]]></entry>
 	<entry key="lbl.or"><![CDATA[or]]></entry>
 	<entry key="lbl.refresh"><![CDATA[باز بینی]]></entry>

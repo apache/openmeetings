@@ -103,7 +103,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="177"><![CDATA[felhasználó]]></entry>
 	<entry key="178"><![CDATA[felhasználó hozzáadása]]></entry>
 	<entry key="186"><![CDATA[Konferenciatermek]]></entry>
-
 	<entry key="188"><![CDATA[id]]></entry>
 	<entry key="190"><![CDATA[nyilvános]]></entry>
 	<entry key="196"><![CDATA[Megjegyzés]]></entry>
@@ -219,9 +218,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="547"><![CDATA[y]]></entry>
 	<entry key="548"><![CDATA[y-méret]]></entry>
 	<entry key="549"><![CDATA[w]]></entry>
-
 	<entry key="551"><![CDATA[h]]></entry>
-
 	<entry key="553"><![CDATA[Áttetszőre váltás]]></entry>
 	<entry key="556"><![CDATA[A kapcsolat megszakadt a szerverrel. Ellenőrizze az internet kapcsolatát, majd lépjen be újra az alkalmazásba.]]></entry>
 	<entry key="557"><![CDATA[Mutató]]></entry>
@@ -589,7 +586,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal email]]></entry>
 	<entry key="appointment.reminder.NONE"><![CDATA[ne küldjön értesítést]]></entry>
 	<entry key="appointment.tab.advanced"><![CDATA[Advanced]]></entry>
-	<entry key="lbl.general"><![CDATA[General]]></entry>
 	<entry key="bad.captcha.text"><![CDATA[You have entered incorrect captcha text]]></entry>
 	<entry key="bad.password.digit"><![CDATA['Weak' password: at least 1 digit is required]]></entry>
 	<entry key="bad.password.lower"><![CDATA['Weak' password: at least 1 lower-case letter is required]]></entry>
@@ -820,6 +816,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="lbl.cancel"><![CDATA[Mégse]]></entry>
 	<entry key="lbl.email"><![CDATA[EMail:]]></entry>
 	<entry key="lbl.enter"><![CDATA[belépés]]></entry>
+	<entry key="lbl.general"><![CDATA[General]]></entry>
 	<entry key="lbl.new"><![CDATA[new]]></entry>
 	<entry key="lbl.or"><![CDATA[or]]></entry>
 	<entry key="lbl.refresh"><![CDATA[frissítés]]></entry>
