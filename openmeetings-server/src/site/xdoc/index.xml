@@ -72,13 +72,13 @@
 				<h4>Version 5.0.0 released!</h4>
 				<div>Release 5.0.0, provides following improvements:<br/>
 					This release provides WebRTC audio/video/screen-sharing in the Room
-					<div class="bd-callout bd-callout-info">Flash plugin is no more required in the browser<br/>
+					<div class="bd-callout bd-callout-info">Flash plugin is no longer required in the browser<br/>
 						<br/>
 						IMPORTANT: Java 11 is required
 					</div>
 					Security:
 					<ul>
-						<li>Libraries are updated with latest versions</li>
+						<li>Libraries are updated to latest versions</li>
 						<li>More strict CSP is implemented</li>
 						<li>User accounts are hidden for regular users</li>
 						<li>User email addresses are hidden</li>
@@ -88,14 +88,14 @@
 						<li>Support for touch events is added (mobiles, tablets)</li>
 						<li>Better support for new MS Edge browser</li>
 						<li>Direct link for entering the room with room name (not ID)</li>
-						<li>Front camera is being used by default</li>
+						<li>Front camera is used by default</li>
 						<li>User avatar is editable at Admin-&gt;Users</li>
 					</ul>
 					Audio/Video:
 					<ul>
 						<li>Stability is improved</li>
 						<li>Connection to KMS is auto-recovering</li>
-						<li>Camera resolution is taken over immediately</li>
+						<li>Camera resolution changes take effect immediately</li>
 						<li>Multiple client-side JS errors are fixed</li>
 					</ul>
 					<br/>

@@ -64,10 +64,10 @@ This release provides WebRTC audio/video/screen-sharing in the Room
 
 IMPORTANT: Java 11 is required
 
-Flash plugin is no more required in the browser
+Flash plugin is no longer required in the browser
 
 Security:
-* Libraries are updated with latest versions
+* Libraries are updated to latest versions
 * More strict CSP is implemented
 * User accounts are hidden for regular users
 * User email addresses are hidden
@@ -76,13 +76,13 @@ UI:
 * Support for touch events is added (mobiles, tablets)
 * Better support for new MS Edge browser
 * Direct link for entering the room with room name (not ID)
-* Front camera is being used by default
+* Front camera is used by default
 * User avatar is editable at Admin->Users
 
 Audio/Video:
 * Stability is improved
 * Connection to KMS is auto-recovering
-* Camera resolution is taken over immediately
+* Camera resolution changes take effect immediately
 * Multiple client-side JS errors are fixed
 
 Some other fixes and improvements, 74 issues were addressed
