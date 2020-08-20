@@ -113,7 +113,7 @@
 		<jetty.version>9.4.30.v20200611</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.66</bcprov-jdk15on.version>
-		<mockito.version>3.5.0</mockito.version>
+		<mockito.version>3.5.2</mockito.version>
 		<powermock.version>2.0.7</powermock.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.14.0</kurento.version>
