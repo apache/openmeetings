@@ -22,9 +22,6 @@
 	<body>
 		<section name="Apache OpenMeetings Demo Servers">
 			<p>
-				There are currently some technical issues with demo servers.
-			</p>
-			<p>
 				This is a list of servers that you can use for testing OpenMeetings.
 			</p>
 			<table>
