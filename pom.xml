@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache</groupId>
 		<artifactId>apache</artifactId>
-		<version>21</version>
+		<version>23</version>
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
@@ -36,27 +36,28 @@
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
 		<db>derby</db>
+		<autoModuleName>apache.openmeetings.parent</autoModuleName>
 		<jdk.version>1.8</jdk.version>
 		<!-- plugin versions -->
-		<maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
-		<maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
-		<maven-site-plugin.version>3.7.1</maven-site-plugin.version>
+		<maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+		<maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+		<maven-site-plugin.version>3.9.1</maven-site-plugin.version>
 		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
-		<maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
+		<maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
 		<maven-source-plugin.version>3.2.0</maven-source-plugin.version>
 		<checksum-maven-plugin.version>1.8</checksum-maven-plugin.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 		<license-maven-plugin.version>1.16</license-maven-plugin.version>
-		<reflow-maven-skin.version>2.1.0</reflow-maven-skin.version>
+		<reflow-maven-skin.version>2.3.0</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-		<maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
+		<maven-project-info-reports-plugin.version>3.1.0</maven-project-info-reports-plugin.version>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-		<maven-assembly-plugin.version>3.2.0</maven-assembly-plugin.version>
-		<maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
-		<maven-bundle-plugin.version>4.1.0</maven-bundle-plugin.version>
-		<maven-war-plugin.version>3.2.3</maven-war-plugin.version>
+		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
+		<maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
+		<maven-bundle-plugin.version>4.2.1</maven-bundle-plugin.version>
+		<maven-war-plugin.version>3.3.1</maven-war-plugin.version>
 		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
 		<wagon-maven-plugin.version>2.0.0</wagon-maven-plugin.version>
 		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
@@ -68,50 +69,51 @@
 		<apache-rat-plugin.version>0.13</apache-rat-plugin.version>
 		<keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
-		<sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
-		<jacoco-maven-plugin.versoin>0.8.4</jacoco-maven-plugin.versoin>
-		<forbiddenapis.version>2.6</forbiddenapis.version>
+		<sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
+		<jacoco-maven-plugin.versoin>0.8.5</jacoco-maven-plugin.versoin>
+		<forbiddenapis.version>2.7</forbiddenapis.version>
+		<maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
 		<!-- dependency versions -->
-		<junit.version>4.12</junit.version>
-		<wicket.version>8.6.1</wicket.version>
-		<wicketju.version>8.3.0</wicketju.version>
-		<wickets.version>8.6.0</wickets.version>
+		<junit.version>4.13</junit.version>
+		<wicket.version>8.9.0</wicket.version>
+		<wicketju.version>8.8.0</wicketju.version>
+		<wickets.version>8.9.0</wickets.version>
 		<red5-server.version>1.1.1</red5-server.version>
 		<red5-client.version>1.1.1</red5-client.version>
-		<spring.version>5.2.2.RELEASE</spring.version>
+		<spring.version>5.2.8.RELEASE</spring.version>
 		<mina.version>2.1.3</mina.version>
-		<tomcat.version>9.0.30</tomcat.version>
-		<ical4j.version>3.0.11</ical4j.version>
-		<cxf.version>3.3.4</cxf.version>
+		<tomcat.version>9.0.37</tomcat.version>
+		<ical4j.version>3.0.18</ical4j.version>
+		<cxf.version>3.3.7</cxf.version>
 		<selenium.version>3.141.59</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
-		<jettison.version>1.4.0</jettison.version>
+		<jettison.version>1.4.1</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
 		<derby.version>10.14.2.0</derby.version>
-		<commons-lang3.version>3.9</commons-lang3.version>
+		<commons-lang3.version>3.11</commons-lang3.version>
 		<javax.mail.version>1.6.2</javax.mail.version>
-		<openjpa.version>3.1.0</openjpa.version>
-		<asterisk-java.version>2.0.2</asterisk-java.version>
+		<openjpa.version>3.1.2</openjpa.version>
+		<asterisk-java.version>3.6.0</asterisk-java.version>
 		<commons-dbcp.version>2.7.0</commons-dbcp.version>
-		<commons-pool2.version>2.8.0</commons-pool2.version>
-		<postgresql.version>42.2.9</postgresql.version>
+		<commons-pool2.version>2.8.1</commons-pool2.version>
+		<postgresql.version>42.2.14</postgresql.version>
 		<commons-cli.version>1.4</commons-cli.version>
-		<dom4j.version>2.1.1</dom4j.version>
-		<commons-codec.version>1.13</commons-codec.version>
-		<commons-io.version>2.6</commons-io.version>
-		<mysql.version>8.0.18</mysql.version>
-		<mssql.version>7.4.1.jre8</mssql.version>
-		<pdfbox.version>2.0.17</pdfbox.version>
+		<dom4j.version>2.1.3</dom4j.version>
+		<commons-codec.version>1.14</commons-codec.version>
+		<commons-io.version>2.7</commons-io.version>
+		<mysql.version>8.0.20</mysql.version>
+		<mssql.version>8.4.0.jre8</mssql.version>
+		<pdfbox.version>2.0.20</pdfbox.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
-		<xstream.version>1.4.11.1</xstream.version>
-		<api-all.version>2.0.0.AM3</api-all.version>
-		<caldav4j.version>1.0.0-rc.2</caldav4j.version>
-		<tika-parsers.version>1.23</tika-parsers.version>
-		<commons-text.version>1.8</commons-text.version>
+		<xstream.version>1.4.12</xstream.version>
+		<api-all.version>2.0.1</api-all.version>
+		<caldav4j.version>1.0.0</caldav4j.version>
+		<tika-parsers.version>1.24.1</tika-parsers.version>
+		<commons-text.version>1.9</commons-text.version>
 		<license.excludedScopes>test</license.excludedScopes>
-		<bcprov-jdk15on.version>1.64</bcprov-jdk15on.version>
-		<mockito.version>3.2.0</mockito.version>
+		<bcprov-jdk15on.version>1.66</bcprov-jdk15on.version>
+		<mockito.version>3.5.2</mockito.version>
 		<jaxws-api.version>2.3.1</jaxws-api.version>
 		<javax.jws-api.version>1.1</javax.jws-api.version>
 		<quartz.version>2.3.2</quartz.version>
@@ -163,7 +165,7 @@
 			<name>Maxim Solodovnik</name>
 			<email>solomax666@gmail.com</email>
 			<organization>Unipro</organization>
-			<organizationUrl>https://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 			<roles>
 				<role>chair</role>
 				<role>architect</role>
@@ -176,7 +178,7 @@
 			<name>Vasiliy Degtyarev</name>
 			<email>vdegtyarev1964@gmail.com</email>
 			<organization>Unipro</organization>
-			<organizationUrl>https://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 			<roles>
 				<role>developer</role>
 				<role>tester</role>
@@ -188,7 +190,7 @@
 			<name>Irina Arkhipets</name>
 			<email>Irina.Arkhipets@gmail.com</email>
 			<organization>Unipro</organization>
-			<organizationUrl>https://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 			<roles>
 				<role>support</role>
 				<role>pmc</role>
@@ -209,7 +211,7 @@
 			<id>dkandrov</id>
 			<name>Denis Kandrov</name>
 			<organization>Unipro</organization>
-			<organizationUrl>https://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 			<roles>
 				<role>support</role>
 				<role>pmc</role>
@@ -244,7 +246,7 @@
 		<developer>
 			<name>Timur Tleukenov</name>
 			<organization>Unipro</organization>
-			<organizationUrl>https://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 			<roles>
 				<role>developer</role>
 				<role>pmc</role>
@@ -253,7 +255,7 @@
 		<developer>
 			<name>Dmitry Bezhetskov</name>
 			<organization>Unipro</organization>
-			<organizationUrl>https://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 			<roles>
 				<role>developer</role>
 			</roles>
@@ -275,7 +277,7 @@
 		<developer>
 			<name>Yulia Algaer</name>
 			<organization>Unipro</organization>
-			<organizationUrl>https://unipro.ru</organizationUrl>
+			<organizationUrl>https://unipro.ru/</organizationUrl>
 		</developer>
 		<developer>
 			<name>Artyom Horuzhenko</name>
@@ -284,7 +286,7 @@
 			<id>daehn</id>
 			<name>Peter Dähn</name>
 			<organization>VCRP</organization>
-			<organizationUrl>https://www.vcrp.de</organizationUrl>
+			<organizationUrl>https://www.vcrp.de/</organizationUrl>
 		</developer>
 		<developer>
 			<id>onoke</id>
@@ -537,7 +539,7 @@
 						<artifactId>*</artifactId>
 					</exclusion>
 					<exclusion>
-						<groupId>asm</groupId>
+						<groupId>org.ow2.asm</groupId>
 						<artifactId>asm</artifactId>
 					</exclusion>
 				</exclusions>
@@ -657,6 +659,14 @@
 						<groupId>com.google.protobuf</groupId>
 						<artifactId>protobuf-java</artifactId>
 					</exclusion>
+					<exclusion>
+						<groupId>xml-apis</groupId>
+						<artifactId>xml-apis</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>xerces</groupId>
+						<artifactId>xercesImpl</artifactId>
+					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
@@ -664,6 +674,11 @@
 				<artifactId>mockito-core</artifactId>
 				<version>${mockito.version}</version>
 				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jodconverter</groupId>
+				<artifactId>jodconverter-local</artifactId>
+				<version>4.3.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -741,6 +756,9 @@
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
+				<configuration>
+					<skip>${om.quick.build}</skip>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -769,6 +787,9 @@
 			<plugin>
 				<groupId>de.thetaphi</groupId>
 				<artifactId>forbiddenapis</artifactId>
+				<configuration>
+					<failOnMissingClasses>${om.notquick.build}</failOnMissingClasses>
+				</configuration>
 				<executions>
 					<execution>
 						<id>forbiddenapis</id>
@@ -776,25 +797,6 @@
 							<goal>check</goal>
 							<goal>testCheck</goal>
 						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.gmaven</groupId>
-				<artifactId>groovy-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-						<configuration>
-							<source>
-								def autoModuleName = "apache.${project.artifactId}".replace('-', '.')
-								project.properties['autoModuleName'] = autoModuleName;
-								println("Automatic-Module-Name will be '" + autoModuleName + "'")
-							</source>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -813,6 +815,9 @@
 						<additionalparam>-Xdoclint:none -html5</additionalparam>
 						<source>${jdk.version}</source>
 						<javadocVersion>${jdk.version}</javadocVersion>
+						<links>
+							<link>https://openmeetings.apache.org/openmeetings-db/apidocs/</link>
+						</links>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -1006,11 +1011,6 @@
 					</configuration>
 				</plugin>
 				<plugin>
-					<groupId>org.codehaus.gmaven</groupId>
-					<artifactId>groovy-maven-plugin</artifactId>
-					<version>2.1.1</version>
-				</plugin>
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>
 					<version>${maven-enforcer-plugin.version}</version>
@@ -1044,6 +1044,7 @@
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>${maven-project-info-reports-plugin.version}</version>
 				<configuration>
+					<skip>${om.quick.build}</skip>
 					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
 					<showAvatarImages>true</showAvatarImages>
 				</configuration>
@@ -1082,6 +1083,9 @@
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
+				<configuration>
+					<skip>${om.quick.build}</skip>
+				</configuration>
 				<reportSets>
 					<reportSet>
 						<reports>

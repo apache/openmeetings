@@ -91,6 +91,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ROOM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SYSTEM_EMAIL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT_CON;
@@ -362,6 +363,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_DISPLAY_NAME_EDITABLE, String.valueOf(false), Configuration.Type.BOOL, "Is user will be able to edit his/her display name (default false).", "4.0.7");
 		addCfg(list, CONFIG_KEYCODE_QUICKPOLL, "Ctrl+Alt+KeyQ", Configuration.Type.HOTKEY
 				, "A hot key code to start quick poll", "4.0.10");
+		addCfg(list, CONFIG_SMTP_SSL, String.valueOf(false), Configuration.Type.BOOL, "Enable SSL", "4.0.11");
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {

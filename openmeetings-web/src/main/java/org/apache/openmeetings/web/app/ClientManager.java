@@ -43,7 +43,6 @@ import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
-import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,7 +177,7 @@ public class ClientManager implements IClientManager {
 		log.debug("Adding online room client: {}, room: {}", c.getUid(), roomId);
 		IMap<Long, Set<String>> rooms = rooms();
 		rooms.lock(roomId);
-		rooms.putIfAbsent(roomId, new ConcurrentHashSet<String>());
+		rooms.putIfAbsent(roomId, ConcurrentHashMap.newKeySet());
 		Set<String> set = rooms.get(roomId);
 		set.add(c.getUid());
 		final int count = set.size();

@@ -31,6 +31,7 @@
 	<description>Module for OpenMeetings core and red5 related classes and services</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
+		<autoModuleName>apache.openmeetings.core</autoModuleName>
 	</properties>
 	<build>
 		<plugins>
@@ -81,8 +82,8 @@
 			<version>${api-all.version}</version>
 			<exclusions>
 				<exclusion>
-					<groupId>org.apache.mina</groupId>
-					<artifactId>mina-core</artifactId>
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -92,9 +93,8 @@
 			<version>${javax.mail.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.artofsolving.jodconverter</groupId>
-			<artifactId>jodconverter-core</artifactId>
-			<version>3.0.1-om</version>
+			<groupId>org.jodconverter</groupId>
+			<artifactId>jodconverter-local</artifactId>
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>

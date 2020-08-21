@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
@@ -333,7 +332,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			super(id, model);
 			setOutputMarkupId(true);
 
-			myRoomsAllowed = getBean(ConfigurationDao.class).getBool(CONFIG_MYROOMS_ENABLED, true);
+			myRoomsAllowed = isMyRoomsEnabled();
 			createRoom = myRoomsAllowed;
 			add(feedback.setOutputMarkupId(true));
 			//General

@@ -20,91 +20,7 @@ package org.apache.openmeetings.db.dao.basic;
 
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHAT_SEND_ON_ENTER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DISPLAY_NAME_EDITABLE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_MIC_RATE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE_PROXY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FNAME_MIN_LENGTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE_OTHERS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_QUICKPOLL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LNAME_MIN_LENGTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_BITRATE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_RATE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_VIDEO_PRESET;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REST_ALLOW_ORIGIN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_EXTEN_CONTEXT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_SIP_CONTEXT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_BANDWIDTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_ECHO_PATH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_FPS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_MIC_RATE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_NATIVE_SSL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_QUALITY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_VIDEO_CODEC;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setAllowRegisterFrontend;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setAllowRegisterOauth;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setAllowRegisterSoap;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioBitrate;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioRate;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setBaseUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setChatSenndOnEnter;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setCryptClassName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultGroup;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultLang;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setDisplayNameEditable;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setGaCode;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setMaxUploadSize;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinFnameLength;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinLnameLength;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinLoginLength;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinPasswdLength;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setRestAllowOrigin;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setRoomSettings;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setSendRegisterEmail;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setSendVerificationEmail;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipContext;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipEnabled;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setVideoPreset;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -134,7 +50,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.util.DaoHelper;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
@@ -215,7 +130,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		List<Configuration> list = get(new String[] {key});
 
 		if (list == null || list.isEmpty() || list.get(0) == null) {
-			log.warn("Could not find key in configurations: " + key);
+			log.warn("Could not find key in configurations: {}", key);
 			return null;
 		}
 		return list.get(0);
@@ -425,6 +340,21 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_DISPLAY_NAME_EDITABLE:
 				reloadDisplayNameEditable();
 				break;
+			case CONFIG_MYROOMS_ENABLED:
+				reloadMyRoomsEnabled();
+				break;
+			case CONFIG_SMTP_SERVER:
+			case CONFIG_SMTP_PORT:
+			case CONFIG_SMTP_SYSTEM_EMAIL:
+			case CONFIG_SMTP_USER:
+			case CONFIG_SMTP_PASS:
+			case CONFIG_SMTP_TLS:
+			case CONFIG_SMTP_SSL:
+			case CONFIG_REPLY_TO_ORGANIZER:
+			case CONFIG_SMTP_TIMEOUT_CON:
+			case CONFIG_SMTP_TIMEOUT:
+				reloadMailSettings();
+				break;
 		}
 		return entity;
 	}
@@ -493,7 +423,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			log.error("There is no correct time zone set in the configuration of OpenMeetings for the key default.timezone or key is missing in table, using default locale!");
 			defaultTzName = TimeZone.getDefault().getID();
 		}
-		OpenmeetingsVariables.setDefaultTimezone(defaultTzName);
+		setDefaultTimezone(defaultTzName);
 	}
 
 	private void reloadRestAllowOrigin() {
@@ -525,7 +455,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	private void reloadChatSendOnEnter() {
-		setChatSenndOnEnter(getBool(CONFIG_CHAT_SEND_ON_ENTER, false));
+		setChatSendOnEnter(getBool(CONFIG_CHAT_SEND_ON_ENTER, false));
 	}
 
 	private void reloadAllowRegisterFront() {
@@ -550,6 +480,23 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	private void reloadDisplayNameEditable() {
 		setDisplayNameEditable(getBool(CONFIG_DISPLAY_NAME_EDITABLE, false));
+	}
+
+	private void reloadMyRoomsEnabled() {
+		setMyRoomsEnabled(getBool(CONFIG_MYROOMS_ENABLED, true));
+	}
+
+	private void reloadMailSettings() {
+		setSmtpServer(getString(CONFIG_SMTP_SERVER, null));
+		setSmtpPort(getInt(CONFIG_SMTP_PORT, 25));
+		setSmtpUser(getString(CONFIG_SMTP_USER, null));
+		setSmtpPass(getString(CONFIG_SMTP_PASS, null));
+		setSmtpUseTls(getBool(CONFIG_SMTP_TLS, false));
+		setSmtpUseSsl(getBool(CONFIG_SMTP_SSL, false));
+		setSmtpTimeOut(getInt(CONFIG_SMTP_TIMEOUT, 30000));
+		setSmtpConnectionTimeOut(getInt(CONFIG_SMTP_TIMEOUT_CON, 30000));
+		setMailFrom(getString(CONFIG_SMTP_SYSTEM_EMAIL, null));
+		setMailAddReplyTo(getBool(CONFIG_REPLY_TO_ORGANIZER, true));
 	}
 
 	public void reinit() {
@@ -579,6 +526,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadSendVerificationEmail();
 		reloadSendRegisterEmail();
 		reloadDisplayNameEditable();
+		reloadMyRoomsEnabled();
+		reloadMailSettings();
 	}
 
 	private static JSONObject getHotkey(String value) {

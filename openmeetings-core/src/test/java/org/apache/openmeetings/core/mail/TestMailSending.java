@@ -16,9 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.user;
+package org.apache.openmeetings.core.mail;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setMailFrom;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSmtpPass;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSmtpPort;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSmtpServer;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSmtpUseTls;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSmtpUser;
 import static org.junit.Assert.assertTrue;
 
 import javax.mail.Message;
@@ -26,7 +32,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.openmeetings.core.mail.MailHandler;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -66,7 +71,12 @@ public class TestMailSending {
 
 	private MimeMessage getMimeMessage() throws Exception {
 		MailHandler h = new MailHandler();
-		h.init(smtpServer, smtpPort, from, mailAuthUser, mailAuthPass, mailTls, true);
+		setSmtpServer(smtpServer);
+		setSmtpPort(smtpPort);
+		setSmtpUseTls(mailTls);
+		setSmtpUser(mailAuthUser);
+		setSmtpPass(mailAuthPass);
+		setMailFrom(from);
 		// Building MimeMessage
 		MimeMessage msg = h.getBasicMimeMessage();
 		msg.setSubject("getSubject()");

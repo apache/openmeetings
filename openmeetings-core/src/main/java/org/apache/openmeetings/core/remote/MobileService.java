@@ -20,13 +20,13 @@ package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterFrontend;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterOauth;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendVerificationEmail;
 import static org.apache.openmeetings.util.Version.getVersion;
 
@@ -48,7 +48,6 @@ import org.apache.openmeetings.core.util.ChatWebSocketHelper;
 import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -82,8 +81,6 @@ import org.springframework.stereotype.Service;
 @Service("mobile.service")
 public class MobileService {
 	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, getWebAppRootKey());
-	@Autowired
-	private ConfigurationDao cfgDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -311,7 +308,7 @@ public class MobileService {
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient c = streamClientManager.get(IClientUtil.getId(current.getClient()));
 		User u = userDao.get(c.getUserId());
-		if (cfgDao.getBool(CONFIG_MYROOMS_ENABLED, true)) {
+		if (isMyRoomsEnabled()) {
 			//my rooms
 			List<Room> myl = new ArrayList<>();
 			myl.add(roomDao.getUserRoom(u.getId(), Room.Type.conference, LabelDao.getString("my.room.conference", u.getLanguageId())));

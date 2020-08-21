@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.MESSAGES_TAB_ID;
@@ -266,7 +266,7 @@ public class OmUrlFragment implements Serializable {
 				MenuParams params = MenuParams.publicTabButton;
 				if (TYPE_GROUP.equals(type)) {
 					params = MenuParams.privateTabButton;
-				} else if (getBean(ConfigurationDao.class).getBool(CONFIG_MYROOMS_ENABLED, true) && TYPE_MY.equals(type)) {
+				} else if (isMyRoomsEnabled() && TYPE_MY.equals(type)) {
 					params = MenuParams.myTabButton;
 				}
 				basePanel = new RoomsSelectorPanel(CHILD_ID, params);

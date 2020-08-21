@@ -26,8 +26,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 
 import java.io.File;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.DoubleConsumer;
+import java.util.function.Function;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.file.FileItem;
@@ -35,9 +35,11 @@ import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
-import org.artofsolving.jodconverter.OfficeDocumentConverter;
-import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
-import org.artofsolving.jodconverter.office.OfficeManager;
+import org.jodconverter.core.job.ConversionJob;
+import org.jodconverter.core.office.OfficeException;
+import org.jodconverter.core.office.OfficeManager;
+import org.jodconverter.local.LocalConverter;
+import org.jodconverter.local.office.LocalOfficeManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DocumentConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(DocumentConverter.class, getWebAppRootKey());
+	private static final String JOD_JOD_NAME = "doJodConvert";
 
 	@Autowired
 	protected ConfigurationDao cfgDao;
@@ -60,7 +63,7 @@ public class DocumentConverter {
 		boolean fullProcessing = !sf.isPdf();
 		File original = f.getFile(sf.getExt());
 		File pdf = f.getFile(EXTENSION_PDF);
-		log.debug("fullProcessing: " + fullProcessing);
+		log.debug("fullProcessing: {}", fullProcessing);
 		if (fullProcessing) {
 			log.debug("-- running JOD --");
 			logs.add(doJodConvert(original, pdf));
@@ -73,17 +76,17 @@ public class DocumentConverter {
 		return imageConverter.convertDocument(f, pdf, logs, progress);
 	}
 
-	public static void createOfficeManager(String officePath, Consumer<OfficeManager> consumer) {
+	public static void createOfficeManager(String officePath, Function<OfficeManager, ConversionJob> job) throws OfficeException {
 		OfficeManager manager = null;
 		try {
-			DefaultOfficeManagerConfiguration configuration = new DefaultOfficeManagerConfiguration();
+			LocalOfficeManager.Builder builder = LocalOfficeManager.builder();
 			if (!Strings.isEmpty(officePath)) {
-				configuration.setOfficeHome(officePath);
+				builder.officeHome(officePath);
 			}
-			manager = configuration.buildOfficeManager();
+			manager = builder.build();
 			manager.start();
-			if (consumer != null) {
-				consumer.accept(manager);
+			if (job != null) {
+				job.apply(manager).execute();
 			}
 		} finally {
 			if (manager != null) {
@@ -102,15 +105,12 @@ public class DocumentConverter {
 	public ProcessResult doJodConvert(File in, File out) {
 		try {
 			createOfficeManager(cfgDao.getString(CONFIG_PATH_OFFICE, null)
-					, man -> {
-						OfficeDocumentConverter converter = new OfficeDocumentConverter(man);
-						converter.convert(in, out);
-					});
+					, man -> LocalConverter.make(man).convert(in).to(out));
 		} catch (Exception ex) {
-			log.error("doJodConvert", ex);
-			return new ProcessResult("doJodConvert", ex.getMessage(), ex);
+			log.error(JOD_JOD_NAME, ex);
+			return new ProcessResult(JOD_JOD_NAME, ex.getMessage(), ex);
 		}
-		return new ProcessResult("doJodConvert", "Document converted successfully", null)
+		return new ProcessResult(JOD_JOD_NAME, "Document converted successfully", null)
 				.setExitCode(0);
 	}
 }
