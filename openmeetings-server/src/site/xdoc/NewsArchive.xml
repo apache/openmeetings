@@ -20,6 +20,41 @@
 	</properties>
 
 	<body>
+		<section name="Release 4.0.10">
+			<div class="bd-callout bd-callout-info">
+				<h4>Version 4.0.10 released!</h4>
+				<div>Release 4.0.10, provides following improvements:<br/>
+					Backup/Restore:
+					<ul>
+						<li>Multiple issues with restore were fixed</li>
+						<li>Confirmation of backup import was added</li>
+						<li>File/recording hashes are preserved when possible</li>
+					</ul>
+					White board:
+					<ul>
+						<li>Document upload/conversion is improved</li>
+						<li>Whiteboards are not auto-created on room enter</li>
+						<li>Keyboard shortcut for quick poll is added</li>
+					</ul>
+					Room:
+					<ul>
+						<li>User list is now sorted</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
+				</div>
+				<br/>
+
+				<span>
+					11 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.10/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12345740">Detailed list</a>
+				</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.10">Archived download</a>.</span>
+				<span class="date">(2019-12-16)</span>
+			</div>
+		</section>
 		<section name="Release 4.0.9">
 			<div class="bd-callout bd-callout-info">
 				<h4>Version 4.0.9 released!</h4>

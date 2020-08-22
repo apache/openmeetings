@@ -6,6 +6,27 @@ See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number o
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
 
+Release Notes - Openmeetings - Version 4.0.11
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-2154] - Export of OM Calendars is broken
+    * [OPENMEETINGS-2160] - 'closed' room attribute is not being mapped to entity
+    * [OPENMEETINGS-2202] - NPE while invalidating session
+    * [OPENMEETINGS-2286] - Hide user accounts to new users
+    * [OPENMEETINGS-2328] - Sending messages through an external mailbox
+    * [OPENMEETINGS-2382] - email addresses shown - follow up to 2286
+    * [OPENMEETINGS-2383] - for guests: in the chat area apears guest's email instead of First name/Last name
+
+* Improvement
+    * [OPENMEETINGS-2010] - Private chats will not be removed
+    * [OPENMEETINGS-2021] - Widget in Chat Log
+    * [OPENMEETINGS-2188] - OAuth works with 2 level mappings only
+
+* Task
+    * [OPENMEETINGS-2152] - Library versions need to be updated (4.0.11)
+
+
 Release Notes - Openmeetings - Version 4.0.10
 ================================================================================================================
 

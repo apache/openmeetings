@@ -47,6 +47,18 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+4.0.11
+-----
+[Release 4.0.11](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.11), provides following improvements:
+
+Security:
+* 3rd-party libraries are updated to latest versions
+* Email sending via SSL is added
+* User email addresses are hidden
+
+Other fixes and improvements, 11 issues were addressed
+
+
 4.0.10
 -----
 [Release 4.0.10](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.10), provides following improvements:
