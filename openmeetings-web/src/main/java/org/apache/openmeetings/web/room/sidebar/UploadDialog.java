@@ -37,14 +37,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
 public class UploadDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(UploadDialog.class);
 	private final WebMarkupContainer form = new WebMarkupContainer("form");
 	private final RoomFilePanel roomFiles;
 	private final RoomPanel room;
@@ -86,7 +83,7 @@ public class UploadDialog extends Modal<String> {
 	public Modal<String> show(IPartialPageRequestHandler handler) {
 		lastSelected.add(AttributeAppender.replace("value", roomFiles.getLastSelected().getId()));
 		handler.add(form.setVisible(true));
-		handler.appendJavaScript(String.format("bindUpload();"));
+		handler.appendJavaScript(String.format("Upload.bindUpload();"));
 		return super.show(handler);
 	}
 

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.ThreadHelper.startRunnable;
@@ -156,6 +157,7 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 		final BaseFileItem parent = fileDao.get(lastSelected);
 		final long langId = getLangId(c);
 		final long totalSize = files.stream().mapToLong(FileItem::getSize).sum();
+		final String uuid = randomUUID().toString();
 		final AtomicInteger progress = new AtomicInteger(0);
 		long currentSize = 0;
 		for (FileItem curItem : files) {
@@ -177,12 +179,12 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 				f.setInsertedBy(getUserId());
 
 				ProcessResultList logs = processor.processFile(f, curItem.getInputStream()
-						, Optional.<DoubleConsumer>of(part -> sendProgress(c, progress, progress.get() + (int)(100 * part * size / totalSize))));
+						, Optional.<DoubleConsumer>of(part -> sendProgress(c, uuid, progress, progress.get() + (int)(100 * part * size / totalSize))));
 				for (ProcessResult res : logs.getJobs()) {
 					fileLogDao.add(res.getProcess(), f, res);
 				}
 				if (logs.hasError()) {
-					sendError(c, Application.getString("convert.errors.file", langId));
+					sendError(c, uuid, Application.getString("convert.errors.file", langId));
 				} else {
 					if (toWb) {
 						//FIXME TODO room.getWb().sendFileToWb(f, clean);
@@ -191,26 +193,31 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 				}
 			} catch (Exception e) {
 				log.error("Unexpected error while processing uploaded file", e);
-				sendError(c, e.getMessage() == null ? "Unexpected error" : e.getMessage());
+				sendError(c, uuid, e.getMessage() == null ? "Unexpected error" : e.getMessage());
 			} finally {
 				curItem.delete();
 			}
 			currentSize += size;
-			sendProgress(c, progress, (int)(100 * currentSize / totalSize));
+			sendProgress(c, uuid, progress, (int)(100 * currentSize / totalSize));
 		}
-		sendProgress(c, progress, 100);
+		sendProgress(c, uuid, progress, 100);
 	}
 
-	private void sendError(Client c, String msg) {
-		WebSocketHelper.sendClient(c, new JSONObject()
+	private JSONObject getBaseMessage(String uuid) {
+		return new JSONObject()
+				.put("uuid", uuid)
+				.put("type", "room-upload");
+	}
+	private void sendError(Client c, String uuid, String msg) {
+		WebSocketHelper.sendClient(c, getBaseMessage(uuid)
 				.put("status", Status.ERROR.name())
 				.put("message", msg));
 	}
 
-	private void sendProgress(Client c, AtomicInteger progress, int cur) {
+	private void sendProgress(Client c, String uuid, AtomicInteger progress, int cur) {
 		if (cur > progress.get()) {
 			progress.set(cur);
-			WebSocketHelper.sendClient(c, new JSONObject()
+			WebSocketHelper.sendClient(c, getBaseMessage(uuid)
 					.put("status", Status.PROGRESS.name())
 					.put("progress", cur));
 		}
