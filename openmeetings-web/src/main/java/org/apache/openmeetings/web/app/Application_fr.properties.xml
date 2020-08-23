@@ -103,7 +103,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="177"><![CDATA[Utilisateur]]></entry>
 	<entry key="178"><![CDATA[Ajouter utilisateur]]></entry>
 	<entry key="186"><![CDATA[Salles]]></entry>
-
 	<entry key="188"><![CDATA[ID]]></entry>
 	<entry key="190"><![CDATA[Publique]]></entry>
 	<entry key="196"><![CDATA[Commentaire :]]></entry>
@@ -219,9 +218,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="547"><![CDATA[y]]></entry>
 	<entry key="548"><![CDATA[axe-y]]></entry>
 	<entry key="549"><![CDATA[w]]></entry>
-
 	<entry key="551"><![CDATA[h]]></entry>
-
 	<entry key="553"><![CDATA[Modifier la transparence]]></entry>
 	<entry key="556"><![CDATA[La connexion avec le serveur est interrompue. Vérifiez le réseau ou contactez l'adminitrateur.]]></entry>
 	<entry key="557"><![CDATA[Pointeur]]></entry>
@@ -589,7 +586,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="appointment.reminder.ICAL"><![CDATA[courriel iCal]]></entry>
 	<entry key="appointment.reminder.NONE"><![CDATA[ne pas envoyer de notification]]></entry>
 	<entry key="appointment.tab.advanced"><![CDATA[Advanced]]></entry>
-	<entry key="lbl.general"><![CDATA[General]]></entry>
 	<entry key="bad.captcha.text"><![CDATA[You have entered incorrect captcha text]]></entry>
 	<entry key="bad.password.digit"><![CDATA['Weak' password: at least 1 digit is required]]></entry>
 	<entry key="bad.password.lower"><![CDATA['Weak' password: at least 1 lower-case letter is required]]></entry>
@@ -832,6 +828,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="lbl.cancel"><![CDATA[Annuler]]></entry>
 	<entry key="lbl.email"><![CDATA[Courriel :]]></entry>
 	<entry key="lbl.enter"><![CDATA[Entrer]]></entry>
+	<entry key="lbl.general"><![CDATA[General]]></entry>
 	<entry key="lbl.new"><![CDATA[new]]></entry>
 	<entry key="lbl.or"><![CDATA[or]]></entry>
 	<entry key="lbl.refresh"><![CDATA[Rafraichir]]></entry>

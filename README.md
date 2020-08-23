@@ -13,15 +13,15 @@ Getting Started
 ===============
 Please visit the project website for the latest information:
   - https://openmeetings.apache.org/
-    
+
 Documentation for Installation and Upgrade:
   - https://openmeetings.apache.org/installation.html
   - https://openmeetings.apache.org/Upgrade.html
 
 Along with the developer mailing list archive:
   - https://openmeetings.apache.org/mail-lists.html
-    
-    
+
+
 System Requirements
 ===================
 You need a platform that supports [Java SE 11](https://www.oracle.com/java/technologies/javase-downloads.html).
@@ -48,14 +48,45 @@ Builds and CI
 
 | Description | Jenkins CI |
 | :--- | :---: |
-| Master nightly | [![Build Status](https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings/badge/icon)](https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings/) |
-| Master Pull Request | [![Build Status](https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings-pr-build/badge/icon)](https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings-pr-build/) |
-| 4.x Release | [![Build Status](https://builds.apache.org/view/M-R/view/OpenMeetings/job/OpenMeetings%204.0.x/badge/icon)](https://builds.apache.org/view/M-R/view/OpenMeetings/job/OpenMeetings%204.0.x/) |
+| Master nightly | [![Build Status](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings//badge/icon)](https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings/) |
+| Master Pull Request | [![Build Status](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings-pr-build/badge/icon)](https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings-pr-build/) |
 
 Release Notes 
 =============
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
+
+5.0.0
+-----
+[Release 5.0.0](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0), provides following improvements:
+
+This release provides WebRTC audio/video/screen-sharing in the Room
+
+IMPORTANT: Java 11 is required
+
+Flash plugin is no longer required in the browser
+
+Security:
+* Libraries are updated to latest versions
+* More strict CSP is implemented
+* User accounts are hidden for regular users
+* User email addresses are hidden
+
+UI:
+* Support for touch events is added (mobiles, tablets)
+* Better support for new MS Edge browser
+* Direct link for entering the room with room name (not ID)
+* Front camera is used by default
+* User avatar is editable at Admin->Users
+
+Audio/Video:
+* Stability is improved
+* Connection to KMS is auto-recovering
+* Camera resolution changes take effect immediately
+* Multiple client-side JS errors are fixed
+
+Some other fixes and improvements, 74 issues were addressed
+
 
 5.0.0-M4
 -----

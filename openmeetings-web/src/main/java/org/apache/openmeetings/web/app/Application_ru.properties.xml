@@ -103,7 +103,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="177"><![CDATA[Пользователь]]></entry>
 	<entry key="178"><![CDATA[Добавить пользователя]]></entry>
 	<entry key="186"><![CDATA[Комнаты совещаний]]></entry>
-
 	<entry key="188"><![CDATA[Идент. №]]></entry>
 	<entry key="190"><![CDATA[Публичная комната]]></entry>
 	<entry key="196"><![CDATA[Комментарий]]></entry>
@@ -219,9 +218,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="547"><![CDATA[y]]></entry>
 	<entry key="548"><![CDATA[ось y]]></entry>
 	<entry key="549"><![CDATA[w]]></entry>
-
 	<entry key="551"><![CDATA[h]]></entry>
-
 	<entry key="553"><![CDATA[Изменить прозрачность]]></entry>
 	<entry key="556"><![CDATA[Потеряно соединение с сервером. Загрузите заново приложение, либо проверьте вашу сеть.]]></entry>
 	<entry key="557"><![CDATA[Указатель]]></entry>
@@ -589,7 +586,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal e-майл]]></entry>
 	<entry key="appointment.reminder.NONE"><![CDATA[не посылать уведомление]]></entry>
 	<entry key="appointment.tab.advanced"><![CDATA[Дополнительные]]></entry>
-	<entry key="lbl.general"><![CDATA[Общие]]></entry>
 	<entry key="bad.captcha.text"><![CDATA[Вы ввели неверный текст капчи]]></entry>
 	<entry key="bad.password.digit"><![CDATA['Слабый' пароль: обязателена по крайней мере одна цифра]]></entry>
 	<entry key="bad.password.lower"><![CDATA['Слабый' пароль: обязателена по крайней мере одна строчная буква]]></entry>
@@ -598,9 +594,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="bad.password.stop"><![CDATA['Слабый' пароль: пароль не должен содержать частей пользовательского email или логина]]></entry>
 	<entry key="bad.password.upper"><![CDATA['Слабый' пароль: обязателена по крайней мере одна прописная буква]]></entry>
 	<entry key="button.label.share"><![CDATA[Поделиться]]></entry>
-	<entry key="calendar.addCalendar"><![CDATA[Add External Calendar]]></entry>
-	<entry key="calendar.defaultTitle"><![CDATA[New Calendar]]></entry>
-	<entry key="calendar.dialogTitle"><![CDATA[Calendar Details]]></entry>
+	<entry key="calendar.addCalendar"><![CDATA[Добавить внешний календарь]]></entry>
+	<entry key="calendar.defaultTitle"><![CDATA[Новый календарь]]></entry>
+	<entry key="calendar.dialogTitle"><![CDATA[Детали календаря]]></entry>
 	<entry key="calendar.error"><![CDATA[Error in making connection on the URL specified.]]></entry>
 	<entry key="calendar.gcal"><![CDATA[Google Calendar]]></entry>
 	<entry key="calendar.googleID"><![CDATA[Google Calendar ID]]></entry>
@@ -832,8 +828,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="lbl.cancel"><![CDATA[Отменить]]></entry>
 	<entry key="lbl.email"><![CDATA[e-mail:]]></entry>
 	<entry key="lbl.enter"><![CDATA[Вход]]></entry>
+	<entry key="lbl.general"><![CDATA[Общие]]></entry>
 	<entry key="lbl.new"><![CDATA[новый]]></entry>
-	<entry key="lbl.or"><![CDATA[or]]></entry>
+	<entry key="lbl.or"><![CDATA[или]]></entry>
 	<entry key="lbl.refresh"><![CDATA[обновить]]></entry>
 	<entry key="lbl.settings.whiteboard"><![CDATA[Настройки доски]]></entry>
 	<entry key="lbl.update"><![CDATA[Изменить]]></entry>

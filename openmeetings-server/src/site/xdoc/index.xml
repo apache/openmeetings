@@ -69,40 +69,34 @@
 		</section>
 		<section name="News">
 			<div class="bd-callout bd-callout-danger">
-				<h4>Version 5.0.0-M4 released!</h4>
-				<div>Release 5.0.0-M4, provides following improvements:<br/>
+				<h4>Version 5.0.0 released!</h4>
+				<div>Release 5.0.0, provides following improvements:<br/>
 					This release provides WebRTC audio/video/screen-sharing in the Room
-					<div class="bd-callout bd-callout-info">Flash plugin is no more required in the browser<br/>
-						<br/>
-						Please NOTE: this version might be not production ready<br/>
+					<div class="bd-callout bd-callout-info">Flash plugin is no longer required in the browser<br/>
 						<br/>
 						IMPORTANT: Java 11 is required
 					</div>
+					Security:
+					<ul>
+						<li>Libraries are updated to latest versions</li>
+						<li>More strict CSP is implemented</li>
+						<li>User accounts are hidden for regular users</li>
+						<li>User email addresses are hidden</li>
+					</ul>
 					UI:
 					<ul>
-						<li>Main UI library has been changed Jquery-UI -> Bootstrap</li>
-						<li>Hotkey to resize&amp;arrage "video" windows is added</li>
-						<li>Camera/Microphone on/off icons are less confusing</li>
-						<li>The room can be blocked until moderator will enter</li>
-						<li>Room sidebar dock button works as expected</li>
-						<li>Right-click menu for WB tab is fixed</li>
-						<li>Link to privacy statement is added to sign-in dialog</li>
+						<li>Support for touch events is added (mobiles, tablets)</li>
+						<li>Better support for new MS Edge browser</li>
+						<li>Direct link for entering the room with room name (not ID)</li>
+						<li>Front camera is used by default</li>
+						<li>User avatar is editable at Admin-&gt;Users</li>
 					</ul>
 					Audio/Video:
 					<ul>
-						<li>Audio-only clients doesn't create "video" windows</li>
-						<li>Audio/Video stream tries to re-connect in case of any issue</li>
-					</ul>
-					Backup/Restore:
-					<ul>
-						<li>Backup/restore was re-worked and better covered with tests</li>
-						<li>Multiple other issues are addressed</li>
-					</ul>
-					Integration:
-					<ul>
-						<li>OAuth: user attributes retrieval is improved</li>
-						<li>LDAP documentation is improved</li>
-						<li>User picture can be retrieved from LDAP</li>
+						<li>Stability is improved</li>
+						<li>Connection to KMS is auto-recovering</li>
+						<li>Camera resolution changes take effect immediately</li>
+						<li>Multiple client-side JS errors are fixed</li>
 					</ul>
 					<br/>
 					Other fixes and improvements
@@ -110,12 +104,12 @@
 				<br/>
 
 				<span>
-					56 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/5.0.0-M4/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12346603">Detailed list</a>
+					74 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/5.0.0/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12348040">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2020-04-23)</span>
+				<span class="date">(2020-08-21)</span>
 			</div>
 			<div class="bd-callout bd-callout-danger">
 				<h4>Version 4.0.10 released!</h4>

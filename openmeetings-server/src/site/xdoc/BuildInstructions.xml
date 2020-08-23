@@ -23,8 +23,8 @@
 		<section name="Nightly Builds">
 			<p>
 				You can find Nightly Builds of the software at:
-				<a href="https://builds.apache.org/view/M-R/view/OpenMeetings/" rel="nofollow" target="_blank">
-					https://builds.apache.org/view/M-R/view/OpenMeetings/
+				<a href="https://ci-builds.apache.org/job/OpenMeetings/" rel="nofollow" target="_blank">
+					https://ci-builds.apache.org/job/OpenMeetings/
 				</a>
 			</p>
 		</section>
@@ -87,6 +87,19 @@ mvn install -P allModules,quick,mysql -pl openmeetings-web,openmeetings-server -
 mvn install -P allModules,quick,mysql -pl openmeetings-util,openmeetings-db,openmeetings-core,openmeetings-install,openmeetings-service,openmeetings-web,openmeetings-server,openmeetings-webservice -Dwicket.configuration=DEVELOPMENT
 ]]>
 			</source>
+
+		</section>
+		<section name="Update JavaScript and CSS at runtime">
+			<div>
+				<p>You can update Javascript and CSS files and then copy them at runtime. No need to re-run the entire Server build and restart. This can greatly save time when developing:</p>
+				<source>mvn minify:minify@room-js minify:minify@interview-wb-js minify:minify@wb-js minify:minify@fileinput-js minify:minify@settings-js minify:minify@nettest-js minify:minify@chat-js minify:minify@theme-minify</source>
+				<p>You can further trim down the compile time to just selected Javascript sections:</p>
+				<source>mvn minify:minify@room-js minify:minify@interview-wb-js</source>
+				<p>And then copy them into the relevant folder, for example if your run the Embedded Jetty:</p>
+				<source>cp -R target/generated-sources/main/java/org/apache/openmeetings/* target/openmeetings-web-5.0.0-SNAPSHOT/WEB-INF/classes/org/apache/openmeetings/</source>
+			</div>
+		</section>
+		<section name="Fix Proxy settings">
 			<div>
 				<b>Working behind a proxy:</b>
 				If you are sitting behind a proxy you should add some proxy settings before starting the build process.

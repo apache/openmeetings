@@ -103,7 +103,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="177"><![CDATA[Användare]]></entry>
 	<entry key="178"><![CDATA[Lägg till användare]]></entry>
 	<entry key="186"><![CDATA[Konferensrum]]></entry>
-
 	<entry key="188"><![CDATA[Id]]></entry>
 	<entry key="190"><![CDATA[Publik]]></entry>
 	<entry key="196"><![CDATA[Kommentar]]></entry>
@@ -220,9 +219,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="547"><![CDATA[y]]></entry>
 	<entry key="548"><![CDATA[y-axel]]></entry>
 	<entry key="549"><![CDATA[b]]></entry>
-
 	<entry key="551"><![CDATA[h]]></entry>
-
 	<entry key="553"><![CDATA[Ändra Genomskinlighet]]></entry>
 	<entry key="556"><![CDATA[Anslutningen till Servern är förlorad. Du måste ladda om Applikationen och/eller kolla din Nätverksanslutning.]]></entry>
 	<entry key="557"><![CDATA[Pekare]]></entry>
@@ -590,7 +587,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal-epost]]></entry>
 	<entry key="appointment.reminder.NONE"><![CDATA[skicka inte notifikation]]></entry>
 	<entry key="appointment.tab.advanced"><![CDATA[Advanced]]></entry>
-	<entry key="lbl.general"><![CDATA[Allmänt]]></entry>
 	<entry key="bad.captcha.text"><![CDATA[Du angav captchatexten felaktigt]]></entry>
 	<entry key="bad.password.digit"><![CDATA['Svagt' lösenord: det krävs minst en siffra]]></entry>
 	<entry key="bad.password.lower"><![CDATA['Svagt' lösenord: det krävs åtminstone en gemen]]></entry>
@@ -829,6 +825,7 @@ till dess kan bli oanvändbara.
 	<entry key="lbl.cancel"><![CDATA[Avbryt]]></entry>
 	<entry key="lbl.email"><![CDATA[E-postadress]]></entry>
 	<entry key="lbl.enter"><![CDATA[Anslut]]></entry>
+	<entry key="lbl.general"><![CDATA[Allmänt]]></entry>
 	<entry key="lbl.new"><![CDATA[new]]></entry>
 	<entry key="lbl.or"><![CDATA[eller]]></entry>
 	<entry key="lbl.refresh"><![CDATA[Uppdatera]]></entry>
