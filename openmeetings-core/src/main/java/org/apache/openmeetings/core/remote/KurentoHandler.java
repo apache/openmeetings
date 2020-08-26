@@ -19,7 +19,6 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static java.util.UUID.randomUUID;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.security.InvalidKeyException;
@@ -27,8 +26,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -39,7 +41,6 @@ import javax.annotation.PreDestroy;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -53,6 +54,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.wicket.util.string.Strings;
 import org.kurento.client.Endpoint;
 import org.kurento.client.EventListener;
 import org.kurento.client.KurentoClient;
@@ -97,6 +99,7 @@ public class KurentoHandler {
 	private KurentoClient client;
 	private final AtomicBoolean connected = new AtomicBoolean(false);
 	private String kuid;
+	private final Set<String> ignoredKuids = new HashSet<>();
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
 	private Runnable check;
 
@@ -127,7 +130,6 @@ public class KurentoHandler {
 					return;
 				}
 				log.debug("Reconnecting KMS");
-				kuid = randomUUID().toString();
 				client = KurentoClient.createFromJsonRpcClient(new JsonRpcClientNettyWebSocket(kurentoWsUrl) {
 						{
 							setTryReconnectingMaxTime(0);
@@ -377,6 +379,16 @@ public class KurentoHandler {
 		return kuid;
 	}
 
+	public void setKuid(String kuid) {
+		this.kuid = kuid;
+	}
+
+	public void setIgnoredKuids(String ignoredKuids) {
+		if (!Strings.isEmpty(ignoredKuids)) {
+			this.ignoredKuids.addAll(List.of(ignoredKuids.split("[, ]")));
+		}
+	}
+
 	public void setCheckTimeout(long checkTimeout) {
 		this.checkTimeout = checkTimeout;
 	}
@@ -441,10 +453,14 @@ public class KurentoHandler {
 					// still alive
 					MediaPipeline pipe = client.getById(roid, MediaPipeline.class);
 					Map<String, String> tags = tagsAsMap(pipe);
+					final String inKuid = tags.get(TAG_KUID);
+					if (ignoredKuids.contains(inKuid)) {
+						return;
+					}
 					if (validTestPipeline(tags)) {
 						return;
 					}
-					if (kuid.equals(tags.get(TAG_KUID))) {
+					if (kuid.equals(inKuid)) {
 						KRoom r = rooms.get(Long.valueOf(tags.get(TAG_ROOM)));
 						if (r.getPipeline().getId().equals(pipe.getId())) {
 							return;
@@ -475,7 +491,12 @@ public class KurentoHandler {
 					}
 					// still alive
 					Endpoint point = client.getById(eoid, fClazz);
-					if (validTestPipeline(point.getMediaPipeline())) {
+					Map<String, String> pipeTags = tagsAsMap(point.getMediaPipeline());
+					final String inKuid = pipeTags.get(TAG_KUID);
+					if (ignoredKuids.contains(inKuid)) {
+						return;
+					}
+					if (validTestPipeline(pipeTags)) {
 						return;
 					}
 					Map<String, String> tags = tagsAsMap(point);
@@ -490,12 +511,10 @@ public class KurentoHandler {
 			}
 		}
 
-		private boolean validTestPipeline(MediaPipeline pipeline) {
-			return validTestPipeline(tagsAsMap(pipeline));
-		}
-
 		private boolean validTestPipeline(Map<String, String> tags) {
-			return kuid.equals(tags.get(TAG_KUID)) && MODE_TEST.equals(tags.get(TAG_MODE)) && MODE_TEST.equals(tags.get(TAG_ROOM));
+			return kuid.equals(tags.get(TAG_KUID))
+					&& MODE_TEST.equals(tags.get(TAG_MODE))
+					&& MODE_TEST.equals(tags.get(TAG_ROOM));
 		}
 	}
 }
