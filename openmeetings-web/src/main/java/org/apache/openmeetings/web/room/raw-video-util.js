@@ -3,12 +3,13 @@ const WB_AREA_SEL = '.room-block .wb-block';
 const WBA_WB_SEL = '.room-block .wb-block .wb-tab-content';
 const VIDWIN_SEL = '.video.user-video';
 const VID_SEL = '.video-container[id!=user-video]';
+const VID_DLG = '.video-container.ui-dialog-content';
 const CAM_ACTIVITY = 'VIDEO';
 const MIC_ACTIVITY = 'AUDIO';
 const SCREEN_ACTIVITY = 'SCREEN';
 const REC_ACTIVITY = 'RECORD';
 var VideoUtil = (function() {
-	const self = {};
+	const self = {arrangeMode: 0};
 	function _getVid(uid) {
 		return 'video' + uid;
 	}
@@ -49,7 +50,7 @@ var VideoUtil = (function() {
 		return c.length > 0 ? $(WBA_WB_SEL) : a;
 	}
 	function __processTopToBottom(area, rectNew, list) {
-		const offsetX = 20
+		const offsetX = 10
 			, offsetY = 10;
 
 		let minY = area.bottom, posFound;
@@ -78,7 +79,7 @@ var VideoUtil = (function() {
 		return {left: rectNew.left, top: rectNew.top};
 	}
 	function __processEqualsBottomToTop(area, rectNew, list) {
-		const offsetX = 20
+		const offsetX = 10
 			, offsetY = 10;
 
 		rectNew.bottom = area.bottom;
@@ -147,31 +148,65 @@ var VideoUtil = (function() {
 		const processor = _processor || __processTopToBottom;
 		return processor(area, rectNew, list);
 	}
-	function _arrange() {
-		const list = [];
-		$(VIDWIN_SEL).each(function() {
-			const v = $(this);
-			v.css(_getPos(list, v.width(), v.height()));
-			list.push(_getRect(v));
-		});
-	}
-	function _arrangeResize() {
-		const list = [];
-		function __getDialog(_v) {
-			return $(_v).find('.video-container.ui-dialog-content');
+	function _arrange_set(v, list) {
+		var w, h, f, r = false;
+
+		switch (self.arrangeMode) {
+			case 1:
+				w = 240;
+				h = 180;
+				break;
+			case 2:
+				w = 120;
+				h = 90;
+				f = __processEqualsBottomToTop;
+				break;
+
+			default:
+				const v2 = v.find('.video').get(0);
+				w = v2 && parseInt(v2.style.width, 10);
+				h = v2 && parseInt(v2.style.height, 10);
+				r = true;
+				break;
 		}
-		$(VIDWIN_SEL).toArray().sort((v1, v2) => {
-			const c1 = __getDialog(v1).data().stream()
-				, c2 = __getDialog(v2).data().stream();
-			return c2.level - c1.level || c1.user.displayName.localeCompare(c2.user.displayName);
-		}).forEach(_v => {
-			const v = $(_v);
-			__getDialog(v)
-				.dialog('option', 'width', 120)
-				.dialog('option', 'height', 90);
-			v.css(_getPos(list, v.width(), v.height(), __processEqualsBottomToTop));
-			list.push(_getRect(v));
-		});
+
+		v.find(VID_DLG)
+			.dialog('option', 'width', w)
+			.dialog('option', 'height', h)
+			.dialog('option', 'resizable', r);
+
+		footer = v.find('.footer');
+		h += (!footer || !footer.is(':visible') ? 25 : 50);
+		v.css(_getPos(list, w, h, f)).css('height', h);
+		list.push( _getRect(v));
+	}
+	function _arrange(mode) {
+		const list = [];
+
+		if (mode >= 0) {
+			self.arrangeMode = mode;
+		}
+
+		if (self.arrangeMode == 2) {
+			$(VIDWIN_SEL).toArray().sort((v1, v2) => {
+				const c1 = $(v1).find(VID_DLG).data().stream()
+					, c2 = $(v2).find(VID_DLG).data().stream();
+				return c2.level - c1.level || c1.user.displayName.localeCompare(c2.user.displayName);
+			}).forEach(_v => {
+				_arrange_set($(_v), list);
+			});
+		} else {
+			$(VIDWIN_SEL).each(function() {
+				_arrange_set($(this), list);
+			});
+		}
+	}
+	function _arrangeNext() {
+		self.arrangeMode++;
+		if (self.arrangeMode > 2) {
+			self.arrangeMode = 0;
+		}
+		_arrange();
 	}
 	function _cleanStream(stream) {
 		if (!!stream) {
@@ -282,7 +317,7 @@ var VideoUtil = (function() {
 	self.getPos = _getPos;
 	self.container = _container;
 	self.arrange = _arrange;
-	self.arrangeResize = _arrangeResize;
+	self.arrangeNext = _arrangeNext;
 	self.cleanStream = _cleanStream;
 	self.cleanPeer = _cleanPeer;
 	self.addIceServers = function(opts, m) {

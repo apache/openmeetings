@@ -86,9 +86,11 @@ var Room = (function() {
 	}
 	function _keyHandler(e) {
 		if (__keyPressed(options.keycode.arrange, e)) {
-			VideoUtil.arrange();
+			VideoUtil.arrange(0);
 		} else if (__keyPressed(options.keycode.arrangeresize, e)) {
-			VideoUtil.arrangeResize();
+			VideoUtil.arrange(2);
+		} else if (__keyPressed(options.keycode.arrangenext, e)) {
+			VideoUtil.arrangeNext();
 		} else if (__keyPressed(options.keycode.muteothers, e)) {
 			const v = _getSelfAudioClient();
 			if (v !== null) {

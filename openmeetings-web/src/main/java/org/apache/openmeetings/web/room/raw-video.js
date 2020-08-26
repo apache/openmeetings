@@ -357,8 +357,8 @@ var Video = (function() {
 					, 'ui-dialog-titlebar': '' + (opts.showMicStatus ? ' ui-state-highlight' : '')
 				}
 				, width: _w
-				, minWidth: 40
-				, minHeight: 50
+				, minWidth: 72
+				, minHeight: 60
 				, autoOpen: true
 				, modal: false
 				, appendTo: contSel
@@ -407,7 +407,7 @@ var Video = (function() {
 		const _id = VideoUtil.getVid(sd.uid);
 		_resizeDlgArea(size.width, size.height);
 		if (hasVideo && !isSharing && !isRecording) {
-			VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VIDWIN_SEL), sd.width, sd.height + 25));
+			VideoUtil.arrange();
 		}
 		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 			.attr('playsinline', 'playsinline')
@@ -505,6 +505,7 @@ var Video = (function() {
 		}
 		vc.find('audio,video').remove();
 		vol.destroy();
+		VideoUtil.arrange();
 	}
 	function _reattachStream() {
 		if (video && video.length > 0) {
