@@ -324,7 +324,9 @@ public class CalendarPanel extends UserBasePanel {
 		syncTimer.stop(handler);
 		if (client != null) {
 			apptManager.cleanupIdleConnections();
-			context.getCredentialsProvider().clear();
+			if (context != null) {
+				context.getCredentialsProvider().clear();
+			}
 		}
 	}
 
