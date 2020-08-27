@@ -57,7 +57,7 @@
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
-		<maven-bundle-plugin.version>4.2.1</maven-bundle-plugin.version>
+		<maven-bundle-plugin.version>5.1.1</maven-bundle-plugin.version>
 		<maven-war-plugin.version>3.3.1</maven-war-plugin.version>
 		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
 		<wagon-maven-plugin.version>2.0.0</wagon-maven-plugin.version>
@@ -83,7 +83,7 @@
 		<spring.version>5.2.8.RELEASE</spring.version>
 		<tomcat.version>9.0.37</tomcat.version>
 		<ical4j.version>3.0.18</ical4j.version>
-		<cxf.version>3.3.7</cxf.version>
+		<cxf.version>3.4.0</cxf.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.1</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
@@ -95,25 +95,25 @@
 		<asterisk-java.version>3.6.0</asterisk-java.version>
 		<commons-dbcp.version>2.7.0</commons-dbcp.version>
 		<commons-pool2.version>2.8.1</commons-pool2.version>
-		<postgresql.version>42.2.14</postgresql.version>
+		<postgresql.version>42.2.16</postgresql.version>
 		<commons-cli.version>1.4</commons-cli.version>
 		<dom4j.version>2.1.3</dom4j.version>
 		<commons-codec.version>1.14</commons-codec.version>
 		<commons-io.version>2.7</commons-io.version>
-		<mysql.version>8.0.20</mysql.version>
-		<mssql.version>8.2.2.jre11</mssql.version>
+		<mysql.version>8.0.21</mysql.version>
+		<mssql.version>8.4.0.jre11</mssql.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<xstream.version>1.4.12</xstream.version>
 		<api-all.version>2.0.1</api-all.version>
-		<caldav4j.version>1.0.0-rc.2</caldav4j.version>
+		<caldav4j.version>1.0.1</caldav4j.version>
 		<tika-parsers.version>1.24.1</tika-parsers.version>
 		<commons-text.version>1.9</commons-text.version>
 		<slf4j.version>1.7.30</slf4j.version>
 		<logback.version>1.2.3</logback.version>
-		<jetty.version>9.4.30.v20200611</jetty.version>
+		<jetty.version>9.4.31.v20200723</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.66</bcprov-jdk15on.version>
-		<mockito.version>3.5.2</mockito.version>
+		<mockito.version>3.5.7</mockito.version>
 		<powermock.version>2.0.7</powermock.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.14.0</kurento.version>
