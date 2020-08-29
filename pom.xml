@@ -79,7 +79,7 @@
 		<wicket.version>9.0.0</wicket.version>
 		<wicketju.version>9.0.0-M5.1</wicketju.version>
 		<wickets.version>9.0.0</wickets.version>
-		<wicket-bootstrap.version>5.0.0-M2</wicket-bootstrap.version>
+		<wicket-bootstrap.version>5.0.1</wicket-bootstrap.version>
 		<spring.version>5.2.8.RELEASE</spring.version>
 		<tomcat.version>9.0.37</tomcat.version>
 		<ical4j.version>3.0.18</ical4j.version>
