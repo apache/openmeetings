@@ -21,7 +21,7 @@
 
 	<body>
 		<section name="Audio/Video Conferencing">
-			<img src="images/cut_conference_room.png" alt="Conference Room" />
+			<img src="images/cut_conference_room_om5.png" alt="Conference Room" />
 			<p>OpenMeetings enables you to make Audio/Video conferencing.</p>
 		</section>
 		<section name="Calendar">
@@ -112,23 +112,13 @@
 				<span class="date">(2020-08-21)</span>
 			</div>
 			<div class="bd-callout bd-callout-danger">
-				<h4>Version 4.0.10 released!</h4>
-				<div>Release 4.0.10, provides following improvements:<br/>
-					Backup/Restore:
+				<h4>Version 4.0.11 released!</h4>
+				<div>Release 4.0.11, provides following improvements:<br/>
+					Security:
 					<ul>
-						<li>Multiple issues with restore were fixed</li>
-						<li>Confirmation of backup import was added</li>
-						<li>File/recording hashes are preserved when possible</li>
-					</ul>
-					White board:
-					<ul>
-						<li>Document upload/conversion is improved</li>
-						<li>Whiteboards are not auto-created on room enter</li>
-						<li>Keyboard shortcut for quick poll is added</li>
-					</ul>
-					Room:
-					<ul>
-						<li>User list is now sorted</li>
+						<li>3rd-party libraries are updated to latest versions</li>
+						<li>Email sending via SSL is added</li>
+						<li>User email addresses are hidden</li>
 					</ul>
 					<br/>
 					Other fixes and improvements
@@ -138,11 +128,11 @@
 
 				<span>
 					11 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.10/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12345740">Detailed list</a>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.11/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12346607">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2019-12-16)</span>
+				<span class="date">(2020-09-02)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>

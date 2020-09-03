@@ -96,6 +96,27 @@ Release Notes - Openmeetings - Version 5.0.0
     * [OPENMEETINGS-2304] - Verify string
 
 
+Release Notes - Openmeetings - Version 4.0.11
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-2154] - Export of OM Calendars is broken
+    * [OPENMEETINGS-2160] - 'closed' room attribute is not being mapped to entity
+    * [OPENMEETINGS-2202] - NPE while invalidating session
+    * [OPENMEETINGS-2286] - Hide user accounts to new users
+    * [OPENMEETINGS-2328] - Sending messages through an external mailbox
+    * [OPENMEETINGS-2382] - email addresses shown - follow up to 2286
+    * [OPENMEETINGS-2383] - for guests: in the chat area apears guest's email instead of First name/Last name
+
+* Improvement
+    * [OPENMEETINGS-2010] - Private chats will not be removed
+    * [OPENMEETINGS-2021] - Widget in Chat Log
+    * [OPENMEETINGS-2188] - OAuth works with 2 level mappings only
+
+* Task
+    * [OPENMEETINGS-2152] - Library versions need to be updated (4.0.11)
+
+
 Release Notes - Openmeetings - Version 5.0.0-M4
 ================================================================================================================
 
@@ -164,6 +185,27 @@ Release Notes - Openmeetings - Version 5.0.0-M4
     * [OPENMEETINGS-2151] - Library versions need to be updated (5.0.0-M4)
     * [OPENMEETINGS-2176] - Sonar issues need to be addressed (M4)
     * [OPENMEETINGS-2247] - CSP should be re-worked
+
+
+Release Notes - Openmeetings - Version 4.0.10
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-2088] - Internal error on clicking start upload button without selecting file in file uploading
+    * [OPENMEETINGS-2098] - New Whiteboard each time admin logs in
+    * [OPENMEETINGS-2110] - Restore of backup failed
+    * [OPENMEETINGS-2113] - messed up documents in folder after backup/import
+
+* Improvement
+    * [OPENMEETINGS-2078] - Shortcut for quick poll is needed
+    * [OPENMEETINGS-2089] - Additional ImageMagic parameter should be added
+    * [OPENMEETINGS-2143] - Polish translation need to be improved
+    * [OPENMEETINGS-2144] - sort user list
+
+* Task
+    * [OPENMEETINGS-2094] - Library versions need to be updated (4.0.10)
+    * [OPENMEETINGS-2123] - FB API should be updated to use v4.0
+    * [OPENMEETINGS-2146] - Hash of file/recording shouldn't be changed on every import
 
 
 Release Notes - Openmeetings - Version 5.0.0-M3

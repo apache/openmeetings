@@ -78,21 +78,21 @@
 			</subsection>
 			<subsection name="Latest Official Release">
 				<p>
-					Apache OpenMeetings 4.0.10
+					Apache OpenMeetings 4.0.11
 				</p>
 				<ul>
 					<li>
 						Binaries:
 						<ul>
 							<li>
-								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.zip">apache-openmeetings-4.0.10.zip</a>
-								<a href="https://downloads.apache.org/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.zip.asc">[SIG]</a>
-								<a href="https://downloads.apache.org/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.zip.sha512">[SHA512]</a>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.11/bin/apache-openmeetings-4.0.11.zip">apache-openmeetings-4.0.11.zip</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.11/bin/apache-openmeetings-4.0.11.zip.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.11/bin/apache-openmeetings-4.0.11.zip.sha512">[SHA512]</a>
 							</li>
 							<li>
-								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.tar.gz">apache-openmeetings-4.0.10.tar.gz</a>
-								<a href="https://downloads.apache.org/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.tar.gz.asc">[SIG]</a>
-								<a href="https://downloads.apache.org/openmeetings/4.0.10/bin/apache-openmeetings-4.0.10.tar.gz.sha512">[SHA512]</a>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.11/bin/apache-openmeetings-4.0.11.tar.gz">apache-openmeetings-4.0.11.tar.gz</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.11/bin/apache-openmeetings-4.0.11.tar.gz.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.11/bin/apache-openmeetings-4.0.11.tar.gz.sha512">[SHA512]</a>
 							</li>
 						</ul>
 					</li>
@@ -100,22 +100,22 @@
 						Sources:
 						<ul>
 							<li>
-								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.zip">apache-openmeetings-4.0.10-src.zip</a>
-								<a href="https://downloads.apache.org/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.zip.asc">[SIG]</a>
-								<a href="https://downloads.apache.org/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.zip.sha512">[SHA512]</a>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.11/src/apache-openmeetings-4.0.11-src.zip">apache-openmeetings-4.0.11-src.zip</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.11/src/apache-openmeetings-4.0.11-src.zip.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.11/src/apache-openmeetings-4.0.11-src.zip.sha512">[SHA512]</a>
 							</li>
 							<li>
-								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.tar.gz">apache-openmeetings-4.0.10-src.tar.gz</a>
-								<a href="https://downloads.apache.org/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.tar.gz.asc">[SIG]</a>
-								<a href="https://downloads.apache.org/openmeetings/4.0.10/src/apache-openmeetings-4.0.10-src.tar.gz.sha512">[SHA512]</a>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.11/src/apache-openmeetings-4.0.11-src.tar.gz">apache-openmeetings-4.0.11-src.tar.gz</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.11/src/apache-openmeetings-4.0.11-src.tar.gz.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/4.0.11/src/apache-openmeetings-4.0.11-src.tar.gz.sha512">[SHA512]</a>
 							</li>
 						</ul>
 					</li>
 					<li>
-						Changes: <a href="https://downloads.apache.org/openmeetings/4.0.10/CHANGELOG.md">CHANGELOG.md</a>.
+						Changes: <a href="https://downloads.apache.org/openmeetings/4.0.11/CHANGELOG.md">CHANGELOG.md</a>.
 					</li>
 					<li>
-						Docker image: <a href="https://github.com/openmeetings/openmeetings-docker/tree/4.0.10">https://github.com/openmeetings/openmeetings-docker/tree/4.0.10</a>
+						Docker image: <a href="https://github.com/openmeetings/openmeetings-docker/tree/4.0.11">https://github.com/openmeetings/openmeetings-docker/tree/4.0.11</a>
 					</li>
 					<li>
 						<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Live+iso+OpenMeetings+on+Ubuntu">Live OM iso images by Alvaro</a>
