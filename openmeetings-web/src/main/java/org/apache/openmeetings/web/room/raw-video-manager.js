@@ -8,12 +8,12 @@ var VideoManager = (function() {
 			, v = w.data()
 			, peer = v && v.getPeer();
 
-		if (peer) {
+		if (peer && false === peer.cleaned) {
 			peer.processAnswer(m.sdpAnswer, function (error) {
+				if (true === peer.cleaned) {
+					return;
+				}
 				if (error) {
-					if (true === this.cleaned) {
-						return;
-					}
 					return OmUtil.error(error);
 				}
 				const vidEls = w.find('audio, video')
@@ -85,12 +85,12 @@ var VideoManager = (function() {
 						, v = w.data()
 						, peer = v && v.getPeer();
 
-					if (peer) {
+					if (peer && false === peer.cleaned) {
 						peer.addIceCandidate(m.candidate, function (error) {
+							if (true === this.cleaned) {
+								return;
+							}
 							if (error) {
-								if (true === this.cleaned) {
-									return;
-								}
 								OmUtil.error('Error adding candidate: ' + error);
 								return;
 							}

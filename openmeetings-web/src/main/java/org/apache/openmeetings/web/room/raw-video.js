@@ -1,8 +1,8 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Video = (function() {
-	const self = {}
+	const self = {}, states = []
 		, AudioCtx = window.AudioContext || window.webkitAudioContext;
-	let sd, v, vc, t, footer, size, vol, video, iceServers
+	let sd, v, vc, t, footer, size, vol, iceServers
 		, lm, level, userSpeaks = false, muteOthers
 		, hasVideo, isSharing, isRecording;
 
@@ -19,7 +19,7 @@ var Video = (function() {
 			OmUtil.sendMessage({type: 'mic', id: 'activity', active: speaks});
 		}
 	}
-	function _getScreenStream(msg, callback) {
+	function _getScreenStream(msg, state, callback) {
 		function __handleScreenError(err) {
 			VideoManager.sendMessage({id: 'errorSharing'});
 			Sharer.setShareState(SHARE_STOPPED);
@@ -50,11 +50,14 @@ var Video = (function() {
 			});
 		}
 		promise.then(function(stream) {
-			__createVideo();
-			callback(msg, cnts, stream);
+			if (!state.disposed) {
+				__createVideo(state);
+				state.stream = stream;
+				callback(msg, state, cnts);
+			}
 		}).catch(__handleScreenError);
 	}
-	function _getVideoStream(msg, callback) {
+	function _getVideoStream(msg, state, callback) {
 		VideoSettings.constraints(sd, function(cnts) {
 			if ((VideoUtil.hasCam(sd) && !cnts.video) || (VideoUtil.hasMic(sd) && !cnts.audio)) {
 				VideoManager.sendMessage({
@@ -71,7 +74,7 @@ var Video = (function() {
 			}
 			navigator.mediaDevices.getUserMedia(cnts)
 				.then(function(stream) {
-					if (msg.instanceUid !== v.data('instance-uid')) {
+					if (state.disposed || msg.instanceUid !== v.data('instance-uid')) {
 						return;
 					}
 					let _stream = stream;
@@ -97,8 +100,10 @@ var Video = (function() {
 							});
 						}
 					}
-					__createVideo(data);
-					callback(msg, cnts, _stream);
+					state.data = data;
+					__createVideo(state);
+					state.stream = _stream;
+					callback(msg, state, cnts);
 				})
 				.catch(function(err) {
 					VideoManager.sendMessage({
@@ -116,9 +121,9 @@ var Video = (function() {
 				});
 		});
 	}
-	function __attachListener(rtcPeer) {
-		if (rtcPeer) {
-			const pc = rtcPeer.peerConnection;
+	function __attachListener(state) {
+		if (!state.disposed && state.data.rtcPeer) {
+			const pc = state.data.rtcPeer.peerConnection;
 			pc.onconnectionstatechange = function(event) {
 				console.warn(`!!RTCPeerConnection state changed: ${pc.connectionState}, user: ${sd.user.displayName}, uid: ${sd.uid}`);
 				switch(pc.connectionState) {
@@ -141,20 +146,20 @@ var Video = (function() {
 			}
 		}
 	}
-	function __createSendPeer(msg, cnts, stream) {
-		const options = {
-			videoStream: stream
+	function __createSendPeer(msg, state, cnts) {
+		state.options = {
+			videoStream: state.stream
 			, mediaConstraints: cnts
 			, onicecandidate: self.onIceCandidate
 		};
 		if (!isSharing) {
-			options.localVideo = video[0];
+			state.options.localVideo = state.video[0];
 		}
-		const data = video.data();
+		const data = state.data;
 		data.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
-			VideoUtil.addIceServers(options, msg)
+			VideoUtil.addIceServers(state.options, msg)
 			, function (error) {
-				if (true === this.cleaned) {
+				if (state.disposed || true === data.rtcPeer.cleaned) {
 					return;
 				}
 				if (error) {
@@ -164,8 +169,8 @@ var Video = (function() {
 					level = MicLevel();
 					level.meter(data.analyser, lm, _micActivity, OmUtil.error);
 				}
-				this.generateOffer(function(error, offerSdp) {
-					if (true === this.cleaned) {
+				data.rtcPeer.generateOffer(function(error, offerSdp) {
+					if (state.disposed || true === data.rtcPeer.cleaned) {
 						return;
 					}
 					if (error) {
@@ -185,33 +190,34 @@ var Video = (function() {
 					}
 				});
 			});
-		__attachListener(data.rtcPeer);
+		data.rtcPeer.cleaned = false;
+		__attachListener(state);
 	}
-	function _createSendPeer(msg) {
+	function _createSendPeer(msg, state) {
 		if (isSharing || isRecording) {
-			_getScreenStream(msg, __createSendPeer);
+			_getScreenStream(msg, state, __createSendPeer);
 		} else {
-			_getVideoStream(msg, __createSendPeer);
+			_getVideoStream(msg, state, __createSendPeer);
 		}
 	}
-	function _createResvPeer(msg) {
-		__createVideo();
+	function _createResvPeer(msg, state) {
+		__createVideo(state);
 		const options = VideoUtil.addIceServers({
-			remoteVideo : video[0]
+			remoteVideo : state.video[0]
 			, onicecandidate : self.onIceCandidate
 		}, msg);
-		const data = video.data();
+		const data = state.data;
 		data.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
 			options
 			, function(error) {
-				if (true === this.cleaned) {
+				if (state.disposed || true === data.rtcPeer.cleaned) {
 					return;
 				}
 				if (error) {
 					return OmUtil.error(error);
 				}
-				this.generateOffer(function(error, offerSdp) {
-					if (true === this.cleaned) {
+				data.rtcPeer.generateOffer(function(error, offerSdp) {
+					if (state.disposed || true === data.rtcPeer.cleaned) {
 						return;
 					}
 					if (error) {
@@ -225,7 +231,8 @@ var Video = (function() {
 					});
 				});
 			});
-		__attachListener(data.rtcPeer);
+		data.rtcPeer.cleaned = false;
+		__attachListener(state);
 	}
 	function _handleMicStatus(state) {
 		if (!footer || !footer.is(':visible')) {
@@ -403,27 +410,27 @@ var Video = (function() {
 			_init({stream: sd, iceServers: iceServers});
 		}
 	}
-	function __createVideo(data) {
+	function __createVideo(state) {
 		const _id = VideoUtil.getVid(sd.uid);
 		_resizeDlgArea(size.width, size.height);
 		if (hasVideo && !isSharing && !isRecording) {
 			VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VIDWIN_SEL), sd.width, sd.height + 25));
 		}
-		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
+		state.video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 			.attr('playsinline', 'playsinline')
 			.width(vc.width()).height(vc.height())
 			.prop('autoplay', true).prop('controls', false);
-		if (data) {
-			video.data(data);
+		if (state.data) {
+			state.video.data(state.data);
 		}
 		if (hasVideo) {
 			vc.removeClass('audio-only').css('background-image', '');;
 			vc.parents('.ui-dialog').removeClass('audio-only');
-			video.attr('poster', sd.user.pictureUri);
+			state.video.attr('poster', sd.user.pictureUri);
 		} else {
 			vc.addClass('audio-only');
 		}
-		vc.append(video);
+		vc.append(state.video);
 		if (VideoUtil.hasMic(sd)) {
 			const volIco = vol.create(self)
 			if (hasVideo) {
@@ -439,12 +446,17 @@ var Video = (function() {
 	function _refresh(_msg) {
 		const msg = _msg || {iceServers: iceServers};
 		_cleanup();
-		const hasAudio = VideoUtil.hasMic(sd);
+		const hasAudio = VideoUtil.hasMic(sd)
+			, state = {
+				disposed: false
+				, data: {}
+			};
+		states.push(state);
 		if (sd.self) {
-			_createSendPeer(msg);
+			_createSendPeer(msg, state);
 			_handleMicStatus(hasAudio);
 		} else {
-			_createResvPeer(msg);
+			_createResvPeer(msg, state);
 		}
 	}
 	function _setRights() {
@@ -456,43 +468,73 @@ var Video = (function() {
 			muteOthers.removeClass('enabled').off();
 		}
 	}
-	function _cleanup() {
-		OmUtil.log('Disposing participant ' + sd.uid);
-		if (video && video.length > 0) {
-			const data = video.data();
-			if (data.analyser) {
-				VideoUtil.disconnect(data.analyser);
-				data.analyser = null;
+	function _cleanData(data) {
+		if (!data) {
+			return;
+		}
+		if (data.analyser) {
+			VideoUtil.disconnect(data.analyser);
+			data.analyser = null;
+		}
+		if (data.gainNode) {
+			VideoUtil.disconnect(data.gainNode);
+			data.gainNode = null;
+		}
+		if (data.aSrc) {
+			VideoUtil.cleanStream(data.aSrc.mediaStream);
+			VideoUtil.cleanStream(data.aSrc.origStream);
+			VideoUtil.disconnect(data.aSrc);
+			data.aSrc = null;
+		}
+		if (data.aDest) {
+			VideoUtil.disconnect(data.aDest);
+			data.aDest = null;
+		}
+		if (data.aCtx) {
+			if (data.aCtx.destination) {
+				VideoUtil.disconnect(data.aCtx.destination);
 			}
-			if (data.gainNode) {
-				VideoUtil.disconnect(data.gainNode);
-				data.gainNode = null;
-			}
-			if (data.aSrc) {
-				VideoUtil.cleanStream(data.aSrc.mediaStream);
-				VideoUtil.cleanStream(data.aSrc.origStream);
-				VideoUtil.disconnect(data.aSrc);
-				data.aSrc = null;
-			}
-			if (data.aDest) {
-				VideoUtil.disconnect(data.aDest);
-				data.aDest = null;
-			}
-			if (data.aCtx) {
-				if (data.aCtx.destination) {
-					VideoUtil.disconnect(data.aCtx.destination);
+			if ('closed' !== data.aCtx.state) {
+				try {
+					data.aCtx.close();
+				} catch(e) {
+					console.error(e);
 				}
-				data.aCtx.close();
-				data.aCtx = null;
 			}
-			video.attr('id', 'dummy');
-			const vidNode = video[0];
-			VideoUtil.cleanStream(vidNode.srcObject);
-			vidNode.srcObject = null;
-			vidNode.parentNode.removeChild(vidNode);
-
-			VideoUtil.cleanPeer(data.rtcPeer);
-			video = null;
+			data.aCtx = null;
+		}
+		VideoUtil.cleanPeer(data.rtcPeer);
+		data.rtcPeer = null;
+	}
+	function _cleanup(evt) {
+		OmUtil.log('!!Disposing participant ' + sd.uid);
+		let state;
+		while(state = states.pop()) {
+			state.disposed = true;
+			if (state.options) {
+				delete state.options.videoStream;
+				delete state.options.mediaConstraints;
+				delete state.options.onicecandidate;
+				delete state.options.localVideo;
+				state.options = null;
+			}
+			_cleanData(state.data);
+			VideoUtil.cleanStream(state.stream);
+			state.data = null;
+			state.stream = null;
+			const video = state.video;
+			if (video && video.length > 0) {
+				video.attr('id', 'dummy');
+				const vidNode = video[0];
+				VideoUtil.cleanStream(vidNode.srcObject);
+				vidNode.srcObject = null;
+				vidNode.load();
+				vidNode.removeAttribute("src");
+				vidNode.removeAttribute("srcObject");
+				vidNode.parentNode.removeChild(vidNode);
+				state.video.data({});
+				state.video = null;
+			}
 		}
 		if (lm && lm.length > 0) {
 			_micActivity(false);
@@ -505,14 +547,19 @@ var Video = (function() {
 		}
 		vc.find('audio,video').remove();
 		vol.destroy();
+		if (evt && evt.target) {
+			$(evt).off();
+		}
 	}
 	function _reattachStream() {
-		if (video && video.length > 0) {
-			const data = video.data();
-			if (data.rtcPeer) {
-				video[0].srcObject = sd.self ? data.rtcPeer.getLocalStream() : data.rtcPeer.getRemoteStream();
+		states.forEach(state => {
+			if (state.video && state.video.length > 0) {
+				const data = state.data;
+				if (data.rtcPeer) {
+					state.video[0].srcObject = sd.self ? data.rtcPeer.getLocalStream() : data.rtcPeer.getRemoteStream();
+				}
 			}
-		}
+		});
 	}
 
 	self.update = _update;
@@ -526,7 +573,9 @@ var Video = (function() {
 	self.init = _init;
 	self.stream = function() { return sd; };
 	self.setRights = _setRights;
-	self.getPeer = function() { return video ? video.data().rtcPeer : null; };
+	self.getPeer = function() {
+		return states.length > 0 ? states[0].data.rtcPeer : null;
+	};
 	self.onIceCandidate = function(candidate) {
 		const opts = Room.getOptions();
 		OmUtil.log('Local candidate ' + JSON.stringify(candidate));
@@ -539,7 +588,7 @@ var Video = (function() {
 	};
 	self.reattachStream = _reattachStream;
 	self.video = function() {
-		return video;
+		return states.length > 0 ? states[0].video : null;
 	};
 	self.handleMicStatus = _handleMicStatus;
 	return self;

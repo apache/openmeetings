@@ -175,34 +175,52 @@ var VideoUtil = (function() {
 	}
 	function _cleanStream(stream) {
 		if (!!stream) {
-			stream.getTracks().forEach(function(track) {
-				try {
-					track.stop();
-				} catch(e) {
-					//no-op
-				}
-			});
+			stream.getTracks().forEach(track => track.stop());
 		}
 	}
 	function _cleanPeer(peer) {
 		if (!!peer) {
 			peer.cleaned = true;
-			const pc = peer.peerConnection;
 			try {
-				if (!!pc && !!pc.getLocalStreams()) {
-					pc.getLocalStreams().forEach(function(stream) {
-						_cleanStream(stream);
+				const pc = peer.peerConnection;
+				if (!!pc) {
+					pc.getSenders().forEach(sender => {
+						try {
+							if (sender.track) {
+								sender.track.stop();
+							}
+						} catch(e) {
+							OmUtil.log('Failed to clean sender' + e);
+						}
 					});
+					pc.getReceivers().forEach(receiver => {
+						try {
+							if (receiver.track) {
+								receiver.track.stop();
+							}
+						} catch(e) {
+							OmUtil.log('Failed to clean receiver' + e);
+						}
+					});
+					pc.onconnectionstatechange = null;
+					pc.ontrack = null;
+					pc.onremovetrack = null;
+					pc.onremovestream = null;
+					pc.onicecandidate = null;
+					pc.oniceconnectionstatechange = null;
+					pc.onsignalingstatechange = null;
+					pc.onicegatheringstatechange = null;
+					pc.onnegotiationneeded = null;
 				}
-			} catch(e) {
-				OmUtil.log('Failed to clean peer' + e);
-			}
-			try {
 				peer.dispose();
+				peer.removeAllListeners('icecandidate');
+				delete peer.generateOffer;
+				delete peer.processAnswer;
+				delete peer.processOffer;
+				delete peer.addIceCandidate;
 			} catch(e) {
 				//no-op
 			}
-			peer = null;
 		}
 	}
 	function _isChrome(_b) {

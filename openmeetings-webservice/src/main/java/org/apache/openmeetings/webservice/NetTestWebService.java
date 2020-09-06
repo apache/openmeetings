@@ -19,9 +19,9 @@
 package org.apache.openmeetings.webservice;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -32,9 +32,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.ThreadLocalRandom;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 @Service("netTestWebService")
 @Path("/networktest")
@@ -58,7 +59,7 @@ public class NetTestWebService {
 	public Response get(@QueryParam("type") String type, @QueryParam("size") int _size) {
 		final int size;
 		TestType testType = getTypeByString(type);
-		log.debug("Network test:: get");
+		log.debug("Network test:: get, {}, {}", testType, _size);
 
 		// choose data to send
 		switch (testType) {

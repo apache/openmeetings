@@ -307,7 +307,7 @@ var VideoSettings = (function() {
 					options
 					, function(error) {
 						if (error) {
-							if (true === this.cleaned) {
+							if (true === rtcPeer.cleaned) {
 								return;
 							}
 							return OmUtil.error(error);
@@ -321,7 +321,7 @@ var VideoSettings = (function() {
 						}
 						rtcPeer.generateOffer(function(error, _offerSdp) {
 							if (error) {
-								if (true === this.cleaned) {
+								if (true === rtcPeer.cleaned) {
 									return;
 								}
 								return OmUtil.error('Error generating the offer');
@@ -496,14 +496,14 @@ var VideoSettings = (function() {
 						options
 						, function(error) {
 							if (error) {
-								if (true === this.cleaned) {
+								if (true === rtcPeer.cleaned) {
 									return;
 								}
 								return OmUtil.error(error);
 							}
 							rtcPeer.generateOffer(function(error, offerSdp) {
 								if (error) {
-									if (true === this.cleaned) {
+									if (true === rtcPeer.cleaned) {
 										return;
 									}
 									return OmUtil.error('Error generating the offer');
@@ -520,7 +520,7 @@ var VideoSettings = (function() {
 				OmUtil.log('Play SDP answer received from server. Processing ...');
 				rtcPeer.processAnswer(m.sdpAnswer, function(error) {
 					if (error) {
-						if (true === this.cleaned) {
+						if (true === rtcPeer.cleaned) {
 							return;
 						}
 						return OmUtil.error(error);
@@ -534,7 +534,7 @@ var VideoSettings = (function() {
 				OmUtil.log('SDP answer received from server. Processing ...');
 				rtcPeer.processAnswer(m.sdpAnswer, function(error) {
 					if (error) {
-						if (true === this.cleaned) {
+						if (true === rtcPeer.cleaned) {
 							return;
 						}
 						return OmUtil.error(error);
@@ -544,7 +544,7 @@ var VideoSettings = (function() {
 			case 'iceCandidate':
 				rtcPeer.addIceCandidate(m.candidate, function(error) {
 					if (error) {
-						if (true === this.cleaned) {
+						if (true === rtcPeer.cleaned) {
 							return;
 						}
 						return OmUtil.error('Error adding candidate: ' + error);

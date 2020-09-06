@@ -202,6 +202,7 @@
 							<jsSourceDir>../java/org/apache/openmeetings/web/room</jsSourceDir>
 							<jsSourceFiles>
 								<jsSourceFile>NoSleep.js</jsSourceFile>
+								<jsSourceFile>raw-activities.js</jsSourceFile>
 								<jsSourceFile>raw-video.js</jsSourceFile>
 								<jsSourceFile>raw-video-manager.js</jsSourceFile>
 								<jsSourceFile>raw-sharer.js</jsSourceFile>

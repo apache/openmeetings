@@ -390,6 +390,9 @@ public class KStream extends AbstractStream {
 
 	public void addCandidate(IceCandidate candidate, String uid) {
 		if (this.uid.equals(uid)) {
+			if (outgoingMedia == null) {
+				return;
+			}
 			outgoingMedia.addIceCandidate(candidate);
 		} else {
 			WebRtcEndpoint endpoint = listeners.get(uid);

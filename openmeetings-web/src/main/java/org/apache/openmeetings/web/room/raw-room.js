@@ -372,6 +372,9 @@ var Room = (function() {
 		}).appendTo(container);
 	}
 	function _addClient(_clients) {
+		if (!options) {
+			return; //too early
+		}
 		const clients = Array.isArray(_clients) ? _clients : [_clients];
 		clients.forEach(c => {
 			const self = c.uid === options.uid;
@@ -392,6 +395,9 @@ var Room = (function() {
 		__sortUserList();
 	}
 	function _updateClient(c) {
+		if (!options) {
+			return; //too early
+		}
 		const self = c.uid === options.uid
 			, le = Room.getClient(c.uid)
 			, hasAudio = VideoUtil.hasMic(c)
