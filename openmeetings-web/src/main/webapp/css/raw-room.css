@@ -509,13 +509,26 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 .room-block .room-container .user-video {
 	display: inline-block !important;
-	overflow: hidden;
 }
 .room-block .room-container .user-video .ui-resizable-se {
+	position: absolute;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	right: 0px;
+	bottom: 0px;
+	overflow: hidden;
+	background: none;
+}
+.room-block .room-container .user-video .ui-resizable-se:before {
+	content: ' ';
 	width: 32px;
 	height: 32px;
 	transform: rotate(-45deg);
-	right: -16px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	right: -21px;
 	bottom: -16px;
 	background: repeating-linear-gradient(
 		var(--dark), var(--dark) 3px, transparent 3px, transparent 5px

@@ -46,6 +46,7 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.common.confirmation.ConfirmationDialog;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -133,6 +134,7 @@ public abstract class FileTreePanel extends Panel {
 		}
 	});
 	private final Component upload = new WebMarkupContainer("upload");
+	private ConfirmationDialog confirmTrashDialog;
 
 	@SpringBean
 	private RecordingDao recDao;
@@ -208,6 +210,7 @@ public abstract class FileTreePanel extends Panel {
 			}
 		}));
 		trashToolbar.add(getTrashBorder());
+		add(confirmTrashDialog);
 
 		form.add(trees.add(tree).setOutputMarkupId(true));
 		updateSizes();
@@ -304,31 +307,24 @@ public abstract class FileTreePanel extends Panel {
 
 	private ConfirmableAjaxBorder getTrashBorder() {
 		if (trashBorder == null) {
-			trashBorder = new ConfirmableAjaxBorder("trash", new ResourceModel("80"), new ResourceModel("713")) {
+			confirmTrashDialog = new ConfirmationDialog("trash-confirm-dialog", new ResourceModel("80"), new ResourceModel("713")) {
 				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected boolean isClickable() {
-					return !readOnly && !selected.isEmpty();
-				}
 
 				@Override
 				protected void onConfirm(AjaxRequestTarget target) {
 					deleteAll(target);
 				}
 			};
+			trashBorder = new ConfirmableAjaxBorder("trash", confirmTrashDialog) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected boolean isClickable() {
+					return !readOnly && !selected.isEmpty();
+				}
+			};
 		}
 		return trashBorder;
-	}
-
-	public FileTreePanel setBorderTitle(IModel<String> title) {
-		getTrashBorder().setTitle(title);
-		return this;
-	}
-
-	public FileTreePanel setBorderMessage(IModel<String> message) {
-		getTrashBorder().setMessage(message);
-		return this;
 	}
 
 	@Override

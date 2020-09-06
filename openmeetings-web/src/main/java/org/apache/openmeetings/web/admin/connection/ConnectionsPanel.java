@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.admin.connection;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
-import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelConfirm;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior.newOkCancelConfirm;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

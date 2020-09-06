@@ -20,38 +20,19 @@ package org.apache.openmeetings.web.common.confirmation;
 
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.markup.html.border.Border;
-import org.apache.wicket.model.IModel;
 
 public abstract class ConfirmableAjaxBorder extends Border {
 	private static final long serialVersionUID = 1L;
-	private final IModel<String> title;
-	private final IModel<String> message;
-	private ConfirmationDialog dialog;
+	private final ConfirmationDialog dialog;
 
-	public ConfirmableAjaxBorder(String id, IModel<String> title, IModel<String> message) {
+	public ConfirmableAjaxBorder(String id, ConfirmationDialog dialog) {
 		super(id);
-		this.title = title;
-		this.message = message;
+		this.dialog = dialog;
 		setOutputMarkupId(true);
-	}
-
-	private ConfirmationDialog getDialog() {
-		if (dialog == null) {
-			dialog = new ConfirmationDialog("dialog", title, message) {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onConfirm(AjaxRequestTarget target) {
-					ConfirmableAjaxBorder.this.onConfirm(target);
-				}
-			};
-		}
-		return dialog;
 	}
 
 	@Override
@@ -69,25 +50,14 @@ public abstract class ConfirmableAjaxBorder extends Border {
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				if (isClickable()) {
-					getDialog().show(target);
+					dialog.show(target);
 				}
 			}
 		});
-		addToBorder(getDialog());
 	}
 
 	protected boolean isClickable() {
 		return true;
-	}
-
-	public ConfirmableAjaxBorder setTitle(IModel<String> title) {
-		getDialog().header(title);
-		return this;
-	}
-
-	public ConfirmableAjaxBorder setMessage(IModel<String> message) {
-		getDialog().setModel(message);
-		return this;
 	}
 
 	/**
@@ -99,38 +69,6 @@ public abstract class ConfirmableAjaxBorder extends Border {
 	}
 
 	protected void onEvent(AjaxRequestTarget target) {
-		getDialog().show(target);
-	}
-
-	/**
-	 * Triggered when the form is submitted, and the validation succeed
-	 *
-	 * @param target - the {@link AjaxRequestTarget}
-	 */
-	protected abstract void onConfirm(AjaxRequestTarget target);
-
-	@Override
-	protected void detachModel() {
-		super.detachModel();
-		title.detach();
-		message.detach();
-	}
-
-	public static ConfirmationBehavior newOkCancelDangerConfirm(Component c, String title) {
-		return new ConfirmationBehavior(newOkCancelConfirmCfg(c, title)
-				.withBtnOkClass("btn btn-sm btn-danger")
-				.withBtnOkIconClass("fas fa-exclamation-triangle")
-				);
-	}
-
-	public static ConfirmationBehavior newOkCancelConfirm(Component c, String title) {
-		return new ConfirmationBehavior(newOkCancelConfirmCfg(c, title));
-	}
-
-	public static ConfirmationConfig newOkCancelConfirmCfg(Component c, String title) {
-		return new ConfirmationConfig()
-				.withBtnCancelLabel(c.getString("lbl.cancel"))
-				.withBtnOkLabel(c.getString("54"))
-				.withTitle(title);
+		dialog.show(target);
 	}
 }

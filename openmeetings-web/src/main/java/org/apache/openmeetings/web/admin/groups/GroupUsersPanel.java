@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
-import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior.newOkCancelDangerConfirm;
 
 import java.util.ArrayList;
 import java.util.List;

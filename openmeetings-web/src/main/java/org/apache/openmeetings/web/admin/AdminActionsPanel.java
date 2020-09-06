@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.admin;
 
-import static org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior.newOkCancelDangerConfirm;
 
 import org.apache.openmeetings.web.common.FormActionsPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
