@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.common.menu;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 
 import java.util.ArrayList;
@@ -92,7 +91,6 @@ public class OmMenuItem implements INavbarComponent {
 					OmMenuItem.this.onClick(target);
 				}
 			}.setIconType(icon);
-			item.add(AttributeModifier.append(ATTR_CLASS, "nav-link"));
 		} else {
 			item = new NavbarDropDownButton(Model.of(title), Model.of(icon)) {
 				private static final long serialVersionUID = 1L;
