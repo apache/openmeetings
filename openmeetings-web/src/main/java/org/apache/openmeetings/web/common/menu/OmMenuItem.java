@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.common.menu;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 
 import java.util.ArrayList;
@@ -80,30 +81,39 @@ public class OmMenuItem implements INavbarComponent {
 	@Override
 	public AbstractLink create(String markupId) {
 		AbstractLink item;
-		if (Strings.isEmpty(title)) {
-			item = new MenuDivider();
-		} else if (items.isEmpty()) {
-			item = new NavbarAjaxLink<String>(markupId, Model.of(title)) {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onClick(AjaxRequestTarget target) {
-					OmMenuItem.this.onClick(target);
-				}
-			}.setIconType(icon);
+		if (items.isEmpty()) {
+			item = createLink(markupId, true);
 		} else {
 			item = new NavbarDropDownButton(Model.of(title), Model.of(icon)) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected List<AbstractLink> newSubMenuButtons(String markupId) {
-					return items.stream().map(mItem -> ((OmMenuItem)mItem).create(markupId)).collect(Collectors.toList());
+					return items.stream().map(mItem -> ((OmMenuItem)mItem).createLink(markupId, false)).collect(Collectors.toList());
 				}
 			};
 		}
 		item.add(AttributeModifier.append(ATTR_TITLE, desc));
 		item.setVisible(visible);
 		return item;
+	}
+
+	private AbstractLink createLink(String markupId, boolean topLevel) {
+		if (Strings.isEmpty(title)) {
+			return new MenuDivider();
+		}
+		NavbarAjaxLink<String> link = new NavbarAjaxLink<>(markupId, Model.of(title)) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				OmMenuItem.this.onClick(target);
+			}
+		};
+		if (topLevel) {
+			link.add(AttributeModifier.append(ATTR_CLASS, "nav-link"));
+		}
+		return link.setIconType(icon);
 	}
 
 	@Override

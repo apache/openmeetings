@@ -120,6 +120,7 @@ public class InstallWizard extends BootstrapWizard {
 	private NotificationPanel feedback;
 	private final CompoundPropertyModel<InstallationConfig> model;
 	private final List<Button> buttons = new ArrayList<>(4);
+	private WizardButtonBar btnBar;
 
 	@SpringBean
 	private ImportInitvalues initvalues;
@@ -163,7 +164,7 @@ public class InstallWizard extends BootstrapWizard {
 
 	@Override
 	protected Component newButtonBar(String id) {
-		return new WizardButtonBar(id, this) {
+		btnBar = new WizardButtonBar(id, this) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -222,6 +223,8 @@ public class InstallWizard extends BootstrapWizard {
 				return button;
 			}
 		};
+		btnBar.setOutputMarkupId(true);
+		return btnBar;
 	}
 
 	private abstract class BaseStep extends DynamicWizardStep {
@@ -771,7 +774,7 @@ public class InstallWizard extends BootstrapWizard {
 				stop(target);
 				progressBar.setVisible(false);
 				congrat.show(initDbType != dbType);
-				target.add(container, desc.setVisible(false));
+				target.add(container, desc.setVisible(false), btnBar.setVisible(false));
 			}
 		};
 		private final Label desc = new Label("desc", "");

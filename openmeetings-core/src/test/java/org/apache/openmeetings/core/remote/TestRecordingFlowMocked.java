@@ -19,40 +19,34 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Locale;
-
-import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
-import org.apache.openmeetings.db.entity.label.OmLanguage;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.Transaction;
-import org.mockito.BDDMockito;
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import com.github.openjson.JSONObject;
 
-@PrepareForTest(LabelDao.class)
 public class TestRecordingFlowMocked extends BaseMockedTest {
 	private static final Long USER_ID = 1L;
 	private static final Long ROOM_ID = 5L;
@@ -72,6 +66,7 @@ public class TestRecordingFlowMocked extends BaseMockedTest {
 	private String streamDescUID;
 
 	@Override
+	@BeforeEach
 	public void setup() {
 		super.setup();
 		doReturn(mock(MediaPipeline.class)).when(client).createMediaPipeline(any(Transaction.class));
@@ -87,9 +82,6 @@ public class TestRecordingFlowMocked extends BaseMockedTest {
 			r.setId(1L);
 			return r;
 		});
-
-		PowerMockito.mockStatic(LabelDao.class);
-		BDDMockito.given(LabelDao.getLanguage(any(Long.class))).willReturn(new OmLanguage(Locale.ENGLISH));
 
 		// init client object for this test
 		c = getClientFull();
@@ -119,13 +111,18 @@ public class TestRecordingFlowMocked extends BaseMockedTest {
 	}
 
 	@Test
-	public void testRecordingFlow() throws Exception {
+	public void testRecordingFlow() {
+		runWrapped(() -> {
+			try {
+				// start recording and simulate broadcast starting
+				testStartRecordWhenSharingWasNot();
 
-		// start recording and simulate broadcast starting
-		testStartRecordWhenSharingWasNot();
-
-		// stop recording
-		testStopRecordingWhenNoSharingStarted();
+				// stop recording
+				testStopRecordingWhenNoSharingStarted();
+			} catch (Exception e) {
+				fail("Unexpected exception", e);
+			}
+		});
 	}
 
 	/**

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.backup;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -26,7 +27,11 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +44,8 @@ public class TestImportOld extends AbstractTestImport {
 	private RoomDao roomDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
+	@Autowired
+	private FileItemDao fileDao;
 
 	@Test
 	public void importOldVersions() {
@@ -82,6 +89,30 @@ public class TestImportOld extends AbstractTestImport {
 				throw new RuntimeException("Unexpected exception while importing backup: " + name, e);
 			}
 			log.debug("... Done.");
+		}
+	}
+
+	/**
+	 * Test for https://issues.apache.org/jira/browse/OPENMEETINGS-2423
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void importJira2423() throws Exception {
+		try (InputStream is = getClass().getClassLoader().getResourceAsStream("org/apache/openmeetings/backup/jira2423/backup_2423.zip")) {
+			backupImport.performImport(is, new ProgressHolder());
+
+			Group grp2 = groupDao.get("group2_jira_2423");
+			User usr2 = userDao.getByLogin("testUser2_jira_2423", User.Type.USER, null);
+			assertTrue(usr2.getGroupUsers().stream().filter(gu -> gu.getGroup().getId().equals(grp2.getId())).findFirst().isPresent(), "User2 should belong to group2");
+			roomDao.getMyRooms(usr2.getId(), "bla", "bla1").forEach(r -> {
+				assertTrue(r.getName().contains("user2_jira_2423"));
+			});
+			FileItem f1 = fileDao.getByHash("820b356c-2c96-4634-90c4-3e490432987f");
+			assertEquals(usr2.getId(), f1.getInsertedBy(), "Inserted by is wrong");
+			assertEquals(usr2.getId(), f1.getOwnerId(), "Owner is wrong");
+			FileItem f2 = fileDao.getByHash("7af3f90d-2a8d-44fa-9e0f-79fd87511cc6");
+			assertEquals(grp2.getId(), f2.getGroupId(), "Group is wrong");
 		}
 	}
 }

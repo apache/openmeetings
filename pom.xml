@@ -114,7 +114,6 @@
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.66</bcprov-jdk15on.version>
 		<mockito.version>3.5.10</mockito.version>
-		<powermock.version>2.0.7</powermock.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.14.0</kurento.version>
 		<!--  Exclude all generated code  -->
@@ -616,7 +615,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.mockito</groupId>
-				<artifactId>mockito-core</artifactId>
+				<artifactId>mockito-inline</artifactId>
 				<version>${mockito.version}</version>
 				<scope>test</scope>
 			</dependency>
@@ -624,18 +623,6 @@
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-junit-jupiter</artifactId>
 				<version>${mockito.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.powermock</groupId>
-				<artifactId>powermock-module-junit4</artifactId>
-				<version>${powermock.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.powermock</groupId>
-				<artifactId>powermock-api-mockito2</artifactId>
-				<version>${powermock.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
@@ -676,24 +663,13 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-			<version>${junit.version}</version>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-inline</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-module-junit4</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-mockito2</artifactId>
+			<artifactId>mockito-junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

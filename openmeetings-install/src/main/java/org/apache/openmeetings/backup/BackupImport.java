@@ -718,6 +718,13 @@ public class BackupImport {
 		readList(unmarshaller, base, "rooms.xml", ROOM_LIST_NODE, ROOM_NODE, eClazz, r -> {
 			Long roomId = r.getId();
 
+			if (r.getOwnerId() != null) {
+				Long newOwnerId = userMap.get(r.getOwnerId());
+				if (newOwnerId == null) {
+					return; // owner was deleted
+				}
+				r.setOwnerId(newOwnerId);
+			}
 			// We need to reset ids as openJPA reject to store them otherwise
 			r.setId(null);
 			if (r.getModerators() != null) {
@@ -883,6 +890,17 @@ public class BackupImport {
 				return true; // owner was deleted
 			}
 			file.setOwnerId(newOwnerId);
+		}
+		if (file.getInsertedBy() != null) {
+			Long newInsertedBy = userMap.get(file.getInsertedBy());
+			file.setInsertedBy(newInsertedBy);
+		}
+		if (file.getGroupId() != null) {
+			Long newGroupId = groupMap.get(file.getGroupId());
+			if (newGroupId == null) {
+				return true; // owner was deleted
+			}
+			file.setGroupId(newGroupId);
 		}
 		return false;
 	}

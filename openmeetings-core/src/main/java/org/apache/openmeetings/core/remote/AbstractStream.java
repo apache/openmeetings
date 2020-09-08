@@ -47,17 +47,17 @@ public abstract class AbstractStream {
 
 	public abstract void release(IStreamProcessor processor, boolean remove);
 
-	public WebRtcEndpoint createWebRtcEndpoint(MediaPipeline pipeline) {
+	public static WebRtcEndpoint createWebRtcEndpoint(MediaPipeline pipeline) {
 		return new WebRtcEndpoint.Builder(pipeline).build();
 	}
 
-	public RecorderEndpoint createRecorderEndpoint(MediaPipeline pipeline, String path, MediaProfileSpecType profile) {
+	public static RecorderEndpoint createRecorderEndpoint(MediaPipeline pipeline, String path, MediaProfileSpecType profile) {
 		return new RecorderEndpoint.Builder(pipeline, path)
 				.stopOnEndOfStream()
 				.withMediaProfile(profile).build();
 	}
 
-	public PlayerEndpoint createPlayerEndpoint(MediaPipeline pipeline, String path) {
+	public static PlayerEndpoint createPlayerEndpoint(MediaPipeline pipeline, String path) {
 		return new PlayerEndpoint.Builder(pipeline, path).build();
 	}
 }
