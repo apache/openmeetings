@@ -40,6 +40,7 @@ import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
@@ -249,6 +250,8 @@ public class RoomPanel extends BasePanel {
 	private StreamProcessor streamProcessor;
 	@SpringBean
 	private TimerService timerService;
+	@SpringBean
+	private FileItemDao fileDao;
 
 	public RoomPanel(String id, Room r) {
 		super(id);
@@ -593,6 +596,11 @@ public class RoomPanel extends BasePanel {
 								}
 							}
 						}
+					}
+						break;
+					case WB_PUT_FILE: {
+						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
+						getWb().sendFileToWb(fileDao.getAny(obj.getLong("fileId")), obj.getBoolean("clean"));
 					}
 						break;
 				}

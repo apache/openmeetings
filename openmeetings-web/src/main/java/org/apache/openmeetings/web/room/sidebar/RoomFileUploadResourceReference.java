@@ -42,6 +42,8 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.openmeetings.web.app.Application;
@@ -113,15 +115,16 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 						final boolean toWb = multiPartRequest.getPostParameters().getParameterValue(PARAM_TO_WB_NAME).toBoolean(false);
 						final boolean clean = multiPartRequest.getPostParameters().getParameterValue(PARAM_CLEAN_NAME).toBoolean(false);
 						final long lastSelected = multiPartRequest.getPostParameters().getParameterValue(PARAM_LAST_SELECTED_NAME).toLong(-1L);
-						startRunnable(() -> convertAll(c, fileItems, toWb, clean, lastSelected));
+						final String uuid = randomUUID().toString();
+						startRunnable(() -> convertAll(c, fileItems, uuid, toWb, clean, lastSelected));
 
-						prepareResponse(response, Status.SUCCESS, Application.getString("54", langId));
+						prepareResponse(response, Status.SUCCESS, uuid, Application.getString("54", langId));
 					} else {
-						prepareResponse(response, Status.ERROR, Application.getString("access.denied.header", langId));
+						prepareResponse(response, Status.ERROR, null, Application.getString("access.denied.header", langId));
 					}
 				} catch (Exception e) {
 					log.error("An error occurred while uploading a file", e);
-					prepareResponse(response, Status.ERROR, e.getMessage());
+					prepareResponse(response, Status.ERROR, null, e.getMessage());
 				}
 				return response;
 			}
@@ -132,7 +135,7 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 		return c == null || c.getUser() == null ? 1L : c.getUser().getLanguageId();
 	}
 
-	private static void prepareResponse(ResourceResponse response, Status status, String msg) {
+	private static void prepareResponse(ResourceResponse response, Status status, String uuid, String msg) {
 		response.setContentType(MediaType.APPLICATION_JSON);
 		response.setWriteCallback(new WriteCallback() {
 			@Override
@@ -140,6 +143,7 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 				attributes.getResponse().write(new JSONObject()
 						.put("status", status.name())
 						.put("message", msg)
+						.put("uuid", uuid)
 						.toString());
 			}
 		});
@@ -153,11 +157,10 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 		return !r.isHidden(RoomElement.FILES) && c.hasRight(Right.PRESENTER);
 	}
 
-	private void convertAll(Client c, List<FileItem> files, boolean toWb, boolean clean, long lastSelected) {
+	private void convertAll(Client c, List<FileItem> files, String uuid, boolean toWb, boolean clean, long lastSelected) {
 		final BaseFileItem parent = fileDao.get(lastSelected);
 		final long langId = getLangId(c);
 		final long totalSize = files.stream().mapToLong(FileItem::getSize).sum();
-		final String uuid = randomUUID().toString();
 		final AtomicInteger progress = new AtomicInteger(0);
 		long currentSize = 0;
 		for (FileItem curItem : files) {
@@ -187,7 +190,11 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 					sendError(c, uuid, Application.getString("convert.errors.file", langId));
 				} else {
 					if (toWb) {
-						//FIXME TODO room.getWb().sendFileToWb(f, clean);
+						WebSocketHelper.sendClient(c, new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.WB_PUT_FILE
+								, new JSONObject()
+										.put("fileId", f.getId())
+										.put("clean", clean)
+										.toString()));
 						clean = false;
 					}
 				}

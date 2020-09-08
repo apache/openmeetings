@@ -80,6 +80,17 @@ public class WebSocketHelper {
 		}
 	}
 
+	public static void sendClient(final IWsClient omClient, final RoomMessage m) {
+		log.trace("Sending WebSocket message to client: {} {}", m.getType(), m instanceof TextRoomMessage ? ((TextRoomMessage)m).getText() : "");
+		sendClient(omClient, c -> {
+			try {
+				c.sendMessage(m);
+			} catch (Throwable e) {
+				log.error("Error while sending message to client", e);
+			}
+		});
+	}
+
 	public static IApplication getApp() {
 		return (IApplication)Application.get(getWicketApplicationName());
 	}
