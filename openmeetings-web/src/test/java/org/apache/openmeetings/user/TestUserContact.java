@@ -33,7 +33,7 @@ import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 
-public class TestUserContact extends AbstractWicketTester {
+class TestUserContact extends AbstractWicketTester {
 
 	@Test
 	void testGetUser() {

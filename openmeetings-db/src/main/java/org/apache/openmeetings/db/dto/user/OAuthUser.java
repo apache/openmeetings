@@ -75,10 +75,10 @@ public class OAuthUser implements Serializable {
 	 */
 	public OAuthUser(Map<String, String> umap) {
 		Map<String, String> data = new HashMap<>();
-		data.put(PARAM_LOGIN, umap.get("login"));
-		data.put(PARAM_EMAIL, umap.get("email"));
-		data.put(PARAM_FNAME, umap.get("firstname"));
-		data.put(PARAM_LNAME, umap.get("lastname"));
+		data.put(PARAM_LOGIN, umap.get(PARAM_LOGIN));
+		data.put(PARAM_EMAIL, umap.get(PARAM_EMAIL));
+		data.put(PARAM_FNAME, umap.get(PARAM_FNAME));
+		data.put(PARAM_LNAME, umap.get(PARAM_LNAME));
 		userData = Collections.unmodifiableMap(data);
 	}
 

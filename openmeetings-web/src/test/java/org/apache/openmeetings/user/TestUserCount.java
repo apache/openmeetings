@@ -25,7 +25,7 @@ import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 
-public class TestUserCount extends AbstractWicketTester {
+class TestUserCount extends AbstractWicketTester {
 	@Test
 	void testCountSearchUsers() throws Exception {
 		User u = createUser();

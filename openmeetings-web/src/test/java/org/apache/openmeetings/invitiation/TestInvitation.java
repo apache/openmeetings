@@ -32,7 +32,7 @@ import org.apache.openmeetings.service.room.InvitationManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestInvitation extends AbstractWicketTester {
+class TestInvitation extends AbstractWicketTester {
 	@Autowired
 	private InvitationManager invitationManager;
 	@Autowired

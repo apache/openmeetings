@@ -21,7 +21,7 @@ package org.apache.openmeetings.calendar;
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.junit.jupiter.api.Test;
 
-public class TestDatabaseStructureMeetingMember extends AbstractJUnitDefaults {
+class TestDatabaseStructureMeetingMember extends AbstractJUnitDefaults {
 
 	@Test
 	void testUpdateMeetingMember(){

@@ -25,7 +25,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
 import org.junit.jupiter.api.Test;
 
-public class TestLogin extends AbstractJUnitDefaults {
+class TestLogin extends AbstractJUnitDefaults {
 	@Test
 	void testTestLogin() throws OmException {
 		User us = userDao.login(adminUsername, userpass);

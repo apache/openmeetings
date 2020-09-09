@@ -26,7 +26,7 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
-import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -64,14 +64,14 @@ public class UploadDialog extends Modal<String> {
 		setCloseOnEscapeKey(false);
 		setBackdrop(Backdrop.STATIC);
 
-		add(form.add(AttributeAppender.append("data-max-size", getMaxUploadSize()))
-				.add(AttributeAppender.append("data-max-size-lbl", Bytes.bytes(getMaxUploadSize()).toString(WebSession.get().getLocale())))
-				.add(AttributeAppender.append("data-upload-lbl", getString("593")))
-				.add(AttributeAppender.append("data-max-upload-lbl", getString("1491")))
-				.add(AttributeAppender.append("action", "" + urlFor(new RoomFileUploadResourceReference(), new PageParameters())))
+		add(form.add(AttributeModifier.append("data-max-size", getMaxUploadSize()))
+				.add(AttributeModifier.append("data-max-size-lbl", Bytes.bytes(getMaxUploadSize()).toString(WebSession.get().getLocale())))
+				.add(AttributeModifier.append("data-upload-lbl", getString("593")))
+				.add(AttributeModifier.append("data-max-upload-lbl", getString("1491")))
+				.add(AttributeModifier.append("action", "" + urlFor(new RoomFileUploadResourceReference(), new PageParameters())))
 				.setOutputMarkupId(true)
 				.setOutputMarkupPlaceholderTag(true));
-		form.add(new WebMarkupContainer("sid").add(AttributeAppender.append("value", room.getClient().getSid())).setMarkupId("room-upload-sid").setOutputMarkupId(true));
+		form.add(new WebMarkupContainer("sid").add(AttributeModifier.append("value", room.getClient().getSid())).setMarkupId("room-upload-sid").setOutputMarkupId(true));
 		form.add(lastSelected.setMarkupId("room-upload-last-selected").setOutputMarkupId(true));
 		add(BootstrapFileUploadBehavior.INSTANCE);
 		addButton(OmModalCloseButton.of("85"));
@@ -81,9 +81,9 @@ public class UploadDialog extends Modal<String> {
 
 	@Override
 	public Modal<String> show(IPartialPageRequestHandler handler) {
-		lastSelected.add(AttributeAppender.replace("value", roomFiles.getLastSelected().getId()));
+		lastSelected.add(AttributeModifier.replace("value", roomFiles.getLastSelected().getId()));
 		handler.add(form.setVisible(true));
-		handler.appendJavaScript(String.format("Upload.bindUpload();"));
+		handler.appendJavaScript("Upload.bindUpload();");
 		return super.show(handler);
 	}
 

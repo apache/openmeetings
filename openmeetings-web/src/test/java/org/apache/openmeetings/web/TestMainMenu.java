@@ -42,7 +42,7 @@ import org.junit.jupiter.api.Test;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 
-public class TestMainMenu extends AbstractWicketTester {
+class TestMainMenu extends AbstractWicketTester {
 	private void checkMenuItem(int idx1, int idx2, Class<? extends BasePanel> clazz) throws OmException {
 		testArea(adminUsername, p -> {
 			Navbar menu = (Navbar)p.get(PATH_MENU);

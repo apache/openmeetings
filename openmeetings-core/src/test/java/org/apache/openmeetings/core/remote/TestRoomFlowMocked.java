@@ -42,7 +42,7 @@ import org.mockito.Mock;
 
 import com.github.openjson.JSONObject;
 
-public class TestRoomFlowMocked extends BaseMockedTest {
+class TestRoomFlowMocked extends BaseMockedTest {
 	private static final Long USER_ID = 1L;
 	private static final Long ROOM_ID = 5L;
 	@Mock

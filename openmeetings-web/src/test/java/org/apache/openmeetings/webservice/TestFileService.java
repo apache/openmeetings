@@ -35,7 +35,7 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-public class TestFileService extends AbstractWebServiceTest {
+class TestFileService extends AbstractWebServiceTest {
 
 	@Test
 	@Tag("org.apache.openmeetings.test.NonJenkinsTests")

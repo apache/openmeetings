@@ -27,7 +27,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
 import org.junit.jupiter.api.Test;
 
-public class TestWebSession extends AbstractWicketTester {
+class TestWebSession extends AbstractWicketTester {
 	@Test
 	void testLogin() throws OmException {
 		WebSession ws = WebSession.get();

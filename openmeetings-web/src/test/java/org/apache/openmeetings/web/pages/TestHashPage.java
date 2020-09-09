@@ -54,7 +54,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public class TestHashPage extends AbstractWicketTester {
+class TestHashPage extends AbstractWicketTester {
 	private static final Logger log = LoggerFactory.getLogger(TestHashPage.class);
 
 	@Autowired

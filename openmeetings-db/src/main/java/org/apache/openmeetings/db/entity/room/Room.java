@@ -19,6 +19,9 @@
 package org.apache.openmeetings.db.entity.room;
 
 import static org.apache.openmeetings.db.bind.Constants.ROOM_NODE;
+import static org.apache.openmeetings.db.dao.room.RoomDao.GRP_FILES;
+import static org.apache.openmeetings.db.dao.room.RoomDao.GRP_GROUPS;
+import static org.apache.openmeetings.db.dao.room.RoomDao.GRP_MODERATORS;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -66,9 +69,9 @@ import org.apache.openmeetings.db.entity.user.Group;
 
 @Entity
 @FetchGroups({
-	@FetchGroup(name = "roomModerators", attributes = { @FetchAttribute(name = "moderators") })
-	, @FetchGroup(name = "roomGroups", attributes = { @FetchAttribute(name = "groups") })
-	, @FetchGroup(name = "roomFiles", attributes = { @FetchAttribute(name = "files") })
+	@FetchGroup(name = GRP_MODERATORS, attributes = { @FetchAttribute(name = "moderators") })
+	, @FetchGroup(name = GRP_GROUPS, attributes = { @FetchAttribute(name = "groups") })
+	, @FetchGroup(name = GRP_FILES, attributes = { @FetchAttribute(name = "files") })
 })
 @NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false")
 @NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r WHERE r.ispublic = true and r.deleted = false and r.type = :type")

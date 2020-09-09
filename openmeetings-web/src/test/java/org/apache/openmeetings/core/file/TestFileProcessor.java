@@ -37,7 +37,7 @@ import org.apache.openmeetings.util.process.ProcessResultList;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestFileProcessor extends AbstractJUnitDefaults {
+class TestFileProcessor extends AbstractJUnitDefaults {
 	private static final String FILE_NAME = "test_name";
 
 	@Autowired

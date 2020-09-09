@@ -166,6 +166,7 @@ import java.util.zip.ZipInputStream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 
@@ -1164,7 +1165,7 @@ public class BackupImport {
 			StreamSource xmlSource = new StreamSource(xml);
 			XMLStreamReader xsr = xif.createXMLStreamReader(xmlSource);
 			boolean listNodeFound = false;
-			while (xsr.getEventType() != XMLStreamReader.END_DOCUMENT) {
+			while (xsr.getEventType() != XMLStreamConstants.END_DOCUMENT) {
 				if (xsr.isStartElement()) {
 					if (!listNodeFound && listNodeName.equals(xsr.getLocalName())) {
 						listNodeFound = true;

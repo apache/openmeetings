@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 
 import com.sun.star.uno.RuntimeException;
 
-public class TestBaseService {
+class TestBaseService {
 	private static void checkException(Runnable r) {
 		try {
 			r.run();

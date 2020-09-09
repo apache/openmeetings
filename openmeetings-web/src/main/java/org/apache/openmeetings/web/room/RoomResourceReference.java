@@ -34,6 +34,7 @@ import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
@@ -140,7 +141,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 
 	@Override
 	protected File getFile(FileItem f, Attributes attr) {
-		String ext = f.getType() == FileItem.Type.PRESENTATION
+		String ext = f.getType() == BaseFileItem.Type.PRESENTATION
 				? attr.getParameters().get(ATTR_SLIDE).toString() : null;
 		return getFile(f, ext);
 	}

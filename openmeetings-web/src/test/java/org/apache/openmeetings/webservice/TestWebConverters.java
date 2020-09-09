@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 
 import com.github.openjson.JSONObject;
 
-public class TestWebConverters {
+class TestWebConverters {
 	@Test
 	void testDateConverter() {
 		assertEquals(null, DateParamConverter.get(null), "Null date should be parsed");

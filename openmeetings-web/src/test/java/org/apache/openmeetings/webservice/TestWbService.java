@@ -28,7 +28,7 @@ import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.junit.jupiter.api.Test;
 
-public class TestWbService extends AbstractWebServiceTest {
+class TestWbService extends AbstractWebServiceTest {
 	private static final long CAPACITY = 666L;
 	private static final String WB_SERVICE_MOUNT = "wb";
 

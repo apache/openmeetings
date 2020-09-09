@@ -40,7 +40,7 @@ import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.junit.jupiter.api.Test;
 
-public class TestRoomService extends AbstractWebServiceTest {
+class TestRoomService extends AbstractWebServiceTest {
 	private static final long CAPACITY = 666L;
 
 	@Test

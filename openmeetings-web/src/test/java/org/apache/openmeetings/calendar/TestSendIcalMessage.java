@@ -66,7 +66,7 @@ import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
 
-public class TestSendIcalMessage extends AbstractJUnitDefaults {
+class TestSendIcalMessage extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(TestSendIcalMessage.class);
 
 	@Autowired

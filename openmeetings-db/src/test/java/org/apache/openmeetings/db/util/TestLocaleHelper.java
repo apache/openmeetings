@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-public class TestLocaleHelper {
+class TestLocaleHelper {
 	private static final String COUNTRY_IT_LC = "it";
 	private static final String COUNTRY_IT = "IT";
 	private static final String COUNTRY_ITALY = "Italy";

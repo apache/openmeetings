@@ -395,7 +395,7 @@ public class IcalUtils {
 		}
 
 		Calendar icsCalendar = new Calendar();
-		icsCalendar.getProperties().add(new ProdId("-//Events Calendar//Apache Openmeetings//EN"));
+		icsCalendar.getProperties().add(new ProdId(PROD_ID));
 		icsCalendar.getProperties().add(Version.VERSION_2_0);
 		icsCalendar.getProperties().add(CalScale.GREGORIAN);
 		icsCalendar.getComponents().add(timeZone.getVTimeZone());

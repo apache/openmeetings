@@ -34,7 +34,7 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 
-public class TestRecordingService extends AbstractWebServiceTest {
+class TestRecordingService extends AbstractWebServiceTest {
 	public static final String RECORD_SERVICE_MOUNT = "record";
 
 	private User getExternalUser() throws Exception {

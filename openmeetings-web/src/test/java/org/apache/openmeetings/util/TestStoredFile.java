@@ -28,7 +28,7 @@ import java.io.IOException;
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.junit.jupiter.api.Test;
 
-public class TestStoredFile extends AbstractJUnitDefaults {
+class TestStoredFile extends AbstractJUnitDefaults {
 	@Test
 	void testPng() throws FileNotFoundException, IOException {
 		File f = getDefaultProfilePicture();

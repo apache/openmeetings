@@ -61,6 +61,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	private static final Logger log = LoggerFactory.getLogger(RoomDao.class);
 	private static final String[] searchFields = {"name"};
+	public static final String GRP_MODERATORS = "roomModerators";
+	public static final String GRP_GROUPS = "roomGroups";
+	public static final String GRP_FILES = "roomFiles";
 
 	@PersistenceContext
 	private EntityManager em;
@@ -78,7 +81,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 			r = single(fillLazy(em
 					, oem -> oem.createNamedQuery("getRoomById", Room.class)
 						.setParameter("id", id)
-					, "roomModerators", "roomGroups", "roomFiles"));
+					, GRP_MODERATORS, GRP_GROUPS, GRP_FILES));
 		} else {
 			log.info("[get]: No room id given");
 		}
@@ -90,7 +93,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 		if (!Strings.isEmpty(tag)) {
 			r = single(fillLazy(em
 					, oem -> oem.createNamedQuery("getRoomByTag", Room.class).setParameter("tag", tag)
-					, "roomModerators", "roomGroups", "roomFiles"));
+					, GRP_MODERATORS, GRP_GROUPS, GRP_FILES));
 		} else {
 			log.info("[get]: No room tag given");
 		}
@@ -100,7 +103,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	public List<Room> get() {
 		return fillLazy(em
 				, oem -> oem.createNamedQuery("getBackupRooms", Room.class)
-				, "roomModerators", "roomGroups", "roomFiles");
+				, GRP_MODERATORS, GRP_GROUPS, GRP_FILES);
 	}
 
 	public List<Room> get(List<Long> ids) {
@@ -265,7 +268,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 					.setParameter("externalId", externalId)
 					.setParameter("externalType", externalType)
 					.setParameter("type", type)
-				, "roomGroups"));
+				, GRP_GROUPS));
 	}
 
 	public List<Room> getRecent(Long userId) {

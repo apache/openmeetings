@@ -21,7 +21,7 @@ package org.apache.openmeetings.gui;
 import org.junit.jupiter.api.Test;
 
 
-public class TestGui {
+class TestGui {
 
 	@Test
 	void testNoop() {

@@ -28,7 +28,7 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestAuth extends AbstractJUnitDefaults {
+class TestAuth extends AbstractJUnitDefaults {
 	@Autowired
 	private SessiondataDao sessionDao;
 

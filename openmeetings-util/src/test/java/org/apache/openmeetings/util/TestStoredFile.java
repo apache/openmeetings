@@ -26,7 +26,7 @@ import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
 
-public class TestStoredFile {
+class TestStoredFile {
 	@Test
 	void testAudio() {
 		final String[] exts = {"aif", "aifc", "aiff", "au", "mp3", "flac", "wav"}; //TODO enlarge

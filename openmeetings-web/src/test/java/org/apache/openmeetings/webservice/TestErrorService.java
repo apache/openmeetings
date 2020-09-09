@@ -31,7 +31,7 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.junit.jupiter.api.Test;
 
-public class TestErrorService extends AbstractWebServiceTest {
+class TestErrorService extends AbstractWebServiceTest {
 	public static final String ERROR_SERVICE_MOUNT = "error";
 
 	@Test

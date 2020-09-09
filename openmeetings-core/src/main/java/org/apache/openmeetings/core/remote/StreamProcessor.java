@@ -190,10 +190,7 @@ public class StreamProcessor implements IStreamProcessor {
 			}
 		} catch (KurentoServerException e) {
 			sender.release(this);
-			WebSocketHelper.sendClient(c, newKurentoMsg()
-					.put("id", "broadcastStopped")
-					.put("uid", sd.getUid())
-				);
+			WebSocketHelper.sendClient(c, newStoppedMsg(sd));
 			sendError(c, "Failed to start broadcast: " + e.getMessage());
 			log.error("Failed to start broadcast", e);
 		}
@@ -393,10 +390,7 @@ public class StreamProcessor implements IStreamProcessor {
 			KStream sender = getByUid(uid);
 			sender.pauseSharing();
 			kHandler.sendShareUpdated(sd);
-			WebSocketHelper.sendRoomOthers(c.getRoomId(), c.getUid(), newKurentoMsg()
-					.put("id", "broadcastStopped")
-					.put("uid", sd.getUid())
-				);
+			WebSocketHelper.sendRoomOthers(c.getRoomId(), c.getUid(), newStoppedMsg(sd));
 		} else {
 			stopSharing(c, uid);
 		}
@@ -500,9 +494,7 @@ public class StreamProcessor implements IStreamProcessor {
 			AbstractStream s = getByUid(sd.getUid());
 			if (s != null) {
 				s.release(this);
-				WebSocketHelper.sendRoomOthers(c.getRoomId(), c.getUid(), newKurentoMsg()
-						.put("id", "broadcastStopped")
-						.put("uid", sd.getUid()));
+				WebSocketHelper.sendRoomOthers(c.getRoomId(), c.getUid(), newStoppedMsg(sd));
 			}
 		}
 		if (c.getRoomId() != null) {
@@ -577,5 +569,11 @@ public class StreamProcessor implements IStreamProcessor {
 		for (Map.Entry<String, KStream> e : streamByUid.entrySet()) {
 			release(e.getValue(), true);
 		}
+	}
+
+	private static JSONObject newStoppedMsg(StreamDesc sd) {
+		return newKurentoMsg()
+				.put("id", "broadcastStopped")
+				.put("uid", sd.getUid());
 	}
 }

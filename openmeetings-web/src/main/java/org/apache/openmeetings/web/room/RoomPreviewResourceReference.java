@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 
 import java.io.File;
 
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.wicket.request.resource.IResource.Attributes;
 
@@ -46,7 +47,7 @@ public class RoomPreviewResourceReference extends RoomResourceReference {
 	@Override
 	protected FileItem getFileItem(Attributes attr) {
 		FileItem f = super.getFileItem(attr);
-		if (f != null && FileItem.Type.VIDEO == f.getType()) {
+		if (f != null && BaseFileItem.Type.VIDEO == f.getType()) {
 			return f;
 		}
 		return null;

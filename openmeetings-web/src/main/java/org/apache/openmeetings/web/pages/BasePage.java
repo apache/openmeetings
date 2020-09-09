@@ -94,7 +94,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		add(new Label("pageTitle", appName));
 		add(header = new HeaderPanel("header", appName));
 		add(loader.setVisible(isMainPage()).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
-		add(new HeaderResponseContainer("customCSS", CUSTOM_CSS_FILTER));
+		add(new HeaderResponseContainer(CUSTOM_CSS_FILTER, CUSTOM_CSS_FILTER));
 	}
 
 	public abstract boolean isRtl();

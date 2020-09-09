@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestImportUser extends AbstractTestImport {
+class TestImportUser extends AbstractTestImport {
 	@Autowired
 	private LdapConfigDao ldapDao;
 

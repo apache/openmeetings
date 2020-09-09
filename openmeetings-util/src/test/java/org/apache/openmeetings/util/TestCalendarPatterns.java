@@ -24,7 +24,7 @@ import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 
-public class TestCalendarPatterns {
+class TestCalendarPatterns {
 
 	@Test
 	void backupDateParseTest() {

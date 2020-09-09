@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 
 import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
 
-public class TestExport extends AbstractJUnitDefaults {
+class TestExport extends AbstractJUnitDefaults {
 	@Test
 	void exportMain() throws Exception {
 		BackupExport.main(new String[] {File.createTempFile("gereral", "cfg").getCanonicalPath()});

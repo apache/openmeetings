@@ -32,7 +32,7 @@ import java.util.Locale;
 import org.apache.openmeetings.web.common.AbstractOmDateTimePicker;
 import org.junit.jupiter.api.Test;
 
-public class TestDateTime {
+class TestDateTime {
 
 	@Test
 	void test1() throws Exception {

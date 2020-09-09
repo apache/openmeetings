@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * @author swagner
  *
  */
-public class TestMailSending {
+class TestMailSending {
 	private static final Logger log = LoggerFactory.getLogger(TestMailSending.class);
 
 	//Example GMail email server data

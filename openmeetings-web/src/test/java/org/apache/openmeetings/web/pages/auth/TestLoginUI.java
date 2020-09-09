@@ -47,7 +47,7 @@ import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.tester.FormTester;
 import org.junit.jupiter.api.Test;
 
-public class TestLoginUI extends AbstractWicketTester {
+class TestLoginUI extends AbstractWicketTester {
 	private final static String PATH_REGISTER = "register:form";
 
 	private void checkLogin(String login, String pass) {

@@ -26,7 +26,7 @@ import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.wicket.util.string.Strings;
 import org.junit.jupiter.api.Test;
 
-public class TestEmailTemplate extends AbstractWicketTester {
+class TestEmailTemplate extends AbstractWicketTester {
 	private static void checkTemplate(String eml) {
 		assertFalse(Strings.isEmpty(eml), "Body should be not empty");
 	}

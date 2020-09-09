@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestImportOld extends AbstractTestImport {
+class TestImportOld extends AbstractTestImport {
 	private static final Logger log = LoggerFactory.getLogger(TestImportOld.class);
 
 	@Autowired

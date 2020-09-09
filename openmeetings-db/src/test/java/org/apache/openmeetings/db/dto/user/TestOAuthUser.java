@@ -33,7 +33,7 @@ import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.wicket.util.string.Strings;
 import org.junit.jupiter.api.Test;
 
-public class TestOAuthUser {
+class TestOAuthUser {
 	@Test
 	void firstLevel() {
 		OAuthServer server = new OAuthServer()

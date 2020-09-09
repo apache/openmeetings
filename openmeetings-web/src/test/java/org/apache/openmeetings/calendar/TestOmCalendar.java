@@ -28,7 +28,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestOmCalendar extends AbstractJUnitDefaults {
+class TestOmCalendar extends AbstractJUnitDefaults {
 	@Autowired
 	private OmCalendarDao calendarDao;
 

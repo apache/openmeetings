@@ -20,7 +20,7 @@ package org.apache.openmeetings;
 
 import org.junit.jupiter.api.Test;
 
-public class TestConnection {
+class TestConnection {
 
 	@Test
 	void testNoop() {

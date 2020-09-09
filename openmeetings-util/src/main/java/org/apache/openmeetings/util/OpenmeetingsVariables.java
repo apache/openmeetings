@@ -26,6 +26,7 @@ import com.github.openjson.JSONObject;
 public class OpenmeetingsVariables {
 	public static final String ATTR_CLASS = "class";
 	public static final String ATTR_TITLE = "title";
+	public static final String ATTR_DISABLED = "disabled";
 	public static final String PARAM_USER_ID = "userId";
 	public static final String PARAM_STATUS = "status";
 	public static final String PARAM_SRC = "src";

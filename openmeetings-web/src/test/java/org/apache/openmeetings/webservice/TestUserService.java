@@ -51,7 +51,7 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.string.StringValue;
 import org.junit.jupiter.api.Test;
 
-public class TestUserService extends AbstractWebServiceTest {
+class TestUserService extends AbstractWebServiceTest {
 	private static final String DUMMY_PICTURE_URL = "https://openmeetings.apache.org/images/logo.png";
 
 	@Test

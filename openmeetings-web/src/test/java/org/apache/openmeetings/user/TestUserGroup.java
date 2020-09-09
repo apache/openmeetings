@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestUserGroup extends AbstractJUnitDefaults {
+class TestUserGroup extends AbstractJUnitDefaults {
 	public static final String GROUP_NAME = "Test Group";
 	@Autowired
 	private GroupUserDao groupUserDao;

@@ -29,7 +29,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 
-public class TestAuthLevelUtil {
+class TestAuthLevelUtil {
 	@Test
 	void testNull() {
 		assertTrue(getRoomRight(null, null, null, 0).isEmpty(), "Result should be empty");

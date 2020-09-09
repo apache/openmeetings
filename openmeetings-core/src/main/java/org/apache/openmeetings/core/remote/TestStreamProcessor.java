@@ -41,7 +41,7 @@ import org.springframework.stereotype.Component;
 import com.github.openjson.JSONObject;
 
 @Component
-public class TestStreamProcessor implements IStreamProcessor {
+class TestStreamProcessor implements IStreamProcessor {
 	private final Map<String, KTestStream> streamByUid = new ConcurrentHashMap<>();
 
 	@Autowired

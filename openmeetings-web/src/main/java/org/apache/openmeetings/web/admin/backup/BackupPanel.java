@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.admin.backup;
 
 import static java.time.Duration.ZERO;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_DISABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
 
 import java.io.File;
@@ -256,7 +257,7 @@ public class BackupPanel extends AdminBasePanel {
 
 		private void updateButtons(IPartialPageRequestHandler target, boolean enabled) {
 			download.setEnabled(enabled);
-			upload.add(enabled ? AttributeModifier.remove("disabled") : AttributeModifier.append("disabled", "disabled"));
+			upload.add(enabled ? AttributeModifier.remove(ATTR_DISABLED) : AttributeModifier.append(ATTR_DISABLED, ATTR_DISABLED));
 			fileUploadField.setEnabled(enabled);
 			target.add(download, upload);
 		}

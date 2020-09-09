@@ -37,7 +37,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class TestGroupService extends AbstractWebServiceTest {
+class TestGroupService extends AbstractWebServiceTest {
 	public static final String GROUP_SERVICE_MOUNT = "group";
 
 	@Test

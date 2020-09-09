@@ -71,7 +71,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TestMainAreas extends AbstractWicketTester {
+class TestMainAreas extends AbstractWicketTester {
 	private static final Logger log = LoggerFactory.getLogger(TestMainAreas.class);
 
 	@Test

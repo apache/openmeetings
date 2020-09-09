@@ -49,7 +49,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 @ExtendWith(MockitoExtension.class)
-public class TestUserManagerMocked {
+class TestUserManagerMocked {
 	@Mock
 	private GroupDao groupDao;
 	@Mock

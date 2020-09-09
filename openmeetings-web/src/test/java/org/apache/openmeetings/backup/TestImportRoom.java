@@ -26,7 +26,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestImportRoom extends AbstractTestImport {
+class TestImportRoom extends AbstractTestImport {
 	@Autowired
 	private RoomDao roomDao;
 

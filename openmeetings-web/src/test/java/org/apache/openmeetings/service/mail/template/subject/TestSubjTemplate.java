@@ -36,7 +36,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.util.string.Strings;
 import org.junit.jupiter.api.Test;
 
-public class TestSubjTemplate extends AbstractWicketTester {
+class TestSubjTemplate extends AbstractWicketTester {
 	private static void checkTemplate(SubjectEmailTemplate t) {
 		assertNotNull(t, "Template should be created");
 		assertFalse(Strings.isEmpty(t.getSubject()), "Subject should be not empty");

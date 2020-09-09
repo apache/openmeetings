@@ -404,7 +404,7 @@ public class BackupExport {
 						marshaller.marshal(t, sw);
 						sw.write("\n");
 					} catch (Exception e) {
-						log.debug("Exception While writing node of type: " + t.getClass(), e);
+						log.debug("Exception While writing node of type: {}", t.getClass(), e);
 					}
 				}
 			}

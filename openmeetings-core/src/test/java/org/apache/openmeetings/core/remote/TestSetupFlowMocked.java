@@ -34,7 +34,7 @@ import org.kurento.client.Transaction;
 
 import com.github.openjson.JSONObject;
 
-public class TestSetupFlowMocked extends BaseMockedTest {
+class TestSetupFlowMocked extends BaseMockedTest {
 	@Override
 	@BeforeEach
 	public void setup() {

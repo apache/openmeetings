@@ -61,11 +61,6 @@ public class FileItem extends BaseFileItem {
 	private String externalId;
 
 	@Override
-	public Long getId() {
-		return super.getId();
-	}
-
-	@Override
 	@XmlElement(name = "fileExplorerItemId")
 	@XmlJavaTypeAdapter(LongAdapter.class)
 	public void setId(Long id) {

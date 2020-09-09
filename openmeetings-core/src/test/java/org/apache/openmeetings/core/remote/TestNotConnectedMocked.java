@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import com.github.openjson.JSONObject;
 
-public class TestNotConnectedMocked extends BaseMockedTest {
+class TestNotConnectedMocked extends BaseMockedTest {
 	@Test
 	void testNotConnected() {
 		handler.onMessage(null, MSG_BASE);

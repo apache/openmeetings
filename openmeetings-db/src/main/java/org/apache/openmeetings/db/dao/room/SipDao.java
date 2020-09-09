@@ -86,7 +86,7 @@ public class SipDao {
 			}
 			return (r instanceof ManagerError) ? null : r;
 		} catch (Exception e) {
-			log.error("Error while executing ManagerAction: " + action, e);
+			log.error("Error while executing ManagerAction: {}", action, e);
 		} finally {
 			try {
 				con.logoff();
@@ -111,7 +111,7 @@ public class SipDao {
 			}
 			return (r == null || r.getResponse() instanceof ManagerError) ? null : r;
 		} catch (Exception e) {
-			log.error("Error while executing EventGeneratingAction: " + action, e);
+			log.error("Error while executing EventGeneratingAction: {}", action, e);
 		} finally {
 			try {
 				con.logoff();

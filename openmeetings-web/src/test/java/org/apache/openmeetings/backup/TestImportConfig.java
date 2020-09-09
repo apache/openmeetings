@@ -29,7 +29,7 @@ import java.io.File;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.junit.jupiter.api.Test;
 
-public class TestImportConfig extends AbstractTestImport {
+class TestImportConfig extends AbstractTestImport {
 
 	@Test
 	void importConfigsNoKeyDeleted() throws Exception {

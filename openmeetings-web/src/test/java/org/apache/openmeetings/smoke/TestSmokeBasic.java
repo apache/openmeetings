@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.junit.jupiter.api.Test;
 
-public class TestSmokeBasic extends AbstractJUnitDefaults {
+class TestSmokeBasic extends AbstractJUnitDefaults {
 	@Test
 	void createErrorValueAndTest() {
 		assertNotNull(userDao.get(1L));

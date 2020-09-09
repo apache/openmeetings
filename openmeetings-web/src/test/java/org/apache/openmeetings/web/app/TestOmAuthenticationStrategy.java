@@ -28,7 +28,7 @@ import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 
-public class TestOmAuthenticationStrategy extends AbstractWicketTester {
+class TestOmAuthenticationStrategy extends AbstractWicketTester {
 	@Test
 	void test() {
 		OmAuthenticationStrategy s = new OmAuthenticationStrategy();

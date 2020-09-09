@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.apache.openmeetings.db.dto.basic.Info;
 import org.junit.jupiter.api.Test;
 
-public class TestInfoService extends AbstractWebServiceTest {
+class TestInfoService extends AbstractWebServiceTest {
 	private static final String INFO_SERVICE_MOUNT = "info";
 
 	@Test

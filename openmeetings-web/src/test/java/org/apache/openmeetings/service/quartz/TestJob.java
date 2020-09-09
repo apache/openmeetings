@@ -28,7 +28,7 @@ import org.apache.openmeetings.service.quartz.scheduler.ReminderJob;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestJob extends AbstractWicketTester {
+class TestJob extends AbstractWicketTester {
 	@Autowired
 	private CleanupJob cleanJob;
 	@Autowired

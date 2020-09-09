@@ -36,7 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestRoomDao extends AbstractJUnitDefaults {
+class TestRoomDao extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(TestRoomDao.class);
 	@Autowired
 	protected RoomDao roomDao;

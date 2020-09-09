@@ -370,18 +370,18 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_KEYCODE_ARRANGE_RESIZE, "Ctrl+Shift+KeyA", Configuration.Type.HOTKEY
 				, "A hot key code to arrange video windows bottom-to-top with resize to 120x90", VER_5_0_0);
 		final String cspMore = ", more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy";
-		addCfg(list, CONFIG_CSP_FONT, DEFAULT_CSP_FONT, Configuration.Type.STRING, String.format("Value for 'font-src' directive of 'Content-Security-Policy' header (default: %s)"
-				+ cspMore, DEFAULT_CSP_FONT), VER_5_0_0);
-		addCfg(list, CONFIG_CSP_FRAME, SELF.getValue(), Configuration.Type.STRING, String.format("Value for 'frame-src' directive of 'Content-Security-Policy' header (default: %s)"
-				+ cspMore, SELF), VER_5_0_0);
-		addCfg(list, CONFIG_CSP_IMAGE, DEFAULT_CSP_DATA, Configuration.Type.STRING, String.format("Value for 'image-src' directive of 'Content-Security-Policy' header (default: %s)"
-				+ cspMore, DEFAULT_CSP_DATA), VER_5_0_0);
-		addCfg(list, CONFIG_CSP_MEDIA, DEFAULT_CSP_DATA, Configuration.Type.STRING, String.format("Value for 'media-src' directive of 'Content-Security-Policy' header (default: %s)"
-				+ cspMore, DEFAULT_CSP_DATA), VER_5_0_0);
-		addCfg(list, CONFIG_CSP_SCRIPT, STRICT_DYNAMIC.getValue(), Configuration.Type.STRING, String.format("Value for 'script-src' directive of 'Content-Security-Policy' header (default: %s)"
-				+ cspMore, STRICT_DYNAMIC), VER_5_0_0);
-		addCfg(list, CONFIG_CSP_STYLE, DEFAULT_CSP_STYLE, Configuration.Type.STRING, String.format("Value for 'style-src' directive of 'Content-Security-Policy' header (default: %s)"
-				+ cspMore, DEFAULT_CSP_STYLE), VER_5_0_0);
+		addCfg(list, CONFIG_CSP_FONT, DEFAULT_CSP_FONT, Configuration.Type.STRING, "Value for 'font-src' directive of 'Content-Security-Policy' header (default: "
+				+ DEFAULT_CSP_FONT + ")" + cspMore, VER_5_0_0);
+		addCfg(list, CONFIG_CSP_FRAME, SELF.getValue(), Configuration.Type.STRING, "Value for 'frame-src' directive of 'Content-Security-Policy' header (default: "
+				+ SELF + ")" + cspMore, VER_5_0_0);
+		addCfg(list, CONFIG_CSP_IMAGE, DEFAULT_CSP_DATA, Configuration.Type.STRING, "Value for 'image-src' directive of 'Content-Security-Policy' header (default: "
+				+ DEFAULT_CSP_DATA + ")" + cspMore, VER_5_0_0);
+		addCfg(list, CONFIG_CSP_MEDIA, DEFAULT_CSP_DATA, Configuration.Type.STRING, "Value for 'media-src' directive of 'Content-Security-Policy' header (default: "
+				+ DEFAULT_CSP_DATA + ")" + cspMore, VER_5_0_0);
+		addCfg(list, CONFIG_CSP_SCRIPT, STRICT_DYNAMIC.getValue(), Configuration.Type.STRING, "Value for 'script-src' directive of 'Content-Security-Policy' header (default: "
+				+ STRICT_DYNAMIC + ")" + cspMore, VER_5_0_0);
+		addCfg(list, CONFIG_CSP_STYLE, DEFAULT_CSP_STYLE, Configuration.Type.STRING, "Value for 'style-src' directive of 'Content-Security-Policy' header (default: "
+				+ DEFAULT_CSP_STYLE + ")" + cspMore, VER_5_0_0);
 		addCfg(list, CONFIG_SMTP_SSL, String.valueOf(false), Configuration.Type.BOOL, "Enable SSL", VER_5_0_0);
 		addCfg(list, CONFIG_CSP_ENABLED, String.valueOf(true), Configuration.Type.BOOL, "Whether or not CSP secure headers are enabled", VER_5_0_0);
 		return list;

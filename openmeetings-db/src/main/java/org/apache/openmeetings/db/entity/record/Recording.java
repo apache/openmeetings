@@ -151,11 +151,6 @@ public class Recording extends BaseFileItem {
 	private boolean notified = false;
 
 	@Override
-	public Long getId() {
-		return super.getId();
-	}
-
-	@Override
 	@XmlElement(name = "flvRecordingId")
 	@XmlJavaTypeAdapter(LongAdapter.class)
 	public void setId(Long id) {

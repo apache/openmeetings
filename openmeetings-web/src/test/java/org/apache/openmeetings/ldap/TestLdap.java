@@ -71,7 +71,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 	})
 @CreateLdapServer(transports = { @CreateTransport(protocol = "LDAP", address = "localhost")})
 @ApplyLdifFiles({"schema/users.ldif"})
-public class TestLdap extends AbstractWicketTester {
+class TestLdap extends AbstractWicketTester {
 	private static final String CFG_SEARCH_BIND = UUID.randomUUID().toString();
 	private static final String BAD_PASSWORD = "bad password";
 	private static final String USER1 = "ldaptest1";

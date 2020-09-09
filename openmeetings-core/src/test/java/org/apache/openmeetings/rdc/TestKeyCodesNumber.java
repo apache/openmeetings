@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TestKeyCodesNumber {
+class TestKeyCodesNumber {
 	private static final Logger log = LoggerFactory.getLogger(TestKeyCodesNumber.class);
 
 	@Test

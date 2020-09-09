@@ -57,7 +57,7 @@ import org.junit.jupiter.api.Test;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
-public class TestCalendarService extends AbstractWebServiceTest {
+class TestCalendarService extends AbstractWebServiceTest {
 	public static final String CALENDAR_SERVICE_MOUNT = "calendar";
 
 	private void actualTest(Room r) throws Exception {
