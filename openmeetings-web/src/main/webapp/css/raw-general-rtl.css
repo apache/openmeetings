@@ -142,13 +142,6 @@ html[dir="rtl"] span.css-emoticon.un-transformed-emoticon
 html[dir="rtl"] span.css-emoticon {
 	transform: rotate(-90deg) !important;
 }
-html[dir="rtl"] .adminForm label
-, html[dir="rtl"] .adminForm input
-, html[dir="rtl"] .adminForm select
-, html[dir="rtl"] .adminForm textarea
-{
-	float: right !important;
-}
 html[dir="rtl"] #alert-holder {
 	left: 0;
 }
