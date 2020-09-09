@@ -139,31 +139,31 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 		List<BaseFileItem> list = new ArrayList<>();
 		if (node instanceof Recording) {
 			Recording rec = (Recording)node;
-			List<Recording> _list;
+			List<Recording> recList;
 			if (id == null) {
 				if (node.getOwnerId() == null) {
-					_list = recDao.getRootByPublic(rec.getGroupId());
+					recList = recDao.getRootByPublic(rec.getGroupId());
 				} else {
-					_list = recDao.getRootByOwner(node.getOwnerId());
+					recList = recDao.getRootByOwner(node.getOwnerId());
 				}
 			} else {
-				_list = recDao.getByParent(id);
+				recList = recDao.getByParent(id);
 			}
-			list.addAll(_list);
+			list.addAll(recList);
 		} else {
-			List<FileItem> _list;
+			List<FileItem> fileList;
 			if (id == null) {
 				if (node.getRoomId() != null) {
-					_list = fileDao.getByRoom(node.getRoomId());
+					fileList = fileDao.getByRoom(node.getRoomId());
 				} else if (node.getGroupId() != null) {
-					_list = fileDao.getByGroup(node.getGroupId(), roomId == null ? VIDEO_TYPES : null);
+					fileList = fileDao.getByGroup(node.getGroupId(), roomId == null ? VIDEO_TYPES : null);
 				} else {
-					_list = fileDao.getByOwner(node.getOwnerId());
+					fileList = fileDao.getByOwner(node.getOwnerId());
 				}
 			} else {
-				_list = fileDao.getByParent(id, roomId == null ? VIDEO_TYPES : null);
+				fileList = fileDao.getByParent(id, roomId == null ? VIDEO_TYPES : null);
 			}
-			list.addAll(_list);
+			list.addAll(fileList);
 		}
 		if (node.isReadOnly()) {
 			for (BaseFileItem f : list) {

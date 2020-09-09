@@ -26,13 +26,13 @@ import org.junit.jupiter.api.Test;
 
 public class TestBackupVersion {
 	@Test
-	public void testGet() {
+	void testGet() {
 		BackupVersion bv = BackupVersion.get();
 		assertNotEquals(0, bv.getMajor(), "Major should be set");
 	}
 
 	@Test
-	public void testEquals() {
+	void testEquals() {
 		assertEquals(BackupVersion.get(), BackupVersion.get());
 		assertNotEquals(BackupVersion.get(), null);
 		assertNotEquals(BackupVersion.get("3.2.1"), BackupVersion.get("3.2.0"));
@@ -41,7 +41,7 @@ public class TestBackupVersion {
 	}
 
 	@Test
-	public void testCompare() {
+	void testCompare() {
 		assertEquals(0, BackupVersion.get().compareTo(BackupVersion.get()));
 		assertEquals(1, BackupVersion.get().compareTo(null));
 		assertEquals(1, BackupVersion.get("3.2.1").compareTo(BackupVersion.get("3.2.0")));

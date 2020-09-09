@@ -62,9 +62,9 @@ public class ExtendedClientProperties extends ClientProperties {
 		return new JSONObject();
 	}
 
-	private static StringBuilder cleanUrl(String _url) {
+	private static StringBuilder cleanUrl(String inUrl) {
 		StringBuilder sb = new StringBuilder();
-		String url = _url;
+		String url = inUrl;
 		int semi = url.indexOf(';');
 		if (semi > -1) {
 			url = url.substring(0, semi);
@@ -81,8 +81,8 @@ public class ExtendedClientProperties extends ClientProperties {
 	@Override
 	public void read(IRequestParameters parameters) {
 		super.read(parameters);
-		String _url = parameters.getParameterValue("codebase").toString(OpenmeetingsVariables.getBaseUrl());
-		StringBuilder sb = cleanUrl(_url);
+		String url = parameters.getParameterValue("codebase").toString(OpenmeetingsVariables.getBaseUrl());
+		StringBuilder sb = cleanUrl(url);
 		if (sb.charAt(sb.length() - 1) != '/') {
 			sb.append('/');
 		}

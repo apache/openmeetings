@@ -48,7 +48,7 @@ public class TestImportOld extends AbstractTestImport {
 	private FileItemDao fileDao;
 
 	@Test
-	public void importOldVersions() {
+	void importOldVersions() {
 		String backupsDir = System.getProperty("backups.dir", ".");
 		File backupsHome = new File(backupsDir);
 
@@ -98,7 +98,7 @@ public class TestImportOld extends AbstractTestImport {
 	 * @throws Exception
 	 */
 	@Test
-	public void importJira2423() throws Exception {
+	void importJira2423() throws Exception {
 		try (InputStream is = getClass().getClassLoader().getResourceAsStream("org/apache/openmeetings/backup/jira2423/backup_2423.zip")) {
 			backupImport.performImport(is, new ProgressHolder());
 

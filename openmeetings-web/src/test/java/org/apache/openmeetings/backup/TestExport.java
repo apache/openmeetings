@@ -37,12 +37,12 @@ import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
 
 public class TestExport extends AbstractJUnitDefaults {
 	@Test
-	public void exportMain() throws Exception {
+	void exportMain() throws Exception {
 		BackupExport.main(new String[] {File.createTempFile("gereral", "cfg").getCanonicalPath()});
 	}
 
 	@Test
-	public void exportUser() throws Exception {
+	void exportUser() throws Exception {
 		User u = createUser();
 		u.setAge(LocalDate.of(1977, 11, 13));
 		Group g = groupDao.get(1L);

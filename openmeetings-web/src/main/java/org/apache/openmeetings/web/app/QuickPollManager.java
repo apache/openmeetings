@@ -58,7 +58,7 @@ public class QuickPollManager {
 		log.debug("Starting quick poll, room: {}", roomId);
 		IMap<Long, Map<Long, Boolean>> polls = map();
 		polls.lock(roomId);
-		polls.putIfAbsent(roomId, new ConcurrentHashMap<Long, Boolean>());
+		polls.putIfAbsent(roomId, new ConcurrentHashMap<>());
 		polls.unlock(roomId);
 		WebSocketHelper.sendRoom(new TextRoomMessage(roomId, c, Type.QUICK_POLL_UPDATED, c.getUid()));
 	}

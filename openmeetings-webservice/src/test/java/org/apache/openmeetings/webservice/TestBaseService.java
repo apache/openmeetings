@@ -43,7 +43,7 @@ public class TestBaseService {
 	}
 
 	@Test
-	public void testCheck() {
+	void testCheck() {
 		Sessiondata sd = new BaseWebService() {}.check(null);
 		assertNotNull(sd, "NOT null Sessiondata should be returned");
 		assertNull(sd.getUserId(), "UserId should be null");
@@ -55,17 +55,17 @@ public class TestBaseService {
 	}
 
 	@Test
-	public void testGetRights1() {
+	void testGetRights1() {
 		checkRights(new BaseWebService() {}.getRights(1L));
 	}
 
 	@Test
-	public void testGetRights2() {
+	void testGetRights2() {
 		checkRights(new BaseWebService() {}.getRights(""));
 	}
 
 	@Test
-	public void testPerformCall() {
+	void testPerformCall() {
 		checkException(() -> new BaseWebService() {}.performCall("", sd -> true
 				, sd -> { throw new RuntimeException("test"); }));
 	}

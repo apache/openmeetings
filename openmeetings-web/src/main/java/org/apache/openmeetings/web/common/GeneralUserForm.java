@@ -127,8 +127,8 @@ public class GeneralUserForm extends Form<User> {
 			}
 
 			@Override
-			public GroupUser fromId(String _id) {
-				Long id = Long.parseLong(_id);
+			public GroupUser fromId(String inId) {
+				Long id = Long.parseLong(inId);
 				User u = GeneralUserForm.this.getModelObject();
 				Group g = groupDao.get(id);
 				GroupUser gu = new GroupUser(g, u);

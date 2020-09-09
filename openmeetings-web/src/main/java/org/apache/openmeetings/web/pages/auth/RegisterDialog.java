@@ -167,12 +167,12 @@ public class RegisterDialog extends Modal<String> {
 		protected void onInitialize() {
 			super.onInitialize();
 			add(feedback.setOutputMarkupId(true));
-			add(firstNameField = new RequiredTextField<>("firstName", new PropertyModel<String>(RegisterDialog.this, "firstName")));
-			add(lastNameField = new RequiredTextField<>("lastName", new PropertyModel<String>(RegisterDialog.this, "lastName")));
-			add(loginField = new RequiredTextField<>("login", new PropertyModel<String>(RegisterDialog.this, "login")));
-			add(passwordField = new PasswordTextField("password", new PropertyModel<String>(RegisterDialog.this, "password")));
-			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()).setResetPassword(true));
-			add(emailField = new RequiredTextField<>("email", new PropertyModel<String>(RegisterDialog.this, "email")) {
+			add(firstNameField = new RequiredTextField<>("firstName", new PropertyModel<>(RegisterDialog.this, "firstName")));
+			add(lastNameField = new RequiredTextField<>("lastName", new PropertyModel<>(RegisterDialog.this, "lastName")));
+			add(loginField = new RequiredTextField<>("login", new PropertyModel<>(RegisterDialog.this, "login")));
+			add(passwordField = new PasswordTextField("password", new PropertyModel<>(RegisterDialog.this, "password")));
+			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<>()).setResetPassword(true));
+			add(emailField = new RequiredTextField<>("email", new PropertyModel<>(RegisterDialog.this, "email")) {
 				private static final long serialVersionUID = 1L;
 
 				@Override

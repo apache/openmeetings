@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 public class TestOmAuthenticationStrategy extends AbstractWicketTester {
 	@Test
-	public void test() {
+	void test() {
 		OmAuthenticationStrategy s = new OmAuthenticationStrategy();
 		s.save(null, null, User.Type.OAUTH, null);
 		assertNull(s.load(), "Wasn't saved, should not be loaded");

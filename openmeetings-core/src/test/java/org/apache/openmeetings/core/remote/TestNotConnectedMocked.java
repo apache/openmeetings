@@ -28,32 +28,32 @@ import com.github.openjson.JSONObject;
 
 public class TestNotConnectedMocked extends BaseMockedTest {
 	@Test
-	public void testNotConnected() {
+	void testNotConnected() {
 		handler.onMessage(null, MSG_BASE);
 	}
 
 	@Test
-	public void testRecordingAllowed() {
+	void testRecordingAllowed() {
 		assertFalse(streamProcessor.recordingAllowed(null));
 	}
 
 	@Test
-	public void testStartRecording() {
+	void testStartRecording() {
 		streamProcessor.startRecording(null);
 	}
 
 	@Test
-	public void testStopRecording() {
+	void testStopRecording() {
 		streamProcessor.stopRecording(null);
 	}
 
 	@Test
-	public void testIsRecording() {
+	void testIsRecording() {
 		assertFalse(streamProcessor.isRecording(null));
 	}
 
 	@Test
-	public void testGetRecordingUser() {
+	void testGetRecordingUser() {
 		assertEquals(new JSONObject().toString(), handler.getRecordingUser(null).toString());
 	}
 }

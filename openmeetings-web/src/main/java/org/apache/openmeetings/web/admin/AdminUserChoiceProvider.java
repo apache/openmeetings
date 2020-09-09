@@ -52,9 +52,9 @@ public abstract class AdminUserChoiceProvider extends ChoiceProvider<User> {
 	}
 
 	@Override
-	public Collection<User> toChoices(Collection<String> _ids) {
+	public Collection<User> toChoices(Collection<String> inIds) {
 		List<Long> ids = new ArrayList<>();
-		for (String id : _ids) {
+		for (String id : inIds) {
 			ids.add(Long.valueOf(id));
 		}
 		return new ArrayList<>(userDao.get(ids));

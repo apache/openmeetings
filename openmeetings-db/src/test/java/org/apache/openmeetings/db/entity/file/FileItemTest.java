@@ -41,7 +41,7 @@ public class FileItemTest {
 	}
 
 	@Test
-	public void testGetFileShouldReturnFirstSlideWithPDF() {
+	void testGetFileShouldReturnFirstSlideWithPDF() {
 		// Setup file
 		fileItem.setDeleted(false);
 		fileItem.setHash("6594186e-c6bb-49d5-9f66-829e45599aaa");
@@ -55,7 +55,7 @@ public class FileItemTest {
 	}
 
 	@Test
-	public void testGetOriginalWithPDFWithOriginalName() {
+	void testGetOriginalWithPDFWithOriginalName() {
 		// Setup file
 		fileItem.setDeleted(false);
 		fileItem.setHash("6594186e-c6bb-49d5-9f66-829e45599aaa");
@@ -69,7 +69,7 @@ public class FileItemTest {
 	}
 
 	@Test
-	public void testGetOriginalWithPDFWithChangedName() {
+	void testGetOriginalWithPDFWithChangedName() {
 		// Setup file
 		fileItem.setDeleted(false);
 		fileItem.setHash("6594186e-c6bb-49d5-9f66-829e45599aaa");
@@ -90,7 +90,7 @@ public class FileItemTest {
 	}
 
 	@Test
-	public void testGetOriginalWithDOCXWithOriginalName() {
+	void testGetOriginalWithDOCXWithOriginalName() {
 		// Setup file
 		fileItem.setDeleted(false);
 		fileItem.setHash("d44ab2c5-fd5d-4903-8fa7-292286d72a5f");
@@ -106,7 +106,7 @@ public class FileItemTest {
 	}
 
 	@Test
-	public void testGetOriginalWithDOCXWithChangedName() {
+	void testGetOriginalWithDOCXWithChangedName() {
 		// Setup file
 		fileItem.setDeleted(false);
 		fileItem.setHash("d44ab2c5-fd5d-4903-8fa7-292286d72a5f");
@@ -121,7 +121,7 @@ public class FileItemTest {
 	}
 
 	@Test
-	public void testGetFileShouldReturnFirstSlideWithDOCX() {
+	void testGetFileShouldReturnFirstSlideWithDOCX() {
 		// Setup file
 		fileItem.setDeleted(false);
 		fileItem.setHash("d44ab2c5-fd5d-4903-8fa7-292286d72a5f");
@@ -135,7 +135,7 @@ public class FileItemTest {
 	}
 
 	@Test
-	public void testGetFileShouldReturnPDFWhenRequested() {
+	void testGetFileShouldReturnPDFWhenRequested() {
 		// Setup file
 		fileItem.setDeleted(false);
 		fileItem.setHash("d44ab2c5-fd5d-4903-8fa7-292286d72a5f");

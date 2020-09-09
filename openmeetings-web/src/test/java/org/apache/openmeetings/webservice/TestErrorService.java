@@ -35,7 +35,7 @@ public class TestErrorService extends AbstractWebServiceTest {
 	public static final String ERROR_SERVICE_MOUNT = "error";
 
 	@Test
-	public void getTestBadKey() {
+	void getTestBadKey() {
 		Locale[] locales = Locale.getAvailableLocales();
 		ServiceResult sr = getClient(getErrorUrl())
 				.path(String.format("/%s/%s", randomUUID().toString(), LabelDao.getLanguage(locales[rnd.nextInt(locales.length)], 1L)))
@@ -45,7 +45,7 @@ public class TestErrorService extends AbstractWebServiceTest {
 	}
 
 	@Test
-	public void getTest() {
+	void getTest() {
 		Locale[] locales = Locale.getAvailableLocales();
 		ServiceResult sr = getClient(getErrorUrl())
 				.path(String.format("/%s/%s", "error.unknown", LabelDao.getLanguage(locales[rnd.nextInt(locales.length)], 1L)))
@@ -55,7 +55,7 @@ public class TestErrorService extends AbstractWebServiceTest {
 	}
 
 	@Test
-	public void reportTest() {
+	void reportTest() {
 		// null report
 		Response resp = getClient(getErrorUrl())
 				.path("/report")

@@ -75,7 +75,7 @@ public class TestMainAreas extends AbstractWicketTester {
 	private static final Logger log = LoggerFactory.getLogger(TestMainAreas.class);
 
 	@Test
-	public void testDashboard() throws OmException {
+	void testDashboard() throws OmException {
 		testArea(regularUsername, p -> {
 			tester.assertComponent(PATH_CHILD, OmDashboardPanel.class);
 		});
@@ -115,147 +115,147 @@ public class TestMainAreas extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testCalendar() throws OmException {
+	void testCalendar() throws OmException {
 		checkArea(AreaKeys.user, TYPE_CALENDAR, CalendarPanel.class, regularUsername);
 	}
 
 	@Test
-	public void testRecordings() throws OmException {
+	void testRecordings() throws OmException {
 		checkArea(AreaKeys.user, TYPE_RECORDINGS, RecordingsPanel.class, regularUsername);
 	}
 
 	@Test
-	public void testRoomsPublic() throws OmException {
+	void testRoomsPublic() throws OmException {
 		checkArea(AreaKeys.rooms, TYPE_PUBLIC, RoomsSelectorPanel.class, regularUsername);
 	}
 
 	@Test
-	public void testRoomsGroup() throws OmException {
+	void testRoomsGroup() throws OmException {
 		checkArea(AreaKeys.rooms, TYPE_GROUP, RoomsSelectorPanel.class, regularUsername);
 	}
 
 	@Test
-	public void testRoomsMy() throws OmException {
+	void testRoomsMy() throws OmException {
 		checkArea(AreaKeys.rooms, TYPE_MY, RoomsSelectorPanel.class, regularUsername);
 	}
 
 	@Test
-	public void testProfileMessages() throws OmException {
+	void testProfileMessages() throws OmException {
 		checkArea(AreaKeys.profile, TYPE_MESSAGES, MessagesContactsPanel.class, regularUsername);
 	}
 
 	@Test
-	public void testProfileEdit() throws OmException {
+	void testProfileEdit() throws OmException {
 		checkArea(AreaKeys.profile, TYPE_EDIT, EditProfilePanel.class, regularUsername);
 	}
 
 	@Test
-	public void testNonExistent() throws OmException {
+	void testNonExistent() throws OmException {
 		checkArea(AreaKeys.profile, "bla", OmDashboardPanel.class, regularUsername);
 	}
 
 	@Test
-	public void testAdminUsers() throws OmException {
+	void testAdminUsers() throws OmException {
 		checkArea(AreaKeys.admin, TYPE_USER, UsersPanel.class, adminUsername, groupAdminUsername);
 	}
 
 	@Test
-	public void testAdminUsers1() throws OmException {
+	void testAdminUsers1() throws OmException {
 		checkUnauthArea(AreaKeys.admin, TYPE_USER, regularUsername);
 	}
 
 	@Test
-	public void testAdminConnections() throws OmException {
+	void testAdminConnections() throws OmException {
 		checkArea(AreaKeys.admin, TYPE_CONNECTION, ConnectionsPanel.class, adminUsername);
 	}
 
 	@Test
-	public void testAdminConnections1() throws OmException {
+	void testAdminConnections1() throws OmException {
 		checkUnauthArea(AreaKeys.admin, TYPE_CONNECTION, groupAdminUsername, regularUsername);
 	}
 
 	@Test
-	public void testAdminGroups() throws OmException {
+	void testAdminGroups() throws OmException {
 		checkArea(AreaKeys.admin, TYPE_GROUP, GroupsPanel.class, adminUsername, groupAdminUsername);
 	}
 
 	@Test
-	public void testAdminGroups1() throws OmException {
+	void testAdminGroups1() throws OmException {
 		checkUnauthArea(AreaKeys.admin, TYPE_GROUP, regularUsername);
 	}
 
 	@Test
-	public void testAdminRooms() throws OmException {
+	void testAdminRooms() throws OmException {
 		checkArea(AreaKeys.admin, TYPE_ROOM, RoomsPanel.class, adminUsername, groupAdminUsername);
 	}
 
 	@Test
-	public void testAdminRooms1() throws OmException {
+	void testAdminRooms1() throws OmException {
 		checkUnauthArea(AreaKeys.admin, TYPE_ROOM, regularUsername);
 	}
 
 	@Test
-	public void testAdminConfigs() throws OmException {
+	void testAdminConfigs() throws OmException {
 		checkArea(AreaKeys.admin, TYPE_CONFIG, ConfigsPanel.class, adminUsername);
 	}
 
 	@Test
-	public void testAdminConfigs1() throws OmException {
+	void testAdminConfigs1() throws OmException {
 		checkUnauthArea(AreaKeys.admin, TYPE_CONFIG, groupAdminUsername, regularUsername);
 	}
 
 	@Test
-	public void testAdminLang() throws OmException {
+	void testAdminLang() throws OmException {
 		checkArea(AreaKeys.admin, TYPE_LANG, LangPanel.class, adminUsername);
 	}
 
 	@Test
-	public void testAdminLang1() throws OmException {
+	void testAdminLang1() throws OmException {
 		checkUnauthArea(AreaKeys.admin, TYPE_LANG, groupAdminUsername, regularUsername);
 	}
 
 	@Test
-	public void testAdminLdap() throws OmException {
+	void testAdminLdap() throws OmException {
 		checkArea(AreaKeys.admin, TYPE_LDAP, LdapsPanel.class, adminUsername);
 	}
 
 	@Test
-	public void testAdminLdap1() throws OmException {
+	void testAdminLdap1() throws OmException {
 		checkUnauthArea(AreaKeys.admin, TYPE_LDAP, groupAdminUsername, regularUsername);
 	}
 
 	@Test
-	public void testAdminOauth() throws OmException {
+	void testAdminOauth() throws OmException {
 		checkArea(AreaKeys.admin, TYPE_OAUTH2, OAuthPanel.class, adminUsername);
 	}
 
 	@Test
-	public void testAdminOauth1() throws OmException {
+	void testAdminOauth1() throws OmException {
 		checkUnauthArea(AreaKeys.admin, TYPE_OAUTH2, groupAdminUsername, regularUsername);
 	}
 
 	@Test
-	public void testAdminBackup() throws OmException {
+	void testAdminBackup() throws OmException {
 		checkArea(AreaKeys.admin, TYPE_BACKUP, BackupPanel.class, adminUsername);
 	}
 
 	@Test
-	public void testAdminBackup1() throws OmException {
+	void testAdminBackup1() throws OmException {
 		checkUnauthArea(AreaKeys.admin, TYPE_BACKUP, groupAdminUsername, regularUsername);
 	}
 
 	@Test
-	public void testAdminEmail() throws OmException {
+	void testAdminEmail() throws OmException {
 		checkArea(AreaKeys.admin, TYPE_EMAIL, EmailPanel.class, adminUsername);
 	}
 
 	@Test
-	public void testAdminEmail1() throws OmException {
+	void testAdminEmail1() throws OmException {
 		checkUnauthArea(AreaKeys.admin, TYPE_EMAIL, groupAdminUsername, regularUsername);
 	}
 
 	@Test
-	public void testAdminBad() throws OmException {
+	void testAdminBad() throws OmException {
 		checkArea(AreaKeys.admin, "BAD", OmDashboardPanel.class, adminUsername);
 	}
 
@@ -268,30 +268,30 @@ public class TestMainAreas extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testRoom5() throws OmException {
+	void testRoom5() throws OmException {
 		// public presentation room
 		testRoom(5L);
 	}
 
 	@Test
-	public void testRoom1() throws OmException {
+	void testRoom1() throws OmException {
 		//public interview room
 		testRoom(1L);
 	}
 
 	@Test
-	public void testRoomBad() throws OmException {
+	void testRoomBad() throws OmException {
 		checkArea(AreaKeys.room, "BAD", OmDashboardPanel.class, adminUsername);
 	}
 
 	@Test
-	public void testInstallNotAccessible() {
+	void testInstallNotAccessible() {
 		tester.startPage(InstallWizardPage.class);
 		tester.assertRenderedPage(SignInPage.class);
 	}
 
 	@Test
-	public void testUnavailNotAccessible() {
+	void testUnavailNotAccessible() {
 		tester.startPage(NotInitedPage.class);
 		tester.assertRenderedPage(SignInPage.class);
 	}

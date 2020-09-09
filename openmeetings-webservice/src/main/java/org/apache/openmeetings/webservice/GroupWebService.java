@@ -195,7 +195,7 @@ public class GroupWebService extends BaseWebService {
 			Room r = roomDao.get(roomid);
 			if (r != null) {
 				if (r.getGroups() == null) {
-					r.setGroups(new ArrayList<RoomGroup>());
+					r.setGroups(new ArrayList<>());
 				}
 				boolean found = false;
 				for (RoomGroup ro : r.getGroups()) {
@@ -245,7 +245,7 @@ public class GroupWebService extends BaseWebService {
 			SearchResult<User> result = new SearchResult<>();
 			result.setObjectName(User.class.getName());
 			result.setRecords(groupUserDao.count(id));
-			result.setResult(new ArrayList<User>());
+			result.setResult(new ArrayList<>());
 			String order = isAlphanumeric(orderby) ? orderby : "id";
 			for (GroupUser ou : groupUserDao.get(id, null, start, max, order + " " + (asc ? "ASC" : "DESC"))) {
 				result.getResult().add(ou.getUser());

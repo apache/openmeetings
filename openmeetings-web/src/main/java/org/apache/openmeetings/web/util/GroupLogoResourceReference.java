@@ -75,9 +75,9 @@ public class GroupLogoResourceReference extends FileSystemResourceReference {
 				WebSession ws = WebSession.get();
 				if (ws.isSignedIn()) {
 					PageParameters params = attrs.getParameters();
-					StringValue _id = params.get("id");
+					StringValue inId = params.get("id");
 					try {
-						id = _id.toOptionalLong();
+						id = inId.toOptionalLong();
 					} catch (Exception e) {
 						//no-op expected
 					}

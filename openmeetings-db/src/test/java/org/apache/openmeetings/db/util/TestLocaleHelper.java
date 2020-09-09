@@ -35,7 +35,7 @@ public class TestLocaleHelper {
 	private static final String COUNTRY_ITALY = "Italy";
 
 	@Test
-	public void testCountry() {
+	void testCountry() {
 		List<String> list = getCountries();
 		assertNotNull(list, "Country list shouldn't be null");
 		assertFalse(list.isEmpty(), "Country list shouldn't be empty");

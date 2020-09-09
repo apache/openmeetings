@@ -111,7 +111,7 @@ public class TestRecordingFlowMocked extends BaseMockedTest {
 	}
 
 	@Test
-	public void testRecordingFlow() {
+	void testRecordingFlow() {
 		runWrapped(() -> {
 			try {
 				// start recording and simulate broadcast starting

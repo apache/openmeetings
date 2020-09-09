@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 public class TestSmokeBasic extends AbstractJUnitDefaults {
 	@Test
-	public void createErrorValueAndTest() {
+	void createErrorValueAndTest() {
 		assertNotNull(userDao.get(1L));
 	}
 }

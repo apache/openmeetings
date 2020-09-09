@@ -85,23 +85,23 @@ public class TestAdmin {
 	}
 
 	@Test
-	public void testNoArgs() throws Exception {
+	void testNoArgs() throws Exception {
 		checkError();
 	}
 
 	@Test
-	public void testBadArgs() throws Exception {
+	void testBadArgs() throws Exception {
 		checkError("aaaa");
 	}
 
 	@Test
-	public void testUsage() throws Exception {
+	void testUsage() throws Exception {
 		new Admin().process("-h");
 		assertTrue(true);
 	}
 
 	@Test
-	public void testInstallParamConflict() throws Exception {
+	void testInstallParamConflict() throws Exception {
 		checkError("-v", "-i", "-file", "aaa", "-user", "bbb");
 		checkError("-i", "-file", "aaa", "-email", "bbb");
 		checkError("-i", "-file", "aaa", "-group", "bbb");
@@ -121,7 +121,7 @@ public class TestAdmin {
 	}
 
 	@Test
-	public void testInstallBackup() throws Exception {
+	void testInstallBackup() throws Exception {
 		String tempDB = Files.createTempFile("omtempdb", null).toFile().getCanonicalPath();
 		Admin a = new Admin();
 		performInstall(a, "--db-name", tempDB);
@@ -132,7 +132,7 @@ public class TestAdmin {
 	}
 
 	@Test
-	public void testFilesNoDb() throws Exception {
+	void testFilesNoDb() throws Exception {
 		//clean-up report
 		new Admin().process("-f");
 	}

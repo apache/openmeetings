@@ -156,9 +156,9 @@ public class SignInDialog extends Modal<String> {
 			int selectedLdap = cfgDao.getInt(CONFIG_DEFAULT_LDAP_ID, 0);
 			domain = ldaps.get(selectedLdap < ldaps.size() && selectedLdap > 0 ? selectedLdap : 0);
 			credentials.add(new WebMarkupContainer("ldap")
-				.add(new DropDownChoice<>("domain", new PropertyModel<LdapConfig>(SignInDialog.this, "domain")
-						, ldaps, new ChoiceRenderer<LdapConfig>("name", "id"))).setVisible(showLdap));
-			credentials.add(new CheckBox("rememberMe", new PropertyModel<Boolean>(SignInDialog.this, "rememberMe")).setOutputMarkupId(true));
+				.add(new DropDownChoice<>("domain", new PropertyModel<>(SignInDialog.this, "domain")
+						, ldaps, new ChoiceRenderer<>("name", "id"))).setVisible(showLdap));
+			credentials.add(new CheckBox("rememberMe", new PropertyModel<>(SignInDialog.this, "rememberMe")).setOutputMarkupId(true));
 			AjaxButton ab = new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;
 			};

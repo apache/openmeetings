@@ -61,7 +61,7 @@ public class TestFileService extends AbstractWebServiceTest {
 	}
 
 	@Test
-	public void testGetRoom() {
+	void testGetRoom() {
 		ServiceResult r = login();
 		FileExplorerObject fo = getClient(getFileUrl())
 				.path("/room/5")

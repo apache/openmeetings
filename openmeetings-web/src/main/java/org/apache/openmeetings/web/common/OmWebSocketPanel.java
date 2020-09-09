@@ -114,11 +114,11 @@ public abstract class OmWebSocketPanel extends Panel {
 								break;
 							case "mic":
 							{
-								IWsClient _c = getWsClient();
-								if (!(_c instanceof Client)) {
+								IWsClient curClient = getWsClient();
+								if (!(curClient instanceof Client)) {
 									break;
 								}
-								Client c = (Client)_c;
+								Client c = (Client)curClient;
 								if (c.getRoomId() == null) {
 									break;
 								}

@@ -31,7 +31,7 @@ public class TestAddGroup extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(TestAddGroup.class);
 
 	@Test
-	public void testAddingGroup() {
+	void testAddingGroup() {
 		Group o = new Group();
 		o.setName("default");
 		o = groupDao.update(o, null);

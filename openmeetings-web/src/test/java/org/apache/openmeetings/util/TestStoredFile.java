@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 public class TestStoredFile extends AbstractJUnitDefaults {
 	@Test
-	public void testPng() throws FileNotFoundException, IOException {
+	void testPng() throws FileNotFoundException, IOException {
 		File f = getDefaultProfilePicture();
 		for (String ext : new String[] {null, "txt", "jpg"}) {
 			StoredFile sf = new StoredFile("test image", ext, f);

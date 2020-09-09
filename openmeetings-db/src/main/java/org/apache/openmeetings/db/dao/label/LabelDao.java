@@ -95,7 +95,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		languages.put(id + 1, new OmLanguage(l));
 		storeLanguages();
-		labelCache.put(l, new ArrayList<StringLabel>());
+		labelCache.put(l, new ArrayList<>());
 	}
 
 	public static String getString(String key, long langId) {

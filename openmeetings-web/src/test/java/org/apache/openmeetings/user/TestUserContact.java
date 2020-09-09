@@ -36,12 +36,12 @@ import org.junit.jupiter.api.Test;
 public class TestUserContact extends AbstractWicketTester {
 
 	@Test
-	public void testGetUser() {
+	void testGetUser() {
 		assertNull(userDao.get(Long.MAX_VALUE), "Null should be returned in case User does not exist");
 	}
 
 	@Test
-	public void createUserWithGroup() throws Exception {
+	void createUserWithGroup() throws Exception {
 		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
 		u.addGroup(groupDao.get(1L));
@@ -55,14 +55,14 @@ public class TestUserContact extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testCreateUser() throws Exception {
+	void testCreateUser() throws Exception {
 		String uuid = randomUUID().toString();
 		User u = createUser(uuid);
 		assertTrue(userDao.verifyPassword(u.getId(), createPass()), "Password should be set as expected");
 	}
 
 	@Test
-	public void testCreateUserWithSip() throws Exception {
+	void testCreateUserWithSip() throws Exception {
 		boolean sipEnabled = isSipEnabled();
 		try {
 			setSipEnabled(true);
@@ -76,7 +76,7 @@ public class TestUserContact extends AbstractWicketTester {
 	}
 
 	@Test
-	public void addContactByOwner() throws Exception {
+	void addContactByOwner() throws Exception {
 		login(null, null);
 
 		List<User> users = userDao.getAllUsers();

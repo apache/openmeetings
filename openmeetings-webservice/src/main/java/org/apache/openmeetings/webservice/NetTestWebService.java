@@ -56,10 +56,10 @@ public class NetTestWebService {
 	@GET
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/")
-	public Response get(@QueryParam("type") String type, @QueryParam("size") int _size) {
+	public Response get(@QueryParam("type") String type, @QueryParam("size") int inSize) {
 		final int size;
 		TestType testType = getTypeByString(type);
-		log.debug("Network test:: get, {}, {}", testType, _size);
+		log.debug("Network test:: get, {}, {}", testType, inSize);
 
 		// choose data to send
 		switch (testType) {
@@ -70,7 +70,7 @@ public class NetTestWebService {
 				size = JITTER_PACKET_SIZE;
 				break;
 			default:
-				size = _size;
+				size = inSize;
 				break;
 		}
 		ResponseBuilder response = Response.ok().type(MediaType.APPLICATION_OCTET_STREAM).entity(new InputStream() {

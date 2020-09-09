@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 
 public class TestLogin extends AbstractJUnitDefaults {
 	@Test
-	public void testTestLogin() throws OmException {
+	void testTestLogin() throws OmException {
 		User us = userDao.login(adminUsername, userpass);
 		assertNotNull(us, "User is unable to login");
 	}

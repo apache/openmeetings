@@ -33,25 +33,25 @@ public class TestAuth extends AbstractJUnitDefaults {
 	private SessiondataDao sessionDao;
 
 	@Test
-	public void test() {
+	void test() {
 		Sessiondata sd = sessionDao.create(1L, 1L);
 		assertNotNull(sd);
 		sessionDao.clearSessionTable(-1L);
 	}
 
 	@Test
-	public void testNotExistent() {
+	void testNotExistent() {
 		Sessiondata sd = sessionDao.check(randomUUID().toString());
 		assertNotNull(sd);
 	}
 
 	@Test
-	public void testFind1() {
+	void testFind1() {
 		assertNull(sessionDao.find(null));
 	}
 
 	@Test
-	public void testFind2() {
+	void testFind2() {
 		assertNull(sessionDao.find(randomUUID().toString()));
 	}
 }

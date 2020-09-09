@@ -38,7 +38,7 @@ public class TestAppointmentSchedulerTask extends AbstractJUnitDefaults {
 	private AppointmentLogic appointmentLogic;
 
 	@Test
-	public void noBaseUrl() {
+	void noBaseUrl() {
 		final String origBaseUrl = getBaseUrl();
 		try {
 			for (String url : new String[] {null, ""}) {
@@ -51,7 +51,7 @@ public class TestAppointmentSchedulerTask extends AbstractJUnitDefaults {
 	}
 
 	@Test
-	public void turnedOff() {
+	void turnedOff() {
 		final Configuration origCfg = cfgDao.get(CONFIG_APPOINTMENT_REMINDER_MINUTES);
 		try {
 			Configuration cfg = cfgDao.get(origCfg.getId());
@@ -64,7 +64,7 @@ public class TestAppointmentSchedulerTask extends AbstractJUnitDefaults {
 	}
 
 	@Test
-	public void doIt() {
+	void doIt() {
 		log.debug("- 1 MeetingReminderJob.execute");
 		try {
 			appointmentLogic.doScheduledMeetingReminder();

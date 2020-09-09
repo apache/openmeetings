@@ -53,9 +53,9 @@ public class VideoInfo extends Panel {
 		setDefaultModel(rm);
 	}
 
-	public VideoInfo update(AjaxRequestTarget target, BaseFileItem _r) {
-		if (_r instanceof Recording) {
-			Recording r = (Recording)_r;
+	public VideoInfo update(AjaxRequestTarget target, BaseFileItem file) {
+		if (file instanceof Recording) {
+			Recording r = (Recording)file;
 			rm.setObject(r);
 			try {
 				String name = null;

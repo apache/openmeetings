@@ -44,17 +44,17 @@ public class WbWebSocketHelper extends WebSocketHelper {
 	public static final String PARAM_OBJ = "obj";
 	private static final String PARAM__POSTER = "_poster";
 
-	public static boolean send(IClusterWsMessage _m) {
-		if (_m instanceof WsMessageWb) {
-			WsMessageWb m = (WsMessageWb)_m;
+	public static boolean send(IClusterWsMessage inMsg) {
+		if (inMsg instanceof WsMessageWb) {
+			WsMessageWb m = (WsMessageWb)inMsg;
 			if (m.getUid() == null) {
 				sendWbAll(m.getRoomId(), m.getMeth(), m.getObj(), false);
 			} else {
 				sendWbOthers(m.getRoomId(), m.getMeth(), m.getObj(), m.getUid(), false);
 			}
 			return true;
-		} else if (_m instanceof WsMessageWbFile) {
-			WsMessageWbFile m = (WsMessageWbFile)_m;
+		} else if (inMsg instanceof WsMessageWbFile) {
+			WsMessageWbFile m = (WsMessageWbFile)inMsg;
 			sendWbFile(m.getRoomId(), m.getWbId(), m.getRoomUid(), m.getFile(), m.getFileItem(), false);
 			return true;
 		}
@@ -97,13 +97,13 @@ public class WbWebSocketHelper extends WebSocketHelper {
 		return rc.getUrlRenderer().renderContextRelativeUrl(rc.mapUrlFor(handler).toString());
 	}
 
-	public static JSONObject addFileUrl(String ruid, JSONObject _file, BaseFileItem fi, Client c) {
-		JSONObject file = new JSONObject(_file.toString(new NullStringer()));
+	public static JSONObject addFileUrl(String ruid, JSONObject inFile, BaseFileItem fi, Client c) {
+		JSONObject file = new JSONObject(inFile.toString(new NullStringer()));
 		final FileSystemResourceReference ref;
 		final PageParameters pp = new PageParameters()
 				.add("id", fi.getId())
 				.add("ruid", ruid)
-				.add("wuid", _file.optString("uid"));
+				.add("wuid", inFile.optString("uid"));
 		if (c != null) {
 			pp.add("uid", c.getUid());
 		}
@@ -140,8 +140,8 @@ public class WbWebSocketHelper extends WebSocketHelper {
 		return String.format("%s&uid=%s", url, c.getUid());
 	}
 
-	private static JSONObject patchUrls(BaseFileItem fi, Client c, JSONObject _f) {
-		JSONObject f = new JSONObject(_f.toString()); // deep copy to ensure thread safety
+	private static JSONObject patchUrls(BaseFileItem fi, Client c, JSONObject inFile) {
+		JSONObject f = new JSONObject(inFile.toString()); // deep copy to ensure thread safety
 		switch (fi.getType()) {
 			case VIDEO:
 				f.put(PARAM__SRC, patchUrl(f.getString(PARAM__SRC), c));
@@ -165,13 +165,13 @@ public class WbWebSocketHelper extends WebSocketHelper {
 		if (publish) {
 			publish(new WsMessageWbFile(roomId, wbId, ruid, file, fi));
 		}
-		final JSONObject _f = addFileUrl(ruid, file, fi, null);
+		final JSONObject f = addFileUrl(ruid, file, fi, null);
 		WebSocketHelper.sendRoom(
 				roomId
 				, new JSONObject().put("type", "wb")
 				, null
 				, (o, c) -> o.put("func", WbAction.createObj.name())
-							.put("param", getObjWbJson(wbId, patchUrls(fi, c, _f))));
+							.put("param", getObjWbJson(wbId, patchUrls(fi, c, f))));
 	}
 
 	private static void sendWb(Long roomId, WbAction meth, JSONObject obj, Predicate<Client> check) {

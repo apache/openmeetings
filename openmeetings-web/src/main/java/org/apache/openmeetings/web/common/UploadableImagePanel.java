@@ -47,7 +47,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5I
 public abstract class UploadableImagePanel extends ImagePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(UploadableImagePanel.class);
-	private final FileUploadField fileUploadField = new FileUploadField("image", new ListModel<FileUpload>());
+	private final FileUploadField fileUploadField = new FileUploadField("image", new ListModel<>());
 	private final Form<Void> form = new Form<>("form");
 	private final boolean delayed;
 

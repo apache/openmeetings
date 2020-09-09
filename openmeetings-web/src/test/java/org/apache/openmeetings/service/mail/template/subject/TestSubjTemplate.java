@@ -44,7 +44,7 @@ public class TestSubjTemplate extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testTemplateGeneration() {
+	void testTemplateGeneration() {
 		Appointment a = getAppointment();
 		String[] ids = TimeZone.getAvailableIDs();
 		Recording rec = new Recording();
@@ -76,7 +76,7 @@ public class TestSubjTemplate extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testError() {
+	void testError() {
 		InvitedAppointmentTemplate t = new InvitedAppointmentTemplate(Locale.CHINA, new Appointment(), TimeZone.getDefault(), "TEST") {
 			private static final long serialVersionUID = 1L;
 

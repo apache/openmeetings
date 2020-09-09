@@ -39,7 +39,7 @@ public class TestInvitation extends AbstractWicketTester {
 	private RoomDao roomDao;
 
 	@Test
-	public void testSendInvitationLink() throws Exception {
+	void testSendInvitationLink() throws Exception {
 		User us = userDao.getByLogin(adminUsername, User.Type.USER, null);
 
 		LocalDateTime from = LocalDateTime.now().plusDays(1).withHour(12).withMinute(0).withSecond(0);

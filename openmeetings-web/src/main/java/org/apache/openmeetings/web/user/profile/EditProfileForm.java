@@ -54,7 +54,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 public class EditProfileForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(EditProfileForm.class);
-	private final PasswordTextField passwd = new PasswordTextField("passwd", new Model<String>());
+	private final PasswordTextField passwd = new PasswordTextField("passwd", new Model<>());
 	private final GeneralUserForm userForm;
 	private final ChangePasswordDialog chPwdDlg;
 	private boolean checkPassword;

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 
 public class TestStoredFile {
 	@Test
-	public void testAudio() {
+	void testAudio() {
 		final String[] exts = {"aif", "aifc", "aiff", "au", "mp3", "flac", "wav"}; //TODO enlarge
 		for (String ext : exts) {
 			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
@@ -38,7 +38,7 @@ public class TestStoredFile {
 	}
 
 	@Test
-	public void testVideo() {
+	void testVideo() {
 		final String[] exts = {"avi", "mov", "flv", "mp4"}; //TODO enlarge
 		for (String ext : exts) {
 			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
@@ -48,7 +48,7 @@ public class TestStoredFile {
 	}
 
 	@Test
-	public void testImage() {
+	void testImage() {
 		final String[] exts = {"png", "gif", "svg", "dpx", "exr",
 				"pcd", // PhotoCD
 				"pcds", // PhotoCD
@@ -67,7 +67,7 @@ public class TestStoredFile {
 	}
 
 	@Test
-	public void testOffice() {
+	void testOffice() {
 		final String[] exts = {
 				"ppt", "odp", "odt", "sxw", "wpd", "doc", "rtf", "txt", "ods", "sxc", "xls", "sxi", "pptx", "docx", "xlsx"
 		};
@@ -87,7 +87,7 @@ public class TestStoredFile {
 	}
 
 	@Test
-	public void testOffice1() throws IOException {
+	void testOffice1() throws IOException {
 		for (String path : new String[] {"/ODFtest.odt", "/ODFtest.ods"}) {
 			fileOfficeTest(path);
 		}

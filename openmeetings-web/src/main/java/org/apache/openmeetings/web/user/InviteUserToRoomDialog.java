@@ -69,8 +69,8 @@ public class InviteUserToRoomDialog extends Modal<String> {
 		header(new ResourceModel("1131"));
 
 		addButton(OmModalCloseButton.of());
-		add(publicRooms = new InviteRoomListPanel("publicRooms", new ArrayList<Room>(), getString("1135")));
-		add(privateRooms = new InviteRoomListPanel("privateRooms", new ArrayList<Room>(), getString("1135")));
+		add(publicRooms = new InviteRoomListPanel("publicRooms", new ArrayList<>(), getString("1135")));
+		add(privateRooms = new InviteRoomListPanel("privateRooms", new ArrayList<>(), getString("1135")));
 		add(inviteMsg);
 		super.onInitialize();
 	}

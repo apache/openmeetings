@@ -28,7 +28,7 @@ public class TestKeyCodesNumber {
 	private static final Logger log = LoggerFactory.getLogger(TestKeyCodesNumber.class);
 
 	@Test
-	public void testKeyCodes() {
+	void testKeyCodes() {
 		try {
 
 			for (int i = 1; i < 600; i++) {

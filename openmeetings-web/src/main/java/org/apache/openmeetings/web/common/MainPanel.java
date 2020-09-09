@@ -120,9 +120,9 @@ public class MainPanel extends Panel {
 		this(id, null);
 	}
 
-	public MainPanel(String id, BasePanel _panel) {
+	public MainPanel(String id, BasePanel panel) {
 		super(id);
-		this.panel = _panel;
+		this.panel = panel;
 		setAuto(true);
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);

@@ -29,22 +29,22 @@ import org.junit.jupiter.api.Test;
 
 public class TestVersion {
 	@Test
-	public void testVersion() {
+	void testVersion() {
 		assertNotNull(getVersion());
 	}
 
 	@Test
-	public void testBuildDate() {
+	void testBuildDate() {
 		assertNotNull(getBuildDate());
 	}
 
 	@Test
-	public void testRevision() {
+	void testRevision() {
 		assertNotNull(getRevision());
 	}
 
 	@Test
-	public void testLogVersion() {
+	void testLogVersion() {
 		logOMStarted();
 		assertTrue(true);
 	}

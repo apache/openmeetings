@@ -34,7 +34,7 @@ public class TestConfig extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(TestConfig.class);
 
 	@Test
-	public void getConfigKey() {
+	void getConfigKey() {
 		System.err.println("THIS");
 
 		Configuration smtp_server = cfgDao.get(CONFIG_SMTP_SERVER);
@@ -45,7 +45,7 @@ public class TestConfig extends AbstractJUnitDefaults {
 	}
 
 	@Test
-	public void getConfigs() {
+	void getConfigs() {
 		try {
 			List<Configuration> list = cfgDao.get(4, 6);
 

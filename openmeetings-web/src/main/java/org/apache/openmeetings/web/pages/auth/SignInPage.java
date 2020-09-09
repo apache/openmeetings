@@ -278,8 +278,8 @@ public class SignInPage extends BaseInitedPage {
 		return result;
 	}
 
-	private void prepareConnection(URLConnection _connection) {
-		if (!(_connection instanceof HttpsURLConnection)) {
+	private void prepareConnection(URLConnection inConnection) {
+		if (!(inConnection instanceof HttpsURLConnection)) {
 			return;
 		}
 		if (!cfgDao.getBool(CONFIG_IGNORE_BAD_SSL, false)) {
@@ -302,7 +302,7 @@ public class SignInPage extends BaseInitedPage {
 			}
 		}};
 		try {
-			HttpsURLConnection connection = (HttpsURLConnection)_connection;
+			HttpsURLConnection connection = (HttpsURLConnection)inConnection;
 			SSLContext sslContext = SSLContext.getInstance("SSL");
 			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 			SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();

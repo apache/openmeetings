@@ -117,7 +117,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		}
 	};
 	private IModel<User> moderator2add = Model.of((User)null);
-	private IModel<Collection<BaseFileItem>> files2add = new CollectionModel<>(new ArrayList<BaseFileItem>());
+	private IModel<Collection<BaseFileItem>> files2add = new CollectionModel<>(new ArrayList<>());
 	private IModel<Long> wbIdx = Model.of(0L);
 	@SpringBean
 	private GroupDao groupDao;
@@ -202,8 +202,8 @@ public class RoomForm extends AdminBaseForm<Room> {
 			}
 
 			@Override
-			public RoomGroup fromId(String _id) {
-				Long id = Long.valueOf(_id);
+			public RoomGroup fromId(String inId) {
+				Long id = Long.valueOf(inId);
 
 				if (!orgList.stream().filter(g -> g.getId().equals(id)).findFirst().isPresent()) {
 					return null; // seems to be hacked
@@ -286,7 +286,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				boolean found = false;
 				if (u != null) {
 					if (r.getModerators() == null) {
-						r.setModerators(new ArrayList<RoomModerator>());
+						r.setModerators(new ArrayList<>());
 					}
 					for (RoomModerator rm : r.getModerators()) {
 						if (rm.getUser().getId().equals(u.getId())) {
@@ -323,7 +323,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				};
 				del.setIconType(FontAwesome5IconType.times_s)
 						.add(newOkCancelDangerConfirm(this, getString("833")));
-				item.add(new CheckBox("superModerator", new PropertyModel<Boolean>(moderator, "superModerator")))
+				item.add(new CheckBox("superModerator", new PropertyModel<>(moderator, "superModerator")))
 					.add(new Label("userId", String.valueOf(moderator.getUser().getId())))
 					.add(name)
 					.add(new Label("email", moderator.getUser().getAddress().getEmail()))
@@ -398,8 +398,8 @@ public class RoomForm extends AdminBaseForm<Room> {
 					public void onClick(AjaxRequestTarget target) {
 						Room r = RoomForm.this.getModelObject();
 						for (Iterator<RoomFile> iter = r.getFiles().iterator(); iter.hasNext();) {
-							RoomFile _rf = iter.next();
-							if (_rf.getFile().getId().equals(rf.getFile().getId())) {
+							RoomFile curRf = iter.next();
+							if (curRf.getFile().getId().equals(rf.getFile().getId())) {
 								iter.remove();
 								break;
 							}

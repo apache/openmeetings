@@ -89,13 +89,13 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					, LinkedHashMap::new
 					, Collectors.collectingAndThen(Collectors.toList(), l -> l.stream().sorted(Comparator.comparing(RecordingChunk::getStart)).collect(Collectors.toList()))));
 			List<String> pods = new ArrayList<>();
-			int N = pods.size();
+			int numPods = pods.size();
 			for (Entry<String, List<RecordingChunk>> e : cunksBySid.entrySet()) {
 				Date pStart = r.getRecordStart();
 				List<PodPart> parts = new ArrayList<>();
-				pStart = processParts(r.getRoomId(), e.getValue(), logs, N, parts, pStart);
+				pStart = processParts(r.getRoomId(), e.getValue(), logs, numPods, parts, pStart);
 				if (!parts.isEmpty()) {
-					String podX = new File(streamFolder, String.format("rec_%s_pod_%s.%s", r.getId(), N, EXTENSION_MP4)).getCanonicalPath();
+					String podX = new File(streamFolder, String.format("rec_%s_pod_%s.%s", r.getId(), numPods, EXTENSION_MP4)).getCanonicalPath();
 					long diff = diff(r.getRecordEnd(), pStart);
 					PodPart.add(parts, diff);
 					/* create continuous pod
@@ -135,16 +135,16 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					args.add(concat.insert(0, videos).append("concat=n=").append(parts.size()).append(":v=1:a=0").toString());
 					args.add("-an");
 					args.add(podX);
-					ProcessResult res = ProcessHelper.executeScript(String.format("Full video pod_%s", N), args.toArray(new String[0]), true);
+					ProcessResult res = ProcessHelper.executeScript(String.format("Full video pod_%s", numPods), args.toArray(new String[0]), true);
 					logs.add(res);
 					if (res.isWarn()) {
 						throw new ConversionException("Fail to create pod");
 					}
 					pods.add(podX);
-					N = pods.size();
+					numPods = pods.size();
 				}
 			}
-			if (N == 0) {
+			if (numPods == 0) {
 				ProcessResult res = new ProcessResult();
 				res.setProcess("CheckStreamFilesExists");
 				res.setError("No valid pods found");
@@ -152,14 +152,14 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				logs.add(res);
 				return;
 			}
-			double ratio = Math.sqrt(N / Math.sqrt(2));
-			int w = ratio < 1 ? N : (int)Math.round(ratio);
-			w = Math.max(w, (int)Math.round(1. * N / w));
+			double ratio = Math.sqrt(numPods / Math.sqrt(2));
+			int w = ratio < 1 ? numPods : (int)Math.round(ratio);
+			w = Math.max(w, (int)Math.round(1. * numPods / w));
 
 			r.setWidth(w * width);
-			r.setHeight((N / w) * height);
+			r.setHeight((numPods / w) * height);
 
-			String mp4path = convertToMp4(r, getFinalArgs(N, pods, wav, w), logs);
+			String mp4path = convertToMp4(r, getFinalArgs(numPods, pods, wav, w), logs);
 
 			finalizeRec(r, mp4path, logs);
 		} catch (Exception err) {
@@ -175,7 +175,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 		}
 	}
 
-	private Date processParts(Long roomId, List<RecordingChunk> chunks, ProcessResultList logs, int N, List<PodPart> parts, Date pStart) throws IOException {
+	private Date processParts(Long roomId, List<RecordingChunk> chunks, ProcessResultList logs, int numPods, List<PodPart> parts, Date pStart) throws IOException {
 		for (RecordingChunk chunk : chunks) {
 			File chunkStream = getRecordingChunk(roomId, chunk.getStreamName());
 			if (!chunkStream.exists()) {
@@ -191,7 +191,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					, "-v", "error"
 					, "-f", "null"
 					, "file.null"};
-			ProcessResult res = ProcessHelper.executeScript(String.format("Check chunk pod video_%s_%s", N, parts.size()), args, true);
+			ProcessResult res = ProcessHelper.executeScript(String.format("Check chunk pod video_%s_%s", numPods, parts.size()), args, true);
 			logs.add(res);
 			if (!res.isWarn()) {
 				long diff = diff(chunk.isAudioOnly() ? chunk.getEnd() : chunk.getStart(), pStart);
@@ -205,9 +205,9 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 		return pStart;
 	}
 
-	private static List<String> getFinalArgs(int N, List<String> pods, File wav, int w) throws IOException {
+	private static List<String> getFinalArgs(int numPods, List<String> pods, File wav, int w) throws IOException {
 		List<String> args = new ArrayList<>();
-		if (N == 1) {
+		if (numPods == 1) {
 			args.add("-i");
 			args.add(pods.get(0));
 			args.add("-i");
@@ -222,13 +222,13 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			 */
 			StringBuilder cols = new StringBuilder();
 			StringBuilder rows = new StringBuilder();
-			for (int i = 0, j = 0; i < N; ++i) {
+			for (int i = 0, j = 0; i < numPods; ++i) {
 				args.add("-i");
 				args.add(pods.get(i));
 				cols.append('[').append(i).append(":v]");
 				if (i != 0 && (i + 1) % w == 0) {
 					cols.append("hstack=inputs=").append(w);
-					if (j == 0 && i == N - 1) {
+					if (j == 0 && i == numPods - 1) {
 						cols.append("[v]");
 					} else {
 						cols.append("[c").append(j).append("];");
@@ -236,7 +236,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					rows.append("[c").append(j).append(']');
 					j++;
 				}
-				if (i == N - 1) {
+				if (i == numPods - 1) {
 					if (j > 1) {
 						rows.append("vstack=inputs=").append(j).append("[v]");
 					} else {
@@ -252,7 +252,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			args.add("[v]");
 		}
 		args.add("-map");
-		args.add(String.format("%s:a", N));
+		args.add(String.format("%s:a", numPods));
 		args.add("-qmax"); args.add("1");
 		args.add("-qmin"); args.add("1");
 		return args;

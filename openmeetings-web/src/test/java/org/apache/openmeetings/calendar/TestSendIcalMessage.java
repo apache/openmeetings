@@ -160,7 +160,7 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 	}
 
 	@Test
-	public void sendInvitionIcalLink() {
+	void sendInvitionIcalLink() {
 		try {
 			String email = "hans@webbase-design.de";
 			String username = "shans";

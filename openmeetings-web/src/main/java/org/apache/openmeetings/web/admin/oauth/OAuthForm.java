@@ -105,11 +105,11 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		add(new RequiredTextField<String>("clientSecret").setLabel(Model.of("client_secret")));
 		add(redirectUriText = (TextField<String>) new TextField<>("redirectUri", Model.of("")).setLabel(new ResourceModel("1587")));
 		add(new RequiredTextField<String>("requestKeyUrl").setLabel(new ResourceModel("1578")));
-		add(new DropDownChoice<>("requestTokenMethod", List.of(RequestTokenMethod.values()), new ChoiceRenderer<RequestTokenMethod>("name", "name")));
+		add(new DropDownChoice<>("requestTokenMethod", List.of(RequestTokenMethod.values()), new ChoiceRenderer<>("name", "name")));
 		add(new RequiredTextField<String>("requestTokenUrl").setLabel(new ResourceModel("1579")));
 		add(new RequiredTextField<String>("requestTokenAttributes").setLabel(new ResourceModel("1586")));
 		add(new RequiredTextField<String>("requestInfoUrl").setLabel(new ResourceModel("1580")));
-		add(new DropDownChoice<>("requestInfoMethod", List.of(RequestInfoMethod.values()), new ChoiceRenderer<RequestInfoMethod>("name", "name")));
+		add(new DropDownChoice<>("requestInfoMethod", List.of(RequestInfoMethod.values()), new ChoiceRenderer<>("name", "name")));
 		Form<Void> mappingForm = new Form<>("mappingForm");
 		final TextField<String> omAttr = new TextField<>("omAttr", Model.of(""));
 		final TextField<String> oauthAttr = new TextField<>("oauthAttr", Model.of(""));

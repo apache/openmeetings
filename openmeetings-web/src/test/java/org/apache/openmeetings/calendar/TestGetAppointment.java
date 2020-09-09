@@ -39,7 +39,7 @@ public class TestGetAppointment extends AbstractJUnitDefaults {
 	private RoomDao roomDao;
 
 	@Test
-	public void getAppoinment() {
+	void getAppoinment() {
 		log.debug("getAppoinment enter");
 		Long userId = 1L;
 
@@ -58,7 +58,7 @@ public class TestGetAppointment extends AbstractJUnitDefaults {
 	}
 
 	@Test
-	public void testGetByRoom() {
+	void testGetByRoom() {
 		Date start = new Date();
 		Appointment a = createAppointment(getAppointment(userDao.get(1L), roomDao.get(5L), start, new Date(start.getTime() + ONE_HOUR)));
 		Appointment a1 = appointmentDao.getByRoom(1L, 5L);

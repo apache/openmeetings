@@ -31,7 +31,7 @@ public class TestImportRoom extends AbstractTestImport {
 	private RoomDao roomDao;
 
 	@Test
-	public void importRooms() throws Exception {
+	void importRooms() throws Exception {
 		long roomsCount = roomDao.count();
 		File rooms = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/room/rooms.xml").toURI());
 		backupImport.importRooms(rooms.getParentFile());
@@ -39,7 +39,7 @@ public class TestImportRoom extends AbstractTestImport {
 	}
 
 	@Test
-	public void importRoomGroups() throws Exception {
+	void importRoomGroups() throws Exception {
 		//TODO need to check it somehow
 		File rooms = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/room/rooms.xml").toURI());
 		backupImport.importRoomGroups(rooms.getParentFile());

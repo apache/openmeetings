@@ -57,7 +57,7 @@ public class RoomInvitationForm extends InvitationForm {
 	private final Long roomId;
 	private final WebMarkupContainer groupContainer = new WebMarkupContainer("groupContainer");
 	final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
-			, new CollectionModel<>(new ArrayList<Group>())
+			, new CollectionModel<>(new ArrayList<>())
 			, new GroupChoiceProvider());
 	final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
 	@SpringBean
@@ -131,7 +131,7 @@ public class RoomInvitationForm extends InvitationForm {
 		if (i.getRoom() != null) {
 			target.add(sipContainer.replace(new Label("room.confno", i.getRoom().getConfno())).setVisible(i.getRoom().isSipEnabled()));
 		}
-		groups.setModelObject(new ArrayList<Group>());
+		groups.setModelObject(new ArrayList<>());
 		groups.setEnabled(false);
 		rdi.setModelObject(InviteeType.user);
 	}

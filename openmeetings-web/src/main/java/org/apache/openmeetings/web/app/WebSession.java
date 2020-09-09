@@ -490,7 +490,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	public String getClientTZCode() {
-		TimeZone _zone = browserTz;
+		TimeZone curZone = browserTz;
 		if (browserTz == null) {
 			try {
 				browserTz = getClientInfo().getProperties().getTimeZone();
@@ -503,15 +503,15 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 						}
 					}
 				}
-				_zone = browserTz;
+				curZone = browserTz;
 			} catch (Exception e) {
 				//no-op
 			}
 			if (browserTz == null) {
-				_zone = Calendar.getInstance(getLocale()).getTimeZone();
+				curZone = Calendar.getInstance(getLocale()).getTimeZone();
 			}
 		}
-		return _zone == null ? null : _zone.getID();
+		return curZone == null ? null : curZone.getID();
 	}
 
 	public static TimeZone getClientTimeZone() {

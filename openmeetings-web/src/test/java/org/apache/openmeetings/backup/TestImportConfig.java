@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 public class TestImportConfig extends AbstractTestImport {
 
 	@Test
-	public void importConfigsNoKeyDeleted() throws Exception {
+	void importConfigsNoKeyDeleted() throws Exception {
 		long configsCount = cfgDao.count();
 		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/config/skip/configs.xml").toURI());
 		backupImport.importConfigs(configs.getParentFile());
@@ -40,7 +40,7 @@ public class TestImportConfig extends AbstractTestImport {
 	}
 
 	@Test
-	public void importConfigsBool() throws Exception {
+	void importConfigsBool() throws Exception {
 		cfgDao.get(CONFIG_REGISTER_FRONTEND, CONFIG_REGISTER_SOAP, CONFIG_REGISTER_OAUTH, CONFIG_REPLY_TO_ORGANIZER).forEach(cfg -> {
 			cfg.setValueB(cfg.getKey().equals(CONFIG_REPLY_TO_ORGANIZER));
 			cfgDao.update(cfg, null);
@@ -61,7 +61,7 @@ public class TestImportConfig extends AbstractTestImport {
 	}
 
 	@Test
-	public void importConfigs() throws Exception {
+	void importConfigs() throws Exception {
 		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/config/configs.xml").toURI());
 		backupImport.importConfigs(configs.getParentFile());
 	}

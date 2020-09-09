@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 public class TestGui {
 
 	@Test
-	public void testNoop() {
+	void testNoop() {
 		// no-op
 	}
 }

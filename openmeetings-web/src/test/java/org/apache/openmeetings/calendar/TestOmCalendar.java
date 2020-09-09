@@ -33,7 +33,7 @@ public class TestOmCalendar extends AbstractJUnitDefaults {
 	private OmCalendarDao calendarDao;
 
 	@Test
-	public void saveCalendar() {
+	void saveCalendar() {
 		OmCalendar calendar = new OmCalendar();
 		Long userId = 1L;
 		User owner = userDao.get(userId);

@@ -54,9 +54,9 @@ public class OmHelpFormatter extends HelpFormatter {
 		final String lpadParam = createPadding(leftPad + 2);
 		List<OmOption> reqOptions = getReqOptions(opts);
 		Map<String, List<OmOption>> map = new LinkedHashMap<>(reqOptions.size());
-		map.put(GENERAL_OPTION_GROUP, new ArrayList<OmOption>());
+		map.put(GENERAL_OPTION_GROUP, new ArrayList<>());
 		for (OmOption o : reqOptions) {
-			map.put(o.getOpt(), new ArrayList<OmOption>());
+			map.put(o.getOpt(), new ArrayList<>());
 		}
 		for (Option option : opts.getOptions()) {
 			OmOption o = (OmOption)option;

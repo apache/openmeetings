@@ -451,11 +451,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return getString(key, getLocale(languageId));
 	}
 
-	public static String getString(String key, final Locale loc, String... _params) {
+	public static String getString(String key, final Locale loc, String... inParams) {
 		if (!exists()) {
 			ThreadContext.setApplication(org.apache.wicket.Application.get(appName));
 		}
-		String[] params = _params;
+		String[] params = inParams;
 		if ((params == null || params.length == 0) && STRINGS_WITH_APP.contains(key)) {
 			params = new String[]{getApplicationName()};
 		}

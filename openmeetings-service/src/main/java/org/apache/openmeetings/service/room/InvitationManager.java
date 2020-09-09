@@ -182,13 +182,13 @@ public class InvitationManager implements IInvitationManager {
 	}
 
 	@Override
-	public Invitation getInvitation(Invitation _invitation, User inveetee, Room room
+	public Invitation getInvitation(Invitation inInvitation, User inveetee, Room room
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
 			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment) {
 
-		Invitation invitation = _invitation;
-		if (null == _invitation) {
+		Invitation invitation = inInvitation;
+		if (null == inInvitation) {
 			invitation = new Invitation();
 			invitation.setHash(randomUUID().toString());
 		}

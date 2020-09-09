@@ -32,14 +32,14 @@ public class TestEmailTemplate extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testNullLocale() {
+	void testNullLocale() {
 		User u = new User();
 		u.setLanguageId(666L);
 		checkTemplate(InvitationTemplate.getEmail(u, "testuser", "email", "message"));
 	}
 
 	@Test
-	public void testTemplateGeneration() {
+	void testTemplateGeneration() {
 		User u = new User();
 		u.setLanguageId(rnd.nextInt(30));
 		UserContact uc = new UserContact();

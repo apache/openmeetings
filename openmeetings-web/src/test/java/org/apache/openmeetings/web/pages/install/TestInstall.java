@@ -121,7 +121,7 @@ public class TestInstall {
 	}
 
 	@Test
-	public void testInstall() {
+	void testInstall() {
 		InstallWizardPage page = tester.startPage(InstallWizardPage.class);
 		tester.assertRenderedPage(InstallWizardPage.class);
 		InstallWizard wiz = (InstallWizard)page.get(WIZARD_PATH);

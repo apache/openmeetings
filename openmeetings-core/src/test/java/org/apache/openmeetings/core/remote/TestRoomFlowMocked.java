@@ -74,7 +74,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 	}
 
 	@Test
-	public void testNoClient() {
+	void testNoClient() {
 		runWrapped(() -> {
 			handler.onMessage(null, MSG_BASE.put("id", "aa"));
 		});
@@ -85,14 +85,14 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 	}
 
 	@Test
-	public void testNoRoom() {
+	void testNoRoom() {
 		runWrapped(() -> {
 			handler.onMessage(getClient(), MSG_BASE.put("id", "aa"));
 		});
 	}
 
 	@Test
-	public void testRecordingAllowed() {
+	void testRecordingAllowed() {
 		runWrapped(() -> {
 			Client c = getClient();
 			assertFalse(streamProcessor.recordingAllowed(c));
@@ -115,7 +115,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 	}
 
 	@Test
-	public void testWannaRecord1() throws Exception {
+	void testWannaRecord1() throws Exception {
 		JSONObject msg = new JSONObject(MSG_BASE.toString()).put("id", "wannaRecord");
 		handler.onMessage(getClientWithRoom(), msg);
 	}
@@ -128,7 +128,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 	}
 
 	@Test
-	public void testWannaRecord2() throws Exception {
+	void testWannaRecord2() throws Exception {
 		runWrapped(() -> {
 			JSONObject msg = new JSONObject(MSG_BASE.toString()).put("id", "wannaRecord");
 			Client c = getClientFull();
@@ -139,7 +139,7 @@ public class TestRoomFlowMocked extends BaseMockedTest {
 	}
 
 	@Test
-	public void testRecordRecord() throws Exception {
+	void testRecordRecord() throws Exception {
 		runWrapped(() -> {
 			JSONObject msg = new JSONObject(MSG_BASE.toString())
 					.put("id", "wannaRecord")

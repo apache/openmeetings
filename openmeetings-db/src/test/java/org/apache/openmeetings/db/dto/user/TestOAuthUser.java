@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 
 public class TestOAuthUser {
 	@Test
-	public void firstLevel() {
+	void firstLevel() {
 		OAuthServer server = new OAuthServer()
 				.addMapping(PARAM_LOGIN, "id")
 				.addMapping(PARAM_EMAIL, "email")
@@ -52,7 +52,7 @@ public class TestOAuthUser {
 	}
 
 	@Test
-	public void secondLevel() {
+	void secondLevel() {
 		OAuthServer server = new OAuthServer()
 				.addMapping(PARAM_LOGIN, "uid")
 				.addMapping(PARAM_EMAIL, "email")
@@ -76,7 +76,7 @@ public class TestOAuthUser {
 	}
 
 	@Test
-	public void secondLevel1() {
+	void secondLevel1() {
 		OAuthServer server = new OAuthServer()
 				.addMapping(PARAM_LOGIN, "username")
 				.addMapping(PARAM_EMAIL, "email")
@@ -93,7 +93,7 @@ public class TestOAuthUser {
 	}
 
 	@Test
-	public void thirdLevel() {
+	void thirdLevel() {
 		OAuthServer server = new OAuthServer()
 				.addMapping(PARAM_LOGIN, "id")
 				.addMapping(PARAM_EMAIL, "email")
@@ -140,7 +140,7 @@ public class TestOAuthUser {
 	}
 
 	@Test
-	public void map() {
+	void map() {
 		Map<String, String> umap = new HashMap<>();
 		umap.put("login", "abc");
 		umap.put("email", "abc@local");

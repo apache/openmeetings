@@ -62,7 +62,7 @@ public class TestWbService extends AbstractWebServiceTest {
 	}
 
 	@Test
-	public void testReset() {
+	void testReset() {
 		doTest((room, sid) -> {
 			ServiceResult res = getClient(getWbUrl())
 					.path("/resetwb/" + room.getId())
@@ -73,7 +73,7 @@ public class TestWbService extends AbstractWebServiceTest {
 	}
 
 	@Test
-	public void testCleanAll() {
+	void testCleanAll() {
 		doTest((room, sid) -> {
 			ServiceResult res = getClient(getWbUrl())
 					.path("/cleanwb/" + room.getId() + "/" + 0)
@@ -84,7 +84,7 @@ public class TestWbService extends AbstractWebServiceTest {
 	}
 
 	@Test
-	public void testCleanSlide() {
+	void testCleanSlide() {
 		doTest((room, sid) -> {
 			ServiceResult res = getClient(getWbUrl())
 					.path("/cleanslide/" + room.getId() + "/" + 0 + "/" + 0)

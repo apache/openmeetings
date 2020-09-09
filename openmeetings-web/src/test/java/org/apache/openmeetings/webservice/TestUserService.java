@@ -55,14 +55,14 @@ public class TestUserService extends AbstractWebServiceTest {
 	private static final String DUMMY_PICTURE_URL = "https://openmeetings.apache.org/images/logo.png";
 
 	@Test
-	public void invalidLoginTest() {
+	void invalidLoginTest() {
 		ServiceResult r = loginNoCheck("invalid-user", "bad pass");
 		assertNotNull(r, "Valid ServiceResult should be returned");
 		assertEquals(Type.ERROR.name(), r.getType(), "Login should NOT be successful");
 	}
 
 	@Test
-	public void loginTest() {
+	void loginTest() {
 		ServiceResult r = login();
 		assertNotNull(r, "Valid ServiceResult should be returned");
 	}
@@ -96,7 +96,7 @@ public class TestUserService extends AbstractWebServiceTest {
 	}
 
 	@Test
-	public void hashTestNoAuth() {
+	void hashTestNoAuth() {
 		getHash("aa", true);
 	}
 
@@ -117,7 +117,7 @@ public class TestUserService extends AbstractWebServiceTest {
 	}
 
 	@Test
-	public void hashTest() throws OmException {
+	void hashTest() throws OmException {
 		ensureApplication(-1L); // to ensure WebSession is attached
 		WebSession ws = WebSession.get();
 		assertTrue(ws.signIn(adminUsername, userpass, User.Type.USER, null));
@@ -128,7 +128,7 @@ public class TestUserService extends AbstractWebServiceTest {
 	}
 
 	@Test
-	public void addUserTest() {
+	void addUserTest() {
 		String[] tzList = TimeZone.getAvailableIDs();
 		String tz = TimeZone.getTimeZone(tzList[rnd.nextInt(tzList.length)]).getID();
 		ServiceResult r = login();
@@ -157,7 +157,7 @@ public class TestUserService extends AbstractWebServiceTest {
 	}
 
 	@Test
-	public void list() {
+	void list() {
 		ServiceResult r = login();
 		Collection<? extends UserDTO> users = getClient(getUserUrl())
 				.path("/")

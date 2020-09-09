@@ -44,7 +44,7 @@ public class TestSetupFlowMocked extends BaseMockedTest {
 	}
 
 	@Test
-	public void testMsgTestWannaRecord() throws Exception {
+	void testMsgTestWannaRecord() throws Exception {
 		runWrapped(() -> {
 			JSONObject msg = new JSONObject(MSG_BASE.toString()).put("id", "wannaRecord");
 			WsClient c = new WsClient("sessionId", 0);
@@ -53,7 +53,7 @@ public class TestSetupFlowMocked extends BaseMockedTest {
 	}
 
 	@Test
-	public void testMsgTestRecord1() throws Exception {
+	void testMsgTestRecord1() throws Exception {
 		runWrapped(() -> {
 			doReturn(mock(MediaPipeline.class)).when(client).createMediaPipeline(any(Transaction.class));
 
@@ -83,7 +83,7 @@ public class TestSetupFlowMocked extends BaseMockedTest {
 	}
 
 	@Test
-	public void testMsgTestIceCandidate() throws Exception {
+	void testMsgTestIceCandidate() throws Exception {
 		runWrapped(() -> {
 			JSONObject msg = new JSONObject(MSG_BASE.toString())
 					.put("id", "iceCandidate")
@@ -94,7 +94,7 @@ public class TestSetupFlowMocked extends BaseMockedTest {
 	}
 
 	@Test
-	public void testMsgTestWannaPlay() throws Exception {
+	void testMsgTestWannaPlay() throws Exception {
 		runWrapped(() -> {
 			JSONObject msg = new JSONObject(MSG_BASE.toString()).put("id", "wannaPlay");
 			WsClient c = new WsClient("sessionId", 0);
@@ -103,7 +103,7 @@ public class TestSetupFlowMocked extends BaseMockedTest {
 	}
 
 	@Test
-	public void testMsgTestPlay() throws Exception {
+	void testMsgTestPlay() throws Exception {
 		runWrapped(() -> {
 			JSONObject msg = new JSONObject(MSG_BASE.toString()).put("id", "play");
 			WsClient c = new WsClient("sessionId", 0);

@@ -428,8 +428,8 @@ public class RoomPanel extends BasePanel {
 
 	@Override
 	public void onEvent(IEvent<?> event) {
-		Client _c = getClient();
-		if (_c != null && event.getPayload() instanceof WebSocketPushPayload) {
+		Client curClient = getClient();
+		if (curClient != null && event.getPayload() instanceof WebSocketPushPayload) {
 			WebSocketPushPayload wsEvent = (WebSocketPushPayload) event.getPayload();
 			if (wsEvent.getMessage() instanceof RoomMessage) {
 				RoomMessage m = (RoomMessage)wsEvent.getMessage();
@@ -456,7 +456,7 @@ public class RoomPanel extends BasePanel {
 								log.error("Not existing user in rightUpdated {} !!!!", uid);
 								return;
 							}
-							boolean self = _c.getUid().equals(c.getUid());
+							boolean self = curClient.getUid().equals(c.getUid());
 							StringBuilder sb = new StringBuilder("Room.updateClient(")
 									.append(c.toJson(self).toString(new NullStringer()))
 									.append(");")
@@ -478,8 +478,8 @@ public class RoomPanel extends BasePanel {
 								log.error("Not existing user in rightUpdated {} !!!!", uid);
 								return;
 							}
-							boolean self = _c.getUid().equals(c.getUid());
-							if (self || _c.hasRight(Room.Right.MODERATOR) || !r.isHidden(RoomElement.USER_COUNT)) {
+							boolean self = curClient.getUid().equals(c.getUid());
+							if (self || curClient.hasRight(Room.Right.MODERATOR) || !r.isHidden(RoomElement.USER_COUNT)) {
 								handler.appendJavaScript(String.format("Room.addClient([%s]);"
 										, c.toJson(self).toString(new NullStringer())));
 							}
@@ -526,18 +526,18 @@ public class RoomPanel extends BasePanel {
 						sidebar.removeActivity(((TextRoomMessage)m).getText(), handler);
 						break;
 					case HAVE_QUESTION:
-						if (_c.hasRight(Room.Right.MODERATOR) || getUserId().equals(m.getUserId())) {
+						if (curClient.hasRight(Room.Right.MODERATOR) || getUserId().equals(m.getUserId())) {
 							sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.haveQuestion), handler);
 						}
 						break;
 					case KICK:
 						{
 							String uid = ((TextRoomMessage)m).getText();
-							if (_c.getUid().equals(uid)) {
+							if (curClient.getUid().equals(uid)) {
 								handler.add(room.setVisible(false));
 								getMainPanel().getChat().toggle(handler, false);
 								clientKicked.show(handler);
-								cm.exitRoom(_c);
+								cm.exitRoom(curClient);
 							}
 						}
 						break;
@@ -549,7 +549,7 @@ public class RoomPanel extends BasePanel {
 							log.error("Not existing user in mute {} !!!!", obj);
 							return;
 						}
-						if (!_c.getUid().equals(c.getUid())) {
+						if (!curClient.getUid().equals(c.getUid())) {
 							handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.mute('%s', %s);}", obj.getString("uid"), obj.getBoolean("mute")));
 						}
 					}
@@ -582,7 +582,7 @@ public class RoomPanel extends BasePanel {
 					case MODERATOR_IN_ROOM: {
 						if (!r.isModerated() || !r.isWaitModerator()) {
 							log.warn("Something weird: `moderatorInRoom` in wrong room {}", r);
-						} else if (!_c.hasRight(Room.Right.MODERATOR)) {
+						} else if (!curClient.hasRight(Room.Right.MODERATOR)) {
 							boolean moderInRoom = Boolean.TRUE.equals(Boolean.valueOf(((TextRoomMessage)m).getText()));
 							log.warn("!! moderatorInRoom: {}", moderInRoom);
 							if (room.isVisible() != moderInRoom) {
@@ -614,8 +614,8 @@ public class RoomPanel extends BasePanel {
 	}
 
 	private void updateInterviewRecordingButtons(IPartialPageRequestHandler handler) {
-		Client _c = getClient();
-		if (interview && _c.hasRight(Right.MODERATOR)) {
+		Client curClient = getClient();
+		if (interview && curClient.hasRight(Right.MODERATOR)) {
 			if (streamProcessor.isRecording(r.getId())) {
 				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
 			} else if (streamProcessor.recordingAllowed(getClient())) {

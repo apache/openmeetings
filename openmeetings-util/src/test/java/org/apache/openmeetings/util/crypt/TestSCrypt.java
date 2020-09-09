@@ -35,7 +35,7 @@ public class TestSCrypt extends AbstractCryptTest {
 	}
 
 	@Test
-	public void fallbackTest() {
+	void fallbackTest() {
 		assertFalse(crypt.verify(TEST_PASS, MD5_HASH), "MD5 is not valid hash");
 		assertFalse(crypt.verify(TEST_PASS, SHA_HASH), "SHA256 is not valid hash");
 		assertFalse(crypt.fallback(TEST_PASS, MD5_HASH), "MD5 is valid fallback");

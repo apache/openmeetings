@@ -27,7 +27,7 @@ public class TestInfoService extends AbstractWebServiceTest {
 	private static final String INFO_SERVICE_MOUNT = "info";
 
 	@Test
-	public void infoTest() {
+	void infoTest() {
 		Info info = getClient(getInfoUrl()).path("/version").get(Info.class);
 		assertNotNull(info, "Valid info should be returned");
 		assertNotNull(info.getBuildDate(), "Valid BuildDate should be returned");

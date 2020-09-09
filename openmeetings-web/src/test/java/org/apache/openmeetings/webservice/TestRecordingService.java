@@ -47,7 +47,7 @@ public class TestRecordingService extends AbstractWebServiceTest {
 	}
 
 	@Test
-	public void testExternal() throws Exception {
+	void testExternal() throws Exception {
 		User u = getExternalUser();
 		Recording r = new Recording();
 		r.setInsertedBy(u.getId());

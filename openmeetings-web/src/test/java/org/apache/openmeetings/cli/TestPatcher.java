@@ -49,7 +49,7 @@ public class TestPatcher {
 	}
 
 	@Test
-	public void test() throws Exception {
+	void test() throws Exception {
 		for (DbType dbType : DbType.values()) {
 			ConnectionProperties props = ConnectionPropertiesPatcher.patch(dbType, HOST, PORT, DB, USER, PASS);
 			assertEquals(dbType, props.getDbType(), "DB type should match");

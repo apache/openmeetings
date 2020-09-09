@@ -36,7 +36,7 @@ public class TestImportUser extends AbstractTestImport {
 	private LdapConfigDao ldapDao;
 
 	@Test
-	public void importUserNE() throws Exception {
+	void importUserNE() throws Exception {
 		Assertions.assertThrows(BackupException.class, () -> {
 			File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/config/skip/configs.xml").toURI());
 			backupImport.importUsers(configs.getParentFile());
@@ -44,7 +44,7 @@ public class TestImportUser extends AbstractTestImport {
 	}
 
 	@Test
-	public void importUsers() throws Exception {
+	void importUsers() throws Exception {
 		long userCount = userDao.count();
 		File users = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/users.xml").toURI());
 		backupImport.importUsers(users.getParentFile());
@@ -54,7 +54,7 @@ public class TestImportUser extends AbstractTestImport {
 	}
 
 	@Test
-	public void importNoLoginDeleted() throws Exception {
+	void importNoLoginDeleted() throws Exception {
 		long userCount = userDao.count();
 		File users = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/skip/users.xml").toURI());
 		backupImport.importUsers(users.getParentFile());
@@ -62,7 +62,7 @@ public class TestImportUser extends AbstractTestImport {
 	}
 
 	@Test
-	public void importLdap() throws Exception {
+	void importLdap() throws Exception {
 		final String login = "omLdap2294";
 		// OPENMEETINGS-2294
 		//clean-up

@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 
 public class TestWebSession extends AbstractWicketTester {
 	@Test
-	public void testLogin() throws OmException {
+	void testLogin() throws OmException {
 		WebSession ws = WebSession.get();
 		assertFalse(ws.isSignedIn(), "Should not be signed in");
 

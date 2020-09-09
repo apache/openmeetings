@@ -52,7 +52,7 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 	}
 
 	@Test
-	public void getUsersByGroupId() {
+	void getUsersByGroupId() {
 		User u = getValidUser();
 		Long groupId = u.getGroupUsers().get(0).getGroup().getId();
 		List<GroupUser> ul = groupUserDao.get(groupId, 0, 9999);
@@ -63,7 +63,7 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 	}
 
 	@Test
-	public void addGroup() {
+	void addGroup() {
 		Group g = new Group();
 		g.setName(GROUP_NAME);
 		Long groupId = groupDao.update(g, null).getId(); //inserted by not checked
@@ -74,7 +74,7 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 	}
 
 	@Test
-	public void addUserWithoutGroup() throws Exception {
+	void addUserWithoutGroup() throws Exception {
 		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
 		u = userDao.update(u, null);
@@ -91,7 +91,7 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 
 
 	@Test
-	public void addLdapUserWithoutGroup() throws Exception {
+	void addLdapUserWithoutGroup() throws Exception {
 		User u1 = getUser();
 		u1.setType(User.Type.LDAP);
 		u1.setDomainId(1L);

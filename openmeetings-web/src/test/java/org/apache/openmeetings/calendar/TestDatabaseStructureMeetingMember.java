@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 public class TestDatabaseStructureMeetingMember extends AbstractJUnitDefaults {
 
 	@Test
-	public void testUpdateMeetingMember(){
+	void testUpdateMeetingMember(){
 		//TODO add test
 	}
 }

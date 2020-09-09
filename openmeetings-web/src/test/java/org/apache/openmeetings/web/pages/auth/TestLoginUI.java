@@ -63,7 +63,7 @@ public class TestLoginUI extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testValidLogin() {
+	void testValidLogin() {
 		tester.startPage(MainPage.class);
 		tester.assertRenderedPage(SignInPage.class);
 
@@ -71,7 +71,7 @@ public class TestLoginUI extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testEmptyLogin() {
+	void testEmptyLogin() {
 		tester.startPage(SignInPage.class);
 		tester.assertRenderedPage(SignInPage.class);
 
@@ -91,14 +91,14 @@ public class TestLoginUI extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testEmptyRegister() {
+	void testEmptyRegister() {
 		FormTester formTester = showRegister();
 		formTester.submit("submit");
 		assertTrue(countErrors(tester) > 7, "There should be at least 8 errors");
 	}
 
 	@Test
-	public void testRegister() throws ReflectiveOperationException, SecurityException {
+	void testRegister() throws ReflectiveOperationException, SecurityException {
 		tester.startPage(SignInPage.class);
 		tester.assertRenderedPage(SignInPage.class);
 
@@ -120,14 +120,14 @@ public class TestLoginUI extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testEmptyForget() {
+	void testEmptyForget() {
 		FormTester formTester = showForget();
 		formTester.submit("submit");
 		checkErrors(2);
 	}
 
 	@Test
-	public void testForget() throws SecurityException, ReflectiveOperationException {
+	void testForget() throws SecurityException, ReflectiveOperationException {
 		tester.startPage(SignInPage.class);
 		tester.assertRenderedPage(SignInPage.class);
 
@@ -135,7 +135,7 @@ public class TestLoginUI extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testReset() {
+	void testReset() {
 		tester.startPage(ResetPage.class, new PageParameters().add(ResetPage.RESET_PARAM, randomUUID().toString()));
 		tester.assertRenderedPage(SignInPage.class);
 	}
@@ -183,7 +183,7 @@ public class TestLoginUI extends AbstractWicketTester {
 
 	// complex test
 	@Test
-	public void testCompleteRegister() throws ReflectiveOperationException, SecurityException {
+	void testCompleteRegister() throws ReflectiveOperationException, SecurityException {
 		// set activation properties
 		List<Configuration> cfgs = cfgDao.get(CONFIG_EMAIL_AT_REGISTER, CONFIG_EMAIL_VERIFICATION);
 		for (Configuration c : cfgs) {

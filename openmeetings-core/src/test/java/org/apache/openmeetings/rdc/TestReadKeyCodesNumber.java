@@ -26,7 +26,7 @@ public class TestReadKeyCodesNumber {
 	private static final Logger log = LoggerFactory.getLogger(TestReadKeyCodesNumber.class);
 
 	@Test
-	public void testTestKeyCodesNumber() {
+	void testTestKeyCodesNumber() {
 		try {
 
 			this.testKeyCodes();
@@ -37,7 +37,7 @@ public class TestReadKeyCodesNumber {
 	}
 
 	@Test
-	public void testKeyCodes() {
+	void testKeyCodes() {
 		try {
 
 		} catch (Exception err) {

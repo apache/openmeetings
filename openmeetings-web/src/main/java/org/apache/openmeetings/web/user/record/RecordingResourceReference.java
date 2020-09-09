@@ -70,17 +70,17 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 	@Override
 	protected Recording getFileItem(Attributes attributes) {
 		PageParameters params = attributes.getParameters();
-		StringValue _id = params.get("id");
+		StringValue inId = params.get("id");
 		String ruid = params.get("ruid").toString();
 		String uid = params.get("uid").toString();
 		Long id = null;
 		try {
-			id = _id.toOptionalLong();
+			id = inId.toOptionalLong();
 		} catch (Exception e) {
 			//no-op expected
 		}
 		WebSession ws = WebSession.get();
-		if (id == null && ws.signIn(_id.toString(), true)) {
+		if (id == null && ws.signIn(inId.toString(), true)) {
 			id = getRecordingId();
 		}
 		if (id != null && ws.isSignedIn()) {

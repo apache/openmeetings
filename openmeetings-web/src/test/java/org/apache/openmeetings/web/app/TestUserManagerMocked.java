@@ -62,7 +62,7 @@ public class TestUserManagerMocked {
 	private UserManager userManager;
 
 	@Test
-	public void oauthTest() throws NoSuchAlgorithmException, IOException {
+	void oauthTest() throws NoSuchAlgorithmException, IOException {
 		setCryptClassName(SCryptImplementation.class.getCanonicalName());
 		doReturn(true).when(userDao).validLogin(anyString());
 		doReturn(true).when(userDao).checkEmail(anyString(), eq(Type.OAUTH), any(Long.class), nullable(Long.class));

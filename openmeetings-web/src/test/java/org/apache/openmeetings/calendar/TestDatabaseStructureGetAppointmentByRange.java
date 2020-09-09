@@ -34,7 +34,7 @@ public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDef
 	private static final Logger log = LoggerFactory.getLogger(TestDatabaseStructureGetAppointmentByRange.class);
 
 	@Test
-	public void test() {
+	void test() {
 		log.debug("Test started");
 		Long userId = 1L;
 

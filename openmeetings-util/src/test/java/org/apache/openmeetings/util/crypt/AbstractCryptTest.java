@@ -35,7 +35,7 @@ public abstract class AbstractCryptTest {
 	protected static ICrypt crypt;
 
 	@Test
-	public void nulltest() {
+	void nulltest() {
 		String hash = crypt.hash(null);
 		assertNull(hash, "Hash for null should be null");
 
@@ -63,7 +63,7 @@ public abstract class AbstractCryptTest {
 	}
 
 	@Test
-	public void test() {
+	void test() {
 		for (String str : get(64)) {
 			String h1 = crypt.hash(str);
 			assertNotNull(h1, "Hash should not be null");

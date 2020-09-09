@@ -52,7 +52,7 @@ public abstract class PagingNavigatorPanel extends Panel {
 		dataView.setItemsPerPage(entitiesPerPage);
 		final Form<Void> f = new Form<>("pagingForm");
 		f.add(new OmPagingNavigator("navigator", dataView).setOutputMarkupId(true))
-			.add(new DropDownChoice<>("entitiesPerPage", new PropertyModel<Integer>(this, "entitiesPerPage"), numbers)
+			.add(new DropDownChoice<>("entitiesPerPage", new PropertyModel<>(this, "entitiesPerPage"), numbers)
 				.add(new AjaxFormComponentUpdatingBehavior("change") {
 					private static final long serialVersionUID = 1L;
 

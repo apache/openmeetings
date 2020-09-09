@@ -54,82 +54,82 @@ public class TestMainMenu extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testDahboard() throws OmException {
+	void testDahboard() throws OmException {
 		checkMenuItem(0, 0, OmDashboardPanel.class);
 	}
 
 	@Test
-	public void testCalendar() throws OmException {
+	void testCalendar() throws OmException {
 		checkMenuItem(0, 1, CalendarPanel.class);
 	}
 
 	@Test
-	public void testRoomPublic() throws OmException {
+	void testRoomPublic() throws OmException {
 		checkMenuItem(1, 0, RoomsSelectorPanel.class);
 	}
 
 	@Test
-	public void testRoomGroup() throws OmException {
+	void testRoomGroup() throws OmException {
 		checkMenuItem(1, 1, RoomsSelectorPanel.class);
 	}
 
 	@Test
-	public void testRoomMy() throws OmException {
+	void testRoomMy() throws OmException {
 		checkMenuItem(1, 2, RoomsSelectorPanel.class);
 	}
 
 	@Test
-	public void testRecordings() throws OmException {
+	void testRecordings() throws OmException {
 		checkMenuItem(2, 0, RecordingsPanel.class);
 	}
 
 	@Test
-	public void testAdminUsers() throws OmException {
+	void testAdminUsers() throws OmException {
 		checkMenuItem(4, 0, UsersPanel.class);
 	}
 
 	@Test
-	public void testAdminConnections() throws OmException {
+	void testAdminConnections() throws OmException {
 		checkMenuItem(4, 1, ConnectionsPanel.class);
 	}
 
 	@Test
-	public void testAdminGroups() throws OmException {
+	void testAdminGroups() throws OmException {
 		checkMenuItem(4, 2, GroupsPanel.class);
 	}
 
 	@Test
-	public void testAdminRooms() throws OmException {
+	void testAdminRooms() throws OmException {
 		checkMenuItem(4, 3, RoomsPanel.class);
 	}
 
 	@Test
-	public void testAdminConfigs() throws OmException {
+	void testAdminConfigs() throws OmException {
 		checkMenuItem(4, 4, ConfigsPanel.class);
 	}
 
 	@Test
-	public void testAdminLabels() throws OmException {
+	void testAdminLabels() throws OmException {
 		checkMenuItem(4, 5, LangPanel.class);
 	}
 
 	@Test
-	public void testAdminLaps() throws OmException {
+	void testAdminLaps() throws OmException {
 		checkMenuItem(4, 6, LdapsPanel.class);
 	}
 
 	@Test
-	public void testAdminOauth() throws OmException {
+	void testAdminOauth() throws OmException {
 		checkMenuItem(4, 7, OAuthPanel.class);
 	}
 
 	@Test
-	public void testAdminBackup() throws OmException {
+	void testAdminBackup() throws OmException {
 		checkMenuItem(4, 8, BackupPanel.class);
 	}
 
 	@Test
-	public void testAdminEmail() throws OmException {
+	void testAdminEmail() throws OmException {
 		checkMenuItem(4, 9, EmailPanel.class);
 	}
 }

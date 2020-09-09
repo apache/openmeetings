@@ -87,9 +87,9 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 	@SpringBean
 	private UserDao userDao;
 
-	public PollResultsDialog(String id, CreatePollDialog createPoll, Long _roomId) {
+	public PollResultsDialog(String id, CreatePollDialog createPoll, Long roomId) {
 		super(id);
-		this.roomId = _roomId;
+		this.roomId = roomId;
 		this.createPoll = createPoll;
 	}
 
@@ -202,8 +202,8 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 		}
 	}
 
-	private static String removeMinified(String _name) {
-		String name = _name;
+	private static String removeMinified(String inName) {
+		String name = inName;
 		int idxOfExtension = name.lastIndexOf('.');
 		if (idxOfExtension > -1) {
 			String extension = name.substring(idxOfExtension);
@@ -295,7 +295,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();
-			add((select = new DropDownChoice<>("polls", Model.of((RoomPoll)null), new ArrayList<RoomPoll>(), new ChoiceRenderer<RoomPoll>() {
+			add((select = new DropDownChoice<>("polls", Model.of((RoomPoll)null), new ArrayList<>(), new ChoiceRenderer<RoomPoll>() {
 				private static final long serialVersionUID = 1L;
 
 				@Override

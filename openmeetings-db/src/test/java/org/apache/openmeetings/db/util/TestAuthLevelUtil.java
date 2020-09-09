@@ -31,12 +31,12 @@ import org.junit.jupiter.api.Test;
 
 public class TestAuthLevelUtil {
 	@Test
-	public void testNull() {
+	void testNull() {
 		assertTrue(getRoomRight(null, null, null, 0).isEmpty(), "Result should be empty");
 	}
 
 	@Test
-	public void testAdmin() {
+	void testAdmin() {
 		User u = new User();
 		u.setRights(Set.of(User.Right.ADMIN));
 		Set<Room.Right> rights = getRoomRight(u, new Room(), null, 0);
@@ -45,7 +45,7 @@ public class TestAuthLevelUtil {
 	}
 
 	@Test
-	public void testAppointmentOwner() {
+	void testAppointmentOwner() {
 		User u = new User();
 		u.setId(666L);
 		Room r = new Room();
@@ -59,7 +59,7 @@ public class TestAuthLevelUtil {
 	}
 
 	@Test
-	public void testConference() {
+	void testConference() {
 		User u = new User();
 		Room r = new Room();
 		Set<Room.Right> rights = getRoomRight(u, r, null, 0);

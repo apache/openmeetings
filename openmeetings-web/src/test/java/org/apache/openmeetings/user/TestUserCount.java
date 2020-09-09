@@ -27,27 +27,27 @@ import org.junit.jupiter.api.Test;
 
 public class TestUserCount extends AbstractWicketTester {
 	@Test
-	public void testCountSearchUsers() throws Exception {
+	void testCountSearchUsers() throws Exception {
 		User u = createUser();
 		assertTrue(userDao.count(u.getFirstname()) == 1, "Account of search users should be one");
 	}
 
 	@Test
-	public void testCountFilteredUsers() throws Exception {
+	void testCountFilteredUsers() throws Exception {
 		User u = createUser();
 		User contact = createUserContact(u.getId());
 		assertTrue(userDao.count(contact.getFirstname(), true, u.getId()) == 1, "Account of filtered user should be one");
 	}
 
 	@Test
-	public void testCountUnfilteredUsers() throws Exception {
+	void testCountUnfilteredUsers() throws Exception {
 		User u = createUser();
 		createUserContact(u.getId());
 		assertTrue(userDao.count("firstname", false, getUserId()) > 1, "Account of unfiltered should be more then one");
 	}
 
 	@Test
-	public void testCountAllUsers() {
+	void testCountAllUsers() {
 		assertTrue(userDao.count() > 0, "Account of users should be positive");
 	}
 }

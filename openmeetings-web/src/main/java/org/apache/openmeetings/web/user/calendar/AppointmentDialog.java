@@ -109,9 +109,9 @@ public class AppointmentDialog extends Modal<Appointment> {
 	private final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
 	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.user));
 	private final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
-			, new CollectionModel<Group>(new ArrayList<>())
+			, new CollectionModel<>(new ArrayList<>())
 			, new GroupChoiceProvider());
-	private final UserMultiChoice attendees = new UserMultiChoice("attendees", new CollectionModel<User>(new ArrayList<>()));
+	private final UserMultiChoice attendees = new UserMultiChoice("attendees", new CollectionModel<>(new ArrayList<>()));
 	private enum InviteeType {
 		user
 		, group
@@ -289,7 +289,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 				"groom"
 				, Model.of(new Room())
 				, getRoomList()
-				, new ChoiceRenderer<Room>("name", "id"));
+				, new ChoiceRenderer<>("name", "id"));
 		private DropDownChoice<OmCalendar> cals = new DropDownChoice<>(
 				"calendar",
 				new LoadableDetachableModel<List<? extends OmCalendar>>() {
@@ -304,7 +304,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 						return apptManager.getCalendars(getUserId());
 					}
 				},
-				new ChoiceRenderer<OmCalendar>("title", "id")
+				new ChoiceRenderer<>("title", "id")
 		);
 		private final WebMarkupContainer groupContainer = new WebMarkupContainer("groupContainer");
 
@@ -412,7 +412,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 			add(new WysiwygEditor("description", toolbar));
 
 			//room
-			add(new AjaxCheckBox("createRoom", new PropertyModel<Boolean>(this, "createRoom")) {
+			add(new AjaxCheckBox("createRoom", new PropertyModel<>(this, "createRoom")) {
 				private static final long serialVersionUID = 1L;
 
 				@Override

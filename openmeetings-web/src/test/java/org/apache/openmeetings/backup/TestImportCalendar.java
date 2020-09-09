@@ -34,7 +34,7 @@ public class TestImportCalendar extends AbstractTestImport {
 	private MeetingMemberDao meetingMemberDao;
 
 	@Test
-	public void importCalendars() throws Exception {
+	void importCalendars() throws Exception {
 		long calCount = calendarDao.get().size();
 		File cals = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/calendar/calendars.xml").toURI());
 		backupImport.importCalendars(cals.getParentFile());
@@ -42,7 +42,7 @@ public class TestImportCalendar extends AbstractTestImport {
 	}
 
 	@Test
-	public void importAppointmentsSkip() throws Exception {
+	void importAppointmentsSkip() throws Exception {
 		long appCount = appointmentDao.get().size();
 		File apps = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/calendar/skip/appointements.xml").toURI());
 		backupImport.importAppointments(apps.getParentFile());
@@ -50,7 +50,7 @@ public class TestImportCalendar extends AbstractTestImport {
 	}
 
 	@Test
-	public void importAppointments() throws Exception {
+	void importAppointments() throws Exception {
 		long appCount = appointmentDao.get().size();
 		File apps = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/calendar/appointements.xml").toURI());
 		backupImport.importAppointments(apps.getParentFile());

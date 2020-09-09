@@ -685,11 +685,11 @@ public class InstallWizard extends BootstrapWizard {
 			return installStep;
 		}
 
-		private String getToolPath(String _path, String app) {
+		private String getToolPath(String inPath, String app) {
 			StringBuilder path = new StringBuilder();
-			if (!Strings.isEmpty(_path)) {
-				path.append(_path);
-				if (!_path.endsWith(File.separator)) {
+			if (!Strings.isEmpty(inPath)) {
+				path.append(inPath);
+				if (!inPath.endsWith(File.separator)) {
 					path.append(File.separator);
 				}
 			}
@@ -860,7 +860,7 @@ public class InstallWizard extends BootstrapWizard {
 		WizardDropDown(String id) {
 			super(id);
 			propModel = model.bind(id);
-			setModel(new PropertyModel<T>(this, "option"));
+			setModel(new PropertyModel<>(this, "option"));
 		}
 
 		@Override
@@ -909,7 +909,7 @@ public class InstallWizard extends BootstrapWizard {
 
 		SelectOptionDropDown(String id) {
 			super(id);
-			setChoiceRenderer(new ChoiceRenderer<SelectOption>("value", "key"));
+			setChoiceRenderer(new ChoiceRenderer<>("value", "key"));
 		}
 
 		@Override

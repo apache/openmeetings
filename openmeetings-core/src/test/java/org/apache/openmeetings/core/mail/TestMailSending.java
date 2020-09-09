@@ -52,14 +52,13 @@ public class TestMailSending {
 	private boolean mailTls = true;
 
 	/**
-	 * @Test
 	 *
 	 * It does not make a lot of send to test this in every test suite, it is more for manual testing.
 	 * Handy to check your server and the JavaMail setting properties
 	 *
 	 */
 	@Test
-	public void doTestSendEmail() {
+	void doTestSendEmail() {
 		try {
 			Transport.send(getMimeMessage());
 		} catch (Exception err) {

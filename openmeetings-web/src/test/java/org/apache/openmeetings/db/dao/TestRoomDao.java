@@ -42,7 +42,7 @@ public class TestRoomDao extends AbstractJUnitDefaults {
 	protected RoomDao roomDao;
 
 	@Test
-	public void testMicStatusHidden() throws Exception {
+	void testMicStatusHidden() throws Exception {
 		Room r = roomDao.get(1);
 		assertNotNull(r, "Room must exist");
 		assertTrue(r.isHidden(RoomElement.MICROPHONE_STATUS), "Default interview room should have mic status hidden");
@@ -65,7 +65,7 @@ public class TestRoomDao extends AbstractJUnitDefaults {
 	}
 
 	@Test
-	public void testPublicRooms() {
+	void testPublicRooms() {
 		for (Room.Type type : Room.Type.values()) {
 			for (Room r : roomDao.getPublicRooms(type)) {
 				assertEquals(type, r.getType(), "Room type should be " + type);

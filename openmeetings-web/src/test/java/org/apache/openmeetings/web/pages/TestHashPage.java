@@ -146,37 +146,37 @@ public class TestHashPage extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testNoParams() {
+	void testNoParams() {
 		log.debug("No params");
 		checkAccessDenied(null);
 	}
 
 	@Test
-	public void testBadParam() {
+	void testBadParam() {
 		log.debug("bad params");
 		checkAccessDenied(new PageParameters().add("aaa", "bbb").add(HashPage.LANG, 777));
 	}
 
 	@Test
-	public void testBadSecure() {
+	void testBadSecure() {
 		log.debug("bad secure");
 		checkAccessDenied(new PageParameters().add(HASH, "bbb").add(HashPage.LANG, 3));
 	}
 
 	@Test
-	public void testBadInvitation() {
+	void testBadInvitation() {
 		log.debug("bad invitation");
 		checkAccessDenied(new PageParameters().add(INVITATION_HASH, "bbb").add(HashPage.LANG, 5));
 	}
 
 	@Test
-	public void testValidOneTimeRoom() {
+	void testValidOneTimeRoom() {
 		Invitation i = get(1L, 2L, null, null, Valid.ONE_TIME, null, null, null);
 		checkMainPanel(new PageParameters().add(INVITATION_HASH, i.getHash()), RoomPanel.class);
 	}
 
 	@Test
-	public void testValidOneTimeRecording() {
+	void testValidOneTimeRecording() {
 		// panel-recording
 		Recording rec = new Recording();
 		rec.setOwnerId(1L);

@@ -80,7 +80,7 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 	}
 
 	@Test
-	public void saveAppointment() throws Exception {
+	void saveAppointment() throws Exception {
 		log.debug("- saveAppointment");
 
 		Calendar start = Calendar.getInstance();
@@ -146,7 +146,7 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testCreate() {
+	void testCreate() {
 		Appointment a = new Appointment();
 		a.setTitle("Test title");
 		setTime(a);

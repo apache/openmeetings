@@ -35,7 +35,7 @@ import com.github.openjson.JSONObject;
 
 public class TestWebConverters {
 	@Test
-	public void testDateConverter() {
+	void testDateConverter() {
 		assertEquals(null, DateParamConverter.get(null), "Null date should be parsed");
 		assertEquals(
 				Date.from(LocalDate.of(2017, 01, 15).atStartOfDay(ZoneId.systemDefault()).toInstant())
@@ -48,7 +48,7 @@ public class TestWebConverters {
 	}
 
 	@Test
-	public void testCalendarConverter() {
+	void testCalendarConverter() {
 		CalendarParamConverter c = new CalendarParamConverter();
 		assertEquals(null, c.fromString(null), "Null calendar should be parsed");
 		Calendar cal = Calendar.getInstance();
@@ -57,7 +57,7 @@ public class TestWebConverters {
 	}
 
 	@Test
-	public void testUserConverter() {
+	void testUserConverter() {
 		assertEquals(null, UserDTO.get((JSONObject)null), "Null UserDTO should be parsed");
 	}
 }

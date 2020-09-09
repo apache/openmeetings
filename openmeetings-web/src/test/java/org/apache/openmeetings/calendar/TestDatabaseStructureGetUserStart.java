@@ -27,7 +27,7 @@ public class TestDatabaseStructureGetUserStart extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(TestDatabaseStructureGetUserStart.class);
 
 	@Test
-	public void testAddingGroup() {
+	void testAddingGroup() {
 		try {
 			userDao.get(1L);
 		} catch (Exception err) {

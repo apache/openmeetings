@@ -32,7 +32,7 @@ public class TestUserGroupAggregation extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(TestUserGroupAggregation.class);
 
 	@Test
-	public void testitNow() {
+	void testitNow() {
 		User u = userDao.get(1L);
 
 		assertNotNull(u.getGroupUsers(), "Group list for default user must not be null");

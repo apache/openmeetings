@@ -33,7 +33,7 @@ public class LanguageDropDown extends DropDownChoice<Long> {
 	private final List<Long> languages = new ArrayList<>();
 
 	public LanguageDropDown(String id, IModel<Long> model) {
-		super(id, model, new ArrayList<Long>());
+		super(id, model, new ArrayList<>());
 		internalInit();
 	}
 

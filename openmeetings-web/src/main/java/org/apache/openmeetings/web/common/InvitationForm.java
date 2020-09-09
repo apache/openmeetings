@@ -75,7 +75,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 	protected final TextField<String> subject = new TextField<>("subject", Model.of((String)null));
 	protected final TextArea<String> message = new TextArea<>("message", Model.of((String)null));
 	protected final TextField<String> url = new TextField<>("url", Model.of((String)null));
-	protected final UserMultiChoice recipients = new UserMultiChoice("recipients", new CollectionModel<>(new ArrayList<User>()));
+	protected final UserMultiChoice recipients = new UserMultiChoice("recipients", new CollectionModel<>(new ArrayList<>()));
 	protected InvitationDialog dialog;
 	@SpringBean
 	private InvitationDao inviteDao;
@@ -206,7 +206,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 		lang.setModelObject(u.getLanguageId());
 		url.setModelObject(null);
 		setModelObject(i);
-		recipients.setModelObject(new ArrayList<User>());
+		recipients.setModelObject(new ArrayList<>());
 		recipients.setEnabled(true);
 		passwd.setEnabled(false);
 		final boolean isPeriod = i.getValid() == Valid.PERIOD;

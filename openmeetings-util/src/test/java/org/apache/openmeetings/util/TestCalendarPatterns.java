@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 public class TestCalendarPatterns {
 
 	@Test
-	public void backupDateParseTest() {
+	void backupDateParseTest() {
 		Date d = CalendarPatterns.parseImportDate("1360832400000");
 		assertNotNull(d, "Date parsed should not be NULL");
 	}

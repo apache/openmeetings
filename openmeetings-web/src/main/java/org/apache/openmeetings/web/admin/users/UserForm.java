@@ -91,7 +91,7 @@ public class UserForm extends AdminBaseForm<User> {
 	private GeneralUserForm generalForm;
 	private final RequiredTextField<String> login = new RequiredTextField<>("login");
 	private StrongPasswordValidator passValidator;
-	private final PasswordTextField password = new PasswordTextField("password", new Model<String>());
+	private final PasswordTextField password = new PasswordTextField("password", new Model<>());
 	private final Modal<String> warning;
 	private final DropDownChoice<Long> domainId = new DropDownChoice<>("domainId");
 	private final PasswordDialog adminPass;

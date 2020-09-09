@@ -89,7 +89,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 	private final OmDateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
 	private final OmDateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 	private boolean isPrivate = false;
-	private final IModel<Collection<User>> modelTo = new CollectionModel<>(new ArrayList<User>());
+	private final IModel<Collection<User>> modelTo = new CollectionModel<>(new ArrayList<>());
 	@SpringBean
 	private RoomDao roomDao;
 	@SpringBean
@@ -242,7 +242,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 		LocalDateTime now = ZonedDateTime.now(getZoneId()).toLocalDateTime();
 		start.setModelObject(now);
 		end.setModelObject(now.plus(1, ChronoUnit.HOURS));
-		modelTo.setObject(new ArrayList<User>());
+		modelTo.setObject(new ArrayList<>());
 		PrivateMessage p = new PrivateMessage();
 		p.setFrom(userDao.get(getUserId()));
 		p.setOwner(p.getFrom());

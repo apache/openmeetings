@@ -35,7 +35,7 @@ public class TestJob extends AbstractWicketTester {
 	private ReminderJob reminderJob;
 
 	@Test
-	public void testNotInited() {
+	void testNotInited() {
 		try {
 			setInitComplete(false);
 			cleanJob.cleanExpiredRecordings();
@@ -65,12 +65,12 @@ public class TestJob extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testRssDisabled() {
+	void testRssDisabled() {
 		testRss(false, () -> reminderJob.loadRss());
 	}
 
 	@Test
-	public void testRssEnabled() {
+	void testRssEnabled() {
 		testRss(true, () -> reminderJob.loadRss());
 	}
 }

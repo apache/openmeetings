@@ -189,14 +189,14 @@ public class IcalHandler {
 	/**
 	 * Write iCal to File
 	 *
-	 * @param _filerPath
+	 * @param inFilerPath
 	 *            - path to '*.ics' file
 	 * @throws Exception
 	 *             - in case of error during writing to the file
 	 */
-	public void writeDataToFile(String _filerPath) throws Exception {
-		String filerPath = _filerPath.endsWith(".ics") ? _filerPath
-				: String.format("%s.ics", _filerPath);
+	public void writeDataToFile(String inFilerPath) throws Exception {
+		String filerPath = inFilerPath.endsWith(".ics") ? inFilerPath
+				: String.format("%s.ics", inFilerPath);
 
 		try (FileOutputStream fout = new FileOutputStream(filerPath)) {
 			CalendarOutputter outputter = new CalendarOutputter();

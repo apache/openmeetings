@@ -57,7 +57,7 @@ public class LangForm extends Form<Void> {
 		setOutputMarkupId(true);
 
 		languages = new DropDownChoice<>("language"
-				, new PropertyModel<Map.Entry<Long, Locale>>(langPanel, "language")
+				, new PropertyModel<>(langPanel, "language")
 				, getLanguages()
 				, new ChoiceRenderer<Map.Entry<Long, Locale>>() {
 					private static final long serialVersionUID = 1L;

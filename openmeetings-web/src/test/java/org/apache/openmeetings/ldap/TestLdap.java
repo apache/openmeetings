@@ -130,7 +130,7 @@ public class TestLdap extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testSbndSessionLogin() throws OmException {
+	void testSbndSessionLogin() throws OmException {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
 		assertTrue(WebSession.get().signIn(USER1, userpass, User.Type.LDAP, cfg.getId()), "Login should be successful");
 		//do login second time
@@ -141,7 +141,7 @@ public class TestLdap extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testPhoto1() throws OmException {
+	void testPhoto1() throws OmException {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
 		assertTrue(WebSession.get().signIn(USER2, userpass, User.Type.LDAP, cfg.getId()), "Login should be successful");
 		User u = userDao.getByLogin(USER2, User.Type.LDAP, cfg.getId());
@@ -150,7 +150,7 @@ public class TestLdap extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testPhoto2() throws OmException {
+	void testPhoto2() throws OmException {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
 		assertTrue(WebSession.get().signIn(USER3, userpass, User.Type.LDAP, cfg.getId()), "Login should be successful");
 		User u = userDao.getByLogin(USER3, User.Type.LDAP, cfg.getId());
@@ -159,7 +159,7 @@ public class TestLdap extends AbstractWicketTester {
 	}
 
 	@Test
-	public void testSbndSessionLoginBadPassword() {
+	void testSbndSessionLoginBadPassword() {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
 		assertThrows(OmException.class, () -> WebSession.get().signIn(USER1, BAD_PASSWORD, User.Type.LDAP, cfg.getId()));
 	}
