@@ -8,9 +8,9 @@ var VideoManager = (function() {
 			, v = w.data()
 			, peer = v && v.getPeer();
 
-		if (peer && false === peer.cleaned) {
+		if (peer && false === peer.cleaned && peer.peerConnection.signalingState !== 'stable') {
 			peer.processAnswer(m.sdpAnswer, function (error) {
-				if (true === peer.cleaned) {
+				if (true === peer.cleaned || peer.peerConnection.signalingState === 'stable') {
 					return;
 				}
 				if (error) {
