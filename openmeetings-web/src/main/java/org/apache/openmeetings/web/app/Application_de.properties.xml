@@ -681,8 +681,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.host"><![CDATA[DB host spezifizieren]]></entry>
 	<entry key="install.wizard.db.step.instructions.db2"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.h2"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/H2Config.html">H2</a>]]></entry>
-	<entry key="install.wizard.db.step.instructions.mssql"><![CDATA[
-<a target="_blank" href="https://openmeetings.apache.org/MSSQLConfig.html">MSSQL</a>]]></entry>
+	<entry key="install.wizard.db.step.instructions.mssql"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/MSSQLConfig.html">MSSQL</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mysql"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/MySQLConfig.html">MySQL</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.oracle"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/OracleConfig.html">Oracle</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.postgresql"><![CDATA[<a target="_blank" href="https://openmeetings.apache.org/PostgresConfig.html">PostgreSql</a>]]></entry>
