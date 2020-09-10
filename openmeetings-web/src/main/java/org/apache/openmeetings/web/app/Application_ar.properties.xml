@@ -140,7 +140,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="281"><![CDATA[مساعدة ودعم]]></entry>
 	<entry key="282"><![CDATA[https://openmeetings.apache.org/]]></entry>
 	<entry key="283"><![CDATA[https://openmeetings.apache.org/mailing-lists.html]]></entry>
-	<entry key="284"><![CDATA[تقرير البقات !]]></entry>
+	<entry key="284"><![CDATA[الإبلاغ عن خطأ]]></entry>
 	<entry key="286"><![CDATA[مشروع شبكى (https://openmeetings.apache.org)]]></entry>
 	<entry key="287"><![CDATA[مستخدم قائمة بريديه (https://openmeetings.apache.org/mailing-lists.html - مستخدم)]]></entry>
 	<entry key="288"><![CDATA[نتذكر تسجيل الدخول]]></entry>
@@ -187,7 +187,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="428"><![CDATA[تعطيل / تشغيل ملء اللون]]></entry>
 	<entry key="429"><![CDATA[تغيير عرض الخط]]></entry>
 	<entry key="433"><![CDATA[ضيف]]></entry>
-	<entry key="442"><![CDATA[حذف server-chatlog]]></entry>
+	<entry key="442"><![CDATA[حذف سجل دردشة الخادم]]></entry>
 	<entry key="482"><![CDATA[المشاركون]]></entry>
 	<entry key="498"><![CDATA[ليس هناك أي رئيس للجلسة في هذه الغرفة، و لكن هناك بعد المشاركين. عليك التقدم لرئاسة الجلسة أو الإنتظار.]]></entry>
 	<entry key="499"><![CDATA[ملاحظات {0}]]></entry>
@@ -312,7 +312,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="861"><![CDATA[التسجيلات العامة]]></entry>
 	<entry key="864"><![CDATA[الطول]]></entry>
 	<entry key="865"><![CDATA[التاريخ]]></entry>
-	<entry key="867"><![CDATA[PLAY]]></entry>
+	<entry key="867"><![CDATA[تشغيل]]></entry>
 	<entry key="871"><![CDATA[ابدأ التسجيل]]></entry>
 	<entry key="872"><![CDATA[إيقاف التسجيل]]></entry>
 	<entry key="879"><![CDATA[السماح بأسئلة المستخدم]]></entry>
@@ -320,7 +320,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="881"><![CDATA[حقوق]]></entry>
 	<entry key="887"><![CDATA[كانت هناك أخطاء أثناء معالجة التسجيل.]]></entry>
 	<entry key="888"><![CDATA[التسجيل ليس جاهزًا بعد للمشاهدة. يرجى إعادة المحاولة بعد دقيقتين مرة أخرى.]]></entry>
-	<entry key="923"><![CDATA[Home drive size]]></entry>
+	<entry key="923"><![CDATA[حجم محرك الرئيسي]]></entry>
 	<entry key="924"><![CDATA[حجم محرك الأقراص العام]]></entry>
 	<entry key="996"><![CDATA[الحالة]]></entry>
 	<entry key="1001"><![CDATA[رقم SIP]]></entry>
@@ -329,7 +329,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[مسح الكائنات في الشريحة الحالية فقط!]]></entry>
 	<entry key="1065"><![CDATA[النسخ الاحتياطي للنظام. يتضمن النسخ الاحتياطي جميع البيانات التي ينشئها المستخدم. لم يتم تضمين التكوين بالإضافة إلى تسميات اللغة. لأن هذه القيم يتم استيرادها باستخدام مثبت النظام. لتحديث نظامك ، قم بتصدير نظامك القديم (1) وأعد تثبيت الحزمة الجديدة (2) في قاعدة بيانات جديدة واستورد ملف النسخ الاحتياطي مرة أخرى (3). يجب استيراد النسخة الاحتياطية قبل إنشاء البيانات في النظام المثبت حديثًا.]]></entry>
-	<entry key="1066"><![CDATA[System Backup]]></entry>
+	<entry key="1066"><![CDATA[النسخ الاحتياطي للنظام]]></entry>
 	<entry key="1076"><![CDATA[غرفة لللصوت فقط]]></entry>
 	<entry key="1077"><![CDATA[قم بتشغيل هذه العلامة وسيحصل المستخدمون على خيار الصوت فقط ولا يتوفر فيديو في غرفة الاجتماعات. يمكن أن يؤدي ذلك إلى تقيل حزمة البيانات.]]></entry>
 	<entry key="1089"><![CDATA[جودة الشاشة]]></entry>
@@ -339,18 +339,18 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1101"><![CDATA[إعدادات إنهاء الغرفة]]></entry>
 	<entry key="1102"><![CDATA[إذا كانت الغرفة مغلقة ، فسيتم إعادة توجيه المستخدمين إلى عنوان URL للخروج.]]></entry>
 	<entry key="1103"><![CDATA[Ldap]]></entry>
-	<entry key="1106"><![CDATA[Config File]]></entry>
+	<entry key="1106"><![CDATA[ملف الاعدادات]]></entry>
 	<entry key="1107"><![CDATA[Ldap Config]]></entry>
 	<entry key="1109"><![CDATA[مفعل]]></entry>
 	<entry key="1110"><![CDATA[مدرج]]></entry>
-	<entry key="1111"><![CDATA[Inserted by]]></entry>
+	<entry key="1111"><![CDATA[تم إدراجها من قبل]]></entry>
 	<entry key="1112"><![CDATA[محدثه]]></entry>
 	<entry key="1114"><![CDATA[The config files are in the folder OM_DATA_FOLDER/conf. You need to manually upload the files to this folder. Changes to the config file are immediately online.]]></entry>
-	<entry key="1115"><![CDATA[Config file name]]></entry>
+	<entry key="1115"><![CDATA[اسم ملف الاعدادات]]></entry>
 	<entry key="1116"><![CDATA[إذا قمت بتمكين "إضافة مجال إلى اسم المستخدم" ، تتم إضافة قيمة الحقل "المجال" إلى كل تسجيل دخول يدخله المستخدم في مربع تسجيل الدخول. هذا مفيد إذا تم تخزين تسجيل الدخول في Ldap بما في ذلك اسم المجال. مثال: يقوم المستخدم بإدخال المجال "hans" محددًا كـ "localhost.com" ، تسجيل الدخول الذي تم التحقق منه مقابل Ldap هو: hans@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[أضف المجال إلى اسم المستخدم]]></entry>
 	<entry key="1118"><![CDATA[Domain]]></entry>
-	<entry key="1121"><![CDATA[Remote clipboard text]]></entry>
+	<entry key="1121"><![CDATA[نص الحافظة البعيد]]></entry>
 	<entry key="1131"><![CDATA[ادعوة مستخدم إلى غرفة الاجتماعات]]></entry>
 	<entry key="1132"><![CDATA[اختر غرفة اجتماعات. سيتلقى المستخدم المدعو رسالة باسمك ورابط للغرفة.]]></entry>
 	<entry key="1134"><![CDATA[أدخل الغرفة بعد إرسال الدعوة]]></entry>
@@ -358,7 +358,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1137"><![CDATA[يود دعوتك إلى غرفة الاجتماعات:]]></entry>
 	<entry key="1138"><![CDATA[رسالة دعوة]]></entry>
 	<entry key="1143"><![CDATA[المنطقه الزمنيه]]></entry>
-	<entry key="1146"><![CDATA[Description]]></entry>
+	<entry key="1146"><![CDATA[الوصف]]></entry>
 	<entry key="1147"><![CDATA[انشأ من قبل]]></entry>
 	<entry key="1151"><![CDATA[مؤتمر {0} جديد:]]></entry>
 	<entry key="1152"><![CDATA[التفاصيل:]]></entry>
@@ -372,8 +372,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1160"><![CDATA[إظهار بيانات الاتصال للجميع]]></entry>
 	<entry key="1162"><![CDATA[عروضي]]></entry>
 	<entry key="1163"><![CDATA[اهتماماتي]]></entry>
-	<entry key="1166"><![CDATA[Fields of interest]]></entry>
-	<entry key="1167"><![CDATA[Contact information]]></entry>
+	<entry key="1166"><![CDATA[مجالات الاهتمام]]></entry>
+	<entry key="1167"><![CDATA[معلومات للتواصل]]></entry>
 	<entry key="1168"><![CDATA[إظهار بيانات الاتصال لجهات الاتصال فقط]]></entry>
 	<entry key="1169"><![CDATA[إظهار بيانات الاتصال لأي شخص]]></entry>
 	<entry key="1170"><![CDATA[ملفي]]></entry>
@@ -382,7 +382,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1177"><![CDATA[عروض المستخدم]]></entry>
 	<entry key="1178"><![CDATA[يبحث المستخدم عن]]></entry>
 	<entry key="1179"><![CDATA[نص حر]]></entry>
-	<entry key="1182"><![CDATA[Offers]]></entry>
+	<entry key="1182"><![CDATA[عروض]]></entry>
 	<entry key="1183"><![CDATA[عمليات البحث]]></entry>
 	<entry key="1184"><![CDATA[نتيجة البحث]]></entry>
 	<entry key="1186"><![CDATA[أضف إلى جهات الاتصال]]></entry>
@@ -419,10 +419,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1248"><![CDATA[تؤشر مقروءه]]></entry>
 	<entry key="1252"><![CDATA[أجراءات ...]]></entry>
 	<entry key="1253"><![CDATA[إرسال رسالة خاصة]]></entry>
-	<entry key="1255"><![CDATA[Move to Inbox]]></entry>
+	<entry key="1255"><![CDATA[نقل إلى صندوق الوارد]]></entry>
 	<entry key="1256"><![CDATA[حذف (نهائي)]]></entry>
 	<entry key="1259"><![CDATA[أضف مجلدات ونظم رسائلك!]]></entry>
-	<entry key="1261"><![CDATA[Add]]></entry>
+	<entry key="1261"><![CDATA[اجمع]]></entry>
 	<entry key="1262"><![CDATA[احذف المجلد]]></entry>
 	<entry key="1268"><![CDATA[لا يشارك المستخدم بيانات الاتصال الشخصية الخاصة به.]]></entry>
 	<entry key="1269"><![CDATA[يشارك المستخدم بيانات الاتصال الشخصية الخاصة به مع جهات الاتصال فقط.]]></entry>
@@ -447,9 +447,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1410"><![CDATA[اسم الاستطلاع]]></entry>
 	<entry key="1411"><![CDATA[انت]]></entry>
 	<entry key="1412"><![CDATA[الاستطلاعات المؤرشفة]]></entry>
-	<entry key="1413"><![CDATA[active]]></entry>
-	<entry key="1414"><![CDATA[Simple Chart]]></entry>
-	<entry key="1415"><![CDATA[Pie Chart]]></entry>
+	<entry key="1413"><![CDATA[نشيط]]></entry>
+	<entry key="1414"><![CDATA[مخطط بسيط]]></entry>
+	<entry key="1415"><![CDATA[مخطط دائري]]></entry>
 	<entry key="1418"><![CDATA[إغلاق الاستطلاع]]></entry>
 	<entry key="1419"><![CDATA[هل أنت متأكد أنك تريد إغلاق هذا الاستطلاع؟ لن يتمكن أحد من التصويت]]></entry>
 	<entry key="1420"><![CDATA[حذف الاستطلاع]]></entry>
@@ -493,7 +493,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1507"><![CDATA[الغرف المشتركة لمجموعة المستخدمين الحالية]]></entry>
 	<entry key="1508"><![CDATA[غرف المستخدم الحالي]]></entry>
 	<entry key="1509"><![CDATA[انشاء / تعديل موعد غرفة خاصة]]></entry>
-	<entry key="1513"><![CDATA[Is chat moderated]]></entry>
+	<entry key="1513"><![CDATA[مشراف على الدردشة]]></entry>
 	<entry key="1515"><![CDATA[تم فتح لوحة الدردشة بشكل افتراضي]]></entry>
 	<entry key="1516"><![CDATA[تم فتح لوحة الملفات افتراضيًا]]></entry>
 	<entry key="1526"><![CDATA[Generate URL]]></entry>
@@ -531,10 +531,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1586"><![CDATA[Request token attributes]]></entry>
 	<entry key="1587"><![CDATA[Redirect uri]]></entry>
 	<entry key="1588"><![CDATA[You can enter email address in the format: firstname1 lastname1 <email1> or "firstname2 lastname2" <email2> or 'firstname3 lastname3' <email3> or email]]></entry>
-	<entry key="1590"><![CDATA[Display]]></entry>
-	<entry key="1592"><![CDATA[End date entered is earlier than start date.]]></entry>
-	<entry key="1593"><![CDATA[Exit value]]></entry>
-	<entry key="1594"><![CDATA[Conversion messages]]></entry>
+	<entry key="1590"><![CDATA[عرض]]></entry>
+	<entry key="1592"><![CDATA[تاريخ الانتهاء الذي تم إدخاله يسبق تاريخ البدء.]]></entry>
+	<entry key="1593"><![CDATA[قيمة الخروج]]></entry>
+	<entry key="1594"><![CDATA[رسائل التحويل]]></entry>
 	<entry key="1595"><![CDATA[لم يتم العثور على ملف التسجيل]]></entry>
 	<entry key="1599"><![CDATA[تم الرفض. ليس لديك حقوق لدخول هذه الغرفة.]]></entry>
 	<entry key="1600"><![CDATA[Re-convert]]></entry>
@@ -822,7 +822,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<br />
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
-	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
+	<entry key="label.dock.panel"><![CDATA[انقر لإرساء اللوحة]]></entry>
 	<entry key="label.undock.panel"><![CDATA[انقر لإلغاء قفل اللوحة]]></entry>
 	<entry key="lbl.cancel"><![CDATA[الغاء]]></entry>
 	<entry key="lbl.email"><![CDATA[البريد الإلكتروني:]]></entry>
@@ -838,8 +838,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="menu.polls"><![CDATA[استطلاعات الرأي]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[جمع الملاحظات دون إنشاء استطلاع]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[إنشاء استطلاع سريع]]></entry>
-	<entry key="messages.btn.reply"><![CDATA[جواب]]></entry>
-	<entry key="messages.subject.re"><![CDATA[Re:]]></entry>
+	<entry key="messages.btn.reply"><![CDATA[جواب:]]></entry>
+	<entry key="messages.subject.re"><![CDATA[جواب:]]></entry>
 	<entry key="microphone.off"><![CDATA[الميكروفون مغلق. انقر للتشغيل.]]></entry>
 	<entry key="microphone.on"><![CDATA[Microphone is on. Click to turn off.]]></entry>
 	<entry key="my.room.conference"><![CDATA[غرفة الاجتماعات الخاصة بي (من 1 إلى 16 مستخدمًا)]]></entry>
@@ -888,16 +888,16 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="room.type.PRESENTATION"><![CDATA[عرض  (1-150 مستخدمًا)]]></entry>
 	<entry key="room.type.PRESENTATION.desc"><![CDATA["مقيد" افتراضيًا: سيحتاج كل مستخدم عادي إلى السؤال عما إذا كان يريد مشاركة الصوت / الفيديو]]></entry>
 	<entry key="save.success"><![CDATA[حفظ بنجاح]]></entry>
-	<entry key="send.on.ctrl.enter"><![CDATA[Send on Ctrl+Enter]]></entry>
-	<entry key="send.on.enter"><![CDATA[Send on Enter]]></entry>
+	<entry key="send.on.ctrl.enter"><![CDATA[أرسل على Ctrl + Enter]]></entry>
+	<entry key="send.on.enter"><![CDATA[أرسل على Enter]]></entry>
 	<entry key="sound.enable"><![CDATA[تمكين الصوت]]></entry>
 	<entry key="sound.mute"><![CDATA[كتم الصوت]]></entry>
 	<entry key="template.recording.expiring.body"><![CDATA[سيتم حذف تسجيلك {0} الأخير تلقائيًا
 في {1} يوم. إذا كنت ترغب في حفظ هذا التسجيل ، يرجى تنزيله قبل ذلك الحين.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[Regards,<br/>
 	{0} Support Team.]]></entry>
-	<entry key="template.recording.expiring.greetings"><![CDATA[Hello {0}]]></entry>
-	<entry key="template.recording.expiring.subj.prefix"><![CDATA[Recording will be deleted]]></entry>
+	<entry key="template.recording.expiring.greetings"><![CDATA[مرحبا {0}]]></entry>
+	<entry key="template.recording.expiring.subj.prefix"><![CDATA[سيتم حذف التسجيل]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[- غرفة [{0}]]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[السماح لهذا المستخدم باستخدام الميكروفون]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[طلب إذن لاستخدام الميكروفون]]></entry>
@@ -927,7 +927,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="ulist.user.muteothers.confirm"><![CDATA[هل تريد حقًا كتم صوت جميع المستخدمين باستثناء هذا؟]]></entry>
 	<entry key="ulist.user.speaks"><![CDATA[المستخدم يتكلم]]></entry>
 	<entry key="upload.dlg.choose.title"><![CDATA[اختر ملف]]></entry>
-	<entry key="upload.dlg.convert.title"><![CDATA[Converting...]]></entry>
+	<entry key="upload.dlg.convert.title"><![CDATA[جاري التحويل ...]]></entry>
 	<entry key="user.label.displayName"><![CDATA[اسم الشهرة]]></entry>
 	<entry key="user.salutation.DR"><![CDATA[د.]]></entry>
 	<entry key="user.salutation.MR"><![CDATA[السيد]]></entry>
@@ -935,11 +935,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="user.salutation.MS"><![CDATA[السيدة]]></entry>
 	<entry key="user.salutation.PROF"><![CDATA[أ.]]></entry>
 	<entry key="video.mic.off"><![CDATA[تم كتم صوت الميكروفون]]></entry>
-	<entry key="video.mic.on"><![CDATA[Microphone is on!]]></entry>
-	<entry key="video.muteothers"><![CDATA[Mute microphone of others]]></entry>
-	<entry key="video.permission.text"><![CDATA[Extra permission is required to play video.<br/>Press OK to allow playing.]]></entry>
+	<entry key="video.mic.on"><![CDATA[الميكروفون قيد التشغيل!]]></entry>
+	<entry key="video.muteothers"><![CDATA[كتم صوت ميكروفون الآخرين]]></entry>
+	<entry key="video.permission.text"><![CDATA[مطلوب إذن إضافي لتشغيل الفيديو. <br/> اضغط "موافق" للسماح بالتشغيل.]]></entry>
 	<entry key="video.permission.title"><![CDATA[الصلاحيه مطلوبه]]></entry>
-	<entry key="video.settings.https.required"><![CDATA[Camera/microphone most probably will not work in insecure environment. Try using https.]]></entry>
+	<entry key="video.settings.https.required"><![CDATA[على الأرجح لن تعمل الكاميرا / الميكروفون في بيئة غير آمنة. جرب استخدام https.]]></entry>
 	<entry key="volume.label"><![CDATA[ضبط مستوى الصوت]]></entry>
 	<entry key="wait-moderator.message"><![CDATA[الرجاء الانتظار حتى يدخل <b> المشرف </ b> الغرفة]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[يرجى التحلي بالصبر ...]]></entry>
