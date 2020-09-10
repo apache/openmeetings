@@ -87,9 +87,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="126"><![CDATA[المجموعات]]></entry>
 	<entry key="135"><![CDATA[التحية/الاسم]]></entry>
 	<entry key="136"><![CDATA[اسم العائله]]></entry>
-	<entry key="138"><![CDATA[عيد الميلاد]]></entry>
-	<entry key="139"><![CDATA[الشارع / لا]]></entry>
-	<entry key="140"><![CDATA[الرمز البريدي / المدينة]]></entry>
+	<entry key="138"><![CDATA[تاريخ الميلاد]]></entry>
+	<entry key="139"><![CDATA[عنوان]]></entry>
+	<entry key="140"><![CDATA[رمز البريد/المدينة]]></entry>
 	<entry key="141"><![CDATA[البلاد]]></entry>
 	<entry key="142"><![CDATA[العنوان]]></entry>
 	<entry key="143"><![CDATA[بيانات المستخدم]]></entry>
