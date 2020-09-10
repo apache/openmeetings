@@ -561,6 +561,44 @@ var Video = (function() {
 			}
 		});
 	}
+	function _processSdpAnswer(answer) {
+		const state = states.length > 0 ? states[0] : null;
+		if (!state || state.disposed || !state.data.rtcPeer || state.data.rtcPeer.cleaned || state.data.rtcPeer.peerConnection.signalingState === 'stable') {
+			return;
+		}
+		state.data.rtcPeer.processAnswer(answer, function (error) {
+			if (true === this.cleaned || this.peerConnection.signalingState === 'stable') {
+				return;
+			}
+			if (error) {
+				return OmUtil.error(error);
+			}
+			if (state.video && state.video.paused) {
+				state.video.play().catch(function (err) {
+					if ('NotAllowedError' === err.name) {
+						VideoUtil.askPermission(function () {
+							state.video.play();
+						});
+					}
+				});
+			}
+		});
+	}
+	function _processIceCandidate(candidate) {
+		const state = states.length > 0 ? states[0] : null;
+		if (!state || state.disposed || !state.data.rtcPeer || state.data.rtcPeer.cleaned || state.data.rtcPeer.peerConnection.signalingState === 'stable') {
+			return;
+		}
+		state.data.rtcPeer.addIceCandidate(candidate, function (error) {
+			if (true === this.cleaned) {
+				return;
+			}
+			if (error) {
+				OmUtil.error('Error adding candidate: ' + error);
+				return;
+			}
+		});
+	}
 
 	self.update = _update;
 	self.refresh = _refresh;
@@ -573,9 +611,8 @@ var Video = (function() {
 	self.init = _init;
 	self.stream = function() { return sd; };
 	self.setRights = _setRights;
-	self.getPeer = function() {
-		return states.length > 0 ? states[0].data.rtcPeer : null;
-	};
+	self.processSdpAnswer = _processSdpAnswer;
+	self.processIceCandidate = _processIceCandidate;
 	self.onIceCandidate = function(candidate) {
 		const opts = Room.getOptions();
 		OmUtil.log('Local candidate ' + JSON.stringify(candidate));
@@ -588,7 +625,11 @@ var Video = (function() {
 	};
 	self.reattachStream = _reattachStream;
 	self.video = function() {
-		return states.length > 0 ? states[0].video : null;
+		const state = states.length > 0 ? states[0] : null;
+		if (!state || state.disposed) {
+			return null;
+		}
+		return state.video;
 	};
 	self.handleMicStatus = _handleMicStatus;
 	return self;
