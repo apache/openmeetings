@@ -37,6 +37,9 @@
 .nettest .test-container button.not-started i::before {
 	content: '\f04b';
 }
+.nettest .test-container button.started i {
+	animation: fa-spin 2s linear infinite;
+}
 .nettest .test-container button.started i::before {
 	content: '\f110';
 }

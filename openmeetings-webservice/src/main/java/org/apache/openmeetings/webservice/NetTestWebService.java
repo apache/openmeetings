@@ -33,6 +33,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.apache.openmeetings.webservice.util.RateLimited;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,8 +41,8 @@ import org.springframework.stereotype.Service;
 @Service("netTestWebService")
 @Path("/networktest")
 public class NetTestWebService {
-	private static final Logger log = LoggerFactory.getLogger(UserWebService.class);
-	enum TestType {
+	private static final Logger log = LoggerFactory.getLogger(NetTestWebService.class);
+	public enum TestType {
 		UNKNOWN,
 		PING,
 		JITTER,
@@ -53,6 +54,7 @@ public class NetTestWebService {
 	private static final int JITTER_PACKET_SIZE = 1024;
 	private static final int MAX_UPLOAD_SIZE = 16 * 1024 * 1024;
 
+	@RateLimited
 	@GET
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/")
@@ -109,7 +111,7 @@ public class NetTestWebService {
 		log.debug("Total bytes read {}", totalCount);
 	}
 
-	private static TestType getTypeByString(String typeString) {
+	public static TestType getTypeByString(String typeString) {
 		if ("ping".equals(typeString)) {
 			return TestType.PING;
 		} else if ("jitter".equals(typeString)) {

@@ -242,7 +242,6 @@
 							<jsSourceDir>../java/org/apache/openmeetings/web/room</jsSourceDir>
 							<jsSourceFiles>
 								<jsSourceFile>raw-nettest.js</jsSourceFile>
-								<jsSourceFile>network.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>nettest.js</jsFinalFile>
 							<jsEngine>CLOSURE</jsEngine>
