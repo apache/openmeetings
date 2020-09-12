@@ -424,7 +424,7 @@ var Video = (function() {
 			state.video.data(state.data);
 		}
 		if (hasVideo) {
-			vc.removeClass('audio-only').css('background-image', '');;
+			vc.removeClass('audio-only').css('background-image', '');
 			vc.parents('.ui-dialog').removeClass('audio-only');
 			state.video.attr('poster', sd.user.pictureUri);
 		} else {

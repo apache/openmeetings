@@ -117,9 +117,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 
 	private void update(Optional<AjaxRequestTarget> target) {
 		update();
-		target.ifPresent(t -> {
-			t.add(profile, form);
-		});
+		target.ifPresent(t -> t.add(profile, form));
 	}
 
 	public void process(Optional<AjaxRequestTarget> target) {

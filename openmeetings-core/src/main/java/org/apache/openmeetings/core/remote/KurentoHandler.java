@@ -282,9 +282,7 @@ public class KurentoHandler {
 
 	KRoom getRoom(Long roomId) {
 		log.debug("Searching for room {}", roomId);
-		KRoom room = rooms.get(roomId);
-
-		if (room == null) {
+		KRoom room = rooms.computeIfAbsent(roomId, k -> {
 			log.debug("Room {} does not exist. Will create now!", roomId);
 			Room r = roomDao.get(roomId);
 			Transaction t = beginTransaction();
@@ -292,9 +290,8 @@ public class KurentoHandler {
 			pipe.addTag(t, TAG_KUID, kuid);
 			pipe.addTag(t, TAG_ROOM, String.valueOf(roomId));
 			t.commit();
-			room = new KRoom(streamProcessor, r, pipe, chunkDao);
-			rooms.put(roomId, room);
-		}
+			return new KRoom(streamProcessor, r, pipe, chunkDao);
+		});
 		log.debug("Room {} found!", roomId);
 		return room;
 	}

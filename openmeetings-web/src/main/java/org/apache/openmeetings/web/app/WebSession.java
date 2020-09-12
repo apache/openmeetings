@@ -206,9 +206,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			String url = cm.getServerUrl(r, baseUrl -> {
 				PageParameters params = new PageParameters();
 				IRequestParameters reqParams = RequestCycle.get().getRequest().getQueryParameters();
-				reqParams.getParameterNames().forEach(name -> {
-					params.add(name, reqParams.getParameterValue(name));
-				});
+				reqParams.getParameterNames().forEach(name -> params.add(name, reqParams.getParameterValue(name)));
 				return Application.urlForPage(HashPage.class
 						, params
 						, baseUrl);

@@ -792,9 +792,7 @@ public class InstallWizard extends BootstrapWizard {
 			desc.setDefaultModelObject(getString("install.wizard.install.started"));
 			RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(target -> {
 				progressBar.restart(target).setModelObject(0);
-				buttons.forEach(b -> {
-					target.add(b.setEnabled(false));
-				});
+				buttons.forEach(b -> target.add(b.setEnabled(false)));
 				target.add(desc, container);
 			});
 		}

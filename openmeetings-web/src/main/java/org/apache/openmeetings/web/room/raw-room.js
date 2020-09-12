@@ -287,7 +287,7 @@ var Room = (function() {
 		if (predicate()) {
 			icon.show();
 			const on = onfunc()
-				, disabled = disabledfunc();;
+				, disabled = disabledfunc();
 			if (disabled) {
 				icon.addClass('disabled');
 			} else {

@@ -50,11 +50,11 @@ public class AuthLevelUtil {
 		if (u == null) {
 			return result;
 		}
-		if (hasAdminLevel(u.getRights())) {
-			//admin user get superModerator level, no-one can kick him/her
-			result.add(Room.Right.SUPER_MODERATOR);
-		} else if (r.isAppointment() && a != null && u.getId().equals(a.getOwner().getId())) {
+		if (//admin user get superModerator level, no-one can kick him/her
+			hasAdminLevel(u.getRights())
 			// appointment owner is super moderator
+			|| (r.isAppointment() && a != null && u.getId().equals(a.getOwner().getId())))
+		{
 			result.add(Room.Right.SUPER_MODERATOR);
 		}
 		if (result.isEmpty()) {

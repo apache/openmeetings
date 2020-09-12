@@ -144,9 +144,6 @@ public class WbWebSocketHelper extends WebSocketHelper {
 		JSONObject f = new JSONObject(inFile.toString()); // deep copy to ensure thread safety
 		switch (fi.getType()) {
 			case VIDEO:
-				f.put(PARAM__SRC, patchUrl(f.getString(PARAM__SRC), c));
-				f.put(PARAM__POSTER, patchUrl(f.getString(PARAM__POSTER), c));
-				break;
 			case RECORDING:
 				f.put(PARAM__SRC, patchUrl(f.getString(PARAM__SRC), c));
 				f.put(PARAM__POSTER, patchUrl(f.getString(PARAM__POSTER), c));

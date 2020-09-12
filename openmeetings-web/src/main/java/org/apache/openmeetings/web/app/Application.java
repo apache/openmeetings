@@ -197,9 +197,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		cfg.setClassLoader(getClass().getClassLoader());
 		hazelcast = Hazelcast.getOrCreateHazelcastInstance(cfg);
 		serverId = hazelcast.getName();
-		hazelcast.getCluster().getMembers().forEach(m -> {
-			cm.serverAdded(m.getAttribute(NAME_ATTR_KEY), m.getAttribute(SERVER_URL_ATTR_KEY));
-		});
+		hazelcast.getCluster().getMembers().forEach(m -> cm.serverAdded(m.getAttribute(NAME_ATTR_KEY), m.getAttribute(SERVER_URL_ATTR_KEY)));
 		hazelWsTopic = hazelcast.getTopic("default");
 		hazelWsTopic.addMessageListener(msg -> {
 			String mServerId = msg.getPublishingMember().getAttribute(NAME_ATTR_KEY);

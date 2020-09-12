@@ -121,7 +121,7 @@ var DrawWbArea = function() {
 	}
 	function _getWbContent(wbId) {
 		return $('#' + __getWbContentId(wbId));
-	};
+	}
 	function _renameTab(obj) {
 		_setTabName(_getWbTab(obj.wbId), obj.name);
 	}
@@ -168,10 +168,10 @@ var DrawWbArea = function() {
 	}
 	function __getWbTabId(id) {
 		return 'wb-tab-' + id;
-	};
+	}
 	function __getWbContentId(id) {
 		return 'wb-content-' + id;
-	};
+	}
 	function __initTab(elems) {
 		const links = elems.find('a');
 		if (role === PRESENTER) {
@@ -190,7 +190,7 @@ var DrawWbArea = function() {
 					_actionActivateWb($(this).data('wb-id'));
 				}
 			});
-	};
+	}
 
 	self.getWb = function(id) {
 		return _getWbContent(id).data();

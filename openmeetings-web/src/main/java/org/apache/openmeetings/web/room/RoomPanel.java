@@ -880,9 +880,7 @@ public class RoomPanel extends BasePanel {
 
 	private CharSequence createAddClientJs(Client c) {
 		JSONArray arr = new JSONArray();
-		cm.listByRoom(r.getId()).stream().forEach(cl -> {
-			arr.put(cl.toJson(c.getUid().equals(cl.getUid())));
-		});
+		cm.listByRoom(r.getId()).stream().forEach(cl -> arr.put(cl.toJson(c.getUid().equals(cl.getUid()))));
 		return new StringBuilder()
 				.append("Room.addClient(")
 				.append(arr.toString(new NullStringer()))

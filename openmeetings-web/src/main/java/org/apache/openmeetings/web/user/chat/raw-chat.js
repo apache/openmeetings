@@ -30,7 +30,7 @@ var Chat = function() {
 		} else {
 			OmUtil.setCssVar(key, val);
 		}
-	};
+	}
 	function __setCssWidth(val) {
 		__setCssVar('--chat-width', val)
 	}
@@ -200,7 +200,7 @@ var Chat = function() {
 		$('#chat .chat-toolbar .link-field').off().on('keypress', function() {
 			if (event.keyCode === 13) {
 				$(this).parent().find('button').trigger('click');
-			};
+			}
 			return event.keyCode !== 13;
 		});
 		inited = true;

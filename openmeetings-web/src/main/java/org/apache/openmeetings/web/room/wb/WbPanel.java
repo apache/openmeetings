@@ -364,9 +364,8 @@ public class WbPanel extends AbstractWbPanel {
 					break;
 				case clearSlide:
 				{
-					wbm.cleanSlide(roomId, obj.getLong("wbId"), obj.getInt(ATTR_SLIDE), (wb, arr) -> {
-						addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
-					});
+					wbm.cleanSlide(roomId, obj.getLong("wbId"), obj.getInt(ATTR_SLIDE)
+							, (wb, arr) -> addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr)));
 				}
 					break;
 				case save:

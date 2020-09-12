@@ -917,9 +917,7 @@ public class BackupImport {
 			)
 	{
 		TreeMap<Long, T> items = new TreeMap<>();
-		readList(baseDir, fileName, listNodeName, nodeName, clazz, f -> {
-			items.put(f.getId(), f);
-		}, false);
+		readList(baseDir, fileName, listNodeName, nodeName, clazz, f -> items.put(f.getId(), f), false);
 		FileTree<T> tree = new FileTree<>();
 		TreeMap<Long, T> remain = new TreeMap<>();
 		int counter = items.size(); //max iterations
