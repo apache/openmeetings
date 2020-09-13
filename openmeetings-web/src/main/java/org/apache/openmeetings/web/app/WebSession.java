@@ -111,7 +111,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private OmUrlFragment area = null;
 	private TimeZone tz;
 	private TimeZone browserTz;
-	private FastDateFormat ISO8601FORMAT = null;
+	private FastDateFormat iso8601Format = null;
 	private FastDateFormat  sdf = null;
 	private UserDashboard dashboard;
 	private Invitation i = null;
@@ -150,7 +150,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		super.invalidate();
 		userId = null;
 		rights = Collections.unmodifiableSet(Collections.<Right>emptySet());
-		ISO8601FORMAT = null;
+		iso8601Format = null;
 		sdf = null;
 		languageId = -1;
 		i = null;
@@ -352,7 +352,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 		languageId = u.getLanguageId();
 		tz = getTimeZone(u);
-		ISO8601FORMAT = FastDateFormat.getInstance(ISO8601_FULL_FORMAT_STRING, tz);
+		iso8601Format = FastDateFormat.getInstance(ISO8601_FULL_FORMAT_STRING, tz);
 		setLocale(LocaleHelper.getLocale(u));
 		sdf = FormatHelper.getDateTimeFormat(u);
 	}
@@ -445,7 +445,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	public static FastDateFormat getIsoDateFormat() {
-		return get().ISO8601FORMAT;
+		return get().iso8601Format;
 	}
 
 	public static FastDateFormat getDateFormat() {

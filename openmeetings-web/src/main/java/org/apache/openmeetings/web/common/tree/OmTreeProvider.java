@@ -53,7 +53,7 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 	public static final String FILES_GROUP = "files-group-%s";
 	private final Long roomId;
 	private final List<BaseFileItem> roots = new ArrayList<>();
-	private final String PUBLIC, GROUP_FILE, GROUP_REC;
+	private final String lblPublic, lblGroupFile, lblGroupRec;
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean
@@ -64,9 +64,9 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 	public OmTreeProvider(Long roomId) {
 		Injector.get().inject(this);
 		this.roomId = roomId;
-		PUBLIC = Application.getString("861");
-		GROUP_FILE = Application.getString("files.root.group");
-		GROUP_REC = Application.getString("recordings.root.group");
+		lblPublic = Application.getString("861");
+		lblGroupFile = Application.getString("files.root.group");
+		lblGroupRec = Application.getString("recordings.root.group");
 		refreshRoots(true);
 	}
 
@@ -89,7 +89,7 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 				rRoot.add(r);
 			}
 			{
-				BaseFileItem r = createRoot(PUBLIC, RECORDINGS_PUBLIC, true);
+				BaseFileItem r = createRoot(lblPublic, RECORDINGS_PUBLIC, true);
 				rRoot.add(r);
 			}
 		}
@@ -97,12 +97,12 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 			Group g = gu.getGroup();
 			boolean readOnly = g.isRestricted() && !hasAdminLevel(getRights()) && !gu.isModerator();
 			if (all) {
-				BaseFileItem r = createRoot(String.format("%s (%s)", GROUP_REC, g.getName()), String.format(RECORDINGS_GROUP, g.getId()), true);
+				BaseFileItem r = createRoot(String.format("%s (%s)", lblGroupRec, g.getName()), String.format(RECORDINGS_GROUP, g.getId()), true);
 				r.setReadOnly(readOnly);
 				r.setGroupId(g.getId());
 				rRoot.add(r);
 			}
-			BaseFileItem r = createRoot(String.format("%s (%s)", GROUP_FILE, g.getName()), String.format(FILES_GROUP, g.getId()), false);
+			BaseFileItem r = createRoot(String.format("%s (%s)", lblGroupFile, g.getName()), String.format(FILES_GROUP, g.getId()), false);
 			r.setGroupId(g.getId());
 			//group videos are read-only in recordings tree
 			r.setReadOnly(roomId == null || readOnly);

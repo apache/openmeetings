@@ -131,9 +131,9 @@ public class MessagesContactsPanel extends UserBasePanel {
 				return object;
 			}
 		});
-	private PrivateMessageFolder NOT_MOVE_FOLDER = new PrivateMessageFolder();
-	private final DropDownChoice<PrivateMessageFolder> moveDropDown = new DropDownChoice<>("msgMove", Model.of(NOT_MOVE_FOLDER)
-		, List.of(NOT_MOVE_FOLDER)
+	private final PrivateMessageFolder notMoveFolder = new PrivateMessageFolder();
+	private final DropDownChoice<PrivateMessageFolder> moveDropDown = new DropDownChoice<>("msgMove", Model.of(notMoveFolder)
+		, List.of(notMoveFolder)
 		, new ChoiceRenderer<PrivateMessageFolder>() {
 			private static final long serialVersionUID = 1L;
 
@@ -159,8 +159,8 @@ public class MessagesContactsPanel extends UserBasePanel {
 
 	public MessagesContactsPanel(String id) {
 		super(id);
-		NOT_MOVE_FOLDER.setId(MOVE_CHOOSE);
-		NOT_MOVE_FOLDER.setFolderName(Application.getString("1243"));
+		notMoveFolder.setId(MOVE_CHOOSE);
+		notMoveFolder.setFolderName(Application.getString("1243"));
 		foldersModel.setObject(folderDao.get(0, Integer.MAX_VALUE));
 		updateMoveModel();
 
@@ -585,7 +585,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 		selectFolder(folder);
 		emptySelection(target);
 		selectDropDown.setModelObject(SELECT_CHOOSE);
-		moveDropDown.setModelObject(NOT_MOVE_FOLDER);
+		moveDropDown.setModelObject(notMoveFolder);
 		deleteBtn.add(AttributeModifier.replace("value", Application.getString(TRASH_FOLDER_ID.equals(id) ? "1256" : "80")));
 		readBtn.setEnabled(false);
 		unreadBtn.setEnabled(false);
@@ -608,7 +608,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 
 	private void updateMoveModel() {
 		List<PrivateMessageFolder> list = new ArrayList<>();
-		list.add(NOT_MOVE_FOLDER);
+		list.add(notMoveFolder);
 		list.addAll(foldersModel.getObject());
 		moveDropDown.setChoices(list);
 	}

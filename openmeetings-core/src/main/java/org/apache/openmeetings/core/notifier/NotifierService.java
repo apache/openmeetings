@@ -45,8 +45,8 @@ public class NotifierService {
 
 	public void notify(User u, Appointment a, Invitation inv) {
 		if (inv == null) {
-			log.error(String.format("Error retrieving Invitation for member %s in Appointment %s"
-					, u.getAddress().getEmail(), a.getTitle()));
+			log.error("Error retrieving Invitation for member {} in Appointment {}"
+					, u.getAddress().getEmail(), a.getTitle());
 			return;
 		}
 		for (INotifier n : notifiers) {

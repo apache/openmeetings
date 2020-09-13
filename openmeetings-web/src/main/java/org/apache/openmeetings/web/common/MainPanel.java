@@ -95,7 +95,7 @@ import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptRefe
 public class MainPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(MainPanel.class);
-	private final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
+	private final WebMarkupContainer empty = new WebMarkupContainer(CHILD_ID);
 	private String uid = null;
 	private MenuPanel menu;
 	private final WebMarkupContainer topControls = new WebMarkupContainer("topControls");
@@ -192,7 +192,7 @@ public class MainPanel extends Panel {
 		});
 		menu = new MenuPanel("menu", getMainMenu());
 		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
-		add(contents.add(getClient() == null || panel == null ? EMPTY : panel).setOutputMarkupId(true).setMarkupId("contents"));
+		add(contents.add(getClient() == null || panel == null ? empty : panel).setOutputMarkupId(true).setMarkupId("contents"));
 		topControls.add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
 		final AboutDialog about = new AboutDialog("aboutDialog");
 		topLinks.add(new AjaxLink<Void>("about") {

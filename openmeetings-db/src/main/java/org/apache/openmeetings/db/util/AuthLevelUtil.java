@@ -37,7 +37,7 @@ public class AuthLevelUtil {
 
 	public static boolean check(Set<User.Right> rights, User.Right level) {
 		boolean result = rights.contains(level);
-		log.debug(String.format("Level %s :: %s", level, result ? "[GRANTED]" : "[DENIED]"));
+		log.debug("Level {} :: {}", level, result ? "[GRANTED]" : "[DENIED]");
 		return result;
 	}
 
