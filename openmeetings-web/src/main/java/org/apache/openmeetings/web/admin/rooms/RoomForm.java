@@ -205,7 +205,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 			public RoomGroup fromId(String inId) {
 				Long id = Long.valueOf(inId);
 
-				if (!orgList.stream().filter(g -> g.getId().equals(id)).findFirst().isPresent()) {
+				if (!orgList.stream().anyMatch(g -> g.getId().equals(id))) {
 					return null; // seems to be hacked
 				}
 				Group g = groupDao.get(id);

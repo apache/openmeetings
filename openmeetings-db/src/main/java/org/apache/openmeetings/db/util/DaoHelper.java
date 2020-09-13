@@ -146,6 +146,6 @@ public class DaoHelper {
 	}
 
 	public static <T> T single(List<T> l) {
-		return l.size() > 0 ? l.get(0) : null;
+		return l.isEmpty() ? null : l.get(0);
 	}
 }

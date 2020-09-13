@@ -54,8 +54,6 @@
 	margin-top: 20px;
 	overflow: auto;
 }
-.nettest output {
-}
 .nettest output .module {
 	color: #6b0df7;
 	padding: 0 5px;

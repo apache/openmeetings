@@ -2,7 +2,7 @@
 var NetTest = (function() {
 	const self = {}, PINGS = 10, LIMIT = 2000, URL = './services/networktest/'
 		, DELAY = 3000, KB = 1024, MB = KB * KB;
-	let output, lbls, net, tests, testName, testLabel, testNext, bulk = true;
+	let output, lbls, tests, testName, testLabel, testNext, bulk = true;
 
 	const average = (array) => array.reduce((a, b) => a + b) / array.length;
 

@@ -47,9 +47,9 @@ var Upload = (function() {
 				.text(form.data('upload-lbl'));
 			form.parents('.modal-content').find('.modal-footer').prepend(uploadBtn);
 			uploadBtn.click(function() {
-				const form = $('#room-upload-form');
+				const cform = $('#room-upload-form');
 				$.ajax({
-					url: form.attr('action')
+					url: cform.attr('action')
 					, type: 'POST'
 					, data: new FormData($('#room-upload-form')[0])
 					, processData: false
@@ -57,7 +57,7 @@ var Upload = (function() {
 				}).done(function(data) {
 					curUid = data.uuid;
 					uploadBtn.attr('disabled', 'disabled');
-					form.hide();
+					cform.hide();
 					progress.removeClass('d-none');
 					Wicket.Event.subscribe('/websocket/message', _onWsMessage);
 				}).fail(function(e) {

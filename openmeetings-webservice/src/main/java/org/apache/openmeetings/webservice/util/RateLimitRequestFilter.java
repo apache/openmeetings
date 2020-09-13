@@ -28,20 +28,19 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.cxf.interceptor.Fault;
 import org.apache.openmeetings.webservice.NetTestWebService;
 import org.apache.openmeetings.webservice.NetTestWebService.TestType;
 
 @RateLimited
 public class RateLimitRequestFilter implements ContainerRequestFilter {
-	private final static String ATTR_LAST_ACCESS_TIME = "LAST_ACCESS_TIME";
-	private final static long ALLOWED_TIME = 3000;
+	private static final String ATTR_LAST_ACCESS_TIME = "LAST_ACCESS_TIME";
+	private static final long ALLOWED_TIME = 3000;
 
 	@Context
 	private HttpServletRequest request;
 
 	@Override
-	public void filter(ContainerRequestContext context) throws Fault {
+	public void filter(ContainerRequestContext context) {
 		HttpSession session = request.getSession(false);
 		if (session == null) {
 			context.abortWith(Response.status(Status.FORBIDDEN).build());

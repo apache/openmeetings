@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.cli;
 
+import static java.util.Collections.addAll;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 
 import java.io.File;
@@ -107,9 +108,9 @@ public class CleanupHelper {
 			String hash = f.getName().substring(0, f.getName().length() - EXTENSION_MP4.length() - 1);
 			Recording item = recordDao.getByHash(hash);
 			if (item == null) {
-				add(invalid, hash);
+				addAll(invalid, list(hash));
 			} else if (item.isDeleted()) {
-				add(deleted, hash);
+				addAll(deleted, list(hash));
 			}
 		}
 		for (Recording item : recordDao.get()) {
@@ -140,12 +141,6 @@ public class CleanupHelper {
 
 	private static File[] list(final String hash) {
 		return list(hibernateDir, (dir, name) -> name.startsWith(hash));
-	}
-
-	private static void add(List<File> list, final String hash) {
-		for (File f : list(hash)) {
-			list.add(f);
-		}
 	}
 
 	private static long getUserIdByProfile(String name) {

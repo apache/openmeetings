@@ -39,7 +39,7 @@ class TestFileService extends AbstractWebServiceTest {
 
 	@Test
 	@Tag("org.apache.openmeetings.test.NonJenkinsTests")
-	public void addFileTest() throws IOException {
+	void addFileTest() throws IOException {
 		File img = null;
 		try {
 			img = File.createTempFile("omtest", ".jpg");

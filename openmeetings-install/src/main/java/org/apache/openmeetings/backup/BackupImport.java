@@ -496,7 +496,7 @@ public class BackupImport {
 
 	static BackupVersion getVersion(File base) {
 		List<BackupVersion> list = new ArrayList<>(1);
-		readList(base, "version.xml", VERSION_LIST_NODE, VERSION_NODE, BackupVersion.class, v -> list.add(v), true);
+		readList(base, "version.xml", VERSION_LIST_NODE, VERSION_NODE, BackupVersion.class, list::add, true);
 		return list.isEmpty() ? new BackupVersion() : list.get(0);
 	}
 

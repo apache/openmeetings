@@ -31,7 +31,7 @@ import java.util.Random;
 import org.apache.commons.text.RandomStringGenerator;
 import org.junit.jupiter.api.Test;
 
-public abstract class AbstractCryptTest {
+abstract class AbstractCryptTest {
 	protected static ICrypt crypt;
 
 	@Test

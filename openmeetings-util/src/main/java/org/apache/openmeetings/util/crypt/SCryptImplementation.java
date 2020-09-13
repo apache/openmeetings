@@ -30,20 +30,18 @@ import org.slf4j.LoggerFactory;
 
 public class SCryptImplementation implements ICrypt {
 	private static final Logger log = LoggerFactory.getLogger(SCryptImplementation.class);
-	private static final ThreadLocal<SecureRandom> rnd = new ThreadLocal<>() {
-		@Override
-		protected SecureRandom initialValue() {
-			SecureRandom sr;
-			try {
-				sr = SecureRandom.getInstance(SECURE_RND_ALG);
-			} catch (NoSuchAlgorithmException e) {
-				log.error("Failed to get instance of SecureRandom {}", SECURE_RND_ALG);
-				sr = new SecureRandom();
-			}
-			return sr;
-		}
-	};
 	private static final String SECURE_RND_ALG = "SHA1PRNG";
+	private static final ThreadLocal<SecureRandom> rnd
+			= ThreadLocal.withInitial(() -> {
+				SecureRandom sr;
+				try {
+					sr = SecureRandom.getInstance(SECURE_RND_ALG);
+				} catch (NoSuchAlgorithmException e) {
+					log.error("Failed to get instance of SecureRandom {}", SECURE_RND_ALG);
+					sr = new SecureRandom();
+				}
+				return sr;
+			});
 	private static final int COST = 1024 * 16;
 	private static final int KEY_LENGTH = 512;
 	private static final int SALT_LENGTH = 200;

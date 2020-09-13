@@ -107,7 +107,7 @@ class TestUserGroup extends AbstractJUnitDefaults {
 
 	@Test
 	@Tag("org.apache.openmeetings.test.HeavyTests")
-	public void add10kUsers() throws Exception {
+	void add10kUsers() throws Exception {
 		List<Group> groups = groupDao.get(GROUP_NAME, 0, 1, null);
 		Group g = null;
 		if (groups == null || groups.isEmpty()) {
