@@ -106,6 +106,7 @@ public class OmFileHelper {
 		} else {
 			DATA_HOME = new File(dataDir);
 		}
+		log.info("Using file locations - OM_HOME: {} DATA_DIR: {}", OM_HOME, DATA_HOME);
 	}
 
 	public static void setOmHome(String home) {
