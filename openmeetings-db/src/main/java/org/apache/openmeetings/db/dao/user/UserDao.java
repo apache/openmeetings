@@ -159,17 +159,13 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return q.getResultList();
 	}
 
-	//This is AdminDao method
+	// This is AdminDao method
 	public List<User> get(String search, boolean excludeContacts, long first, long count) {
 		Map<String, Object> params = new HashMap<>();
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", null, search, true, true, false
 				, getAdditionalWhere(excludeContacts, params), null, searchFields), User.class);
 		setAdditionalParams(setLimits(q, first, count), params);
 		return q.getResultList();
-	}
-
-	public List<User> get(String search, boolean filterContacts, Long currentUserId) {
-		return get(search, null, null, null, filterContacts, currentUserId, true);
 	}
 
 	public List<User> get(String search, long start, long count, String sort, boolean filterContacts, Long currentUserId) {
@@ -537,7 +533,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		boolean count = clazz.isAssignableFrom(Long.class);
 
 		StringBuilder sb = new StringBuilder("SELECT ");
-		sb.append(count ? "COUNT(" : "").append("u").append(count ? ") " : " ")
+		sb.append(count ? "COUNT(" : "").append("DISTINCT u").append(count ? ") " : " ")
 			.append("FROM User u ").append(getAdditionalJoin(filterContacts)).append(" WHERE u.deleted = false AND ")
 			.append(getAdditionalWhere(filterContacts, userId, params));
 		if (!Strings.isEmpty(offers)) {
