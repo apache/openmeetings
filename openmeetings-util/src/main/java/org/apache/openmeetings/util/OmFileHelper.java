@@ -104,6 +104,7 @@ public class OmFileHelper {
 		if (Strings.isEmpty(dataDir)) {
 			DATA_HOME = new File(OM_HOME, DATA_DIR);
 		} else {
+			log.info("Overwrite custom DATA_DIR: {}", dataDir);
 			DATA_HOME = new File(dataDir);
 		}
 	}
