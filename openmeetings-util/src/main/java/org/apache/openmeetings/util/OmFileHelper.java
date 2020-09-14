@@ -101,12 +101,12 @@ public class OmFileHelper {
 	public static void setOmHome(File home) {
 		OM_HOME = home;
 		final String dataDir = System.getProperty("DATA_DIR");
-		log.info("Using file locations - OM_HOME: {} DATA_DIR: {}", OM_HOME, dataDir);
 		if (Strings.isEmpty(dataDir)) {
 			DATA_HOME = new File(OM_HOME, DATA_DIR);
 		} else {
 			DATA_HOME = new File(dataDir);
 		}
+		log.info("Using file locations - OM_HOME: {} DATA_DIR: {}", OM_HOME, DATA_HOME);
 	}
 
 	public static void setOmHome(String home) {
