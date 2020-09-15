@@ -154,24 +154,23 @@ var Activities = function() {
 			const _id = _getId(obj.id);
 			(obj.action ? modArea : area).append(OmUtil.tmpl('#activity-stub', _id).data(obj));
 			const a = $('#' + _id).addClass(obj.cssClass);
-			a.find('.activity-close,.activity-accept,.activity-decline,.activity-find').addClass('align-right');
 			const acpt = a.find('.activity-accept');
 			if (obj.accept) {
 				acpt.click(function() { _action('accept', obj.id); });
 			} else {
-				acpt.hide();
+				acpt.remove();
 			}
 			const dcln = a.find('.activity-decline');
 			if (obj.decline) {
 				dcln.click(function() { _action('decline', obj.id); });
 			} else {
-				dcln.hide();
+				dcln.remove();
 			}
 			const fnd = a.find('.activity-find');
 			if (obj.find) {
 				fnd.click(function() { _findUser(obj.uid); });
 			} else {
-				fnd.hide();
+				fnd.remove();
 			}
 			a.find('.activity-close').click(function() {
 				_action('close', obj.id);
