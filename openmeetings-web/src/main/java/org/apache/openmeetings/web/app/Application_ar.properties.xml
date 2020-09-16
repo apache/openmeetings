@@ -213,10 +213,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="530"><![CDATA[صالح من:]]></entry>
 	<entry key="531"><![CDATA[صالح لغاية:]]></entry>
 	<entry key="537"><![CDATA[إفحص كلمة المرور]]></entry>
-	<entry key="545"><![CDATA[x]]></entry>
-	<entry key="546"><![CDATA[x-axis]]></entry>
-	<entry key="547"><![CDATA[y]]></entry>
-	<entry key="548"><![CDATA[y-axis]]></entry>
+	<entry key="545"><![CDATA[س]]></entry>
+	<entry key="546"><![CDATA[الاحداثي س]]></entry>
+	<entry key="547"><![CDATA[ص]]></entry>
+	<entry key="548"><![CDATA[الاحداثي ص]]></entry>
 	<entry key="549"><![CDATA[ع]]></entry>
 	<entry key="551"><![CDATA[ط]]></entry>
 	<entry key="553"><![CDATA[تغيير الشفافية]]></entry>
@@ -486,7 +486,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1492"><![CDATA[اطلب من المشرف مشاركة السبورة]]></entry>
 	<entry key="1493"><![CDATA[ابدأ دردشة خاصة]]></entry>
 	<entry key="1494"><![CDATA[كل]]></entry>
-	<entry key="1500"><![CDATA[Server Name]]></entry>
+	<entry key="1500"><![CDATA[اسم الخادم]]></entry>
 	<entry key="1504"><![CDATA[مستخدم النشر:]]></entry>
 	<entry key="1505"><![CDATA[To save time and internet traffic you can use command line admin to backup/restore/upgrade: <ol> <li>go to OM install dir (for ex. /opt/om)</li> <li>stop OM (for ex. ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)</li> <li>download archive with new OM</li> <li>mv /opt/om /opt/om.bak (move working version of OM just in case :))</li> <li>extract downloaded OM to the /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )</li> <li>start OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[غرف مشتركة لجميع المستخدمين]]></entry>
@@ -496,7 +496,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1513"><![CDATA[مشراف على الدردشة]]></entry>
 	<entry key="1515"><![CDATA[تم فتح لوحة الدردشة بشكل افتراضي]]></entry>
 	<entry key="1516"><![CDATA[تم فتح لوحة الملفات افتراضيًا]]></entry>
-	<entry key="1526"><![CDATA[Generate URL]]></entry>
+	<entry key="1526"><![CDATA[توليد رابط URL]]></entry>
 	<entry key="1527"><![CDATA[اختبار الشبكة]]></entry>
 	<entry key="1536"><![CDATA[استيراد النظام]]></entry>
 	<entry key="1537"><![CDATA[تضمين الملفات والتسجيلات التي تم تحميلها في النسخ الاحتياطي]]></entry>
@@ -515,7 +515,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1559"><![CDATA[أبريل]]></entry>
 	<entry key="1560"><![CDATA[مايو]]></entry>
 	<entry key="1561"><![CDATA[حزيران]]></entry>
-	<entry key="1562"><![CDATA[Jul]]></entry>
+	<entry key="1562"><![CDATA[يوليو]]></entry>
 	<entry key="1563"><![CDATA[اب]]></entry>
 	<entry key="1564"><![CDATA[سبتمبر]]></entry>
 	<entry key="1565"><![CDATA[أكتوبر]]></entry>
@@ -586,7 +586,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="appointment.reminder.ICAL"><![CDATA[iCal email]]></entry>
 	<entry key="appointment.reminder.NONE"><![CDATA[لا ترسل إخطارا]]></entry>
 	<entry key="appointment.tab.advanced"><![CDATA[خيارات متقدمه]]></entry>
-	<entry key="bad.captcha.text"><![CDATA[لقد أدخلت نص captcha غير صحيح]]></entry>
+	<entry key="bad.captcha.text"><![CDATA[لقد أدخلت نص عشوائي غير صحيح]]></entry>
 	<entry key="bad.password.digit"><![CDATA[كلمة مرور "ضعيفة": مطلوب رقم واحد على الأقل]]></entry>
 	<entry key="bad.password.lower"><![CDATA[كلمة المرور "ضعيفة": مطلوب حرف واحد صغير على الأقل]]></entry>
 	<entry key="bad.password.short"><![CDATA[كلمة المرور "ضعيفة": الحد الأدنى لطول كلمة المرور هو ${0}]]></entry>
@@ -605,7 +605,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="calendar.url"><![CDATA[External CalDAV Calendar URL]]></entry>
 	<entry key="camera.off"><![CDATA[الكاميرا متوقفة. انقر للتشغيل.]]></entry>
 	<entry key="camera.on"><![CDATA[الكاميرا قيد التشغيل. انقر لإيقاف.]]></entry>
-	<entry key="captcha.text"><![CDATA[Captcha text]]></entry>
+	<entry key="captcha.text"><![CDATA[ادخل النص العشوائي]]></entry>
 	<entry key="close.settings.tab"><![CDATA[بعد حفظ إعدادات الصوت والفيديو ، يمكنك إغلاق علامة تبويب المتصفح.]]></entry>
 	<entry key="convert.errors.file"><![CDATA[حدثت أخطاء أثناء معالجة الملف]]></entry>
 	<entry key="convert.errors.file.missing"><![CDATA[الملف غير موجود]]></entry>
@@ -841,7 +841,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="messages.btn.reply"><![CDATA[جواب:]]></entry>
 	<entry key="messages.subject.re"><![CDATA[جواب:]]></entry>
 	<entry key="microphone.off"><![CDATA[الميكروفون مغلق. انقر للتشغيل.]]></entry>
-	<entry key="microphone.on"><![CDATA[Microphone is on. Click to turn off.]]></entry>
+	<entry key="microphone.on"><![CDATA[الميكروفون قيد التشغيل. انقر لإيقافه.]]></entry>
 	<entry key="my.room.conference"><![CDATA[غرفة الاجتماعات الخاصة بي (من 1 إلى 16 مستخدمًا)]]></entry>
 	<entry key="my.room.presentation"><![CDATA[غرفة العرض الخاص بي (من 1-120 مستخدمًا)]]></entry>
 	<entry key="network.test.click.play"><![CDATA[انقر فوق زر التشغيل لإجراء الاختبار]]></entry>
@@ -948,7 +948,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="wb.tool.math.formula"><![CDATA[صيغة الرياضيات]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[دليل بناء الجملة الرياضاتيه]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>
-	<entry key="wb.tool.white-out"><![CDATA[White-Out]]></entry>
+	<entry key="wb.tool.white-out"><![CDATA[تبييض]]></entry>
 	<entry key="widget.recent.desc"><![CDATA[تعرض هذه الأقسام الغرف التي فتحتها مؤخرًا]]></entry>
 	<entry key="widget.recent.title"><![CDATA[الغرف الحديثة]]></entry>
 	<entry key="widget.start.desc"><![CDATA[{0} ، النظام الأساسي لعقد المؤتمرات عبر الويب. يمكنك إما اتباع الخطوات 1-2-3 للدخول إلى غرفة الاجتماعات مباشرة ، أو اختيار التقويم لإعداد اجتماع والتخطيط له.]]></entry>
