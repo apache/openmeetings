@@ -18,18 +18,28 @@
  */
 package org.apache.openmeetings.web.user.dashboard.admin;
 
-import org.apache.openmeetings.web.user.dashboard.OmWidget;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.model.Model;
+import org.wicketstuff.dashboard.AbstractWidget;
 import org.wicketstuff.dashboard.WidgetLocation;
 import org.wicketstuff.dashboard.web.WidgetView;
 
-public class AdminWidget extends OmWidget {
+public class AdminWidget extends AbstractWidget {
 	private static final long serialVersionUID = 1L;
 	public static final String WIDGET_ID_ADMIN = "AdminWidget";
 
 	public AdminWidget() {
-		super(WIDGET_ID_ADMIN, "dashboard.widget.admin.title");
 		location = new WidgetLocation(0, 2);
+	}
+
+	@Override
+	public String getId() {
+		return WIDGET_ID_ADMIN;
+	}
+
+	@Override
+	public String getTitle() {
+		return Application.getString("dashboard.widget.admin.title");
 	}
 
 	@Override

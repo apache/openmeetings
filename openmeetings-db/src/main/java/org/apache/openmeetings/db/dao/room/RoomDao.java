@@ -232,11 +232,10 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 
 	public Room getUserRoom(Long ownerId, Room.Type type, String name) {
 		log.debug("getUserRoom : {} || {}", ownerId, type);
-		Room room = null;
-		List<Room> ll = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class).setParameter("ownerId", ownerId).setParameter("type", type).getResultList();
-		if (!ll.isEmpty()) {
-			room = ll.get(0);
-		}
+		Room room = single(em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class)
+				.setParameter("ownerId", ownerId)
+				.setParameter("type", type)
+				.getResultList());
 
 		if (room == null) {
 			log.debug("Could not find room {} || {}", ownerId, type);
@@ -257,6 +256,8 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 			}
 			return null;
 		} else {
+			room.setName(name);
+			room = update(room, ownerId);
 			return room;
 		}
 	}
