@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.core.util;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setPwdCheckDigit;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setPwdCheckSpecial;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setPwdCheckUpper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,13 +41,17 @@ import org.mockito.MockedStatic;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-public class TestStrongPasswordValidator {
+class TestStrongPasswordValidator {
 	private static User getUser(String login, String email) {
 		User u = new User();
 		u.setLogin(login);
 		u.setAddress(new Address());
 		u.getAddress().setEmail(email);
 		return u;
+	}
+
+	private static User getUser3() {
+		return getUser("2222", "2222@local");
 	}
 
 	private static Stream<Arguments> provideTestArgs() {
@@ -56,7 +62,7 @@ public class TestStrongPasswordValidator {
 			args.add(Arguments.of(null, web, u1, 5));
 			User u2 = getUser("2222", null);
 			args.add(Arguments.of("1", web, u2, 4));
-			User u3 = getUser("2222", "2222@local");
+			User u3 = getUser3();
 			args.add(Arguments.of("password", web, u3, 3));
 			args.add(Arguments.of("passWord", web, u3, 2));
 			args.add(Arguments.of("passWord222", web, u3, 2));
@@ -98,28 +104,39 @@ public class TestStrongPasswordValidator {
 		});
 	}
 
-
 	@Test
 	void testNoUpper() {
 		try {
 			setPwdCheckUpper(false);
-			runWrapped(() -> {
-				int expectedErrors = 2;
-				String pwd = "password";
-				Validatable<String> pass = new Validatable<>(pwd);
-				User u = getUser("2222", "2222@local");
-				StrongPasswordValidator validator = new StrongPasswordValidator(u);
-				validator.validate(pass);
-				assertEquals(expectedErrors, pass.getErrors().size(), "Expected exactly " + expectedErrors + " errors, pass: '" + pwd + "', user: " + u);
-			});
+			test("password", false, getUser3(), 2);
 		} finally {
 			setPwdCheckUpper(true);
 		}
 	}
 
+	@Test
+	void testNoDigit() {
+		try {
+			setPwdCheckDigit(false);
+			test("password", false, getUser3(), 2);
+		} finally {
+			setPwdCheckDigit(true);
+		}
+	}
+
+	@Test
+	void testNoSpecial() {
+		try {
+			setPwdCheckSpecial(false);
+			test("password", false, getUser3(), 2);
+		} finally {
+			setPwdCheckSpecial(true);
+		}
+	}
+
 	@ParameterizedTest
 	@MethodSource("provideTestArgs")
-	void testNull(String pwd, boolean web, User u, int expectedErrors) {
+	void test(String pwd, boolean web, User u, int expectedErrors) {
 		runWrapped(() -> {
 			Validatable<String> pass = new Validatable<>(pwd);
 			StrongPasswordValidator validator = new StrongPasswordValidator(web, u);

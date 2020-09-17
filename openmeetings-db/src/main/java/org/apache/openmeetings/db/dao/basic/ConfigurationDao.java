@@ -295,6 +295,12 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_PASS_CHECK_UPPER:
 				reloadPwdCheckUpper();
 				break;
+			case CONFIG_PASS_CHECK_DIGIT:
+				reloadPwdCheckNumber();
+				break;
+			case CONFIG_PASS_CHECK_SPECIAL:
+				reloadPwdCheckSpecial();
+				break;
 			case CONFIG_DEFAULT_GROUP_ID:
 				reloadDefaultGroup();
 				break;
@@ -434,6 +440,14 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	private void reloadPwdCheckUpper() {
 		setPwdCheckUpper(getBool(CONFIG_PASS_CHECK_UPPER, true));
+	}
+
+	private void reloadPwdCheckNumber() {
+		setPwdCheckDigit(getBool(CONFIG_PASS_CHECK_DIGIT, true));
+	}
+
+	private void reloadPwdCheckSpecial() {
+		setPwdCheckSpecial(getBool(CONFIG_PASS_CHECK_SPECIAL, true));
 	}
 
 	private void reloadDefaultGroup() {

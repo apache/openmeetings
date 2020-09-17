@@ -19,6 +19,8 @@
 package org.apache.openmeetings.core.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinPasswdLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isPwdCheckDigit;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isPwdCheckSpecial;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isPwdCheckUpper;
 
 import java.util.Locale;
@@ -49,11 +51,11 @@ public class StrongPasswordValidator implements IValidator<String> {
 	}
 
 	private static boolean noDigit(String password) {
-		return password == null || !password.matches(".*\\d+.*");
+		return password == null || (isPwdCheckDigit() && !password.matches(".*\\d+.*"));
 	}
 
 	private static boolean noSymbol(String password) {
-		return password == null || !password.matches(".*[!@#$%^&*\\]\\[]+.*");
+		return password == null || (isPwdCheckSpecial() && !password.matches(".*[!@#$%^&*\\]\\[]+.*"));
 	}
 
 	private static boolean noUpperCase(String password) {

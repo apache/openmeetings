@@ -169,12 +169,12 @@ var Video = (function() {
 					level = MicLevel();
 					level.meter(data.analyser, lm, _micActivity, OmUtil.error);
 				}
-				data.rtcPeer.generateOffer(function(error, offerSdp) {
+				data.rtcPeer.generateOffer(function(genErr, offerSdp) {
 					if (state.disposed || true === data.rtcPeer.cleaned) {
 						return;
 					}
-					if (error) {
-						return OmUtil.error('Sender sdp offer error ' + error);
+					if (genErr) {
+						return OmUtil.error('Sender sdp offer error ' + genErr);
 					}
 					OmUtil.log('Invoking Sender SDP offer callback function');
 					VideoManager.sendMessage({
@@ -216,12 +216,12 @@ var Video = (function() {
 				if (error) {
 					return OmUtil.error(error);
 				}
-				data.rtcPeer.generateOffer(function(error, offerSdp) {
+				data.rtcPeer.generateOffer(function(genErr, offerSdp) {
 					if (state.disposed || true === data.rtcPeer.cleaned) {
 						return;
 					}
-					if (error) {
-						return OmUtil.error('Receiver sdp offer error ' + error);
+					if (genErr) {
+						return OmUtil.error('Receiver sdp offer error ' + genErr);
 					}
 					OmUtil.log('Invoking Receiver SDP offer callback function');
 					VideoManager.sendMessage({

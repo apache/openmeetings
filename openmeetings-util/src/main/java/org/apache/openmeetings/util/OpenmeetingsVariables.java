@@ -52,6 +52,8 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_LOGIN_MIN_LENGTH = "user.login.minimum.length";
 	public static final String CONFIG_PASS_MIN_LENGTH = "user.pass.minimum.length";
 	public static final String CONFIG_PASS_CHECK_UPPER = "user.pass.check.upper";
+	public static final String CONFIG_PASS_CHECK_DIGIT = "user.pass.check.digit";
+	public static final String CONFIG_PASS_CHECK_SPECIAL = "user.pass.check.special";
 	public static final String CONFIG_IGNORE_BAD_SSL = "oauth2.ignore.bad.ssl";
 	public static final String CONFIG_REDIRECT_URL_FOR_EXTERNAL = "redirect.url.for.external.users";
 	public static final String CONFIG_APPOINTMENT_REMINDER_MINUTES = "number.minutes.reminder.send";
@@ -130,6 +132,8 @@ public class OpenmeetingsVariables {
 	private static int minLoginLength = USER_LOGIN_MINIMUM_LENGTH;
 	private static int minPasswdLength = USER_PASSWORD_MINIMUM_LENGTH;
 	private static boolean pwdCheckUpper = true;
+	private static boolean pwdCheckDigit = true;
+	private static boolean pwdCheckSpecial = true;
 	private static JSONObject roomSettings = new JSONObject();
 	private static boolean initComplete = false;
 	private static long maxUploadSize = DEFAULT_MAX_UPLOAD_SIZE;
@@ -336,6 +340,22 @@ public class OpenmeetingsVariables {
 
 	public static void setPwdCheckUpper(boolean check) {
 		pwdCheckUpper = check;
+	}
+
+	public static boolean isPwdCheckDigit() {
+		return pwdCheckDigit;
+	}
+
+	public static void setPwdCheckDigit(boolean check) {
+		pwdCheckDigit = check;
+	}
+
+	public static boolean isPwdCheckSpecial() {
+		return pwdCheckSpecial;
+	}
+
+	public static void setPwdCheckSpecial(boolean check) {
+		pwdCheckSpecial = check;
 	}
 
 	public static Long getDefaultGroup() {

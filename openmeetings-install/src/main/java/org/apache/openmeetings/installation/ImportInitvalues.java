@@ -72,6 +72,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_VIDEO_PRESET;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_CHECK_DIGIT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_CHECK_SPECIAL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_CHECK_UPPER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
@@ -154,6 +156,7 @@ public class ImportInitvalues {
 	private static final String VER_3_0_3 = "3.0.3";
 	private static final String VER_3_3_0 = "3.3.0";
 	private static final String VER_5_0_0 = "5.0.0";
+	private static final String VER_5_0_1 = "5.0.1";
 	private static final String CLIENT_PLACEHOLDER = "<put your client_id>";
 	private static final String SECRET_PLACEHOLDER = "<put your client_secret>";
 	private static final String EMAIL_PARAM = "email";
@@ -385,7 +388,9 @@ public class ImportInitvalues {
 				+ DEFAULT_CSP_STYLE + ")" + cspMore, VER_5_0_0);
 		addCfg(list, CONFIG_SMTP_SSL, String.valueOf(false), Configuration.Type.BOOL, "Enable SSL", VER_5_0_0);
 		addCfg(list, CONFIG_CSP_ENABLED, String.valueOf(true), Configuration.Type.BOOL, "Whether or not CSP secure headers are enabled", VER_5_0_0);
-		addCfg(list, CONFIG_PASS_CHECK_UPPER, String.valueOf(true), Configuration.Type.BOOL, "Whether or not Password MUST contain uppercase characters", "5.0.1");
+		addCfg(list, CONFIG_PASS_CHECK_UPPER, String.valueOf(true), Configuration.Type.BOOL, "Whether or not Password MUST contain uppercase characters", VER_5_0_1);
+		addCfg(list, CONFIG_PASS_CHECK_DIGIT, String.valueOf(true), Configuration.Type.BOOL, "Whether or not Password MUST contain numeric", VER_5_0_1);
+		addCfg(list, CONFIG_PASS_CHECK_SPECIAL, String.valueOf(true), Configuration.Type.BOOL, "Whether or not Password MUST contain special character", VER_5_0_1);
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {
