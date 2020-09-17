@@ -51,6 +51,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_SIP_EXTEN_CONTEXT = "sip.exten.context";
 	public static final String CONFIG_LOGIN_MIN_LENGTH = "user.login.minimum.length";
 	public static final String CONFIG_PASS_MIN_LENGTH = "user.pass.minimum.length";
+	public static final String CONFIG_PASS_CHECK_UPPER = "user.pass.check.upper";
 	public static final String CONFIG_IGNORE_BAD_SSL = "oauth2.ignore.bad.ssl";
 	public static final String CONFIG_REDIRECT_URL_FOR_EXTERNAL = "redirect.url.for.external.users";
 	public static final String CONFIG_APPOINTMENT_REMINDER_MINUTES = "number.minutes.reminder.send";
@@ -128,6 +129,7 @@ public class OpenmeetingsVariables {
 	private static int extProcessTtl = 20;
 	private static int minLoginLength = USER_LOGIN_MINIMUM_LENGTH;
 	private static int minPasswdLength = USER_PASSWORD_MINIMUM_LENGTH;
+	private static boolean pwdCheckUpper = true;
 	private static JSONObject roomSettings = new JSONObject();
 	private static boolean initComplete = false;
 	private static long maxUploadSize = DEFAULT_MAX_UPLOAD_SIZE;
@@ -326,6 +328,14 @@ public class OpenmeetingsVariables {
 
 	public static void setMinPasswdLength(int length) {
 		minPasswdLength = length;
+	}
+
+	public static boolean isPwdCheckUpper() {
+		return pwdCheckUpper;
+	}
+
+	public static void setPwdCheckUpper(boolean check) {
+		pwdCheckUpper = check;
 	}
 
 	public static Long getDefaultGroup() {

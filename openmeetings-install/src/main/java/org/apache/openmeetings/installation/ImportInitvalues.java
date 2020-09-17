@@ -72,6 +72,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_VIDEO_PRESET;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_CHECK_UPPER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
@@ -384,6 +385,7 @@ public class ImportInitvalues {
 				+ DEFAULT_CSP_STYLE + ")" + cspMore, VER_5_0_0);
 		addCfg(list, CONFIG_SMTP_SSL, String.valueOf(false), Configuration.Type.BOOL, "Enable SSL", VER_5_0_0);
 		addCfg(list, CONFIG_CSP_ENABLED, String.valueOf(true), Configuration.Type.BOOL, "Whether or not CSP secure headers are enabled", VER_5_0_0);
+		addCfg(list, CONFIG_PASS_CHECK_UPPER, String.valueOf(true), Configuration.Type.BOOL, "Whether or not Password MUST contain uppercase characters", "5.0.1");
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {

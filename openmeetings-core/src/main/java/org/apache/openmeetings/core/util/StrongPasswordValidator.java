@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinPasswdLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isPwdCheckUpper;
 
 import java.util.Locale;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class StrongPasswordValidator implements IValidator<String> {
 	}
 
 	private static boolean noUpperCase(String password) {
-		return password == null || password.equals(password.toLowerCase(Locale.ROOT));
+		return password == null || (isPwdCheckUpper() && password.equals(password.toLowerCase(Locale.ROOT)));
 	}
 
 	private static boolean noLowerCase(String password) {
@@ -68,7 +69,7 @@ public class StrongPasswordValidator implements IValidator<String> {
 	}
 
 	private static boolean checkWord(String password, String word) {
-		if (Strings.isEmpty(word) || word.length() < 3) {
+		if (Strings.isEmpty(password) || Strings.isEmpty(word) || word.length() < 3) {
 			return false;
 		}
 		for (int i = 0; i < word.length() - 3; ++i) {

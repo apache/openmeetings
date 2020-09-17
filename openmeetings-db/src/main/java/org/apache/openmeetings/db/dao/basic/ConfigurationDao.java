@@ -292,6 +292,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_PASS_MIN_LENGTH:
 				reloadPasswdMinLength();
 				break;
+			case CONFIG_PASS_CHECK_UPPER:
+				reloadPwdCheckUpper();
+				break;
 			case CONFIG_DEFAULT_GROUP_ID:
 				reloadDefaultGroup();
 				break;
@@ -429,6 +432,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setMinPasswdLength(getInt(CONFIG_LOGIN_MIN_LENGTH, USER_PASSWORD_MINIMUM_LENGTH));
 	}
 
+	private void reloadPwdCheckUpper() {
+		setPwdCheckUpper(getBool(CONFIG_PASS_CHECK_UPPER, true));
+	}
+
 	private void reloadDefaultGroup() {
 		setDefaultGroup(getLong(CONFIG_DEFAULT_GROUP_ID, null));
 	}
@@ -505,6 +512,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadRoomSettings();
 		reloadLoginMinLength();
 		reloadPasswdMinLength();
+		reloadPwdCheckUpper();
 		reloadDefaultGroup();
 		reloadSipContext();
 		reloadFnameMinLength();
