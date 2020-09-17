@@ -44,7 +44,7 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private ConfigurationDao cfgDao;;
+	private ConfigurationDao cfgDao;
 
 	public List<OAuthServer> getActive() {
 		if (!isAllowRegisterOauth()) {

@@ -27,6 +27,10 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class CalendarHelper {
+	private CalendarHelper() {
+		// denied
+	}
+
 	public static ZoneId getZoneId(String tzId) {
 		return ZoneId.of(tzId, ZoneId.SHORT_IDS);
 	}

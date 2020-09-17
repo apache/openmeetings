@@ -261,6 +261,15 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 		}
 	}
 
+	public Room getExternal(String externalType, String externalId) {
+		log.debug("getExternal : {}  - {}", externalType, externalId);
+		return single(fillLazy(em
+				, oem -> oem.createNamedQuery("getExternalRoomNoType", Room.class)
+					.setParameter("externalId", externalId)
+					.setParameter("externalType", externalType)
+				, GRP_GROUPS));
+	}
+
 	public Room getExternal(Type type, String externalType, String externalId) {
 		log.debug("getExternal : {} - {}  - {}", type, externalType, externalId);
 		return single(fillLazy(em

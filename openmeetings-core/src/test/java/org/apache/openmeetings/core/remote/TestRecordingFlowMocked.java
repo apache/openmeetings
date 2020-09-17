@@ -153,7 +153,7 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 		assertTrue(streamProcessor.isSharing(ROOM_ID));
 
 		// Get current Stream, there should be only 1 KStream created as result of this
-		assertTrue(c.getStreams().size() == 1);
+		assertEquals(1, c.getStreams().size());
 		StreamDesc streamDesc = c.getStreams().get(0);
 
 		//save UID for stopping the stream later
@@ -175,7 +175,7 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 		verify(streamProcessor).startBroadcast(any(), any(), any());
 
 		// Assert that there is still just 1 stream and has only the activities to Record assigned
-		assertTrue(c.getStreams().size() == 1);
+		assertEquals(1, c.getStreams().size());
 		streamDesc = c.getStreams().get(0);
 		assertEquals(1, streamDesc.getActivities().size());
 		assertEquals(Activity.RECORD, streamDesc.getActivities().get(0));
@@ -208,6 +208,6 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 		// Verify it did also stop the sharing stream
 		verify(streamProcessor).pauseSharing(any(), any());
 		// Verify all streams gone
-		assertTrue(c.getStreams().size() == 0);
+		assertTrue(c.getStreams().isEmpty());
 	}
 }

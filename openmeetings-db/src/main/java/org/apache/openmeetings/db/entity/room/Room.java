@@ -81,6 +81,9 @@ import org.apache.openmeetings.db.entity.user.Group;
 @NamedQuery(name = "getExternalRoom", query = "SELECT rg.room FROM RoomGroup rg WHERE "
 		+ "rg.group.deleted = false AND rg.group.external = true AND rg.group.name = :externalType "
 		+ "AND rg.room.deleted = false AND rg.room.type = :type AND rg.room.externalId = :externalId")
+@NamedQuery(name = "getExternalRoomNoType", query = "SELECT rg.room FROM RoomGroup rg WHERE "
+		+ "rg.group.deleted = false AND rg.group.external = true AND rg.group.name = :externalType "
+		+ "AND rg.room.deleted = false AND rg.room.externalId = :externalId")
 @NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC")
 @NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id = :id")
 @NamedQuery(name = "getRoomsByIds", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id IN :ids")

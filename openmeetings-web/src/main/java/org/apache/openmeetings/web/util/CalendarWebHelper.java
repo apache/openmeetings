@@ -27,20 +27,24 @@ import java.util.Date;
 
 import org.apache.openmeetings.util.CalendarHelper;
 
-public class CalendarWebHelper extends CalendarHelper {
+public class CalendarWebHelper {
+	private CalendarWebHelper() {
+		// denied
+	}
+
 	public static ZoneId getZoneId() {
-		return getZoneId(getUserTimeZone().getID());
+		return CalendarHelper.getZoneId(getUserTimeZone().getID());
 	}
 
 	public static Date getDate(LocalDateTime d) {
-		return getDate(d, getUserTimeZone().getID());
+		return CalendarHelper.getDate(d, getUserTimeZone().getID());
 	}
 
 	public static Date getDate(LocalDate d) {
-		return getDate(d, getUserTimeZone().getID());
+		return CalendarHelper.getDate(d, getUserTimeZone().getID());
 	}
 
 	public static LocalDateTime getDateTime(Date d) {
-		return getDateTime(d, getUserTimeZone().getID());
+		return CalendarHelper.getDateTime(d, getUserTimeZone().getID());
 	}
 }

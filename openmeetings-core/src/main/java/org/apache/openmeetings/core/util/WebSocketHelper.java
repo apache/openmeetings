@@ -55,6 +55,10 @@ import com.github.openjson.JSONObject;
 public class WebSocketHelper {
 	private static final Logger log = LoggerFactory.getLogger(WebSocketHelper.class);
 
+	private WebSocketHelper() {
+		// denied
+	}
+
 	public static void sendClient(final IWsClient omClient, byte[] b) {
 		if (omClient != null) {
 			sendClient(omClient, c -> {
@@ -212,12 +216,12 @@ public class WebSocketHelper {
 		}).start();
 	}
 
-	protected static void publish(IClusterWsMessage m) {
+	public static void publish(IClusterWsMessage m) {
 		IApplication app = getApp();
 		new Thread(() -> app.publishWsTopic(m)).start();
 	}
 
-	protected static void sendRoom(final Long roomId, final JSONObject m, Predicate<Client> check, BiFunction<JSONObject, Client, JSONObject> func) {
+	public static void sendRoom(final Long roomId, final JSONObject m, Predicate<Client> check, BiFunction<JSONObject, Client, JSONObject> func) {
 		log.trace("Sending json WebSocket message to room: {}", m);
 		sendRoom(roomId, (t, c) -> doSend(t, c, m, func, "room"), check);
 	}

@@ -18,12 +18,13 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
+import static org.apache.openmeetings.core.util.WebSocketHelper.publish;
+import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_SRC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM__SRC;
 
 import java.util.function.Predicate;
 
-import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.util.NullStringer;
@@ -40,9 +41,13 @@ import org.apache.wicket.resource.FileSystemResourceReference;
 
 import com.github.openjson.JSONObject;
 
-public class WbWebSocketHelper extends WebSocketHelper {
+public class WbWebSocketHelper {
 	public static final String PARAM_OBJ = "obj";
 	private static final String PARAM__POSTER = "_poster";
+
+	private WbWebSocketHelper() {
+		// denied
+	}
 
 	public static boolean send(IClusterWsMessage inMsg) {
 		if (inMsg instanceof WsMessageWb) {
@@ -163,7 +168,7 @@ public class WbWebSocketHelper extends WebSocketHelper {
 			publish(new WsMessageWbFile(roomId, wbId, ruid, file, fi));
 		}
 		final JSONObject f = addFileUrl(ruid, file, fi, null);
-		WebSocketHelper.sendRoom(
+		sendRoom(
 				roomId
 				, new JSONObject().put("type", "wb")
 				, null
@@ -172,7 +177,7 @@ public class WbWebSocketHelper extends WebSocketHelper {
 	}
 
 	private static void sendWb(Long roomId, WbAction meth, JSONObject obj, Predicate<Client> check) {
-		WebSocketHelper.sendRoom(
+		sendRoom(
 				roomId
 				, new JSONObject().put("type", "wb")
 				, check

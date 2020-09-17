@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.server;
 
+import org.apache.openmeetings.db.dto.user.ExternalUserDTO;
+
 import com.github.openjson.JSONObject;
 
 /**
@@ -40,10 +42,6 @@ public class RemoteSessionObject {
 		// def constructor
 	}
 
-	public RemoteSessionObject(String username, String firstname, String lastname, String pictureUrl, String email) {
-		this(username, firstname, lastname, pictureUrl, email, "0", "");
-	}
-
 	/**
 	 * @param username
 	 *            - username
@@ -62,15 +60,14 @@ public class RemoteSessionObject {
 	 *
 	 *            06.09.2009 17:05:48 sebastianwagner
 	 */
-	public RemoteSessionObject(String username, String firstname, String lastname, String pictureUrl, String email,
-			String externalId, String externalType) {
-		this.username = username;
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.pictureUrl = pictureUrl;
-		this.email = email;
-		this.externalId = externalId;
-		this.externalType = externalType;
+	public RemoteSessionObject(ExternalUserDTO user) {
+		this.username = user.getLogin();
+		this.firstname = user.getFirstname();
+		this.lastname = user.getLastname();
+		this.pictureUrl = user.getProfilePictureUrl();
+		this.email = user.getEmail();
+		this.externalId = user.getExternalId();
+		this.externalType = user.getExternalType();
 	}
 
 	public String getUsername() {

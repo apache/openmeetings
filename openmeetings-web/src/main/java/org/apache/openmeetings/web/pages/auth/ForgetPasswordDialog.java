@@ -268,5 +268,5 @@ public class ForgetPasswordDialog extends Modal<String> {
 			wasReset = true;
 			ForgetPasswordDialog.this.close(target);
 		}
-	};
+	}
 }

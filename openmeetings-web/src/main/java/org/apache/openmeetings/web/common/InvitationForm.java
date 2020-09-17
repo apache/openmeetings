@@ -87,7 +87,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 	public enum Action {
 		GENERATE
 		, SEND
-	};
+	}
 
 	public InvitationForm(String id) {
 		super(id, new CompoundPropertyModel<>(new Invitation()));

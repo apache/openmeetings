@@ -67,6 +67,10 @@ public class AtomReader {
 			.add(new Field("author"));
 	}
 
+	private AtomReader() {
+		// denied
+	}
+
 	private static Spec add(String name) {
 		Spec s = new Spec(name);
 		specs.put(name, s);

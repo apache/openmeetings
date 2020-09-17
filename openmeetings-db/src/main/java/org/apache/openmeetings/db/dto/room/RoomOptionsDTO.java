@@ -33,6 +33,8 @@ import com.github.openjson.JSONObject;
 public class RoomOptionsDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long roomId;
+	private String externalRoomId;
+	private String externalType;
 	private Long recordingId;
 	private boolean moderator;
 	private boolean showAudioVideoTest;
@@ -50,6 +52,22 @@ public class RoomOptionsDTO implements Serializable {
 	public RoomOptionsDTO setRoomId(Long roomId) {
 		this.roomId = roomId;
 		return this;
+	}
+
+	public String getExternalRoomId() {
+		return externalRoomId;
+	}
+
+	public void setExternalRoomId(String externalRoomId) {
+		this.externalRoomId = externalRoomId;
+	}
+
+	public String getExternalType() {
+		return externalType;
+	}
+
+	public void setExternalType(String externalType) {
+		this.externalType = externalType;
 	}
 
 	public Long getRecordingId() {
@@ -101,6 +119,8 @@ public class RoomOptionsDTO implements Serializable {
 		ro.moderator = o.optBoolean("moderator", false);
 		ro.recordingId = optLong(o, "recordingId");
 		ro.roomId = optLong(o, "roomId");
+		ro.externalRoomId = o.optString("externalRoomId");
+		ro.externalType = o.optString("externalType");
 		ro.showAudioVideoTest = o.optBoolean("showAudioVideoTest", false);
 		return ro;
 	}

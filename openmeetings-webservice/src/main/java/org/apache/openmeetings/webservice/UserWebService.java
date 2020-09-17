@@ -300,10 +300,7 @@ public class UserWebService extends BaseWebService {
 			if (Strings.isEmpty(user.getExternalId()) || Strings.isEmpty(user.getExternalType())) {
 				return new ServiceResult("externalId and/or externalType are not set", Type.ERROR);
 			}
-			RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
-					user.getLogin(), user.getFirstname(), user.getLastname()
-					, user.getProfilePictureUrl(), user.getEmail()
-					, user.getExternalId(), user.getExternalType());
+			RemoteSessionObject remoteSessionObject = new RemoteSessionObject(user);
 
 			log.debug(remoteSessionObject.toString());
 
@@ -311,11 +308,7 @@ public class UserWebService extends BaseWebService {
 
 			log.debug("jsonString {}", xmlString);
 
-			String hash = soapDao.addSOAPLogin(sid, options.getRoomId(),
-					options.isModerator(), options.isShowAudioVideoTest(), options.isAllowSameURLMultipleTimes(),
-					options.getRecordingId(),
-					options.isAllowRecording()
-					);
+			String hash = soapDao.addSOAPLogin(sid, options);
 
 			if (hash != null) {
 				if (options.isAllowSameURLMultipleTimes()) {

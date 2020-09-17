@@ -82,10 +82,8 @@ public class OauthMapAdapter extends XmlAdapter<Object, Map<String, String>> {
 						key = n;
 						continue;
 					}
-					if (value == null) {
-						value = n;
-						break;
-					}
+					value = n;
+					break;
 				}
 				if (key != null && value != null) {
 					putValue(map, key.getTextContent(), value.getTextContent());

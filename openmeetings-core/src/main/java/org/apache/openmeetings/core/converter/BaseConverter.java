@@ -309,6 +309,12 @@ public abstract class BaseConverter {
 		return getDimensions(r, 'x');
 	}
 
+	/**
+	 * This method should be overridden to supply any additional parameters
+	 *
+	 * @param r - recording to get params from
+	 * @return additional conversion parameters
+	 */
 	protected List<String> additionalMp4OutParams(Recording r) {
 		return List.of();
 	}

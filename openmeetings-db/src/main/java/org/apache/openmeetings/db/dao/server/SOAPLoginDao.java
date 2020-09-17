@@ -26,6 +26,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.apache.openmeetings.db.dto.room.RoomOptionsDTO;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,21 +41,20 @@ public class SOAPLoginDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public String addSOAPLogin(String sessionHash, Long roomId,
-			boolean becomemoderator, boolean showAudioVideoTest,
-			boolean allowSameURLMultipleTimes, Long recordingId,
-			boolean allowRecording) {
+	public String addSOAPLogin(String sessionHash, RoomOptionsDTO options) {
 		SOAPLogin soapLogin = new SOAPLogin();
 		soapLogin.setCreated(new Date());
 		soapLogin.setUsed(false);
-		soapLogin.setRoomId(roomId);
-		soapLogin.setAllowSameURLMultipleTimes(allowSameURLMultipleTimes);
+		soapLogin.setRoomId(options.getRoomId());
+		soapLogin.setExternalRoomId(options.getExternalRoomId());
+		soapLogin.setExternalType(options.getExternalType());
+		soapLogin.setAllowSameURLMultipleTimes(options.isAllowSameURLMultipleTimes());
 		soapLogin.setHash(randomUUID().toString());
-		soapLogin.setRecordingId(recordingId);
+		soapLogin.setRecordingId(options.getRecordingId());
 		soapLogin.setSessionHash(sessionHash);
-		soapLogin.setModerator(becomemoderator);
-		soapLogin.setShowAudioVideoTest(showAudioVideoTest);
-		soapLogin.setAllowRecording(allowRecording);
+		soapLogin.setModerator(options.isModerator());
+		soapLogin.setShowAudioVideoTest(options.isShowAudioVideoTest());
+		soapLogin.setAllowRecording(options.isAllowRecording());
 
 		em.persist(soapLogin);
 		em.flush();

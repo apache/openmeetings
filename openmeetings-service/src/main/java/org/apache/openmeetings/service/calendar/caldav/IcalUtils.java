@@ -403,7 +403,7 @@ public class IcalUtils {
 		DateTime start = new DateTime(appointment.getStart()), end = new DateTime(appointment.getEnd());
 
 		VEvent meeting = new VEvent(start, end, appointment.getTitle());
-		meeting = addVEventpropsfromAppointment(appointment, meeting);
+		addVEventpropsfromAppointment(appointment, meeting);
 		icsCalendar.getComponents().add(meeting);
 
 		return icsCalendar;
@@ -416,8 +416,7 @@ public class IcalUtils {
 	 * @param meeting     VEvent of the Appointment
 	 * @return Updated VEvent
 	 */
-	private static VEvent addVEventpropsfromAppointment(Appointment appointment, VEvent meeting) {
-
+	private static void addVEventpropsfromAppointment(Appointment appointment, VEvent meeting) {
 		if (appointment.getLocation() != null) {
 			meeting.getProperties().add(new Location(appointment.getLocation()));
 		}
@@ -457,8 +456,6 @@ public class IcalUtils {
 		Organizer organizer = new Organizer(orgUri);
 		organizer.getParameters().add(orgCn);
 		meeting.getProperties().add(organizer);
-
-		return meeting;
 	}
 
 	/**
@@ -488,7 +485,7 @@ public class IcalUtils {
 			DateTime start = new DateTime(appointment.getStart()), end = new DateTime(appointment.getEnd());
 
 			VEvent meeting = new VEvent(start, end, appointment.getTitle());
-			meeting = addVEventpropsfromAppointment(appointment, meeting);
+			addVEventpropsfromAppointment(appointment, meeting);
 			icsCalendar.getComponents().add(meeting);
 		}
 		return icsCalendar;

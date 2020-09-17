@@ -286,8 +286,13 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			if (sd.getXml() != null) {
 				RemoteSessionObject remoteUser = RemoteSessionObject.fromString(sd.getXml());
 				log.debug("Hash data was parsed successfuly ? {}, containg exterlaId ? {}", (remoteUser != null), !Strings.isEmpty(remoteUser.getExternalId()));
-				if (remoteUser != null && !Strings.isEmpty(remoteUser.getExternalId())) {
-					Room r = roomDao.get(soapLogin.getRoomId());
+				if (!Strings.isEmpty(remoteUser.getExternalId())) {
+					Room r;
+					if (Strings.isEmpty(soapLogin.getExternalRoomId()) || Strings.isEmpty(soapLogin.getExternalType())) {
+						r = roomDao.get(soapLogin.getRoomId());
+					} else {
+						r = roomDao.getExternal(soapLogin.getExternalType(), soapLogin.getExternalRoomId());
+					}
 					if (r == null) {
 						log.warn("Room was not found");
 					} else {
@@ -317,7 +322,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 						soapLogin.setUseDate(new Date());
 						soapDao.update(soapLogin);
 					}
-					roomId = soapLogin.getRoomId();
+					roomId = r == null ? null : r.getId();
 					sd.setUserId(user.getId());
 					sd.setRoomId(roomId);
 					sessionDao.update(sd);

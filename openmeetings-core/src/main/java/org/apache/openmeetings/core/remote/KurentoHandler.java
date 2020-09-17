@@ -188,7 +188,7 @@ public class KurentoHandler {
 			try {
 				KurentoClient copy = client;
 				client = null;
-				if (copy != null && !copy.isClosed()) {
+				if (!copy.isClosed()) {
 					log.debug("Client will destroyed ...");
 					copy.destroy();
 					log.debug(".... Client is destroyed");

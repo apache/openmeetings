@@ -48,6 +48,12 @@ public class SOAPLogin implements Serializable {
 	@Column(name = "room_id")
 	private Long roomId;
 
+	@Column(name = "external_room_id")
+	private String externalRoomId;
+
+	@Column(name = "external_type")
+	private String externalType;
+
 	@Column(name = "session_hash")
 	private String sessionHash;
 
@@ -100,6 +106,22 @@ public class SOAPLogin implements Serializable {
 
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
+	}
+
+	public String getExternalRoomId() {
+		return externalRoomId;
+	}
+
+	public void setExternalRoomId(String externalRoomId) {
+		this.externalRoomId = externalRoomId;
+	}
+
+	public String getExternalType() {
+		return externalType;
+	}
+
+	public void setExternalType(String externalType) {
+		this.externalType = externalType;
 	}
 
 	public String getSessionHash() {
