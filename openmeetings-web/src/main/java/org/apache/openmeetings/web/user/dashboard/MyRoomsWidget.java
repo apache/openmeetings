@@ -18,27 +18,17 @@
  */
 package org.apache.openmeetings.web.user.dashboard;
 
-import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.model.Model;
-import org.wicketstuff.dashboard.AbstractWidget;
 import org.wicketstuff.dashboard.WidgetLocation;
 import org.wicketstuff.dashboard.web.WidgetView;
 
-public class MyRoomsWidget extends AbstractWidget {
+public class MyRoomsWidget extends OmWidget {
 	private static final long serialVersionUID = 1L;
 	public static final String WIDGET_ID_MY_ROOMS = "MyRoomsWidget";
 
 	public MyRoomsWidget() {
-		super();
+		super(WIDGET_ID_MY_ROOMS, "781");
 		location = new WidgetLocation(0, 1);
-		init();
-	}
-
-	@Override
-	public void init() {
-		super.init();
-		title = Application.getString("781");
-		id = WIDGET_ID_MY_ROOMS;
 	}
 
 	@Override
