@@ -38,7 +38,7 @@ var Video = (function() {
 			cnts = Sharer.baseConstraints(sd);
 			cnts.video.mediaSource = sd.shareType;
 			promise = navigator.mediaDevices.getUserMedia(cnts);
-		} else if (VideoUtil.isChrome(b) || VideoUtil.isEdgeChromium(b)) {
+		} else if (VideoUtil.sharingSupported()) {
 			cnts = {
 				video: true
 			};

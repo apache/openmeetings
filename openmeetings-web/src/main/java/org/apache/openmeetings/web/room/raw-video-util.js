@@ -274,8 +274,10 @@ var VideoUtil = (function() {
 		const b = kurentoUtils.WebRtcPeer.browser;
 		return (b.name === 'Edge' && b.major > 16)
 			|| (b.name === 'Firefox')
-			|| (b.name === 'Chrome')
-			|| (b.name === 'Chromium');
+			|| (b.name === 'Opera')
+			|| (b.name === 'Yandex')
+			|| _isChrome(b)
+			|| _isEdgeChromium(b);
 	}
 	function _highlight(el, clazz, count) {
 		if (!el || el.length < 1 || el.hasClass('disabled') || count < 0) {
