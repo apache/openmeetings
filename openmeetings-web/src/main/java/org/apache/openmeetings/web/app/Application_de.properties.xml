@@ -298,7 +298,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="801"><![CDATA[Monat]]></entry>
 	<entry key="803"><![CDATA[Teilnehmer]]></entry>
 	<entry key="815"><![CDATA[Event Details]]></entry>
-	<entry key="816"><![CDATA[Default Moderatoren]]></entry>
+	<entry key="816"><![CDATA[Standard Moderatoren]]></entry>
 	<entry key="817"><![CDATA[Super]]></entry>
 	<entry key="823"><![CDATA[In einem moderierten Raum sind Nutzer mit den Rollen Level-Moderator oder Administrator beim Betreten des Raums automatisch Moderatoren. Um dies abzuschalten, verwenden Sie die Funktion Default-Moderator.]]></entry>
 	<entry key="828"><![CDATA[Wenn Sie einem Raum eine Organisation  zuweisen, haben nur Mitglieder der Organisation Zugang. (Dies gilt nur wenn die Einstellung isPublic auf false gesetzt wurde!)]]></entry>
