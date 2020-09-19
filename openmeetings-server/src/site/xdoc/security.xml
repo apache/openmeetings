@@ -45,6 +45,17 @@
 				Please NOTE: only security issues should be reported to this list.
 			</p>
 		</section>
+		<section name="CVE-2020-13951 - Apache Openmeetings: DoS via public web service">
+			<p>Severity: High</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: 4.0.0 - 5.0.0</p>
+			<p>Description: NetTest web service can be used to perform Denial of Service attack<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-13951">CVE-2020-13951</a>
+			</p>
+			<p>The issue was fixed in 5.0.1<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 5.0.1</p>
+			<p>Credit: This issue was identified by Trung Le, Chi Tran, Ngo Van Thien</p>
+		</section>
 		<section name="CVE-2018-1325 - Wicket jQuery UI: XSS while displaying value in WYSIWYG editor">
 			<p>Severity: High</p>
 			<p>Vendor: wicket-jquery-ui</p>

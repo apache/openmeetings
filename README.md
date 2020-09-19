@@ -56,9 +56,30 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+5.0.1
+-----
+[Release 5.0.1](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.1), provides following improvements:
+
+This release provides WebRTC audio/video/screen-sharing in the Room
+
+Security:
+* Rate limit is checked for network test web service
+* Libraries are updated to latest versions
+* Password complexity can be fine-tuned
+
+Backup/Restore:
+* Group files/recordings might be restored to wrong group
+
+UI:
+* Translations and support of RTL languages are improved
+* Dashboard widgets and personal room are always displayed in current user language
+
+Some other fixes and improvements, 21 issues were addressed
+
+
 5.0.0
 -----
-[Release 5.0.0](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0), provides following improvements:
+[Release 5.0.0](https://archive.apache.org/dist/openmeetings/5.0.0), provides following improvements:
 
 This release provides WebRTC audio/video/screen-sharing in the Room
 
@@ -88,9 +109,21 @@ Audio/Video:
 Some other fixes and improvements, 74 issues were addressed
 
 
+4.0.11
+-----
+[Release 4.0.11](https://archive.apache.org/dist/openmeetings/4.0.11), provides following improvements:
+
+Security:
+* 3rd-party libraries are updated to latest versions
+* Email sending via SSL is added
+* User email addresses are hidden
+
+Other fixes and improvements, 11 issues were addressed
+
+
 5.0.0-M4
 -----
-[Release 5.0.0-M4](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M4), provides following improvements:
+[Release 5.0.0-M4](https://archive.apache.org/dist/openmeetings/5.0.0-M4), provides following improvements:
 
 This release provides WebRTC audio/video/screen-sharing in the Room
 
@@ -127,7 +160,7 @@ Some other fixes and improvements, 56 issues were addressed
 
 5.0.0-M3
 -----
-[Release 5.0.0-M3](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M3), provides following improvements:
+[Release 5.0.0-M3](https://archive.apache.org/dist/openmeetings/5.0.0-M3), provides following improvements:
 
 This release provides WebRTC audio/video/screen-sharing in the Room
 
@@ -158,7 +191,7 @@ Some other fixes and improvements, 36 issues were addressed
 
 5.0.0-M2
 -----
-[Release 5.0.0-M2](https://www.apache.org/dyn/closer.lua/openmeetings/5.0.0-M2), provides following improvements:
+[Release 5.0.0-M2](https://archive.apache.org/dist/openmeetings/5.0.0-M2), provides following improvements:
 
 This release provides WebRTC audio/video/screen-sharing in the Room
 
@@ -186,7 +219,7 @@ Some other fixes and improvements, 18 issues were addressed
 
 4.0.9
 -----
-[Release 4.0.9](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.9), provides following improvements:
+[Release 4.0.9](https://archive.apache.org/dist/openmeetings/4.0.9), provides following improvements:
 
 Backup/Restore:
 * Recordings of deleted users were restored as public

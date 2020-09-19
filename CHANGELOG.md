@@ -6,6 +6,39 @@ See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number 
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
 
+Release Notes - Openmeetings - Version 5.0.1
+================================================================================================================
+
+* Vulnerability
+    * CVE-2020-13951 - Apache Openmeetings: DoS via public web service
+
+* Bug
+    * [OPENMEETINGS-2402] - Server Lost Connection
+    * [OPENMEETINGS-2421] - NPE can happen during calendar panel unload
+    * [OPENMEETINGS-2423] - Group files are being restored to wrong group
+    * [OPENMEETINGS-2424] - Issues with "wait for moderator" room
+    * [OPENMEETINGS-2425] - Translation to Arabic need to be improved
+    * [OPENMEETINGS-2426] - Multiple UI issues
+    * [OPENMEETINGS-2428] - User profile looks wrong in RTL language
+    * [OPENMEETINGS-2429] - (My rooms) label in the dashboard
+    * [OPENMEETINGS-2433] - Settings->SearchUsers show some users more than once
+    * [OPENMEETINGS-2438] - Buttons in "Activities and actions" not really visible
+    * [OPENMEETINGS-2442] - volume slider very "small"
+
+* Improvement
+    * [OPENMEETINGS-2297] - It should be possible to create room hash by externalId/type
+    * [OPENMEETINGS-2422] - It should be possible to share KMS server between multiple OM instances
+    * [OPENMEETINGS-2432] - Rate limit should be checked for network test web service
+    * [OPENMEETINGS-2434] - minor improvement DATA_DIR
+    * [OPENMEETINGS-2444] - Screen-sharing is disabled in some browsers
+
+* Task
+    * [OPENMEETINGS-2418] - (5.0.1) Label contributions from https://poeditor.com should be merged back
+    * [OPENMEETINGS-2419] - Library versions need to be updated (5.0.1)
+    * [OPENMEETINGS-2427] - Sonar issues need to be addressed (5.0.1)
+    * [OPENMEETINGS-2443] - Easing password for Arabic users
+
+
 Release Notes - Openmeetings - Version 5.0.0
 ================================================================================================================
 

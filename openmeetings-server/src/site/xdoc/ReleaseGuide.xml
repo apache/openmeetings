@@ -105,7 +105,7 @@
 					</li>
 					<li>
 						Ensure All contributed translations are imported to our codebase<br/>
-						(More info and examples <a href="https://github.com/solomax/om-poeditor">is here</a>))
+						(More info and examples <a href="https://github.com/solomax/om-poeditor">are here</a>))
 					</li>
 					<li>
 						Update following files in OM documentation:<br/>
@@ -113,32 +113,32 @@
 						<tt>openmeetings-server/src/site/xdoc/NewsArchive.xml</tt><br/>
 						<tt>openmeetings-server/src/site/xdoc/downloads.xml</tt><br/>
 						<div class="bd-callout bd-callout-danger">
-							<div class="h4">Download links in NewsArchive.xml should be updated</div>
+							<div class="h4">Download links in NewsArchive.xml and README.md should be updated</div>
 						</div>
 					</li>
 					<li>Switch to the necessary branch:
-						<source>git checkout 4.0.x</source>
+						<source>git checkout master</source>
 					</li>
 					<li>Create temporary local branch
-						<source>git checkout -b release-4.0.0-RC1</source>
+						<source>git checkout -b release-5.0.1</source>
 					</li>
 					<li>Update versions of all modules
-						<source>mvn versions:set -DgenerateBackupPoms=false -DnewVersion=4.0.0</source>
+						<source>mvn versions:set -DgenerateBackupPoms=false -DnewVersion=5.0.1</source>
 					</li>
 					<li>Update final SCM URL located at <tt>pom.xml</tt> and <tt>openmeetings-server/pom.xml</tt>
 						<source><![CDATA[
 <scm>
     <url>https://github.com/apache/openmeetings.git</url>
 
-    SET https://github.com/apache/openmeetings/tree/4.0.0
+    SET https://github.com/apache/openmeetings/tree/5.0.1
 						]]></source>
 					</li>
 					<li>
 						Create a TAG and commit it to the Git<br/>
 						<source>
-git commit -a -m "4.0.0 Release Candidate 1"
-git tag -s 4.0.0-RC1 -m "4.0.0 Release Candidate 1 tag"
-git push origin 4.0.0-RC1
+git commit -a -m "5.0.1 Release Candidate 1"
+git tag -s 5.0.1-RC1 -m "5.0.1 Release Candidate 1 tag"
+git push origin 5.0.1-RC1
 						</source>
 					</li>
 					<li>
@@ -157,26 +157,26 @@ git push origin 4.0.0-RC1
 						<p>
 							Commit artifacts you have created with KEYS file to the
 							<tt>https://dist.apache.org/repos/dist/dev/openmeetings/</tt>
-							Proposed file structure for "Release Candidate 1" of 4.0.0 will be:
+							Proposed file structure for "Release Candidate 1" of 5.0.1 will be:
 						</p>
 						<source>
-4.0.0
-4.0.0/rc1
-4.0.0/rc1/src
-4.0.0/rc1/src/apache-openmeetings-4.0.0-src.zip
-4.0.0/rc1/src/apache-openmeetings-4.0.0-src.tar.gz
-4.0.0/rc1/src/apache-openmeetings-4.0.0-src.zip.sha
-4.0.0/rc1/src/apache-openmeetings-4.0.0-src.zip.asc
-4.0.0/rc1/src/apache-openmeetings-4.0.0-src.tar.gz.sha
-4.0.0/rc1/src/apache-openmeetings-4.0.0-src.tar.gz.asc
-4.0.0/rc1/bin
-4.0.0/rc1/bin/apache-openmeetings-4.0.0.zip
-4.0.0/rc1/bin/apache-openmeetings-4.0.0.tar.gz
-4.0.0/rc1/bin/apache-openmeetings-4.0.0.zip.sha
-4.0.0/rc1/bin/apache-openmeetings-4.0.0.zip.asc
-4.0.0/rc1/bin/apache-openmeetings-4.0.0.tar.gz.sha
-4.0.0/rc1/bin/apache-openmeetings-4.0.0.tar.gz.asc
-4.0.0/rc1/CHANGELOG
+5.0.1
+5.0.1/rc1
+5.0.1/rc1/src
+5.0.1/rc1/src/apache-openmeetings-5.0.1-src.zip
+5.0.1/rc1/src/apache-openmeetings-5.0.1-src.tar.gz
+5.0.1/rc1/src/apache-openmeetings-5.0.1-src.zip.sha
+5.0.1/rc1/src/apache-openmeetings-5.0.1-src.zip.asc
+5.0.1/rc1/src/apache-openmeetings-5.0.1-src.tar.gz.sha
+5.0.1/rc1/src/apache-openmeetings-5.0.1-src.tar.gz.asc
+5.0.1/rc1/bin
+5.0.1/rc1/bin/apache-openmeetings-5.0.1.zip
+5.0.1/rc1/bin/apache-openmeetings-5.0.1.tar.gz
+5.0.1/rc1/bin/apache-openmeetings-5.0.1.zip.sha
+5.0.1/rc1/bin/apache-openmeetings-5.0.1.zip.asc
+5.0.1/rc1/bin/apache-openmeetings-5.0.1.tar.gz.sha
+5.0.1/rc1/bin/apache-openmeetings-5.0.1.tar.gz.asc
+5.0.1/rc1/CHANGELOG
 						</source>
 						<p><b>NOTE</b> KEYS file is located at https://www.apache.org/dist/openmeetings/KEYS and should be just updated</p>
 					</li>
@@ -222,8 +222,8 @@ mvn clean install -Prc,release
 					<li>Go to <a href="https://securesigning.pki.digicert.com/csportal">https://securesigning.pki.digicert.com/csportal</a></li>
 					<li>Select "Signing Sets"</li>
 					<li>Select "Add signing set"</li>
-					<li>Enter "Signing set name" (must include "Apache OpenMeetings" and version) for ex. "Apache OpenMeetings 4.0.0-RELEASE"</li>
-					<li>Enter "Version" for ex. "4.0.0-RELEASE"</li>
+					<li>Enter "Signing set name" (must include "Apache OpenMeetings" and version) for ex. "Apache OpenMeetings 5.0.1-RELEASE"</li>
+					<li>Enter "Version" for ex. "5.0.1-RELEASE"</li>
 					<li>Select "Java Signing Sha256" as "Signing service"</li>
 					<li>Select "Upload files" and add all <b>jar</b> files from <tt>target/jnlp</tt></li>
 					<li>Select "Sign now"</li>

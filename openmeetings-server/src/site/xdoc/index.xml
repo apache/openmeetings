@@ -69,34 +69,23 @@
 		</section>
 		<section name="News">
 			<div class="bd-callout bd-callout-danger">
-				<h4>Version 5.0.0 released!</h4>
-				<div>Release 5.0.0, provides following improvements:<br/>
+				<h4>Version 5.0.1 released!</h4>
+				<div>Release 5.0.1, provides following improvements:<br/>
 					This release provides WebRTC audio/video/screen-sharing in the Room
-					<div class="bd-callout bd-callout-info">Flash plugin is no longer required in the browser<br/>
-						<br/>
-						IMPORTANT: Java 11 is required
-					</div>
 					Security:
 					<ul>
+						<li>Rate limit is checked for network test web service</li>
 						<li>Libraries are updated to latest versions</li>
-						<li>More strict CSP is implemented</li>
-						<li>User accounts are hidden for regular users</li>
-						<li>User email addresses are hidden</li>
+						<li>Password complexity can be fine-tuned</li>
+					</ul>
+					Backup/Restore:
+					<ul>
+						<li>Group files/recordings might be restored to wrong group</li>
 					</ul>
 					UI:
 					<ul>
-						<li>Support for touch events is added (mobiles, tablets)</li>
-						<li>Better support for new MS Edge browser</li>
-						<li>Direct link for entering the room with room name (not ID)</li>
-						<li>Front camera is used by default</li>
-						<li>User avatar is editable at Admin-&gt;Users</li>
-					</ul>
-					Audio/Video:
-					<ul>
-						<li>Stability is improved</li>
-						<li>Connection to KMS is auto-recovering</li>
-						<li>Camera resolution changes take effect immediately</li>
-						<li>Multiple client-side JS errors are fixed</li>
+						<li>Translations and support of RTL languages are improved</li>
+						<li>Dashboard widgets and personal room are always displayed in current user language</li>
 					</ul>
 					<br/>
 					Other fixes and improvements
@@ -104,38 +93,12 @@
 				<br/>
 
 				<span>
-					74 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/5.0.0/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12348040">Detailed list</a>
+					21 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/5.0.1/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12348725">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2020-08-21)</span>
-			</div>
-			<div class="bd-callout bd-callout-danger">
-				<h4>Version 4.0.11 released!</h4>
-				<div>Release 4.0.11, provides following improvements:<br/>
-					Security:
-					<ul>
-						<li>3rd-party libraries are updated to latest versions</li>
-						<li>Email sending via SSL is added</li>
-						<li>User email addresses are hidden</li>
-					</ul>
-					<br/>
-					Other fixes and improvements
-					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
-				</div>
-				<br/>
-
-				<span>
-					11 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.11/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12346607">Detailed list</a>
-				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2020-09-02)</span>
-			</div>
-			<div class="bd-callout bd-callout-info">
-				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
+				<span class="date">(2020-09-23)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
