@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.openmeetings</groupId>
 		<artifactId>openmeetings-parent</artifactId>
-		<version>5.0.1-SNAPSHOT</version>
+		<version>5.0.1</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>openmeetings-server</artifactId>
@@ -46,7 +46,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/apache/openmeetings.git</connection>
 		<developerConnection>scm:git:https://github.com/apache/openmeetings.git</developerConnection>
-		<url>https://github.com/apache/openmeetings.git</url>
+		<url>https://github.com/apache/openmeetings/tree/5.0.1</url>
 		<tag>HEAD</tag>
 	</scm>
 	<profiles>
