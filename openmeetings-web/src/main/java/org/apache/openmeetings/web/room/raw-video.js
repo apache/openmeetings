@@ -461,8 +461,8 @@ var Video = (function() {
 	}
 	function _setRights() {
 		if (Room.hasRight(['MUTE_OTHERS']) && VideoUtil.hasMic(sd)) {
-			muteOthers.addClass('enabled').click(function() {
-				VideoManager.clickMuteOthers(sd.uid);
+			muteOthers.addClass('enabled').off().click(function() {
+				VideoManager.clickMuteOthers(sd.cuid);
 			});
 		} else {
 			muteOthers.removeClass('enabled').off();
