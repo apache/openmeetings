@@ -277,7 +277,8 @@ var VideoUtil = (function() {
 			|| (b.name === 'Opera')
 			|| (b.name === 'Yandex')
 			|| _isChrome(b)
-			|| _isEdgeChromium(b);
+			|| _isEdgeChromium(b)
+			|| (b.name === 'Mozilla' && b.major > 4);
 	}
 	function _highlight(el, clazz, count) {
 		if (!el || el.length < 1 || el.hasClass('disabled') || count < 0) {
