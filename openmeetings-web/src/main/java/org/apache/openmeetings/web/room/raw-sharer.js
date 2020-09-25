@@ -14,7 +14,7 @@ var Sharer = (function() {
 		shareState = SHARE_STOPPED;
 		recState = SHARE_STOPPED;
 	}
-	
+
 	function _init() {
 		reset();
 		sharer = $('#sharer').dialog({
@@ -27,7 +27,7 @@ var Sharer = (function() {
 			, resizable: false
 		});
 		fixJQueryUIDialogTouch(sharer);
-		
+
 		if (!VideoUtil.sharingSupported()) {
 			sharer.find('.container').remove();
 			sharer.find('.alert').show();

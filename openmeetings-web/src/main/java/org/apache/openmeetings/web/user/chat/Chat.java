@@ -47,6 +47,7 @@ import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -59,6 +60,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.jqueryui.JQueryUIJavaScriptReference;
 
 public class Chat extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -169,7 +172,17 @@ public class Chat extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(Chat.class, "chat.js"))));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(Chat.class, "chat.js"))) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public List<HeaderItem> getDependencies() {
+				return List.of(JavaScriptHeaderItem.forScript("const bstooltip = jQuery.fn.tooltip;", "preserve-bs-tooltip")
+						, JQueryUIJavaScriptReference.asHeaderItem()
+						, JavaScriptHeaderItem.forScript("jQuery.fn.tooltip = bstooltip;", "restore-bs-tooltip")
+						);
+			}
+		});
 		response.render(new PriorityHeaderItem(getNamedFunction("chatActivity", chatActivity, explicit(PARAM_TYPE), explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID))));
 
 		if (showDashboardChat) {

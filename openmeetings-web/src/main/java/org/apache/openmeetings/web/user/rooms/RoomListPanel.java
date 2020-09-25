@@ -27,6 +27,7 @@ import java.util.List;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.util.OmTooltipBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -42,8 +43,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
@@ -51,64 +50,72 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5I
 
 public class RoomListPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	private final ListView<Room> list;
+	private final String label;
+	private final ListView<Room> list = new ListView<>("list") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void populateItem(ListItem<Room> item) {
+			final Room r = item.getModelObject();
+			WebMarkupContainer roomContainer;
+			item.add((roomContainer = new WebMarkupContainer("roomContainer")).add(new AjaxEventBehavior(EVT_CLICK){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onEvent(AjaxRequestTarget target) {
+					onContainerClick(target, r);
+				}
+			}));
+			roomContainer.add(new Label("roomName", r.getName()));
+			final WebMarkupContainer info = new WebMarkupContainer("info");
+			roomContainer.add(info.setOutputMarkupId(true)
+					.add(AttributeModifier.append(ATTR_TITLE, getString(String.format("room.type.%s.desc", r.getType().name())))));
+			final Label curUsers = new Label("curUsers", new Model<>(cm.listByRoom(r.getId()).size()));
+			roomContainer.add(curUsers.setOutputMarkupId(true));
+			roomContainer.add(new Label("totalUsers", r.getCapacity()));
+			item.add(new WebMarkupContainer("btn").add(new Label("label", label)).add(new RoomEnterBehavior(r.getId()) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onEvent(AjaxRequestTarget target) {
+					onRoomEnter(target, roomId);
+				}
+			}));
+			roomContainer.add(new BootstrapAjaxLink<String>("refresh", null, Buttons.Type.Outline_Info, new ResourceModel("lbl.refresh")) {
+				private static final long serialVersionUID = 1L;
+
+				{
+					setIconType(FontAwesome5IconType.sync_alt_s);
+				}
+
+				@Override
+				protected <L extends Serializable> Component newLabel(String markupId, IModel<L> model) {
+					return super.newLabel(markupId, model).setRenderBodyOnly(false).add(new CssClassNameAppender("sr-only"));
+				}
+
+				@Override
+				public void onClick(AjaxRequestTarget target) {
+					target.add(curUsers.setDefaultModelObject(cm.listByRoom(r.getId()).size()));
+					onRefreshClick(target, r);
+				}
+			}.add(AttributeModifier.append(ATTR_TITLE, new ResourceModel("lbl.refresh"))));
+		}
+	};
 	@SpringBean
 	private ClientManager cm;
 
 	public RoomListPanel(String id, List<Room> rooms, final String label) {
 		super(id);
 		setOutputMarkupId(true);
-		add(list = new ListView<>("list", rooms) {
-			private static final long serialVersionUID = 1L;
+		this.label = label;
+		list.setList(rooms);
+	}
 
-			@Override
-			protected void populateItem(ListItem<Room> item) {
-				final Room r = item.getModelObject();
-				WebMarkupContainer roomContainer;
-				item.add((roomContainer = new WebMarkupContainer("roomContainer")).add(new AjaxEventBehavior(EVT_CLICK){
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						onContainerClick(target, r);
-					}
-				}));
-				roomContainer.add(new Label("roomName", r.getName()));
-				final WebMarkupContainer info = new WebMarkupContainer("info");
-				roomContainer.add(info.setOutputMarkupId(true)
-						.add(AttributeModifier.append(ATTR_TITLE, getString(String.format("room.type.%s.desc", r.getType().name())))));
-				final Label curUsers = new Label("curUsers", new Model<>(cm.listByRoom(r.getId()).size()));
-				roomContainer.add(curUsers.setOutputMarkupId(true));
-				roomContainer.add(new Label("totalUsers", r.getCapacity()));
-				item.add(new WebMarkupContainer("btn").add(new Label("label", label)).add(new RoomEnterBehavior(r.getId()) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						onRoomEnter(target, roomId);
-					}
-				}));
-				roomContainer.add(new BootstrapAjaxLink<String>("refresh", null, Buttons.Type.Outline_Info, new ResourceModel("lbl.refresh")) {
-					private static final long serialVersionUID = 1L;
-
-					{
-						setIconType(FontAwesome5IconType.sync_alt_s);
-					}
-
-					@Override
-					protected <L extends Serializable> Component newLabel(String markupId, IModel<L> model) {
-						return super.newLabel(markupId, model).setRenderBodyOnly(false).add(new CssClassNameAppender("sr-only"));
-					}
-
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						target.add(curUsers.setDefaultModelObject(cm.listByRoom(r.getId()).size()));
-						onRefreshClick(target, r);
-					}
-				}.add(AttributeModifier.append(ATTR_TITLE, new ResourceModel("lbl.refresh"))));
-			}
-		});
-		add(new TooltipBehavior(".info-tooltip"));
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(list);
+		add(new OmTooltipBehavior());
 	}
 
 	public void update(IPartialPageRequestHandler handler, List<Room> rooms) {

@@ -54,6 +54,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ErrorMessagePanel;
 import org.apache.openmeetings.web.common.OmLabel;
+import org.apache.openmeetings.web.util.OmTooltipBehavior;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -90,9 +91,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.web.context.support.XmlWebApplicationContext;
-
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.ButtonBehavior;
@@ -613,7 +611,7 @@ public class InstallWizard extends BootstrapWizard {
 					target.add(feedback);
 				}
 			});
-			add(new TooltipBehavior(".text-info"));
+			add(new OmTooltipBehavior());
 		}
 
 		private void reportSuccess(TextField<String> path) {
@@ -713,9 +711,7 @@ public class InstallWizard extends BootstrapWizard {
 			add(new CheckBox("sipEnable"));
 			add(new TextField<String>("sipRoomPrefix"));
 			add(new TextField<String>("sipExtenContext"));
-			Options options = new Options();
-			options.set("content", "function () { return $(this).prop('title'); }");
-			add(new TooltipBehavior(".text-info", options));
+			add(new OmTooltipBehavior());
 		}
 
 		@Override

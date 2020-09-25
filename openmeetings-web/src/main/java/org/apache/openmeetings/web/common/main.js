@@ -29,25 +29,6 @@ var OmUtil = (function() {
 	function _init(_options) {
 		options = _options;
 	}
-	function _confirmDlg(_id, okHandler) {
-		const confirm = $('#' + _id);
-		confirm.dialog({
-			modal: true
-			, buttons: [{
-				text: confirm.data('btn-ok'),
-				click: function() {
-					okHandler();
-					$(this).dialog('close');
-				}
-			}, {
-				text: confirm.data('btn-cancel'),
-				click: function() {
-					$(this).dialog('close');
-				}
-			}]
-		});
-		return confirm;
-	}
 	function _tmpl(tmplId, newId) {
 		return $(tmplId).clone().attr('id', newId || '');
 	}
@@ -85,7 +66,6 @@ var OmUtil = (function() {
 	}
 
 	self.init = _init;
-	self.confirmDlg = _confirmDlg;
 	self.tmpl = _tmpl;
 	self.debugEnabled = _debugEnabled;
 	self.enableDebug = function() {
@@ -135,7 +115,7 @@ Wicket.BrowserInfo.collectExtraInfo = function(info) {
 //Fix to move the close icon on top of the .ui-dialog-titlebar cause otherwise 
 // touch-events are broken and you won't be able to close the dialog
 function fixJQueryUIDialogTouch (dialog) {
-    dialog.parent().find('.ui-dialog-titlebar-close').appendTo(dialog.parent());
+	dialog.parent().find('.ui-dialog-titlebar-close').appendTo(dialog.parent());
 }
 function showBusyIndicator() {
 	$('#busy-indicator').show();
