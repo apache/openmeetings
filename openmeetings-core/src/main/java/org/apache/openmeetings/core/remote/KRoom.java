@@ -30,6 +30,8 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -41,9 +43,9 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
+import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
-import org.apache.openmeetings.util.CalendarPatterns;
 import org.kurento.client.Continuation;
 import org.kurento.client.MediaPipeline;
 import org.slf4j.Logger;
@@ -63,22 +65,24 @@ public class KRoom {
 	 * Not injected by annotation but by constructor.
 	 */
 	private final StreamProcessor processor;
+	private final RecordingChunkDao chunkDao;
+	private final IApplication app;
 	private final MediaPipeline pipeline;
 	private final Long roomId;
 	private final Room.Type type;
 	private final AtomicBoolean recordingStarted = new AtomicBoolean(false);
 	private final AtomicBoolean sharingStarted = new AtomicBoolean(false);
 	private Long recordingId = null;
-	private final RecordingChunkDao chunkDao;
 	private JSONObject recordingUser = new JSONObject();
 	private JSONObject sharingUser = new JSONObject();
 
-	public KRoom(StreamProcessor processor, Room r, MediaPipeline pipeline, RecordingChunkDao chunkDao) {
-		this.processor = processor;
+	public KRoom(KurentoHandler handler, Room r, MediaPipeline pipeline) {
+		this.processor = handler.getStreamProcessor();
+		this.chunkDao = handler.getChunkDao();
+		this.app = handler.getApp();
 		this.roomId = r.getId();
 		this.type = r.getType();
 		this.pipeline = pipeline;
-		this.chunkDao = chunkDao;
 		log.info("ROOM {} has been created", roomId);
 	}
 
@@ -143,7 +147,9 @@ public class KRoom {
 			Recording rec = new Recording();
 
 			rec.setHash(randomUUID().toString());
-			rec.setName(String.format("%s %s", interview ? "Interview" : "Recording", CalendarPatterns.getDateWithTimeByMiliSeconds(new Date())));
+			final FastDateFormat fdf = FormatHelper.getDateTimeFormat(c.getUser());
+			rec.setName(app.getOmString(interview ? "file.name.interview" : "file.name.recording", c.getUser().getLanguageId())
+					+ fdf.format(new Date()));
 			User u = c.getUser();
 			recordingUser.put("login", u.getLogin());
 			recordingUser.put("firstName", u.getFirstname());

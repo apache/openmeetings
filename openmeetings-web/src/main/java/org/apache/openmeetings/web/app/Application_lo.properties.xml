@@ -31,7 +31,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="5"><![CDATA[ໂປຝາຍ]]></entry>
 	<entry key="6"><![CDATA[Administration]]></entry>
 	<entry key="15"><![CDATA[File upload]]></entry>
-	<entry key="18"><![CDATA[new poll]]></entry>
+	<entry key="18"><![CDATA[New poll]]></entry>
 	<entry key="19"><![CDATA[A new poll for the conference]]></entry>
 	<entry key="20"><![CDATA[Question]]></entry>
 	<entry key="21"><![CDATA[Type of poll]]></entry>
@@ -67,8 +67,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="82"><![CDATA[Flexible textbox]]></entry>
 	<entry key="84"><![CDATA[I have a question]]></entry>
 	<entry key="85"><![CDATA[Close]]></entry>
-	<entry key="86"><![CDATA[italic]]></entry>
-	<entry key="87"><![CDATA[bold]]></entry>
+	<entry key="86"><![CDATA[Italic]]></entry>
+	<entry key="87"><![CDATA[Bold]]></entry>
 	<entry key="98"><![CDATA[Moderator]]></entry>
 	<entry key="99"><![CDATA[This room is full]]></entry>
 	<entry key="108"><![CDATA[Login]]></entry>
@@ -211,7 +211,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="528"><![CDATA[Period]]></entry>
 	<entry key="529"><![CDATA[One time]]></entry>
 	<entry key="530"><![CDATA[Valid from]]></entry>
-	<entry key="531"><![CDATA[Valid to]]></entry>
+	<entry key="531"><![CDATA[Valid until]]></entry>
 	<entry key="537"><![CDATA[Check password]]></entry>
 	<entry key="545"><![CDATA[x]]></entry>
 	<entry key="546"><![CDATA[x-axis]]></entry>
@@ -347,7 +347,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1112"><![CDATA[Updated]]></entry>
 	<entry key="1114"><![CDATA[The config files are in the folder OM_DATA_FOLDER/conf. You need to manually upload the files to this folder. Changes to the config file are immediately online.]]></entry>
 	<entry key="1115"><![CDATA[Config file name]]></entry>
-	<entry key="1116"><![CDATA[If you enable "Add Domain to user name" the value of the field "domain" is added to each login that the user enters in the login box. This is useful if the login in the LDAP is stored including the domain name. Example: user enters "hans" domain is specified as "localhost.com", login that is verified against LDAP is: hans@localhost.com]]></entry>
+	<entry key="1116"><![CDATA[If you enable "Add Domain to Username" the value of the field "domain" is added to each login that the user enters in the login box. This is useful if the login in the LDAP is stored including the domain name. Example: user enters "hans" domain is specified as "localhost.com", login that is verified against LDAP is: hans@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[Add domain to user name]]></entry>
 	<entry key="1118"><![CDATA[Domain]]></entry>
 	<entry key="1121"><![CDATA[Remote clipboard text]]></entry>
@@ -424,7 +424,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1259"><![CDATA[ເພີ່ມແຟ້ມແລະຈັດຂໍ້ຄວາມຂອງທ່ານ!]]></entry>
 	<entry key="1261"><![CDATA[Add]]></entry>
 	<entry key="1262"><![CDATA[Delete folder]]></entry>
-	<entry key="1268"><![CDATA[The user does not share his personal contact data.]]></entry>
+	<entry key="1268"><![CDATA[The user does not share personal contact data.]]></entry>
 	<entry key="1269"><![CDATA[The user shares their personal contact data only to contacts.]]></entry>
 	<entry key="1287"><![CDATA[ເລືອກເຊື່ອເລັ້ນ]]></entry>
 	<entry key="1296"><![CDATA[Member since]]></entry>
@@ -433,7 +433,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1308"><![CDATA[Owner ID]]></entry>
 	<entry key="1312"><![CDATA[Load directly to the Whiteboard]]></entry>
 	<entry key="1313"><![CDATA[Do you really want to remove this whiteboard? This action cannot be undone.]]></entry>
-	<entry key="1315"><![CDATA[Do not forget to 'Start recording', if you want have the meeting recorded.]]></entry>
+	<entry key="1315"><![CDATA[Do not forget to 'Start recording', if you want to have the meeting recorded.]]></entry>
 	<entry key="1316"><![CDATA[Start recording]]></entry>
 	<entry key="1323"><![CDATA[Clip arts]]></entry>
 	<entry key="1340"><![CDATA[Do you really want to delete the complete content on the whiteboard?]]></entry>
@@ -456,7 +456,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1421"><![CDATA[Are you sure you want to delete this poll? The results will be deleted as well.]]></entry>
 	<entry key="1422"><![CDATA[Language ISO code]]></entry>
 	<entry key="1429"><![CDATA[Cam resolution]]></entry>
-	<entry key="1430"><![CDATA[Changing the resolution affects bandwidth, bigger picture needs more bandwith.]]></entry>
+	<entry key="1430"><![CDATA[Changing the resolution affects bandwidth, a bigger picture uses more bandwidth.]]></entry>
 	<entry key="1443"><![CDATA[Layout options]]></entry>
 	<entry key="1444"><![CDATA[New Event]]></entry>
 	<entry key="1445"><![CDATA[Password protected are the links to the conference that are send to the participents when you save the calendar event, not the room! That means if you save the event multiple times but with different passwords every participent receives a new link that has a different password. But old links still work once send!]]></entry>
@@ -648,6 +648,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="error.type.error"><![CDATA[Error]]></entry>
 	<entry key="error.type.info"><![CDATA[Message]]></entry>
 	<entry key="error.unknown"><![CDATA[Unknown error. Please report this to the administrator.]]></entry>
+	<entry key="file.name.interview"><![CDATA[Interview]]></entry>
+	<entry key="file.name.recording"><![CDATA[Recording]]></entry>
 	<entry key="files.download.jpg"><![CDATA[JPG]]></entry>
 	<entry key="files.download.original"><![CDATA[Original]]></entry>
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>
@@ -943,7 +945,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="volume.label"><![CDATA[Adjust volume]]></entry>
 	<entry key="wait-moderator.message"><![CDATA[Please wait until a <b>moderator</b> enters the room]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[Please be patient ...]]></entry>
-	<entry key="warn.nogroup"><![CDATA[User added but you need to assign this user to an usergroup, otherwise they won't be able to log in]]></entry>
+	<entry key="warn.nogroup"><![CDATA[User added but you need to assign this user to a usergroup, otherwise they won't be able to log in]]></entry>
 	<entry key="warn.notverified"><![CDATA[You have successfully signed up. An email with a verification code will be sent to your mailbox.]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[Math formula]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Guide to LaTeX Syntax]]></entry>

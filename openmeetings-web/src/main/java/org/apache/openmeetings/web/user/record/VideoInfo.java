@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import org.apache.openmeetings.core.converter.InterviewConverter;
-import org.apache.openmeetings.core.converter.RecordingConverter;
+import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
+
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -30,19 +30,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class VideoInfo extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final Form<Void> form = new Form<>("form");
-	private final IModel<Recording> rm = new CompoundPropertyModel<>(new Recording());
-	private final IModel<String> roomName = Model.of((String)null);
-	@SpringBean
-	private InterviewConverter interviewConverter;
-	@SpringBean
-	private RecordingConverter recordingConverter;
+	private final Label dateLbl = new Label("recordEnd", Model.of(""));
+	private final Label roomNameLbl = new Label("roomName", Model.of(""));
 	@SpringBean
 	private RoomDao roomDao;
 	@SpringBean
@@ -50,13 +45,13 @@ public class VideoInfo extends Panel {
 
 	public VideoInfo(String id) {
 		super(id);
-		setDefaultModel(rm);
+		setDefaultModel(new CompoundPropertyModel<>(new Recording()));
 	}
 
 	public VideoInfo update(AjaxRequestTarget target, BaseFileItem file) {
 		if (file instanceof Recording) {
 			Recording r = (Recording)file;
-			rm.setObject(r);
+			setDefaultModelObject(file);
 			try {
 				String name = null;
 				if (r.getRoomId() != null) {
@@ -65,7 +60,8 @@ public class VideoInfo extends Panel {
 						name = room.getName();
 					}
 				}
-				roomName.setObject(name);
+				dateLbl.setDefaultModelObject(getDateFormat().format(r.getRecordEnd()));
+				roomNameLbl.setDefaultModelObject(name);
 			} catch (Exception e) {
 				//no-op
 			}
@@ -78,20 +74,13 @@ public class VideoInfo extends Panel {
 	}
 
 	@Override
-	protected void onDetach() {
-		rm.detach();
-		roomName.detach();
-		super.onDetach();
-	}
-
-	@Override
 	protected void onInitialize() {
 		super.onInitialize();
 		add(form.setOutputMarkupId(true));
 		form.add(new Label("name")
 				, new Label("duration")
-				, new Label("recordEnd")
-				, new Label("roomName", roomName));
+				, dateLbl
+				, roomNameLbl);
 
 		update(null, null);
 	}

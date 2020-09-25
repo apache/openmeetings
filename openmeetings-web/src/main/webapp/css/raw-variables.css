@@ -39,7 +39,7 @@ body.no-menu {
 }
 .file-tree {
 	--tree-header-height: 36px;
-	--tree-footer-height: 50px;
+	--tree-footer-height: 60px;
 }
 .main.room {
 	--header-height: 0px;

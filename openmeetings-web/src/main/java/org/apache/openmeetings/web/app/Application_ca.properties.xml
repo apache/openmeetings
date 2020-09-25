@@ -424,7 +424,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1259"><![CDATA[Add folders and organize your messages!]]></entry>
 	<entry key="1261"><![CDATA[Add]]></entry>
 	<entry key="1262"><![CDATA[Delete folder]]></entry>
-	<entry key="1268"><![CDATA[The user does not share his personal contact data.]]></entry>
+	<entry key="1268"><![CDATA[The user does not share personal contact data.]]></entry>
 	<entry key="1269"><![CDATA[The user shares their personal contact data only to contacts.]]></entry>
 	<entry key="1287"><![CDATA[Choose your nickname]]></entry>
 	<entry key="1296"><![CDATA[Member since]]></entry>
@@ -648,6 +648,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="error.type.error"><![CDATA[Error]]></entry>
 	<entry key="error.type.info"><![CDATA[Missatge]]></entry>
 	<entry key="error.unknown"><![CDATA[Error desconegut. Enviï aquesta informació a l'administrador del sistema.]]></entry>
+	<entry key="file.name.interview"><![CDATA[Interview]]></entry>
+	<entry key="file.name.recording"><![CDATA[Recording]]></entry>
 	<entry key="files.download.jpg"><![CDATA[JPG]]></entry>
 	<entry key="files.download.original"><![CDATA[Original]]></entry>
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>

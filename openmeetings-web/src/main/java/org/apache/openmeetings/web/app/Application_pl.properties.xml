@@ -648,6 +648,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="error.type.error"><![CDATA[Informacja]]></entry>
 	<entry key="error.type.info"><![CDATA[Błąd]]></entry>
 	<entry key="error.unknown"><![CDATA[Nieznany błąd. Proszę poinformować administratora.]]></entry>
+	<entry key="file.name.interview"><![CDATA[Interview]]></entry>
+	<entry key="file.name.recording"><![CDATA[Recording]]></entry>
 	<entry key="files.download.jpg"><![CDATA[JPG]]></entry>
 	<entry key="files.download.original"><![CDATA[Oryginał]]></entry>
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>
