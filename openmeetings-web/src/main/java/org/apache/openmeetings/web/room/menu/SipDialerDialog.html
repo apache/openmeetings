@@ -20,34 +20,34 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
+<wicket:extend>
 	<div class="sip">
 		<div class="button-row">
 			<form wicket:id="form">
 				<input wicket:id="number" class="sip-number" type="text"/>
-				<span id="sip-dialer-btn-erase">&#8592;</span>
+				<span id="sip-dialer-btn-erase" class="btn btn-outline-danger">&#8592;</span>
 				<input type="submit" wicket:id="submit" class="invisible-form-component"/>
 			</form>
 		</div>
 		<div class="button-row">
-			<button id="sip-dialer-btn-7" data-value="7">7</button>
-			<button id="sip-dialer-btn-8" data-value="8">8</button>
-			<button id="sip-dialer-btn-9" data-value="9">9</button>
+			<button id="sip-dialer-btn-7" class="btn btn-outline-secondary" data-value="7">7</button>
+			<button id="sip-dialer-btn-8" class="btn btn-outline-secondary" data-value="8">8</button>
+			<button id="sip-dialer-btn-9" class="btn btn-outline-secondary" data-value="9">9</button>
 		</div>
 		<div class="button-row">
-			<button id="sip-dialer-btn-4" data-value="4">4</button>
-			<button id="sip-dialer-btn-5" data-value="5">5</button>
-			<button id="sip-dialer-btn-6" data-value="6">6</button>
+			<button id="sip-dialer-btn-4" class="btn btn-outline-secondary" data-value="4">4</button>
+			<button id="sip-dialer-btn-5" class="btn btn-outline-secondary" data-value="5">5</button>
+			<button id="sip-dialer-btn-6" class="btn btn-outline-secondary" data-value="6">6</button>
 		</div>
 		<div class="button-row">
-			<button id="sip-dialer-btn-1" data-value="1">1</button>
-			<button id="sip-dialer-btn-2" data-value="2">2</button>
-			<button id="sip-dialer-btn-3" data-value="3">3</button>
+			<button id="sip-dialer-btn-1" class="btn btn-outline-secondary" data-value="1">1</button>
+			<button id="sip-dialer-btn-2" class="btn btn-outline-secondary" data-value="2">2</button>
+			<button id="sip-dialer-btn-3" class="btn btn-outline-secondary" data-value="3">3</button>
 		</div>
 		<div class="button-row">
-			<button id="sip-dialer-btn-0" data-value="0">0</button>
+			<button id="sip-dialer-btn-0" class="btn btn-outline-secondary" data-value="0">0</button>
 		</div>
 	</div>
 	<div wicket:id="feedback"></div>
-</wicket:panel>
+</wicket:extend>
 </html>

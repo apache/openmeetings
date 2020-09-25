@@ -157,8 +157,11 @@ var Room = (function() {
 		Wicket.Event.subscribe("/websocket/error", _close);
 		$(window).on('keydown.openmeetings', _preventKeydown);
 		$(window).on('keyup.openmeetings', _keyHandler);
+		$(window).on('keydown.om-sip', _sipKeyDown);
+		$(window).on('keyup.om-sip', _sipKeyUp);
 		$(document).click(_mouseHandler);
 		_addNoSleep();
+		_initSip();
 	}
 	function _addNoSleep() {
 		_removeNoSleep();
@@ -188,6 +191,8 @@ var Room = (function() {
 		$('.ui-dialog.user-video').remove();
 		$(window).off('keyup.openmeetings');
 		$(window).off('keydown.openmeetings');
+		$(window).off('keydown.om-sip');
+		$(window).off('keyup.om-sip');
 		$(document).off('click', _mouseHandler);
 		sb = undefined;
 		Sharer.close();
@@ -460,6 +465,50 @@ var Room = (function() {
 		}
 		VideoManager.update(c)
 	}
+	function __addSipText(v) {
+		const txt = $('.sip-number');
+		txt.val(txt.val() + v);
+	}
+	function __eraseSipText() {
+		const txt = $('.sip-number')
+			, t = txt.val();
+		if (!!t) {
+			txt.val(t.substring(0, t.length - 1));
+		}
+	}
+	function _initSip() {
+		$('.sip .button-row button').off().click(function() {
+			__addSipText($(this).data('value'));
+		});
+		$('#sip-dialer-btn-erase').off().click(__eraseSipText);
+	}
+	function _sipGetKey(evt) {
+		let k = -1;
+		if (evt.keyCode > 47 && evt.keyCode < 58) {
+			k = evt.keyCode - 48;
+		}
+		if (evt.keyCode > 95 && evt.keyCode < 106) {
+			k = evt.keyCode - 96;
+		}
+		return k;
+	}
+	function _sipKeyDown(evt) {
+		const k = _sipGetKey(evt);
+		if (k > 0) {
+			$('#sip-dialer-btn-' + k).addClass('bg-warning');
+		}
+	}
+	function _sipKeyUp(evt) {
+		if (evt.key === 'Backspace') {
+			__eraseSipText();
+		} else {
+			const k = _sipGetKey(evt);
+			if (k > 0) {
+				$('#sip-dialer-btn-' + k).removeClass('bg-warning');
+				__addSipText(k);
+			}
+		}
+	}
 
 	// Let's re-style jquery-ui dialogs and buttons
 	$.extend($.ui.dialog.prototype.options.classes, {
@@ -509,39 +558,6 @@ var Room = (function() {
 	return self;
 })();
 /***** functions required by SIP   ******/
-function sipBtnClick() {
-	const txt = $('.sip-number');
-	txt.val(txt.val() + $(this).data('value'));
-}
-function sipBtnEraseClick() {
-	const txt = $('.sip-number')
-		, t = txt.val();
-	if (!!t) {
-		txt.val(t.substring(0, t.length - 1));
-	}
-}
-function sipGetKey(evt) {
-	let k = -1;
-	if (evt.keyCode > 47 && evt.keyCode < 58) {
-		k = evt.keyCode - 48;
-	}
-	if (evt.keyCode > 95 && evt.keyCode < 106) {
-		k = evt.keyCode - 96;
-	}
-	return k;
-}
-function sipKeyDown(evt) {
-	const k = sipGetKey(evt);
-	if (k > 0) {
-		$('#sip-dialer-btn-' + k).addClass('ui-state-active');
-	}
-}
-function sipKeyUp(evt) {
-	const k = sipGetKey(evt);
-	if (k > 0) {
-		$('#sip-dialer-btn-' + k).removeClass('ui-state-active');
-	}
-}
 function typingActivity(uid, active) {
 	const u = Room.getClient(uid).find('.typing-activity');
 	if (active) {
@@ -550,8 +566,3 @@ function typingActivity(uid, active) {
 		u.removeClass("typing");
 	}
 }
-$(function() {
-	$('.sip').on('keydown', sipKeyDown).on('keyup', sipKeyUp);
-	$('.sip .button-row button').button().click(sipBtnClick);
-	$('#sip-dialer-btn-erase').button().click(sipBtnEraseClick);
-});
