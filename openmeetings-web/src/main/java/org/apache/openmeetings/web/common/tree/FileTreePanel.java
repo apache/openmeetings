@@ -44,6 +44,7 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.confirmation.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.confirmation.ConfirmationDialog;
@@ -98,6 +99,7 @@ public abstract class FileTreePanel extends Panel {
 	private BaseFileItem lastSelected = null;
 	private Map<String, BaseFileItem> selected = new HashMap<>();
 	private File dwnldFile;
+	private String dwnldName;
 	final AjaxDownloadBehavior downloader = new AjaxDownloadBehavior(new IResource() {
 		private static final long serialVersionUID = 1L;
 
@@ -110,6 +112,7 @@ public abstract class FileTreePanel extends Panel {
 				protected ResourceResponse createResourceResponse(Attributes attr, Path path) {
 					ResourceResponse response = super.createResourceResponse(attr, path);
 					response.setCacheDuration(ZERO);
+					response.setFileName(dwnldName);
 					return response;
 				}
 			}.respond(attributes);
@@ -290,6 +293,7 @@ public abstract class FileTreePanel extends Panel {
 						? fi.getOriginal() : fi.getFile(ext);
 				if (f != null && f.exists()) {
 					dwnldFile = f;
+					dwnldName = fi.getName() + "." + OmFileHelper.getFileExt(f.getName());
 					downloader.initiate(target);
 				}
 			}
