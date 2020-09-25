@@ -26,6 +26,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -53,6 +54,8 @@ class TestRoomFlowMocked extends BaseMockedTest {
 	private RecordingDao recDao;
 	@Mock
 	private IClientManager cm;
+	@Mock
+	private IApplication app;
 
 	@Override
 	@BeforeEach

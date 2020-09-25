@@ -29,6 +29,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -58,6 +59,8 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 	private RecordingDao recDao;
 	@Mock
 	private IClientManager cm;
+	@Mock
+	private IApplication app;
 
 	//This variable holds a reference to the current client in the room
 	private Client c;
