@@ -146,6 +146,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	@Override
 	public void invalidate() {
+		log.debug("[{}] invalidating session", getId());
 		cm.invalidate(userId, getId());
 		super.invalidate();
 		userId = null;
@@ -220,7 +221,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	public void checkHashes(StringValue secure, StringValue invitation) {
-		log.debug("checkHashes, secure: '{}', invitation: '{}'", secure, invitation);
+		log.debug("[{} ? {}] checkHashes, secure: '{}', invitation: '{}'", getId(), isTemporary(), secure, invitation);
 		try {
 			log.debug("checkHashes, has soap in session ? '{}'", (soap != null));
 			if (!secure.isEmpty() && (soap == null || !soap.getHash().equals(secure.toString()))) {
