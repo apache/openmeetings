@@ -34,12 +34,19 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
  */
 public class MenuPanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	private final Navbar navbar = new Navbar("menu");
 
 	public MenuPanel(String id, List<INavbarComponent> menus) {
 		super(id);
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
-		add(new Navbar("menu").addComponents(menus));
+		navbar.addComponents(menus);
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(navbar);
 	}
 
 	public void update(IPartialPageRequestHandler target) {

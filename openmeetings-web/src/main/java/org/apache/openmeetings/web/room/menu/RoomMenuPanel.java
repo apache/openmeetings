@@ -50,7 +50,7 @@ import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ImagePanel;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
-import org.apache.openmeetings.web.common.menu.RoomMenuItem;
+import org.apache.openmeetings.web.common.menu.OmMenuItem;
 import org.apache.openmeetings.web.room.OmTimerBehavior;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.AttributeModifier;
@@ -94,8 +94,8 @@ public class RoomMenuPanel extends Panel {
 		}
 	};
 	private final RoomPanel room;
-	private RoomMenuItem exitMenuItem;
-	private RoomMenuItem filesMenu;
+	private OmMenuItem exitMenuItem;
+	private OmMenuItem filesMenu;
 	private final ImagePanel logo = new ImagePanel("logo") {
 		private static final long serialVersionUID = 1L;
 
@@ -141,7 +141,7 @@ public class RoomMenuPanel extends Panel {
 
 	@Override
 	protected void onInitialize() {
-		exitMenuItem = new RoomMenuItem(getString("308"), getString("309"), FontAwesome5IconType.sign_out_alt_s) {
+		exitMenuItem = new OmMenuItem(getString("308"), getString("309"), FontAwesome5IconType.sign_out_alt_s) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -150,7 +150,7 @@ public class RoomMenuPanel extends Panel {
 				exit(target);
 			}
 		};
-		filesMenu = new RoomMenuItem(getString("245"), null, false);
+		filesMenu = new OmMenuItem(getString("245"), null, false);
 		actionsSubMenu.init();
 		pollsSubMenu.init();
 		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(isVisible()));
@@ -188,7 +188,7 @@ public class RoomMenuPanel extends Panel {
 		exitMenuItem.setVisible(false);
 		menu.add(exitMenuItem);
 
-		filesMenu.add(new RoomMenuItem(getString("15"), getString("1479")) {
+		filesMenu.add(new OmMenuItem(getString("15"), getString("1479")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

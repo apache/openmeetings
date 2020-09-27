@@ -41,20 +41,34 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarDropDownBut
 public class OmMenuItem implements INavbarComponent {
 	private static final long serialVersionUID = 1L;
 
-	private String title;
-	private String desc;
-	private IconType icon;
-	private List<INavbarComponent> items = new ArrayList<>(0);
+	private final String title;
+	private final String desc;
+	private final IconType icon;
+	private final List<INavbarComponent> items = new ArrayList<>(0);
 	private boolean visible = true;
 
-	public OmMenuItem(String title, List<INavbarComponent> items) {
-		this.title = title;
-		this.items = items;
+	public OmMenuItem(String title, String desc) {
+		this(title, desc, null, List.of());
 	}
 
-	public OmMenuItem(String title, String desc) {
+	public OmMenuItem(String title, String desc, boolean visible) {
+		this(title, desc);
+		this.visible = visible;
+	}
+
+	public OmMenuItem(String title, List<INavbarComponent> items) {
+		this(title, null, null, items);
+	}
+
+	public OmMenuItem(String title, String desc, IconType icon) {
+		this(title, desc, icon, List.of());
+	}
+
+	public OmMenuItem(String title, String desc, IconType icon, List<INavbarComponent> items) {
 		this.title = title;
 		this.desc = desc;
+		this.icon = icon;
+		this.items.addAll(items);
 	}
 
 	public OmMenuItem add(INavbarComponent item) {
@@ -64,14 +78,6 @@ public class OmMenuItem implements INavbarComponent {
 
 	public String getDesc() {
 		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
-
-	public void setIcon(IconType icon) {
-		this.icon = icon;
 	}
 
 	public void setVisible(boolean visible) {
@@ -94,7 +100,6 @@ public class OmMenuItem implements INavbarComponent {
 			};
 		}
 		item.add(AttributeModifier.append(ATTR_TITLE, desc));
-		item.setVisible(visible);
 		return item;
 	}
 
@@ -113,6 +118,7 @@ public class OmMenuItem implements INavbarComponent {
 		if (topLevel) {
 			link.add(AttributeModifier.append(ATTR_CLASS, "nav-link"));
 		}
+		link.setVisible(visible);
 		return link.setIconType(icon);
 	}
 

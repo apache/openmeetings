@@ -31,7 +31,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.web.app.QuickPollManager;
-import org.apache.openmeetings.web.common.menu.RoomMenuItem;
+import org.apache.openmeetings.web.common.menu.OmMenuItem;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.poll.CreatePollDialog;
 import org.apache.openmeetings.web.room.poll.PollResultsDialog;
@@ -58,11 +58,11 @@ public class PollsSubMenu implements Serializable {
 	private final CreatePollDialog createPoll;
 	private final VoteDialog vote;
 	private final PollResultsDialog pollResults;
-	private RoomMenuItem pollsMenu;
-	private RoomMenuItem pollQuickMenuItem;
-	private RoomMenuItem pollCreateMenuItem;
-	private RoomMenuItem pollVoteMenuItem;
-	private RoomMenuItem pollResultMenuItem;
+	private OmMenuItem pollsMenu;
+	private OmMenuItem pollQuickMenuItem;
+	private OmMenuItem pollCreateMenuItem;
+	private OmMenuItem pollVoteMenuItem;
+	private OmMenuItem pollResultMenuItem;
 	private final AbstractDefaultAjaxBehavior quickPollAction = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
@@ -104,8 +104,8 @@ public class PollsSubMenu implements Serializable {
 	}
 
 	public void init() {
-		pollsMenu = new RoomMenuItem(mp.getString("menu.polls"), null, false);
-		pollQuickMenuItem = new RoomMenuItem(mp.getString("menu.polls.quick.title"), mp.getString("menu.polls.quick.descr"), false) {
+		pollsMenu = new OmMenuItem(mp.getString("menu.polls"), null, false);
+		pollQuickMenuItem = new OmMenuItem(mp.getString("menu.polls.quick.title"), mp.getString("menu.polls.quick.descr"), false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -113,7 +113,7 @@ public class PollsSubMenu implements Serializable {
 				qpollManager.start(room.getClient());
 			}
 		};
-		pollCreateMenuItem = new RoomMenuItem(mp.getString("24"), mp.getString("1483"), false) {
+		pollCreateMenuItem = new OmMenuItem(mp.getString("24"), mp.getString("1483"), false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -122,7 +122,7 @@ public class PollsSubMenu implements Serializable {
 				createPoll.show(target);
 			}
 		};
-		pollVoteMenuItem = new RoomMenuItem(mp.getString("32"), mp.getString("1485"), false) {
+		pollVoteMenuItem = new OmMenuItem(mp.getString("32"), mp.getString("1485"), false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -134,7 +134,7 @@ public class PollsSubMenu implements Serializable {
 				}
 			}
 		};
-		pollResultMenuItem = new RoomMenuItem(mp.getString("37"), mp.getString("1484"), false) {
+		pollResultMenuItem = new OmMenuItem(mp.getString("37"), mp.getString("1484"), false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -146,7 +146,7 @@ public class PollsSubMenu implements Serializable {
 		mp.add(quickPollAction);
 	}
 
-	RoomMenuItem getMenu() {
+	OmMenuItem getMenu() {
 		pollsMenu
 			.add(pollQuickMenuItem)
 			.add(pollCreateMenuItem)

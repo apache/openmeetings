@@ -29,7 +29,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.app.WhiteboardManager;
 import org.apache.openmeetings.web.common.InvitationDialog;
-import org.apache.openmeetings.web.common.menu.RoomMenuItem;
+import org.apache.openmeetings.web.common.menu.OmMenuItem;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.injection.Injector;
@@ -41,16 +41,16 @@ public class ActionsSubMenu implements Serializable {
 	private final RoomMenuPanel mp;
 	private InvitationDialog invite;
 	private SipDialerDialog sipDialer;
-	private RoomMenuItem actionsMenu;
-	private RoomMenuItem inviteMenuItem;
-	private RoomMenuItem shareMenuItem;
-	private RoomMenuItem applyModerMenuItem;
-	private RoomMenuItem applyWbMenuItem;
-	private RoomMenuItem applyAvMenuItem;
-	private RoomMenuItem sipDialerMenuItem;
-	private RoomMenuItem downloadPngMenuItem;
-	private RoomMenuItem downloadPdfMenuItem;
-	private RoomMenuItem resetWb;
+	private OmMenuItem actionsMenu;
+	private OmMenuItem inviteMenuItem;
+	private OmMenuItem shareMenuItem;
+	private OmMenuItem applyModerMenuItem;
+	private OmMenuItem applyWbMenuItem;
+	private OmMenuItem applyAvMenuItem;
+	private OmMenuItem sipDialerMenuItem;
+	private OmMenuItem downloadPngMenuItem;
+	private OmMenuItem downloadPdfMenuItem;
+	private OmMenuItem resetWb;
 	private final boolean visible;
 	@SpringBean
 	private WhiteboardManager wbManager;
@@ -67,8 +67,8 @@ public class ActionsSubMenu implements Serializable {
 		mp.add(invite = new InvitationDialog("invite", rif));
 		rif.setDialog(invite);
 		mp.add(sipDialer = new SipDialerDialog("sipDialer", room));
-		actionsMenu = new RoomMenuItem(mp.getString("635"), null, false);
-		inviteMenuItem = new RoomMenuItem(mp.getString("213"), mp.getString("1489"), false) {
+		actionsMenu = new OmMenuItem(mp.getString("635"), null, false);
+		inviteMenuItem = new OmMenuItem(mp.getString("213"), mp.getString("1489"), false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -77,7 +77,7 @@ public class ActionsSubMenu implements Serializable {
 				invite.show(target);
 			}
 		};
-		shareMenuItem = new RoomMenuItem(mp.getString("239"), mp.getString("1480"), false) {
+		shareMenuItem = new OmMenuItem(mp.getString("239"), mp.getString("1480"), false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -85,7 +85,7 @@ public class ActionsSubMenu implements Serializable {
 				target.appendJavaScript("Sharer.open();");
 			}
 		};
-		applyModerMenuItem = new RoomMenuItem(mp.getString("784"), mp.getString("1481"), false) {
+		applyModerMenuItem = new OmMenuItem(mp.getString("784"), mp.getString("1481"), false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -93,7 +93,7 @@ public class ActionsSubMenu implements Serializable {
 				room.requestRight(Room.Right.MODERATOR, target);
 			}
 		};
-		applyWbMenuItem = new RoomMenuItem(mp.getString("785"), mp.getString("1492"), false) {
+		applyWbMenuItem = new OmMenuItem(mp.getString("785"), mp.getString("1492"), false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -101,7 +101,7 @@ public class ActionsSubMenu implements Serializable {
 				room.requestRight(Room.Right.WHITEBOARD, target);
 			}
 		};
-		applyAvMenuItem = new RoomMenuItem(mp.getString("786"), mp.getString("1482"), false) {
+		applyAvMenuItem = new OmMenuItem(mp.getString("786"), mp.getString("1482"), false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -109,7 +109,7 @@ public class ActionsSubMenu implements Serializable {
 				room.requestRight(Room.Right.VIDEO, target);
 			}
 		};
-		sipDialerMenuItem = new RoomMenuItem(mp.getString("1447"), mp.getString("1488"), false) {
+		sipDialerMenuItem = new OmMenuItem(mp.getString("1447"), mp.getString("1488"), false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -117,7 +117,7 @@ public class ActionsSubMenu implements Serializable {
 				sipDialer.show(target);
 			}
 		};
-		downloadPngMenuItem = new RoomMenuItem(mp.getString("download.png"), mp.getString("download.png")) {
+		downloadPngMenuItem = new OmMenuItem(mp.getString("download.png"), mp.getString("download.png")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -125,7 +125,7 @@ public class ActionsSubMenu implements Serializable {
 				download(target, EXTENSION_PNG);
 			}
 		};
-		downloadPdfMenuItem = new RoomMenuItem(mp.getString("download.pdf"), mp.getString("download.pdf")) {
+		downloadPdfMenuItem = new OmMenuItem(mp.getString("download.pdf"), mp.getString("download.pdf")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -133,7 +133,7 @@ public class ActionsSubMenu implements Serializable {
 				download(target, EXTENSION_PDF);
 			}
 		};
-		resetWb = new RoomMenuItem(mp.getString("reset.whiteboard"), mp.getString("reset.whiteboard")) {
+		resetWb = new OmMenuItem(mp.getString("reset.whiteboard"), mp.getString("reset.whiteboard")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -143,7 +143,7 @@ public class ActionsSubMenu implements Serializable {
 		};
 	}
 
-	RoomMenuItem getMenu() {
+	OmMenuItem getMenu() {
 		actionsMenu
 			.add(inviteMenuItem)
 			.add(shareMenuItem)
