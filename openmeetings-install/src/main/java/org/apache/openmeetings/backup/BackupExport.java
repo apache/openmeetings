@@ -369,7 +369,10 @@ public class BackupExport {
 		writeList(zos, "chat_messages.xml", CHAT_LIST_NODE, list);
 	}
 
-	private static <T> ByteArrayOutputStream stream(String listElement, List<T> list) throws Exception {
+	/*
+	 * Package private for tests
+	 */
+	static <T> ByteArrayOutputStream stream(String listElement, List<T> list) throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream(10 * 1024); //10K
 		writeList(baos, listElement, list);
 		return baos;
@@ -400,12 +403,8 @@ public class BackupExport {
 				marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 				marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
 				for (T t : list) {
-					try {
-						marshaller.marshal(t, sw);
-						sw.write("\n");
-					} catch (Exception e) {
-						log.debug("Exception While writing node of type: {}", t.getClass(), e);
-					}
+					marshaller.marshal(t, sw);
+					sw.write("\n");
 				}
 			}
 			sw.write("</" + listElement + ">\n");

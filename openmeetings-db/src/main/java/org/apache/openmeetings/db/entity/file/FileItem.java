@@ -60,6 +60,16 @@ public class FileItem extends BaseFileItem {
 	@XmlElement(name = "externalId", required = false)
 	private String externalId;
 
+	/**
+	 * Method to get ID
+	 *
+	 * required to be overridden for valid export
+	 */
+	@Override
+	public Long getId() {
+		return super.getId();
+	}
+
 	@Override
 	@XmlElement(name = "fileExplorerItemId")
 	@XmlJavaTypeAdapter(LongAdapter.class)

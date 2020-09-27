@@ -18,6 +18,12 @@
  */
 package org.apache.openmeetings.backup;
 
+import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.db.bind.Constants.FILE_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.USER_LIST_NODE;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -28,14 +34,21 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
 
 class TestExport extends AbstractJUnitDefaults {
+	@Autowired
+	private FileItemDao fileItemDao;
+
 	@Test
 	void exportMain() throws Exception {
 		BackupExport.main(new String[] {File.createTempFile("gereral", "cfg").getCanonicalPath()});
@@ -60,5 +73,28 @@ class TestExport extends AbstractJUnitDefaults {
 		StringWriter writer = new StringWriter();
 		marshaller.marshal(u, writer);
 		Assertions.assertNotNull(writer.getBuffer());
+	}
+
+	@Test
+	void exportUsers() throws Exception {
+		ByteArrayOutputStream baos = BackupExport.stream(USER_LIST_NODE, userDao.getAllBackupUsers());
+		assertNotNull(baos);
+	}
+
+	@Test
+	void exportFiles() throws Exception {
+		FileItem fld = new FileItem();
+		fld.setName("folder");
+		fld.setHash(randomUUID().toString());
+		fld.setType(BaseFileItem.Type.FOLDER);
+		fileItemDao.update(fld);
+		FileItem f = new FileItem();
+		f.setName("file");
+		f.setHash(randomUUID().toString());
+		f.setParentId(fld.getId());
+		f.setType(BaseFileItem.Type.PRESENTATION);
+		fileItemDao.update(f);
+		ByteArrayOutputStream baos = BackupExport.stream(FILE_LIST_NODE, fileItemDao.get());
+		assertNotNull(baos);
 	}
 }
