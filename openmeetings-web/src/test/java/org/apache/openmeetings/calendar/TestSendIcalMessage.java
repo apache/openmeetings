@@ -19,15 +19,18 @@
 package org.apache.openmeetings.calendar;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.activation.DataHandler;
@@ -175,8 +178,7 @@ class TestSendIcalMessage extends AbstractJUnitDefaults {
 			Map<String, String> attendeeList = handler.getAttendeeData(email, username, invitor);
 			Map<String, String> organizerAttendee = handler.getAttendeeData(recipients, "seba-test", true);
 
-			List<Map<String, String>> atts = new ArrayList<>();
-			atts.add(attendeeList);
+			List<Map<String, String>> atts = List.of(attendeeList);
 
 			// Create ICal Message
 			String meetingId = handler.addNewMeeting(start.getTime(), end.getTime(), "test event",
@@ -230,5 +232,16 @@ class TestSendIcalMessage extends AbstractJUnitDefaults {
 
 		// Transport trans = session.getTransport("smtp");
 		Transport.send(mimeMessage);
+	}
+
+	@Test
+	void testTeamLbl() {
+		final String prevAppName = getApplicationName();
+		try {
+			setApplicationName("AAA");
+			assertEquals("AAA-Team", app.getOmString("511", Locale.ENGLISH));
+		} finally {
+			setApplicationName(prevAppName);
+		}
 	}
 }

@@ -594,11 +594,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 	}
 
-	@Override
-	public long getOmLanguage() {
-		return getLanguage();
-	}
-
 	private static void checkIsInvalid() {
 		WebSession session = get();
 		if (isInvaldSession(session.getId())) {

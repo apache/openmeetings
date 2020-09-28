@@ -199,7 +199,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[إذا واجهتك مشاكل مع الرابط، الرجاء نسخه و من ثم لصقه في المتصفح:]]></entry>
 	<entry key="506"><![CDATA[تسجيل {0}]]></entry>
 	<entry key="507"><![CDATA[بياناتك:]]></entry>
-	<entry key="511"><![CDATA[فريق - OpenMeeting]]></entry>
+	<entry key="511"><![CDATA[فريق - {0}]]></entry>
 	<entry key="512"><![CDATA[إنشاء حساب OpenMeeting]]></entry>
 	<entry key="513"><![CDATA[إعادة ضبط كلمة مرور - OpenMeeting]]></entry>
 	<entry key="514"><![CDATA[انقر على هذا الرابط من أجل إدخال كلمة مرور جديدة:]]></entry>
