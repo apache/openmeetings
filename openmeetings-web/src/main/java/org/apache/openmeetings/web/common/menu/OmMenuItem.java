@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
@@ -98,8 +99,8 @@ public class OmMenuItem implements INavbarComponent {
 					return items.stream().map(mItem -> ((OmMenuItem)mItem).createLink(markupId, false)).collect(Collectors.toList());
 				}
 			};
+			setAttributes(item);
 		}
-		item.add(AttributeModifier.append(ATTR_TITLE, desc));
 		return item;
 	}
 
@@ -118,8 +119,13 @@ public class OmMenuItem implements INavbarComponent {
 		if (topLevel) {
 			link.add(AttributeModifier.append(ATTR_CLASS, "nav-link"));
 		}
-		link.setVisible(visible);
+		setAttributes(link);
 		return link.setIconType(icon);
+	}
+
+	private void setAttributes(Component comp) {
+		comp.add(AttributeModifier.append(ATTR_TITLE, desc));
+		comp.setVisible(visible);
 	}
 
 	@Override
