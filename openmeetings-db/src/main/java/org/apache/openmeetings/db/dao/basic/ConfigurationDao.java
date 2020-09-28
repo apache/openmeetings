@@ -296,7 +296,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				reloadPwdCheckUpper();
 				break;
 			case CONFIG_PASS_CHECK_DIGIT:
-				reloadPwdCheckNumber();
+				reloadPwdCheckDigit();
 				break;
 			case CONFIG_PASS_CHECK_SPECIAL:
 				reloadPwdCheckSpecial();
@@ -442,7 +442,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setPwdCheckUpper(getBool(CONFIG_PASS_CHECK_UPPER, true));
 	}
 
-	private void reloadPwdCheckNumber() {
+	private void reloadPwdCheckDigit() {
 		setPwdCheckDigit(getBool(CONFIG_PASS_CHECK_DIGIT, true));
 	}
 
@@ -527,6 +527,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadLoginMinLength();
 		reloadPasswdMinLength();
 		reloadPwdCheckUpper();
+		reloadPwdCheckDigit();
+		reloadPwdCheckSpecial();
 		reloadDefaultGroup();
 		reloadSipContext();
 		reloadFnameMinLength();
