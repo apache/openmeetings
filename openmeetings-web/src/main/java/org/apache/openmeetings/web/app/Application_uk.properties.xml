@@ -190,7 +190,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="442"><![CDATA[Стерти лог чату серверу]]></entry>
 	<entry key="482"><![CDATA[Учасники]]></entry>
 	<entry key="498"><![CDATA[Немає модератора в даній кімнаті, але є учасники. Ви можете стати модератором або чекати]]></entry>
-	<entry key="499"><![CDATA[Зворотній зв'язок {0}]]></entry>
+	<entry key="499"><![CDATA[Зворотній зв''язок {0}]]></entry>
 	<entry key="500"><![CDATA[{0} - Запрошення]]></entry>
 	<entry key="501"><![CDATA[Повідомлення для користувачів:]]></entry>
 	<entry key="502"><![CDATA[Повідомлення:]]></entry>

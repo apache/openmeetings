@@ -19,10 +19,6 @@
 package org.apache.openmeetings.calendar;
 
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -31,11 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 import javax.activation.DataHandler;
 import javax.mail.BodyPart;
@@ -49,7 +41,6 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.core.mail.MailHandler;
-import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.util.mail.ByteArrayDataSource;
 import org.apache.openmeetings.util.mail.IcalHandler;
 import org.junit.jupiter.api.Test;
@@ -237,21 +228,5 @@ class TestSendIcalMessage extends AbstractJUnitDefaults {
 
 		// Transport trans = session.getTransport("smtp");
 		Transport.send(mimeMessage);
-	}
-
-	@Test
-	void testTeamLbl() {
-		final String newAppName = "AAAAA";
-		final String prevAppName = getApplicationName();
-		try {
-			setApplicationName(newAppName);
-			List<Locale> locales = LabelDao.getLanguages().stream().map(Entry::getValue).collect(Collectors.toList());
-			Locale l = locales.get(new Random().nextInt(locales.size()));
-			final String str = app.getOmString("511", l);
-			assertNotNull(str);
-			assertTrue(str.contains(newAppName));
-		} finally {
-			setApplicationName(prevAppName);
-		}
 	}
 }

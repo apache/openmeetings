@@ -204,7 +204,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="513"><![CDATA[{0} - Reset Password]]></entry>
 	<entry key="514"><![CDATA[Kliknite na tento link pre zadanie nového hesla]]></entry>
 	<entry key="515"><![CDATA[Kliknite sem pre zadanie nového hesla]]></entry>
-	<entry key="517"><![CDATA[Reset hesla]]></entry>
+	<entry key="517"><![CDATA[{0} Reset hesla]]></entry>
 	<entry key="524"><![CDATA[Chránené heslom]]></entry>
 	<entry key="526"><![CDATA[Validačná doba]]></entry>
 	<entry key="527"><![CDATA[Nekonečné]]></entry>

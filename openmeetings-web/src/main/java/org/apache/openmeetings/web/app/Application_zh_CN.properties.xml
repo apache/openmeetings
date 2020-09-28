@@ -360,14 +360,14 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[时区]]></entry>
 	<entry key="1146"><![CDATA[详细描述]]></entry>
 	<entry key="1147"><![CDATA[创建者]]></entry>
-	<entry key="1151"><![CDATA[新会议:]]></entry>
+	<entry key="1151"><![CDATA[新会议: {0}]]></entry>
 	<entry key="1152"><![CDATA[详细情况]]></entry>
 	<entry key="1153"><![CDATA[开始时间:]]></entry>
 	<entry key="1154"><![CDATA[结束时间:]]></entry>
-	<entry key="1155"><![CDATA[会议变更:]]></entry>
+	<entry key="1155"><![CDATA[会议变更: {0}]]></entry>
 	<entry key="1156"><![CDATA[主持人:]]></entry>
-	<entry key="1157"><![CDATA[会议取消:]]></entry>
-	<entry key="1158"><![CDATA[会议提醒:]]></entry>
+	<entry key="1157"><![CDATA[会议取消: {0}]]></entry>
+	<entry key="1158"><![CDATA[会议提醒: {0}]]></entry>
 	<entry key="1159"><![CDATA[社区设置]]></entry>
 	<entry key="1160"><![CDATA[联系信息对于任何人都可见]]></entry>
 	<entry key="1162"><![CDATA[供职单位]]></entry>
@@ -392,7 +392,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1191"><![CDATA[拒绝]]></entry>
 	<entry key="1192"><![CDATA[您好,]]></entry>
 	<entry key="1193"><![CDATA[想把您添加为联系人.]]></entry>
-	<entry key="1194"><![CDATA[检查您的联系人请求消息，通过点击链接来接受或者拒绝请求]]></entry>
+	<entry key="1194"><![CDATA[检查您的联系人请求消息 {0}，通过点击链接来接受或者拒绝请求]]></entry>
 	<entry key="1196"><![CDATA[联系人列表]]></entry>
 	<entry key="1198"><![CDATA[已经确认了您的请求!]]></entry>
 	<entry key="1202"><![CDATA[来自]]></entry>

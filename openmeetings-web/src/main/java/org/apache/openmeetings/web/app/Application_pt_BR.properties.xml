@@ -199,12 +199,12 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="505"><![CDATA[se você tiver problemas com o link, por favor copie e cole isso no seu browser:]]></entry>
 	<entry key="506"><![CDATA[{0} Inscrição]]></entry>
 	<entry key="507"><![CDATA[Seus dados:]]></entry>
-	<entry key="511"><![CDATA[TVQWEB - Equipe]]></entry>
-	<entry key="512"><![CDATA[TVQWEB - Inscrição]]></entry>
-	<entry key="513"><![CDATA[TVQWEB - Redefinição de Senha]]></entry>
+	<entry key="511"><![CDATA[{0} - Equipe]]></entry>
+	<entry key="512"><![CDATA[{0} - Inscrição]]></entry>
+	<entry key="513"><![CDATA[{0} - Redefinição de Senha]]></entry>
 	<entry key="514"><![CDATA[Clique neste link para criar uma nova senha:]]></entry>
 	<entry key="515"><![CDATA[Click aqui para criar umanova senha]]></entry>
-	<entry key="517"><![CDATA[TVQWEB - Redefinição de Senha]]></entry>
+	<entry key="517"><![CDATA[{0} - Redefinição de Senha]]></entry>
 	<entry key="524"><![CDATA[Proteger com senha]]></entry>
 	<entry key="526"><![CDATA[Período de validade]]></entry>
 	<entry key="527"><![CDATA[Final]]></entry>

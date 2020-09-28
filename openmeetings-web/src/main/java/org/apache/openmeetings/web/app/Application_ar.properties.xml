@@ -200,11 +200,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="506"><![CDATA[تسجيل {0}]]></entry>
 	<entry key="507"><![CDATA[بياناتك:]]></entry>
 	<entry key="511"><![CDATA[فريق - {0}]]></entry>
-	<entry key="512"><![CDATA[إنشاء حساب OpenMeeting]]></entry>
-	<entry key="513"><![CDATA[إعادة ضبط كلمة مرور - OpenMeeting]]></entry>
+	<entry key="512"><![CDATA[إنشاء حساب {0}]]></entry>
+	<entry key="513"><![CDATA[إعادة ضبط كلمة مرور - {0}]]></entry>
 	<entry key="514"><![CDATA[انقر على هذا الرابط من أجل إدخال كلمة مرور جديدة:]]></entry>
 	<entry key="515"><![CDATA[انقر على هنا من أجل إدخال كلمة مرور جديدة]]></entry>
-	<entry key="517"><![CDATA[إعادة ضبط كلمة مرور الموقع]]></entry>
+	<entry key="517"><![CDATA[إعادة ضبط كلمة مرور الموقع{0}]]></entry>
 	<entry key="524"><![CDATA[محمي عن طريق كلمة مرور]]></entry>
 	<entry key="526"><![CDATA[مدة الصلاحية]]></entry>
 	<entry key="527"><![CDATA[أبدي]]></entry>

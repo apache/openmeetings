@@ -954,7 +954,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="wb.tool.white-out"><![CDATA[White-Out]]></entry>
 	<entry key="widget.recent.desc"><![CDATA[あなたが最近開設した会議室を表示します。]]></entry>
 	<entry key="widget.recent.title"><![CDATA[最近の会議室]]></entry>
-	<entry key="widget.start.desc"><![CDATA[ウェブ会議プラットホーム「オープン・ミーティングス」<br>たった4ステップでウェブ会議を始められます。<br>カレンダーでウェブ会議の予定を作成することもできます。]]></entry>
+	<entry key="widget.start.desc"><![CDATA[ウェブ会議プラットホーム{0}<br>たった4ステップでウェブ会議を始められます。<br>カレンダーでウェブ会議の予定を作成することもできます。]]></entry>
 	<entry key="widget.start.header"><![CDATA[使用方法:]]></entry>
 	<entry key="widget.start.title"><![CDATA[さあ始めましょう]]></entry>
 	<entry key="wizard.button.finish"><![CDATA[インストール]]></entry>
