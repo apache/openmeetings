@@ -61,7 +61,7 @@ public class VoteDialog extends Modal<RoomPollAnswer> {
 	private static final List<Integer> answers = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 	private PollAnswerForm form;
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
-	private final IModel<String> user = Model.of((String)null);
+	private final Label userLbl = new Label("user", Model.of(""));
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean
@@ -104,7 +104,7 @@ public class VoteDialog extends Modal<RoomPollAnswer> {
 	}
 
 	static String getName(Component c, User u) {
-		return u == null ? "" : (getUserId().equals(u.getId()) ? c.getString("1411") : u.getFirstname() + " " + u.getLastname());
+		return u == null ? "" : (getUserId().equals(u.getId()) ? c.getString("1411") : u.getDisplayName());
 	}
 
 	public void updateModel(IPartialPageRequestHandler target, RoomPoll rp) {
@@ -112,18 +112,12 @@ public class VoteDialog extends Modal<RoomPollAnswer> {
 		a.setRoomPoll(rp);
 		User u = userDao.get(getUserId());
 		a.setVotedUser(u);
-		user.setObject(getName(this, a.getRoomPoll().getCreator()));
+		userLbl.setDefaultModelObject(getName(this, a.getRoomPoll().getCreator()));
 		form.setModelObject(a);
 		boolean typeNum = a.getRoomPoll() != null && RoomPoll.Type.NUMERIC == a.getRoomPoll().getType();
 		form.typeBool.setVisible(!typeNum);
 		form.typeInt.setVisible(typeNum);
 		target.add(form);
-	}
-
-	@Override
-	protected void onDetach() {
-		user.detach();
-		super.onDetach();
 	}
 
 	private class PollAnswerForm extends Form<RoomPollAnswer> {
@@ -139,7 +133,7 @@ public class VoteDialog extends Modal<RoomPollAnswer> {
 		protected void onInitialize() {
 			super.onInitialize();
 			add(feedback.setOutputMarkupId(true));
-			add(new Label("user", user));
+			add(userLbl);
 			add(new Label("roomPoll.question"));
 			add(typeBool.add(new RadioGroup<Boolean>("answer").setRequired(true)
 						.add(new Radio<>("true", Model.of(Boolean.TRUE))).add(new Radio<>("false", Model.of(Boolean.FALSE)))

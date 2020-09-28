@@ -117,7 +117,7 @@ public class UserSearchPanel extends UserBasePanel {
 				User u = item.getModelObject();
 				final long userId = u.getId();
 				item.add(new WebMarkupContainer("status").add(AttributeModifier.append(ATTR_CLASS, cm.isOnline(userId) ? "online" : "offline")));
-				item.add(new Label("name", getName(u)));
+				item.add(new Label("name", u.getDisplayName()));
 				item.add(new Label("tz", getTimeZone(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
@@ -145,10 +145,6 @@ public class UserSearchPanel extends UserBasePanel {
 		handler.appendJavaScript("$('#searchUsersTable .new-msg.om-icon.clickable').off().click(function() {privateMessage($(this).data('user-id'));});");
 		handler.appendJavaScript("$('#searchUsersTable .profile.om-icon.clickable').off().click(function() {showUserInfo($(this).data('user-id'));});");
 		handler.appendJavaScript("$('#searchUsersTable .invite.om-icon.clickable').off().click(function() {inviteUser($(this).data('user-id'));});");
-	}
-
-	private static String getName(User u) {
-		return "" + u.getFirstname() + " " + u.getLastname() + " [" + u.getLogin() + "]";
 	}
 
 	@Override

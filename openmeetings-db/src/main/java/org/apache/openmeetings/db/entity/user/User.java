@@ -664,8 +664,8 @@ public class User extends HistoricalEntity {
 		StringBuilder sb = new StringBuilder();
 		String delim = "";
 		OmLanguage l = LabelDao.getLanguage(languageId);
-		String first = l.isRtl() ? getLastname() : getFirstname();
-		String last = l.isRtl() ? getFirstname() : getLastname();
+		String first = l.isRtl() ? lastname : firstname;
+		String last = l.isRtl() ? firstname : lastname;
 		if (!Strings.isEmpty(first)) {
 			sb.append(first);
 			delim = " ";
@@ -673,8 +673,12 @@ public class User extends HistoricalEntity {
 		if (!Strings.isEmpty(last)) {
 			sb.append(delim).append(last);
 		}
-		if (Strings.isEmpty(sb) && address != null && !Strings.isEmpty(address.getEmail())) {
-			sb.append(delim).append(address.getEmail());
+		if (Strings.isEmpty(sb)) {
+			if (Type.CONTACT == type && address != null && !Strings.isEmpty(address.getEmail())) {
+				sb.append(address.getEmail());
+			} else {
+				sb.append(login);
+			}
 		}
 		if (Strings.isEmpty(sb)) {
 			sb.append(DISPLAY_NAME_NA);
