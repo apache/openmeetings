@@ -22,30 +22,28 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 	<form wicket:id="selForm">
-		<table class="w-100">
-			<tr>
-				<td><wicket:message key="1412"/></td>
-				<td><select class="form-control" wicket:id="polls"></select></td>
-			</tr>
-		</table>
+		<div class="row">
+			<div class="col-4"><wicket:message key="1412"/></div>
+			<select class="custom-select col-7" wicket:id="polls"></select>
+		</div>
 	</form>
 	<form wicket:id="dispForm">
-		<table class="w-100">
-			<tr>
-				<td colspan="2"><span wicket:id="name"></span>&nbsp;<wicket:message key="36"/></td>
-			</tr>
-			<tr>
-				<td colspan="2"><span wicket:id="question"></span></td>
-			</tr>
-			<tr>
-				<td><wicket:message key="39"/>&nbsp;(<span wicket:id="count"></span>)</td>
-				<td><select class="form-control" wicket:id="chartType"></select></td>
-			</tr>
-			<tr>
-				<td><wicket:message key="40"/></td>
-				<td><div wicket:id="chart"></div></td>
-			</tr>
-		</table>
+		<div class="row">
+			<div class="col-11">
+				<span wicket:id="name"></span>&nbsp;<wicket:message key="36"/>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-11"><span wicket:id="question"></span></div>
+		</div>
+		<div class="row">
+			<div class="col-4"><wicket:message key="39"/>&nbsp;(<span wicket:id="count"></span>)</div>
+			<select class="custom-select col-7" wicket:id="chartType"></select>
+		</div>
 	</form>
+	<div class="row">
+		<div class="col-4"><wicket:message key="40"/></div>
+		<div class="col-7" wicket:id="chart" id="room-poll-chart"></div>
+	</div>
 </wicket:extend>
 </html>

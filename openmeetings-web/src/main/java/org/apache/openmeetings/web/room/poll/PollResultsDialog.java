@@ -155,27 +155,22 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 		});
 		clone.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		addButton(OmModalCloseButton.of());
+		add(chartDiv.setOutputMarkupId(true));
 		super.onInitialize();
 	}
 
-	public void updateModel(IPartialPageRequestHandler target, boolean moderator) {
+	public void updateModel(IPartialPageRequestHandler target, boolean onOpen, boolean moderator) {
 		selForm.updateModel(target);
 		this.moderator = moderator;
 		RoomPoll p = selForm.select.getModelObject();
-		dispForm.updateModel(p, false, target);
-		StringBuilder builder = new StringBuilder();
-		builder.append("$('#").append(PollResultsDialog.this.getMarkupId()).append("').on('dialogopen', function( event, ui ) {");
-		builder.append(getScript(barChart(p), true));
-		builder.append("});");
-
-		target.appendJavaScript(builder.toString());
+		dispForm.updateModel(p, !onOpen, target);
 	}
 
 	private StringBuilder getScript(Chart<?> chart, boolean onShow) {
 		StringBuilder sb = new StringBuilder()
 				.append("$('#").append(chartDiv.getMarkupId()).append("').html(''); ");
 		if (onShow) {
-			sb.append("$('#").append(getMarkupId()).append("').on('shown.bs.modal', function (e) {\n");
+			sb.append("$('#").append(getMarkupId()).append("').off().on('shown.bs.modal', function (e) {\n");
 		}
 		sb.append("$.jqplot('").append(chartDiv.getMarkupId()).append("', ")
 				.append(chart.getChartData().toJsonString())
@@ -219,7 +214,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 	public Modal<RoomPoll> show(IPartialPageRequestHandler handler) {
 		opened = true;
 		super.show(handler);
-		dispForm.redraw(handler, true);
+		handler.appendJavaScript(getScript(barChart(selForm.select.getModelObject()), true));
 		return this;
 	}
 
@@ -290,6 +285,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 
 		PollSelectForm(String id) {
 			super(id);
+			setOutputMarkupId(true);
 		}
 
 		@Override
@@ -349,7 +345,6 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 
 		@Override
 		protected void onInitialize() {
-			add(chartDiv.setOutputMarkupId(true));
 			chartSimple = getString("1414");
 			chartPie = getString("1415");
 			add(name, question, count);

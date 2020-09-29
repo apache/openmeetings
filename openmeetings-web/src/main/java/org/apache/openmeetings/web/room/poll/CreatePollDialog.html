@@ -22,26 +22,24 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 	<form wicket:id="form">
-		<table>
-			<tr>
-				<th colspan="2"><wicket:message key="19" /></th>
-			</tr>
-			<tr>
-				<td><label wicket:for="name"><wicket:message key="1410" /></label></td>
-				<td><input type="text" wicket:id="name" class="input"/></td>
-			</tr>
-			<tr>
-				<td><label wicket:for="question"><wicket:message key="20" /></label></td>
-				<td><textarea wicket:id="question"></textarea></td>
-			</tr>
-			<tr>
-				<td><label wicket:for="type"><wicket:message key="21" /></label></td>
-				<td><select wicket:id="type"/></td>
-			</tr>
-			<tr>
-				<td colspan="2"><wicket:message key="23" /></td>
-			</tr>
-		</table>
+		<div class="row form-group">
+			<div class="col-11"><wicket:message key="19"/></div>
+		</div>
+		<div class="row form-group">
+			<label wicket:for="name" class="col-4"><wicket:message key="1410"/></label>
+			<input type="text" wicket:id="name" class="col-7"/>
+		</div>
+		<div class="row form-group">
+			<label wicket:for="question" class="col-4"><wicket:message key="20"/></label>
+			<textarea wicket:id="question" class="col-7"></textarea>
+		</div>
+		<div class="row form-group">
+			<label wicket:for="type" class="col-4"><wicket:message key="21" /></label>
+			<select wicket:id="type" class="custom-select col-7"/>
+		</div>
+		<div class="row">
+			<div class="col-11"><wicket:message key="23" /></div>
+		</div>
 		<div wicket:id="feedback"></div>
 	</form>
 </wicket:extend>

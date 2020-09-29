@@ -22,28 +22,34 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 	<form wicket:id="form">
-		<table>
-			<tr>
-				<td colspan="2"><span wicket:id="user"></span>&nbsp;<wicket:message key="36" /></td>
-			</tr>
-			<tr>
-				<td colspan="2"><span wicket:id="roomPoll.question"></span></td>
-			</tr>
-			<tr>
-				<td><wicket:message key="33" /></td>
-				<td>
-					<div wicket:id="typeBool">
-						<div wicket:id="answer">
-							<input type="radio" wicket:id="true"/><label wicket:for="true"><wicket:message key="34" /></label><br/>
-							<input type="radio" wicket:id="false"/><label wicket:for="false"><wicket:message key="35" /></label>
+		<div class="row form-group">
+			<div class="col-11">
+				<span wicket:id="user"></span>&nbsp;<wicket:message key="36"/>
+			</div>
+		</div>
+		<div class="row form-group">
+			<div class="col-11"><span wicket:id="roomPoll.question"></span></div>
+		</div>
+		<div class="row">
+			<div class="col-4"><wicket:message key="33" /></div>
+			<div class="col-7">
+				<div wicket:id="typeBool">
+					<div wicket:id="answer">
+						<div class="custom-control custom-radio">
+							<input type="radio" wicket:id="true" class="custom-control-input"/>
+							<label wicket:for="true" class="custom-control-label"><wicket:message key="34" /></label>
+						</div>
+						<div class="custom-control custom-radio">
+							<input type="radio" wicket:id="false" class="custom-control-input"/>
+							<label wicket:for="false" class="custom-control-label"><wicket:message key="35" /></label>
 						</div>
 					</div>
-					<div wicket:id="typeInt">
-						<select wicket:id="pointList"></select>
-					</div>
-				</td>
-			</tr>
-		</table>
+				</div>
+				<div wicket:id="typeInt">
+					<select class="custom-select" wicket:id="pointList"></select>
+				</div>
+			</div>
+		</div>
 		<div wicket:id="feedback"></div>
 	</form>
 </wicket:extend>

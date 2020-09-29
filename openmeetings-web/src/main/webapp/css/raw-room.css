@@ -663,6 +663,9 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 .main.room.INTERVIEW .wb-block .wb-area .rec-btn .ui-button-icon.ui-icon.record {
 	border-radius: 15px;
 }
+#room-poll-chart {
+	height: 300px;
+}
 #quick-vote {
 	position: absolute;
 	right: 40px;
