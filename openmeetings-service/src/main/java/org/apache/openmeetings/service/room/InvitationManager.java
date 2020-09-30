@@ -107,7 +107,7 @@ public class InvitationManager implements IInvitationManager {
 		}
 		User owner = i.getInvitedBy();
 
-		String invitorName = owner.getFirstname() + " " + owner.getLastname();
+		String invitorName = owner.getDisplayName();
 		String template = InvitationTemplate.getEmail(i.getInvitee(), invitorName, message, invitationLink);
 		String email = i.getInvitee().getAddress().getEmail();
 		String replyToEmail = owner.getAddress().getEmail();
