@@ -226,7 +226,8 @@ var VideoManager = (function() {
 		if (false !== s.video.confirmMuteOthers) {
 			const dlg = $('#muteothers-confirm');
 			dlg.dialog({
-				buttons: [
+				appendTo: ".room-container"
+				, buttons: [
 					{
 						text: dlg.data('btn-ok')
 						, click: function() {
@@ -244,6 +245,8 @@ var VideoManager = (function() {
 					}
 				]
 			})
+		} else {
+			OmUtil.roomAction({action: 'muteOthers', uid: uid});
 		}
 	}
 	function _muteOthers(uid) {
