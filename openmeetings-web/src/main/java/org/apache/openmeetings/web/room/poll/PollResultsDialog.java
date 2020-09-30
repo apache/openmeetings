@@ -173,7 +173,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 		StringBuilder sb = new StringBuilder()
 				.append("$('#").append(chartDiv.getMarkupId()).append("').html(''); ");
 		if (onShow) {
-			sb.append("$('#").append(getMarkupId()).append("').off().on('shown.bs.modal', function (e) {\n");
+			sb.append("$('#").append(getMarkupId()).append("').off('shown.bs.modal').on('shown.bs.modal', function (e) {\n");
 		}
 		sb.append("$.jqplot('").append(chartDiv.getMarkupId()).append("', ")
 				.append(chart.getChartData().toJsonString())
