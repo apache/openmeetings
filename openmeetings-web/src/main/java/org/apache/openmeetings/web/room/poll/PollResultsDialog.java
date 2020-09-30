@@ -81,7 +81,10 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 	private BootstrapAjaxLink<String> clone;
 	private boolean moderator = false;
 	private boolean opened = false;
+	private String chartSimple;
+	private String chartPie;
 	private final CreatePollDialog createPoll;
+	private DropDownChoice<String> chartType;
 	@SpringBean
 	private PollDao pollDao;
 	@SpringBean
@@ -96,10 +99,10 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 	@Override
 	protected void onInitialize() {
 		header(new ResourceModel("37"));
-		setCloseOnEscapeKey(false);
-		setBackdrop(Backdrop.STATIC);
 		setUseCloseHandler(true);
 
+		chartSimple = getString("1414");
+		chartPie = getString("1415");
 		add(selForm = new PollSelectForm("selForm"));
 		add(dispForm = new PollResultsForm("dispForm"));
 		addButton(close = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Danger, new ResourceModel("1418")) {
@@ -214,14 +217,13 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 	public Modal<RoomPoll> show(IPartialPageRequestHandler handler) {
 		opened = true;
 		super.show(handler);
-		handler.appendJavaScript(getScript(barChart(selForm.select.getModelObject()), true));
+		redraw(handler, true);
 		return this;
 	}
 
 	@Override
 	public void onClose(IPartialPageRequestHandler handler) {
 		opened = false;
-		super.onClose(handler);
 	}
 
 	public boolean isOpened() {
@@ -279,6 +281,35 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 		return barChart;
 	}
 
+	private PieChart<Integer> pieChart(RoomPoll p) {
+		PieChart<Integer> pieChart = new PieChart<>(null);
+		String[] ticks = getTicks(p);
+		Integer[] values = getValues(p);
+		for (int i = 0; i < values.length; ++i) {
+			pieChart.addValue(ticks[i], values[i]);
+		}
+
+		pieChart.getSeriesDefaults().setRendererOptions(new RendererOptions().setHighlightMouseDown(true)
+				.setShowDataLabels(true).setFill(false).setSliceMargin(4).setLineWidth(5));
+
+		Highlighter h = new Highlighter();
+		h.setShow(true);
+		h.setFormatString("%s, %P");
+		h.setTooltipLocation(Location.ne);
+		h.setShowTooltip(true);
+		h.setUseAxesFormatters(false);
+
+		pieChart.getChartConfiguration()
+			.setLegend(null).setHighlighter(h);
+		return pieChart;
+	}
+
+	private void redraw(IPartialPageRequestHandler handler, boolean onShow) {
+		RoomPoll p = dispForm.getModelObject();
+		Chart<?> chart = chartSimple.equals(chartType.getModelObject()) ? barChart(p) : pieChart(p);
+		handler.appendJavaScript(getScript(chart, onShow));
+	}
+
 	private class PollSelectForm extends Form<RoomPoll> {
 		private static final long serialVersionUID = 1L;
 		private DropDownChoice<RoomPoll> select;
@@ -331,12 +362,9 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 
 	private class PollResultsForm extends Form<RoomPoll> {
 		private static final long serialVersionUID = 1L;
-		private String chartSimple;
-		private String chartPie;
 		private final Label name = new Label("name", Model.of((String)null));
 		private final Label question = new Label("question", Model.of((String)null));
 		private final Label count = new Label("count", Model.of(0));
-		private DropDownChoice<String> chartType;
 
 		PollResultsForm(String id) {
 			super(id, Model.of((RoomPoll)null));
@@ -345,8 +373,6 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 
 		@Override
 		protected void onInitialize() {
-			chartSimple = getString("1414");
-			chartPie = getString("1415");
 			add(name, question, count);
 			chartType = new DropDownChoice<>("chartType", Model.of(chartSimple), List.of(chartSimple, chartPie));
 			add(chartType.add(new AjaxFormComponentUpdatingBehavior("change") {
@@ -373,35 +399,6 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 			if (redraw) {
 				redraw(handler, false);
 			}
-		}
-
-		private void redraw(IPartialPageRequestHandler handler, boolean onShow) {
-			RoomPoll poll = getModelObject();
-			Chart<?> chart = chartSimple.equals(chartType.getModelObject()) ? barChart(poll) : pieChart(poll);
-			handler.appendJavaScript(getScript(chart, onShow));
-		}
-
-		private PieChart<Integer> pieChart(RoomPoll p) {
-			PieChart<Integer> pieChart = new PieChart<>(null);
-			String[] ticks = getTicks(p);
-			Integer[] values = getValues(p);
-			for (int i = 0; i < values.length; ++i) {
-				pieChart.addValue(ticks[i], values[i]);
-			}
-
-			pieChart.getSeriesDefaults().setRendererOptions(new RendererOptions().setHighlightMouseDown(true)
-					.setShowDataLabels(true).setFill(false).setSliceMargin(4).setLineWidth(5));
-
-			Highlighter h = new Highlighter();
-			h.setShow(true);
-			h.setFormatString("%s, %P");
-			h.setTooltipLocation(Location.ne);
-			h.setShowTooltip(true);
-			h.setUseAxesFormatters(false);
-
-			pieChart.getChartConfiguration()
-				.setLegend(null).setHighlighter(h);
-			return pieChart;
 		}
 	}
 }
