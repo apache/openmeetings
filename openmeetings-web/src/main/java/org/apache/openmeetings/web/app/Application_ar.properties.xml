@@ -143,13 +143,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="284"><![CDATA[الإبلاغ عن خطأ]]></entry>
 	<entry key="286"><![CDATA[موقع المشروع (https://openmeetings.apache.org)]]></entry>
 	<entry key="287"><![CDATA[القائمة البريدية للمستخدمين (https://openmeetings.apache.org/mailing-lists.html)]]></entry>
-	<entry key="288"><![CDATA[نتذكر تسجيل الدخول]]></entry>
+	<entry key="288"><![CDATA[تذكر تسجيل الدخول]]></entry>
 	<entry key="290"><![CDATA[صفحتي]]></entry>
 	<entry key="291"><![CDATA[التقويم]]></entry>
 	<entry key="306"><![CDATA[إعدادات الكاميرا والميكروفون]]></entry>
 	<entry key="308"><![CDATA[خروج]]></entry>
 	<entry key="309"><![CDATA[عودة الى غرف]]></entry>
-	<entry key="310"><![CDATA[تسجيل خروج]]></entry>
+	<entry key="310"><![CDATA[خروج]]></entry>
 	<entry key="311"><![CDATA[هل نسيت كلمة المرور؟]]></entry>
 	<entry key="312"><![CDATA[بدء عارض سطح المكتب]]></entry>
 	<entry key="313"><![CDATA[استخدام عنوان بريد إلكتروني]]></entry>
@@ -161,7 +161,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="325"><![CDATA[إستعادة كلمة المرور]]></entry>
 	<entry key="327"><![CDATA[تغيير كلمة المرور]]></entry>
 	<entry key="328"><![CDATA[كلمة مرور جديدة]]></entry>
-	<entry key="332"><![CDATA[تم تسجيل كلمة المرور. يمكنك الآن تسجيل الدخول]]></entry>
+	<entry key="332"><![CDATA[تم تسجيل كلمة المرور. يمكنك الآن الدخول]]></entry>
 	<entry key="348"><![CDATA[محرر اللغة]]></entry>
 	<entry key="353"><![CDATA[قيم الحقل]]></entry>
 	<entry key="360"><![CDATA[تصدير]]></entry>
@@ -243,7 +243,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="615"><![CDATA[اللوح]]></entry>
 	<entry key="619"><![CDATA[نوع الغرفة]]></entry>
 	<entry key="620"><![CDATA[غرفة المواعيد]]></entry>
-	<entry key="634"><![CDATA[هل أنت متأكد أنك تريد تسجيل الخروج؟]]></entry>
+	<entry key="634"><![CDATA[هل أنت متأكد أنك تريد الخروج؟]]></entry>
 	<entry key="635"><![CDATA[النشاطات]]></entry>
 	<entry key="636"><![CDATA[غرفة تجريبية]]></entry>
 	<entry key="637"><![CDATA[وقت تجريبي]]></entry>
@@ -335,7 +335,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1089"><![CDATA[جودة الشاشة:]]></entry>
 	<entry key="1098"><![CDATA[الندوة عبر الإنترنت مغلقة بالفعل ، ستتم إعادة توجيهك إلى بعض العروض الشيقة في]]></entry>
 	<entry key="1099"><![CDATA[غرفة مغلقة]]></entry>
-	<entry key="1100"><![CDATA[رابط خروج]]></entry>
+	<entry key="1100"><![CDATA[رابط الخروج]]></entry>
 	<entry key="1101"><![CDATA[إعدادات إنهاء الغرفة]]></entry>
 	<entry key="1102"><![CDATA[إذا كانت الغرفة مغلقة ، فسيتم إعادة توجيه المستخدمين إلى عنوان URL للخروج.]]></entry>
 	<entry key="1103"><![CDATA[LDAP]]></entry>
@@ -539,7 +539,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1599"><![CDATA[تم الرفض. ليس لديك حقوق لدخول هذه الغرفة.]]></entry>
 	<entry key="1600"><![CDATA[إعادة التحويل]]></entry>
 	<entry key="access.denied.header"><![CDATA[تم الرفض. أنت غير مخول للقيام بهذا الإجراء.]]></entry>
-	<entry key="account.created"><![CDATA[لقد تم انشاء حسابك. يمكنك الان تسجيل الدخول.]]></entry>
+	<entry key="account.created"><![CDATA[لقد تم انشاء حسابك. يمكنك الان الدخول.]]></entry>
 	<entry key="activities.ask.question"><![CDATA[يود طرح سؤال]]></entry>
 	<entry key="activities.autoclean"><![CDATA[تنظيف اتوماتيكي]]></entry>
 	<entry key="activities.msg.enter"><![CDATA[أدخل الغرفة.]]></entry>
@@ -635,7 +635,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="error.contact.added"><![CDATA[هذا المستخدم موجود بالفعل في قائمة جهات الاتصال الخاصة بك أو تلقى دعوة إلى قائمة جهات الاتصال الخاصة بك لم يتم الرد عليها بعد.]]></entry>
 	<entry key="error.contact.approved"><![CDATA[تمت الموافقة على المستخدم بالفعل.]]></entry>
 	<entry key="error.contact.denied"><![CDATA[تم رفض المستخدم بالفعل.]]></entry>
-	<entry key="error.email.inuse"><![CDATA[البريد الالكتروني هو ما سبق تسجيله]]></entry>
+	<entry key="error.email.inuse"><![CDATA[البريد الالكتروني قد سبق تسجيله]]></entry>
 	<entry key="error.hash.invalid"><![CDATA[رمز الدعوة هذا ليس صالح.]]></entry>
 	<entry key="error.hash.period"><![CDATA[رمز الدعوة غير صالح ، الرمز صالح فقط خلال هذا التاريخ والوقت المحددين:]]></entry>
 	<entry key="error.hash.used"><![CDATA[تم استخدام هذه الدعوة سابقا]]></entry>
@@ -649,7 +649,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="error.type.info"><![CDATA[رسالة]]></entry>
 	<entry key="error.unknown"><![CDATA[خطأ غير معروف. الرجاء إبلاغ فريق الخدمة]]></entry>
 	<entry key="file.name.interview"><![CDATA[مقابلة]]></entry>
-	<entry key="file.name.recording"><![CDATA[تسجيل]]></entry>
+	<entry key="file.name.recording"><![CDATA[تسجيل ]]></entry>
 	<entry key="files.download.jpg"><![CDATA[JPG]]></entry>
 	<entry key="files.download.original"><![CDATA[أصلي]]></entry>
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>
