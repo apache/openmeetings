@@ -554,6 +554,7 @@
 						</systemProperties>
 						<webApp>
 							<contextPath>/openmeetings</contextPath>
+							<descriptor>${project.basedir}/src/test/jetty/web.xml</descriptor>
 						</webApp>
 						<jettyXml>${project.basedir}/src/test/jetty/jetty.xml,${project.basedir}/src/test/jetty/jetty-ssl.xml,${project.basedir}/src/test/jetty/jetty-http.xml,${project.basedir}/src/test/jetty/jetty-https.xml</jettyXml>
 					</configuration>
