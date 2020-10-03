@@ -372,20 +372,15 @@ var VideoSettings = (function() {
 			return;
 		}
 		navigator.mediaDevices.enumerateDevices()
-			.then(function(devices) {
-				devices.forEach(function(device) {
+			.then(devices => devices.forEach(device => {
 					if (DEV_AUDIO === device.kind) {
 						devCnts.audio = true;
 					} else if (DEV_VIDEO === device.kind) {
 						devCnts.video = true;
 					}
-				});
-				callback(devCnts);
-			})
-			.catch(function() {
-				OmUtil.error('Unable to get the list of multimedia devices');
-				callback(devCnts);
-			});
+				}))
+			.catch(() => OmUtil.error('Unable to get the list of multimedia devices'))
+			.finally(() => callback(devCnts));
 	}
 	function _initDevices() {
 		if (window.isSecureContext === false) {
@@ -404,23 +399,19 @@ var VideoSettings = (function() {
 				return;
 			}
 			navigator.mediaDevices.getUserMedia(devCnts)
-				.then(function(stream) {
+				.then(stream => {
 					const devices = navigator.mediaDevices.enumerateDevices()
-						.then(function(devices) {
-							_clear(stream);
-							return devices;
-						})
 						.catch(function(err) {
-							_clear(stream);
 							throw err;
-						});
+						})
+						.finally(() => _clear(stream));
 					return devices;
 				})
-				.then(function(devices) {
+				.then(devices => {
 					let cCount = 0, mCount = 0;
 					_load();
 					_setDisabled([cam, mic]);
-					devices.forEach(function(device) {
+					devices.forEach(device => {
 						if (DEV_AUDIO === device.kind) {
 							const o = $('<option></option>').attr('value', mCount).text(device.label)
 								.data('device-id', device.deviceId);

@@ -49,7 +49,7 @@ var Video = (function() {
 				throw 'Screen-sharing is not supported in ' + b.name + '[' + b.major + ']';
 			});
 		}
-		promise.then(function(stream) {
+		promise.then(stream => {
 			if (!state.disposed) {
 				__createVideo(state);
 				state.stream = stream;
@@ -73,10 +73,11 @@ var Video = (function() {
 				return;
 			}
 			navigator.mediaDevices.getUserMedia(cnts)
-				.then(function(stream) {
+				.then(stream => {
 					if (state.disposed || msg.instanceUid !== v.data('instance-uid')) {
 						return;
 					}
+					state.localStream = stream;
 					let _stream = stream;
 					const data = {};
 					if (stream.getAudioTracks().length !== 0) {
@@ -93,7 +94,6 @@ var Video = (function() {
 						} else {
 							data.aDest = data.aCtx.createMediaStreamDestination();
 							data.analyser.connect(data.aDest);
-							data.aSrc.origStream = stream;
 							_stream = data.aDest.stream;
 							stream.getVideoTracks().forEach(function(track) {
 								_stream.addTrack(track);
@@ -482,7 +482,6 @@ var Video = (function() {
 		}
 		if (data.aSrc) {
 			VideoUtil.cleanStream(data.aSrc.mediaStream);
-			VideoUtil.cleanStream(data.aSrc.origStream);
 			VideoUtil.disconnect(data.aSrc);
 			data.aSrc = null;
 		}
@@ -519,8 +518,10 @@ var Video = (function() {
 				state.options = null;
 			}
 			_cleanData(state.data);
+			VideoUtil.cleanStream(state.localStream);
 			VideoUtil.cleanStream(state.stream);
 			state.data = null;
+			state.localStream = null;
 			state.stream = null;
 			const video = state.video;
 			if (video && video.length > 0) {
