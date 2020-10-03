@@ -25,6 +25,7 @@ import static org.apache.openmeetings.web.app.Application.isInstalled;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.web.app.Application;
@@ -35,6 +36,7 @@ import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -130,7 +132,14 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		response.render(CssHeaderItem.forUrl(String.format("css/theme_om/jquery-ui%s.css", suffix)));
 		response.render(CssHeaderItem.forUrl("css/theme.css"));
 		if (!Strings.isEmpty(getGaCode())) {
-			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BasePage.class, "om-ga.js"))));
+			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BasePage.class, "om-ga.js") {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public List<HeaderItem> getDependencies() {
+					return List.of(JavaScriptHeaderItem.forUrl("https://www.googletagmanager.com/gtag/js?id=" + getGaCode()).setAsync(true));
+				}
+			})));
 			StringBuilder script = new StringBuilder("initGA('");
 			script.append(getGaCode()).append("');").append(isMainPage() ? "initHash()" : "init()").append(';');
 			response.render(OnDomReadyHeaderItem.forScript(script));
