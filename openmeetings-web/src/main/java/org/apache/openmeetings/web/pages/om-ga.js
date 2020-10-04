@@ -3,18 +3,16 @@ window.dataLayer = window.dataLayer || [];
 function gtag() {
 	dataLayer.push(arguments);
 }
+function gtagEvent() {
+	gtag('event', 'pageview', {page: location.pathname, hash: location.hash});
+}
 function initGA(code) {
 	gtag('js', new Date());
 
 	gtag('config', code);
 }
-function init() {
-	gtag('event', 'pageview');
-}
 function initHash() {
-	gtag('event', 'pageview', window.location.hash);
+	gtagEvent();
 
-	$(window).bind('hashchange', function() {
-		gtag('event', 'pageview', window.location.hash);
-	});
+	$(window).off('hashchange').on('hashchange', gtagEvent);
 }

@@ -141,7 +141,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 				}
 			})));
 			StringBuilder script = new StringBuilder("initGA('");
-			script.append(getGaCode()).append("');").append(isMainPage() ? "initHash()" : "init()").append(';');
+			script.append(getGaCode()).append("');").append(isMainPage() ? "initHash()" : "gtagEvent()").append(';');
 			response.render(OnDomReadyHeaderItem.forScript(script));
 		}
 		response.render(CssHeaderItem.forReference(FontAwesome5CssReference.instance()));
