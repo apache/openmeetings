@@ -140,8 +140,8 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 					return List.of(JavaScriptHeaderItem.forUrl("https://www.googletagmanager.com/gtag/js?id=" + getGaCode()).setAsync(true));
 				}
 			})));
-			StringBuilder script = new StringBuilder("initGA('");
-			script.append(getGaCode()).append("');").append(isMainPage() ? "initHash()" : "gtagEvent()").append(';');
+			StringBuilder script = new StringBuilder("initGA('")
+					.append(getGaCode()).append("', ").append(isMainPage()).append(");");
 			response.render(OnDomReadyHeaderItem.forScript(script));
 		}
 		response.render(CssHeaderItem.forReference(FontAwesome5CssReference.instance()));
