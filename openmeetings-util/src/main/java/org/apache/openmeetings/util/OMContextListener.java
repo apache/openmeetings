@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
-import ch.qos.logback.core.util.StatusPrinter;
 
 public class OMContextListener implements ServletContextListener {
 	private static final String LOG_DIR_PROP = "current_openmeetings_log_dir";
@@ -62,10 +61,8 @@ public class OMContextListener implements ServletContextListener {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			// StatusPrinter will handle this
+			// no-op
 		}
-		StatusPrinter.printInCaseOfErrorsOrWarnings(context);
 	}
 
 	private static String pathToName(ServletContextEvent event) {
