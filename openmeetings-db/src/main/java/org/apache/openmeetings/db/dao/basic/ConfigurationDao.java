@@ -631,7 +631,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			addCspRule(cspConfig, CSPDirective.CONNECT_SRC, app.getWsUrl(), false); // special code for Safari browser
 			if (!Strings.isEmpty(getGaCode())) {
 				// https://developers.google.com/tag-manager/web/csp#universal_analytics_google_analytics
-				//addCspRule(cspConfig, CSPDirective.IMG_SRC, "https://www.google-analytics.com");
+				addCspRule(cspConfig, CSPDirective.IMG_SRC, "https://www.google-analytics.com");
 				addCspRule(cspConfig, CSPDirective.SCRIPT_SRC, "https://www.googletagmanager.com");
 			}
 			oauthDao.getActive().forEach(oauth -> {
