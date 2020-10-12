@@ -18,6 +18,41 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
+import static javax.sip.message.Request.INVITE;
+import static javax.sip.message.Request.REGISTER;
+import static javax.sip.message.Response.OK;
+import static javax.sip.message.Response.RINGING;
+import static javax.sip.message.Response.TRYING;
+import static javax.sip.message.Response.UNAUTHORIZED;
+
+import java.text.ParseException;
+import java.util.List;
+import java.util.Properties;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
+
+import javax.annotation.PostConstruct;
+import javax.sip.ClientTransaction;
+import javax.sip.DialogTerminatedEvent;
+import javax.sip.IOExceptionEvent;
+import javax.sip.ListeningPoint;
+import javax.sip.RequestEvent;
+import javax.sip.ResponseEvent;
+import javax.sip.ServerTransaction;
+import javax.sip.SipException;
+import javax.sip.SipFactory;
+import javax.sip.SipProvider;
+import javax.sip.TimeoutEvent;
+import javax.sip.TransactionTerminatedEvent;
+import javax.sip.address.Address;
+import javax.sip.address.AddressFactory;
+import javax.sip.header.ContactHeader;
+import javax.sip.header.HeaderFactory;
+import javax.sip.message.MessageFactory;
+import javax.sip.message.Request;
+import javax.sip.message.Response;
+
 import org.apache.openmeetings.db.entity.room.Room;
 import org.asteriskjava.manager.DefaultManagerConnection;
 import org.asteriskjava.manager.ManagerConnection;
@@ -35,40 +70,94 @@ import org.asteriskjava.manager.response.ManagerError;
 import org.asteriskjava.manager.response.ManagerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class SipDao {
+import gov.nist.javax.sip.DialogTimeoutEvent;
+import gov.nist.javax.sip.SipListenerExt;
+import gov.nist.javax.sip.SipStackExt;
+import gov.nist.javax.sip.address.SipUri;
+import gov.nist.javax.sip.clientauthutils.AuthenticationHelper;
+import gov.nist.javax.sip.clientauthutils.UserCredentials;
+import gov.nist.javax.sip.stack.NioMessageProcessorFactory;
+
+@Service
+public class SipDao implements SipListenerExt {
 	private static final Logger log = LoggerFactory.getLogger(SipDao.class);
 	public static final String ASTERISK_OM_FAMILY = "openmeetings";
 	public static final String ASTERISK_OM_KEY = "rooms";
 	public static final String SIP_FIRST_NAME = "SIP Transport";
 	public static final String SIP_USER_NAME = "--SIP--";
-	private String sipHostname;
-	private int sipPort;
-	private String sipUsername;
-	private String sipPassword;
-	private String uid;
-	private long timeout;
-	private ManagerConnectionFactory factory;
-
-	public SipDao() {
-		// enabled for @SpringBean
+	private static final String SIP_TRANSPORT = "ws";
+	private static final <T> Consumer<T> NOOP() {
+		return t -> {};
 	}
 
-	public SipDao(String sipHostname, int sipPort, String sipUsername, String sipPassword, long timeout) {
-		this.sipHostname = sipHostname;
-		this.sipPort = sipPort;
-		this.sipUsername = sipUsername;
-		this.sipPassword = sipPassword;
-		this.timeout = timeout;
-		factory = new ManagerConnectionFactory(this.sipHostname, this.sipPort, this.sipUsername, this.sipPassword);
+	private final AtomicLong cseq = new AtomicLong();
+	private final Random rnd = new Random();
+
+	private String tag;
+	private String branch;
+
+	private SipProvider sipProvider;
+	private SipFactory sipFactory;
+	private SipStackExt sipStack;
+	private MessageFactory messageFactory;
+	private HeaderFactory headerFactory;
+	private AddressFactory addressFactory;
+	private ContactHeader contactHeader;
+	private ManagerConnectionFactory factory;
+
+	@Autowired
+	private SipConfig config;
+
+	@PostConstruct
+	public void init() throws Exception {
+		if (config.getSipHostname() != null) {
+			factory = new ManagerConnectionFactory(
+					config.getSipHostname()
+					, config.getManagerPort()
+					, config.getManagerUser()
+					, config.getManagerPass());
+			sipFactory = SipFactory.getInstance();
+			sipFactory.setPathName("gov.nist");
+
+			final Properties properties = new Properties();
+			properties.setProperty("javax.sip.STACK_NAME", "stack");
+			//properties.setProperty("gov.nist.javax.sip.TRACE_LEVEL", "32");
+			properties.setProperty("gov.nist.javax.sip.LOG_MESSAGE_CONTENT", "true");
+			properties.setProperty("gov.nist.javax.sip.MESSAGE_PROCESSOR_FACTORY", NioMessageProcessorFactory.class.getName());
+			sipStack = (SipStackExt) sipFactory.createSipStack(properties);
+			tag = getRnd(10);
+			branch = getRnd(14);
+
+			messageFactory = sipFactory.createMessageFactory();
+			headerFactory = sipFactory.createHeaderFactory();
+			addressFactory = sipFactory.createAddressFactory();
+			final ListeningPoint listeningPoint = sipStack.createListeningPoint(
+					config.getLocalWsHost()
+					, config.getLocalWsPort()
+					, SIP_TRANSPORT);
+			sipProvider = sipStack.createSipProvider(listeningPoint);
+			sipProvider.addSipListener(this);
+			Address contact = createAddr(config.getOmSipUser(), config.getLocalWsHost(), uri -> {
+				try {
+					uri.setPort(config.getLocalWsPort());
+					uri.setTransportParam(SIP_TRANSPORT);
+				} catch (ParseException e) {
+					log.error("fail to create contact address", e);
+				}
+			});
+			contactHeader = headerFactory.createContactHeader(contact);
+		}
 	}
 
 	private ManagerConnection getConnection() {
 		DefaultManagerConnection con = (DefaultManagerConnection)factory.createManagerConnection();
-		con.setDefaultEventTimeout(timeout);
-		con.setDefaultResponseTimeout(timeout);
-		con.setSocketReadTimeout((int)timeout);
-		con.setSocketTimeout((int)timeout);
+		con.setDefaultEventTimeout(config.getManagerTimeout());
+		con.setDefaultResponseTimeout(config.getManagerTimeout());
+		con.setSocketReadTimeout((int)config.getManagerTimeout());
+		con.setSocketTimeout((int)config.getManagerTimeout());
 		return con;
 	}
 
@@ -126,6 +215,10 @@ public class SipDao {
 		return ASTERISK_OM_KEY + "/" + confno;
 	}
 
+	private static String getSipNumber(Room r) {
+		return (r != null && r.getConfno() != null) ? r.getConfno() : null;
+	}
+
 	public String get(String confno) {
 		String pin = null;
 		DbGetAction da = new DbGetAction(ASTERISK_OM_FAMILY, getKey(confno));
@@ -175,7 +268,7 @@ public class SipDao {
 	 *            room to be connected to the call
 	 */
 	public void joinToConfCall(String number, Room r) {
-		String sipNumber = (r != null && r.getConfno() != null) ? r.getConfno() : null;
+		String sipNumber = getSipNumber(r);
 		if (sipNumber == null) {
 			log.warn("Failed to get SIP number for room: {}", r);
 			return;
@@ -186,16 +279,208 @@ public class SipDao {
 		oa.setContext("rooms-out");
 		oa.setExten(number);
 		oa.setPriority(1);
-		oa.setTimeout(timeout);
+		oa.setTimeout(config.getManagerTimeout());
 
 		exec(oa);
 	}
 
-	public String getUid() {
-		return uid;
+	@Override
+	public void processDialogTerminated(DialogTerminatedEvent evt) {
+		log.error("processDialogTerminated: \n{}", evt);
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
+	@Override
+	public void processIOException(IOExceptionEvent evt) {
+		log.error("processIOException: \n{}", evt);
+	}
+
+	@Override
+	public void processTimeout(TimeoutEvent evt) {
+		log.error("processTimeout: \n{}", evt);
+	}
+
+	@Override
+	public void processTransactionTerminated(TransactionTerminatedEvent evt) {
+		log.error("processTransactionTerminated: \n{}", evt);
+	}
+
+	@Override
+	public void processDialogTimeout(DialogTimeoutEvent timeoutEvent) {
+		log.error("processDialogTimeout: \n{}", timeoutEvent);
+	}
+
+	@Override
+	public void processRequest(RequestEvent evt) {
+		log.debug("processRequest: \n\n{}", evt.getRequest());
+		Request rq = evt.getRequest();
+		String method = rq.getMethod();
+		try {
+			if (Request.OPTIONS.equals(method)) {
+				ServerTransaction transaction = sipProvider.getNewServerTransaction(rq);
+				Response resp = messageFactory.createResponse(200, rq);
+				resp.addHeader(contactHeader);
+				transaction.sendResponse(resp);
+			}
+		} catch (Exception e) {
+			log.error("processRequest", e);
+		}
+	}
+
+	@Override
+	public void processResponse(ResponseEvent evt) {
+		Response resp = evt.getResponse();
+		ClientTransaction curTrans = evt.getClientTransaction();
+		Request prevReq = curTrans.getRequest();
+		log.warn("Response code: {} on {}", resp.getStatusCode(), prevReq.getMethod());
+		switch (resp.getStatusCode()) {
+			case UNAUTHORIZED:
+				processUnauth(evt);
+				break;
+			case OK:
+				break;
+			case TRYING:
+			case RINGING:
+				break;
+			// FIXME TODO other codes: 404
+			default:
+				log.debug("No handler for response: \n\n{}", resp);
+		}
+	}
+
+	private String getRnd(int count) {
+		return rnd.ints('0', 'z' + 1)
+				.filter(ch -> (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z'))
+				.limit(count)
+				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+				.toString();
+	}
+
+	private Address createAddr(String user) {
+		return createAddr(user, config.getSipHostname(), NOOP());
+	}
+
+	private Address createAddr(String user, String host, Consumer<SipUri> cons) {
+		try {
+			SipUri uri = new SipUri();
+			uri.setHost(host);
+			uri.setUser(user);
+			cons.accept(uri);
+			return addressFactory.createAddress(user, uri);
+		} catch (ParseException e) {
+			log.error("fail to create address", e);
+		}
+		return null;
+	}
+
+	private void sendRequest(String method, String to, Consumer<SipUri> uriCons, Consumer<Request> reqCons) throws Exception {
+		SipUri uri = new SipUri();
+		uri.setHost(config.getSipHostname());
+		uri.setPort(config.getWsPort());
+		uri.setTransportParam(SIP_TRANSPORT);
+		uri.setMethodParam("GET");
+		uri.setHeader("Host", config.getSipHostname());
+		uri.setHeader("Location", "/ws");
+		uriCons.accept(uri);
+
+		Request request = messageFactory.createRequest(
+				uri
+				, method
+				, sipProvider.getNewCallId()
+				, headerFactory.createCSeqHeader(cseq.incrementAndGet(), method)
+				, headerFactory.createFromHeader(createAddr(config.getOmSipUser()), tag)
+				, headerFactory.createToHeader(createAddr(to), null)
+				, List.of(headerFactory.createViaHeader(config.getLocalWsHost(), config.getLocalWsPort(), SIP_TRANSPORT, branch))
+				, headerFactory.createMaxForwardsHeader(70));
+		request.addHeader(contactHeader);
+		request.addHeader(headerFactory.createExpiresHeader(600));
+
+		reqCons.accept(request);
+
+		log.debug("sendRequest: \n\n{}", request);
+
+		ClientTransaction trans = sipProvider.getNewClientTransaction(request);
+		trans.sendRequest();
+	}
+
+	private void processUnauth(ResponseEvent evt) {
+		Response resp = evt.getResponse();
+		ClientTransaction curTrans = evt.getClientTransaction();
+		AuthenticationHelper helper = sipStack.getAuthenticationHelper((trans, s) -> new UserCredentials() {
+			@Override
+			public String getUserName() {
+				return config.getOmSipUser();
+			}
+
+			@Override
+			public String getPassword() {
+				return config.getOmSipPasswd();
+			}
+
+			@Override
+			public String getSipDomain() {
+				return "asterisk";
+			}
+		}, headerFactory);
+		try {
+			ClientTransaction trans = helper.handleChallenge(resp, curTrans, sipProvider, 5);
+			trans.sendRequest();
+		} catch (SipException e) {
+			log.error("Error while sending AUTH", e);
+		}
+	}
+
+	private void addAllow(Request req) throws ParseException {
+		req.addHeader(headerFactory.createAllowHeader("ACK,CANCEL,INVITE,MESSAGE,BYE,OPTIONS,INFO,NOTIFY,REFER"));
+	}
+
+	private void register() throws Exception {
+		sendRequest(
+				REGISTER
+				, config.getOmSipUser()
+				, NOOP()
+				, req -> {
+					try {
+						addAllow(req);
+					} catch (ParseException e) {
+						log.error("fail to create allow header", e);
+					}
+				});
+	}
+
+	private void invite(Room r, String sdp) throws Exception {
+		final String sipNumber = getSipNumber(r);
+		if (sipNumber == null) {
+			log.warn("Failed to get SIP number for room: {}", r);
+			return;
+		}
+		sendRequest(
+				INVITE
+				, sipNumber
+				, uri -> uri.setUser(sipNumber)
+				, req -> {
+					/*
+					 * ContentLengthHeader contentLength =
+					 * this.headerFactory.createContentLengthHeader(300);
+					 * ContentTypeHeader contentType =
+					 * this.headerFactory.createContentTypeHeader("application",
+					 * "sdp");
+					 *
+					 * String sdpData = "v=0\n" +
+					 * "o=user1 392867480 292042336 IN IP4 xx.xx.xx.xx\n" + "s=-\n"
+					 * + "c=IN IP4 xx.xx.xx.xx\n" + "t=0 0\n" +
+					 * "m=audio 8000 RTP/AVP 0 8 101\n" + "a=rtpmap:0 PCMU/8000\n" +
+					 * "a=rtpmap:8 PCMA/8000\n" +
+					 * "a=rtpmap:101 telephone-event/8000\n" + "a=sendrecv"; byte[]
+					 * contents = sdpData.getBytes(); this.contactHeader =
+					 * this.headerFactory.createContactHeader(contactAddress);
+					 */
+					try {
+						addAllow(req);
+						req.addHeader(headerFactory.createContentLengthHeader(sdp.length()));
+						req.setContent(sdp, headerFactory.createContentTypeHeader("application", "sdp"));
+					} catch (Exception e) {
+						log.error("fail to create allow header", e);
+					}
+				});
 	}
 }

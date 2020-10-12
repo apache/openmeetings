@@ -109,6 +109,10 @@
 			<version>${mssql.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>javax.sip</groupId>
+			<artifactId>jain-sip-ri</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-util</artifactId>
 			<version>${project.version}</version>

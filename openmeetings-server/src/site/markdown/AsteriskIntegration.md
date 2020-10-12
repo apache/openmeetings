@@ -125,19 +125,22 @@ rtcachefriends=yes
 maxexpiry=43200
 ```
 
-** FIXME TODO Add user for the "SIP Transport"**
+**Add user for the "SIP Transport"**
 
 ```
-; FIXME TODO commented for now
-; [red5sip_user]
-; type=friend
-; secret=12345
-; disallow=all
-; allow=ulaw
-; allow=h263
-; host=dynamic
-; nat=force_rport,comedia
-; context=rooms-red5sip
+[omsip_user]
+host=dynamic
+secret=12345
+context=rooms-omsip
+transport=ws,wss
+type=friend
+encryption=no
+avpf=yes
+icesupport=yes
+directmedia=no
+disallow=all
+allow=ulaw,opus
+allow=vp8
 ```
 
 ### Configure extensions:
@@ -187,11 +190,10 @@ exten => _400X!,n,Hangup
 ; Extensions for outgoing calls from Openmeetings room.
 ; *****************************************************
 
-; FIXME TODO commented for now
-;[rooms-red5sip]
-;exten => _400X!,1,GotoIf($[${DB_EXISTS(openmeetings/rooms/${EXTEN})}]?ok:notavail)
-;exten => _400X!,n(ok),Confbridge(${EXTEN},default_bridge,red5sip_user)
-;exten => _400X!,n(notavail),Hangup
+[rooms-omsip]
+exten => _400X!,1,GotoIf($[${DB_EXISTS(openmeetings/rooms/${EXTEN})}]?ok:notavail)
+exten => _400X!,n(ok),Confbridge(${EXTEN},default_bridge,omsip_user)
+exten => _400X!,n(notavail),Hangup
 ```
 
 ### Configure Confbridge
@@ -203,12 +205,11 @@ Modify `/etc/asterisk/confbridge.conf`
 ```
 [general]
 
-; FIXME TODO commented for now
-;[red5sip_user]
-;type=user
-;marked=yes
-;dsp_drop_silence=yes
-;denoise=true
+[omsip_user]
+type=user
+marked=yes
+dsp_drop_silence=yes
+denoise=true
 
 [sip_user]
 type=user
@@ -247,8 +248,8 @@ write = all
 Update OpenMeetings with credentials for Asterisk manager.
 Modify `/opt/om/webapps/openmeetings/WEB-INF/classes/applicationContext.xml`
 
-find **&lt;bean id="sipDao" class="org.apache.openmeetings.db.dao.room.SipDao"&gt;**
-uncomment its parameters and set it to your custom values.
+find **&lt;bean class="org.apache.openmeetings.db.dao.room.SipConfig"&gt;**
+uncomment its properties and set it to your custom values.
 
 set value for `uid` property to unique secret value (can be generated here <a href="https://www.uuidtools.com">https://www.uuidtools.com</a>)
 
@@ -257,3 +258,61 @@ set value for `uid` property to unique secret value (can be generated here <a hr
 	otherwise all SIP related room information will be lost
 </p>
 
+### Configure Asterisk's built-in HTTP server
+
+To communicate with WebSocket clients, Asterisk uses its built-in HTTP server. Configure `/etc/asterisk/http.conf` as follows:
+
+```
+[general]
+enabled=yes
+bindaddr=127.0.0.1  ; or your Asterisk IP
+bindport=8088
+tlsenable=yes
+tlsbindaddr=0.0.0.0:8089
+tlscertfile=/etc/asterisk/keys/asterisk.crt
+tlsprivatekey=/etc/asterisk/keys/asterisk.key
+```
+
+### Configure PJSIP
+
+If you're not already familiar with configuring Asterisk's chan_pjsip driver, visit the res_pjsip configuration page.
+
+Modify `/etc/asterisk/pjsip.conf` as follows:
+
+```
+[transport-wss]
+type=transport
+protocol=wss
+bind=0.0.0.0
+; All other transport parameters are ignored for wss transports.
+
+[webrtc_client]
+type=aor
+max_contacts=5
+remove_existing=yes
+
+[webrtc_client]
+type=auth
+auth_type=userpass
+username=webrtc_client
+password=webrtc_client ; This is a completely insecure password!  Do NOT expose this
+                       ; system to the Internet without utilizing a better password.
+
+[webrtc_client]
+type=endpoint
+aors=webrtc_client
+auth=webrtc_client
+dtls_auto_generate_cert=yes
+webrtc=yes
+; Setting webrtc=yes is a shortcut for setting the following options:
+; use_avpf=yes
+; media_encryption=dtls
+; dtls_verify=fingerprint
+; dtls_setup=actpass
+; ice_support=yes
+; media_use_received_transport=yes
+; rtcp_mux=yes
+context=default
+disallow=all
+allow=opus,ulaw
+```

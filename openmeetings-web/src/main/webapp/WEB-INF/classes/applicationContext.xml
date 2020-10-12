@@ -124,16 +124,22 @@
 	</bean>
 	<!-- End of Services -->
 
-	<!-- Interface Transactional -->
-	<bean id="sipDao" class="org.apache.openmeetings.db.dao.room.SipDao">
-	<!-- Should be uncommented and updated with real values for Asterisk
-		<constructor-arg index="0" value="127.0.0.1"/>
-		<constructor-arg index="1" value="5038" type = "int"/>
-		<constructor-arg index="2" value="openmeetings"/>
-		<constructor-arg index="3" value="12345"/>
-		<constructor-arg index="4" value="10000" type = "long"/>
+	<bean class="org.apache.openmeetings.db.dao.room.SipConfig">
+		<!-- Should be uncommented and updated with real values for Asterisk-
+		<property name="sipHostname" value="192.168.1.102"/>
+		<property name="managerPort" value="5038"/>
+		<property name="managerUser" value="openmeetings"/>
+		<property name="managerPass" value="12345"/>
+		<property name="managerTimeout" value="10000"/>
+
+		<property name="localWsPort" value="6666"/>
+		<property name="localWsHost" value="192.168.1.211"/>
+		<property name="wsPort" value="8088"/>
+		<property name="omSipUser" value="omsip_user"/>
+		<property name="omSipPasswd" value="12345"/>
+
 		<property name="uid" value="87dddad4-9ca5-475b-860f-2e0825d02b76"/>
-	-->
+		-  -->
 	</bean>
 
 	<!-- Thread Executor -->
