@@ -19,8 +19,7 @@
 package org.apache.openmeetings.service.calendar;
 
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MINUTES_REMINDER_SEND;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getAppointmentReminderMinutes;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 
 import java.util.Calendar;
@@ -28,7 +27,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.core.notifier.NotifierService;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -46,8 +44,6 @@ public class AppointmentLogic {
 
 	@Autowired
 	private AppointmentDao appointmentDao;
-	@Autowired
-	private ConfigurationDao cfgDao;
 	@Autowired
 	private InvitationDao invitationDao;
 	@Autowired
@@ -81,7 +77,7 @@ public class AppointmentLogic {
 			log.error("Error retrieving baseUrl for application");
 			return;
 		}
-		int minutesReminderSend = cfgDao.getInt(CONFIG_APPOINTMENT_REMINDER_MINUTES, DEFAULT_MINUTES_REMINDER_SEND);
+		int minutesReminderSend = getAppointmentReminderMinutes();
 
 		if (minutesReminderSend == 0) {
 			log.warn("minutesReminderSend is 0, disabling reminder scheduler");

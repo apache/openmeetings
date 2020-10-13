@@ -409,7 +409,9 @@ public class User extends HistoricalEntity {
 	}
 
 	public User setDisplayName(String displayName) {
-		if (!Strings.isEmpty(displayName)) {
+		if (Strings.isEmpty(displayName)) {
+			resetDisplayName();
+		} else {
 			this.displayName = escapeMarkup(displayName).toString();
 		}
 		return this;
@@ -673,7 +675,7 @@ public class User extends HistoricalEntity {
 		if (!Strings.isEmpty(last)) {
 			sb.append(delim).append(last);
 		}
-		if (Strings.isEmpty(sb)) {
+		if (id != null && Strings.isEmpty(sb)) {
 			if (Type.CONTACT == type && address != null && !Strings.isEmpty(address.getEmail())) {
 				sb.append(address.getEmail());
 			} else {

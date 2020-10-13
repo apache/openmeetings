@@ -19,6 +19,7 @@
 package org.apache.openmeetings.service.room;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.db.entity.calendar.Appointment.allowedStart;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 
@@ -183,8 +184,8 @@ public class InvitationManager implements IInvitationManager {
 
 	@Override
 	public Invitation getInvitation(Invitation inInvitation, User inveetee, Room room
-			, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
+			, boolean isPasswordProtected, String invitationpass, Valid valid
+			, User createdBy, Long languageId, Date mmStart, Date mmEnd
 			, Appointment appointment) {
 
 		Invitation invitation = inInvitation;
@@ -204,8 +205,8 @@ public class InvitationManager implements IInvitationManager {
 		// valid period of Invitation
 		switch (valid) {
 			case PERIOD:
-				invitation.setValidFrom(new Date(gmtTimeStart.getTime() - (5 * 60 * 1000)));
-				invitation.setValidTo(gmtTimeEnd);
+				invitation.setValidFrom(allowedStart(mmStart));
+				invitation.setValidTo(mmEnd);
 				break;
 			case ENDLESS:
 			case ONE_TIME:
@@ -229,10 +230,10 @@ public class InvitationManager implements IInvitationManager {
 
 	@Override
 	public Invitation getInvitation(User inveetee, Room room, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd, Appointment appointment)
+			User createdBy, Long languageId, Date mmStart, Date mmEnd, Appointment appointment)
 	{
 		Invitation i = getInvitation((Invitation)null, inveetee, room, isPasswordProtected, invitationpass, valid, createdBy
-				, languageId, gmtTimeStart, gmtTimeEnd, appointment);
+				, languageId, mmStart, mmEnd, appointment);
 		i = invitationDao.update(i);
 		return i;
 	}

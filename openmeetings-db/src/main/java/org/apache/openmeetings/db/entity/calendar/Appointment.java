@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.entity.calendar;
 
 import static org.apache.openmeetings.db.bind.Constants.APPOINTMENT_NODE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getAppointmentPreStartMinutes;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -329,6 +330,10 @@ public class Appointment extends HistoricalEntity {
 
 	public Date getStart() {
 		return start;
+	}
+
+	public static Date allowedStart(Date start) {
+		return new Date(start.getTime() - (getAppointmentPreStartMinutes() * 60 * 1000));
 	}
 
 	public Calendar startCalendar(TimeZone timeZone) {

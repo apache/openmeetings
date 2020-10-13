@@ -287,19 +287,11 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				reloadRestAllowOrigin();
 				break;
 			case CONFIG_LOGIN_MIN_LENGTH:
-				reloadLoginMinLength();
-				break;
 			case CONFIG_PASS_MIN_LENGTH:
-				reloadPasswdMinLength();
-				break;
 			case CONFIG_PASS_CHECK_UPPER:
-				reloadPwdCheckUpper();
-				break;
 			case CONFIG_PASS_CHECK_DIGIT:
-				reloadPwdCheckDigit();
-				break;
 			case CONFIG_PASS_CHECK_SPECIAL:
-				reloadPwdCheckSpecial();
+				reloadLoginPassword();
 				break;
 			case CONFIG_DEFAULT_GROUP_ID:
 				reloadDefaultGroup();
@@ -317,13 +309,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				reloadChatSendOnEnter();
 				break;
 			case CONFIG_REGISTER_FRONTEND:
-				reloadAllowRegisterFront();
-				break;
 			case CONFIG_REGISTER_SOAP:
-				reloadAllowRegisterSoap();
-				break;
 			case CONFIG_REGISTER_OAUTH:
-				reloadAllowRegisterOauth();
+				reloadRegister();
 				break;
 			case CONFIG_EMAIL_VERIFICATION:
 				reloadSendVerificationEmail();
@@ -358,6 +346,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_SMTP_TIMEOUT_CON:
 			case CONFIG_SMTP_TIMEOUT:
 				reloadMailSettings();
+				break;
+			case CONFIG_APPOINTMENT_REMINDER_MINUTES:
+			case CONFIG_APPOINTMENT_PRE_START_MINUTES:
+				reloadAppointmentSettings();
 				break;
 		}
 		return entity;
@@ -430,23 +422,11 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setRestAllowOrigin(getString(CONFIG_REST_ALLOW_ORIGIN, null));
 	}
 
-	private void reloadLoginMinLength() {
+	private void reloadLoginPassword() {
 		setMinLoginLength(getInt(CONFIG_LOGIN_MIN_LENGTH, USER_LOGIN_MINIMUM_LENGTH));
-	}
-
-	private void reloadPasswdMinLength() {
 		setMinPasswdLength(getInt(CONFIG_LOGIN_MIN_LENGTH, USER_PASSWORD_MINIMUM_LENGTH));
-	}
-
-	private void reloadPwdCheckUpper() {
 		setPwdCheckUpper(getBool(CONFIG_PASS_CHECK_UPPER, true));
-	}
-
-	private void reloadPwdCheckDigit() {
 		setPwdCheckDigit(getBool(CONFIG_PASS_CHECK_DIGIT, true));
-	}
-
-	private void reloadPwdCheckSpecial() {
 		setPwdCheckSpecial(getBool(CONFIG_PASS_CHECK_SPECIAL, true));
 	}
 
@@ -470,15 +450,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setChatSendOnEnter(getBool(CONFIG_CHAT_SEND_ON_ENTER, false));
 	}
 
-	private void reloadAllowRegisterFront() {
+	private void reloadRegister() {
 		setAllowRegisterFrontend(getBool(CONFIG_REGISTER_FRONTEND, false));
-	}
-
-	private void reloadAllowRegisterSoap() {
 		setAllowRegisterSoap(getBool(CONFIG_REGISTER_SOAP, false));
-	}
-
-	private void reloadAllowRegisterOauth() {
 		setAllowRegisterOauth(getBool(CONFIG_REGISTER_OAUTH, false));
 	}
 
@@ -511,6 +485,11 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setMailAddReplyTo(getBool(CONFIG_REPLY_TO_ORGANIZER, true));
 	}
 
+	private void reloadAppointmentSettings() {
+		setAppointmentPreStartMinutes(getInt(CONFIG_APPOINTMENT_PRE_START_MINUTES, 5));
+		setAppointmentReminderMinutes(getInt(CONFIG_APPOINTMENT_REMINDER_MINUTES, 15));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -524,24 +503,19 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadTimezone();
 		reloadRestAllowOrigin();
 		reloadRoomSettings();
-		reloadLoginMinLength();
-		reloadPasswdMinLength();
-		reloadPwdCheckUpper();
-		reloadPwdCheckDigit();
-		reloadPwdCheckSpecial();
+		reloadLoginPassword();
 		reloadDefaultGroup();
 		reloadSipContext();
 		reloadFnameMinLength();
 		reloadLnameMinLength();
 		reloadChatSendOnEnter();
-		reloadAllowRegisterFront();
-		reloadAllowRegisterSoap();
-		reloadAllowRegisterOauth();
+		reloadRegister();
 		reloadSendVerificationEmail();
 		reloadSendRegisterEmail();
 		reloadDisplayNameEditable();
 		reloadMyRoomsEnabled();
 		reloadMailSettings();
+		reloadAppointmentSettings();
 
 		updateCsp();
 	}

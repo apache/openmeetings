@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.room;
 import static java.time.Duration.ZERO;
 import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed;
 import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_USER_PREFIX;
+import static org.apache.openmeetings.db.entity.calendar.Appointment.allowedStart;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -335,7 +336,7 @@ public class RoomPanel extends BasePanel {
 					}
 					if (allowed) {
 						Calendar cal = WebSession.getCalendar();
-						if (isOwner || cal.getTime().after(a.getStart()) && cal.getTime().before(a.getEnd())) {
+						if (isOwner || cal.getTime().after(allowedStart(a.getStart())) && cal.getTime().before(a.getEnd())) {
 							eventDetail = new EventDetailDialog(EVENT_DETAILS_ID, a);
 						} else {
 							allowed = false;
