@@ -18,11 +18,9 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
-import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
 
@@ -35,7 +33,6 @@ public interface IUserManager {
 	Object registerUser(User u, String password, String hash) throws OmException, NoSuchAlgorithmException;
 
 	Long getLanguage(Locale loc);
-	User loginOAuth(OAuthUser user, long serverId) throws IOException, NoSuchAlgorithmException;
 
 	boolean kickExternal(Long roomId, String externalType, String externalId);
 	boolean kickUsersByRoomId(Long roomId);

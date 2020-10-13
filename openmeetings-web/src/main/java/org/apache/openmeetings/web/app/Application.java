@@ -176,6 +176,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Autowired
 	private UserDao userDao;
 	@Autowired
+	private UserManager userManager;
+	@Autowired
 	private ClientManager cm;
 	@Autowired
 	private WhiteboardManager wbManager;
@@ -340,6 +342,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			setExtProcessTtl(cfgDao.getInt(CONFIG_EXT_PROCESS_TTL, getExtProcessTtl()));
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
+			userManager.initHttpClient();
 			setInitComplete(true);
 		} catch (Exception err) {
 			log.error("[appStart]", err);

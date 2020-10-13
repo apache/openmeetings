@@ -58,6 +58,14 @@ import org.apache.openmeetings.db.entity.HistoricalEntity;
 public class OAuthServer extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
+	public enum RequestTokenMethod {
+		POST, GET
+	}
+
+	public enum RequestInfoMethod {
+		POST, GET, HEADER
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -116,7 +124,6 @@ public class OAuthServer extends HistoricalEntity {
 	@MapKeyColumn(name = "name")
 	@Column(name = "value")
 	@CollectionTable(name = "oauth_mapping", joinColumns = @JoinColumn(name = "oauth_id"))
-	//FIXME TODO @XmlElement(name = "attrMapping", required = false)
 	@XmlTransient
 	private Map<String, String> mapping = new LinkedHashMap<>();
 
@@ -262,13 +269,5 @@ public class OAuthServer extends HistoricalEntity {
 				.append(", mapping=").append(mapping)
 				.append(", isDeleted()=").append(isDeleted())
 				.append("]").toString();
-	}
-
-	public enum RequestTokenMethod {
-		POST, GET
-	}
-
-	public enum RequestInfoMethod {
-		POST, GET, HEADER
 	}
 }

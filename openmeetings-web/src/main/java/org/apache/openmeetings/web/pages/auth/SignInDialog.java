@@ -20,9 +20,9 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
+import static org.apache.openmeetings.web.app.UserManager.showAuth;
 import static org.apache.openmeetings.web.pages.HashPage.APP;
 import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
-import static org.apache.openmeetings.web.pages.auth.SignInPage.showAuth;
 
 import java.util.List;
 
