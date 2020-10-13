@@ -33,7 +33,7 @@ iframe {
 	background-repeat: no-repeat;
 	background-image: url('../images/logos/pb.png');
 	background-position: 0 0;
-	background-size: 200px 200px;
+	background-size: 200px;
 	width: 200px;
 	height: 200px;
 	position: relative;
@@ -41,12 +41,12 @@ iframe {
 .powered-preview-logo {
 	background-repeat: no-repeat;
 	background-position: 0 0;
-	background-size: 70px 70px;
+	background-size: 130px;
 	position: absolute;
-	height: 70px;
-	width: 70px;
-	top: 65px;
-	left: 65px;
+	height: 130px;
+	width: 130px;
+	top: 37px;
+	left: 37px;
 }
 .example-image-link {
 	display: block;

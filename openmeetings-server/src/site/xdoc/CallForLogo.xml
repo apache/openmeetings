@@ -37,9 +37,11 @@
 				Please send your logos and opinions to <a href="mailing-lists.html">user@ mail list</a> (you need to subscribe first)<br/>
 				Thanks in advance :)
 			</p>
+			<div id="before-preview"></div>
 		</section>
 		<section name="Preview">
 			<div class="powered-preview">
+				<div class='powered-preview-logo'></div>
 			</div>
 		</section>
 		<section name="Logos">
@@ -310,15 +312,10 @@
 					$(window).scrollTop(0);
 				}
 				function applyLogoSmall() {
-					var pp = $('.powered-preview');
-					var l = pp.children('.powered-preview-logo');
-					if (!l.length) {
-						l = $("<div class='powered-preview-logo'></div>");
-						pp.append(l);
-					}
+					var l = $('.powered-preview .powered-preview-logo');
 					var ib = $(this).closest('table').find('.logo-square');
 					l.css('background-image', 'url(' + ib.attr('src') + ')');
-					$('#_toc_preview')[0].scrollIntoView();
+					$('#before-preview')[0].scrollIntoView();
 				}
 				document.addEventListener("DOMContentLoaded", function() {
 					$('.btn-logo-big').click(applyLogoBig);
