@@ -98,6 +98,10 @@ public abstract class BasePanel extends Panel {
 	protected void process(IPartialPageRequestHandler handler, JSONObject o) throws IOException {
 	}
 
+	/**
+	 * can be overridden by children to provide custom CSS class
+	 * @return custom CSS class
+	 */
 	protected String getCssClass() {
 		return "";
 	}

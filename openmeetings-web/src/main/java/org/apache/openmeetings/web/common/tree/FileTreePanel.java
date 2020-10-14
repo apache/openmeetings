@@ -337,6 +337,10 @@ public abstract class FileTreePanel extends Panel {
 		response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FileTreePanel.class, "filetree.js")));
 	}
 
+	/**
+	 * can be overridden by children to provide custom containment
+	 * @return custom containment
+	 */
 	protected String getContainment() {
 		return ".file.item.drop.area";
 	}

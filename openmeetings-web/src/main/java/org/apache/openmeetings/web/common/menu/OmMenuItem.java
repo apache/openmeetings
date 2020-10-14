@@ -134,5 +134,6 @@ public class OmMenuItem implements INavbarComponent {
 	}
 
 	public void onClick(AjaxRequestTarget target) {
+		// no-op by default
 	}
 }

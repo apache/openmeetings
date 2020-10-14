@@ -48,6 +48,7 @@ import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.Continuation;
 import org.kurento.client.IceCandidate;
+import org.kurento.client.MediaFlowState;
 import org.kurento.client.MediaProfileSpecType;
 import org.kurento.client.MediaType;
 import org.kurento.client.RecorderEndpoint;
@@ -122,25 +123,22 @@ public class KStream extends AbstractStream {
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
 		outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
 			log.info("Media Flow STATE :: {}, type {}, evt {}", evt.getState(), evt.getType(), evt.getMediaType());
-			switch (evt.getState()) {
-				case NOT_FLOWING:
-					log.warn("FlowOut Future is created");
-					flowoutFuture = Optional.of(new CompletableFuture<>().completeAsync(() -> {
-						log.warn("KStream will be dropped {}", sd);
-						if (StreamType.SCREEN == streamType) {
-							processor.doStopSharing(sid, uid);
-						}
-						stopBroadcast();
-						return null;
-					}, delayedExecutor(getFlowoutTimeout(), TimeUnit.SECONDS)));
-					break;
-				case FLOWING:
-					flowoutFuture.ifPresent(f -> {
-						log.warn("FlowOut Future is canceled");
-						f.cancel(true);
-						flowoutFuture = Optional.empty();
-					});
-					break;
+			if (MediaFlowState.NOT_FLOWING == evt.getState()) {
+				log.warn("FlowOut Future is created");
+				flowoutFuture = Optional.of(new CompletableFuture<>().completeAsync(() -> {
+					log.warn("KStream will be dropped {}", sd);
+					if (StreamType.SCREEN == streamType) {
+						processor.doStopSharing(sid, uid);
+					}
+					stopBroadcast();
+					return null;
+				}, delayedExecutor(getFlowoutTimeout(), TimeUnit.SECONDS)));
+			} else {
+				flowoutFuture.ifPresent(f -> {
+					log.warn("FlowOut Future is canceled");
+					f.cancel(true);
+					flowoutFuture = Optional.empty();
+				});
 			}
 		});
 		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media FlowIn :: {}", evt));

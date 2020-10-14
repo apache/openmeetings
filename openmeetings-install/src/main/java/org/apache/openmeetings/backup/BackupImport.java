@@ -452,17 +452,17 @@ public class BackupImport {
 		progressHolder.setProgress(97);
 
 		if (ver.compareTo(BackupVersion.get("4.0.0")) < 0) {
-			for (BaseFileItem bfi : files) {
+			for (FileItem bfi : files) {
 				if (bfi.isDeleted()) {
 					continue;
 				}
 				if (BaseFileItem.Type.PRESENTATION == bfi.getType()) {
-					convertOldPresentation((FileItem)bfi);
+					convertOldPresentation(bfi);
 					fileItemDao.updateBase(bfi);
 				}
 				if (BaseFileItem.Type.WML_FILE == bfi.getType()) {
 					try {
-						Whiteboard wb = WbConverter.convert((FileItem)bfi);
+						Whiteboard wb = WbConverter.convert(bfi);
 						wb.save(bfi.getFile().toPath());
 					} catch (Exception e) {
 						log.error("Unexpected error while converting WB", e);

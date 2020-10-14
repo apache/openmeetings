@@ -53,7 +53,9 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 	public static final String FILES_GROUP = "files-group-%s";
 	private final Long roomId;
 	private final List<BaseFileItem> roots = new ArrayList<>();
-	private final String lblPublic, lblGroupFile, lblGroupRec;
+	private final String lblPublic;
+	private final String lblGroupFile;
+	private final String lblGroupRec;
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean

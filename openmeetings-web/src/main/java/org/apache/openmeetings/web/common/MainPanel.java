@@ -390,7 +390,7 @@ public class MainPanel extends Panel {
 
 	private BasePanel getCurrentPanel() {
 		Component prev = contents.get(CHILD_ID);
-		if (prev != null && prev instanceof BasePanel) {
+		if (prev instanceof BasePanel) {
 			return (BasePanel)prev;
 		}
 		return null;
