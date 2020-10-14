@@ -115,11 +115,11 @@ public class SignInPage extends BaseInitedPage {
 	@SpringBean
 	private OAuth2Dao oauthDao;
 
-	public SignInPage() {
+	public SignInPage() throws InterruptedException {
 		this(new PageParameters());
 	}
 
-	public SignInPage(PageParameters p) {
+	public SignInPage(PageParameters p) throws InterruptedException {
 		super();
 		WebSession.get().checkToken(p.get(TOKEN_PARAM));
 		if (WebSession.get().isSignedIn()) {
@@ -143,7 +143,7 @@ public class SignInPage extends BaseInitedPage {
 				} else {
 					log.error("Failed to login via OAuth2!");
 				}
-			} catch (IOException|NoSuchAlgorithmException|InterruptedException|JSONException e) {
+			} catch (IOException|NoSuchAlgorithmException|JSONException e) {
 				log.error("OAuth2 login error", e);
 			}
 		}

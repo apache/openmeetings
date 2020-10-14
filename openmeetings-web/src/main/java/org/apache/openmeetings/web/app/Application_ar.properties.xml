@@ -823,6 +823,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 
 	<br />
 	]]></entry>
+	<entry key="internal.error"><![CDATA[Unfortunately something bad just happen :(, <br/>
+please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="label.dock.panel"><![CDATA[انقر لإرساء اللوحة]]></entry>
 	<entry key="label.undock.panel"><![CDATA[انقر لإلغاء قفل اللوحة]]></entry>

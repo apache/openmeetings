@@ -68,6 +68,7 @@ import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.HashPage;
+import org.apache.openmeetings.web.pages.InternalErrorPage;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
 import org.apache.openmeetings.web.pages.PrivacyPage;
@@ -118,6 +119,7 @@ import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
+import org.apache.wicket.settings.ExceptionSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.validator.UrlValidator;
@@ -189,6 +191,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		setWicketApplicationName(super.getName());
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
+		getApplicationSettings().setInternalErrorPage(InternalErrorPage.class);
+		getExceptionSettings().setUnexpectedExceptionDisplay(ExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this, ctx, true));
 
 		Config cfg = new XmlConfigBuilder().build();

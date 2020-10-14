@@ -824,6 +824,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 		target="_blank">https://openmeetings.apache.org/commercial-support.html</a></span>
 	<br />
 	]]></entry>
+	<entry key="internal.error"><![CDATA[К сожалению что-то поломалось :(, <br/>
+пожалуйста проверьте <tt>openmeetings.log</tt> и свяжитесь с разработчиками OpenMeetings]]></entry>
 	<entry key="invalid.hash"><![CDATA[Неверный код]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Кликните чтобы "прилепить" панель]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Кликните чтобы "отлепить" панель]]></entry>
