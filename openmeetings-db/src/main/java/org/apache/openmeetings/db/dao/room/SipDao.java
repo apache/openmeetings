@@ -89,7 +89,7 @@ public class SipDao implements SipListenerExt {
 	public static final String SIP_FIRST_NAME = "SIP Transport";
 	public static final String SIP_USER_NAME = "--SIP--";
 	private static final String SIP_TRANSPORT = "ws";
-	private static final <T> Consumer<T> NOOP() {
+	private static final <T> Consumer<T> noop() {
 		return t -> {};
 	}
 
@@ -100,7 +100,6 @@ public class SipDao implements SipListenerExt {
 	private String branch;
 
 	private SipProvider sipProvider;
-	private SipFactory sipFactory;
 	private SipStackExt sipStack;
 	private MessageFactory messageFactory;
 	private HeaderFactory headerFactory;
@@ -119,7 +118,7 @@ public class SipDao implements SipListenerExt {
 					, config.getManagerPort()
 					, config.getManagerUser()
 					, config.getManagerPass());
-			sipFactory = SipFactory.getInstance();
+			final SipFactory sipFactory = SipFactory.getInstance();
 			sipFactory.setPathName("gov.nist");
 
 			final Properties properties = new Properties();
@@ -356,7 +355,7 @@ public class SipDao implements SipListenerExt {
 	}
 
 	private Address createAddr(String user) {
-		return createAddr(user, config.getSipHostname(), NOOP());
+		return createAddr(user, config.getSipHostname(), noop());
 	}
 
 	private Address createAddr(String user, String host, Consumer<SipUri> cons) {
@@ -437,7 +436,7 @@ public class SipDao implements SipListenerExt {
 		sendRequest(
 				REGISTER
 				, config.getOmSipUser()
-				, NOOP()
+				, noop()
 				, req -> {
 					try {
 						addAllow(req);
