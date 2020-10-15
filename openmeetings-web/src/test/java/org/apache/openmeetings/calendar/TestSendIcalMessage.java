@@ -70,11 +70,12 @@ class TestSendIcalMessage extends AbstractJUnitDefaults {
 		Date end = endCal.getTime();
 		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST)
 				.createVEvent(TimeZone.getDefault().getID(), start, end, "test event")
+				.setLocation("")
+				.setDescription("localhost:5080/link_openmeetings")
+				.setUid(randomUUID().toString())
+				.setSequence(0)
 				.addOrganizer(recipients, "seba-test")
 				.addAttendee(email, username, invitor)
-				.setDescription("localhost:5080/link_openmeetings")
-				.setLocation("")
-				.setUid(randomUUID().toString())
 				.build();
 
 		log.debug("ICS: {}", handler.toString());

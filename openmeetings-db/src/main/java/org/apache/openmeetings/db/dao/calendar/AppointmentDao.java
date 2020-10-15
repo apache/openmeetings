@@ -26,7 +26,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -101,7 +100,12 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 		}
 		a.setRoom(roomDao.update(r, userId));
 		final boolean newApp = a.getId() == null;
-		Appointment a0 = newApp ? null : get(a.getId());
+		Appointment a0 = null;
+		Set<Long> mmIds = Set.of();
+		if (sendmails && !newApp) {
+			a0 = get(a.getId());
+			mmIds = meetingMemberDao.getMeetingMemberIdsByAppointment(a.getId());
+		}
 		if (newApp) {
 			a.setInserted(new Date());
 			a.setIcalId(randomUUID().toString());
@@ -111,8 +115,6 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 			a = em.merge(a);
 		}
 		if (sendmails) {
-			Set<Long> mmIds = newApp ? new HashSet<>()
-					: meetingMemberDao.getMeetingMemberIdsByAppointment(a.getId());
 			// update meeting members
 			boolean sendMail = a0 == null || !a0.getTitle().equals(a.getTitle()) ||
 					!(a0.getDescription() != null ? a0.getDescription().equals(a.getDescription()) : true) ||

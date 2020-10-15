@@ -115,11 +115,12 @@ public class InvitationManager implements IInvitationManager {
 			Appointment a = i.getAppointment();
 			IcalHandler handler = new IcalHandler(MessageType.CANCEL == type ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST)
 					.createVEvent(getTimeZone(owner).getID(), a.getStart(), a.getEnd(), a.getTitle())
+					.setLocation(a.getLocation())
+					.setDescription(a.getDescription() + "\n\n\n" + invitationLink)
+					.setUid(a.getIcalId())
+					.setSequence(0)
 					.addOrganizer(replyToEmail, owner.getLogin())
 					.addAttendee(email, username, isOwner)
-					.setLocation(a.getLocation())
-					.setDescription(invitationLink)
-					.setUid(a.getIcalId())
 					.build();
 
 			log.debug(handler.toString());
