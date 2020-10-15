@@ -23,6 +23,8 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.Validatable;
 
 public class MailUtil {
+	public static final String SCHEME_MAILTO = "mailto";
+	public static final String MAILTO = SCHEME_MAILTO + ":";
 	private MailUtil() {}
 
 	public static boolean isValid(String email) {

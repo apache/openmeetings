@@ -20,6 +20,8 @@ package org.apache.openmeetings.service.calendar.caldav;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
+import static org.apache.openmeetings.util.mail.MailUtil.MAILTO;
+import static org.apache.openmeetings.util.mail.MailUtil.SCHEME_MAILTO;
 
 import java.net.URI;
 import java.text.ParsePosition;
@@ -228,7 +230,7 @@ public class IcalUtils {
 			URI uri = URI.create(organizer.getValue());
 
 			//If the value of the organizer is an email
-			if ("mailto".equals(uri.getScheme())) {
+			if (SCHEME_MAILTO.equals(uri.getScheme())) {
 				String email = uri.getSchemeSpecificPart();
 
 				organizerEmail = email;
@@ -248,7 +250,7 @@ public class IcalUtils {
 		if (attendees != null && !attendees.isEmpty()) {
 			for (Property attendee : attendees) {
 				URI uri = URI.create(attendee.getValue());
-				if ("mailto".equals(uri.getScheme())) {
+				if (SCHEME_MAILTO.equals(uri.getScheme())) {
 					String email = uri.getSchemeSpecificPart();
 
 					Role role = attendee.getParameter(Role.CHAIR.getName());
@@ -439,14 +441,14 @@ public class IcalUtils {
 
 		if (appointment.getMeetingMembers() != null) {
 			for (MeetingMember meetingMember : appointment.getMeetingMembers()) {
-				Attendee attendee = new Attendee(URI.create("mailto:" +
-						meetingMember.getUser().getAddress().getEmail()));
+				Attendee attendee = new Attendee(URI.create(MAILTO
+						+ meetingMember.getUser().getAddress().getEmail()));
 				attendee.getParameters().add(Role.REQ_PARTICIPANT);
 				attendee.getParameters().add(new Cn(meetingMember.getUser().getLogin()));
 				meeting.getProperties().add(attendee);
 			}
 		}
-		URI orgUri = URI.create("mailto:" + appointment.getOwner().getAddress().getEmail());
+		URI orgUri = URI.create(MAILTO + appointment.getOwner().getAddress().getEmail());
 		Attendee orgAtt = new Attendee(orgUri);
 		orgAtt.getParameters().add(Role.CHAIR);
 		Cn orgCn = new Cn(appointment.getOwner().getLogin());

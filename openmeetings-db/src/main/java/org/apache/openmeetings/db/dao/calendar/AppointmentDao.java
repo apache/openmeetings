@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.calendar;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
@@ -100,8 +101,10 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 		}
 		a.setRoom(roomDao.update(r, userId));
 		final boolean newApp = a.getId() == null;
+		Appointment a0 = newApp ? null : get(a.getId());
 		if (newApp) {
 			a.setInserted(new Date());
+			a.setIcalId(randomUUID().toString());
 			em.persist(a);
 		} else {
 			a.setUpdated(new Date());
@@ -111,7 +114,6 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 			Set<Long> mmIds = newApp ? new HashSet<>()
 					: meetingMemberDao.getMeetingMemberIdsByAppointment(a.getId());
 			// update meeting members
-			Appointment a0 = newApp ? null : get(a.getId());
 			boolean sendMail = a0 == null || !a0.getTitle().equals(a.getTitle()) ||
 					!(a0.getDescription() != null ? a0.getDescription().equals(a.getDescription()) : true) ||
 					!(a0.getLocation() != null ? a0.getLocation().equals(a.getLocation()) : true) ||

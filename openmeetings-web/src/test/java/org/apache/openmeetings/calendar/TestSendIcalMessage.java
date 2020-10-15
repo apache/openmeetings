@@ -19,15 +19,12 @@
 package org.apache.openmeetings.calendar;
 
 import static java.util.UUID.randomUUID;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Map;
+import java.util.TimeZone;
 
 import javax.activation.DataHandler;
 import javax.mail.BodyPart;
@@ -48,23 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import net.fortuna.ical4j.data.CalendarOutputter;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.TimeZone;
-import net.fortuna.ical4j.model.TimeZoneRegistry;
-import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.component.VTimeZone;
-import net.fortuna.ical4j.model.parameter.Cn;
-import net.fortuna.ical4j.model.parameter.Role;
-import net.fortuna.ical4j.model.property.Attendee;
-import net.fortuna.ical4j.model.property.CalScale;
-import net.fortuna.ical4j.model.property.Method;
-import net.fortuna.ical4j.model.property.Organizer;
-import net.fortuna.ical4j.model.property.ProdId;
-import net.fortuna.ical4j.model.property.Uid;
-import net.fortuna.ical4j.model.property.Version;
-
 class TestSendIcalMessage extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(TestSendIcalMessage.class);
 
@@ -78,120 +58,31 @@ class TestSendIcalMessage extends AbstractJUnitDefaults {
 	String htmlBody = "test";
 
 
-	public void simpleInvitionIcalLink() {
-		// Create a TimeZone
-		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
-		TimeZone timezone = registry.getTimeZone("America/Mexico_City");
-		VTimeZone tz = timezone.getVTimeZone();
-
-		// Start Date is on: April 1, 2008, 9:00 am
-		java.util.Calendar startDate = new GregorianCalendar();
-		startDate.setTimeZone(timezone);
-		startDate.set(java.util.Calendar.MONTH, java.util.Calendar.APRIL);
-		startDate.set(java.util.Calendar.DAY_OF_MONTH, 1);
-		startDate.set(java.util.Calendar.YEAR, 2008);
-		startDate.set(java.util.Calendar.HOUR_OF_DAY, 9);
-		startDate.set(java.util.Calendar.MINUTE, 0);
-		startDate.set(java.util.Calendar.SECOND, 0);
-
-		// End Date is on: April 1, 2008, 13:00
-		java.util.Calendar endDate = new GregorianCalendar();
-		endDate.setTimeZone(timezone);
-		endDate.set(java.util.Calendar.MONTH, java.util.Calendar.APRIL);
-		endDate.set(java.util.Calendar.DAY_OF_MONTH, 1);
-		endDate.set(java.util.Calendar.YEAR, 2008);
-		endDate.set(java.util.Calendar.HOUR_OF_DAY, 13);
-		endDate.set(java.util.Calendar.MINUTE, 0);
-		endDate.set(java.util.Calendar.SECOND, 0);
-
-		// Create the event
-		String eventName = "Progress Meeting";
-		DateTime start = new DateTime(startDate.getTime());
-		DateTime end = new DateTime(endDate.getTime());
-		VEvent meeting = new VEvent(start, end, eventName);
-
-		// add timezone info..
-		meeting.getProperties().add(tz.getTimeZoneId());
-
-		// generate unique identifier..
-		Uid uid = new Uid(randomUUID().toString());
-		meeting.getProperties().add(uid);
-
-		// add attendees..
-		Attendee dev1 = new Attendee(URI.create("mailto:dev1@mycompany.com"));
-		dev1.getParameters().add(Role.REQ_PARTICIPANT);
-		dev1.getParameters().add(new Cn("Developer 1"));
-		meeting.getProperties().add(dev1);
-
-		Attendee dev2 = new Attendee(URI.create("mailto:dev2@mycompany.com"));
-		dev2.getParameters().add(Role.OPT_PARTICIPANT);
-		dev2.getParameters().add(new Cn("Developer 2"));
-		meeting.getProperties().add(dev2);
-
-		// Create a calendar
-		net.fortuna.ical4j.model.Calendar icsCalendar = new net.fortuna.ical4j.model.Calendar();
-		icsCalendar.getProperties().add(
-				new ProdId("-//Events Calendar//iCal4j 1.0//EN"));
-		icsCalendar.getProperties().add(CalScale.GREGORIAN);
-		icsCalendar.getProperties().add(Version.VERSION_2_0);
-
-		// Add the event and print
-		icsCalendar.getComponents().add(meeting);
-
-		Organizer orger = new Organizer(URI.create("seba.wagner@gmail.com"));
-		orger.getParameters().add(new Cn("Sebastian Wagner"));
-		meeting.getProperties().add(orger);
-
-		icsCalendar.getProperties().add(Method.REQUEST);
-
-		log.debug(icsCalendar.toString());
-
-		ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		CalendarOutputter outputter = new CalendarOutputter();
-		try {
-			outputter.output(icsCalendar, bout);
-			iCalMimeBody = bout.toByteArray();
-
-			sendIcalMessage();
-		} catch (Exception e) {
-			log.error("Error", e);
-		}
-	}
-
 	@Test
-	void sendInvitionIcalLink() {
-		try {
-			String email = "hans@webbase-design.de";
-			String username = "shans";
-			boolean invitor = false;
+	void sendInvitionIcalLink() throws Exception {
+		String email = "hans@webbase-design.de";
+		String username = "shans";
+		boolean invitor = false;
 
-			Calendar start = Calendar.getInstance();
-			Calendar end = Calendar.getInstance();
-			IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST);
+		Date start = Calendar.getInstance().getTime();
+		Calendar endCal = Calendar.getInstance();
+		endCal.add(Calendar.HOUR_OF_DAY, 1);
+		Date end = endCal.getTime();
+		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST)
+				.createVEvent(TimeZone.getDefault().getID(), start, end, "test event")
+				.addOrganizer(recipients, "seba-test")
+				.addAttendee(email, username, invitor)
+				.setDescription("localhost:5080/link_openmeetings")
+				.setLocation("")
+				.setUid(randomUUID().toString())
+				.build();
 
-			// Transforming Meeting Members
+		log.debug("ICS: {}", handler.toString());
+		assertNotNull(handler.toString(), "Valid ICS should be created");
 
-			Map<String, String> attendeeList = handler.getAttendeeData(email, username, invitor);
-			Map<String, String> organizerAttendee = handler.getAttendeeData(recipients, "seba-test", true);
+		iCalMimeBody = handler.toByteArray();
 
-			List<Map<String, String>> atts = List.of(attendeeList);
-
-			// Create ICal Message
-			String meetingId = handler.addNewMeeting(start.getTime(), end.getTime(), "test event",
-					atts, "localhost:5080/link_openmeetings",
-					organizerAttendee, "", java.util.TimeZone.getDefault().getID());
-
-			log.debug("meetingId " + meetingId);
-
-			iCalMimeBody = handler.getIcalAsByteArray();
-
-			sendIcalMessage();
-
-			// return MailHandler.sendMail(email, subject, template);
-
-		} catch (Exception err) {
-			log.error("sendInvitionIcalLink", err);
-		}
+		sendIcalMessage();
 	}
 
 	private void sendIcalMessage() throws Exception {

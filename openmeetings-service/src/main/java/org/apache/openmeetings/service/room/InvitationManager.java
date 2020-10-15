@@ -23,10 +23,7 @@ import static org.apache.openmeetings.db.entity.calendar.Appointment.allowedStar
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.IApplication;
@@ -50,7 +47,6 @@ import org.apache.openmeetings.service.mail.template.subject.SubjectEmailTemplat
 import org.apache.openmeetings.service.mail.template.subject.UpdatedAppointmentTemplate;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.mail.IcalHandler;
-import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,29 +112,18 @@ public class InvitationManager implements IInvitationManager {
 		if (ical) {
 			String username = i.getInvitee().getLogin();
 			boolean isOwner = owner.getId().equals(i.getInvitee().getId());
-			IcalHandler handler = new IcalHandler(MessageType.CANCEL == type ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST);
-
-			Map<String, String> attendeeList = handler.getAttendeeData(email, username, isOwner);
-
-			List<Map<String, String>> atts = new ArrayList<>();
-			atts.add(attendeeList);
-
-			// Defining Organizer
-
-			Map<String, String> organizerAttendee = handler.getAttendeeData(replyToEmail, owner.getLogin(), isOwner);
-
 			Appointment a = i.getAppointment();
-			// Create ICal Message
-			String meetingId = handler.addNewMeeting(a.getStart(), a.getEnd(), a.getTitle(), atts, invitationLink,
-					organizerAttendee, a.getIcalId(), getTimeZone(owner).getID());
+			IcalHandler handler = new IcalHandler(MessageType.CANCEL == type ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST)
+					.createVEvent(getTimeZone(owner).getID(), a.getStart(), a.getEnd(), a.getTitle())
+					.addOrganizer(replyToEmail, owner.getLogin())
+					.addAttendee(email, username, isOwner)
+					.setLocation(a.getLocation())
+					.setDescription(invitationLink)
+					.setUid(a.getIcalId())
+					.build();
 
-			// Writing back meetingUid
-			if (Strings.isEmpty(a.getIcalId())) {
-				a.setIcalId(meetingId);
-			}
-
-			log.debug(handler.getICalDataAsString());
-			mailHandler.send(new MailMessage(email, replyToEmail, subject, template, handler.getIcalAsByteArray()));
+			log.debug(handler.toString());
+			mailHandler.send(new MailMessage(email, replyToEmail, subject, template, handler.toByteArray()));
 		} else {
 			mailHandler.send(email, replyToEmail, subject, template);
 		}

@@ -18,18 +18,14 @@
  */
 package org.apache.openmeetings.util.mail;
 
-import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.util.mail.MailUtil.MAILTO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
-import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +64,8 @@ public class IcalHandler {
 
 	/** ICal instance */
 	private final Calendar icsCalendar;
+	private TimeZone timeZone;
+	private VEvent meeting;
 
 	/** Creation of a new Event */
 	public static final Method ICAL_METHOD_REQUEST = Method.REQUEST;
@@ -90,36 +88,12 @@ public class IcalHandler {
 		icsCalendar.getProperties().add(method);
 	}
 
-	/**
-	 *
-	 * @param startDate
-	 *            use standard TimeZone!!
-	 * @param endDate
-	 *            use standard time zone!!
-	 * @param name
-	 *            meeting name
-	 * @param attendees
-	 *            List of attendees (use getAttendeeData to retrieve valid records)
-	 * @param description
-	 *            containing the meeting description
-	 * @param organizer
-	 *            organizer
-	 * @param uid
-	 *            (maybe null)
-	 * @param javaTzId ID of owner's java time zone
-	 * @return UID of Meeting
-	 */
-	// ---------------------------------------------------------------------------------------
-	public String addNewMeeting(Date startDate, Date endDate, String name,
-			List<Map<String, String>> attendees, String description,
-			Map<String, String> organizer, String uid, String javaTzId)
-	{
-
+	public IcalHandler createVEvent(String tz, Date startDate, Date endDate, String name) {
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
 
-		TimeZone timeZone = registry.getTimeZone(javaTzId);
+		timeZone = registry.getTimeZone(tz);
 		if (timeZone == null) {
-			throw new NoSuchElementException("Unable to get time zone by id provided: " + javaTzId);
+			throw new NoSuchElementException("Unable to get time zone by id provided: " + tz);
 		}
 
 		DateTime start = new DateTime(startDate);
@@ -127,63 +101,54 @@ public class IcalHandler {
 		DateTime end = new DateTime(endDate);
 		end.setTimeZone(timeZone);
 
-		VEvent meeting = new VEvent(start, end, name);
-
-		meeting.getProperties().add(new Description(description));
-		meeting.getProperties().add(new Sequence(0));
-		meeting.getProperties().add(new Location(""));
+		meeting = new VEvent(start, end, name);
 		meeting.getProperties().add(Transp.OPAQUE);
-
-		// generate unique identifier (if not submitted)
-		Uid ui;
-		if (Strings.isEmpty(uid)) {
-			ui = new Uid(randomUUID().toString());
-			log.debug("Generating Meeting UID : {}", ui.getValue());
-		} else {
-			ui = new Uid(uid);
-			log.debug("Using Meeting UID : {}", ui.getValue());
-		}
-
-		meeting.getProperties().add(ui);
-
-		for (Map<String, String> att : attendees) {
-			Attendee uno = new Attendee(URI.create(att.get("uri")));
-			String chair = att.get("chair");
-			uno.getParameters().add("0".equals(chair) ? Role.REQ_PARTICIPANT : Role.CHAIR);
-			uno.getParameters().add(new Cn(att.get("cn")));
-			meeting.getProperties().add(uno);
-		}
-
-		Organizer orger = new Organizer(URI.create(organizer.get("uri")));
-		orger.getParameters().add(new Cn(organizer.get("cn")));
-
-		meeting.getProperties().add(orger);
-
-		icsCalendar.getComponents().add(timeZone.getVTimeZone());
-		icsCalendar.getComponents().add(meeting);
-
-		return ui.getValue();
+		return this;
 	}
 
-	/**
-	 * Use this function to build a valid record for the AttendeeList for
-	 * addMeetings Generate a Attendee
-	 *
-	 * @param emailAdress
-	 *            - email of attendee
-	 * @param displayName
-	 *            - name of attendee
-	 * @param chair
-	 *            - is this organizer
-	 * @return attendee data as {@link Map}
-	 */
-	public Map<String, String> getAttendeeData(String emailAdress, String displayName, boolean chair) {
-		Map<String, String> oneRecord = new HashMap<>();
-		oneRecord.put("uri", "mailto:" + emailAdress);
-		oneRecord.put("cn", displayName);
-		oneRecord.put("chair", chair ? "1" : "0");
+	public IcalHandler setDescription(String description) {
+		meeting.getProperties().add(new Description(description));
+		return this;
+	}
 
-		return oneRecord;
+	public IcalHandler setLocation(String location) {
+		meeting.getProperties().add(new Location(location));
+		return this;
+	}
+
+	public IcalHandler setSequence(int seq) {
+		meeting.getProperties().add(new Sequence(seq));
+		return this;
+	}
+
+	public IcalHandler setUid(String uid) {
+		meeting.getProperties().add(new Uid(uid));
+		return this;
+	}
+
+	private static URI getMailto(String email) {
+		return URI.create(MAILTO + email);
+	}
+
+	public IcalHandler addOrganizer(String email, String name) {
+		Organizer orger = new Organizer(getMailto(email));
+		orger.getParameters().add(new Cn(name));
+		meeting.getProperties().add(orger);
+		return this;
+	}
+
+	public IcalHandler addAttendee(String email, String display, boolean chair) {
+		Attendee uno = new Attendee(URI.create(MAILTO + email));
+		uno.getParameters().add(chair ? Role.REQ_PARTICIPANT : Role.CHAIR);
+		uno.getParameters().add(new Cn(display));
+		meeting.getProperties().add(uno);
+		return this;
+	}
+
+	public IcalHandler build() {
+		icsCalendar.getComponents().add(timeZone.getVTimeZone());
+		icsCalendar.getComponents().add(meeting);
+		return this;
 	}
 
 	/**
@@ -194,7 +159,7 @@ public class IcalHandler {
 	 * @throws Exception
 	 *             - in case of error during writing to the file
 	 */
-	public void writeDataToFile(String inFilerPath) throws Exception {
+	public void toFile(String inFilerPath) throws Exception {
 		String filerPath = inFilerPath.endsWith(".ics") ? inFilerPath
 				: String.format("%s.ics", inFilerPath);
 
@@ -211,7 +176,7 @@ public class IcalHandler {
 	 * @throws Exception
 	 *             - in case of error during writing to byte array
 	 */
-	public byte[] getIcalAsByteArray() throws Exception {
+	public byte[] toByteArray() throws Exception {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		CalendarOutputter outputter = new CalendarOutputter();
 		outputter.output(icsCalendar, bout);
@@ -221,7 +186,8 @@ public class IcalHandler {
 	/**
 	 * Retrieving Data as String
 	 */
-	public String getICalDataAsString() {
-		return icsCalendar.toString();
+	@Override
+	public String toString() {
+		return icsCalendar == null ? null : icsCalendar.toString();
 	}
 }
