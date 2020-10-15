@@ -121,3 +121,6 @@ iframe {
 	font-weight: bold;
 	color: var(--info);
 }
+.grid-striped .row:nth-of-type(odd) {
+	background-color: rgba(0,0,0,.05);
+}

@@ -40,26 +40,30 @@
 				configuration values.
 			</p>
 			<p></p>
-			<table>
-				<tr>
-					<th> key </th>
-					<th> default </th>
-					<th> meaning </th>
-					<th> availabe since OpenMeetings version </th>
-				</tr>
+			<div class="container grid-striped">
+				<div class="row font-weight-bold mb-3">
+					<div class="col-1 p-2"> # </div>
+					<div class="col-3 text-break p-2"> key </div>
+					<div class="col-1 p-2"> type </div>
+					<div class="col-3 text-break p-2"> default </div>
+					<div class="col-3 text-break p-2"> meaning </div>
+					<div class="col-1 p-2"> version </div>
+				</div>
 			<xsl:apply-templates/>
-			</table>
+			</div>
 		</section>
 	</body>
 </document>
 	</xsl:template>
 
 	<xsl:template match="config">
-				<tr>
-					<td><xsl:value-of select="key"/></td>
-					<td><xsl:value-of select="value"/></td>
-					<td><xsl:value-of select="comment"/></td>
-					<td><xsl:value-of select="fromVersion"/></td>
-				</tr>
+				<div class="row mb-3">
+					<div class="col-1 p-2"><xsl:value-of select="position() div 2"/></div>
+					<div class="col-3 text-break p-2"><xsl:value-of select="key"/></div>
+					<div class="col-1 p-2"><xsl:value-of select="type"/></div>
+					<div class="col-3 text-break font-italic font-weight-bold p-2"><xsl:value-of select="value"/></div>
+					<div class="col-3 text-break p-2"><xsl:value-of select="comment"/></div>
+					<div class="col-1 p-2"><xsl:value-of select="fromVersion"/></div>
+				</div>
 	</xsl:template>
 </xsl:stylesheet>
