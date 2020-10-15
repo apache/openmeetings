@@ -99,11 +99,19 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 			r.setCapacity(cfgDao.getLong(CONFIG_CALENDAR_ROOM_CAPACITY, 50L));
 		}
 		a.setRoom(roomDao.update(r, userId));
+		final boolean newApp = a.getId() == null;
+		if (newApp) {
+			a.setInserted(new Date());
+			em.persist(a);
+		} else {
+			a.setUpdated(new Date());
+			a = em.merge(a);
+		}
 		if (sendmails) {
-			Set<Long> mmIds = a.getId() == null ? new HashSet<>()
+			Set<Long> mmIds = newApp ? new HashSet<>()
 					: meetingMemberDao.getMeetingMemberIdsByAppointment(a.getId());
 			// update meeting members
-			Appointment a0 = a.getId() == null ? null : get(a.getId());
+			Appointment a0 = newApp ? null : get(a.getId());
 			boolean sendMail = a0 == null || !a0.getTitle().equals(a.getTitle()) ||
 					!(a0.getDescription() != null ? a0.getDescription().equals(a.getDescription()) : true) ||
 					!(a0.getLocation() != null ? a0.getLocation().equals(a.getLocation()) : true) ||
@@ -126,20 +134,13 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 			//notify owner
 			MeetingMember owner = new MeetingMember();
 			owner.setUser(a.getOwner());
-			if (a.getId() == null) {
+			if (newApp) {
 				invitationManager.processInvitation(a, owner, MessageType.CREATE);
 			} else if (a.isDeleted()) {
 				invitationManager.processInvitation(a, owner, MessageType.CANCEL);
 			} else if (sendMail) {
 				invitationManager.processInvitation(a, owner, MessageType.UPDATE, sendMail);
 			}
-		}
-		if (a.getId() == null) {
-			a.setInserted(new Date());
-			em.persist(a);
-		} else {
-			a.setUpdated(new Date());
-			a = em.merge(a);
 		}
 		return a;
 	}
