@@ -105,7 +105,7 @@ public class IcalHandler {
 		end.setTimeZone(timeZone);
 
 		meeting = new VEvent(start, end, name);
-		meeting.getProperties().add(Transp.OPAQUE);
+		meeting.getProperties().add(Method.CANCEL == method ? Transp.TRANSPARENT : Transp.OPAQUE);
 		return this;
 	}
 

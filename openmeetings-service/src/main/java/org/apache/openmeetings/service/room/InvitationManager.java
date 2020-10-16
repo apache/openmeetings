@@ -97,10 +97,12 @@ public class InvitationManager implements IInvitationManager {
 
 	@Override
 	public void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical, String baseUrl) throws Exception {
-		String invitationLink = null;
+		final String invitationLink;
 		if (type != MessageType.CANCEL) {
 			IApplication app = ensureApplication(1L);
 			invitationLink = app.getOmInvitationLink(i, baseUrl);
+		} else {
+			invitationLink = null;
 		}
 		User owner = i.getInvitedBy();
 
@@ -110,7 +112,6 @@ public class InvitationManager implements IInvitationManager {
 		String replyToEmail = owner.getAddress().getEmail();
 
 		if (ical) {
-			String username = i.getInvitee().getLogin();
 			boolean isOwner = owner.getId().equals(i.getInvitee().getId());
 			Appointment a = i.getAppointment();
 			String desc = a.getDescription() == null ? "" : a.getDescription();
@@ -123,8 +124,8 @@ public class InvitationManager implements IInvitationManager {
 					.setDescription(desc)
 					.setUid(a.getIcalId())
 					.setSequence(0)
-					.addOrganizer(replyToEmail, owner.getLogin())
-					.addAttendee(email, username, isOwner)
+					.addOrganizer(replyToEmail, owner.getDisplayName())
+					.addAttendee(email, i.getInvitee().getLogin(), isOwner)
 					.build();
 
 			log.debug(handler.toString());
