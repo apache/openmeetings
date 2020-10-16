@@ -143,8 +143,8 @@ public class IcalHandler {
 	public IcalHandler addAttendee(String email, String display, boolean chair) {
 		Attendee uno = new Attendee(URI.create(MAILTO + email));
 		uno.getParameters().add(chair ? Role.CHAIR : Role.REQ_PARTICIPANT);
-		uno.getParameters().add(new Cn(display));
 		uno.getParameters().add(Method.CANCEL == method ? PartStat.DECLINED : PartStat.ACCEPTED);
+		uno.getParameters().add(new Cn(display));
 		meeting.getProperties().add(uno);
 		return this;
 	}

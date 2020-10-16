@@ -30,7 +30,6 @@ import javax.activation.DataHandler;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.Multipart;
-import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -50,8 +49,6 @@ class TestSendIcalMessage extends AbstractJUnitDefaults {
 
 	@Autowired
 	private MailHandler mailHandler;
-
-	private byte[] iCalMimeBody;
 
 	String subject = "test iCal";
 	String recipients = "seba.wagner@gmail.com";
@@ -81,12 +78,10 @@ class TestSendIcalMessage extends AbstractJUnitDefaults {
 		log.debug("ICS: {}", handler.toString());
 		assertNotNull(handler.toString(), "Valid ICS should be created");
 
-		iCalMimeBody = handler.toByteArray();
-
-		sendIcalMessage();
+		sendIcalMessage(handler.toByteArray());
 	}
 
-	private void sendIcalMessage() throws Exception {
+	private void sendIcalMessage(byte[] iCalMimeBody) throws Exception {
 		log.debug("sendIcalMessage");
 
 		// Building MimeMessage
@@ -114,11 +109,6 @@ class TestSendIcalMessage extends AbstractJUnitDefaults {
 		mimeMessage.setSentDate(new Date());
 		mimeMessage.setContent(multipart);
 
-		// -- Set some other header information --
-		// mimeMessage.setHeader("X-Mailer", "XML-Mail");
-		// mimeMessage.setSentDate(new Date());
-
-		// Transport trans = session.getTransport("smtp");
-		Transport.send(mimeMessage);
+		assertNotNull(mimeMessage, "Valid MIME message should be created");
 	}
 }
