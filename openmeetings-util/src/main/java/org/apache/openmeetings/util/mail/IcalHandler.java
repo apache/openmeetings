@@ -47,6 +47,7 @@ import net.fortuna.ical4j.model.property.Method;
 import net.fortuna.ical4j.model.property.Organizer;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Sequence;
+import net.fortuna.ical4j.model.property.Status;
 import net.fortuna.ical4j.model.property.Transp;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
@@ -106,6 +107,7 @@ public class IcalHandler {
 
 		meeting = new VEvent(start, end, name);
 		meeting.getProperties().add(Method.CANCEL == method ? Transp.TRANSPARENT : Transp.OPAQUE);
+		meeting.getProperties().add(Status.VEVENT_CONFIRMED);
 		return this;
 	}
 
