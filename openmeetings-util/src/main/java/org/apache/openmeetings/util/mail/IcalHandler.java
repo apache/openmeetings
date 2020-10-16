@@ -37,6 +37,7 @@ import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.parameter.Cn;
+import net.fortuna.ical4j.model.parameter.PartStat;
 import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.CalScale;
@@ -66,6 +67,7 @@ public class IcalHandler {
 	private final Calendar icsCalendar;
 	private TimeZone timeZone;
 	private VEvent meeting;
+	private Method method;
 
 	/** Creation of a new Event */
 	public static final Method ICAL_METHOD_REQUEST = Method.REQUEST;
@@ -79,6 +81,7 @@ public class IcalHandler {
 	 *            (@see IcalHandler) constants
 	 */
 	public IcalHandler(Method method) {
+		this.method = method;
 		log.debug("Icalhandler method type : {}", method);
 
 		icsCalendar = new Calendar();
@@ -141,6 +144,7 @@ public class IcalHandler {
 		Attendee uno = new Attendee(URI.create(MAILTO + email));
 		uno.getParameters().add(chair ? Role.CHAIR : Role.REQ_PARTICIPANT);
 		uno.getParameters().add(new Cn(display));
+		uno.getParameters().add(Method.CANCEL == method ? PartStat.DECLINED : PartStat.ACCEPTED);
 		meeting.getProperties().add(uno);
 		return this;
 	}
