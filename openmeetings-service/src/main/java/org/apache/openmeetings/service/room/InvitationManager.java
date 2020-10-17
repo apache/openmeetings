@@ -73,11 +73,10 @@ public class InvitationManager implements IInvitationManager {
 	 * @param mm - attendee being processed
 	 * @param type - type of the message
 	 * @param ical - should iCal appoinment be attached to message
-	 * @throws Exception in case of error happens during sending
 	 */
-	private void sendInvitionLink(Appointment a, MeetingMember mm, MessageType type, boolean ical) throws Exception	{
+	private void sendInvitionLink(Appointment a, MeetingMember mm, MessageType type, boolean ical) {
 		User owner = a.getOwner();
-		String invitorName = owner.getFirstname() + " " + owner.getLastname();
+		String invitorName = owner.getDisplayName();
 		TimeZone tz = getTimeZone(mm.getUser());
 		SubjectEmailTemplate t;
 		switch (type) {
@@ -96,7 +95,7 @@ public class InvitationManager implements IInvitationManager {
 	}
 
 	@Override
-	public void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical, String baseUrl) throws Exception {
+	public void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical, String baseUrl) {
 		final String invitationLink;
 		if (type != MessageType.CANCEL) {
 			IApplication app = ensureApplication(1L);
@@ -120,16 +119,18 @@ public class InvitationManager implements IInvitationManager {
 			}
 			IcalHandler handler = new IcalHandler(MessageType.CANCEL == type ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST)
 					.createVEvent(getTimeZone(owner).getID(), a.getStart(), a.getEnd(), a.getTitle())
-					.setLocation(a.getLocation())
-					.setDescription(desc)
-					.setUid(a.getIcalId())
-					.setSequence(0)
 					.addOrganizer(replyToEmail, owner.getDisplayName())
-					.addAttendee(email, i.getInvitee().getLogin(), isOwner)
+					.setUid(a.getIcalId())
+					.addAttendee(email, i.getInvitee().getDisplayName(), isOwner)
+					.setCreated(a.getInserted())
+					.setDescription(desc)
+					.setModified(a.getUpdated())
+					.setLocation(a.getLocation())
+					.setSequence(0)
 					.build();
 
 			log.debug(handler.toString());
-			mailHandler.send(new MailMessage(email, replyToEmail, subject, template, handler.toByteArray()));
+			mailHandler.send(new MailMessage(email, replyToEmail, subject, template, handler));
 		} else {
 			mailHandler.send(email, replyToEmail, subject, template);
 		}

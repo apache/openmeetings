@@ -98,7 +98,7 @@ public class MailHandler {
 		BodyPart iCalContent = new MimeBodyPart();
 		iCalContent.addHeader("content-class", "urn:content-classes:calendarmessage");
 		iCalContent.setDataHandler(new DataHandler(new ByteArrayDataSource(new ByteArrayInputStream(m.getIcs()),
-				"text/calendar; charset=UTF-8; method=REQUEST")));
+				"text/calendar; charset=UTF-8; method=" + m.getIcsMethod())));
 		multiBody.addBodyPart(iCalContent);
 		BodyPart body = new MimeBodyPart();
 		body.setContent(multiBody);

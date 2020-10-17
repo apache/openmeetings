@@ -34,10 +34,12 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
@@ -100,10 +102,13 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 		}
 		a.setRoom(roomDao.update(r, userId));
 		final boolean newApp = a.getId() == null;
-		Appointment a0 = null;
+		AppointmentDTO a0 = null;
 		Set<Long> mmIds = Set.of();
 		if (sendmails && !newApp) {
-			a0 = get(a.getId());
+			Appointment prev = get(a.getId());
+			if (prev != null) {
+				a0 = new AppointmentDTO(prev);
+			}
 			mmIds = meetingMemberDao.getMeetingMemberIdsByAppointment(a.getId());
 		}
 		if (newApp) {
@@ -116,11 +121,12 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 		}
 		if (sendmails) {
 			// update meeting members
-			boolean sendMail = a0 == null || !a0.getTitle().equals(a.getTitle()) ||
-					!(a0.getDescription() != null ? a0.getDescription().equals(a.getDescription()) : true) ||
-					!(a0.getLocation() != null ? a0.getLocation().equals(a.getLocation()) : true) ||
-					!a0.getStart().equals(a.getStart()) ||
-					!a0.getEnd().equals(a.getEnd());
+			boolean sendMail = a0 == null
+					|| !StringUtils.equals(a0.getTitle(), a.getTitle())
+					|| !StringUtils.equals(a0.getDescription(), a.getDescription())
+					|| !StringUtils.equals(a0.getLocation(), a.getLocation())
+					|| !a0.getStart().getTime().equals(a.getStart())
+					|| !a0.getEnd().getTime().equals(a.getEnd());
 			List<MeetingMember> mmList = a.getMeetingMembers();
 			if (mmList != null){
 				for (MeetingMember mm : mmList) {

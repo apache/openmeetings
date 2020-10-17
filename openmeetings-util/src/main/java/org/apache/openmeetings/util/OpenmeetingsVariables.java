@@ -119,7 +119,7 @@ public class OpenmeetingsVariables {
 	public static final String DEFAULT_APP_NAME = "OpenMeetings";
 	public static final String DEFAULT_CONTEXT_NAME = "openmeetings";
 	public static final long DEFAULT_MAX_UPLOAD_SIZE = 100 * 1024 * 1024L; // 100MB
-	public static final String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";
+	public static final String DEFAULT_BASE_URL = "https://localhost:5443/openmeetings/";
 	public static final String DEFAULT_SIP_CONTEXT = "rooms";
 	public static final String DEFAULT_CSP_FONT = "https://fonts.gstatic.com";
 	public static final String DEFAULT_CSP_STYLE = "https://fonts.googleapis.com/css";

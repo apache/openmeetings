@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.mail.MailUtil.MAILTO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
 import java.util.NoSuchElementException;
@@ -37,11 +38,16 @@ import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.parameter.Cn;
+import net.fortuna.ical4j.model.parameter.CuType;
 import net.fortuna.ical4j.model.parameter.PartStat;
 import net.fortuna.ical4j.model.parameter.Role;
+import net.fortuna.ical4j.model.parameter.Rsvp;
+import net.fortuna.ical4j.model.parameter.XParameter;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.CalScale;
+import net.fortuna.ical4j.model.property.Created;
 import net.fortuna.ical4j.model.property.Description;
+import net.fortuna.ical4j.model.property.LastModified;
 import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.Method;
 import net.fortuna.ical4j.model.property.Organizer;
@@ -51,6 +57,7 @@ import net.fortuna.ical4j.model.property.Status;
 import net.fortuna.ical4j.model.property.Transp;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
+import net.fortuna.ical4j.validate.ValidationException;
 
 /**
  *
@@ -86,7 +93,7 @@ public class IcalHandler {
 		log.debug("Icalhandler method type : {}", method);
 
 		icsCalendar = new Calendar();
-		icsCalendar.getProperties().add(new ProdId("-//Events Calendar//iCal4j 1.0//EN"));
+		icsCalendar.getProperties().add(new ProdId("-//Apache Openmeetings//OM Calendar//EN"));
 		icsCalendar.getProperties().add(Version.VERSION_2_0);
 		icsCalendar.getProperties().add(CalScale.GREGORIAN);
 		icsCalendar.getProperties().add(method);
@@ -106,8 +113,18 @@ public class IcalHandler {
 		end.setTimeZone(timeZone);
 
 		meeting = new VEvent(start, end, name);
-		meeting.getProperties().add(Method.CANCEL == method ? Transp.TRANSPARENT : Transp.OPAQUE);
+		meeting.getProperties().add(Transp.OPAQUE);
 		meeting.getProperties().add(Status.VEVENT_CONFIRMED);
+		return this;
+	}
+
+	public IcalHandler setCreated(Date date) {
+		meeting.getProperties().add(new Created(new DateTime(date)));
+		return this;
+	}
+
+	public IcalHandler setModified(Date date) {
+		meeting.getProperties().add(new LastModified(new DateTime(date == null ? new Date() : date)));
 		return this;
 	}
 
@@ -144,8 +161,15 @@ public class IcalHandler {
 
 	public IcalHandler addAttendee(String email, String display, boolean chair) {
 		Attendee uno = new Attendee(URI.create(MAILTO + email));
+		uno.getParameters().add(CuType.INDIVIDUAL);
 		uno.getParameters().add(chair ? Role.CHAIR : Role.REQ_PARTICIPANT);
-		uno.getParameters().add(Method.CANCEL == method ? PartStat.DECLINED : PartStat.ACCEPTED);
+		if (Method.CANCEL == method) {
+			uno.getParameters().add(PartStat.DECLINED);
+		} else {
+			uno.getParameters().add(chair ? PartStat.ACCEPTED : PartStat.NEEDS_ACTION);
+			uno.getParameters().add(Rsvp.TRUE);
+		}
+		uno.getParameters().add(new XParameter("X-NUM-GUESTS", "0"));
 		uno.getParameters().add(new Cn(display));
 		meeting.getProperties().add(uno);
 		return this;
@@ -155,6 +179,10 @@ public class IcalHandler {
 		icsCalendar.getComponents().add(timeZone.getVTimeZone());
 		icsCalendar.getComponents().add(meeting);
 		return this;
+	}
+
+	public Method getMethod() {
+		return method;
 	}
 
 	/**
@@ -179,10 +207,12 @@ public class IcalHandler {
 	 * Get IcalBody as ByteArray
 	 *
 	 * @return - calendar in ICS format as byte[]
-	 * @throws Exception
+	 * @throws IOException
 	 *             - in case of error during writing to byte array
+	 * @throws ValidationException
+	 *             - in case of invalid calendar properties
 	 */
-	public byte[] toByteArray() throws Exception {
+	public byte[] toByteArray() throws ValidationException, IOException {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		CalendarOutputter outputter = new CalendarOutputter();
 		outputter.output(icsCalendar, bout);

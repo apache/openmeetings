@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
+import java.io.IOException;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -30,6 +32,12 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.HistoricalEntity;
+import org.apache.openmeetings.util.mail.IcalHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.fortuna.ical4j.model.property.Method;
+import net.fortuna.ical4j.validate.ValidationException;
 
 @Entity
 @NamedQuery(name = "getMailMessageById", query = "SELECT m FROM MailMessage m WHERE m.id = :id")
@@ -42,6 +50,7 @@ import org.apache.openmeetings.db.entity.HistoricalEntity;
 @Table(name = "email_queue")
 public class MailMessage extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(MailMessage.class);
 
 	public enum Status {
 		NONE, SENDING, ERROR, DONE
@@ -70,6 +79,9 @@ public class MailMessage extends HistoricalEntity {
 	@Column(name = "ics")
 	private byte[] ics;
 
+	@Column(name = "ics_method")
+	private String icsMethod;
+
 	@Column(name = "status", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Status status = Status.NONE;
@@ -89,12 +101,19 @@ public class MailMessage extends HistoricalEntity {
 		this(recipients, replyTo, subject, body, null);
 	}
 
-	public MailMessage(String recipients, String replyTo, String subject, String body, byte[] ics) {
+	public MailMessage(String recipients, String replyTo, String subject, String body, IcalHandler ical) {
 		this.recipients = recipients;
 		this.replyTo = replyTo;
 		this.subject = subject;
 		this.body = body;
-		this.ics = ics;
+		if (ical != null) {
+			this.icsMethod = ical.getMethod().getValue();
+			try {
+				this.ics = ical.toByteArray();
+			} catch (ValidationException|IOException e) {
+				log.error("Unexpected error while getting ICS", e);
+			}
+		}
 	}
 
 	@Override
@@ -169,5 +188,9 @@ public class MailMessage extends HistoricalEntity {
 
 	public void setLastError(String lastError) {
 		this.lastError = lastError;
+	}
+
+	public String getIcsMethod() {
+		return icsMethod == null ? Method.REQUEST.getValue() : icsMethod;
 	}
 }
