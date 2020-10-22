@@ -172,7 +172,7 @@ public class WbWebSocketHelper {
 		sendRoom(
 				roomId
 				, new JSONObject().put("type", "wb")
-				, null
+				, alwaysTrue()
 				, (o, c) -> o.put("func", WbAction.createObj.name())
 							.put("param", getObjWbJson(wbId, patchUrls(fi, c, f))));
 	}
