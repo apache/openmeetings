@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.service.quartz.scheduler;
+package org.apache.openmeetings.service.scheduler;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 

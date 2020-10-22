@@ -39,10 +39,12 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import javax.websocket.WebSocketContainer;
 
 import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.core.util.ChatWebSocketHelper;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -60,6 +62,7 @@ import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.db.util.ApplicationHelper;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -185,6 +188,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private WhiteboardManager wbManager;
 	@Autowired
 	private AppointmentDao appointmentDao;
+	@Autowired
+	private SipManager sipManager;
 
 	@Override
 	protected void init() {
@@ -348,6 +353,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
 			userManager.initHttpClient();
 			setInitComplete(true);
+			CompletableFuture.runAsync(() -> {
+				ThreadContext.setApplication(Application.this);
+				ApplicationHelper.ensureRequestCycle(Application.this);
+				sipManager.setUserPicture(u -> ProfileImageResourceReference.getUrl(RequestCycle.get(), u));
+			});
 		} catch (Exception err) {
 			log.error("[appStart]", err);
 		}

@@ -26,11 +26,11 @@ import javax.annotation.PostConstruct;
 
 import org.apache.openmeetings.core.notifier.INotifier;
 import org.apache.openmeetings.core.notifier.NotifierService;
-import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.manager.IInvitationManager;
 import org.apache.openmeetings.service.mail.template.subject.AppointmentReminderTemplate;
 import org.apache.openmeetings.service.mail.template.subject.SubjectEmailTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

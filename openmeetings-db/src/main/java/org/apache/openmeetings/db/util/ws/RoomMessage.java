@@ -19,7 +19,7 @@
 package org.apache.openmeetings.db.util.ws;
 
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
+import static org.apache.openmeetings.db.manager.ISipManager.SIP_FIRST_NAME;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 
 import java.util.Date;

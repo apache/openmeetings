@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.service.quartz.scheduler;
+package org.apache.openmeetings.service.scheduler;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
@@ -33,12 +33,19 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component("cleanupJob")
 public class CleanupJob extends AbstractJob {
 	private static Logger log = LoggerFactory.getLogger(CleanupJob.class);
+	@Value("${job.cleanup.session.timeout}")
 	private long sessionTimeout = 30 * 60 * 1000L;
+	@Value("${job.cleanup.test.setup.timeout}")
 	private long testSetupTimeout = 60 * 60 * 1000L; // 1 hour
+	@Value("${job.cleanup.reset.hash.ttl}")
 	private long resetHashTtl = 24 * 60 * 60 * 1000L; // 1 day
+	@Value("${job.cleanup.conf.log.ttl}")
 	private long confLogTtl = 7 * 24 * 60 * 60 * 1000L; // 7 days
 
 	@Autowired
@@ -47,22 +54,6 @@ public class CleanupJob extends AbstractJob {
 	private UserDao userDao;
 	@Autowired
 	private ConferenceLogDao confLogDao;
-
-	public void setSessionTimeout(long sessionTimeout) {
-		this.sessionTimeout = sessionTimeout;
-	}
-
-	public void setTestSetupTimeout(long testSetupTimeout) {
-		this.testSetupTimeout = testSetupTimeout;
-	}
-
-	public void setResetHashTtl(long resetHashTtl) {
-		this.resetHashTtl = resetHashTtl;
-	}
-
-	public void setConfLogTtl(long confLogTtl) {
-		this.confLogTtl = confLogTtl;
-	}
 
 	public void cleanTestSetup() {
 		log.trace("CleanupJob.cleanTestSetup");

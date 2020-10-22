@@ -223,9 +223,7 @@ public class UserManager implements IUserManager {
 	@Override
 	public boolean kickUsersByRoomId(Long roomId) {
 		try {
-			for (Client c : cm.listByRoom(roomId)) {
-				Application.kickUser(c);
-			}
+			cm.streamByRoom(roomId).forEach(Application::kickUser);
 			return true;
 		} catch (Exception err) {
 			log.error("[kickUsersByRoomId]", err);
@@ -235,7 +233,7 @@ public class UserManager implements IUserManager {
 
 	@Override
 	public boolean kickExternal(Long roomId, String externalType, String externalId) {
-		boolean result = false;
+		Boolean result = false;
 		try {
 			if (roomId == null) {
 				return result;

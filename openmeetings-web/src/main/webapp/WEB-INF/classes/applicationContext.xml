@@ -40,18 +40,9 @@
 	<context:annotation-config />
 	<context:component-scan base-package="org.apache.openmeetings" />
 
-	<!--
-			5000		== 5 sec
-			300000		== 5 min
-			900000		== 15 min
-			1800000		== 30 min
-			3600000		== 1 hour
-			86400000	== 1 day
-			604800000	== 7 days
-	 -->
-	<bean id="cleanupJob" class="org.apache.openmeetings.service.quartz.scheduler.CleanupJob"
-			p:sessionTimeout="1800000" p:testSetupTimeout="3600000" p:resetHashTtl="86400000"
-			p:confLogTtl="604800000" />
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+		p:location="classpath:openmeetings.properties" />
+
 	<!-- sessions clean-up -->
 	<bean id="cleanSessionsJobDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
 			p:targetObject-ref="cleanupJob" p:targetMethod="cleanSessions" p:concurrent="false" />
@@ -124,46 +115,10 @@
 	</bean>
 	<!-- End of Services -->
 
-	<bean class="org.apache.openmeetings.db.dao.room.SipConfig">
-		<!-- Should be uncommented and updated with real values for Asterisk-
-		<property name="sipHostname" value="192.168.1.102"/>
-		<property name="managerPort" value="5038"/>
-		<property name="managerUser" value="openmeetings"/>
-		<property name="managerPass" value="12345"/>
-		<property name="managerTimeout" value="10000"/>
-
-		<property name="localWsPort" value="6666"/>
-		<property name="localWsHost" value="192.168.1.211"/>
-		<property name="wsPort" value="8088"/>
-		<property name="omSipUser" value="omsip_user"/>
-		<property name="omSipPasswd" value="12345"/>
-
-		<property name="uid" value="87dddad4-9ca5-475b-860f-2e0825d02b76"/>
-		-  -->
-	</bean>
-
 	<!-- Thread Executor -->
 	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 		<property name="corePoolSize" value="5" />
 		<property name="maxPoolSize" value="10" />
 		<property name="queueCapacity" value="25" />
 	</bean>
-
-	<!-- Kurento -->
-	<!-- please ensure `p:kuid` below is unique, better to regenerate it from time to time -->
-	<!-- `p:ignoredKuids` can be space and/or comma separated -->
-	<bean id="kurentoHandler" class="org.apache.openmeetings.core.remote.KurentoHandler"
-			p:kurentoWsUrl="ws://127.0.0.1:8888/kurento"
-			p:checkTimeout="10000"
-			p:watchThreadCount="10"
-			p:turnUrl=""
-			p:turnUser=""
-			p:turnSecret=""
-			p:turnMode="rest"
-			p:turnTtl="60"
-			p:objCheckTimeout="200"
-			p:flowoutTimeout="5"
-			p:kuid="df992960-e7b0-11ea-9acd-337fb30dd93d"
-			p:ignoredKuids=""
-			/>
 </beans>

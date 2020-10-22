@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.entity.basic;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -127,6 +128,10 @@ public class Client implements IDataProviderEntity, IWsClient {
 
 	public String getSid() {
 		return sid;
+	}
+
+	public boolean isSip() {
+		return SIP_USER_ID.equals(getUserId());
 	}
 
 	public void clear() {

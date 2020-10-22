@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.db.dao.room;
+package org.apache.openmeetings.core.sip;
 
 import static javax.sip.message.Request.INVITE;
 import static javax.sip.message.Request.REGISTER;
@@ -24,6 +24,8 @@ import static javax.sip.message.Response.OK;
 import static javax.sip.message.Response.RINGING;
 import static javax.sip.message.Response.TRYING;
 import static javax.sip.message.Response.UNAUTHORIZED;
+import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 
 import java.text.ParseException;
 import java.util.List;
@@ -31,6 +33,7 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
 import javax.sip.ClientTransaction;
@@ -54,6 +57,9 @@ import javax.sip.message.Request;
 import javax.sip.message.Response;
 
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.manager.ISipManager;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.asteriskjava.manager.DefaultManagerConnection;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerConnectionFactory;
@@ -70,7 +76,7 @@ import org.asteriskjava.manager.response.ManagerError;
 import org.asteriskjava.manager.response.ManagerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import gov.nist.javax.sip.DialogTimeoutEvent;
@@ -82,8 +88,8 @@ import gov.nist.javax.sip.clientauthutils.UserCredentials;
 import gov.nist.javax.sip.stack.NioMessageProcessorFactory;
 
 @Service
-public class SipDao implements SipListenerExt {
-	private static final Logger log = LoggerFactory.getLogger(SipDao.class);
+public class SipManager implements ISipManager, SipListenerExt {
+	private static final Logger log = LoggerFactory.getLogger(SipManager.class);
 	public static final String ASTERISK_OM_FAMILY = "openmeetings";
 	public static final String ASTERISK_OM_KEY = "rooms";
 	public static final String SIP_FIRST_NAME = "SIP Transport";
@@ -92,6 +98,28 @@ public class SipDao implements SipListenerExt {
 	private static final <T> Consumer<T> noop() {
 		return t -> {};
 	}
+
+	@Value("${sip.hostname}")
+	private String sipHostname;
+	@Value("${sip.manager.port}")
+	private int managerPort;
+	@Value("${sip.manager.user}")
+	private String managerUser;
+	@Value("${sip.manager.password}")
+	private String managerPass;
+	@Value("${sip.manager.timeout}")
+	private long managerTimeout;
+
+	@Value("${sip.ws.local.port}")
+	private int localWsPort = 6666;
+	@Value("${sip.ws.local.host}")
+	private String localWsHost;
+	@Value("${sip.ws.remote.port}")
+	private int wsPort;
+	@Value("${sip.ws.remote.user}")
+	private String omSipUser;
+	@Value("${sip.ws.remote.password}")
+	private String omSipPasswd;
 
 	private final AtomicLong cseq = new AtomicLong();
 	private final Random rnd = new Random();
@@ -106,18 +134,16 @@ public class SipDao implements SipListenerExt {
 	private AddressFactory addressFactory;
 	private ContactHeader contactHeader;
 	private ManagerConnectionFactory factory;
-
-	@Autowired
-	private SipConfig config;
+	private String sipUserPicture;
 
 	@PostConstruct
 	public void init() throws Exception {
-		if (config.getSipHostname() != null) {
+		if (sipHostname != null) {
 			factory = new ManagerConnectionFactory(
-					config.getSipHostname()
-					, config.getManagerPort()
-					, config.getManagerUser()
-					, config.getManagerPass());
+					sipHostname
+					, managerPort
+					, managerUser
+					, managerPass);
 			final SipFactory sipFactory = SipFactory.getInstance();
 			sipFactory.setPathName("gov.nist");
 
@@ -134,14 +160,14 @@ public class SipDao implements SipListenerExt {
 			headerFactory = sipFactory.createHeaderFactory();
 			addressFactory = sipFactory.createAddressFactory();
 			final ListeningPoint listeningPoint = sipStack.createListeningPoint(
-					config.getLocalWsHost()
-					, config.getLocalWsPort()
+					localWsHost
+					, localWsPort
 					, SIP_TRANSPORT);
 			sipProvider = sipStack.createSipProvider(listeningPoint);
 			sipProvider.addSipListener(this);
-			Address contact = createAddr(config.getOmSipUser(), config.getLocalWsHost(), uri -> {
+			Address contact = createAddr(omSipUser, localWsHost, uri -> {
 				try {
-					uri.setPort(config.getLocalWsPort());
+					uri.setPort(localWsPort);
 					uri.setTransportParam(SIP_TRANSPORT);
 				} catch (ParseException e) {
 					log.error("fail to create contact address", e);
@@ -153,10 +179,10 @@ public class SipDao implements SipListenerExt {
 
 	private ManagerConnection getConnection() {
 		DefaultManagerConnection con = (DefaultManagerConnection)factory.createManagerConnection();
-		con.setDefaultEventTimeout(config.getManagerTimeout());
-		con.setDefaultResponseTimeout(config.getManagerTimeout());
-		con.setSocketReadTimeout((int)config.getManagerTimeout());
-		con.setSocketTimeout((int)config.getManagerTimeout());
+		con.setDefaultEventTimeout(managerTimeout);
+		con.setDefaultResponseTimeout(managerTimeout);
+		con.setSocketReadTimeout((int)managerTimeout);
+		con.setSocketTimeout((int)managerTimeout);
 		return con;
 	}
 
@@ -228,6 +254,7 @@ public class SipDao implements SipListenerExt {
 		return pin;
 	}
 
+	@Override
 	public void update(String confno, String pin) {
 		delete(confno);
 		DbPutAction da = new DbPutAction(ASTERISK_OM_FAMILY, getKey(confno), pin);
@@ -239,6 +266,7 @@ public class SipDao implements SipListenerExt {
 		exec(da);
 	}
 
+	@Override
 	public void delete(String confno) {
 		DbDelAction da = new DbDelAction(ASTERISK_OM_FAMILY, getKey(confno));
 		exec(da);
@@ -251,7 +279,7 @@ public class SipDao implements SipListenerExt {
 		ConfbridgeListAction da = new ConfbridgeListAction(confno);
 		ResponseEvents r = execEvent(da);
 		if (r != null) {
-			log.debug("SipDao::countUsers size == {}", r.getEvents().size());
+			log.debug("SipManager::countUsers size == {}", r.getEvents().size());
 			// "- 1" here means: ListComplete event
 			return r.getEvents().size() - 1;
 		}
@@ -278,9 +306,27 @@ public class SipDao implements SipListenerExt {
 		oa.setContext("rooms-out");
 		oa.setExten(number);
 		oa.setPriority(1);
-		oa.setTimeout(config.getManagerTimeout());
+		oa.setTimeout(managerTimeout);
 
 		exec(oa);
+	}
+
+	public void setUserPicture(Function<User, String> pictureCreator) {
+		User u = new User();
+		u.setId(SIP_USER_ID);
+		sipUserPicture = pictureCreator.apply(u);
+	}
+
+	public User getSipUser(Room r) {
+		if (factory == null || !isSipEnabled() || !r.isSipEnabled()) {
+			return null;
+		}
+		User u = new User();
+		u.setId(OmFileHelper.SIP_USER_ID);
+		u.setFirstname(SIP_FIRST_NAME);
+		u.setLogin(SIP_USER_NAME);
+		u.setPictureUri(sipUserPicture);
+		return u;
 	}
 
 	@Override
@@ -355,7 +401,7 @@ public class SipDao implements SipListenerExt {
 	}
 
 	private Address createAddr(String user) {
-		return createAddr(user, config.getSipHostname(), noop());
+		return createAddr(user, sipHostname, noop());
 	}
 
 	private Address createAddr(String user, String host, Consumer<SipUri> cons) {
@@ -373,11 +419,11 @@ public class SipDao implements SipListenerExt {
 
 	private void sendRequest(String method, String to, Consumer<SipUri> uriCons, Consumer<Request> reqCons) throws Exception {
 		SipUri uri = new SipUri();
-		uri.setHost(config.getSipHostname());
-		uri.setPort(config.getWsPort());
+		uri.setHost(sipHostname);
+		uri.setPort(wsPort);
 		uri.setTransportParam(SIP_TRANSPORT);
 		uri.setMethodParam("GET");
-		uri.setHeader("Host", config.getSipHostname());
+		uri.setHeader("Host", sipHostname);
 		uri.setHeader("Location", "/ws");
 		uriCons.accept(uri);
 
@@ -386,9 +432,9 @@ public class SipDao implements SipListenerExt {
 				, method
 				, sipProvider.getNewCallId()
 				, headerFactory.createCSeqHeader(cseq.incrementAndGet(), method)
-				, headerFactory.createFromHeader(createAddr(config.getOmSipUser()), tag)
+				, headerFactory.createFromHeader(createAddr(omSipUser), tag)
 				, headerFactory.createToHeader(createAddr(to), null)
-				, List.of(headerFactory.createViaHeader(config.getLocalWsHost(), config.getLocalWsPort(), SIP_TRANSPORT, branch))
+				, List.of(headerFactory.createViaHeader(localWsHost, localWsPort, SIP_TRANSPORT, branch))
 				, headerFactory.createMaxForwardsHeader(70));
 		request.addHeader(contactHeader);
 		request.addHeader(headerFactory.createExpiresHeader(600));
@@ -407,12 +453,12 @@ public class SipDao implements SipListenerExt {
 		AuthenticationHelper helper = sipStack.getAuthenticationHelper((trans, s) -> new UserCredentials() {
 			@Override
 			public String getUserName() {
-				return config.getOmSipUser();
+				return omSipUser;
 			}
 
 			@Override
 			public String getPassword() {
-				return config.getOmSipPasswd();
+				return omSipPasswd;
 			}
 
 			@Override
@@ -435,7 +481,7 @@ public class SipDao implements SipListenerExt {
 	private void register() throws Exception {
 		sendRequest(
 				REGISTER
-				, config.getOmSipUser()
+				, omSipUser
 				, noop()
 				, req -> {
 					try {

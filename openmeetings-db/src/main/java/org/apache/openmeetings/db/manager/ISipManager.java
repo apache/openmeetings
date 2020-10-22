@@ -18,18 +18,12 @@
  */
 package org.apache.openmeetings.db.manager;
 
-import java.util.Collection;
-import java.util.stream.Stream;
+/**
+ * this interface is required to use SipMagager from openmeetings-core
+ */
+public interface ISipManager {
+	public static final String SIP_FIRST_NAME = "SIP Transport";
 
-import org.apache.openmeetings.db.entity.basic.Client;
-
-public interface IClientManager {
-	Client get(String uid);
-	Client getBySid(String sid);
-	String uidBySid(String sid);
-	Stream<Client> stream();
-	Stream<Client> streamByRoom(Long roomId);
-	Collection<Client> listByUser(Long userId);
-	Client update(Client c);
-	void exit(Client c);
+	void update(String confno, String pin);
+	void delete(String confno);
 }

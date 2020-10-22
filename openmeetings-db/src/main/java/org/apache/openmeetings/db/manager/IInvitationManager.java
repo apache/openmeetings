@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.db.dao.room;
+package org.apache.openmeetings.db.manager;
 
 import java.util.Date;
 

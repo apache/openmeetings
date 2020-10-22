@@ -13,4 +13,4 @@ Licensed under the Apache License, Version 2.0 (the "License") http://www.apache
 
 ## Specify/Install Turn server
 
-<div class="bd-callout bd-callout-info">Optional step</div>
+<div class="bd-callout bd-callout-warning">Only local installation will work without TURN server</div>

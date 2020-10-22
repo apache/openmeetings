@@ -22,6 +22,7 @@ import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -46,7 +47,6 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.InvitationDTO;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -349,7 +349,7 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/count/{roomid}")
 	public ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
-		return performCall(sid, User.Right.SOAP, sd -> new ServiceResult(String.valueOf(clientManager.listByRoom(roomId).size()), Type.SUCCESS));
+		return performCall(sid, User.Right.SOAP, sd -> new ServiceResult(String.valueOf(clientManager.streamByRoom(roomId).count()), Type.SUCCESS));
 	}
 
 	/**
@@ -364,11 +364,9 @@ public class RoomWebService extends BaseWebService {
 	@Path("/users/{roomid}")
 	public List<UserDTO> users(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
 		return performCall(sid, User.Right.SOAP, sd -> {
-			List<UserDTO> result = new ArrayList<>();
-			for (Client c : clientManager.listByRoom(roomId)) {
-				result.add(new UserDTO(c.getUser()));
-			}
-			return result;
+			return clientManager.streamByRoom(roomId)
+					.map(c -> new UserDTO(c.getUser()))
+					.collect(Collectors.toList());
 		});
 	}
 

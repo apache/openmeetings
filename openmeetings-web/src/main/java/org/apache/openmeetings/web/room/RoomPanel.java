@@ -44,7 +44,6 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -167,9 +166,9 @@ public class RoomPanel extends BasePanel {
 				sidebar.setFilesActive(target);
 			}
 			if (Room.Type.PRESENTATION != r.getType()) {
-				List<Client> mods = cm.listByRoom(r.getId(), cl -> cl.hasRight(Room.Right.MODERATOR));
-				log.debug("RoomPanel::roomEnter, mods IS EMPTY ? {}, is MOD ? {}", mods.isEmpty(), c.hasRight(Room.Right.MODERATOR));
-				if (mods.isEmpty()) {
+				boolean modsEmpty = noModerators();
+				log.debug("RoomPanel::roomEnter, mods IS EMPTY ? {}, is MOD ? {}", modsEmpty, c.hasRight(Room.Right.MODERATOR));
+				if (modsEmpty) {
 					showIdeaAlert(target, getString(r.isModerated() ? "641" : "498"));
 				}
 			}
@@ -182,11 +181,10 @@ public class RoomPanel extends BasePanel {
 		private void initVideos(AjaxRequestTarget target) {
 			StringBuilder sb = new StringBuilder();
 			JSONArray streams = new JSONArray();
-			for (Client c : cm.listByRoom(getRoom().getId())) {
-				for (StreamDesc sd : c.getStreams()) {
-					streams.put(sd.toJson());
-				}
-			}
+			cm.streamByRoom(getRoom().getId())
+				.map(Client::getStreams)
+				.flatMap(List::stream)
+				.forEach(sd -> streams.put(sd.toJson()));
 			if (streams.length() > 0) {
 				sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers(getClient())).append(");");
 			}
@@ -312,7 +310,7 @@ public class RoomPanel extends BasePanel {
 		add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
 		if (r.isClosed()) {
 			room.setVisible(false);
-		} else if (cm.listByRoom(r.getId()).size() >= r.getCapacity()) {
+		} else if (cm.streamByRoom(r.getId()).count() >= r.getCapacity()) {
 			accessDenied = new ExpiredMessageDialog(ACCESS_DENIED_ID, getString("99"), menu);
 			room.setVisible(false);
 		} else if (r.getId().equals(WebSession.get().getRoomId())) {
@@ -397,7 +395,7 @@ public class RoomPanel extends BasePanel {
 			}
 			if (r.isModerated() && r.isWaitModerator()
 					&& !c.hasRight(Right.MODERATOR)
-					&& cm.listByRoom(r.getId(), cl -> cl.hasRight(Right.MODERATOR)).isEmpty())
+					&& noModerators())
 			{
 				room.setVisible(false);
 				createWaitModerator(true);
@@ -620,13 +618,9 @@ public class RoomPanel extends BasePanel {
 			if (streamProcessor.isRecording(r.getId())) {
 				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
 			} else if (streamProcessor.recordingAllowed(getClient())) {
-				boolean hasStreams = false;
-				for (Client cl : cm.listByRoom(r.getId())) {
-					if (!cl.getStreams().isEmpty()) {
-						hasStreams = true;
-						break;
-					}
-				}
+				boolean hasStreams = cm.streamByRoom(r.getId())
+						.filter(cl -> !cl.getStreams().isEmpty())
+						.findAny().isPresent();
 				handler.appendJavaScript(String.format("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(false);WbArea.setRecEnabled(%s);}", hasStreams));
 			}
 		}
@@ -641,12 +635,9 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public static boolean hasRight(ClientManager cm, long userId, long roomId, Right r) {
-		for (Client c : cm.listByRoom(roomId)) {
-			if (c.sameUserId(userId) && c.hasRight(r)) {
-				return true;
-			}
-		}
-		return false;
+		return cm.streamByRoom(roomId)
+				.filter(c -> c.sameUserId(userId) && c.hasRight(r))
+				.findAny().isPresent();
 	}
 
 	@Override
@@ -699,8 +690,7 @@ public class RoomPanel extends BasePanel {
 
 	public void requestRight(Right right, IPartialPageRequestHandler handler) {
 		RoomMessage.Type reqType = null;
-		List<Client> mods = cm.listByRoom(r.getId(), c -> c.hasRight(Room.Right.MODERATOR));
-		if (mods.isEmpty()) {
+		if (noModerators()) {
 			if (r.isModerated()) {
 				showIdeaAlert(handler, getString("696"));
 				return;
@@ -881,7 +871,7 @@ public class RoomPanel extends BasePanel {
 
 	private CharSequence createAddClientJs(Client c) {
 		JSONArray arr = new JSONArray();
-		cm.listByRoom(r.getId()).stream().forEach(cl -> arr.put(cl.toJson(c.getUid().equals(cl.getUid()))));
+		cm.streamByRoom(r.getId()).forEach(cl -> arr.put(cl.toJson(c.getUid().equals(cl.getUid()))));
 		return new StringBuilder()
 				.append("Room.addClient(")
 				.append(arr.toString(new NullStringer()))
@@ -908,5 +898,12 @@ public class RoomPanel extends BasePanel {
 			}
 		}
 		return res;
+	}
+
+	private boolean noModerators() {
+		return cm.streamByRoom(r.getId())
+				.filter(cl -> cl.hasRight(Room.Right.MODERATOR))
+				.findAny()
+				.isEmpty();
 	}
 }

@@ -46,6 +46,7 @@ import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.Room.Type;
+import org.apache.openmeetings.db.manager.ISipManager;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.util.DaoHelper;
@@ -70,7 +71,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
-	private SipDao sipDao;
+	private ISipManager sipManager;
 	@Autowired
 	private UserDao userDao;
 
@@ -213,9 +214,9 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 			if (sipNumber != null && !sipNumber.equals(entity.getConfno())) {
 				entity.setConfno(sipNumber);
 			}
-			sipDao.update(sipNumber, entity.getPin());
+			sipManager.update(sipNumber, entity.getPin());
 		} else {
-			sipDao.delete(entity.getConfno());
+			sipManager.delete(entity.getConfno());
 			entity.setConfno(null);
 			entity.setPin(null);
 		}

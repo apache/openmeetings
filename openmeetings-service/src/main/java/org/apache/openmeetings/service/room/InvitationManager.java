@@ -28,7 +28,6 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.mail.MailHandler;
-import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -40,6 +39,7 @@ import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.db.manager.IInvitationManager;
 import org.apache.openmeetings.service.mail.template.InvitationTemplate;
 import org.apache.openmeetings.service.mail.template.subject.CanceledAppointmentTemplate;
 import org.apache.openmeetings.service.mail.template.subject.CreatedAppointmentTemplate;

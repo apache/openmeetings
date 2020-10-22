@@ -434,8 +434,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 	void updateClients(AjaxRequestTarget target) {
 		long roomId = getModelObject().getId() != null ? getModelObject().getId() : 0;
-		final List<Client> clientsInRoom = cm.listByRoom(roomId);
-		clients.setDefaultModelObject(clientsInRoom);
+		clients.setDefaultModelObject(cm.streamByRoom(roomId).collect(Collectors.toList()));
 		target.add(clientsContainer);
 	}
 

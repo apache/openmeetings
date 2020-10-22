@@ -23,21 +23,21 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.TOKEN_PARAM;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.openmeetings.core.remote.KurentoHandler;
+import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
@@ -78,6 +78,10 @@ public class ClientManager implements IClientManager {
 	private Application app;
 	@Autowired
 	private KurentoHandler kHandler;
+	@Autowired
+	private SipManager sipManager;
+	@Autowired
+	private TimerService timerService;
 
 	private IMap<String, Client> map() {
 		return app.hazelcast.getMap(ONLINE_USERS_KEY);
@@ -170,14 +174,12 @@ public class ClientManager implements IClientManager {
 		if (roomId != null) {
 			IMap<Long, Set<String>> rooms = rooms();
 			rooms.lock(roomId);
-			Set<String> clients = rooms.get(roomId);
-			if (clients != null) {
-				clients.remove(c.getUid());
-				rooms.put(roomId, clients);
-				onlineRooms.put(roomId, clients);
-			}
+			Set<String> clients = rooms.getOrDefault(roomId, ConcurrentHashMap.newKeySet());
+			clients.remove(c.getUid());
+			rooms.put(roomId, clients);
+			onlineRooms.put(roomId, clients);
 			rooms.unlock(roomId);
-			if (clients == null || clients.isEmpty()) {
+			if (clients.isEmpty()) {
 				String serverId = c.getServerId();
 				IMap<String, ServerInfo> servers = servers();
 				servers.lock(serverId);
@@ -258,8 +260,7 @@ public class ClientManager implements IClientManager {
 		log.debug("Adding online room client: {}, room: {}", c.getUid(), roomId);
 		IMap<Long, Set<String>> rooms = rooms();
 		rooms.lock(roomId);
-		rooms.putIfAbsent(roomId, ConcurrentHashMap.newKeySet());
-		Set<String> set = rooms.get(roomId);
+		Set<String> set = rooms.getOrDefault(roomId, ConcurrentHashMap.newKeySet());
 		set.add(c.getUid());
 		final int count = set.size();
 		rooms.put(roomId, set);
@@ -268,6 +269,7 @@ public class ClientManager implements IClientManager {
 		String serverId = c.getServerId();
 		addRoomToServer(serverId, r);
 		update(c);
+		timerService.scheduleSipCheck(r);
 		return count;
 	}
 
@@ -296,8 +298,8 @@ public class ClientManager implements IClientManager {
 	}
 
 	@Override
-	public List<Client> list() {
-		return new ArrayList<>(map().values());
+	public Stream<Client> stream() {
+		return map().values().stream();
 	}
 
 	@Override
@@ -306,50 +308,24 @@ public class ClientManager implements IClientManager {
 	}
 
 	@Override
-	public List<Client> listByRoom(Long roomId) {
-		return listByRoom(roomId, null);
-	}
-
-	public List<Client> listByRoom(Long roomId, Predicate<Client> filter) {
-		List<Client> clients = new ArrayList<>();
-		if (roomId != null) {
-			Set<String> uids = onlineRooms.get(roomId);
-			if (uids != null) {
-				for (String uid : uids) {
-					Client c = get(uid);
-					if (c != null && (filter == null || filter.test(c))) {
-						clients.add(c);
-					}
-				}
-			}
-		}
-		return clients;
-	}
-
-	public Set<Long> listRoomIds(Long userId) {
-		Set<Long> result = new HashSet<>();
-		for (Entry<Long, Set<String>> me : onlineRooms.entrySet()) {
-			for (String uid : me.getValue()) {
-				Client c = get(uid);
-				if (c != null && c.sameUserId(userId)) {
-					result.add(me.getKey());
-				}
-			}
-		}
-		return result;
+	public Stream<Client> streamByRoom(Long roomId) {
+		return Optional.ofNullable(roomId)
+			.map(id -> onlineRooms.getOrDefault(id, Set.of()))
+			.stream()
+			.flatMap(Set::stream)
+			.map(uid -> get(uid))
+			.filter(Objects::nonNull);
 	}
 
 	public boolean isInRoom(long roomId, long userId) {
-		Set<String> clients = onlineRooms.get(roomId);
-		if (clients != null) {
-			for (String uid : clients) {
-				Client c = get(uid);
-				if (c != null && c.sameUserId(userId)) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return Optional.of(roomId)
+			.map(id -> onlineRooms.getOrDefault(id, Set.of()))
+			.stream()
+			.flatMap(Set::stream)
+			.map(uid -> get(uid))
+			.filter(c -> c != null && c.sameUserId(userId))
+			.findAny()
+			.isPresent();
 	}
 
 	private List<Client> getByKeys(Long userId, String sessionId) {

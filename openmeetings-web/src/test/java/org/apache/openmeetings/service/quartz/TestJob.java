@@ -23,8 +23,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.basic.Configuration;
-import org.apache.openmeetings.service.quartz.scheduler.CleanupJob;
-import org.apache.openmeetings.service.quartz.scheduler.ReminderJob;
+import org.apache.openmeetings.service.scheduler.CleanupJob;
+import org.apache.openmeetings.service.scheduler.ReminderJob;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

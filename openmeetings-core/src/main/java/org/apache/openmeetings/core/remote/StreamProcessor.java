@@ -306,10 +306,12 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 		KRoom room = kHandler.getRoom(roomId);
 		if (room.isSharing()) {
-			List<StreamDesc> streams = cm.listByRoom(roomId).parallelStream()
+			if (cm.streamByRoom(roomId)
 					.flatMap(c -> c.getStreams().stream())
-					.filter(sd -> StreamType.SCREEN == sd.getType()).collect(Collectors.toList());
-			if (streams.isEmpty()) {
+					.filter(sd -> StreamType.SCREEN == sd.getType())
+					.findAny()
+					.isEmpty())
+			{
 				log.info("No more screen streams in the room, stopping sharing");
 				room.stopSharing();
 				if (Room.Type.INTERVIEW != room.getType() && room.isRecording()) {
@@ -319,10 +321,11 @@ public class StreamProcessor implements IStreamProcessor {
 			}
 		}
 		if (room.isRecording()) {
-			List<StreamDesc> streams = cm.listByRoom(roomId).parallelStream()
+			if (cm.streamByRoom(roomId)
 					.flatMap(c -> c.getStreams().stream())
-					.collect(Collectors.toList());
-			if (streams.isEmpty()) {
+					.findAny()
+					.isEmpty())
+			{
 				log.info("No more streams in the room, stopping recording");
 				room.stopRecording(null);
 			}

@@ -116,13 +116,17 @@ public class ApplicationHelper {
 		}
 	}
 
-	public static IApplication ensureApplication(Long langId) {
-		IApplication a = ensureApplication();
+	public static void ensureRequestCycle(IApplication a) {
 		if (ThreadContext.getRequestCycle() == null) {
 			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest((Application)a, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
 			RequestCycleContext rctx = new RequestCycleContext(req, new MockWebResponse(), a.getRootRequestMapper(), a.getExceptionMapperProvider().get());
 			ThreadContext.setRequestCycle(new RequestCycle(rctx));
 		}
+	}
+
+	public static IApplication ensureApplication(Long langId) {
+		IApplication a = ensureApplication();
+		ensureRequestCycle(a);
 		if (ThreadContext.getSession() == null) {
 			WebSession s = WebSession.get();
 			if (langId > 0) {

@@ -70,7 +70,7 @@ public class RoomListPanel extends Panel {
 			final WebMarkupContainer info = new WebMarkupContainer("info");
 			roomContainer.add(info.setOutputMarkupId(true)
 					.add(AttributeModifier.append(ATTR_TITLE, getString(String.format("room.type.%s.desc", r.getType().name())))));
-			final Label curUsers = new Label("curUsers", new Model<>(cm.listByRoom(r.getId()).size()));
+			final Label curUsers = new Label("curUsers", new Model<>(cm.streamByRoom(r.getId()).count()));
 			roomContainer.add(curUsers.setOutputMarkupId(true));
 			roomContainer.add(new Label("totalUsers", r.getCapacity()));
 			item.add(new WebMarkupContainer("btn").add(new Label("label", label)).add(new RoomEnterBehavior(r.getId()) {
@@ -95,7 +95,7 @@ public class RoomListPanel extends Panel {
 
 				@Override
 				public void onClick(AjaxRequestTarget target) {
-					target.add(curUsers.setDefaultModelObject(cm.listByRoom(r.getId()).size()));
+					target.add(curUsers.setDefaultModelObject(cm.streamByRoom(r.getId()).count()));
 					onRefreshClick(target, r);
 				}
 			}.add(AttributeModifier.append(ATTR_TITLE, new ResourceModel("lbl.refresh"))));

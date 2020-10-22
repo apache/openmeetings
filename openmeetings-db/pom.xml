@@ -73,11 +73,6 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.asteriskjava</groupId>
-			<artifactId>asterisk-java</artifactId>
-			<version>${asterisk-java.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-dbcp2</artifactId>
 			<version>${commons-dbcp.version}</version>
@@ -107,10 +102,6 @@
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
 			<version>${mssql.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.sip</groupId>
-			<artifactId>jain-sip-ri</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
+import static org.apache.openmeetings.core.util.WebSocketHelper.alwaysTrue;
 import static org.apache.openmeetings.core.util.WebSocketHelper.publish;
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_SRC;
@@ -74,7 +75,7 @@ public class WbWebSocketHelper {
 		if (publish) {
 			publish(new WsMessageWb(roomId, meth, obj, null));
 		}
-		sendWb(roomId, meth, obj, null);
+		sendWb(roomId, meth, obj, alwaysTrue());
 	}
 
 	public static void sendWbOthers(Long roomId, WbAction meth, JSONObject obj, final String uid) {

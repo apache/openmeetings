@@ -125,10 +125,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -170,7 +170,7 @@ public class ImportInitvalues {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private SipDao sipDao;
+	private SipManager sipDao;
 	@Autowired
 	private OAuth2Dao oauthDao;
 	@Autowired

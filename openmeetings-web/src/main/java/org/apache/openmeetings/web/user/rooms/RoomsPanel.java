@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -128,7 +129,7 @@ public class RoomsPanel extends UserPanel {
 	}
 
 	void updateRoomDetails(AjaxRequestTarget target) {
-		clients.setDefaultModelObject(cm.listByRoom(roomId));
+		clients.setDefaultModelObject(cm.streamByRoom(roomId).collect(Collectors.toList()));
 		Room room = roomDao.get(roomId);
 		roomIdLbl.setDefaultModelObject(room.getId());
 		roomNameLbl.setDefaultModelObject(room.getName());

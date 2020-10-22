@@ -165,7 +165,7 @@ Modify `/etc/asterisk/extensions.conf`
 ; If you do not receive an output with that resembles openmeetings/rooms/400## where “##” will equal
 ; the extension assigned when you created your room
 ; If you do not receive the above output check your parameters in
-; /opt/om/webapps/openmeetings/WEB-INF/classes/applicationContext.xml
+; /opt/om/webapps/openmeetings/WEB-INF/classes/openmeetings.properties
 ; Go back into the Administrator Panel and remove the PIN number in each room save the record with
 ; no PIN number and then re-enter the pin again resave the record.
 ; *****************************************************
@@ -246,12 +246,9 @@ write = all
 ```
 
 Update OpenMeetings with credentials for Asterisk manager.
-Modify `/opt/om/webapps/openmeetings/WEB-INF/classes/applicationContext.xml`
+Modify `/opt/om/webapps/openmeetings/WEB-INF/classes/openmeetings.properties`
 
-find **&lt;bean class="org.apache.openmeetings.db.dao.room.SipConfig"&gt;**
-uncomment its properties and set it to your custom values.
-
-set value for `uid` property to unique secret value (can be generated here <a href="https://www.uuidtools.com">https://www.uuidtools.com</a>)
+find all properties start with `sip.` and set it to your custom values.
 
 <p style="font-size: larger; color: blue;">
 	IMPORTANT: this step should be done <strong>BEFORE</strong> system install/restore

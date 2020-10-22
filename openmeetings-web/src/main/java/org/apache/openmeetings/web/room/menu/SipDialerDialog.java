@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
-import org.apache.openmeetings.db.dao.room.SipDao;
+import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -41,7 +41,7 @@ public class SipDialerDialog extends Modal<String> {
 	private final TextField<String> number = new TextField<>("number", Model.of(""));
 	private final RoomPanel room;
 	@SpringBean
-	private SipDao sipDao;
+	private SipManager sipDao;
 
 	public SipDialerDialog(String id, RoomPanel room) {
 		super(id);

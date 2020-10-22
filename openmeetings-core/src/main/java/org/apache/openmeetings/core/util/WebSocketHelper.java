@@ -21,12 +21,12 @@ package org.apache.openmeetings.core.util;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.ws.WsMessageAll;
@@ -54,6 +54,9 @@ import com.github.openjson.JSONObject;
 
 public class WebSocketHelper {
 	private static final Logger log = LoggerFactory.getLogger(WebSocketHelper.class);
+	public static final <T> Predicate<T> alwaysTrue() {
+		return x -> true;
+	}
 
 	private WebSocketHelper() {
 		// denied
@@ -139,7 +142,7 @@ public class WebSocketHelper {
 			publish(new WsMessageRoomMsg(m));
 		}
 		log.trace("Sending WebSocket message to room: {} {}", m.getType(), m instanceof TextRoomMessage ? ((TextRoomMessage)m).getText() : "");
-		sendRoom(m.getRoomId(), (t, c) -> t.sendMessage(m), null);
+		sendRoom(m.getRoomId(), (t, c) -> t.sendMessage(m), alwaysTrue());
 	}
 
 	public static void sendServer(final RoomMessage m) {
@@ -161,7 +164,7 @@ public class WebSocketHelper {
 		if (publish) {
 			publish(new WsMessageRoom(roomId, m));
 		}
-		sendRoom(roomId, m, null, null);
+		sendRoom(roomId, m, alwaysTrue(), null);
 	}
 
 	public static void sendRoomOthers(final Long roomId, final String uid, final JSONObject m) {
@@ -183,8 +186,8 @@ public class WebSocketHelper {
 		if (publish) {
 			publish(new WsMessageUser(userId, m));
 		}
-		send(a -> ((IApplication)a).getBean(IClientManager.class).listByUser(userId)
-				, (t, c) -> doSend(t, c, m, func, "user"), null);
+		send(a -> ((IApplication)a).getBean(IClientManager.class).listByUser(userId).stream()
+				, (t, c) -> doSend(t, c, m, func, "user"), alwaysTrue());
 	}
 
 	public static void sendAll(final String m) {
@@ -239,11 +242,11 @@ public class WebSocketHelper {
 	}
 
 	private static void sendRoom(final Long roomId, BiConsumer<IWebSocketConnection, Client> consumer, Predicate<Client> check) {
-		send(a -> ((IApplication)a).getBean(IClientManager.class).listByRoom(roomId), consumer, check);
+		send(a -> ((IApplication)a).getBean(IClientManager.class).streamByRoom(roomId), consumer, check);
 	}
 
 	static void send(
-			final Function<Application, Collection<Client>> func
+			final Function<Application, Stream<Client>> func
 			, BiConsumer<IWebSocketConnection, Client> consumer
 			, Predicate<Client> check)
 	{
@@ -255,14 +258,14 @@ public class WebSocketHelper {
 			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
 			Executor executor = settings.getWebSocketPushMessageExecutor();
-			for (Client c : func.apply(app)) {
-				if (check == null || check.test(c)) {
-					final IWebSocketConnection wc = reg.getConnection(app, c.getSessionId(), new PageIdKey(c.getPageId()));
-					if (wc != null && wc.isOpen()) {
-						executor.run(() -> consumer.accept(wc, c));
-					}
-				}
-			}
+			func.apply(app)
+					.filter(check)
+					.forEach(c -> {
+						final IWebSocketConnection wc = reg.getConnection(app, c.getSessionId(), new PageIdKey(c.getPageId()));
+						if (wc != null && wc.isOpen()) {
+							executor.run(() -> consumer.accept(wc, c));
+						}
+					});
 		}).start();
 	}
 }

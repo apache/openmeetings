@@ -71,10 +71,13 @@ import org.kurento.jsonrpc.client.JsonRpcClientNettyWebSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
+@Component
 public class KurentoHandler {
 	private static final Logger log = LoggerFactory.getLogger(KurentoHandler.class);
 	public static final String PARAM_ICE = "iceServers";
@@ -88,20 +91,30 @@ public class KurentoHandler {
 	private final ScheduledExecutorService kmsRecheckScheduler = Executors.newScheduledThreadPool(1);
 	public static final String KURENTO_TYPE = "kurento";
 	private static int FLOWOUT_TIMEOUT_SEC = 5;
-	private long checkTimeout = 120000; //ms
-	private long objCheckTimeout = 200; //ms
-	private int watchThreadCount = 10;
+	@Value("${kurento.ws.url}")
 	private String kurentoWsUrl;
+	@Value("${kurento.turn.url}")
 	private String turnUrl;
+	@Value("${kurento.turn.user}")
 	private String turnUser;
+	@Value("${kurento.turn.secret}")
 	private String turnSecret;
+	@Value("${kurento.turn.mode}")
 	private String turnMode;
+	@Value("${kurento.turn.ttl}")
 	private int turnTtl = 60; //minutes
+	@Value("${kurento.check.timeout}")
+	private long checkTimeout = 120000; //ms
+	@Value("${kurento.object.check.timeout}")
+	private long objCheckTimeout = 200; //ms
+	@Value("${kurento.watch.thread.count}")
+	private int watchThreadCount = 10;
+	@Value("${kurento.kuid}")
+	private String kuid;
 	private KurentoClient client;
 	private final AtomicBoolean connected = new AtomicBoolean(false);
-	private String kuid;
-	private final Set<String> ignoredKuids = new HashSet<>();
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
+	private final Set<String> ignoredKuids = new HashSet<>();
 	private Runnable check;
 
 	@Autowired
@@ -379,56 +392,6 @@ public class KurentoHandler {
 		return kuid;
 	}
 
-	public void setKuid(String kuid) {
-		this.kuid = kuid;
-	}
-
-	public void setIgnoredKuids(String ignoredKuids) {
-		if (!Strings.isEmpty(ignoredKuids)) {
-			this.ignoredKuids.addAll(List.of(ignoredKuids.split("[, ]")));
-		}
-	}
-
-	public void setCheckTimeout(long checkTimeout) {
-		this.checkTimeout = checkTimeout;
-	}
-
-	public void setObjCheckTimeout(long objCheckTimeout) {
-		this.objCheckTimeout = objCheckTimeout;
-	}
-
-	public void setWatchThreadCount(int watchThreadCount) {
-		this.watchThreadCount = watchThreadCount;
-	}
-
-	public void setKurentoWsUrl(String kurentoWsUrl) {
-		this.kurentoWsUrl = kurentoWsUrl;
-	}
-
-	public void setTurnUrl(String turnUrl) {
-		this.turnUrl = turnUrl;
-	}
-
-	public void setTurnUser(String turnUser) {
-		this.turnUser = turnUser;
-	}
-
-	public void setTurnSecret(String turnSecret) {
-		this.turnSecret = turnSecret;
-	}
-
-	public void setTurnMode(String turnMode) {
-		this.turnMode = turnMode;
-	}
-
-	public void setTurnTtl(int turnTtl) {
-		this.turnTtl = turnTtl;
-	}
-
-	public void setFlowoutTimeout(int timeout) {
-		FLOWOUT_TIMEOUT_SEC = timeout;
-	}
-
 	IApplication getApp() {
 		return app;
 	}
@@ -443,6 +406,18 @@ public class KurentoHandler {
 
 	static int getFlowoutTimeout() {
 		return FLOWOUT_TIMEOUT_SEC;
+	}
+
+	@Value("${kurento.flowout.timeout}")
+	private void setFlowoutTimeout(int timeout) {
+		FLOWOUT_TIMEOUT_SEC = timeout;
+	}
+
+	@Value("${kurento.ignored.kuids}")
+	private void setIgnoredKuids(String ignoredKuids) {
+		if (!Strings.isEmpty(ignoredKuids)) {
+			this.ignoredKuids.addAll(List.of(ignoredKuids.split("[, ]")));
+		}
 	}
 
 	private class KWatchDogCreate implements EventListener<ObjectCreatedEvent> {
