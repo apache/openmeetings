@@ -60,6 +60,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.ISipManager;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.wicket.util.string.Strings;
 import org.asteriskjava.manager.DefaultManagerConnection;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerConnectionFactory;
@@ -138,7 +139,7 @@ public class SipManager implements ISipManager, SipListenerExt {
 
 	@PostConstruct
 	public void init() throws Exception {
-		if (sipHostname != null) {
+		if (!Strings.isEmpty(sipHostname)) {
 			factory = new ManagerConnectionFactory(
 					sipHostname
 					, managerPort
