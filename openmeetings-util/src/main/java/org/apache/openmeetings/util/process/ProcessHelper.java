@@ -18,8 +18,9 @@
  */
 package org.apache.openmeetings.util.process;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,9 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProcessHelper {
 	public static final Logger log = LoggerFactory.getLogger(ProcessHelper.class);
@@ -56,7 +56,7 @@ public class ProcessHelper {
 					line = br.readLine();
 				}
 			} catch (IOException ioexception) {
-				return;
+				// no-op
 			}
 		}
 

@@ -23,7 +23,7 @@ var Settings = (function() {
 	};
 })();
 var OmUtil = (function() {
-	let options, errs, alertId = 0;
+	let options, alertId = 0;
 	const self = {};
 
 	function _init(_options) {

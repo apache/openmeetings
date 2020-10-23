@@ -61,7 +61,7 @@ public class EmailManager {
 	 * @param sendEmailWithVerficationCode - if email with verification code should be sent
 	 * @param langId - language Id
 	 */
-	public void sendMail(String username, String email, String hash, Boolean sendEmailWithVerficationCode, Long langId) {
+	public void sendMail(String username, String email, String hash, boolean sendEmailWithVerficationCode, Long langId) {
 		log.debug("sendMail:: username = {}, email = {}", username, email);
 
 		ensureApplication(langId != null ? langId : getDefaultLang());

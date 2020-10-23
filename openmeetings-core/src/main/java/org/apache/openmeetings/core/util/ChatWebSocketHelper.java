@@ -69,7 +69,7 @@ public class ChatWebSocketHelper {
 		JSONArray arr = new JSONArray();
 		for (ChatMessage m : list) {
 			String smsg = m.getMessage();
-			smsg = smsg == null ? smsg : " " + smsg.replaceAll("&nbsp;", " ") + " ";
+			smsg = smsg == null ? smsg : " " + smsg.replace("&nbsp;", " ") + " ";
 			JSONObject from = new JSONObject()
 					.put("id", m.getFromUser().getId())
 					.put("displayName", m.getFromName())

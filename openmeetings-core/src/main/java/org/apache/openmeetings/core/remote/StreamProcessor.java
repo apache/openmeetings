@@ -307,30 +307,26 @@ public class StreamProcessor implements IStreamProcessor {
 			return;
 		}
 		KRoom room = kHandler.getRoom(roomId);
-		if (room.isSharing()) {
-			if (cm.streamByRoom(roomId)
+		if (room.isSharing() && cm.streamByRoom(roomId)
 					.flatMap(c -> c.getStreams().stream())
 					.filter(sd -> StreamType.SCREEN == sd.getType())
 					.findAny()
 					.isEmpty())
-			{
-				log.info("No more screen streams in the room, stopping sharing");
-				room.stopSharing();
-				if (Room.Type.INTERVIEW != room.getType() && room.isRecording()) {
-					log.info("No more screen streams in the non-interview room, stopping recording");
-					room.stopRecording(null);
-				}
-			}
-		}
-		if (room.isRecording()) {
-			if (cm.streamByRoom(roomId)
-					.flatMap(c -> c.getStreams().stream())
-					.findAny()
-					.isEmpty())
-			{
-				log.info("No more streams in the room, stopping recording");
+		{
+			log.info("No more screen streams in the room, stopping sharing");
+			room.stopSharing();
+			if (Room.Type.INTERVIEW != room.getType() && room.isRecording()) {
+				log.info("No more screen streams in the non-interview room, stopping recording");
 				room.stopRecording(null);
 			}
+		}
+		if (room.isRecording() && cm.streamByRoom(roomId)
+				.flatMap(c -> c.getStreams().stream())
+				.findAny()
+				.isEmpty())
+		{
+			log.info("No more streams in the room, stopping recording");
+			room.stopRecording(null);
 		}
 	}
 

@@ -92,7 +92,7 @@ public class KurentoHandler {
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 	private final ScheduledExecutorService kmsRecheckScheduler = Executors.newScheduledThreadPool(1);
 	public static final String KURENTO_TYPE = "kurento";
-	private static int FLOWOUT_TIMEOUT_SEC = 5;
+	private static int flowoutTimeout = 5;
 	@Value("${kurento.ws.url}")
 	private String kurentoWsUrl;
 	@Value("${kurento.turn.url}")
@@ -309,12 +309,11 @@ public class KurentoHandler {
 	}
 
 	KRoom getRoom(Long roomId) {
-		KRoom room = rooms.computeIfAbsent(roomId, k -> {
+		return rooms.computeIfAbsent(roomId, k -> {
 			log.debug("Room {} does not exist. Will create now!", roomId);
 			Room r = roomDao.get(roomId);
 			return new KRoom(this, r);
 		});
-		return room;
 	}
 
 	public Collection<KRoom> getRooms() {
@@ -410,12 +409,12 @@ public class KurentoHandler {
 	}
 
 	static int getFlowoutTimeout() {
-		return FLOWOUT_TIMEOUT_SEC;
+		return flowoutTimeout;
 	}
 
 	@Value("${kurento.flowout.timeout}")
 	private void setFlowoutTimeout(int timeout) {
-		FLOWOUT_TIMEOUT_SEC = timeout;
+		flowoutTimeout = timeout;
 	}
 
 	@Value("${kurento.ignored.kuids}")
@@ -465,7 +464,7 @@ public class KurentoHandler {
 								}
 							}
 						}
-					} catch (Throwable e) {
+					} catch (Exception e) {
 						log.warn("Invalid MediaPipeline {} detected, will be dropped, tags: {}", pipe.getId(), tags);
 						pipe.release();
 					}
@@ -504,7 +503,7 @@ public class KurentoHandler {
 						if (stream != null && stream.contains(tags.get("uid"))) {
 							return;
 						}
-					} catch (Throwable e) {
+					} catch (Exception e) {
 						log.warn("Kurento::ObjectCreated -> Invalid Endpoint {} detected, will be dropped, tags: {}", point.getId(), tags);
 						point.release();
 					}

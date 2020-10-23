@@ -291,11 +291,11 @@ public class User extends HistoricalEntity {
 	private String externalId;
 
 	@XmlElement(name = "externalUserType", required = false)
-	@Deprecated(since = "5.0")
 	@Transient
 	/**
 	 * @deprecated External group should be used instead
 	 */
+	@Deprecated(since = "5.0")
 	private String externalType;
 
 	/**
@@ -550,18 +550,18 @@ public class User extends HistoricalEntity {
 		return extType.isPresent() ? extType.get() : null;
 	}
 
-	@Deprecated(since = "5.0")
 	/**
 	 * @deprecated External group should be used instead
 	 */
+	@Deprecated(since = "5.0")
 	public String getExternalType() {
 		return externalType;
 	}
 
-	@Deprecated(since = "5.0")
 	/**
 	 * @deprecated External group should be used instead
 	 */
+	@Deprecated(since = "5.0")
 	public void setExternalType(String externalType) {
 		this.externalType = externalType;
 	}

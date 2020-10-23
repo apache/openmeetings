@@ -106,9 +106,7 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler;
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.FilteringHeaderResponse;
-import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.IPageStore;
 import org.apache.wicket.pageStore.SerializingPageStore;
@@ -287,12 +285,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (sc != null) {
 			sc.setDefaultMaxSessionIdleTimeout(60 * 1000L); // should be enough, should it be configurable?
 		}
-		getHeaderResponseDecorators().add(new IHeaderResponseDecorator() {
-			@Override
-			public IHeaderResponse decorate(IHeaderResponse response) {
-				return new FilteringHeaderResponse(response);
-			}
-		});
+		getHeaderResponseDecorators().add(response -> new FilteringHeaderResponse(response));
 		super.init();
 		final IBootstrapSettings settings = new BootstrapSettings();
 		settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Sandstone));//FIXME TODO new SingleThemeProvider(new MaterialDesignTheme())

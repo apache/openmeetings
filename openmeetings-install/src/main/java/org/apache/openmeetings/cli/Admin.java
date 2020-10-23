@@ -121,7 +121,7 @@ public class Admin {
 	}
 
 	private static void doLog(CharSequence msg) {
-		log.info(msg.toString());
+		log.info("{}", msg);
 		System.out.println(msg);
 	}
 

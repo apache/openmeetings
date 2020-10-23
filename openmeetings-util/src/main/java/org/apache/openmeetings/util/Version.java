@@ -79,6 +79,6 @@ public class Version {
 		getLine(sb, getVersion() + " " + getRevision() + " " + getBuildDate(), ' ');
 		getLine(sb, "and ready to use", ' ');
 		getLine(sb, "", '#');
-		log.debug(sb.toString());
+		log.debug("{}", sb);
 	}
 }

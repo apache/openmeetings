@@ -218,11 +218,11 @@ public class Room extends HistoricalEntity {
 	private String externalId;
 
 	@XmlElement(name = "externalType", required = false)
-	@Deprecated(since = "5.0")
 	@Transient
 	/**
 	 * @deprecated External group should be used instead
 	 */
+	@Deprecated(since = "5.0")
 	private String externalType;
 
 	@Column(name = "demo_room", nullable = false)

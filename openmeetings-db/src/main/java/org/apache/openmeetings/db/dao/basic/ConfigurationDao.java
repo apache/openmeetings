@@ -583,7 +583,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			getLine(sb, "CSP headers are DISABLED", ' ');
 			getLine(sb, "Disabling CSP can lead to XSS attacks! Use this mode only if you must!", ' ');
 			getLine(sb, "", '#');
-			log.warn(sb.toString());
+			log.warn("{}", sb);
 			WebApplication.get().getCspSettings().blocking().disabled();
 			return;
 		}

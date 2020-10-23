@@ -129,7 +129,7 @@ public class InvitationManager implements IInvitationManager {
 					.setSequence(0)
 					.build();
 
-			log.debug(handler.toString());
+			log.debug("IcalHandler {}", handler);
 			mailHandler.send(new MailMessage(email, replyToEmail, subject, template, handler));
 		} else {
 			mailHandler.send(email, replyToEmail, subject, template);

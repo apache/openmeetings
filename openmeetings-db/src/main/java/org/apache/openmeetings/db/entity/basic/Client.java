@@ -114,7 +114,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 	}
 
 	public boolean sameUserId(Long userId) {
-		return getUserId() == null ? false : getUserId().equals(userId);
+		return getUserId() != null && getUserId().equals(userId);
 	}
 
 	public String getPictureUri() {

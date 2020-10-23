@@ -66,7 +66,7 @@ public class OMContextListener implements ServletContextListener {
 	}
 
 	private static String pathToName(ServletContextEvent event) {
-		String contextName = event.getServletContext().getContextPath().replaceAll("/", "");
+		String contextName = event.getServletContext().getContextPath().replace("/", "");
 		if ("".equals(contextName)) {
 			contextName = "root";
 		}

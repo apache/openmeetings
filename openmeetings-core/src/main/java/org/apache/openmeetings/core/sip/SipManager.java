@@ -197,7 +197,7 @@ public class SipManager implements ISipManager, SipListenerExt {
 			con.login();
 			ManagerResponse r = con.sendAction(action);
 			if (r != null) {
-				log.debug(r.toString());
+				log.debug("{}", r);
 			}
 			return (r instanceof ManagerError) ? null : r;
 		} catch (Exception e) {
@@ -222,7 +222,7 @@ public class SipManager implements ISipManager, SipListenerExt {
 			con.login("on");
 			ResponseEvents r = con.sendEventGeneratingAction(action);
 			if (r != null) {
-				log.debug(r.getResponse().toString());
+				log.debug("{}", r.getResponse());
 			}
 			return (r == null || r.getResponse() instanceof ManagerError) ? null : r;
 		} catch (Exception e) {
