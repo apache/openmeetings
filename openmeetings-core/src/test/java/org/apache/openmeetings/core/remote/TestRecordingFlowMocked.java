@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,9 +41,10 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kurento.client.MediaPipeline;
-import org.kurento.client.Transaction;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import com.github.openjson.JSONObject;
 
@@ -72,7 +72,6 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 	@BeforeEach
 	public void setup() {
 		super.setup();
-		doReturn(mock(MediaPipeline.class)).when(client).createMediaPipeline(any(Transaction.class));
 		User u = new User();
 		u.setId(USER_ID);
 		u.setFirstname("firstname");
@@ -91,7 +90,13 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 		doReturn(c.getRoom()).when(roomDao).get(ROOM_ID);
 
 		// Mock out the methods that do webRTC
-		doReturn(null).when(streamProcessor).startBroadcast(any(), any(), any(), any());
+		Mockito.doAnswer(new Answer<Void>() {
+			@Override
+			public Void answer(InvocationOnMock invocation) throws Throwable {
+				invocation.getArgument(3, Runnable.class).run();
+				return null;
+			}
+		}).when(streamProcessor).startBroadcast(any(), any(), any(), any());
 
 	}
 
