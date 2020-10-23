@@ -91,7 +91,7 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 		doReturn(c.getRoom()).when(roomDao).get(ROOM_ID);
 
 		// Mock out the methods that do webRTC
-		doReturn(null).when(streamProcessor).startBroadcast(any(), any(), any());
+		doReturn(null).when(streamProcessor).startBroadcast(any(), any(), any(), any());
 
 	}
 
@@ -175,7 +175,7 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 		assertTrue(streamProcessor.isSharing(ROOM_ID));
 
 		//verify startBroadcast has been invoked
-		verify(streamProcessor).startBroadcast(any(), any(), any());
+		verify(streamProcessor).startBroadcast(any(), any(), any(), any());
 
 		// Assert that there is still just 1 stream and has only the activities to Record assigned
 		assertEquals(1, c.getStreams().size());

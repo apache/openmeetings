@@ -6,6 +6,10 @@ var Video = (function() {
 		, lm, level, userSpeaks = false, muteOthers
 		, hasVideo, isSharing, isRecording;
 
+	function __getVideo(_state) {
+		const vid = self.video(_state);
+		return vid && vid.length > 0 ? vid[0] : null;
+	}
 	function _resizeDlgArea(_w, _h) {
 		if (Room.getOptions().interview) {
 			VideoUtil.setPos(v, VideoUtil.getPos());
@@ -153,7 +157,7 @@ var Video = (function() {
 			, onicecandidate: self.onIceCandidate
 		};
 		if (!isSharing) {
-			state.options.localVideo = state.video[0];
+			state.options.localVideo = __getVideo(state);
 		}
 		const data = state.data;
 		data.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
@@ -203,7 +207,7 @@ var Video = (function() {
 	function _createResvPeer(msg, state) {
 		__createVideo(state);
 		const options = VideoUtil.addIceServers({
-			remoteVideo : state.video[0]
+			remoteVideo : __getVideo(state)
 			, onicecandidate : self.onIceCandidate
 		}, msg);
 		const data = state.data;
@@ -418,8 +422,9 @@ var Video = (function() {
 		}
 		state.video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 			.attr('playsinline', 'playsinline')
-			.width(vc.width()).height(vc.height())
-			.prop('autoplay', true).prop('controls', false);
+			//.attr('autoplay', 'autoplay')
+			.prop('controls', false)
+			.width(vc.width()).height(vc.height());
 		if (state.data) {
 			state.video.data(state.data);
 		}
@@ -568,20 +573,22 @@ var Video = (function() {
 			return;
 		}
 		state.data.rtcPeer.processAnswer(answer, function (error) {
-			if (true === this.cleaned || this.peerConnection.signalingState === 'stable') {
+			if (true === this.cleaned) {
+				return;
+			}
+			const video = __getVideo(state);
+			if (this.peerConnection.signalingState === 'stable' && video && video.paused) {
+				video.play().catch(function (err) {
+					if ('NotAllowedError' === err.name) {
+						VideoUtil.askPermission(function () {
+							video.play();
+						});
+					}
+				});
 				return;
 			}
 			if (error) {
 				return OmUtil.error(error);
-			}
-			if (state.video && state.video.paused) {
-				state.video.play().catch(function (err) {
-					if ('NotAllowedError' === err.name) {
-						VideoUtil.askPermission(function () {
-							state.video.play();
-						});
-					}
-				});
 			}
 		});
 	}
@@ -625,8 +632,8 @@ var Video = (function() {
 		});
 	};
 	self.reattachStream = _reattachStream;
-	self.video = function() {
-		const state = states.length > 0 ? states[0] : null;
+	self.video = function(_state) {
+		const state = _state || (states.length > 0 ? states[0] : null);
 		if (!state || state.disposed) {
 			return null;
 		}

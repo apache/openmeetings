@@ -280,7 +280,7 @@ public class SipManager implements ISipManager, SipListenerExt {
 		ConfbridgeListAction da = new ConfbridgeListAction(confno);
 		ResponseEvents r = execEvent(da);
 		if (r != null) {
-			log.debug("SipManager::countUsers size == {}", r.getEvents().size());
+			log.trace("SipManager::countUsers size == {}", r.getEvents().size());
 			// "- 1" here means: ListComplete event
 			return r.getEvents().size() - 1;
 		}

@@ -49,6 +49,7 @@ import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.Continuation;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.MediaFlowState;
+import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaProfileSpecType;
 import org.kurento.client.MediaType;
 import org.kurento.client.RecorderEndpoint;
@@ -62,38 +63,49 @@ import com.github.openjson.JSONObject;
 public class KStream extends AbstractStream {
 	private static final Logger log = LoggerFactory.getLogger(KStream.class);
 
+	private final KurentoHandler kHandler;
 	private final KRoom room;
 	private final Date connectedSince;
 	private final StreamType streamType;
 	private MediaProfileSpecType profile;
+	private MediaPipeline pipeline;
 	private RecorderEndpoint recorder;
 	private WebRtcEndpoint outgoingMedia = null;
 	private final ConcurrentMap<String, WebRtcEndpoint> listeners = new ConcurrentHashMap<>();
 	private Optional<CompletableFuture<Object>> flowoutFuture = Optional.empty();
 	private Long chunkId;
 	private Type type;
+	private boolean hasAudio;
+	private boolean hasVideo;
+	private boolean hasScreen;
 
-	public KStream(final StreamDesc sd, KRoom room) {
+	public KStream(final StreamDesc sd, KRoom room, KurentoHandler kHandler) {
 		super(sd.getSid(), sd.getUid());
 		this.room = room;
 		streamType = sd.getType();
 		this.connectedSince = new Date();
+		this.kHandler = kHandler;
 		//TODO Min/MaxVideoSendBandwidth
 		//TODO Min/Max Audio/Video RecvBandwidth
 	}
 
-	public KStream startBroadcast(final StreamProcessor processor, final StreamDesc sd, final String sdpOffer) {
+	public void startBroadcast(
+			final StreamProcessor processor
+			, final StreamDesc sd
+			, final String sdpOffer
+			, Runnable then)
+	{
 		if (outgoingMedia != null) {
 			release(processor, false);
 		}
-		final boolean hasAudio = sd.hasActivity(Activity.AUDIO);
-		final boolean hasVideo = sd.hasActivity(Activity.VIDEO);
-		final boolean hasScreen = sd.hasActivity(Activity.SCREEN);
+		hasAudio = sd.hasActivity(Activity.AUDIO);
+		hasVideo = sd.hasActivity(Activity.VIDEO);
+		hasScreen = sd.hasActivity(Activity.SCREEN);
 		if ((sdpOffer.indexOf("m=audio") > -1 && !hasAudio)
 				|| (sdpOffer.indexOf("m=video") > -1 && !hasVideo && StreamType.SCREEN != streamType))
 		{
 			log.warn("Broadcast started without enough rights");
-			return this;
+			return;
 		}
 		if (StreamType.SCREEN == streamType) {
 			type = Type.SCREEN;
@@ -119,6 +131,25 @@ public class KStream extends AbstractStream {
 				profile = MediaProfileSpecType.WEBM_VIDEO_ONLY;
 				break;
 		}
+		pipeline = kHandler.createPipiline(room.getRoomId(), sd.getUid(), new Continuation<Void>() {
+			@Override
+			public void onSuccess(Void result) throws Exception {
+				internalStartBroadcast(processor, sd, sdpOffer);
+				then.run();
+			}
+
+			@Override
+			public void onError(Throwable cause) throws Exception {
+				log.warn("Unable to create pipeline {}", KStream.this.uid, cause);
+			}
+		});
+	}
+
+	private void internalStartBroadcast(
+			final StreamProcessor processor
+			, final StreamDesc sd
+			, final String sdpOffer)
+	{
 		outgoingMedia = createEndpoint(processor, sd.getSid(), sd.getUid());
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
 		outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
@@ -151,10 +182,9 @@ public class KStream extends AbstractStream {
 		if (hasAudio || hasVideo || hasScreen) {
 			WebSocketHelper.sendRoomOthers(room.getRoomId(), c.getUid(), newKurentoMsg()
 					.put("id", "newStream")
-					.put(PARAM_ICE, processor.getHandler().getTurnServers(c))
+					.put(PARAM_ICE, kHandler.getTurnServers(c))
 					.put("stream", sd.toJson()));
 		}
-		return this;
 	}
 
 	public void addListener(final StreamProcessor processor, String sid, String uid, String sdpOffer) {
@@ -172,7 +202,7 @@ public class KStream extends AbstractStream {
 		log.debug("gather candidates");
 		endpoint.gatherCandidates(); // this one might throw Exception
 		log.trace("USER {}: SdpAnswer is {}", this.uid, sdpAnswer);
-		processor.getHandler().sendClient(sid, newKurentoMsg()
+		kHandler.sendClient(sid, newKurentoMsg()
 				.put("id", "videoResponse")
 				.put("uid", this.uid)
 				.put("sdpAnswer", sdpAnswer));
@@ -215,11 +245,11 @@ public class KStream extends AbstractStream {
 	}
 
 	private WebRtcEndpoint createEndpoint(final StreamProcessor processor, String sid, String uid) {
-		WebRtcEndpoint endpoint = createWebRtcEndpoint(room.getPipeline());
+		WebRtcEndpoint endpoint = createWebRtcEndpoint(pipeline);
 		endpoint.addTag("outUid", this.uid);
 		endpoint.addTag("uid", uid);
 
-		endpoint.addIceCandidateFoundListener(evt -> processor.getHandler().sendClient(sid
+		endpoint.addIceCandidateFoundListener(evt -> kHandler.sendClient(sid
 				, newKurentoMsg()
 					.put("id", "iceCandidate")
 					.put("uid", KStream.this.uid)
@@ -235,7 +265,7 @@ public class KStream extends AbstractStream {
 			return;
 		}
 		final String chunkUid = "rec_" + room.getRecordingId() + "_" + randomUUID();
-		recorder = createRecorderEndpoint(room.getPipeline(), getRecUri(getRecordingChunk(room.getRoomId(), chunkUid)), profile);
+		recorder = createRecorderEndpoint(pipeline, getRecUri(getRecordingChunk(room.getRoomId(), chunkUid)), profile);
 		recorder.addTag("outUid", uid);
 		recorder.addTag("uid", uid);
 
@@ -335,6 +365,17 @@ public class KStream extends AbstractStream {
 					log.warn("PARTICIPANT {}: Could not release", KStream.this.uid, cause);
 				}
 			});
+			pipeline.release(new Continuation<Void>() {
+				@Override
+				public void onSuccess(Void result) throws Exception {
+					log.trace("PARTICIPANT {}: Released Pipeline", KStream.this.uid);
+				}
+
+				@Override
+				public void onError(Throwable cause) throws Exception {
+					log.warn("PARTICIPANT {}: Could not release Pipeline", KStream.this.uid, cause);
+				}
+			});
 			releaseRecorder(false);
 			outgoingMedia = null;
 		}
@@ -421,6 +462,10 @@ public class KStream extends AbstractStream {
 
 	public KRoom getRoom() {
 		return room;
+	}
+
+	MediaPipeline getPipeline() {
+		return pipeline;
 	}
 
 	public StreamType getStreamType() {

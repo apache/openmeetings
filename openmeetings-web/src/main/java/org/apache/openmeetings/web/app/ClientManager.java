@@ -313,7 +313,7 @@ public class ClientManager implements IClientManager {
 			.map(id -> onlineRooms.getOrDefault(id, Set.of()))
 			.stream()
 			.flatMap(Set::stream)
-			.map(uid -> get(uid))
+			.map(this::get)
 			.filter(Objects::nonNull);
 	}
 
@@ -322,10 +322,8 @@ public class ClientManager implements IClientManager {
 			.map(id -> onlineRooms.getOrDefault(id, Set.of()))
 			.stream()
 			.flatMap(Set::stream)
-			.map(uid -> get(uid))
-			.filter(c -> c != null && c.sameUserId(userId))
-			.findAny()
-			.isPresent();
+			.map(this::get)
+			.anyMatch(c -> c != null && c.sameUserId(userId));
 	}
 
 	private List<Client> getByKeys(Long userId, String sessionId) {

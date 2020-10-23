@@ -82,7 +82,7 @@ public class TimerService {
 		sipCheckMap.put(
 				roomId
 				, new CompletableFuture<>().completeAsync(() -> {
-					log.warn("Sip room check {}", roomId);
+					log.trace("Sip room check {}", roomId);
 					Optional<Client> sipClient = cm.streamByRoom(roomId).filter(Client::isSip).findAny();
 					cm.streamByRoom(roomId).filter(Predicate.not(Client::isSip)).findAny().ifPresentOrElse(c -> {
 						updateSipLastName(sipClient, c.getRoom());

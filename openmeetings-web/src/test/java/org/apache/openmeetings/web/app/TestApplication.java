@@ -33,7 +33,7 @@ import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.junit.jupiter.api.Test;
 
-public class TestApplication extends AbstractJUnitDefaults {
+class TestApplication extends AbstractJUnitDefaults {
 	@Test
 	void testMissing() {
 		assertEquals("[Missing]", app.getOmString("909", Locale.ENGLISH));

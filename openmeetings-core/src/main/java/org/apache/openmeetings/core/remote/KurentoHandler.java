@@ -56,6 +56,7 @@ import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.wicket.util.string.Strings;
+import org.kurento.client.Continuation;
 import org.kurento.client.Endpoint;
 import org.kurento.client.EventListener;
 import org.kurento.client.KurentoClient;
@@ -87,6 +88,7 @@ public class KurentoHandler {
 	public static final String TAG_KUID = "kuid";
 	public static final String TAG_MODE = "mode";
 	public static final String TAG_ROOM = "roomId";
+	public static final String TAG_STREAM_UID = "streamUid";
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 	private final ScheduledExecutorService kmsRecheckScheduler = Executors.newScheduledThreadPool(1);
 	public static final String KURENTO_TYPE = "kurento";
@@ -296,19 +298,22 @@ public class KurentoHandler {
 		streamProcessor.remove((Client)c);
 	}
 
+	MediaPipeline createPipiline(Long roomId, String uid, Continuation<Void> continuation) {
+		Transaction t = beginTransaction();
+		MediaPipeline pipe = client.createMediaPipeline(t);
+		pipe.addTag(t, TAG_KUID, kuid);
+		pipe.addTag(t, TAG_ROOM, String.valueOf(roomId));
+		pipe.addTag(t, TAG_STREAM_UID, uid);
+		t.commit(continuation);
+		return pipe;
+	}
+
 	KRoom getRoom(Long roomId) {
-		log.debug("Searching for room {}", roomId);
 		KRoom room = rooms.computeIfAbsent(roomId, k -> {
 			log.debug("Room {} does not exist. Will create now!", roomId);
 			Room r = roomDao.get(roomId);
-			Transaction t = beginTransaction();
-			MediaPipeline pipe = client.createMediaPipeline(t);
-			pipe.addTag(t, TAG_KUID, kuid);
-			pipe.addTag(t, TAG_ROOM, String.valueOf(roomId));
-			t.commit();
-			return new KRoom(this, r, pipe);
+			return new KRoom(this, r);
 		});
-		log.debug("Room {} found!", roomId);
 		return room;
 	}
 
@@ -440,24 +445,30 @@ public class KurentoHandler {
 					// still alive
 					MediaPipeline pipe = client.getById(roid, MediaPipeline.class);
 					Map<String, String> tags = tagsAsMap(pipe);
-					final String inKuid = tags.get(TAG_KUID);
-					if (ignoredKuids.contains(inKuid)) {
-						return;
-					}
-					if (validTestPipeline(tags)) {
-						return;
-					}
-					if (kuid.equals(inKuid)) {
-						KRoom r = rooms.get(Long.valueOf(tags.get(TAG_ROOM)));
-						if (r.getPipeline().getId().equals(pipe.getId())) {
+					try {
+						final String inKuid = tags.get(TAG_KUID);
+						if (inKuid != null && ignoredKuids.contains(inKuid)) {
 							return;
-						} else if (r != null) {
-							rooms.remove(r.getRoomId());
-							r.close();
 						}
+						if (validTestPipeline(tags)) {
+							return;
+						}
+						if (kuid.equals(inKuid)) {
+							KStream stream = streamProcessor.getByUid(tags.get(TAG_STREAM_UID));
+							if (stream != null) {
+								if (stream.getRoom().getRoomId().equals(Long.valueOf(tags.get(TAG_ROOM)))
+										&& stream.getPipeline().getId().equals(pipe.getId()))
+								{
+									return;
+								} else {
+									stream.release(streamProcessor);
+								}
+							}
+						}
+					} catch (Throwable e) {
+						log.warn("Invalid MediaPipeline {} detected, will be dropped, tags: {}", pipe.getId(), tags);
+						pipe.release();
 					}
-					log.warn("Invalid MediaPipeline {} detected, will be dropped, tags: {}", pipe.getId(), tags);
-					pipe.release();
 				}, objCheckTimeout, MILLISECONDS);
 			} else if (evt.getObject() instanceof Endpoint) {
 				// endpoint created
@@ -478,22 +489,25 @@ public class KurentoHandler {
 					}
 					// still alive
 					Endpoint point = client.getById(eoid, fClazz);
-					Map<String, String> pipeTags = tagsAsMap(point.getMediaPipeline());
-					final String inKuid = pipeTags.get(TAG_KUID);
-					if (ignoredKuids.contains(inKuid)) {
-						return;
-					}
-					if (validTestPipeline(pipeTags)) {
-						return;
-					}
 					Map<String, String> tags = tagsAsMap(point);
-					KStream stream = streamProcessor.getByUid(tags.get("outUid"));
-					log.debug("New Endpoint {} detected, tags: {}, kStream: {}", point.getId(), tags, stream);
-					if (stream != null && stream.contains(tags.get("uid"))) {
-						return;
+					try {
+						Map<String, String> pipeTags = tagsAsMap(point.getMediaPipeline());
+						final String inKuid = pipeTags.get(TAG_KUID);
+						if (ignoredKuids.contains(inKuid)) {
+							return;
+						}
+						if (validTestPipeline(pipeTags)) {
+							return;
+						}
+						KStream stream = streamProcessor.getByUid(tags.get("outUid"));
+						log.debug("Kurento::ObjectCreated -> New Endpoint {} detected, tags: {}, kStream: {}", point.getId(), tags, stream);
+						if (stream != null && stream.contains(tags.get("uid"))) {
+							return;
+						}
+					} catch (Throwable e) {
+						log.warn("Kurento::ObjectCreated -> Invalid Endpoint {} detected, will be dropped, tags: {}", point.getId(), tags);
+						point.release();
 					}
-					log.warn("Invalid Endpoint {} detected, will be dropped, tags: {}", point.getId(), tags);
-					point.release();
 				}, objCheckTimeout, MILLISECONDS);
 			}
 		}

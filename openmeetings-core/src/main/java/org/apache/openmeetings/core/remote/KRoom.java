@@ -25,7 +25,6 @@ import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -46,8 +45,6 @@ import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
-import org.kurento.client.Continuation;
-import org.kurento.client.MediaPipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +64,6 @@ public class KRoom {
 	private final StreamProcessor processor;
 	private final RecordingChunkDao chunkDao;
 	private final IApplication app;
-	private final MediaPipeline pipeline;
 	private final Long roomId;
 	private final Room.Type type;
 	private final AtomicBoolean recordingStarted = new AtomicBoolean(false);
@@ -76,13 +72,12 @@ public class KRoom {
 	private JSONObject recordingUser = new JSONObject();
 	private JSONObject sharingUser = new JSONObject();
 
-	public KRoom(KurentoHandler handler, Room r, MediaPipeline pipeline) {
+	public KRoom(KurentoHandler handler, Room r) {
 		this.processor = handler.getStreamProcessor();
 		this.chunkDao = handler.getChunkDao();
 		this.app = handler.getApp();
 		this.roomId = r.getId();
 		this.type = r.getType();
-		this.pipeline = pipeline;
 		log.info("ROOM {} has been created", roomId);
 	}
 
@@ -98,23 +93,15 @@ public class KRoom {
 		return recordingId;
 	}
 
-	public MediaPipeline getPipeline() {
-		return pipeline;
-	}
-
 	public RecordingChunkDao getChunkDao() {
 		return chunkDao;
 	}
 
-	public KStream join(final StreamDesc sd) {
+	public KStream join(final StreamDesc sd, KurentoHandler kHandler) {
 		log.info("ROOM {}: join client {}, stream: {}", roomId, sd.getClient(), sd.getUid());
-		final KStream stream = new KStream(sd, this);
+		final KStream stream = new KStream(sd, this, kHandler);
 		processor.addStream(stream);
 		return stream;
-	}
-
-	public Collection<KStream> getParticipants() {
-		return processor.getByRoom(this.getRoomId());
 	}
 
 	public void onStopBroadcast(KStream stream) {
@@ -269,17 +256,6 @@ public class KRoom {
 		processor.getByRoom(this.getRoomId()).forEach(
 				stream -> stream.release(processor)
 		);
-		pipeline.release(new Continuation<Void>() {
-			@Override
-			public void onSuccess(Void result) throws Exception {
-				log.trace("ROOM {}: Released Pipeline", KRoom.this.roomId);
-			}
-
-			@Override
-			public void onError(Throwable cause) throws Exception {
-				log.warn("PARTICIPANT {}: Could not release Pipeline", KRoom.this.roomId);
-			}
-		});
 		log.debug("Room {} closed", this.roomId);
 	}
 }

@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.openmeetings.core.converter.IRecordingConverter;
 import org.apache.openmeetings.core.converter.InterviewConverter;
@@ -182,12 +182,13 @@ public class StreamProcessor implements IStreamProcessor {
 		try {
 			if (sender == null) {
 				KRoom room = kHandler.getRoom(c.getRoomId());
-				sender = room.join(sd);
+				sender = room.join(sd, kHandler);
 			}
-			startBroadcast(sender, sd, msg.getString("sdpOffer"));
-			if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !isRecording(c.getRoomId())) {
-				startRecording(c);
-			}
+			startBroadcast(sender, sd, msg.getString("sdpOffer"), () -> {
+				if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !isRecording(c.getRoomId())) {
+					startRecording(c);
+				}
+			});
 		} catch (KurentoServerException e) {
 			sender.release(this);
 			WebSocketHelper.sendClient(c, newStoppedMsg(sd));
@@ -203,10 +204,11 @@ public class StreamProcessor implements IStreamProcessor {
 	 * @param stream Stream to start
 	 * @param sd StreamDesc to start
 	 * @param sdpOffer the sdpOffer
+	 * @param then steps need to be done after broadcast is started
 	 * @return the current KStream
 	 */
-	KStream startBroadcast(KStream stream, StreamDesc sd, String sdpOffer) {
-		return stream.startBroadcast(this, sd, sdpOffer);
+	void startBroadcast(KStream stream, StreamDesc sd, String sdpOffer, Runnable then) {
+		stream.startBroadcast(this, sd, sdpOffer, then);
 	}
 
 	private static boolean isBroadcasting(final Client c) {
@@ -501,7 +503,7 @@ public class StreamProcessor implements IStreamProcessor {
 			}
 		}
 		if (c.getRoomId() != null) {
-			getByRoom(c.getRoomId()).stream().forEach(stream -> stream.remove(c)); // listeners of existing streams should be cleaned-up
+			getByRoom(c.getRoomId()).forEach(stream -> stream.remove(c)); // listeners of existing streams should be cleaned-up
 			checkStreams(c.getRoomId());
 		}
 	}
@@ -514,10 +516,9 @@ public class StreamProcessor implements IStreamProcessor {
 		return streamByUid.values();
 	}
 
-	Collection<KStream> getByRoom(Long roomId) {
+	Stream<KStream> getByRoom(Long roomId) {
 		return streamByUid.values().stream()
-				.filter(stream -> stream.getRoom() != null && stream.getRoom().getRoomId().equals(roomId))
-				.collect(Collectors.toList());
+				.filter(stream -> stream.getRoom() != null && stream.getRoom().getRoomId().equals(roomId));
 	}
 
 	Client getBySid(String sid) {

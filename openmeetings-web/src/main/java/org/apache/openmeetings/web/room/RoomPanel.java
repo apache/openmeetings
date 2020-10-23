@@ -619,8 +619,7 @@ public class RoomPanel extends BasePanel {
 				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
 			} else if (streamProcessor.recordingAllowed(getClient())) {
 				boolean hasStreams = cm.streamByRoom(r.getId())
-						.filter(cl -> !cl.getStreams().isEmpty())
-						.findAny().isPresent();
+						.anyMatch(cl -> !cl.getStreams().isEmpty());
 				handler.appendJavaScript(String.format("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(false);WbArea.setRecEnabled(%s);}", hasStreams));
 			}
 		}
@@ -636,8 +635,7 @@ public class RoomPanel extends BasePanel {
 
 	public static boolean hasRight(ClientManager cm, long userId, long roomId, Right r) {
 		return cm.streamByRoom(roomId)
-				.filter(c -> c.sameUserId(userId) && c.hasRight(r))
-				.findAny().isPresent();
+				.anyMatch(c -> c.sameUserId(userId) && c.hasRight(r));
 	}
 
 	@Override
