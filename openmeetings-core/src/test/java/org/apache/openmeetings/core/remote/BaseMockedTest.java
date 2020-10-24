@@ -27,10 +27,12 @@ import static org.mockito.Mockito.mockStatic;
 
 import java.util.Locale;
 
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.db.entity.label.OmLanguage;
+import org.apache.openmeetings.db.util.ApplicationHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kurento.client.KurentoClient;
@@ -83,6 +85,7 @@ public class BaseMockedTest {
 		try (MockedStatic<AbstractStream> streamMock = mockStatic(AbstractStream.class);
 				MockedStatic<WebSocketHelper> wsHelperMock = mockStatic(WebSocketHelper.class);
 				MockedStatic<LabelDao> labelMock = mockStatic(LabelDao.class);
+				MockedStatic<ApplicationHelper> appHelpMock = mockStatic(ApplicationHelper.class);
 				)
 		{
 			wsHelperMock.when(() -> WebSocketHelper.sendClient(any(IWsClient.class), any(JSONObject.class))).thenAnswer(new Answer<Void>() {
@@ -96,6 +99,7 @@ public class BaseMockedTest {
 			streamMock.when(() -> AbstractStream.createPlayerEndpoint(any(MediaPipeline.class), anyString())).thenReturn(mock(PlayerEndpoint.class));
 
 			labelMock.when(() -> LabelDao.getLanguage(any(Long.class))).thenReturn(new OmLanguage(Locale.ENGLISH));
+			appHelpMock.when(() -> ApplicationHelper.ensureApplication(any(Long.class))).thenReturn(mock(IApplication.class));
 			task.run();
 		}
 	}
