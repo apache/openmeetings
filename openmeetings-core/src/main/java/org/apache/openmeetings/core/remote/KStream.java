@@ -356,6 +356,7 @@ public class KStream extends AbstractStream {
 	public void release(boolean remove) {
 		if (outgoingMedia != null) {
 			releaseListeners();
+			releaseRecorder(false);
 			outgoingMedia.release(new Continuation<Void>() {
 				@Override
 				public void onSuccess(Void result) throws Exception {
@@ -378,7 +379,6 @@ public class KStream extends AbstractStream {
 					log.warn("PARTICIPANT {}: Could not release Pipeline", KStream.this.uid, cause);
 				}
 			});
-			releaseRecorder(false);
 			outgoingMedia = null;
 		}
 		if (remove) {

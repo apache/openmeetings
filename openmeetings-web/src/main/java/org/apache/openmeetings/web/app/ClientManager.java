@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.openmeetings.core.remote.KurentoHandler;
-import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
@@ -78,8 +77,6 @@ public class ClientManager implements IClientManager {
 	private Application app;
 	@Autowired
 	private KurentoHandler kHandler;
-	@Autowired
-	private SipManager sipManager;
 	@Autowired
 	private TimerService timerService;
 

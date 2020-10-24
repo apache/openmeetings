@@ -469,9 +469,10 @@ public class KurentoHandler {
 							}
 						}
 					} catch (Exception e) {
-						log.warn("Invalid MediaPipeline {} detected, will be dropped, tags: {}", pipe.getId(), tags);
-						pipe.release();
+						log.warn("Unexpected error while checking MediaPipeline {}, tags: {}", pipe.getId(), tags, e);
 					}
+					log.warn("Invalid MediaPipeline {} detected, will be dropped, tags: {}", pipe.getId(), tags);
+					pipe.release();
 				}, objCheckTimeout, MILLISECONDS);
 			} else if (evt.getObject() instanceof Endpoint) {
 				// endpoint created
@@ -510,9 +511,10 @@ public class KurentoHandler {
 							return;
 						}
 					} catch (Exception e) {
-						log.warn("Kurento::ObjectCreated -> Invalid Endpoint {} detected, will be dropped, tags: {}", point.getId(), tags);
-						point.release();
+						log.warn("Unexpected error while checking Endpoint {}, tags: {}", point.getId(), tags, e);
 					}
+					log.warn("Invalid Endpoint {} detected, will be dropped, tags: {}", point.getId(), tags);
+					point.release();
 				}, objCheckTimeout, MILLISECONDS);
 			}
 		}
