@@ -41,7 +41,7 @@ import javax.annotation.PreDestroy;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -65,6 +65,7 @@ import org.kurento.client.MediaPipeline;
 import org.kurento.client.ObjectCreatedEvent;
 import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.RecorderEndpoint;
+import org.kurento.client.RtpEndpoint;
 import org.kurento.client.Tag;
 import org.kurento.client.Transaction;
 import org.kurento.client.WebRtcEndpoint;
@@ -122,8 +123,6 @@ public class KurentoHandler {
 	@Autowired
 	private IClientManager cm;
 	@Autowired
-	private IApplication app;
-	@Autowired
 	private RoomDao roomDao;
 	@Autowired
 	private RecordingChunkDao chunkDao;
@@ -131,6 +130,8 @@ public class KurentoHandler {
 	private TestStreamProcessor testProcessor;
 	@Autowired
 	private StreamProcessor streamProcessor;
+	@Autowired
+	private SipManager sipManager;
 
 	boolean isConnected() {
 		boolean connctd = connected.get() && client != null && !client.isClosed();
@@ -298,12 +299,11 @@ public class KurentoHandler {
 		streamProcessor.remove((Client)c);
 	}
 
-	MediaPipeline createPipiline(Long roomId, String uid, Continuation<Void> continuation) {
+	MediaPipeline createPipiline(Map<String, String> tags, Continuation<Void> continuation) {
 		Transaction t = beginTransaction();
 		MediaPipeline pipe = client.createMediaPipeline(t);
 		pipe.addTag(t, TAG_KUID, kuid);
-		pipe.addTag(t, TAG_ROOM, String.valueOf(roomId));
-		pipe.addTag(t, TAG_STREAM_UID, uid);
+		tags.forEach((key, value) -> pipe.addTag(t, key, value));
 		t.commit(continuation);
 		return pipe;
 	}
@@ -396,12 +396,16 @@ public class KurentoHandler {
 		return kuid;
 	}
 
-	IApplication getApp() {
-		return app;
+	public TestStreamProcessor getTestProcessor() {
+		return testProcessor;
 	}
 
 	StreamProcessor getStreamProcessor() {
 		return streamProcessor;
+	}
+
+	SipManager getSipManager() {
+		return sipManager;
 	}
 
 	RecordingChunkDao getChunkDao() {
@@ -460,7 +464,7 @@ public class KurentoHandler {
 								{
 									return;
 								} else {
-									stream.release(streamProcessor);
+									stream.release();
 								}
 							}
 						}
@@ -480,6 +484,8 @@ public class KurentoHandler {
 					clazz = RecorderEndpoint.class;
 				} else if (curPoint instanceof PlayerEndpoint) {
 					clazz = PlayerEndpoint.class;
+				} else if (curPoint instanceof RtpEndpoint) {
+					clazz = RtpEndpoint.class;
 				}
 				final Class<? extends Endpoint> fClazz = clazz;
 				scheduler.schedule(() -> {

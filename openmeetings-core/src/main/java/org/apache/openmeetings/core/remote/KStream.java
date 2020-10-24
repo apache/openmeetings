@@ -25,12 +25,15 @@ import static java.util.UUID.randomUUID;
 import static java.util.concurrent.CompletableFuture.delayedExecutor;
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
+import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_ROOM;
+import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_STREAM_UID;
 import static org.apache.openmeetings.core.remote.KurentoHandler.getFlowoutTimeout;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.util.OmFileHelper.getRecUri;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -53,6 +56,7 @@ import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaProfileSpecType;
 import org.kurento.client.MediaType;
 import org.kurento.client.RecorderEndpoint;
+import org.kurento.client.RtpEndpoint;
 import org.kurento.client.WebRtcEndpoint;
 import org.kurento.jsonrpc.JsonUtils;
 import org.slf4j.Logger;
@@ -89,14 +93,9 @@ public class KStream extends AbstractStream {
 		//TODO Min/Max Audio/Video RecvBandwidth
 	}
 
-	public void startBroadcast(
-			final StreamProcessor processor
-			, final StreamDesc sd
-			, final String sdpOffer
-			, Runnable then)
-	{
+	public void startBroadcast(final StreamDesc sd, final String sdpOffer, Runnable then) {
 		if (outgoingMedia != null) {
-			release(processor, false);
+			release(false);
 		}
 		hasAudio = sd.hasActivity(Activity.AUDIO);
 		hasVideo = sd.hasActivity(Activity.VIDEO);
@@ -131,10 +130,10 @@ public class KStream extends AbstractStream {
 				profile = MediaProfileSpecType.WEBM_VIDEO_ONLY;
 				break;
 		}
-		pipeline = kHandler.createPipiline(room.getRoomId(), sd.getUid(), new Continuation<Void>() {
+		pipeline = kHandler.createPipiline(Map.of(TAG_ROOM, String.valueOf(room.getRoomId()), TAG_STREAM_UID, sd.getUid()), new Continuation<Void>() {
 			@Override
 			public void onSuccess(Void result) throws Exception {
-				internalStartBroadcast(processor, sd, sdpOffer);
+				internalStartBroadcast(sd, sdpOffer);
 				then.run();
 			}
 
@@ -145,12 +144,8 @@ public class KStream extends AbstractStream {
 		});
 	}
 
-	private void internalStartBroadcast(
-			final StreamProcessor processor
-			, final StreamDesc sd
-			, final String sdpOffer)
-	{
-		outgoingMedia = createEndpoint(processor, sd.getSid(), sd.getUid());
+	private void internalStartBroadcast(final StreamDesc sd, final String sdpOffer) {
+		outgoingMedia = createEndpoint(sd.getSid(), sd.getUid());
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
 		outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
 			log.info("Media Flow STATE :: {}, type {}, evt {}", evt.getState(), evt.getType(), evt.getMediaType());
@@ -159,7 +154,7 @@ public class KStream extends AbstractStream {
 				flowoutFuture = Optional.of(new CompletableFuture<>().completeAsync(() -> {
 					log.warn("KStream will be dropped {}", sd);
 					if (StreamType.SCREEN == streamType) {
-						processor.doStopSharing(sid, uid);
+						kHandler.getStreamProcessor().doStopSharing(sid, uid);
 					}
 					stopBroadcast();
 					return null;
@@ -173,9 +168,9 @@ public class KStream extends AbstractStream {
 			}
 		});
 		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media FlowIn :: {}", evt));
-		addListener(processor, sd.getSid(), sd.getUid(), sdpOffer);
+		addListener(sd.getSid(), sd.getUid(), sdpOffer);
 		if (room.isRecording()) {
-			startRecord(processor);
+			startRecord();
 		}
 		Client c = sd.getClient();
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
@@ -187,7 +182,14 @@ public class KStream extends AbstractStream {
 		}
 	}
 
-	public void addListener(final StreamProcessor processor, String sid, String uid, String sdpOffer) {
+	private RtpEndpoint createRtpEndpoint(MediaPipeline pipeline) {
+		RtpEndpoint endpoint = new RtpEndpoint.Builder(pipeline).build();
+		endpoint.addTag("outUid", this.uid);
+		endpoint.addTag("uid", uid);
+		return endpoint;
+	}
+
+	public void addListener(String sid, String uid, String sdpOffer) {
 		final boolean self = uid.equals(this.uid);
 		log.info("USER {}: have started {} in room {}", uid, self ? "broadcasting" : "receiving", room.getRoomId());
 		log.trace("USER {}: SdpOffer is {}", uid, sdpOffer);
@@ -196,7 +198,7 @@ public class KStream extends AbstractStream {
 			return;
 		}
 
-		final WebRtcEndpoint endpoint = getEndpointForUser(processor, sid, uid);
+		final WebRtcEndpoint endpoint = getEndpointForUser(sid, uid);
 		final String sdpAnswer = endpoint.processOffer(sdpOffer);
 
 		log.debug("gather candidates");
@@ -208,7 +210,7 @@ public class KStream extends AbstractStream {
 				.put("sdpAnswer", sdpAnswer));
 	}
 
-	private WebRtcEndpoint getEndpointForUser(final StreamProcessor processor, String sid, String uid) {
+	private WebRtcEndpoint getEndpointForUser(String sid, String uid) {
 		if (uid.equals(this.uid)) {
 			log.debug("PARTICIPANT {}: configuring loopback", this.uid);
 			return outgoingMedia;
@@ -221,11 +223,11 @@ public class KStream extends AbstractStream {
 			listener.release();
 		}
 		log.debug("PARTICIPANT {}: creating new endpoint for {}", uid, this.uid);
-		listener = createEndpoint(processor, sid, uid);
+		listener = createEndpoint(sid, uid);
 		listeners.put(uid, listener);
 
 		log.debug("PARTICIPANT {}: obtained endpoint for {}", uid, this.uid);
-		Client cur = processor.getBySid(this.sid);
+		Client cur = kHandler.getStreamProcessor().getBySid(this.sid);
 		if (cur == null) {
 			log.warn("Client for endpoint dooesn't exists");
 		} else {
@@ -244,7 +246,7 @@ public class KStream extends AbstractStream {
 		return listener;
 	}
 
-	private WebRtcEndpoint createEndpoint(final StreamProcessor processor, String sid, String uid) {
+	private WebRtcEndpoint createEndpoint(String sid, String uid) {
 		WebRtcEndpoint endpoint = createWebRtcEndpoint(pipeline);
 		endpoint.addTag("outUid", this.uid);
 		endpoint.addTag("uid", uid);
@@ -258,10 +260,10 @@ public class KStream extends AbstractStream {
 		return endpoint;
 	}
 
-	public void startRecord(StreamProcessor processor) {
+	public void startRecord() {
 		log.debug("startRecord outMedia OK ? {}", outgoingMedia != null);
 		if (outgoingMedia == null) {
-			release(processor, true);
+			release(true);
 			return;
 		}
 		final String chunkUid = "rec_" + room.getRecordingId() + "_" + randomUUID();
@@ -351,7 +353,7 @@ public class KStream extends AbstractStream {
 	}
 
 	@Override
-	public void release(IStreamProcessor processor, boolean remove) {
+	public void release(boolean remove) {
 		if (outgoingMedia != null) {
 			releaseListeners();
 			outgoingMedia.release(new Continuation<Void>() {
@@ -380,7 +382,7 @@ public class KStream extends AbstractStream {
 			outgoingMedia = null;
 		}
 		if (remove) {
-			processor.release(this, false);
+			kHandler.getStreamProcessor().release(this, false);
 		}
 	}
 

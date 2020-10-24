@@ -22,9 +22,7 @@ package org.apache.openmeetings.core.remote;
 import static org.apache.openmeetings.core.remote.KurentoHandler.MODE_TEST;
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
-import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_KUID;
 import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_MODE;
-import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_ROOM;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,8 +31,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.kurento.client.IceCandidate;
-import org.kurento.client.MediaPipeline;
-import org.kurento.client.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -58,9 +54,9 @@ class TestStreamProcessor implements IStreamProcessor {
 				break;
 			case "record":
 				if (user != null) {
-					user.release(this);
+					user.release();
 				}
-				user = new KTestStream(c, msg, createTestPipeline());
+				user = new KTestStream(c, msg, kHandler);
 				streamByUid.put(c.getUid(), user);
 				break;
 			case "iceCandidate":
@@ -79,7 +75,7 @@ class TestStreamProcessor implements IStreamProcessor {
 				break;
 			case "play":
 				if (user != null) {
-					user.play(c, msg, createTestPipeline());
+					user.play(c, msg);
 				}
 				break;
 			default:
@@ -92,16 +88,6 @@ class TestStreamProcessor implements IStreamProcessor {
 		return uid == null ? null : streamByUid.get(uid);
 	}
 
-	private MediaPipeline createTestPipeline() {
-		Transaction t = kHandler.beginTransaction();
-		MediaPipeline pipe = kHandler.getClient().createMediaPipeline(t);
-		pipe.addTag(t, TAG_KUID, kHandler.getKuid());
-		pipe.addTag(t, TAG_MODE, MODE_TEST);
-		pipe.addTag(t, TAG_ROOM, MODE_TEST);
-		t.commit();
-		return pipe;
-	}
-
 	static JSONObject newTestKurentoMsg() {
 		return KurentoHandler.newKurentoMsg().put(TAG_MODE, MODE_TEST);
 	}
@@ -109,7 +95,7 @@ class TestStreamProcessor implements IStreamProcessor {
 	void remove(IWsClient c) {
 		AbstractStream s = getByUid(c.getUid());
 		if (s != null) {
-			s.release(this);
+			s.release();
 		}
 	}
 
@@ -121,7 +107,7 @@ class TestStreamProcessor implements IStreamProcessor {
 	@Override
 	public void destroy() {
 		for (Entry<String, KTestStream> e : streamByUid.entrySet()) {
-			e.getValue().release(this);
+			e.getValue().release();
 			streamByUid.remove(e.getKey());
 		}
 		streamByUid.clear();

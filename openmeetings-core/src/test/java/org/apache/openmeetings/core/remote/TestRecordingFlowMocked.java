@@ -148,8 +148,6 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 	private void testStartRecordWhenSharingWasNot() throws Exception {
 		JSONObject msg = new JSONObject(MSG_BASE.toString())
 				.put("id", "wannaRecord")
-				.put("width", 640)
-				.put("height", 480)
 				.put("shareType", "shareType")
 				.put("fps", "fps")
 				;
@@ -172,6 +170,8 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 				.put("type", "kurento")
 				.put("uid", streamDescUID)
 				.put("sdpOffer", "SDP-OFFER")
+				.put("width", 640)
+				.put("height", 480)
 				;
 		handler.onMessage(c, msgBroadcastStarted);
 

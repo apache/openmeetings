@@ -4,7 +4,7 @@ var SHARE_STARTED = 'started';
 var SHARE_STOPPED = 'stopped';
 var Sharer = (function() {
 	const self = {};
-	let sharer, type, fps, sbtn, rbtn, width, height
+	let sharer, type, fps, sbtn, rbtn
 		, shareState = SHARE_STOPPED, recState = SHARE_STOPPED;
 
 	/**
@@ -43,8 +43,6 @@ var Sharer = (function() {
 						id: 'wannaShare'
 						, shareType: type.val()
 						, fps: fps.val()
-						, width: width.val()
-						, height: height.val()
 					});
 				} else {
 					VideoManager.sendMessage({
@@ -53,8 +51,6 @@ var Sharer = (function() {
 					});
 				}
 			});
-			width = sharer.find('.width');
-			height = sharer.find('.height');
 			rbtn = sharer.find('.record-start-stop').off();
 			if (Room.getOptions().allowRecording) {
 				rbtn.show().click(function() {
@@ -64,8 +60,6 @@ var Sharer = (function() {
 							id: 'wannaRecord'
 							, shareType: type.val()
 							, fps: fps.val()
-							, width: width.val()
-							, height: height.val()
 						});
 					} else {
 						VideoManager.sendMessage({
@@ -96,8 +90,6 @@ var Sharer = (function() {
 			, typeDis = _typeDisabled();
 		_disable(type, dis);
 		_disable(fps, dis || typeDis);
-		_disable(width, dis);
-		_disable(height, dis);
 		btn.find('span').text(btn.data(dis ? 'stop' : 'start'));
 		if (dis) {
 			btn.addClass('stop');

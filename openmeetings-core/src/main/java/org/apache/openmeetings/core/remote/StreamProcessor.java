@@ -134,7 +134,7 @@ public class StreamProcessor implements IStreamProcessor {
 					if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !sd.hasActivity(Activity.SCREEN)) {
 						break;
 					}
-					sender.addListener(this, c.getSid(), c.getUid(), msg.getString("sdpOffer"));
+					sender.addListener(c.getSid(), c.getUid(), msg.getString("sdpOffer"));
 				}
 				break;
 			case "wannaShare":
@@ -184,13 +184,17 @@ public class StreamProcessor implements IStreamProcessor {
 				KRoom room = kHandler.getRoom(c.getRoomId());
 				sender = room.join(sd, kHandler);
 			}
+			if (msg.has("width")) {
+				sd.setWidth(msg.getInt("width")).setHeight(msg.getInt("height"));
+				cm.update(c);
+			}
 			startBroadcast(sender, sd, msg.getString("sdpOffer"), () -> {
 				if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !isRecording(c.getRoomId())) {
 					startRecording(c);
 				}
 			});
 		} catch (KurentoServerException e) {
-			sender.release(this);
+			sender.release();
 			WebSocketHelper.sendClient(c, newStoppedMsg(sd));
 			sendError(c, "Failed to start broadcast: " + e.getMessage());
 			log.error("Failed to start broadcast", e);
@@ -208,7 +212,7 @@ public class StreamProcessor implements IStreamProcessor {
 	 * @return the current KStream
 	 */
 	void startBroadcast(KStream stream, StreamDesc sd, String sdpOffer, Runnable then) {
-		stream.startBroadcast(this, sd, sdpOffer, then);
+		stream.startBroadcast(sd, sdpOffer, then);
 	}
 
 	private static boolean isBroadcasting(final Client c) {
@@ -494,7 +498,7 @@ public class StreamProcessor implements IStreamProcessor {
 		for (StreamDesc sd : c.getStreams()) {
 			AbstractStream s = getByUid(sd.getUid());
 			if (s != null) {
-				s.release(this);
+				s.release();
 				WebSocketHelper.sendRoomOthers(c.getRoomId(), c.getUid(), newStoppedMsg(sd));
 			}
 		}
@@ -545,7 +549,7 @@ public class StreamProcessor implements IStreamProcessor {
 	public void release(AbstractStream stream, boolean releaseStream) {
 		final String uid = stream.getUid();
 		if (releaseStream) {
-			stream.release(this);
+			stream.release();
 		}
 		Client c = cm.getBySid(stream.getSid());
 		if (c != null) {

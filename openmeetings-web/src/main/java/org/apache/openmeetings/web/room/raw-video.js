@@ -181,11 +181,18 @@ var Video = (function() {
 						return OmUtil.error('Sender sdp offer error ' + genErr);
 					}
 					OmUtil.log('Invoking Sender SDP offer callback function');
-					VideoManager.sendMessage({
-						id : 'broadcastStarted'
-						, uid: sd.uid
-						, sdpOffer: offerSdp
-					});
+					const bmsg = {
+							id : 'broadcastStarted'
+							, uid: sd.uid
+							, sdpOffer: offerSdp
+						}, vtracks = state.stream.getVideoTracks();
+					if (vtracks && vtracks.length > 0) {
+						const vts = vtracks[0].getSettings();
+						bmsg.width = vts.width;
+						bmsg.height = vts.height;
+						bmsg.fps = vts.frameRate;
+					}
+					VideoManager.sendMessage(bmsg);
 					if (isSharing) {
 						Sharer.setShareState(SHARE_STARTED);
 					}

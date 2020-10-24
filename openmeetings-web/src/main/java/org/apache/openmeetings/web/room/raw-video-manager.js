@@ -6,7 +6,9 @@ var VideoManager = (function() {
 	function _onVideoResponse(m) {
 		const w = $('#' + VideoUtil.getVid(m.uid))
 			, v = w.data();
-		v.processSdpAnswer(m.sdpAnswer);
+		if (v) {
+			v.processSdpAnswer(m.sdpAnswer);
+		}
 	}
 	function _onBroadcast(msg) {
 		const sd = msg.stream
@@ -61,7 +63,9 @@ var VideoManager = (function() {
 				{
 					const w = $('#' + VideoUtil.getVid(m.uid))
 						, v = w.data();
-					v.processIceCandidate(m.candidate);
+					if (v) {
+						v.processIceCandidate(m.candidate);
+					}
 				}
 				break;
 			case 'newStream':

@@ -24,6 +24,7 @@ package org.apache.openmeetings.core.remote;
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 
 import java.util.Date;
 import java.util.Optional;
@@ -55,7 +56,6 @@ import com.github.openjson.JSONObject;
  *
  */
 public class KRoom {
-
 	private static final Logger log = LoggerFactory.getLogger(KRoom.class);
 
 	/**
@@ -63,7 +63,6 @@ public class KRoom {
 	 */
 	private final StreamProcessor processor;
 	private final RecordingChunkDao chunkDao;
-	private final IApplication app;
 	private final Long roomId;
 	private final Room.Type type;
 	private final AtomicBoolean recordingStarted = new AtomicBoolean(false);
@@ -75,7 +74,6 @@ public class KRoom {
 	public KRoom(KurentoHandler handler, Room r) {
 		this.processor = handler.getStreamProcessor();
 		this.chunkDao = handler.getChunkDao();
-		this.app = handler.getApp();
 		this.roomId = r.getId();
 		this.type = r.getType();
 		log.info("ROOM {} has been created", roomId);
@@ -125,6 +123,8 @@ public class KRoom {
 
 	public void startRecording(Client c) {
 		if (recordingStarted.compareAndSet(false, true)) {
+			IApplication app = ensureApplication(c.getUser().getLanguageId());
+
 			log.debug("##REC:: recording in room {} is starting ::", roomId);
 			Room r = c.getRoom();
 			boolean interview = Room.Type.INTERVIEW == r.getType();
@@ -164,9 +164,7 @@ public class KRoom {
 			rec = processor.getRecordingDao().update(rec);
 			// Receive recordingId
 			recordingId = rec.getId();
-			processor.getByRoom(this.getRoomId()).forEach(
-					stream -> stream.startRecord(processor)
-			);
+			processor.getByRoom(this.getRoomId()).forEach(KStream::startRecord);
 
 			// Send notification to all users that the recording has been started
 			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.RECORDING_TOGGLED));
@@ -224,7 +222,6 @@ public class KRoom {
 		if (sharingStarted.compareAndSet(false, true)) {
 			sharingUser.put("sid", c.getSid());
 			sd = c.addStream(StreamType.SCREEN, a);
-			sd.setWidth(msg.getInt("width")).setHeight(msg.getInt("height"));
 			cm.update(c);
 			log.debug("Stream.UID {}: sharing has been started, activity: {}", sd.getUid(), a);
 			h.sendClient(sd.getSid(), newKurentoMsg()
@@ -253,9 +250,7 @@ public class KRoom {
 	}
 
 	public void close() {
-		processor.getByRoom(this.getRoomId()).forEach(
-				stream -> stream.release(processor)
-		);
+		processor.getByRoom(this.getRoomId()).forEach(KStream::release);
 		log.debug("Room {} closed", this.roomId);
 	}
 }

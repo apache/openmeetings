@@ -146,8 +146,6 @@ class TestRoomFlowMocked extends BaseMockedTest {
 		runWrapped(() -> {
 			JSONObject msg = new JSONObject(MSG_BASE.toString())
 					.put("id", "wannaRecord")
-					.put("width", 640)
-					.put("height", 480)
 					.put("shareType", "shareType")
 					.put("fps", "fps")
 					;

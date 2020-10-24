@@ -123,7 +123,7 @@ public class TimerService {
 
 	public void scheduleSipCheck(Room r) {
 		// sip allowed and configured
-		if (sipManager.getSipUser(r) != null && !sipCheckMap.containsKey(r.getId())) {
+		if (sipManager.getSipUser(r) != null && r.isSipEnabled() && !sipCheckMap.containsKey(r.getId())) {
 			doSipCheck(r.getId());
 		}
 	}
