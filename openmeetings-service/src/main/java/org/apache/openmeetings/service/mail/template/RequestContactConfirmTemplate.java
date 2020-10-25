@@ -29,10 +29,8 @@ public class RequestContactConfirmTemplate extends AbstractTemplatePanel {
 	private RequestContactConfirmTemplate(UserContact contact) {
 		super(LocaleHelper.getLocale(contact.getOwner()));
 		add(new Label("hi", getString("1192", locale)));
-		add(new Label("firstName", contact.getOwner().getFirstname()));
-		add(new Label("lastName", contact.getOwner().getLastname()));
-		add(new Label("addedFirstName", contact.getContact().getFirstname()));
-		add(new Label("addedLastName", contact.getContact().getLastname()));
+		add(new Label("displayName", contact.getOwner().getDisplayName()));
+		add(new Label("addedName", contact.getContact().getDisplayName()));
 		add(new Label("confirmed", getString("1198", locale)));
 	}
 

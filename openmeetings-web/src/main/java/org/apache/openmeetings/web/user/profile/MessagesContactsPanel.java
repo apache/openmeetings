@@ -449,7 +449,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 			private static final long serialVersionUID = 1L;
 
 			private String getName(UserContact uc) {
-				return uc.getOwner().getFirstname() + " " + uc.getOwner().getLastname();
+				return uc.getOwner().getDisplayName();
 			}
 
 			@Override

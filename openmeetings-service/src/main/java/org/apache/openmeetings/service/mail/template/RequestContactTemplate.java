@@ -30,10 +30,8 @@ public class RequestContactTemplate extends AbstractTemplatePanel {
 	private RequestContactTemplate(User userToAdd, User user) {
 		super(LocaleHelper.getLocale(userToAdd));
 		add(new Label("hi", getString("1192", locale)));
-		add(new Label("addedFirstName", userToAdd.getFirstname()));
-		add(new Label("addedLastName", userToAdd.getLastname()));
-		add(new Label("firstName", user.getFirstname()));
-		add(new Label("lastName", user.getLastname()));
+		add(new Label("addedName", userToAdd.getDisplayName()));
+		add(new Label("displayName", user.getDisplayName()));
 		add(new Label("likeToAdd", getString("1193", locale)));
 		add(new Label("check", getString("1194", locale)));
 		add(new ExternalLink("link", app.getOmContactsLink()).add(new Label("contactList", getString("1196", locale))));
