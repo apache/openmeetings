@@ -46,7 +46,7 @@
 				<li>Copy your connector (.jar file) to <tt>${OM_HOME}/webapps/openmeetings/WEB-INF/lib</tt> make sure OM will be able to connect the database correctly.</li>
 				<li>(*) Modify DB settings</li>
 				<li>Start Openmeetings</li>
-				<li>go to http://localhost:5080/openmeetings</li>
+				<li>go to https://localhost:5443/openmeetings</li>
 				<li>Install OM using Web installer</li>
 				<li>Login as Administrator and Administration &gt; Backup</li>
 				<li>Perform system import</li>
@@ -91,7 +91,7 @@
 				<li><tt>./admin.sh -v -i -file ../backup_today.zip --drop --skip-default-objects</tt> (Optionally you can specify
 					additional parameters like DB host/user/pass/instance etc.)</li>
 				<li>Start Openmeetings</li>
-				<li>go to http://localhost:5080/openmeetings</li>
+				<li>go to https://localhost:5443/openmeetings</li>
 			</ol>
 			<p>(*) Optional step</p>
 		</section>

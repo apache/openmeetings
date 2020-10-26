@@ -50,7 +50,7 @@
 				<ul>
 					<li>
 						Run OpenMeetings and goto the web-based installer:
-						http://localhost:5080/openmeetings/install
+						https://localhost:5443/openmeetings/install
 					</li>
 				</ul>
 			</subsection>

@@ -27,12 +27,12 @@
 			<div>
 				you can query methods of each service using following suffixes
 				<ul>
-					<li>SOAP: <tt>?wsdl</tt> suffix, for example <tt>http://localhost:5080/openmeetings/services/UserService?wsdl</tt></li>
-					<li>REST: as xml <tt>?_wadl</tt> for example <tt>http://localhost:5080/openmeetings/services/user?_wadl</tt></li>
-					<li>REST: as json <tt>?_wadl&amp;type=json</tt> for example <tt>http://localhost:5080/openmeetings/services/user?_wadl&amp;type=json</tt></li>
+					<li>SOAP: <tt>?wsdl</tt> suffix, for example <tt>https://localhost:5443/openmeetings/services/UserService?wsdl</tt></li>
+					<li>REST: as xml <tt>?_wadl</tt> for example <tt>https://localhost:5443/openmeetings/services/user?_wadl</tt></li>
+					<li>REST: as json <tt>?_wadl&amp;type=json</tt> for example <tt>https://localhost:5443/openmeetings/services/user?_wadl&amp;type=json</tt></li>
 				</ul>
 				<div class="bd-callout bd-callout-info">
-					The full list of services with All WSDLs/WADLs is available at following URL: <tt>http://localhost:5080/openmeetings/services/services</tt>
+					The full list of services with All WSDLs/WADLs is available at following URL: <tt>https://localhost:5443/openmeetings/services/services</tt>
 				</div>
 			</div>
 		</section>
@@ -83,8 +83,8 @@ $.ajax({
 				</li>
 				<li>
 					In case of error you can get detailed error message in your language as result of following query
-					<tt>http://localhost:5080/openmeetings/services/error/<b>ERROR_ID</b>/<b>LANGUAGE_ID</b></tt>
-					(for ex. http://localhost:5080/openmeetings/services/error/<b>-11</b>/<b>9</b>)
+					<tt>https://localhost:5443/openmeetings/services/error/<b>ERROR_ID</b>/<b>LANGUAGE_ID</b></tt>
+					(for ex. https://localhost:5443/openmeetings/services/error/<b>-11</b>/<b>9</b>)
 				</li>
 				<li>If your request was successful you will get your SID as <b>message</b> (78189aff-d68d-458a-8840-5b18d15a50b0)</li>
 				<li>Then you can use SID to generate room hash
@@ -131,7 +131,7 @@ $.ajax({
 					</table>
 				</li>
 				<li>If your request was successful you will get your hash as <b>message</b> (fa1f9381-bd03-42ae-9fd9-332b5f775a1b)</li>
-				<li>Now you can use following URL to enter the room: <tt>http://localhost:5080/openmeetings/hash?secure=fa1f9381-bd03-42ae-9fd9-332b5f775a1b&amp;language=1</tt></li>
+				<li>Now you can use following URL to enter the room: <tt>https://localhost:5443/openmeetings/hash?secure=fa1f9381-bd03-42ae-9fd9-332b5f775a1b&amp;language=1</tt></li>
 			</ul>
 		</section>
 	</body>

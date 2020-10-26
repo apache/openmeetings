@@ -50,7 +50,7 @@
 					</li>
 					<li>
 						Run OpenMeetings and goto the web-based installer:
-						<tt>http://localhost:5080/openmeetings/install</tt><br/>
+						<tt>https://localhost:5443/openmeetings/install</tt><br/>
 						Or <a href="./CommandLineAdmin.html" target="_blank"
 							rel="nofollow">Command line installer</a>
 					</li>
