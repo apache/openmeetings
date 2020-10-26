@@ -44,11 +44,13 @@ var OmUtil = (function() {
 			setTimeout(() => { $(`#${curId}`).alert('close');}, autohideAfter);
 		}
 	}
-	function _error(msg) {
+	function _error(msg, noAlert) {
 		if (typeof(msg) === 'object') {
 			msg = msg.name + ': ' + msg.message;
 		}
-		__alert('danger', msg, 20000);
+		if (noAlert !== true) {
+			__alert('danger', msg, 20000);
+		}
 		return console.error(msg);
 	}
 	function _debugEnabled() {

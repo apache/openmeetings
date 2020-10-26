@@ -576,7 +576,7 @@ var Video = (function() {
 	}
 	function _processSdpAnswer(answer) {
 		const state = states.length > 0 ? states[0] : null;
-		if (!state || state.disposed || !state.data.rtcPeer || state.data.rtcPeer.cleaned || state.data.rtcPeer.peerConnection.signalingState === 'stable') {
+		if (!state || state.disposed || !state.data.rtcPeer || state.data.rtcPeer.cleaned) {
 			return;
 		}
 		state.data.rtcPeer.processAnswer(answer, function (error) {
@@ -595,13 +595,13 @@ var Video = (function() {
 				return;
 			}
 			if (error) {
-				return OmUtil.error(error);
+				OmUtil.error(error, true);
 			}
 		});
 	}
 	function _processIceCandidate(candidate) {
 		const state = states.length > 0 ? states[0] : null;
-		if (!state || state.disposed || !state.data.rtcPeer || state.data.rtcPeer.cleaned || state.data.rtcPeer.peerConnection.signalingState === 'stable') {
+		if (!state || state.disposed || !state.data.rtcPeer || state.data.rtcPeer.cleaned) {
 			return;
 		}
 		state.data.rtcPeer.addIceCandidate(candidate, function (error) {
@@ -609,8 +609,7 @@ var Video = (function() {
 				return;
 			}
 			if (error) {
-				OmUtil.error('Error adding candidate: ' + error);
-				return;
+				OmUtil.error('Error adding candidate: ' + error, true);
 			}
 		});
 	}
