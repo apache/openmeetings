@@ -30,9 +30,9 @@
 		<section name="Renaming /openmeetings context">
 			<p>
 				If you want to have
-				<tt>http://yourcorp.com:5080/yourmeetings</tt>
+				<tt>https://yourcorp.com:5443/yourmeetings</tt>
 				instead of
-				<tt>http://yourcorp.com:5080/openmeetings</tt>
+				<tt>https://yourcorp.com:5443/openmeetings</tt>
 				you need to do the following
 			</p>
 			<ol>
@@ -114,8 +114,8 @@
 		<section name="Running multiple Openmeetings instances on the same server">
 			<p>
 				If you want to run multiple Openmeetings instances on the same server i.e. to have<br/>
-				<tt>http://yourcorp.com:5080/openmeetings1</tt><br/>
-				<tt>http://yourcorp.com:5080/openmeetings2</tt><br/> etc.<br/> you need to do the following:
+				<tt>https://yourcorp.com:5443/openmeetings1</tt><br/>
+				<tt>https://yourcorp.com:5443/openmeetings2</tt><br/> etc.<br/> you need to do the following:
 			</p>
 		</section>
 	</body>
