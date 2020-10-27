@@ -133,6 +133,16 @@ html[dir="rtl"] .list-table th {
 	text-align: right !important;
 }
 /**** file-tree **************/
+html[dir="rtl"] .trees .om-icon.big::before {
+	left: initial;
+	right: 3px;
+}
+html[dir="rtl"] .file.om-icon
+, html[dir="rtl"] .recording.om-icon
+{
+	padding-left: initial;
+	padding-right: 34px;
+}
 /**** TODO need to be moved to wicket-jquery-ui **************/
 html[dir="rtl"] span.css-emoticon.un-transformed-emoticon
 , html[dir="rtl"] span.css-emoticon.animated-emoticon:hover
