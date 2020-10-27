@@ -113,8 +113,8 @@ html[dir="rtl"] #chat .messageArea .user-row {
 	padding-right: 40px !important;
 	background-position-x: 100%;
 }
-html[dir="rtl"] @media screen and (max-width: 1280px) {
-	.room-block .sidebar .tab.om-icon.big {
+@media screen and (max-width: 1280px) {
+	html[dir="rtl"] .room-block .sidebar .tab.om-icon.big {
 		padding-left: 0 !important;
 	}
 }
@@ -132,7 +132,7 @@ html[dir="rtl"] .room-block .sidebar .user-list .user .ui-icon.audio-activity {
 html[dir="rtl"] .list-table th {
 	text-align: right !important;
 }
-
+/**** file-tree **************/
 /**** TODO need to be moved to wicket-jquery-ui **************/
 html[dir="rtl"] span.css-emoticon.un-transformed-emoticon
 , html[dir="rtl"] span.css-emoticon.animated-emoticon:hover

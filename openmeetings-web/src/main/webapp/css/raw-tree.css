@@ -15,6 +15,26 @@
 	height: 2px;
 	width: 2px;
 }
+.trees .tree-theme-windows
+, .trees .tree-theme-windows > :first-child
+, .trees .tree-theme-windows .tree-branch
+, .trees .tree-theme-windows .tree-branch .tree-node
+, .trees .tree-theme-windows .tree-subtree .tree-branch
+, .trees .tree-theme-windows .tree-node .om-icon
+, .trees .tree-theme-windows .tree-node .om-icon .file.item
+, .trees .tree-theme-windows .tree-node .om-icon .file.item .name
+, .trees .tree-theme-windows .tree-node .om-icon .file.item .name span
+{
+	width: 100%;
+}
+.trees .tree-theme-windows div.tree-subtree
+, .trees .tree-theme-windows .tree-node .om-icon
+{
+	width: calc(100% - 20px);
+}
+.trees .tree-theme-windows .tree-node .om-icon.broken .file.item .name {
+	width: calc(100% - 32px);
+}
 .file-tree .footer {
 	height: var(--tree-footer-height);
 }
@@ -27,90 +47,6 @@
 .file-tree .footer .buttons .other-buttons {
 	display: inline-block;
 	margin: 0 2px;
-}
-/* Calc width with default for max level of 7 */
-.file-tree .file.item .name
-	, .file-tree .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 26px);
-	min-width: 60px;
-}
-.file-tree .tree-subtree .file.item .name
-	, .file-tree .tree-subtree .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 44px);
-}
-.file-tree .tree-subtree .tree-subtree .file.item .name
-	, .file-tree .tree-subtree .tree-subtree .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 62px);
-}
-.file-tree .tree-subtree .tree-subtree .tree-subtree .file.item .name
-	, .file-tree .tree-subtree .tree-subtree .tree-subtree .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 80px);
-}
-.file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name
-	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 98px);
-}
-.file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name
-	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 116px);
-}
-.file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name
-	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 134px);
-}
-.file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name
-	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 152px);
-}
-/* adding 32px extra space in case "broken" symbol is on same row*/
-.file-tree .broken .file.item .name
-	, .file-tree .broken .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 58px);
-	min-width: 60px;
-}
-.file-tree .tree-subtree .broken .file.item .name
-	, .file-tree .tree-subtree .broken .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 76px);
-}
-.file-tree .tree-subtree .tree-subtree .broken .file.item .name
-	, .file-tree .tree-subtree .tree-subtree .broken .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 94px);
-}
-.file-tree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name
-	, .file-tree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 112px);
-}
-.file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name
-	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 130px);
-}
-.file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name
-	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 148px);
-}
-.file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name
-	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 166px);
-}
-.file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name
-	, .file-tree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .tree-subtree .broken .file.item .name span
-{
-	max-width: calc(var(--sidebar-width) - 184px);
 }
 .trash-toolbar {
 	font-weight: bold;
@@ -159,11 +95,6 @@
 .trees .om-icon.big::before {
 	position: absolute;
 	left: 3px;
-}
-.trees .om-icon span {
-	white-space: nowrap;
-	padding-right: 20px;
-	vertical-align: top;
 }
 .trees .tree-node {
 	white-space: nowrap;
@@ -254,7 +185,7 @@
 .file.item .errors {
 	position: absolute;
 	top: 0px;
-	right: 0px;
+	right: 1px;
 	width: 32px;
 	height: 32px;
 	margin: 0px;
