@@ -71,8 +71,8 @@
 		<keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
-		<jacoco-maven-plugin.versoin>0.8.5</jacoco-maven-plugin.versoin>
-		<forbiddenapis.version>2.7</forbiddenapis.version>
+		<jacoco-maven-plugin.versoin>0.8.6</jacoco-maven-plugin.versoin>
+		<forbiddenapis.version>3.1</forbiddenapis.version>
 		<maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
 		<!-- dependency versions -->
 		<junit.version>5.7.0</junit.version>
@@ -81,7 +81,7 @@
 		<wickets.version>9.1.0</wickets.version>
 		<wicket-bootstrap.version>5.0.2</wicket-bootstrap.version>
 		<font-awesome.version>5.15.1</font-awesome.version>
-		<spring.version>5.2.9.RELEASE</spring.version>
+		<spring.version>5.3.0</spring.version>
 		<tomcat.version>9.0.39</tomcat.version>
 		<ical4j.version>3.0.18</ical4j.version>
 		<cxf.version>3.4.0</cxf.version>
@@ -111,10 +111,10 @@
 		<commons-text.version>1.9</commons-text.version>
 		<slf4j.version>1.7.30</slf4j.version>
 		<logback.version>1.2.3</logback.version>
-		<jetty.version>9.4.31.v20200723</jetty.version>
+		<jetty.version>9.4.33.v20201020</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.66</bcprov-jdk15on.version>
-		<mockito.version>3.5.15</mockito.version>
+		<mockito.version>3.6.0</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.14.0</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
