@@ -63,8 +63,7 @@ public class KRoom {
 	 */
 	private final StreamProcessor processor;
 	private final RecordingChunkDao chunkDao;
-	private final Long roomId;
-	private final Room.Type type;
+	private final Room room;
 	private final AtomicBoolean recordingStarted = new AtomicBoolean(false);
 	private final AtomicBoolean sharingStarted = new AtomicBoolean(false);
 	private Long recordingId = null;
@@ -74,17 +73,12 @@ public class KRoom {
 	public KRoom(KurentoHandler handler, Room r) {
 		this.processor = handler.getStreamProcessor();
 		this.chunkDao = handler.getChunkDao();
-		this.roomId = r.getId();
-		this.type = r.getType();
-		log.info("ROOM {} has been created", roomId);
+		this.room = r;
+		log.info("ROOM {} has been created", room.getId());
 	}
 
-	public Long getRoomId() {
-		return roomId;
-	}
-
-	public Room.Type getType() {
-		return type;
+	public Room getRoom() {
+		return room;
 	}
 
 	public Long getRecordingId() {
@@ -96,7 +90,7 @@ public class KRoom {
 	}
 
 	public KStream join(final StreamDesc sd, KurentoHandler kHandler) {
-		log.info("ROOM {}: join client {}, stream: {}", roomId, sd.getClient(), sd.getUid());
+		log.info("ROOM {}: join client {}, stream: {}", room.getId(), sd.getClient(), sd.getUid());
 		final KStream stream = new KStream(sd, this, kHandler);
 		processor.addStream(stream);
 		return stream;
@@ -125,7 +119,7 @@ public class KRoom {
 		if (recordingStarted.compareAndSet(false, true)) {
 			IApplication app = ensureApplication(c.getUser().getLanguageId());
 
-			log.debug("##REC:: recording in room {} is starting ::", roomId);
+			log.debug("##REC:: recording in room {} is starting ::", room.getId());
 			Room r = c.getRoom();
 			boolean interview = Room.Type.INTERVIEW == r.getType();
 
@@ -147,7 +141,7 @@ public class KRoom {
 			rec.setType(BaseFileItem.Type.RECORDING);
 			rec.setInterview(interview);
 
-			rec.setRoomId(roomId);
+			rec.setRoomId(room.getId());
 			rec.setRecordStart(now);
 
 			rec.setOwnerId(ownerId);
@@ -164,18 +158,18 @@ public class KRoom {
 			rec = processor.getRecordingDao().update(rec);
 			// Receive recordingId
 			recordingId = rec.getId();
-			processor.getByRoom(this.getRoomId()).forEach(KStream::startRecord);
+			processor.getByRoom(room.getId()).forEach(KStream::startRecord);
 
 			// Send notification to all users that the recording has been started
-			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.RECORDING_TOGGLED));
-			log.debug("##REC:: recording in room {} is started {} ::", roomId, recordingId);
+			WebSocketHelper.sendRoom(new RoomMessage(room.getId(), u, RoomMessage.Type.RECORDING_TOGGLED));
+			log.debug("##REC:: recording in room {} is started {} ::", room.getId(), recordingId);
 		}
 	}
 
 	public void stopRecording(Client c) {
 		if (recordingStarted.compareAndSet(true, false)) {
-			log.debug("##REC:: recording in room {} is stopping {} ::", roomId, recordingId);
-			processor.getByRoom(this.getRoomId()).forEach(KStream::stopRecord);
+			log.debug("##REC:: recording in room {} is stopping {} ::", room.getId(), recordingId);
+			processor.getByRoom(room.getId()).forEach(KStream::stopRecord);
 			Recording rec = processor.getRecordingDao().get(recordingId);
 			rec.setRecordEnd(new Date());
 			rec = processor.getRecordingDao().update(rec);
@@ -196,8 +190,8 @@ public class KRoom {
 				}
 			}
 			// Send notification to all users that the recording has been started
-			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.RECORDING_TOGGLED));
-			log.debug("##REC:: recording in room {} is stopped ::", roomId);
+			WebSocketHelper.sendRoom(new RoomMessage(room.getId(), u, RoomMessage.Type.RECORDING_TOGGLED));
+			log.debug("##REC:: recording in room {} is stopped ::", room.getId());
 		}
 	}
 
@@ -236,7 +230,7 @@ public class KRoom {
 			cm.update(c);
 			h.sendShareUpdated(sd);
 			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
-			WebSocketHelper.sendRoomOthers(roomId, c.getUid(), newKurentoMsg()
+			WebSocketHelper.sendRoomOthers(room.getId(), c.getUid(), newKurentoMsg()
 					.put("id", "newStream")
 					.put(PARAM_ICE, processor.getHandler().getTurnServers(c))
 					.put("stream", sd.toJson()));
@@ -250,7 +244,7 @@ public class KRoom {
 	}
 
 	public void close() {
-		processor.getByRoom(this.getRoomId()).forEach(KStream::release);
-		log.debug("Room {} closed", this.roomId);
+		processor.getByRoom(room.getId()).forEach(KStream::release);
+		log.debug("Room {} closed", room.getId());
 	}
 }

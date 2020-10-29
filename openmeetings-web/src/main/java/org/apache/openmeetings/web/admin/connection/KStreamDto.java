@@ -50,7 +50,7 @@ public class KStreamDto implements IDataProviderEntity {
 	public KStreamDto(KStream kStream) {
 		this.sid = kStream.getSid();
 		this.uid = kStream.getUid();
-		this.roomId = (kStream.getRoom() == null) ? null : kStream.getRoom().getRoomId();
+		this.roomId = kStream.getRoomId();
 		this.connectedSince = kStream.getConnectedSince();
 		this.streamType = kStream.getStreamType();
 		this.profile = kStream.getProfile().toString();

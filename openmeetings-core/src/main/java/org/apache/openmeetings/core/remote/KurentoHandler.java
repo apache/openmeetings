@@ -459,7 +459,7 @@ public class KurentoHandler {
 						if (kuid.equals(inKuid)) {
 							KStream stream = streamProcessor.getByUid(tags.get(TAG_STREAM_UID));
 							if (stream != null) {
-								if (stream.getRoom().getRoomId().equals(Long.valueOf(tags.get(TAG_ROOM)))
+								if (stream.getRoomId().equals(Long.valueOf(tags.get(TAG_ROOM)))
 										&& stream.getPipeline().getId().equals(pipe.getId()))
 								{
 									return;

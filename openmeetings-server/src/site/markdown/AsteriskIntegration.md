@@ -139,8 +139,7 @@ avpf=yes
 icesupport=yes
 directmedia=no
 disallow=all
-allow=ulaw,opus
-allow=vp8
+allow=!all,ulaw,opus,vp8
 ```
 
 ### Configure extensions:
@@ -282,34 +281,4 @@ type=transport
 protocol=wss
 bind=0.0.0.0
 ; All other transport parameters are ignored for wss transports.
-
-[webrtc_client]
-type=aor
-max_contacts=5
-remove_existing=yes
-
-[webrtc_client]
-type=auth
-auth_type=userpass
-username=webrtc_client
-password=webrtc_client ; This is a completely insecure password!  Do NOT expose this
-                       ; system to the Internet without utilizing a better password.
-
-[webrtc_client]
-type=endpoint
-aors=webrtc_client
-auth=webrtc_client
-dtls_auto_generate_cert=yes
-webrtc=yes
-; Setting webrtc=yes is a shortcut for setting the following options:
-; use_avpf=yes
-; media_encryption=dtls
-; dtls_verify=fingerprint
-; dtls_setup=actpass
-; ice_support=yes
-; media_use_received_transport=yes
-; rtcp_mux=yes
-context=default
-disallow=all
-allow=opus,ulaw
 ```

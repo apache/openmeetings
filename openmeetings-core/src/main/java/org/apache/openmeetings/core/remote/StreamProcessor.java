@@ -310,27 +310,27 @@ public class StreamProcessor implements IStreamProcessor {
 		if (!kHandler.isConnected()) {
 			return;
 		}
-		KRoom room = kHandler.getRoom(roomId);
-		if (room.isSharing() && cm.streamByRoom(roomId)
+		KRoom kRoom = kHandler.getRoom(roomId);
+		if (kRoom.isSharing() && cm.streamByRoom(roomId)
 					.flatMap(c -> c.getStreams().stream())
 					.filter(sd -> StreamType.SCREEN == sd.getType())
 					.findAny()
 					.isEmpty())
 		{
 			log.info("No more screen streams in the room, stopping sharing");
-			room.stopSharing();
-			if (Room.Type.INTERVIEW != room.getType() && room.isRecording()) {
+			kRoom.stopSharing();
+			if (Room.Type.INTERVIEW != kRoom.getRoom().getType() && kRoom.isRecording()) {
 				log.info("No more screen streams in the non-interview room, stopping recording");
-				room.stopRecording(null);
+				kRoom.stopRecording(null);
 			}
 		}
-		if (room.isRecording() && cm.streamByRoom(roomId)
+		if (kRoom.isRecording() && cm.streamByRoom(roomId)
 				.flatMap(c -> c.getStreams().stream())
 				.findAny()
 				.isEmpty())
 		{
 			log.info("No more streams in the room, stopping recording");
-			room.stopRecording(null);
+			kRoom.stopRecording(null);
 		}
 	}
 
@@ -518,7 +518,7 @@ public class StreamProcessor implements IStreamProcessor {
 
 	Stream<KStream> getByRoom(Long roomId) {
 		return streamByUid.values().stream()
-				.filter(stream -> stream.getRoom() != null && stream.getRoom().getRoomId().equals(roomId));
+				.filter(stream -> stream.getRoomId().equals(roomId));
 	}
 
 	Client getBySid(String sid) {

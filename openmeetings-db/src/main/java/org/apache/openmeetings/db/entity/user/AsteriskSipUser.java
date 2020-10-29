@@ -125,9 +125,13 @@ public class AsteriskSipUser implements Serializable {
 	@XmlElement(name = "callbackextension", required = false)
 	private String callbackextension;
 
+	@Column(name = "transport", nullable = false, length = 100)
+	@XmlElement(name = "transport", required = false)
+	private String transport = "wss,ws,udp";
+
 	@Column(name = "allow", nullable = false, length = 100)
 	@XmlElement(name = "allow", required = false)
-	private String allow = "ulaw;alaw;h264";
+	private String allow = "!all,ulaw,opus,vp8";
 
 	public long getId() {
 		return id;
@@ -271,5 +275,13 @@ public class AsteriskSipUser implements Serializable {
 
 	public void setAllow(String allow) {
 		this.allow = allow;
+	}
+
+	public String getTransport() {
+		return transport;
+	}
+
+	public void setTransport(String transport) {
+		this.transport = transport;
 	}
 }

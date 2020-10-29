@@ -41,6 +41,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.openmeetings.core.sip.ISipCallbacks;
+import org.apache.openmeetings.core.sip.SipStackProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
@@ -52,6 +54,7 @@ import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.Continuation;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.MediaFlowState;
+import org.kurento.client.MediaObject;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaProfileSpecType;
 import org.kurento.client.MediaType;
@@ -64,28 +67,31 @@ import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
-public class KStream extends AbstractStream {
+public class KStream extends AbstractStream implements ISipCallbacks {
 	private static final Logger log = LoggerFactory.getLogger(KStream.class);
 
 	private final KurentoHandler kHandler;
-	private final KRoom room;
+	private final KRoom kRoom;
 	private final Date connectedSince;
 	private final StreamType streamType;
 	private MediaProfileSpecType profile;
 	private MediaPipeline pipeline;
 	private RecorderEndpoint recorder;
 	private WebRtcEndpoint outgoingMedia = null;
+	private RtpEndpoint rtpEndpoint;
+	private Optional<SipStackProcessor> sipProcessor;
 	private final ConcurrentMap<String, WebRtcEndpoint> listeners = new ConcurrentHashMap<>();
 	private Optional<CompletableFuture<Object>> flowoutFuture = Optional.empty();
 	private Long chunkId;
 	private Type type;
+	private String sdpOffer;
 	private boolean hasAudio;
 	private boolean hasVideo;
 	private boolean hasScreen;
 
-	public KStream(final StreamDesc sd, KRoom room, KurentoHandler kHandler) {
+	public KStream(final StreamDesc sd, KRoom kRoom, KurentoHandler kHandler) {
 		super(sd.getSid(), sd.getUid());
-		this.room = room;
+		this.kRoom = kRoom;
 		streamType = sd.getType();
 		this.connectedSince = new Date();
 		this.kHandler = kHandler;
@@ -130,7 +136,7 @@ public class KStream extends AbstractStream {
 				profile = MediaProfileSpecType.WEBM_VIDEO_ONLY;
 				break;
 		}
-		pipeline = kHandler.createPipiline(Map.of(TAG_ROOM, String.valueOf(room.getRoomId()), TAG_STREAM_UID, sd.getUid()), new Continuation<Void>() {
+		pipeline = kHandler.createPipiline(Map.of(TAG_ROOM, String.valueOf(getRoomId()), TAG_STREAM_UID, sd.getUid()), new Continuation<Void>() {
 			@Override
 			public void onSuccess(Void result) throws Exception {
 				internalStartBroadcast(sd, sdpOffer);
@@ -144,7 +150,8 @@ public class KStream extends AbstractStream {
 		});
 	}
 
-	private void internalStartBroadcast(final StreamDesc sd, final String sdpOffer) {
+	private void internalStartBroadcast(final StreamDesc sd, final String sdpOffer) throws Exception {
+		this.sdpOffer = sdpOffer;
 		outgoingMedia = createEndpoint(sd.getSid(), sd.getUid());
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
 		outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
@@ -169,29 +176,29 @@ public class KStream extends AbstractStream {
 		});
 		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media FlowIn :: {}", evt));
 		addListener(sd.getSid(), sd.getUid(), sdpOffer);
-		if (room.isRecording()) {
+		sipProcessor = kHandler.getSipManager().createSipStackProcessor(
+				randomUUID().toString()
+				, kRoom.getRoom()
+				, this); // TODO check this
+		sipProcessor.ifPresent(ssp -> {
+			ssp.register();
+		});
+		if (kRoom.isRecording()) {
 			startRecord();
 		}
 		Client c = sd.getClient();
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 		if (hasAudio || hasVideo || hasScreen) {
-			WebSocketHelper.sendRoomOthers(room.getRoomId(), c.getUid(), newKurentoMsg()
+			WebSocketHelper.sendRoomOthers(getRoomId(), c.getUid(), newKurentoMsg()
 					.put("id", "newStream")
 					.put(PARAM_ICE, kHandler.getTurnServers(c))
 					.put("stream", sd.toJson()));
 		}
 	}
 
-	private RtpEndpoint createRtpEndpoint(MediaPipeline pipeline) {
-		RtpEndpoint endpoint = new RtpEndpoint.Builder(pipeline).build();
-		endpoint.addTag("outUid", this.uid);
-		endpoint.addTag("uid", uid);
-		return endpoint;
-	}
-
 	public void addListener(String sid, String uid, String sdpOffer) {
 		final boolean self = uid.equals(this.uid);
-		log.info("USER {}: have started {} in room {}", uid, self ? "broadcasting" : "receiving", room.getRoomId());
+		log.info("USER {}: have started {} in kRoom {}", uid, self ? "broadcasting" : "receiving", getRoomId());
 		log.trace("USER {}: SdpOffer is {}", uid, sdpOffer);
 		if (!self && outgoingMedia == null) {
 			log.warn("Trying to add listener too early");
@@ -246,10 +253,20 @@ public class KStream extends AbstractStream {
 		return listener;
 	}
 
-	private WebRtcEndpoint createEndpoint(String sid, String uid) {
-		WebRtcEndpoint endpoint = createWebRtcEndpoint(pipeline);
+	private void setTags(MediaObject endpoint, String uid) {
 		endpoint.addTag("outUid", this.uid);
 		endpoint.addTag("uid", uid);
+	}
+
+	private RtpEndpoint getRtpEndpoint(MediaPipeline pipeline) {
+		RtpEndpoint endpoint = new RtpEndpoint.Builder(pipeline).build();
+		setTags(endpoint, uid);
+		return endpoint;
+	}
+
+	private WebRtcEndpoint createEndpoint(String sid, String uid) {
+		WebRtcEndpoint endpoint = createWebRtcEndpoint(pipeline);
+		setTags(endpoint, uid);
 
 		endpoint.addIceCandidateFoundListener(evt -> kHandler.sendClient(sid
 				, newKurentoMsg()
@@ -266,13 +283,12 @@ public class KStream extends AbstractStream {
 			release(true);
 			return;
 		}
-		final String chunkUid = "rec_" + room.getRecordingId() + "_" + randomUUID();
-		recorder = createRecorderEndpoint(pipeline, getRecUri(getRecordingChunk(room.getRoomId(), chunkUid)), profile);
-		recorder.addTag("outUid", uid);
-		recorder.addTag("uid", uid);
+		final String chunkUid = "rec_" + kRoom.getRecordingId() + "_" + randomUUID();
+		recorder = createRecorderEndpoint(pipeline, getRecUri(getRecordingChunk(getRoomId(), chunkUid)), profile);
+		setTags(recorder, uid);
 
-		recorder.addRecordingListener(evt -> chunkId = room.getChunkDao().start(room.getRecordingId(), type, chunkUid, sid));
-		recorder.addStoppedListener(evt -> room.getChunkDao().stop(chunkId));
+		recorder.addRecordingListener(evt -> chunkId = kRoom.getChunkDao().start(kRoom.getRecordingId(), type, chunkUid, sid));
+		recorder.addStoppedListener(evt -> kRoom.getChunkDao().stop(chunkId));
 		switch (profile) {
 			case WEBM:
 				outgoingMedia.connect(recorder, MediaType.AUDIO);
@@ -312,7 +328,7 @@ public class KStream extends AbstractStream {
 	}
 
 	public void stopBroadcast() {
-		room.onStopBroadcast(this);
+		kRoom.onStopBroadcast(this);
 	}
 
 	public void pauseSharing() {
@@ -357,6 +373,7 @@ public class KStream extends AbstractStream {
 		if (outgoingMedia != null) {
 			releaseListeners();
 			releaseRecorder(false);
+			releaseRtp();
 			outgoingMedia.release(new Continuation<Void>() {
 				@Override
 				public void onSuccess(Void result) throws Exception {
@@ -429,6 +446,24 @@ public class KStream extends AbstractStream {
 		}
 	}
 
+	private void releaseRtp() {
+		if (rtpEndpoint != null) {
+			rtpEndpoint.release(new Continuation<Void>() {
+				@Override
+				public void onSuccess(Void result) throws Exception {
+					log.trace("PARTICIPANT {}: RtpEndpoint released successfully", KStream.this.uid);
+				}
+
+				@Override
+				public void onError(Throwable cause) throws Exception {
+					log.warn("PARTICIPANT {}: Could not release RtpEndpoint", KStream.this.uid, cause);
+				}
+			});
+			rtpEndpoint = null;
+		}
+		sipProcessor.ifPresent(SipStackProcessor::destroy);
+	}
+
 	public void addCandidate(IceCandidate candidate, String uid) {
 		if (this.uid.equals(uid)) {
 			if (outgoingMedia == null) {
@@ -462,8 +497,12 @@ public class KStream extends AbstractStream {
 		return connectedSince;
 	}
 
-	public KRoom getRoom() {
-		return room;
+	public KRoom getKRoom() {
+		return kRoom;
+	}
+
+	public Long getRoomId() {
+		return kRoom.getRoom().getId();
 	}
 
 	MediaPipeline getPipeline() {
@@ -500,8 +539,14 @@ public class KStream extends AbstractStream {
 
 	@Override
 	public String toString() {
-		return "KStream [room=" + room + ", streamType=" + streamType + ", profile=" + profile + ", recorder="
+		return "KStream [kRoom=" + kRoom + ", streamType=" + streamType + ", profile=" + profile + ", recorder="
 				+ recorder + ", outgoingMedia=" + outgoingMedia + ", listeners=" + listeners + ", flowoutFuture="
 				+ flowoutFuture + ", chunkId=" + chunkId + ", type=" + type + ", sid=" + sid + ", uid=" + uid + "]";
+	}
+
+	@Override
+	public void onRegister() {
+		rtpEndpoint = getRtpEndpoint(pipeline);
+		sipProcessor.get().invite(kRoom.getRoom(), sdpOffer);
 	}
 }
