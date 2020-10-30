@@ -179,10 +179,8 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		sipProcessor = kHandler.getSipManager().createSipStackProcessor(
 				randomUUID().toString()
 				, kRoom.getRoom()
-				, this); // TODO check this
-		sipProcessor.ifPresent(ssp -> {
-			ssp.register();
-		});
+				, this);
+		sipProcessor.ifPresent(SipStackProcessor::register);
 		if (kRoom.isRecording()) {
 			startRecord();
 		}
@@ -545,8 +543,15 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	}
 
 	@Override
-	public void onRegister() {
+	public void onRegisterOk() {
 		rtpEndpoint = getRtpEndpoint(pipeline);
-		sipProcessor.get().invite(kRoom.getRoom(), sdpOffer);
+		outgoingMedia.connect(rtpEndpoint, MediaType.AUDIO); //TODO VIDEO
+		sipProcessor.get().invite(kRoom.getRoom(), null);
+	}
+
+	@Override
+	public void onInviteOk(String sdp) {
+		String answer = rtpEndpoint.processOffer(sdp);
+		sipProcessor.get().invite(kRoom.getRoom(), answer);
 	}
 }

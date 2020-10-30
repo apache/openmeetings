@@ -21,6 +21,7 @@ package org.apache.openmeetings.core.sip;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 
+import java.util.BitSet;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -84,6 +85,7 @@ public class SipManager implements ISipManager {
 
 	private ManagerConnectionFactory factory;
 	private String sipUserPicture;
+	private BitSet ports;
 
 	@PostConstruct
 	public void init() {
@@ -93,6 +95,7 @@ public class SipManager implements ISipManager {
 					, managerPort
 					, managerUser
 					, managerPass);
+			ports = new BitSet(maxLocalWsPort - minLocalWsPort);
 		}
 	}
 
@@ -273,6 +276,18 @@ public class SipManager implements ISipManager {
 			log.warn("Asterisk is not configured or denied in room #{}", r.getId());
 			return Optional.empty();
 		}
-		return Optional.of(new SipStackProcessor(this, name, minLocalWsPort, callbacks)); /// FIXME TODO
+		int port;
+		synchronized (ports) {
+			int free = ports.nextClearBit(0);
+			ports.flip(free);
+			port = minLocalWsPort + free;
+		}
+		return Optional.of(new SipStackProcessor(this, name, port, callbacks));
+	}
+
+	void freePort(int port) {
+		synchronized (ports) {
+			ports.clear(port - minLocalWsPort);
+		}
 	}
 }

@@ -106,7 +106,9 @@ public class SipStackProcessor implements SipListenerExt {
 
 		final Properties properties = new Properties();
 		properties.setProperty("javax.sip.STACK_NAME", name);
-		//properties.setProperty("gov.nist.javax.sip.TRACE_LEVEL", "32");
+		if (log.isTraceEnabled()) {
+			properties.setProperty("gov.nist.javax.sip.TRACE_LEVEL", "32");
+		}
 		properties.setProperty("gov.nist.javax.sip.LOG_MESSAGE_CONTENT", "true");
 		properties.setProperty("gov.nist.javax.sip.MESSAGE_PROCESSOR_FACTORY", NioMessageProcessorFactory.class.getName());
 		sipStack = new SipStackImpl(properties);
@@ -186,7 +188,9 @@ public class SipStackProcessor implements SipListenerExt {
 				break;
 			case OK:
 				if (REGISTER.equals(prevReq.getMethod())) {
-					callbacks.onRegister();
+					callbacks.onRegisterOk();
+				} else if (INVITE.equals(prevReq.getMethod())) {
+					callbacks.onInviteOk(new String((byte[])resp.getContent()));
 				}
 				break;
 			case TRYING:
@@ -247,8 +251,6 @@ public class SipStackProcessor implements SipListenerExt {
 			request.addHeader(headerFactory.createExpiresHeader(600));
 
 			reqCons.accept(request);
-
-			log.debug("sendRequest: \n\n{}", request);
 
 			ClientTransaction trans = sipProvider.getNewClientTransaction(request);
 			trans.sendRequest();
@@ -315,15 +317,18 @@ public class SipStackProcessor implements SipListenerExt {
 				, req -> {
 					try {
 						addAllow(req);
-						req.addHeader(headerFactory.createContentLengthHeader(sdp.length()));
-						req.setContent(sdp, headerFactory.createContentTypeHeader("application", "sdp"));
+						if (sdp != null) {
+							req.addHeader(headerFactory.createContentLengthHeader(sdp.length()));
+							req.setContent(sdp, headerFactory.createContentTypeHeader("application", "sdp"));
+						}
 					} catch (Exception e) {
-						log.error("fail to create allow header", e);
+						log.error("fail patch invite request", e);
 					}
 				});
 	}
 
 	public void destroy() {
 		sipStack.stop();
+		manager.freePort(localWsPort);
 	}
 }

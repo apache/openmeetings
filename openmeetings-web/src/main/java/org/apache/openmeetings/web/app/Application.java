@@ -285,7 +285,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (sc != null) {
 			sc.setDefaultMaxSessionIdleTimeout(60 * 1000L); // should be enough, should it be configurable?
 		}
-		getHeaderResponseDecorators().add(response -> new FilteringHeaderResponse(response));
+		getHeaderResponseDecorators().add(FilteringHeaderResponse::new);
 		super.init();
 		final IBootstrapSettings settings = new BootstrapSettings();
 		settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Sandstone));//FIXME TODO new SingleThemeProvider(new MaterialDesignTheme())

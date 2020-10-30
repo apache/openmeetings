@@ -19,5 +19,6 @@
 package org.apache.openmeetings.core.sip;
 
 public interface ISipCallbacks {
-	void onRegister();
+	void onRegisterOk();
+	void onInviteOk(String sdp);
 }
