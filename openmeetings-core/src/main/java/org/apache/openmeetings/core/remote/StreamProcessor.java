@@ -267,7 +267,7 @@ public class StreamProcessor implements IStreamProcessor {
 				log.debug("User {}: has started broadcast", sd.getUid());
 				kHandler.sendClient(sd.getSid(), newKurentoMsg()
 						.put("id", "broadcast")
-						.put("stream", sd.toJson())
+						.put("stream", sd.toJson(true))
 						.put("cleanup", new JSONArray(closed))
 						.put(PARAM_ICE, kHandler.getTurnServers(c, false)));
 			}

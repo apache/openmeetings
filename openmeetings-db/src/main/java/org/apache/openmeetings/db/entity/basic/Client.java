@@ -558,13 +558,21 @@ public class Client implements IDataProviderEntity, IWsClient {
 		}
 
 		public JSONObject toJson() {
-			return addUserJson(new JSONObject()
+			return toJson(false);
+		}
+
+		public JSONObject toJson(boolean self) {
+			JSONObject o = new JSONObject()
 					.put("uid", uuid)
 					.put("type", type.name())
 					.put("width", swidth)
 					.put("height", sheight)
 					.put("activities", new JSONArray(sactivities))
-					.put("cuid", uid));
+					.put("cuid", uid);
+			if (self) {
+				o.put("cam", cam).put("mic", mic);
+			}
+			return addUserJson(o);
 		}
 
 		@Override
