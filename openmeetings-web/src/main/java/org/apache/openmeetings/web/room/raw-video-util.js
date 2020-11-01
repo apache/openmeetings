@@ -245,6 +245,7 @@ var VideoUtil = (function() {
 		if (undefined === perm.dialog('instance')) {
 			perm.data('callbacks', []).dialog({
 				appendTo: '.room-block .room-container'
+				, dialogClass: "ask-permission"
 				, autoOpen: true
 				, buttons: [
 					{
