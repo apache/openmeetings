@@ -109,6 +109,7 @@
 								<cssSourceFile>raw-room.css</cssSourceFile>
 								<cssSourceFile>raw-tree.css</cssSourceFile>
 								<cssSourceFile>raw-wb.css</cssSourceFile>
+								<cssSourceFile>raw-responsive.css</cssSourceFile>
 							</cssSourceFiles>
 							<skipMinify>true</skipMinify>
 							<cssFinalFile>theme.css</cssFinalFile>

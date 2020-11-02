@@ -13,6 +13,7 @@ body {
 	--chat-tabs-height: 26px;
 	--chat-tools-height: 37px;
 	--chat-msg-height: 80px;
+	--chat-send-width: 32px;
 }
 body.no-header {
 	--header-height: 0px;

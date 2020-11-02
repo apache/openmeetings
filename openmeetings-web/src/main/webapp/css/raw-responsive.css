@@ -1,0 +1,84 @@
+/* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+/* dashboard more responsive */
+#contents .dashboard {
+	display: flex;
+}
+#contents .dashboard > div:nth-child(1) {
+	width: 50%;
+}
+#contents .dashboard > div:nth-child(2) {
+	width: 50%;
+}
+#contents .dashboard .column {
+	width: 100%;
+	float: none;
+}
+
+/* Chat send button width */
+#chatMessage {
+	width: calc(100% - var(--chat-send-width));
+}
+#chat .send {
+	width: var(--chat-send-width);
+	font-size: var(--chat-send-width);
+}
+@media screen and (max-width: 900px), (orientation: portrait) {
+	.dashboard {
+		flex-wrap: wrap;
+	}
+	.dashboard > div:nth-child(1) {
+		flex-basis: 100%;
+	}
+	.dashboard > div:nth-child(2) {
+		flex-basis: 100%;
+	}
+	body {
+		font-size: 1.5vmax;
+	}
+	h3 {
+		font-size: 2.5vmax;
+	}
+	.btn {
+		font-size: 1.5vmax;
+		line-height: 1.5vmax;
+	}
+	#header {
+		font-size: 2.5vmax;
+	}
+	.navbar-toggler-icon {
+		width: 2.5em;
+		height: 2.5em;
+	}
+	.navbar .nav-link {
+		font-size: 1.5vmax;
+		line-height: 1.5vmax;
+	}
+	.dropdown-menu .dropdown-item {
+		font-size: 1.5vmax;
+		line-height: 1.5vmax;
+	}
+}
+
+/* dashboard rooms widgets */
+@media screen and (max-width: 1400px), (orientation: portrait) {
+	.rooms-widget {
+		flex-wrap: wrap;
+	}
+	.rooms-table {
+		flex-basis: 100%;
+	}
+}
+
+/* my/group/public rooms */
+@media screen and (max-width: 900px), (orientation: portrait) {
+	.rooms-table {
+		flex-basis: 100%;
+		height: 50%
+	}
+	.tab-content {
+		flex-wrap: wrap;
+	}
+	.rooms-area {
+		flex-wrap: wrap;
+	}
+}
