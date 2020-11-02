@@ -345,7 +345,7 @@ var Chat = function() {
 		__setCssWidth(openedWidth);
 		p.resizable({
 			handles: (Settings.isRtl ? 'e' : 'w')
-			, minWidth: 120
+			, minWidth: 150
 			, stop: function(event, ui) {
 				p.css({'left': '', 'width': '', 'height': ''});
 				openedWidth = ui.size.width + 'px';

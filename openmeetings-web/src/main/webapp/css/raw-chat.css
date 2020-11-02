@@ -13,6 +13,9 @@
 #chat {
 	height: calc(100% - 20px);
 }
+#chat .chat-toolbar.btn-toolbar .dropdown-menu {
+	min-width: unset;
+}
 #chat .chat-toolbar.btn-toolbar .dropdown-menu.btns-only li {
 	display: inline-block;
 }
@@ -139,8 +142,7 @@ html[dir="rtl"] #chat .messageArea .icons {
 	margin-left: 0;
 }
 #chat .tool-container {
-	max-height: var(--chat-tools-height);
-	height: var(--chat-tools-height);
+	min-height: var(--chat-tools-height);
 }
 /* room mode */
 .main.room #chatPanel {
