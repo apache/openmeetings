@@ -47,9 +47,15 @@
 	content: "\f106";
 }
 .main.room #chatPanel #chatPopup .control.block i::before {
-	content: "\f105";
+	content: "\f104\f104";
 }
 .main.room #chatPanel.closed #chatPopup .control.block i::before {
+	content: "\f104";
+}
+.main.room #chatPanel.wide #chatPopup .control.block i::before {
+	content: "\f105";
+}
+.main.room #chatPanel.opened #chatPopup .control.block i::before {
 	content: "\f104";
 }
 #chat .messageArea .msg-row.need-moderation {
