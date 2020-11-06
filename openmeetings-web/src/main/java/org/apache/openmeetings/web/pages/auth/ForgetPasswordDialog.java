@@ -29,6 +29,7 @@ import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.mail.template.ResetPasswordTemplate;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.Captcha;
 import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.pages.ResetPage;
@@ -185,7 +186,7 @@ public class ForgetPasswordDialog extends Modal<String> {
 
 		String template = ResetPasswordTemplate.getEmail(resetLink);
 
-		mailHandler.send(email, getString("517"), template);
+		mailHandler.send(email, Application.getString("517"), template); // Application should be used here to fill placeholder
 	}
 
 	private class ForgetPasswordForm extends Form<String> {

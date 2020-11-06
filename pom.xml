@@ -113,10 +113,10 @@
 		<logback.version>1.2.3</logback.version>
 		<jetty.version>9.4.33.v20201020</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
-		<bcprov-jdk15on.version>1.66</bcprov-jdk15on.version>
+		<bcprov-jdk15on.version>1.67</bcprov-jdk15on.version>
 		<mockito.version>3.6.0</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
-		<kurento.version>6.14.0</kurento.version>
+		<kurento.version>6.15.0</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/fabric.js, file:**/cssemoticons.js, file:**/adapter-latest.js, file:**/kurento-utils.js, file:**/NoSleep.js, file:**/fileinput*.js, file:**/MathJax.js, file:**/network.js</sonar.exclusions>
