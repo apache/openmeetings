@@ -25,7 +25,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -225,11 +225,8 @@ public class KurentoHandler {
 	}
 
 	private static Map<String, String> tagsAsMap(MediaObject pipe) {
-		Map<String, String> map = new HashMap<>();
-		for (Tag t : pipe.getTags()) {
-			map.put(t.getKey(), t.getValue());
-		}
-		return map;
+		return pipe.getTags().stream()
+				.collect(Collectors.toMap(Tag::getKey, Tag::getValue));
 	}
 
 	Transaction beginTransaction() {

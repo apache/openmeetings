@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.app;
 
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -32,14 +31,11 @@ import org.apache.wicket.resource.loader.IStringResourceLoader;
  *
  */
 public class LabelResourceLoader implements IStringResourceLoader {
-	private static final Map<String, String> STRING_LABEL_MAPPING = new HashMap<>();
-
-	static {
-		STRING_LABEL_MAPPING.put("PagingNavigator.first", "goto.first");
-		STRING_LABEL_MAPPING.put("PagingNavigator.previous", "goto.prev");
-		STRING_LABEL_MAPPING.put("PagingNavigator.next", "goto.next");
-		STRING_LABEL_MAPPING.put("PagingNavigator.last", "goto.last");
-	}
+	private static final Map<String, String> STRING_LABEL_MAPPING = Map.of(
+			"PagingNavigator.first", "goto.first"
+			, "PagingNavigator.previous", "goto.prev"
+			, "PagingNavigator.next", "goto.next"
+			, "PagingNavigator.last", "goto.last");
 
 	@Override
 	public String loadStringResource(Class<?> clazz, String key, Locale locale,

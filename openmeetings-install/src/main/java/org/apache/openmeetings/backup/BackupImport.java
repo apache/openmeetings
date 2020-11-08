@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.backup;
 
+import static java.util.Map.entry;
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.bind.Constants.APPOINTMENT_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.APPOINTMENT_NODE;
@@ -237,79 +238,79 @@ import org.springframework.stereotype.Component;
 @Component
 public class BackupImport {
 	private static final Logger log = LoggerFactory.getLogger(BackupImport.class);
-	private static final Map<String, String> outdatedConfigKeys = new HashMap<>();
-	private static final Map<String, Configuration.Type> configTypes = new HashMap<>();
+	private static final Map<String, String> outdatedConfigKeys = Map.ofEntries(
+			entry("crypt_ClassName", CONFIG_CRYPT)
+			, entry("system_email_addr", CONFIG_SMTP_SYSTEM_EMAIL)
+			, entry("smtp_server", CONFIG_SMTP_SERVER)
+			, entry("smtp_port", CONFIG_SMTP_PORT)
+			, entry("email_username", CONFIG_SMTP_USER)
+			, entry("email_userpass", CONFIG_SMTP_PASS)
+			, entry("default_lang_id", CONFIG_DEFAULT_LANG)
+			, entry("allow_frontend_register", CONFIG_REGISTER_FRONTEND)
+			, entry("max_upload_size", CONFIG_MAX_UPLOAD_SIZE)
+			, entry("rss_feed1", CONFIG_DASHBOARD_RSS_FEED1)
+			, entry("rss_feed2", CONFIG_DASHBOARD_RSS_FEED2)
+			, entry("oauth2.ignore_bad_ssl", CONFIG_IGNORE_BAD_SSL)
+			, entry("default.quality.screensharing", CONFIG_SCREENSHARING_QUALITY)
+			, entry("default.fps.screensharing", CONFIG_SCREENSHARING_FPS)
+			, entry("ldap_default_id", CONFIG_DEFAULT_LDAP_ID)
+			, entry("default_group_id", CONFIG_DEFAULT_GROUP_ID)
+			, entry("imagemagick_path", CONFIG_PATH_IMAGEMAGIC)
+			, entry("sox_path", CONFIG_PATH_SOX)
+			, entry("ffmpeg_path", CONFIG_PATH_FFMPEG)
+			, entry("office.path", CONFIG_PATH_OFFICE)
+			, entry("red5sip.enable", CONFIG_SIP_ENABLED)
+			, entry("red5sip.room_prefix", CONFIG_SIP_ROOM_PREFIX)
+			, entry("red5sip.exten_context", CONFIG_SIP_EXTEN_CONTEXT)
+			, entry("sendEmailAtRegister", CONFIG_EMAIL_AT_REGISTER)
+			, entry("sendEmailWithVerficationCode", CONFIG_EMAIL_VERIFICATION)
+			, entry("swftools_zoom", CONFIG_DOCUMENT_DPI)
+			, entry("swftools_jpegquality", CONFIG_DOCUMENT_QUALITY)
+			, entry("sms.subject", CONFIG_REMINDER_MESSAGE)
+			, entry("exclusive.audio.keycode", CONFIG_KEYCODE_MUTE_OTHERS)
+			, entry("header.csp.frame.options", CONFIG_CSP_FRAME)
+			);
+	private static final Map<String, Configuration.Type> configTypes = Map.ofEntries(
+			entry(CONFIG_REGISTER_FRONTEND, Configuration.Type.BOOL)
+			, entry(CONFIG_REGISTER_SOAP, Configuration.Type.BOOL)
+			, entry(CONFIG_REGISTER_OAUTH, Configuration.Type.BOOL)
+			, entry(CONFIG_SMTP_TLS, Configuration.Type.BOOL)
+			, entry(CONFIG_EMAIL_AT_REGISTER, Configuration.Type.BOOL)
+			, entry(CONFIG_EMAIL_VERIFICATION, Configuration.Type.BOOL)
+			, entry(CONFIG_SIP_ENABLED, Configuration.Type.BOOL)
+			, entry(CONFIG_SCREENSHARING_FPS_SHOW, Configuration.Type.BOOL)
+			, entry(CONFIG_SCREENSHARING_ALLOW_REMOTE, Configuration.Type.BOOL)
+			, entry(CONFIG_DASHBOARD_SHOW_MYROOMS, Configuration.Type.BOOL)
+			, entry(CONFIG_DASHBOARD_SHOW_CHAT, Configuration.Type.BOOL)
+			, entry(CONFIG_DASHBOARD_SHOW_RSS, Configuration.Type.BOOL)
+			, entry(CONFIG_REPLY_TO_ORGANIZER, Configuration.Type.BOOL)
+			, entry(CONFIG_IGNORE_BAD_SSL, Configuration.Type.BOOL)
+			, entry(CONFIG_MYROOMS_ENABLED, Configuration.Type.BOOL)
+			, entry(CONFIG_DEFAULT_GROUP_ID, Configuration.Type.NUMBER)
+			, entry(CONFIG_SMTP_PORT, Configuration.Type.NUMBER)
+			, entry(CONFIG_SMTP_TIMEOUT_CON, Configuration.Type.NUMBER)
+			, entry(CONFIG_SMTP_TIMEOUT, Configuration.Type.NUMBER)
+			, entry(CONFIG_DEFAULT_LANG, Configuration.Type.NUMBER)
+			, entry(CONFIG_DOCUMENT_DPI, Configuration.Type.NUMBER)
+			, entry(CONFIG_DOCUMENT_QUALITY, Configuration.Type.NUMBER)
+			, entry(CONFIG_SCREENSHARING_QUALITY, Configuration.Type.NUMBER)
+			, entry(CONFIG_SCREENSHARING_FPS, Configuration.Type.NUMBER)
+			, entry(CONFIG_MAX_UPLOAD_SIZE, Configuration.Type.NUMBER)
+			, entry(CONFIG_APPOINTMENT_REMINDER_MINUTES, Configuration.Type.NUMBER)
+			, entry(CONFIG_LOGIN_MIN_LENGTH, Configuration.Type.NUMBER)
+			, entry(CONFIG_PASS_MIN_LENGTH, Configuration.Type.NUMBER)
+			, entry(CONFIG_CALENDAR_ROOM_CAPACITY, Configuration.Type.NUMBER)
+			, entry(CONFIG_KEYCODE_ARRANGE, Configuration.Type.HOTKEY)
+			, entry(CONFIG_KEYCODE_MUTE_OTHERS, Configuration.Type.HOTKEY)
+			, entry(CONFIG_KEYCODE_MUTE, Configuration.Type.HOTKEY)
+			, entry(CONFIG_DEFAULT_LDAP_ID, Configuration.Type.NUMBER)
+			, entry(CONFIG_CAM_FPS, Configuration.Type.NUMBER)
+			, entry(CONFIG_MIC_RATE, Configuration.Type.NUMBER)
+			, entry(CONFIG_MIC_ECHO, Configuration.Type.BOOL)
+			, entry(CONFIG_MIC_NOISE, Configuration.Type.BOOL)
+			, entry(CONFIG_EXT_PROCESS_TTL, Configuration.Type.NUMBER)
+			);
 	private static final Pattern UUID_PATTERN = Pattern.compile("^[\\da-f]{8}(?:-[\\da-f]{4}){3}-[\\da-f]{12}$");
-	static {
-		outdatedConfigKeys.put("crypt_ClassName", CONFIG_CRYPT);
-		outdatedConfigKeys.put("system_email_addr", CONFIG_SMTP_SYSTEM_EMAIL);
-		outdatedConfigKeys.put("smtp_server", CONFIG_SMTP_SERVER);
-		outdatedConfigKeys.put("smtp_port", CONFIG_SMTP_PORT);
-		outdatedConfigKeys.put("email_username", CONFIG_SMTP_USER);
-		outdatedConfigKeys.put("email_userpass", CONFIG_SMTP_PASS);
-		outdatedConfigKeys.put("default_lang_id", CONFIG_DEFAULT_LANG);
-		outdatedConfigKeys.put("allow_frontend_register", CONFIG_REGISTER_FRONTEND);
-		outdatedConfigKeys.put("max_upload_size", CONFIG_MAX_UPLOAD_SIZE);
-		outdatedConfigKeys.put("rss_feed1", CONFIG_DASHBOARD_RSS_FEED1);
-		outdatedConfigKeys.put("rss_feed2", CONFIG_DASHBOARD_RSS_FEED2);
-		outdatedConfigKeys.put("oauth2.ignore_bad_ssl", CONFIG_IGNORE_BAD_SSL);
-		outdatedConfigKeys.put("default.quality.screensharing", CONFIG_SCREENSHARING_QUALITY);
-		outdatedConfigKeys.put("default.fps.screensharing", CONFIG_SCREENSHARING_FPS);
-		outdatedConfigKeys.put("ldap_default_id", CONFIG_DEFAULT_LDAP_ID);
-		outdatedConfigKeys.put("default_group_id", CONFIG_DEFAULT_GROUP_ID);
-		outdatedConfigKeys.put("imagemagick_path", CONFIG_PATH_IMAGEMAGIC);
-		outdatedConfigKeys.put("sox_path", CONFIG_PATH_SOX);
-		outdatedConfigKeys.put("ffmpeg_path", CONFIG_PATH_FFMPEG);
-		outdatedConfigKeys.put("office.path", CONFIG_PATH_OFFICE);
-		outdatedConfigKeys.put("red5sip.enable", CONFIG_SIP_ENABLED);
-		outdatedConfigKeys.put("red5sip.room_prefix", CONFIG_SIP_ROOM_PREFIX);
-		outdatedConfigKeys.put("red5sip.exten_context", CONFIG_SIP_EXTEN_CONTEXT);
-		outdatedConfigKeys.put("sendEmailAtRegister", CONFIG_EMAIL_AT_REGISTER);
-		outdatedConfigKeys.put("sendEmailWithVerficationCode", CONFIG_EMAIL_VERIFICATION);
-		outdatedConfigKeys.put("swftools_zoom", CONFIG_DOCUMENT_DPI);
-		outdatedConfigKeys.put("swftools_jpegquality", CONFIG_DOCUMENT_QUALITY);
-		outdatedConfigKeys.put("sms.subject", CONFIG_REMINDER_MESSAGE);
-		outdatedConfigKeys.put("exclusive.audio.keycode", CONFIG_KEYCODE_MUTE_OTHERS);
-		outdatedConfigKeys.put("header.csp.frame.options", CONFIG_CSP_FRAME);
-		configTypes.put(CONFIG_REGISTER_FRONTEND, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_REGISTER_SOAP, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_REGISTER_OAUTH, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_SMTP_TLS, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_EMAIL_AT_REGISTER, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_EMAIL_VERIFICATION, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_SIP_ENABLED, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_SCREENSHARING_FPS_SHOW, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_SCREENSHARING_ALLOW_REMOTE, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_DASHBOARD_SHOW_MYROOMS, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_DASHBOARD_SHOW_CHAT, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_DASHBOARD_SHOW_RSS, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_REPLY_TO_ORGANIZER, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_IGNORE_BAD_SSL, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_MYROOMS_ENABLED, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_DEFAULT_GROUP_ID, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_SMTP_PORT, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_SMTP_TIMEOUT_CON, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_SMTP_TIMEOUT, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_DEFAULT_LANG, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_DOCUMENT_DPI, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_DOCUMENT_QUALITY, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_SCREENSHARING_QUALITY, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_SCREENSHARING_FPS, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_MAX_UPLOAD_SIZE, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_APPOINTMENT_REMINDER_MINUTES, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_LOGIN_MIN_LENGTH, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_PASS_MIN_LENGTH, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_CALENDAR_ROOM_CAPACITY, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_KEYCODE_ARRANGE, Configuration.Type.HOTKEY);
-		configTypes.put(CONFIG_KEYCODE_MUTE_OTHERS, Configuration.Type.HOTKEY);
-		configTypes.put(CONFIG_KEYCODE_MUTE, Configuration.Type.HOTKEY);
-		configTypes.put(CONFIG_DEFAULT_LDAP_ID, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_CAM_FPS, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_MIC_RATE, Configuration.Type.NUMBER);
-		configTypes.put(CONFIG_MIC_ECHO, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_MIC_NOISE, Configuration.Type.BOOL);
-		configTypes.put(CONFIG_EXT_PROCESS_TTL, Configuration.Type.NUMBER);
-	}
 
 	@Autowired
 	private AppointmentDao appointmentDao;

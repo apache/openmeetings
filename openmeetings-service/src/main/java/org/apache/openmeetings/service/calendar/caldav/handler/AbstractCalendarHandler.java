@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -66,11 +68,8 @@ public abstract class AbstractCalendarHandler implements CalendarHandler {
 	 * @return Map of Hrefs to Appointments
 	 */
 	static Map<String, Appointment> listToMap(List<Appointment> appointments) {
-		Map<String, Appointment> map = new HashMap<>();
-		for(Appointment a : appointments) {
-			map.put(a.getHref(), a);
-		}
-		return map;
+		return appointments.stream()
+				.collect(Collectors.toMap(Appointment::getHref, Function.identity()));
 	}
 
 	/**

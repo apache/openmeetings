@@ -26,7 +26,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -98,8 +97,7 @@ public class ProcessHelper {
 	}
 
 	public static ProcessResult executeScript(String process, String[] argv, boolean optional) {
-		Map<String, String> env = new HashMap<>();
-		return executeScript(process, argv, env, optional);
+		return executeScript(process, argv, Map.of(), optional);
 	}
 
 	private static ProcessResult executeScript(String process, String[] argv, Map<? extends String, ? extends String> env, boolean optional) {

@@ -111,6 +111,6 @@ public class OauthMapAdapter extends XmlAdapter<Object, Map<String, String>> {
 		if ("mapping".equals(el.getLocalName())) {
 			return getMap(el.getChildNodes());
 		}
-		return new HashMap<>();
+		return Map.of();
 	}
 }

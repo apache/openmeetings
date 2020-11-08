@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.openmeetings.db.entity.server.OAuthServer;
@@ -141,10 +140,9 @@ class TestOAuthUser {
 
 	@Test
 	void map() {
-		Map<String, String> umap = new HashMap<>();
-		umap.put("login", "abc");
-		umap.put("email", "abc@local");
-		OAuthUser user = new OAuthUser(umap);
+		OAuthUser user = new OAuthUser(Map.of(
+				"login", "abc"
+				, "email", "abc@local"));
 		assertEquals("abc", user.getLogin(), "Login should be correct");
 		assertEquals("abc@local", user.getEmail(), "Email should be correct");
 		assertNull(user.getUserData().get(PARAM_FNAME), "First name should be empty");
