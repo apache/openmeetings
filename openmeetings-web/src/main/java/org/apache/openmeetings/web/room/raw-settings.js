@@ -205,7 +205,7 @@ var VideoSettings = (function() {
 			_close();
 			vs.modal("hide");
 		});
-		vs.off().on('hidden.bs.modal', function (e) {
+		vs.off().on('hidden.bs.modal', function () {
 			_close();
 		});
 		o.width = 300;

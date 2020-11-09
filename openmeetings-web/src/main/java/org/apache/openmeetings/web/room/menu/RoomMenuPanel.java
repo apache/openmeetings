@@ -260,6 +260,7 @@ public class RoomMenuPanel extends Panel {
 				room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
 			}
 		} else {
+			WebSession.get().invalidate();
 			String url = cfgDao.getString(CONFIG_REDIRECT_URL_FOR_EXTERNAL, "");
 			throw new RedirectToUrlException(Strings.isEmpty(url) ? getBaseUrl() : url);
 		}

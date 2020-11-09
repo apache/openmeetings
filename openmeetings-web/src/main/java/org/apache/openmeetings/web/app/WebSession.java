@@ -149,7 +149,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		cm.invalidate(userId, getId());
 		super.invalidate();
 		userId = null;
-		rights = Collections.unmodifiableSet(Collections.<Right>emptySet());
+		rights = Set.of();
 		iso8601Format = null;
 		sdf = null;
 		languageId = -1;
