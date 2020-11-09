@@ -107,7 +107,6 @@
 			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}</directory>
 			<outputDirectory>${om.webapp}</outputDirectory>
 			<excludes>
-				<exclude>META-INF/**</exclude>
 				<exclude>WEB-INF/classes/META-INF/**</exclude>
 			</excludes>
 		</fileSet>
