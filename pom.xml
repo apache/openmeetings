@@ -62,7 +62,7 @@
 		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
 		<wagon-maven-plugin.version>2.0.0</wagon-maven-plugin.version>
 		<maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
-		<maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
+		<maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
 		<replacer.version>1.5.3</replacer.version>
 		<xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
 		<saxon.version>8.7</saxon.version>
