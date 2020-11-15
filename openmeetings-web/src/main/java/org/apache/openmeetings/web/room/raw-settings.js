@@ -362,7 +362,7 @@ var VideoSettings = (function() {
 		o.prop('selected', true);
 	}
 	function _getDevConstraints(callback) {
-		const devCnts = {audio: false, video: false};
+		const devCnts = {audio: false, video: false, devices: []};
 		if (window.isSecureContext === false) {
 			OmUtil.error($('#settings-https-required').text());
 			return;
@@ -373,6 +373,13 @@ var VideoSettings = (function() {
 		}
 		navigator.mediaDevices.enumerateDevices()
 			.then(devices => devices.forEach(device => {
+					if (DEV_AUDIO === device.kind || DEV_VIDEO === device.kind) {
+						devCnts.devices.push({
+							kind: device.kind
+							, label: device.label || (device.kind + ' ' + devCnts.devices.length)
+							, deviceId: device.deviceId
+						});
+					}
 					if (DEV_AUDIO === device.kind) {
 						devCnts.audio = true;
 					} else if (DEV_VIDEO === device.kind) {
@@ -405,7 +412,10 @@ var VideoSettings = (function() {
 							throw err;
 						})
 						.finally(() => _clear(stream));
-					return devices;
+					return devices || devCnts.devices;
+				})
+				.catch(function() {
+					return devCnts.devices;
 				})
 				.then(devices => {
 					let cCount = 0, mCount = 0;
