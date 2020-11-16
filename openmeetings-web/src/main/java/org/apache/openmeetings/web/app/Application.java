@@ -114,6 +114,7 @@ import org.apache.wicket.protocol.ws.WebSocketAwareCsrfPreventionRequestCycleLis
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
+import org.apache.wicket.request.Url.StringMode;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebResponse;
@@ -644,19 +645,25 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return wsUrl;
 	}
 
-	private static String getWsUrl(Url reqUrl) {
+	// package private for testing
+	static String getWsUrl(Url reqUrl) {
 		if (!reqUrl.isFull()) {
 			return null;
 		}
 		final boolean insecure = "http".equalsIgnoreCase(reqUrl.getProtocol());
 		String delim = ":";
-		String port = reqUrl.getPort() == null || reqUrl.getPort() < 0 ? "" : String.valueOf(reqUrl.getPort());
-		if (!port.isEmpty() && ((insecure && 80 == reqUrl.getPort()) || (!insecure && 443 == reqUrl.getPort()))) {
+		String port;
+		if (reqUrl.getPort() == null || reqUrl.getPort() < 0
+				|| (insecure && 80 == reqUrl.getPort())
+				|| (!insecure && 443 == reqUrl.getPort()))
+		{
 			port = "";
-		}
-		if (port.isEmpty()) {
 			delim = "";
+		} else {
+			port = String.valueOf(reqUrl.getPort());
 		}
-		return String.format("%s://%s%s%s", insecure ? "ws" : "wss", reqUrl.getHost(), delim, port);
+		String url = (insecure ? "ws" : "wss") + "://" + reqUrl.getHost() + delim + port;
+		log.debug("Getting WS url from '{}', result: '{}'", reqUrl.toString(StringMode.FULL), url);
+		return url;
 	}
 }
