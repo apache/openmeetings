@@ -169,7 +169,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	HazelcastInstance hazelcast;
 	private ITopic<IClusterWsMessage> hazelWsTopic;
 	private String serverId;
-	private String wsUrl;
+	private final Set<String> wsUrls = new HashSet<>();
 
 	@Autowired
 	private ApplicationContext ctx;
@@ -264,6 +264,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
 		getRequestCycleListeners().add(new WebSocketAwareCsrfPreventionRequestCycleListener() {
 			@Override
+			public void onBeginRequest(RequestCycle cycle) {
+				String wsUrl = getWsUrl(cycle.getRequest().getUrl());
+				if (wsUrl != null && !wsUrls.contains(wsUrl)) {
+					wsUrls.add(wsUrl);
+					cfgDao.updateCsp();
+				}
+			}
+
+			@Override
 			public void onEndRequest(RequestCycle cycle) {
 				Response resp = cycle.getResponse();
 				if (resp instanceof WebResponse) {
@@ -272,12 +281,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 						wresp.setHeader("X-XSS-Protection", "1; mode=block");
 						wresp.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
 						wresp.setHeader("X-Content-Type-Options", "nosniff");
-						if (wsUrl == null) {
-							wsUrl = getWsUrl(cycle.getRequest().getUrl());
-							if (wsUrl != null) {
-								cfgDao.updateCsp();
-							}
-						}
 					}
 				}
 			}
@@ -289,7 +292,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getHeaderResponseDecorators().add(FilteringHeaderResponse::new);
 		super.init();
 		final IBootstrapSettings settings = new BootstrapSettings();
-		settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Sandstone));//FIXME TODO new SingleThemeProvider(new MaterialDesignTheme())
+		settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Sandstone));
 		Bootstrap.builder().withBootstrapSettings(settings).install(this);
 		WysiwygLibrarySettings.get().setBootstrapCssReference(null);
 		WysiwygLibrarySettings.get().setBootstrapDropDownJavaScriptReference(null);
@@ -641,8 +644,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	@Override
-	public String getWsUrl() {
-		return wsUrl;
+	public Set<String> getWsUrls() {
+		return Set.copyOf(wsUrls);
 	}
 
 	// package private for testing

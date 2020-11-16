@@ -19,6 +19,7 @@
 package org.apache.openmeetings;
 
 import java.util.Locale;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import javax.servlet.ServletContext;
@@ -48,5 +49,5 @@ public interface IApplication {
 
 	//WS
 	void publishWsTopic(IClusterWsMessage msg);
-	String getWsUrl();
+	Set<String> getWsUrls();
 }
