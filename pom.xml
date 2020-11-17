@@ -104,7 +104,7 @@
 		<mysql.version>8.0.22</mysql.version>
 		<mssql.version>8.4.1.jre11</mssql.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
-		<xstream.version>1.4.13</xstream.version>
+		<xstream.version>1.4.14</xstream.version>
 		<api-all.version>2.0.1</api-all.version>
 		<caldav4j.version>1.0.1</caldav4j.version>
 		<tika-parsers.version>1.24.1</tika-parsers.version>
