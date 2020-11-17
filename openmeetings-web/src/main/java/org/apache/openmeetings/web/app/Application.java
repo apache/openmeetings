@@ -666,7 +666,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			port = String.valueOf(reqUrl.getPort());
 		}
 		String url = (insecure ? "ws" : "wss") + "://" + reqUrl.getHost() + delim + port;
-		log.debug("Getting WS url from '{}', result: '{}'", reqUrl.toString(StringMode.FULL), url);
+		if (log.isTraceEnabled()) {
+			log.trace("Getting WS url from '{}', result: '{}'", reqUrl.toString(StringMode.FULL), url);
+		}
 		return url;
 	}
 }
