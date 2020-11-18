@@ -176,9 +176,10 @@ public class Chat extends Panel {
 
 			@Override
 			public List<HeaderItem> getDependencies() {
-				return List.of(JavaScriptHeaderItem.forScript("const bstooltip = jQuery.fn.tooltip;", "preserve-bs-tooltip")
-						, JavaScriptHeaderItem.forReference(JQueryUILibrarySettings.get().getJavaScriptReference())
-						, JavaScriptHeaderItem.forScript("jQuery.fn.tooltip = bstooltip;", "restore-bs-tooltip")
+				return List.of(
+						new PriorityHeaderItem(JavaScriptHeaderItem.forScript("const bstooltip = jQuery.fn.tooltip;", "preserve-bs-tooltip"))
+						, new PriorityHeaderItem(JavaScriptHeaderItem.forReference(JQueryUILibrarySettings.get().getJavaScriptReference()))
+						, new PriorityHeaderItem(JavaScriptHeaderItem.forScript("jQuery.fn.tooltip = bstooltip;", "restore-bs-tooltip"))
 						);
 			}
 		});

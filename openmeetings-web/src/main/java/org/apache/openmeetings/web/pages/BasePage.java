@@ -137,7 +137,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 
 				@Override
 				public List<HeaderItem> getDependencies() {
-					return List.of(JavaScriptHeaderItem.forUrl("https://www.googletagmanager.com/gtag/js?id=" + getGaCode()).setAsync(true));
+					return List.of(new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("https://www.googletagmanager.com/gtag/js?id=" + getGaCode()).setAsync(true)));
 				}
 			})));
 			StringBuilder script = new StringBuilder("initGA('")
