@@ -169,7 +169,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[حذف لغة]]></entry>
 	<entry key="366"><![CDATA[إضافة لغة]]></entry>
 	<entry key="367"><![CDATA[نسخ إحتياطي]]></entry>
-	<entry key="376"><![CDATA[مرحباً،]]></entry>
+	<entry key="376"><![CDATA[مرحباً ]]></entry>
 	<entry key="377"><![CDATA[عدل ملفك الشخصي]]></entry>
 	<entry key="378"><![CDATA[رسائل جديدة:]]></entry>
 	<entry key="379"><![CDATA[إيداع صور جديدة]]></entry>
@@ -305,7 +305,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[محددات]]></entry>
 	<entry key="832"><![CDATA[هل أنت متأكد؟]]></entry>
 	<entry key="833"><![CDATA[هل تريد حقًا حذف هذا العنصر؟ يجب عليك الضغط على زر الحفظ لتخزين التغييرات!]]></entry>
-	<entry key="843"><![CDATA[خصائص الأداة]]></entry>
+	<entry key="843"><![CDATA[     خصائص الأداة]]></entry>
 	<entry key="848"><![CDATA[عرض الشاشة]]></entry>
 	<entry key="850"><![CDATA[يريد مشاركة شاشته. هل تريد ان تراها؟]]></entry>
 	<entry key="860"><![CDATA[تسجيلاتي]]></entry>
@@ -823,9 +823,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 
 	<br />
 	]]></entry>
-	<entry key="internal.error"><![CDATA[Unfortunately something bad just happen :(, <br/>
-please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></entry>
-	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
+	<entry key="internal.error"><![CDATA[للأسف حدث شيء سيء :( ، <br/>
+يرجى مراجعة <tt> openmeetings.log </tt> والاتصال بمطوري OpenMeetings]]></entry>
+	<entry key="invalid.hash"><![CDATA[خطأ في مفتاح الترميز Invalid Hash]]></entry>
 	<entry key="label.dock.panel"><![CDATA[انقر لإرساء اللوحة]]></entry>
 	<entry key="label.undock.panel"><![CDATA[انقر لإلغاء قفل اللوحة]]></entry>
 	<entry key="lbl.cancel"><![CDATA[الغاء]]></entry>
@@ -900,7 +900,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 في {1} يوم. إذا كنت ترغب في حفظ هذا التسجيل ، يرجى تنزيله قبل ذلك الحين.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[مع التحيات,<br/>
 	{0} فريق الاسناد.]]></entry>
-	<entry key="template.recording.expiring.greetings"><![CDATA[مرحبا {0}]]></entry>
+	<entry key="template.recording.expiring.greetings"><![CDATA[مرحباً {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[سيتم حذف التسجيل]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[- غرفة [{0}]]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[السماح لهذا المستخدم باستخدام الميكروفون]]></entry>
@@ -949,7 +949,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="wait-moderator.title"><![CDATA[يرجى التحلي بالصبر ...]]></entry>
 	<entry key="warn.nogroup"><![CDATA[تمت إضافة المستخدم لكن يجب إنساب هذا المستخدم إلى تنظيم و إلا لن يمكنه تسجيل الدخول]]></entry>
 	<entry key="warn.notverified"><![CDATA[لقد سجلت بنجاح. سيتم إرسال بريد إلكتروني برمز التحقق إلى صندوق البريد الخاص بك.]]></entry>
-	<entry key="wb.tool.math.formula"><![CDATA[صيغة الرياضيات]]></entry>
+	<entry key="wb.tool.math.formula"><![CDATA[     صيغ الرياضيات]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[دليل بناء الجملة الرياضاتيه]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>
 	<entry key="wb.tool.white-out"><![CDATA[تبييض]]></entry>

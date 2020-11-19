@@ -145,7 +145,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="287"><![CDATA[User Mailing List (https://openmeetings.apache.org/mailing-lists.html)]]></entry>
 	<entry key="288"><![CDATA[Remember Login]]></entry>
 	<entry key="290"><![CDATA[My Home Page]]></entry>
-	<entry key="291"><![CDATA[My Scheduled Meetings]]></entry>
+	<entry key="291"><![CDATA[Calendar]]></entry>
 	<entry key="306"><![CDATA[Cam and Mic Settings]]></entry>
 	<entry key="308"><![CDATA[Exit]]></entry>
 	<entry key="309"><![CDATA[Back to Rooms]]></entry>
@@ -204,7 +204,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="513"><![CDATA[{0} - Reset Password]]></entry>
 	<entry key="514"><![CDATA[Click on this link to enter a new password:]]></entry>
 	<entry key="515"><![CDATA[Click here to enter a new Password]]></entry>
-	<entry key="517"><![CDATA[{0} Password Reset]]></entry>
+	<entry key="517"><![CDATA[{0} password reset]]></entry>
 	<entry key="524"><![CDATA[Passwort protected]]></entry>
 	<entry key="526"><![CDATA[Validity period]]></entry>
 	<entry key="527"><![CDATA[Endless]]></entry>
