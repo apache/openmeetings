@@ -86,4 +86,14 @@ class TestDateTime {
 		format = AbstractOmDateTimePicker.getDateTimeFormat(Locale.ENGLISH);
 		assertEquals(format, AbstractOmDateTimePicker.patch(format));
 	}
+
+	@Test
+	void test4() throws Exception {
+		final Locale loc = new Locale.Builder()
+				.setLanguage("bg")
+				.setRegion("BG")
+				.build();
+		String format = AbstractOmDateTimePicker.getDateTimeFormat(loc);
+		assertEquals("d.MM.yy [г]., H:mm [ч].", AbstractOmDateTimePicker.patch(format));
+	}
 }

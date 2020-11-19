@@ -60,7 +60,7 @@ public abstract class AbstractOmDateTimePicker<T> extends AbstractDateTimePicker
 	public static String patch(String format) {
 		// in Java free text is escaped with single-quotes
 		// moment.js uses []
-		return format.replaceFirst("(.*)([']{1}(.*)[']{1})(.*)", "$1\\[$3\\]$4");
+		return format.replaceAll("[']{1}([^']*)[']{1}", "\\[$1\\]");
 	}
 
 	public static String getDateTimeFormat() {
