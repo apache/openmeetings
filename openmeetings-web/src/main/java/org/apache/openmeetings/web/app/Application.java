@@ -425,7 +425,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static void kickUser(Client client) {
 		if (client != null) {
 			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoom().getId(), client, RoomMessage.Type.KICK, client.getUid()));
-			get().cm.exitRoom(client);
 		}
 	}
 

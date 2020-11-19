@@ -263,10 +263,8 @@ var Wb = function() {
 		switch (role) {
 			case PRESENTER:
 				clearAll.confirmation({
-					confirmationEvent: 'bla'
-					, onConfirm: function() {
-						OmUtil.wbAction({action: 'clearAll', data: {wbId: wb.id}});
-					}
+					confirmationEvent: 'om-clear-all'
+					, onConfirm: () => OmUtil.wbAction({action: 'clearAll', data: {wbId: wb.id}})
 				}).removeClass('disabled');
 				zoomBar.find('.curr-slide').change(function() {
 					_setSlide($(this).val() - 1);
@@ -316,7 +314,7 @@ var Wb = function() {
 				});
 				tools.find('.om-icon.clear-slide')
 					.confirmation({
-						confirmationEvent: 'bla'
+						confirmationEvent: 'om-clear-slide'
 						, onConfirm: function() {
 							OmUtil.wbAction({action: 'clearSlide', data: {wbId: wb.id, slide: slide}});
 						}

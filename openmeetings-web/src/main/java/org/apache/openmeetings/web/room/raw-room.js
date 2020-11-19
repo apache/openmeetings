@@ -308,14 +308,20 @@ var Room = (function() {
 			icon.hide();
 		}
 	}
-	function __activityIcon(elem, selector, predicate, action) {
+	function __activityIcon(elem, selector, predicate, action, confirm) {
 		let icon = elem.find(selector);
 		if (predicate()) {
 			if (icon.length === 0) {
 				icon = OmUtil.tmpl('#user-actions-stub ' + selector);
 				elem.append(icon);
 			}
-			icon.off().click(action);
+			icon.off();
+			if (confirm) {
+				icon.confirmation('dispose');
+				icon.confirmation(confirm)
+			} else {
+				icon.click(action);
+			}
 		} else {
 			icon.hide();
 		}
@@ -440,7 +446,12 @@ var Room = (function() {
 		__rightOtherIcons(c, actions);
 		__activityIcon(actions, '.kick'
 			, () => !self && _hasRight('MODERATOR') && !_hasRight('SUPER_MODERATOR', c.rights)
-			, function() { OmUtil.roomAction({action: 'kick', uid: c.uid}); });
+			, null
+			, {
+				confirmationEvent: 'om-kick'
+				, placement: Settings.isRtl ? 'left' : 'right'
+				, onConfirm: () => OmUtil.roomAction({action: 'kick', uid: c.uid})
+			});
 		__activityIcon(actions, '.private-chat'
 				, () => options.userId !== c.user.id && $('#chatPanel').is(':visible')
 				, function() {

@@ -60,7 +60,6 @@
 	<div wicket:id="activities"></div>
 	<div wicket:id="addFolder"></div>
 	<div wicket:id="upload"></div>
-	<div wicket:id="confirm-kick" />
 	<div wicket:id="settings" />
 	<div hidden="hidden">
 		<div id="user-entry-stub" class="user entry clearfix" >
@@ -73,14 +72,14 @@
 			<div class="user actions clearfix">
 			</div>
 		</div>
-		<span id="volume-control-stub" class="om-icon dropdown dropright volume-control align-right">
+		<div id="volume-control-stub" class="om-icon dropdown dropright volume-control align-right">
 			<a class="fas volume-on" type="button" href="#" wicket:message="title:volume.label"></a>
 			<div class="dropdown-menu">
 				<div class="slider" wicket:message="title:volume.label">
 					<div class="ui-slider-handle handle"></div>
 				</div>
 			</div>
-		</span>
+		</div>
 		<span id="user-av-restart" class="om-icon align-right restart clickable" wicket:message="title:lbl.refresh">
 			<i class="fas fa-sync-alt"></i>
 		</span>
@@ -106,7 +105,10 @@
 			<span class="om-icon align-left right moderator bumper clickable" wicket:message="data-request:ulist.right.moderator.request,data-revoke:ulist.right.moderator.revoke,data-grant:ulist.right.moderator.grant">
 				<i class="fas"></i>
 			</span>
-			<span class="om-icon align-left kick bumper clickable" wicket:message="title:603">
+			<span class="om-icon align-left kick bumper clickable"
+					wicket:message="title:603,data-btn-ok-label:54,data-btn-cancel-label:lbl.cancel,data-title:603,data-content:605"
+					data-btn-ok-class="btn btn-sm btn-danger"
+					data-btn-ok-icon-class="fas fa-exclamation-triangle">
 				<i class="fas fa-ban text-danger"></i>
 			</span>
 			<span class="om-icon align-right private-chat clickable" wicket:message="title:1493">
