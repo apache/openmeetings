@@ -338,12 +338,6 @@ select.messages.selector {
 	display: inline-block;
 	margin-left: 10px;
 }
-.invisible-form-component {
-	position: absolute;
-	top: -9999px;
-	width: 1px;
-	height: 1px;
-}
 #messagesTable tr.selected {
 	background-color: #d7ebf9;
 }
