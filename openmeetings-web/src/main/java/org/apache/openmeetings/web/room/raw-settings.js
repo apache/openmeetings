@@ -240,8 +240,8 @@ var VideoSettings = (function() {
 			});
 			cnts.video.width = width < 1281 ? width : 1280;
 		} else {
-			cnts.video.width = s.video.width;
-			cnts.video.height = s.video.height;
+			cnts.video.width = o.interview ? 320 : s.video.width;
+			cnts.video.height = o.interview ? 260 : s.video.height;
 		}
 	}
 	//each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints

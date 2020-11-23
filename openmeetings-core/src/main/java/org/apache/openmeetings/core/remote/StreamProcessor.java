@@ -109,6 +109,9 @@ public class StreamProcessor implements IStreamProcessor {
 			case "broadcastStarted":
 				handleBroadcastStarted(c, uid, msg);
 				break;
+			case "broadcastRestarted":
+				handleBroadcastRestarted(c, uid);
+				break;
 			case "onIceCandidate":
 				sender = getByUid(uid);
 				if (sender != null) {
@@ -170,6 +173,16 @@ public class StreamProcessor implements IStreamProcessor {
 			default:
 				// no-op
 				break;
+		}
+	}
+
+	private void handleBroadcastRestarted(Client c, final String uid) {
+		if (!kHandler.isConnected()) {
+			return;
+		}
+		KStream sender = getByUid(uid);
+		if (sender != null) {
+			sender.broadcastRestarted();
 		}
 	}
 

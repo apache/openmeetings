@@ -456,7 +456,16 @@ var Video = (function() {
 		}
 	}
 	function _refresh(_msg) {
-		const msg = _msg || {iceServers: iceServers};
+		const msg = _msg || {
+			iceServers: iceServers
+			, instanceUid: v.length > 0 ? v.data('instance-uid') : undefined
+		};
+		if (sd.self) {
+			VideoManager.sendMessage({
+				id : 'broadcastRestarted'
+				, uid: sd.uid
+			});
+		}
 		_cleanup();
 		const hasAudio = VideoUtil.hasMic(sd)
 			, state = {
@@ -567,9 +576,10 @@ var Video = (function() {
 	function _reattachStream() {
 		states.forEach(state => {
 			if (state.video && state.video.length > 0) {
-				const data = state.data;
-				if (data.rtcPeer) {
-					state.video[0].srcObject = sd.self ? data.rtcPeer.getLocalStream() : data.rtcPeer.getRemoteStream();
+				const data = state.data
+					, videoEl = state.video[0];
+				if (data.rtcPeer && (!videoEl.srcObject || !videoEl.srcObject.active)) {
+					videoEl.srcObject = sd.self ? data.rtcPeer.getLocalStream() : data.rtcPeer.getRemoteStream();
 				}
 			}
 		});

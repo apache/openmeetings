@@ -53,6 +53,7 @@ import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.Continuation;
 import org.kurento.client.IceCandidate;
+import org.kurento.client.ListenerSubscription;
 import org.kurento.client.MediaFlowState;
 import org.kurento.client.MediaObject;
 import org.kurento.client.MediaPipeline;
@@ -82,6 +83,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	private Optional<SipStackProcessor> sipProcessor;
 	private final ConcurrentMap<String, WebRtcEndpoint> listeners = new ConcurrentHashMap<>();
 	private Optional<CompletableFuture<Object>> flowoutFuture = Optional.empty();
+	private ListenerSubscription flowoutSubscription;
 	private Long chunkId;
 	private Type type;
 	private String sdpOffer;
@@ -154,7 +156,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		this.sdpOffer = sdpOffer;
 		outgoingMedia = createEndpoint(sd.getSid(), sd.getUid());
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
-		outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
+		flowoutSubscription = outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
 			log.info("Media Flow STATE :: {}, type {}, evt {}", evt.getState(), evt.getType(), evt.getMediaType());
 			if (MediaFlowState.NOT_FLOWING == evt.getState()) {
 				log.warn("FlowOut Future is created");
@@ -167,11 +169,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 					return null;
 				}, delayedExecutor(getFlowoutTimeout(), TimeUnit.SECONDS)));
 			} else {
-				flowoutFuture.ifPresent(f -> {
-					log.warn("FlowOut Future is canceled");
-					f.cancel(true);
-					flowoutFuture = Optional.empty();
-				});
+				dropFlowoutFuture();
 			}
 		});
 		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media FlowIn :: {}", evt));
@@ -192,6 +190,21 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 					.put(PARAM_ICE, kHandler.getTurnServers(c))
 					.put("stream", sd.toJson()));
 		}
+	}
+
+	public void broadcastRestarted() {
+		if (outgoingMedia != null && flowoutSubscription != null) {
+			outgoingMedia.removeMediaFlowOutStateChangeListener(flowoutSubscription);
+		}
+		dropFlowoutFuture();
+	}
+
+	private void dropFlowoutFuture() {
+		flowoutFuture.ifPresent(f -> {
+			log.warn("FlowOut Future is canceled");
+			f.cancel(true);
+			flowoutFuture = Optional.empty();
+		});
 	}
 
 	public void addListener(String sid, String uid, String sdpOffer) {

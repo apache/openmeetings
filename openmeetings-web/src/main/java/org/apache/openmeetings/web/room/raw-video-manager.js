@@ -36,7 +36,7 @@ var VideoManager = (function() {
 	}
 	function _onReceive(msg) {
 		const uid = msg.stream.uid;
-		$('#' + VideoUtil.getVid(uid)).remove();
+		_closeV($('#' + VideoUtil.getVid(uid)));
 		Video().init(msg);
 		OmUtil.log(uid + ' receiving video');
 	}
@@ -148,6 +148,9 @@ var VideoManager = (function() {
 		});
 	}
 	function _closeV(v) {
+		if (!v || v.length < 1) {
+			return;
+		}
 		if (v.dialog('instance') !== undefined) {
 			v.dialog('destroy');
 		}
