@@ -46,8 +46,7 @@
 	overflow-y: auto;
 }
 .adminForm legend, .installer legend {
-	padding: 0.2em 0.5em;
-	margin: 0px 10px;
+	padding: 0.5em 1em;
 	font-style: italic;
 	text-align: right;
 }
