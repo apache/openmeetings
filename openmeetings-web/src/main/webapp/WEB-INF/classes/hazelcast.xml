@@ -79,6 +79,7 @@
 	</member-attributes>
 	<network>
 		<join>
+			<auto-detection enabled="false"/>
 			<multicast enabled="false"/>
 			<tcp-ip enabled="false"/>
 			<aws enabled="false"/>
