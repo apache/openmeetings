@@ -112,6 +112,7 @@
 				<assembly.finalName>server</assembly.finalName>
 				<assembly.descriptor>unpacked</assembly.descriptor>
 				<src.pack.skip>true</src.pack.skip>
+				<logback.console><![CDATA[<appender-ref ref="CONSOLE" />]]></logback.console>
 			</properties>
 		</profile>
 		<profile>

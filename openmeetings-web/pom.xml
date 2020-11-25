@@ -283,8 +283,7 @@
 						**/fileinput.css,
 						**/adapter-latest.js,
 						**/kurento-utils.js,
-						**/NoSleep.js,
-						**/network.js
+						**/NoSleep.js
 					</packagingExcludes>
 					<warSourceExcludes>
 						**/raw-*.css,
@@ -295,8 +294,7 @@
 						**/fileinput.css,
 						**/adapter-latest.js,
 						**/kurento-utils.js,
-						**/NoSleep.js,
-						**/network.js
+						**/NoSleep.js
 					</warSourceExcludes>
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
 					<webResources>
@@ -310,6 +308,16 @@
 								<include>**/*.xml</include>
 								<include>**/*.properties</include>
 							</includes>
+							<excludes>
+								<exclude>**/raw-*.js</exclude>
+								<exclude>**/fabric.js</exclude>
+								<exclude>**/MathJax*.js</exclude>
+								<exclude>**/fileinput.js</exclude>
+								<exclude>**/fileinput.css</exclude>
+								<exclude>**/adapter-latest.js</exclude>
+								<exclude>**/kurento-utils.js</exclude>
+								<exclude>**/NoSleep.js</exclude>
+							</excludes>
 						</webResource>
 						<webResource>
 							<directory>${project.parent.basedir}/openmeetings-service/src/main/java</directory>

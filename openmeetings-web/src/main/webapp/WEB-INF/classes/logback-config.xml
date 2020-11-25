@@ -49,6 +49,6 @@
 	<logger name="org.apache.cxf.services" level="WARN" /> <!-- no payload -->
 	<root level="INFO">
 		<appender-ref ref="FILE" />
-		<appender-ref ref="CONSOLE" />
+		${logback.console}
 	</root>
 </configuration>

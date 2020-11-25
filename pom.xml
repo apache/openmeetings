@@ -36,6 +36,7 @@
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
 		<om.notquick.build>true</om.notquick.build>
+		<logback.console></logback.console>
 		<db>h2</db>
 		<autoModuleName>apache.openmeetings.parent</autoModuleName>
 		<jdk.version>11</jdk.version>
@@ -1181,6 +1182,7 @@
 				<om.notquick.build>false</om.notquick.build>
 				<wicket.configuration>DEVELOPMENT</wicket.configuration>
 				<src.pack.skip>true</src.pack.skip>
+				<logback.console><![CDATA[<appender-ref ref="CONSOLE" />]]></logback.console>
 			</properties>
 		</profile>
 		<profile>

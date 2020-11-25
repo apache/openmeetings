@@ -107,7 +107,7 @@
 			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}</directory>
 			<outputDirectory>${om.webapp}</outputDirectory>
 			<excludes>
-				<exclude>WEB-INF/classes/META-INF/**</exclude>
+				<exclude>WEB-INF/classes/**</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
@@ -115,7 +115,7 @@
 			<outputDirectory>${om.webapp}</outputDirectory>
 			<filtered>true</filtered>
 			<includes>
-				<include>WEB-INF/classes/META-INF/**</include>
+				<include>WEB-INF/classes/**</include>
 			</includes>
 		</fileSet>
 		<fileSet>
