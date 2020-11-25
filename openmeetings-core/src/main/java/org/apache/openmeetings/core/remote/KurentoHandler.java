@@ -190,7 +190,7 @@ public class KurentoHandler {
 			} catch (Exception e) {
 				connected.set(false);
 				clean();
-				log.warn("Fail to create Kurento client, will re-try in {} ms", checkTimeout);
+				log.warn("Fail to create Kurento client, will re-try in {} ms", checkTimeout, e);
 			}
 		};
 		kmsRecheckScheduler.scheduleAtFixedRate(check, 0L, checkTimeout, MILLISECONDS);
@@ -208,7 +208,7 @@ public class KurentoHandler {
 				KurentoClient copy = client;
 				client = null;
 				if (!copy.isClosed()) {
-					log.debug("Client will destroyed ...");
+					log.debug("Client will be destroyed ...");
 					copy.destroy();
 					log.debug(".... Client is destroyed");
 				}
