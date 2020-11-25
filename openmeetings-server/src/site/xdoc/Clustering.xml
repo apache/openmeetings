@@ -117,7 +117,7 @@
 							<li>Set <tt>instance-name</tt> for each server to unique value</li>
 							<li>Set <tt>server.url</tt> for each server to full <strong>public</strong> URL of this server (please NOTE using of numeric IP address might broke HTTPS))</li>
 							<li>
-								Comment out/delete following block:
+								Comment out/delete following blocks:
 								<source><![CDATA[
 <network>
 	<join>
@@ -126,6 +126,9 @@
 		<aws enabled="false"/>
 	</join>
 </network>
+								]]></source>
+								<source><![CDATA[
+<property name="hazelcast.discovery.enabled">false</property>
 								]]></source>
 							</li>
 							<li>
