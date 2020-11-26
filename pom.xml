@@ -115,7 +115,7 @@
 		<jetty.version>9.4.34.v20201102</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.67</bcprov-jdk15on.version>
-		<mockito.version>3.6.0</mockito.version>
+		<mockito.version>3.6.28</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.15.0</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
@@ -909,7 +909,7 @@
 						<excludes>
 							<exclude/>
 						</excludes>
-						<argLine>--add-modules java.se --add-exports java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED</argLine>
+						<argLine>@{argLine} --add-modules java.se --add-exports java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED</argLine>
 					</configuration>
 				</plugin>
 				<plugin>
