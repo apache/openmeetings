@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -663,28 +664,24 @@ public class User extends HistoricalEntity {
 	}
 
 	private String generateDisplayName() {
-		StringBuilder sb = new StringBuilder();
-		String delim = "";
+		StringJoiner joiner = new StringJoiner(" ")
+				.setEmptyValue(DISPLAY_NAME_NA);
 		OmLanguage l = LabelDao.getLanguage(languageId);
 		String first = l.isRtl() ? lastname : firstname;
 		String last = l.isRtl() ? firstname : lastname;
 		if (!Strings.isEmpty(first)) {
-			sb.append(first);
-			delim = " ";
+			joiner.add(first);
 		}
 		if (!Strings.isEmpty(last)) {
-			sb.append(delim).append(last);
+			joiner.add(last);
 		}
-		if (id != null && Strings.isEmpty(sb)) {
+		if (id != null && joiner.length() == 0) {
 			if (Type.CONTACT == type && address != null && !Strings.isEmpty(address.getEmail())) {
-				sb.append(address.getEmail());
+				joiner.add(address.getEmail());
 			} else {
-				sb.append(login);
+				joiner.add(login);
 			}
 		}
-		if (Strings.isEmpty(sb)) {
-			sb.append(DISPLAY_NAME_NA);
-		}
-		return escapeMarkup(sb).toString();
+		return escapeMarkup(joiner.toString()).toString();
 	}
 }

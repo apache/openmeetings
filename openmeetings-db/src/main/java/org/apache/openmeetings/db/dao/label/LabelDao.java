@@ -74,6 +74,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static final String KEY_ATTR = "key";
 	public static final String APP_RESOURCES_PREFIX = "Application";
 	public static final String APP_RESOURCES_SUFFIX = ".properties.xml";
+	private static final OmLanguage LNG_ENGLISH = new OmLanguage(Locale.ENGLISH);
 	private static final LinkedHashMap<Long, OmLanguage> languages = new LinkedHashMap<>();
 	private static final ConcurrentHashMap<Locale, List<StringLabel>> labelCache = new ConcurrentHashMap<>();
 	private static final Set<String> keys = new HashSet<>();
@@ -207,8 +208,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	public static OmLanguage getLanguage(Long id) {
-		OmLanguage l = id == null ? null : languages.get(id);
-		return l == null ? languages.get(1L) : l;
+		return languages.getOrDefault(id == null ? 1L : id, LNG_ENGLISH);
 	}
 
 	public static Locale getLocale(Long id) {
