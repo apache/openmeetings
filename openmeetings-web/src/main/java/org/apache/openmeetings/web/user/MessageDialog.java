@@ -148,8 +148,6 @@ public class MessageDialog extends Modal<PrivateMessage> {
 						MeetingMember mm = new MeetingMember();
 						mm.setUser(to);
 						mm.setDeleted(false);
-						mm.setInserted(a.getInserted());
-						mm.setUpdated(a.getUpdated());
 						mm.setAppointment(a);
 						attendees.add(mm);
 					}

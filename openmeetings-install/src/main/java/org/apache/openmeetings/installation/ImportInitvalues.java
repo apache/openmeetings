@@ -121,7 +121,6 @@ import static org.apache.wicket.csp.CSPDirectiveSrcValue.SELF;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.STRICT_DYNAMIC;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -408,7 +407,6 @@ public class ImportInitvalues {
 		Room r = new Room();
 		r.setName(name);
 		r.setComment("");
-		r.setInserted(new Date());
 		r.setCapacity(capacity);
 		r.setType(type);
 		r.setIspublic(isPublic);
@@ -467,7 +465,6 @@ public class ImportInitvalues {
 		g.setName(cfg.getGroup());
 		g.setInsertedby(1L);
 		g.setDeleted(false);
-		g.setInserted(new Date());
 		g = groupDao.update(g, null);
 		Configuration c = cfgDao.get(CONFIG_DEFAULT_GROUP_ID);
 		c.setValueN(g.getId());

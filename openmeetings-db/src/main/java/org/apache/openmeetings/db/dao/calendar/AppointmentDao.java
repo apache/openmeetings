@@ -43,8 +43,8 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
-import org.apache.openmeetings.db.manager.IInvitationManager;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.manager.IInvitationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,11 +112,9 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 			mmIds = meetingMemberDao.getMeetingMemberIdsByAppointment(a.getId());
 		}
 		if (newApp) {
-			a.setInserted(new Date());
 			a.setIcalId(randomUUID().toString());
 			em.persist(a);
 		} else {
-			a.setUpdated(new Date());
 			a = em.merge(a);
 		}
 		if (sendmails) {
@@ -162,7 +160,6 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 		if (a == null || a.getId() == null) {
 			return;
 		}
-		a.setUpdated(new Date());
 		a.setDeleted(true);
 		a.setMeetingMembers(null);
 		if (a.getRoom().isAppointment()) {

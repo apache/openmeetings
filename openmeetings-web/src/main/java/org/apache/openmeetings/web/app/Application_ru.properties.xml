@@ -563,6 +563,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.NONE"><![CDATA[Нет]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[Посылается]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[дней]]></entry>
+	<entry key="admin.group.form.hours"><![CDATA[hours]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[Разрешить ограничения]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[Лого]]></entry>
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[Максимальный размер файлов]]></entry>
@@ -571,6 +572,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.group.form.recordingTtl"><![CDATA[Записи стираются через]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[Напоминание о стирании посылается за]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[Тэг]]></entry>
+	<entry key="admin.group.new.users.notification.interval"><![CDATA[Интервал оповещения о новых пользователях]]></entry>
 	<entry key="admin.oauth.attr.oauth"><![CDATA[Атрибут пользователя OAuth]]></entry>
 	<entry key="admin.oauth.attr.om"><![CDATA[Атрибут пользователя OM]]></entry>
 	<entry key="admin.oauth.req.info.method"><![CDATA[HTTP метод для инфо]]></entry>
@@ -897,6 +899,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="send.on.enter"><![CDATA[Отправить по Enter]]></entry>
 	<entry key="sound.enable"><![CDATA[Включить звук]]></entry>
 	<entry key="sound.mute"><![CDATA[Выключить звук]]></entry>
+	<entry key="template.new.group.users.notification.body"><![CDATA[Уважаемый модератор "{0}" группы,<br/>
+<br/>
+{1} новых пользователей было добавлено в течение последних {2} часов<br/>
+Вы можете увидеть их если зайдёте на {3} OM сервер в раздел Админ -> Группы]]></entry>
+	<entry key="template.new.group.users.notification.footer"><![CDATA[С уважением,<br/>
+Команда поддержки {0}.]]></entry>
+	<entry key="template.new.group.users.notification.subject"><![CDATA[[{0}] Новые пользователи "{1}" группы]]></entry>
 	<entry key="template.recording.expiring.body"><![CDATA[Ваша {0} запись(и) будут автоматически удалены
 		в течении {1} дней. Пожалуйста скачайте запись если она Вам нужна.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[С уважением,<br/>

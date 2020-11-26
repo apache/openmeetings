@@ -85,6 +85,10 @@
 			p:targetObject-ref="reminderJob" p:targetMethod="checkHealth" p:concurrent="false" />
 	<bean id="triggerCheckHealth" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
 			p:jobDetail-ref="checkHealthJobDetail" p:startDelay="5000" p:repeatInterval="15000"/>
+	<bean id="notifyNewGroupUsersDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+			p:targetObject-ref="reminderJob" p:targetMethod="notifyNewGroupUsers" p:concurrent="false" />
+	<bean id="triggerNotifyNewGroupUsers" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
+			p:jobDetail-ref="notifyNewGroupUsersDetail" p:startDelay="5000" p:repeatInterval="3600000"/>
 
 	<!-- Mail related jobs -->
 	<bean id="resetSendingMailStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
@@ -110,6 +114,7 @@
 				<ref bean="triggerSendMails" />
 				<ref bean="triggerLoadRss" />
 				<ref bean="triggerCheckHealth" />
+				<ref bean="triggerNotifyNewGroupUsers" />
 			</list>
 		</property>
 	</bean>

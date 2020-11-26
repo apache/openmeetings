@@ -20,16 +20,18 @@ package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
+import static org.apache.openmeetings.db.util.DaoHelper.single;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.user.GroupUser;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.DaoHelper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,9 +46,9 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 
 	@Override
 	public GroupUser get(Long id) {
-		TypedQuery<GroupUser> q = em.createNamedQuery("getGroupUsersById", GroupUser.class);
-		q.setParameter("id", id);
-		return q.getSingleResult();
+		return em.createNamedQuery("getGroupUsersById", GroupUser.class)
+				.setParameter("id", id)
+				.getSingleResult();
 	}
 
 	@Override
@@ -73,14 +75,17 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	}
 
 	public GroupUser getByGroupAndUser(Long groupId, Long userId) {
-		List<GroupUser> list = em.createNamedQuery("isUserInGroup", GroupUser.class)
-				.setParameter(PARAM_GROUPID, groupId).setParameter(PARAM_USER_ID, userId).getResultList();
-		return list.isEmpty() ? null : list.get(0);
+		return single(em.createNamedQuery("isUserInGroup", GroupUser.class)
+				.setParameter(PARAM_GROUPID, groupId)
+				.setParameter(PARAM_USER_ID, userId)
+				.getResultList());
 	}
 
 	public boolean isUserInGroup(long groupId, long userId) {
 		return !em.createNamedQuery("isUserInGroup", GroupUser.class)
-				.setParameter(PARAM_GROUPID, groupId).setParameter(PARAM_USER_ID, userId).getResultList().isEmpty();
+				.setParameter(PARAM_GROUPID, groupId).setParameter(PARAM_USER_ID, userId)
+				.getResultList()
+				.isEmpty();
 	}
 
 	@Override
@@ -90,14 +95,14 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 
 	@Override
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery(GroupUser.class.getSimpleName(), "ou", search, false, true, null, searchFields), Long.class);
-		return q.getSingleResult();
+		return em.createQuery(DaoHelper.getSearchQuery(GroupUser.class.getSimpleName(), "ou", search, false, true, null, searchFields), Long.class)
+				.getSingleResult();
 	}
 
 	public long count(long groupId) {
-		TypedQuery<Long> q = em.createNamedQuery("countGroupUsers", Long.class);
-		q.setParameter("id", groupId);
-		return q.getSingleResult();
+		return em.createNamedQuery("countGroupUsers", Long.class)
+				.setParameter("id", groupId)
+				.getSingleResult();
 	}
 
 	@Override
@@ -108,5 +113,18 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	@Override
 	public void delete(GroupUser entity, Long userId) {
 		throw UNSUPPORTED;
+	}
+
+	public long getGroupUserCountAddedAfter(Long id, Date date) {
+		return em.createNamedQuery("getGroupUserCountAddedAfter", Long.class)
+				.setParameter("id", id)
+				.setParameter("inserted", date)
+				.getSingleResult();
+	}
+
+	public List<User> getGroupModerators(Long id) {
+		return em.createNamedQuery("getGroupModerators", User.class)
+				.setParameter("id", id)
+				.getResultList();
 	}
 }

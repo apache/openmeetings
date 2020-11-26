@@ -21,7 +21,6 @@ package org.apache.openmeetings.db.dao.server;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -124,13 +123,11 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		try {
 			entity.setDeleted(false);
 			if (entity.getId() == null) {
-				entity.setInserted(new Date());
 				if (userId != null) {
 					entity.setInsertedby(userDao.get(userId));
 				}
 				em.persist(entity);
 			} else {
-				entity.setUpdated(new Date());
 				if (userId != null) {
 					entity.setUpdatedby(userDao.get(userId));
 				}
@@ -145,7 +142,6 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	@Override
 	public void delete(LdapConfig entity, Long userId) {
 		if (entity.getId() != null) {
-			entity.setUpdated(new Date());
 			if (userId != null) {
 				entity.setUpdatedby(userDao.get(userId));
 			}

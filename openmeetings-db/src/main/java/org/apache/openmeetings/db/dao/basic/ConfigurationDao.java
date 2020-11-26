@@ -27,7 +27,6 @@ import static org.apache.wicket.csp.CSPDirectiveSrcValue.STRICT_DYNAMIC;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -228,13 +227,11 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		String key = entity.getKey();
 		String value = entity.getValue();
 		if (entity.getId() == null || entity.getId().longValue() <= 0) {
-			entity.setInserted(new Date());
 			entity.setDeleted(deleted);
 			em.persist(entity);
 		} else {
 			entity.setUser(userDao.get(userId));
 			entity.setDeleted(deleted);
-			entity.setUpdated(new Date());
 			entity = em.merge(entity);
 		}
 		switch (key) {
@@ -357,7 +354,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	@Override
 	public void delete(Configuration entity, Long userId) {
-		entity.setUpdated(new Date());
 		this.update(entity, userId, true);
 	}
 

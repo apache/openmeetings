@@ -214,7 +214,6 @@ public class InvitationManager implements IInvitationManager {
 			invitation.getInvitee().setLanguageId(languageId);
 		}
 		invitation.setRoom(room);
-		invitation.setInserted(new Date());
 		invitation.setAppointment(appointment);
 
 		return invitation;

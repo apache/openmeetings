@@ -20,7 +20,6 @@ package org.apache.openmeetings.db.dao.file;
 
 import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -82,7 +81,6 @@ public class BaseFileItemDao implements IDataProviderDao<BaseFileItem> {
 			return;
 		}
 		f.setDeleted(true);
-		f.setUpdated(new Date());
 
 		updateBase(f);
 	}
@@ -118,10 +116,8 @@ public class BaseFileItemDao implements IDataProviderDao<BaseFileItem> {
 			}
 		}
 		if (f.getId() == null) {
-			f.setInserted(new Date());
 			em.persist(f);
 		} else {
-			f.setUpdated(new Date());
 			f = em.merge(f);
 		}
 		return f;

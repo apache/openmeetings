@@ -232,10 +232,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			if (u.getRegdate() == null) {
 				u.setRegdate(new Date());
 			}
-			u.setInserted(new Date());
 			em.persist(u);
 		} else {
-			u.setUpdated(new Date());
 			u = em.merge(u);
 		}
 		return u;
@@ -293,7 +291,6 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		if (u != null && u.getId() != null) {
 			u.setGroupUsers(new ArrayList<>());
 			u.setDeleted(true);
-			u.setUpdated(new Date());
 			u.setSipUser(null);
 			Address adr = u.getAddress();
 			if (adr != null) {

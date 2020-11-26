@@ -22,7 +22,6 @@ import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -109,10 +108,8 @@ public class MailMessageDao implements IDataProviderDao<MailMessage> {
 	@Override
 	public MailMessage update(MailMessage m, Long userId) {
 		if (m.getId() == null) {
-			m.setInserted(new Date());
 			em.persist(m);
 		} else {
-			m.setUpdated(new Date());
 			m = em.merge(m);
 		}
 		return m;

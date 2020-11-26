@@ -21,7 +21,6 @@ package org.apache.openmeetings.db.dao.user;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -108,19 +107,21 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 		return em.createNamedQuery("getLimitedGroups", Group.class).getResultList();
 	}
 
+	public List<Group> getGroupsForUserNotifications() {
+		return em.createNamedQuery("getGroupsForUserNotifications", Group.class).getResultList();
+	}
+
 	@Override
 	public Group update(Group entity, Long userId) {
 		if (entity.getId() == null) {
 			if (userId != null) {
 				entity.setInsertedby(userId);
 			}
-			entity.setInserted(new Date());
 			em.persist(entity);
 		} else {
 			if (userId != null) {
 				entity.setUpdatedby(userId);
 			}
-			entity.setUpdated(new Date());
 			entity = em.merge(entity);
 		}
 		return entity;

@@ -95,10 +95,8 @@ public class RecordingChunkDao {
 	public RecordingChunk update(RecordingChunk chunk) {
 		log.debug("[update]: ");
 		if (chunk.getId() == null) {
-			chunk.setInserted(new Date());
 			em.persist(chunk);
 		} else {
-			chunk.setUpdated(new Date());
 			chunk = em.merge(chunk);
 		}
 		return chunk;

@@ -35,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractJob {
 	private static Logger log = LoggerFactory.getLogger(AbstractJob.class);
 	@Autowired
-	private GroupDao groupDao;
+	GroupDao groupDao;
 	@Autowired
 	RecordingDao recordingDao;
 

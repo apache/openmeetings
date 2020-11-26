@@ -563,6 +563,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.NONE"><![CDATA[無し]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[送信中]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[日]]></entry>
+	<entry key="admin.group.form.hours"><![CDATA[hours]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[制限を有効化]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[ロゴ]]></entry>
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[最大ファイル・サイズ]]></entry>
@@ -571,6 +572,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.group.form.recordingTtl"><![CDATA[録画有効期限]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[有効期限切れの予告通知]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[タグ]]></entry>
+	<entry key="admin.group.new.users.notification.interval"><![CDATA[New user notification interval]]></entry>
 	<entry key="admin.oauth.attr.oauth"><![CDATA[OAuth User attribute]]></entry>
 	<entry key="admin.oauth.attr.om"><![CDATA[OM User attribute]]></entry>
 	<entry key="admin.oauth.req.info.method"><![CDATA[Request info method]]></entry>
@@ -897,6 +899,13 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="send.on.enter"><![CDATA[Enterを押して送信]]></entry>
 	<entry key="sound.enable"><![CDATA[消音を解除]]></entry>
 	<entry key="sound.mute"><![CDATA[消音]]></entry>
+	<entry key="template.new.group.users.notification.body"><![CDATA[Dear "{0}" group moderator,<br/>
+<br/>
+{1} new users were added to the group in the last {2} hours<br/>
+Please visit {3} OM server and check them under Admin -> Groups]]></entry>
+	<entry key="template.new.group.users.notification.footer"><![CDATA[Regards,<br/>
+{0} Support Team.]]></entry>
+	<entry key="template.new.group.users.notification.subject"><![CDATA[[{0}] New "{1}" group users]]></entry>
 	<entry key="template.recording.expiring.body"><![CDATA[あなたの録画（{0}）は {1} 日後に自動削除されます。
 		この録画を保存する場合は、自動削除される前にダウンロードしてください。]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[<br/>

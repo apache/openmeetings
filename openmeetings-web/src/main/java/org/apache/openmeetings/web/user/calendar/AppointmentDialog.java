@@ -189,8 +189,6 @@ public class AppointmentDialog extends Modal<Appointment> {
 						MeetingMember mm = new MeetingMember();
 						mm.setUser(u);
 						mm.setDeleted(false);
-						mm.setInserted(a.getInserted());
-						mm.setUpdated(a.getUpdated());
 						mm.setAppointment(a);
 						mms.add(mm);
 					}

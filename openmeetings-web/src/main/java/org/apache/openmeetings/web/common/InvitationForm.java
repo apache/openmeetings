@@ -167,7 +167,6 @@ public abstract class InvitationForm extends Form<Invitation> {
 		Invitation i = new Invitation(getModelObject());
 		i.setInvitedBy(userDao.get(getUserId()));
 		i.setId(null);
-		i.setUpdated(null);
 		i.setUsed(false);
 
 		i.setPassword(CryptProvider.get().hash(i.getPassword()));

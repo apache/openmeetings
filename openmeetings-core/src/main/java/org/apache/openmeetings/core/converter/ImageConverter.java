@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.Optional;
 import java.util.function.DoubleConsumer;
 
@@ -111,7 +110,6 @@ public class ImageConverter extends BaseConverter {
 
 		String img = destinationFile.getName();
 		User us = userDao.get(userId);
-		us.setUpdated(new Date());
 		us.setPictureUri(img);
 		userDao.update(us, userId);
 

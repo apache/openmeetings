@@ -21,7 +21,6 @@ package org.apache.openmeetings.db.dao.calendar;
 import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -90,10 +89,8 @@ public class OmCalendarDao implements IDataProviderDao<OmCalendar> {
 	 */
 	public OmCalendar update(OmCalendar c) {
 		if (c.getId() == null) {
-			c.setInserted(new Date());
 			em.persist(c);
 		} else {
-			c.setUpdated(new Date());
 			c = em.merge(c);
 		}
 		return c;

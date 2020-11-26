@@ -563,6 +563,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.NONE"><![CDATA[keine]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[senden]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[Tage]]></entry>
+	<entry key="admin.group.form.hours"><![CDATA[hours]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[Begrenzungen aktiv]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[Logo]]></entry>
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[maximale Dateigröße]]></entry>
@@ -571,6 +572,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.group.form.recordingTtl"><![CDATA[Aufnahmen laufen ab in]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[Erinnerung des Ablaufs gesenet in]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[Markierung]]></entry>
+	<entry key="admin.group.new.users.notification.interval"><![CDATA[New user notification interval]]></entry>
 	<entry key="admin.oauth.attr.oauth"><![CDATA[OAuth Nutzer Attribute]]></entry>
 	<entry key="admin.oauth.attr.om"><![CDATA[OM Nutzer-Attribute]]></entry>
 	<entry key="admin.oauth.req.info.method"><![CDATA[Info-Methode anfragen]]></entry>
@@ -902,6 +904,13 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="send.on.enter"><![CDATA[Abschicken bei Drücken der Eingabetaste]]></entry>
 	<entry key="sound.enable"><![CDATA[Ton einschalten]]></entry>
 	<entry key="sound.mute"><![CDATA[Ton ausschalten]]></entry>
+	<entry key="template.new.group.users.notification.body"><![CDATA[Dear "{0}" group moderator,<br/>
+<br/>
+{1} new users were added to the group in the last {2} hours<br/>
+Please visit {3} OM server and check them under Admin -> Groups]]></entry>
+	<entry key="template.new.group.users.notification.footer"><![CDATA[Regards,<br/>
+{0} Support Team.]]></entry>
+	<entry key="template.new.group.users.notification.subject"><![CDATA[[{0}] New "{1}" group users]]></entry>
 	<entry key="template.recording.expiring.body"><![CDATA[Ihre momentane {0} Aufnahme wird automatisch in {1} Tagen gelöscht. Wenn Sie diese Aufnahme speichern möchten, laden Sie sie vorher herunter.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[Grüße,<br/>
        {0} Support Team.]]></entry>

@@ -305,7 +305,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[محددات]]></entry>
 	<entry key="832"><![CDATA[هل أنت متأكد؟]]></entry>
 	<entry key="833"><![CDATA[هل تريد حقًا حذف هذا العنصر؟ يجب عليك الضغط على زر الحفظ لتخزين التغييرات!]]></entry>
-	<entry key="843"><![CDATA[     خصائص الأداة]]></entry>
+	<entry key="843"><![CDATA[خصائص الأداة]]></entry>
 	<entry key="848"><![CDATA[عرض الشاشة]]></entry>
 	<entry key="850"><![CDATA[يريد مشاركة شاشته. هل تريد ان تراها؟]]></entry>
 	<entry key="860"><![CDATA[تسجيلاتي]]></entry>
@@ -349,7 +349,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1115"><![CDATA[اسم ملف الاعدادات]]></entry>
 	<entry key="1116"><![CDATA[إذا قمت بتمكين "إضافة مجال إلى اسم المستخدم" ، تتم إضافة قيمة الحقل "المجال" إلى كل تسجيل دخول يدخله المستخدم في مربع تسجيل الدخول. هذا مفيد إذا تم تخزين تسجيل الدخول في Ldap بما في ذلك اسم المجال. مثال: يقوم المستخدم بإدخال المجال "hans" محددًا كـ "localhost.com" ، تسجيل الدخول الذي تم التحقق منه مقابل Ldap هو: hans@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[أضف المجال إلى اسم المستخدم]]></entry>
-	<entry key="1118"><![CDATA[Domain]]></entry>
+	<entry key="1118"><![CDATA[نطاق]]></entry>
 	<entry key="1121"><![CDATA[نص الحافظة البعيد]]></entry>
 	<entry key="1131"><![CDATA[ادعوة مستخدم إلى غرفة الاجتماعات]]></entry>
 	<entry key="1132"><![CDATA[اختر غرفة اجتماعات. سيتلقى المستخدم المدعو رسالة باسمك ورابط للغرفة.]]></entry>
@@ -563,6 +563,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.NONE"><![CDATA[لا شيء]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[إرسال]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[ايام]]></entry>
+	<entry key="admin.group.form.hours"><![CDATA[hours]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[تمكين الحدود]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[شعار]]></entry>
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[الحجم الأقصى للملفات]]></entry>
@@ -571,6 +572,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.group.form.recordingTtl"><![CDATA[التسجيلات تنتهي في]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[تم إرسال تذكير انتهاء الصلاحية]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[وسم]]></entry>
+	<entry key="admin.group.new.users.notification.interval"><![CDATA[New user notification interval]]></entry>
 	<entry key="admin.oauth.attr.oauth"><![CDATA[سمة مستخدم النظام الخارجي]]></entry>
 	<entry key="admin.oauth.attr.om"><![CDATA[سمة مستخدم النظام]]></entry>
 	<entry key="admin.oauth.req.info.method"><![CDATA[طريقة طلب المعلومات]]></entry>
@@ -896,6 +898,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="send.on.enter"><![CDATA[أرسل على Enter]]></entry>
 	<entry key="sound.enable"><![CDATA[تمكين الصوت]]></entry>
 	<entry key="sound.mute"><![CDATA[كتم الصوت]]></entry>
+	<entry key="template.new.group.users.notification.body"><![CDATA[Dear "{0}" group moderator,<br/>
+<br/>
+{1} new users were added to the group in the last {2} hours<br/>
+Please visit {3} OM server and check them under Admin -> Groups]]></entry>
+	<entry key="template.new.group.users.notification.footer"><![CDATA[Regards,<br/>
+{0} Support Team.]]></entry>
+	<entry key="template.new.group.users.notification.subject"><![CDATA[[{0}] New "{1}" group users]]></entry>
 	<entry key="template.recording.expiring.body"><![CDATA[سيتم حذف تسجيلك {0} الأخير تلقائيًا
 في {1} يوم. إذا كنت ترغب في حفظ هذا التسجيل ، يرجى تنزيله قبل ذلك الحين.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[مع التحيات,<br/>
@@ -949,7 +958,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="wait-moderator.title"><![CDATA[يرجى التحلي بالصبر ...]]></entry>
 	<entry key="warn.nogroup"><![CDATA[تمت إضافة المستخدم لكن يجب إنساب هذا المستخدم إلى تنظيم و إلا لن يمكنه تسجيل الدخول]]></entry>
 	<entry key="warn.notverified"><![CDATA[لقد سجلت بنجاح. سيتم إرسال بريد إلكتروني برمز التحقق إلى صندوق البريد الخاص بك.]]></entry>
-	<entry key="wb.tool.math.formula"><![CDATA[     صيغ الرياضيات]]></entry>
+	<entry key="wb.tool.math.formula"><![CDATA[صيغ الرياضيات]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[دليل بناء الجملة الرياضاتيه]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>
 	<entry key="wb.tool.white-out"><![CDATA[تبييض]]></entry>

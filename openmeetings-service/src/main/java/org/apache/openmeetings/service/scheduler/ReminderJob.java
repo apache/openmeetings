@@ -24,12 +24,22 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOAR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.Health;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
+import org.apache.openmeetings.service.mail.template.subject.NewGroupUsersNotificationTemplate;
 import org.apache.openmeetings.service.mail.template.subject.RecordingExpiringTemplate;
 import org.apache.openmeetings.service.mail.template.subject.SubjectEmailTemplate;
 import org.apache.openmeetings.util.crypt.CryptProvider;
@@ -52,6 +62,11 @@ public class ReminderJob extends AbstractJob {
 	private MailHandler mailHandler;
 	@Autowired
 	private ConfigurationDao cfgDao;
+	@Autowired
+	private GroupUserDao groupUserDao;
+
+	//package private for testing
+	Map<Long, LocalDateTime> groupNotifications = new HashMap<>();
 
 	public void remindMeetings() {
 		log.trace("ReminderJob.remindMeetings");
@@ -116,5 +131,30 @@ public class ReminderJob extends AbstractJob {
 		Health.INSTANCE.setInited(isInitComplete())
 				.setInstalled(CryptProvider.get() != null)
 				.setDbOk(dbOk);
+	}
+
+	public void notifyNewGroupUsers() {
+		log.trace("ReminderJob.notifyNewGroupUsers");
+		if (!isInitComplete()) {
+			return;
+		}
+		LocalDateTime now = LocalDateTime.now();
+		for (Group g : groupDao.getGroupsForUserNotifications()) {
+			LocalDateTime lastChecked = groupNotifications.get(g.getId());
+			if (lastChecked == null) {
+				groupNotifications.put(g.getId(), now);
+				continue;
+			}
+			if (Duration.between(now, lastChecked).minusHours(g.getNotifyInterval()).isNegative()) {
+				long count = groupUserDao.getGroupUserCountAddedAfter(g.getId(), Date.from(lastChecked.atZone(ZoneId.systemDefault()).toInstant()));
+				if (count > 0) {
+					for (User u : groupUserDao.getGroupModerators(g.getId())) {
+						SubjectEmailTemplate templ = NewGroupUsersNotificationTemplate.get(u, g, count);
+						mailHandler.send(u.getAddress().getEmail(), templ.getSubject(), templ.getEmail());
+					}
+				}
+				groupNotifications.put(g.getId(), now);
+			}
+		}
 	}
 }

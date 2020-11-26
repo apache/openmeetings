@@ -32,7 +32,6 @@ import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -401,7 +400,6 @@ public abstract class FileTreePanel extends Panel {
 		f.setName(name);
 		f.setHash(randomUUID().toString());
 		f.setInsertedBy(getUserId());
-		f.setInserted(new Date());
 		f.setType(Type.FOLDER);
 		f.setOwnerId(p.getOwnerId());
 		f.setGroupId(p.getGroupId());

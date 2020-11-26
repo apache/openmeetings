@@ -22,6 +22,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -72,5 +74,15 @@ public abstract class HistoricalEntity implements IDataProviderEntity {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	@PrePersist
+	void insertedAt() {
+		this.inserted = new Date();
+	}
+
+	@PreUpdate
+	void updatedAt() {
+		this.updated = new Date();
 	}
 }

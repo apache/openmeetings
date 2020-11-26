@@ -47,6 +47,7 @@ import org.apache.openmeetings.db.entity.HistoricalEntity;
 @NamedQuery(name = "getNondeletedGroups", query = "SELECT g FROM Group g WHERE g.deleted = false ORDER BY g.id")
 @NamedQuery(name = "countGroups", query = "SELECT COUNT(g) FROM Group AS g WHERE g.deleted = false")
 @NamedQuery(name = "getLimitedGroups", query = "SELECT g FROM Group AS g WHERE g.deleted = false AND g.limited = true")
+@NamedQuery(name = "getGroupsForUserNotifications", query = "SELECT g FROM Group AS g WHERE g.deleted = false AND g.notifyInterval > 0")
 @Table(name = "om_group", indexes = {
 		@Index(name = "group_name_idx", columnList = "name")
 })
@@ -116,6 +117,11 @@ public class Group extends HistoricalEntity {
 	@XmlElement(name = "external", required = false)
 	@XmlJavaTypeAdapter(value = BooleanAdapter.class, type = boolean.class)
 	private boolean external;
+
+	@Column(name = "notify_user_int", nullable = false)
+	@XmlElement(name = "notifyNewUsersInterval", required = false)
+	@XmlJavaTypeAdapter(value = IntAdapter.class, type = int.class)
+	private int notifyInterval;
 
 	public Long getInsertedby() {
 		return insertedby;
@@ -223,6 +229,14 @@ public class Group extends HistoricalEntity {
 	public Group setExternal(boolean external) {
 		this.external = external;
 		return this;
+	}
+
+	public int getNotifyInterval() {
+		return notifyInterval;
+	}
+
+	public void setNotifyInterval(int notifyInterval) {
+		this.notifyInterval = notifyInterval;
 	}
 
 	@Override

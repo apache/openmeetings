@@ -44,6 +44,8 @@ import org.apache.openmeetings.db.entity.HistoricalEntity;
 @NamedQuery(name = "getGroupUsersById", query = "SELECT gu FROM GroupUser gu WHERE gu.id = :id")
 @NamedQuery(name = "getGroupUsersByGroupId", query = "SELECT gu FROM GroupUser gu WHERE gu.group.id = :id")
 @NamedQuery(name = "isUserInGroup", query = "SELECT gu FROM GroupUser gu WHERE gu.group.id = :groupId AND gu.user.id = :userId")
+@NamedQuery(name = "getGroupUserCountAddedAfter", query = "SELECT COUNT(gu) FROM GroupUser gu WHERE gu.deleted = false AND gu.group.id = :id AND gu.inserted > :inserted")
+@NamedQuery(name = "getGroupModerators", query = "SELECT gu.user FROM GroupUser gu WHERE gu.deleted = false AND gu.moderator = true AND  gu.group.id = :id")
 @Table(name = "group_user")
 @XmlRootElement(name = "user_organisation")
 public class GroupUser extends HistoricalEntity {
