@@ -145,7 +145,7 @@ public class ReminderJob extends AbstractJob {
 				groupNotifications.put(g.getId(), now);
 				continue;
 			}
-			if (Duration.between(now, lastChecked).minusHours(g.getNotifyInterval()).isNegative()) {
+			if (!Duration.between(lastChecked, now).minusHours(g.getNotifyInterval()).isNegative()) {
 				long count = groupUserDao.getGroupUserCountAddedAfter(g.getId(), Date.from(lastChecked.atZone(ZoneId.systemDefault()).toInstant()));
 				if (count > 0) {
 					for (User u : groupUserDao.getGroupModerators(g.getId())) {
