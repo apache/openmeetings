@@ -51,7 +51,7 @@ class FileItemTest {
 		File f = fileItem.getFile(null);
 
 		assertTrue(f.getName().endsWith("png"));
-		assertEquals(f.getName(), "page-0000.png");
+		assertEquals("page-0000.png", f.getName());
 	}
 
 	@Test
@@ -65,7 +65,7 @@ class FileItemTest {
 		File f = fileItem.getOriginal();
 
 		assertTrue(f.getName().endsWith("pdf"));
-		assertEquals(f.getName(), "6594186e-c6bb-49d5-9f66-829e45599aaa.pdf");
+		assertEquals("6594186e-c6bb-49d5-9f66-829e45599aaa.pdf", f.getName());
 	}
 
 	@Test
@@ -79,7 +79,7 @@ class FileItemTest {
 		File f = fileItem.getOriginal();
 
 		assertTrue(f.getName().endsWith("pdf"));
-		assertEquals(f.getName(), "6594186e-c6bb-49d5-9f66-829e45599aaa.pdf");
+		assertEquals("6594186e-c6bb-49d5-9f66-829e45599aaa.pdf", f.getName());
 	}
 
 	private void wrapper(Runnable r) {
@@ -101,7 +101,7 @@ class FileItemTest {
 			File f = fileItem.getOriginal();
 
 			assertTrue(f.getName().endsWith("docx"));
-			assertEquals(f.getName(), "d44ab2c5-fd5d-4903-8fa7-292286d72a5f.docx");
+			assertEquals("d44ab2c5-fd5d-4903-8fa7-292286d72a5f.docx", f.getName());
 		});
 	}
 
@@ -116,7 +116,7 @@ class FileItemTest {
 			File f = fileItem.getOriginal();
 
 			assertTrue(f.getName().endsWith("docx"));
-			assertEquals(f.getName(), "d44ab2c5-fd5d-4903-8fa7-292286d72a5f.docx");
+			assertEquals("d44ab2c5-fd5d-4903-8fa7-292286d72a5f.docx", f.getName());
 		});
 	}
 
@@ -131,7 +131,7 @@ class FileItemTest {
 		File f = fileItem.getFile(null);
 
 		assertTrue(f.getName().endsWith("png"));
-		assertEquals(f.getName(), "page-0000.png");
+		assertEquals("page-0000.png", f.getName());
 	}
 
 	@Test
@@ -145,7 +145,7 @@ class FileItemTest {
 		File f = fileItem.getFile("pdf");
 
 		assertTrue(f.getName().endsWith("pdf"));
-		assertEquals(f.getName(), "d44ab2c5-fd5d-4903-8fa7-292286d72a5f.pdf");
+		assertEquals("d44ab2c5-fd5d-4903-8fa7-292286d72a5f.pdf", f.getName());
 	}
 
 }

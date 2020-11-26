@@ -35,11 +35,11 @@ public abstract class AbstractOmDateTimePicker<T> extends AbstractDateTimePicker
 	private static final String DEFAULT_DATE_FORMAT = "yyyy/MM/dd";
 	private static final String DEFAULT_DATE_TIME_FORMAT = DEFAULT_DATE_FORMAT + " HH:mm:ss";
 
-	public AbstractOmDateTimePicker(String id, IModel<T> model) {
+	protected AbstractOmDateTimePicker(String id, IModel<T> model) {
 		this(id, model, getDateTimeFormat());
 	}
 
-	public AbstractOmDateTimePicker(String id, IModel<T> model, String format) {
+	protected AbstractOmDateTimePicker(String id, IModel<T> model, String format) {
 		super(id, model, new DatetimePickerConfig()
 				//.useLocale(WebSession.get().getLocale().toLanguageTag())
 				.withFormat(patch(format))

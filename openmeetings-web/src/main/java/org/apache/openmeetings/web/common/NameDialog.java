@@ -40,11 +40,11 @@ public abstract class NameDialog extends Modal<String> {
 	private final String name;
 	private RequiredTextField<String> title;
 
-	public NameDialog(String id) {
+	protected NameDialog(String id) {
 		this(id, null);
 	}
 
-	public NameDialog(String id, String name) {
+	protected NameDialog(String id, String name) {
 		super(id, Model.of(name));
 		this.name = name;
 		form = new Form<>("form", getModel());

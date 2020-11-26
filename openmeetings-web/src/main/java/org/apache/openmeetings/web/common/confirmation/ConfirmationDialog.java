@@ -34,7 +34,7 @@ public abstract class ConfirmationDialog extends TextContentModal {
 	private static final long serialVersionUID = 1L;
 	private BootstrapAjaxLink<String> okButton;
 
-	public ConfirmationDialog(String id, IModel<String> title, IModel<String> model) {
+	protected ConfirmationDialog(String id, IModel<String> title, IModel<String> model) {
 		super(id, model);
 		header(title);
 	}

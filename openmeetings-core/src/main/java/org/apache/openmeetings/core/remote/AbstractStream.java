@@ -29,7 +29,7 @@ public abstract class AbstractStream {
 	protected final String sid;
 	protected final String uid;
 
-	public AbstractStream(final String sid, final String uid) {
+	protected AbstractStream(final String sid, final String uid) {
 		this.sid = sid;
 		this.uid = uid;
 	}

@@ -31,7 +31,7 @@ public abstract class ImagePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	protected final WebMarkupContainer profile = new TransparentWebMarkupContainer("profile");
 
-	public ImagePanel(String id) {
+	protected ImagePanel(String id) {
 		super(id);
 		add(profile.setOutputMarkupId(true));
 	}

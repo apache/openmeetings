@@ -25,11 +25,11 @@ import org.apache.wicket.model.IModel;
 public abstract class UserBasePanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 
-	public UserBasePanel(String id) {
+	protected UserBasePanel(String id) {
 		super(id);
 	}
 
-	public UserBasePanel(String id, IModel<?> model) {
+	protected UserBasePanel(String id, IModel<?> model) {
 		super(id, model);
 	}
 }

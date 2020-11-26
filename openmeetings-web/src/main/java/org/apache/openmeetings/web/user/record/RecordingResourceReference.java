@@ -55,7 +55,7 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 	@SpringBean
 	private UserDao userDao;
 
-	public RecordingResourceReference(String name) {
+	protected RecordingResourceReference(String name) {
 		super(name);
 		Injector.get().inject(this);
 	}

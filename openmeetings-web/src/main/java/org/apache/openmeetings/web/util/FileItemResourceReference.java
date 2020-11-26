@@ -35,7 +35,7 @@ public abstract class FileItemResourceReference<T extends BaseFileItem> extends 
 	private static final long serialVersionUID = 1L;
 	protected static final Logger log = LoggerFactory.getLogger(FileItemResourceReference.class);
 
-	public FileItemResourceReference(String name) {
+	protected FileItemResourceReference(String name) {
 		super(name);
 	}
 

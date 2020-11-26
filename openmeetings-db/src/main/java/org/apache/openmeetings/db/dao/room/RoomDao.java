@@ -204,7 +204,6 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	public Room update(Room entity, Long userId) {
 		if (entity.getId() == null) {
 			em.persist(entity);
-		} else {
 		}
 		if (entity.isSipEnabled() && isSipEnabled()) {
 			String sipNumber = getSipNumber(entity.getId());

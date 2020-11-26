@@ -33,7 +33,7 @@ public abstract class AbstractWbPanel extends Panel {
 	protected final RoomPanel rp;
 	protected boolean inited = false;
 
-	public AbstractWbPanel(String id, RoomPanel rp) {
+	protected AbstractWbPanel(String id, RoomPanel rp) {
 		super(id);
 		this.rp = rp;
 		setOutputMarkupId(true);

@@ -34,7 +34,7 @@ class TestBackupVersion {
 	@Test
 	void testEquals() {
 		assertEquals(BackupVersion.get(), BackupVersion.get());
-		assertNotEquals(BackupVersion.get(), null);
+		assertNotEquals(null, BackupVersion.get());
 		assertNotEquals(BackupVersion.get("3.2.1"), BackupVersion.get("3.2.0"));
 		assertNotEquals(BackupVersion.get("3.1.1"), BackupVersion.get("3.0.0"));
 		assertNotEquals(BackupVersion.get("3.1.1"), BackupVersion.get("2.0.0"));

@@ -89,7 +89,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 		, SEND
 	}
 
-	public InvitationForm(String id) {
+	protected InvitationForm(String id) {
 		super(id, new CompoundPropertyModel<>(new Invitation()));
 		setOutputMarkupId(true);
 	}

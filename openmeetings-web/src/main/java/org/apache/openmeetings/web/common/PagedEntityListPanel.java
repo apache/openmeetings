@@ -35,7 +35,7 @@ public abstract class PagedEntityListPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final SearchableDataView<? extends IDataProviderEntity> dataView;
 
-	public PagedEntityListPanel(String id, final SearchableDataView<? extends IDataProviderEntity> dataView) {
+	protected PagedEntityListPanel(String id, final SearchableDataView<? extends IDataProviderEntity> dataView) {
 		super(id);
 		this.dataView = dataView;
 	}

@@ -39,7 +39,7 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 	protected final AjaxFormValidatingBehavior validationBehavior
 			= new AjaxFormValidatingBehavior("keydown", Duration.ofSeconds(1));
 
-	public AdminBaseForm(String id, IModel<T> object) {
+	protected AdminBaseForm(String id, IModel<T> object) {
 		super(id, object);
 
 		savePanel = new AdminActionsPanel<>("buttons", this) {

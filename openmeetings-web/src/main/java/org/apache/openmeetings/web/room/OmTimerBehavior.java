@@ -29,7 +29,7 @@ public abstract class OmTimerBehavior extends AbstractAjaxTimerBehavior {
 	private final int delay;
 	private final String labelId;
 
-	public OmTimerBehavior(int delay, String labelId) {
+	protected OmTimerBehavior(int delay, String labelId) {
 		super(Duration.ofSeconds(1));
 		clock = System.currentTimeMillis();
 		this.delay = delay;

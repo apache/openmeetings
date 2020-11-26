@@ -143,7 +143,7 @@ public abstract class FileTreePanel extends Panel {
 	@SpringBean
 	private FileItemDao fileDao;
 
-	public FileTreePanel(String id, Long roomId, NameDialog addFolder) {
+	protected FileTreePanel(String id, Long roomId, NameDialog addFolder) {
 		super(id);
 		this.roomId = roomId;
 		this.addFolder = addFolder;

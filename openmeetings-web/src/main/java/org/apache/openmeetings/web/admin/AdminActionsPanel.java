@@ -35,7 +35,7 @@ public abstract class AdminActionsPanel<T> extends FormActionsPanel<T> {
 	private AjaxLink<Void> delBtn;
 	private AjaxLink<Void> restoreBtn;
 
-	public AdminActionsPanel(String id, final Form<T> form) {
+	protected AdminActionsPanel(String id, final Form<T> form) {
 		super(id, form);
 		this.form = form;
 	}

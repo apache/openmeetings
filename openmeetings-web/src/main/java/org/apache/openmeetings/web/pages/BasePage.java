@@ -71,7 +71,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		}
 	};
 
-	public BasePage() {
+	protected BasePage() {
 		if (isInitComplete()) {
 			if (!isInstalled() && ! (this instanceof InstallWizardPage)) {
 				throw new RestartResponseException(InstallWizardPage.class);

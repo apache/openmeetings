@@ -51,7 +51,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 	private final Form<Void> form = new Form<>("form");
 	private final boolean delayed;
 
-	public UploadableImagePanel(String id, boolean delayed) {
+	protected UploadableImagePanel(String id, boolean delayed) {
 		super(id);
 		this.delayed = delayed;
 	}

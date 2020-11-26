@@ -31,11 +31,11 @@ public abstract class EntityAdapter<E extends IDataProviderEntity> extends XmlAd
 	private final IDataProviderDao<E> dao;
 	private final Map<Long, Long> idMap;
 
-	public EntityAdapter() {
+	protected EntityAdapter() {
 		this(null, null);
 	}
 
-	public EntityAdapter(IDataProviderDao<E> dao, Map<Long, Long> idMap) {
+	protected EntityAdapter(IDataProviderDao<E> dao, Map<Long, Long> idMap) {
 		this.dao = dao;
 		this.idMap = idMap;
 	}

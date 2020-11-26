@@ -33,7 +33,7 @@ public abstract class SearchableDataView<T extends IDataProviderEntity> extends 
 	private static final long serialVersionUID = 1L;
 	private SearchableDataProvider<T> dp;
 
-	public SearchableDataView(String id, SearchableDataProvider<T> dp) {
+	protected SearchableDataView(String id, SearchableDataProvider<T> dp) {
 		super(id, dp);
 		this.dp = dp;
 	}

@@ -35,7 +35,7 @@ public abstract class AdminUserChoiceProvider extends ChoiceProvider<User> {
 	@SpringBean
 	private UserDao userDao;
 
-	public AdminUserChoiceProvider() {
+	protected AdminUserChoiceProvider() {
 		Injector.get().inject(this);
 	}
 

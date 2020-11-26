@@ -29,7 +29,7 @@ public abstract class ConfirmableAjaxBorder extends Border {
 	private static final long serialVersionUID = 1L;
 	private final ConfirmationDialog dialog;
 
-	public ConfirmableAjaxBorder(String id, ConfirmationDialog dialog) {
+	protected ConfirmableAjaxBorder(String id, ConfirmationDialog dialog) {
 		super(id);
 		this.dialog = dialog;
 		setOutputMarkupId(true);

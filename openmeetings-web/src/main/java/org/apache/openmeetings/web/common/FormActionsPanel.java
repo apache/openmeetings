@@ -35,7 +35,7 @@ public abstract class FormActionsPanel<T> extends Panel {
 	private AjaxButton saveBtn;
 	private AjaxLink<Void> purgeBtn;
 
-	public FormActionsPanel(String id, Form<T> form) {
+	protected FormActionsPanel(String id, Form<T> form) {
 		super(id);
 		this.form = form;
 		setOutputMarkupId(true);

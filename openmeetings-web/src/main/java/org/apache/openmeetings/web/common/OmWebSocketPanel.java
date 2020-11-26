@@ -58,7 +58,7 @@ public abstract class OmWebSocketPanel extends Panel {
 	private KurentoHandler kHandler;
 	private boolean pingable = false;
 
-	public OmWebSocketPanel(String id) {
+	protected OmWebSocketPanel(String id) {
 		super(id);
 	}
 
