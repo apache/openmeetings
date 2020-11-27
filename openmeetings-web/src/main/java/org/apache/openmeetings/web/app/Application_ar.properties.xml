@@ -169,7 +169,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[حذف لغة]]></entry>
 	<entry key="366"><![CDATA[إضافة لغة]]></entry>
 	<entry key="367"><![CDATA[نسخ إحتياطي]]></entry>
-	<entry key="376"><![CDATA[مرحباً ]]></entry>
+	<entry key="376"><![CDATA[مرحباً]]></entry>
 	<entry key="377"><![CDATA[عدل ملفك الشخصي]]></entry>
 	<entry key="378"><![CDATA[رسائل جديدة:]]></entry>
 	<entry key="379"><![CDATA[إيداع صور جديدة]]></entry>
@@ -563,7 +563,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.NONE"><![CDATA[لا شيء]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[إرسال]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[ايام]]></entry>
-	<entry key="admin.group.form.hours"><![CDATA[hours]]></entry>
+	<entry key="admin.group.form.hours"><![CDATA[ساعات]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[تمكين الحدود]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[شعار]]></entry>
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[الحجم الأقصى للملفات]]></entry>
@@ -572,7 +572,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.group.form.recordingTtl"><![CDATA[التسجيلات تنتهي في]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[تم إرسال تذكير انتهاء الصلاحية]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[وسم]]></entry>
-	<entry key="admin.group.new.users.notification.interval"><![CDATA[New user notification interval]]></entry>
+	<entry key="admin.group.new.users.notification.interval"><![CDATA[الفاصل الزمني بالإعلام بوجود مستخدم جديد]]></entry>
 	<entry key="admin.oauth.attr.oauth"><![CDATA[سمة مستخدم النظام الخارجي]]></entry>
 	<entry key="admin.oauth.attr.om"><![CDATA[سمة مستخدم النظام]]></entry>
 	<entry key="admin.oauth.req.info.method"><![CDATA[طريقة طلب المعلومات]]></entry>
@@ -898,13 +898,13 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="send.on.enter"><![CDATA[أرسل على Enter]]></entry>
 	<entry key="sound.enable"><![CDATA[تمكين الصوت]]></entry>
 	<entry key="sound.mute"><![CDATA[كتم الصوت]]></entry>
-	<entry key="template.new.group.users.notification.body"><![CDATA[Dear "{0}" group moderator,<br/>
+	<entry key="template.new.group.users.notification.body"><![CDATA[عزيزي مشرف المجموعة "{0}" ، <br/>
 <br/>
-{1} new users were added to the group in the last {2} hours<br/>
-Please visit {3} OM server and check them under Admin -> Groups]]></entry>
-	<entry key="template.new.group.users.notification.footer"><![CDATA[Regards,<br/>
-{0} Support Team.]]></entry>
-	<entry key="template.new.group.users.notification.subject"><![CDATA[[{0}] New "{1}" group users]]></entry>
+تمت إضافة {1} من المستخدمين الجدد إلى المجموعة في آخر {2} ساعة <br/>
+يرجى زيارة خادم OM {3} والتحقق منها ضمن قائمة المسؤول -> المجموعات]]></entry>
+	<entry key="template.new.group.users.notification.footer"><![CDATA[مع التحيات ، <br/>
+ فريق دعم {0}.]]></entry>
+	<entry key="template.new.group.users.notification.subject"><![CDATA[[{0}] مستخدمو مجموعة "{1}" الجدد]]></entry>
 	<entry key="template.recording.expiring.body"><![CDATA[سيتم حذف تسجيلك {0} الأخير تلقائيًا
 في {1} يوم. إذا كنت ترغب في حفظ هذا التسجيل ، يرجى تنزيله قبل ذلك الحين.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[مع التحيات,<br/>
