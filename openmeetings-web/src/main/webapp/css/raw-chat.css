@@ -119,6 +119,7 @@ html[dir="rtl"] #chat .messageArea .icons {
 }
 #chat .chat-tool-icon, #chat .chat.btn {
 	font-size: 1.1em;
+	max-height: var(--chat-tools-height);
 }
 #chat .sound.chat-tool-icon i::before {
 	content: '\f028';
