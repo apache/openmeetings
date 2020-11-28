@@ -509,6 +509,8 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 .room-block .room-container .user-video {
 	display: inline-block !important;
+	max-width: 95vw;
+	max-height: 95vh;
 }
 .room-block .room-container .user-video .ui-resizable-se {
 	position: absolute;
