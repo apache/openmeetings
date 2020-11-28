@@ -6,21 +6,14 @@ var Chat = function() {
 		, emoticon = new CSSEmoticon()
 		, doneTypingInterval = 5000 //time in ms, 5 second for example
 		, SEND_ENTER = 'enter', SEND_CTRL = 'ctrl'
+		, audio = new Audio('./public/chat_message.mp3')
 		;
-	let p, pp, ctrl, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
-		, roomPrefix = "Room ", typingTimer, audio, roomMode = false, globalWidth = 600
+	let p, ctrlBlk, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
+		, roomPrefix = "Room ", typingTimer, roomMode = false
 		, editor = $('#chatMessage .wysiwyg-editor'), muted = false, sendOn, DEF_SEND
-		, userId, inited = false
+		, userId, inited = false, newMsgNotification
 		;
 
-	try {
-		audio = new Audio('./public/chat_message.mp3');
-	} catch (e) {
-		//not implemented in IE
-		audio = {
-			play: function() {}
-		};
-	}
 	function __setCssVar(key, _val) {
 		const val = ('' + _val).endsWith('px') ? _val : _val + 'px';
 		if (roomMode) {
@@ -149,8 +142,8 @@ var Chat = function() {
 		sendOn = DEF_SEND;
 		p = $('#chatPanel');
 		clearTimeout(p.data('timeout'));
-		pp = $('#chatPanel, #chatPopup');
-		ctrl = $('#chatPopup .control.block');
+		ctrlBlk = $('#chatPopup .control.block');
+		newMsgNotification = ctrlBlk.data('new-msg');
 		editor = $('#chatMessage .wysiwyg-editor');
 		initToolbar();
 		tabs = $("#chatTabs");
@@ -167,7 +160,7 @@ var Chat = function() {
 		if (roomMode) {
 			_removeResize();
 		} else {
-			ctrl.attr('title', '');
+			ctrlBlk.attr('title', '');
 			p.removeClass('room opened').addClass('closed')
 				.off('mouseenter mouseleave')
 				.resizable({
@@ -175,17 +168,16 @@ var Chat = function() {
 					, disabled: isClosed()
 					, minHeight: 195
 					, minWidth: 260
-					, stop: function(event, ui) {
+					, stop: function(_, ui) {
 						p.css({'top': '', 'left': ''});
 						openedHeight = ui.size.height + 'px';
-						globalWidth = ui.size.width;
 						__setCssHeight(openedHeight);
 						__setCssWidth(ui.size.width);
 					}
 				});
 			__setCssHeight(closedSize);
 		}
-		ctrl.off().click(Chat.toggle);
+		ctrlBlk.off().click(Chat.toggle);
 		$('#chatMessage').off().on('input propertychange paste', function () {
 			const room = $('.room-block .room-container');
 			if (room.length) {
@@ -278,7 +270,7 @@ var Chat = function() {
 			let msg, cm, notify = false;
 			while (!!(cm = m.msg.pop())) {
 				let area = $('#' + cm.scope);
-				if (cm.from.id !== userId) {
+				if (cm.from.id !== userId && (isClosed() || !area.is(':visible'))) {
 					notify = true;
 				}
 				const actions = ('full' === cm.actions ? 'full' : 'short') + (cm.needModeration ? '-mod' : '');
@@ -328,14 +320,32 @@ var Chat = function() {
 				}
 			}
 			if (notify) {
-				ctrl.addClass('bg-warning');
+				ctrlBlk.addClass('bg-warning');
 				if (p.is(':visible') && !muted) {
-					audio.play()
-						.then(function() {
-							// Automatic playback started!
-						}).catch(function() {
-							// Automatic playback failed.
-						});
+					if (window === window.parent) {
+						function _newMessage() {
+							new Notification(newMsgNotification, {
+								tag: 'new_chat_msg'
+							});
+						}
+						if (Notification.permission === 'granted') {
+							_newMessage();
+						} else if (Notification.permission !== 'denied') {
+							Notification.requestPermission().then(permission => {
+								if (permission === 'granted') {
+									_newMessage();
+								}
+							});
+						}
+					} else {
+						// impossible to use Notification API from iFrame
+						audio.play()
+							.then(function() {
+								// Automatic playback started!
+							}).catch(function() {
+								// Automatic playback failed.
+							});
+					}
 				}
 			}
 			emoticon.animate();
@@ -346,7 +356,7 @@ var Chat = function() {
 		p.resizable({
 			handles: (Settings.isRtl ? 'e' : 'w')
 			, minWidth: 165
-			, stop: function(event, ui) {
+			, stop: function(_, ui) {
 				p.css({'left': '', 'width': '', 'height': ''});
 				openedWidth = ui.size.width + 'px';
 				__setCssWidth(openedWidth);
@@ -360,7 +370,7 @@ var Chat = function() {
 	}
 	function _open(handler) {
 		if (isClosed()) {
-			ctrl.removeClass('bg-warning');
+			ctrlBlk.removeClass('bg-warning');
 			let opts;
 			if (roomMode) {
 				opts = {width: openedWidth};
@@ -375,7 +385,7 @@ var Chat = function() {
 				if (typeof(handler) === 'function') {
 					handler();
 				}
-				ctrl.attr('title', ctrl.data('ttl-undock'));
+				ctrlBlk.attr('title', ctrlBlk.data('ttl-undock'));
 				if (roomMode) {
 					_setOpened();
 				} else {
@@ -405,7 +415,7 @@ var Chat = function() {
 				if (typeof(handler) === 'function') {
 					handler();
 				}
-				ctrl.attr('title', ctrl.data('ttl-dock'));
+				ctrlBlk.attr('title', ctrlBlk.data('ttl-dock'));
 			});
 		}
 	}
@@ -416,8 +426,8 @@ var Chat = function() {
 			_close();
 		}
 	}
-	function _editorAppend(emoticon) {
-		editor.html(editor.html() + ' ' + emoticon + ' ').trigger('change');
+	function _editorAppend(_emoticon) {
+		editor.html(editor.html() + ' ' + _emoticon + ' ').trigger('change');
 	}
 	function _clean() {
 		editor.html('').trigger('change');
@@ -488,7 +498,7 @@ var Chat = function() {
 	};
 }();
 $(function() {
-	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
+	Wicket.Event.subscribe("/websocket/message", function(_, msg) {
 		try {
 			if (msg instanceof Blob) {
 				return; //ping

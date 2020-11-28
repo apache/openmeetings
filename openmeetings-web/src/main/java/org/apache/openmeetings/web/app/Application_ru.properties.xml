@@ -878,6 +878,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.upl.bytes"><![CDATA[Загруженные байты]]></entry>
 	<entry key="network.test.upl.speed"><![CDATA[Скорость загрузки]]></entry>
 	<entry key="network.test.upl.time"><![CDATA[Время загрузки]]></entry>
+	<entry key="notification.chat.message"><![CDATA[У Вас есть новые сообщения в чате]]></entry>
+	<entry key="notification.room.activity"><![CDATA[У Вас новый запрос, пожалуйста проверьте "Активность и действия"]]></entry>
 	<entry key="poll.clone"><![CDATA[Клонировать]]></entry>
 	<entry key="poll.type.NUMERIC"><![CDATA[Число 1 - 10]]></entry>
 	<entry key="poll.type.YES_NO"><![CDATA[Да/Нет]]></entry>

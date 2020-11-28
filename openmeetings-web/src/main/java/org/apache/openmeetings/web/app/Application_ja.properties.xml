@@ -878,6 +878,8 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="network.test.upl.bytes"><![CDATA[バイト 送信済み]]></entry>
 	<entry key="network.test.upl.speed"><![CDATA[アップロード速度]]></entry>
 	<entry key="network.test.upl.time"><![CDATA[アップロード時間]]></entry>
+	<entry key="notification.chat.message"><![CDATA[You have new chat message(s)]]></entry>
+	<entry key="notification.room.activity"><![CDATA[You have new activities, please check "Activities&Action"]]></entry>
 	<entry key="poll.clone"><![CDATA[Clone]]></entry>
 	<entry key="poll.type.NUMERIC"><![CDATA[1～10の数字]]></entry>
 	<entry key="poll.type.YES_NO"><![CDATA[はい/いいえ]]></entry>

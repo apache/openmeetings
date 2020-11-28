@@ -874,6 +874,8 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="network.test.upl.bytes"><![CDATA[بایت  بارگذاری شده]]></entry>
 	<entry key="network.test.upl.speed"><![CDATA[سرعت بارگذاری]]></entry>
 	<entry key="network.test.upl.time"><![CDATA[زمان بارگذاری]]></entry>
+	<entry key="notification.chat.message"><![CDATA[You have new chat message(s)]]></entry>
+	<entry key="notification.room.activity"><![CDATA[You have new activities, please check "Activities&Action"]]></entry>
 	<entry key="poll.clone"><![CDATA[Clone]]></entry>
 	<entry key="poll.type.NUMERIC"><![CDATA[اعداد 10-1]]></entry>
 	<entry key="poll.type.YES_NO"><![CDATA[خير/بله]]></entry>

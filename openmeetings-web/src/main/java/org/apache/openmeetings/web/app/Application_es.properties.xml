@@ -876,6 +876,8 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="network.test.upl.bytes"><![CDATA[Bytes subidos]]></entry>
 	<entry key="network.test.upl.speed"><![CDATA[Velocidad de subida]]></entry>
 	<entry key="network.test.upl.time"><![CDATA[Tiempo de subida]]></entry>
+	<entry key="notification.chat.message"><![CDATA[You have new chat message(s)]]></entry>
+	<entry key="notification.room.activity"><![CDATA[You have new activities, please check "Activities&Action"]]></entry>
 	<entry key="poll.clone"><![CDATA[Clonar]]></entry>
 	<entry key="poll.type.NUMERIC"><![CDATA[Valor numérico [1-10]]]></entry>
 	<entry key="poll.type.YES_NO"><![CDATA[Sí/No]]></entry>

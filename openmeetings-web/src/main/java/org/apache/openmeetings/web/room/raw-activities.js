@@ -2,7 +2,8 @@
 var Activities = function() {
 	const closedHeight = 20, timeout = 10000;
 	let activities, aclean, modArea, area, openedHeight = 345
-		, openedHeightPx = openedHeight + 'px', inited = false;
+		, openedHeightPx = openedHeight + 'px', inited = false
+		, newActNotification;
 
 	function _load() {
 		const s = Settings.load();
@@ -73,12 +74,28 @@ var Activities = function() {
 			u.removeClass('bg-warning', 1500);
 		}
 	}
-	function _hightlight() {
+	function _hightlight(notify) {
 		if (!inited) {
 			return;
 		}
 		if (isClosed()) {
 			$('.control.block', activities).addClass('bg-warning');
+			if (window === window.parent && notify) {
+				function _newMessage() {
+					new Notification(newActNotification, {
+						tag: 'new_aa_item'
+					});
+				}
+				if (Notification.permission === 'granted') {
+					_newMessage();
+				} else if (Notification.permission !== 'denied') {
+					Notification.requestPermission().then(permission => {
+						if (permission === 'granted') {
+							_newMessage();
+						}
+					});
+				}
+			}
 		}
 	}
 	function _getId(id) {
@@ -111,12 +128,14 @@ var Activities = function() {
 				return;
 			}
 			activities = $('#activities');
-			activities.find('.control.block').off().click(Activities.toggle);
+			const ctrlBlk = activities.find('.control.block');
+			ctrlBlk.off().click(Activities.toggle);
+			newActNotification = ctrlBlk.data('new-aa');
 			activities.resizable({
 				handles: 'n'
 				, disabled: isClosed()
 				, minHeight: 195
-				, stop: function(event, ui) {
+				, stop: function(_, ui) {
 					openedHeight = ui.size.height;
 					openedHeightPx = openedHeight + 'px';
 					_updateHeightVar(openedHeightPx);
@@ -176,7 +195,7 @@ var Activities = function() {
 				_action('close', obj.id);
 			});
 			a.find('.activity-text').text(obj.text);
-			_hightlight();
+			_hightlight(obj.action);
 			if (aclean.prop('checked') && a.hasClass('auto-clean')) {
 				setTimeout(_clearItem.bind(null, obj.id), timeout);
 			}
