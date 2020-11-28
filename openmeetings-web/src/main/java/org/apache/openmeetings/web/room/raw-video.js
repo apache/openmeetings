@@ -475,10 +475,10 @@ var Video = (function() {
 		states.push(state);
 		if (sd.self) {
 			_createSendPeer(msg, state);
-			_handleMicStatus(hasAudio);
 		} else {
 			_createResvPeer(msg, state);
 		}
+		_handleMicStatus(hasAudio);
 	}
 	function _setRights() {
 		if (Room.hasRight(['MUTE_OTHERS']) && VideoUtil.hasMic(sd)) {

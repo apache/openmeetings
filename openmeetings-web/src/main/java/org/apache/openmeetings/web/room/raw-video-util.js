@@ -345,6 +345,7 @@ var Volume = (function() {
 		video = _video;
 		_destroy();
 		const uid = video.stream().uid
+			, cuid = video.stream().cuid
 			, volId = 'volume-' + uid;
 		vol = OmUtil.tmpl('#volume-control-stub', volId)
 		slider = vol.find('.slider');
@@ -356,7 +357,7 @@ var Volume = (function() {
 			})
 			.click(function(e) {
 				e.stopImmediatePropagation();
-				OmUtil.roomAction({action: 'mute', uid: uid, mute: !muted});
+				OmUtil.roomAction({action: 'mute', uid: cuid, mute: !muted});
 				_mute(!muted);
 				drop.hide();
 				return false;
