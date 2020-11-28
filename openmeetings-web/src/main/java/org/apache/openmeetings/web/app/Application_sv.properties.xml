@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[OK]]></entry>
 	<entry key="59"><![CDATA[Språk]]></entry>
 	<entry key="62"><![CDATA[Rensa vita tavlan]]></entry>
-	<entry key="64"><![CDATA[Fråga inte igen]]></entry>
 	<entry key="70"><![CDATA[Ångra]]></entry>
 	<entry key="72"><![CDATA[Välj ett objekt]]></entry>
 	<entry key="73"><![CDATA[Text]]></entry>
@@ -378,7 +377,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1168"><![CDATA[Visa kontaktuppgifterna bara till kontakter]]></entry>
 	<entry key="1169"><![CDATA[Visa inte kontaktuppgifterna till någon]]></entry>
 	<entry key="1170"><![CDATA[Min profil]]></entry>
-	<entry key="1171"><![CDATA[Redigera inställningar]]></entry>
 	<entry key="1172"><![CDATA[Sök användare]]></entry>
 	<entry key="1177"><![CDATA[Användaren erbjuder]]></entry>
 	<entry key="1178"><![CDATA[Användaren söker]]></entry>
@@ -630,8 +628,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Är du säker att du vill radera alla temporära filer? Denna operation kan inte ångras.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[Allmänna administrativa funktioner]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[Administrativa funktioner]]></entry>
+	<entry key="dont.ask.again"><![CDATA[Fråga inte igen]]></entry>
 	<entry key="download.pdf"><![CDATA[Ladda ner som PDF]]></entry>
 	<entry key="download.png"><![CDATA[Ladda ner som PNG]]></entry>
+	<entry key="edit.settings"><![CDATA[Redigera inställningar]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[Felaktigt användarnamn/e-postadress och/eller lösenord.]]></entry>
 	<entry key="error.bad.password"><![CDATA[Ogiltigt Lösenord!]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[En konfiguration med den angivna nyckeln finns redan, vänligen ange en annan nyckel eller redigera den befintliga konfigurationen]]></entry>

@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[Ok]]></entry>
 	<entry key="59"><![CDATA[Langue :]]></entry>
 	<entry key="62"><![CDATA[Nettoyer le tableau blanc]]></entry>
-	<entry key="64"><![CDATA[Ne pas redemander]]></entry>
 	<entry key="70"><![CDATA[Annuler]]></entry>
 	<entry key="72"><![CDATA[Sélectionner un objet]]></entry>
 	<entry key="73"><![CDATA[Texte]]></entry>
@@ -377,7 +376,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1168"><![CDATA[Montrer les données de contact aux contacts seulement]]></entry>
 	<entry key="1169"><![CDATA[Ne montrer les données de contact à personne]]></entry>
 	<entry key="1170"><![CDATA[Mon profil]]></entry>
-	<entry key="1171"><![CDATA[Editer les paramètres]]></entry>
 	<entry key="1172"><![CDATA[Chercher des utilisateurs]]></entry>
 	<entry key="1177"><![CDATA[Utilisateur offre]]></entry>
 	<entry key="1178"><![CDATA[Utilisateur cherche]]></entry>
@@ -629,8 +627,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Etes-vous sur de vouloir supprimer tous les fichiers temporaires ? Cette opération ne peut être annulée.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[Fonctions d'admin générales]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[Fonctions d'admin]]></entry>
+	<entry key="dont.ask.again"><![CDATA[Ne pas redemander]]></entry>
 	<entry key="download.pdf"><![CDATA[Télécharger en PDF]]></entry>
 	<entry key="download.png"><![CDATA[Télécharger en PNG]]></entry>
+	<entry key="edit.settings"><![CDATA[Editer les paramètres]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[Username/email and/or password are incorrect.]]></entry>
 	<entry key="error.bad.password"><![CDATA[Mot de passe non valide !]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[Une configuration avec cette clé existe déjà, veuillez spécifier une autre clé ou éditer la configuration existante]]></entry>

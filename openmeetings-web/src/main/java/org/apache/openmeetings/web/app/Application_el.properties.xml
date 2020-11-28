@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[Εντάξει]]></entry>
 	<entry key="59"><![CDATA[Γλώσσα:]]></entry>
 	<entry key="62"><![CDATA[Εκκαθάριση Πίνακα]]></entry>
-	<entry key="64"><![CDATA[Να μην ερωτηθώ ξανά!]]></entry>
 	<entry key="70"><![CDATA[Αναίρεση]]></entry>
 	<entry key="72"><![CDATA[Επιλογή Αντικειμένου]]></entry>
 	<entry key="73"><![CDATA[Κείμενο]]></entry>
@@ -377,7 +376,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1168"><![CDATA[Show contact data to contacts only]]></entry>
 	<entry key="1169"><![CDATA[Show contact data to nobody]]></entry>
 	<entry key="1170"><![CDATA[My Profile]]></entry>
-	<entry key="1171"><![CDATA[Edit settings]]></entry>
 	<entry key="1172"><![CDATA[Search users]]></entry>
 	<entry key="1177"><![CDATA[User offers]]></entry>
 	<entry key="1178"><![CDATA[User looks for]]></entry>
@@ -629,8 +627,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Are you sure you want to delete all temporary files? This operation cannot be undone.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[General Admin functions]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[Admin functions]]></entry>
+	<entry key="dont.ask.again"><![CDATA[Να μην ερωτηθώ ξανά!]]></entry>
 	<entry key="download.pdf"><![CDATA[Αποθήκευση ως PDF]]></entry>
 	<entry key="download.png"><![CDATA[Αποθήκευση ως PNG]]></entry>
+	<entry key="edit.settings"><![CDATA[Edit settings]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[Username/email and/or password are incorrect.]]></entry>
 	<entry key="error.bad.password"><![CDATA[Μη Έγκυρος Κωδικός!]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[Configuration with given key already exists, please specify another key or edit existent configuration]]></entry>

@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[はい]]></entry>
 	<entry key="59"><![CDATA[言語:]]></entry>
 	<entry key="62"><![CDATA[ホワイトボードのクリア]]></entry>
-	<entry key="64"><![CDATA[次回から入力を省略]]></entry>
 	<entry key="70"><![CDATA[取り消し]]></entry>
 	<entry key="72"><![CDATA[オブジェクト選択]]></entry>
 	<entry key="73"><![CDATA[文字列]]></entry>
@@ -377,7 +376,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1168"><![CDATA[コンタクト・データをコンタクトにのみ公開する]]></entry>
 	<entry key="1169"><![CDATA[コンタクト・データを非公開にする]]></entry>
 	<entry key="1170"><![CDATA[プロフィール]]></entry>
-	<entry key="1171"><![CDATA[設定]]></entry>
 	<entry key="1172"><![CDATA[ユーザー検索]]></entry>
 	<entry key="1177"><![CDATA[お勧め]]></entry>
 	<entry key="1178"><![CDATA[ユーザー名]]></entry>
@@ -629,8 +627,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[全ての一時ファイルを削除してよろしいですか？（この作業は実行後、元に戻せません）]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[一般管理機能]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[管理機能]]></entry>
+	<entry key="dont.ask.again"><![CDATA[次回から入力を省略]]></entry>
 	<entry key="download.pdf"><![CDATA[PDFとしてダウンロード]]></entry>
 	<entry key="download.png"><![CDATA[PNGとしてダウンロード]]></entry>
+	<entry key="edit.settings"><![CDATA[設定]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[ユーザー名/電子メール・アドレス、またはパスワードが不正です。]]></entry>
 	<entry key="error.bad.password"><![CDATA[パスワードが間違っています。]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[指定されたキーの構成は既に存在しています。別のキーを指定するか、既存の構成を編集してください。]]></entry>

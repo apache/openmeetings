@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[确定]]></entry>
 	<entry key="59"><![CDATA[语言:]]></entry>
 	<entry key="62"><![CDATA[清除白板]]></entry>
-	<entry key="64"><![CDATA[不再询问]]></entry>
 	<entry key="70"><![CDATA[取消]]></entry>
 	<entry key="72"><![CDATA[选择对象]]></entry>
 	<entry key="73"><![CDATA[文本]]></entry>
@@ -377,7 +376,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1168"><![CDATA[只给自己的联系人显示联系信息]]></entry>
 	<entry key="1169"><![CDATA[不开放个人联系信息]]></entry>
 	<entry key="1170"><![CDATA[个人简介]]></entry>
-	<entry key="1171"><![CDATA[设置]]></entry>
 	<entry key="1172"><![CDATA[查找用户]]></entry>
 	<entry key="1177"><![CDATA[供职单位]]></entry>
 	<entry key="1178"><![CDATA[其它信息]]></entry>
@@ -629,8 +627,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Are you sure you want to delete all temporary files? This operation cannot be undone.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[General Admin functions]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[Admin functions]]></entry>
+	<entry key="dont.ask.again"><![CDATA[不再询问]]></entry>
 	<entry key="download.pdf"><![CDATA[下载为 PDF]]></entry>
 	<entry key="download.png"><![CDATA[下载为 PNG]]></entry>
+	<entry key="edit.settings"><![CDATA[设置]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[Username/email and/or password are incorrect.]]></entry>
 	<entry key="error.bad.password"><![CDATA[无效密码!]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[给定键的配置已存在，请指定另一个键或编辑存在的配置]]></entry>

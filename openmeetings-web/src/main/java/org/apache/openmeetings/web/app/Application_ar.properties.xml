@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[موافق]]></entry>
 	<entry key="59"><![CDATA[اللغة]]></entry>
 	<entry key="62"><![CDATA[مسح اللوح الابيض]]></entry>
-	<entry key="64"><![CDATA[لا تسأل مرة أخرى]]></entry>
 	<entry key="70"><![CDATA[الغاء]]></entry>
 	<entry key="72"><![CDATA[اختر جسم]]></entry>
 	<entry key="73"><![CDATA[النص]]></entry>
@@ -377,7 +376,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1168"><![CDATA[إظهار بيانات الاتصال لجهات الاتصال فقط]]></entry>
 	<entry key="1169"><![CDATA[إظهار بيانات الاتصال لأي شخص]]></entry>
 	<entry key="1170"><![CDATA[ملفي]]></entry>
-	<entry key="1171"><![CDATA[تحرير الإعدادات]]></entry>
 	<entry key="1172"><![CDATA[بحث المستخدمين]]></entry>
 	<entry key="1177"><![CDATA[عروض المستخدم]]></entry>
 	<entry key="1178"><![CDATA[يبحث المستخدم عن]]></entry>
@@ -629,8 +627,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[هل أنت متأكد أنك تريد حذف كافة الملفات المؤقتة؟ هذه العملية لا يمكن التراجع عنها.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[وظائف الإدارة العامة]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[وظائف المسؤول]]></entry>
+	<entry key="dont.ask.again"><![CDATA[لا تسأل مرة أخرى]]></entry>
 	<entry key="download.pdf"><![CDATA[تنزيل كملف PDF]]></entry>
 	<entry key="download.png"><![CDATA[تنزيل بتنسيق PNG]]></entry>
+	<entry key="edit.settings"><![CDATA[تحرير الإعدادات]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[اسم المستخدم / البريد الإلكتروني و / أو كلمة المرور غير صحيحة.]]></entry>
 	<entry key="error.bad.password"><![CDATA[كلمة مرور غير صحيحة]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[الاعداد بالمفتاح المحدد موجود بالفعل ، يرجى تحديد مفتاح آخر أو تعديل الاعداد الموجود]]></entry>

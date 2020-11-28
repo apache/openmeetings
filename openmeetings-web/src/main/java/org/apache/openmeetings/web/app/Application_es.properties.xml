@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[Aceptar]]></entry>
 	<entry key="59"><![CDATA[Idioma:]]></entry>
 	<entry key="62"><![CDATA[Borrar pizarra]]></entry>
-	<entry key="64"><![CDATA[No volver a preguntar]]></entry>
 	<entry key="70"><![CDATA[Deshacer]]></entry>
 	<entry key="72"><![CDATA[Seleccionar un objeto]]></entry>
 	<entry key="73"><![CDATA[Texto]]></entry>
@@ -377,7 +376,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1168"><![CDATA[Mostrar información de contacto solo a contactados.]]></entry>
 	<entry key="1169"><![CDATA[No mostrar datos de contacto a nadie]]></entry>
 	<entry key="1170"><![CDATA[Mi Perfil]]></entry>
-	<entry key="1171"><![CDATA[Editar configuraciones]]></entry>
 	<entry key="1172"><![CDATA[Buscar usuarios]]></entry>
 	<entry key="1177"><![CDATA[Ofertas del usuario]]></entry>
 	<entry key="1178"><![CDATA[Busca usuario]]></entry>
@@ -629,8 +627,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[¿Estás seguro de querer borrar todos los ficheros temporales? Esta operación no se puede deshacer.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[Funciones de administración general]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[Funciones de administración]]></entry>
+	<entry key="dont.ask.again"><![CDATA[No volver a preguntar]]></entry>
 	<entry key="download.pdf"><![CDATA[Descargar como PDF]]></entry>
 	<entry key="download.png"><![CDATA[Descargar como PNG]]></entry>
+	<entry key="edit.settings"><![CDATA[Editar configuraciones]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[Usuario/correo y/o contraseña son incorrectos]]></entry>
 	<entry key="error.bad.password"><![CDATA[Contraseña incorrecta]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[Ya existe la configuración con esa clave, por favor especifique otra clave o edite la configuración existente]]></entry>

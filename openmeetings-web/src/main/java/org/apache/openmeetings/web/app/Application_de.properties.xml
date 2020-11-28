@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[Ok]]></entry>
 	<entry key="59"><![CDATA[Kurssprache:]]></entry>
 	<entry key="62"><![CDATA[Zeichenbrett leeren]]></entry>
-	<entry key="64"><![CDATA[Nicht nochmal fragen]]></entry>
 	<entry key="70"><![CDATA[Rückgängig]]></entry>
 	<entry key="72"><![CDATA[Markieren]]></entry>
 	<entry key="73"><![CDATA[Text]]></entry>
@@ -377,7 +376,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1168"><![CDATA[Meine Kontaktdaten nur persönlichen Kontakten anzeigen]]></entry>
 	<entry key="1169"><![CDATA[Niemanden meine Kontaktdaten anzeigen]]></entry>
 	<entry key="1170"><![CDATA[Mein Profil]]></entry>
-	<entry key="1171"><![CDATA[Einstellungen bearbeiten]]></entry>
 	<entry key="1172"><![CDATA[Nutzer suchen]]></entry>
 	<entry key="1177"><![CDATA[Nutzer bietet an]]></entry>
 	<entry key="1178"><![CDATA[Nutzer sucht]]></entry>
@@ -629,8 +627,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Wollen sie wirklich alle Temporären Dateien löschen? Diese Vorgang kann nicht rückgängig gemacht werden.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[Allgemeine Admin-Funktionen]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[Admin-Funktionen]]></entry>
+	<entry key="dont.ask.again"><![CDATA[Nicht nochmal fragen]]></entry>
 	<entry key="download.pdf"><![CDATA[Download als PDF]]></entry>
 	<entry key="download.png"><![CDATA[Download als PNG]]></entry>
+	<entry key="edit.settings"><![CDATA[Einstellungen bearbeiten]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[Nutzername/E-Mail und/oder Passwort ist/sind falsch.]]></entry>
 	<entry key="error.bad.password"><![CDATA[Falsches Passwort!]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[Eine Konfiguration mit diesem Schlüssel gibt es bereits. Bitte benutzen Sie einen neuen Schlüssel oder ändern die vorhanden Konfiguration]]></entry>

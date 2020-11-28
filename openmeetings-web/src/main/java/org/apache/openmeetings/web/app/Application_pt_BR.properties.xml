@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[ok]]></entry>
 	<entry key="59"><![CDATA[Idioma:]]></entry>
 	<entry key="62"><![CDATA[Limpar a lousa.]]></entry>
-	<entry key="64"><![CDATA[Não perguntar de novo.]]></entry>
 	<entry key="70"><![CDATA[Desfazer]]></entry>
 	<entry key="72"><![CDATA[Selecionar um objeto]]></entry>
 	<entry key="73"><![CDATA[Texto]]></entry>
@@ -377,7 +376,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1168"><![CDATA[Mostrar dados de contato apenas para os contatos]]></entry>
 	<entry key="1169"><![CDATA[Não mostrar dados de contato]]></entry>
 	<entry key="1170"><![CDATA[Meu Perfil]]></entry>
-	<entry key="1171"><![CDATA[Editar configurações]]></entry>
 	<entry key="1172"><![CDATA[Pesquisar usuários]]></entry>
 	<entry key="1177"><![CDATA[Usuário oferece]]></entry>
 	<entry key="1178"><![CDATA[Usuário procura]]></entry>
@@ -629,8 +627,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Are you sure you want to delete all temporary files? This operation cannot be undone.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[General Admin functions]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[Funções Administrativas]]></entry>
+	<entry key="dont.ask.again"><![CDATA[Não perguntar de novo.]]></entry>
 	<entry key="download.pdf"><![CDATA[Download como PDF]]></entry>
 	<entry key="download.png"><![CDATA[Download como PNG]]></entry>
+	<entry key="edit.settings"><![CDATA[Editar configurações]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[Username/email and/or password are incorrect.]]></entry>
 	<entry key="error.bad.password"><![CDATA[Senha Inválida!]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[Configuration with given key already exists, please specify another key or edit existent configuration]]></entry>

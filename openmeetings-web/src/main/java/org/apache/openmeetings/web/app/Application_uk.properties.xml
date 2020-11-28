@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[OK]]></entry>
 	<entry key="59"><![CDATA[Мова:]]></entry>
 	<entry key="62"><![CDATA[Очистити планшет]]></entry>
-	<entry key="64"><![CDATA[Больше не спрашивать]]></entry>
 	<entry key="70"><![CDATA[Відмінити]]></entry>
 	<entry key="72"><![CDATA[Вибрати об'єкт]]></entry>
 	<entry key="73"><![CDATA[Текст]]></entry>
@@ -377,7 +376,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1168"><![CDATA[Показувати контакти тільки контактам]]></entry>
 	<entry key="1169"><![CDATA[Не показувати контактні дані нікому]]></entry>
 	<entry key="1170"><![CDATA[Мій профайл]]></entry>
-	<entry key="1171"><![CDATA[Редагувати установки]]></entry>
 	<entry key="1172"><![CDATA[Шукати користувачів]]></entry>
 	<entry key="1177"><![CDATA[Користувач пропонує]]></entry>
 	<entry key="1178"><![CDATA[Користувач шукає]]></entry>
@@ -629,8 +627,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Ви впевнені, що хочете видалити всі тимчасові файли? Цю операцію не можна буде скасувати.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[Основні адміністративні фукції]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[Адміністративні функції]]></entry>
+	<entry key="dont.ask.again"><![CDATA[Больше не спрашивать]]></entry>
 	<entry key="download.pdf"><![CDATA[Завантажити як PDF]]></entry>
 	<entry key="download.png"><![CDATA[Завантажити як PNG]]></entry>
+	<entry key="edit.settings"><![CDATA[Редагувати установки]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[Username/email and/or password are incorrect.]]></entry>
 	<entry key="error.bad.password"><![CDATA[Невірний пароль!]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[Конфігурація з цим ключем вже існує, будь ласка виберіть інший ключ або змінити існуючий]]></entry>

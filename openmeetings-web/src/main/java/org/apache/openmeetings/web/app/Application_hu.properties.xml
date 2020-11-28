@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[Rendben]]></entry>
 	<entry key="59"><![CDATA[Nyelv:]]></entry>
 	<entry key="62"><![CDATA[Tábla törlése]]></entry>
-	<entry key="64"><![CDATA[Ne kérdezd többször]]></entry>
 	<entry key="70"><![CDATA[Vissza]]></entry>
 	<entry key="72"><![CDATA[Válassz objektumot]]></entry>
 	<entry key="73"><![CDATA[Szöveg]]></entry>
@@ -377,7 +376,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1168"><![CDATA[Kapcsolati adatokat csak a személyes kontakt listámon láthatják]]></entry>
 	<entry key="1169"><![CDATA[Ne mutassa a kapcsolati adataimat]]></entry>
 	<entry key="1170"><![CDATA[Profilom]]></entry>
-	<entry key="1171"><![CDATA[Beállítások szerkesztés]]></entry>
 	<entry key="1172"><![CDATA[Felhasználók keresése]]></entry>
 	<entry key="1177"><![CDATA[Felhasználói ajánlatok]]></entry>
 	<entry key="1178"><![CDATA[Felhasználó nézi ezt]]></entry>
@@ -629,8 +627,10 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Are you sure you want to delete all temporary files? This operation cannot be undone.]]></entry>
 	<entry key="dashboard.widget.admin.desc"><![CDATA[General Admin functions]]></entry>
 	<entry key="dashboard.widget.admin.title"><![CDATA[Admin functions]]></entry>
+	<entry key="dont.ask.again"><![CDATA[Ne kérdezd többször]]></entry>
 	<entry key="download.pdf"><![CDATA[Letöltés mint PDF]]></entry>
 	<entry key="download.png"><![CDATA[Letöltés mint PNG]]></entry>
+	<entry key="edit.settings"><![CDATA[Beállítások szerkesztés]]></entry>
 	<entry key="error.bad.credentials"><![CDATA[Username/email and/or password are incorrect.]]></entry>
 	<entry key="error.bad.password"><![CDATA[Hibás jelszó!]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[Konfigurációs beállító kulcs már létezik, válasszon másikat, vagy szerkessze a meglévőt]]></entry>
