@@ -203,7 +203,9 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 	padding: 1px;
 	height: 20px;
 }
-html[dir="rtl"] .wb-tool-settings .ui-dialog-titlebar-close, .wb-formula .ui-dialog-titlebar-close {
+html[dir="rtl"] .wb-tool-settings .ui-dialog-titlebar-close
+, html[dir="rtl"] .wb-formula .ui-dialog-titlebar-close
+{
 	left: .3em;
 	right: auto;
 }
