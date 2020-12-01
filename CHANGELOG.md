@@ -6,6 +6,71 @@ See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number 
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
 
+
+Release Notes - Openmeetings - Version 5.1.0
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-677] - SIP transport left room every 30 minutes
+    * [OPENMEETINGS-2441] - Inviting for a meeting as user of type "USER" returns "Internal Error"
+    * [OPENMEETINGS-2451] - Mute others is broken
+    * [OPENMEETINGS-2452] - Actions->Show SipDialer no close button/blocking UI
+    * [OPENMEETINGS-2453] - Time Zone is not implemented on recordings date/time
+    * [OPENMEETINGS-2456] - Poll Results: chart is closed when a participant vote
+    * [OPENMEETINGS-2457] - user can vote multiple times
+    * [OPENMEETINGS-2459] - File/Recording backup is broken
+    * [OPENMEETINGS-2461] - check digit & check special does not take effect
+    * [OPENMEETINGS-2464] - Invitation to Metting from user: null null
+    * [OPENMEETINGS-2466] - Camera is occupied (on) even after leaving the room
+    * [OPENMEETINGS-2470] - Unable to use WebService interface when running via Jetty
+    * [OPENMEETINGS-2480] - Email for a changed event contains wrong URL
+    * [OPENMEETINGS-2481] - event cancelation/deletion email: attached event is not deleting event in calendar tool
+    * [OPENMEETINGS-2490] - "Add to contacts" email contains null null as sender
+    * [OPENMEETINGS-2491] - When drag an uploaded txt file or room recording to whiteboard ,nothing happens
+    * [OPENMEETINGS-2493] - Build # 117 does not do recording
+    * [OPENMEETINGS-2494] - Slide bar of users/files in conf rooms does not refresh recordings positions
+    * [OPENMEETINGS-2496] - a/v connection regression
+    * [OPENMEETINGS-2502] - Multimedia streams are always created twice
+    * [OPENMEETINGS-2504] - Add classes for selector to uniquely identify confirmation button for selenium/webdriver test
+    * [OPENMEETINGS-2506] - Chat area tab (save, delete) does not appear on Chrome (Win 10)
+    * [OPENMEETINGS-2510] - No devices are available in case default cam is broken/busy
+    * [OPENMEETINGS-2511] - WSS url in connect-src doesn't have port
+    * [OPENMEETINGS-2513] - Room is rendered incompletely
+    * [OPENMEETINGS-2514] - Unenroll user seems to be broken
+    * [OPENMEETINGS-2516] - Send Invitations Form
+    * [OPENMEETINGS-2517] - (x) mark overlay message caption
+    * [OPENMEETINGS-2521] - Hidden Field is shown in login screen
+    * [OPENMEETINGS-2523] - Refresh of audio/video is broken
+    * [OPENMEETINGS-2525] - NPE while calculating User display name
+    * [OPENMEETINGS-2527] - 'Mute' and 'Mic status' are broken
+    * [OPENMEETINGS-2529] - Apache Open Meetings Installation Failed using Oracle 19c using ojdbc10.jar file as connector
+
+* New Feature
+    * [OPENMEETINGS-2526] - It should be possible to notify moderator on new group users
+
+* Improvement
+    * [OPENMEETINGS-2190] - Room notifications
+    * [OPENMEETINGS-2363] - Rework Conference Room UI-Dialogs to use Bootstrap style
+    * [OPENMEETINGS-2371] - Network testing tool does not work in Safari/OSX
+    * [OPENMEETINGS-2450] - Screen-sharing on PureBrowser
+    * [OPENMEETINGS-2458] - Vote: New poll should show "Display name" not "Firstname Lastname"
+    * [OPENMEETINGS-2463] - Arabic Translation & Placeholder checking
+    * [OPENMEETINGS-2465] - Enter a meetingroom a few minutes before scheduled start
+    * [OPENMEETINGS-2467] - Appearence of "My rooms" differ form "Recent rooms"
+    * [OPENMEETINGS-2469] - Startup warnings need to be elimitated
+    * [OPENMEETINGS-2472] - Old ga.js should be migrated to gtag
+    * [OPENMEETINGS-2476] - HttpURLConnection should be replaced with HttpClient
+    * [OPENMEETINGS-2482] - GeneralConfiguration page should be improved
+    * [OPENMEETINGS-2492] - MediaPipeline should be KStream based
+    * [OPENMEETINGS-2505] - more responsive UI
+    * [OPENMEETINGS-2509] - User session should be invalidated for external user on room exit
+
+* Task
+    * [OPENMEETINGS-2455] - (5.1.0) Library versions need to be updated
+    * [OPENMEETINGS-2462] - (5.1.0) Label contributions from https://poeditor.com should be merged back
+    * [OPENMEETINGS-2478] - Sonar issues need to be addressed
+
+
 Release Notes - Openmeetings - Version 5.0.1
 ================================================================================================================
 
