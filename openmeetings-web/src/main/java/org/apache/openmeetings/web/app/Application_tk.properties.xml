@@ -27,8 +27,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 ###############################################
 -->
 <properties>
-	<entry key="4"><![CDATA[Settings]]></entry>
-	<entry key="5"><![CDATA[Profile]]></entry>
+	<entry key="4"><![CDATA[Sazlamalar]]></entry>
+	<entry key="5"><![CDATA[Profil]]></entry>
 	<entry key="6"><![CDATA[Administration]]></entry>
 	<entry key="15"><![CDATA[File upload]]></entry>
 	<entry key="18"><![CDATA[New poll]]></entry>
@@ -401,7 +401,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1210"><![CDATA[To:]]></entry>
 	<entry key="1211"><![CDATA[Subject:]]></entry>
 	<entry key="1218"><![CDATA[Book conference room]]></entry>
-	<entry key="1221"><![CDATA[Add an optional request for meeting to the message and create a conference room. The event is then copied in the calendar of every participant.]]></entry>
+	<entry key="1221"><![CDATA[Habara duşuşmak üçin goşmaça haýyş goşuň we konferensiýa otagyny dörediň. Soňra çäre her gatnaşyjynyň senenamasynda göçürilýär.]]></entry>
 	<entry key="1222"><![CDATA[Inbox]]></entry>
 	<entry key="1223"><![CDATA[Sent]]></entry>
 	<entry key="1224"><![CDATA[Trash]]></entry>
