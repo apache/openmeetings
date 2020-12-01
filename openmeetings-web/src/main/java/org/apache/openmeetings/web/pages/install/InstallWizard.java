@@ -55,6 +55,7 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ErrorMessagePanel;
 import org.apache.openmeetings.web.common.OmLabel;
 import org.apache.openmeetings.web.util.OmTooltipBehavior;
+import org.apache.openmeetings.web.util.ThreadHelper;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -783,8 +784,8 @@ public class InstallWizard extends BootstrapWizard {
 		@Override
 		public void applyState() {
 			started = true;
-			new Thread(new InstallProcess(initvalues)
-				, "Openmeetings - Installation").start();
+			ThreadHelper.startRunnable(new InstallProcess(initvalues)
+				, "Openmeetings - Installation");
 			desc.setDefaultModelObject(getString("install.wizard.install.started"));
 			RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(target -> {
 				progressBar.restart(target).setModelObject(0);
