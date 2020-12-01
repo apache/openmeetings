@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
@@ -115,6 +116,11 @@ public class OmMenuItem implements INavbarComponent {
 			public void onClick(AjaxRequestTarget target) {
 				OmMenuItem.this.onClick(target);
 			}
+
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				OmMenuItem.this.updateAjaxAttributes(attributes);
+			}
 		};
 		if (topLevel) {
 			link.add(AttributeModifier.append(ATTR_CLASS, "nav-link"));
@@ -130,10 +136,14 @@ public class OmMenuItem implements INavbarComponent {
 
 	@Override
 	public ComponentPosition getPosition() {
-		return ComponentPosition.LEFT; //FIXME TODO
+		return ComponentPosition.LEFT;
 	}
 
-	public void onClick(AjaxRequestTarget target) {
+	protected void onClick(AjaxRequestTarget target) {
+		// no-op by default
+	}
+
+	protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
 		// no-op by default
 	}
 }

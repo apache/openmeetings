@@ -109,7 +109,7 @@ public class PollsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				qpollManager.start(room.getClient());
 			}
 		};
@@ -117,7 +117,7 @@ public class PollsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				createPoll.updateModel(target);
 				createPoll.show(target);
 			}
@@ -126,7 +126,7 @@ public class PollsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				RoomPoll rp = pollDao.getByRoom(room.getRoom().getId());
 				if (rp != null) {
 					vote.updateModel(target, rp);
@@ -138,7 +138,7 @@ public class PollsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				pollResults.updateModel(target, true, room.getClient().hasRight(Room.Right.MODERATOR));
 				pollResults.show(target);
 			}

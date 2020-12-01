@@ -337,7 +337,7 @@ public class MainPanel extends Panel {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public void onClick(AjaxRequestTarget target) {
+					protected void onClick(AjaxRequestTarget target) {
 						RoomEnterBehavior.roomEnter((MainPage)getPage(), target, roomId);
 					}
 				});
