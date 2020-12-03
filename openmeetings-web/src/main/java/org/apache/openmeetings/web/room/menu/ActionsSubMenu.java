@@ -31,7 +31,10 @@ import org.apache.openmeetings.web.app.WhiteboardManager;
 import org.apache.openmeetings.web.common.InvitationDialog;
 import org.apache.openmeetings.web.common.menu.OmMenuItem;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.attributes.IAjaxCallListener;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -51,6 +54,7 @@ public class ActionsSubMenu implements Serializable {
 	private OmMenuItem downloadPngMenuItem;
 	private OmMenuItem downloadPdfMenuItem;
 	private OmMenuItem resetWb;
+	private OmMenuItem localSettings;
 	private final boolean visible;
 	@SpringBean
 	private WhiteboardManager wbManager;
@@ -72,7 +76,7 @@ public class ActionsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				invite.updateModel(target);
 				invite.show(target);
 			}
@@ -81,7 +85,7 @@ public class ActionsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				target.appendJavaScript("Sharer.open();");
 			}
 		};
@@ -89,7 +93,7 @@ public class ActionsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				room.requestRight(Room.Right.MODERATOR, target);
 			}
 		};
@@ -97,7 +101,7 @@ public class ActionsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				room.requestRight(Room.Right.WHITEBOARD, target);
 			}
 		};
@@ -105,7 +109,7 @@ public class ActionsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				room.requestRight(Room.Right.VIDEO, target);
 			}
 		};
@@ -113,7 +117,7 @@ public class ActionsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				sipDialer.show(target);
 			}
 		};
@@ -121,7 +125,7 @@ public class ActionsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				download(target, EXTENSION_PNG);
 			}
 		};
@@ -129,7 +133,7 @@ public class ActionsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				download(target, EXTENSION_PDF);
 			}
 		};
@@ -137,8 +141,21 @@ public class ActionsSubMenu implements Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onClick(AjaxRequestTarget target) {
 				wbManager.reset(room.getRoom().getId(), getUserId());
+			}
+		};
+		localSettings = new OmMenuItem(mp.getString("edit.settings"), mp.getString("edit.settings")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				attributes.getAjaxCallListeners().add(new IAjaxCallListener() {
+					@Override
+					public CharSequence getPrecondition(Component component) {
+						return "$('#room-local-settings').modal('show'); return false;";
+					}
+				});
 			}
 		};
 	}
@@ -157,6 +174,7 @@ public class ActionsSubMenu implements Serializable {
 				.add(downloadPdfMenuItem)
 				.add(resetWb);
 		}
+		actionsMenu.add(localSettings);
 		return actionsMenu;
 	}
 
