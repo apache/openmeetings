@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.service.scheduler;
 
+import static org.apache.commons.text.StringEscapeUtils.escapeXml11;
 import static org.apache.openmeetings.core.rss.LoadAtomRssFeed.getFeedConnection;
 
 import java.io.IOException;
@@ -113,7 +114,7 @@ public class AtomReader {
 								}
 							}
 						} else if (f != null && evt.isCharacters()) {
-							val.append(((Characters)evt).getData());
+							val.append(escapeXml11(((Characters)evt).getData()));
 						} else if (f != null && evt.isEndElement() && f.getName().equals(((EndElement)evt).getName().getLocalPart())) {
 							if (!obj.has(f.getAlias())) {
 								obj.put(f.getAlias(), val.toString());

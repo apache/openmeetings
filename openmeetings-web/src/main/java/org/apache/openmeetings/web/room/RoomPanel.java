@@ -227,7 +227,7 @@ public class RoomPanel extends BasePanel {
 			super.onDownloadCompleted(target);
 			try {
 				Files.deleteIfExists(Paths.get(System.getProperty("java.io.tmpdir"), fuid));
-			} catch (IOException e) {
+			} catch (Exception e) {
 				log.error("unexcepted error while clean-up", e);
 			}
 			fuid = null;
