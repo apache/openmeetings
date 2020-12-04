@@ -324,9 +324,7 @@ var Chat = function() {
 				if (p.is(':visible') && !muted) {
 					if (window === window.parent) {
 						function _newMessage() {
-							new Notification(newMsgNotification, {
-								tag: 'new_chat_msg'
-							});
+							OmUtil.notify(newMsgNotification, 'new_chat_msg');
 						}
 						if (Notification.permission === 'granted') {
 							_newMessage();

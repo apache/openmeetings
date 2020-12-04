@@ -82,9 +82,7 @@ var Activities = function() {
 			$('.control.block', activities).addClass('bg-warning');
 			if (window === window.parent && notify) {
 				function _newMessage() {
-					new Notification(newActNotification, {
-						tag: 'new_aa_item'
-					});
+					OmUtil.notify(newActNotification, 'new_aa_item');
 				}
 				if (Notification.permission === 'granted') {
 					_newMessage();

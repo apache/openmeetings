@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -63,7 +62,6 @@ import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -418,7 +416,8 @@ public class MainPanel extends Panel {
 			if (prev != null) {
 				prev.cleanup(handler);
 			}
-			handler.add(contents.replace(inPanel), this.add(AttributeModifier.replace(ATTR_CLASS, "main " + inPanel.getCssClass())));
+			handler.add(contents.replace(inPanel));
+			handler.appendJavaScript("$('#" + this.getMarkupId() + "').attr('class', 'main " + inPanel.getCssClass() + "');");
 			inPanel.onMenuPanelLoad(handler);
 		}
 	}

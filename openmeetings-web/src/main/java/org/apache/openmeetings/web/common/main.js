@@ -106,7 +106,13 @@ var OmUtil = (function() {
 	};
 	self.ping = function() {
 		setTimeout(() => OmUtil.sendMessage({type: 'ping'}), 30000);
-	} ;
+	};
+	self.notify = function(msg, tag) {
+		const opts = {
+				tag: tag
+			};
+		new Notification(msg, opts);
+	}
 	return self;
 })();
 Wicket.BrowserInfo.collectExtraInfo = function(info) {
