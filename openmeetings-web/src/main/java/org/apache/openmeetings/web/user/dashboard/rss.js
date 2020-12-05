@@ -15,7 +15,7 @@ function displayRss(entries) {
 		markup.find('button').attr('data-target', `#${bodyId}`).attr('aria-controls', bodyId)
 			.append(entries[i].title);
 		markup.find('.collapse').attr('id', bodyId).attr('aria-labelledby', headId);
-		markup.find('.card-body').text(entries[i].content);
+		markup.find('.card-body').html(entries[i].content);
 		feeds.append(markup);
 	}
 }
