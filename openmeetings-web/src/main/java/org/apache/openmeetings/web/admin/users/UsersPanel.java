@@ -77,7 +77,7 @@ public class UsersPanel extends AdminBasePanel {
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(userDao.get(userId));
-						form.setNewVisible(false);
+						form.setNewRecordVisible(false);
 						form.update(target);
 					}
 				});
@@ -111,7 +111,7 @@ public class UsersPanel extends AdminBasePanel {
 				.addButton(OmModalCloseButton.of("54"));
 
 		form = new UserForm("form", listContainer, getNewUserInstance(userDao.get(getUserId())), adminPass, warning);
-		form.setNewVisible(true);
+		form.setNewRecordVisible(true);
 		add(form, warning);
 		super.onInitialize();
 	}

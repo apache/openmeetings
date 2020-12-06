@@ -277,7 +277,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	private void updateForm(AjaxRequestTarget target) {
 		setModelObject(userDao.get(getModelObject().getId()));
-		setNewVisible(false);
+		setNewRecordVisible(false);
 		target.add(this, listContainer);
 	}
 

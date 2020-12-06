@@ -67,7 +67,7 @@ public class ConfigsPanel extends AdminBasePanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						form.setNewVisible(false);
+						form.setNewRecordVisible(false);
 						form.setModelObject(c);
 						target.add(form, listContainer);
 					}
@@ -92,7 +92,7 @@ public class ConfigsPanel extends AdminBasePanel {
 		add(navigator);
 
 		form = new ConfigForm("form", listContainer, new Configuration());
-		form.setNewVisible(true);
+		form.setNewRecordVisible(true);
 		add(form);
 		super.onInitialize();
 	}

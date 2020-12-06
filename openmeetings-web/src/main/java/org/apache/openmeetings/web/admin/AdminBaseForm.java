@@ -41,7 +41,11 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 
 	protected AdminBaseForm(String id, IModel<T> object) {
 		super(id, object);
+	}
 
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		savePanel = new AdminActionsPanel<>("buttons", this) {
 			private static final long serialVersionUID = 1L;
 
@@ -81,12 +85,6 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 			}
 		};
 		add(savePanel);
-	}
-
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(validationBehavior);
@@ -94,6 +92,10 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 
 	public void setNewVisible(boolean visible) {
 		savePanel.setNewVisible(visible);
+	}
+
+	public void setNewRecordVisible(boolean visible) {
+		savePanel.setNewRecordVisible(visible);
 	}
 
 	public void setDelVisible(boolean visible) {

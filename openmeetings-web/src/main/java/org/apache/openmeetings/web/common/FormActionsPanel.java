@@ -72,7 +72,7 @@ public abstract class FormActionsPanel<T> extends Panel {
 			public void onClick(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
-				setNewVisible(false);
+				setNewRecordVisible(false);
 				onRefreshSubmit(target, form);
 			}
 		});
@@ -83,7 +83,7 @@ public abstract class FormActionsPanel<T> extends Panel {
 			public void onClick(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
-				setNewVisible(false);
+				setNewRecordVisible(false);
 				onPurgeSubmit(target, form);
 			}
 		};
@@ -101,7 +101,7 @@ public abstract class FormActionsPanel<T> extends Panel {
 	 *
 	 * @param visible - new visibility
 	 */
-	public void setNewVisible(boolean visible) {
+	public void setNewRecordVisible(boolean visible) {
 		// for admin only, will be implemented in admin
 	}
 

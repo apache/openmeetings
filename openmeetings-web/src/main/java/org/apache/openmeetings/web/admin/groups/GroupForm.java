@@ -154,6 +154,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 		super.onInitialize();
 		final boolean isGroupAdmin = hasGroupAdminLevel(getRights());
 		setNewVisible(!isGroupAdmin);
+		setNewRecordVisible(!isGroupAdmin);
 		userToadd.setEnabled(!isGroupAdmin);
 		add(new RequiredTextField<String>("name").setLabel(new ResourceModel("165")));
 		add(logo);
@@ -238,7 +239,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 			usersPanel.update(grpUser);
 		}
 		logo.process(Optional.of(target));
-		setNewVisible(false);
+		setNewRecordVisible(false);
 		updateView(target);
 	}
 }

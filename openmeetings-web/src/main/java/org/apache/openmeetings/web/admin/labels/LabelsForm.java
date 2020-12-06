@@ -75,7 +75,7 @@ public class LabelsForm extends AdminBaseForm<StringLabel> {
 		} catch (Exception e) {
 			error("Unexpected error while saving label:" + e.getMessage());
 		}
-		setNewVisible(false);
+		setNewRecordVisible(false);
 		target.add(panel.listContainer);
 	}
 

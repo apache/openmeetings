@@ -18,7 +18,11 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
+
+import java.util.Iterator;
 
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.user.Group;
@@ -51,11 +55,12 @@ public class GroupsPanel extends AdminBasePanel {
 
 	public GroupsPanel(String id) {
 		super(id);
-		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+	}
 
-		//Adding the Group Form
-		form = new GroupForm("form", listContainer, new Group());
-		add(form);
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 
 		//List view
 		SearchableDataView<Group> dataView = new SearchableDataView<>("groupList", new SearchableGroupAdminDataProvider<>(GroupDao.class)) {
@@ -75,7 +80,7 @@ public class GroupsPanel extends AdminBasePanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						form.setNewVisible(false);
+						form.setNewRecordVisible(false);
 						form.setModelObject(g);
 						form.updateView(target);
 						target.add(listContainer);
@@ -84,6 +89,13 @@ public class GroupsPanel extends AdminBasePanel {
 				item.add(AttributeModifier.append(ATTR_CLASS, getRowClass(g.getId(), form.getModelObject().getId())));
 			}
 		};
+
+		final boolean isGroupAdmin = hasGroupAdminLevel(getRights());
+		Iterator<? extends Group> iter = dataView.getDataProvider().iterator(0, 1);
+		Group g = iter.hasNext() ? iter.next() : new Group();
+		//Adding the Group Form
+		form = new GroupForm("form", listContainer, isGroupAdmin ? g : new Group());
+		add(form);
 
 		//Paging
 		add(listContainer.add(dataView).setOutputMarkupId(true));
