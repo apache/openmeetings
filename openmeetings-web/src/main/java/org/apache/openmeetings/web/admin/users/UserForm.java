@@ -174,6 +174,7 @@ public class UserForm extends AdminBaseForm<User> {
 		}));
 		mainContainer.add(new ComunityUserForm("comunity", getModel()));
 		remove(validationBehavior);
+		setNewRecordVisible(true);
 	}
 
 	@Override

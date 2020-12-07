@@ -111,7 +111,6 @@ public class UsersPanel extends AdminBasePanel {
 				.addButton(OmModalCloseButton.of("54"));
 
 		form = new UserForm("form", listContainer, getNewUserInstance(userDao.get(getUserId())), adminPass, warning);
-		form.setNewRecordVisible(true);
 		add(form, warning);
 		super.onInitialize();
 	}

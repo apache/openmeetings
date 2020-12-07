@@ -92,7 +92,6 @@ public class ConfigsPanel extends AdminBasePanel {
 		add(navigator);
 
 		form = new ConfigForm("form", listContainer, new Configuration());
-		form.setNewRecordVisible(true);
 		add(form);
 		super.onInitialize();
 	}

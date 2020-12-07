@@ -52,6 +52,7 @@ public class LabelsForm extends AdminBaseForm<StringLabel> {
 		super.onInitialize();
 		add(new RequiredTextField<String>("key").setLabel(new ResourceModel("165")));
 		add(new TextArea<String>("value"));
+		setNewRecordVisible(true);
 	}
 
 	@Override

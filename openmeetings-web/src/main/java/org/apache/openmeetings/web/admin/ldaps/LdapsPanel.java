@@ -92,7 +92,6 @@ public class LdapsPanel extends AdminBasePanel {
 		add(navigator);
 
 		form = new LdapForm("form", listContainer, new LdapConfig());
-		form.setNewRecordVisible(true);
 		add(form);
 
 		super.onInitialize();

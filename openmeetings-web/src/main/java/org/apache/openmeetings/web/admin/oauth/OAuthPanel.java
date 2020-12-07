@@ -46,6 +46,7 @@ public class OAuthPanel extends AdminBasePanel {
 
 	@Override
 	protected void onInitialize() {
+		super.onInitialize();
 		SearchableDataView<OAuthServer> dataView = new SearchableDataView<>("oauthServersList",
 				new SearchableDataProvider<>(OAuth2Dao.class))
 		{
@@ -87,8 +88,6 @@ public class OAuthPanel extends AdminBasePanel {
 		add(navigator);
 
 		form = new OAuthForm("form", listContainer, new OAuthServer());
-		form.setNewRecordVisible(true);
 		add(form);
-		super.onInitialize();
 	}
 }
