@@ -371,11 +371,7 @@ var Wb = function() {
 					, minWidth: 255
 				});
 				tools.find('.om-icon.dweet').click(function(){					
-			        dweet = OmUtil.tmpl("#wb-dweet");			        
-			       	dweet[0].id='wb-dweet' + dweetIDCount++;        
-			        dweet[0].style.bottom = '100px';
-			        dweet[0].style.position= 'absolute';
-			        dweet[0].style[(Settings.isRtl ? 'left' : 'right')] = '100px';        			        					      	         
+			        dweet = OmUtil.tmpl('#wb-dweet', 'wb-dweet'+dweetIDCount++);
 					dweet.find('.ui-dialog-titlebar-close').click(function() {
 						let id = $(this.parentElement).attr('id');
 						$("#"+id).remove();
@@ -400,9 +396,9 @@ var Wb = function() {
 					, minWidth: 255
 				});		
 				dweet.find('.update-btn').button().click(function() {
-					var id = $(this.parentElement.parentElement).attr('id');
-					var thing = $("#" + id).find('input').val();
-					var content = $("#" + id).find('textarea').val();
+					let id = $(this.parentElement.parentElement).attr('id');
+					let thing = $("#" + id).find('input').val();
+					let content = $("#" + id).find('textarea').val();
 					content = JSON.parse(content);
 					if(thing){
 						dweetio.dweet_for(thing, content, function(err, dweet){
@@ -835,8 +831,7 @@ var Wb = function() {
 				math[0].style.display = 'none';
 				math[0].style.bottom = '100px';
 				math[0].style[(Settings.isRtl ? 'left' : 'right')] = '100px';
-				dweet = OmUtil.tmpl("#wb-dweet");
-				console.log(dweet);
+				dweet = OmUtil.tmpl("#wb-dweet");				
 				dweet[0].style.display = 'none';
 				dweet[0].style.bottom = '100px';
 				dweet[0].style[(Settings.isRtl ? 'left' : 'right')] = '100px';				

@@ -158,6 +158,10 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 .room-block .sb-wb .wb-block .om-icon.big.prev::before {
 	content: '\f053';
 }
+.room-block .sb-wb .wb-block .tools .om-icon.big.dweet::before {
+	content: '\f1e6';
+	color: red;
+}
 .wb-tool-settings, .wb-formula {
 	position: absolute;
 	z-index: 95;
@@ -353,6 +357,27 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 }
 #wb-rename-menu {
 	display: none;
+}
+.dweet-btn {
+	float: right;
+	margin: 10px;
+}
+.dweet-input {
+	resize: vertical !important;
+}
+
+.dweet-inline {
+	display: inline-block;
+}
+
+.dweet-inline.input {
+	padding-left: 1rem;
+}
+
+.wb-dweet {
+	bottom: 100px;
+	right: 100px;
+	position: absolute !important; 
 }
 /* MathJax*/
 .MathJax_SVG_Display {text-align: center; margin: 1em 0em; position: relative; display: block!important; text-indent: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; width: 100%}

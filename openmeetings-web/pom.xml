@@ -163,8 +163,8 @@
 								<jsSourceFile>raw-tool-arrow.js</jsSourceFile>
 								<jsSourceFile>raw-tool-clipart.js</jsSourceFile>
 								<jsSourceFile>raw-wb-board.js</jsSourceFile>
-								<jsSourceFile>raw-wb-area.js</jsSourceFile>																
-								<jsSourceFile>dweet-io.js</jsSourceFile>								
+								<jsSourceFile>raw-wb-area.js</jsSourceFile>
+								<jsSourceFile>dweet-io.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>wb.js</jsFinalFile>
 							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room/wb/</jsTargetDir>
@@ -265,7 +265,7 @@
 							<jsEngine>CLOSURE</jsEngine>
 							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/user/chat</jsTargetDir>
 						</configuration>
-					</execution>					
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
