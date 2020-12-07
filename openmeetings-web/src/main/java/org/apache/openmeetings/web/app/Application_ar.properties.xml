@@ -877,8 +877,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.upl.bytes"><![CDATA[بايت تم تحميلها]]></entry>
 	<entry key="network.test.upl.speed"><![CDATA[سرعة الرفع]]></entry>
 	<entry key="network.test.upl.time"><![CDATA[وقت التحميل]]></entry>
-	<entry key="notification.chat.message"><![CDATA[You have new chat message(s)]]></entry>
-	<entry key="notification.room.activity"><![CDATA[You have new activities, please check "Activities&Action"]]></entry>
+	<entry key="notification.chat.message"><![CDATA[لديك رسالة (رسائل) دردشة جديدة]]></entry>
+	<entry key="notification.room.activity"><![CDATA[لديك أنشطة جديدة ، يرجى تحديد "الأنشطة والعمل"]]></entry>
 	<entry key="poll.clone"><![CDATA[استنساخ]]></entry>
 	<entry key="poll.type.NUMERIC"><![CDATA[عددي من 1 الى 10]]></entry>
 	<entry key="poll.type.YES_NO"><![CDATA[نعم / لا]]></entry>
