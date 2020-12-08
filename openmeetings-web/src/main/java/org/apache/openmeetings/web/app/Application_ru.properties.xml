@@ -189,7 +189,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="442"><![CDATA[Удалить лог чата на сервере]]></entry>
 	<entry key="482"><![CDATA[Участники]]></entry>
 	<entry key="498"><![CDATA[В этой комнате нет модератора, но есть участники. Вы можете запросить функции модератора или подождать]]></entry>
-	<entry key="499"><![CDATA[Обратная связь {0}]]></entry>
 	<entry key="500"><![CDATA[{0}: Приглашение]]></entry>
 	<entry key="501"><![CDATA[Сообщение от участника:]]></entry>
 	<entry key="502"><![CDATA[Текст сообщения:]]></entry>

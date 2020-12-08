@@ -189,7 +189,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="442"><![CDATA[Delete Server-Chatlog]]></entry>
 	<entry key="482"><![CDATA[Participants]]></entry>
 	<entry key="498"><![CDATA[There is no Moderator in this Room, but there are some Participants. You have to apply for Moderation or wait.]]></entry>
-	<entry key="499"><![CDATA[Feedback {0}]]></entry>
 	<entry key="500"><![CDATA[{0} - Invitation]]></entry>
 	<entry key="501"><![CDATA[Message from User:]]></entry>
 	<entry key="502"><![CDATA[Message:]]></entry>

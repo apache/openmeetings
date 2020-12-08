@@ -160,7 +160,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static final String NAME_ATTR_KEY = "name";
 	public static final String SERVER_URL_ATTR_KEY = "server.url";
 	//additional maps for faster searching should be created
-	static final Set<String> STRINGS_WITH_APP = Set.of("499", "500", "506", "511", "512", "513", "517", "widget.start.desc"
+	static final Set<String> STRINGS_WITH_APP = Set.of("500", "506", "511", "512", "513", "517", "widget.start.desc"
 			, "1151", "1155", "1157", "1158", "1194"); // package private for testing
 	private static String appName;
 	public static final String HASH_MAPPING = "/hash";
