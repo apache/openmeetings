@@ -49,6 +49,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
 import org.junit.jupiter.api.Test;
 
 class TestUserService extends AbstractWebServiceTest {
@@ -127,13 +128,12 @@ class TestUserService extends AbstractWebServiceTest {
 		assertEquals(userId1, userId2, "User should be the same");
 	}
 
-	@Test
-	void addUserTest() {
+	private UserDTO doAddUser(String uuid, String extId) {
 		String[] tzList = TimeZone.getAvailableIDs();
 		String tz = TimeZone.getTimeZone(tzList[rnd.nextInt(tzList.length)]).getID();
 		ServiceResult r = login();
 		UserDTO u = new UserDTO();
-		String uuid = randomUUID().toString();
+		u.setType(null); // check auto-set
 		u.setLogin("test" + uuid);
 		u.setPassword(createPass());
 		u.setFirstname("testF" + uuid);
@@ -142,8 +142,10 @@ class TestUserService extends AbstractWebServiceTest {
 		u.getAddress().setEmail(uuid + "@local");
 		u.getAddress().setCountry(Locale.getDefault().getCountry());
 		u.setTimeZoneId(tz);
-		u.setExternalId(uuid);
-		u.setExternalType(UNIT_TEST_EXT_TYPE);
+		if (!Strings.isEmpty(extId)) {
+			u.setExternalId(extId);
+			u.setExternalType(UNIT_TEST_EXT_TYPE);
+		}
 		UserDTO user = getClient(getUserUrl())
 				.path("/")
 				.query("sid", r.getMessage())
@@ -152,8 +154,22 @@ class TestUserService extends AbstractWebServiceTest {
 		assertNotNull(user, "Valid UserDTO should be returned");
 		assertNotNull(user.getId(), "Id should not be NULL");
 		assertEquals(u.getLogin(), user.getLogin(), "Login should match");
-		assertEquals(User.Type.EXTERNAL, user.getType(), "Type should match");
 		assertEquals(tz, user.getTimeZoneId(), "Timezone should match");
+		return user;
+	}
+
+	@Test
+	void addUserTest() {
+		String uuid = randomUUID().toString();
+		UserDTO user = doAddUser(uuid, uuid);
+		assertEquals(User.Type.EXTERNAL, user.getType(), "Type should match");
+	}
+
+	@Test
+	void addIntUserTest() {
+		String uuid = randomUUID().toString();
+		UserDTO user = doAddUser(uuid, null);
+		assertEquals(User.Type.USER, user.getType(), "Type should match");
 	}
 
 	@Test

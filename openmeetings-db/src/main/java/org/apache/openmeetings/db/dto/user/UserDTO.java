@@ -92,7 +92,7 @@ public class UserDTO implements Serializable {
 			}
 			u.setExternalId(externalId);
 		}
-		u.setType(type);
+		u.setType(type == null ? Type.USER : type);
 		u.setPictureUri(pictureUri);
 		return u;
 	}
