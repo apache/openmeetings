@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
 import javax.sip.ClientTransaction;
+import javax.sip.Dialog;
 import javax.sip.DialogTerminatedEvent;
 import javax.sip.IOExceptionEvent;
 import javax.sip.ListeningPoint;
@@ -47,6 +48,7 @@ import javax.sip.TimeoutEvent;
 import javax.sip.TransactionTerminatedEvent;
 import javax.sip.address.Address;
 import javax.sip.address.AddressFactory;
+import javax.sip.header.CSeqHeader;
 import javax.sip.header.ContactHeader;
 import javax.sip.header.HeaderFactory;
 import javax.sip.message.MessageFactory;
@@ -165,8 +167,11 @@ public class SipStackProcessor implements SipListenerExt {
 		Request rq = evt.getRequest();
 		String method = rq.getMethod();
 		try {
-			if (Request.OPTIONS.equals(method)) {
-				ServerTransaction transaction = sipProvider.getNewServerTransaction(rq);
+			if (Request.OPTIONS.equals(method) || Request.BYE.equals(method)) {
+				ServerTransaction transaction = evt.getServerTransaction();
+				if (transaction == null) {
+					transaction = sipProvider.getNewServerTransaction(rq);
+				}
 				Response resp = messageFactory.createResponse(200, rq);
 				resp.addHeader(contactHeader);
 				transaction.sendResponse(resp);
@@ -190,6 +195,7 @@ public class SipStackProcessor implements SipListenerExt {
 				if (REGISTER.equals(prevReq.getMethod())) {
 					callbacks.onRegisterOk();
 				} else if (INVITE.equals(prevReq.getMethod())) {
+					ack(evt);
 					callbacks.onInviteOk(new String((byte[])resp.getContent()));
 				}
 				break;
@@ -199,6 +205,18 @@ public class SipStackProcessor implements SipListenerExt {
 			// FIXME TODO other codes: 404
 			default:
 				log.debug("No handler for response: \n\n{}", resp);
+		}
+	}
+
+	private void ack(ResponseEvent evt) {
+		try {
+			Response resp = evt.getResponse();
+			Dialog dlg = evt.getDialog();
+			CSeqHeader cseqHead = (CSeqHeader)resp.getHeader(CSeqHeader.NAME);
+			Request ack = dlg.createAck(cseqHead.getSeqNumber());
+			dlg.sendAck(ack);
+		} catch (Exception e) {
+			log.error("ack {}", evt, e);
 		}
 	}
 

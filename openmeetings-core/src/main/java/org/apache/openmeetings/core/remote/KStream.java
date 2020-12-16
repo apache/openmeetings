@@ -467,6 +467,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 			rtpEndpoint = null;
 		}
 		sipProcessor.ifPresent(SipStackProcessor::destroy);
+		sipProcessor = Optional.empty();
 	}
 
 	public void addCandidate(IceCandidate candidate, String uid) {
@@ -485,7 +486,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	}
 
 	void addSipProcessor(int count) {
-		if (kRoom.getSipCount() > 0) {
+		if (count > 0) {
 			if (sipProcessor.isEmpty()) {
 				try {
 					sipProcessor = kHandler.getSipManager().createSipStackProcessor(
