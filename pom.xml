@@ -1012,6 +1012,14 @@
 									<pattern>BSD-style license</pattern>
 								</patterns>
 							</license>
+							<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+								<licenseFamilyCategory>Creative Commons Attribution</licenseFamilyCategory>
+								<licenseFamilyName>CC BY</licenseFamilyName>
+								<notes></notes>
+								<patterns>
+									<pattern>creativecommons.org/licenses/by/4.0</pattern>
+								</patterns>
+							</license>
 						</licenses>
 						<licenseFamilies>
 							<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
@@ -1019,6 +1027,9 @@
 							</licenseFamily>
 							<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
 								<familyName>BSD</familyName>
+							</licenseFamily>
+							<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+								<familyName>CC BY</familyName>
 							</licenseFamily>
 						</licenseFamilies>
 						<excludes>

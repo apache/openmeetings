@@ -67,6 +67,7 @@ public class KRoom {
 	private final AtomicBoolean recordingStarted = new AtomicBoolean(false);
 	private final AtomicBoolean sharingStarted = new AtomicBoolean(false);
 	private Long recordingId = null;
+	private int sipCount = 0;
 	private JSONObject recordingUser = new JSONObject();
 	private JSONObject sharingUser = new JSONObject();
 
@@ -246,5 +247,16 @@ public class KRoom {
 	public void close() {
 		processor.getByRoom(room.getId()).forEach(KStream::release);
 		log.debug("Room {} closed", room.getId());
+	}
+
+	public void updateSipCount(final int count) {
+		if (count != sipCount) {
+			sipCount = count;
+			processor.getByRoom(room.getId()).forEach(stream -> stream.addSipProcessor(count));
+		}
+	}
+
+	public int getSipCount() {
+		return sipCount;
 	}
 }

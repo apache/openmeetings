@@ -29,6 +29,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -55,6 +56,8 @@ public class TimerService {
 	private ClientManager cm;
 	@Autowired
 	private SipManager sipManager;
+	@Autowired
+	private KurentoHandler kHandler;
 
 	@PostConstruct
 	private void init() {
@@ -97,7 +100,9 @@ public class TimerService {
 	}
 
 	private void updateSipLastName(Optional<Client> sipClient, Room r) {
-		final String newLastName = "(" + sipManager.countUsers(r.getConfno()) + ")";
+		int count = sipManager.countUsers(r.getConfno());
+		final String newLastName = "(" + count + ")";
+		kHandler.updateSipCount(r, count);
 		sipClient.ifPresentOrElse(c -> {
 			if (!newLastName.equals(c.getUser().getLastname())) {
 				c.getUser().setLastname(newLastName).resetDisplayName();

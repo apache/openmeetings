@@ -317,6 +317,10 @@ public class KurentoHandler {
 		return rooms.values();
 	}
 
+	public void updateSipCount(Room r, int count) {
+		getRoom(r.getId()).updateSipCount(count);
+	}
+
 	static JSONObject newKurentoMsg() {
 		return new JSONObject().put("type", KURENTO_TYPE);
 	}

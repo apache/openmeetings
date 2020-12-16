@@ -80,13 +80,12 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	private RecorderEndpoint recorder;
 	private WebRtcEndpoint outgoingMedia = null;
 	private RtpEndpoint rtpEndpoint;
-	private Optional<SipStackProcessor> sipProcessor;
+	private Optional<SipStackProcessor> sipProcessor = Optional.empty();
 	private final ConcurrentMap<String, WebRtcEndpoint> listeners = new ConcurrentHashMap<>();
 	private Optional<CompletableFuture<Object>> flowoutFuture = Optional.empty();
 	private ListenerSubscription flowoutSubscription;
 	private Long chunkId;
 	private Type type;
-	private String sdpOffer;
 	private boolean hasAudio;
 	private boolean hasVideo;
 	private boolean hasScreen;
@@ -153,7 +152,6 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	}
 
 	private void internalStartBroadcast(final StreamDesc sd, final String sdpOffer) throws Exception {
-		this.sdpOffer = sdpOffer;
 		outgoingMedia = createEndpoint(sd.getSid(), sd.getUid());
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
 		flowoutSubscription = outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
@@ -174,11 +172,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		});
 		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media FlowIn :: {}", evt));
 		addListener(sd.getSid(), sd.getUid(), sdpOffer);
-		sipProcessor = kHandler.getSipManager().createSipStackProcessor(
-				randomUUID().toString()
-				, kRoom.getRoom()
-				, this);
-		sipProcessor.ifPresent(SipStackProcessor::register);
+		addSipProcessor(kRoom.getSipCount());
 		if (kRoom.isRecording()) {
 			startRecord();
 		}
@@ -490,6 +484,24 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		}
 	}
 
+	void addSipProcessor(int count) {
+		if (kRoom.getSipCount() > 0) {
+			if (sipProcessor.isEmpty()) {
+				try {
+					sipProcessor = kHandler.getSipManager().createSipStackProcessor(
+							randomUUID().toString()
+							, kRoom.getRoom()
+							, this);
+					sipProcessor.ifPresent(SipStackProcessor::register);
+				} catch (Exception e) {
+					log.error("Unexpected error while creating SipProcessor", e);
+				}
+			}
+		} else {
+			releaseRtp();
+		}
+	}
+
 	private static JSONObject convert(com.google.gson.JsonObject o) {
 		return new JSONObject(o.toString());
 	}
@@ -557,14 +569,20 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 
 	@Override
 	public void onRegisterOk() {
+		//TODO code for `SIP master` stream
 		rtpEndpoint = getRtpEndpoint(pipeline);
-		outgoingMedia.connect(rtpEndpoint, MediaType.AUDIO); //TODO VIDEO
-		sipProcessor.get().invite(kRoom.getRoom(), null);
+		if (hasAudio) {
+			outgoingMedia.connect(rtpEndpoint, MediaType.AUDIO);
+		}
+		if (hasVideo) {
+			outgoingMedia.connect(rtpEndpoint, MediaType.VIDEO);
+		}
+		sipProcessor.get().invite(kRoom.getRoom(), rtpEndpoint.generateOffer());
 	}
 
 	@Override
 	public void onInviteOk(String sdp) {
-		String answer = rtpEndpoint.processOffer(sdp);
-		sipProcessor.get().invite(kRoom.getRoom(), answer);
+		//TODO code for `SIP master` stream
+		rtpEndpoint.processAnswer(sdp);
 	}
 }

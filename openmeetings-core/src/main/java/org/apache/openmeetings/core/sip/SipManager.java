@@ -194,16 +194,15 @@ public class SipManager implements ISipManager {
 		exec(da);
 	}
 
-	public Integer countUsers(String confno) {
-		if (confno == null) {
-			return null;
-		}
-		ConfbridgeListAction da = new ConfbridgeListAction(confno);
-		ResponseEvents r = execEvent(da);
-		if (r != null) {
-			log.trace("SipManager::countUsers size == {}", r.getEvents().size());
-			// "- 1" here means: ListComplete event
-			return r.getEvents().size() - 1;
+	public int countUsers(String confno) {
+		if (confno != null) {
+			ConfbridgeListAction da = new ConfbridgeListAction(confno);
+			ResponseEvents r = execEvent(da);
+			if (r != null) {
+				log.trace("SipManager::countUsers size == {}", r.getEvents().size());
+				// "- 1" here means: ListComplete event
+				return r.getEvents().size() - 1;
+			}
 		}
 		return 0;
 	}
