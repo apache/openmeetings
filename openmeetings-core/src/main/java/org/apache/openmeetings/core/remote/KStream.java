@@ -51,6 +51,7 @@ import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.entity.record.RecordingChunk.Type;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.kurento.client.Continuation;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.ListenerSubscription;
@@ -89,6 +90,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	private boolean hasAudio;
 	private boolean hasVideo;
 	private boolean hasScreen;
+	private boolean sipClient;
 
 	public KStream(final StreamDesc sd, KRoom kRoom, KurentoHandler kHandler) {
 		super(sd.getSid(), sd.getUid());
@@ -107,6 +109,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		hasAudio = sd.hasActivity(Activity.AUDIO);
 		hasVideo = sd.hasActivity(Activity.VIDEO);
 		hasScreen = sd.hasActivity(Activity.SCREEN);
+		sipClient = OmFileHelper.SIP_USER_ID.equals(sd.getClient().getUserId());
 		if ((sdpOffer.indexOf("m=audio") > -1 && !hasAudio)
 				|| (sdpOffer.indexOf("m=video") > -1 && !hasVideo && StreamType.SCREEN != streamType))
 		{
@@ -570,20 +573,26 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 
 	@Override
 	public void onRegisterOk() {
-		//TODO code for `SIP master` stream
-		rtpEndpoint = getRtpEndpoint(pipeline);
-		if (hasAudio) {
-			outgoingMedia.connect(rtpEndpoint, MediaType.AUDIO);
+		if (sipClient) {
+
+		} else {
+			rtpEndpoint = getRtpEndpoint(pipeline);
+			if (hasAudio) {
+				outgoingMedia.connect(rtpEndpoint, MediaType.AUDIO);
+			}
+			if (hasVideo) {
+				outgoingMedia.connect(rtpEndpoint, MediaType.VIDEO);
+			}
+			sipProcessor.get().invite(kRoom.getRoom(), rtpEndpoint.generateOffer());
 		}
-		if (hasVideo) {
-			outgoingMedia.connect(rtpEndpoint, MediaType.VIDEO);
-		}
-		sipProcessor.get().invite(kRoom.getRoom(), rtpEndpoint.generateOffer());
 	}
 
 	@Override
 	public void onInviteOk(String sdp) {
-		//TODO code for `SIP master` stream
-		rtpEndpoint.processAnswer(sdp);
+		if (sipClient) {
+
+		} else {
+			rtpEndpoint.processAnswer(sdp);
+		}
 	}
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.sip;
 
+import static javax.sip.message.Request.BYE;
 import static javax.sip.message.Request.INVITE;
 import static javax.sip.message.Request.REGISTER;
 import static javax.sip.message.Response.OK;
@@ -93,6 +94,7 @@ public class SipStackProcessor implements SipListenerExt {
 	private final ContactHeader contactHeader;
 	private final AtomicLong cseq = new AtomicLong();
 	private final Random rnd = new Random();
+	private Dialog dialog;
 
 	SipStackProcessor(SipManager manager, String name, int localWsPort, ISipCallbacks callbacks) throws Exception {
 		this.manager = manager;
@@ -195,14 +197,16 @@ public class SipStackProcessor implements SipListenerExt {
 				if (REGISTER.equals(prevReq.getMethod())) {
 					callbacks.onRegisterOk();
 				} else if (INVITE.equals(prevReq.getMethod())) {
+					dialog = evt.getDialog();
 					ack(evt);
 					callbacks.onInviteOk(new String((byte[])resp.getContent()));
+				} else if (BYE.equals(prevReq.getMethod())) {
+					doDestroy();
 				}
 				break;
 			case TRYING:
 			case RINGING:
 				break;
-			// FIXME TODO other codes: 404
 			default:
 				log.debug("No handler for response: \n\n{}", resp);
 		}
@@ -217,6 +221,16 @@ public class SipStackProcessor implements SipListenerExt {
 			dlg.sendAck(ack);
 		} catch (Exception e) {
 			log.error("ack {}", evt, e);
+		}
+	}
+
+	private void sayBye() {
+		try {
+			Request req = dialog.createRequest(BYE);
+			ClientTransaction ct = sipProvider.getNewClientTransaction(req);
+			dialog.sendRequest(ct);
+		} catch (SipException e) {
+			log.error("bye ", e);
 		}
 	}
 
@@ -346,6 +360,14 @@ public class SipStackProcessor implements SipListenerExt {
 	}
 
 	public void destroy() {
+		if (dialog != null) {
+			sayBye();
+		} else {
+			doDestroy();
+		}
+	}
+
+	private void doDestroy() {
 		sipStack.stop();
 		manager.freePort(localWsPort);
 	}
