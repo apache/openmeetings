@@ -64,22 +64,24 @@ var MicLevel = (function() {
 				const WIDTH = canvas.width
 					, HEIGHT = canvas.height;
 				canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-				if (!!analyser && cnvs.is(':visible')) {
-					analyser.getByteFrequencyData(arr);
-					let favg = 0.0;
-					for (let i = 0; i < al; ++i) {
-						favg += arr[i] * arr[i];
-					}
-					vol = Math.sqrt(favg / al);
-					vals.push(vol);
-					const min = vals.min();
-					_micActivity(vol > min + 5); // magic number
-					canvasCtx.fillStyle = color;
-					if (horiz) {
-						canvasCtx.fillRect(0, 0, WIDTH * vol / 100, HEIGHT);
-					} else {
-						const h = HEIGHT * vol / 100;
-						canvasCtx.fillRect(0, HEIGHT - h, WIDTH, h);
+				if (!!analyser && cnvs.length > 0) {
+					if (cnvs.is(':visible')) {
+						analyser.getByteFrequencyData(arr);
+						let favg = 0.0;
+						for (let i = 0; i < al; ++i) {
+							favg += arr[i] * arr[i];
+						}
+						vol = Math.sqrt(favg / al);
+						vals.push(vol);
+						const min = vals.min();
+						_micActivity(vol > min + 5); // magic number
+						canvasCtx.fillStyle = color;
+						if (horiz) {
+							canvasCtx.fillRect(0, 0, WIDTH * vol / 100, HEIGHT);
+						} else {
+							const h = HEIGHT * vol / 100;
+							canvasCtx.fillRect(0, HEIGHT - h, WIDTH, h);
+						}
 					}
 					requestAnimationFrame(update);
 				}
