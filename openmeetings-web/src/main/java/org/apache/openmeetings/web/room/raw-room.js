@@ -121,7 +121,7 @@ var Room = (function() {
 		const sbW = _sbWidth()
 			, holder = $('.room-block');
 		($('.main.room')[0]).style.setProperty('--sidebar-width', sbW + 'px');
-		if (sbW > 285) {
+		if (sbW > 236) {
 			holder.addClass('big').removeClass('narrow');
 		} else {
 			holder.removeClass('big').addClass('narrow');

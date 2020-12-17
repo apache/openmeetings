@@ -317,7 +317,7 @@ public class KurentoHandler {
 		return rooms.values();
 	}
 
-	public void updateSipCount(Room r, int count) {
+	public void updateSipCount(Room r, long count) {
 		getRoom(r.getId()).updateSipCount(count);
 	}
 

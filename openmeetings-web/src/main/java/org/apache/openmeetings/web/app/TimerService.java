@@ -100,7 +100,7 @@ public class TimerService {
 	}
 
 	private void updateSipLastName(Optional<Client> sipClient, Room r) {
-		int count = sipManager.countUsers(r.getConfno());
+		long count = sipManager.countUsers(r.getConfno());
 		final String newLastName = "(" + count + ")";
 		kHandler.updateSipCount(r, count);
 		sipClient.ifPresentOrElse(c -> {

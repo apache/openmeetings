@@ -488,7 +488,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		}
 	}
 
-	void addSipProcessor(int count) {
+	void addSipProcessor(long count) {
 		if (count > 0) {
 			if (sipProcessor.isEmpty()) {
 				try {

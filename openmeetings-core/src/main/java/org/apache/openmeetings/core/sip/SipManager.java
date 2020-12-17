@@ -44,6 +44,7 @@ import org.asteriskjava.manager.action.DbPutAction;
 import org.asteriskjava.manager.action.EventGeneratingAction;
 import org.asteriskjava.manager.action.ManagerAction;
 import org.asteriskjava.manager.action.OriginateAction;
+import org.asteriskjava.manager.event.ConfbridgeListEvent;
 import org.asteriskjava.manager.response.ManagerError;
 import org.asteriskjava.manager.response.ManagerResponse;
 import org.slf4j.Logger;
@@ -194,14 +195,17 @@ public class SipManager implements ISipManager {
 		exec(da);
 	}
 
-	public int countUsers(String confno) {
+	public long countUsers(String confno) {
 		if (confno != null) {
 			ConfbridgeListAction da = new ConfbridgeListAction(confno);
 			ResponseEvents r = execEvent(da);
 			if (r != null) {
-				log.trace("SipManager::countUsers size == {}", r.getEvents().size());
-				// "- 1" here means: ListComplete event
-				return r.getEvents().size() - 1;
+				long count = r.getEvents().stream()
+						.filter(evt -> evt instanceof ConfbridgeListEvent)
+						.filter(evt -> !omSipUser.equals(evt.getCallerIdName()))
+						.count();
+				log.trace("SipManager::countUsers == {}", count);
+				return count;
 			}
 		}
 		return 0;
