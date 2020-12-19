@@ -971,4 +971,8 @@ Please visit {3} OM server and check them under Admin -> Groups]]></entry>
 	<entry key="wizard.button.finish"><![CDATA[Finish]]></entry>
 	<entry key="zoom.FULL_FIT"><![CDATA[Full-Fit]]></entry>
 	<entry key="zoom.PAGE_WIDTH"><![CDATA[Page Width]]></entry>
+	<entry key="wb.tool.dweet"><![CDATA[Dweet IOT Messaging]]></entry>
+	<entry key="wb.tool.dweet.mything"><![CDATA[MyThing]]></entry>
+	<entry key="wb.tool.dweet.context"><![CDATA[Data]]></entry>
+	<entry key="wb.tool.dweet.response"><![CDATA[Response]]></entry>
 </properties>

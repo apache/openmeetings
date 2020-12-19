@@ -165,6 +165,7 @@
 								<jsSourceFile>raw-tool-clipart.js</jsSourceFile>
 								<jsSourceFile>raw-wb-board.js</jsSourceFile>
 								<jsSourceFile>raw-wb-area.js</jsSourceFile>
+								<jsSourceFile>dweet-io.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>wb.js</jsFinalFile>
 							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room/wb/</jsTargetDir>

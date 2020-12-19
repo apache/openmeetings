@@ -260,6 +260,7 @@ var Wb = function() {
 		const clearAll = tools.find('.om-icon.clear-all')
 			, sBtn = tools.find('.om-icon.settings');
 		let _firstToolItem = true;
+		let dweetIDCount = 1;
 		switch (role) {
 			case PRESENTER:
 				clearAll.confirmation({
@@ -367,6 +368,48 @@ var Wb = function() {
 					minHeight: 140
 					, minWidth: 255
 				});
+				tools.find('.om-icon.dweet').click(function(){					
+			        dweet = OmUtil.tmpl('#wb-dweet', 'wb-dweet'+dweetIDCount++);
+					dweet.find('.ui-dialog-titlebar-close').click(function() {
+						let id = $(this.parentElement).attr('id');
+						$("#"+id).remove();
+					});
+					dweet.draggable({
+					scroll: false
+					, handle: '.ui-dialog-titlebar'
+					, containment: 'body'
+					, start: function() {
+						if (!!$(this).css('bottom')) {
+							$(this).css('bottom', '').css(Settings.isRtl ? 'left' : 'right', '');
+						}
+					}
+					, drag: function() {
+						if ($(this).position().x + $(this).width() >= $(this).parent().width()) {
+							return false;
+						}
+					}
+				});
+				dweet.resizable({
+					minHeight: 140
+					, minWidth: 255
+				});		
+				dweet.find('.update-btn').button().click(function() {
+					let id = $(this.parentElement.parentElement).attr('id');
+					let thing = $("#" + id).find('input').val();
+					let content = $("#" + id).find('textarea').val();
+					content = JSON.parse(content);
+					if(thing){
+						dweetio.dweet_for(thing, content, function(err, dweet){
+							let responseContainer = $("#"+id).find('.dweet-response');
+							if(err){
+								responseContainer.val(dweet.thing +"\n"+dweet.content+"\n"+dweet.created);	
+							}						   						    
+						    responseContainer.val(dweet.thing +"\n"+dweet.content+"\n"+dweet.created);
+						});						
+					}
+				});	
+					wbEl.append(dweet);						      
+				});			
 			case NONE:
 				_updateZoomPanel();
 				zoomBar.find('.zoom-out').click(function() {
@@ -786,7 +829,11 @@ var Wb = function() {
 				math[0].style.display = 'none';
 				math[0].style.bottom = '100px';
 				math[0].style[(Settings.isRtl ? 'left' : 'right')] = '100px';
-				wbEl.append(settings, math);
+				dweet = OmUtil.tmpl('#wb-dweet');				
+				dweet[0].style.display = 'none';
+				dweet[0].style.bottom = '100px';
+				dweet[0].style[(Settings.isRtl ? 'left' : 'right')] = '100px';				
+				wbEl.append(settings, math, dweet);
 				sc.on('scroll', scrollHandler);
 			}
 			wbEl.find('.tools').append(tools);
