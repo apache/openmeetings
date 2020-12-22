@@ -102,7 +102,6 @@ public class TimerService {
 	private void updateSipLastName(Optional<Client> sipClient, Room r) {
 		long count = sipManager.countUsers(r.getConfno());
 		final String newLastName = "(" + count + ")";
-		kHandler.updateSipCount(r, count);
 		sipClient.ifPresentOrElse(c -> {
 			if (!newLastName.equals(c.getUser().getLastname())) {
 				c.getUser().setLastname(newLastName).resetDisplayName();
@@ -113,11 +112,13 @@ public class TimerService {
 			User sipUser = sipManager.getSipUser(r);
 			sipUser.setLastname(newLastName).resetDisplayName();
 			Client c = new Client("-- unique - sip - session --", 1, sipUser, sipUser.getPictureUri());
+			c.allow(Right.VIDEO, Right.AUDIO);
 			cm.add(c);
 			c.setRoom(r);
 			cm.addToRoom(c);
 			WebSocketHelper.sendRoom(new TextRoomMessage(r.getId(), c, RoomMessage.Type.ROOM_ENTER, c.getUid()));
 		});
+		kHandler.updateSipCount(r, count);
 	}
 
 	public void scheduleModCheck(Room r) {

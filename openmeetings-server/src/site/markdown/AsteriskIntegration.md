@@ -138,7 +138,6 @@ encryption=no
 avpf=yes
 icesupport=yes
 directmedia=no
-disallow=all
 allow=!all,ulaw,opus,vp8
 ```
 

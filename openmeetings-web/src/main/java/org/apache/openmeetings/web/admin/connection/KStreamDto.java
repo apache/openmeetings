@@ -37,30 +37,26 @@ import org.apache.openmeetings.db.entity.record.RecordingChunk.Type;
 public class KStreamDto implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
-	private String sid;
-	private String uid;
-	private Long roomId;
-	private Date connectedSince;
-	private StreamType streamType;
-	private String profile;
-	private String recorder;
-	private Long chunkId;
-	private Type type;
+	private final String sid;
+	private final String uid;
+	private final Long roomId;
+	private final Date connectedSince;
+	private final StreamType streamType;
+	private final String profile;
+	private final String recorder;
+	private final Long chunkId;
+	private final Type type;
 
 	public KStreamDto(KStream kStream) {
-		this.sid = kStream.getSid();
-		this.uid = kStream.getUid();
-		this.roomId = kStream.getRoomId();
-		this.connectedSince = kStream.getConnectedSince();
-		this.streamType = kStream.getStreamType();
-		this.profile = kStream.getProfile().toString();
-		this.recorder = (kStream.getRecorder() == null) ? null : kStream.getRecorder().toString();
-		this.chunkId = kStream.getChunkId();
-		this.type = kStream.getType();
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+		sid = kStream.getSid();
+		uid = kStream.getUid();
+		roomId = kStream.getRoomId();
+		connectedSince = kStream.getConnectedSince();
+		streamType = kStream.getStreamType();
+		profile = kStream.getProfile().toString();
+		recorder = (kStream.getRecorder() == null) ? null : kStream.getRecorder().toString();
+		chunkId = kStream.getChunkId();
+		type = kStream.getType();
 	}
 
 	public String getSid() {

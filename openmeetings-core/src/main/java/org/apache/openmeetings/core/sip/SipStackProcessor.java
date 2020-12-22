@@ -198,8 +198,7 @@ public class SipStackProcessor implements SipListenerExt {
 					callbacks.onRegisterOk();
 				} else if (INVITE.equals(prevReq.getMethod())) {
 					dialog = evt.getDialog();
-					ack(evt);
-					callbacks.onInviteOk(new String((byte[])resp.getContent()));
+					callbacks.onInviteOk(new String((byte[])resp.getContent()), answer -> ack(evt, answer));
 				} else if (BYE.equals(prevReq.getMethod())) {
 					doDestroy();
 				}
@@ -212,12 +211,13 @@ public class SipStackProcessor implements SipListenerExt {
 		}
 	}
 
-	private void ack(ResponseEvent evt) {
+	private void ack(ResponseEvent evt, String answer) {
 		try {
 			Response resp = evt.getResponse();
 			Dialog dlg = evt.getDialog();
 			CSeqHeader cseqHead = (CSeqHeader)resp.getHeader(CSeqHeader.NAME);
 			Request ack = dlg.createAck(cseqHead.getSeqNumber());
+			addSdp(ack, answer);
 			dlg.sendAck(ack);
 		} catch (Exception e) {
 			log.error("ack {}", evt, e);
@@ -336,6 +336,13 @@ public class SipStackProcessor implements SipListenerExt {
 				});
 	}
 
+	private void addSdp(Request req, String sdp) throws Exception {
+		if (sdp != null) {
+			req.addHeader(headerFactory.createContentLengthHeader(sdp.length()));
+			req.setContent(sdp, headerFactory.createContentTypeHeader("application", "sdp"));
+		}
+	}
+
 	public void invite(Room r, String sdp) {
 		final String sipNumber = getSipNumber(r);
 		if (sipNumber == null) {
@@ -349,10 +356,7 @@ public class SipStackProcessor implements SipListenerExt {
 				, req -> {
 					try {
 						addAllow(req);
-						if (sdp != null) {
-							req.addHeader(headerFactory.createContentLengthHeader(sdp.length()));
-							req.setContent(sdp, headerFactory.createContentTypeHeader("application", "sdp"));
-						}
+						addSdp(req, sdp);
 					} catch (Exception e) {
 						log.error("fail patch invite request", e);
 					}

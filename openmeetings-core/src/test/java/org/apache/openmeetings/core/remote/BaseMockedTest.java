@@ -20,6 +20,7 @@
 package org.apache.openmeetings.core.remote;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
@@ -94,7 +95,7 @@ public class BaseMockedTest {
 					return null;
 				}
 			});
-			streamMock.when(() -> AbstractStream.createWebRtcEndpoint(any(MediaPipeline.class))).thenReturn(mock(WebRtcEndpoint.class));
+			streamMock.when(() -> AbstractStream.createWebRtcEndpoint(any(MediaPipeline.class), anyBoolean())).thenReturn(mock(WebRtcEndpoint.class));
 			streamMock.when(() -> AbstractStream.createRecorderEndpoint(any(MediaPipeline.class), anyString(), any(MediaProfileSpecType.class))).thenReturn(mock(RecorderEndpoint.class));
 			streamMock.when(() -> AbstractStream.createPlayerEndpoint(any(MediaPipeline.class), anyString())).thenReturn(mock(PlayerEndpoint.class));
 

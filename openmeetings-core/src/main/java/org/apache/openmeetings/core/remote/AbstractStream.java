@@ -48,8 +48,16 @@ public abstract class AbstractStream {
 
 	public abstract void release(boolean remove);
 
-	public static WebRtcEndpoint createWebRtcEndpoint(MediaPipeline pipeline) {
-		return new WebRtcEndpoint.Builder(pipeline).build();
+	public static WebRtcEndpoint createWebRtcEndpoint(MediaPipeline pipeline, Boolean send) {
+		WebRtcEndpoint.Builder builder = new WebRtcEndpoint.Builder(pipeline);
+		if (send != null) {
+			if (send) {
+				builder.sendonly();
+			} else {
+				builder.recvonly();
+			}
+		}
+		return builder.build();
 	}
 
 	public static RecorderEndpoint createRecorderEndpoint(MediaPipeline pipeline, String path, MediaProfileSpecType profile) {

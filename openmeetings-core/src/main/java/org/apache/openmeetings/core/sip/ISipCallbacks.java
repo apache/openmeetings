@@ -18,7 +18,9 @@
  */
 package org.apache.openmeetings.core.sip;
 
+import java.util.function.Consumer;
+
 public interface ISipCallbacks {
 	void onRegisterOk();
-	void onInviteOk(String sdp);
+	void onInviteOk(String sdp, Consumer<String> answerConsumer);
 }

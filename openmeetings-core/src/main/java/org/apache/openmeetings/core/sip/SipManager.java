@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
@@ -35,6 +36,7 @@ import org.apache.wicket.util.string.Strings;
 import org.asteriskjava.manager.DefaultManagerConnection;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerConnectionFactory;
+import org.asteriskjava.manager.ManagerConnectionState;
 import org.asteriskjava.manager.ResponseEvents;
 import org.asteriskjava.manager.action.ConfbridgeListAction;
 import org.asteriskjava.manager.action.DbDelAction;
@@ -85,6 +87,7 @@ public class SipManager implements ISipManager {
 	private int maxLocalWsPort = 7666;
 
 	private ManagerConnectionFactory factory;
+	private ManagerConnection con;
 	private String sipUserPicture;
 	private BitSet ports;
 
@@ -100,13 +103,23 @@ public class SipManager implements ISipManager {
 		}
 	}
 
-	private ManagerConnection getConnection() {
-		DefaultManagerConnection con = (DefaultManagerConnection)factory.createManagerConnection();
-		con.setDefaultEventTimeout(managerTimeout);
-		con.setDefaultResponseTimeout(managerTimeout);
-		con.setSocketReadTimeout((int)managerTimeout);
-		con.setSocketTimeout((int)managerTimeout);
-		return con;
+	@PreDestroy
+	public void destroy() {
+		if (con != null) {
+			con.logoff();
+		}
+	}
+
+	private void connectManager() throws Exception {
+		if (con == null || ManagerConnectionState.CONNECTED != con.getState()) {
+			DefaultManagerConnection defCon = (DefaultManagerConnection)factory.createManagerConnection();
+			defCon.setDefaultEventTimeout(managerTimeout);
+			defCon.setDefaultResponseTimeout(managerTimeout);
+			defCon.setSocketReadTimeout((int)managerTimeout);
+			defCon.setSocketTimeout((int)managerTimeout);
+			con = defCon;
+			con.login("on");
+		}
 	}
 
 	private ManagerResponse exec(ManagerAction action) {
@@ -114,9 +127,8 @@ public class SipManager implements ISipManager {
 			log.warn("There is no Asterisk configured");
 			return null;
 		}
-		ManagerConnection con = getConnection();
 		try {
-			con.login();
+			connectManager();
 			ManagerResponse r = con.sendAction(action);
 			if (r != null) {
 				log.debug("{}", r);
@@ -124,12 +136,6 @@ public class SipManager implements ISipManager {
 			return (r instanceof ManagerError) ? null : r;
 		} catch (Exception e) {
 			log.error("Error while executing ManagerAction: {}", action, e);
-		} finally {
-			try {
-				con.logoff();
-			} catch (Exception e) {
-				// no-op
-			}
 		}
 		return null;
 	}
@@ -139,22 +145,15 @@ public class SipManager implements ISipManager {
 			log.warn("There is no Asterisk configured");
 			return null;
 		}
-		ManagerConnection con = getConnection();
 		try {
-			con.login("on");
+			connectManager();
 			ResponseEvents r = con.sendEventGeneratingAction(action);
 			if (r != null) {
-				log.debug("{}", r.getResponse());
+				log.trace("{}", r.getResponse());
 			}
 			return (r == null || r.getResponse() instanceof ManagerError) ? null : r;
 		} catch (Exception e) {
 			log.error("Error while executing EventGeneratingAction: {}", action, e);
-		} finally {
-			try {
-				con.logoff();
-			} catch (Exception e) {
-				// no-op
-			}
 		}
 		return null;
 	}

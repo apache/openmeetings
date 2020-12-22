@@ -440,25 +440,27 @@ var Room = (function() {
 			.css('background-image', 'url(' + c.user.pictureUri + ')')
 			.find('.user.name').text(c.user.displayName);
 
-		const actions = le.find('.user.actions');
-		__rightVideoIcon(c, actions);
-		__rightAudioIcon(c, actions);
-		__rightOtherIcons(c, actions);
-		__activityIcon(actions, '.kick'
-			, () => !self && _hasRight('MODERATOR') && !_hasRight('SUPER_MODERATOR', c.rights)
-			, null
-			, {
-				confirmationEvent: 'om-kick'
-				, placement: Settings.isRtl ? 'left' : 'right'
-				, onConfirm: () => OmUtil.roomAction({action: 'kick', uid: c.uid})
-			});
-		__activityIcon(actions, '.private-chat'
+		if (c.user.id !== -1) {
+			const actions = le.find('.user.actions');
+			__rightVideoIcon(c, actions);
+			__rightAudioIcon(c, actions);
+			__rightOtherIcons(c, actions);
+			__activityIcon(actions, '.kick'
+				, () => !self && _hasRight('MODERATOR') && !_hasRight('SUPER_MODERATOR', c.rights)
+				, null
+				, {
+					confirmationEvent: 'om-kick'
+					, placement: Settings.isRtl ? 'left' : 'right'
+					, onConfirm: () => OmUtil.roomAction({action: 'kick', uid: c.uid})
+				});
+			__activityIcon(actions, '.private-chat'
 				, () => options.userId !== c.user.id && $('#chatPanel').is(':visible')
 				, function() {
 					Chat.addTab('chatTab-u' + c.user.id, c.user.displayName);
 					Chat.open();
 					$('#chatMessage .wysiwyg-editor').click();
 				});
+		}
 		if (self) {
 			options.rights = c.rights;
 			_setQuickPollRights();

@@ -1,7 +1,4 @@
 /*
- * (C) Copyright 2014 Kurento (http://kurento.org/)
- */
-/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -52,15 +49,12 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONObject;
 
 /**
- * Bean object dynamically created representing a conference room on the MediaServer
+ * Dynamically created object representing a conference room on the MediaServer
  *
  */
 public class KRoom {
 	private static final Logger log = LoggerFactory.getLogger(KRoom.class);
 
-	/**
-	 * Not injected by annotation but by constructor.
-	 */
 	private final StreamProcessor processor;
 	private final RecordingChunkDao chunkDao;
 	private final Room room;
@@ -104,8 +98,6 @@ public class KRoom {
 				.put("uid", stream.getUid())
 				.toString()
 			);
-		//FIXME TODO check close on stop sharing
-		//FIXME TODO permission can be removed, some listener might be required
 	}
 
 	public boolean isRecording() {
@@ -251,8 +243,22 @@ public class KRoom {
 
 	public void updateSipCount(final long count) {
 		if (count != sipCount) {
-			sipCount = count;
 			processor.getByRoom(room.getId()).forEach(stream -> stream.addSipProcessor(count));
+			if (sipCount == 0) {
+				processor.getClientManager()
+					.streamByRoom(room.getId())
+					.filter(Client::isSip)
+					.findAny()
+					.ifPresent(c -> {
+						StreamDesc sd = c.addStream(StreamType.WEBCAM, Activity.AUDIO, Activity.VIDEO); // TODO check this
+						sd.setWidth(120).setHeight(90);
+						c.restoreActivities(sd);
+						KStream stream = join(sd, processor.getHandler());
+						stream.startBroadcast(sd, "", () -> {});
+						processor.getClientManager().update(c);
+					});
+			}
+			sipCount = count;
 		}
 	}
 

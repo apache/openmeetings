@@ -72,7 +72,7 @@ public class KTestStream extends AbstractStream {
 	}
 
 	private void startTestRecording(IWsClient c, JSONObject msg) {
-		webRtcEndpoint = createWebRtcEndpoint(pipeline);
+		webRtcEndpoint = createWebRtcEndpoint(pipeline, null);
 		webRtcEndpoint.connect(webRtcEndpoint);
 
 		MediaProfileSpecType profile = getProfile(msg);
@@ -134,7 +134,7 @@ public class KTestStream extends AbstractStream {
 
 	public void play(final IWsClient inClient, JSONObject msg) {
 		createPipeline(() -> {
-			webRtcEndpoint = createWebRtcEndpoint(pipeline);
+			webRtcEndpoint = createWebRtcEndpoint(pipeline, true);
 			player = createPlayerEndpoint(pipeline, recPath);
 			player.connect(webRtcEndpoint);
 			webRtcEndpoint.addMediaSessionStartedListener(evt -> {
