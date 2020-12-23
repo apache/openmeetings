@@ -48,13 +48,13 @@ public abstract class AbstractStream {
 
 	public abstract void release(boolean remove);
 
-	public static WebRtcEndpoint createWebRtcEndpoint(MediaPipeline pipeline, Boolean send) {
+	public static WebRtcEndpoint createWebRtcEndpoint(MediaPipeline pipeline, Boolean recv) {
 		WebRtcEndpoint.Builder builder = new WebRtcEndpoint.Builder(pipeline);
-		if (send != null) {
-			if (send) {
-				builder.sendonly();
-			} else {
+		if (recv != null) {
+			if (recv) {
 				builder.recvonly();
+			} else {
+				builder.sendonly();
 			}
 		}
 		return builder.build();

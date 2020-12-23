@@ -283,16 +283,14 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		endpoint.addTag("uid", uid);
 	}
 
-	private RtpEndpoint getRtpEndpoint(MediaPipeline pipeline, String direction) {
-		RtpEndpoint endpoint = new RtpEndpoint.Builder(pipeline)
-				//.withProperties(Properties.of(direction, Boolean.TRUE))
-				.build();
+	private RtpEndpoint getRtpEndpoint(MediaPipeline pipeline) {
+		RtpEndpoint endpoint = new RtpEndpoint.Builder(pipeline).build();
 		setTags(endpoint, uid);
 		return endpoint;
 	}
 
-	private WebRtcEndpoint createEndpoint(String sid, String uid, boolean send) {
-		WebRtcEndpoint endpoint = createWebRtcEndpoint(pipeline, send);
+	private WebRtcEndpoint createEndpoint(String sid, String uid, boolean recv) {
+		WebRtcEndpoint endpoint = createWebRtcEndpoint(pipeline, recv);
 		setTags(endpoint, uid);
 
 		endpoint.addIceCandidateFoundListener(evt -> kHandler.sendClient(sid
@@ -578,13 +576,11 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 
 	@Override
 	public void onRegisterOk() {
-		rtpEndpoint = getRtpEndpoint(pipeline, sipClient ? "recvonly" : "sendonly");
+		rtpEndpoint = getRtpEndpoint(pipeline);
 		OfferOptions options = new OfferOptions();
 		options.setOfferToReceiveAudio(hasAudio);
 		options.setOfferToReceiveVideo(hasVideo);
-		String offer = null;
 		if (!sipClient) {
-			offer = rtpEndpoint.generateOffer(options);
 			if (hasAudio) {
 				outgoingMedia.connect(rtpEndpoint, MediaType.AUDIO);
 			}
@@ -592,15 +588,15 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 				outgoingMedia.connect(rtpEndpoint, MediaType.VIDEO);
 			}
 		}
-		sipProcessor.get().invite(kRoom.getRoom(), offer);
+		sipProcessor.get().invite(kRoom.getRoom(), null);
 	}
 
 	@Override
 	public void onInviteOk(String sdp, Consumer<String> answerConsumer) {
+		String answer = rtpEndpoint.processOffer(sdp.replace("a=sendrecv", sipClient ? "a=sendonly" : "a=recvonly"));
+		answerConsumer.accept(answer);
+		log.debug(answer);
 		if (sipClient) {
-			String answer = rtpEndpoint.processOffer(sdp);
-			answerConsumer.accept(answer);
-			log.debug(answer);
 			StreamDesc sd = kHandler.getStreamProcessor().getBySid(sid).getStream(uid);
 			try {
 				outgoingMedia = rtpEndpoint;
@@ -609,8 +605,6 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 			} catch (Exception e) {
 				log.error("Unexpected error");
 			}
-		} else {
-			rtpEndpoint.processAnswer(sdp);
 		}
 	}
 }

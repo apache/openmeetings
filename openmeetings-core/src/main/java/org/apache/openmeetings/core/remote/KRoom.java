@@ -250,7 +250,7 @@ public class KRoom {
 					.filter(Client::isSip)
 					.findAny()
 					.ifPresent(c -> {
-						StreamDesc sd = c.addStream(StreamType.WEBCAM, Activity.AUDIO, Activity.VIDEO); // TODO check this
+						StreamDesc sd = c.addStream(StreamType.WEBCAM, Activity.AUDIO);
 						sd.setWidth(120).setHeight(90);
 						c.restoreActivities(sd);
 						KStream stream = join(sd, processor.getHandler());
