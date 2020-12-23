@@ -62,7 +62,6 @@ import org.kurento.client.MediaObject;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaProfileSpecType;
 import org.kurento.client.MediaType;
-import org.kurento.client.OfferOptions;
 import org.kurento.client.RecorderEndpoint;
 import org.kurento.client.RtpEndpoint;
 import org.kurento.client.WebRtcEndpoint;
@@ -577,9 +576,6 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	@Override
 	public void onRegisterOk() {
 		rtpEndpoint = getRtpEndpoint(pipeline);
-		OfferOptions options = new OfferOptions();
-		options.setOfferToReceiveAudio(hasAudio);
-		options.setOfferToReceiveVideo(hasVideo);
 		if (!sipClient) {
 			if (hasAudio) {
 				outgoingMedia.connect(rtpEndpoint, MediaType.AUDIO);
