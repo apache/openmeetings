@@ -206,6 +206,13 @@ Modify `/etc/asterisk/confbridge.conf`
 [omsip_user]
 type=user
 marked=yes
+dsp_drop_silence=yes
+denoise=true
+
+[sip_user]
+type=user
+end_marked=yes
+wait_marked=yes
 music_on_hold_when_empty=yes
 dsp_drop_silence=yes
 denoise=true
