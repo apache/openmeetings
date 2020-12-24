@@ -18,14 +18,4 @@ Object.assign(window, {
 	, Sharer: require('./sharer')
 	, Room: require('./room')
 	, Activities: require('./activities')
-
-	/***** functions required by SIP   ******/
-	, typingActivity: function(uid, active) {
-		const u = Room.getClient(uid).find('.typing-activity');
-		if (active) {
-			u.addClass("typing");
-		} else {
-			u.removeClass("typing");
-		}
-	}
 });

@@ -103,6 +103,24 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>chat-install</id>
+						<goals><goal>npm</goal></goals>
+						<configuration>
+							<workingDirectory>src/main/front/chat</workingDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>chat</id>
+						<goals><goal>npm</goal></goals>
+						<configuration>
+							<arguments>run build</arguments>
+							<workingDirectory>src/main/front/chat</workingDirectory>
+							<environmentVariables>
+								<outDir>${project.build.directory}/generated-sources/js/org/apache/openmeetings/web/user/chat/</outDir>
+							</environmentVariables>
+						</configuration>
+					</execution>
+					<execution>
 						<id>settings-install</id>
 						<goals><goal>npm</goal></goals>
 						<configuration>
@@ -249,23 +267,6 @@
 							<jsFinalFile>nettest.js</jsFinalFile>
 							<jsEngine>CLOSURE</jsEngine>
 							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/room</jsTargetDir>
-						</configuration>
-					</execution>
-					<execution>
-						<id>chat-js</id>
-						<goals>
-							<goal>minify</goal>
-						</goals>
-						<configuration>
-							<charset>UTF-8</charset>
-							<jsSourceDir>../java/org/apache/openmeetings/web/user/chat</jsSourceDir>
-							<jsSourceFiles>
-								<jsSourceFile>raw-cssemoticons.js</jsSourceFile>
-								<jsSourceFile>raw-chat.js</jsSourceFile>
-							</jsSourceFiles>
-							<jsFinalFile>chat.js</jsFinalFile>
-							<jsEngine>CLOSURE</jsEngine>
-							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/user/chat</jsTargetDir>
 						</configuration>
 					</execution>
 				</executions>

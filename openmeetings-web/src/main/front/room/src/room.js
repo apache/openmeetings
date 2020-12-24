@@ -3,6 +3,7 @@ const NoSleep = require('nosleep.js');
 const VideoManager = require('./video-manager');
 const Sharer = require('./sharer');
 const Activities = require('./activities');
+const SipDialer = require('./sip-dialer');
 
 const sbSide = Settings.isRtl ? 'right' : 'left';
 let options, menuHeight, sb, dock, noSleep;
@@ -158,11 +159,11 @@ function _load() {
 	Wicket.Event.subscribe("/websocket/error", _close);
 	$(window).on('keydown.openmeetings', _preventKeydown);
 	$(window).on('keyup.openmeetings', _keyHandler);
-	$(window).on('keydown.om-sip', _sipKeyDown);
-	$(window).on('keyup.om-sip', _sipKeyUp);
+	$(window).on('keydown.om-sip', SipDialer.keyDown);
+	$(window).on('keyup.om-sip', SipDialer.keyUp);
 	$(document).click(_mouseHandler);
 	_addNoSleep();
-	_initSip();
+	SipDialer.init();
 }
 function _addNoSleep() {
 	_removeNoSleep();
@@ -478,50 +479,6 @@ function _updateClient(c) {
 		__rightOtherIcons(c, header);
 	}
 	VideoManager.update(c)
-}
-function __addSipText(v) {
-	const txt = $('.sip-number');
-	txt.val(txt.val() + v);
-}
-function __eraseSipText() {
-	const txt = $('.sip-number')
-		, t = txt.val();
-	if (!!t) {
-		txt.val(t.substring(0, t.length - 1));
-	}
-}
-function _initSip() {
-	$('.sip .button-row button').off().click(function() {
-		__addSipText($(this).data('value'));
-	});
-	$('#sip-dialer-btn-erase').off().click(__eraseSipText);
-}
-function _sipGetKey(evt) {
-	let k = -1;
-	if (evt.keyCode > 47 && evt.keyCode < 58) {
-		k = evt.keyCode - 48;
-	}
-	if (evt.keyCode > 95 && evt.keyCode < 106) {
-		k = evt.keyCode - 96;
-	}
-	return k;
-}
-function _sipKeyDown(evt) {
-	const k = _sipGetKey(evt);
-	if (k > 0) {
-		$('#sip-dialer-btn-' + k).addClass('bg-warning');
-	}
-}
-function _sipKeyUp(evt) {
-	if (evt.key === 'Backspace') {
-		__eraseSipText();
-	} else {
-		const k = _sipGetKey(evt);
-		if (k > 0) {
-			$('#sip-dialer-btn-' + k).removeClass('bg-warning');
-			__addSipText(k);
-		}
-	}
 }
 
 module.exports = {
