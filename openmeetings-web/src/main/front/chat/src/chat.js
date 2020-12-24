@@ -483,7 +483,7 @@ function _typingActivity(uid, active) {
 	if (!c) {
 		return;
 	}
-	const u = Room.getClient(uid).find('.typing-activity');
+	const u = c.find('.typing-activity');
 	if (!u) {
 		return;
 	}
