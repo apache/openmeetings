@@ -156,6 +156,24 @@
 							</environmentVariables>
 						</configuration>
 					</execution>
+					<execution>
+						<id>wb-install</id>
+						<goals><goal>npm</goal></goals>
+						<configuration>
+							<workingDirectory>src/main/front/wb</workingDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>wb</id>
+						<goals><goal>npm</goal></goals>
+						<configuration>
+							<arguments>run build</arguments>
+							<workingDirectory>src/main/front/wb</workingDirectory>
+							<environmentVariables>
+								<outDir>${project.build.directory}/generated-sources/js/org/apache/openmeetings/web/room/wb/</outDir>
+							</environmentVariables>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -198,62 +216,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>interview-wb-js</id>
-						<goals>
-							<goal>minify</goal>
-						</goals>
-						<configuration>
-							<charset>UTF-8</charset>
-							<jsSourceDir>../java/org/apache/openmeetings/web/room/wb</jsSourceDir>
-							<jsSourceFiles>
-								<jsSourceFile>raw-wb-area-base.js</jsSourceFile>
-								<jsSourceFile>raw-interview-area.js</jsSourceFile>
-							</jsSourceFiles>
-							<jsFinalFile>interviewwb.js</jsFinalFile>
-							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/room/wb/</jsTargetDir>
-							<jsEngine>CLOSURE</jsEngine>
-						</configuration>
-					</execution>
-					<execution>
-						<id>wb-js</id>
-						<goals>
-							<goal>minify</goal>
-						</goals>
-						<configuration>
-							<charset>UTF-8</charset>
-							<jsSourceDir>../java/org/apache/openmeetings/web/room/wb</jsSourceDir>
-							<jsSourceFiles>
-								<jsSourceFile>fabric.js</jsSourceFile>
-								<jsSourceFile>MathJax-config.js</jsSourceFile>
-								<jsSourceFile>MathJax.js</jsSourceFile>
-								<jsSourceFile>raw-wb-area-base.js</jsSourceFile>
-								<jsSourceFile>raw-tool-util.js</jsSourceFile>
-								<jsSourceFile>raw-player.js</jsSourceFile>
-								<jsSourceFile>raw-tool-base.js</jsSourceFile>
-								<jsSourceFile>raw-tool-pointer.js</jsSourceFile>
-								<jsSourceFile>raw-tool-apointer.js</jsSourceFile>
-								<jsSourceFile>raw-tool-shape-base.js</jsSourceFile>
-								<jsSourceFile>raw-tool-text.js</jsSourceFile>
-								<jsSourceFile>raw-tool-whiteout.js</jsSourceFile>
-								<jsSourceFile>raw-tool-textbox.js</jsSourceFile>
-								<jsSourceFile>raw-tool-math.js</jsSourceFile>
-								<jsSourceFile>raw-tool-paint.js</jsSourceFile>
-								<jsSourceFile>raw-tool-shape.js</jsSourceFile>
-								<jsSourceFile>raw-tool-line.js</jsSourceFile>
-								<jsSourceFile>raw-tool-uline.js</jsSourceFile>
-								<jsSourceFile>raw-tool-rect.js</jsSourceFile>
-								<jsSourceFile>raw-tool-ellipse.js</jsSourceFile>
-								<jsSourceFile>raw-tool-arrow.js</jsSourceFile>
-								<jsSourceFile>raw-tool-clipart.js</jsSourceFile>
-								<jsSourceFile>raw-wb-board.js</jsSourceFile>
-								<jsSourceFile>raw-wb-area.js</jsSourceFile>
-							</jsSourceFiles>
-							<jsFinalFile>wb.js</jsFinalFile>
-							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/room/wb/</jsTargetDir>
-							<jsEngine>CLOSURE</jsEngine>
-						</configuration>
-					</execution>
-					<execution>
 						<id>nettest-js</id>
 						<goals>
 							<goal>minify</goal>
@@ -280,13 +242,11 @@
 						**/*.class,
 						**/raw-*.css,
 						**/raw-*.js,
-						**/fabric.js,
 						**/MathJax*.js,
 					</packagingExcludes>
 					<warSourceExcludes>
 						**/raw-*.css,
 						**/raw-*.js,
-						**/fabric.js,
 						**/MathJax*.js,
 					</warSourceExcludes>
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
@@ -303,7 +263,6 @@
 							</includes>
 							<excludes>
 								<exclude>**/raw-*.js</exclude>
-								<exclude>**/fabric.js</exclude>
 								<exclude>**/MathJax*.js</exclude>
 							</excludes>
 						</webResource>
@@ -416,7 +375,6 @@
 									<excludes>
 										<exclude>**/raw-*.css</exclude>
 										<exclude>**/raw-*.js</exclude>
-										<exclude>**/fabric.js</exclude>
 										<exclude>**/MathJax*.js</exclude>
 										<exclude>**/network.js</exclude>
 									</excludes>
@@ -447,7 +405,6 @@
 									<excludes>
 										<exclude>**/raw-*.css</exclude>
 										<exclude>**/raw-*.js</exclude>
-										<exclude>**/fabric.js</exclude>
 										<exclude>**/MathJax*.js</exclude>
 										<exclude>**/network.js</exclude>
 									</excludes>

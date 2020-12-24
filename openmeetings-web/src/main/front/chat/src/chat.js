@@ -189,11 +189,11 @@ function _reinit(opts) {
 			typingTimer = setTimeout(doneTyping, doneTypingInterval);
 		}
 	});
-	$('#chat .chat-toolbar .link-field').off().on('keypress', function() {
-		if (event.keyCode === 13) {
+	$('#chat .chat-toolbar .link-field').off().on('keypress', function(evt) {
+		if (evt.keyCode === 13) {
 			$(this).parent().find('button').trigger('click');
 		}
-		return event.keyCode !== 13;
+		return evt.keyCode !== 13;
 	});
 	inited = true;
 }

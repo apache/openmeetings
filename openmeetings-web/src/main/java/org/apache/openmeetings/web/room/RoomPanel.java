@@ -25,7 +25,6 @@ import static org.apache.openmeetings.db.entity.calendar.Appointment.allowedStar
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.room.wb.InterviewWbPanel.INTERVIEWWB_JS_REFERENCE;
 import static org.apache.openmeetings.web.room.wb.WbPanel.WB_JS_REFERENCE;
 
 import java.io.IOException;
@@ -680,7 +679,7 @@ public class RoomPanel extends BasePanel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(interview ? INTERVIEWWB_JS_REFERENCE : WB_JS_REFERENCE)));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE)));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "room.js"))) {
 			private static final long serialVersionUID = 1L;
 

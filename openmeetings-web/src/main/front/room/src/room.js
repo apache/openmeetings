@@ -12,7 +12,7 @@ let options, menuHeight, sb, dock, noSleep;
 
 function _init(_options) {
 	options = _options;
-	window.WbArea = options.interview ? InterviewWbArea() : DrawWbArea();
+	window.WbArea = options.interview ? new InterviewWbArea() : new DrawWbArea();
 	const menu = $('.room-block .room-container .menu');
 	sb = $('.room-block .sidebar');
 	sb.width(sb.width()); // this is required to 'fix' the width so it will not depend on CSS var
