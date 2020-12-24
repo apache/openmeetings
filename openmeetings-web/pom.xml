@@ -200,28 +200,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>fileinput-js</id>
-						<goals>
-							<goal>minify</goal>
-						</goals>
-						<configuration>
-							<charset>UTF-8</charset>
-							<jsSourceDir>../java/org/apache/openmeetings/web/util/upload</jsSourceDir>
-							<jsSourceFiles>
-								<jsSourceFile>fileinput.js</jsSourceFile>
-							</jsSourceFiles>
-							<jsFinalFile>omfileinput.js</jsFinalFile>
-							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/util/upload</jsTargetDir>
-							<jsEngine>CLOSURE</jsEngine>
-							<cssSourceDir>../java/org/apache/openmeetings/web/util/upload</cssSourceDir>
-							<cssSourceFiles>
-								<cssSourceFile>fileinput.css</cssSourceFile>
-							</cssSourceFiles>
-							<cssFinalFile>omfileinput.css</cssFinalFile>
-							<cssTargetDir>../generated-sources/js/org/apache/openmeetings/web/util/upload</cssTargetDir>
-						</configuration>
-					</execution>
-					<execution>
 						<id>room-js</id>
 						<goals>
 							<goal>minify</goal>
@@ -307,8 +285,6 @@
 						**/raw-*.js,
 						**/fabric.js,
 						**/MathJax*.js,
-						**/fileinput.js,
-						**/fileinput.css,
 						**/adapter-latest.js,
 						**/kurento-utils.js,
 						**/NoSleep.js
@@ -318,8 +294,6 @@
 						**/raw-*.js,
 						**/fabric.js,
 						**/MathJax*.js,
-						**/fileinput.js,
-						**/fileinput.css,
 						**/adapter-latest.js,
 						**/kurento-utils.js,
 						**/NoSleep.js
@@ -340,8 +314,6 @@
 								<exclude>**/raw-*.js</exclude>
 								<exclude>**/fabric.js</exclude>
 								<exclude>**/MathJax*.js</exclude>
-								<exclude>**/fileinput.js</exclude>
-								<exclude>**/fileinput.css</exclude>
 								<exclude>**/adapter-latest.js</exclude>
 								<exclude>**/kurento-utils.js</exclude>
 								<exclude>**/NoSleep.js</exclude>
@@ -458,8 +430,6 @@
 										<exclude>**/raw-*.js</exclude>
 										<exclude>**/fabric.js</exclude>
 										<exclude>**/MathJax*.js</exclude>
-										<exclude>**/fileinput.js</exclude>
-										<exclude>**/fileinput.css</exclude>
 										<exclude>**/adapter-latest.js</exclude>
 										<exclude>**/kurento-utils.js</exclude>
 										<exclude>**/network.js</exclude>
@@ -493,8 +463,6 @@
 										<exclude>**/raw-*.js</exclude>
 										<exclude>**/fabric.js</exclude>
 										<exclude>**/MathJax*.js</exclude>
-										<exclude>**/fileinput.js</exclude>
-										<exclude>**/fileinput.css</exclude>
 										<exclude>**/adapter-latest.js</exclude>
 										<exclude>**/kurento-utils.js</exclude>
 										<exclude>**/network.js</exclude>
@@ -623,6 +591,11 @@
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-webservice</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jasny-bootstrap</artifactId>
+			<version>${jasny-bootstrap.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

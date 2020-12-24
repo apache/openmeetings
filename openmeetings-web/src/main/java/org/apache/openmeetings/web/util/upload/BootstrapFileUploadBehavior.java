@@ -23,16 +23,17 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+
+import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 public class BootstrapFileUploadBehavior extends Behavior {
 	private static final long serialVersionUID = 1L;
 	private static final ResourceReference BOOTSTRAP_FILEINPUT_JS_REFERENCE
-			= new JavaScriptResourceReference(BootstrapFileUploadBehavior.class, "omfileinput.js");
+			= new WebjarsJavaScriptResourceReference("/jasny-bootstrap/current/js/jasny-bootstrap.js");
 	private static final ResourceReference BOOTSTRAP_FILEINPUT_CSS_REFERENCE
-			= new CssResourceReference(BootstrapFileUploadBehavior.class, "omfileinput.css");
+			= new WebjarsCssResourceReference("/jasny-bootstrap/current/css/jasny-bootstrap.css");
 	public static final BootstrapFileUploadBehavior INSTANCE = new BootstrapFileUploadBehavior();
 
 	private BootstrapFileUploadBehavior() {

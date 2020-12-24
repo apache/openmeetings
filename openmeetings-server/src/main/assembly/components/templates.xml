@@ -35,12 +35,9 @@
 				<exclude>**/raw-*.js</exclude>
 				<exclude>**/fabric.js</exclude>
 				<exclude>**/MathJax*.js</exclude>
-				<exclude>**/fileinput.js</exclude>
-				<exclude>**/fileinput.css</exclude>
 				<exclude>**/adapter-latest.js</exclude>
 				<exclude>**/kurento-utils.js</exclude>
 				<exclude>**/NoSleep.js</exclude>
-				<exclude>**/network.js</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
