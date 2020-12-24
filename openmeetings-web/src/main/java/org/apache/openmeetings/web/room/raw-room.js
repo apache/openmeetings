@@ -78,7 +78,7 @@ var Room = (function() {
 		}
 	}
 	function __keyPressed(hotkey, e) {
-		const code = OmUtil.getKeyCode(e);
+		const code = e.code;
 		return hotkey.alt === e.altKey
 			&& hotkey.ctrl === e.ctrlKey
 			&& hotkey.shift === e.shiftKey

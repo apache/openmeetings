@@ -44,7 +44,7 @@
 			</excludes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-web/target/generated-sources/main/java</directory>
+			<directory>${project.parent.basedir}/openmeetings-web/target/generated-sources/js</directory>
 			<outputDirectory>${om.webapp}/WEB-INF/classes</outputDirectory>
 			<includes>
 				<include>**/*.js</include>

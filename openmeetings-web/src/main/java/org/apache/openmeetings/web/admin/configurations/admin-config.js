@@ -15,7 +15,7 @@ function addOmAdminConfigHandlers() {
 			if (evt.shiftKey) {
 				val += 'Shift+';
 			}
-			const code = OmUtil.getKeyCode(evt);
+			const code = evt.code;
 			if (typeof(code) === 'undefined') {
 				return;
 			}

@@ -75,6 +75,7 @@
 		<jacoco-maven-plugin.versoin>0.8.6</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>3.1</forbiddenapis.version>
 		<maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
+		<frontend-maven-plugin.version>1.11.0</frontend-maven-plugin.version>
 		<!-- dependency versions -->
 		<junit.version>5.7.0</junit.version>
 		<wicket.version>9.2.0</wicket.version>
@@ -1035,6 +1036,8 @@
 						<excludes>
 							<exclude>**/*.mp3</exclude>
 							<exclude>**/localhost.jks</exclude>
+							<exclude>**/node_modules/**</exclude>
+							<exclude>**/package-lock.json</exclude>
 						</excludes>
 					</configuration>
 				</plugin>
@@ -1102,6 +1105,15 @@
 							</configuration>
 						</execution>
 					</executions>
+				</plugin>
+				<plugin>
+					<groupId>com.github.eirslett</groupId>
+					<artifactId>frontend-maven-plugin</artifactId>
+					<version>${frontend-maven-plugin.version}</version>
+					<configuration>
+						<nodeVersion>v14.15.3</nodeVersion>
+						<installDirectory>${project.build.directory}</installDirectory>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>

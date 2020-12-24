@@ -77,6 +77,34 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>install-node</id>
+						<goals><goal>install-node-and-npm</goal></goals>
+					</execution>
+					<execution>
+						<id>main-install</id>
+						<goals><goal>npm</goal></goals>
+						<configuration>
+							<workingDirectory>src/main/front/main</workingDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>main</id>
+						<goals><goal>npm</goal></goals>
+						<configuration>
+							<arguments>run build</arguments>
+							<workingDirectory>src/main/front/main</workingDirectory>
+							<environmentVariables>
+								<outDir>${project.build.directory}/generated-sources/js/org/apache/openmeetings/web/common/</outDir>
+							</environmentVariables>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>com.samaxes.maven</groupId>
 				<artifactId>minify-maven-plugin</artifactId>
 				<version>${minify-maven-plugin.version}</version>
@@ -128,7 +156,7 @@
 								<jsSourceFile>raw-interview-area.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>interviewwb.js</jsFinalFile>
-							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room/wb/</jsTargetDir>
+							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/room/wb/</jsTargetDir>
 							<jsEngine>CLOSURE</jsEngine>
 						</configuration>
 					</execution>
@@ -167,7 +195,7 @@
 								<jsSourceFile>raw-wb-area.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>wb.js</jsFinalFile>
-							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room/wb/</jsTargetDir>
+							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/room/wb/</jsTargetDir>
 							<jsEngine>CLOSURE</jsEngine>
 						</configuration>
 					</execution>
@@ -183,14 +211,14 @@
 								<jsSourceFile>fileinput.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>omfileinput.js</jsFinalFile>
-							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/util/upload</jsTargetDir>
+							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/util/upload</jsTargetDir>
 							<jsEngine>CLOSURE</jsEngine>
 							<cssSourceDir>../java/org/apache/openmeetings/web/util/upload</cssSourceDir>
 							<cssSourceFiles>
 								<cssSourceFile>fileinput.css</cssSourceFile>
 							</cssSourceFiles>
 							<cssFinalFile>omfileinput.css</cssFinalFile>
-							<cssTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/util/upload</cssTargetDir>
+							<cssTargetDir>../generated-sources/js/org/apache/openmeetings/web/util/upload</cssTargetDir>
 						</configuration>
 					</execution>
 					<execution>
@@ -211,7 +239,7 @@
 							</jsSourceFiles>
 							<jsFinalFile>room.js</jsFinalFile>
 							<jsEngine>CLOSURE</jsEngine>
-							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room</jsTargetDir>
+							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/room</jsTargetDir>
 						</configuration>
 					</execution>
 					<execution>
@@ -230,7 +258,7 @@
 							</jsSourceFiles>
 							<jsFinalFile>settings.js</jsFinalFile>
 							<jsEngine>CLOSURE</jsEngine>
-							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room</jsTargetDir>
+							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/room</jsTargetDir>
 						</configuration>
 					</execution>
 					<execution>
@@ -246,7 +274,7 @@
 							</jsSourceFiles>
 							<jsFinalFile>nettest.js</jsFinalFile>
 							<jsEngine>CLOSURE</jsEngine>
-							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room</jsTargetDir>
+							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/room</jsTargetDir>
 						</configuration>
 					</execution>
 					<execution>
@@ -263,7 +291,7 @@
 							</jsSourceFiles>
 							<jsFinalFile>chat.js</jsFinalFile>
 							<jsEngine>CLOSURE</jsEngine>
-							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/user/chat</jsTargetDir>
+							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/user/chat</jsTargetDir>
 						</configuration>
 					</execution>
 				</executions>
@@ -336,7 +364,7 @@
 							<filtering>true</filtering>
 						</webResource>
 						<webResource>
-							<directory>${project.build.directory}/generated-sources/main/java/</directory>
+							<directory>${project.build.directory}/generated-sources/js/</directory>
 							<targetPath>WEB-INF/classes</targetPath>
 						</webResource>
 					</webResources>

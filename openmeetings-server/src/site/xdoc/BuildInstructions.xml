@@ -96,7 +96,7 @@ mvn install -P allModules,quick,mysql -pl openmeetings-util,openmeetings-db,open
 				<p>You can further trim down the compile time to just selected Javascript sections:</p>
 				<source>mvn minify:minify@room-js minify:minify@interview-wb-js</source>
 				<p>And then copy them into the relevant folder, for example if your run the Embedded Jetty:</p>
-				<source>cp -R target/generated-sources/main/java/org/apache/openmeetings/* target/openmeetings-web-5.0.0-SNAPSHOT/WEB-INF/classes/org/apache/openmeetings/</source>
+				<source>cp -R target/generated-sources/js/org/apache/openmeetings/* target/openmeetings-web-6.0.0-SNAPSHOT/WEB-INF/classes/org/apache/openmeetings/</source>
 			</div>
 		</section>
 		<section name="Fix Proxy settings">

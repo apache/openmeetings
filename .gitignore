@@ -16,3 +16,7 @@ openmeetings-server/web-server
 
 # OSX files
 .DS_Store
+
+node_modules
+package-lock.json
+
