@@ -170,7 +170,7 @@ var Video = (function() {
 					return OmUtil.error(error);
 				}
 				if (data.analyser) {
-					level = MicLevel();
+					level = new MicLevel();
 					level.meter(data.analyser, lm, _micActivity, OmUtil.error);
 				}
 				data.rtcPeer.generateOffer(function(genErr, offerSdp) {

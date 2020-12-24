@@ -102,6 +102,24 @@
 							</environmentVariables>
 						</configuration>
 					</execution>
+					<execution>
+						<id>settings-install</id>
+						<goals><goal>npm</goal></goals>
+						<configuration>
+							<workingDirectory>src/main/front/main</workingDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>settings</id>
+						<goals><goal>npm</goal></goals>
+						<configuration>
+							<arguments>run build</arguments>
+							<workingDirectory>src/main/front/main</workingDirectory>
+							<environmentVariables>
+								<outDir>${project.build.directory}/generated-sources/js/org/apache/openmeetings/web/room/</outDir>
+							</environmentVariables>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -221,25 +239,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>settings-js</id>
-						<goals>
-							<goal>minify</goal>
-						</goals>
-						<configuration>
-							<charset>UTF-8</charset>
-							<jsSourceDir>../java/org/apache/openmeetings/web/room</jsSourceDir>
-							<jsSourceFiles>
-								<jsSourceFile>raw-video-util.js</jsSourceFile>
-								<jsSourceFile>raw-settings.js</jsSourceFile>
-								<jsSourceFile>adapter-latest.js</jsSourceFile>
-								<jsSourceFile>kurento-utils.js</jsSourceFile>
-							</jsSourceFiles>
-							<jsFinalFile>settings.js</jsFinalFile>
-							<jsEngine>CLOSURE</jsEngine>
-							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/room</jsTargetDir>
-						</configuration>
-					</execution>
-					<execution>
 						<id>nettest-js</id>
 						<goals>
 							<goal>minify</goal>
@@ -285,8 +284,6 @@
 						**/raw-*.js,
 						**/fabric.js,
 						**/MathJax*.js,
-						**/adapter-latest.js,
-						**/kurento-utils.js,
 						**/NoSleep.js
 					</packagingExcludes>
 					<warSourceExcludes>
@@ -294,8 +291,6 @@
 						**/raw-*.js,
 						**/fabric.js,
 						**/MathJax*.js,
-						**/adapter-latest.js,
-						**/kurento-utils.js,
 						**/NoSleep.js
 					</warSourceExcludes>
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
@@ -314,8 +309,6 @@
 								<exclude>**/raw-*.js</exclude>
 								<exclude>**/fabric.js</exclude>
 								<exclude>**/MathJax*.js</exclude>
-								<exclude>**/adapter-latest.js</exclude>
-								<exclude>**/kurento-utils.js</exclude>
 								<exclude>**/NoSleep.js</exclude>
 							</excludes>
 						</webResource>
@@ -430,8 +423,6 @@
 										<exclude>**/raw-*.js</exclude>
 										<exclude>**/fabric.js</exclude>
 										<exclude>**/MathJax*.js</exclude>
-										<exclude>**/adapter-latest.js</exclude>
-										<exclude>**/kurento-utils.js</exclude>
 										<exclude>**/network.js</exclude>
 									</excludes>
 									<filtering>true</filtering>
@@ -463,8 +454,6 @@
 										<exclude>**/raw-*.js</exclude>
 										<exclude>**/fabric.js</exclude>
 										<exclude>**/MathJax*.js</exclude>
-										<exclude>**/adapter-latest.js</exclude>
-										<exclude>**/kurento-utils.js</exclude>
 										<exclude>**/network.js</exclude>
 									</excludes>
 								</resource>
