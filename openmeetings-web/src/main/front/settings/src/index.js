@@ -10,6 +10,9 @@ Object.assign(window, {
 	, VIDWIN_SEL: VideoUtil.VIDWIN_SEL
 	, VID_SEL: VideoUtil.VID_SEL
 	, MicLevel: require('./mic-level')
+	, VideoSettings: require('./settings')
+
+	// AdapterJS is not added for now
 	, kurentoUtils: require('kurento-utils')
 	, uuidv4: require('uuid/v4')
 });

@@ -35,7 +35,6 @@
 				<exclude>**/raw-*.js</exclude>
 				<exclude>**/fabric.js</exclude>
 				<exclude>**/MathJax*.js</exclude>
-				<exclude>**/NoSleep.js</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>

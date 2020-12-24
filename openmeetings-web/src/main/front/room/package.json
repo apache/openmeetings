@@ -1,0 +1,21 @@
+{
+  "name": "room",
+  "version": "1.0.0",
+  "description": "Methods for OM room",
+  "main": "src/index.js",
+  "scripts": {
+    "build-dev": "browserify src/index.js --transform-key=staging -o ${outDir}${npm_package_name}.js",
+    "build-prod": "browserify src/index.js --transform-key=production -p tinyify -o ${outDir}${npm_package_name}.min.js",
+    "build": "npm run build-dev && npm run build-prod"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "rat-license": "Licensed under the Apache License, Version 2.0 (the \"License\") http://www.apache.org/licenses/LICENSE-2.0",
+  "devDependencies": {
+    "browserify": "^17.0.0",
+    "tinyify": "^3.0.0"
+  },
+  "dependencies": {
+    "nosleep.js": "^0.12.0"
+  }
+}

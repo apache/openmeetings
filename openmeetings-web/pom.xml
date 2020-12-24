@@ -106,7 +106,7 @@
 						<id>settings-install</id>
 						<goals><goal>npm</goal></goals>
 						<configuration>
-							<workingDirectory>src/main/front/main</workingDirectory>
+							<workingDirectory>src/main/front/settings</workingDirectory>
 						</configuration>
 					</execution>
 					<execution>
@@ -114,7 +114,25 @@
 						<goals><goal>npm</goal></goals>
 						<configuration>
 							<arguments>run build</arguments>
-							<workingDirectory>src/main/front/main</workingDirectory>
+							<workingDirectory>src/main/front/settings</workingDirectory>
+							<environmentVariables>
+								<outDir>${project.build.directory}/generated-sources/js/org/apache/openmeetings/web/room/</outDir>
+							</environmentVariables>
+						</configuration>
+					</execution>
+					<execution>
+						<id>room-install</id>
+						<goals><goal>npm</goal></goals>
+						<configuration>
+							<workingDirectory>src/main/front/room</workingDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>room</id>
+						<goals><goal>npm</goal></goals>
+						<configuration>
+							<arguments>run build</arguments>
+							<workingDirectory>src/main/front/room</workingDirectory>
 							<environmentVariables>
 								<outDir>${project.build.directory}/generated-sources/js/org/apache/openmeetings/web/room/</outDir>
 							</environmentVariables>
@@ -218,27 +236,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>room-js</id>
-						<goals>
-							<goal>minify</goal>
-						</goals>
-						<configuration>
-							<charset>UTF-8</charset>
-							<jsSourceDir>../java/org/apache/openmeetings/web/room</jsSourceDir>
-							<jsSourceFiles>
-								<jsSourceFile>NoSleep.js</jsSourceFile>
-								<jsSourceFile>raw-activities.js</jsSourceFile>
-								<jsSourceFile>raw-video.js</jsSourceFile>
-								<jsSourceFile>raw-video-manager.js</jsSourceFile>
-								<jsSourceFile>raw-sharer.js</jsSourceFile>
-								<jsSourceFile>raw-room.js</jsSourceFile>
-							</jsSourceFiles>
-							<jsFinalFile>room.js</jsFinalFile>
-							<jsEngine>CLOSURE</jsEngine>
-							<jsTargetDir>../generated-sources/js/org/apache/openmeetings/web/room</jsTargetDir>
-						</configuration>
-					</execution>
-					<execution>
 						<id>nettest-js</id>
 						<goals>
 							<goal>minify</goal>
@@ -284,14 +281,12 @@
 						**/raw-*.js,
 						**/fabric.js,
 						**/MathJax*.js,
-						**/NoSleep.js
 					</packagingExcludes>
 					<warSourceExcludes>
 						**/raw-*.css,
 						**/raw-*.js,
 						**/fabric.js,
 						**/MathJax*.js,
-						**/NoSleep.js
 					</warSourceExcludes>
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
 					<webResources>
@@ -309,7 +304,6 @@
 								<exclude>**/raw-*.js</exclude>
 								<exclude>**/fabric.js</exclude>
 								<exclude>**/MathJax*.js</exclude>
-								<exclude>**/NoSleep.js</exclude>
 							</excludes>
 						</webResource>
 						<webResource>

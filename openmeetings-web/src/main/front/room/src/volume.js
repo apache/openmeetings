@@ -1,121 +1,116 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var Volume = (function() {
-	let video, vol, drop, slider, handleEl, hideTimer = null
-		, lastVolume = 50, muted = false;
+module.exports = class Volume {
+	constructor() {
+		let video, vol, drop, slider, handleEl, hideTimer = null
+			, lastVolume = 50, muted = false;
 
-	function __cancelHide() {
-		if (hideTimer) {
-			clearTimeout(hideTimer);
-			hideTimer = null;
+		function __cancelHide() {
+			if (hideTimer) {
+				clearTimeout(hideTimer);
+				hideTimer = null;
+			}
 		}
-	}
-	function __hideDrop() {
-		__cancelHide();
-		hideTimer = setTimeout(() => {
-			drop.hide();
-			hideTimer = null;
-		}, 3000);
-	}
-
-	function _create(_video) {
-		video = _video;
-		_destroy();
-		const uid = video.stream().uid
-			, cuid = video.stream().cuid
-			, volId = 'volume-' + uid;
-		vol = OmUtil.tmpl('#volume-control-stub', volId)
-		slider = vol.find('.slider');
-		drop = vol.find('.dropdown-menu');
-		vol.on('mouseenter', function(e) {
-				e.stopImmediatePropagation();
-				drop.show();
-				__hideDrop()
-			})
-			.click(function(e) {
-				e.stopImmediatePropagation();
-				OmUtil.roomAction({action: 'mute', uid: cuid, mute: !muted});
-				_mute(!muted);
-				drop.hide();
-				return false;
-			}).dblclick(function(e) {
-				e.stopImmediatePropagation();
-				return false;
-			});
-		drop.on('mouseenter', function() {
+		function __hideDrop() {
 			__cancelHide();
-		});
-		drop.on('mouseleave', function() {
-			__hideDrop();
-		});
-		handleEl = vol.find('.handle');
-		slider.slider({
-			orientation: 'vertical'
-			, range: 'min'
-			, min: 0
-			, max: 100
-			, value: lastVolume
-			, create: function() {
-				handleEl.text($(this).slider('value'));
-			}
-			, slide: function(event, ui) {
-				_handle(ui.value);
-			}
-		});
-		_handle(lastVolume);
-		_mute(muted);
-		return vol;
-	}
-	function _handle(val) {
-		handleEl.text(val);
-		const vidEl = video.video()
-			, data = vidEl.data();
-		if (video.stream().self) {
-			if (data.gainNode) {
-				data.gainNode.gain.value = val / 100;
-			}
-		} else {
-			vidEl[0].volume = val / 100;
+			hideTimer = setTimeout(() => {
+				drop.hide();
+				hideTimer = null;
+			}, 3000);
 		}
-		const ico = vol.find('a');
-		if (val > 0 && ico.hasClass('volume-off')) {
-			ico.toggleClass('volume-off volume-on');
-			video.handleMicStatus(true);
-		} else if (val === 0 && ico.hasClass('volume-on')) {
-			ico.toggleClass('volume-on volume-off');
-			video.handleMicStatus(false);
-		}
-	}
-	function _mute(mute) {
-		if (!slider) {
-			return;
-		}
-		muted = mute;
-		if (mute) {
-			const val = slider.slider('option', 'value');
-			if (val > 0) {
-				lastVolume = val;
-			}
-			slider.slider('option', 'value', 0);
-			_handle(0);
-		} else {
-			slider.slider('option', 'value', lastVolume);
-			_handle(lastVolume);
-		}
-	}
-	function _destroy() {
-		if (vol) {
-			vol.remove();
-			vol = null;
-		}
-	}
 
-	return {
-		create: _create
-		, handle: _handle
-		, mute: _mute
-		, muted: function() {
+		this.create = (_video) => {
+			video = _video;
+			_destroy();
+			const uid = video.stream().uid
+				, cuid = video.stream().cuid
+				, volId = 'volume-' + uid;
+			vol = OmUtil.tmpl('#volume-control-stub', volId)
+			slider = vol.find('.slider');
+			drop = vol.find('.dropdown-menu');
+			vol.on('mouseenter', function(e) {
+					e.stopImmediatePropagation();
+					drop.show();
+					__hideDrop()
+				})
+				.click(function(e) {
+					e.stopImmediatePropagation();
+					OmUtil.roomAction({action: 'mute', uid: cuid, mute: !muted});
+					_mute(!muted);
+					drop.hide();
+					return false;
+				}).dblclick(function(e) {
+					e.stopImmediatePropagation();
+					return false;
+				});
+			drop.on('mouseenter', function() {
+				__cancelHide();
+			});
+			drop.on('mouseleave', function() {
+				__hideDrop();
+			});
+			handleEl = vol.find('.handle');
+			slider.slider({
+				orientation: 'vertical'
+				, range: 'min'
+				, min: 0
+				, max: 100
+				, value: lastVolume
+				, create: function() {
+					handleEl.text($(this).slider('value'));
+				}
+				, slide: function(event, ui) {
+					_handle(ui.value);
+				}
+			});
+			_handle(lastVolume);
+			_mute(muted);
+			return vol;
+		};
+		this.handle = (val) => {
+			handleEl.text(val);
+			const vidEl = video.video()
+				, data = vidEl.data();
+			if (video.stream().self) {
+				if (data.gainNode) {
+					data.gainNode.gain.value = val / 100;
+				}
+			} else {
+				vidEl[0].volume = val / 100;
+			}
+			const ico = vol.find('a');
+			if (val > 0 && ico.hasClass('volume-off')) {
+				ico.toggleClass('volume-off volume-on');
+				video.handleMicStatus(true);
+			} else if (val === 0 && ico.hasClass('volume-on')) {
+				ico.toggleClass('volume-on volume-off');
+				video.handleMicStatus(false);
+			}
+		};
+		this.mute = (mute) => {
+			if (!slider) {
+				return;
+			}
+			muted = mute;
+			if (mute) {
+				const val = slider.slider('option', 'value');
+				if (val > 0) {
+					lastVolume = val;
+				}
+				slider.slider('option', 'value', 0);
+				_handle(0);
+			} else {
+				slider.slider('option', 'value', lastVolume);
+				_handle(lastVolume);
+			}
+		};
+		this.destroy = () => {
+			if (vol) {
+				vol.remove();
+				vol = null;
+			}
+		};
+		this.muted = () => {
 			return muted;
-		}
-		, destroy: _destroy
-	};
-});
+		};
+	}
+};
