@@ -1,9 +1,19 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var Arrow = function(wb, s, sBtn) {
-	const arrow = Line(wb, s, sBtn);
-	arrow.stroke.width = 20;
-	arrow.createShape = function() {
-		arrow.obj = new fabric.Polygon([
+const Line = require('./wb-tool-line');
+const ToolUtil = require('./wb-tool-util');
+
+module.exports = class Arrow extends Line {
+	constructor(wb, settings, sBtn) {
+		super(wb, settings, sBtn)
+		this.stroke.width = 20;
+
+		this.internalActivate = () => {
+			ToolUtil.enableAllProps(settings, this);
+		};
+	}
+
+	createShape() {
+		this.obj = new fabric.Polygon([
 			{x: 0, y: 0},
 			{x: 0, y: 0},
 			{x: 0, y: 0},
@@ -12,23 +22,22 @@ var Arrow = function(wb, s, sBtn) {
 			{x: 0, y: 0},
 			{x: 0, y: 0}]
 			, {
-				left: arrow.orig.x
-				, top: arrow.orig.y
+				left: this.orig.x
+				, top: this.orig.y
 				, angle: 0
 				, strokeWidth: 2
-				, fill: arrow.fill.enabled ? arrow.fill.color : 'rgba(0,0,0,0)'
-				, stroke: arrow.stroke.enabled ? arrow.stroke.color : 'rgba(0,0,0,0)'
-				, opacity: arrow.opacity
+				, fill: this.fill.enabled ? this.fill.color : ToolUtil.noColor
+				, stroke: this.stroke.enabled ? this.stroke.color : ToolUtil.noColor
+				, opacity: this.opacity
 				, omType: 'arrow'
 			});
+	}
 
-		return arrow.obj;
-	};
-	arrow.updateShape = function(pointer) {
-		const dx = pointer.x - arrow.orig.x
-			, dy = pointer.y - arrow.orig.y
+	updateShape(pointer) {
+		const dx = pointer.x - this.orig.x
+			, dy = pointer.y - this.orig.y
 			, d = Math.sqrt(dx * dx + dy * dy)
-			, sw = arrow.stroke.width
+			, sw = this.stroke.width
 			, hl = sw * 3
 			, h = 1.5 * sw
 			, points = [
@@ -39,7 +48,7 @@ var Arrow = function(wb, s, sBtn) {
 				{x: Math.max(0, d - hl), y: 0},
 				{x: Math.max(0, d - hl), y: sw / 2},
 				{x: 0, y: sw / 2}];
-		arrow.obj.set({
+		this.obj.set({
 			points: points
 			, angle: Math.atan2(dy, dx) * 180 / Math.PI
 			, width: d
@@ -51,9 +60,5 @@ var Arrow = function(wb, s, sBtn) {
 				y: h / 2
 			}
 		});
-	};
-	arrow.internalActivate = function() {
-		ToolUtil.enableAllProps(s, arrow);
-	};
-	return arrow;
+	}
 };

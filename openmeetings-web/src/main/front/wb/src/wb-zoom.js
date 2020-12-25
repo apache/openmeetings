@@ -1,23 +1,23 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const Role = require('./wb-role');
 
-const area = $('.room-block .wb-block .wb-area .tabs')
-	, bar = area.find('.wb-tabbar')
-
 module.exports = class WbZoom {
 	constructor(wbEl, wbObj) {
 		this.zoom = 1.;
 		this.zoomMode = 'PAGE_WIDTH';
 
+		const self = this
+			, area = $('.room-block .wb-block .wb-area .tabs')
+			, bar = area.find('.wb-tabbar');
 		let zoomBar;
 		function _sendSetSize() {
 			wbObj.doSetSize();
 			OmUtil.wbAction({action: 'setSize', data: {
 				wbId: wbObj.getId()
-				, zoom: this.zoom
-				, zoomMode: this.zoomMode
-				, width: wbObj.getWidth()
-				, height: wbObj.getHeight()
+				, zoom: self.zoom
+				, zoomMode: self.zoomMode
+				, width: wbObj.width
+				, height: wbObj.height
 			}});
 		}
 
@@ -32,7 +32,7 @@ module.exports = class WbZoom {
 				zoomBar.find('.doc-group .curr-slide').removeClass("text-muted");
 				zoomBar.find('.doc-group .curr-slide').addClass("text-dark");
 				zoomBar.find('.doc-group .input-group-text').removeClass("text-muted");
-				const ns = 1 * slide;
+				const ns = 1 * wbObj.slide;
 				zoomBar.find('.doc-group .curr-slide').val(ns + 1).attr('max', ccount);
 				zoomBar.find('.doc-group .up').prop('disabled', ns < 1);
 				zoomBar.find('.doc-group .down').prop('disabled', ns > ccount - 2);
@@ -55,21 +55,21 @@ module.exports = class WbZoom {
 			switch (role) {
 				case Role.PRESENTER:
 					zoomBar.find('.curr-slide').change(function() {
-						_setSlide($(this).val() - 1);
-						showCurrentSlide();
+						wbObj._doSetSlide($(this).val() - 1);
+						wbObj._showCurrentSlide();
 					});
 					zoomBar.find('.doc-group .up').click(function () {
-						_setSlide(1 * slide - 1);
-						showCurrentSlide();
+						wbObj._doSetSlide(1 * wbObj.slide - 1);
+						wbObj._showCurrentSlide();
 					});
 					zoomBar.find('.doc-group .down').click(function () {
-						_setSlide(1 * slide + 1);
-						showCurrentSlide();
+						wbObj._doSetSlide(1 * wbObj.slide + 1);
+						wbObj._showCurrentSlide();
 					});
 					zoomBar.find('.settings-group').show().find('.settings').click(function () {
 						const wbs = $('#wb-settings')
-							, wbsw = wbs.find('.wbs-width').val(width)
-							, wbsh = wbs.find('.wbs-height').val(height);
+							, wbsw = wbs.find('.wbs-width').val(wbObj.width)
+							, wbsh = wbs.find('.wbs-height').val(wbObj.height);
 						function isNumeric(n) {
 							return !isNaN(parseInt(n)) && isFinite(n);
 						}
@@ -77,8 +77,8 @@ module.exports = class WbZoom {
 						wbs.find('.btn-ok').off().click(function() {
 							const __w = wbsw.val(), __h = wbsh.val();
 							if (isNumeric(__w) && isNumeric(__h)) {
-								width = parseInt(__w);
-								height = parseInt(__h);
+								wbObj.width = parseInt(__w);
+								wbObj.height = parseInt(__h);
 								_sendSetSize();
 							}
 							wbs.modal('hide');
@@ -88,35 +88,35 @@ module.exports = class WbZoom {
 					// fallthrough
 				case Role.NONE:
 					zoomBar.find('.zoom-out').click(function() {
-						this.zoom -= .2;
-						if (this.zoom < .1) {
-							this.zoom = .1;
+						self.zoom -= .2;
+						if (self.zoom < .1) {
+							self.zoom = .1;
 						}
-						this.zoomMode = 'ZOOM';
+						self.zoomMode = 'ZOOM';
 						_sendSetSize();
 					});
 					zoomBar.find('.zoom-in').click(function() {
-						this.zoom += .2;
-						this.zoomMode = 'ZOOM';
+						self.zoom += .2;
+						self.zoomMode = 'ZOOM';
 						_sendSetSize();
 					});
 					zoomBar.find('.zoom').change(function() {
 						const zzz = $(this).val();
-						this.zoomMode = 'ZOOM';
+						self.zoomMode = 'ZOOM';
 						if (isNaN(zzz)) {
 							switch (zzz) {
 								case 'FULL_FIT':
 								case 'PAGE_WIDTH':
-									this.zoomMode = zzz;
+									self.zoomMode = zzz;
 									break;
 								case 'custom':
-									this.zoom = 1. * $(this).data('custom-val');
+									self.zoom = 1. * $(this).data('custom-val');
 									break;
 								default:
 									//no-op
 							}
 						} else {
-							this.zoom = 1. * zzz;
+							self.zoom = 1. * zzz;
 						}
 						_sendSetSize();
 					});
@@ -127,11 +127,11 @@ module.exports = class WbZoom {
 		this.setSize = () => {
 			switch (this.zoomMode) {
 				case 'FULL_FIT':
-					this.zoom = Math.min((area.width() - 30) / wbObj.getWidth(), (area.height() - bar.height() - 30) / wbObj.getHeight());
+					this.zoom = Math.min((area.width() - 30) / wbObj.width, (area.height() - bar.height() - 30) / wbObj.height);
 					zoomBar.find('.zoom').val(this.zoomMode);
 					break;
 				case 'PAGE_WIDTH':
-					this.zoom = (area.width() - 30 - 40) / wbObj.getWidth(); // bumper + toolbar
+					this.zoom = (area.width() - 30 - 40) / wbObj.width; // bumper + toolbar
 					zoomBar.find('.zoom').val(this.zoomMode);
 					break;
 				default:

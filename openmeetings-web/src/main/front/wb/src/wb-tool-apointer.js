@@ -22,8 +22,8 @@ module.exports = class APointer extends WbToolBase {
 				, y: ptr.y
 				, user: self.user
 			};
-			obj.uid = self.objectCreated(obj, canvas);
-			self.create(canvas, obj);
+			obj.uid = self.objectCreated.call(self, obj, canvas);
+			self.create.call(self, canvas, obj);
 		}
 
 		this.activate = () => {
@@ -43,8 +43,9 @@ module.exports = class APointer extends WbToolBase {
 	}
 
 	create(canvas, o) {
+		const zoom = this.wb.getZoom();
 		fabric.Image.fromURL('./css/images/pointer.png', function(img) {
-			const scale = 1. / this.wb.getZoom();
+			const scale = 1. / zoom;
 			img.set({
 				left:15
 				, originX: 'right'
@@ -54,7 +55,7 @@ module.exports = class APointer extends WbToolBase {
 				radius: 20
 				, stroke: '#ff6600'
 				, strokeWidth: 2
-				, fill: 'rgba(0,0,0,0)'
+				, fill: ToolUtil.noColor
 				, originX: 'center'
 				, originY: 'center'
 			});
@@ -62,7 +63,7 @@ module.exports = class APointer extends WbToolBase {
 				radius: 6
 				, stroke: '#ff6600'
 				, strokeWidth: 2
-				, fill: 'rgba(0,0,0,0)'
+				, fill: ToolUtil.noColor
 				, originX: 'center'
 				, originY: 'center'
 			});

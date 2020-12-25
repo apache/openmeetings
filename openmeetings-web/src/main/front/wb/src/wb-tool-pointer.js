@@ -1,7 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var Pointer = function(wb, s, sBtn) {
-	return {
-		activate: function() {
+const ToolUtil = require('./wb-tool-util');
+
+module.exports = class Pointer {
+	constructor(wb, s, sBtn) {
+		this.activate = () => {
 			wb.eachCanvas(function(canvas) {
 				canvas.selection = true;
 				canvas.forEachObject(function(o) {
@@ -10,8 +12,8 @@ var Pointer = function(wb, s, sBtn) {
 			});
 			ToolUtil.disableAllProps(s);
 			sBtn.addClass('disabled');
-		}
-		, deactivate: function() {
+		};
+		this.deactivate = () => {
 			wb.eachCanvas(function(canvas) {
 				canvas.selection = false;
 				canvas.forEachObject(function(o) {
@@ -19,5 +21,5 @@ var Pointer = function(wb, s, sBtn) {
 				});
 			});
 		}
-	};
+	}
 };

@@ -2,6 +2,16 @@
 const Role = require('./wb-role');
 const WbUtils = require('./wb-utils');
 const APointer = require('./wb-tool-apointer');
+const Pointer = require('./wb-tool-pointer');
+const Text = require('./wb-tool-text');
+const Textbox = require('./wb-tool-textbox');
+const Whiteout = require('./wb-tool-whiteout');
+const Paint = require('./wb-tool-paint');
+const Line = require('./wb-tool-line');
+const ULine = require('./wb-tool-uline');
+const Rect = require('./wb-tool-rect');
+const Ellipse = require('./wb-tool-ellipse');
+const Arrow = require('./wb-tool-arrow');
 
 const ACTIVE = 'active';
 
@@ -92,19 +102,19 @@ module.exports = class WbTools {
 		}
 		function _initTexts(sBtn) {
 			const c = _initGroup('#wb-area-texts', _getBtn('apointer'));
-			_initToolBtn('text', false, Text(wb, settings, sBtn));
-			_initToolBtn('textbox', false, Textbox(wb, settings, sBtn));
+			_initToolBtn('text', false, new Text(wb, settings, sBtn));
+			_initToolBtn('textbox', false, new Textbox(wb, settings, sBtn));
 			_initGroupHandle(c, tools);
 		}
 		function _initDrawings(sBtn) {
 			const c = _initGroup('#wb-area-drawings', tools.find('.texts'));
-			_initToolBtn('eraser', false, Whiteout(wb, settings, sBtn));
-			_initToolBtn('paint', false, Paint(wb, settings, sBtn));
-			_initToolBtn('line', false, Line(wb, settings, sBtn));
-			_initToolBtn('uline', false, ULine(wb, settings, sBtn));
-			_initToolBtn('rect', false, Rect(wb, settings, sBtn));
-			_initToolBtn('ellipse', false, Ellipse(wb, settings, sBtn));
-			_initToolBtn('arrow', false, Arrow(wb, settings, sBtn));
+			_initToolBtn('eraser', false, new Whiteout(wb, settings, sBtn));
+			_initToolBtn('paint', false, new Paint(wb, settings, sBtn));
+			_initToolBtn('line', false, new Line(wb, settings, sBtn));
+			_initToolBtn('uline', false, new ULine(wb, settings, sBtn));
+			_initToolBtn('rect', false, new Rect(wb, settings, sBtn));
+			_initToolBtn('ellipse', false, new Ellipse(wb, settings, sBtn));
+			_initToolBtn('arrow', false, new Arrow(wb, settings, sBtn));
 			_initGroupHandle(c, tools);
 		}
 		function _initCliparts(sBtn) {
@@ -123,6 +133,9 @@ module.exports = class WbTools {
 		function _initSettings() {
 			function setStyle(canvas, styleName, value) {
 				const o = canvas.getActiveObject();
+				if (!o) {
+					return;
+				}
 				if (o.setSelectionStyles && o.isEditing) {
 					const style = {};
 					style[styleName] = value;
@@ -243,7 +256,7 @@ module.exports = class WbTools {
 				StaticTMath.create(json, cnvs
 					, function(obj) {
 						_removeHandler(o);
-						cnvs.trigger('object:modified', {target: obj});
+						cnvs.fire('object:modified', {target: obj});
 					}
 					, function(msg) {
 						const err = math.find('.status');
@@ -314,12 +327,12 @@ module.exports = class WbTools {
 					if (role === Role.WHITEBOARD) {
 						clearAll.addClass('disabled');
 					}
-					_initToolBtn('pointer', _firstToolItem, Pointer(wb, settings, sBtn));
+					_initToolBtn('pointer', _firstToolItem, new Pointer(wb, settings, sBtn));
 					_firstToolItem = false;
 					_initTexts(sBtn);
 					_initDrawings(sBtn);
-					_initToolBtn('math', _firstToolItem, TMath(wb, settings, sBtn));
-					_initCliparts(sBtn);
+					// FIXME TODO _initToolBtn('math', _firstToolItem, TMath(wb, settings, sBtn));
+					// FIXME TODO _initCliparts(sBtn);
 					tools.find('.om-icon.settings').click(function() {
 						settings.show();
 					});

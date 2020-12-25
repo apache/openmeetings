@@ -59,4 +59,5 @@ module.exports = {
 			return result;
 		}, {});
 	}
+	, noColor: 'rgba(0,0,0,0)'
 };

@@ -14,22 +14,12 @@ module.exports = class Wb {
 		this.title = wbo.name;
 		this.width = wbo.width;
 		this.height = wbo.height;
+		this.slide = 0;
+
 		const canvases = [], self = this;
-		let wbEl, tools, zoomBar, slide = 0
+		let wbEl, tools, zoomBar
 			, role = null, scrollTimeout = null;
 
-		function _setSlide(_sld) {
-			const sld = 1 * _sld;
-			if (sld < 0 || sld > canvases.length - 1) {
-				return;
-			}
-			slide = _sld;
-			OmUtil.wbAction({action: 'setSlide', data: {
-				wbId: self.id
-				, slide: _sld
-			}});
-			zoomBar.update(role, canvases.length);
-		}
 		function _findObject(o) {
 			let _o = null;
 			const cnvs = canvases[o.slide];
@@ -89,7 +79,7 @@ module.exports = class Wb {
 							b.data().deactivate();
 							b.data().activate();
 						}
-						showCurrentSlide();
+						self._showCurrentSlide();
 					}
 				}
 					break;
@@ -230,36 +220,19 @@ module.exports = class Wb {
 				const sc = wbEl.find('.scroll-container')
 					, canvases = sc.find('.canvas-container');
 				if (Math.round(sc.height() + sc[0].scrollTop) === sc[0].scrollHeight) {
-					if (slide !== canvases.length - 1) {
-						_setSlide(canvases.length - 1);
+					if (self.slide !== canvases.length - 1) {
+						self._doSetSlide(canvases.length - 1);
 					}
 					return false;
 				}
 				canvases.each(function(idx) {
 					const h = $(this).height(), pos = $(this).position();
-					if (slide !== idx && pos.top > BUMPER - h && pos.top < BUMPER) {
-						_setSlide(idx);
+					if (self.slide !== idx && pos.top > BUMPER - h && pos.top < BUMPER) {
+						self._doSetSlide(idx);
 						return false;
 					}
 				});
 			}, 100);
-		}
-		function showCurrentSlide() {
-			wbEl.find('.scroll-container .canvas-container').each(function(idx) {
-				if (role === Role.PRESENTER) {
-					$(this).show();
-					const cclist = wbEl.find('.scroll-container .canvas-container');
-					if (cclist.length > slide) {
-						cclist[slide].scrollIntoView();
-					}
-				} else {
-					if (idx === slide) {
-						$(this).show();
-					} else {
-						$(this).hide();
-					}
-				}
-			});
 		}
 		/*TODO interactive text change
 		var textEditedHandler = function (e) {
@@ -310,7 +283,7 @@ module.exports = class Wb {
 			canvases.push(canvas);
 			const cc = $('#' + cid).closest('.canvas-container');
 			if (role === Role.NONE) {
-				if (sl === slide) {
+				if (sl === self.slide) {
 					cc.show();
 				} else {
 					cc.hide();
@@ -329,7 +302,7 @@ module.exports = class Wb {
 			self.eachCanvas(function(canvas) {
 				__setSize(canvas);
 			});
-			_setSlide(slide);
+			self._doSetSlide(self.slide);
 		}
 		function _videoStatus(json) {
 			const g = _findObject(json);
@@ -347,7 +320,7 @@ module.exports = class Wb {
 				} else {
 					sc.on('scroll', scrollHandler);
 				}
-				showCurrentSlide();
+				self._showCurrentSlide();
 				this.eachCanvas(function(canvas) {
 					setHandlers(canvas);
 					canvas.forEachObject(function(__o) {
@@ -374,9 +347,38 @@ module.exports = class Wb {
 				_setSize();
 			}
 		};
+		this._showCurrentSlide = () => {
+			wbEl.find('.scroll-container .canvas-container').each(function(idx) {
+				if (role === Role.PRESENTER) {
+					$(this).show();
+					const cclist = wbEl.find('.scroll-container .canvas-container');
+					if (cclist.length > self.slide) {
+						cclist[self.slide].scrollIntoView();
+					}
+				} else {
+					if (idx === self.slide) {
+						$(this).show();
+					} else {
+						$(this).hide();
+					}
+				}
+			});
+		};
+		this._doSetSlide = (_sld) => {
+			const sld = 1 * _sld;
+			if (sld < 0 || sld > canvases.length - 1) {
+				return;
+			}
+			self.slide = _sld;
+			OmUtil.wbAction({action: 'setSlide', data: {
+				wbId: self.id
+				, slide: _sld
+			}});
+			zoomBar.update(role, canvases.length);
+		};
 		this.setSlide = (_sl) => {
-			slide = _sl;
-			showCurrentSlide();
+			self.slide = _sl;
+			self._showCurrentSlide();
 		};
 		this.createObj = (obj) => {
 			const arr = [], del = [], _arr = Array.isArray(obj) ? obj : [obj];
@@ -477,7 +479,7 @@ module.exports = class Wb {
 			}
 		};
 		this.getCanvas = () => {
-			return canvases[slide];
+			return canvases[self.slide];
 		};
 		this.eachCanvas = (func) => {
 			for (let i = 0; i < canvases.length; ++i) {
@@ -508,13 +510,5 @@ module.exports = class Wb {
 
 	getId() {
 		return this.id;
-	}
-
-	getWidth() {
-		return this.width;
-	}
-
-	getHeight() {
-		return this.height;
 	}
 };
