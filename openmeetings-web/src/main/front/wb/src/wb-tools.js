@@ -1,6 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const Role = require('./wb-role');
 const WbUtils = require('./wb-utils');
+const APointer = require('./wb-tool-apointer');
 
 const ACTIVE = 'active';
 
@@ -33,8 +34,8 @@ function __destroySettings() {
 }
 
 module.exports = class WbTools {
-	constructor(wbEl) {
-		let tools, settings, math;
+	constructor(wbEl, wb) {
+		let mode, tools, settings, math;
 
 		function _initGroupHandle(c) {
 			c.find('a').off().click(function(e) {
@@ -307,7 +308,7 @@ module.exports = class WbTools {
 				case Role.PRESENTER:
 					clearAll.confirmation({
 						confirmationEvent: 'om-clear-all'
-						, onConfirm: () => OmUtil.wbAction({action: 'clearAll', data: {wbId: wb.id}})
+						, onConfirm: () => OmUtil.wbAction({action: 'clearAll', data: {wbId: wb.getId()}})
 					}).removeClass('disabled');
 				case Role.WHITEBOARD:
 					if (role === Role.WHITEBOARD) {
@@ -329,19 +330,19 @@ module.exports = class WbTools {
 						.confirmation({
 							confirmationEvent: 'om-clear-slide'
 							, onConfirm: function() {
-								OmUtil.wbAction({action: 'clearSlide', data: {wbId: wb.id, slide: slide}});
+								OmUtil.wbAction({action: 'clearSlide', data: {wbId: wb.getId(), slide: slide}});
 							}
 						});
 					tools.find('.om-icon.save').click(function() {
-						OmUtil.wbAction({action: 'save', data: {wbId: wb.id}});
+						OmUtil.wbAction({action: 'save', data: {wbId: wb.getId()}});
 					});
 					tools.find('.om-icon.undo').click(function() {
-						OmUtil.wbAction({action: 'undo', data: {wbId: wb.id}});
+						OmUtil.wbAction({action: 'undo', data: {wbId: wb.getId()}});
 					});
 					_initSettings();
 					_initMath();
 				case Role.NONE:
-					_initToolBtn('apointer', _firstToolItem, APointer(wb, settings, sBtn));
+					_initToolBtn('apointer', _firstToolItem, new APointer(wb, settings, sBtn));
 				default:
 					//no-op
 			}
@@ -354,6 +355,9 @@ module.exports = class WbTools {
 		};
 		this.destroy = () => {
 			__destroySettings();
+		};
+		this.getMode = () => {
+			return mode;
 		};
 		this.getMath = () => {
 			return math;

@@ -115,7 +115,7 @@
 		<logback.version>1.2.3</logback.version>
 		<jetty.version>9.4.34.v20201102</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
-		<bcprov-jdk15on.version>1.67</bcprov-jdk15on.version>
+		<bcprov-jdk15on.version>1.68</bcprov-jdk15on.version>
 		<mockito.version>3.6.28</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.15.0</kurento.version>

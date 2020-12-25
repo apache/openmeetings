@@ -15,10 +15,12 @@ module.exports = class WbAreaBase {
 			}
 		}
 
-		this.init = () => {
+		this.wsinit = () => {
+			// it seems `super` can't be called from lambda
 			Wicket.Event.subscribe("/websocket/message", _wbWsHandler);
 		};
-		this.destroy = () => {
+		this.wsdestroy = () => {
+			// it seems `super` can't be called from lambda
 			Wicket.Event.unsubscribe("/websocket/message", _wbWsHandler);
 		};
 		this.setRole = () => {};

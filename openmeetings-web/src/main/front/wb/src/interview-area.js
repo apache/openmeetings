@@ -21,7 +21,8 @@ module.exports = class InterviewWbArea extends WbAreaBase {
 			pArea.attr('class', cls);
 		}
 		this.init = () => {
-			super.init();
+			// it seems `super` can't be called from lambda
+			this.wsinit();
 			container = $(".room-block .wb-block");
 			area = container.find(".wb-area");
 			pArea = area.find(".pod-area");
@@ -66,6 +67,10 @@ module.exports = class InterviewWbArea extends WbAreaBase {
 			});
 			_updateAreaClass();
 			_inited = true;
+		};
+		this.destroy = () => {
+			// it seems `super` can't be called from lambda
+			this.wsdestroy();
 		};
 		this.setRecEnabled = (en) => {
 			if (!_inited) {

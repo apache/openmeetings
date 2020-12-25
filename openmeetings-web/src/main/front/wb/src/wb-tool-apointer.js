@@ -1,10 +1,50 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var APointer = function(wb, s, sBtn) {
-	const pointer = Base();
-	pointer.user = '';
-	pointer.create = function(canvas, o) {
+const WbToolBase = require('./wb-tool-base');
+const ToolUtil = require('./wb-tool-util');
+require('fabric');
+
+module.exports = class APointer extends WbToolBase {
+	constructor(wb, settings, sBtn) {
+		super();
+		this.user = '';
+		this.wb = wb;
+
+		const self = this;
+		function _mouseUp(o) {
+			const canvas = this
+				, ptr = canvas.getPointer(o.e);
+			if (self.user === '') {
+				self.user = $('.room-block .sidebar .user-list .current .name').text();
+			}
+			const obj = {
+				omType: 'pointer'
+				, x: ptr.x
+				, y: ptr.y
+				, user: self.user
+			};
+			obj.uid = self.objectCreated(obj, canvas);
+			self.create(canvas, obj);
+		}
+
+		this.activate = () => {
+			this.wb.eachCanvas(function(canvas) {
+				canvas.selection = false;
+				canvas.on('mouse:up', _mouseUp);
+			});
+			ToolUtil.disableAllProps(settings);
+			sBtn.addClass('disabled');
+		}
+
+		this.deactivate = () => {
+			this.wb.eachCanvas(function(canvas) {
+				canvas.off('mouse:up', _mouseUp);
+			});
+		};
+	}
+
+	create(canvas, o) {
 		fabric.Image.fromURL('./css/images/pointer.png', function(img) {
-			const scale = 1. / wb.getZoom();
+			const scale = 1. / this.wb.getZoom();
 			img.set({
 				left:15
 				, originX: 'right'
@@ -68,33 +108,4 @@ var APointer = function(wb, s, sBtn) {
 			go(count);
 		});
 	}
-	pointer.mouseUp = function(o) {
-		const canvas = this
-			, ptr = canvas.getPointer(o.e);
-		if (pointer.user === '') {
-			pointer.user = $('.room-block .sidebar .user-list .current .name').text();
-		}
-		const obj = {
-			omType: 'pointer'
-			, x: ptr.x
-			, y: ptr.y
-			, user: pointer.user
-		};
-		obj.uid = pointer.objectCreated(obj, canvas);
-		pointer.create(canvas, obj);
-	}
-	pointer.activate = function() {
-		wb.eachCanvas(function(canvas) {
-			canvas.selection = false;
-			canvas.on('mouse:up', pointer.mouseUp);
-		});
-		ToolUtil.disableAllProps(s);
-		sBtn.addClass('disabled');
-	}
-	pointer.deactivate = function() {
-		wb.eachCanvas(function(canvas) {
-			canvas.off('mouse:up', pointer.mouseUp);
-		});
-	};
-	return pointer;
 };

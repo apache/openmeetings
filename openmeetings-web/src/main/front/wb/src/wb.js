@@ -1,8 +1,8 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const Role = require('./wb-role');
-const Tools = require('./wb-tools');
+const WbTools = require('./wb-tools');
 const WbZoom = require('./wb-zoom');
-const fabric = require('fabric');
+require('fabric'); // will produce `fabric` namespace
 
 const BUMPER = 100
 	, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src', 'formula'];
@@ -14,8 +14,8 @@ module.exports = class Wb {
 		this.title = wbo.name;
 		this.width = wbo.width;
 		this.height = wbo.height;
-		const canvases = [];
-		let wbEl, tools, zoomBar, mode, slide = 0
+		const canvases = [], self = this;
+		let wbEl, tools, zoomBar, slide = 0
 			, role = null, scrollTimeout = null;
 
 		function _setSlide(_sld) {
@@ -25,7 +25,7 @@ module.exports = class Wb {
 			}
 			slide = _sld;
 			OmUtil.wbAction({action: 'setSlide', data: {
-				wbId: this.id
+				wbId: self.id
 				, slide: _sld
 			}});
 			zoomBar.update(role, canvases.length);
@@ -76,7 +76,7 @@ module.exports = class Wb {
 						if (_o.deleted) {
 							ToolUtil.addDeletedItem(canvas, _o);
 						} else {
-							let scale = this.width / _o.width;
+							let scale = self.width / _o.width;
 							scale = scale < 1 ? 1 : scale;
 							canvas.setBackgroundImage(_o._src + '&slide=' + i, canvas.renderAll.bind(canvas)
 									, {scaleX: scale, scaleY: scale});
@@ -98,7 +98,7 @@ module.exports = class Wb {
 					const canvas = canvases[_o.slide];
 					if (!!canvas) {
 						_o.selectable = canvas.selection;
-						_o.editable = ('text' === mode || 'textbox' === mode);
+						_o.editable = ('text' === tools.getMode() || 'textbox' === tools.getMode());
 						canvas.add(_o);
 					}
 				}
@@ -107,7 +107,7 @@ module.exports = class Wb {
 		}
 		function _createObject(arr, handler) {
 			fabric.util.enlivenObjects(arr, function(objects) {
-				this.eachCanvas(function(canvas) {
+				self.eachCanvas(function(canvas) {
 					canvas.renderOnAddRemove = false;
 				});
 
@@ -117,7 +117,7 @@ module.exports = class Wb {
 					handler(_o);
 				}
 
-				this.eachCanvas(function(canvas) {
+				self.eachCanvas(function(canvas) {
 					canvas.renderOnAddRemove = true;
 					canvas.requestRenderAll();
 				});
@@ -154,7 +154,7 @@ module.exports = class Wb {
 					break;
 			}
 			OmUtil.wbAction({action: 'createObj', data: {
-				wbId: this.id
+				wbId: self.id
 				, obj: json
 			}});
 		}
@@ -194,7 +194,7 @@ module.exports = class Wb {
 				items.push(toOmJson(o));
 			}
 			OmUtil.wbAction({action: 'modifyObj', data: {
-				wbId: this.id
+				wbId: self.id
 				, obj: items
 			}});
 		}
@@ -208,7 +208,7 @@ module.exports = class Wb {
 			}
 			if ('textbox' === o.omType || 'i-text' === o.omType) {
 				OmUtil.wbAction({action: 'deleteObj', data: {
-					wbId: this.id
+					wbId: self.id
 					, obj: [{
 						uid: o.uid
 						, slide: o.slide
@@ -299,13 +299,13 @@ module.exports = class Wb {
 		}
 		function addCanvas() {
 			const sl = canvases.length
-				, cid = 'can-' + this.id + '-slide-' + sl
+				, cid = 'can-' + self.id + '-slide-' + sl
 				, c = $('<canvas></canvas>').attr('id', cid);
 			wbEl.find('.canvases').append(c);
 			const canvas = new fabric.Canvas(c.attr('id'), {
 				preserveObjectStacking: true
 			});
-			canvas.wbId = this.id;
+			canvas.wbId = self.id;
 			canvas.slide = sl;
 			canvases.push(canvas);
 			const cc = $('#' + cid).closest('.canvas-container');
@@ -320,13 +320,13 @@ module.exports = class Wb {
 			setHandlers(canvas);
 		}
 		function __setSize(_cnv) {
-			_cnv.setWidth(zoomBar.zoom * this.width)
-				.setHeight(zoomBar.zoom * this.height)
-				.setZoom(zoomBar.zoom);
+			_cnv.setWidth(zoomBar.getZoom() * self.width)
+				.setHeight(zoomBar.getZoom() * self.height)
+				.setZoom(zoomBar.getZoom());
 		}
 		function _setSize() {
 			zoomBar.setSize();
-			this.eachCanvas(function(canvas) {
+			self.eachCanvas(function(canvas) {
 				__setSize(canvas);
 			});
 			_setSlide(slide);
@@ -358,6 +358,7 @@ module.exports = class Wb {
 				});
 				tools.setRole(role);
 				zoomBar.setRole(role);
+				zoomBar.update(role, canvases.length);
 				_setSize();
 			}
 		};
@@ -369,7 +370,7 @@ module.exports = class Wb {
 		};
 		this.doSetSize = _setSize;
 		this.resize = () => {
-			if (zoomBar.mode !== 'ZOOM') {
+			if (zoomBar.getMode() !== 'ZOOM') {
 				_setSize();
 			}
 		};
@@ -491,29 +492,29 @@ module.exports = class Wb {
 			return tools.getMath();
 		};
 		this.getZoom = () => {
-			return zoomBar.zoom;
+			return zoomBar.getZoom();
 		};
 		this.destroy = () => {
 			tools.destroy();
 		};
 
 		wbEl = $('#' + tcid);
-		tools = new Tools(wbEl);
+		tools = new WbTools(wbEl, this);
 		zoomBar = new WbZoom(wbEl, this);
 		zoomBar.init(wbo);
 		addCanvas();
 		this.setRole(_role);
 	}
 
-	get id() {
+	getId() {
 		return this.id;
 	}
 
-	get width() {
+	getWidth() {
 		return this.width;
 	}
 
-	get height() {
+	getHeight() {
 		return this.height;
 	}
 };

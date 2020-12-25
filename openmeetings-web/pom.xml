@@ -537,6 +537,12 @@
 			<groupId>org.webjars</groupId>
 			<artifactId>jasny-bootstrap</artifactId>
 			<version>${jasny-bootstrap.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.webjars</groupId>
+					<artifactId>bootstrap</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

@@ -2,7 +2,7 @@
 const WbAreaBase = require('./wb-area-base');
 const Role = require('./wb-role');
 const Wb = require('./wb');
-const fabric = require('fabric');
+require('fabric'); // will produce `fabric` namespace
 
 const arrowImg = new Image(), delImg = new Image();
 
@@ -117,6 +117,7 @@ function _actionActivateWb(_wbId) {
 module.exports = class DrawWbArea extends WbAreaBase {
 	constructor() {
 		super();
+		const self = this;
 		let scroll, role = Role.NONE, _inited = false;
 
 		function _performDelete() {
@@ -216,7 +217,7 @@ module.exports = class DrawWbArea extends WbAreaBase {
 				axis: 'x'
 			});
 			_inited = true;
-			this.setRole(role);
+			self.setRole(role);
 			if (typeof(callback) === 'function') {
 				callback();
 			}
@@ -227,7 +228,8 @@ module.exports = class DrawWbArea extends WbAreaBase {
 		}
 
 		this.init = (callback) => {
-			super.init();
+			// it seems `super` can't be called from lambda
+			this.wsinit();
 			_doInit(callback);
 		};
 		//FIXME TODO self.getWb = _getWb;
@@ -270,7 +272,8 @@ module.exports = class DrawWbArea extends WbAreaBase {
 			});
 		};
 		this.destroy = () => {
-			super.destroy();
+			// it seems `super` can't be called from lambda
+			this.wsdestroy();
 			this.removeDeleteHandler();
 		};
 		this.create = (obj) => {
@@ -428,7 +431,7 @@ module.exports = class DrawWbArea extends WbAreaBase {
 			}).fail(function(err) {
 				OmUtil.error(err);
 			});
-		}
+		};
 		this.videoStatus = _videoStatus;
 		this.loadVideos = () => {
 			if (!_inited) {

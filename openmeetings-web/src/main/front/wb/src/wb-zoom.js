@@ -1,4 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+const Role = require('./wb-role');
+
 const area = $('.room-block .wb-block .wb-area .tabs')
 	, bar = area.find('.wb-tabbar')
 
@@ -11,11 +13,11 @@ module.exports = class WbZoom {
 		function _sendSetSize() {
 			wbObj.doSetSize();
 			OmUtil.wbAction({action: 'setSize', data: {
-				wbId: wbObj.id
+				wbId: wbObj.getId()
 				, zoom: this.zoom
 				, zoomMode: this.zoomMode
-				, width: wbObj.width
-				, height: wbObj.height
+				, width: wbObj.getWidth()
+				, height: wbObj.getHeight()
 			}});
 		}
 
@@ -85,7 +87,6 @@ module.exports = class WbZoom {
 				case Role.WHITEBOARD:
 					// fallthrough
 				case Role.NONE:
-					zoomBar.update(role, canvases.length);
 					zoomBar.find('.zoom-out').click(function() {
 						this.zoom -= .2;
 						if (this.zoom < .1) {
@@ -126,11 +127,11 @@ module.exports = class WbZoom {
 		this.setSize = () => {
 			switch (this.zoomMode) {
 				case 'FULL_FIT':
-					this.zoom = Math.min((area.width() - 30) / wbObj.width, (area.height() - bar.height() - 30) / wbObj.height);
+					this.zoom = Math.min((area.width() - 30) / wbObj.getWidth(), (area.height() - bar.height() - 30) / wbObj.getHeight());
 					zoomBar.find('.zoom').val(this.zoomMode);
 					break;
 				case 'PAGE_WIDTH':
-					this.zoom = (area.width() - 30 - 40) / wbObj.width; // bumper + toolbar
+					this.zoom = (area.width() - 30 - 40) / wbObj.getWidth(); // bumper + toolbar
 					zoomBar.find('.zoom').val(this.zoomMode);
 					break;
 				default:
@@ -152,11 +153,11 @@ module.exports = class WbZoom {
 		};
 	}
 
-	get zoom() {
+	getZoom() {
 		return this.zoom;
 	}
 
-	get mode() {
+	getMode() {
 		return this.zoomMode;
 	}
 };
