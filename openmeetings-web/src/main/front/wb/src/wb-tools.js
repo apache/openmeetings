@@ -12,6 +12,7 @@ const ULine = require('./wb-tool-uline');
 const Rect = require('./wb-tool-rect');
 const Ellipse = require('./wb-tool-ellipse');
 const Arrow = require('./wb-tool-arrow');
+const Clipart = require('./wb-tool-clipart');
 
 const ACTIVE = 'active';
 
@@ -126,7 +127,7 @@ module.exports = class WbTools {
 					.click(function() {
 						_setCurrent(c, cur);
 					});
-				_initToolBtn(cur.data('mode'), false, Clipart(wb, cur, settings, sBtn));
+				_initToolBtn(cur.data('mode'), false, new Clipart(wb, cur, settings, sBtn));
 			});
 			_initGroupHandle(c, tools);
 		}
@@ -332,7 +333,7 @@ module.exports = class WbTools {
 					_initTexts(sBtn);
 					_initDrawings(sBtn);
 					// FIXME TODO _initToolBtn('math', _firstToolItem, TMath(wb, settings, sBtn));
-					// FIXME TODO _initCliparts(sBtn);
+					_initCliparts(sBtn);
 					tools.find('.om-icon.settings').click(function() {
 						settings.show();
 					});

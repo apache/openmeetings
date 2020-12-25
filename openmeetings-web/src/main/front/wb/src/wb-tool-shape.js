@@ -11,16 +11,13 @@ module.exports = class WbShape extends WbShapeBase {
 		});
 
 		const self = this;
-		function _add2Canvas(canvas) {
-			canvas.add(self.obj);
-		}
 		function _mouseDown(o) {
 			const canvas = this
 				, pointer = canvas.getPointer(o.e);
 			self.isDown = true;
 			self.orig = {x: pointer.x, y: pointer.y};
 			self.createShape.call(self, canvas);
-			_add2Canvas(canvas);
+			self.add2Canvas.call(self, canvas);
 		};
 		function _mouseMove(o) {
 			const canvas = this;
@@ -60,6 +57,10 @@ module.exports = class WbShape extends WbShapeBase {
 				});
 			});
 		};
+	}
+
+	add2Canvas(canvas) {
+		canvas.add(this.obj);
 	}
 
 	createShape() {}

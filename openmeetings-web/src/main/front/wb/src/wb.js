@@ -2,6 +2,7 @@
 const Role = require('./wb-role');
 const WbTools = require('./wb-tools');
 const WbZoom = require('./wb-zoom');
+const APointer = require('./wb-tool-apointer');
 require('fabric'); // will produce `fabric` namespace
 
 const BUMPER = 100
@@ -390,7 +391,7 @@ module.exports = class Wb {
 				}
 				switch(o.omType) {
 					case 'pointer':
-						APointer(wb).create(canvases[o.slide], o);
+						new APointer(wb).create(canvases[o.slide], o);
 						break;
 					case 'Video':
 						Player.create(canvases[o.slide], o, wb);
@@ -423,7 +424,7 @@ module.exports = class Wb {
 				const o = _arr[i];
 				switch(o.omType) {
 					case 'pointer':
-						_modifyHandler(APointer(wb).create(canvases[o.slide], o));
+						_modifyHandler(new APointer(wb).create(canvases[o.slide], o));
 						break;
 					case 'Video':
 					{
