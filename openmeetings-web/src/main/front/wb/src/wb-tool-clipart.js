@@ -1,6 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const WbShape = require('./wb-tool-shape');
 const ToolUtil = require('./wb-tool-util');
+require('fabric');
 
 module.exports = class Clipart extends WbShape {
 	constructor(wb, btn, settings, sBtn) {

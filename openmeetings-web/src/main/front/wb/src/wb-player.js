@@ -1,87 +1,95 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var Player = (function() {
-	const player = {}, mainColor = '#ff6600', rad = 20;
-	let trg, circle, rectPause1, rectPause2, play, cProgress, progress;
+const Role = require('./wb-role');
+const ToolUtil = require('./wb-tool-util');
+require('fabric');
 
-	function _sendStatus(g, _paused, _pos) {
-		g.status.paused = _paused;
-		g.status.pos = _pos;
-		OmUtil.wbAction({action: 'videoStatus', data: {
+const mainColor = '#ff6600', rad = 20;
+
+function _sendStatus(g, _paused, _pos) {
+	g.status.paused = _paused;
+	g.status.pos = _pos;
+	OmUtil.wbAction({
+		action: 'videoStatus'
+		, data: {
 			wbId: g.canvas.wbId
 			, uid: g.uid
 			, status: {
 				paused: _paused
 				, pos: _pos
 			}
-		}});
-	}
-	function _initControls(_o) {
-		trg = new fabric.Triangle({
-			left: 2.7 * rad
-			, top: _o.height - 2.5 * rad
-			, visible: _o.status.paused
-			, angle: 90
-			, width: rad
-			, height: rad
-			, stroke: mainColor
-			, fill: mainColor
-		});
-		rectPause1 = new fabric.Rect({
-			left: 1.6 * rad
-			, top: _o.height - 2.5 * rad
-			, visible: !_o.status.paused
-			, width: rad / 3
-			, height: rad
-			, stroke: mainColor
-			, fill: mainColor
-		});
-		rectPause2 = new fabric.Rect({
-			left: 2.1 * rad
-			, top: _o.height - 2.5 * rad
-			, visible: !_o.status.paused
-			, width: rad / 3
-			, height: rad
-			, stroke: mainColor
-			, fill: mainColor
-		});
-		circle = new fabric.Circle({
-			left: rad
-			, top: _o.height - 3 * rad
-			, radius: rad
-			, stroke: mainColor
-			, strokeWidth: 2
-			, fill: null
-		});
-		play = new fabric.Group([circle, trg, rectPause1, rectPause2]
-			, {
-				objectCaching: false
-				, visible: false
-			});
-		cProgress = new fabric.Rect({
-			left: 3.5 * rad
-			, top: _o.height - 1.5 * rad
-			, visible: false
-			, width: _o.width - 5 * rad
-			, height: rad / 2
-			, stroke: mainColor
-			, fill: null
-			, rx: 5
-			, ry: 5
-		});
-		progress = new fabric.Rect({
-			left: 3.5 * rad
-			, top: _o.height - 1.5 * rad
-			, visible: false
-			, width: 0
-			, height: rad / 2
-			, stroke: mainColor
-			, fill: mainColor
-			, rx: 5
-			, ry: 5
-		});
-	}
+		}
+	});
+}
 
-	player.create = function(canvas, _o, wb) {
+module.exports = class Player {
+	static create(canvas, _o, wb) {
+		let trg, circle, rectPause1, rectPause2, play, cProgress, progress;
+
+		function _initControls(_o) {
+			trg = new fabric.Triangle({
+				left: 2.7 * rad
+				, top: _o.height - 2.5 * rad
+				, visible: _o.status.paused
+				, angle: 90
+				, width: rad
+				, height: rad
+				, stroke: mainColor
+				, fill: mainColor
+			});
+			rectPause1 = new fabric.Rect({
+				left: 1.6 * rad
+				, top: _o.height - 2.5 * rad
+				, visible: !_o.status.paused
+				, width: rad / 3
+				, height: rad
+				, stroke: mainColor
+				, fill: mainColor
+			});
+			rectPause2 = new fabric.Rect({
+				left: 2.1 * rad
+				, top: _o.height - 2.5 * rad
+				, visible: !_o.status.paused
+				, width: rad / 3
+				, height: rad
+				, stroke: mainColor
+				, fill: mainColor
+			});
+			circle = new fabric.Circle({
+				left: rad
+				, top: _o.height - 3 * rad
+				, radius: rad
+				, stroke: mainColor
+				, strokeWidth: 2
+				, fill: null
+			});
+			play = new fabric.Group([circle, trg, rectPause1, rectPause2]
+				, {
+					objectCaching: false
+					, visible: false
+				});
+			cProgress = new fabric.Rect({
+				left: 3.5 * rad
+				, top: _o.height - 1.5 * rad
+				, visible: false
+				, width: _o.width - 5 * rad
+				, height: rad / 2
+				, stroke: mainColor
+				, fill: null
+				, rx: 5
+				, ry: 5
+			});
+			progress = new fabric.Rect({
+				left: 3.5 * rad
+				, top: _o.height - 1.5 * rad
+				, visible: false
+				, width: 0
+				, height: rad / 2
+				, stroke: mainColor
+				, fill: mainColor
+				, rx: 5
+				, ry: 5
+			});
+		}
 		const vid = $('<video>').hide()
 			.attr('class', 'wb-video slide-' + canvas.slide)
 			.attr('playsinline', 'playsinline')
@@ -194,7 +202,7 @@ var Player = (function() {
 				}
 			});
 			group.setPlayable = function(_r) {
-				playable = _r !== NONE;
+				playable = _r !== Role.NONE;
 			};
 			group.videoStatus = function(_status) {
 				group.status = _status;
@@ -220,12 +228,13 @@ var Player = (function() {
 			group.setPlayable(wb.getRole());
 			canvas.add(group);
 			canvas.requestRenderAll();
-			player.modify(group, _o);
+			Player.modify(group, _o);
 
 			const pos = {left: play.left, top: play.top};
 		});
-	};
-	player.modify = function(g, _o) {
+	}
+
+	static modify(g, _o) {
 		const opts = $.extend({
 			angle: 0
 			, left: 10
@@ -235,6 +244,5 @@ var Player = (function() {
 		}, ToolUtil.filter(_o, ['angle', 'left', 'scaleX', 'scaleY', 'top']));
 		g.set(opts).setCoords();
 		g.canvas.requestRenderAll();
-	};
-	return player;
-})();
+	}
+};

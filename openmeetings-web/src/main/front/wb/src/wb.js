@@ -3,6 +3,7 @@ const Role = require('./wb-role');
 const WbTools = require('./wb-tools');
 const WbZoom = require('./wb-zoom');
 const APointer = require('./wb-tool-apointer');
+const Player = require('./wb-player');
 require('fabric'); // will produce `fabric` namespace
 
 const BUMPER = 100
@@ -394,7 +395,7 @@ module.exports = class Wb {
 						new APointer(wb).create(canvases[o.slide], o);
 						break;
 					case 'Video':
-						Player.create(canvases[o.slide], o, wb);
+						Player.create(canvases[o.slide], o, self);
 						break;
 					case 'Math':
 						StaticTMath.create(o, canvases[o.slide]);
