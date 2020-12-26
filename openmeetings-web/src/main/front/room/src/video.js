@@ -1,18 +1,18 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
-const VideoManager = require('./video-manager');
+const VideoMgrUtil = require('./video-manager-util');
 const Sharer = require('./sharer');
 const Volume = require('./volume');
 
 module.exports = class Video {
 	constructor(msg) {
-		const states = [];
+		const states = [], self = this;
 		let sd, v, vc, t, footer, size, vol, iceServers
 			, lm, level, userSpeaks = false, muteOthers
 			, hasVideo, isSharing, isRecording;
 
 		function __getVideo(_state) {
-			const vid = this.video(_state);
+			const vid = self.video(_state);
 			return vid && vid.length > 0 ? vid[0] : null;
 		}
 		function _resizeDlgArea(_w, _h) {
@@ -30,7 +30,7 @@ module.exports = class Video {
 		}
 		function _getScreenStream(msg, state, callback) {
 			function __handleScreenError(err) {
-				VideoManager.sendMessage({id: 'errorSharing'});
+				VideoMgrUtil.sendMessage({id: 'errorSharing'});
 				Sharer.setShareState(SHARE_STOPPED);
 				Sharer.setRecState(SHARE_STOPPED);
 				OmUtil.error(err);
@@ -69,7 +69,7 @@ module.exports = class Video {
 		function _getVideoStream(msg, state, callback) {
 			VideoSettings.constraints(sd, function(cnts) {
 				if ((VideoUtil.hasCam(sd) && !cnts.video) || (VideoUtil.hasMic(sd) && !cnts.audio)) {
-					VideoManager.sendMessage({
+					VideoMgrUtil.sendMessage({
 						id : 'devicesAltered'
 						, uid: sd.uid
 						, audio: !!cnts.audio
@@ -78,7 +78,7 @@ module.exports = class Video {
 				}
 				if (!cnts.audio && !cnts.video) {
 					OmUtil.error('Requested devices are not available');
-					VideoManager.close(sd.uid)
+					VideoMgrUtil.close(sd.uid)
 					return;
 				}
 				navigator.mediaDevices.getUserMedia(cnts)
@@ -115,13 +115,13 @@ module.exports = class Video {
 						callback(msg, state, cnts);
 					})
 					.catch(function(err) {
-						VideoManager.sendMessage({
+						VideoMgrUtil.sendMessage({
 							id : 'devicesAltered'
 							, uid: sd.uid
 							, audio: false
 							, video: false
 						});
-						VideoManager.close(sd.uid);
+						VideoMgrUtil.close(sd.uid);
 						if ('NotReadableError' === err.name) {
 							OmUtil.error('Camera/Microphone is busy and can\'t be used');
 						} else {
@@ -159,7 +159,7 @@ module.exports = class Video {
 			state.options = {
 				videoStream: state.stream
 				, mediaConstraints: cnts
-				, onicecandidate: this.onIceCandidate
+				, onicecandidate: self.onIceCandidate
 			};
 			if (!isSharing) {
 				state.options.localVideo = __getVideo(state);
@@ -197,7 +197,7 @@ module.exports = class Video {
 							bmsg.height = vts.height;
 							bmsg.fps = vts.frameRate;
 						}
-						VideoManager.sendMessage(bmsg);
+						VideoMgrUtil.sendMessage(bmsg);
 						if (isSharing) {
 							Sharer.setShareState(SHARE_STARTED);
 						}
@@ -220,7 +220,7 @@ module.exports = class Video {
 			__createVideo(state);
 			const options = VideoUtil.addIceServers({
 				remoteVideo : __getVideo(state)
-				, onicecandidate : this.onIceCandidate
+				, onicecandidate : self.onIceCandidate
 			}, msg);
 			const data = state.data;
 			data.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
@@ -240,7 +240,7 @@ module.exports = class Video {
 							return OmUtil.error('Receiver sdp offer error ' + genErr);
 						}
 						OmUtil.log('Invoking Receiver SDP offer callback function');
-						VideoManager.sendMessage({
+						VideoMgrUtil.sendMessage({
 							id : 'addListener'
 							, sender: sd.uid
 							, sdpOffer: offerSdp
@@ -285,7 +285,7 @@ module.exports = class Video {
 					.attr('data-client-uid', sd.cuid)
 					.attr('data-client-type', sd.type)
 					.attr('data-instance-uid', instanceUid)
-					.data(this));
+					.data(self));
 			v = $('#' + _id);
 			vc = v.find('.video');
 			muteOthers = vc.find('.mute-others');
@@ -302,7 +302,7 @@ module.exports = class Video {
 				v.dialog('option', 'resizable', true);
 				if (isSharing) {
 					v.on('dialogclose', function() {
-						VideoManager.close(sd.uid, true);
+						VideoMgrUtil.close(sd.uid, true);
 					});
 				}
 			}
@@ -321,7 +321,7 @@ module.exports = class Video {
 				, tgl = v.parent().find('.btn-toggle')
 				, cls = v.parent().find('.btn-wclose');
 			if (isSharing) {
-				cls.click(function (e) {
+				cls.click(function (_) {
 					v.dialog('close');
 					return false;
 				});
@@ -399,7 +399,7 @@ module.exports = class Video {
 			}
 			vc.append(state.video);
 			if (VideoUtil.hasMic(sd)) {
-				const volIco = vol.create(this)
+				const volIco = vol.create(self)
 				if (hasVideo) {
 					v.parent().find('.buttonpane').append(volIco);
 				} else {
@@ -416,7 +416,7 @@ module.exports = class Video {
 				, instanceUid: v.length > 0 ? v.data('instance-uid') : undefined
 			};
 			if (sd.self) {
-				VideoManager.sendMessage({
+				VideoMgrUtil.sendMessage({
 					id : 'broadcastRestarted'
 					, uid: sd.uid
 				});
@@ -438,7 +438,7 @@ module.exports = class Video {
 		function _setRights() {
 			if (Room.hasRight(['MUTE_OTHERS']) && VideoUtil.hasMic(sd)) {
 				muteOthers.addClass('enabled').off().click(function() {
-					VideoManager.clickMuteOthers(sd.cuid);
+					VideoMgrUtil.clickMuteOthers(sd.cuid);
 				});
 			} else {
 				muteOthers.removeClass('enabled').off();
@@ -594,7 +594,7 @@ module.exports = class Video {
 		this.onIceCandidate = function(candidate) {
 			const opts = Room.getOptions();
 			OmUtil.log('Local candidate ' + JSON.stringify(candidate));
-			VideoManager.sendMessage({
+			VideoMgrUtil.sendMessage({
 				id: 'onIceCandidate'
 				, candidate: candidate
 				, uid: sd.uid

@@ -1,5 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 let share, inited = false;
+const VideoMgrUtil = require('./video-manager-util');
 const Video = require('./video');
 const Sharer = require('./sharer');
 
@@ -15,7 +16,7 @@ function _onBroadcast(msg) {
 		, uid = sd.uid;
 	if (Array.isArray(msg.cleanup)) {
 		msg.cleanup.forEach(function(_cuid) {
-			_close(_cuid);
+			VideoMgrUtil.close(_cuid);
 		});
 	}
 	$('#' + VideoUtil.getVid(uid)).remove();
@@ -36,7 +37,7 @@ function _onShareUpdated(msg) {
 }
 function _onReceive(msg) {
 	const uid = msg.stream.uid;
-	_closeV($('#' + VideoUtil.getVid(uid)));
+	VideoMgrUtil.closeV($('#' + VideoUtil.getVid(uid)));
 	new Video(msg);
 	OmUtil.log(uid + ' receiving video');
 }
@@ -44,14 +45,14 @@ function _onKMessage(m) {
 	switch (m.id) {
 		case 'clientLeave':
 			$(VID_SEL + '[data-client-uid="' + m.uid + '"]').each(function() {
-				_closeV($(this));
+				VideoMgrUtil.closeV($(this));
 			});
 			if (share.data('cuid') === m.uid) {
 				share.off().hide();
 			}
 			break;
 		case 'broadcastStopped':
-			_close(m.uid, false);
+			VideoMgrUtil.close(m.uid, false);
 			break;
 		case 'broadcast':
 			_onBroadcast(m);
@@ -81,7 +82,7 @@ function _onKMessage(m) {
 			//no-op
 	}
 }
-function _onWsMessage(jqEvent, msg) {
+function _onWsMessage(_, msg) {
 	try {
 		if (msg instanceof Blob) {
 			return; //ping
@@ -110,6 +111,7 @@ function _init() {
 	Wicket.Event.subscribe('/websocket/message', _onWsMessage);
 	VideoSettings.init(Room.getOptions());
 	share = $('.room-block .room-container').find('.btn.shared');
+	VideoMgrUtil.init(share);
 	inited = true;
 }
 function _update(c) {
@@ -131,7 +133,7 @@ function _update(c) {
 		if (av && v.length === 1) {
 			v.data().update(sd);
 		} else if (!av && v.length === 1) {
-			_closeV(v);
+			VideoMgrUtil.closeV(v);
 		}
 	});
 	if (c.uid === Room.getOptions().uid) {
@@ -143,20 +145,9 @@ function _update(c) {
 		const sd = $(this).data().stream();
 		if (!streamMap[sd.uid]) {
 			//not-inited/invalid video window
-			_closeV($(this));
+			VideoMgrUtil.closeV($(this));
 		}
 	});
-}
-function _closeV(v) {
-	if (!v || v.length < 1) {
-		return;
-	}
-	if (v.dialog('instance') !== undefined) {
-		v.dialog('destroy');
-	}
-	v.parents('.pod').remove();
-	v.remove();
-	WbArea.updateAreaClass();
 }
 function _playSharing(sd, iceServers) {
 	const m = {stream: sd, iceServers: iceServers};
@@ -193,15 +184,6 @@ function _play(streams, iceServers) {
 		}
 	});
 }
-function _close(uid, showShareBtn) {
-	const v = $('#' + VideoUtil.getVid(uid));
-	if (v.length === 1) {
-		_closeV(v);
-	}
-	if (!showShareBtn && uid === share.data('uid')) {
-		share.off().hide();
-	}
-}
 function _find(uid) {
 	return $(VID_SEL + '[data-client-uid="' + uid + '"][data-client-type="WEBCAM"]');
 }
@@ -228,34 +210,6 @@ function _mute(uid, mute) {
 		v.data().mute(mute);
 	}
 }
-function _clickMuteOthers(uid) {
-	const s = VideoSettings.load();
-	if (false !== s.video.confirmMuteOthers) {
-		const dlg = $('#muteothers-confirm');
-		dlg.dialog({
-			appendTo: ".room-container"
-			, buttons: [
-				{
-					text: dlg.data('btn-ok')
-					, click: function() {
-						s.video.confirmMuteOthers = !$('#muteothers-confirm-dont-show').prop('checked');
-						VideoSettings.save();
-						OmUtil.roomAction({action: 'muteOthers', uid: uid});
-						$(this).dialog('close');
-					}
-				}
-				, {
-					text: dlg.data('btn-cancel')
-					, click: function() {
-						$(this).dialog('close');
-					}
-				}
-			]
-		})
-	} else {
-		OmUtil.roomAction({action: 'muteOthers', uid: uid});
-	}
-}
 function _muteOthers(uid) {
 	$(VID_SEL).each(function() {
 		const w = $(this), v = w.data(), v2 = w.data('client-uid');
@@ -264,11 +218,8 @@ function _muteOthers(uid) {
 		}
 	});
 }
-function _sendMessage(_m) {
-	OmUtil.sendMessage(_m, {type: 'kurento'});
-}
 function _toggleActivity(activity) {
-	_sendMessage({
+	VideoMgrUtil.sendMessage({
 		id: 'toggleActivity'
 		, activity: activity
 	});
@@ -278,13 +229,10 @@ module.exports = {
 	init: _init
 	, update: _update
 	, play: _play
-	, close: _close
 	, refresh: _refresh
 	, mute: _mute
-	, clickMuteOthers: _clickMuteOthers
 	, muteOthers: _muteOthers
 	, toggleActivity: _toggleActivity
-	, sendMessage: _sendMessage
 	, destroy: function() {
 		Wicket.Event.unsubscribe('/websocket/message', _onWsMessage);
 	}

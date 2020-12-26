@@ -1,6 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 module.exports = class Volume {
 	constructor() {
+		const self = this;
 		let video, vol, drop, slider, handleEl, hideTimer = null
 			, lastVolume = 50, muted = false;
 
@@ -20,7 +21,7 @@ module.exports = class Volume {
 
 		this.create = (_video) => {
 			video = _video;
-			_destroy();
+			this.destroy();
 			const uid = video.stream().uid
 				, cuid = video.stream().cuid
 				, volId = 'volume-' + uid;
@@ -35,7 +36,7 @@ module.exports = class Volume {
 				.click(function(e) {
 					e.stopImmediatePropagation();
 					OmUtil.roomAction({action: 'mute', uid: cuid, mute: !muted});
-					_mute(!muted);
+					self.mute(!muted);
 					drop.hide();
 					return false;
 				}).dblclick(function(e) {
@@ -59,11 +60,11 @@ module.exports = class Volume {
 					handleEl.text($(this).slider('value'));
 				}
 				, slide: function(event, ui) {
-					_handle(ui.value);
+					self.handle(ui.value);
 				}
 			});
-			_handle(lastVolume);
-			_mute(muted);
+			this.handle(lastVolume);
+			this.mute(muted);
 			return vol;
 		};
 		this.handle = (val) => {
@@ -97,10 +98,10 @@ module.exports = class Volume {
 					lastVolume = val;
 				}
 				slider.slider('option', 'value', 0);
-				_handle(0);
+				this.handle(0);
 			} else {
 				slider.slider('option', 'value', lastVolume);
-				_handle(lastVolume);
+				this.handle(lastVolume);
 			}
 		};
 		this.destroy = () => {

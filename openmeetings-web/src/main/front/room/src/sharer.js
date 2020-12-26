@@ -1,4 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+const VideoMgrUtil = require('./video-manager-util');
+
 var SHARE_STARTING = 'starting';
 var SHARE_STARTED = 'started';
 var SHARE_STOPPED = 'stopped';
@@ -38,13 +40,13 @@ function _init() {
 		sbtn = sharer.find('.share-start-stop').off().click(function() {
 			if (shareState === SHARE_STOPPED) {
 				_setShareState(SHARE_STARTING);
-				VideoManager.sendMessage({
+				VideoMgrUtil.sendMessage({
 					id: 'wannaShare'
 					, shareType: type.val()
 					, fps: fps.val()
 				});
 			} else {
-				VideoManager.sendMessage({
+				VideoMgrUtil.sendMessage({
 					id: 'pauseSharing'
 					, uid: _getShareUid()
 				});
@@ -55,13 +57,13 @@ function _init() {
 			rbtn.show().click(function() {
 				if (recState === SHARE_STOPPED) {
 					_setRecState(SHARE_STARTING);
-					VideoManager.sendMessage({
+					VideoMgrUtil.sendMessage({
 						id: 'wannaRecord'
 						, shareType: type.val()
 						, fps: fps.val()
 					});
 				} else {
-					VideoManager.sendMessage({
+					VideoMgrUtil.sendMessage({
 						id: 'stopRecord'
 						, uid: _getShareUid()
 					});
