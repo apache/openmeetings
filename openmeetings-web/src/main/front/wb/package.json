@@ -4,8 +4,8 @@
   "description": "Methods for WB",
   "main": "src/index.js",
   "scripts": {
-    "build-dev": "browserify src/index.js --transform-key=staging -o ${outDir}${npm_package_name}.js",
-    "build-prod": "browserify src/index.js --transform-key=production -p tinyify -o ${outDir}${npm_package_name}.min.js",
+    "build-dev": "browserify src/index.js --transform-key=staging -p esmify -o ${outDir}${npm_package_name}.js",
+    "build-prod": "browserify src/index.js --transform-key=production -p esmify | terser -o ${outDir}${npm_package_name}.min.js",
     "build": "npm run build-dev && npm run build-prod"
   },
   "author": "",
@@ -13,9 +13,12 @@
   "rat-license": "Licensed under the Apache License, Version 2.0 (the \"License\") http://www.apache.org/licenses/LICENSE-2.0",
   "devDependencies": {
     "browserify": "^17.0.0",
+    "esmify": "^2.1.1",
+    "terser": "^5.5.1",
     "tinyify": "^3.0.0"
   },
   "dependencies": {
-    "fabric": "^3.6.6"
+    "fabric": "^3.6.6",
+    "mathjax-full": "^3.1.2"
   }
 }

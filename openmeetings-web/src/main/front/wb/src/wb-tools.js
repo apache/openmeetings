@@ -13,6 +13,8 @@ const Rect = require('./wb-tool-rect');
 const Ellipse = require('./wb-tool-ellipse');
 const Arrow = require('./wb-tool-arrow');
 const Clipart = require('./wb-tool-clipart');
+const StaticTMath = require('./wb-tool-stat-math');
+const TMath = require('./wb-tool-math');
 
 const ACTIVE = 'active';
 
@@ -247,16 +249,16 @@ module.exports = class WbTools {
 				math.hide();
 			});
 			math.find('.update-btn').button().click(function() {
-				const o = _findObject({
+				const o = wb._findObject({
 					uid: $(this).data('uid')
 					, slide: $(this).data('slide')
 				});
-				const json = toOmJson(o);
+				const json = wb._toOmJson(o);
 				json.formula = math.find('textarea').val();
-				const cnvs = canvases[o.slide];
+				const cnvs = wb.getCanvas(o.slide);
 				StaticTMath.create(json, cnvs
 					, function(obj) {
-						_removeHandler(o);
+						wb.removeObj([o]);
 						cnvs.fire('object:modified', {target: obj});
 					}
 					, function(msg) {
@@ -332,7 +334,7 @@ module.exports = class WbTools {
 					_firstToolItem = false;
 					_initTexts(sBtn);
 					_initDrawings(sBtn);
-					// FIXME TODO _initToolBtn('math', _firstToolItem, TMath(wb, settings, sBtn));
+					_initToolBtn('math', _firstToolItem, new TMath(wb, settings, sBtn));
 					_initCliparts(sBtn);
 					tools.find('.om-icon.settings').click(function() {
 						settings.show();

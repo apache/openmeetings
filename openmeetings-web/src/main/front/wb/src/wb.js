@@ -4,6 +4,8 @@ const WbTools = require('./wb-tools');
 const WbZoom = require('./wb-zoom');
 const APointer = require('./wb-tool-apointer');
 const Player = require('./wb-player');
+const TMath = require('./wb-tool-math');
+const StaticTMath = require('./wb-tool-stat-math');
 require('fabric'); // will produce `fabric` namespace
 
 const BUMPER = 100
@@ -22,21 +24,8 @@ module.exports = class Wb {
 		let wbEl, tools, zoomBar
 			, role = null, scrollTimeout = null;
 
-		function _findObject(o) {
-			let _o = null;
-			const cnvs = canvases[o.slide];
-			if (!!cnvs) {
-				cnvs.forEachObject(function(__o) {
-					if (!!__o && o.uid === __o.uid) {
-						_o = __o;
-						return false;
-					}
-				});
-			}
-			return _o;
-		}
 		function _removeHandler(o) {
-			const __o = _findObject(o);
+			const __o = self._findObject(o);
 			if (!!__o) {
 				const cnvs = canvases[o.slide];
 				if (!!cnvs) {
@@ -116,20 +105,6 @@ module.exports = class Wb {
 			});
 		}
 
-		function toOmJson(o) {
-			const r = o.toJSON(extraProps);
-			switch (o.omType) {
-				case 'Video':
-					delete r.objects;
-					break;
-				case 'Math':
-					delete r.objects;
-					break;
-				default:
-					//no-op
-			}
-			return r;
-		}
 		//events
 		function objCreatedHandler(o) {
 			if (role === Role.NONE && o.omType !== 'pointer') {
@@ -142,7 +117,7 @@ module.exports = class Wb {
 					break;
 				default:
 					o.includeDefaultValues = false;
-					json = toOmJson(o);
+					json = self._toOmJson(o);
 					break;
 			}
 			OmUtil.wbAction({action: 'createObj', data: {
@@ -179,11 +154,11 @@ module.exports = class Wb {
 					_o.includeDefaultValues = false;
 					const _items = _o.destroy().getObjects();
 					for (let i = 0; i < _items.length; ++i) {
-						items.push(toOmJson(_items[i]));
+						items.push(self._toOmJson(_items[i]));
 					}
 				}, extraProps);
 			} else {
-				items.push(toOmJson(o));
+				items.push(self._toOmJson(o));
 			}
 			OmUtil.wbAction({action: 'modifyObj', data: {
 				wbId: self.id
@@ -307,12 +282,39 @@ module.exports = class Wb {
 			self._doSetSlide(self.slide);
 		}
 		function _videoStatus(json) {
-			const g = _findObject(json);
+			const g = self._findObject(json);
 			if (!!g) {
 				g.videoStatus(json.status);
 			}
 		}
 
+		this._toOmJson = (o) => {
+			const r = o.toJSON(extraProps);
+			switch (o.omType) {
+				case 'Video':
+					delete r.objects;
+					break;
+				case TMath.TYPE:
+					delete r.objects;
+					break;
+				default:
+					//no-op
+			}
+			return r;
+		};
+		this._findObject = (o) => {
+			let _o = null;
+			const cnvs = canvases[o.slide];
+			if (!!cnvs) {
+				cnvs.forEachObject(function(__o) {
+					if (!!__o && o.uid === __o.uid) {
+						_o = __o;
+						return false;
+					}
+				});
+			}
+			return _o;
+		};
 		this.setRole = (_role) => {
 			if (role !== _role) {
 				role = _role;
@@ -397,12 +399,12 @@ module.exports = class Wb {
 					case 'Video':
 						Player.create(canvases[o.slide], o, self);
 						break;
-					case 'Math':
+					case TMath.TYPE:
 						StaticTMath.create(o, canvases[o.slide]);
 						break;
 					default:
 					{
-						const __o = _findObject(o);
+						const __o = self._findObject(o);
 						if (!__o) {
 							arr.push(o);
 						}
@@ -429,13 +431,13 @@ module.exports = class Wb {
 						break;
 					case 'Video':
 					{
-						const g = _findObject(o);
+						const g = self._findObject(o);
 						if (!!g) {
 							Player.modify(g, o);
 						}
 					}
 						break;
-					case 'Math':
+					case TMath.TYPE:
 					{
 						_removeHandler(o);
 						StaticTMath.create(o, canvases[o.slide]);
@@ -480,8 +482,8 @@ module.exports = class Wb {
 				canvas.requestRenderAll();
 			}
 		};
-		this.getCanvas = () => {
-			return canvases[self.slide];
+		this.getCanvas = (_slide) => {
+			return canvases[typeof(_slide) === 'number' ? _slide : self.slide];
 		};
 		this.eachCanvas = (func) => {
 			for (let i = 0; i < canvases.length; ++i) {
