@@ -68,12 +68,20 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<wicket:message key="556"/>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
-						<i class="fas fa-sync-alt"></i>&nbsp;<wicket:message key="753"/>
-					</button>
+					<h5><wicket:message key="video.muteothers"/></h5>
+					<div class="row justify-content-end">
+						<div class="custom-control custom-checkbox col-10">
+							<input type="checkbox" class="custom-control-input" id="muteOthersAsk">
+							<label class="custom-control-label" for="muteOthersAsk"><wicket:message key="dont.ask.again"/></label>
+						</div>
+					</div>
+					<h5 class="mt-2"><wicket:message key="244"/></h5>
+					<div class="row justify-content-end">
+						<div class="custom-control custom-checkbox col-10">
+							<input type="checkbox" class="custom-control-input" id="chatNotify">
+							<label class="custom-control-label" for="chatNotify"><wicket:message key="sound.enable"/></label>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
