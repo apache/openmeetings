@@ -33,7 +33,6 @@
 			<excludes>
 				<exclude>**/raw-*.css</exclude>
 				<exclude>**/raw-*.js</exclude>
-				<exclude>**/MathJax*.js</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>

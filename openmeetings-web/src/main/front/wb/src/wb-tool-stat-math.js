@@ -51,8 +51,12 @@ function _tex2svg(tex, callback, _errCallback) {
 		, ex: 8 // ex-size in pixels
 		, containerWidth: 80 * 16
 	}).then(function (node) {
-		console.log(node);
-		callback(node.firstElementChild);
+		const errEl = node.querySelector('[data-mjx-error]');
+		if (errEl) {
+			_errCallback(errEl.getAttribute('data-mjx-error'));
+		} else {
+			callback(node.firstElementChild);
+		}
 	}).catch(function (err) {
 		console.error(err);
 	});

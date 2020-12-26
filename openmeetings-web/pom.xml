@@ -242,12 +242,10 @@
 						**/*.class,
 						**/raw-*.css,
 						**/raw-*.js,
-						**/MathJax*.js,
 					</packagingExcludes>
 					<warSourceExcludes>
 						**/raw-*.css,
 						**/raw-*.js,
-						**/MathJax*.js,
 					</warSourceExcludes>
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
 					<webResources>
@@ -263,7 +261,6 @@
 							</includes>
 							<excludes>
 								<exclude>**/raw-*.js</exclude>
-								<exclude>**/MathJax*.js</exclude>
 							</excludes>
 						</webResource>
 						<webResource>
@@ -375,8 +372,6 @@
 									<excludes>
 										<exclude>**/raw-*.css</exclude>
 										<exclude>**/raw-*.js</exclude>
-										<exclude>**/MathJax*.js</exclude>
-										<exclude>**/network.js</exclude>
 									</excludes>
 									<filtering>true</filtering>
 								</resource>
@@ -405,8 +400,6 @@
 									<excludes>
 										<exclude>**/raw-*.css</exclude>
 										<exclude>**/raw-*.js</exclude>
-										<exclude>**/MathJax*.js</exclude>
-										<exclude>**/network.js</exclude>
 									</excludes>
 								</resource>
 								<resource>

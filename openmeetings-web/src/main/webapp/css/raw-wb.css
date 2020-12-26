@@ -360,22 +360,3 @@ html[dir="rtl"] .wb-tool-settings .ui-dialog-titlebar-close
 #wb-rename-menu {
 	display: none;
 }
-/* MathJax*/
-.MathJax_SVG_Display {text-align: center; margin: 1em 0em; position: relative; display: block!important; text-indent: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; width: 100%}
-.MathJax_SVG .MJX-monospace {font-family: monospace}
-.MathJax_SVG .MJX-sans-serif {font-family: sans-serif}
-#MathJax_SVG_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
-.MathJax_SVG {display: inline; font-style: normal; font-weight: normal; line-height: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0; min-height: 0; border: 0; padding: 0; margin: 0}
-.MathJax_SVG * {transition: none; -webkit-transition: none; -moz-transition: none; -ms-transition: none; -o-transition: none}
-.MathJax_SVG > div {display: inline-block}
-.mjx-svg-href {fill: blue; stroke: blue}
-.MathJax_SVG_Processing {visibility: hidden; position: absolute; top: 0; left: 0; width: 0; height: 0; overflow: hidden; display: block!important}
-.MathJax_SVG_Processed {display: none!important}
-.MathJax_SVG_test {font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow: hidden; height: 1px}
-.MathJax_SVG_test.mjx-test-display {display: table!important}
-.MathJax_SVG_test.mjx-test-inline {display: inline!important; margin-right: -1px}
-.MathJax_SVG_test.mjx-test-default {display: block!important; clear: both}
-.MathJax_SVG_ex_box {display: inline-block!important; position: absolute; overflow: hidden; min-height: 0; max-height: none; padding: 0; border: 0; margin: 0; width: 1px; height: 60ex}
-.mjx-test-inline .MathJax_SVG_left_box {display: inline-block; width: 0; float: left}
-.mjx-test-inline .MathJax_SVG_right_box {display: inline-block; width: 0; float: right}
-.mjx-test-display .MathJax_SVG_right_box {display: table-cell!important; width: 10000em!important; min-width: 0; max-width: none; padding: 0; border: 0; margin: 0}
