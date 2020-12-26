@@ -162,7 +162,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		});
 	}
 
-	private void internalStartBroadcast(final StreamDesc sd, final String sdpOffer) throws Exception {
+	private void internalStartBroadcast(final StreamDesc sd, final String sdpOffer) {
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
 		flowoutSubscription = outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
 			log.info("Media Flow OUT STATE :: {}, evt {}, source {}"
@@ -491,7 +491,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 
 	public void addCandidate(IceCandidate candidate, String uid) {
 		if (this.uid.equals(uid)) {
-			if (outgoingMedia == null || !(outgoingMedia instanceof WebRtcEndpoint)) {
+			if (!(outgoingMedia instanceof WebRtcEndpoint)) {
 				return;
 			}
 			((WebRtcEndpoint)outgoingMedia).addIceCandidate(candidate);
