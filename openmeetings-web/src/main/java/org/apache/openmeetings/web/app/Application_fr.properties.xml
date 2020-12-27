@@ -886,7 +886,7 @@ allez sur <tt>openmeetings.log</tt> et contactez les développeurs d'OpenMeeting
 	<entry key="profile.invitation"><![CDATA[Invitation]]></entry>
 	<entry key="profile.invitations"><![CDATA[Invitations]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Enregistrements de groupe]]></entry>
-	<entry key="register.privacy.accept"><![CDATA[En cliquant sur "${s'inscrire}", vous acceptez notre ${lien}.]]></entry>
+	<entry key="register.privacy.accept"><![CDATA[En cliquant sur "${register}", vous acceptez notre ${link}.]]></entry>
 	<entry key="register.privacy.statement"><![CDATA[déclaration de confidentialité]]></entry>
 	<entry key="reset.whiteboard"><![CDATA[Effacer le tableau]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Les groupes de fichiers sont restreints]]></entry>
