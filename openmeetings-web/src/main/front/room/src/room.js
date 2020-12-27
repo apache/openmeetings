@@ -4,6 +4,7 @@ const VideoManager = require('./video-manager');
 const Sharer = require('./sharer');
 const Activities = require('./activities');
 const SipDialer = require('./sip-dialer');
+const UserListUtil = require('./user-list-util');
 const UserList = require('./user-list');
 const QuickPoll = require('./quick-poll');
 
@@ -234,7 +235,7 @@ module.exports = {
 	, unload: _unload
 	, showClipboard: _showClipboard
 	, quickPoll: QuickPoll.update
-	, hasRight: UserList.hasRight
+	, hasRight: UserListUtil.hasRight
 	, setCssVar: function(key, val) {
 		($('.main.room')[0]).style.setProperty(key, val);
 	}

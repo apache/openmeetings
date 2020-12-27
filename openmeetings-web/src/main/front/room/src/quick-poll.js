@@ -1,10 +1,10 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-const UserList = require('./user-list');
+const UserListUtil = require('./user-list-util');
 
 function _setQuickPollRights() {
 	const close = $('#quick-vote .close-btn');
 	if (close.length === 1) {
-		if (UserList.hasRight(['PRESENTER'])) {
+		if (UserListUtil.hasRight(['PRESENTER'])) {
 			close.show();
 			if (typeof(close.data('bs.confirmation')) === 'object') {
 				return;

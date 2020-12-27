@@ -1,28 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const VideoManager = require('./video-manager');
+const UserListUtil = require('./user-list-util');
 const QuickPoll = require('./quick-poll');
 
 let options;
-
-function _hasRight(_inRights, _ref) {
-	const ref = _ref || options.rights;
-	let _rights;
-	if (Array.isArray(_inRights)) {
-		_rights = _inRights;
-	} else {
-		if ('SUPER_MODERATOR' === _inRights) {
-			return ref.includes(_inRights);
-		}
-		_rights = [_inRights];
-	}
-	const rights = ['SUPER_MODERATOR', 'MODERATOR', ..._rights];
-	for (let i = 0; i < rights.length; ++i) {
-		if (ref.includes(rights[i])) {
-			return true;
-		}
-	}
-	return false;
-}
 
 function __activityAVIcon(elem, selector, predicate, onfunc, disabledfunc) {
 	let icon = elem.find(selector);
@@ -65,11 +46,11 @@ function __activityIcon(elem, selector, predicate, action, confirm) {
 }
 function __rightIcon(c, elem, rights, selector, predicate) {
 	const self = c.uid === options.uid
-		, hasRight = _hasRight(rights, c.rights);
+		, hasRight = UserListUtil.hasRight(rights, c.rights);
 	let icon = elem.find(selector);
-	if (predicate() && !_hasRight('SUPER_MODERATOR', c.rights) && (
+	if (predicate() && !UserListUtil.hasRight('SUPER_MODERATOR', c.rights) && (
 		(self && options.questions && !hasRight)
-		|| (!self && _hasRight('MODERATOR'))
+		|| (!self && UserListUtil.hasRight('MODERATOR'))
 	)) {
 		if (icon.length === 0) {
 			icon = OmUtil.tmpl('#user-actions-stub ' + selector);
@@ -172,7 +153,7 @@ function _updateClient(c) {
 	speaks.hide().removeClass('clickable').attr('title', speaks.data('speaks')).off();
 	if (hasAudio) {
 		speaks.show();
-		if(_hasRight('MUTE_OTHERS')) {
+		if(UserListUtil.hasRight('MUTE_OTHERS')) {
 			speaks.addClass('clickable').click(function () {
 				VideoManager.clickMuteOthers(c.uid);
 			}).attr('title', speaks.attr('title') + speaks.data('mute'));
@@ -188,7 +169,7 @@ function _updateClient(c) {
 		__rightAudioIcon(c, actions);
 		__rightOtherIcons(c, actions);
 		__activityIcon(actions, '.kick'
-			, () => !self && _hasRight('MODERATOR') && !_hasRight('SUPER_MODERATOR', c.rights)
+			, () => !self && UserListUtil.hasRight('MODERATOR') && !UserListUtil.hasRight('SUPER_MODERATOR', c.rights)
 			, null
 			, {
 				confirmationEvent: 'om-kick'
@@ -209,11 +190,11 @@ function _updateClient(c) {
 		options.activities = c.activities;
 		const header = $('#room-sidebar-tab-users .header');
 		__rightVideoIcon(c, header);
-		__activityAVIcon(header, '.activity.cam', () => !options.audioOnly && _hasRight('VIDEO')
+		__activityAVIcon(header, '.activity.cam', () => !options.audioOnly && UserListUtil.hasRight('VIDEO')
 			, () => hasVideo
 			, () => Settings.load().video.cam < 0);
 		__rightAudioIcon(c, header);
-		__activityAVIcon(header, '.activity.mic', () => _hasRight('AUDIO')
+		__activityAVIcon(header, '.activity.mic', () => UserListUtil.hasRight('AUDIO')
 			, () => hasAudio
 			, () => Settings.load().video.mic < 0);
 		__rightOtherIcons(c, header);
@@ -224,8 +205,8 @@ function _updateClient(c) {
 module.exports = {
 	init: function(opts) {
 		options = opts;
+		UserListUtil.init(opts);
 	}
-	, hasRight: _hasRight
 	, addClient: _addClient
 	, updateClient: function(c) {
 		_updateClient(c);
