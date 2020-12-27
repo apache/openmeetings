@@ -19,7 +19,8 @@ const escapeCharacters = [")", "(", "*", "[", "]", "{", "}", "|", "^", "<", ">",
 	// (<\\S+.*>) matches <\\S+.*> (matches an HTML tag like <span> or <div>), but haven't quite gotten it working yet, need to push this fix now
 	, preMatch = '(^|[\\s\\0])'
 	, emoticons = []
-	, matchers = [];
+	, matchers = []
+	, defaults = {animate: true, delay: 500, exclude: 'pre,code,.no-emoticons'};
 
 function createMatcher(m) {
 	const str = m.text.replace(specialRegex, '\\$1');
@@ -80,23 +81,23 @@ addMatchers([ // emoticons to be treated with a special class, hash specifies th
 module.exports = {
 	emoticons: emoticons
 	, matchers: matchers
-	, defaults: {animate: true, delay: 500, exclude: 'pre,code,.no-emoticons'}
+	, defaults: defaults
 	, emoticonize: function(str, options) {
-		const opts = $.extend({}, this.defaults, options);
+		const opts = $.extend({}, defaults, options);
 
 		let cssClass = 'css-emoticon';
 		if (opts.animate) {
 			cssClass += ' un-transformed-emoticon animated-emoticon';
 		}
-		for (let i = 0; i < this.matchers.length; ++i) {
-			const m = this.matchers[i];
+		for (let i = 0; i < matchers.length; ++i) {
+			const m = matchers[i];
 			const css = cssClass + " " + m.cssClass;
 			str = str.replace(m.regexp, "$1<span class='" + css + "'>$2</span>");
 		}
 		return str;
 	}
 	, animate: function(options) {
-		const opts = $.extend({}, this.defaults, options);
+		const opts = $.extend({}, defaults, options);
 		// animate emoticons
 		if (opts.animate) {
 			setTimeout(function () {
