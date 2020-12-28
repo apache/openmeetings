@@ -31,11 +31,11 @@ module.exports = class Video {
 		function _getScreenStream(msg, state, callback) {
 			function __handleScreenError(err) {
 				VideoMgrUtil.sendMessage({id: 'errorSharing'});
-				Sharer.setShareState(SHARE_STOPPED);
-				Sharer.setRecState(SHARE_STOPPED);
+				Sharer.setShareState(Sharer.SHARE_STOPPED);
+				Sharer.setRecState(Sharer.SHARE_STOPPED);
 				OmUtil.error(err);
 			}
-			const b = kurentoUtils.WebRtcPeer.browser;
+			const b = VideoUtil.browser;
 			let promise, cnts;
 			if (VideoUtil.isEdge(b) && b.major > 16) {
 				cnts = {
@@ -199,10 +199,10 @@ module.exports = class Video {
 						}
 						VideoMgrUtil.sendMessage(bmsg);
 						if (isSharing) {
-							Sharer.setShareState(SHARE_STARTED);
+							Sharer.setShareState(Sharer.SHARE_STARTED);
 						}
 						if (isRecording) {
-							Sharer.setRecState(SHARE_STARTED);
+							Sharer.setRecState(Sharer.SHARE_STARTED);
 						}
 					});
 				});

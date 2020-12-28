@@ -32,8 +32,8 @@ function _onShareUpdated(msg) {
 		// Update activities in the current data object
 		v.stream().activities = sd.activities;
 	}
-	Sharer.setShareState(VideoUtil.isSharing(sd) ? SHARE_STARTED : SHARE_STOPPED);
-	Sharer.setRecState(VideoUtil.isRecording(sd) ? SHARE_STARTED : SHARE_STOPPED);
+	Sharer.setShareState(VideoUtil.isSharing(sd) ? Sharer.SHARE_STARTED : Sharer.SHARE_STOPPED);
+	Sharer.setRecState(VideoUtil.isRecording(sd) ? Sharer.SHARE_STARTED : Sharer.SHARE_STOPPED);
 }
 function _onReceive(msg) {
 	const uid = msg.stream.uid;

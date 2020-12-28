@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const VideoMgrUtil = require('./video-manager-util');
 
-var SHARE_STARTING = 'starting';
-var SHARE_STARTED = 'started';
-var SHARE_STOPPED = 'stopped';
+const SHARE_STARTING = 'starting'
+	, SHARE_STARTED = 'started'
+	, SHARE_STOPPED = 'stopped';
 
 let sharer, type, fps, sbtn, rbtn
 	, shareState = SHARE_STOPPED, recState = SHARE_STOPPED;
@@ -34,7 +34,7 @@ function _init() {
 		sharer.find('.alert').show();
 	} else {
 		type = sharer.find('select.type');
-		const b = kurentoUtils.WebRtcPeer.browser;
+		const b = VideoUtil.browser;
 		fps = sharer.find('select.fps');
 		_disable(fps, VideoUtil.isEdge(b));
 		sbtn = sharer.find('.share-start-stop').off().click(function() {
@@ -83,7 +83,7 @@ function _disable(e, state) {
 	}
 }
 function _typeDisabled(_b) {
-	const b = _b || kurentoUtils.WebRtcPeer.browser;
+	const b = _b || VideoUtil.browser;
 	return VideoUtil.isEdge(b) || VideoUtil.isChrome(b) || VideoUtil.isEdgeChromium(b);
 }
 function _setBtnState(btn, state) {
@@ -114,7 +114,11 @@ function _getShareUid() {
 }
 
 module.exports = {
-	init: _init
+	SHARE_STARTING: SHARE_STARTING
+	, SHARE_STARTED: SHARE_STARTED
+	, SHARE_STOPPED: SHARE_STOPPED
+
+	, init: _init
 	, open: function() {
 		if (sharer && sharer.dialog('instance')) {
 			sharer.dialog('open');
