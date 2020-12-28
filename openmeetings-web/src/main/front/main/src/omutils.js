@@ -47,6 +47,34 @@ function _sendMessage(_m, _base) {
 		, msg = JSON.stringify($.extend({}, base, m));
 	Wicket.WebSocket.send(msg);
 }
+function _requestNotifyPermission(callback, elseCallback) {
+	if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+		Notification.requestPermission().then(permission => {
+			if (permission === 'granted') {
+				callback();
+			}
+		});
+	} else if (typeof(elseCallback) === 'function') {
+		elseCallback();
+	}
+}
+function _notify(msg, tag, elseCallback) {
+	if (window === window.parent) {
+		function _newMessage() {
+			const opts = {
+					tag: tag
+				};
+			new Notification(msg, opts);
+		}
+		if (Notification.permission === 'granted') {
+			_newMessage();
+		} else {
+			_requestNotifyPermission(() => _newMessage());
+		}
+	} else if (typeof(elseCallback) === 'function') {
+		elseCallback();
+	}
+}
 
 module.exports = {
 	init: _init
@@ -74,10 +102,6 @@ module.exports = {
 	, ping: function() {
 		setTimeout(() => _sendMessage({type: 'ping'}), 30000);
 	}
-	, notify: function(msg, tag) {
-		const opts = {
-				tag: tag
-			};
-		new Notification(msg, opts);
-	}
+	, notify: _notify
+	, requestNotifyPermission: _requestNotifyPermission
 };

@@ -322,20 +322,7 @@ function _addMessage(m) {
 		if (notify) {
 			ctrlBlk.addClass('bg-warning');
 			if (p.is(':visible') && !muted) {
-				if (window === window.parent) {
-					function _newMessage() {
-						OmUtil.notify(newMsgNotification, 'new_chat_msg');
-					}
-					if (Notification.permission === 'granted') {
-						_newMessage();
-					} else if (Notification.permission !== 'denied') {
-						Notification.requestPermission().then(permission => {
-							if (permission === 'granted') {
-								_newMessage();
-							}
-						});
-					}
-				} else {
+				OmUtil.notify(newMsgNotification, 'new_chat_msg', () => {
 					// impossible to use Notification API from iFrame
 					audio.play()
 						.then(function() {
@@ -343,7 +330,7 @@ function _addMessage(m) {
 						}).catch(function() {
 							// Automatic playback failed.
 						});
-				}
+				});
 			}
 		}
 		CSSEmoticon.animate();
@@ -521,6 +508,13 @@ $(function() {
 			//no-op
 		}
 	});
+	function _cancelAskNotification() {
+		$(document).off('click', _askNotification)
+	}
+	function _askNotification() {
+		OmUtil.requestNotifyPermission(_cancelAskNotification, _cancelAskNotification);
+	}
+	$(document).on('click', _askNotification);
 });
 
 module.exports = {

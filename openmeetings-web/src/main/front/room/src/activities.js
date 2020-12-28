@@ -79,19 +79,8 @@ function _hightlight(notify) {
 	}
 	if (isClosed()) {
 		$('.control.block', activities).addClass('bg-warning');
-		if (window === window.parent && notify) {
-			function _newMessage() {
-				OmUtil.notify(newActNotification, 'new_aa_item');
-			}
-			if (Notification.permission === 'granted') {
-				_newMessage();
-			} else if (Notification.permission !== 'denied') {
-				Notification.requestPermission().then(permission => {
-					if (permission === 'granted') {
-						_newMessage();
-					}
-				});
-			}
+		if (notify) {
+			OmUtil.notify(newActNotification, 'new_aa_item');
 		}
 	}
 }
