@@ -578,6 +578,55 @@ module.exports = class Video {
 				}
 			});
 		}
+		function _init(_msg) {
+			sd = _msg.stream;
+			_msg.instanceUid = uuidv4();
+			if (!vol) {
+				vol = new Volume();
+			}
+			iceServers = _msg.iceServers;
+			sd.activities = sd.activities.sort();
+			isSharing = VideoUtil.isSharing(sd);
+			isRecording = VideoUtil.isRecording(sd);
+			const _id = VideoUtil.getVid(sd.uid)
+				, name = sd.user.displayName
+				, _w = sd.width
+				, _h = sd.height
+				, opts = Room.getOptions();
+			sd.self = sd.cuid === opts.uid;
+			const contSel = _initContainer(_id, name, opts, _msg.instanceUid);
+			footer = v.find('.footer');
+			if (!opts.showMicStatus) {
+				footer.hide();
+			}
+			if (!sd.self && isSharing) {
+				Sharer.close();
+			}
+			if (sd.self && (isSharing || isRecording)) {
+				v.hide();
+			} else if (hasVideo) {
+				v.dialog({
+					classes: {
+						'ui-dialog': 'video user-video' + (opts.showMicStatus ? ' mic-status' : '')
+						, 'ui-dialog-titlebar': '' + (opts.showMicStatus ? ' ui-state-highlight' : '')
+					}
+					, width: _w
+					, minWidth: 40
+					, minHeight: 50
+					, autoOpen: true
+					, modal: false
+					, appendTo: contSel
+				});
+				_initDialog(v, opts);
+			}
+			t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
+			v.on('remove', _cleanup);
+			if (hasVideo) {
+				vc.width(_w).height(_h);
+			}
+
+			_refresh(_msg);
+		}
 
 		this.update = _update;
 		this.refresh = _refresh;
@@ -611,53 +660,6 @@ module.exports = class Video {
 		};
 		this.handleMicStatus = _handleMicStatus;
 
-		// init
-		sd = msg.stream;
-		msg.instanceUid = uuidv4();
-		if (!vol) {
-			vol = new Volume();
-		}
-		iceServers = msg.iceServers;
-		sd.activities = sd.activities.sort();
-		isSharing = VideoUtil.isSharing(sd);
-		isRecording = VideoUtil.isRecording(sd);
-		const _id = VideoUtil.getVid(sd.uid)
-			, name = sd.user.displayName
-			, _w = sd.width
-			, _h = sd.height
-			, opts = Room.getOptions();
-		sd.self = sd.cuid === opts.uid;
-		const contSel = _initContainer(_id, name, opts, msg.instanceUid);
-		footer = v.find('.footer');
-		if (!opts.showMicStatus) {
-			footer.hide();
-		}
-		if (!sd.self && isSharing) {
-			Sharer.close();
-		}
-		if (sd.self && (isSharing || isRecording)) {
-			v.hide();
-		} else if (hasVideo) {
-			v.dialog({
-				classes: {
-					'ui-dialog': 'video user-video' + (opts.showMicStatus ? ' mic-status' : '')
-					, 'ui-dialog-titlebar': '' + (opts.showMicStatus ? ' ui-state-highlight' : '')
-				}
-				, width: _w
-				, minWidth: 40
-				, minHeight: 50
-				, autoOpen: true
-				, modal: false
-				, appendTo: contSel
-			});
-			_initDialog(v, opts);
-		}
-		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
-		v.on('remove', _cleanup);
-		if (hasVideo) {
-			vc.width(_w).height(_h);
-		}
-
-		_refresh(msg);
+		_init(msg);
 	}
 };
