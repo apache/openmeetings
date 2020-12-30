@@ -310,54 +310,11 @@ public class MainPanel extends Panel {
 
 	private List<INavbarComponent> getMainMenu() {
 		List<INavbarComponent> mmenu = new ArrayList<>();
-		{
-			// Dashboard Menu Points
-			List<INavbarComponent> l = new ArrayList<>();
-			l.add(getSubItem("290", "1450", MenuActions.DASHBOARD_START));
-			l.add(getSubItem("291", "1451", MenuActions.DASHBOARD_CALENDAR));
-			mmenu.add(new OmMenuItem(getString("124"), l));
-		}
-		{
-			// Conference Menu Points
-			List<INavbarComponent> l = new ArrayList<>();
-			l.add(getSubItem("777", "1506", MenuActions.ROOMS_PUBLIC));
-			l.add(getSubItem("779", "1507", MenuActions.ROOMS_GROUP));
-			if (isMyRoomsEnabled()) {
-				l.add(getSubItem("781", "1508", MenuActions.ROOMS_MY));
-			}
-			List<Room> recent = roomDao.getRecent(getUserId());
-			if (!recent.isEmpty()) {
-				l.add(new OmMenuItem(null, (String)null));
-			}
-			for (Room r : recent) {
-				final Long roomId = r.getId();
-				l.add(new OmMenuItem(r.getName(), r.getName()) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onClick(AjaxRequestTarget target) {
-						RoomEnterBehavior.roomEnter((MainPage)getPage(), target, roomId);
-					}
-				});
-			}
-			mmenu.add(new OmMenuItem(getString("792"), l));
-		}
-		{
-			// Recording Menu Points
-			List<INavbarComponent> l = new ArrayList<>();
-			l.add(getSubItem("395", "1452", MenuActions.RECORD));
-			mmenu.add(new OmMenuItem(getString("395"), l));
-		}
-		{
-			// Settings Menu Points
-			List<INavbarComponent> l = new ArrayList<>();
-			l.add(getSubItem("1188", "1188", MenuActions.PROFILE_MESSAGE));
-			l.add(getSubItem("377", "377", MenuActions.PROFILE_EDIT));
-			l.add(getSubItem("1172", "1172", MenuActions.PROFILE_SEARCH));
-			l.add(getSubItem("profile.invitations", "profile.invitations", MenuActions.PROFILE_INVITATION));
-			l.add(getSubItem("1548", "1548", MenuActions.PROFILE_WIDGET));
-			mmenu.add(new OmMenuItem(getString("4"), l));
-		}
+		createDashboardMenu(mmenu);
+		createRoomsMenu(mmenu);
+		// Recording Menu Points
+		mmenu.add(getSubItem("395", "1452", MenuActions.RECORD));
+		createSettingsMenu(mmenu);
 		Set<Right> r = WebSession.getRights();
 		boolean isAdmin = hasAdminLevel(r);
 		if (isAdmin || hasGroupAdminLevel(r)) {
@@ -380,6 +337,48 @@ public class MainPanel extends Panel {
 			mmenu.add(new OmMenuItem(getString("6"), l));
 		}
 		return mmenu;
+	}
+
+	private void createDashboardMenu(List<INavbarComponent> mmenu) {
+		List<INavbarComponent> l = new ArrayList<>();
+		l.add(getSubItem("290", "1450", MenuActions.DASHBOARD_START));
+		l.add(getSubItem("291", "1451", MenuActions.DASHBOARD_CALENDAR));
+		mmenu.add(new OmMenuItem(getString("124"), l));
+	}
+
+	private void createRoomsMenu(List<INavbarComponent> mmenu) {
+		List<INavbarComponent> l = new ArrayList<>();
+		l.add(getSubItem("777", "1506", MenuActions.ROOMS_PUBLIC));
+		l.add(getSubItem("779", "1507", MenuActions.ROOMS_GROUP));
+		if (isMyRoomsEnabled()) {
+			l.add(getSubItem("781", "1508", MenuActions.ROOMS_MY));
+		}
+		List<Room> recent = roomDao.getRecent(getUserId());
+		if (!recent.isEmpty()) {
+			l.add(new OmMenuItem(null, (String)null));
+		}
+		for (Room r : recent) {
+			final Long roomId = r.getId();
+			l.add(new OmMenuItem(r.getName(), r.getName()) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onClick(AjaxRequestTarget target) {
+					RoomEnterBehavior.roomEnter((MainPage)getPage(), target, roomId);
+				}
+			});
+		}
+		mmenu.add(new OmMenuItem(getString("792"), l));
+	}
+
+	private void createSettingsMenu(List<INavbarComponent> mmenu) {
+		List<INavbarComponent> l = new ArrayList<>();
+		l.add(getSubItem("1188", "1188", MenuActions.PROFILE_MESSAGE));
+		l.add(getSubItem("377", "377", MenuActions.PROFILE_EDIT));
+		l.add(getSubItem("1172", "1172", MenuActions.PROFILE_SEARCH));
+		l.add(getSubItem("profile.invitations", "profile.invitations", MenuActions.PROFILE_INVITATION));
+		l.add(getSubItem("1548", "1548", MenuActions.PROFILE_WIDGET));
+		mmenu.add(new OmMenuItem(getString("4"), l));
 	}
 
 	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler) {

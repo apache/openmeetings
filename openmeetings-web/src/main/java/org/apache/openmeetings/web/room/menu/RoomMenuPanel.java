@@ -183,7 +183,6 @@ public class RoomMenuPanel extends Panel {
 
 	private List<INavbarComponent> getMenu() {
 		List<INavbarComponent> menu = new ArrayList<>();
-		exitMenuItem.setVisible(false);
 		menu.add(exitMenuItem);
 
 		if (actionsSubMenu.isVisible()) {
@@ -202,7 +201,6 @@ public class RoomMenuPanel extends Panel {
 		Room r = room.getRoom();
 		User u = room.getClient().getUser();
 		boolean notExternalUser = u.getType() != User.Type.CONTACT;
-		exitMenuItem.setVisible(notExternalUser);
 		boolean moder = room.getClient().hasRight(Room.Right.MODERATOR);
 		actionsSubMenu.update(moder, notExternalUser);
 		pollsSubMenu.update(moder, notExternalUser, r);
