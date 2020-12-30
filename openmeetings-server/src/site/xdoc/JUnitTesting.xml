@@ -65,11 +65,15 @@
 			<ul>
 				<li>Select Arguments tab </li>
 				<li>Add the following code to the VM section
-					<source>-javaagent:/home/solomax/.m2/repository/org/apache/openjpa/openjpa/3.0.0/openjpa-3.0.0.jar -Dom.home=${workspace_loc:openmeetings-web}/target/test-root/ -Dbackups.dir=${workspace_loc:openmeetings-web}/target/test-data</source>
+					<source>-javaagent:/home/solomax/.m2/repository/org/apache/openjpa/openjpa/3.1.2/openjpa-3.1.2.jar -Dom.home=${workspace_loc:openmeetings-web}/target/test-root/ -Dbackups.dir=${workspace_loc:openmeetings-web}/target/test-data</source>
 				</li>
 				<li>To avoid temporary files being created in OM root, modify
 					"Working Directory" as follows
 					<source>${workspace_loc:openmeetings-web/target}</source>
+				</li>
+				<li>
+					Open Dependencies tab and add folder <tt>/openmeetings-web/target/test-root/WEB-INF/classes</tt>
+					to <tt>CLASSPATH</tt>
 				</li>
 			</ul>
 			<p>

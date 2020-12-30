@@ -43,11 +43,17 @@ import org.junit.jupiter.api.Test;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 
 class TestMainMenu extends AbstractWicketTester {
-	private void checkMenuItem(int idx1, int idx2, Class<? extends BasePanel> clazz) throws OmException {
+	private void checkMenuItem(int idx1, Integer idx2, Class<? extends BasePanel> clazz) throws OmException {
 		testArea(adminUsername, p -> {
 			Navbar menu = (Navbar)p.get(PATH_MENU);
 			assertNotNull(menu);
-			tester.executeBehavior((AbstractAjaxBehavior)menu.get("collapse:navLeftListEnclosure:navLeftList:" + idx1 + ":component:dropdown-menu:buttons:" + idx2 + ":button").getBehaviorById(0));
+			String path = "collapse:navLeftListEnclosure:navLeftList:" + idx1;
+			if (idx2 == null) {
+				path += ":component";
+			} else {
+				path += ":component:dropdown-menu:buttons:" + idx2 + ":button";
+			}
+			tester.executeBehavior((AbstractAjaxBehavior)menu.get(path).getBehaviorById(0));
 
 			tester.assertComponent(PATH_CHILD, clazz);
 		});
@@ -80,7 +86,7 @@ class TestMainMenu extends AbstractWicketTester {
 
 	@Test
 	void testRecordings() throws OmException {
-		checkMenuItem(2, 0, RecordingsPanel.class);
+		checkMenuItem(2, null, RecordingsPanel.class);
 	}
 
 	@Test
