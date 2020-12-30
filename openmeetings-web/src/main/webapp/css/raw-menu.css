@@ -58,3 +58,10 @@
 .room-block .menu .details .icon .profile img {
 	width: 28px;
 }
+html[dir="rtl"] .dropdown-menu {
+	left: initial;
+	right: 0;
+}
+html[dir="rtl"] .dropdown-menu .dropdown-item {
+	text-align: right;
+}
