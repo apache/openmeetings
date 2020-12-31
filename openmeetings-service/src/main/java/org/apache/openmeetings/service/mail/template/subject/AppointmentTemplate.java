@@ -53,9 +53,9 @@ public abstract class AppointmentTemplate extends SubjectEmailTemplate {
 				.add(new Label("descLbl", getString("1152", locale)))
 				.add(new Label("desc", a.getDescription()).setEscapeModelStrings(false))
 				.setVisible(!Strings.isEmpty(a.getDescription())));
-		add(new Label("startLbl", getString("1153", locale)));
+		add(new Label("startLbl", getString("label.start", locale)));
 		add(new Label("start", format(a.getStart())));
-		add(new Label("endLbl", getString("1154", locale)));
+		add(new Label("endLbl", getString("label.end", locale)));
 		add(new Label("end", format(a.getEnd())));
 	}
 

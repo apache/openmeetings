@@ -116,7 +116,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 		setUseCloseHandler(true);
 		size(Modal.Size.Large);
 
-		addButton(new BootstrapAjaxButton("button", new ResourceModel("218"), form, Buttons.Type.Outline_Primary) {
+		addButton(new BootstrapAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("218"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -142,7 +142,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 		size(Size.Large);
 
 		add(form = new AppointmentForm("appForm", getModel()));
-		addButton(save = new BootstrapAjaxButton("button", new ResourceModel("144"), form, Buttons.Type.Outline_Primary) {
+		addButton(save = new BootstrapAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("144"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -212,7 +212,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 				target.add(feedback);
 			}
 		});
-		addButton(enterRoom = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Success, new ResourceModel("lbl.enter")) {
+		addButton(enterRoom = new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, null, Buttons.Type.Outline_Success, new ResourceModel("lbl.enter")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -222,7 +222,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 		});
 		enterRoom.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		enterRoom.add(AttributeModifier.append("data-dismiss", "modal"));
-		delete = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Danger, new ResourceModel("80")) {
+		delete = new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, null, Buttons.Type.Outline_Danger, new ResourceModel("80")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -468,8 +468,8 @@ public class AppointmentDialog extends Modal<Appointment> {
 
 			groups.setLabel(new ResourceModel("126"));
 			add(new RequiredTextField<String>("title").setLabel(new ResourceModel("572")));
-			add(start.setLabel(new ResourceModel("570")).setRequired(true)
-					, end.setLabel(new ResourceModel("571")).setRequired(true)
+			add(start.setLabel(new ResourceModel("label.start")).setRequired(true)
+					, end.setLabel(new ResourceModel("label.end")).setRequired(true)
 					, groom.setLabel(new ResourceModel("406")));
 			super.onInitialize();
 		}

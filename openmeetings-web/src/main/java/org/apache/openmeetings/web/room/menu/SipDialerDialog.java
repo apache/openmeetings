@@ -69,7 +69,20 @@ public class SipDialerDialog extends Modal<String> {
 		};
 		form.setDefaultButton(ab);
 		add(feedback.setOutputMarkupId(true), form.add(number, ab));
-		addButton(new BootstrapAjaxButton("button", new ResourceModel("1448"), form, Buttons.Type.Outline_Primary) {
+		addButton(new BootstrapAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("label.hangup"), form, Buttons.Type.Outline_Danger) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				sipDao.hangup(room.getRoom());
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				SipDialerDialog.this.onError(target);
+			}
+		});
+		addButton(new BootstrapAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("1448"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -92,6 +105,5 @@ public class SipDialerDialog extends Modal<String> {
 
 	protected void onSubmit(AjaxRequestTarget target) {
 		sipDao.joinToConfCall(number.getModelObject(), room.getRoom());
-		// close ?
 	}
 }

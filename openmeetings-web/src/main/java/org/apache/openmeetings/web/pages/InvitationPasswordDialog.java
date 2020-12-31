@@ -83,7 +83,7 @@ public class InvitationPasswordDialog extends Modal<Invitation> {
 		form.add(ab);
 		form.setDefaultButton(ab);
 		password.setLabel(new ResourceModel("110"));
-		addButton(new BootstrapAjaxButton("button", new ResourceModel("537"), form, Buttons.Type.Outline_Primary) {
+		addButton(new BootstrapAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("537"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

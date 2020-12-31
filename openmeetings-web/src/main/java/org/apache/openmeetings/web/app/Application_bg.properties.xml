@@ -222,8 +222,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="557"><![CDATA[Указател]]></entry>
 	<entry key="565"><![CDATA[Напомняне:]]></entry>
 	<entry key="569"><![CDATA[Място:]]></entry>
-	<entry key="570"><![CDATA[Начало]]></entry>
-	<entry key="571"><![CDATA[Край]]></entry>
 	<entry key="572"><![CDATA[Заглавие:]]></entry>
 	<entry key="582"><![CDATA[Табло]]></entry>
 	<entry key="583"><![CDATA[Гледане на записани срещи]]></entry>
@@ -288,7 +286,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="784"><![CDATA[Искане за Модератор]]></entry>
 	<entry key="785"><![CDATA[Искане за рисуване върху дъската]]></entry>
 	<entry key="786"><![CDATA[Искане достъп до камера/микрофон]]></entry>
-	<entry key="788"><![CDATA[СТАРТ]]></entry>
 	<entry key="792"><![CDATA[Стаи]]></entry>
 	<entry key="797"><![CDATA[Предупреждение]]></entry>
 	<entry key="799"><![CDATA[ден]]></entry>
@@ -360,8 +357,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1147"><![CDATA[Created by]]></entry>
 	<entry key="1151"><![CDATA[New {0} conference:]]></entry>
 	<entry key="1152"><![CDATA[Details:]]></entry>
-	<entry key="1153"><![CDATA[Start:]]></entry>
-	<entry key="1154"><![CDATA[End:]]></entry>
 	<entry key="1155"><![CDATA[Changed {0} conference:]]></entry>
 	<entry key="1156"><![CDATA[Organizer:]]></entry>
 	<entry key="1157"><![CDATA[Canceled {0} conference:]]></entry>
@@ -828,6 +823,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
+	<entry key="label.end"><![CDATA[Край]]></entry>
+	<entry key="label.hangup"><![CDATA[Hang-up]]></entry>
+	<entry key="label.start"><![CDATA[Начало]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Отказ]]></entry>
 	<entry key="lbl.email"><![CDATA[E-mail:]]></entry>

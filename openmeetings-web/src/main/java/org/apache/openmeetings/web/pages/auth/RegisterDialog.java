@@ -91,7 +91,7 @@ public class RegisterDialog extends Modal<String> {
 		header(new ResourceModel("113"));
 		setUseCloseHandler(true);
 
-		addButton(new SpinnerAjaxButton("button", new ResourceModel("121"), form, Buttons.Type.Outline_Primary)); // register
+		addButton(new SpinnerAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("121"), form, Buttons.Type.Outline_Primary)); // register
 		addButton(OmModalCloseButton.of());
 		add(form);
 		add(new Label("register", getString("121")).setRenderBodyOnly(true), new BookmarkablePageLink<>("link", PrivacyPage.class));

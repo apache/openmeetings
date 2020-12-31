@@ -223,8 +223,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="557"><![CDATA[Pekare]]></entry>
 	<entry key="565"><![CDATA[Typ av meddelande]]></entry>
 	<entry key="569"><![CDATA[Location]]></entry>
-	<entry key="570"><![CDATA[Början]]></entry>
-	<entry key="571"><![CDATA[Slut]]></entry>
 	<entry key="572"><![CDATA[Titel]]></entry>
 	<entry key="582"><![CDATA[Dashboard]]></entry>
 	<entry key="583"><![CDATA[Se inspelade möten och händelser]]></entry>
@@ -289,7 +287,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="784"><![CDATA[Ansök om att bli moderator]]></entry>
 	<entry key="785"><![CDATA[Apply for whiteboard access]]></entry>
 	<entry key="786"><![CDATA[Ansök om tillgång till audio/video]]></entry>
-	<entry key="788"><![CDATA[START]]></entry>
 	<entry key="792"><![CDATA[Rum]]></entry>
 	<entry key="797"><![CDATA[Varning]]></entry>
 	<entry key="799"><![CDATA[Dag]]></entry>
@@ -361,8 +358,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1147"><![CDATA[Skapad av]]></entry>
 	<entry key="1151"><![CDATA[Ny {0} konferens:]]></entry>
 	<entry key="1152"><![CDATA[Detaljer:]]></entry>
-	<entry key="1153"><![CDATA[Början:]]></entry>
-	<entry key="1154"><![CDATA[Slut:]]></entry>
 	<entry key="1155"><![CDATA[{0}-konferensen ändrades:]]></entry>
 	<entry key="1156"><![CDATA[Organisatör:]]></entry>
 	<entry key="1157"><![CDATA[{0}-konferensen ställdes in:]]></entry>
@@ -826,6 +821,9 @@ till dess kan bli oanvändbara.
 please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
+	<entry key="label.end"><![CDATA[Slut]]></entry>
+	<entry key="label.hangup"><![CDATA[Hang-up]]></entry>
+	<entry key="label.start"><![CDATA[Början]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Avbryt]]></entry>
 	<entry key="lbl.email"><![CDATA[E-postadress]]></entry>

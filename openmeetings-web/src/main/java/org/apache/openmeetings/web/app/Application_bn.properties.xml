@@ -222,8 +222,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="557"><![CDATA[পয়েন্টার]]></entry>
 	<entry key="565"><![CDATA[বিজ্ঞপ্তির ধরনের]]></entry>
 	<entry key="569"><![CDATA[অবস্থান]]></entry>
-	<entry key="570"><![CDATA[শুরু]]></entry>
-	<entry key="571"><![CDATA[শেষ]]></entry>
 	<entry key="572"><![CDATA[শিরোনাম]]></entry>
 	<entry key="582"><![CDATA[ড্যাশবোর্ড]]></entry>
 	<entry key="583"><![CDATA[ধারণকৃত মিটিংসমূহ বা ঘটনাবলী দেখুন]]></entry>
@@ -288,7 +286,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="784"><![CDATA[মডারেটর হতে আবেদন করুন]]></entry>
 	<entry key="785"><![CDATA[হোয়াইটবোর্ড অ্যাক্সেসের জন্য আবেদন করুন]]></entry>
 	<entry key="786"><![CDATA[অডিও / ভিডিও অ্যাক্সেসের জন্য আবেদন করুন]]></entry>
-	<entry key="788"><![CDATA[শুরু]]></entry>
 	<entry key="792"><![CDATA[রুমসমূহ]]></entry>
 	<entry key="797"><![CDATA[সতর্কতা]]></entry>
 	<entry key="799"><![CDATA[দিন]]></entry>
@@ -360,8 +357,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1147"><![CDATA[Created by]]></entry>
 	<entry key="1151"><![CDATA[New {0} conference:]]></entry>
 	<entry key="1152"><![CDATA[Details:]]></entry>
-	<entry key="1153"><![CDATA[Start:]]></entry>
-	<entry key="1154"><![CDATA[End:]]></entry>
 	<entry key="1155"><![CDATA[Changed {0} conference:]]></entry>
 	<entry key="1156"><![CDATA[Organizer:]]></entry>
 	<entry key="1157"><![CDATA[Canceled {0} conference:]]></entry>
@@ -828,6 +823,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
+	<entry key="label.end"><![CDATA[শেষ]]></entry>
+	<entry key="label.hangup"><![CDATA[Hang-up]]></entry>
+	<entry key="label.start"><![CDATA[শুরু]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Cancel]]></entry>
 	<entry key="lbl.email"><![CDATA[ইমেইল]]></entry>

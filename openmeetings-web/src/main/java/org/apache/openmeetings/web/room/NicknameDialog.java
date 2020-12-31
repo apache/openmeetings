@@ -62,7 +62,7 @@ public class NicknameDialog extends Modal<User> {
 		setBackdrop(Backdrop.STATIC);
 
 		add(form = new Form<>("form", new CompoundPropertyModel<>(room.getClient().getUser())));
-		addButton(new BootstrapAjaxButton("button", new ResourceModel("54"), form, Buttons.Type.Outline_Primary) {
+		addButton(new BootstrapAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("54"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

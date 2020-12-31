@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.BUTTON_MARKUP_ID;
 import static java.time.Duration.ZERO;
 import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed;
 import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_USER_PREFIX;
@@ -416,7 +417,7 @@ public class RoomPanel extends BasePanel {
 			.header(new ResourceModel("797"))
 			.setCloseOnEscapeKey(false)
 			.setBackdrop(Backdrop.FALSE)
-			.addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Primary, new ResourceModel("54")) {
+			.addButton(new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, Model.of(""), Buttons.Type.Outline_Primary, new ResourceModel("54")) {
 				private static final long serialVersionUID = 1L;
 
 				public void onClick(AjaxRequestTarget target) {

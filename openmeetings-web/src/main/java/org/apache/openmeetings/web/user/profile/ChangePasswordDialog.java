@@ -81,7 +81,7 @@ public class ChangePasswordDialog extends Modal<String> {
 	protected void onInitialize() {
 		header(new ResourceModel("327"));
 
-		addButton(new SpinnerAjaxButton("button", new ResourceModel("327"), form, Buttons.Type.Outline_Primary) {
+		addButton(new SpinnerAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("327"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

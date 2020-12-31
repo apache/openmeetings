@@ -106,8 +106,8 @@ public class SignInDialog extends Modal<String> {
 		show(true);
 		setCloseOnEscapeKey(false);
 		setBackdrop(Backdrop.STATIC);
-		addButton(new SpinnerAjaxButton("button", new ResourceModel("112"), form, Buttons.Type.Outline_Primary)); // Login
-		addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("123")) {
+		addButton(new SpinnerAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("112"), form, Buttons.Type.Outline_Primary)); // Login
+		addButton(new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, Model.of(""), Buttons.Type.Outline_Secondary, new ResourceModel("123")) {
 			private static final long serialVersionUID = 1L;
 
 			public void onClick(AjaxRequestTarget target) {

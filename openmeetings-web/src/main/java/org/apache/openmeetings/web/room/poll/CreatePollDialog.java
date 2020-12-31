@@ -71,7 +71,7 @@ public class CreatePollDialog extends Modal<RoomPoll> {
 		setBackdrop(Backdrop.STATIC);
 
 		add(form = new PollForm("form", getModel()));
-		addButton(new BootstrapAjaxButton("button", new ResourceModel("22"), form, Buttons.Type.Outline_Primary) {
+		addButton(new BootstrapAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("22"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

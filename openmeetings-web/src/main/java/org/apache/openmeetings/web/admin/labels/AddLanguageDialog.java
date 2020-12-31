@@ -54,7 +54,7 @@ public class AddLanguageDialog extends Modal<String> {
 	protected void onInitialize() {
 		header(new ResourceModel("362"));
 
-		addButton(new BootstrapAjaxButton("button", new ResourceModel("366"), form, Buttons.Type.Outline_Primary) {
+		addButton(new BootstrapAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("366"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -222,8 +222,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="557"><![CDATA[Указатель]]></entry>
 	<entry key="565"><![CDATA[Нагадувач:]]></entry>
 	<entry key="569"><![CDATA[Місце:]]></entry>
-	<entry key="570"><![CDATA[Початок]]></entry>
-	<entry key="571"><![CDATA[Кінець]]></entry>
 	<entry key="572"><![CDATA[Назва:]]></entry>
 	<entry key="582"><![CDATA[інформаційна панель]]></entry>
 	<entry key="583"><![CDATA[Подивитися записані наради і лекції]]></entry>
@@ -288,7 +286,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="784"><![CDATA[Подати заявку на модерацію]]></entry>
 	<entry key="785"><![CDATA[Подати заявку на доступ до дошки]]></entry>
 	<entry key="786"><![CDATA[Подати заявку на доступ до камери і мікрофону]]></entry>
-	<entry key="788"><![CDATA[СТАРТ]]></entry>
 	<entry key="792"><![CDATA[Кімнати]]></entry>
 	<entry key="797"><![CDATA[Попередження]]></entry>
 	<entry key="799"><![CDATA[День]]></entry>
@@ -360,8 +357,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1147"><![CDATA[Створено]]></entry>
 	<entry key="1151"><![CDATA[Нова конференція {0}:]]></entry>
 	<entry key="1152"><![CDATA[Деталі:]]></entry>
-	<entry key="1153"><![CDATA[Старт:]]></entry>
-	<entry key="1154"><![CDATA[Кінець:]]></entry>
 	<entry key="1155"><![CDATA[Змінена конференція {0}:]]></entry>
 	<entry key="1156"><![CDATA[Організатор:]]></entry>
 	<entry key="1157"><![CDATA[Скасована конференція {0}:]]></entry>
@@ -828,6 +823,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
+	<entry key="label.end"><![CDATA[Кінець]]></entry>
+	<entry key="label.hangup"><![CDATA[Hang-up]]></entry>
+	<entry key="label.start"><![CDATA[Початок]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Натисніть щоб відокремити панель]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Скасувати]]></entry>
 	<entry key="lbl.email"><![CDATA[E-mail:]]></entry>

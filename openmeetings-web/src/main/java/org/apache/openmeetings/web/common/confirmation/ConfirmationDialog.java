@@ -41,7 +41,7 @@ public abstract class ConfirmationDialog extends TextContentModal {
 
 	private BootstrapAjaxLink<String> getOkButton() {
 		if (okButton == null) {
-			okButton = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Danger, new ResourceModel("54")) {
+			okButton = new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, null, Buttons.Type.Outline_Danger, new ResourceModel("54")) {
 				private static final long serialVersionUID = 1L;
 
 				@Override

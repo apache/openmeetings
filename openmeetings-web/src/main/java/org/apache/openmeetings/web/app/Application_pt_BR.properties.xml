@@ -222,8 +222,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="557"><![CDATA[Ponteiro]]></entry>
 	<entry key="565"><![CDATA[Lembrete:]]></entry>
 	<entry key="569"><![CDATA[Localização:]]></entry>
-	<entry key="570"><![CDATA[Inicio]]></entry>
-	<entry key="571"><![CDATA[Fim]]></entry>
 	<entry key="572"><![CDATA[Título:]]></entry>
 	<entry key="582"><![CDATA[Painel]]></entry>
 	<entry key="583"><![CDATA[Assista reuniões ou eventos gravados]]></entry>
@@ -288,7 +286,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="784"><![CDATA[Pedir moderação]]></entry>
 	<entry key="785"><![CDATA[Pedir acesso para a lousa]]></entry>
 	<entry key="786"><![CDATA[Pedir acesso para camera/microfone]]></entry>
-	<entry key="788"><![CDATA[INICIA]]></entry>
 	<entry key="792"><![CDATA[Salas]]></entry>
 	<entry key="797"><![CDATA[Aviso]]></entry>
 	<entry key="799"><![CDATA[dia]]></entry>
@@ -360,8 +357,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1147"><![CDATA[Criado por]]></entry>
 	<entry key="1151"><![CDATA[Nova conferência {0}]]></entry>
 	<entry key="1152"><![CDATA[Detalhes:]]></entry>
-	<entry key="1153"><![CDATA[Inicio:]]></entry>
-	<entry key="1154"><![CDATA[Fim:]]></entry>
 	<entry key="1155"><![CDATA[Conferência {0} Modificada:]]></entry>
 	<entry key="1156"><![CDATA[Organizador:]]></entry>
 	<entry key="1157"><![CDATA[Conferência {0} Cancelada:]]></entry>
@@ -828,6 +823,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
+	<entry key="label.end"><![CDATA[Fim]]></entry>
+	<entry key="label.hangup"><![CDATA[Hang-up]]></entry>
+	<entry key="label.start"><![CDATA[Inicio]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Cancelar]]></entry>
 	<entry key="lbl.email"><![CDATA[Email:]]></entry>

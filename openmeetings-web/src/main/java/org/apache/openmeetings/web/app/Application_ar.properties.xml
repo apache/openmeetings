@@ -222,8 +222,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="557"><![CDATA[المؤشر]]></entry>
 	<entry key="565"><![CDATA[نوع الإعلام]]></entry>
 	<entry key="569"><![CDATA[موقع]]></entry>
-	<entry key="570"><![CDATA[بداية:]]></entry>
-	<entry key="571"><![CDATA[نهاية:]]></entry>
 	<entry key="572"><![CDATA[عنوان]]></entry>
 	<entry key="582"><![CDATA[صفحتي]]></entry>
 	<entry key="583"><![CDATA[مشاهدة الإجتماعات أو الاحداث المسجلة]]></entry>
@@ -288,7 +286,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="784"><![CDATA[قدم طلبًا للاشراف]]></entry>
 	<entry key="785"><![CDATA[التقدم بطلب للحصول على استخدام السبورة]]></entry>
 	<entry key="786"><![CDATA[تقدم بطلب الوصول إلى الكاميرا / الميكروفون]]></entry>
-	<entry key="788"><![CDATA[البداية]]></entry>
 	<entry key="792"><![CDATA[غرف]]></entry>
 	<entry key="797"><![CDATA[تحذير]]></entry>
 	<entry key="799"><![CDATA[يوم]]></entry>
@@ -360,8 +357,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1147"><![CDATA[انشأ من قبل]]></entry>
 	<entry key="1151"><![CDATA[مؤتمر {0} جديد:]]></entry>
 	<entry key="1152"><![CDATA[التفاصيل:]]></entry>
-	<entry key="1153"><![CDATA[بداية:]]></entry>
-	<entry key="1154"><![CDATA[النهاية:]]></entry>
 	<entry key="1155"><![CDATA[تم تغيير المؤتمر {0}:]]></entry>
 	<entry key="1156"><![CDATA[منظم:]]></entry>
 	<entry key="1157"><![CDATA[الغاء المؤتمر {0}:]]></entry>
@@ -828,6 +823,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 يرجى مراجعة <tt> openmeetings.log </tt> والاتصال بمطوري OpenMeetings]]></entry>
 	<entry key="invalid.hash"><![CDATA[خطأ في مفتاح الترميز Invalid Hash]]></entry>
 	<entry key="label.dock.panel"><![CDATA[انقر لإرساء اللوحة]]></entry>
+	<entry key="label.end"><![CDATA[نهاية:]]></entry>
+	<entry key="label.hangup"><![CDATA[Hang-up]]></entry>
+	<entry key="label.start"><![CDATA[بداية:]]></entry>
 	<entry key="label.undock.panel"><![CDATA[انقر لإلغاء قفل اللوحة]]></entry>
 	<entry key="lbl.cancel"><![CDATA[الغاء]]></entry>
 	<entry key="lbl.email"><![CDATA[البريد الإلكتروني]]></entry>

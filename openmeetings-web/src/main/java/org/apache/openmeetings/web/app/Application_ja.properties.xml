@@ -222,8 +222,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="557"><![CDATA[ポインタ]]></entry>
 	<entry key="565"><![CDATA[リマインダ:]]></entry>
 	<entry key="569"><![CDATA[場所:]]></entry>
-	<entry key="570"><![CDATA[開始]]></entry>
-	<entry key="571"><![CDATA[終了]]></entry>
 	<entry key="572"><![CDATA[タイトル:]]></entry>
 	<entry key="582"><![CDATA[ダッシュボード]]></entry>
 	<entry key="583"><![CDATA[録画済みのミーティング/イベントを視聴する]]></entry>
@@ -288,7 +286,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="784"><![CDATA[モデレータ（司会者）権限を許可]]></entry>
 	<entry key="785"><![CDATA[ホワイトボードへのアクセスを許可]]></entry>
 	<entry key="786"><![CDATA[カメラ・マイクへのアクセスを許可]]></entry>
-	<entry key="788"><![CDATA[開始]]></entry>
 	<entry key="792"><![CDATA[会議室]]></entry>
 	<entry key="797"><![CDATA[警告]]></entry>
 	<entry key="799"><![CDATA[日表示]]></entry>
@@ -360,8 +357,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1147"><![CDATA[作成者]]></entry>
 	<entry key="1151"><![CDATA[{0}会議が設定されました:]]></entry>
 	<entry key="1152"><![CDATA[詳細:]]></entry>
-	<entry key="1153"><![CDATA[開始時刻:]]></entry>
-	<entry key="1154"><![CDATA[終了時刻:]]></entry>
 	<entry key="1155"><![CDATA[{0}会議が更新されました:]]></entry>
 	<entry key="1156"><![CDATA[主催者:]]></entry>
 	<entry key="1157"><![CDATA[{0}会議がキャンセルされました:]]></entry>
@@ -829,6 +824,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></entry>
 	<entry key="invalid.hash"><![CDATA[不正なハッシュ]]></entry>
 	<entry key="label.dock.panel"><![CDATA[クリックしてパネルを連結する]]></entry>
+	<entry key="label.end"><![CDATA[終了]]></entry>
+	<entry key="label.hangup"><![CDATA[Hang-up]]></entry>
+	<entry key="label.start"><![CDATA[開始]]></entry>
 	<entry key="label.undock.panel"><![CDATA[クリックしてパネルを切り離す]]></entry>
 	<entry key="lbl.cancel"><![CDATA[キャンセル]]></entry>
 	<entry key="lbl.email"><![CDATA[メールアドレス:]]></entry>

@@ -222,8 +222,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="557"><![CDATA[Указатель]]></entry>
 	<entry key="565"><![CDATA[Напоминатель:]]></entry>
 	<entry key="569"><![CDATA[Место:]]></entry>
-	<entry key="570"><![CDATA[Начало]]></entry>
-	<entry key="571"><![CDATA[Конец]]></entry>
 	<entry key="572"><![CDATA[Название]]></entry>
 	<entry key="582"><![CDATA[информационная панель]]></entry>
 	<entry key="583"><![CDATA[Посмотреть записанные совещания и лекции]]></entry>
@@ -288,7 +286,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="784"><![CDATA[Подать заявку на модерацию]]></entry>
 	<entry key="785"><![CDATA[Подать заявку на доступ к доске]]></entry>
 	<entry key="786"><![CDATA[Подать заявку на доступ к камере и микрофону]]></entry>
-	<entry key="788"><![CDATA[СТАРТ]]></entry>
 	<entry key="792"><![CDATA[Комнаты]]></entry>
 	<entry key="797"><![CDATA[Предупреждение]]></entry>
 	<entry key="799"><![CDATA[День]]></entry>
@@ -360,8 +357,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1147"><![CDATA[Создано]]></entry>
 	<entry key="1151"><![CDATA[Новая конференция {0}:]]></entry>
 	<entry key="1152"><![CDATA[Детали:]]></entry>
-	<entry key="1153"><![CDATA[Старт:]]></entry>
-	<entry key="1154"><![CDATA[Конец:]]></entry>
 	<entry key="1155"><![CDATA[Изменённая конференция {0}:]]></entry>
 	<entry key="1156"><![CDATA[Организатор:]]></entry>
 	<entry key="1157"><![CDATA[Отменённая конференция {0}:]]></entry>
@@ -829,6 +824,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 пожалуйста проверьте <tt>openmeetings.log</tt> и свяжитесь с разработчиками OpenMeetings]]></entry>
 	<entry key="invalid.hash"><![CDATA[Неверный код]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Кликните чтобы "прилепить" панель]]></entry>
+	<entry key="label.end"><![CDATA[Конец]]></entry>
+	<entry key="label.hangup"><![CDATA[Повесить трубку]]></entry>
+	<entry key="label.start"><![CDATA[Начало]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Кликните чтобы "отлепить" панель]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Отменить]]></entry>
 	<entry key="lbl.email"><![CDATA[e-mail:]]></entry>

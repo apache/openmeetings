@@ -222,8 +222,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="557"><![CDATA[اشاره گر]]></entry>
 	<entry key="565"><![CDATA[یادآوری:]]></entry>
 	<entry key="569"><![CDATA[مکان:]]></entry>
-	<entry key="570"><![CDATA[شروع]]></entry>
-	<entry key="571"><![CDATA[پایان]]></entry>
 	<entry key="572"><![CDATA[عنوان:]]></entry>
 	<entry key="582"><![CDATA[داشبورد]]></entry>
 	<entry key="583"><![CDATA[جلسات ضبط شده را مشاهده کنید.]]></entry>
@@ -288,7 +286,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="784"><![CDATA[درخواست هماهنگ کننده]]></entry>
 	<entry key="785"><![CDATA[درخواست برای دسترسی به اتاق وایت بورد]]></entry>
 	<entry key="786"><![CDATA[درخواست برای دسترسی به دوربین/میکروفن]]></entry>
-	<entry key="788"><![CDATA[شروع]]></entry>
 	<entry key="792"><![CDATA[اتاق ها]]></entry>
 	<entry key="797"><![CDATA[هشدار]]></entry>
 	<entry key="799"><![CDATA[روز]]></entry>
@@ -360,8 +357,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1147"><![CDATA[ایجاد شده توسط]]></entry>
 	<entry key="1151"><![CDATA[کنفرانس جدید: {0}]]></entry>
 	<entry key="1152"><![CDATA[جزییات:]]></entry>
-	<entry key="1153"><![CDATA[شروع:]]></entry>
-	<entry key="1154"><![CDATA[پایان:]]></entry>
 	<entry key="1155"><![CDATA[کنفرانس تغییر یافته: {0}]]></entry>
 	<entry key="1156"><![CDATA[سازمان دهنده:]]></entry>
 	<entry key="1157"><![CDATA[کنفرانس کنسل شد: {0}]]></entry>
@@ -825,6 +820,9 @@ target="_blank">Custom Crypt Mechanism</a>
 please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></entry>
 	<entry key="invalid.hash"><![CDATA[هش نا معتبر]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
+	<entry key="label.end"><![CDATA[پایان]]></entry>
+	<entry key="label.hangup"><![CDATA[Hang-up]]></entry>
+	<entry key="label.start"><![CDATA[شروع]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[انصراف]]></entry>
 	<entry key="lbl.email"><![CDATA[ایمیل:]]></entry>

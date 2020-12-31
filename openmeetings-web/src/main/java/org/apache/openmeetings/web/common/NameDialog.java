@@ -54,7 +54,7 @@ public abstract class NameDialog extends Modal<String> {
 	protected void onInitialize() {
 		header(getTitle());
 
-		addButton(new BootstrapAjaxButton("button", getAddBtnLabel(), form, Buttons.Type.Outline_Primary) {
+		addButton(new BootstrapAjaxButton(BUTTON_MARKUP_ID, getAddBtnLabel(), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -104,7 +104,7 @@ public class CalendarDialog extends Modal<OmCalendar> {
 		form = new UserCalendarForm("calform", getModel());
 		add(form);
 
-		addButton(save = new BootstrapAjaxButton("button", new ResourceModel("144"), form, Buttons.Type.Outline_Primary) {
+		addButton(save = new BootstrapAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("144"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -158,7 +158,7 @@ public class CalendarDialog extends Modal<OmCalendar> {
 			}
 		});
 		save.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
-		delete = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Danger, new ResourceModel("80")) {
+		delete = new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, null, Buttons.Type.Outline_Danger, new ResourceModel("80")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

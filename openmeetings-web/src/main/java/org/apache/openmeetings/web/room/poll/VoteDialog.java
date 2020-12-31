@@ -78,7 +78,7 @@ public class VoteDialog extends Modal<RoomPollAnswer> {
 		setBackdrop(Backdrop.STATIC);
 
 		add(form = new PollAnswerForm("form", new CompoundPropertyModel<>(new RoomPollAnswer())));
-		addButton(new BootstrapAjaxButton("button", new ResourceModel("32"), form, Buttons.Type.Outline_Primary) {
+		addButton(new BootstrapAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("32"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

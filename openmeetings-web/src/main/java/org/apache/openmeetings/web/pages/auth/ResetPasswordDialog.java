@@ -61,7 +61,7 @@ public class ResetPasswordDialog extends Modal<String> {
 		show(true);
 
 		add(form);
-		addButton(new BootstrapAjaxButton("button", new ResourceModel("327"), form, Buttons.Type.Outline_Primary) {
+		addButton(new BootstrapAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("327"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 		}); // Reset
 

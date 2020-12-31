@@ -96,7 +96,7 @@ public class ForgetPasswordDialog extends Modal<String> {
 		header(new ResourceModel("312"));
 		setUseCloseHandler(true);
 
-		addButton(new BootstrapAjaxButton("button", new ResourceModel("317"), form, Buttons.Type.Outline_Primary) {
+		addButton(new BootstrapAjaxButton(BUTTON_MARKUP_ID, new ResourceModel("317"), form, Buttons.Type.Outline_Primary) {
 			private static final long serialVersionUID = 1L;
 		}); // Send
 		addButton(OmModalCloseButton.of());

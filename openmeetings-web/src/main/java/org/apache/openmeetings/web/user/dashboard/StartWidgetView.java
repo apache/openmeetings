@@ -59,7 +59,7 @@ public class StartWidgetView extends WidgetView {
 		add(new WebMarkupContainer("step4").add(new PublicRoomsEventBehavior()));
 		add(new Label("123msg", Application.getString("widget.start.desc")) //Application here is used to substitute {0}
 				.setEscapeModelStrings(false));
-		add(new BootstrapButton("start", new ResourceModel("788"), Buttons.Type.Outline_Primary).add(new PublicRoomsEventBehavior()));
+		add(new BootstrapButton("start", new ResourceModel("773"), Buttons.Type.Outline_Primary).add(new PublicRoomsEventBehavior()));
 		add(new BootstrapButton("calendar", new ResourceModel("291"), Buttons.Type.Outline_Primary).add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 

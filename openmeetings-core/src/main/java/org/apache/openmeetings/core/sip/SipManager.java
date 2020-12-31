@@ -44,6 +44,7 @@ import org.asteriskjava.manager.action.DbDelTreeAction;
 import org.asteriskjava.manager.action.DbGetAction;
 import org.asteriskjava.manager.action.DbPutAction;
 import org.asteriskjava.manager.action.EventGeneratingAction;
+import org.asteriskjava.manager.action.HangupAction;
 import org.asteriskjava.manager.action.ManagerAction;
 import org.asteriskjava.manager.action.OriginateAction;
 import org.asteriskjava.manager.event.ConfbridgeListEvent;
@@ -233,6 +234,20 @@ public class SipManager implements ISipManager {
 		oa.setTimeout(managerTimeout);
 
 		exec(oa);
+	}
+
+	public void hangup(Room r) {
+		String sipNumber = getSipNumber(r);
+		if (sipNumber == null) {
+			log.warn("Failed to get SIP number for room: {}", r);
+			return;
+		}
+
+		HangupAction ha = new HangupAction(
+				String.format("Local/%s@rooms-originate-.*$", sipNumber)
+				, 16 // AST_CAUSE_NORMAL_CLEARING
+				);
+		exec(ha);
 	}
 
 	public void setUserPicture(Function<User, String> pictureCreator) {

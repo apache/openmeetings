@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
+import static de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.BUTTON_MARKUP_ID;
 import static java.time.Duration.ZERO;
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
@@ -298,7 +299,7 @@ public abstract class FileTreePanel extends Panel {
 			}
 		};
 		buttons.setOutputMarkupId(true);
-		form.add(buttons.add(download, new ListView<>("other-buttons", newOtherButtons("button")) {
+		form.add(buttons.add(download, new ListView<>("other-buttons", newOtherButtons(BUTTON_MARKUP_ID)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

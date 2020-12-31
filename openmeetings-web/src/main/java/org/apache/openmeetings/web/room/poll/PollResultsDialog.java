@@ -105,7 +105,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 		chartPie = getString("1415");
 		add(selForm = new PollSelectForm("selForm"));
 		add(dispForm = new PollResultsForm("dispForm"));
-		addButton(close = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Danger, new ResourceModel("1418")) {
+		addButton(close = new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, null, Buttons.Type.Outline_Danger, new ResourceModel("1418")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -123,7 +123,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 		});
 		close.setIconType(FontAwesome5IconType.times_s).add(newOkCancelDangerConfirm(this, getString("1419")));
 		close.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
-		addButton(delete = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Danger, new ResourceModel("1420")) {
+		addButton(delete = new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, null, Buttons.Type.Outline_Danger, new ResourceModel("1420")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -137,7 +137,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 		});
 		delete.setIconType(FontAwesome5IconType.times_s).add(newOkCancelDangerConfirm(this, getString("1421")));
 		delete.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
-		addButton(clone = new BootstrapAjaxLink<>("button", null, Buttons.Type.Outline_Danger, new ResourceModel("poll.clone")) {
+		addButton(clone = new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, null, Buttons.Type.Outline_Danger, new ResourceModel("poll.clone")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
