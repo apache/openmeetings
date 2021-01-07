@@ -23,8 +23,10 @@ import static org.apache.openmeetings.util.CalendarHelper.getDate;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -195,8 +197,9 @@ public abstract class InvitationForm extends Form<Invitation> {
 		User u = userDao.get(getUserId());
 		i.setInvitedBy(u);
 		i.setRoom(null);
-		from.setModelObject(LocalDateTime.now());
-		to.setModelObject(LocalDateTime.now().plusDays(1));
+		LocalDateTime now = ZonedDateTime.now(getZoneId()).toLocalDateTime();
+		from.setModelObject(now);
+		to.setModelObject(now.plusDays(1));
 		i.setPassword(null);
 		i.setHash(null);
 		subject.setModelObject(null);
