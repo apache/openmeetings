@@ -21,53 +21,58 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<div class="invitation table">
-		<div>
-			<div class="column label"><label wicket:for="subject"><wicket:message key="215" /></label></div>
-			<div class="column data"><input type="text" wicket:id="subject" class="input"/></div>
-		</div>
-		<wicket:child/>
-		<div>
-			<div class="column label"><label wicket:for="message"><wicket:message key="217" /></label></div>
-			<div class="column data"><textarea wicket:id="message" class="message"></textarea></div>
-		</div>
-		<div>
-			<input wicket:id="passwordProtected" type="checkbox"/>&nbsp;<label
-					wicket:for="passwordProtected"><wicket:message key="524" /></label>
-		</div>
-		<div>
-			<div class="column label"><label wicket:for="password"><wicket:message key="110" /></label></div>
-			<div class="column data"><input wicket:id="password" type="password"/></div>
-		</div>
-		<div>
-			<div class="column label"><wicket:message key="526" /></div>
-			<div class="column data">
-				<div wicket:id="valid">
-					<input type="radio" wicket:id="one"/><label wicket:for="one"><wicket:message key="529" /></label>
-					<input type="radio" wicket:id="period"/><label wicket:for="period"><wicket:message key="528" /></label>
-					<input type="radio" wicket:id="endless"/><label wicket:for="endless"><wicket:message key="527" /></label>
-				</div>
+	<div class="formelement">
+		<label class="col-3 text-right" wicket:for="subject"><wicket:message key="215" /></label>
+		<input class="col-8" type="text" wicket:id="subject"/>
+	</div>
+	<wicket:child/>
+	<div class="formelement">
+		<label class="col-3 text-right" wicket:for="message"><wicket:message key="217" /></label>
+		<textarea class="col-8" wicket:id="message"></textarea>
+	</div>
+	<div class="formelement">
+		<label class="col-3 text-right" wicket:for="passwordProtected"><wicket:message key="524" /></label>
+		<input wicket:id="passwordProtected" type="checkbox"/>
+	</div>
+	<div class="formelement">
+		<label class="col-3 text-right" wicket:for="password"><wicket:message key="110" /></label>
+		<input class="col-8" wicket:id="password" type="password"/>
+	</div>
+	<div class="formelement">
+		<label class="col-3 text-right" wicket:for="valid"><wicket:message key="526" /></label>
+		<div class="col-8 d-inline-block" wicket:id="valid">
+			<div class="custom-control custom-radio custom-control-inline">
+				<input class="custom-control-input" type="radio" wicket:id="one"/>
+				<label class="custom-control-label" wicket:for="one"><wicket:message key="529" /></label>
+			</div>
+			<div class="custom-control custom-radio custom-control-inline">
+				<input class="custom-control-input" type="radio" wicket:id="period"/>
+				<label class="custom-control-label" wicket:for="period"><wicket:message key="528" /></label>
+			</div>
+			<div class="custom-control custom-radio custom-control-inline">
+				<input class="custom-control-input" type="radio" wicket:id="endless"/>
+				<label class="custom-control-label" wicket:for="endless"><wicket:message key="527" /></label>
 			</div>
 		</div>
-		<div>
-			<div class="column label"><label wicket:for="from"><wicket:message key="530" /></label></div>
-			<div class="column data"><span class="date time picker" wicket:id="from"></span></div>
-		</div>
-		<div>
-			<div class="column label"><label wicket:for="to"><wicket:message key="531" /></label></div>
-			<div class="column data"><span class="date time picker" wicket:id="to"></span></div>
-		</div>
-		<div>
-			<div class="column label"><label wicket:for="timeZoneId"><wicket:message key="1143" /></label></div>
-			<div class="column data"><select wicket:id="timeZoneId"/></div>
-		</div>
-		<div>
-			<div class="column label"><label wicket:for="language"><wicket:message key="59" /></label></div>
-			<div class="column data"><select wicket:id="language"/></div>
-		</div>
-		<div>
-			<input wicket:id="url" type="text" readonly="readonly" class="w-100"/>
-		</div>
+	</div>
+	<div class="formelement">
+		<label class="col-3 text-right" wicket:for="from"><wicket:message key="530" /></label>
+		<div class="d-inline-block col-8 p-0"><span class="date time picker" wicket:id="from"></span></div>
+	</div>
+	<div class="formelement">
+		<label class="col-3 text-right" wicket:for="to"><wicket:message key="531" /></label>
+		<div class="d-inline-block col-8 p-0"><span class="date time picker" wicket:id="to"></span></div>
+	</div>
+	<div class="formelement">
+		<label class="col-3 text-right" wicket:for="timeZoneId"><wicket:message key="1143" /></label>
+		<select class="custom-select col-8" wicket:id="timeZoneId"/>
+	</div>
+	<div class="formelement">
+		<label class="col-3 text-right" wicket:for="language"><wicket:message key="59" /></label>
+		<select class="custom-select col-8" wicket:id="language"/>
+	</div>
+	<div class="formelement">
+		<input class="col-12 text-right" wicket:id="url" type="text" readonly="readonly"/>
 	</div>
 	<span wicket:id="feedback"></span>
 </wicket:panel>

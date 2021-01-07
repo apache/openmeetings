@@ -21,11 +21,7 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-	<div>
-		<div>
-			<div class="column label"><label wicket:for="recipients"><wicket:message key="216" /></label></div>
-			<div class="column data om-select2"><select wicket:id="recipients" class="input invitees"></select></div>
-		</div>
-	</div>
+	<label class="col-3 text-right" wicket:for="recipients"><wicket:message key="216" /></label>
+	<div class="om-select2 p-0 d-inline-block col-8"><select class="input w-100" wicket:id="recipients"></select></div>
 </wicket:extend>
 </html>

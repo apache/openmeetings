@@ -22,18 +22,22 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 	<div wicket:id="inviteeType">
-		<div>
-			<div class="column label"><input type="radio" wicket:id="user"/><label wicket:for="recipients"><wicket:message key="216" /></label></div>
-			<div class="column data om-select2"><select wicket:id="recipients" class="input invitees"></select></div>
+		<div class="formelement">
+			<div class="col-3 text-right d-inline-block">
+				<input type="radio" wicket:id="user"/>&nbsp;<label wicket:for="recipients"><wicket:message key="216" /></label>
+			</div>
+			<div class="om-select2 p-0 d-inline-block col-8"><select class="input w-100" wicket:id="recipients"></select></div>
 		</div>
-		<div wicket:id="groupContainer">
-			<div class="column label"><input type="radio" wicket:id="group"/><label wicket:for="groups"><wicket:message key="126" /></label></div>
-			<div class="column data om-select2"><select wicket:id="groups" class="input invitees"></select></div>
+		<div class="formelement" wicket:id="groupContainer">
+			<div class="col-3 text-right d-inline-block">
+				<input type="radio" wicket:id="group"/>&nbsp;<label wicket:for="groups"><wicket:message key="126" /></label>
+			</div>
+			<div class="om-select2 p-0 d-inline-block col-8"><select class="input w-100" wicket:id="groups"></select></div>
 		</div>
 	</div>
-	<div wicket:id="sip-container">
-		<div class="column label"><wicket:message key="1003"/></div>
-		<div class="column data"><span wicket:id="room.confno"></span></div>
+	<div class="formelement" wicket:id="sip-container">
+		<div class="col-3 text-right"><wicket:message key="1003"/></div>
+		<div class="col-8"><span wicket:id="room.confno"></span></div>
 	</div>
 </wicket:extend>
 </html>
