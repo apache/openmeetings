@@ -22,7 +22,9 @@ package org.apache.openmeetings.webservice;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -32,10 +34,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.openmeetings.webservice.util.RateLimited;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service("netTestWebService")
@@ -53,6 +57,15 @@ public class NetTestWebService {
 	private static final int PING_PACKET_SIZE = 64;
 	private static final int JITTER_PACKET_SIZE = 1024;
 	private static final int MAX_UPLOAD_SIZE = 16 * 1024 * 1024;
+	private AtomicInteger clientCount = new AtomicInteger();
+
+	@Value("${nettest.max.clients}")
+	private int maxClients = 100;
+
+	@PostConstruct
+	private void report() {
+		log.debug("MaxClients: {}", maxClients);
+	}
 
 	@RateLimited
 	@GET
@@ -60,8 +73,15 @@ public class NetTestWebService {
 	@Path("/")
 	public Response get(@QueryParam("type") String type, @QueryParam("size") int inSize) {
 		final int size;
-		TestType testType = getTypeByString(type);
+		final TestType testType = getTypeByString(type);
 		log.debug("Network test:: get, {}, {}", testType, inSize);
+		if (TestType.UNKNOWN == testType) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if (clientCount.intValue() > maxClients) {
+			log.error("Download: Max client count reached");
+			return Response.status(Status.TOO_MANY_REQUESTS).build();
+		}
 
 		// choose data to send
 		switch (testType) {
@@ -72,6 +92,7 @@ public class NetTestWebService {
 				size = JITTER_PACKET_SIZE;
 				break;
 			default:
+				clientCount.incrementAndGet();
 				size = inSize;
 				break;
 		}
@@ -88,6 +109,14 @@ public class NetTestWebService {
 			public int available() throws IOException {
 				return size - pos;
 			}
+
+			@Override
+			public void close() throws IOException {
+				if (TestType.DOWNLOAD_SPEED == testType) {
+					clientCount.decrementAndGet();
+				}
+				super.close();
+			}
 		});
 		response.header("Cache-Control", "no-cache, no-store, no-transform");
 		response.header("Pragma", "no-cache");
@@ -102,13 +131,22 @@ public class NetTestWebService {
 		if (size > MAX_UPLOAD_SIZE) {
 			return;
 		}
-		byte[] b = new byte[1024];
-		int totalCount = 0
-				, count;
-		while ((count = stream.read(b)) > -1) {
-			totalCount += count;
+		if (clientCount.intValue() > maxClients) {
+			log.error("Upload: Max client count reached");
+			return;
 		}
-		log.debug("Total bytes read {}", totalCount);
+		clientCount.incrementAndGet();
+		byte[] b = new byte[1024];
+		int totalCount = 0;
+		int count;
+		try {
+			while ((count = stream.read(b)) > -1) {
+				totalCount += count;
+			}
+			log.debug("Total bytes read {}", totalCount);
+		} finally {
+			clientCount.decrementAndGet();
+		}
 	}
 
 	public static TestType getTypeByString(String typeString) {
