@@ -735,10 +735,6 @@ select.messages.selector {
 .abstractWizard input[type=checkbox], .abstractWizard input[type=radio] {
 	width: auto;
 }
-.invitation .message {
-	width: 280px;
-	height: 70px;
-}
 .img-upload .btn.btn-file {
 	width: 120px;
 	padding: 0;

@@ -153,7 +153,7 @@ public class ActionsSubMenu implements Serializable {
 				attributes.getAjaxCallListeners().add(new IAjaxCallListener() {
 					@Override
 					public CharSequence getPrecondition(Component component) {
-						return "$('#room-local-settings').modal('show'); return false;";
+						return "UserSettings.open(); return false;";
 					}
 				});
 			}

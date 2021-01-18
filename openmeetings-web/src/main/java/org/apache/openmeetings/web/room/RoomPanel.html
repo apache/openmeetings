@@ -81,6 +81,18 @@
 							<input type="checkbox" class="custom-control-input" id="chatNotify">
 							<label class="custom-control-label" for="chatNotify"><wicket:message key="sound.enable"/></label>
 						</div>
+						<div class="custom-control custom-checkbox col-10">
+							<input type="checkbox" class="custom-control-input" id="sendOnCtrlEnter">
+							<label class="custom-control-label" for="sendOnCtrlEnter"><wicket:message key="send.on.ctrl.enter"/></label>
+						</div>
+					</div>
+					<h5 class="mt-2">Video</h5> <!-- FIXME TODO localize -->
+					<div class="row justify-content-end">
+						<div class="custom-control custom-checkbox col-10">
+							<input type="checkbox" class="custom-control-input" id="fixedVideoPod">
+							<label class="custom-control-label" for="fixedVideoPod">Fixed video pod size</label>
+						</div>
+						<div id="video-sizes-container col-10"></div>
 					</div>
 				</div>
 			</div>

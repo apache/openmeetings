@@ -37,17 +37,20 @@ function _load() {
 			muted: false
 			, sendOn: DEF_SEND
 		};
+		Settings.save(s)
 	}
 	muted = s.chat.muted === true;
 	sendOn = s.chat.sendOn === SEND_ENTER ? SEND_ENTER : SEND_CTRL;
 	return s;
 }
-function _updateAudioBtn(btn) {
+function _updateAudioBtn() {
+	const btn = $('#chat .audio');
 	btn.removeClass('sound' + (muted ? '' : '-mute')).addClass('sound' + (muted ? '-mute' : ''))
 			.attr('title', btn.data(muted ? 'sound-enabled' : 'sound-muted'));
 }
-function _updateSendBtn(btn) {
-	const ctrl = sendOn === SEND_CTRL;
+function _updateSendBtn() {
+	const btn = $('#chat .send-btn')
+		, ctrl = sendOn === SEND_CTRL;
 	if (ctrl) {
 		btn.addClass('send-ctrl');
 		editor.off('keydown', _sendOnEnter).keydown('Ctrl+return', _sendOnEnter);
@@ -89,19 +92,19 @@ function initToolbar() {
 	const sbtn = $('#chat .send-btn');
 	{ //scope
 		_load();
-		_updateAudioBtn(a);
-		_updateSendBtn(sbtn)
+		_updateAudioBtn();
+		_updateSendBtn()
 	}
 	a.off().click(function() {
 		const s = _load();
 		muted = s.chat.muted = !s.chat.muted;
-		_updateAudioBtn(a);
+		_updateAudioBtn();
 		Settings.save(s);
 	});
 	sbtn.off().click(function() {
 		const s = _load();
 		sendOn = s.chat.sendOn = s.chat.sendOn !== SEND_CTRL ? SEND_CTRL : SEND_ENTER;
-		_updateSendBtn(sbtn);
+		_updateSendBtn();
 		Settings.save(s);
 	});
 	$('#chat #hyperlink').parent().find('button').off().click(function() {
@@ -518,7 +521,10 @@ $(function() {
 });
 
 module.exports = {
-	reinit: _reinit
+	SEND_ENTER: SEND_ENTER
+	, SEND_CTRL: SEND_CTRL
+
+	, reinit: _reinit
 	, removeTab: _removeTab
 	, addTab: _addTab
 	, addMessage: _addMessage
@@ -532,6 +538,11 @@ module.exports = {
 	, toggle: _toggle
 	, setRoomMode: _setRoomMode
 	, clean: _clean
+	, reload: () => {
+		_load();
+		_updateAudioBtn();
+		_updateSendBtn();
+	}
 	, validate: function() {
 		return !!editor && editor.text().trim().length > 0;
 	}

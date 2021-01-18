@@ -18,4 +18,5 @@ Object.assign(window, {
 	, Sharer: require('./sharer')
 	, Room: require('./room')
 	, Activities: require('./activities')
+	, UserSettings: require('./user-settings')
 });
