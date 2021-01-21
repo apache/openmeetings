@@ -25,6 +25,8 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.wicket.util.string.Strings;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class TestEmailTemplate extends AbstractWicketTester {
 	private static void checkTemplate(String eml) {
@@ -35,21 +37,32 @@ class TestEmailTemplate extends AbstractWicketTester {
 	void testNullLocale() {
 		User u = new User();
 		u.setLanguageId(666L);
-		checkTemplate(InvitationTemplate.getEmail(u, "testuser", "email", "message"));
+		checkTemplate(InvitationTemplate.getEmail(u, "testuser", "email", "message", true));
+	}
+
+	private static User templateUser() {
+		User u = new User();
+		u.setLanguageId(rnd.nextInt(40));
+		return u;
 	}
 
 	@Test
 	void testTemplateGeneration() {
-		User u = new User();
-		u.setLanguageId(rnd.nextInt(30));
+		User u = templateUser();
 		UserContact uc = new UserContact();
 		uc.setOwner(u);
 		uc.setContact(new User());
 		checkTemplate(FeedbackTemplate.getEmail("testuser", "email", "message"));
-		checkTemplate(InvitationTemplate.getEmail(u, "testuser", "email", "message"));
 		checkTemplate(RegisterUserTemplate.getEmail("testuser", "email", "message"));
 		checkTemplate(RequestContactConfirmTemplate.getEmail(uc));
 		checkTemplate(RequestContactTemplate.getEmail(u, new User()));
 		checkTemplate(ResetPasswordTemplate.getEmail("link"));
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {true, false})
+	void testInvitationTemplateGeneration(boolean room) {
+		User u = templateUser();
+		checkTemplate(InvitationTemplate.getEmail(u, "testuser", "email", "message", room));
 	}
 }

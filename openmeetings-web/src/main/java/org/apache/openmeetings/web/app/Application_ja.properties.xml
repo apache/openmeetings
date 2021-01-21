@@ -192,7 +192,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="500"><![CDATA[{0} - 会議参加依頼]]></entry>
 	<entry key="501"><![CDATA[宛先ユーザー:]]></entry>
 	<entry key="502"><![CDATA[メッセージ:]]></entry>
-	<entry key="503"><![CDATA[会議に参加するには:]]></entry>
 	<entry key="504"><![CDATA[会議室に入室するにはここをクリックしてください。]]></entry>
 	<entry key="505"><![CDATA[リンクが動作しない場合、ブラウザに下記URLをコピー&ペーストしてください。:]]></entry>
 	<entry key="506"><![CDATA[{0} サインアップ]]></entry>
@@ -555,12 +554,12 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.NONE"><![CDATA[無し]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[送信中]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[日]]></entry>
-	<entry key="admin.group.form.hours"><![CDATA[hours]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[制限を有効化]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[ロゴ]]></entry>
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[最大ファイル・サイズ]]></entry>
 	<entry key="admin.group.form.maxRecordingsSize"><![CDATA[最大録画サイズ]]></entry>
 	<entry key="admin.group.form.maxRooms"><![CDATA[最大会議室数]]></entry>
+	<entry key="admin.group.form.minutes"><![CDATA[minutes]]></entry>
 	<entry key="admin.group.form.recordingTtl"><![CDATA[録画有効期限]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[有効期限切れの予告通知]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[タグ]]></entry>
@@ -651,6 +650,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>
 	<entry key="files.root.group"><![CDATA[グループのファイル]]></entry>
 	<entry key="find.user"><![CDATA[ユーザーを検索]]></entry>
+	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
 	<entry key="goto.first"><![CDATA[最初へ]]></entry>
 	<entry key="goto.last"><![CDATA[最後へ]]></entry>
 	<entry key="goto.next"><![CDATA[次へ]]></entry>
@@ -837,6 +837,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="lbl.refresh"><![CDATA[更新]]></entry>
 	<entry key="lbl.settings.whiteboard"><![CDATA[Whiteboard Settings]]></entry>
 	<entry key="lbl.update"><![CDATA[更新]]></entry>
+	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[電子メール管理]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[システムで使用する電子メールのチェックを実行]]></entry>
 	<entry key="menu.polls"><![CDATA[投票]]></entry>
@@ -912,6 +913,8 @@ Please visit {3} OM server and check them under Admin -> Groups]]></entry>
 	<entry key="template.recording.expiring.greetings"><![CDATA[こんにちは、 {0}さん]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[録画自動削除予告]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- ルーム[{0}]]]></entry>
+	<entry key="template.recording.invitation.text"><![CDATA[Click this link to view the conference recording video. [The link may only work for a certain period.]]]></entry>
+	<entry key="template.room.invitation.text"><![CDATA[会議に参加するには:]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[Request permission to use microphone]]></entry>
 	<entry key="ulist.right.audio.revoke"><![CDATA[Mute user and remove the right to turn on microphone]]></entry>

@@ -32,7 +32,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 public class InvitationTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	private InvitationTemplate(Locale locale, String invitorName, String message, String link) {
+	private InvitationTemplate(Locale locale, String invitorName, String message, String link, boolean room) {
 		super(locale);
 
 		add(new Label("titleLbl", getString("500", locale)));
@@ -42,7 +42,9 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 		add(new Label("message", message).setEscapeModelStrings(false));
 
 		add(new WebMarkupContainer("links")
-			.add(new Label("comment_for_link1", getString("503", locale)))
+			.add(new Label("comment_for_link1", getString(
+						room ? "template.room.invitation.text" : "template.recording.invitation.text"
+						, locale)))
 			.add(new ExternalLink("invitation_link1", link).add(new Label("clickMe", getString("504", locale))))
 			.add(new Label("comment_for_link2", getString("505", locale)))
 			.add(new Label("invitation_link2", link))
@@ -50,8 +52,8 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 			);
 	}
 
-	public static String getEmail(User invitee, String invitorName, String message, String link) {
+	public static String getEmail(User invitee, String invitorName, String message, String link, boolean room) {
 		ensureApplication(invitee.getLanguageId());
-		return ComponentRenderer.renderComponent(new InvitationTemplate(LocaleHelper.getLocale(invitee), invitorName, message, link)).toString();
+		return ComponentRenderer.renderComponent(new InvitationTemplate(LocaleHelper.getLocale(invitee), invitorName, message, link, room)).toString();
 	}
 }

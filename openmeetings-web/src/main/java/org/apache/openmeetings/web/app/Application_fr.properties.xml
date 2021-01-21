@@ -192,7 +192,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="500"><![CDATA[{0} - Invitation]]></entry>
 	<entry key="501"><![CDATA[Message de :]]></entry>
 	<entry key="502"><![CDATA[Message :]]></entry>
-	<entry key="503"><![CDATA[Cliquez sur le lien pour participer à la conférence :]]></entry>
 	<entry key="504"><![CDATA[Cliquez pour entrer dans la salle]]></entry>
 	<entry key="505"><![CDATA[Si ce lien ne fonctionne pas, copier/coller-le dans votre navigateur.]]></entry>
 	<entry key="506"><![CDATA[Inscription {0}]]></entry>
@@ -556,12 +555,12 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.NONE"><![CDATA[Aucun]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[Envoi]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[jours]]></entry>
-	<entry key="admin.group.form.hours"><![CDATA[heures]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[LImites activées.]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[Logo]]></entry>
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[Taille maximum des fichiers]]></entry>
 	<entry key="admin.group.form.maxRecordingsSize"><![CDATA[Taille maximal d'enregistrement]]></entry>
 	<entry key="admin.group.form.maxRooms"><![CDATA[Nombre maximal de salle.]]></entry>
+	<entry key="admin.group.form.minutes"><![CDATA[minutes]]></entry>
 	<entry key="admin.group.form.recordingTtl"><![CDATA[Les enregistrements expirent dans]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[Rappel d'expiration envoyé]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[Étiquette]]></entry>
@@ -652,6 +651,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>
 	<entry key="files.root.group"><![CDATA[Groupe de fichier]]></entry>
 	<entry key="find.user"><![CDATA[Trouver un utilisateur]]></entry>
+	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
 	<entry key="goto.first"><![CDATA[Retour au début]]></entry>
 	<entry key="goto.last"><![CDATA[Aller au dernier]]></entry>
 	<entry key="goto.next"><![CDATA[Suivant]]></entry>
@@ -826,7 +826,7 @@ allez sur <tt>openmeetings.log</tt> et contactez les développeurs d'OpenMeeting
 	<entry key="invalid.hash"><![CDATA[Hachage invalide.]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Cliquer sur le panneau]]></entry>
 	<entry key="label.end"><![CDATA[Fin]]></entry>
-	<entry key="label.hangup"><![CDATA[Hang-up]]></entry>
+	<entry key="label.hangup"><![CDATA[Raccrocher]]></entry>
 	<entry key="label.start"><![CDATA[Début]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Cliquez pour détacher le panneau]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Annuler]]></entry>
@@ -838,6 +838,7 @@ allez sur <tt>openmeetings.log</tt> et contactez les développeurs d'OpenMeeting
 	<entry key="lbl.refresh"><![CDATA[Rafraichir]]></entry>
 	<entry key="lbl.settings.whiteboard"><![CDATA[Configuration du tableau blanc]]></entry>
 	<entry key="lbl.update"><![CDATA[Mise à jour]]></entry>
+	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Gestion courriels]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Verifier courriels traités par le système]]></entry>
 	<entry key="menu.polls"><![CDATA[Sondages]]></entry>
@@ -914,6 +915,8 @@ dans {1} jours. Si vous souhaitez sauvegarder cet enregistrement, veuillez le t�
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[L'enregistrement sera supprimé.]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[
 -- Chambre[{0}]]]></entry>
+	<entry key="template.recording.invitation.text"><![CDATA[Click this link to view the conference recording video. [The link may only work for a certain period.]]]></entry>
+	<entry key="template.room.invitation.text"><![CDATA[Cliquez sur le lien pour participer à la conférence :]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Autorise cet utilisateur a utiliser le micro]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[Demander l'autorisation pour utiliser son microphone.]]></entry>
 	<entry key="ulist.right.audio.revoke"><![CDATA[Rendre muet l'utilisateur et retirer les permissions d'allumer le micro]]></entry>

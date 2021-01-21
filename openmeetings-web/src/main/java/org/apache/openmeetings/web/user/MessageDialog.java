@@ -188,7 +188,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 								invitationLink = "";
 							} else {
 								invitationLink = "<br/>" //
-										+ Application.getString("503", to.getLanguageId())
+										+ Application.getString("template.room.invitation.text", to.getLanguageId())
 										+ "<br/><a href='" + invitationLink
 										+ "'>"
 										+ Application.getString("504", to.getLanguageId()) + "</a><br/>";

@@ -192,7 +192,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="500"><![CDATA[دعوت {0}]]></entry>
 	<entry key="501"><![CDATA[پیام از کاربر:]]></entry>
 	<entry key="502"><![CDATA[پیام:]]></entry>
-	<entry key="503"><![CDATA[با کلیک بر روی لینک زیر در کنفرانس شرکت کنید]]></entry>
 	<entry key="504"><![CDATA[كنيد كليك را اينجا اطاق به ورود براي]]></entry>
 	<entry key="505"><![CDATA[اگر با مسیر ارتباطی مشکلی دارید لطفا لینک را کپی کرده و آنرا در مرورگر خود اجرا کنید:]]></entry>
 	<entry key="506"><![CDATA[جزییات حساب کاربری {0}]]></entry>
@@ -451,7 +450,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1430"><![CDATA[تغییر اثرات وضوح، پهنای باند، تصاویر بزرگتر احتیاج به پهنای باند بیشتر دارد!]]></entry>
 	<entry key="1443"><![CDATA[گزینه های طرح]]></entry>
 	<entry key="1444"><![CDATA[رویداد جدید]]></entry>
-	<entry key="1445"><![CDATA[لینک های کنفرانس ارسال شده به کاربران که تقویم را ذخیره کرده اندرمز حفاظت شده دارد.اگررویداد را چند بار با رمز متفاوت ذخیره کنید هر شرکت کننده یک لینک جدید که رمز متفاوت دارد دریافت می کند.اما لینک های قدیمی هنوز با یک بارارسال کار می کنند.]]></entry>
+	<entry key="1445"><![CDATA[محافظت شده با رمز عبور پیوندهایی به کنفرانس است که هنگام ذخیره رویداد تقویم برای شرکت کنندگان ارسال می شود نه اتاق! این بدان معناست که اگر رویداد را چندین بار ذخیره کنید اما با گذرواژه های مختلف ، هر یک از شرکت کنندگان پیوند جدیدی دریافت می کند که رمز عبور متفاوتی دارد. اما پیوندهای قدیمی پس از ارسال ، هنوز کار می کنند!]]></entry>
 	<entry key="1447"><![CDATA[نمایش شماره گیر SIP]]></entry>
 	<entry key="1448"><![CDATA[تماس]]></entry>
 	<entry key="1450"><![CDATA[صفحه خانگی شما!]]></entry>
@@ -555,12 +554,12 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.NONE"><![CDATA[هیچ کدام]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[ارسال]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[روزها]]></entry>
-	<entry key="admin.group.form.hours"><![CDATA[hours]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[فعال کردن محدودیت ها]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[لوگو]]></entry>
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[سایز فایل ماکزیمم]]></entry>
 	<entry key="admin.group.form.maxRecordingsSize"><![CDATA[بزرگترین سایز ضبط]]></entry>
 	<entry key="admin.group.form.maxRooms"><![CDATA[شماره اتاق ماکزیمم]]></entry>
+	<entry key="admin.group.form.minutes"><![CDATA[minutes]]></entry>
 	<entry key="admin.group.form.recordingTtl"><![CDATA[ضبط ها انقضا می شوند در]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[یادآوری کننده انقضا ارسال شد در]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[ضمیمه]]></entry>
@@ -651,6 +650,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>
 	<entry key="files.root.group"><![CDATA[فایل های گروهی]]></entry>
 	<entry key="find.user"><![CDATA[پیداکردن کاربر]]></entry>
+	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
 	<entry key="goto.first"><![CDATA[بازگشت به اولین]]></entry>
 	<entry key="goto.last"><![CDATA[رفتن به آخر]]></entry>
 	<entry key="goto.next"><![CDATA[رفتن به بعدی]]></entry>
@@ -821,7 +821,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="invalid.hash"><![CDATA[هش نا معتبر]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
 	<entry key="label.end"><![CDATA[پایان]]></entry>
-	<entry key="label.hangup"><![CDATA[Hang-up]]></entry>
+	<entry key="label.hangup"><![CDATA[او به یک مکالمه تلفنی پایان داد]]></entry>
 	<entry key="label.start"><![CDATA[شروع]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[انصراف]]></entry>
@@ -833,6 +833,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="lbl.refresh"><![CDATA[باز بینی]]></entry>
 	<entry key="lbl.settings.whiteboard"><![CDATA[Whiteboard Settings]]></entry>
 	<entry key="lbl.update"><![CDATA[Update]]></entry>
+	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[مدیریت پست الکترونیک]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[اجرای ایمیل ها را توسط سیستم بررسی کنید]]></entry>
 	<entry key="menu.polls"><![CDATA[نظرسنجی ها]]></entry>
@@ -906,6 +907,8 @@ Please visit {3} OM server and check them under Admin -> Groups]]></entry>
 	<entry key="template.recording.expiring.greetings"><![CDATA[عزیز]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[ضبط حذف خواهد شد]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[اتاق {0}]]></entry>
+	<entry key="template.recording.invitation.text"><![CDATA[Click this link to view the conference recording video. [The link may only work for a certain period.]]]></entry>
+	<entry key="template.room.invitation.text"><![CDATA[با کلیک بر روی لینک زیر در کنفرانس شرکت کنید]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[Request permission to use microphone]]></entry>
 	<entry key="ulist.right.audio.revoke"><![CDATA[Mute user and remove the right to turn on microphone]]></entry>

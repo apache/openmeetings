@@ -192,7 +192,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="500"><![CDATA[{0}: Приглашение]]></entry>
 	<entry key="501"><![CDATA[Сообщение от участника:]]></entry>
 	<entry key="502"><![CDATA[Текст сообщения:]]></entry>
-	<entry key="503"><![CDATA[Для того, чтобы принять участие в совещании, нажмите на следую ссылку:]]></entry>
 	<entry key="504"><![CDATA[Нажмите здесь для того, чтобы войти в комнату совещаний]]></entry>
 	<entry key="505"><![CDATA[Если не удаётся перейти по ссылке, скопируйте этот URL в браузер:]]></entry>
 	<entry key="506"><![CDATA[{0} регистрация]]></entry>
@@ -555,12 +554,12 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.NONE"><![CDATA[Нет]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[Посылается]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[дней]]></entry>
-	<entry key="admin.group.form.hours"><![CDATA[hours]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[Разрешить ограничения]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[Лого]]></entry>
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[Максимальный размер файлов]]></entry>
 	<entry key="admin.group.form.maxRecordingsSize"><![CDATA[Максимальный размер записей]]></entry>
 	<entry key="admin.group.form.maxRooms"><![CDATA[Максимальное количество комнат]]></entry>
+	<entry key="admin.group.form.minutes"><![CDATA[минуты]]></entry>
 	<entry key="admin.group.form.recordingTtl"><![CDATA[Записи стираются через]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[Напоминание о стирании посылается за]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[Тэг]]></entry>
@@ -651,6 +650,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>
 	<entry key="files.root.group"><![CDATA[Файлы группы]]></entry>
 	<entry key="find.user"><![CDATA[Найти пользователя]]></entry>
+	<entry key="fixed.video.pod.size"><![CDATA[Фиксированный размер "окошка"]]></entry>
 	<entry key="goto.first"><![CDATA[к первому]]></entry>
 	<entry key="goto.last"><![CDATA[к последнему]]></entry>
 	<entry key="goto.next"><![CDATA[к следующему]]></entry>
@@ -837,6 +837,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="lbl.refresh"><![CDATA[обновить]]></entry>
 	<entry key="lbl.settings.whiteboard"><![CDATA[Настройки доски]]></entry>
 	<entry key="lbl.update"><![CDATA[Изменить]]></entry>
+	<entry key="lbl.video"><![CDATA[Видео]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Управление письмами]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Проверка статуса отосланных писем]]></entry>
 	<entry key="menu.polls"><![CDATA[Голосования]]></entry>
@@ -912,6 +913,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="template.recording.expiring.greetings"><![CDATA[Дорогой(ая) {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[Запись будет удалена]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- Комната[{0}]]]></entry>
+	<entry key="template.recording.invitation.text"><![CDATA[Перейдите по ссылке чтобы просмотреть запись встречи. [Ссылка может быть доступна только в определённое время]]]></entry>
+	<entry key="template.room.invitation.text"><![CDATA[Перейдите по ссылке, чтобы принять участие в совещании. [Ссылка может быть доступна только в определённое время]]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Разрешить этому пользователю использовать микрофон]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[Запросить право использовать микрофон]]></entry>
 	<entry key="ulist.right.audio.revoke"><![CDATA[Выключить микрофон и запретить его использовать]]></entry>

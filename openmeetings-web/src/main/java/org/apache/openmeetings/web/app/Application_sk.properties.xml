@@ -192,7 +192,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="500"><![CDATA[{0} - Pozvanie]]></entry>
 	<entry key="501"><![CDATA[Správa od:]]></entry>
 	<entry key="502"><![CDATA[Správa:]]></entry>
-	<entry key="503"><![CDATA[Pre participáciu v tejto miestnosti kliknite na tento link:]]></entry>
 	<entry key="504"><![CDATA[Kliknite sem pre vstup do miestnosti:]]></entry>
 	<entry key="505"><![CDATA[Ak máte problém s odkazom, skopírujte ho do vášho prehliadača:]]></entry>
 	<entry key="506"><![CDATA[{0} prihláseniep]]></entry>
@@ -555,12 +554,12 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.NONE"><![CDATA[None]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[Sending]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[days]]></entry>
-	<entry key="admin.group.form.hours"><![CDATA[hours]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[Limits enabled]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[Logo]]></entry>
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[Maximum files size]]></entry>
 	<entry key="admin.group.form.maxRecordingsSize"><![CDATA[Maximum recordings size]]></entry>
 	<entry key="admin.group.form.maxRooms"><![CDATA[Maximum room number]]></entry>
+	<entry key="admin.group.form.minutes"><![CDATA[minutes]]></entry>
 	<entry key="admin.group.form.recordingTtl"><![CDATA[Recordings expire in]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[Expire reminder sent in]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[Tag]]></entry>
@@ -651,6 +650,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>
 	<entry key="files.root.group"><![CDATA[Group files]]></entry>
 	<entry key="find.user"><![CDATA[Find user]]></entry>
+	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
 	<entry key="goto.first"><![CDATA[prvý]]></entry>
 	<entry key="goto.last"><![CDATA[posledný]]></entry>
 	<entry key="goto.next"><![CDATA[ďalší]]></entry>
@@ -836,6 +836,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="lbl.refresh"><![CDATA[Obnoviť]]></entry>
 	<entry key="lbl.settings.whiteboard"><![CDATA[Whiteboard Settings]]></entry>
 	<entry key="lbl.update"><![CDATA[Update]]></entry>
+	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
 	<entry key="menu.polls"><![CDATA[Polls]]></entry>
@@ -911,6 +912,8 @@ Please visit {3} OM server and check them under Admin -> Groups]]></entry>
 	<entry key="template.recording.expiring.greetings"><![CDATA[Hello {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[Recording will be deleted]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- Room[{0}]]]></entry>
+	<entry key="template.recording.invitation.text"><![CDATA[Click this link to view the conference recording video. [The link may only work for a certain period.]]]></entry>
+	<entry key="template.room.invitation.text"><![CDATA[Pre participáciu v tejto miestnosti kliknite na tento link:]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[Request permission to use microphone]]></entry>
 	<entry key="ulist.right.audio.revoke"><![CDATA[Mute user and remove the right to turn on microphone]]></entry>

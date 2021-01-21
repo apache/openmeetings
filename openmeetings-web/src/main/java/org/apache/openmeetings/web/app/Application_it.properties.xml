@@ -192,7 +192,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="500"><![CDATA[{0} - Inviti]]></entry>
 	<entry key="501"><![CDATA[Messaggio dall'utente:]]></entry>
 	<entry key="502"><![CDATA[Messaggio:]]></entry>
-	<entry key="503"><![CDATA[Clicca questo link per partecipare alla conferenza [Il collegamento potrebbe funzionare solo per un certo periodo di tempo.]]]></entry>
 	<entry key="504"><![CDATA[Clicca qui per entrare nella stanza]]></entry>
 	<entry key="505"><![CDATA[Se hai problemi con il collegamento, per favore copia e incolla questo sul browser:]]></entry>
 	<entry key="506"><![CDATA[{0} SignUp]]></entry>
@@ -555,12 +554,12 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.NONE"><![CDATA[Nessuno]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[Spedizione]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[giorni]]></entry>
-	<entry key="admin.group.form.hours"><![CDATA[hours]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[Limits enabled]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[Logo]]></entry>
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[Maximum files size]]></entry>
 	<entry key="admin.group.form.maxRecordingsSize"><![CDATA[Massima dimensione della registrazione]]></entry>
 	<entry key="admin.group.form.maxRooms"><![CDATA[Massimo numero di stanze]]></entry>
+	<entry key="admin.group.form.minutes"><![CDATA[minutes]]></entry>
 	<entry key="admin.group.form.recordingTtl"><![CDATA[Recordings expire in]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[Expire reminder sent in]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[Tag]]></entry>
@@ -651,6 +650,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>
 	<entry key="files.root.group"><![CDATA[Group files]]></entry>
 	<entry key="find.user"><![CDATA[Find user]]></entry>
+	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
 	<entry key="goto.first"><![CDATA[Vai al primo]]></entry>
 	<entry key="goto.last"><![CDATA[Vai all'ultimo]]></entry>
 	<entry key="goto.next"><![CDATA[Vai al prossimo]]></entry>
@@ -838,6 +838,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="lbl.refresh"><![CDATA[Aggiorna]]></entry>
 	<entry key="lbl.settings.whiteboard"><![CDATA[Impostazioni Lavagna]]></entry>
 	<entry key="lbl.update"><![CDATA[Update]]></entry>
+	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Gestione Email]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Verifica elaborazione e-mails del sistema]]></entry>
 	<entry key="menu.polls"><![CDATA[Sondaggi]]></entry>
@@ -913,6 +914,8 @@ Please visit {3} OM server and check them under Admin -> Groups]]></entry>
 	<entry key="template.recording.expiring.greetings"><![CDATA[Hello {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[La registrazione sarà eliminata]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- Room[{0}]]]></entry>
+	<entry key="template.recording.invitation.text"><![CDATA[Click this link to view the conference recording video. [The link may only work for a certain period.]]]></entry>
+	<entry key="template.room.invitation.text"><![CDATA[Clicca questo link per partecipare alla conferenza [Il collegamento potrebbe funzionare solo per un certo periodo di tempo.]]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Consenti a questo utente di utilizzare il microfono]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[Richiedi il permesso di utilizzare il microfono]]></entry>
 	<entry key="ulist.right.audio.revoke"><![CDATA[Mute user and remove the right to turn on microphone]]></entry>
