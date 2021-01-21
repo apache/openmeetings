@@ -6,7 +6,7 @@ const QuickPoll = require('./quick-poll');
 let options;
 
 function __activityAVIcon(elem, selector, predicate, onfunc, disabledfunc) {
-	let icon = elem.find(selector);
+	const icon = elem.find(selector);
 	if (predicate()) {
 		icon.show();
 		const on = onfunc()
@@ -25,6 +25,7 @@ function __activityAVIcon(elem, selector, predicate, onfunc, disabledfunc) {
 	} else {
 		icon.hide();
 	}
+	return icon;
 }
 function __activityIcon(elem, selector, predicate, action, confirm) {
 	let icon = elem.find(selector);
@@ -189,14 +190,26 @@ function _updateClient(c) {
 		QuickPoll.setRights();
 		options.activities = c.activities;
 		const header = $('#room-sidebar-tab-users .header');
+		header.find('.om-icon.settings').off().click(VideoSettings.open);
 		__rightVideoIcon(c, header);
-		__activityAVIcon(header, '.activity.cam', () => !options.audioOnly && UserListUtil.hasRight('VIDEO')
-			, () => hasVideo
-			, () => Settings.load().video.cam < 0);
+		__activityAVIcon(
+				header
+				, '.activity.cam'
+				, () => !options.audioOnly && UserListUtil.hasRight('VIDEO')
+				, () => hasVideo
+				, () => Settings.load().video.cam < 0)
+			.off().click(function() {
+				VideoManager.toggleActivity('VIDEO');
+			});;
 		__rightAudioIcon(c, header);
-		__activityAVIcon(header, '.activity.mic', () => UserListUtil.hasRight('AUDIO')
-			, () => hasAudio
-			, () => Settings.load().video.mic < 0);
+		__activityAVIcon(
+				header
+				, '.activity.mic', () => UserListUtil.hasRight('AUDIO')
+				, () => hasAudio
+				, () => Settings.load().video.mic < 0)
+			.off().click(function() {
+				VideoManager.toggleActivity('AUDIO');
+			});
 		__rightOtherIcons(c, header);
 	}
 	VideoManager.update(c)

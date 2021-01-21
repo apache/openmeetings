@@ -267,7 +267,25 @@ module.exports = class Video {
 		function _initContainer(_id, name, opts, instanceUid) {
 			let contSel = '#user' + sd.cuid;
 			const _hasVideo = VideoUtil.hasVideo(sd)
-			size = {width: _hasVideo ? sd.width : 120, height: _hasVideo ? sd.height : 90};
+			if (_hasVideo) {
+				const s = VideoSettings.load();
+				if (s.fixed.enabled) {
+					size = {
+						width: s.fixed.width
+						, height: s.fixed.height
+					};
+				} else {
+					size = {
+						width: sd.width
+						, height: sd.height
+					};
+				}
+			} else {
+				size = {
+					width: 120
+					, height: 90
+				};
+			}
 			hasVideo = _hasVideo || $(contSel).length < 1;
 			if (hasVideo) {
 				if (opts.interview) {
@@ -380,7 +398,7 @@ module.exports = class Video {
 			const _id = VideoUtil.getVid(sd.uid);
 			_resizeDlgArea(size.width, size.height);
 			if (hasVideo && !isSharing && !isRecording) {
-				VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VIDWIN_SEL), sd.width, sd.height + 25));
+				VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VIDWIN_SEL, _id), sd.width, sd.height + 25));
 			}
 			state.video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 				.attr('playsinline', 'playsinline')

@@ -37,6 +37,46 @@
 		<div wicket:id="nickname" class="room-nickname-dialog"></div>
 		<div wicket:id="client-kicked"></div>
 		<div wicket:id="wait-moderator" class="wait-moder"></div>
+		<div id="room-local-settings" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true">
+			<div class="modal-dialog modal-sm" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title"><wicket:message key="edit.settings"/></h5>
+						<button type="button" class="close" data-dismiss="modal" wicket:message="aria-label:85">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<h5><wicket:message key="video.muteothers"/></h5>
+						<div class="row justify-content-end">
+							<div class="custom-control custom-checkbox col-10">
+								<input type="checkbox" class="custom-control-input" id="muteOthersAsk">
+								<label class="custom-control-label" for="muteOthersAsk"><wicket:message key="dont.ask.again"/></label>
+							</div>
+						</div>
+						<h5 class="mt-2"><wicket:message key="244"/></h5>
+						<div class="row justify-content-end">
+							<div class="custom-control custom-checkbox col-10">
+								<input type="checkbox" class="custom-control-input" id="chatNotify">
+								<label class="custom-control-label" for="chatNotify"><wicket:message key="sound.enable"/></label>
+							</div>
+							<div class="custom-control custom-checkbox col-10">
+								<input type="checkbox" class="custom-control-input" id="sendOnCtrlEnter">
+								<label class="custom-control-label" for="sendOnCtrlEnter"><wicket:message key="send.on.ctrl.enter"/></label>
+							</div>
+						</div>
+						<h5 class="mt-2">Video</h5> <!-- FIXME TODO localize -->
+						<div class="row justify-content-end">
+							<div class="custom-control custom-checkbox col-10">
+								<input type="checkbox" class="custom-control-input" id="fixedVideoPod">
+								<label class="custom-control-label" for="fixedVideoPod">Fixed video pod size</label>
+							</div>
+							<div id="video-sizes-container" class="col-10"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	<div id="disconnected-dlg" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true">
 		<div class="modal-dialog modal-sm" role="document">
@@ -54,46 +94,6 @@
 					<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
 						<i class="fas fa-sync-alt"></i>&nbsp;<wicket:message key="753"/>
 					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div id="room-local-settings" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true">
-		<div class="modal-dialog modal-sm" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title"><wicket:message key="edit.settings"/></h5>
-					<button type="button" class="close" data-dismiss="modal" wicket:message="aria-label:85">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<h5><wicket:message key="video.muteothers"/></h5>
-					<div class="row justify-content-end">
-						<div class="custom-control custom-checkbox col-10">
-							<input type="checkbox" class="custom-control-input" id="muteOthersAsk">
-							<label class="custom-control-label" for="muteOthersAsk"><wicket:message key="dont.ask.again"/></label>
-						</div>
-					</div>
-					<h5 class="mt-2"><wicket:message key="244"/></h5>
-					<div class="row justify-content-end">
-						<div class="custom-control custom-checkbox col-10">
-							<input type="checkbox" class="custom-control-input" id="chatNotify">
-							<label class="custom-control-label" for="chatNotify"><wicket:message key="sound.enable"/></label>
-						</div>
-						<div class="custom-control custom-checkbox col-10">
-							<input type="checkbox" class="custom-control-input" id="sendOnCtrlEnter">
-							<label class="custom-control-label" for="sendOnCtrlEnter"><wicket:message key="send.on.ctrl.enter"/></label>
-						</div>
-					</div>
-					<h5 class="mt-2">Video</h5> <!-- FIXME TODO localize -->
-					<div class="row justify-content-end">
-						<div class="custom-control custom-checkbox col-10">
-							<input type="checkbox" class="custom-control-input" id="fixedVideoPod">
-							<label class="custom-control-label" for="fixedVideoPod">Fixed video pod size</label>
-						</div>
-						<div id="video-sizes-container col-10"></div>
-					</div>
 				</div>
 			</div>
 		</div>

@@ -160,7 +160,14 @@ function _arrange() {
 	});
 }
 function _arrangeResize() {
-	const list = [];
+	const list = []
+		, s = VideoSettings.load()
+		, size = {width: 120, height: 90};
+	if (s.fixed.enabled) {
+		size.width = s.fixed.width;
+		size.height = s.fixed.height;
+	}
+
 	function __getDialog(_v) {
 		return $(_v).find('.video-container.ui-dialog-content');
 	}
@@ -171,8 +178,8 @@ function _arrangeResize() {
 	}).forEach(_v => {
 		const v = $(_v);
 		__getDialog(v)
-			.dialog('option', 'width', 120)
-			.dialog('option', 'height', 90);
+			.dialog('option', 'width', size.width)
+			.dialog('option', 'height', size.height);
 		v.css(_getPos(list, v.width(), v.height(), __processEqualsBottomToTop));
 		list.push(_getRect(v));
 	});

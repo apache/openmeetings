@@ -3,11 +3,13 @@ const MicLevel = require('./mic-level');
 const VideoUtil = require('./video-util');
 const kurentoUtils = require('kurento-utils');
 
-const DEV_AUDIO = 'audioinput', DEV_VIDEO = 'videoinput';
+const DEV_AUDIO = 'audioinput'
+	, DEV_VIDEO = 'videoinput'
+	, MsgBase = {type: 'kurento', mode: 'test'};
 let vs, lm, s, cam, mic, res, o, rtcPeer, timer
 	, vidScroll, vid, recBtn, playBtn, recAllowed = false
 	, level;
-const MsgBase = {type: 'kurento', mode: 'test'};
+
 function _load() {
 	s = Settings.load();
 	if (!s.video) {
@@ -17,6 +19,13 @@ function _load() {
 			, mic: 0
 			, width: _res.width
 			, height: _res.height
+		};
+	}
+	if (!s.fixed) {
+		s.fixed = {
+			enabled: false
+			, width: 120
+			, height: 90
 		};
 	}
 	return s;

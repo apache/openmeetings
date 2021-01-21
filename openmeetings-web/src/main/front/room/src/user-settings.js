@@ -30,25 +30,32 @@ function __initChat() {
 		});
 }
 function __initVideo() {
-	let s = VideoSettings.load()
-		, resolutions = $('#video-settings .cam-resolution').clone();
-	if (typeof(s.fixed) === 'undefined') {
-		s.fixed = {
-			enabled: false
-			, width: 120
-			, height: 90
-		};
-		VideoSettings.save()
-	}
-	$('#video-sizes-container').html('')
-		.append(resolutions);
-	$('#sendOnCtrlEnter')
+	const resolutions = $('#video-settings .cam-resolution').clone();
+	let s = VideoSettings.load();
+	resolutions
+		.change(function() {
+			const o = resolutions.find('option:selected').data();
+			s.fixed.width = o.width;
+			s.fixed.height = o.height;
+			VideoSettings.save();
+		})
+		.find('option').each(function() {
+			const o = $(this).data();
+			if (o.width === s.fixed.width && o.height === s.fixed.height) {
+				$(this).prop('selected', true);
+				return false;
+			}
+		});
+	$('#video-sizes-container')
+		.html('')
+		.append(resolutions.prop('disabled', !s.fixed.enabled));
+	$('#fixedVideoPod')
 		.prop('checked', s.fixed.enabled)
 		.off().click(function() {
-			s = Settings.load();
-			s.chat.sendOn = $('#sendOnCtrlEnter').prop('checked') ? Chat.SEND_CTRL : Chat.SEND_ENTER;
-			Settings.save(s);
-			Chat.reload();
+			s = VideoSettings.load();
+			s.fixed.enabled = $('#fixedVideoPod').prop('checked');
+			resolutions.prop('disabled', !s.fixed.enabled)
+			VideoSettings.save();
 		});
 }
 function _open() {
