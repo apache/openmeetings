@@ -559,7 +559,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[الحجم الأقصى للملفات]]></entry>
 	<entry key="admin.group.form.maxRecordingsSize"><![CDATA[الحجم الأقصى للتسجيلات]]></entry>
 	<entry key="admin.group.form.maxRooms"><![CDATA[الحد الأقصى لرقم الغرفة]]></entry>
-	<entry key="admin.group.form.minutes"><![CDATA[minutes]]></entry>
+	<entry key="admin.group.form.minutes"><![CDATA[دقائق]]></entry>
 	<entry key="admin.group.form.recordingTtl"><![CDATA[التسجيلات تنتهي في]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[تم إرسال تذكير انتهاء الصلاحية]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[وسم]]></entry>
@@ -650,7 +650,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>
 	<entry key="files.root.group"><![CDATA[ملفات المجموعة]]></entry>
 	<entry key="find.user"><![CDATA[البحث عن مستخدم]]></entry>
-	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
+	<entry key="fixed.video.pod.size"><![CDATA[حجم اطار الفيديو الثابت]]></entry>
 	<entry key="goto.first"><![CDATA[القفز إلى الأول]]></entry>
 	<entry key="goto.last"><![CDATA[القفز إلى الأخير]]></entry>
 	<entry key="goto.next"><![CDATA[القفز إلى التالي]]></entry>
@@ -836,7 +836,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="lbl.refresh"><![CDATA[تحديث]]></entry>
 	<entry key="lbl.settings.whiteboard"><![CDATA[إعدادات السبورة]]></entry>
 	<entry key="lbl.update"><![CDATA[تحديث]]></entry>
-	<entry key="lbl.video"><![CDATA[Video]]></entry>
+	<entry key="lbl.video"><![CDATA[فيديو]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[إدارة البريد الإلكتروني]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[تحقق من معالجة رسائل البريد الإلكتروني بواسطة النظام]]></entry>
 	<entry key="menu.polls"><![CDATA[استطلاعات الرأي]]></entry>
@@ -912,7 +912,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="template.recording.expiring.greetings"><![CDATA[مرحباً {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[سيتم حذف التسجيل]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[- غرفة [{0}]]]></entry>
-	<entry key="template.recording.invitation.text"><![CDATA[Click this link to view the conference recording video. [The link may only work for a certain period.]]]></entry>
+	<entry key="template.recording.invitation.text"><![CDATA[انقر فوق هذا الرابط  لعرض فيديو تسجيل المؤتمر. [الرابط قد يعمل فقط لفترة معينة.]]]></entry>
 	<entry key="template.room.invitation.text"><![CDATA[انقر فوق هذا الرابط للمشاركة في المؤتمر [قد يعمل الرابط فقط لفترة معينة.]:]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[السماح لهذا المستخدم باستخدام الميكروفون]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[طلب إذن لاستخدام الميكروفون]]></entry>
