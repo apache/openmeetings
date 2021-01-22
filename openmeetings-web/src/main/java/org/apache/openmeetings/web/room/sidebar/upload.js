@@ -105,7 +105,7 @@ var Upload = (function() {
 			fi.eventAdded = true;
 		}
 	}
-	
+
 	return {
 		bindUpload: _bindUpload
 	};

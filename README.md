@@ -1,6 +1,6 @@
 ![About Openmeetings Logo](/openmeetings-server/src/site/resources/images/logo.png)
 
-[Apache OpenMeetings](https://openmeetings.apache.org) provides: 
+[Apache OpenMeetings](https://openmeetings.apache.org) provides:
  - [x] **video conferencing**
  - [x] **instant messaging**
  - [x] **white board**
@@ -51,7 +51,7 @@ Builds and CI
 | Master nightly | [![Build Status](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings//badge/icon)](https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings/) |
 | Master Pull Request | [![Build Status](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings-pr-build/badge/icon)](https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings-pr-build/) |
 
-Release Notes 
+Release Notes
 =============
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log

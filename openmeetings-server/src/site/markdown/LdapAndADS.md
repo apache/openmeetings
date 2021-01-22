@@ -1,4 +1,4 @@
-<!-- 
+<!--
 Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
 
@@ -49,55 +49,55 @@ To configure access to an LDAP Server, three things are needed:
     ldap_conn_host=10.8.0.10
     ldap_conn_port=389
     ldap_conn_secure=false
-    
-    # The following lines specify the data of the ldap user with 
+
+    # The following lines specify the data of the ldap user with
     # read privileges to the user entries according to the LDAP DB.
     ldap_admin_dn=cn=openmeetings,ou=system-users,dc=mydomain,dc=org
     ldap_passwd=12345
-    
-    # The following line specifies where to search for users wanting to login 
+
+    # The following line specifies where to search for users wanting to login
     ldap_search_base=ou=users,dc=mydomain,dc=org
-    
-    # The attribute in the LDAP DB which will be matched against the 
+
+    # The attribute in the LDAP DB which will be matched against the
     # given login data ("Username or mail address" field) in OpenMeetings:
     ldap_search_query=(uid=%s)
-    
+
     # the scope of the search might be: OBJECT, ONELEVEL, SUBTREE
     ldap_search_scope=ONELEVEL
-    
+
     # Ldap auth type(NONE, SEARCHANDBIND, SIMPLEBIND)
     #  When using SIMPLEBIND a simple bind is performed on the LDAP server to check user authentication
     #  When using NONE, the Ldap server is not used for authentication
     ldap_auth_type=SIMPLEBIND
-    
+
     # userDN format, will be used to bind if ldap_auth_type=SIMPLEBIND
     # might be used to get provisionningDn in case ldap_auth_type=NONE
     ldap_userdn_format=uid=%s,ou=users,dc=mydomain,dc=org
-    
+
     # Ldap provisioning type(NONE, AUTOCREATE, AUTOUPDATE)
     ldap_provisioning=AUTOCREATE
-    
+
     # Ldap deref mode (never, searching, finding, always)
     ldap_deref_mode=always
-    
+
     #  Set this to 'true' if you want to use admin_dn to get user attributes
     #  If any other value is set, user_dn will be used
     ldap_use_admin_to_get_attrs=true
-    
+
     # Ldap-password synchronization to OM DB
     #  Set this to 'true' if you want OM to synchronize the user Ldap-password to OM's internal DB
     #  If you want to disable the feature, set this to any other string.
     #  Defautl value is 'true'
     ldap_sync_password_to_om=true
-    
+
     # Ldap group mode (NONE, ATTRIBUTE, QUERY)
     # NONE means group associations will be ignored
     # ATTRIBUTE means group associations will be taken from 'ldap_group_attr' attribute (M$ AD mode)
     # QUERY means group associations will be taken as a result of 'ldap_group_query' query
     ldap_group_mode=NONE
-    
+
     ldap_group_query=(&(memberUid=%s)(objectClass=posixGroup))
-    
+
     # Ldap user attributes mapping
     # Set the following internal OM user attributes to their corresponding Ldap-attribute
     ldap_user_attr_login=uid
@@ -114,18 +114,18 @@ To configure access to an LDAP Server, three things are needed:
     # optional attribute for user picture
     #ldap_user_attr_picture=
     ldap_group_attr=memberOf
-    
+
     # optional, absolute URL will be used as user picture if #ldap_user_attr_picture will be empty
     #ldap_user_picture_uri=picture_uri
-    
+
     # Ldap ignore upper/lower case, convert all input to lower case
     ldap_use_lower_case=false
-    
+
     # Ldap import query, this query should retrieve all LDAP users
     ldap_import_query=(objectClass=inetOrgPerson)
-    
-    ``` 
-    
+
+    ```
+
     NOTE: Directory Servers are individual for every organization, and
     might use different attribute names than the ones listed in the
     example config. Please obtain the information about the structure
@@ -183,24 +183,24 @@ database can get imported into OpenMeetings internal table of users
 using the command line tool "admin.sh":
 
 -   First test with:
-    
+
     `$OM_HOME/admin.sh -l -d1 --print-only`
-    
+
     The argument of the `-d` ("domain-id") flag indicates the ID number
     of the LDAP DB in the LDAP table on the left pane in OpenMeeting's
     Administration->LDAP configuration. If only one LDAP DB is
     configured there the ID most probably is 1.
-    
+
     `--print-only` indicates that the entries shouldn't actually get
     imported, but rather printed out on the terminal.
-    
+
     If everything works as expected, a lot of printout should happen
     on the terminal with the user entries of the LDAP DB appearing
     last.
 
 -   In that case the entries can actually get imported into
     OpenMeetings by omitting `--print-only`:
-    
+
     `$OM_HOME/admin.sh -l -d1`
 
 After import they can be found in the OpenMeeting website at

@@ -15,7 +15,7 @@
 	text-overflow: ellipsis;
 	max-width: 25px;
 	overflow: hidden;
-	display: inline-block; 
+	display: inline-block;
 }
 .adminPanelColumnTable {
 	display: inline-block;

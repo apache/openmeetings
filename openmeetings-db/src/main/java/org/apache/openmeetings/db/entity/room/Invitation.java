@@ -97,7 +97,7 @@ public class Invitation extends HistoricalEntity {
 	private Recording recording;
 
 	// the hash for the link
-	@Column(name = "hash", unique = true)
+	@Column(name = "hash") // unique via index
 	private String hash;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})

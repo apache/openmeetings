@@ -59,6 +59,14 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>oracle</id>
+			<properties>
+				<db>oracle</db>
+				<db_user>system</db_user>
+				<db_pass>openmeetings_test</db_pass>
+			</properties>
+		</profile>
+		<profile>
 			<id>Jenkins</id>
 			<build>
 				<plugins>

@@ -9,7 +9,7 @@
  *
  * Date: Sun Oct 22 1:00:00 2010 -0500
  */
- 
+
  /* Basic styles for emoticons */
 span.css-emoticon {
 	font-family: "Trebuchet MS", sans-serif; /* seems to give the best and most consistent emoticon appearance */
@@ -70,7 +70,7 @@ span.css-emoticon.pink-emoticon {
 	background-image: linear-gradient(to right, #ffade1, #ff8fd4);
 }
 /* styles for emoticons that need no rotation, like O_o */
-span.css-emoticon.no-rotate { 
+span.css-emoticon.no-rotate {
 	transform: rotate(0deg);
 	box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 	font-size: 0.45em;
@@ -87,7 +87,7 @@ span.css-emoticon.no-rotate.pink-emoticon {
 	background-image: linear-gradient(#ffade1, #ff8fd4);
 }
 /* Styles for emoticons that need to be rotated counter-clockwise, like <3 */
-span.css-emoticon.counter-rotated { 
+span.css-emoticon.counter-rotated {
 	transform: rotate(-90deg);
 	box-shadow: -1px 1px 2px rgba(0,0,0,0.5);
 	background-image: linear-gradient(to left, #fff4c8, #fc0);

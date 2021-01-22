@@ -8,7 +8,7 @@ Wicket.BrowserInfo.collectExtraInfo = function(info) {
 Object.assign(window, {
 	Settings: require('./settings')
 	, OmUtil: require('./omutils')
-	//Fix to move the close icon on top of the .ui-dialog-titlebar cause otherwise 
+	//Fix to move the close icon on top of the .ui-dialog-titlebar cause otherwise
 	// touch-events are broken and you won't be able to close the dialog
 	, fixJQueryUIDialogTouch: function(dialog) {
 		dialog.parent().find('.ui-dialog-titlebar-close').appendTo(dialog.parent());

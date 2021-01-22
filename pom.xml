@@ -105,6 +105,7 @@
 		<postgresql.version>42.2.18</postgresql.version>
 		<mysql.version>8.0.22</mysql.version>
 		<mssql.version>8.4.1.jre11</mssql.version>
+		<ojdbc.version>19.9.0.0</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<xstream.version>1.4.14</xstream.version>
 		<api-all.version>2.0.1</api-all.version>

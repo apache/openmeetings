@@ -81,7 +81,7 @@ public class Configuration extends HistoricalEntity {
 	@XmlJavaTypeAdapter(ConfigTypeAdapter.class)
 	private Type type = Type.STRING;
 
-	@Column(name = "om_key", unique = true)
+	@Column(name = "om_key") // unique via index
 	@XmlElement(name = "key", required = false)
 	private String key;
 

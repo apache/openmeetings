@@ -34,7 +34,7 @@
 			<p>
 				REFERENCES -> permalink to the announce email in archives<br/>
 				Going forward, please include the <b>product and version information</b> in the <b>description</b> itself
-				as well as in the "[PRODUCT]" and "[VERSION]" lines in your submissions. 
+				as well as in the "[PRODUCT]" and "[VERSION]" lines in your submissions.
 				While this may seem redundant, including the information in both places satisfies different use cases and supports automation.
 			</p>
 		</section>
@@ -82,7 +82,7 @@
 			<p>Severity: Medium</p>
 			<p>Vendor: The Apache Software Foundation</p>
 			<p>Versions Affected: Apache OpenMeetings 3.0.0 - 4.0.1</p>
-			<p>Description: CRUD operations on privileged users are not password protected allowing an authenticated attacker 
+			<p>Description: CRUD operations on privileged users are not password protected allowing an authenticated attacker
 				to deny service for privileged users.<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1286">CVE-2018-1286</a>
 			</p>

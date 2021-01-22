@@ -90,12 +90,12 @@ public class RecordingChunk extends HistoricalEntity {
 	@XmlTransient
 	private Recording recording;
 
-	@Column(name = "start")
+	@Column(name = "ch_start")
 	@XmlElement(name = "recordStart")
 	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date start;
 
-	@Column(name = "end")
+	@Column(name = "ch_end")
 	@XmlElement(name = "recordEnd", required = false)
 	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date end;
