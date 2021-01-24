@@ -269,7 +269,7 @@ module.exports = class Video {
 			const _hasVideo = VideoUtil.hasVideo(sd)
 			if (_hasVideo) {
 				const s = VideoSettings.load();
-				if (s.fixed.enabled) {
+				if (s.fixed.enabled && !opts.interview && !isSharing) {
 					size = {
 						width: s.fixed.width
 						, height: s.fixed.height

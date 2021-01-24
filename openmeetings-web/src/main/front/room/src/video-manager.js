@@ -150,12 +150,12 @@ function _update(c) {
 	});
 }
 function _playSharing(sd, iceServers) {
-	const m = {stream: sd, iceServers: iceServers};
-	let v = $('#' + VideoUtil.getVid(sd.uid))
+	const m = {stream: sd, iceServers: iceServers}
+		, v = $('#' + VideoUtil.getVid(sd.uid))
 	if (v.length === 1) {
 		v.remove();
 	}
-	v = new Video(m);
+	new Video(m);
 	VideoUtil.setPos(v, {left: 0, top: 35});
 }
 function _play(streams, iceServers) {
