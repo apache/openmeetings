@@ -25,12 +25,21 @@ import org.apache.openmeetings.db.util.FormatHelper;
 
 public class OmLanguage implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private final long id;
 	private final Locale locale;
 	private final boolean rtl;
+	private String tip;
+	private char rangeStart;
+	private char rangeEnd;
 
-	public OmLanguage(Locale locale) {
+	public OmLanguage(Long id, Locale locale) {
+		this.id = id;
 		this.locale = locale;
 		this.rtl = FormatHelper.isRtlLanguage(locale.toLanguageTag());
+	}
+
+	public long getId() {
+		return id;
 	}
 
 	public Locale getLocale() {
@@ -39,5 +48,49 @@ public class OmLanguage implements Serializable {
 
 	public boolean isRtl() {
 		return rtl;
+	}
+
+	public String getTip() {
+		return tip;
+	}
+
+	public OmLanguage setTip(String tip) {
+		this.tip = tip;
+		return this;
+	}
+
+	public char getRangeStart() {
+		return rangeStart;
+	}
+
+	public OmLanguage setRangeStart(char rangeStart) {
+		this.rangeStart = rangeStart;
+		return this;
+	}
+
+	public char getRangeEnd() {
+		return rangeEnd;
+	}
+
+	public OmLanguage setRangeEnd(char rangeEnd) {
+		this.rangeEnd = rangeEnd;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("OmLanguage [id=");
+		builder.append(id);
+		builder.append(", locale=");
+		builder.append(locale);
+		builder.append(", rtl=");
+		builder.append(rtl);
+		builder.append(", rangeStart=");
+		builder.append(rangeStart);
+		builder.append(", rangeEnd=");
+		builder.append(rangeEnd);
+		builder.append("]");
+		return builder.toString();
 	}
 }

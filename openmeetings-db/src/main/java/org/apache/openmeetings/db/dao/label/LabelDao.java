@@ -74,7 +74,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static final String KEY_ATTR = "key";
 	public static final String APP_RESOURCES_PREFIX = "Application";
 	public static final String APP_RESOURCES_SUFFIX = ".properties.xml";
-	private static final OmLanguage LNG_ENGLISH = new OmLanguage(Locale.ENGLISH);
+	private static final OmLanguage LNG_ENGLISH = new OmLanguage(1L, Locale.ENGLISH);
 	private static final LinkedHashMap<Long, OmLanguage> languages = new LinkedHashMap<>();
 	private static final ConcurrentHashMap<Locale, List<StringLabel>> labelCache = new ConcurrentHashMap<>();
 	private static final Set<String> keys = new HashSet<>();
@@ -84,7 +84,12 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		Document d = XmlExport.createDocument();
 		Element r = XmlExport.createRoot(d, "language");
 		for (Entry<Long, OmLanguage> e : languages.entrySet()) {
-			r.addElement("lang").addAttribute("id", "" + e.getKey()).addAttribute("code", e.getValue().getLocale().toLanguageTag());
+			r.addElement("lang")
+				.addAttribute("id", "" + e.getKey())
+				.addAttribute("code", e.getValue().getLocale().toLanguageTag())
+				.addAttribute("tip", e.getValue().getTip())
+				.addAttribute("rangeStart", "" + e.getValue().getRangeStart())
+				.addAttribute("rangeStart", "" + e.getValue().getRangeEnd());
 		}
 		XmlExport.toXml(getLangFile(), d);
 	}
@@ -94,7 +99,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		for (Entry<Long, OmLanguage> e : languages.entrySet()) {
 			id = e.getKey();
 		}
-		languages.put(id + 1, new OmLanguage(l));
+		languages.put(id + 1, new OmLanguage(id + 1, l));
 		storeLanguages();
 		labelCache.put(l, new ArrayList<>());
 	}
@@ -121,7 +126,11 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 				if (id == 3L) {
 					continue;
 				}
-				languages.put(id, new OmLanguage(Locale.forLanguageTag(code)));
+				languages.put(id, new OmLanguage(id, Locale.forLanguageTag(code))
+						.setTip(item.attributeValue("tip"))
+						.setRangeStart(Optional.ofNullable(item.attributeValue("rangeStart")).map(s -> s.charAt(0)).orElse('A'))
+						.setRangeEnd(Optional.ofNullable(item.attributeValue("rangeEnd")).map(s -> s.charAt(0)).orElse('Z'))
+					);
 			}
 		} catch (Exception e) {
 			log.error("Error while building language map");
@@ -215,11 +224,17 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		return getLanguage(id).getLocale();
 	}
 
+	public static OmLanguage getOmLanguage(Locale loc, Long def) {
+		Optional<OmLanguage> lang = languages.entrySet().stream()
+				.map(Entry::getValue)
+				.filter(l -> l.getLocale().equals(loc)
+						|| Locale.forLanguageTag(l.getLocale().getCountry()).equals(loc))
+				.findFirst();
+		return lang.orElse(getLanguage(def));
+	}
+
 	public static Long getLanguage(Locale loc, Long def) {
-		Optional<Long> lang = languages.entrySet().stream()
-				.filter(e -> e.getValue().getLocale().equals(loc))
-				.map(Entry::getKey).findFirst();
-		return lang.isPresent() ? lang.get() : def;
+		return getOmLanguage(loc, def).getId();
 	}
 
 	public static Set<Entry<Long, Locale>> getLanguages() {

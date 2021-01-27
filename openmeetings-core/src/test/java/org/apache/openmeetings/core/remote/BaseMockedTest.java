@@ -99,7 +99,7 @@ public class BaseMockedTest {
 			streamMock.when(() -> AbstractStream.createRecorderEndpoint(any(MediaPipeline.class), anyString(), any(MediaProfileSpecType.class))).thenReturn(mock(RecorderEndpoint.class));
 			streamMock.when(() -> AbstractStream.createPlayerEndpoint(any(MediaPipeline.class), anyString())).thenReturn(mock(PlayerEndpoint.class));
 
-			labelMock.when(() -> LabelDao.getLanguage(any(Long.class))).thenReturn(new OmLanguage(Locale.ENGLISH));
+			labelMock.when(() -> LabelDao.getLanguage(any(Long.class))).thenReturn(new OmLanguage(1L, Locale.ENGLISH));
 			appHelpMock.when(() -> ApplicationHelper.ensureApplication(any(Long.class))).thenReturn(mock(IApplication.class));
 			task.run();
 		}

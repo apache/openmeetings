@@ -18,10 +18,14 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 
 import java.security.SecureRandom;
 
+import org.apache.openmeetings.db.dao.label.LabelDao;
+import org.apache.openmeetings.db.entity.label.OmLanguage;
+import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
@@ -41,6 +45,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5I
 
 public class Captcha extends Panel {
 	private static final long serialVersionUID = 1L;
+	private OmLanguage lang;
 	private String randomText;
 	private final CaptchaImageResource captchaImageResource = new CaptchaImageResource() {
 		private static final long serialVersionUID = 1L;
@@ -59,25 +64,26 @@ public class Captcha extends Panel {
 
 		private String randomString(int min, int max) {
 			int num = randomInt(min, max);
-			byte[] b = new byte[num];
+			char[] b = new char[num];
 			for (int i = 0; i < num; ++i) {
-				b[i] = (byte)randomInt('a', 'z');
+				b[i] = (char)randomInt(lang.getRangeStart(), lang.getRangeEnd());
 			}
-			return new String(b, UTF_8);
+			return new String(b);
 		}
 	};
-	private final Image captcha = new Image("captcha", captchaImageResource);
+	private Image captcha = new Image("captcha", captchaImageResource);
 	private final RequiredTextField<String> captchaText = new RequiredTextField<>("captchaText", Model.of(""));
 
 	public Captcha(String id) {
 		super(id);
 		setOutputMarkupId(true);
-		add(captcha.setOutputMarkupId(true));
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		lang = LabelDao.getOmLanguage(WebSession.get().getLocale(), getDefaultLang());
+		add(captcha.setOutputMarkupId(true));
 		add(captchaText.setLabel(new ResourceModel("captcha.text")).add(new IValidator<String>() {
 			private static final long serialVersionUID = 1L;
 
@@ -87,7 +93,7 @@ public class Captcha extends Panel {
 					validatable.error(new ValidationError(getString("bad.captcha.text")));
 				}
 			}
-		}).setOutputMarkupId(true));
+		}).setOutputMarkupId(true).add(AttributeModifier.append("placeholder", lang.getTip())));
 		add(new BootstrapAjaxLink<>("refresh", Model.of(""), Buttons.Type.Outline_Info, new ResourceModel("lbl.refresh")) {
 			private static final long serialVersionUID = 1L;
 
