@@ -156,7 +156,7 @@ public class UserWebService extends BaseWebService {
 			@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="user") @FormParam("user") UserDTO user
 			, @WebParam(name="confirm") @FormParam("confirm") Boolean confirm
-			)
+			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
 			if (!isAllowRegisterSoap()) {
@@ -180,7 +180,7 @@ public class UserWebService extends BaseWebService {
 				user.setLanguageId(1L);
 			}
 			User jsonUser = user.get(userDao, groupDao);
-			IValidator<String> passValidator = new StrongPasswordValidator(true, jsonUser);
+			IValidator<String> passValidator = new StrongPasswordValidator(false, jsonUser);
 			Validatable<String> passVal = new Validatable<>(user.getPassword());
 			passValidator.validate(passVal);
 			if (!passVal.isValid()) {
@@ -294,7 +294,7 @@ public class UserWebService extends BaseWebService {
 			@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="user") @FormParam("user") ExternalUserDTO user
 			, @WebParam(name="options") @FormParam("options") RoomOptionsDTO options
-			)
+			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
 			if (Strings.isEmpty(user.getExternalId()) || Strings.isEmpty(user.getExternalType())) {
