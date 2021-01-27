@@ -47,6 +47,7 @@ import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.util.DaoHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.Application;
 import org.apache.wicket.csp.CSPDirective;
@@ -348,6 +349,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_APPOINTMENT_PRE_START_MINUTES:
 				reloadAppointmentSettings();
 				break;
+			case CONFIG_RECORDING_ENABLED:
+				reloadRecordingEnabled();
+				break;
 		}
 		return entity;
 	}
@@ -486,6 +490,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setAppointmentReminderMinutes(getInt(CONFIG_APPOINTMENT_REMINDER_MINUTES, 15));
 	}
 
+	private void reloadRecordingEnabled() {
+		OpenmeetingsVariables.setRecordingsEnabled(getBool(CONFIG_RECORDING_ENABLED, true));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -512,6 +520,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadMyRoomsEnabled();
 		reloadMailSettings();
 		reloadAppointmentSettings();
+		reloadRecordingEnabled();
 
 		updateCsp();
 	}

@@ -44,6 +44,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
@@ -312,8 +313,10 @@ public class MainPanel extends Panel {
 		List<INavbarComponent> mmenu = new ArrayList<>();
 		createDashboardMenu(mmenu);
 		createRoomsMenu(mmenu);
-		// Recording Menu Points
-		mmenu.add(getSubItem("395", "1452", MenuActions.RECORD));
+		if (OpenmeetingsVariables.isRecordingsEnabled()) {
+			// Recording Menu Points
+			mmenu.add(getSubItem("395", "1452", MenuActions.RECORD));
+		}
 		createSettingsMenu(mmenu);
 		Set<Right> r = WebSession.getRights();
 		boolean isAdmin = hasAdminLevel(r);

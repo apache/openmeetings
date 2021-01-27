@@ -118,6 +118,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFFICE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RECORDING_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
@@ -309,6 +310,7 @@ public class BackupImport {
 			, entry(CONFIG_MIC_ECHO, Configuration.Type.BOOL)
 			, entry(CONFIG_MIC_NOISE, Configuration.Type.BOOL)
 			, entry(CONFIG_EXT_PROCESS_TTL, Configuration.Type.NUMBER)
+			, entry(CONFIG_RECORDING_ENABLED, Configuration.Type.BOOL)
 			);
 	private static final Pattern UUID_PATTERN = Pattern.compile("^[\\da-f]{8}(?:-[\\da-f]{4}){3}-[\\da-f]{12}$");
 

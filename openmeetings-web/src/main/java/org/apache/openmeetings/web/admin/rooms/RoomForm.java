@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.admin.rooms;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isRecordingsEnabled;
 import static org.apache.openmeetings.web.admin.AdminUserChoiceProvider.PAGE_SIZE;
 import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
@@ -222,7 +223,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("closed"));
 		add(new TextField<String>("redirectURL"));
 		add(new CheckBox("waitRecording"));
-		add(new CheckBox("allowRecording"));
+		add(new CheckBox("allowRecording").setEnabled(isRecordingsEnabled()));
 		add(new CheckBox("chatModerated"));
 
 		add(new Select2MultiChoice<>("hiddenElements", null, new ChoiceProvider<RoomElement>() {

@@ -112,6 +112,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_CSP_SCRIPT = "header.csp.script";
 	public static final String CONFIG_CSP_STYLE = "header.csp.style";
 	public static final String CONFIG_CSP_ENABLED = "header.csp.enabled";
+	public static final String CONFIG_RECORDING_ENABLED = "recording.enabled";
 
 	public static final int RECENT_ROOMS_COUNT = 5;
 	public static final int USER_LOGIN_MINIMUM_LENGTH = 4;
@@ -177,6 +178,7 @@ public class OpenmeetingsVariables {
 	private static boolean mailAddReplyTo;
 	private static int appointmentReminderMinutes = 15;
 	private static int appointmentPreStartMinutes = 5;
+	private static boolean recordingsEnabled = true;
 
 	private OpenmeetingsVariables() {}
 
@@ -599,5 +601,13 @@ public class OpenmeetingsVariables {
 
 	public static void setAppointmentReminderMinutes(int minutes) {
 		appointmentReminderMinutes = minutes;
+	}
+
+	public static boolean isRecordingsEnabled() {
+		return recordingsEnabled;
+	}
+
+	public static void setRecordingsEnabled(boolean enabled) {
+		recordingsEnabled = enabled;
 	}
 }

@@ -24,6 +24,7 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isRecordingsEnabled;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -456,11 +457,11 @@ public class StreamProcessor implements IStreamProcessor {
 
 	public boolean hasRightsToRecord(Client c) {
 		Room r = c.getRoom();
-		return r != null && r.isAllowRecording() && c.hasRight(Right.MODERATOR);
+		return isRecordingsEnabled() && r != null && r.isAllowRecording() && c.hasRight(Right.MODERATOR);
 	}
 
 	public boolean recordingAllowed(Client c) {
-		if (!kHandler.isConnected()) {
+		if (!kHandler.isConnected() || !isRecordingsEnabled()) {
 			return false;
 		}
 		Room r = c.getRoom();
