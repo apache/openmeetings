@@ -29,8 +29,8 @@ public class OmLanguage implements Serializable {
 	private final Locale locale;
 	private final boolean rtl;
 	private String tip;
-	private char rangeStart;
-	private char rangeEnd;
+	private char rangeStart = 'A';
+	private char rangeEnd = 'Z';
 
 	public OmLanguage(Long id, Locale locale) {
 		this.id = id;
