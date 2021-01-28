@@ -32,7 +32,7 @@
 	<lang id="11" code="zh-CN" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">chinese simplified</lang>
 	<lang id="12" code="zh-TW" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">chinese traditional</lang>
 	<lang id="13" code="ko" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">korean</lang>
-	<lang id="14" code="ar" tip="Only capital Latin latters A-Z" rangeStart="ا" rangeEnd="غ">arabic</lang>
+	<lang id="14" code="ar" tip="ادخل الرمز هنا" rangeStart="1" rangeEnd="9">عربي</lang>
 	<lang id="15" code="ja" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">japanese</lang>
 	<lang id="16" code="in" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">indonesian</lang>
 	<lang id="17" code="hu" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">hungarian</lang>
