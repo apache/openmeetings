@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.pages;
 
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.IRequestParameters;
 
@@ -33,7 +33,7 @@ public class InternalErrorPage extends BaseInitedPage {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(new Form<Void>("form").add(
+		add(new StatelessForm<Void>("form").add(
 				new BootstrapButton("home", new ResourceModel("124"), Buttons.Type.Outline_Primary) {
 					private static final long serialVersionUID = 1L;
 

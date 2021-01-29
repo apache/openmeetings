@@ -30,9 +30,12 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.openmeetings.webservice.NetTestWebService;
 import org.apache.openmeetings.webservice.NetTestWebService.TestType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RateLimited
 public class RateLimitRequestFilter implements ContainerRequestFilter {
+	private static final Logger log = LoggerFactory.getLogger(RateLimitRequestFilter.class);
 	private static final String ATTR_LAST_ACCESS_TIME = "LAST_ACCESS_TIME";
 	private static final long ALLOWED_TIME = 3000;
 
@@ -52,6 +55,11 @@ public class RateLimitRequestFilter implements ContainerRequestFilter {
 			if (TestType.PING == type || TestType.JITTER == type) {
 				return;
 			}
+		}
+		if (NetTestWebService.CLIENT_COUNT.get() > NetTestWebService.maxClients) {
+			log.error("Download: Max client count reached");
+			context.abortWith(Response.status(Status.TOO_MANY_REQUESTS).build());
+			return;
 		}
 		Long lastAccessed = (Long)session.getAttribute(ATTR_LAST_ACCESS_TIME);
 		session.setAttribute(ATTR_LAST_ACCESS_TIME, System.currentTimeMillis());

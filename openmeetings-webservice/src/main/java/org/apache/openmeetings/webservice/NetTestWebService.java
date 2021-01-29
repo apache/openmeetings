@@ -33,7 +33,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.openmeetings.webservice.util.RateLimited;
@@ -57,10 +56,8 @@ public class NetTestWebService {
 	private static final int PING_PACKET_SIZE = 64;
 	private static final int JITTER_PACKET_SIZE = 1024;
 	private static final int MAX_UPLOAD_SIZE = 16 * 1024 * 1024;
-	private AtomicInteger clientCount = new AtomicInteger();
-
-	@Value("${nettest.max.clients}")
-	private int maxClients = 100;
+	public static final AtomicInteger CLIENT_COUNT = new AtomicInteger();
+	public static int maxClients = 100;
 
 	@PostConstruct
 	private void report() {
@@ -78,10 +75,6 @@ public class NetTestWebService {
 		if (TestType.UNKNOWN == testType) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if (clientCount.intValue() > maxClients) {
-			log.error("Download: Max client count reached");
-			return Response.status(Status.TOO_MANY_REQUESTS).build();
-		}
 
 		// choose data to send
 		switch (testType) {
@@ -92,38 +85,42 @@ public class NetTestWebService {
 				size = JITTER_PACKET_SIZE;
 				break;
 			default:
-				clientCount.incrementAndGet();
+				final int count = CLIENT_COUNT.incrementAndGet();
+				log.info("... download: client count: {}", count);
 				size = inSize;
 				break;
 		}
-		ResponseBuilder response = Response.ok().type(MediaType.APPLICATION_OCTET_STREAM).entity(new InputStream() {
-			int pos = 0;
+		return Response.ok()
+				.type(MediaType.APPLICATION_OCTET_STREAM).entity(new InputStream() {
+					int pos = 0;
 
-			@Override
-			public int read() throws IOException {
-				pos++;
-				return pos > size ? -1 : ThreadLocalRandom.current().nextInt(0, 0xFF);
-			}
+					@Override
+					public int read() throws IOException {
+						pos++;
+						return pos > size ? -1 : ThreadLocalRandom.current().nextInt(0, 0xFF);
+					}
 
-			@Override
-			public int available() throws IOException {
-				return size - pos;
-			}
+					@Override
+					public int available() throws IOException {
+						return size - pos;
+					}
 
-			@Override
-			public void close() throws IOException {
-				if (TestType.DOWNLOAD_SPEED == testType) {
-					clientCount.decrementAndGet();
-				}
-				super.close();
-			}
-		});
-		response.header("Cache-Control", "no-cache, no-store, no-transform");
-		response.header("Pragma", "no-cache");
-		response.header("Content-Length", String.valueOf(size));
-		return response.build();
+					@Override
+					public void close() throws IOException {
+						if (TestType.DOWNLOAD_SPEED == testType) {
+							final int count = CLIENT_COUNT.decrementAndGet();
+							log.info("... close: client count: {}", count);
+						}
+						super.close();
+					}
+				})
+				.header("Cache-Control", "no-cache, no-store, no-transform")
+				.header("Pragma", "no-cache")
+				.header("Content-Length", String.valueOf(size))
+				.build();
 	}
 
+	@RateLimited
 	@POST
 	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/")
@@ -131,11 +128,7 @@ public class NetTestWebService {
 		if (size > MAX_UPLOAD_SIZE) {
 			return;
 		}
-		if (clientCount.intValue() > maxClients) {
-			log.error("Upload: Max client count reached");
-			return;
-		}
-		clientCount.incrementAndGet();
+		CLIENT_COUNT.incrementAndGet();
 		byte[] b = new byte[1024];
 		int totalCount = 0;
 		int count;
@@ -145,7 +138,7 @@ public class NetTestWebService {
 			}
 			log.debug("Total bytes read {}", totalCount);
 		} finally {
-			clientCount.decrementAndGet();
+			CLIENT_COUNT.decrementAndGet();
 		}
 	}
 
@@ -161,5 +154,10 @@ public class NetTestWebService {
 		}
 
 		return TestType.UNKNOWN;
+	}
+
+	@Value("${nettest.max.clients}")
+	private void setMaxClients(int count) {
+		maxClients = count;
 	}
 }
