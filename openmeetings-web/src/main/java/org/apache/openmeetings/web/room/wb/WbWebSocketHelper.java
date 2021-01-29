@@ -143,7 +143,7 @@ public class WbWebSocketHelper {
 
 	//This is required cause WebSocketHelper will send message async
 	private static String patchUrl(String url, Client c) {
-		return String.format("%s&uid=%s", url, c.getUid());
+		return url + "&uid=" + c.getUid();
 	}
 
 	private static JSONObject patchUrls(BaseFileItem fi, Client c, JSONObject inFile) {

@@ -18,22 +18,35 @@
  */
 package org.apache.openmeetings.web.util;
 
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.openmeetings.db.dto.room.Whiteboard;
+import org.apache.openmeetings.db.dto.room.Whiteboards;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.web.app.WhiteboardManager;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.resource.FileSystemResourceReference;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.openjson.JSONObject;
 
 public abstract class FileItemResourceReference<T extends BaseFileItem> extends FileSystemResourceReference {
 	private static final long serialVersionUID = 1L;
 	protected static final Logger log = LoggerFactory.getLogger(FileItemResourceReference.class);
+	@SpringBean
+	private WhiteboardManager wbm;
 
 	protected FileItemResourceReference(String name) {
 		super(name);
@@ -75,4 +88,19 @@ public abstract class FileItemResourceReference<T extends BaseFileItem> extends 
 	protected abstract String getFileName(T r);
 	protected abstract File getFile(T r, Attributes attr);
 	protected abstract T getFileItem(Attributes attr);
+
+	protected boolean isAtWb(Client c, String wbId, String wbItemId, Long fileId) {
+		if (c != null && c.getRoom() != null) {
+			Whiteboards wbs = wbm.get(c.getRoomId());
+			if (!Strings.isEmpty(wbItemId) && !Strings.isEmpty(wbId) && wbId.equals(wbs.getUid())) {
+				for (Entry<Long, Whiteboard> e : wbs.getWhiteboards().entrySet()) {
+					JSONObject file = e.getValue().get(wbItemId);
+					if (file != null && fileId.equals(file.optLong(ATTR_FILE_ID))) {
+						return true; // item IS on WB
+					}
+				}
+			}
+		}
+		return false;
+	}
 }
