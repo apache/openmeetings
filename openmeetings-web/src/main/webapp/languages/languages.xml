@@ -39,7 +39,7 @@
 	<lang id="18" code="tr" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">turkish</lang>
 	<lang id="19" code="uk" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">ukrainian</lang>
 	<lang id="20" code="th" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">thai</lang>
-	<lang id="21" code="fa" tip="Only capital Latin latters A-Z" rangeStart="ا" rangeEnd="غ">persian</lang>
+	<lang id="21" code="fa" tip="کد را اینجا وارد کنید" rangeStart="1" rangeEnd="9">فارسي</lang>
 	<lang id="22" code="cs" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">czech</lang>
 	<lang id="23" code="gl" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">galician</lang>
 	<lang id="24" code="fi" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">finnish</lang>
