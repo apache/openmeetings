@@ -15,9 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.apache</groupId>
@@ -26,7 +24,7 @@
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
-	<version>5.1.0</version>
+	<version>5.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Openmeetings</name>
 	<description>Parent project for all OpenMeetings Maven modules. Required to hold general settings</description>
@@ -36,7 +34,7 @@
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
 		<om.notquick.build>true</om.notquick.build>
-		<logback.console></logback.console>
+		<logback.console />
 		<db>h2</db>
 		<autoModuleName>apache.openmeetings.parent</autoModuleName>
 		<jdk.version>11</jdk.version>
@@ -125,8 +123,8 @@
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
 		<jacoco.binary.path>${project.basedir}/../target/jacoco.exec</jacoco.binary.path>
-		<db_user></db_user>
-		<db_pass></db_pass>
+		<db_user />
+		<db_pass />
 	</properties>
 	<url>https://openmeetings.apache.org</url>
 	<inceptionYear>2012</inceptionYear>
@@ -799,22 +797,22 @@
 				<version>${maven-checkstyle-plugin.version}</version>
 				<configuration>
 					<checkstyleRules>
-						<module name = "Checker">
-							<property name="fileExtensions" value="java,js,css,xml"/>
+						<module name="Checker">
+							<property name="fileExtensions" value="java,js,css,xml" />
 							<module name="NewlineAtEndOfFile">
-								<property name="fileExtensions" value="java"/>
+								<property name="fileExtensions" value="java" />
 							</module>
 							<module name="TreeWalker">
-								<module name="UnusedImports"></module>
+								<module name="UnusedImports" />
 								<module name="RegexpSinglelineJava">
-									<property name="format" value="^\t* "/>
-									<property name="message" value="Indent must use tab characters"/>
-									<property name="ignoreComments" value="true"/>
+									<property name="format" value="^\t* " />
+									<property name="message" value="Indent must use tab characters" />
+									<property name="ignoreComments" value="true" />
 								</module>
 							</module>
 							<module name="RegexpSingleline">
-								<property name="format" value="\s+$"/>
-								<property name="message" value="Line has trailing spaces."/>
+								<property name="format" value="\s+$" />
+								<property name="message" value="Line has trailing spaces." />
 							</module>
 						</module>
 					</checkstyleRules>
@@ -907,7 +905,7 @@
 							<include>**/Test*.java</include>
 						</includes>
 						<excludes>
-							<exclude/>
+							<exclude />
 						</excludes>
 						<argLine>@{argLine} --add-modules java.se --add-exports java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED</argLine>
 					</configuration>
@@ -980,7 +978,7 @@
 							<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
 								<licenseFamilyCategory>MIT</licenseFamilyCategory>
 								<licenseFamilyName>MIT</licenseFamilyName>
-								<notes></notes>
+								<notes />
 								<patterns>
 									<pattern>Licensed MIT</pattern>
 									<pattern>Licensed under MIT</pattern>
@@ -993,7 +991,7 @@
 							<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
 								<licenseFamilyCategory>BSD</licenseFamilyCategory>
 								<licenseFamilyName>BSD</licenseFamilyName>
-								<notes></notes>
+								<notes />
 								<patterns>
 									<pattern>BSD-style license</pattern>
 								</patterns>
@@ -1426,7 +1424,7 @@
 												</goals>
 											</pluginExecutionFilter>
 											<action>
-												<ignore></ignore>
+												<ignore />
 											</action>
 										</pluginExecution>
 										<pluginExecution>
@@ -1439,7 +1437,7 @@
 												</goals>
 											</pluginExecutionFilter>
 											<action>
-												<ignore></ignore>
+												<ignore />
 											</action>
 										</pluginExecution>
 										<pluginExecution>
@@ -1454,7 +1452,7 @@
 												</goals>
 											</pluginExecutionFilter>
 											<action>
-												<ignore></ignore>
+												<ignore />
 											</action>
 										</pluginExecution>
 										<pluginExecution>
@@ -1467,7 +1465,7 @@
 												</goals>
 											</pluginExecutionFilter>
 											<action>
-												<ignore></ignore>
+												<ignore />
 											</action>
 										</pluginExecution>
 										<pluginExecution>
@@ -1480,7 +1478,7 @@
 												</goals>
 											</pluginExecutionFilter>
 											<action>
-												<ignore></ignore>
+												<ignore />
 											</action>
 										</pluginExecution>
 										<pluginExecution>
@@ -1493,7 +1491,7 @@
 												</goals>
 											</pluginExecutionFilter>
 											<action>
-												<ignore></ignore>
+												<ignore />
 											</action>
 										</pluginExecution>
 										<pluginExecution>
@@ -1507,7 +1505,7 @@
 												</goals>
 											</pluginExecutionFilter>
 											<action>
-												<ignore></ignore>
+												<ignore />
 											</action>
 										</pluginExecution>
 										<pluginExecution>
@@ -1520,7 +1518,7 @@
 												</goals>
 											</pluginExecutionFilter>
 											<action>
-												<ignore></ignore>
+												<ignore />
 											</action>
 										</pluginExecution>
 										<pluginExecution>
@@ -1533,7 +1531,7 @@
 												</goals>
 											</pluginExecutionFilter>
 											<action>
-												<ignore></ignore>
+												<ignore />
 											</action>
 										</pluginExecution>
 										<pluginExecution>
@@ -1546,7 +1544,7 @@
 												</goals>
 											</pluginExecutionFilter>
 											<action>
-												<ignore></ignore>
+												<ignore />
 											</action>
 										</pluginExecution>
 										<pluginExecution>
@@ -1559,7 +1557,7 @@
 												</goals>
 											</pluginExecutionFilter>
 											<action>
-												<ignore></ignore>
+												<ignore />
 											</action>
 										</pluginExecution>
 									</pluginExecutions>
