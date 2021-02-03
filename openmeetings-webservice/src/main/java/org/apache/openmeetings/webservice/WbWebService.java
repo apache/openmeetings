@@ -52,6 +52,7 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.manager.IWhiteboardManager;
+import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -90,13 +91,14 @@ public class WbWebService extends BaseWebService {
 	 * @param sid - The SID of the User. This SID must be marked as Loggedin
 	 * @param id - id of the room to clean
 	 * @return - serviceResult object with the result
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@GET
 	@Path("/resetwb/{id}")
 	public ServiceResult resetWb(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="id") @PathParam("id") long id
-			)
+			) throws ServiceException
 	{
 		log.debug("[resetWb] room id {}", id);
 		return performCall(sid, User.Right.SOAP, sd -> {
@@ -112,6 +114,7 @@ public class WbWebService extends BaseWebService {
 	 * @param roomId - id of the room to clean
 	 * @param wbId - id of the white board to clean
 	 * @return - serviceResult object with the result
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@GET
@@ -119,7 +122,7 @@ public class WbWebService extends BaseWebService {
 	public ServiceResult cleanWb(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="roomid") @PathParam("roomid") long roomId
 			, @WebParam(name="wbid") @PathParam("wbid") long wbId
-			)
+			) throws ServiceException
 	{
 		log.debug("[cleanWb] room id {}, wb id {}", roomId, wbId);
 		return performCall(sid, User.Right.SOAP, sd -> {
@@ -136,6 +139,7 @@ public class WbWebService extends BaseWebService {
 	 * @param wbId - id of the white board to clean
 	 * @param slide - slide number (zero based)
 	 * @return - serviceResult object with the result
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@GET
@@ -144,7 +148,7 @@ public class WbWebService extends BaseWebService {
 			, @WebParam(name="roomid") @PathParam("roomid") long roomId
 			, @WebParam(name="wbid") @PathParam("wbid") long wbId
 			, @WebParam(name="slide") @PathParam("slide") int slide
-			)
+			) throws ServiceException
 	{
 		log.debug("[cleanSlide] room id {}, wb id {}, slide {}", roomId, wbId, slide);
 		return performCall(sid, User.Right.SOAP, sd -> {
@@ -163,6 +167,7 @@ public class WbWebService extends BaseWebService {
 	 * @param type - the type of document being saved PNG/PDF
 	 * @param data - binary data
 	 * @return - serviceResult object with the result
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@POST
@@ -170,7 +175,7 @@ public class WbWebService extends BaseWebService {
 	public ServiceResult uploadWb(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="type") @PathParam("type") String type
 			, @WebParam(name="data") @FormParam("data") String data
-			)
+			) throws ServiceException
 	{
 		log.debug("[uploadwb] type {}", type);
 		Client c = cm.getBySid(sid);

@@ -18,16 +18,10 @@
  */
 package org.apache.openmeetings.webservice.error;
 
-import javax.xml.ws.WebFault;
-
-import org.apache.openmeetings.db.dto.basic.ServiceResult;
-
-@WebFault
-public class ServiceException extends Exception {
+public class InternalServiceException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
-	public static final ServiceException NO_PERMISSION = new ServiceException(ServiceResult.NO_PERMISSION.getMessage());
 
-	public ServiceException(String msg) {
+	public InternalServiceException(String msg) {
 		super(msg);
 	}
 }

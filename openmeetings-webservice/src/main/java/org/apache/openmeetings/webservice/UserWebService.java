@@ -59,6 +59,7 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.webservice.error.InternalServiceException;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidationError;
@@ -128,11 +129,12 @@ public class UserWebService extends BaseWebService {
 	 *            The SID from getSession
 	 *
 	 * @return - list of users
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@GET
 	@Path("/")
-	public List<UserDTO> get(@WebParam(name="sid") @QueryParam("sid") String sid) {
+	public List<UserDTO> get(@WebParam(name="sid") @QueryParam("sid") String sid) throws ServiceException {
 		return performCall(sid, User.Right.SOAP, sd -> UserDTO.list(userDao.getAllUsers()));
 	}
 
@@ -148,6 +150,7 @@ public class UserWebService extends BaseWebService {
 	 *            whatever or not to send email, leave empty for auto-send
 	 *
 	 * @return - id of the user added or error code
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@POST
@@ -160,12 +163,12 @@ public class UserWebService extends BaseWebService {
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
 			if (!isAllowRegisterSoap()) {
-				throw new ServiceException("Soap register is denied in Settings");
+				throw new InternalServiceException("Soap register is denied in Settings");
 			}
 			User testUser = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
 
 			if (testUser != null) {
-				throw new ServiceException("User does already exist!");
+				throw new InternalServiceException("User does already exist!");
 			}
 
 			String tz = user.getTimeZoneId();
@@ -189,20 +192,20 @@ public class UserWebService extends BaseWebService {
 					sb.append(((ValidationError)err).getMessage()).append(System.lineSeparator());
 				}
 				log.debug("addNewUser::weak password '{}', msg: {}", user.getPassword(), sb);
-				throw new ServiceException(sb.toString());
+				throw new InternalServiceException(sb.toString());
 			}
 			Object ouser;
 			try {
 				jsonUser.addGroup(groupDao.get(getDefaultGroup()));
 				ouser = userManager.registerUser(jsonUser, user.getPassword(), null);
 			} catch (NoSuchAlgorithmException | OmException e) {
-				throw new ServiceException("Unexpected error while creating user");
+				throw new InternalServiceException("Unexpected error while creating user");
 			}
 
 			if (ouser == null) {
-				throw new ServiceException(UNKNOWN.getMessage());
+				throw new InternalServiceException(UNKNOWN.getMessage());
 			} else if (ouser instanceof String) {
-				throw new ServiceException((String)ouser);
+				throw new InternalServiceException((String)ouser);
 			}
 
 			User u = (User)ouser;
@@ -230,11 +233,15 @@ public class UserWebService extends BaseWebService {
 	 *            the openmeetings user id
 	 *
 	 * @return - id of the user deleted, error code otherwise
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
+	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="id") @PathParam("id") long id
+			) throws ServiceException
+	{
 		return performCall(sid, User.Right.ADMIN, sd -> {
 			userDao.delete(userDao.get(id), sd.getUserId());
 
@@ -254,6 +261,7 @@ public class UserWebService extends BaseWebService {
 	 *            externalUserId
 	 *
 	 * @return - id of user deleted, or error code
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@DELETE
 	@Path("/{externaltype}/{externalid}")
@@ -261,7 +269,7 @@ public class UserWebService extends BaseWebService {
 			@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="externaltype") @PathParam("externaltype") String externalType
 			, @WebParam(name="externalid") @PathParam("externalid") String externalId
-			)
+			) throws ServiceException
 	{
 		return performCall(sid, User.Right.ADMIN, sd -> {
 			User user = userDao.getExternalUser(externalId, externalType);
@@ -286,6 +294,7 @@ public class UserWebService extends BaseWebService {
 	 *            room options to set
 	 *
 	 * @return - secure hash or error code
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@POST

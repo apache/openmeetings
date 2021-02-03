@@ -20,28 +20,18 @@ package org.apache.openmeetings.webservice;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Set;
 
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.webservice.error.InternalServiceException;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.junit.jupiter.api.Test;
 
-import com.sun.star.uno.RuntimeException;
-
 class TestBaseService {
-	private static void checkException(Runnable r) {
-		try {
-			r.run();
-			fail("ServiceException expected");
-		} catch (ServiceException e) {
-			assertTrue(true, "expected");
-		}
-	}
-
 	@Test
 	void testCheck() {
 		Sessiondata sd = new BaseWebService() {}.check(null);
@@ -66,7 +56,9 @@ class TestBaseService {
 
 	@Test
 	void testPerformCall() {
-		checkException(() -> new BaseWebService() {}.performCall("", sd -> true
-				, sd -> { throw new RuntimeException("test"); }));
+		assertThrows(ServiceException.class, () -> {
+			new BaseWebService() {}.performCall("", sd -> true
+				, sd -> { throw new InternalServiceException("test"); });
+		});
 	}
 }

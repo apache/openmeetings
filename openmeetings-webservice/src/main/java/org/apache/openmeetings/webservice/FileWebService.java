@@ -50,6 +50,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.process.ProcessResultList;
+import org.apache.openmeetings.webservice.error.InternalServiceException;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,10 +84,14 @@ public class FileWebService extends BaseWebService {
 	 * @param id
 	 *            the id of the file or folder
 	 * @return {@link ServiceResult} with result type
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) {
+	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid
+			, @PathParam("id") @WebParam(name="id") Long id
+			) throws ServiceException
+	{
 		FileItem f = fileDao.get(id);
 		return performCall(sid, sd -> {
 				Long userId = sd.getUserId();
@@ -114,6 +119,7 @@ public class FileWebService extends BaseWebService {
 	 * @param externalType
 	 *            the externalType
 	 * @return {@link ServiceResult} with result type
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@DELETE
 	@Path("/{externaltype}/{externalid}")
@@ -121,7 +127,7 @@ public class FileWebService extends BaseWebService {
 			@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="externaltype") @PathParam("externaltype") String externalType
 			, @WebParam(name="externalid") @PathParam("externalid") String externalId
-			)
+			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
 			FileItem f = fileDao.get(externalId, externalType);
@@ -141,6 +147,7 @@ public class FileWebService extends BaseWebService {
 	 * @param stream
 	 *            the The file to be added
 	 * @return - Object created
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@POST
@@ -149,12 +156,12 @@ public class FileWebService extends BaseWebService {
 	public FileItemDTO add(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @Multipart(value = "file", type = MediaType.APPLICATION_JSON) @WebParam(name="file") FileItemDTO file
 			, @Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM, required = false) @WebParam(name="stream") InputStream stream
-			)
+			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
 			FileItem f = file == null ? null : file.get();
 			if (f == null || f.getId() != null) {
-				throw new ServiceException("Bad id");
+				throw new InternalServiceException("Bad id");
 			}
 			f.setInsertedBy(sd.getUserId());
 			if (stream != null) {
@@ -164,7 +171,7 @@ public class FileWebService extends BaseWebService {
 						throw new ServiceException(result.getLogMessage());
 					}
 				} catch (Exception e) {
-					throw new ServiceException(e.getMessage());
+					throw new InternalServiceException(e.getMessage());
 				}
 			} else {
 				f = fileDao.update(f);
@@ -181,13 +188,14 @@ public class FileWebService extends BaseWebService {
 	 * @param externalType
 	 *            External type for file listing
 	 * @return - the list of file for given external type
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@GET
 	@Path("/{externaltype}")
 	public List<FileItemDTO> getAllExternal(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="externaltype") @PathParam("externaltype") String externalType
-			)
+			) throws ServiceException
 	{
 		log.debug("getAllExternal::externalType {}", externalType);
 		return performCall(sid, User.Right.SOAP, sd -> FileItemDTO.list(fileDao.getExternal(externalType)));
@@ -201,13 +209,14 @@ public class FileWebService extends BaseWebService {
 	 * @param roomId
 	 *            ROOM Id
 	 * @return - File Explorer Object by a given ROOM
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@GET
 	@Path("/room/{id}")
 	public FileExplorerObject getRoom(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="id") @PathParam("id") long roomId
-			)
+			) throws ServiceException
 	{
 		log.debug("getRoom::roomId {}", roomId);
 		return performCall(sid, User.Right.SOAP, sd -> {
@@ -236,6 +245,7 @@ public class FileWebService extends BaseWebService {
 	 * @param roomId
 	 *            the room id
 	 * @return - list of file explorer items
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@GET
@@ -243,7 +253,7 @@ public class FileWebService extends BaseWebService {
 	public List<FileItemDTO> getRoomByParent(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="id") @PathParam("id") long roomId
 			, @WebParam(name="parent") @PathParam("parent") long parentId
-			)
+			) throws ServiceException
 	{
 		log.debug("getRoomByParent {}", parentId);
 		return performCall(sid, User.Right.ROOM, sd -> {
@@ -272,13 +282,15 @@ public class FileWebService extends BaseWebService {
 	 * @param name
 	 *            new file or folder name
 	 * @return - resulting file object
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@POST
 	@Path("/rename/{id}/{name}")
 	public FileItemDTO rename(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="id") @PathParam("id") long id
-			, @WebParam(name="name") @PathParam("name") String name)
+			, @WebParam(name="name") @PathParam("name") String name
+			) throws ServiceException
 	{
 		log.debug("rename {}", id);
 		return performCall(sid, User.Right.SOAP, sd -> {
@@ -299,6 +311,7 @@ public class FileWebService extends BaseWebService {
 	 * @param parentId
 	 *            new parent folder id
 	 * @return - resulting file object
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@POST
@@ -306,7 +319,8 @@ public class FileWebService extends BaseWebService {
 	public FileItemDTO move(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="id") @PathParam("id") long id
 			, @WebParam(name="roomid") @PathParam("roomid") long roomId
-			, @WebParam(name="parentid") @PathParam("parentid") long parentId)
+			, @WebParam(name="parentid") @PathParam("parentid") long parentId
+			) throws ServiceException
 	{
 		log.debug("move {}", id);
 		return performCall(sid, User.Right.SOAP, sd -> {
