@@ -56,7 +56,7 @@ public class RateLimitRequestFilter implements ContainerRequestFilter {
 				return;
 			}
 		}
-		if (NetTestWebService.CLIENT_COUNT.get() > NetTestWebService.maxClients) {
+		if (NetTestWebService.CLIENT_COUNT.get() > NetTestWebService.getMaxClients()) {
 			log.error("Download: Max client count reached");
 			context.abortWith(Response.status(Status.TOO_MANY_REQUESTS).build());
 			return;

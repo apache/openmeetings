@@ -57,7 +57,7 @@ public class NetTestWebService {
 	private static final int JITTER_PACKET_SIZE = 1024;
 	private static final int MAX_UPLOAD_SIZE = 16 * 1024 * 1024;
 	public static final AtomicInteger CLIENT_COUNT = new AtomicInteger();
-	public static int maxClients = 100;
+	private static int maxClients = 100;
 
 	@PostConstruct
 	private void report() {
@@ -159,5 +159,9 @@ public class NetTestWebService {
 	@Value("${nettest.max.clients}")
 	private void setMaxClients(int count) {
 		maxClients = count;
+	}
+
+	public static int getMaxClients() {
+		return maxClients;
 	}
 }
