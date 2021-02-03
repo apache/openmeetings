@@ -94,6 +94,7 @@ import org.apache.openmeetings.web.user.record.PngRecordingResourceReference;
 import org.apache.openmeetings.web.util.GroupLogoResourceReference;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
+import org.apache.openmeetings.web.util.logging.TomcatGenericExports;
 import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.Localizer;
 import org.apache.wicket.Page;
@@ -192,6 +193,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	@Override
 	protected void init() {
+		new TomcatGenericExports(false).register();
 		setWicketApplicationName(super.getName());
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);

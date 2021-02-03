@@ -84,6 +84,7 @@
 		<tomcat.version>9.0.40</tomcat.version>
 		<ical4j.version>3.0.18</ical4j.version>
 		<cxf.version>3.4.1</cxf.version>
+		<io.prometheus.version>0.10.0</io.prometheus.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.1</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
@@ -528,6 +529,21 @@
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-rt-features-logging</artifactId>
 				<version>${cxf.version}</version>
+			</dependency>
+			<dependency>
+			  	<groupId>io.prometheus</groupId>
+			  	<artifactId>simpleclient</artifactId>
+			  	<version>${io.prometheus.version}</version>
+			</dependency>
+			<dependency>
+			  <groupId>io.prometheus</groupId>
+			  <artifactId>simpleclient_servlet</artifactId>
+			  <version>${io.prometheus.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tomcat</groupId>
+				<artifactId>tomcat-catalina</artifactId>
+				<version>${tomcat.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.codehaus.jettison</groupId>
