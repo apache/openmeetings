@@ -85,7 +85,7 @@ public class XmlExport {
 		return document.addElement(root);
 	}
 
-	public static void toXml(Writer out, Document doc) throws IOException {
+	public static void writeOutput(Writer out, Document doc) throws IOException {
 		OutputFormat outformat = OutputFormat.createPrettyPrint();
 		outformat.setIndentSize(1);
 		outformat.setIndent("\t");
@@ -97,11 +97,11 @@ public class XmlExport {
 		out.close();
 	}
 
-	public static void toXml(File f, Document doc) throws Exception {
-		toXml(new FileOutputStream(f), doc);
+	public static void writeOutput(File f, Document doc) throws Exception {
+		writeOutput(new FileOutputStream(f), doc);
 	}
 
-	public static void toXml(OutputStream out, Document doc) throws IOException {
-		toXml(new OutputStreamWriter(out, UTF_8), doc);
+	public static void writeOutput(OutputStream out, Document doc) throws IOException {
+		writeOutput(new OutputStreamWriter(out, UTF_8), doc);
 	}
 }
