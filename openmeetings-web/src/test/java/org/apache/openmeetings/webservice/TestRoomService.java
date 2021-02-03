@@ -60,12 +60,14 @@ class TestRoomService extends AbstractWebServiceTest {
 				.query("room", r.toString())
 				.get(RoomDTO.class);
 		assertNotNull(room, "Valid room should be returned");
+		assertEquals(extId, room.getExternalId(), "External ID of room should match");
 		assertNotNull(room.getId(), "Room ID should be not empty");
 
 		RoomDTO room1 = getClient(getRoomUrl()).path(String.format("/%s/%s/%s", Room.Type.PRESENTATION, UNIT_TEST_EXT_TYPE, extId))
 				.query("sid", sr.getMessage())
 				.get(RoomDTO.class);
 		assertNotNull(room1, "Valid room should be returned");
+		assertEquals(extId, room1.getExternalId(), "External ID of room should match");
 		assertEquals(room.getId(), room1.getId(), "Same Room should be returned");
 	}
 
