@@ -117,6 +117,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Alert;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.Backdrop;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
+import io.prometheus.client.SimpleTimer;
+import io.prometheus.client.Summary;
 
 @AuthorizeInstantiation("ROOM")
 public class RoomPanel extends BasePanel {
@@ -134,67 +136,92 @@ public class RoomPanel extends BasePanel {
 	private final Room r;
 	private final boolean interview;
 	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
+	static final Summary metric_roomPanel_init = Summary.build() //
+			.name("requests_roomPanel_init") //
+			.help("Request latency in seconds.") //
+			.labelNames("aLabel") //
+			.register();
+	static final Summary metric_roomPanel_roomEnter = Summary.build() //
+			.name("requests_roomPanel_room_enter") //
+			.help("Request latency in seconds.") //
+			.labelNames("aLabel") //
+			.register();
+	static final Summary metric_roomPanel_initVideo = Summary.build() //
+			.name("requests_roomPanel_init_video") //
+			.help("Request latency in seconds.") //
+			.labelNames("aLabel") //
+			.register();
 	private final AbstractDefaultAjaxBehavior roomEnter = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
-			log.debug("RoomPanel::roomEnter");
-			WebSession ws = WebSession.get();
-			Client c = getClient();
-			JSONObject options = VideoSettings.getInitJson(c.getSid())
-					.put("uid", c.getUid())
-					.put("userId", c.getUserId())
-					.put("rights", c.toJson(true).getJSONArray("rights"))
-					.put("interview", interview)
-					.put("audioOnly", r.isAudioOnly())
-					.put("allowRecording", r.isAllowRecording())
-					.put("questions", r.isAllowUserQuestions())
-					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MICROPHONE_STATUS));
-			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
-				options.put("reloadUrl", r.getRedirectURL());
-			}
-			StringBuilder sb = new StringBuilder("Room.init(").append(options.toString(new NullStringer())).append(");")
-					.append(wb.getInitScript())
-					.append(getQuickPollJs());
-			sb.append(sendClientsOnInit());
-			target.appendJavaScript(sb);
-
-			WebSocketHelper.sendRoom(new TextRoomMessage(r.getId(), c, RoomMessage.Type.ROOM_ENTER, c.getUid()));
-			// play video from other participants
-			initVideos(target);
-			getMainPanel().getChat().roomEnter(r, target);
-			if (r.isFilesOpened()) {
-				sidebar.setFilesActive(target);
-			}
-			if (Room.Type.PRESENTATION != r.getType()) {
-				boolean modsEmpty = noModerators();
-				log.debug("RoomPanel::roomEnter, mods IS EMPTY ? {}, is MOD ? {}", modsEmpty, c.hasRight(Room.Right.MODERATOR));
-				if (modsEmpty) {
-					showIdeaAlert(target, getString(r.isModerated() ? "641" : "498"));
+			SimpleTimer requestTimer = new SimpleTimer();
+			try {
+				log.debug("RoomPanel::roomEnter");
+				WebSession ws = WebSession.get();
+				Client c = getClient();
+				JSONObject options = VideoSettings.getInitJson(c.getSid())
+						.put("uid", c.getUid())
+						.put("userId", c.getUserId())
+						.put("rights", c.toJson(true).getJSONArray("rights"))
+						.put("interview", interview)
+						.put("audioOnly", r.isAudioOnly())
+						.put("allowRecording", r.isAllowRecording())
+						.put("questions", r.isAllowUserQuestions())
+						.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MICROPHONE_STATUS));
+				if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
+					options.put("reloadUrl", r.getRedirectURL());
 				}
+				StringBuilder sb = new StringBuilder("Room.init(").append(options.toString(new NullStringer())).append(");")
+						.append(wb.getInitScript())
+						.append(getQuickPollJs());
+				sb.append(sendClientsOnInit());
+				target.appendJavaScript(sb);
+
+				WebSocketHelper.sendRoom(new TextRoomMessage(r.getId(), c, RoomMessage.Type.ROOM_ENTER, c.getUid()));
+				// play video from other participants
+				initVideos(target);
+				getMainPanel().getChat().roomEnter(r, target);
+				if (r.isFilesOpened()) {
+					sidebar.setFilesActive(target);
+				}
+				if (Room.Type.PRESENTATION != r.getType()) {
+					boolean modsEmpty = noModerators();
+					log.debug("RoomPanel::roomEnter, mods IS EMPTY ? {}, is MOD ? {}", modsEmpty, c.hasRight(Room.Right.MODERATOR));
+					if (modsEmpty) {
+						showIdeaAlert(target, getString(r.isModerated() ? "641" : "498"));
+					}
+				}
+				if (r.isWaitRecording()) {
+					showIdeaAlert(target, getString("1315"));
+				}
+				wb.update(target);
+			} finally {
+				metric_roomPanel_roomEnter.labels("aLabelValue").observe(requestTimer.elapsedSeconds());
 			}
-			if (r.isWaitRecording()) {
-				showIdeaAlert(target, getString("1315"));
-			}
-			wb.update(target);
 		}
 
 		private void initVideos(AjaxRequestTarget target) {
-			StringBuilder sb = new StringBuilder();
-			JSONArray streams = new JSONArray();
-			cm.streamByRoom(getRoom().getId())
-				.map(Client::getStreams)
-				.flatMap(List::stream)
-				.forEach(sd -> streams.put(sd.toJson()));
-			if (streams.length() > 0) {
-				sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers(getClient())).append(");");
-			}
-			if (interview && streamProcessor.recordingAllowed(getClient())) {
-				sb.append("WbArea.setRecEnabled(true);");
-			}
-			if (!Strings.isEmpty(sb)) {
-				target.appendJavaScript(sb);
+			SimpleTimer requestTimer = new SimpleTimer();
+			try {
+				StringBuilder sb = new StringBuilder();
+				JSONArray streams = new JSONArray();
+				cm.streamByRoom(getRoom().getId())
+					.map(Client::getStreams)
+					.flatMap(List::stream)
+					.forEach(sd -> streams.put(sd.toJson()));
+				if (streams.length() > 0) {
+					sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers(getClient())).append(");");
+				}
+				if (interview && streamProcessor.recordingAllowed(getClient())) {
+					sb.append("WbArea.setRecEnabled(true);");
+				}
+				if (!Strings.isEmpty(sb)) {
+					target.appendJavaScript(sb);
+				}
+			} finally {
+				metric_roomPanel_initVideo.labels("aLabelValue").observe(requestTimer.elapsedSeconds());
 			}
 		}
 	};
@@ -269,162 +296,167 @@ public class RoomPanel extends BasePanel {
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
-		//let's refresh user in client
-		Client c = getClient().updateUser(userDao);
-		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
+		SimpleTimer requestTimer = new SimpleTimer();
+		try {
+			super.onInitialize();
+			//let's refresh user in client
+			Client c = getClient().updateUser(userDao);
+			Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
 
-		room.setOutputMarkupPlaceholderTag(true);
-		room.add(menu = new RoomMenuPanel("menu", this));
-		room.add(AttributeModifier.append("data-room-id", r.getId()));
-		if (interview) {
-			room.add(new WebMarkupContainer("wb-area").add(wb));
-		} else {
-			Droppable<BaseFileItem> wbArea = new Droppable<>("wb-area") {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onConfigure(JQueryBehavior behavior) {
-					super.onConfigure(behavior);
-					behavior.setOption("hoverClass", Options.asString("droppable-hover"));
-					behavior.setOption("accept", Options.asString(".recorditem, .fileitem, .readonlyitem"));
-				}
-
-				@Override
-				public void onDrop(AjaxRequestTarget target, Component component) {
-					Object o = component.getDefaultModelObject();
-					if (wb.isVisible() && o instanceof BaseFileItem) {
-						BaseFileItem f = (BaseFileItem)o;
-						if (sidebar.getFilesPanel().isSelected(f)) {
-							for (Entry<String, BaseFileItem> e : sidebar.getFilesPanel().getSelected().entrySet()) {
-								wb.sendFileToWb(e.getValue(), false);
-							}
-						} else {
-							wb.sendFileToWb(f, false);
-						}
-					}
-				}
-			};
-			room.add(wbArea.add(wb));
-		}
-		room.add(roomEnter);
-		room.add(sidebar = new RoomSidebar("sidebar", this));
-		add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
-		if (r.isClosed()) {
-			room.setVisible(false);
-		} else if (cm.streamByRoom(r.getId()).count() >= r.getCapacity()) {
-			accessDenied = new ExpiredMessageDialog(ACCESS_DENIED_ID, getString("99"), menu);
-			room.setVisible(false);
-		} else if (r.getId().equals(WebSession.get().getRoomId())) {
-			// secureHash/invitationHash, already checked
-		} else {
-			boolean allowed = false;
-			String deniedMessage = null;
-			if (r.isAppointment()) {
-				Appointment a = apptDao.getByRoom(r.getId());
-				if (a != null && !a.isDeleted()) {
-					boolean isOwner = a.getOwner().getId().equals(getUserId());
-					allowed = isOwner;
-					log.debug("appointed room, isOwner ? {}", isOwner);
-					if (!allowed) {
-						for (MeetingMember mm : a.getMeetingMembers()) {
-							if (getUserId().equals(mm.getUser().getId())) {
-								allowed = true;
-								break;
-							}
-						}
-					}
-					if (allowed) {
-						Calendar cal = WebSession.getCalendar();
-						if (isOwner || cal.getTime().after(allowedStart(a.getStart())) && cal.getTime().before(a.getEnd())) {
-							eventDetail = new EventDetailDialog(EVENT_DETAILS_ID, a);
-						} else {
-							allowed = false;
-							deniedMessage = String.format("%s %s - %s", getString("error.hash.period"), getDateFormat().format(a.getStart()), getDateFormat().format(a.getEnd()));
-						}
-					}
-				}
+			room.setOutputMarkupPlaceholderTag(true);
+			room.add(menu = new RoomMenuPanel("menu", this));
+			room.add(AttributeModifier.append("data-room-id", r.getId()));
+			if (interview) {
+				room.add(new WebMarkupContainer("wb-area").add(wb));
 			} else {
-				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()));
-				log.debug("public ? {}, ownedId ? {} {}", r.getIspublic(), r.getOwnerId(), allowed);
-				if (!allowed) {
-					User u = c.getUser();
-					for (RoomGroup ro : r.getGroups()) {
-						for (GroupUser ou : u.getGroupUsers()) {
-							if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
-								allowed = true;
-								break;
+				Droppable<BaseFileItem> wbArea = new Droppable<>("wb-area") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onConfigure(JQueryBehavior behavior) {
+						super.onConfigure(behavior);
+						behavior.setOption("hoverClass", Options.asString("droppable-hover"));
+						behavior.setOption("accept", Options.asString(".recorditem, .fileitem, .readonlyitem"));
+					}
+
+					@Override
+					public void onDrop(AjaxRequestTarget target, Component component) {
+						Object o = component.getDefaultModelObject();
+						if (wb.isVisible() && o instanceof BaseFileItem) {
+							BaseFileItem f = (BaseFileItem)o;
+							if (sidebar.getFilesPanel().isSelected(f)) {
+								for (Entry<String, BaseFileItem> e : sidebar.getFilesPanel().getSelected().entrySet()) {
+									wb.sendFileToWb(e.getValue(), false);
+								}
+							} else {
+								wb.sendFileToWb(f, false);
+							}
+						}
+					}
+				};
+				room.add(wbArea.add(wb));
+			}
+			room.add(roomEnter);
+			room.add(sidebar = new RoomSidebar("sidebar", this));
+			add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
+			if (r.isClosed()) {
+				room.setVisible(false);
+			} else if (cm.streamByRoom(r.getId()).count() >= r.getCapacity()) {
+				accessDenied = new ExpiredMessageDialog(ACCESS_DENIED_ID, getString("99"), menu);
+				room.setVisible(false);
+			} else if (r.getId().equals(WebSession.get().getRoomId())) {
+				// secureHash/invitationHash, already checked
+			} else {
+				boolean allowed = false;
+				String deniedMessage = null;
+				if (r.isAppointment()) {
+					Appointment a = apptDao.getByRoom(r.getId());
+					if (a != null && !a.isDeleted()) {
+						boolean isOwner = a.getOwner().getId().equals(getUserId());
+						allowed = isOwner;
+						log.debug("appointed room, isOwner ? {}", isOwner);
+						if (!allowed) {
+							for (MeetingMember mm : a.getMeetingMembers()) {
+								if (getUserId().equals(mm.getUser().getId())) {
+									allowed = true;
+									break;
+								}
 							}
 						}
 						if (allowed) {
-							break;
+							Calendar cal = WebSession.getCalendar();
+							if (isOwner || cal.getTime().after(allowedStart(a.getStart())) && cal.getTime().before(a.getEnd())) {
+								eventDetail = new EventDetailDialog(EVENT_DETAILS_ID, a);
+							} else {
+								allowed = false;
+								deniedMessage = String.format("%s %s - %s", getString("error.hash.period"), getDateFormat().format(a.getStart()), getDateFormat().format(a.getEnd()));
+							}
+						}
+					}
+				} else {
+					allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()));
+					log.debug("public ? {}, ownedId ? {} {}", r.getIspublic(), r.getOwnerId(), allowed);
+					if (!allowed) {
+						User u = c.getUser();
+						for (RoomGroup ro : r.getGroups()) {
+							for (GroupUser ou : u.getGroupUsers()) {
+								if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
+									allowed = true;
+									break;
+								}
+							}
+							if (allowed) {
+								break;
+							}
 						}
 					}
 				}
-			}
-			if (!allowed) {
-				if (deniedMessage == null) {
-					deniedMessage = getString("1599");
+				if (!allowed) {
+					if (deniedMessage == null) {
+						deniedMessage = getString("1599");
+					}
+					accessDenied = new ExpiredMessageDialog(ACCESS_DENIED_ID, deniedMessage, menu);
+					room.setVisible(false);
 				}
-				accessDenied = new ExpiredMessageDialog(ACCESS_DENIED_ID, deniedMessage, menu);
-				room.setVisible(false);
 			}
-		}
-		RepeatingView groupstyles = new RepeatingView("groupstyle");
-		add(groupstyles.setVisible(room.isVisible() && !r.getGroups().isEmpty()));
-		if (room.isVisible()) {
-			add(new NicknameDialog("nickname", this));
-			add(download);
-			add(new BaseWebSocketBehavior("media"));
-			for (RoomGroup rg : r.getGroups()) {
-				WebMarkupContainer groupstyle = new WebMarkupContainer(groupstyles.newChildId());
-				groupstyle.add(AttributeModifier.append("href"
-						, (String)RequestCycle.get().urlFor(new GroupCustomCssResourceReference(), new PageParameters().add("id", rg.getGroup().getId()))
-						));
-				groupstyles.add(groupstyle);
-			}
-			//We are setting initial rights here
-			final int count = cm.addToRoom(c.setRoom(getRoom()));
-			SOAPLogin soap = WebSession.get().getSoapLogin();
-			if (soap != null && soap.isModerator()) {
-				c.allow(Right.SUPER_MODERATOR);
+			RepeatingView groupstyles = new RepeatingView("groupstyle");
+			add(groupstyles.setVisible(room.isVisible() && !r.getGroups().isEmpty()));
+			if (room.isVisible()) {
+				add(new NicknameDialog("nickname", this));
+				add(download);
+				add(new BaseWebSocketBehavior("media"));
+				for (RoomGroup rg : r.getGroups()) {
+					WebMarkupContainer groupstyle = new WebMarkupContainer(groupstyles.newChildId());
+					groupstyle.add(AttributeModifier.append("href"
+							, (String)RequestCycle.get().urlFor(new GroupCustomCssResourceReference(), new PageParameters().add("id", rg.getGroup().getId()))
+							));
+					groupstyles.add(groupstyle);
+				}
+				//We are setting initial rights here
+				final int count = cm.addToRoom(c.setRoom(getRoom()));
+				SOAPLogin soap = WebSession.get().getSoapLogin();
+				if (soap != null && soap.isModerator()) {
+					c.allow(Right.SUPER_MODERATOR);
+				} else {
+					Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? apptDao.getByRoom(r.getId()) : null, count);
+					if (!rr.isEmpty()) {
+						c.allow(rr);
+						log.info("Setting rights for client:: {} -> {}", rr, c.hasRight(Right.MODERATOR));
+					}
+				}
+				if (r.isModerated() && r.isWaitModerator()
+						&& !c.hasRight(Right.MODERATOR)
+						&& noModerators())
+				{
+					room.setVisible(false);
+					createWaitModerator(true);
+					getMainPanel().getChat().toggle(null, false);
+				}
+				timerService.scheduleModCheck(r);
 			} else {
-				Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? apptDao.getByRoom(r.getId()) : null, count);
-				if (!rr.isEmpty()) {
-					c.allow(rr);
-					log.info("Setting rights for client:: {} -> {}", rr, c.hasRight(Right.MODERATOR));
-				}
+				add(new WebMarkupContainer("nickname").setVisible(false));
 			}
-			if (r.isModerated() && r.isWaitModerator()
-					&& !c.hasRight(Right.MODERATOR)
-					&& noModerators())
-			{
-				room.setVisible(false);
-				createWaitModerator(true);
-				getMainPanel().getChat().toggle(null, false);
+			cm.update(c);
+			if (waitModerator == null) {
+				createWaitModerator(false);
 			}
-			timerService.scheduleModCheck(r);
-		} else {
-			add(new WebMarkupContainer("nickname").setVisible(false));
-		}
-		cm.update(c);
-		if (waitModerator == null) {
-			createWaitModerator(false);
-		}
-		add(room, accessDenied, eventDetail, waitModerator);
-		add(clientKicked = new TextContentModal("client-kicked", new ResourceModel("606")));
-		clientKicked
-			.header(new ResourceModel("797"))
-			.setCloseOnEscapeKey(false)
-			.setBackdrop(Backdrop.FALSE)
-			.addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Primary, new ResourceModel("54")) {
-				private static final long serialVersionUID = 1L;
+			add(room, accessDenied, eventDetail, waitModerator);
+			add(clientKicked = new TextContentModal("client-kicked", new ResourceModel("606")));
+			clientKicked
+				.header(new ResourceModel("797"))
+				.setCloseOnEscapeKey(false)
+				.setBackdrop(Backdrop.FALSE)
+				.addButton(new BootstrapAjaxLink<>("button", Model.of(""), Buttons.Type.Outline_Primary, new ResourceModel("54")) {
+					private static final long serialVersionUID = 1L;
 
-				public void onClick(AjaxRequestTarget target) {
-					clientKicked.close(target);
-					menu.exit(target);
-				}
-			});
+					public void onClick(AjaxRequestTarget target) {
+						clientKicked.close(target);
+						menu.exit(target);
+					}
+				});
+		} finally {
+			metric_roomPanel_init.labels("aLabelValue").observe(requestTimer.elapsedSeconds());
+		}
 	}
 
 	@Override
