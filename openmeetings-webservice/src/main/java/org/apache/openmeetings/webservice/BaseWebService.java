@@ -75,11 +75,13 @@ public abstract class BaseWebService {
 		return new HashSet<>();
 	}
 
-	<T> T performCall(String sid, User.Right level, Function<Sessiondata, T> action) {
+	<T> T performCall(String sid, User.Right level, Function<Sessiondata, T> action) throws ServiceException {
 		return performCall(sid, sd -> AuthLevelUtil.check(getRights(sd.getUserId()), level), action);
 	}
 
-	<T> T performCall(String sid, Predicate<Sessiondata> allowed, Function<Sessiondata, T> action) {
+	<T> T performCall(String sid, Predicate<Sessiondata> allowed, Function<Sessiondata, T> action)
+			throws ServiceException
+	{
 		try {
 			Sessiondata sd = check(sid);
 			if (allowed.test(sd)) {

@@ -50,6 +50,7 @@ import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.webservice.error.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,10 +85,14 @@ public class GroupWebService extends BaseWebService {
 	 * @param name
 	 *            the name of the group
 	 * @return {@link ServiceResult} with result type, and id of the group added
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@POST
 	@Path("/")
-	public ServiceResult add(@QueryParam("sid") @WebParam(name="sid") String sid, @QueryParam("name") @WebParam(name="name") String name) {
+	public ServiceResult add(@QueryParam("sid") @WebParam(name="sid") String sid
+			, @QueryParam("name") @WebParam(name="name") String name
+			) throws ServiceException
+	{
 		log.debug("add:: name {}", name);
 		return performCall(sid, User.Right.SOAP, sd -> {
 			Group o = new Group();
@@ -102,10 +107,11 @@ public class GroupWebService extends BaseWebService {
 	 * @param sid
 	 *            The SID from getSession
 	 * @return list of all groups
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@GET
 	@Path("/")
-	public List<GroupDTO> get(@QueryParam("sid") @WebParam(name="sid") String sid) {
+	public List<GroupDTO> get(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
 		return performCall(sid, User.Right.SOAP, sd -> GroupDTO.list(groupDao.get(0, Integer.MAX_VALUE)));
 	}
 
@@ -120,6 +126,7 @@ public class GroupWebService extends BaseWebService {
 	 * @param id
 	 *            the group id
 	 * @return {@link ServiceResult} with result type, and id of the USER added, or error id in case of the error as text
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@POST
 	@Path("/{id}/users/{userid}")
@@ -127,7 +134,7 @@ public class GroupWebService extends BaseWebService {
 			@QueryParam("sid") @WebParam(name="sid") String sid
 			, @PathParam("id") @WebParam(name="id") Long id
 			, @PathParam("userid") @WebParam(name="userid") Long userid
-			)
+			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
 			if (!groupUserDao.isUserInGroup(id, userid)) {
@@ -150,6 +157,7 @@ public class GroupWebService extends BaseWebService {
 	 * @param id
 	 *            the group id
 	 * @return {@link ServiceResult} with result type, and id of the USER added, or error id in case of the error as text
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@DELETE
 	@Path("/{id}/users/{userid}")
@@ -157,7 +165,7 @@ public class GroupWebService extends BaseWebService {
 			@QueryParam("sid") @WebParam(name="sid") String sid
 			, @PathParam("id") @WebParam(name="id") Long id
 			, @PathParam("userid") @WebParam(name="userid") Long userid
-			)
+			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
 			if (groupUserDao.isUserInGroup(id, userid)) {
@@ -182,6 +190,7 @@ public class GroupWebService extends BaseWebService {
 	 * @param roomid - Id of room to be added
 	 *
 	 * @return {@link ServiceResult} with result type
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@POST
 	@Path("/{id}/rooms/add/{roomid}")
@@ -189,7 +198,7 @@ public class GroupWebService extends BaseWebService {
 			@QueryParam("sid") @WebParam(name="sid") String sid
 			, @PathParam("id") @WebParam(name="id") Long id
 			, @PathParam("roomid") @WebParam(name="roomid") Long roomid
-			)
+			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
 			Room r = roomDao.get(roomid);
@@ -229,6 +238,7 @@ public class GroupWebService extends BaseWebService {
 	 * @param asc
 	 *            asc or desc
 	 * @return - users found
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@GET
 	@Path("/users/{id}")
@@ -239,7 +249,7 @@ public class GroupWebService extends BaseWebService {
 			, @QueryParam("max") @WebParam(name="max") int max
 			, @QueryParam("orderby") @WebParam(name="orderby") String orderby
 			, @QueryParam("asc") @WebParam(name="asc") boolean asc
-			)
+			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
 			SearchResult<User> result = new SearchResult<>();
@@ -262,11 +272,15 @@ public class GroupWebService extends BaseWebService {
 	 * @param id
 	 *            the id of the group
 	 * @return {@link ServiceResult} with result type
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
+	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="id") @PathParam("id") long id
+			) throws ServiceException
+	{
 		return performCall(sid, User.Right.ADMIN, sd -> {
 			groupDao.delete(groupDao.get(id), sd.getUserId());
 

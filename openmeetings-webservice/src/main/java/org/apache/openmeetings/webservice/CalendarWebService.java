@@ -48,6 +48,7 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.webservice.error.InternalServiceException;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,13 +85,14 @@ public class CalendarWebService extends BaseWebService {
 	 *            end time
 	 *
 	 * @return - list of appointments in range
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@GET
 	@Path("/{start}/{end}")
 	public List<AppointmentDTO> range(@QueryParam("sid") @WebParam(name="sid") String sid
 			, @PathParam("start") @WebParam(name="start") Calendar start
 			, @PathParam("end") @WebParam(name="end") Calendar end
-			)
+			) throws ServiceException
 	{
 		log.debug("range : startdate - {} , enddate - {}"
 				, start == null ? "" : start.getTime()
@@ -112,6 +114,7 @@ public class CalendarWebService extends BaseWebService {
 	 *            end time
 	 *
 	 * @return - list of appointments in range
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@GET
 	@Path("/{userid}/{start}/{end}")
@@ -120,7 +123,7 @@ public class CalendarWebService extends BaseWebService {
 			, @PathParam("userid") @WebParam(name="userid") long userid
 			, @PathParam("start") @WebParam(name="start") Calendar start
 			, @PathParam("end") @WebParam(name="end") Calendar end
-			)
+			) throws ServiceException
 	{
 		log.debug("rangeForUser : startdate - {} , enddate - {}"
 				, start == null ? "" : start.getTime()
@@ -135,10 +138,11 @@ public class CalendarWebService extends BaseWebService {
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @return - next Calendar event
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@GET
 	@Path("/next")
-	public AppointmentDTO next(@QueryParam("sid") @WebParam(name="sid") String sid) {
+	public AppointmentDTO next(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
 		return performCall(sid, User.Right.ROOM, sd -> {
 			Appointment a = dao.getNext(sd.getUserId(), new Date());
 			return a == null ? null : new AppointmentDTO(a);
@@ -154,10 +158,14 @@ public class CalendarWebService extends BaseWebService {
 	 *            the userId the calendar events should be loaded
 	 *
 	 * @return - next Calendar event
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@GET
 	@Path("/next/{userid}")
-	public AppointmentDTO nextForUser(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("userid") @WebParam(name="userid") long userid) {
+	public AppointmentDTO nextForUser(@QueryParam("sid") @WebParam(name="sid") String sid
+			, @PathParam("userid") @WebParam(name="userid") long userid
+			) throws ServiceException
+	{
 		return performCall(sid, User.Right.SOAP, sd -> {
 			Appointment a = dao.getNext(userid, new Date());
 			return a == null ? null : new AppointmentDTO(a);
@@ -173,10 +181,14 @@ public class CalendarWebService extends BaseWebService {
 	 * @param roomid
 	 *            id of appointment special room
 	 * @return - calendar event by its room id
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@GET
 	@Path("/room/{roomid}")
-	public AppointmentDTO getByRoom(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("roomid") @WebParam(name="roomid") long roomid) {
+	public AppointmentDTO getByRoom(@QueryParam("sid") @WebParam(name="sid") String sid
+			, @PathParam("roomid") @WebParam(name="roomid") long roomid
+			) throws ServiceException
+	{
 		return performCall(sid, User.Right.ROOM, sd -> {
 			Appointment a = dao.getByRoom(sd.getUserId(), roomid);
 			return a == null ? null : new AppointmentDTO(a);
@@ -192,10 +204,14 @@ public class CalendarWebService extends BaseWebService {
 	 *            the search string
 	 *
 	 * @return - calendar event list
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@GET
 	@Path("/title/{title}")
-	public List<AppointmentDTO> getByTitle(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("title") @WebParam(name="title") String title) {
+	public List<AppointmentDTO> getByTitle(@QueryParam("sid") @WebParam(name="sid") String sid
+			, @PathParam("title") @WebParam(name="title") String title
+			) throws ServiceException
+	{
 		return performCall(sid, User.Right.ROOM, sd -> AppointmentDTO.list(dao.searchByTitle(sd.getUserId(), title)));
 	}
 
@@ -208,11 +224,15 @@ public class CalendarWebService extends BaseWebService {
 	 *            calendar event
 	 *
 	 * @return - appointment saved
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@POST
 	@Path("/")
-	public AppointmentDTO save(@QueryParam("sid") @WebParam(name="sid") String sid, @FormParam("appointment") @WebParam(name="appointment") AppointmentDTO appointment) {
+	public AppointmentDTO save(@QueryParam("sid") @WebParam(name="sid") String sid
+			, @FormParam("appointment") @WebParam(name="appointment") AppointmentDTO appointment
+			) throws ServiceException
+	{
 		//Seems to be create
 		log.debug("save SID: {}", sid);
 
@@ -253,10 +273,14 @@ public class CalendarWebService extends BaseWebService {
 	 * @param id
 	 *            the id to delete
 	 * @return {@link ServiceResult} with result type
+	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) {
+	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid
+			, @PathParam("id") @WebParam(name="id") Long id
+			) throws ServiceException
+	{
 		Appointment a = dao.get(id);
 		return performCall(sid, sd -> {
 				Set<Right> rights = getRights(sd.getUserId());
@@ -270,7 +294,7 @@ public class CalendarWebService extends BaseWebService {
 				return false;
 			}, sd -> {
 				if (a == null) {
-					throw new ServiceException("Bad id");
+					throw new InternalServiceException("Bad id");
 				}
 				dao.delete(a, sd.getUserId());
 				return new ServiceResult("Deleted", Type.SUCCESS);
