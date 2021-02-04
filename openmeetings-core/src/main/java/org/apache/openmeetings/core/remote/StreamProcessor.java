@@ -38,6 +38,7 @@ import org.apache.openmeetings.core.converter.IRecordingConverter;
 import org.apache.openmeetings.core.converter.InterviewConverter;
 import org.apache.openmeetings.core.converter.RecordingConverter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.core.util.logging.Timed;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
@@ -83,6 +84,7 @@ public class StreamProcessor implements IStreamProcessor {
 	@Autowired
 	private InterviewConverter interviewConverter;
 
+	@Timed
 	void onMessage(Client c, final String cmdId, JSONObject msg) {
 		final String uid = msg.optString("uid");
 		KStream sender;
