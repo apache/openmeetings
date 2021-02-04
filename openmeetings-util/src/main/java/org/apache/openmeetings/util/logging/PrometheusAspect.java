@@ -17,48 +17,44 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.util.logging;
-
-import java.util.HashMap;
+package org.apache.openmeetings.util.logging;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
-import io.prometheus.client.Summary;
+import io.prometheus.client.Histogram;
 
 @Aspect
 @Component
 public class PrometheusAspect {
 
-	private final HashMap<String, Summary> summaries = new HashMap<String, Summary>();
-
-	private Summary getSummary(String className, String methodName) {
-		String key = className + "_" + methodName;
-		Summary sum = summaries.get(key);
-		if (sum != null) {
-			return sum;
-		}
-		sum = Summary.build() //
-			.name(key) //
-			.help(key) //
-			.register();
-		summaries.put(key, sum);
-		return sum;
-	}
-
-	@Around("@annotation(Timed)")
+	@Around("@annotation(TimedDatabase)")
 	public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
 		String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
 		String methodName = joinPoint.getSignature().getName();
-		Summary sum = getSummary(className, methodName);
-		Summary.Timer requestTimer = sum.startTimer();
+		Histogram.Timer timer = PrometheusUtil.getHistogram() //
+				.labels(className, methodName, "database").startTimer();
 		try {
 			return joinPoint.proceed();
 		} finally {
-			requestTimer.observeDuration();
+			timer.observeDuration();
 		}
 	}
+
+	@Around("@annotation(TimedApplication)")
+	public Object logExecutionTimedApplication(ProceedingJoinPoint joinPoint) throws Throwable {
+		String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
+		String methodName = joinPoint.getSignature().getName();
+		Histogram.Timer timer = PrometheusUtil.getHistogram() //
+				.labels(className, methodName, "application").startTimer();
+		try {
+			return joinPoint.proceed();
+		} finally {
+			timer.observeDuration();
+		}
+	}
+
 
 }

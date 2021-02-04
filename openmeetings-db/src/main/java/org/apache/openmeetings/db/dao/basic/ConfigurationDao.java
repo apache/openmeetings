@@ -48,6 +48,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.util.DaoHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
+import org.apache.openmeetings.util.logging.TimedDatabase;
 import org.apache.wicket.Application;
 import org.apache.wicket.csp.CSPDirective;
 import org.apache.wicket.csp.CSPHeaderConfiguration;
@@ -105,6 +106,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	 * @param key - key of the {@link Configuration} to get
 	 * @return correspondent {@link Configuration} or null
 	 */
+	@TimedDatabase
 	public Configuration forceGet(String key) {
 		try {
 			List<Configuration> list = em.createNamedQuery("forceGetConfigurationByKey", Configuration.class)
@@ -120,6 +122,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return null;
 	}
 
+	@TimedDatabase
 	public List<Configuration> get(String... keys) {
 		List<Configuration> result = new ArrayList<>();
 		for (String key : keys) { //iteration is necessary to fill list with all values
@@ -187,6 +190,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	@Override
+	@TimedDatabase
 	public Configuration get(Long id) {
 		if (id == null) {
 			return null;
@@ -196,23 +200,27 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	@Override
+	@TimedDatabase
 	public List<Configuration> get(long start, long count) {
 		return setLimits(em.createNamedQuery("getNondeletedConfiguration", Configuration.class)
 				, start, count).getResultList();
 	}
 
 	@Override
+	@TimedDatabase
 	public List<Configuration> get(String search, long start, long count, String sort) {
 		return setLimits(em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, false, sort, searchFields), Configuration.class)
 				, start, count).getResultList();
 	}
 
 	@Override
+	@TimedDatabase
 	public long count() {
 		return em.createNamedQuery("countConfigurations", Long.class).getSingleResult();
 	}
 
 	@Override
+	@TimedDatabase
 	public long count(String search) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
@@ -223,6 +231,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return update(entity, userId, false);
 	}
 
+	@TimedDatabase
 	public Configuration update(Configuration entity, Long userId, boolean deleted) {
 		String key = entity.getKey();
 		String value = entity.getValue();

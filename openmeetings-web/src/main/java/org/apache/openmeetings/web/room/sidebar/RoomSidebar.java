@@ -27,6 +27,7 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.openmeetings.util.logging.PrometheusUtil;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -44,6 +45,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
+
+import io.prometheus.client.Histogram;
 
 public class RoomSidebar extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -73,23 +76,29 @@ public class RoomSidebar extends Panel {
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
-		final NameDialog addFolder = new NameDialog("addFolder", getString("712")) {
-			private static final long serialVersionUID = 1L;
+		Histogram.Timer timer = PrometheusUtil.getHistogram() //
+				.labels("RoomSidebar", "onInitialize", "application").startTimer();
+		try {
+			super.onInitialize();
+			final NameDialog addFolder = new NameDialog("addFolder", getString("712")) {
+				private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				roomFiles.createFolder(target, getModelObject());
-				super.onSubmit(target);
-			}
-		};
-		roomFiles = new RoomFilePanel("tree", room, addFolder);
-		add(fileTab.setVisible(!room.isInterview()), roomFiles.setVisible(!room.isInterview()));
+				@Override
+				protected void onSubmit(AjaxRequestTarget target) {
+					roomFiles.createFolder(target, getModelObject());
+					super.onSubmit(target);
+				}
+			};
+			roomFiles = new RoomFilePanel("tree", room, addFolder);
+			add(fileTab.setVisible(!room.isInterview()), roomFiles.setVisible(!room.isInterview()));
 
-		add(addFolder, settings);
-		add(upload = new UploadDialog("upload", room, roomFiles));
-		updateShowFiles(null);
-		add(activities = new ActivitiesPanel("activities", room));
+			add(addFolder, settings);
+			add(upload = new UploadDialog("upload", room, roomFiles));
+			updateShowFiles(null);
+			add(activities = new ActivitiesPanel("activities", room));
+		} finally {
+			timer.observeDuration();
+		}
 	}
 
 	private void updateShowFiles(IPartialPageRequestHandler handler) {

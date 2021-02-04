@@ -38,7 +38,6 @@ import org.apache.openmeetings.core.converter.IRecordingConverter;
 import org.apache.openmeetings.core.converter.InterviewConverter;
 import org.apache.openmeetings.core.converter.RecordingConverter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
-import org.apache.openmeetings.core.util.logging.Timed;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
@@ -51,6 +50,7 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.openmeetings.util.logging.TimedApplication;
 import org.apache.wicket.util.string.Strings;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.internal.server.KurentoServerException;
@@ -84,7 +84,7 @@ public class StreamProcessor implements IStreamProcessor {
 	@Autowired
 	private InterviewConverter interviewConverter;
 
-	@Timed
+	@TimedApplication
 	void onMessage(Client c, final String cmdId, JSONObject msg) {
 		final String uid = msg.optString("uid");
 		KStream sender;

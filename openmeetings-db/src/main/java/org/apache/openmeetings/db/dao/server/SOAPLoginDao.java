@@ -28,6 +28,7 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.dto.room.RoomOptionsDTO;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
+import org.apache.openmeetings.util.logging.TimedDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -41,6 +42,7 @@ public class SOAPLoginDao {
 	@PersistenceContext
 	private EntityManager em;
 
+	@TimedDatabase
 	public String addSOAPLogin(String sessionHash, RoomOptionsDTO options) {
 		SOAPLogin soapLogin = new SOAPLogin();
 		soapLogin.setCreated(new Date());
@@ -68,6 +70,7 @@ public class SOAPLoginDao {
 		return null;
 	}
 
+	@TimedDatabase
 	public SOAPLogin get(String hash) {
 		if (hash == null) {
 			return null;
@@ -95,6 +98,7 @@ public class SOAPLoginDao {
 		return null;
 	}
 
+	@TimedDatabase
 	public void update(SOAPLogin soapLogin) {
 		try {
 			if (soapLogin.getId() == null) {

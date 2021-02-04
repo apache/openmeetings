@@ -28,6 +28,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
+import org.apache.openmeetings.util.logging.TimedDatabase;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ public class ChatDao {
 	@PersistenceContext
 	private EntityManager em;
 
+	@TimedDatabase
 	public ChatMessage get(long id) {
 		return em.createNamedQuery("getChatMessageById", ChatMessage.class)
 				.setParameter("id", id)
@@ -44,16 +46,19 @@ public class ChatDao {
 	}
 
 	//for export
+	@TimedDatabase
 	public List<ChatMessage> get(long start, long count) {
 		return setLimits(em.createNamedQuery("getChatMessages", ChatMessage.class)
 				, start, count).getResultList();
 	}
 
+	@TimedDatabase
 	public List<ChatMessage> getGlobal(long start, long count) {
 		return setLimits(em.createNamedQuery("getGlobalChatMessages", ChatMessage.class)
 				, start, count).getResultList();
 	}
 
+	@TimedDatabase
 	public List<ChatMessage> getRoom(long roomId, long start, long count, boolean all) {
 		return setLimits(em.createNamedQuery("getChatMessagesByRoom", ChatMessage.class)
 					.setParameter("roomId", roomId)
@@ -61,12 +66,14 @@ public class ChatDao {
 				, start, count).getResultList();
 	}
 
+	@TimedDatabase
 	public List<ChatMessage> getUser(long userId, long start, long count) {
 		return setLimits(em.createNamedQuery("getChatMessagesByUser", ChatMessage.class)
 					.setParameter(PARAM_USER_ID, userId)
 				, start, count).getResultList();
 	}
 
+	@TimedDatabase
 	public List<ChatMessage> getUserRecent(long userId, Date date, long start, long count) {
 		return setLimits(em.createNamedQuery("getChatMessagesByUserTime", ChatMessage.class)
 					.setParameter(PARAM_USER_ID, userId)
@@ -75,6 +82,7 @@ public class ChatDao {
 				, start, count).getResultList();
 	}
 
+	@TimedDatabase
 	public void closeMessages(long userId) {
 		em.createNamedQuery("chatCloseMessagesByUser")
 			.setParameter(PARAM_USER_ID, userId)
@@ -86,6 +94,7 @@ public class ChatDao {
 		return update(entity, null);
 	}
 
+	@TimedDatabase
 	public ChatMessage update(ChatMessage entity, Date sent) {
 		entity.setSent(sent == null ? new Date() : sent);
 		if (entity.getId() == null) {

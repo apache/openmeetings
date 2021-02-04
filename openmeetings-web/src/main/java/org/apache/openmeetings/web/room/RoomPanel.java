@@ -73,6 +73,7 @@ import org.apache.openmeetings.web.room.wb.WbAction;
 import org.apache.openmeetings.web.room.wb.WbPanel;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.openmeetings.web.util.TouchPunchResourceReference;
+import org.apache.openmeetings.util.logging.PrometheusUtil;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -117,8 +118,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Alert;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.Backdrop;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
-import io.prometheus.client.SimpleTimer;
-import io.prometheus.client.Summary;
+import io.prometheus.client.Histogram;
 
 @AuthorizeInstantiation("ROOM")
 public class RoomPanel extends BasePanel {
@@ -136,27 +136,14 @@ public class RoomPanel extends BasePanel {
 	private final Room r;
 	private final boolean interview;
 	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
-	static final Summary metric_roomPanel_init = Summary.build() //
-			.name("requests_roomPanel_init") //
-			.help("Request latency in seconds.") //
-			.labelNames("aLabel") //
-			.register();
-	static final Summary metric_roomPanel_roomEnter = Summary.build() //
-			.name("requests_roomPanel_room_enter") //
-			.help("Request latency in seconds.") //
-			.labelNames("aLabel") //
-			.register();
-	static final Summary metric_roomPanel_initVideo = Summary.build() //
-			.name("requests_roomPanel_init_video") //
-			.help("Request latency in seconds.") //
-			.labelNames("aLabel") //
-			.register();
+
 	private final AbstractDefaultAjaxBehavior roomEnter = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
-			SimpleTimer requestTimer = new SimpleTimer();
+			Histogram.Timer timer = PrometheusUtil.getHistogram() //
+					.labels("RoomPanel", "roomEnter", "application").startTimer();
 			try {
 				log.debug("RoomPanel::roomEnter");
 				WebSession ws = WebSession.get();
@@ -198,30 +185,25 @@ public class RoomPanel extends BasePanel {
 				}
 				wb.update(target);
 			} finally {
-				metric_roomPanel_roomEnter.labels("aLabelValue").observe(requestTimer.elapsedSeconds());
+				timer.observeDuration();
 			}
 		}
 
 		private void initVideos(AjaxRequestTarget target) {
-			SimpleTimer requestTimer = new SimpleTimer();
-			try {
-				StringBuilder sb = new StringBuilder();
-				JSONArray streams = new JSONArray();
-				cm.streamByRoom(getRoom().getId())
-					.map(Client::getStreams)
-					.flatMap(List::stream)
-					.forEach(sd -> streams.put(sd.toJson()));
-				if (streams.length() > 0) {
-					sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers(getClient())).append(");");
-				}
-				if (interview && streamProcessor.recordingAllowed(getClient())) {
-					sb.append("WbArea.setRecEnabled(true);");
-				}
-				if (!Strings.isEmpty(sb)) {
-					target.appendJavaScript(sb);
-				}
-			} finally {
-				metric_roomPanel_initVideo.labels("aLabelValue").observe(requestTimer.elapsedSeconds());
+			StringBuilder sb = new StringBuilder();
+			JSONArray streams = new JSONArray();
+			cm.streamByRoom(getRoom().getId())
+				.map(Client::getStreams)
+				.flatMap(List::stream)
+				.forEach(sd -> streams.put(sd.toJson()));
+			if (streams.length() > 0) {
+				sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers(getClient())).append(");");
+			}
+			if (interview && streamProcessor.recordingAllowed(getClient())) {
+				sb.append("WbArea.setRecEnabled(true);");
+			}
+			if (!Strings.isEmpty(sb)) {
+				target.appendJavaScript(sb);
 			}
 		}
 	};
@@ -296,7 +278,8 @@ public class RoomPanel extends BasePanel {
 
 	@Override
 	protected void onInitialize() {
-		SimpleTimer requestTimer = new SimpleTimer();
+		Histogram.Timer timer = PrometheusUtil.getHistogram() //
+				.labels("RoomPanel", "onInitialize", "application").startTimer();
 		try {
 			super.onInitialize();
 			//let's refresh user in client
@@ -455,7 +438,7 @@ public class RoomPanel extends BasePanel {
 					}
 				});
 		} finally {
-			metric_roomPanel_init.labels("aLabelValue").observe(requestTimer.elapsedSeconds());
+			timer.observeDuration();
 		}
 	}
 

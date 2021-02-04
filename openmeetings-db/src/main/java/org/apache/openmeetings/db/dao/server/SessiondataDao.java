@@ -27,6 +27,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.util.logging.TimedDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -89,6 +90,7 @@ public class SessiondataDao {
 	 * @param sid - sessionId
 	 * @return {@link Sessiondata} with sessionId == SID, or null if not found
 	 */
+	@TimedDatabase
 	public Sessiondata find(String sid) {
 		if (sid == null) {
 			return null;
@@ -126,6 +128,7 @@ public class SessiondataDao {
 	 * @param refreshed - date to compare session update time with
 	 * @return - the list of all expired session data
 	 */
+	@TimedDatabase
 	private List<Sessiondata> getSessionToDelete(Date refreshed) {
 		return em.createNamedQuery("getSessionToDelete", Sessiondata.class)
 				.setParameter("refreshed", refreshed)
@@ -152,6 +155,7 @@ public class SessiondataDao {
 		}
 	}
 
+	@TimedDatabase
 	public Sessiondata update(Sessiondata sd) {
 		sd.setRefreshed(new Date());
 

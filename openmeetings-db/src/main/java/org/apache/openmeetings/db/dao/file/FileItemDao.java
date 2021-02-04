@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.logging.TimedDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -46,11 +47,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class FileItemDao extends BaseFileItemDao {
 	private static final Logger log = LoggerFactory.getLogger(FileItemDao.class);
 
+	@TimedDatabase
 	public List<FileItem> getByRoom(Long roomId) {
 		log.debug("getByRoom roomId :: {}", roomId);
 		return em.createNamedQuery("getFilesByRoom", FileItem.class).setParameter("roomId", roomId).getResultList();
 	}
 
+	@TimedDatabase
 	public List<FileItem> getByOwner(Long ownerId) {
 		log.debug("getByOwner() started");
 		TypedQuery<FileItem> query = em.createNamedQuery("getFilesByOwner", FileItem.class);
@@ -59,6 +62,7 @@ public class FileItemDao extends BaseFileItemDao {
 		return query.getResultList();
 	}
 
+	@TimedDatabase
 	public List<FileItem> getByGroup(Long groupId) {
 		log.debug("getByGroup() started");
 		return em.createNamedQuery("getFileByGroup", FileItem.class)
@@ -66,6 +70,7 @@ public class FileItemDao extends BaseFileItemDao {
 				.getResultList();
 	}
 
+	@TimedDatabase
 	public List<FileItem> getByGroup(Long groupId, List<Type> filter) {
 		if (filter == null) {
 			return getByGroup(groupId);
@@ -77,6 +82,7 @@ public class FileItemDao extends BaseFileItemDao {
 				.getResultList();
 	}
 
+	@TimedDatabase
 	public List<FileItem> getByParent(Long parentId) {
 		log.debug("getByParent() started");
 		return em.createNamedQuery("getFilesByParent", FileItem.class)
@@ -84,6 +90,7 @@ public class FileItemDao extends BaseFileItemDao {
 				.getResultList();
 	}
 
+	@TimedDatabase
 	public List<FileItem> getByParent(Long parentId, List<Type> filter) {
 		if (filter == null) {
 			return getByParent(parentId);
@@ -106,6 +113,7 @@ public class FileItemDao extends BaseFileItemDao {
 		return bf instanceof FileItem ? (FileItem)bf : null;
 	}
 
+	@TimedDatabase
 	public FileItem get(String externalId, String externalType) {
 		log.debug("get started");
 
@@ -115,12 +123,14 @@ public class FileItemDao extends BaseFileItemDao {
 		return list.size() == 1 ? list.get(0) : null;
 	}
 
+	@TimedDatabase
 	public List<FileItem> get() {
 		log.debug("get started");
 
 		return em.createNamedQuery("getAllFiles", FileItem.class).getResultList();
 	}
 
+	@TimedDatabase
 	public List<FileItem> getExternal(String externalType) {
 		log.debug("get external started");
 

@@ -61,6 +61,7 @@ import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.crypt.ICrypt;
+import org.apache.openmeetings.util.logging.TimedDatabase;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,6 +118,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	@Override
+	@TimedDatabase
 	public List<User> get(long first, long count) {
 		return setLimits(
 				em.createNamedQuery("getNondeletedUsers", User.class)
@@ -151,6 +153,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 	}
 
+	@TimedDatabase
 	private List<User> get(String search, Long start, Long count, String order, boolean filterContacts, Long currentUserId, boolean filterDeleted) {
 		Map<String, Object> params = new HashMap<>();
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, filterDeleted, false
@@ -160,6 +163,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	// This is AdminDao method
+	@TimedDatabase
 	public List<User> get(String search, boolean excludeContacts, long first, long count) {
 		Map<String, Object> params = new HashMap<>();
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", null, search, true, true, false
@@ -178,6 +182,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	@Override
+	@TimedDatabase
 	public List<User> adminGet(String search, Long adminId, long start, long count, String order) {
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, false, false
 				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", order, searchFields), User.class);
@@ -194,6 +199,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	@Override
+	@TimedDatabase
 	public long count() {
 		// get all users
 		TypedQuery<Long> q = em.createNamedQuery("countNondeletedUsers", Long.class);
@@ -219,6 +225,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	@Override
+	@TimedDatabase
 	public long adminCount(String search, Long adminId) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, false, true
 				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", null, searchFields), Long.class);
@@ -227,6 +234,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	@Override
+	@TimedDatabase
 	public User update(User u, Long userId) {
 		if (u.getId() == null) {
 			if (u.getRegdate() == null) {
@@ -265,6 +273,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	@Override
+	@TimedDatabase
 	public User get(Long id) {
 		return get(id, false);
 	}
@@ -345,10 +354,12 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 	}
 
+	@TimedDatabase
 	public List<User> get(Collection<Long> ids) {
 		return em.createNamedQuery("getUsersByIds", User.class).setParameter("ids", ids).getResultList();
 	}
 
+	@TimedDatabase
 	public List<User> getAllUsers() {
 		return fillLazy(em
 				, oem -> oem.createNamedQuery("getNondeletedUsers", User.class)
@@ -407,6 +418,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return getByEmail(email, User.Type.USER, null);
 	}
 
+	@TimedDatabase
 	public User getByEmail(String email, User.Type type, Long domainId) {
 		return single(fillLazy(em
 				, oem -> oem.createNamedQuery("getUserByEmail", User.class)
@@ -416,6 +428,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				, FETCH_GROUP_GROUP));
 	}
 
+	@TimedDatabase
 	public User getUserByHash(String hash) {
 		if (Strings.isEmpty(hash)) {
 			return null;
@@ -431,6 +444,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 * @param search - term to search
 	 * @return - number of matching user
 	 */
+	@TimedDatabase
 	public Long selectMaxFromUsersWithSearch(String search) {
 		try {
 			// get all users
@@ -607,6 +621,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 * @return User object in case of successful login
 	 * @throws OmException in case of any issue
 	 */
+	@TimedDatabase
 	public User login(String userOrEmail, String userpass) throws OmException {
 		List<User> users = em.createNamedQuery("getUserByLoginOrEmail", User.class)
 				.setParameter("userOrEmail", userOrEmail)

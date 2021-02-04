@@ -49,6 +49,7 @@ import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.manager.ISipManager;
 import org.apache.openmeetings.db.util.DaoHelper;
+import org.apache.openmeetings.util.logging.TimedDatabase;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -227,6 +228,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 		update(entity, userId);
 	}
 
+	@TimedDatabase
 	public Room getUserRoom(Long ownerId, Room.Type type, String name) {
 		log.debug("getUserRoom : {} || {}", ownerId, type);
 		Room room = single(em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class)
@@ -259,6 +261,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 		}
 	}
 
+	@TimedDatabase
 	public Room getExternal(String externalType, String externalId) {
 		log.debug("getExternal : {}  - {}", externalType, externalId);
 		return single(fillLazy(em
@@ -268,6 +271,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 				, GRP_GROUPS));
 	}
 
+	@TimedDatabase
 	public Room getExternal(Type type, String externalType, String externalId) {
 		log.debug("getExternal : {} - {}  - {}", type, externalType, externalId);
 		return single(fillLazy(em
@@ -278,6 +282,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 				, GRP_GROUPS));
 	}
 
+	@TimedDatabase
 	public List<Room> getRecent(Long userId) {
 		List<Room> result = new ArrayList<>();
 		Set<Long> ids = new HashSet<>();

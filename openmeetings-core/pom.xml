@@ -100,19 +100,6 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.aspectj</groupId>
-		    <artifactId>aspectjtools</artifactId>
-		    <version>1.9.6</version>
-		</dependency>
-		<dependency>
-		  	<groupId>io.prometheus</groupId>
-		  	<artifactId>simpleclient</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.kurento</groupId>
 			<artifactId>kurento-client</artifactId>
 		</dependency>

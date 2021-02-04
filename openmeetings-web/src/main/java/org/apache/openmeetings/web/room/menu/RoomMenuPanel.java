@@ -46,6 +46,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ws.RoomMessage.Type;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.openmeetings.util.logging.PrometheusUtil;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ImagePanel;
@@ -70,6 +71,7 @@ import com.github.openjson.JSONObject;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
+import io.prometheus.client.Histogram;
 
 public class RoomMenuPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -141,40 +143,46 @@ public class RoomMenuPanel extends Panel {
 
 	@Override
 	protected void onInitialize() {
-		exitMenuItem = new OmMenuItem(getString("308"), getString("309"), FontAwesome5IconType.sign_out_alt_s) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				chatDao.closeMessages(getUserId());
-				exit(target);
-			}
-		};
-		filesMenu = new OmMenuItem(getString("245"), null, false);
-		actionsSubMenu.init();
-		pollsSubMenu.init();
-		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(isVisible()));
-
-		add(askBtn.add(AttributeModifier.replace(ATTR_TITLE, getString("84"))));
-		Label demo = new Label("demo", Model.of(""));
-		Room r = room.getRoom();
-		add(demo.setVisible(r.isDemoRoom() && r.getDemoTime() != null && room.getRoom().getDemoTime().intValue() > 0));
-		if (demo.isVisible()) {
-			demo.add(new OmTimerBehavior(room.getRoom().getDemoTime().intValue(), "637") {
+		Histogram.Timer timer = PrometheusUtil.getHistogram() //
+				.labels("RoomMenuPanel", "onInitialize", "application").startTimer();
+		try {
+			exitMenuItem = new OmMenuItem(getString("308"), getString("309"), FontAwesome5IconType.sign_out_alt_s) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected void onTimer(int remain) {
-					getComponent().add(AttributeModifier.replace(ATTR_TITLE, getText(getString("637"), remain)));
-				}
-
-				@Override
-				protected void onFinish(AjaxRequestTarget target) {
+				public void onClick(AjaxRequestTarget target) {
+					chatDao.closeMessages(getUserId());
 					exit(target);
 				}
-			});
+			};
+			filesMenu = new OmMenuItem(getString("245"), null, false);
+			actionsSubMenu.init();
+			pollsSubMenu.init();
+			add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(isVisible()));
+
+			add(askBtn.add(AttributeModifier.replace(ATTR_TITLE, getString("84"))));
+			Label demo = new Label("demo", Model.of(""));
+			Room r = room.getRoom();
+			add(demo.setVisible(r.isDemoRoom() && r.getDemoTime() != null && room.getRoom().getDemoTime().intValue() > 0));
+			if (demo.isVisible()) {
+				demo.add(new OmTimerBehavior(room.getRoom().getDemoTime().intValue(), "637") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onTimer(int remain) {
+						getComponent().add(AttributeModifier.replace(ATTR_TITLE, getText(getString("637"), remain)));
+					}
+
+					@Override
+					protected void onFinish(AjaxRequestTarget target) {
+						exit(target);
+					}
+				});
+			}
+			super.onInitialize();
+		} finally {
+			timer.observeDuration();
 		}
-		super.onInitialize();
 	}
 
 	@Override
