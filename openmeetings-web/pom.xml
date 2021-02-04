@@ -37,8 +37,8 @@
 			<id>mysql</id>
 			<properties>
 				<db>mysql</db>
-				<db_user>om_db_admin</db_user>
-				<db_pass>12345</db_pass>
+				<db_user>root</db_user>
+				<db_pass></db_pass>
 			</properties>
 			<dependencies>
 				<dependency>
