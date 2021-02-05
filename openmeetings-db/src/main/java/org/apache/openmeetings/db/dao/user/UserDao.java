@@ -580,6 +580,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return getUserProfileQuery(Long.class, userId, text, offers, search, null, false).getSingleResult();
 	}
 
+	@TimedDatabase
 	public User getExternalUser(String extId, String extType) {
 		return single(fillLazy(em
 				, oem -> oem.createNamedQuery("getExternalUser", User.class)
@@ -623,6 +624,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 */
 	@TimedDatabase
 	public User login(String userOrEmail, String userpass) throws OmException {
+		long start = System.currentTimeMillis();
 		List<User> users = em.createNamedQuery("getUserByLoginOrEmail", User.class)
 				.setParameter("userOrEmail", userOrEmail)
 				.setParameter("type", Type.USER)
@@ -652,7 +654,12 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 
 		u.setLastlogin(new Date());
-		return update(u, u.getId());
+		User updatedUser = update(u, u.getId());
+
+		long finish = System.currentTimeMillis();
+		long timeElapsed = finish - start;
+		log.info("login - Elapsed time " + timeElapsed);
+		return updatedUser;
 	}
 
 	public List<User> getByExpiredHash(long ttl) {

@@ -142,6 +142,7 @@ public class RoomPanel extends BasePanel {
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
+			long start = System.currentTimeMillis();
 			Histogram.Timer timer = PrometheusUtil.getHistogram() //
 					.labels("RoomPanel", "roomEnter", "application").startTimer();
 			try {
@@ -185,6 +186,7 @@ public class RoomPanel extends BasePanel {
 				}
 				wb.update(target);
 			} finally {
+				log.info("RoomEnter roomEnter - Elapsed time " + (System.currentTimeMillis() - start));
 				timer.observeDuration();
 			}
 		}
@@ -278,6 +280,7 @@ public class RoomPanel extends BasePanel {
 
 	@Override
 	protected void onInitialize() {
+		long start = System.currentTimeMillis();
 		Histogram.Timer timer = PrometheusUtil.getHistogram() //
 				.labels("RoomPanel", "onInitialize", "application").startTimer();
 		try {
@@ -438,6 +441,7 @@ public class RoomPanel extends BasePanel {
 					}
 				});
 		} finally {
+			log.info("RoomEnter onInitialise - Elapsed time " + (System.currentTimeMillis() - start));
 			timer.observeDuration();
 		}
 	}

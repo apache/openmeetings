@@ -23,6 +23,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
@@ -32,7 +33,9 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 
 @Entity
-@Table(name = "address")
+@Table(name = "address", indexes = {
+		@Index(name = "email_idx", columnList = "email")
+})
 @XmlRootElement(name = "address")
 public class Address extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
