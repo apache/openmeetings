@@ -42,7 +42,7 @@ public class SCryptImplementation implements ICrypt {
 				}
 				return sr;
 			});
-	private static final int COST = 1024 * 16;
+	private static final int COST = 256;
 	private static final int KEY_LENGTH = 512;
 	private static final int SALT_LENGTH = 200;
 

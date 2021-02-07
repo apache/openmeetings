@@ -655,10 +655,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 		u.setLastlogin(new Date());
 		User updatedUser = update(u, u.getId());
-
-		long finish = System.currentTimeMillis();
-		long timeElapsed = finish - start;
-		log.info("login - Elapsed time " + timeElapsed);
+		log.info("login - Elapsed time after update - by finish - " + (System.currentTimeMillis() - start));
 		return updatedUser;
 	}
 
