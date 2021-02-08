@@ -155,7 +155,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="314"><![CDATA[Чат]]></entry>
 	<entry key="315"><![CDATA[Планшет]]></entry>
 	<entry key="316"><![CDATA[Модерація]]></entry>
-	<entry key="317"><![CDATA[Файли]]></entry>
+	<entry key="317"><![CDATA[Send email with a reset link]]></entry>
 	<entry key="321"><![CDATA[The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered]]></entry>
 	<entry key="325"><![CDATA[Скинути Ваш пароль]]></entry>
 	<entry key="327"><![CDATA[змінити пароль]]></entry>

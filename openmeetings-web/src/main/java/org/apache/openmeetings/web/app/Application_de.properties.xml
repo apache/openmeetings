@@ -559,7 +559,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.group.form.maxFilesSize"><![CDATA[maximale Dateigröße]]></entry>
 	<entry key="admin.group.form.maxRecordingsSize"><![CDATA[Maximale Größe einer Aufnahme]]></entry>
 	<entry key="admin.group.form.maxRooms"><![CDATA[Maximale Anzahl von Räumen]]></entry>
-	<entry key="admin.group.form.minutes"><![CDATA[minutes]]></entry>
+	<entry key="admin.group.form.minutes"><![CDATA[Minuten]]></entry>
 	<entry key="admin.group.form.recordingTtl"><![CDATA[Aufnahmen laufen ab in]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[Erinnerung des Ablaufs gesenet in]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[Markierung]]></entry>
@@ -830,7 +830,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="invalid.hash"><![CDATA[Fehlerhafter Hash]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Klicken, um das Panel anzudocken]]></entry>
 	<entry key="label.end"><![CDATA[Ende]]></entry>
-	<entry key="label.hangup"><![CDATA[Hang-up]]></entry>
+	<entry key="label.hangup"><![CDATA[Auflegen]]></entry>
 	<entry key="label.start"><![CDATA[Start]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Klicken, um das Panel abzudocken]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Abbrechen]]></entry>

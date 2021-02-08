@@ -156,7 +156,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="314"><![CDATA[Via Användarnamn]]></entry>
 	<entry key="315"><![CDATA[Din E-postadress]]></entry>
 	<entry key="316"><![CDATA[Ditt Användarnamn]]></entry>
-	<entry key="317"><![CDATA[OK]]></entry>
+	<entry key="317"><![CDATA[Send email with a reset link]]></entry>
 	<entry key="321"><![CDATA[Ett e-postmeddelande med en speciallänk har skickats till den e-postadress som är registrerad för användaren vars data uppgavs]]></entry>
 	<entry key="325"><![CDATA[Återställ ditt lösenord]]></entry>
 	<entry key="327"><![CDATA[Ändra lösenord]]></entry>

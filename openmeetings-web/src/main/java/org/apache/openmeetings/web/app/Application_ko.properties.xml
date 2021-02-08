@@ -155,7 +155,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="314"><![CDATA[Chat]]></entry>
 	<entry key="315"><![CDATA[Whiteboard]]></entry>
 	<entry key="316"><![CDATA[Moderation]]></entry>
-	<entry key="317"><![CDATA[Files]]></entry>
+	<entry key="317"><![CDATA[Send email with a reset link]]></entry>
 	<entry key="321"><![CDATA[The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered]]></entry>
 	<entry key="325"><![CDATA[Reset Your Password]]></entry>
 	<entry key="327"><![CDATA[change Password]]></entry>
