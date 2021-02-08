@@ -19,43 +19,43 @@
 
 -->
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<lang id="1" code="en" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">english</lang>
-	<lang id="2" code="de" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">deutsch</lang>
-	<lang id="3" code="de-StudIP" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">deutsch (studIP)</lang>
-	<lang id="4" code="fr" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">french</lang>
-	<lang id="5" code="it" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">italian</lang>
-	<lang id="6" code="pt" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">portugues</lang>
-	<lang id="7" code="pt-br" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">portugues brazil</lang>
-	<lang id="8" code="es" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">spanish</lang>
+	<lang id="1" code="en" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">english</lang>
+	<lang id="2" code="de" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">deutsch</lang>
+	<lang id="3" code="de-StudIP" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">deutsch (studIP)</lang>
+	<lang id="4" code="fr" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">french</lang>
+	<lang id="5" code="it" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">italian</lang>
+	<lang id="6" code="pt" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">portugues</lang>
+	<lang id="7" code="pt-br" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">portugues brazil</lang>
+	<lang id="8" code="es" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">spanish</lang>
 	<lang id="9" code="ru" tip="Только заглавные русские буквы А-Я" rangeStart="А" rangeEnd="Я">russian</lang>
-	<lang id="10" code="sv" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">swedish</lang>
-	<lang id="11" code="zh-CN" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">chinese simplified</lang>
-	<lang id="12" code="zh-TW" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">chinese traditional</lang>
-	<lang id="13" code="ko" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">korean</lang>
+	<lang id="10" code="sv" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">swedish</lang>
+	<lang id="11" code="zh-CN" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">chinese simplified</lang>
+	<lang id="12" code="zh-TW" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">chinese traditional</lang>
+	<lang id="13" code="ko" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">korean</lang>
 	<lang id="14" code="ar" tip="ادخل الرمز هنا" rangeStart="1" rangeEnd="9">عربي</lang>
-	<lang id="15" code="ja" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">japanese</lang>
-	<lang id="16" code="in" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">indonesian</lang>
-	<lang id="17" code="hu" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">hungarian</lang>
-	<lang id="18" code="tr" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">turkish</lang>
-	<lang id="19" code="uk" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">ukrainian</lang>
-	<lang id="20" code="th" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">thai</lang>
+	<lang id="15" code="ja" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">japanese</lang>
+	<lang id="16" code="in" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">indonesian</lang>
+	<lang id="17" code="hu" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">hungarian</lang>
+	<lang id="18" code="tr" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">turkish</lang>
+	<lang id="19" code="uk" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">ukrainian</lang>
+	<lang id="20" code="th" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">thai</lang>
 	<lang id="21" code="fa" tip="کد را اینجا وارد کنید" rangeStart="1" rangeEnd="9">فارسي</lang>
-	<lang id="22" code="cs" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">czech</lang>
-	<lang id="23" code="gl" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">galician</lang>
-	<lang id="24" code="fi" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">finnish</lang>
-	<lang id="25" code="pl" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">polish</lang>
-	<lang id="26" code="el" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">greek</lang>
-	<lang id="27" code="nl" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">dutch</lang>
-	<lang id="28" code="iw" tip="Only capital Latin latters A-Z" rangeStart="א" rangeEnd="ת">hebrew</lang>
-	<lang id="29" code="ca" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">catalan</lang>
-	<lang id="30" code="bg" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">bulgarian</lang>
-	<lang id="31" code="da" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">danish</lang>
-	<lang id="32" code="sk" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">slovak</lang>
-	<lang id="33" code="bn" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">bengali</lang>
-	<lang id="34" code="hi" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">hindi</lang>
-	<lang id="35" code="ta" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">tamil</lang>
-	<lang id="36" code="lo" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">lao</lang>
-	<lang id="37" code="ku" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">kurdish</lang>
-	<lang id="38" code="tk" tip="Only capital Latin latters A-Z" rangeStart="A" rangeEnd="Z">turkmen</lang>
-	<lang id="39" code="ur" tip="Only capital Latin latters A-Z" rangeStart="ا" rangeEnd="غ">urdu</lang>
+	<lang id="22" code="cs" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">czech</lang>
+	<lang id="23" code="gl" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">galician</lang>
+	<lang id="24" code="fi" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">finnish</lang>
+	<lang id="25" code="pl" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">polish</lang>
+	<lang id="26" code="el" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">greek</lang>
+	<lang id="27" code="nl" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">dutch</lang>
+	<lang id="28" code="iw" tip="Only capital Latin letters A-Z" rangeStart="א" rangeEnd="ת">hebrew</lang>
+	<lang id="29" code="ca" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">catalan</lang>
+	<lang id="30" code="bg" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">bulgarian</lang>
+	<lang id="31" code="da" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">danish</lang>
+	<lang id="32" code="sk" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">slovak</lang>
+	<lang id="33" code="bn" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">bengali</lang>
+	<lang id="34" code="hi" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">hindi</lang>
+	<lang id="35" code="ta" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">tamil</lang>
+	<lang id="36" code="lo" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">lao</lang>
+	<lang id="37" code="ku" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">kurdish</lang>
+	<lang id="38" code="tk" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">turkmen</lang>
+	<lang id="39" code="ur" tip="Only capital Latin letters A-Z" rangeStart="ا" rangeEnd="غ">urdu</lang>
 </language>
