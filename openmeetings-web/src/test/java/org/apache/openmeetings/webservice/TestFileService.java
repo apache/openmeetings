@@ -18,6 +18,12 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.AbstractJUnitDefaults.UNIT_TEST_ARAB_EXT_TYPE;
+import static org.apache.openmeetings.AbstractJUnitDefaults.createUser;
+import static org.apache.openmeetings.AbstractJUnitDefaults.getUser;
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -25,13 +31,21 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.imageio.ImageIO;
 
+import org.apache.openmeetings.db.dao.file.FileItemDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.file.FileExplorerObject;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.User;
+import org.apache.wicket.util.encoding.UrlEncoder;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -68,5 +82,29 @@ class TestFileService extends AbstractWebServiceTest {
 				.query("sid", r.getMessage())
 				.get(FileExplorerObject.class);
 		assertNotNull(fo);
+	}
+
+	@Test
+	void testGetExternal() throws Exception {
+		Group g = new Group();
+		g.setExternal(true);
+		g.setName(UNIT_TEST_ARAB_EXT_TYPE);
+		g = getBean(GroupDao.class).update(g, null);
+		User u = getUser(randomUUID().toString());
+		u.addGroup(g);
+		u = createUser(getBean(UserDao.class), u);
+
+		FileItem f = new FileItem();
+		f.setName("Arab external test");
+		f.setType(BaseFileItem.Type.IMAGE);
+		f.setInsertedBy(u.getId());
+		f = getBean(FileItemDao.class).update(f);
+		ServiceResult r = login();
+		Collection<? extends FileItemDTO> list = getClient(getFileUrl())
+				.path("/" + UrlEncoder.PATH_INSTANCE.encode(UNIT_TEST_ARAB_EXT_TYPE, UTF_8))
+				.query("sid", r.getMessage())
+				.getCollection(FileItemDTO.class);
+		assertNotNull(list);
+		assertFalse(list.isEmpty());
 	}
 }

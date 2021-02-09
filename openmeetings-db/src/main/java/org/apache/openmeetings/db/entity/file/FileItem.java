@@ -39,8 +39,8 @@ import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 		+ "AND f.parentId = :parentId ORDER BY f.type ASC, f.name ")
 @NamedQuery(name = "getFilesFilteredByParent", query = "SELECT f FROM FileItem f WHERE f.deleted = false "
 		+ "AND f.parentId = :parentId AND f.type IN :filter ORDER BY f.type ASC, f.name ")
-@NamedQuery(name = "getFileExternal", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.externalId = :externalId AND f.externalType LIKE :externalType")
-@NamedQuery(name = "getFileAllExternal", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.externalType LIKE :externalType")
+@NamedQuery(name = "getFileExternal", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.externalId = :externalId AND f.externalType = :externalType")
+@NamedQuery(name = "getFileAllExternal", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.externalType = :externalType")
 @NamedQuery(name = "getFileByGroup", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.ownerId IS NULL "
 		+ "AND f.groupId = :groupId AND f.parentId IS NULL "
 		+ "ORDER BY f.type ASC, f.name")

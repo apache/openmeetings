@@ -56,6 +56,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	public static final String userpass = "Q!w2e3r4t5";
 	public static final String group = "smoketest";
 	public static final String email = "junit@openmeetings.apache.org";
+	public static final String UNIT_TEST_ARAB_EXT_TYPE = "النُّجُومُ الخَمْسَةِ";
 	public static final Random rnd = new Random();
 
 	@Autowired
