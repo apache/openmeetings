@@ -44,6 +44,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.openmeetings.util.logging.TimedApplication;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -165,6 +166,7 @@ public class ClientManager implements IClientManager {
 		exitRoom(c, true);
 	}
 
+	@TimedApplication
 	public void exitRoom(Client c, boolean update) {
 		Long roomId = c.getRoomId();
 		log.debug("Removing online room client: {}, room: {}", c.getUid(), roomId);
@@ -203,6 +205,7 @@ public class ClientManager implements IClientManager {
 	}
 
 	@Override
+	@TimedApplication
 	public void exit(Client c) {
 		if (c != null) {
 			confLogDao.add(
@@ -246,6 +249,7 @@ public class ClientManager implements IClientManager {
 	 * @param c - client to be added to the room
 	 * @return count of users in room _after_ adding
 	 */
+	@TimedApplication
 	public int addToRoom(Client c) {
 		Room r = c.getRoom();
 		Long roomId = r.getId();
@@ -270,6 +274,7 @@ public class ClientManager implements IClientManager {
 		return count;
 	}
 
+	@TimedApplication
 	private void addRoomToServer(String serverId, Room r) {
 		if (!onlineServers.get(serverId).getRooms().contains(r.getId())) {
 			log.debug("Cluster:: room {} was not found for server '{}', adding ...", r.getId(), serverId);
@@ -305,6 +310,7 @@ public class ClientManager implements IClientManager {
 	}
 
 	@Override
+	@TimedApplication
 	public Stream<Client> streamByRoom(Long roomId) {
 		return Optional.ofNullable(roomId)
 			.map(id -> onlineRooms.getOrDefault(id, Set.of()))

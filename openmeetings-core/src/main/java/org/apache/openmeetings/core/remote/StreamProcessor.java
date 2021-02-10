@@ -50,6 +50,7 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.openmeetings.util.logging.PrometheusUtil;
 import org.apache.openmeetings.util.logging.TimedApplication;
 import org.apache.wicket.util.string.Strings;
 import org.kurento.client.IceCandidate;
@@ -62,6 +63,8 @@ import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
+
+import io.prometheus.client.Histogram;
 
 @Component
 public class StreamProcessor implements IStreamProcessor {
@@ -86,98 +89,105 @@ public class StreamProcessor implements IStreamProcessor {
 
 	@TimedApplication
 	void onMessage(Client c, final String cmdId, JSONObject msg) {
-		final String uid = msg.optString("uid");
-		KStream sender;
-		StreamDesc sd;
-		Optional<StreamDesc> osd;
-		log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
-		switch (cmdId) {
-			case "devicesAltered":
-				sd = c.getStream(uid);
-				if (sd != null) {
-					if (!msg.getBoolean("audio") && c.hasActivity(Activity.AUDIO)) {
-						c.remove(Activity.AUDIO);
+		Histogram.Timer timer = PrometheusUtil.getHistogram() //
+				.labels("StreamProcessor", "onMessage", "application", cmdId).startTimer();
+		try {
+			final String uid = msg.optString("uid");
+			KStream sender;
+			StreamDesc sd;
+			Optional<StreamDesc> osd;
+			log.info("Incoming message from user with ID '{}': {} and cmdId: {} ", c.getUserId(), msg, cmdId);
+			switch (cmdId) {
+				case "devicesAltered":
+					sd = c.getStream(uid);
+					if (sd != null) {
+						if (!msg.getBoolean("audio") && c.hasActivity(Activity.AUDIO)) {
+							c.remove(Activity.AUDIO);
+						}
+						if (!msg.getBoolean("video") && c.hasActivity(Activity.VIDEO)) {
+							c.remove(Activity.VIDEO);
+						}
+						sd.setActivities();
+						WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 					}
-					if (!msg.getBoolean("video") && c.hasActivity(Activity.VIDEO)) {
-						c.remove(Activity.VIDEO);
+					break;
+				case "toggleActivity":
+					toggleActivity(c, Activity.valueOf(msg.getString("activity")));
+					break;
+				case "broadcastStarted":
+					handleBroadcastStarted(c, uid, msg);
+					break;
+				case "broadcastRestarted":
+					handleBroadcastRestarted(c, uid);
+					break;
+				case "onIceCandidate":
+					sender = getByUid(uid);
+					if (sender != null) {
+						JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
+						String candStr = candidate.getString(PARAM_CANDIDATE);
+						if (!Strings.isEmpty(candStr)) {
+							IceCandidate cand = new IceCandidate(
+									candStr
+									, candidate.getString("sdpMid")
+									, candidate.getInt("sdpMLineIndex"));
+							sender.addCandidate(cand, msg.getString("luid"));
+						}
 					}
-					sd.setActivities();
-					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
-				}
-				break;
-			case "toggleActivity":
-				toggleActivity(c, Activity.valueOf(msg.getString("activity")));
-				break;
-			case "broadcastStarted":
-				handleBroadcastStarted(c, uid, msg);
-				break;
-			case "broadcastRestarted":
-				handleBroadcastRestarted(c, uid);
-				break;
-			case "onIceCandidate":
-				sender = getByUid(uid);
-				if (sender != null) {
-					JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
-					String candStr = candidate.getString(PARAM_CANDIDATE);
-					if (!Strings.isEmpty(candStr)) {
-						IceCandidate cand = new IceCandidate(
-								candStr
-								, candidate.getString("sdpMid")
-								, candidate.getInt("sdpMLineIndex"));
-						sender.addCandidate(cand, msg.getString("luid"));
+					break;
+				case "addListener":
+					sender = getByUid(msg.getString("sender"));
+					if (sender != null) {
+						Client sendClient = cm.getBySid(sender.getSid());
+						sd = sendClient.getStream(sender.getUid());
+						if (sd == null) {
+							break;
+						}
+						if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !sd.hasActivity(Activity.SCREEN)) {
+							break;
+						}
+						sender.addListener(c.getSid(), c.getUid(), msg.getString("sdpOffer"));
 					}
-				}
-				break;
-			case "addListener":
-				sender = getByUid(msg.getString("sender"));
-				if (sender != null) {
-					Client sendClient = cm.getBySid(sender.getSid());
-					sd = sendClient.getStream(sender.getUid());
-					if (sd == null) {
-						break;
+					break;
+				case "wannaShare":
+					osd = c.getScreenStream();
+					if (screenShareAllowed(c) || (osd.isPresent() && !osd.get().hasActivity(Activity.SCREEN))) {
+						startSharing(c, osd, msg, Activity.SCREEN);
 					}
-					if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !sd.hasActivity(Activity.SCREEN)) {
-						break;
+					break;
+				case "wannaRecord":
+					osd = c.getScreenStream();
+					if (recordingAllowed(c)) {
+						Room r = c.getRoom();
+						if (Room.Type.INTERVIEW == r.getType()) {
+							log.warn("This shouldn't be called for interview room");
+							break;
+						}
+						boolean sharing = isSharing(r.getId());
+						startSharing(c, osd, msg, Activity.RECORD);
+						if (sharing) {
+							startRecording(c);
+						}
 					}
-					sender.addListener(c.getSid(), c.getUid(), msg.getString("sdpOffer"));
-				}
-				break;
-			case "wannaShare":
-				osd = c.getScreenStream();
-				if (screenShareAllowed(c) || (osd.isPresent() && !osd.get().hasActivity(Activity.SCREEN))) {
-					startSharing(c, osd, msg, Activity.SCREEN);
-				}
-				break;
-			case "wannaRecord":
-				osd = c.getScreenStream();
-				if (recordingAllowed(c)) {
-					Room r = c.getRoom();
-					if (Room.Type.INTERVIEW == r.getType()) {
-						log.warn("This shouldn't be called for interview room");
-						break;
-					}
-					boolean sharing = isSharing(r.getId());
-					startSharing(c, osd, msg, Activity.RECORD);
-					if (sharing) {
-						startRecording(c);
-					}
-				}
-				break;
-			case "pauseSharing":
-				pauseSharing(c, uid);
-				break;
-			case "stopRecord":
-				stopRecording(c);
-				break;
-			case "errorSharing":
-				errorSharing(c);
-				break;
-			default:
-				// no-op
-				break;
+					break;
+				case "pauseSharing":
+					pauseSharing(c, uid);
+					break;
+				case "stopRecord":
+					stopRecording(c);
+					break;
+				case "errorSharing":
+					errorSharing(c);
+					break;
+				default:
+					// no-op
+					break;
+			}
+		} finally {
+			timer.observeDuration();
 		}
 	}
 
+	@TimedApplication
 	private void handleBroadcastRestarted(Client c, final String uid) {
 		if (!kHandler.isConnected()) {
 			return;
@@ -188,6 +198,7 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 	}
 
+	@TimedApplication
 	private void handleBroadcastStarted(Client c, final String uid, JSONObject msg) {
 		if (!kHandler.isConnected()) {
 			return;
@@ -226,6 +237,7 @@ public class StreamProcessor implements IStreamProcessor {
 	 * @param then steps need to be done after broadcast is started
 	 * @return the current KStream
 	 */
+	@TimedApplication
 	void startBroadcast(KStream stream, StreamDesc sd, String sdpOffer, Runnable then) {
 		stream.startBroadcast(sd, sdpOffer, then);
 	}
@@ -234,6 +246,7 @@ public class StreamProcessor implements IStreamProcessor {
 		return c.hasAnyActivity(Activity.AUDIO, Activity.VIDEO);
 	}
 
+	@TimedApplication
 	private Set<String> cleanWebCams(Client c, List<StreamDesc> streams) {
 		Set<String> closed = new HashSet<>();
 		streams.stream()
@@ -249,21 +262,26 @@ public class StreamProcessor implements IStreamProcessor {
 		return closed;
 	}
 
+	@TimedApplication
 	public void toggleActivity(Client c, Activity a) {
 		log.info("PARTICIPANT {}: trying to toggle activity {}", c, a);
 		if (!kHandler.isConnected()) {
+			log.warn("PARTICIPANT {}: trying to toggle activity {} - failed cause Kurento not connected", c, a);
 			return;
 		}
 
 		if (activityAllowed(c, a, c.getRoom())) {
 			boolean wasBroadcasting = isBroadcasting(c);
 			if (a == Activity.AUDIO && !c.isMicEnabled()) {
+				log.warn("PARTICIPANT {}: trying to toggle activity {} - mic not enabled", c, a);
 				return;
 			}
 			if (a == Activity.VIDEO && !c.isCamEnabled()) {
+				log.warn("PARTICIPANT {}: trying to toggle activity {} - cam not enabled", c, a);
 				return;
 			}
 			if (a == Activity.AUDIO_VIDEO && !c.isMicEnabled() && !c.isCamEnabled()) {
+				log.warn("PARTICIPANT {}: trying to toggle activity {} - mic or cam not enabled", c, a);
 				return;
 			}
 			c.toggle(a);
@@ -276,16 +294,19 @@ public class StreamProcessor implements IStreamProcessor {
 					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 				}
 			} else {
+				log.info("PARTICIPANT {}: trying to toggle activity {} - add Stream", c, a);
 				StreamDesc sd = c.addStream(StreamType.WEBCAM);
 				Set<String> closed = wasBroadcasting ? cleanWebCams(c, streams) : Set.of();
 				cm.update(c.restoreActivities(sd));
-				log.debug("User {}: has started broadcast", sd.getUid());
+				log.info("PARTICIPANT {}: trying to toggle activity {} - send client broadcast event", c, a);
 				kHandler.sendClient(sd.getSid(), newKurentoMsg()
 						.put("id", "broadcast")
 						.put("stream", sd.toJson(true))
 						.put("cleanup", new JSONArray(closed))
 						.put(PARAM_ICE, kHandler.getTurnServers(c, false)));
 			}
+		} else {
+			log.warn("PARTICIPANT {}: trying to toggle activity {} - activity not allowed", c, a);
 		}
 	}
 
@@ -301,6 +322,7 @@ public class StreamProcessor implements IStreamProcessor {
 	}
 
 	public void rightsUpdated(Client c) {
+		log.info("rightsUpdated uid {} ", c.getUid());
 		Optional<StreamDesc> osd = c.getScreenStream();
 		if (osd.isPresent() && !hasRightsToShare(c)) {
 			stopSharing(c, osd.get().getUid());
@@ -314,6 +336,7 @@ public class StreamProcessor implements IStreamProcessor {
 					KStream stream = streamByUid.get(sd.getUid());
 					if (stream != null) {
 						KRoom room = kHandler.getRoom(c.getRoomId());
+						log.info("rightsUpdated StopBroadcast uid {} ", c.getUid());
 						room.onStopBroadcast(stream);
 					}
 				});
@@ -321,6 +344,7 @@ public class StreamProcessor implements IStreamProcessor {
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 	}
 
+	@TimedApplication
 	private void checkStreams(Long roomId) {
 		if (!kHandler.isConnected()) {
 			return;
@@ -531,6 +555,7 @@ public class StreamProcessor implements IStreamProcessor {
 		return streamByUid.values();
 	}
 
+	@TimedApplication
 	Stream<KStream> getByRoom(Long roomId) {
 		return streamByUid.values().stream()
 				.filter(stream -> stream.getRoomId().equals(roomId));
@@ -561,6 +586,7 @@ public class StreamProcessor implements IStreamProcessor {
 	}
 
 	@Override
+	@TimedApplication
 	public void release(AbstractStream stream, boolean releaseStream) {
 		final String uid = stream.getUid();
 		if (releaseStream) {

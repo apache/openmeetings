@@ -62,6 +62,7 @@ var Video = (function() {
 		}).catch(__handleScreenError);
 	}
 	function _getVideoStream(msg, state, callback) {
+		console.log("_getVideoStream", JSON.stringify(msg));
 		VideoSettings.constraints(sd, function(cnts) {
 			if ((VideoUtil.hasCam(sd) && !cnts.video) || (VideoUtil.hasMic(sd) && !cnts.audio)) {
 				VideoManager.sendMessage({
@@ -151,6 +152,7 @@ var Video = (function() {
 		}
 	}
 	function __createSendPeer(msg, state, cnts) {
+		console.log('video __createSendPeer', JSON.stringify(msg), state, cnts);
 		state.options = {
 			videoStream: state.stream
 			, mediaConstraints: cnts
@@ -178,8 +180,10 @@ var Video = (function() {
 						return;
 					}
 					if (genErr) {
+						console.error('Sender sdp offer error ' + genErr);
 						return OmUtil.error('Sender sdp offer error ' + genErr);
 					}
+					console.log('Invoking Sender SDP offer callback function - broadcastStarted');
 					OmUtil.log('Invoking Sender SDP offer callback function');
 					const bmsg = {
 							id : 'broadcastStarted'
@@ -260,6 +264,7 @@ var Video = (function() {
 		}
 	}
 	function _initContainer(_id, name, opts, instanceUid) {
+		console.log('video _initContainer', _id, name, opts, instanceUid);
 		let contSel = '#user' + sd.cuid;
 		const _hasVideo = VideoUtil.hasVideo(sd)
 		size = {width: _hasVideo ? sd.width : 120, height: _hasVideo ? sd.height : 90};
@@ -343,6 +348,7 @@ var Video = (function() {
 		}
 	}
 	function _init(msg) {
+		console.log('video init with msg', JSON.stringify(msg));
 		sd = msg.stream;
 		msg.instanceUid = uuidv4();
 		if (!vol) {
@@ -393,6 +399,7 @@ var Video = (function() {
 		return v;
 	}
 	function _update(_c) {
+		console.log("_update ", JSON.stringify(_c));
 		const prevA = sd.activities
 			, prevW = sd.width
 			, prevH = sd.height
@@ -416,6 +423,7 @@ var Video = (function() {
 			&& prevW === sd.width && prevH === sd.height
 			&& prevCam == sd.cam && prevMic === sd.mic;
 		if (sd.self && !same) {
+			console.log("_update now dispose");
 			_cleanup();
 			v.remove();
 			_init({stream: sd, iceServers: iceServers});
@@ -461,6 +469,7 @@ var Video = (function() {
 			, instanceUid: v.length > 0 ? v.data('instance-uid') : undefined
 		};
 		if (sd.self) {
+			console.log('video _refresh', JSON.stringify(_msg));
 			VideoManager.sendMessage({
 				id : 'broadcastRestarted'
 				, uid: sd.uid
@@ -490,6 +499,7 @@ var Video = (function() {
 		}
 	}
 	function _cleanData(data) {
+		console.log("!!_cleanData", data);
 		if (!data) {
 			return;
 		}
@@ -527,6 +537,7 @@ var Video = (function() {
 		data.rtcPeer = null;
 	}
 	function _cleanup(evt) {
+		console.log('!!Disposing participant ' + sd.uid, evt);
 		OmUtil.log('!!Disposing participant ' + sd.uid);
 		let state;
 		while(state = states.pop()) {

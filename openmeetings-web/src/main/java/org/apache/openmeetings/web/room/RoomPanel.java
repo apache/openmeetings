@@ -144,7 +144,7 @@ public class RoomPanel extends BasePanel {
 		protected void respond(AjaxRequestTarget target) {
 			long start = System.currentTimeMillis();
 			Histogram.Timer timer = PrometheusUtil.getHistogram() //
-					.labels("RoomPanel", "roomEnter", "application").startTimer();
+					.labels("RoomPanel", "roomEnter", "application", "default").startTimer();
 			try {
 				log.debug("RoomPanel::roomEnter");
 				WebSession ws = WebSession.get();
@@ -282,7 +282,7 @@ public class RoomPanel extends BasePanel {
 	protected void onInitialize() {
 		long start = System.currentTimeMillis();
 		Histogram.Timer timer = PrometheusUtil.getHistogram() //
-				.labels("RoomPanel", "onInitialize", "application").startTimer();
+				.labels("RoomPanel", "onInitialize", "application", "default").startTimer();
 		try {
 			super.onInitialize();
 			//let's refresh user in client
@@ -495,7 +495,7 @@ public class RoomPanel extends BasePanel {
 							String uid = ((TextRoomMessage)m).getText();
 							Client c = cm.get(uid);
 							if (c == null) {
-								log.error("Not existing user in rightUpdated {} !!!!", uid);
+								log.error("Not existing user in roomEnter {} !!!!", uid);
 								return;
 							}
 							boolean self = curClient.getUid().equals(c.getUid());
@@ -807,10 +807,13 @@ public class RoomPanel extends BasePanel {
 						if (!c.getRoom().isAudioOnly() && !activityAllowed(c, Client.Activity.VIDEO, c.getRoom())) {
 							c.allow(Room.Right.VIDEO);
 						}
+						log.info("Toggle activity ON for client {} and room {} ", c, getRoom().getName());
 						streamProcessor.toggleActivity(c, c.getRoom().isAudioOnly()
 								? Client.Activity.AUDIO
 								: Client.Activity.AUDIO_VIDEO);
 					}
+				} else {
+					log.info("Toggle activity ON already done for client {} and room {} ", c, getRoom().getName());
 				}
 				c.getCamStreams().forEach(sd -> {
 					sd.setWidth(c.getWidth());

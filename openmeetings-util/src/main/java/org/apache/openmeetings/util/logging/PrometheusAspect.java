@@ -35,7 +35,7 @@ public class PrometheusAspect {
 		String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
 		String methodName = joinPoint.getSignature().getName();
 		Histogram.Timer timer = PrometheusUtil.getHistogram() //
-				.labels(className, methodName, "database").startTimer();
+				.labels(className, methodName, "database", "default").startTimer();
 		try {
 			return joinPoint.proceed();
 		} finally {
@@ -48,7 +48,7 @@ public class PrometheusAspect {
 		String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
 		String methodName = joinPoint.getSignature().getName();
 		Histogram.Timer timer = PrometheusUtil.getHistogram() //
-				.labels(className, methodName, "application").startTimer();
+				.labels(className, methodName, "application", "default").startTimer();
 		try {
 			return joinPoint.proceed();
 		} finally {

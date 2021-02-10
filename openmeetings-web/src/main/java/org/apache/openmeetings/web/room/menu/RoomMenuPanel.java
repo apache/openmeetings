@@ -144,7 +144,7 @@ public class RoomMenuPanel extends Panel {
 	@Override
 	protected void onInitialize() {
 		Histogram.Timer timer = PrometheusUtil.getHistogram() //
-				.labels("RoomMenuPanel", "onInitialize", "application").startTimer();
+				.labels("RoomMenuPanel", "onInitialize", "application", "default").startTimer();
 		try {
 			exitMenuItem = new OmMenuItem(getString("308"), getString("309"), FontAwesome5IconType.sign_out_alt_s) {
 				private static final long serialVersionUID = 1L;

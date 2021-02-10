@@ -157,8 +157,9 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		outgoingMedia = createEndpoint(sd.getSid(), sd.getUid());
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
 		flowoutSubscription = outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
-			log.info("Media Flow STATE :: {}, type {}, evt {}", evt.getState(), evt.getType(), evt.getMediaType());
-			if (MediaFlowState.NOT_FLOWING == evt.getState()) {
+			log.info("Media Flow STATE :: {}, type {}, evt {}, sid {}, uid {}", evt.getState(), evt.getType(), evt.getMediaType(), sid, uid);
+			if (MediaFlowState.NOT_FLOWING == evt.getState()
+					&& MediaType.VIDEO == evt.getMediaType()) {
 				log.warn("FlowOut Future is created");
 				flowoutFuture = Optional.of(new CompletableFuture<>().completeAsync(() -> {
 					log.warn("KStream will be dropped {}", sd);
@@ -339,6 +340,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	}
 
 	public void stopBroadcast() {
+		log.info("stopBroadcast StopBroadcast uid {} ", uid);
 		kRoom.onStopBroadcast(this);
 	}
 

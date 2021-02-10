@@ -18,6 +18,7 @@ var VideoManager = (function() {
 				_close(_cuid);
 			});
 		}
+		console.log("_onBroadcast", msg);
 		$('#' + VideoUtil.getVid(uid)).remove();
 		Video().init(msg);
 		OmUtil.log(uid + ' registered in room');
@@ -36,14 +37,17 @@ var VideoManager = (function() {
 	}
 	function _onReceive(msg) {
 		const uid = msg.stream.uid;
+		console.log("do _closeV _onReceive", msg);
 		_closeV($('#' + VideoUtil.getVid(uid)));
 		Video().init(msg);
 		OmUtil.log(uid + ' receiving video');
 	}
 	function _onKMessage(m) {
+		console.log("_onKMessage", JSON.stringify(m));
 		switch (m.id) {
 			case 'clientLeave':
 				$(VID_SEL + '[data-client-uid="' + m.uid + '"]').each(function() {
+					console.log("do _closeV _onKMessage clientLeave", m.uid);
 					_closeV($(this));
 				});
 				if (share.data('cuid') === m.uid) {
@@ -51,9 +55,11 @@ var VideoManager = (function() {
 				}
 				break;
 			case 'broadcastStopped':
+				console.log("do _closeV broadcastStopped", m.uid);
 				_close(m.uid, false);
 				break;
 			case 'broadcast':
+				console.log('broadcast with msg', JSON.stringify(m));
 				_onBroadcast(m);
 				break;
 			case 'videoResponse':
@@ -131,6 +137,7 @@ var VideoManager = (function() {
 			if (av && v.length === 1) {
 				v.data().update(sd);
 			} else if (!av && v.length === 1) {
+				console.log("do _closeV _update", v);
 				_closeV(v);
 			}
 		});
@@ -143,6 +150,7 @@ var VideoManager = (function() {
 			const sd = $(this).data().stream();
 			if (!streamMap[sd.uid]) {
 				//not-inited/invalid video window
+				console.log("do _closeV not-inited/invalid video window");
 				_closeV($(this));
 			}
 		});
@@ -154,6 +162,7 @@ var VideoManager = (function() {
 		if (v.dialog('instance') !== undefined) {
 			v.dialog('destroy');
 		}
+		console.log("_closeV", v);
 		v.parents('.pod').remove();
 		v.remove();
 		WbArea.updateAreaClass();
@@ -162,6 +171,7 @@ var VideoManager = (function() {
 		const m = {stream: sd, iceServers: iceServers};
 		let v = $('#' + VideoUtil.getVid(sd.uid))
 		if (v.length === 1) {
+			console.log("_playSharing", sd);
 			v.remove();
 		}
 		v = Video().init(m);
@@ -196,6 +206,7 @@ var VideoManager = (function() {
 	function _close(uid, showShareBtn) {
 		const v = $('#' + VideoUtil.getVid(uid));
 		if (v.length === 1) {
+			console.log("do _closeV _close");
 			_closeV(v);
 		}
 		if (!showShareBtn && uid === share.data('uid')) {

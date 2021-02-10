@@ -40,6 +40,7 @@ import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.NullStringer;
+import org.apache.openmeetings.util.logging.PrometheusUtil;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.wicket.Application;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
@@ -51,6 +52,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
+
+import io.prometheus.client.Histogram;
 
 public class WebSocketHelper {
 	private static final Logger log = LoggerFactory.getLogger(WebSocketHelper.class);
@@ -250,22 +253,28 @@ public class WebSocketHelper {
 			, BiConsumer<IWebSocketConnection, Client> consumer
 			, Predicate<Client> check)
 	{
-		new Thread(() -> {
-			Application app = (Application)getApp();
-			if (app == null) {
-				return; // Application is not ready
-			}
-			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
-			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-			Executor executor = settings.getWebSocketPushMessageExecutor();
-			func.apply(app)
-					.filter(check)
-					.forEach(c -> {
-						final IWebSocketConnection wc = reg.getConnection(app, c.getSessionId(), new PageIdKey(c.getPageId()));
-						if (wc != null && wc.isOpen()) {
-							executor.run(() -> consumer.accept(wc, c));
-						}
-					});
-		}).start();
+		Histogram.Timer timer = PrometheusUtil.getHistogram() //
+				.labels("WebSocketHelper", "send", "application", "default").startTimer();
+		try {
+			new Thread(() -> {
+				Application app = (Application)getApp();
+				if (app == null) {
+					return; // Application is not ready
+				}
+				WebSocketSettings settings = WebSocketSettings.Holder.get(app);
+				IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
+				Executor executor = settings.getWebSocketPushMessageExecutor();
+				func.apply(app)
+						.filter(check)
+						.forEach(c -> {
+							final IWebSocketConnection wc = reg.getConnection(app, c.getSessionId(), new PageIdKey(c.getPageId()));
+							if (wc != null && wc.isOpen()) {
+								executor.run(() -> consumer.accept(wc, c));
+							}
+						});
+			}).start();
+		} finally {
+			timer.observeDuration();
+		}
 	}
 }

@@ -77,7 +77,7 @@ public class RoomSidebar extends Panel {
 	@Override
 	protected void onInitialize() {
 		Histogram.Timer timer = PrometheusUtil.getHistogram() //
-				.labels("RoomSidebar", "onInitialize", "application").startTimer();
+				.labels("RoomSidebar", "onInitialize", "application", "default").startTimer();
 		try {
 			super.onInitialize();
 			final NameDialog addFolder = new NameDialog("addFolder", getString("712")) {
