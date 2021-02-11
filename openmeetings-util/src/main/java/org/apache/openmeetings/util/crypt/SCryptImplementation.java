@@ -20,8 +20,10 @@ package org.apache.openmeetings.util.crypt;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Properties;
 
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.crypto.generators.SCrypt;
@@ -42,7 +44,7 @@ public class SCryptImplementation implements ICrypt {
 				}
 				return sr;
 			});
-	private static final int COST = 1024 * 16;
+	private static int COST = 1024 * 16;
 	private static final int KEY_LENGTH = 512;
 	private static final int SALT_LENGTH = 200;
 
@@ -50,6 +52,16 @@ public class SCryptImplementation implements ICrypt {
 		byte[] salt = new byte[length];
 		rnd.get().nextBytes(salt);
 		return salt;
+	}
+
+	SCryptImplementation() {
+		try (final InputStream is = getClass().getResourceAsStream("/openmeetings.properties")) {
+			Properties props = new Properties();
+			props.load(is);
+			COST = Integer.valueOf(props.getProperty("scrypt.cost", "" + COST));
+		} catch (Exception e) {
+			log.error("Failed to initialize the COST", e);
+		}
 	}
 
 	private static String hash(String str, byte[] salt) {
