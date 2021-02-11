@@ -166,23 +166,14 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	 * Invoked in case stream stops to decide on if this stream is worth stopping.
 	 *
 	 * Stop broadcast in case:
-	 *  - Audio only stream and audio has been detected as not streaming anymore
-	 *  - Video or Data
+	 *  - If mediaType is anything other then MediaType.AUDIO
+	 *  - If type Audio stop in case it has no Video attached
 	 *
 	 * @param mediaType the MediaType that stopped flowing
 	 * @return true in case this stream should be dropped
 	 */
-	private boolean checkFlowOutEventForStopping(MediaType mediaType) {
-		if (MediaType.AUDIO == mediaType) {
-			if (!hasVideo && hasAudio) {
-				// Only stop in case its audio-only
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return true;
-		}
+	protected boolean checkFlowOutEventForStopping(MediaType mediaType) {
+		return MediaType.AUDIO != mediaType || !hasVideo;
 	}
 
 	private void internalStartBroadcast(final StreamDesc sd, final String sdpOffer) {
