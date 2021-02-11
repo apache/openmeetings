@@ -115,7 +115,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		if ((sdpOffer.indexOf("m=audio") > -1 && !hasAudio)
 				|| (sdpOffer.indexOf("m=video") > -1 && !hasVideo && StreamType.SCREEN != streamType))
 		{
-			log.warn("Broadcast started without enough rights");
+			log.warn("Broadcast started without enough rights, sid {}, uid {}", sid, uid);
 			return;
 		}
 		if (StreamType.SCREEN == streamType) {
@@ -162,15 +162,39 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		});
 	}
 
+	/**
+	 * Invoked in case stream stops to decide on if this stream is worth stopping.
+	 *
+	 * Stop broadcast in case:
+	 *  - Audio only stream and audio has been detected as not streaming anymore
+	 *  - Video or Data
+	 *
+	 * @param mediaType the MediaType that stopped flowing
+	 * @return true in case this stream should be dropped
+	 */
+	private boolean checkFlowOutEventForStopping(MediaType mediaType) {
+		if (MediaType.AUDIO == mediaType) {
+			if (!hasVideo && hasAudio) {
+				// Only stop in case its audio-only
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
 	private void internalStartBroadcast(final StreamDesc sd, final String sdpOffer) {
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
 		flowoutSubscription = outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
-			log.info("Media Flow OUT STATE :: {}, evt {}, source {}"
-					, evt.getState(), evt.getMediaType(), evt.getSource());
-			if (MediaFlowState.NOT_FLOWING == evt.getState()) {
-				log.warn("FlowOut Future is created");
+			log.info("Media Flow OUT STATE :: {}, mediaType {}, source {}, sid {}, uid {}"
+					, evt.getState(), evt.getMediaType(), evt.getSource(), sid, uid);
+			if (MediaFlowState.NOT_FLOWING == evt.getState()
+					&& checkFlowOutEventForStopping(evt.getMediaType())) {
+				log.warn("FlowOut Future is created, sid {}, uid {}", sid, uid);
 				flowoutFuture = Optional.of(new CompletableFuture<>().completeAsync(() -> {
-					log.warn("KStream will be dropped {}", sd);
+					log.warn("KStream will be dropped {}, sid {}, uid {}", sd, sid, uid);
 					if (StreamType.SCREEN == streamType) {
 						kHandler.getStreamProcessor().doStopSharing(sid, uid);
 					}
@@ -181,8 +205,8 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 				dropFlowoutFuture();
 			}
 		});
-		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media Flow IN :: {}, {}, {}"
-				, evt.getState(), evt.getMediaType(), evt.getSource()));
+		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media Flow IN :: {}, {}, {}, sid {}, uid {}"
+				, evt.getState(), evt.getMediaType(), evt.getSource(), sid, uid));
 		if (!sipClient) {
 			addListener(sd.getSid(), sd.getUid(), sdpOffer);
 			addSipProcessor(kRoom.getSipCount());
@@ -220,10 +244,10 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 
 	public void addListener(String sid, String uid, String sdpOffer) {
 		final boolean self = uid.equals(this.uid);
-		log.info("USER {}: have started {} in kRoom {}", uid, self ? "broadcasting" : "receiving", getRoomId());
+		log.info("USER {}: have started, sid {}, uid {} in kRoom {}", sid, uid, self ? "broadcasting" : "receiving", getRoomId());
 		log.trace("USER {}: SdpOffer is {}", uid, sdpOffer);
 		if (!self && outgoingMedia == null) {
-			log.warn("Trying to add listener too early");
+			log.warn("Trying to add listener too early, sid {}, uid {}", sid, uid);
 			return;
 		}
 
