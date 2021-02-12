@@ -126,7 +126,7 @@ public abstract class OmWebSocketPanel extends Panel {
 							}
 								break;
 							case "ping":
-								log.debug("Sending WebSocket PING");
+								log.trace("Sending WebSocket PING");
 								handler.appendJavaScript("OmUtil.ping();");
 								WebSocketHelper.sendClient(getWsClient(), new byte[]{getUserId() == null ? 0 : getUserId().byteValue()});
 								break;
