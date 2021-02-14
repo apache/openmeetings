@@ -563,7 +563,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.group.form.recordingTtl"><![CDATA[Aufnahmen laufen ab in]]></entry>
 	<entry key="admin.group.form.reminderDays"><![CDATA[Erinnerung des Ablaufs gesenet in]]></entry>
 	<entry key="admin.group.form.tag"><![CDATA[Markierung]]></entry>
-	<entry key="admin.group.new.users.notification.interval"><![CDATA[New user notification interval]]></entry>
+	<entry key="admin.group.new.users.notification.interval"><![CDATA[Benachrichtigungsintervall für eine Nutzer]]></entry>
 	<entry key="admin.oauth.attr.oauth"><![CDATA[OAuth Nutzer Attribute]]></entry>
 	<entry key="admin.oauth.attr.om"><![CDATA[OM Nutzer-Attribute]]></entry>
 	<entry key="admin.oauth.req.info.method"><![CDATA[Info-Methode anfragen]]></entry>
@@ -611,7 +611,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.final"><![CDATA[abschließende:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.import"><![CDATA[Import:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.invalid"><![CDATA[ungültig:]]></entry>
-	<entry key="dashboard.widget.admin.cleanup.missing"><![CDATA[missing count:]]></entry>
+	<entry key="dashboard.widget.admin.cleanup.missing"><![CDATA[fehlend]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.profiles"><![CDATA[Profile:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.show"><![CDATA[Cleanup-Bericht anzeigen]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.streams"><![CDATA[Streams-Ordner:]]></entry>
@@ -650,7 +650,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>
 	<entry key="files.root.group"><![CDATA[Gruppendateien]]></entry>
 	<entry key="find.user"><![CDATA[Nutzer finden]]></entry>
-	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
+	<entry key="fixed.video.pod.size"><![CDATA[Feste Größe der Videos]]></entry>
 	<entry key="goto.first"><![CDATA[Zum Ersten]]></entry>
 	<entry key="goto.last"><![CDATA[Zum Letzten]]></entry>
 	<entry key="goto.next"><![CDATA[Zum Nächsten]]></entry>
@@ -729,7 +729,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[Nutzername für Email eintragen]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP-Nutzerpasswort]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthPass.title"><![CDATA[E-Mail-Passwort eingeben]]></entry>
-	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[Mail-Referer]]></entry>
+	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[E-Mail-Referer]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[Geben Sie eine Internetadresse an]]></entry>
 	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[TLS zur Mailserver-Authentifizierung aktivieren]]></entry>
 	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Die E-Mail-Adresse des Einladenden als 'ReplyTo'-Adresse
@@ -825,8 +825,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 		target="_blank">https://openmeetings.apache.org/commercial-support.html</a></span>
 	<br />
 	]]></entry>
-	<entry key="internal.error"><![CDATA[Unfortunately something bad just happen :(, <br/>
-please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></entry>
+	<entry key="internal.error"><![CDATA[Leider ist etwas schlimmes passiert :(, <br/>
+Bitte <tt>openmeetings.log</tt> prüfen und die OpenMeetings-Entwickeler kontaktieren.]]></entry>
 	<entry key="invalid.hash"><![CDATA[Fehlerhafter Hash]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Klicken, um das Panel anzudocken]]></entry>
 	<entry key="label.end"><![CDATA[Ende]]></entry>
@@ -904,19 +904,19 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="send.on.enter"><![CDATA[Abschicken bei Drücken der Eingabetaste]]></entry>
 	<entry key="sound.enable"><![CDATA[Ton einschalten]]></entry>
 	<entry key="sound.mute"><![CDATA[Ton ausschalten]]></entry>
-	<entry key="template.new.group.users.notification.body"><![CDATA[Dear "{0}" group moderator,<br/>
+	<entry key="template.new.group.users.notification.body"><![CDATA[Hallo Gruppenmoderator "{0}",<br/>
 <br/>
-{1} new users were added to the group in the last {2} hours<br/>
-Please visit {3} OM server and check them under Admin -> Groups]]></entry>
+Der Gruppe wurden in den letzten {2} Stunden {1} neue Nutzer hinzugefügt.<br/>
+Bitte am OM server {3} anmelden und sie unter Admininistration -> Gruppen prüfen.]]></entry>
 	<entry key="template.new.group.users.notification.footer"><![CDATA[Gruß,<br/> {0} Supportteam]]></entry>
-	<entry key="template.new.group.users.notification.subject"><![CDATA[[{0}] New "{1}" group users]]></entry>
+	<entry key="template.new.group.users.notification.subject"><![CDATA[[{0}] Es gibt "{1}" neue Gruppennutzer]]></entry>
 	<entry key="template.recording.expiring.body"><![CDATA[Ihre momentane {0} Aufnahme wird automatisch in {1} Tagen gelöscht. Wenn Sie diese Aufnahme speichern möchten, laden Sie sie vorher herunter.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[Grüße,<br/>
        {0} Support Team.]]></entry>
 	<entry key="template.recording.expiring.greetings"><![CDATA[Liebe {0}]]></entry>
 	<entry key="template.recording.expiring.subj.prefix"><![CDATA[Aufnahme wird gelöscht werden]]></entry>
 	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- Raum[{0}]]]></entry>
-	<entry key="template.recording.invitation.text"><![CDATA[Click this link to view the conference recording video. [The link may only work for a certain period.]]]></entry>
+	<entry key="template.recording.invitation.text"><![CDATA[Zur Ansicht des Konferenzvideos bitte diesen Link klicken. [Der Link funktioniert nur für eine gewisse Zeit] ]]></entry>
 	<entry key="template.room.invitation.text"><![CDATA[Klicken Sie auf diesen Link, um in den Raum zu gelangen:]]></entry>
 	<entry key="ulist.right.audio.grant"><![CDATA[Diesem Nutzer erlauben, das Mikrofon zu benutzen]]></entry>
 	<entry key="ulist.right.audio.request"><![CDATA[Berechtigung anfragen, um das Mikrofon zu benutzen]]></entry>
