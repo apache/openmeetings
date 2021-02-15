@@ -198,6 +198,8 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		});
 		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media Flow IN :: {}, {}, {}, sid {}, uid {}"
 				, evt.getState(), evt.getMediaType(), evt.getSource(), sid, uid));
+		outgoingMedia.addMediaStateChangedListener(evt -> log.warn("Media StateChanged :: {}, {}, {}, sid {}, uid {}"
+				, evt.getSource(), evt.getOldState(), evt.getNewState(), sid, uid));
 		if (!sipClient) {
 			addListener(sd.getSid(), sd.getUid(), sdpOffer);
 			addSipProcessor(kRoom.getSipCount());
@@ -313,6 +315,9 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 					.put("uid", KStream.this.uid)
 					.put(PARAM_CANDIDATE, convert(JsonUtils.toJsonObject(evt.getCandidate()))))
 				);
+		endpoint.addIceComponentStateChangeListener(evt -> 
+				log.info("Ice Component change listener state {} ", evt.getState()));
+		
 		return endpoint;
 	}
 
@@ -507,6 +512,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	public void addCandidate(IceCandidate candidate, String uid) {
 		if (this.uid.equals(uid)) {
 			if (!(outgoingMedia instanceof WebRtcEndpoint)) {
+				log.warn("addCandidate outgoingMedia no WebRtcEndpoint, Add candidate for {}, listener found ? {}", uid);
 				return;
 			}
 			((WebRtcEndpoint)outgoingMedia).addIceCandidate(candidate);
@@ -515,6 +521,8 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 			log.debug("Add candidate for {}, listener found ? {}", uid, endpoint != null);
 			if (endpoint != null) {
 				endpoint.addIceCandidate(candidate);
+			} else {
+				log.warn("addCandidate endpoint is null, Add candidate for {}, listener found ? {}", uid);
 			}
 		}
 	}

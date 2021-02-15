@@ -125,6 +125,8 @@ public class StreamProcessor implements IStreamProcessor {
 								, candidate.getInt("sdpMLineIndex"));
 						sender.addCandidate(cand, msg.getString("luid"));
 					}
+				} else {
+					log.warn("onIceCandidate could not find sender, uid {}", uid);
 				}
 				break;
 			case "addListener":
