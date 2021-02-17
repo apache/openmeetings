@@ -283,7 +283,7 @@ public class UserManager implements IUserManager {
 				}
 			}};
 			try {
-				SSLContext sslContext = SSLContext.getInstance("SSL");
+				SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
 				sslContext.init(null, trustAllCerts, new SecureRandom());
 				SSLParameters sslParams = new SSLParameters();
 				sslParams.setEndpointIdentificationAlgorithm("");
