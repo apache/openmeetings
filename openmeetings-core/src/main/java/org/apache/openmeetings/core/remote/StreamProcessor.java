@@ -51,6 +51,7 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.openmeetings.util.logging.TimedApplication;
 import org.apache.wicket.util.string.Strings;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.internal.server.KurentoServerException;
@@ -84,9 +85,9 @@ public class StreamProcessor implements IStreamProcessor {
 	@Autowired
 	private InterviewConverter interviewConverter;
 
+	@TimedApplication
 	void onMessage(Client c, final String cmdId, JSONObject msg) {
 		final String uid = msg.optString("uid");
-		KStream sender;
 		StreamDesc sd;
 		Optional<StreamDesc> osd;
 		log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
@@ -114,32 +115,10 @@ public class StreamProcessor implements IStreamProcessor {
 				handleBroadcastRestarted(c, uid);
 				break;
 			case "onIceCandidate":
-				sender = getByUid(uid);
-				if (sender != null) {
-					JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
-					String candStr = candidate.getString(PARAM_CANDIDATE);
-					if (!Strings.isEmpty(candStr)) {
-						IceCandidate cand = new IceCandidate(
-								candStr
-								, candidate.getString("sdpMid")
-								, candidate.getInt("sdpMLineIndex"));
-						sender.addCandidate(cand, msg.getString("luid"));
-					}
-				}
+				addIceCandidate(msg);
 				break;
 			case "addListener":
-				sender = getByUid(msg.getString("sender"));
-				if (sender != null) {
-					Client sendClient = cm.getBySid(sender.getSid());
-					sd = sendClient.getStream(sender.getUid());
-					if (sd == null) {
-						break;
-					}
-					if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !sd.hasActivity(Activity.SCREEN)) {
-						break;
-					}
-					sender.addListener(c.getSid(), c.getUid(), msg.getString("sdpOffer"));
-				}
+				addListener(c, msg);
 				break;
 			case "wannaShare":
 				osd = c.getScreenStream();
@@ -177,6 +156,41 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 	}
 
+	@TimedApplication
+	private void addIceCandidate(JSONObject msg) {
+		final String uid = msg.optString("uid");
+		KStream sender;
+		sender = getByUid(uid);
+		if (sender != null) {
+			JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
+			String candStr = candidate.getString(PARAM_CANDIDATE);
+			if (!Strings.isEmpty(candStr)) {
+				IceCandidate cand = new IceCandidate(
+						candStr
+						, candidate.getString("sdpMid")
+						, candidate.getInt("sdpMLineIndex"));
+				sender.addCandidate(cand, msg.getString("luid"));
+			}
+		}
+	}
+
+	@TimedApplication
+	private void addListener(Client c, JSONObject msg) {
+		KStream sender = getByUid(msg.getString("sender"));
+		if (sender != null) {
+			Client sendClient = cm.getBySid(sender.getSid());
+			StreamDesc sd = sendClient.getStream(sender.getUid());
+			if (sd == null) {
+				return;
+			}
+			if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !sd.hasActivity(Activity.SCREEN)) {
+				return;
+			}
+			sender.addListener(c.getSid(), c.getUid(), msg.getString("sdpOffer"));
+		}
+	}
+
+	@TimedApplication
 	private void handleBroadcastRestarted(Client c, final String uid) {
 		if (!kHandler.isConnected()) {
 			return;
@@ -187,6 +201,7 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 	}
 
+	@TimedApplication
 	private void handleBroadcastStarted(Client c, final String uid, JSONObject msg) {
 		if (!kHandler.isConnected()) {
 			return;
@@ -225,6 +240,7 @@ public class StreamProcessor implements IStreamProcessor {
 	 * @param then steps need to be done after broadcast is started
 	 * @return the current KStream
 	 */
+	@TimedApplication
 	void startBroadcast(KStream stream, StreamDesc sd, String sdpOffer, Runnable then) {
 		stream.startBroadcast(sd, sdpOffer, then);
 	}
@@ -248,6 +264,7 @@ public class StreamProcessor implements IStreamProcessor {
 		return closed;
 	}
 
+	@TimedApplication
 	public void toggleActivity(Client c, Activity a) {
 		log.info("PARTICIPANT {}: trying to toggle activity {}", c, a);
 		if (!kHandler.isConnected()) {
