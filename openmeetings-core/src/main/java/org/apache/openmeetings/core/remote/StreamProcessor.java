@@ -19,11 +19,9 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
-import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isRecordingsEnabled;
 
 import java.util.Collection;
@@ -52,9 +50,6 @@ import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.logging.TimedApplication;
-import org.apache.wicket.util.string.Strings;
-import org.kurento.client.IceCandidate;
-import org.kurento.client.internal.server.KurentoServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +79,8 @@ public class StreamProcessor implements IStreamProcessor {
 	private RecordingConverter recordingConverter;
 	@Autowired
 	private InterviewConverter interviewConverter;
+	@Autowired
+	private StreamProcessorActions streamProcessorActions;
 
 	@TimedApplication
 	void onMessage(Client c, final String cmdId, JSONObject msg) {
@@ -109,16 +106,16 @@ public class StreamProcessor implements IStreamProcessor {
 				toggleActivity(c, Activity.valueOf(msg.getString("activity")));
 				break;
 			case "broadcastStarted":
-				handleBroadcastStarted(c, uid, msg);
+				streamProcessorActions.handleBroadcastStarted(c, uid, msg);
 				break;
 			case "broadcastRestarted":
-				handleBroadcastRestarted(c, uid);
+				streamProcessorActions.handleBroadcastRestarted(c, uid);
 				break;
 			case "onIceCandidate":
-				addIceCandidate(msg);
+				streamProcessorActions.addIceCandidate(msg);
 				break;
 			case "addListener":
-				addListener(c, msg);
+				streamProcessorActions.addListener(c, msg);
 				break;
 			case "wannaShare":
 				osd = c.getScreenStream();
@@ -156,80 +153,6 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 	}
 
-	@TimedApplication
-	private void addIceCandidate(JSONObject msg) {
-		final String uid = msg.optString("uid");
-		KStream sender;
-		sender = getByUid(uid);
-		if (sender != null) {
-			JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
-			String candStr = candidate.getString(PARAM_CANDIDATE);
-			if (!Strings.isEmpty(candStr)) {
-				IceCandidate cand = new IceCandidate(
-						candStr
-						, candidate.getString("sdpMid")
-						, candidate.getInt("sdpMLineIndex"));
-				sender.addCandidate(cand, msg.getString("luid"));
-			}
-		}
-	}
-
-	@TimedApplication
-	private void addListener(Client c, JSONObject msg) {
-		KStream sender = getByUid(msg.getString("sender"));
-		if (sender != null) {
-			Client sendClient = cm.getBySid(sender.getSid());
-			StreamDesc sd = sendClient.getStream(sender.getUid());
-			if (sd == null) {
-				return;
-			}
-			if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !sd.hasActivity(Activity.SCREEN)) {
-				return;
-			}
-			sender.addListener(c.getSid(), c.getUid(), msg.getString("sdpOffer"));
-		}
-	}
-
-	@TimedApplication
-	private void handleBroadcastRestarted(Client c, final String uid) {
-		if (!kHandler.isConnected()) {
-			return;
-		}
-		KStream sender = getByUid(uid);
-		if (sender != null) {
-			sender.broadcastRestarted();
-		}
-	}
-
-	@TimedApplication
-	private void handleBroadcastStarted(Client c, final String uid, JSONObject msg) {
-		if (!kHandler.isConnected()) {
-			return;
-		}
-		StreamDesc sd = c.getStream(uid);
-		KStream sender = getByUid(uid);
-		try {
-			if (sender == null) {
-				KRoom room = kHandler.getRoom(c.getRoomId());
-				sender = room.join(sd, kHandler);
-			}
-			if (msg.has("width")) {
-				sd.setWidth(msg.getInt("width")).setHeight(msg.getInt("height"));
-				cm.update(c);
-			}
-			startBroadcast(sender, sd, msg.getString("sdpOffer"), () -> {
-				if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !isRecording(c.getRoomId())) {
-					startRecording(c);
-				}
-			});
-		} catch (KurentoServerException e) {
-			sender.release();
-			WebSocketHelper.sendClient(c, newStoppedMsg(sd));
-			sendError(c, "Failed to start broadcast: " + e.getMessage());
-			log.error("Failed to start broadcast", e);
-		}
-	}
-
 	/**
 	 *  Method to start broadcasting.  Externalised for mocking purpose to be able to
 	 *  prevent calling webRTC methods.
@@ -240,7 +163,6 @@ public class StreamProcessor implements IStreamProcessor {
 	 * @param then steps need to be done after broadcast is started
 	 * @return the current KStream
 	 */
-	@TimedApplication
 	void startBroadcast(KStream stream, StreamDesc sd, String sdpOffer, Runnable then) {
 		stream.startBroadcast(sd, sdpOffer, then);
 	}
@@ -606,7 +528,7 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 	}
 
-	private static JSONObject newStoppedMsg(StreamDesc sd) {
+	protected static JSONObject newStoppedMsg(StreamDesc sd) {
 		return newKurentoMsg()
 				.put("id", "broadcastStopped")
 				.put("uid", sd.getUid());
