@@ -1,18 +1,4 @@
-package org.apache.openmeetings.web.util.logging;
-
-import io.prometheus.client.Collector;
-import io.prometheus.client.CounterMetricFamily;
-import io.prometheus.client.GaugeMetricFamily;
-import org.apache.catalina.util.ServerInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.management.*;
-import java.lang.management.ManagementFactory;
-import java.util.*;
-
 /*
-
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -30,6 +16,19 @@ import java.util.*;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.openmeetings.web.util.logging;
+
+import io.prometheus.client.Collector;
+import io.prometheus.client.CounterMetricFamily;
+import io.prometheus.client.GaugeMetricFamily;
+import org.apache.catalina.util.ServerInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.management.*;
+import java.lang.management.ManagementFactory;
+import java.util.*;
+
 /**
  * Exports Tomcat metrics applicable to most most applications:
  *

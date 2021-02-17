@@ -109,7 +109,7 @@
 
 	<servlet>
 		<servlet-name>metrics</servlet-name>
-		<servlet-class>io.prometheus.client.exporter.MetricsServlet</servlet-class>
+		<servlet-class>org.apache.openmeetings.web.util.logging.OpenMeetingsMetricsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>metrics</servlet-name>
