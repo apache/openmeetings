@@ -73,7 +73,7 @@ var NetTest = (function() {
 	function __netTest(params, callback) {
 		let tail = '';
 		if (params.size) {
-			params.curSize = params.multiplier * (params.curSize ? params.curSize : params.size);
+			params.curSize = params.size + (params.curSize || 0);
 			tail = '&size=' + params.curSize;
 		}
 		setTimeout(() => {
@@ -133,7 +133,6 @@ var NetTest = (function() {
 							url: '?type=upload'
 							, mode: 'upload'
 							, size: 512 * KB
-							, multiplier: 2
 							, delay: DELAY
 						}
 						, maxTime: LIMIT
@@ -149,8 +148,7 @@ var NetTest = (function() {
 						action: __netTest
 						, params: {
 							url: '?type=download'
-							, size: 2 * MB
-							, multiplier: 2
+							, size: 1 * MB
 							, delay: DELAY
 						}
 						, maxTime: LIMIT

@@ -55,7 +55,8 @@ public class NetTestWebService {
 
 	private static final int PING_PACKET_SIZE = 64;
 	private static final int JITTER_PACKET_SIZE = 1024;
-	private static final int MAX_UPLOAD_SIZE = 16 * 1024 * 1024;
+	private static final int MAX_DOWNLOAD_SIZE = 5 * 1024 * 1024;
+	private static final int MAX_UPLOAD_SIZE = 5 * 512 * 1024;
 	public static final AtomicInteger CLIENT_COUNT = new AtomicInteger();
 	private static int maxClients = 100;
 
@@ -89,6 +90,9 @@ public class NetTestWebService {
 				log.info("... download: client count: {}", count);
 				size = inSize;
 				break;
+		}
+		if (size > MAX_DOWNLOAD_SIZE) {
+			return Response.status(Status.BAD_REQUEST).build();
 		}
 		return Response.ok()
 				.type(MediaType.APPLICATION_OCTET_STREAM).entity(new InputStream() {
@@ -124,9 +128,9 @@ public class NetTestWebService {
 	@POST
 	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/")
-	public void upload(@QueryParam("size") int size, InputStream stream) throws IOException {
+	public int upload(@QueryParam("size") int size, InputStream stream) throws IOException {
 		if (size > MAX_UPLOAD_SIZE) {
-			return;
+			return -1;
 		}
 		CLIENT_COUNT.incrementAndGet();
 		byte[] b = new byte[1024];
@@ -140,6 +144,7 @@ public class NetTestWebService {
 		} finally {
 			CLIENT_COUNT.decrementAndGet();
 		}
+		return totalCount;
 	}
 
 	public static TestType getTypeByString(String typeString) {
