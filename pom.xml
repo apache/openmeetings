@@ -87,6 +87,7 @@
 		<tomcat.version>9.0.43</tomcat.version>
 		<ical4j.version>3.0.18</ical4j.version>
 		<cxf.version>3.4.2</cxf.version>
+		<io.prometheus.version>0.10.0</io.prometheus.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.1</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
@@ -456,6 +457,17 @@
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
 				<artifactId>spring-context-support</artifactId>
 				<version>${spring.version}</version>
 				<exclusions>
@@ -468,6 +480,17 @@
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
 				<version>${spring.version}</version>
 				<exclusions>
 					<exclusion>
@@ -534,6 +557,16 @@
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-rt-features-logging</artifactId>
 				<version>${cxf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.prometheus</groupId>
+				<artifactId>simpleclient</artifactId>
+				<version>${io.prometheus.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.prometheus</groupId>
+				<artifactId>simpleclient_servlet</artifactId>
+				<version>${io.prometheus.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.codehaus.jettison</groupId>
