@@ -55,6 +55,7 @@
 		</init-param>
 	</filter>
 
+	<!-- Start Prometheus Filter HTTP Servlet metrics
 	<filter>
 		<filter-name>prometheusFilter</filter-name>
 		<filter-class>io.prometheus.client.filter.MetricsFilter</filter-class>
@@ -70,8 +71,6 @@
 			<param-name>buckets</param-name>
 			<param-value>0.005,0.01,0.025,0.05,0.075,0.1,0.25,0.5,0.75,1,2.5,5,7.5,10</param-value>
 		</init-param>
-		<!-- Optionally override path components; anything less than 1 (1 is the 
-			default) means full granularity -->
 		<init-param>
 			<param-name>path-components</param-name>
 			<param-value>0</param-value>
@@ -82,6 +81,7 @@
 		<filter-name>prometheusFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	End Prometheus -->
 	
 	<filter-mapping>
 		<filter-name>OpenmeetingsApplication</filter-name>
@@ -107,6 +107,7 @@
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
 
+	<!-- Start Prometheus export metrics HTTP
 	<servlet>
 		<servlet-name>metrics</servlet-name>
 		<servlet-class>org.apache.openmeetings.web.util.logging.OpenMeetingsMetricsServlet</servlet-class>
@@ -115,6 +116,7 @@
 		<servlet-name>metrics</servlet-name>
 		<url-pattern>/services/metrics/</url-pattern>
 	</servlet-mapping>
+	End Prometheus -->
 
 	<mime-mapping>
 		<extension>inc</extension>
