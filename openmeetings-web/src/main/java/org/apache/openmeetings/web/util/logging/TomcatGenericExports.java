@@ -76,6 +76,7 @@ public class TomcatGenericExports extends Collector {
 
 	private static final Logger log = LoggerFactory.getLogger(TomcatGenericExports.class);
 	private String jmxDomain = "Catalina";
+	private final String labelName = "name";
 
 	public TomcatGenericExports(boolean embedded) {
 		if (embedded) {
@@ -90,7 +91,7 @@ public class TomcatGenericExports extends Collector {
 			Set<ObjectInstance> mBeans = server.queryMBeans(filterName, null);
 
 			if (mBeans.size() > 0) {
-				List<String> labelNameList = Collections.singletonList("name");
+				List<String> labelNameList = List.of(labelName);
 
 				GaugeMetricFamily requestProcessorBytesReceivedGauge = new GaugeMetricFamily(
 						"tomcat_requestprocessor_received_bytes", "Number of bytes received by this request processor",
@@ -151,7 +152,7 @@ public class TomcatGenericExports extends Collector {
 			Set<ObjectInstance> mBeans = server.queryMBeans(filterName, null);
 
 			if (mBeans.size() > 0) {
-				List<String> labelNameList = Arrays.asList("host", "context");
+				List<String> labelNameList = List.of("host", "context");
 
 				GaugeMetricFamily activeSessionCountGauge = new GaugeMetricFamily("tomcat_session_active_total",
 						"Number of active sessions", labelNameList);
@@ -227,7 +228,7 @@ public class TomcatGenericExports extends Collector {
 			Set<ObjectInstance> mBeans = server.queryMBeans(filterName, null);
 
 			if (mBeans.size() > 0) {
-				List<String> labelList = Collections.singletonList("name");
+				List<String> labelList = List.of(labelName);
 
 				GaugeMetricFamily threadPoolCurrentCountGauge = new GaugeMetricFamily("tomcat_threads_total",
 						"Number threads in this pool.", labelList);
