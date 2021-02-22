@@ -25,9 +25,18 @@ import org.apache.catalina.util.ServerInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.management.*;
 import java.lang.management.ManagementFactory;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import javax.management.Attribute;
+import javax.management.AttributeList;
+import javax.management.MBeanServer;
+import javax.management.ObjectInstance;
+import javax.management.ObjectName;
 
 /**
  * Exports Tomcat metrics applicable to most most applications:
@@ -63,7 +72,6 @@ import java.util.*;
  * tomcat_threads_active_max{pool="http-bio-0.0.0.0-8080",} 200.0
  * </pre>
  */
-
 public class TomcatGenericExports extends Collector {
 
 	private static final Logger log = LoggerFactory.getLogger(TomcatGenericExports.class);
