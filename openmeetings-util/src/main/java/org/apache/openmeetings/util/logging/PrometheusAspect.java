@@ -30,31 +30,25 @@ import io.prometheus.client.Histogram;
 @Component
 public class PrometheusAspect {
 
-	@Around("@annotation(TimedDatabase)")
-	public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+	private Object logExecutionTime(ProceedingJoinPoint joinPoint, String logType) throws Throwable {
 		String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
 		String methodName = joinPoint.getSignature().getName();
 		Histogram.Timer timer = PrometheusUtil.getHistogram() //
-				.labels(className, methodName, "database", "default").startTimer();
+				.labels(className, methodName, logType, "default").startTimer();
 		try {
 			return joinPoint.proceed();
 		} finally {
 			timer.observeDuration();
 		}
+	}
+
+	@Around("@annotation(TimedDatabase)")
+	public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+		return logExecutionTime(joinPoint, "database");
 	}
 
 	@Around("@annotation(TimedApplication)")
 	public Object logExecutionTimedApplication(ProceedingJoinPoint joinPoint) throws Throwable {
-		String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
-		String methodName = joinPoint.getSignature().getName();
-		Histogram.Timer timer = PrometheusUtil.getHistogram() //
-				.labels(className, methodName, "application", "default").startTimer();
-		try {
-			return joinPoint.proceed();
-		} finally {
-			timer.observeDuration();
-		}
+		return logExecutionTime(joinPoint, "application");
 	}
-
-
 }
