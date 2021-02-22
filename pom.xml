@@ -88,6 +88,7 @@
 		<ical4j.version>3.0.18</ical4j.version>
 		<cxf.version>3.4.2</cxf.version>
 		<io.prometheus.version>0.10.0</io.prometheus.version>
+		<aspectjtools.version>1.9.6</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.1</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
@@ -567,6 +568,11 @@
 				<groupId>io.prometheus</groupId>
 				<artifactId>simpleclient_servlet</artifactId>
 				<version>${io.prometheus.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjtools</artifactId>
+				<version>${aspectjtools.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.tomcat</groupId>
