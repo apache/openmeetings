@@ -61,6 +61,9 @@ public class BaseMockedTest {
 	protected RomManager romManager;
 	@Mock
 	protected ServerManager kServerManager;
+	@Spy
+	@InjectMocks
+	protected StreamProcessorActions streamProcessorActions;
 	@Mock
 	protected KurentoClient client;
 	@Spy
