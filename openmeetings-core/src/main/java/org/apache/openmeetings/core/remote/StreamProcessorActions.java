@@ -41,8 +41,7 @@ import com.github.openjson.JSONObject;
 
 @Component
 public class StreamProcessorActions {
-
-	private static final Logger log = LoggerFactory.getLogger(StreamProcessor.class);
+	private static final Logger log = LoggerFactory.getLogger(StreamProcessorActions.class);
 
 	@Autowired
 	private IClientManager cm;

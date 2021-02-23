@@ -18,16 +18,8 @@
  */
 package org.apache.openmeetings.web.util.logging;
 
-import io.prometheus.client.Collector;
-import io.prometheus.client.CounterMetricFamily;
-import io.prometheus.client.GaugeMetricFamily;
-import org.apache.catalina.util.ServerInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -38,12 +30,19 @@ import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 
+import org.apache.catalina.util.ServerInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.prometheus.client.Collector;
+import io.prometheus.client.CounterMetricFamily;
+import io.prometheus.client.GaugeMetricFamily;
+
 /**
  * Exports Tomcat metrics applicable to most most applications:
  *
  * - http session metrics - request processor metrics - thread pool metrics
  *
- * <p>
  * Example usage:
  *
  * <pre>
@@ -73,10 +72,9 @@ import javax.management.ObjectName;
  * </pre>
  */
 public class TomcatGenericExports extends Collector {
-
 	private static final Logger log = LoggerFactory.getLogger(TomcatGenericExports.class);
+	private static final String labelName = "name";
 	private String jmxDomain = "Catalina";
-	private final String labelName = "name";
 
 	public TomcatGenericExports(boolean embedded) {
 		if (embedded) {
@@ -90,7 +88,7 @@ public class TomcatGenericExports extends Collector {
 			ObjectName filterName = new ObjectName(jmxDomain + ":type=GlobalRequestProcessor,name=*");
 			Set<ObjectInstance> mBeans = server.queryMBeans(filterName, null);
 
-			if (mBeans.size() > 0) {
+			if (!mBeans.isEmpty()) {
 				List<String> labelNameList = List.of(labelName);
 
 				GaugeMetricFamily requestProcessorBytesReceivedGauge = new GaugeMetricFamily(
@@ -151,7 +149,7 @@ public class TomcatGenericExports extends Collector {
 			ObjectName filterName = new ObjectName(jmxDomain + ":type=Manager,context=*,host=*");
 			Set<ObjectInstance> mBeans = server.queryMBeans(filterName, null);
 
-			if (mBeans.size() > 0) {
+			if (!mBeans.isEmpty()) {
 				List<String> labelNameList = List.of("host", "context");
 
 				GaugeMetricFamily activeSessionCountGauge = new GaugeMetricFamily("tomcat_session_active_total",
@@ -178,7 +176,7 @@ public class TomcatGenericExports extends Collector {
 						"Indication if the lifecycle state of this context is STARTED", labelNameList);
 
 				for (final ObjectInstance mBean : mBeans) {
-					List<String> labelValueList = Arrays.asList(mBean.getObjectName().getKeyProperty("host"),
+					List<String> labelValueList = List.of(mBean.getObjectName().getKeyProperty("host"),
 							mBean.getObjectName().getKeyProperty("context"));
 
 					activeSessionCountGauge.addMetric(labelValueList,
@@ -227,7 +225,7 @@ public class TomcatGenericExports extends Collector {
 			ObjectName filterName = new ObjectName(jmxDomain + ":type=ThreadPool,name=*");
 			Set<ObjectInstance> mBeans = server.queryMBeans(filterName, null);
 
-			if (mBeans.size() > 0) {
+			if (!mBeans.isEmpty()) {
 				List<String> labelList = List.of(labelName);
 
 				GaugeMetricFamily threadPoolCurrentCountGauge = new GaugeMetricFamily("tomcat_threads_total",
@@ -254,26 +252,29 @@ public class TomcatGenericExports extends Collector {
 					AttributeList attributeList = server.getAttributes(mBean.getObjectName(), genericAttributes);
 					for (Attribute attribute : attributeList.asList()) {
 						switch (attribute.getName()) {
-						case "currentThreadCount":
-							threadPoolCurrentCountGauge.addMetric(labelValueList,
-									((Integer) attribute.getValue()).doubleValue());
-							break;
-						case "currentThreadsBusy":
-							threadPoolActiveCountGauge.addMetric(labelValueList,
-									((Integer) attribute.getValue()).doubleValue());
-							break;
-						case "maxThreads":
-							threadPoolMaxThreadsGauge.addMetric(labelValueList,
-									((Integer) attribute.getValue()).doubleValue());
-							break;
-						case "connectionCount":
-							threadPoolConnectionCountGauge.addMetric(labelValueList,
-									((Long) attribute.getValue()).doubleValue());
-							break;
-						case "maxConnections":
-							threadPoolMaxConnectionGauge.addMetric(labelValueList,
-									((Integer) attribute.getValue()).doubleValue());
-
+							case "currentThreadCount":
+								threadPoolCurrentCountGauge.addMetric(labelValueList,
+										((Integer) attribute.getValue()).doubleValue());
+								break;
+							case "currentThreadsBusy":
+								threadPoolActiveCountGauge.addMetric(labelValueList,
+										((Integer) attribute.getValue()).doubleValue());
+								break;
+							case "maxThreads":
+								threadPoolMaxThreadsGauge.addMetric(labelValueList,
+										((Integer) attribute.getValue()).doubleValue());
+								break;
+							case "connectionCount":
+								threadPoolConnectionCountGauge.addMetric(labelValueList,
+										((Long) attribute.getValue()).doubleValue());
+								break;
+							case "maxConnections":
+								threadPoolMaxConnectionGauge.addMetric(labelValueList,
+										((Integer) attribute.getValue()).doubleValue());
+								break;
+							default:
+								log.warn("Unexpected attribute {}", attribute);
+								break;
 						}
 					}
 				}
@@ -285,25 +286,26 @@ public class TomcatGenericExports extends Collector {
 				addNonEmptyMetricFamily(mfs, threadPoolMaxConnectionGauge);
 			}
 		} catch (Exception e) {
-			log.error("Error retrieving metric:" + e.getMessage());
+			log.error("Error retrieving metric: {}", e.getMessage());
 		}
 	}
 
 	private void addVersionInfo(List<MetricFamilySamples> mfs) {
 		GaugeMetricFamily tomcatInfo = new GaugeMetricFamily("tomcat_info", "tomcat version info",
-				Arrays.asList("version", "build"));
-		tomcatInfo.addMetric(Arrays.asList(ServerInfo.getServerNumber(), ServerInfo.getServerBuilt()), 1);
+				List.of("version", "build"));
+		tomcatInfo.addMetric(List.of(ServerInfo.getServerNumber(), ServerInfo.getServerBuilt()), 1);
 		mfs.add(tomcatInfo);
 	}
 
 	private void addNonEmptyMetricFamily(List<MetricFamilySamples> mfs, GaugeMetricFamily metricFamily) {
-		if (metricFamily.samples.size() > 0) {
+		if (!metricFamily.samples.isEmpty()) {
 			mfs.add(metricFamily);
 		}
 	}
 
+	@Override
 	public List<MetricFamilySamples> collect() {
-		List<MetricFamilySamples> mfs = new ArrayList<MetricFamilySamples>();
+		List<MetricFamilySamples> mfs = new ArrayList<>();
 		addSessionMetrics(mfs);
 		addThreadPoolMetrics(mfs);
 		addRequestProcessorMetrics(mfs);
