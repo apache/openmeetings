@@ -44,7 +44,7 @@ public class SCryptImplementation implements ICrypt {
 				}
 				return sr;
 			});
-	private static int COST = 1024 * 16;
+	private static int cost = 1024 * 16;
 	private static final int KEY_LENGTH = 512;
 	private static final int SALT_LENGTH = 200;
 
@@ -58,14 +58,14 @@ public class SCryptImplementation implements ICrypt {
 		try (final InputStream is = getClass().getResourceAsStream("/openmeetings.properties")) {
 			Properties props = new Properties();
 			props.load(is);
-			COST = Integer.valueOf(props.getProperty("scrypt.cost", "" + COST));
+			cost = Integer.valueOf(props.getProperty("scrypt.cost", "" + cost));
 		} catch (Exception e) {
-			log.error("Failed to initialize the COST", e);
+			log.error("Failed to initialize the cost", e);
 		}
 	}
 
 	private static String hash(String str, byte[] salt) {
-		byte[] dk = SCrypt.generate(str.getBytes(UTF_8), salt, COST, 8, 8, KEY_LENGTH);
+		byte[] dk = SCrypt.generate(str.getBytes(UTF_8), salt, cost, 8, 8, KEY_LENGTH);
 		return Base64.encodeBase64String(dk);
 	}
 
