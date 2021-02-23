@@ -54,17 +54,19 @@ public class StreamProcessorActions {
 	protected void addIceCandidate(JSONObject msg) {
 		final String uid = msg.optString("uid");
 		KStream sender;
+		JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
+		String candStr = candidate.getString(PARAM_CANDIDATE);
 		sender = streamProcessor.getByUid(uid);
 		if (sender != null) {
-			JSONObject candidate = msg.getJSONObject(PARAM_CANDIDATE);
-			String candStr = candidate.getString(PARAM_CANDIDATE);
 			if (!Strings.isEmpty(candStr)) {
 				IceCandidate cand = new IceCandidate(
 						candStr
 						, candidate.getString("sdpMid")
 						, candidate.getInt("sdpMLineIndex"));
-				sender.addCandidate(cand, msg.getString("luid"));
+				sender.addIceCandidate(cand, msg.getString("luid"));
 			}
+		} else {
+			log.warn("addIceCandidate sender is empty, uid: {}, candStr: {} ", uid, candStr);
 		}
 	}
 

@@ -504,9 +504,10 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		sipProcessor = Optional.empty();
 	}
 
-	public void addCandidate(IceCandidate candidate, String uid) {
+	public void addIceCandidate(IceCandidate candidate, String uid) {
 		if (this.uid.equals(uid)) {
 			if (!(outgoingMedia instanceof WebRtcEndpoint)) {
+				log.warn("addIceCandidate iceCandidate while not ready yet, uid: {}", uid);
 				return;
 			}
 			((WebRtcEndpoint)outgoingMedia).addIceCandidate(candidate);
@@ -515,6 +516,8 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 			log.debug("Add candidate for {}, listener found ? {}", uid, endpoint != null);
 			if (endpoint != null) {
 				endpoint.addIceCandidate(candidate);
+			} else {
+				log.warn("addIceCandidate iceCandidate could not find endpoint, uid: {}", uid);
 			}
 		}
 	}
