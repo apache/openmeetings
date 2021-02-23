@@ -121,6 +121,7 @@ import org.apache.wicket.util.string.Strings;
 		@Index(name = "login_idx", columnList = "login")
 		, @Index(name = "lastname_idx", columnList = "lastname")
 		, @Index(name = "firstname_idx", columnList = "firstname")
+		, @Index(name = "type_idx", columnList = "type")
 })
 @XmlRootElement(name = USER_NODE)
 public class User extends HistoricalEntity {
