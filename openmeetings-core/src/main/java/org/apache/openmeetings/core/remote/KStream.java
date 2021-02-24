@@ -36,9 +36,10 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -82,9 +83,10 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	private MediaPipeline pipeline;
 	private RecorderEndpoint recorder;
 	private BaseRtpEndpoint outgoingMedia = null;
+	private Queue<IceCandidate> candidatesQueue = new ConcurrentLinkedQueue<>();
 	private RtpEndpoint rtpEndpoint;
 	private Optional<SipStackProcessor> sipProcessor = Optional.empty();
-	private final ConcurrentMap<String, WebRtcEndpoint> listeners = new ConcurrentHashMap<>();
+	private final Map<String, WebRtcEndpoint> listeners = new ConcurrentHashMap<>();
 	private Optional<CompletableFuture<Object>> flowoutFuture = Optional.empty();
 	private ListenerSubscription flowoutSubscription;
 	private Long chunkId;
@@ -149,6 +151,12 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 					addSipProcessor(1);
 				} else {
 					outgoingMedia = createEndpoint(sd.getSid(), sd.getUid(), true);
+					if (!candidatesQueue.isEmpty()) {
+						log.trace("addIceCandidate iceCandidate reply from not ready, uid: {}", sd.getUid());
+						candidatesQueue.stream()
+							.forEach(candidate -> ((WebRtcEndpoint)outgoingMedia).addIceCandidate(candidate));
+						candidatesQueue.clear();
+					}
 					internalStartBroadcast(sd, sdpOffer);
 					notifyOnNewStream(sd);
 				}
@@ -504,9 +512,13 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		sipProcessor = Optional.empty();
 	}
 
-	public void addCandidate(IceCandidate candidate, String uid) {
+	public void addIceCandidate(IceCandidate candidate, String uid) {
 		if (this.uid.equals(uid)) {
 			if (!(outgoingMedia instanceof WebRtcEndpoint)) {
+				if (!sipClient) {
+					log.info("addIceCandidate iceCandidate while not ready yet, uid: {}", uid);
+					candidatesQueue.add(candidate);
+				}
 				return;
 			}
 			((WebRtcEndpoint)outgoingMedia).addIceCandidate(candidate);
@@ -515,6 +527,8 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 			log.debug("Add candidate for {}, listener found ? {}", uid, endpoint != null);
 			if (endpoint != null) {
 				endpoint.addIceCandidate(candidate);
+			} else {
+				log.warn("addIceCandidate iceCandidate could not find endpoint, uid: {}", uid);
 			}
 		}
 	}
