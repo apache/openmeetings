@@ -151,12 +151,6 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 					addSipProcessor(1);
 				} else {
 					outgoingMedia = createEndpoint(sd.getSid(), sd.getUid(), true);
-					if (!candidatesQueue.isEmpty()) {
-						log.trace("addIceCandidate iceCandidate reply from not ready, uid: {}", sd.getUid());
-						candidatesQueue.stream()
-							.forEach(candidate -> ((WebRtcEndpoint)outgoingMedia).addIceCandidate(candidate));
-						candidatesQueue.clear();
-					}
 					internalStartBroadcast(sd, sdpOffer);
 					notifyOnNewStream(sd);
 				}
@@ -243,7 +237,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 
 	public void addListener(String sid, String uid, String sdpOffer) {
 		final boolean self = uid.equals(this.uid);
-		log.info("USER {}: have started, sid {}, uid {} in kRoom {}", sid, uid, self ? "broadcasting" : "receiving", getRoomId());
+		log.info("USER: have started, sid {}, uid {} in kRoom {}", sid, uid, self ? "broadcasting" : "receiving", getRoomId());
 		log.trace("USER {}: SdpOffer is {}", uid, sdpOffer);
 		if (!self && outgoingMedia == null) {
 			log.warn("Trying to add listener too early, sid {}, uid {}", sid, uid);
@@ -254,7 +248,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		final String sdpAnswer = endpoint.processOffer(sdpOffer);
 
 		if (endpoint instanceof WebRtcEndpoint) {
-			log.debug("gather candidates");
+			log.debug("gather candidates, sid {}, uid {}", sid, uid);
 			((WebRtcEndpoint)endpoint).gatherCandidates(); // this one might throw Exception
 		}
 		log.trace("USER {}: SdpAnswer is {}", this.uid, sdpAnswer);
@@ -314,6 +308,15 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	private WebRtcEndpoint createEndpoint(String sid, String uid, boolean recv) {
 		WebRtcEndpoint endpoint = createWebRtcEndpoint(pipeline, recv);
 		setTags(endpoint, uid);
+
+		if (recv) {
+			if (!candidatesQueue.isEmpty()) {
+				log.trace("addIceCandidate iceCandidate reply from not ready, uid: {}", uid);
+				candidatesQueue.stream()
+					.forEach(candidate -> endpoint.addIceCandidate(candidate));
+				candidatesQueue.clear();
+			}
+		}
 
 		endpoint.addIceCandidateFoundListener(evt -> kHandler.sendClient(sid
 				, newKurentoMsg()
@@ -516,7 +519,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		if (this.uid.equals(uid)) {
 			if (!(outgoingMedia instanceof WebRtcEndpoint)) {
 				if (!sipClient) {
-					log.info("addIceCandidate iceCandidate while not ready yet, uid: {}", uid);
+					log.info("addIceCandidate iceCandidate while not ready yet, uid: {}, candidate: {}", uid, candidate.getCandidate());
 					candidatesQueue.add(candidate);
 				}
 				return;
@@ -528,7 +531,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 			if (endpoint != null) {
 				endpoint.addIceCandidate(candidate);
 			} else {
-				log.warn("addIceCandidate iceCandidate could not find endpoint, uid: {}", uid);
+				log.warn("addIceCandidate iceCandidate could not find endpoint, uid: {}, candidate: {}", uid, candidate.getCandidate());
 			}
 		}
 	}
