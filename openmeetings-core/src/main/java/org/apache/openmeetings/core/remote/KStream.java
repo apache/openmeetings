@@ -32,7 +32,9 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.util.OmFileHelper.getRecUri;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -82,6 +84,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	private MediaPipeline pipeline;
 	private RecorderEndpoint recorder;
 	private BaseRtpEndpoint outgoingMedia = null;
+	private List<IceCandidate> candidatesQueue = new ArrayList<>();
 	private RtpEndpoint rtpEndpoint;
 	private Optional<SipStackProcessor> sipProcessor = Optional.empty();
 	private final ConcurrentMap<String, WebRtcEndpoint> listeners = new ConcurrentHashMap<>();
@@ -149,6 +152,12 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 					addSipProcessor(1);
 				} else {
 					outgoingMedia = createEndpoint(sd.getSid(), sd.getUid(), true);
+					if (candidatesQueue.size() > 0) {
+						log.trace("addIceCandidate iceCandidate reply from not ready, uid: {}", sd.getUid());
+						candidatesQueue.stream()
+							.forEach(candidate -> ((WebRtcEndpoint)outgoingMedia).addIceCandidate(candidate));
+						candidatesQueue.clear();
+					}
 					internalStartBroadcast(sd, sdpOffer);
 					notifyOnNewStream(sd);
 				}
@@ -507,7 +516,8 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	public void addIceCandidate(IceCandidate candidate, String uid) {
 		if (this.uid.equals(uid)) {
 			if (!(outgoingMedia instanceof WebRtcEndpoint)) {
-				log.warn("addIceCandidate iceCandidate while not ready yet, uid: {}", uid);
+				log.info("addIceCandidate iceCandidate while not ready yet, uid: {}", uid);
+				candidatesQueue.add(candidate);
 				return;
 			}
 			((WebRtcEndpoint)outgoingMedia).addIceCandidate(candidate);
