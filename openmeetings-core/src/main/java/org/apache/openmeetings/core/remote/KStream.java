@@ -308,15 +308,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	private WebRtcEndpoint createEndpoint(String sid, String uid, boolean recv) {
 		WebRtcEndpoint endpoint = createWebRtcEndpoint(pipeline, recv);
 		setTags(endpoint, uid);
-
-		if (recv) {
-			if (!candidatesQueue.isEmpty()) {
-				log.trace("addIceCandidate iceCandidate reply from not ready, uid: {}", uid);
-				candidatesQueue.stream()
-					.forEach(candidate -> endpoint.addIceCandidate(candidate));
-				candidatesQueue.clear();
-			}
-		}
+		reApplyIceCandiates(endpoint, recv);
 
 		endpoint.addIceCandidateFoundListener(evt -> kHandler.sendClient(sid
 				, newKurentoMsg()
@@ -325,6 +317,16 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 					.put(PARAM_CANDIDATE, convert(JsonUtils.toJsonObject(evt.getCandidate()))))
 				);
 		return endpoint;
+	}
+
+	private void reApplyIceCandiates(WebRtcEndpoint endpoint, boolean recv) {
+		// sender candidates
+		if (recv && !candidatesQueue.isEmpty()) {
+				log.trace("addIceCandidate iceCandidate reply from not ready, uid: {}", uid);
+				candidatesQueue.stream()
+					.forEach(candidate -> endpoint.addIceCandidate(candidate));
+				candidatesQueue.clear();
+		}
 	}
 
 	public void startRecord() {
