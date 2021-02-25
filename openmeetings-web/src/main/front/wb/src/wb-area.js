@@ -181,7 +181,12 @@ module.exports = class DrawWbArea extends WbAreaBase {
 				.confirmation({
 					confirmationEvent: 'bla'
 					, onConfirm: function() {
-						OmUtil.wbAction({action: 'removeWb', data: {wbId: wbId}});
+						const prevLi = li.prev()
+							, prevWbId = prevLi.length > 0 ? prevLi.find('a').data('wb-id') : -1;
+						OmUtil.wbAction({action: 'removeWb', data: {
+							wbId: wbId
+							, prevWbId: prevWbId
+						}});
 					}
 				});
 		}
@@ -343,7 +348,7 @@ module.exports = class DrawWbArea extends WbAreaBase {
 			}
 			_getWbTab(obj.wbId).parent().remove();
 			_getWbContent(obj.wbId).remove();
-			_actionActivateWb(_getActive().data().id);
+			_actionActivateWb(obj.prevWbId);
 		};
 		this.load = (json) => {
 			if (!_inited) {

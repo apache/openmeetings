@@ -242,9 +242,12 @@ public class WhiteboardManager implements IWhiteboardManager {
 		}
 	}
 
-	public Whiteboard remove(long roomId, Long wbId) {
+	public Whiteboard remove(long roomId, long wbId, long prevWbId) {
 		Whiteboards wbs = get(roomId);
 		Whiteboard wb = wbs.getWhiteboards().remove(wbId);
+		if (prevWbId > -1) {
+			wbs.setActiveWb(prevWbId);
+		}
 		update(wbs);
 		return wb;
 	}

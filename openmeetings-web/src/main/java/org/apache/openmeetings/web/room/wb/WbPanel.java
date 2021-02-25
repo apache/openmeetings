@@ -256,7 +256,8 @@ public class WbPanel extends AbstractWbPanel {
 				{
 					long id = obj.optLong("wbId", -1);
 					if (id > -1) {
-						wbm.remove(roomId, id);
+						long prevId = obj.optLong("prevWbId", -1);
+						wbm.remove(roomId, id, prevId);
 						sendWbAll(WbAction.removeWb, obj);
 					}
 				}

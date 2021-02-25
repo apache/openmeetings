@@ -147,6 +147,12 @@ module.exports = class Wb {
 			if (role === Role.NONE && o.omType !== 'pointer') {
 				return;
 			}
+			function modifiedAction(items) {
+				OmUtil.wbAction({action: 'modifyObj', data: {
+					wbId: self.id
+					, obj: items
+				}});
+			}
 			o.includeDefaultValues = false;
 			if ('activeSelection' === o.type) {
 				o.clone(function(_o) {
@@ -156,14 +162,12 @@ module.exports = class Wb {
 					for (let i = 0; i < _items.length; ++i) {
 						items.push(self._toOmJson(_items[i]));
 					}
+					modifiedAction(items);
 				}, extraProps);
 			} else {
 				items.push(self._toOmJson(o));
+				modifiedAction(items);
 			}
-			OmUtil.wbAction({action: 'modifyObj', data: {
-				wbId: self.id
-				, obj: items
-			}});
 		}
 		function objSelectedHandler(e) {
 			tools.updateCoordinates(e.target);
