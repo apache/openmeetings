@@ -75,7 +75,7 @@ module.exports = class DrawWbArea extends WbAreaBase {
 			ctx.save();
 			ctx.translate(left, top);
 			ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle));
-			ctx.drawImage(arrowImg, x-arrowImg.width / 2, -arrowImg.height / 2);
+			ctx.drawImage(arrowImg, -arrowImg.width / 2, -arrowImg.height / 2);
 			ctx.restore();
 		};
 		fabric.Object.prototype.controls.tr = new fabric.Control({
