@@ -18,14 +18,17 @@
  */
 package org.apache.openmeetings.cli;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.cli.Option;
 
 public class OmOption extends Option {
 	private static final long serialVersionUID = 1L;
 	private String group = null;
-	private HashMap<String, Boolean> optional = null;
+	private Map<String, Boolean> optional = null;
 	private int order = 0;
 	private String helpPrefix = "";
 
@@ -65,8 +68,8 @@ public class OmOption extends Option {
 		boolean result = false;
 		if (optional != null) {
 			String[] grps = group.split(",");
-			for(String g : grps) {
-				result |= optional.containsKey(g) ? optional.get(g) : false;
+			for (String g : grps) {
+				result |= optional.getOrDefault(g, false);
 			}
 		}
 		return result;
@@ -77,11 +80,8 @@ public class OmOption extends Option {
 	}
 
 	public void setOptional(String group, boolean val) {
-		String[] grps = group.split(",");
-		optional = new HashMap<>(grps.length);
-		for(String g : grps) {
-			optional.put(g, val);
-		}
+		optional = Stream.of(group.split(","))
+				.collect(Collectors.toMap(Function.identity(), s -> val));
 	}
 
 	public int getOrder() {

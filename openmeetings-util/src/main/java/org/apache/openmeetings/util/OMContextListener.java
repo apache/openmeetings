@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.servlet.ServletContextEvent;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
 
 public class OMContextListener implements ServletContextListener {
 	private static final String LOG_DIR_PROP = "current_openmeetings_log_dir";
@@ -46,22 +48,26 @@ public class OMContextListener implements ServletContextListener {
 			JoranConfigurator configurator = new JoranConfigurator();
 			configurator.setContext(context);
 			context.reset();
-			boolean configured = false;
-			try (InputStream cfgIs = getClass().getResourceAsStream("/logback-test.xml")) {
-				if (cfgIs != null) {
-					configurator.doConfigure(cfgIs);
-					configured = true;
-				}
-			} catch (Exception e) {
-				// no-op
-			}
-			if (!configured) {
-				try (InputStream cfgIs = getClass().getResourceAsStream("/logback-config.xml")) {
-					configurator.doConfigure(cfgIs);
-				}
+			tryConfigure(configurator);
+		} catch (Exception e) {
+			// no-op
+		}
+	}
+
+	private void tryConfigure(JoranConfigurator configurator) throws JoranException, IOException {
+		boolean configured = false;
+		try (InputStream cfgIs = getClass().getResourceAsStream("/logback-test.xml")) {
+			if (cfgIs != null) {
+				configurator.doConfigure(cfgIs);
+				configured = true;
 			}
 		} catch (Exception e) {
 			// no-op
+		}
+		if (!configured) {
+			try (InputStream cfgIs = getClass().getResourceAsStream("/logback-config.xml")) {
+				configurator.doConfigure(cfgIs);
+			}
 		}
 	}
 

@@ -201,7 +201,7 @@ public class SipManager implements ISipManager {
 			ResponseEvents r = execEvent(da);
 			if (r != null) {
 				long count = r.getEvents().stream()
-						.filter(evt -> evt instanceof ConfbridgeListEvent)
+						.filter(ConfbridgeListEvent.class::isInstance)
 						.filter(evt -> !omSipUser.equals(evt.getCallerIdName()))
 						.count();
 				log.trace("SipManager::countUsers == {}", count);

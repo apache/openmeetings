@@ -73,7 +73,7 @@ import io.prometheus.client.GaugeMetricFamily;
  */
 public class TomcatGenericExports extends Collector {
 	private static final Logger log = LoggerFactory.getLogger(TomcatGenericExports.class);
-	private static final String labelName = "name";
+	private static final String LABEL_NAME = "name";
 	private String jmxDomain = "Catalina";
 
 	public TomcatGenericExports(boolean embedded) {
@@ -89,7 +89,7 @@ public class TomcatGenericExports extends Collector {
 			Set<ObjectInstance> mBeans = server.queryMBeans(filterName, null);
 
 			if (!mBeans.isEmpty()) {
-				List<String> labelNameList = List.of(labelName);
+				List<String> labelNameList = List.of(LABEL_NAME);
 
 				GaugeMetricFamily requestProcessorBytesReceivedGauge = new GaugeMetricFamily(
 						"tomcat_requestprocessor_received_bytes", "Number of bytes received by this request processor",
@@ -226,7 +226,7 @@ public class TomcatGenericExports extends Collector {
 			Set<ObjectInstance> mBeans = server.queryMBeans(filterName, null);
 
 			if (!mBeans.isEmpty()) {
-				List<String> labelList = List.of(labelName);
+				List<String> labelList = List.of(LABEL_NAME);
 
 				GaugeMetricFamily threadPoolCurrentCountGauge = new GaugeMetricFamily("tomcat_threads_total",
 						"Number threads in this pool.", labelList);

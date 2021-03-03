@@ -237,7 +237,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 
 	public void addListener(String sid, String uid, String sdpOffer) {
 		final boolean self = uid.equals(this.uid);
-		log.info("USER: have started, sid {}, uid {} in kRoom {}", sid, uid, self ? "broadcasting" : "receiving", getRoomId());
+		log.info("USER: have started, sid {}, uid {}, mode {} in kRoom {}", sid, uid, self ? "broadcasting" : "receiving", getRoomId());
 		log.trace("USER {}: SdpOffer is {}", uid, sdpOffer);
 		if (!self && outgoingMedia == null) {
 			log.warn("Trying to add listener too early, sid {}, uid {}", sid, uid);
@@ -323,8 +323,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		// sender candidates
 		if (recv && !candidatesQueue.isEmpty()) {
 				log.trace("addIceCandidate iceCandidate reply from not ready, uid: {}", uid);
-				candidatesQueue.stream()
-					.forEach(candidate -> endpoint.addIceCandidate(candidate));
+				candidatesQueue.stream().forEach(endpoint::addIceCandidate);
 				candidatesQueue.clear();
 		}
 	}
