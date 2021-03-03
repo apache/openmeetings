@@ -6,7 +6,7 @@ const Volume = require('./volume');
 
 module.exports = class Video {
 	constructor(msg) {
-		const states = [], self = this;
+		const states = [], self = this, vidSize = {};
 		let sd, v, vc, t, footer, size, vol, iceServers
 			, lm, level, userSpeaks = false, muteOthers
 			, hasVideo, isSharing, isRecording;
@@ -193,6 +193,8 @@ module.exports = class Video {
 							}, vtracks = state.stream.getVideoTracks();
 						if (vtracks && vtracks.length > 0) {
 							const vts = vtracks[0].getSettings();
+							vidSize.width = vts.width;
+							vidSize.height = vts.height;
 							bmsg.width = vts.width;
 							bmsg.height = vts.height;
 							bmsg.fps = vts.frameRate;
@@ -367,8 +369,8 @@ module.exports = class Video {
 		}
 		function _update(_c) {
 			const prevA = sd.activities
-				, prevW = sd.width
-				, prevH = sd.height
+				, prevW = vidSize.width || sd.width // try to check actual size of video first
+				, prevH = vidSize.height || sd.height // try to check actual size of video first
 				, prevCam = sd.cam
 				, prevMic = sd.mic;
 			sd.activities = _c.activities.sort();
@@ -500,6 +502,8 @@ module.exports = class Video {
 			data.rtcPeer = null;
 		}
 		function _cleanup(evt) {
+			delete vidSize.width;
+			delete vidSize.height;
 			OmUtil.log('!!Disposing participant ' + sd.uid);
 			let state;
 			while(state = states.pop()) {
