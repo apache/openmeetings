@@ -5,7 +5,9 @@ const Role = require('./wb-role');
 const StaticTMath = require('./wb-tool-stat-math');
 
 module.exports = class TMath extends WbShapeBase {
-	static TYPE = 'Math';
+	static get TYPE() {
+		return 'Math';
+	}
 
 	constructor(wb, settings, sBtn) {
 		super();
