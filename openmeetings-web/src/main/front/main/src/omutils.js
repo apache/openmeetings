@@ -49,11 +49,16 @@ function _sendMessage(_m, _base) {
 }
 function _requestNotifyPermission(callback, elseCallback) {
 	if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-		Notification.requestPermission().then(permission => {
+		function onRequest(permission) {
 			if (permission === 'granted') {
 				callback();
 			}
-		});
+		}
+		if (VideoUtil.browser.name === 'Safari') {
+			Notification.requestPermission(onRequest);
+		} else {
+			Notification.requestPermission().then(onRequest);
+		}
 	} else if (typeof(elseCallback) === 'function') {
 		elseCallback();
 	}
