@@ -8,11 +8,6 @@ const MIC_ACTIVITY = 'AUDIO';
 const SCREEN_ACTIVITY = 'SCREEN';
 const REC_ACTIVITY = 'RECORD';
 
-const UAParser = require('ua-parser-js')
-	, ua = (typeof window !== 'undefined' && window.navigator) ? window.navigator.userAgent : ''
-	, parser = new UAParser(ua)
-	, browser = parser.getBrowser();
-
 function _getVid(uid) {
 	return 'video' + uid;
 }
@@ -234,18 +229,6 @@ function _cleanPeer(peer) {
 		}
 	}
 }
-function _isChrome(_b) {
-	const b = _b || browser;
-	return b.name === 'Chrome' || b.name === 'Chromium';
-}
-function _isEdge(_b) {
-	const b = _b || browser;
-	return b.name === 'Edge' && "MSGestureEvent" in window;
-}
-function _isEdgeChromium(_b) {
-	const b = _b || browser;
-	return b.name === 'Edge' && !("MSGestureEvent" in window);
-}
 function _setPos(v, pos) {
 	if (v.dialog('instance')) {
 		v.dialog('widget').css(pos);
@@ -283,13 +266,13 @@ function _disconnect(node) {
 	}
 }
 function _sharingSupported() {
-	const b = browser;
+	const b = OmUtil.browser;
 	return (b.name === 'Edge' && b.major > 16)
 		|| (b.name === 'Firefox')
 		|| (b.name === 'Opera')
 		|| (b.name === 'Yandex')
-		|| _isChrome(b)
-		|| _isEdgeChromium(b)
+		|| OmUtil.isChrome()
+		|| OmUtil.isEdgeChromium()
 		|| (b.name === 'Mozilla' && b.major > 4);
 }
 function _highlight(el, clazz, count) {
@@ -309,7 +292,6 @@ module.exports = {
 	VIDWIN_SEL: VIDWIN_SEL
 	, VID_SEL: VID_SEL
 
-	, browser: browser
 	, getVid: _getVid
 	, isSharing: _isSharing
 	, isRecording: _isRecording
@@ -329,9 +311,6 @@ module.exports = {
 		}
 		return opts;
 	}
-	, isEdge: _isEdge
-	, isEdgeChromium: _isEdgeChromium
-	, isChrome: _isChrome
 	, setPos: _setPos
 	, askPermission: _askPermission
 	, disconnect: _disconnect

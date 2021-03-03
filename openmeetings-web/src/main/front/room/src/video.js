@@ -35,9 +35,9 @@ module.exports = class Video {
 				Sharer.setRecState(Sharer.SHARE_STOPPED);
 				OmUtil.error(err);
 			}
-			const b = VideoUtil.browser;
+			const b = OmUtil.browser;
 			let promise, cnts;
-			if (VideoUtil.isEdge(b) && b.major > 16) {
+			if (OmUtil.isEdge() && b.major > 16) {
 				cnts = {
 					video: true
 				};
@@ -98,7 +98,7 @@ module.exports = class Video {
 							data.aSrc = data.aCtx.createMediaStreamSource(stream);
 							data.aSrc.connect(data.gainNode);
 							data.gainNode.connect(data.analyser);
-							if (VideoUtil.isEdge()) {
+							if (OmUtil.isEdge()) {
 								data.analyser.connect(data.aCtx.destination);
 							} else {
 								data.aDest = data.aCtx.createMediaStreamDestination();

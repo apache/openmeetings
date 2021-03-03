@@ -1,4 +1,10 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+
+const UAParser = require('ua-parser-js')
+	, ua = (typeof window !== 'undefined' && window.navigator) ? window.navigator.userAgent : ''
+	, parser = new UAParser(ua)
+	, browser = parser.getBrowser();
+
 let options, alertId = 0;
 
 function _init(_options) {
@@ -54,7 +60,7 @@ function _requestNotifyPermission(callback, elseCallback) {
 				callback();
 			}
 		}
-		if (VideoUtil.browser.name === 'Safari') {
+		if (_isSafari()) {
 			Notification.requestPermission(onRequest);
 		} else {
 			Notification.requestPermission().then(onRequest);
@@ -79,6 +85,18 @@ function _notify(msg, tag, elseCallback) {
 	} else if (typeof(elseCallback) === 'function') {
 		elseCallback();
 	}
+}
+function _isSafari() {
+	return browser.name === 'Safari';
+}
+function _isChrome() {
+	return browser.name === 'Chrome' || browser.name === 'Chromium';
+}
+function _isEdge() {
+	return browser.name === 'Edge' && "MSGestureEvent" in window;
+}
+function _isEdgeChromium() {
+	return browser.name === 'Edge' && !("MSGestureEvent" in window);
 }
 
 module.exports = {
@@ -109,4 +127,9 @@ module.exports = {
 	}
 	, notify: _notify
 	, requestNotifyPermission: _requestNotifyPermission
+	, browser: browser
+	, isEdge: _isEdge
+	, isEdgeChromium: _isEdgeChromium
+	, isChrome: _isChrome
+	, isSafari: _isSafari
 };

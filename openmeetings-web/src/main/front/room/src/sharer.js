@@ -34,9 +34,8 @@ function _init() {
 		sharer.find('.alert').show();
 	} else {
 		type = sharer.find('select.type');
-		const b = VideoUtil.browser;
 		fps = sharer.find('select.fps');
-		_disable(fps, VideoUtil.isEdge(b));
+		_disable(fps, OmUtil.isEdge());
 		sbtn = sharer.find('.share-start-stop').off().click(function() {
 			if (shareState === SHARE_STOPPED) {
 				_setShareState(SHARE_STARTING);
@@ -82,9 +81,8 @@ function _disable(e, state) {
 		e.removeClass('disabled');
 	}
 }
-function _typeDisabled(_b) {
-	const b = _b || VideoUtil.browser;
-	return VideoUtil.isEdge(b) || VideoUtil.isChrome(b) || VideoUtil.isEdgeChromium(b);
+function _typeDisabled() {
+	return OmUtil.isEdge() || OmUtil.isChrome() || OmUtil.isEdgeChromium();
 }
 function _setBtnState(btn, state) {
 	const dis = SHARE_STOPPED !== state

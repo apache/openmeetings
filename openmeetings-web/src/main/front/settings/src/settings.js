@@ -130,8 +130,7 @@ function _updateRec() {
 	recBtn.prop('disabled', !recAllowed || (s.video.cam < 0 && s.video.mic < 0));
 }
 function _setCntsDimensions(cnts) {
-	const b = VideoUtil.browser;
-	if (b.name === 'Safari') {
+	if (OmUtil.isSafari()) {
 		let width = s.video.width;
 		//valid widths are 320, 640, 1280
 		[320, 640, 1280].some(function(w) {

@@ -14,5 +14,8 @@
   "devDependencies": {
     "browserify": "^17.0.0",
     "tinyify": "^3.0.0"
+  },
+  "dependencies": {
+    "ua-parser-js": "^0.7.24"
   }
 }
