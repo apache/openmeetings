@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.openmeetings.core.remote.KurentoHandler;
+import org.apache.openmeetings.core.remote.IKurentoHandler;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
@@ -55,7 +55,7 @@ public abstract class OmWebSocketPanel extends Panel {
 	public static final String CONNECTED_MSG = "socketConnected";
 	private final AtomicBoolean connected = new AtomicBoolean();
 	@SpringBean
-	private KurentoHandler kHandler;
+	private IKurentoHandler kHandler;
 	private boolean pingable = false;
 
 	protected OmWebSocketPanel(String id) {

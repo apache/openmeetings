@@ -29,7 +29,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.openmeetings.core.remote.KurentoHandler;
+import org.apache.openmeetings.core.remote.IKurentoHandler;
 import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -57,7 +57,7 @@ public class TimerService {
 	@Autowired
 	private SipManager sipManager;
 	@Autowired
-	private KurentoHandler kHandler;
+	private IKurentoHandler kHandler;
 
 	@PostConstruct
 	private void init() {

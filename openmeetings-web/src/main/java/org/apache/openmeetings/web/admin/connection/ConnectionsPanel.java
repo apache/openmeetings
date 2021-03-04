@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.openmeetings.core.remote.KurentoHandler;
-import org.apache.openmeetings.core.remote.StreamProcessor;
+import org.apache.openmeetings.core.remote.IKurentoHandler;
+import org.apache.openmeetings.core.remote.IStreamProcessor;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -57,9 +57,9 @@ public class ConnectionsPanel extends AdminBasePanel {
 	@SpringBean
 	private ClientManager cm;
 	@SpringBean
-	private KurentoHandler kHandler;
+	private IKurentoHandler kHandler;
 	@SpringBean
-	private StreamProcessor streamProcessor;
+	private IStreamProcessor streamProcessor;
 	@SpringBean
 	private IUserManager userManager;
 

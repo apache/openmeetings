@@ -37,8 +37,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.text.StringEscapeUtils;
-import org.apache.openmeetings.core.remote.KurentoHandler;
-import org.apache.openmeetings.core.remote.StreamProcessor;
+import org.apache.openmeetings.core.remote.IKurentoHandler;
+import org.apache.openmeetings.core.remote.IStreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
@@ -246,9 +246,9 @@ public class RoomPanel extends BasePanel {
 	@SpringBean
 	private QuickPollManager qpollManager;
 	@SpringBean
-	private KurentoHandler kHandler;
+	private IKurentoHandler kHandler;
 	@SpringBean
-	private StreamProcessor streamProcessor;
+	private IStreamProcessor streamProcessor;
 	@SpringBean
 	private TimerService timerService;
 	@SpringBean

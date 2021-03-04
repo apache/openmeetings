@@ -34,8 +34,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.openmeetings.core.remote.KurentoHandler;
-import org.apache.openmeetings.core.remote.StreamProcessor;
+import org.apache.openmeetings.core.remote.IKurentoHandler;
+import org.apache.openmeetings.core.remote.IStreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -112,9 +112,9 @@ public class RoomMenuPanel extends Panel {
 	@SpringBean
 	private ChatDao chatDao;
 	@SpringBean
-	private KurentoHandler kHandler;
+	private IKurentoHandler kHandler;
 	@SpringBean
-	private StreamProcessor streamProcessor;
+	private IStreamProcessor streamProcessor;
 
 	public RoomMenuPanel(String id, final RoomPanel room) {
 		super(id);

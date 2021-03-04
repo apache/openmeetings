@@ -44,6 +44,10 @@
 	<aop:aspectj-autoproxy/>
 	End annotation -->
 	<context:component-scan base-package="org.apache.openmeetings" />
+	
+	<!--  Kurento Handlers -->
+	<bean id="kHandler" class="org.apache.openmeetings.core.remote.KurentoHandler" />
+	<bean id="streamProcessor" class="org.apache.openmeetings.core.remote.StreamProcessorr" />
 
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
 		p:location="classpath:openmeetings.properties" />

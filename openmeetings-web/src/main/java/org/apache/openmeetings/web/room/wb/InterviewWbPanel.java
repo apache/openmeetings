@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.room.wb;
 
 import java.io.IOException;
 
-import org.apache.openmeetings.core.remote.StreamProcessor;
+import org.apache.openmeetings.core.remote.IStreamProcessor;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -33,7 +33,7 @@ import com.github.openjson.JSONObject;
 public class InterviewWbPanel extends AbstractWbPanel {
 	private static final long serialVersionUID = 1L;
 	@SpringBean
-	private StreamProcessor streamProcessor;
+	private IStreamProcessor streamProcessor;
 
 	public InterviewWbPanel(String id, RoomPanel rp) {
 		super(id, rp);

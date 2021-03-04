@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.room.sidebar;
 
 import static org.apache.openmeetings.web.app.Application.kickUser;
 
-import org.apache.openmeetings.core.remote.StreamProcessor;
+import org.apache.openmeetings.core.remote.IStreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -64,7 +64,7 @@ public class RoomSidebar extends Panel {
 	@SpringBean
 	private ClientManager cm;
 	@SpringBean
-	private StreamProcessor streamProcessor;
+	private IStreamProcessor streamProcessor;
 
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);
