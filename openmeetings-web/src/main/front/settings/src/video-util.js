@@ -271,6 +271,7 @@ function _sharingSupported() {
 		|| (b.name === 'Firefox')
 		|| (b.name === 'Opera')
 		|| (b.name === 'Yandex')
+		|| OmUtil.isSafari()
 		|| OmUtil.isChrome()
 		|| OmUtil.isEdgeChromium()
 		|| (b.name === 'Mozilla' && b.major > 4);
