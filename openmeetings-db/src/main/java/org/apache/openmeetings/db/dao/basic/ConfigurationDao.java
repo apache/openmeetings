@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.basic;
 
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.*;
 import static org.apache.openmeetings.util.Version.getLine;
@@ -41,7 +42,6 @@ import org.apache.openjpa.event.RemoteCommitProvider;
 import org.apache.openjpa.event.TCPRemoteCommitProvider;
 import org.apache.openjpa.persistence.OpenJPAEntityManagerSPI;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
-import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -88,8 +88,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private UserDao userDao;
 	@Autowired
 	private OAuth2Dao oauthDao;
-	@Autowired
-	private IApplication app;
 
 	public void updateClusterAddresses(String addresses) throws UnknownHostException {
 		OpenJPAConfiguration cfg = ((OpenJPAEntityManagerSPI)OpenJPAPersistence.cast(em)).getConfiguration();
@@ -606,7 +604,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			addCspRule(cspConfig, CSPDirective.MEDIA_SRC, getCspMediaSrc());
 			addCspRule(cspConfig, CSPDirective.SCRIPT_SRC, getCspScriptSrc());
 			addCspRule(cspConfig, CSPDirective.STYLE_SRC, getCspStyleSrc());
-			app.getWsUrls().forEach(wsUrl -> addCspRule(cspConfig, CSPDirective.CONNECT_SRC, wsUrl, false)); // special code for Safari browser
+			ensureApplication().getWsUrls().forEach(wsUrl -> addCspRule(cspConfig, CSPDirective.CONNECT_SRC, wsUrl, false)); // special code for Safari browser
 			if (!Strings.isEmpty(getGaCode())) {
 				// https://developers.google.com/tag-manager/web/csp#universal_analytics_google_analytics
 				addCspRule(cspConfig, CSPDirective.IMG_SRC, "https://www.google-analytics.com");
