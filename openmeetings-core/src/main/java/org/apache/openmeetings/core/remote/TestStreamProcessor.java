@@ -24,12 +24,18 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_MODE;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.Activity;
+import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.kurento.client.IceCandidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,10 +47,10 @@ class TestStreamProcessor implements IStreamProcessor {
 	private final Map<String, KTestStream> streamByUid = new ConcurrentHashMap<>();
 
 	@Autowired
-	private KurentoHandler kHandler;
+	private IKurentoHandler kHandler;
 
 	void onMessage(IWsClient c, final String cmdId, JSONObject msg) {
-		KTestStream user = getByUid(c.getUid());
+		KTestStream user = getByUid1(c.getUid());
 		switch (cmdId) {
 			case "wannaRecord":
 				WebSocketHelper.sendClient(c, newTestKurentoMsg()
@@ -84,16 +90,16 @@ class TestStreamProcessor implements IStreamProcessor {
 		}
 	}
 
-	private KTestStream getByUid(String uid) {
+	public KTestStream getByUid1(String uid) {
 		return uid == null ? null : streamByUid.get(uid);
 	}
 
-	static JSONObject newTestKurentoMsg() {
-		return KurentoHandler.newKurentoMsg().put(TAG_MODE, MODE_TEST);
+	JSONObject newTestKurentoMsg() {
+		return kHandler.newKurentoMsg().put(TAG_MODE, MODE_TEST);
 	}
 
 	void remove(IWsClient c) {
-		AbstractStream s = getByUid(c.getUid());
+		AbstractStream s = getByUid1(c.getUid());
 		if (s != null) {
 			s.release();
 		}
@@ -111,5 +117,134 @@ class TestStreamProcessor implements IStreamProcessor {
 			streamByUid.remove(e.getKey());
 		}
 		streamByUid.clear();
+	}
+
+	@Override
+	public void toggleActivity(Client c, Activity a) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void rightsUpdated(Client c) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean hasRightsToShare(Client c) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean screenShareAllowed(Client c) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isSharing(Long roomId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean hasRightsToRecord(Client c) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean recordingAllowed(Client c) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void startRecording(Client c) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void stopRecording(Client c) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean isRecording(Long roomId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Collection<KStream> getStreams() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasStream(String uid) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void startBroadcast(KStream stream, StreamDesc sd, String sdpOffer, Runnable then) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean startConvertion(Recording rec) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void pauseSharing(Client c, String uid) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public Client getBySid(String sid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addStream(KStream stream) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public StreamDesc doStopSharing(String sid, String uid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Stream<KStream> getByRoom(Long roomId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public KStream getByUid(String uid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void onMessage(Client c, String cmdId, JSONObject msg) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void remove(Client c) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public JSONObject newStoppedMsg(StreamDesc sd) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

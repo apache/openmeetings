@@ -44,6 +44,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
@@ -74,13 +75,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
-@Component
-public class KurentoHandler {
+public class KurentoHandler implements IKurentoHandler {
 	private static final Logger log = LoggerFactory.getLogger(KurentoHandler.class);
 	public static final String PARAM_ICE = "iceServers";
 	public static final String PARAM_CANDIDATE = "candidate";
@@ -123,17 +122,20 @@ public class KurentoHandler {
 	@Autowired
 	private IClientManager cm;
 	@Autowired
+	private RecordingDao recDao;
+	@Autowired
 	private RoomDao roomDao;
 	@Autowired
 	private RecordingChunkDao chunkDao;
 	@Autowired
 	private TestStreamProcessor testProcessor;
 	@Autowired
-	private StreamProcessor streamProcessor;
+	private IStreamProcessor streamProcessor;
 	@Autowired
 	private SipManager sipManager;
 
-	boolean isConnected() {
+	@Override
+	public boolean isConnected() {
 		boolean connctd = connected.get() && client != null && !client.isClosed();
 		if (!connctd) {
 			log.warn(WARN_NO_KURENTO);
@@ -141,6 +143,7 @@ public class KurentoHandler {
 		return connctd;
 	}
 
+	@Override
 	@PostConstruct
 	public void init() {
 		check = () -> {
@@ -196,6 +199,7 @@ public class KurentoHandler {
 		kmsRecheckScheduler.scheduleAtFixedRate(check, 0L, checkTimeout, MILLISECONDS);
 	}
 
+	@Override
 	@PreDestroy
 	public void destroy() {
 		clean();
@@ -233,6 +237,7 @@ public class KurentoHandler {
 		return client.beginTransaction();
 	}
 
+	@Override
 	public void onMessage(IWsClient inClient, JSONObject msg) {
 		if (!isConnected()) {
 			sendError(inClient, "Multimedia server is inaccessible");
@@ -252,6 +257,7 @@ public class KurentoHandler {
 		}
 	}
 
+	@Override
 	public JSONObject getRecordingUser(Long roomId) {
 		if (!isConnected()) {
 			return new JSONObject();
@@ -259,6 +265,7 @@ public class KurentoHandler {
 		return getRoom(roomId).getRecordingUser();
 	}
 
+	@Override
 	public void leaveRoom(Client c) {
 		remove(c);
 		WebSocketHelper.sendAll(newKurentoMsg()
@@ -268,23 +275,27 @@ public class KurentoHandler {
 			);
 	}
 
-	void sendShareUpdated(StreamDesc sd) {
+	@Override
+	public void sendShareUpdated(StreamDesc sd) {
 		sendClient(sd.getSid(), newKurentoMsg()
 				.put("id", "shareUpdated")
 				.put("stream", sd.toJson())
 			);
 	}
 
+	@Override
 	public void sendClient(String sid, JSONObject msg) {
 		WebSocketHelper.sendClient(cm.getBySid(sid), msg);
 	}
 
-	public static void sendError(IWsClient c, String msg) {
+	@Override
+	public void sendError(IWsClient c, String msg) {
 		WebSocketHelper.sendClient(c, newKurentoMsg()
 				.put("id", "error")
 				.put("message", msg));
 	}
 
+	@Override
 	public void remove(IWsClient c) {
 		if (!isConnected() || c == null) {
 			return;
@@ -296,7 +307,8 @@ public class KurentoHandler {
 		streamProcessor.remove((Client)c);
 	}
 
-	MediaPipeline createPipiline(Map<String, String> tags, Continuation<Void> continuation) {
+	@Override
+	public MediaPipeline createPipiline(Map<String, String> tags, Continuation<Void> continuation) {
 		Transaction t = beginTransaction();
 		MediaPipeline pipe = client.createMediaPipeline(t);
 		pipe.addTag(t, TAG_KUID, kuid);
@@ -305,23 +317,27 @@ public class KurentoHandler {
 		return pipe;
 	}
 
-	KRoom getRoom(Long roomId) {
+	@Override
+	public KRoom getRoom(Long roomId) {
 		return rooms.computeIfAbsent(roomId, k -> {
 			log.debug("Room {} does not exist. Will create now!", roomId);
 			Room r = roomDao.get(roomId);
-			return new KRoom(this, r);
+			return new KRoom(this, r, cm, recDao);
 		});
 	}
 
+	@Override
 	public Collection<KRoom> getRooms() {
 		return rooms.values();
 	}
 
+	@Override
 	public void updateSipCount(Room r, long count) {
 		getRoom(r.getId()).updateSipCount(count);
 	}
 
-	static JSONObject newKurentoMsg() {
+	@Override
+	public JSONObject newKurentoMsg() {
 		return new JSONObject().put("type", KURENTO_TYPE);
 	}
 
@@ -343,11 +359,13 @@ public class KurentoHandler {
 		return r;
 	}
 
+	@Override
 	public JSONArray getTurnServers(Client c) {
 		return getTurnServers(c, false);
 	}
 
-	JSONArray getTurnServers(Client c, final boolean test) {
+	@Override
+	public JSONArray getTurnServers(Client c, final boolean test) {
 		JSONArray arr = new JSONArray();
 		if (!Strings.isEmpty(turnUrl)) {
 			try {
@@ -397,23 +415,28 @@ public class KurentoHandler {
 		return kuid;
 	}
 
+	@Override
 	public TestStreamProcessor getTestProcessor() {
 		return testProcessor;
 	}
 
-	StreamProcessor getStreamProcessor() {
+	@Override
+	public IStreamProcessor getStreamProcessor() {
 		return streamProcessor;
 	}
 
-	SipManager getSipManager() {
+	@Override
+	public SipManager getSipManager() {
 		return sipManager;
 	}
 
-	RecordingChunkDao getChunkDao() {
+	@Override
+	public RecordingChunkDao getChunkDao() {
 		return chunkDao;
 	}
 
-	static int getFlowoutTimeout() {
+	@Override
+	public int getFlowoutTimeout() {
 		return flowoutTimeout;
 	}
 

@@ -23,8 +23,6 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.MODE_TEST;
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_MODE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_ROOM;
-import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
-import static org.apache.openmeetings.core.remote.TestStreamProcessor.newTestKurentoMsg;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WEBM;
 import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
@@ -55,7 +53,7 @@ import com.github.openjson.JSONObject;
 public class KTestStream extends AbstractStream {
 	private static final Logger log = LoggerFactory.getLogger(KTestStream.class);
 	private static final Map<String, String> TAGS = Map.of(TAG_MODE, MODE_TEST, TAG_ROOM, MODE_TEST);
-	private final KurentoHandler kHandler;
+	private final IKurentoHandler kHandler;
 	private MediaPipeline pipeline;
 	private WebRtcEndpoint webRtcEndpoint;
 	private PlayerEndpoint player;
@@ -65,10 +63,14 @@ public class KTestStream extends AbstractStream {
 	private ScheduledFuture<?> recHandle;
 	private int recTime;
 
-	public KTestStream(IWsClient c, JSONObject msg, KurentoHandler kHandler) {
+	public KTestStream(IWsClient c, JSONObject msg, IKurentoHandler kHandler) {
 		super(null, c.getUid());
 		this.kHandler = kHandler;
 		createPipeline(() -> startTestRecording(c, msg));
+	}
+
+	JSONObject newTestKurentoMsg() {
+		return kHandler.newKurentoMsg().put(TAG_MODE, MODE_TEST);
 	}
 
 	private void startTestRecording(IWsClient c, JSONObject msg) {
@@ -126,7 +128,7 @@ public class KTestStream extends AbstractStream {
 
 			@Override
 			public void onError(Throwable cause) throws Exception {
-				sendError(c, "Failed to start recording");
+				kHandler.sendError(c, "Failed to start recording");
 				log.error("Failed to start recording", cause);
 			}
 		});

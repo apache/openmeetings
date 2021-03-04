@@ -21,7 +21,6 @@ package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed;
-import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isRecordingsEnabled;
 
 import java.util.Collection;
@@ -37,7 +36,6 @@ import org.apache.openmeetings.core.converter.IRecordingConverter;
 import org.apache.openmeetings.core.converter.InterviewConverter;
 import org.apache.openmeetings.core.converter.RecordingConverter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
-import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
@@ -54,12 +52,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
-@Component
 public class StreamProcessor implements IStreamProcessor {
 	private static final Logger log = LoggerFactory.getLogger(StreamProcessor.class);
 	/**
@@ -70,9 +66,7 @@ public class StreamProcessor implements IStreamProcessor {
 	@Autowired
 	private IClientManager cm;
 	@Autowired
-	private RecordingDao recDao;
-	@Autowired
-	private KurentoHandler kHandler;
+	private IKurentoHandler kHandler;
 	@Autowired
 	private TaskExecutor taskExecutor;
 	@Autowired
@@ -83,7 +77,8 @@ public class StreamProcessor implements IStreamProcessor {
 	private StreamProcessorActions streamProcessorActions;
 
 	@TimedApplication
-	void onMessage(Client c, final String cmdId, JSONObject msg) {
+	@Override
+	public void onMessage(Client c, final String cmdId, JSONObject msg) {
 		final String uid = msg.optString("uid");
 		StreamDesc sd;
 		Optional<StreamDesc> osd;
@@ -163,7 +158,8 @@ public class StreamProcessor implements IStreamProcessor {
 	 * @param then steps need to be done after broadcast is started
 	 * @return the current KStream
 	 */
-	void startBroadcast(KStream stream, StreamDesc sd, String sdpOffer, Runnable then) {
+	@Override
+	public void startBroadcast(KStream stream, StreamDesc sd, String sdpOffer, Runnable then) {
 		stream.startBroadcast(sd, sdpOffer, then);
 	}
 
@@ -186,6 +182,7 @@ public class StreamProcessor implements IStreamProcessor {
 		return closed;
 	}
 
+	@Override
 	@TimedApplication
 	public void toggleActivity(Client c, Activity a) {
 		log.info("PARTICIPANT {}: trying to toggle activity {}", c, a);
@@ -218,11 +215,11 @@ public class StreamProcessor implements IStreamProcessor {
 				Set<String> closed = wasBroadcasting ? cleanWebCams(c, streams) : Set.of();
 				cm.update(c.restoreActivities(sd));
 				log.debug("User {}: has started broadcast", sd.getUid());
-				kHandler.sendClient(sd.getSid(), newKurentoMsg()
+				kHandler.sendClient(sd.getSid(), kHandler.newKurentoMsg()
 						.put("id", "broadcast")
 						.put("stream", sd.toJson(true))
 						.put("cleanup", new JSONArray(closed))
-						.put(PARAM_ICE, kHandler.getTurnServers(c, false)));
+						.put(PARAM_ICE, kHandler.getTurnServers(c)));
 			}
 		}
 	}
@@ -238,6 +235,7 @@ public class StreamProcessor implements IStreamProcessor {
 			});
 	}
 
+	@Override
 	public void rightsUpdated(Client c) {
 		Optional<StreamDesc> osd = c.getScreenStream();
 		if (osd.isPresent() && !hasRightsToShare(c)) {
@@ -288,6 +286,7 @@ public class StreamProcessor implements IStreamProcessor {
 	}
 
 	// Sharing
+	@Override
 	public boolean hasRightsToShare(Client c) {
 		if (!kHandler.isConnected()) {
 			return false;
@@ -298,6 +297,7 @@ public class StreamProcessor implements IStreamProcessor {
 				&& c.hasRight(Right.SHARE);
 	}
 
+	@Override
 	public boolean screenShareAllowed(Client c) {
 		Room r = c.getRoom();
 		return hasRightsToShare(c) && !isSharing(r.getId());
@@ -322,7 +322,7 @@ public class StreamProcessor implements IStreamProcessor {
 
 	private void startSharing(Client c, Optional<StreamDesc> osd, JSONObject msg, Activity a) {
 		if (kHandler.isConnected() && c.getRoomId() != null) {
-			kHandler.getRoom(c.getRoomId()).startSharing(this, cm, c, osd, msg, a);
+			kHandler.getRoom(c.getRoomId()).startSharing(cm, c, osd, msg, a);
 		}
 	}
 
@@ -334,7 +334,8 @@ public class StreamProcessor implements IStreamProcessor {
 	 * @param c client
 	 * @param uid the uid
 	 */
-	void pauseSharing(Client c, String uid) {
+	@Override
+	public void pauseSharing(Client c, String uid) {
 		if (!hasRightsToShare(c)) {
 			return;
 		}
@@ -364,7 +365,8 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 	}
 
-	StreamDesc doStopSharing(String sid, String uid) {
+	@Override
+	public StreamDesc doStopSharing(String sid, String uid) {
 		return doStopSharing(getBySid(sid), uid);
 	}
 
@@ -385,6 +387,7 @@ public class StreamProcessor implements IStreamProcessor {
 		return sd;
 	}
 
+	@Override
 	public boolean isSharing(Long roomId) {
 		if (!kHandler.isConnected()) {
 			return false;
@@ -394,11 +397,13 @@ public class StreamProcessor implements IStreamProcessor {
 
 	// Recording
 
+	@Override
 	public boolean hasRightsToRecord(Client c) {
 		Room r = c.getRoom();
 		return isRecordingsEnabled() && r != null && r.isAllowRecording() && c.hasRight(Right.MODERATOR);
 	}
 
+	@Override
 	public boolean recordingAllowed(Client c) {
 		if (!kHandler.isConnected() || !isRecordingsEnabled()) {
 			return false;
@@ -407,6 +412,7 @@ public class StreamProcessor implements IStreamProcessor {
 		return hasRightsToRecord(c) && !isRecording(r.getId());
 	}
 
+	@Override
 	public void startRecording(Client c) {
 		if (!kHandler.isConnected() || !hasRightsToRecord(c)) {
 			return;
@@ -414,6 +420,7 @@ public class StreamProcessor implements IStreamProcessor {
 		kHandler.getRoom(c.getRoomId()).startRecording(c);
 	}
 
+	@Override
 	public void stopRecording(Client c) {
 		if (!kHandler.isConnected() || !hasRightsToRecord(c)) {
 			return;
@@ -434,12 +441,14 @@ public class StreamProcessor implements IStreamProcessor {
 	 * @param rec
 	 * @return
 	 */
-	boolean startConvertion(Recording rec) {
+	@Override
+	public boolean startConvertion(Recording rec) {
 		IRecordingConverter conv = rec.isInterview() ? interviewConverter : recordingConverter;
 		taskExecutor.execute(() -> conv.startConversion(rec));
 		return true;
 	}
 
+	@Override
 	public boolean isRecording(Long roomId) {
 		if (!kHandler.isConnected()) {
 			return false;
@@ -447,7 +456,8 @@ public class StreamProcessor implements IStreamProcessor {
 		return kHandler.getRoom(roomId).isRecording();
 	}
 
-	void remove(Client c) {
+	@Override
+	public void remove(Client c) {
 		for (StreamDesc sd : c.getStreams()) {
 			AbstractStream s = getByUid(sd.getUid());
 			if (s != null) {
@@ -461,41 +471,43 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 	}
 
-	void addStream(KStream stream) {
+	@Override
+	public void addStream(KStream stream) {
 		streamByUid.put(stream.getUid(), stream);
 	}
 
+	@Override
 	public Collection<KStream> getStreams() {
 		return streamByUid.values();
 	}
 
-	Stream<KStream> getByRoom(Long roomId) {
+	@Override
+	public Stream<KStream> getByRoom(Long roomId) {
 		return streamByUid.values().stream()
 				.filter(stream -> stream.getRoomId().equals(roomId));
 	}
 
-	Client getBySid(String sid) {
+	@Override
+	public Client getBySid(String sid) {
 		return cm.getBySid(sid);
 	}
 
+	@Override
 	public boolean hasStream(String uid) {
 		return streamByUid.get(uid) != null;
 	}
 
-	KStream getByUid(String uid) {
+	@Override
+	public KStream getByUid(String uid) {
 		return uid == null ? null : streamByUid.get(uid);
 	}
 
-	KurentoHandler getHandler() {
+	IKurentoHandler getHandler() {
 		return kHandler;
 	}
 
 	IClientManager getClientManager() {
 		return cm;
-	}
-
-	RecordingDao getRecordingDao() {
-		return recDao;
 	}
 
 	@Override
@@ -528,8 +540,9 @@ public class StreamProcessor implements IStreamProcessor {
 		}
 	}
 
-	protected static JSONObject newStoppedMsg(StreamDesc sd) {
-		return newKurentoMsg()
+	@Override
+	public JSONObject newStoppedMsg(StreamDesc sd) {
+		return kHandler.newKurentoMsg()
 				.put("id", "broadcastStopped")
 				.put("uid", sd.getUid());
 	}

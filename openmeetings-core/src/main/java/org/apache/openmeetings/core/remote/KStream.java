@@ -27,8 +27,6 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_ICE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_ROOM;
 import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_STREAM_UID;
-import static org.apache.openmeetings.core.remote.KurentoHandler.getFlowoutTimeout;
-import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.util.OmFileHelper.getRecUri;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
@@ -75,7 +73,8 @@ import com.github.openjson.JSONObject;
 public class KStream extends AbstractStream implements ISipCallbacks {
 	private static final Logger log = LoggerFactory.getLogger(KStream.class);
 
-	private final KurentoHandler kHandler;
+	private final IKurentoHandler kHandler;
+	private final IStreamProcessor processor;
 	private final KRoom kRoom;
 	private final Date connectedSince;
 	private final StreamType streamType;
@@ -96,9 +95,10 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	private boolean hasScreen;
 	private boolean sipClient;
 
-	public KStream(final StreamDesc sd, KRoom kRoom, KurentoHandler kHandler) {
+	public KStream(final StreamDesc sd, KRoom kRoom, IKurentoHandler kHandler, IStreamProcessor processor) {
 		super(sd.getSid(), sd.getUid());
 		this.kRoom = kRoom;
+		this.processor = processor;
 		streamType = sd.getType();
 		this.connectedSince = new Date();
 		this.kHandler = kHandler;
@@ -189,11 +189,11 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 				flowoutFuture = Optional.of(new CompletableFuture<>().completeAsync(() -> {
 					log.warn("KStream will be dropped {}, sid {}, uid {}", sd, sid, uid);
 					if (StreamType.SCREEN == streamType) {
-						kHandler.getStreamProcessor().doStopSharing(sid, uid);
+						processor.doStopSharing(sid, uid);
 					}
 					stopBroadcast();
 					return null;
-				}, delayedExecutor(getFlowoutTimeout(), TimeUnit.SECONDS)));
+				}, delayedExecutor(kHandler.getFlowoutTimeout(), TimeUnit.SECONDS)));
 			} else {
 				dropFlowoutFuture();
 			}
@@ -213,7 +213,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		Client c = sd.getClient();
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 		if (hasAudio || hasVideo || hasScreen) {
-			WebSocketHelper.sendRoomOthers(getRoomId(), c.getUid(), newKurentoMsg()
+			WebSocketHelper.sendRoomOthers(getRoomId(), c.getUid(), kHandler.newKurentoMsg()
 					.put("id", "newStream")
 					.put(PARAM_ICE, kHandler.getTurnServers(c))
 					.put("stream", sd.toJson()));
@@ -252,7 +252,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 			((WebRtcEndpoint)endpoint).gatherCandidates(); // this one might throw Exception
 		}
 		log.trace("USER {}: SdpAnswer is {}", this.uid, sdpAnswer);
-		kHandler.sendClient(sid, newKurentoMsg()
+		kHandler.sendClient(sid, kHandler.newKurentoMsg()
 				.put("id", "videoResponse")
 				.put("uid", this.uid)
 				.put("sdpAnswer", sdpAnswer));
@@ -311,7 +311,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		reApplyIceCandiates(endpoint, recv);
 
 		endpoint.addIceCandidateFoundListener(evt -> kHandler.sendClient(sid
-				, newKurentoMsg()
+				, kHandler.newKurentoMsg()
 					.put("id", "iceCandidate")
 					.put("uid", KStream.this.uid)
 					.put(PARAM_CANDIDATE, convert(JsonUtils.toJsonObject(evt.getCandidate()))))
