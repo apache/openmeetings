@@ -17,6 +17,6 @@
   },
   "dependencies": {
     "adapterjs": "^0.15.5",
-    "kurento-utils": "^6.15.0"
+    "kurento-utils": "^6.16.0"
   }
 }
