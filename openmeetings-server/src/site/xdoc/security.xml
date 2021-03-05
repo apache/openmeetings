@@ -45,6 +45,17 @@
 				Please NOTE: only security issues should be reported to this list.
 			</p>
 		</section>
+		<section name="CVE-2021-27576 - Apache OpenMeetings: bandwidth can be overloaded with public web service">
+			<p>Severity: Low</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: 4.0.0 - 5.1.0</p>
+			<p>Description: NetTest web service can be used to overload the bandwidth of the server<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-27576">CVE-2021-27576</a>
+			</p>
+			<p>The issue was fixed in 6.0.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 6.0.0</p>
+			<p>Credit: This issue was identified by Trung Le, Chi Tran, Ngo Van Thien</p>
+		</section>
 		<section name="CVE-2020-13951 - Apache Openmeetings: DoS via public web service">
 			<p>Severity: High</p>
 			<p>Vendor: The Apache Software Foundation</p>

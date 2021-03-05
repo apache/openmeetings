@@ -56,9 +56,33 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+6.0.0
+-----
+[Release 6.0.0](https://www.apache.org/dyn/closer.lua/openmeetings/6.0.0), provides following improvements:
+
+This release provides WebRTC audio/video/screen-sharing in the Room
+
+Security:
+* TLS1.2. is used for OAuth
+* NetTest client count can be limited
+* Captcha is now configurable
+* Recordings can be globally disabled
+
+Stability:
+* Audio/video in room is more stable
+
+UI:
+* Translations are improved
+* Invitation form displayes time in client time zone
+* Notifications are displayed using JS Notification API
+* Video pods size can be fixed and configurable per-user
+
+Some other fixes and improvements, 40 issues were addressed
+
+
 5.1.0
 -----
-[Release 5.1.0](https://www.apache.org/dyn/closer.lua/openmeetings/5.1.0), provides following improvements:
+[Release 5.1.0](https://archive.apache.org/dist/openmeetings/5.1.0), provides following improvements:
 
 This release provides WebRTC audio/video/screen-sharing in the Room
 
