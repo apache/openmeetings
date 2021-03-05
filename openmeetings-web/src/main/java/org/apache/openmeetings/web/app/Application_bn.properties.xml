@@ -295,7 +295,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="816"><![CDATA[ডিফল্ট মডারেটর]]></entry>
 	<entry key="817"><![CDATA[সুপার]]></entry>
 	<entry key="823"><![CDATA[If the room is moderated, any users with a moderator or administrator level access are automatically set to moderator when they enter the room]]></entry>
-	<entry key="828"><![CDATA[If you add an usergroup to the room only users of that usergroup have access to it]]></entry>
+	<entry key="828"><![CDATA[If you add a usergroup to the room only users of that usergroup have access to it]]></entry>
 	<entry key="830"><![CDATA[Limitations]]></entry>
 	<entry key="832"><![CDATA[Are you sure?]]></entry>
 	<entry key="833"><![CDATA[Do you really want to delete this item?]]></entry>
@@ -318,7 +318,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="924"><![CDATA[Public drive size]]></entry>
 	<entry key="996"><![CDATA[Status]]></entry>
 	<entry key="1001"><![CDATA[SIP-Settings]]></entry>
-	<entry key="1002"><![CDATA[The conference number and PIN is automatically created via the OpenXG RPC-Gateway]]></entry>
+	<entry key="1002"><![CDATA[The conference number and PIN are automatically created via the OpenXG RPC-Gateway]]></entry>
 	<entry key="1003"><![CDATA[SIP number]]></entry>
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[Clear objects on current slide only.]]></entry>
@@ -417,7 +417,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1262"><![CDATA[Delete folder]]></entry>
 	<entry key="1268"><![CDATA[The user does not share personal contact data.]]></entry>
 	<entry key="1269"><![CDATA[The user shares their personal contact data only to contacts.]]></entry>
-	<entry key="1287"><![CDATA[Choose your nick name]]></entry>
+	<entry key="1287"><![CDATA[Choose your nickname]]></entry>
 	<entry key="1296"><![CDATA[Member since]]></entry>
 	<entry key="1301"><![CDATA[New private message:]]></entry>
 	<entry key="1302"><![CDATA[Click here to visit your profile to see the full message ...]]></entry>
