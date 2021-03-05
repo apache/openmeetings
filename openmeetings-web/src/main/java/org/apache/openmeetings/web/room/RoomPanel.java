@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.room;
 
 import static de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.BUTTON_MARKUP_ID;
 import static java.time.Duration.ZERO;
-import static org.apache.openmeetings.core.remote.KurentoHandler.activityAllowed;
 import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.db.entity.calendar.Appointment.allowedStart;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
@@ -782,10 +781,10 @@ public class RoomPanel extends BasePanel {
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.CONFERENCE == r.getType()) {
-						if (!activityAllowed(c, Client.Activity.AUDIO, c.getRoom())) {
+						if (!c.activityAllowed(Client.Activity.AUDIO)) {
 							c.allow(Room.Right.AUDIO);
 						}
-						if (!c.getRoom().isAudioOnly() && !activityAllowed(c, Client.Activity.VIDEO, c.getRoom())) {
+						if (!c.getRoom().isAudioOnly() && !c.activityAllowed(Client.Activity.VIDEO)) {
 							c.allow(Room.Right.VIDEO);
 						}
 						streamProcessor.toggleActivity(c, c.getRoom().isAudioOnly()
@@ -816,7 +815,7 @@ public class RoomPanel extends BasePanel {
 
 	public boolean screenShareAllowed() {
 		Client c = getClient();
-		return c.getScreenStream().isPresent() || streamProcessor.screenShareAllowed(c);
+		return c.getScreenStream().isPresent() || kHandler.screenShareAllowed(c);
 	}
 
 	public RoomSidebar getSidebar() {

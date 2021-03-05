@@ -20,6 +20,9 @@
 package org.apache.openmeetings.core.remote;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.apache.openmeetings.core.remote.KurentoUtil.newKurentoMsg;
+import static org.apache.openmeetings.core.remote.KurentoUtil.sendError;
+import static org.apache.openmeetings.core.remote.KurentoUtil.tagsAsMap;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -34,7 +37,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -44,13 +46,12 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
@@ -60,13 +61,11 @@ import org.kurento.client.Continuation;
 import org.kurento.client.Endpoint;
 import org.kurento.client.EventListener;
 import org.kurento.client.KurentoClient;
-import org.kurento.client.MediaObject;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.ObjectCreatedEvent;
 import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.RecorderEndpoint;
 import org.kurento.client.RtpEndpoint;
-import org.kurento.client.Tag;
 import org.kurento.client.Transaction;
 import org.kurento.client.WebRtcEndpoint;
 import org.kurento.jsonrpc.client.JsonRpcClientNettyWebSocket;
@@ -92,7 +91,6 @@ public class KurentoHandler {
 	public static final String TAG_STREAM_UID = "streamUid";
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 	private final ScheduledExecutorService kmsRecheckScheduler = Executors.newScheduledThreadPool(1);
-	public static final String KURENTO_TYPE = "kurento";
 	private static int flowoutTimeout = 5;
 	@Value("${kurento.ws.url}")
 	private String kurentoWsUrl;
@@ -127,6 +125,8 @@ public class KurentoHandler {
 	@Autowired
 	private RecordingChunkDao chunkDao;
 	@Autowired
+	private RecordingDao recDao;
+	@Autowired
 	private TestStreamProcessor testProcessor;
 	@Autowired
 	private StreamProcessor streamProcessor;
@@ -139,6 +139,21 @@ public class KurentoHandler {
 			log.warn(WARN_NO_KURENTO);
 		}
 		return connctd;
+	}
+
+	public boolean isSharing(Long roomId) {
+		if (!isConnected()) {
+			return false;
+		}
+		return getRoom(roomId).isSharing();
+	}
+
+	public boolean screenShareAllowed(Client c) {
+		if (!isConnected()) {
+			return false;
+		}
+		Room r = c.getRoom();
+		return c.hasRightsToShare() && !isSharing(r.getId());
 	}
 
 	@PostConstruct
@@ -224,11 +239,6 @@ public class KurentoHandler {
 		}
 	}
 
-	private static Map<String, String> tagsAsMap(MediaObject pipe) {
-		return pipe.getTags().stream()
-				.collect(Collectors.toMap(Tag::getKey, Tag::getValue));
-	}
-
 	Transaction beginTransaction() {
 		return client.beginTransaction();
 	}
@@ -279,12 +289,6 @@ public class KurentoHandler {
 		WebSocketHelper.sendClient(cm.getBySid(sid), msg);
 	}
 
-	public static void sendError(IWsClient c, String msg) {
-		WebSocketHelper.sendClient(c, newKurentoMsg()
-				.put("id", "error")
-				.put("message", msg));
-	}
-
 	public void remove(IWsClient c) {
 		if (!isConnected() || c == null) {
 			return;
@@ -309,7 +313,7 @@ public class KurentoHandler {
 		return rooms.computeIfAbsent(roomId, k -> {
 			log.debug("Room {} does not exist. Will create now!", roomId);
 			Room r = roomDao.get(roomId);
-			return new KRoom(this, r);
+			return new KRoom(this, r, cm, recDao, chunkDao, streamProcessor, sipManager);
 		});
 	}
 
@@ -319,28 +323,6 @@ public class KurentoHandler {
 
 	public void updateSipCount(Room r, long count) {
 		getRoom(r.getId()).updateSipCount(count);
-	}
-
-	static JSONObject newKurentoMsg() {
-		return new JSONObject().put("type", KURENTO_TYPE);
-	}
-
-	public static boolean activityAllowed(Client c, Activity a, Room room) {
-		boolean r = false;
-		switch (a) {
-			case AUDIO:
-				r = c.hasRight(Right.AUDIO);
-				break;
-			case VIDEO:
-				r = !room.isAudioOnly() && c.hasRight(Right.VIDEO);
-				break;
-			case AUDIO_VIDEO:
-				r = !room.isAudioOnly() && c.hasRight(Right.AUDIO) && c.hasRight(Right.VIDEO);
-				break;
-			default:
-				break;
-		}
-		return r;
 	}
 
 	public JSONArray getTurnServers(Client c) {
@@ -399,18 +381,6 @@ public class KurentoHandler {
 
 	public TestStreamProcessor getTestProcessor() {
 		return testProcessor;
-	}
-
-	StreamProcessor getStreamProcessor() {
-		return streamProcessor;
-	}
-
-	SipManager getSipManager() {
-		return sipManager;
-	}
-
-	RecordingChunkDao getChunkDao() {
-		return chunkDao;
 	}
 
 	static int getFlowoutTimeout() {

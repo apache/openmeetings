@@ -156,7 +156,7 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 		// This should enable the sharing, but for enabling recording it should wait for
 		// the event that broadcast was started
 		assertFalse(streamProcessor.isRecording(ROOM_ID));
-		assertTrue(streamProcessor.isSharing(ROOM_ID));
+		assertTrue(handler.isSharing(ROOM_ID));
 
 		// Get current Stream, there should be only 1 KStream created as result of this
 		assertEquals(1, c.getStreams().size());
@@ -177,7 +177,7 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 
 		// Assert that stream AND recording is true
 		assertTrue(streamProcessor.isRecording(ROOM_ID));
-		assertTrue(streamProcessor.isSharing(ROOM_ID));
+		assertTrue(handler.isSharing(ROOM_ID));
 
 		//verify startBroadcast has been invoked
 		verify(streamProcessor).startBroadcast(any(), any(), any(), any());
@@ -204,7 +204,7 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 		doReturn(true).when(streamProcessor).startConvertion(any(Recording.class));
 
 		// Needed for stopping, needs to stop by sid
-		doReturn(c).when(streamProcessor).getBySid(c.getSid());
+		doReturn(c).when(cm).getBySid(c.getSid());
 
 		JSONObject msg = new JSONObject(MSG_BASE.toString())
 				.put("id", "stopRecord")

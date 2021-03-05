@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.core.remote.KurentoHandler.KURENTO_TYPE;
+import static org.apache.openmeetings.core.remote.KurentoUtil.KURENTO_TYPE;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.io.IOException;

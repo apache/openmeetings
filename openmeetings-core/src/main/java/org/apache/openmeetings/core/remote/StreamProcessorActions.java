@@ -20,7 +20,6 @@
 package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE;
-import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -120,8 +119,8 @@ public class StreamProcessorActions {
 			});
 		} catch (KurentoServerException e) {
 			sender.release();
-			WebSocketHelper.sendClient(c, StreamProcessor.newStoppedMsg(sd));
-			sendError(c, "Failed to start broadcast: " + e.getMessage());
+			WebSocketHelper.sendClient(c, KurentoUtil.newStoppedMsg(sd));
+			KurentoUtil.sendError(c, "Failed to start broadcast: " + e.getMessage());
 			log.error("Failed to start broadcast", e);
 		}
 	}

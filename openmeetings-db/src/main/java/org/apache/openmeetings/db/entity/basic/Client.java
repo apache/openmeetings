@@ -20,6 +20,7 @@ package org.apache.openmeetings.db.entity.basic;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isRecordingsEnabled;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.util.string.Strings;
 
@@ -140,6 +142,22 @@ public class Client implements IDataProviderEntity, IWsClient {
 		streams.clear();
 	}
 
+	public boolean isBroadcasting() {
+		return hasAnyActivity(Activity.AUDIO, Activity.VIDEO);
+	}
+
+	public boolean hasRightsToRecord() {
+		Room r = getRoom();
+		return isRecordingsEnabled() && r != null && r.isAllowRecording() && hasRight(Right.MODERATOR);
+	}
+
+	public boolean hasRightsToShare() {
+		Room r = getRoom();
+		return r != null && Room.Type.INTERVIEW != r.getType()
+				&& !r.isHidden(RoomElement.SCREEN_SHARING)
+				&& hasRight(Right.SHARE);
+	}
+
 	public boolean hasRight(Right right) {
 		if (Right.SUPER_MODERATOR == right) {
 			return rights.contains(right);
@@ -182,6 +200,25 @@ public class Client implements IDataProviderEntity, IWsClient {
 
 	public boolean hasActivity(Activity a) {
 		return activities.contains(a);
+	}
+
+	public boolean activityAllowed(Activity a) {
+		Room room = getRoom();
+		boolean r = false;
+		switch (a) {
+			case AUDIO:
+				r = hasRight(Right.AUDIO);
+				break;
+			case VIDEO:
+				r = !room.isAudioOnly() && hasRight(Right.VIDEO);
+				break;
+			case AUDIO_VIDEO:
+				r = !room.isAudioOnly() && hasRight(Right.AUDIO) && hasRight(Right.VIDEO);
+				break;
+			default:
+				break;
+		}
+		return r;
 	}
 
 	public Client toggle(Activity a) {

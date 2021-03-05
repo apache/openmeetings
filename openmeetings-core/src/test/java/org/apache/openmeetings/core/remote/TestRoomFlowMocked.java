@@ -152,7 +152,7 @@ class TestRoomFlowMocked extends BaseMockedTest {
 			Client c = getClientFull();
 			doReturn(c.getRoom()).when(roomDao).get(ROOM_ID);
 			handler.onMessage(c, msg);
-			assertTrue(streamProcessor.isSharing(ROOM_ID));
+			assertTrue(handler.isSharing(ROOM_ID));
 			handler.onMessage(c, msg);
 		});
 	}

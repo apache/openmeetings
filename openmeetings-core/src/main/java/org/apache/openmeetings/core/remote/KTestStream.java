@@ -23,7 +23,6 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.MODE_TEST;
 import static org.apache.openmeetings.core.remote.KurentoHandler.PARAM_CANDIDATE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_MODE;
 import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_ROOM;
-import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
 import static org.apache.openmeetings.core.remote.TestStreamProcessor.newTestKurentoMsg;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WEBM;
 import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
@@ -126,7 +125,7 @@ public class KTestStream extends AbstractStream {
 
 			@Override
 			public void onError(Throwable cause) throws Exception {
-				sendError(c, "Failed to start recording");
+				KurentoUtil.sendError(c, "Failed to start recording");
 				log.error("Failed to start recording", cause);
 			}
 		});

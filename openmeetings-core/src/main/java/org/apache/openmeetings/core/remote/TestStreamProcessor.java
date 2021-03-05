@@ -89,7 +89,7 @@ class TestStreamProcessor implements IStreamProcessor {
 	}
 
 	static JSONObject newTestKurentoMsg() {
-		return KurentoHandler.newKurentoMsg().put(TAG_MODE, MODE_TEST);
+		return KurentoUtil.newKurentoMsg().put(TAG_MODE, MODE_TEST);
 	}
 
 	void remove(IWsClient c) {
