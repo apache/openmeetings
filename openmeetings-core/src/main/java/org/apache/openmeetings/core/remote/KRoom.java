@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONObject;
 
 /**
- * Dynamically created object representing a conference room on the MediaServer
+ * Dynamically created object representing a conference room on the Kurento MediaServer
  *
  */
 public class KRoom {
