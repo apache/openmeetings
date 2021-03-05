@@ -7,6 +7,65 @@ See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number 
 
 
 
+Release Notes - Openmeetings - Version 6.0.0
+================================================================================================================
+
+* Vulnerability
+    * CVE-2021-27576 - Apache OpenMeetings: bandwidth can be overloaded with public web service
+
+* Bug
+    * [OPENMEETINGS-2533] - Create New Group From Moderator
+    * [OPENMEETINGS-2534] - RSS widget can break menu
+    * [OPENMEETINGS-2535] - New chat notifications are too annoying
+    * [OPENMEETINGS-2539] - Voice Indicator disappears 
+    * [OPENMEETINGS-2542] - Notifications are not working in FF
+    * [OPENMEETINGS-2543] - Error when adding google calendar
+    * [OPENMEETINGS-2544] - Joining via URL room does not have 'exit' link
+    * [OPENMEETINGS-2547] - Time is incorrect in invitations
+    * [OPENMEETINGS-2556] - Updated by not shown
+    * [OPENMEETINGS-2559] - Openmeetings instalaltion failing with oracle as DB set up
+    * [OPENMEETINGS-2564] - Video does not play on WB
+    * [OPENMEETINGS-2565] - Typo in RoomDTO getExternal - doesn't return correct room
+    * [OPENMEETINGS-2570] - Wrong German translation on "Reset password" popup 
+    * [OPENMEETINGS-2573] - FlowState.NOT_FLOWING Type Audio should not stop broadcast as can start flowing again
+    * [OPENMEETINGS-2575] - Log file fills up with ping messages
+    * [OPENMEETINGS-2581] - saving whiteboard content and puttting it back onto it _ error
+    * [OPENMEETINGS-2584] - Whiteboard display error (build 259)
+    * [OPENMEETINGS-2586] - Screen-sharing is not allowed in Safari
+
+* New Feature
+    * [OPENMEETINGS-2561] - Captcha should be configurable
+    * [OPENMEETINGS-2562] - It should be possible to globally disable recording functionality
+    * [OPENMEETINGS-2577] - Add performance and monitoring metrics - in disabled state
+    * [OPENMEETINGS-2580] - iceCandidates can be incoming before WebRtcEndpoint is ready and requires queueing
+    * [OPENMEETINGS-2583] - Safari has JavaScript errors and doesn't load conference room
+
+* Improvement
+    * [OPENMEETINGS-1381] - Sip dialer should be moved to HTML5
+    * [OPENMEETINGS-2000] - High resolution webcam videos should not fill the entire screen by default. Just because you set a higher resolution doesn't mean the slides should be overlaid
+    * [OPENMEETINGS-2081] - (6.0.0) Code clean-up
+    * [OPENMEETINGS-2538] - User type should be set automatically if not provided
+    * [OPENMEETINGS-2545] - Right justification for RTL languages
+    * [OPENMEETINGS-2551] - There should be way to limit NetTest client count
+    * [OPENMEETINGS-2558] - General configs page can be improved
+    * [OPENMEETINGS-2563] - Empty tabs should be hidden from private rooms panel
+    * [OPENMEETINGS-2576] - Sign up screen slightly confusing
+    * [OPENMEETINGS-2578] - TLSv1.2 should be used as SSLContext protocol
+
+* Test
+    * [OPENMEETINGS-2507] - Need push "allow cam-mic button" twice 
+    * [OPENMEETINGS-2571] - Tests for getExternal should be added
+
+* Wish
+    * [OPENMEETINGS-2239] - (Re-) Implementation SIP (audio only)
+
+* Task
+    * [OPENMEETINGS-2518] - (6.0.0) Label contributions from https://poeditor.com should be merged back
+    * [OPENMEETINGS-2519] - (6.0.0) Library versions need to be updated
+    * [OPENMEETINGS-2520] - (6.0.0) Sonar issues need to be addressed
+    * [OPENMEETINGS-2560] - Improve WebService response for UserWebService
+
+
 Release Notes - Openmeetings - Version 5.1.0
 ================================================================================================================
 
