@@ -90,7 +90,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5I
 public abstract class FileTreePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final String BASE_CLASS = " om-icon big clickable";
-	private static final String UPLOAD_CLASS = "add" + BASE_CLASS + " " + ALIGN_LEFT;
+	private static final String UPLOAD_CLASS = "upload" + BASE_CLASS + " " + ALIGN_LEFT;
 	private static final String CREATE_DIR_CLASS = "folder-create" + BASE_CLASS + " " + ALIGN_LEFT;
 	private static final String TRASH_CLASS = "trash" + BASE_CLASS + " " + ALIGN_RIGHT;
 	private static final String DISABLED_CLASS = " disabled";

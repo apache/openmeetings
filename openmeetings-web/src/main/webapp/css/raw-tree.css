@@ -216,3 +216,10 @@
 	white-space: pre;
 	margin: 0;
 }
+.upload.om-icon {
+	margin-top: 0;
+}
+.upload.om-icon::before {
+	content: '\f574';
+	padding: 0 7px;
+}
