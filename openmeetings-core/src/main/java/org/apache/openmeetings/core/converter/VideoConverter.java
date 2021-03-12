@@ -62,13 +62,13 @@ public class VideoConverter extends BaseConverter {
 			List<String> args = new ArrayList<>(List.of(getPathToFFMPEG(), "-y"));
 			if (sf.isAudio()) {
 				// need to add background image, it should be jpg since black on transparent will be invisible
-				args.addAll(List.of("-loop", "1"//
-						, "-framerate", "24"//
+				args.addAll(List.of("-loop", "1"
+						, "-framerate", "24"
 						, "-i", new File(getCssImagesDir(), "audio.jpg").getCanonicalPath()));
 			}
-			args.addAll(List.of("-i", input //
-					, "-c:v", "h264" //
-					, "-c:a", "aac" //
+			args.addAll(List.of("-i", input
+					, "-c:v", "h264"
+					, "-c:a", "aac"
 					, "-pix_fmt", "yuv420p"
 					, "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2"
 					));
@@ -76,7 +76,7 @@ public class VideoConverter extends BaseConverter {
 				args.add("-shortest");
 			}
 			args.add(mp4.getCanonicalPath());
-			ProcessResult res = ProcessHelper.executeScript("convert to MP4 :: " + f.getHash(), args.toArray(new String[0]));
+			ProcessResult res = ProcessHelper.exec("convert to MP4 :: " + f.getHash(), args);
 			logs.add(res);
 			progress.ifPresent(theProgress -> theProgress.accept(STEP));
 			if (sameExt && tmp != null) {

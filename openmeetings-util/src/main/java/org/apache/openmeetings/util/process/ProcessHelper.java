@@ -26,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -71,15 +72,11 @@ public class ProcessHelper {
 
 	private ProcessHelper() {}
 
-	private static String getCommand(String[] argv) {
-		StringBuilder tString = new StringBuilder();
-		for (int i = 0; i < argv.length; i++) {
-			tString.append(argv[i]).append(" ");
-		}
-		return tString.toString();
+	private static String getCommand(List<String> argv) {
+		return String.join(" ", argv);
 	}
 
-	private static void debugCommandStart(String desc, String[] argv) {
+	private static void debugCommandStart(String desc, List<String> argv) {
 		if (log.isDebugEnabled()) {
 			log.debug("START {} ################# ", desc);
 			log.debug(getCommand(argv));
@@ -92,15 +89,15 @@ public class ProcessHelper {
 		}
 	}
 
-	public static ProcessResult executeScript(String process, String[] argv) {
-		return executeScript(process, argv, false);
+	public static ProcessResult exec(String process, List<String> argv) {
+		return exec(process, argv, false);
 	}
 
-	public static ProcessResult executeScript(String process, String[] argv, boolean optional) {
-		return executeScript(process, argv, Map.of(), optional);
+	public static ProcessResult exec(String process, List<String> argv, boolean optional) {
+		return exec(process, argv, Map.of(), optional);
 	}
 
-	private static ProcessResult executeScript(String process, String[] argv, Map<? extends String, ? extends String> env, boolean optional) {
+	private static ProcessResult exec(String process, List<String> argv, Map<? extends String, ? extends String> env, boolean optional) {
 		ProcessResult res = new ProcessResult()
 				.setProcess(process)
 				.setOptional(optional);

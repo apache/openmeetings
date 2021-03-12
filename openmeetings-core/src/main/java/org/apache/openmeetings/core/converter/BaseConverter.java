@@ -62,7 +62,7 @@ public abstract class BaseConverter {
 	private static final Pattern p = Pattern.compile("\\d{2,5}(x)\\d{2,5}");
 	public static final String EXEC_EXT = System.getProperty("os.name").toUpperCase(Locale.ROOT).indexOf("WINDOWS") < 0 ? "" : ".exe";
 	private static final int MINUTE_MULTIPLIER = 60 * 1000;
-	public static final int TIME_TO_WAIT_FOR_FRAME = 15 * MINUTE_MULTIPLIER;
+	public static final int TIME_TO_WAIT_FOR_FRAME = 5 * MINUTE_MULTIPLIER;
 	public static final double HALF_STEP = 1. / 2;
 
 	@Autowired
@@ -140,7 +140,7 @@ public abstract class BaseConverter {
 		}
 	}
 
-	private String[] mergeAudioToWaves(List<File> waveFiles, File wav) throws IOException {
+	private List<String> mergeAudioToWaves(List<File> waveFiles, File wav) throws IOException {
 		List<String> argv = new ArrayList<>();
 
 		argv.add(getPathToSoX());
@@ -150,7 +150,7 @@ public abstract class BaseConverter {
 		}
 		argv.add(wav.getCanonicalPath());
 
-		return argv.toArray(new String[0]);
+		return argv;
 	}
 
 	protected void createWav(Recording r, ProcessResultList logs, File streamFolder, List<File> waveFiles, File wav, List<RecordingChunk> chunks) throws IOException {
@@ -163,27 +163,25 @@ public abstract class BaseConverter {
 			// Calculate delta at beginning
 			double duration = diffSeconds(r.getRecordEnd(), r.getRecordStart());
 
-			String[] cmd = new String[] { getPathToSoX(), oneSecWav, wav.getCanonicalPath(), "pad", "0", String.valueOf(duration) };
+			List<String> cmd = List.of(getPathToSoX(), oneSecWav, wav.getCanonicalPath(), "pad", "0", String.valueOf(duration));
 
-			logs.add(ProcessHelper.executeScript("generateSampleAudio", cmd));
+			logs.add(ProcessHelper.exec("generateSampleAudio", cmd));
 		} else if (waveFiles.size() == 1) {
 			copyFile(waveFiles.get(0), wav);
 		} else {
-			String[] soxArgs = mergeAudioToWaves(waveFiles, wav);
-
-			logs.add(ProcessHelper.executeScript("mergeAudioToWaves", soxArgs));
+			logs.add(ProcessHelper.exec("mergeAudioToWaves", mergeAudioToWaves(waveFiles, wav)));
 		}
 	}
 
-	private String[] addSoxPad(ProcessResultList logs, String job, double length, double position, File inFile, File outFile) throws IOException {
+	private List<String> addSoxPad(ProcessResultList logs, String job, double length, double position, File inFile, File outFile) throws IOException {
 		if (length < 0 || position < 0) {
 			log.debug("::addSoxPad {} Invalid parameters: length = {}; position = {}; inFile = {}", job, length, position, inFile);
 		}
-		String[] argv = new String[] { getPathToSoX(), inFile.getCanonicalPath(), outFile.getCanonicalPath(), "pad"
+		List<String> argv = List.of(getPathToSoX(), inFile.getCanonicalPath(), outFile.getCanonicalPath(), "pad"
 				, String.valueOf(length < 0 ? 0 : length)
-				, String.valueOf(position < 0 ? 0 : position) };
+				, String.valueOf(position < 0 ? 0 : position));
 
-		logs.add(ProcessHelper.executeScript(job, argv));
+		logs.add(ProcessHelper.exec(job, argv));
 		return argv;
 	}
 
@@ -192,7 +190,7 @@ public abstract class BaseConverter {
 			log.debug("### {}:: recording id {}; stream with id {}; current status: {} ", prefix, chunk.getRecording().getId()
 					, chunk.getId(), chunk.getStreamStatus());
 			File chunkFlv = getRecordingChunk(chunk.getRecording().getRoomId(), chunk.getStreamName());
-			log.debug("### {}:: Flv file [{}] exists ? {}; size: {}, lastModified: {} ", prefix, chunkFlv.getPath(), chunkFlv.exists(), chunkFlv.length(), chunkFlv.lastModified());
+			log.debug("### {}:: Chunk file [{}] exists ? {}; size: {}, lastModified: {} ", prefix, chunkFlv.getPath(), chunkFlv.exists(), chunkFlv.length(), chunkFlv.lastModified());
 		}
 	}
 
@@ -259,13 +257,13 @@ public abstract class BaseConverter {
 				log.debug("FLV File Name: {} Length: {} ", inputFlvFile.getName(), inputFlvFile.length());
 
 				if (inputFlvFile.exists()) {
-					String[] argv = new String[] {
+					List<String> argv = List.of(
 							getPathToFFMPEG(), "-y"
 							, "-i", inputFlvFile.getCanonicalPath()
 							, "-af", String.format("aresample=%s:min_comp=0.001:min_hard_comp=0.100000", getAudioBitrate())
-							, outputWav.getCanonicalPath()};
+							, outputWav.getCanonicalPath());
 					//there might be no audio in the stream
-					logs.add(ProcessHelper.executeScript("stripAudioFromFLVs", argv, true));
+					logs.add(ProcessHelper.exec("stripAudioFromFLVs", argv, true));
 				}
 
 				if (outputWav.exists() && outputWav.length() != 0) {
@@ -319,13 +317,12 @@ public abstract class BaseConverter {
 		return List.of();
 	}
 
-	private List<String> addMp4OutParams(Recording r, List<String> argv, String mp4path) {
+	private List<String> addMp4OutParams(Recording r, List<String> argv, boolean interview, String mp4path) {
 		argv.addAll(List.of(
 				"-c:v", "h264" //
 				, "-crf", "24"
 				, "-vsync", "0"
 				, "-pix_fmt", "yuv420p"
-				, "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2"
 				, "-preset", getVideoPreset()
 				, "-profile:v", "baseline"
 				, "-level", "3.0"
@@ -334,16 +331,19 @@ public abstract class BaseConverter {
 				, "-ar", String.valueOf(getAudioRate())
 				, "-b:a", getAudioBitrate()
 				));
+		if (!interview) {
+			argv.addAll(List.of("-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2"));
+		}
 		argv.addAll(additionalMp4OutParams(r));
 		argv.add(mp4path);
 		return argv;
 	}
 
-	protected String convertToMp4(Recording r, List<String> inArgv, ProcessResultList logs) throws IOException {
+	protected String convertToMp4(Recording r, List<String> inArgv, boolean interview, ProcessResultList logs) throws IOException {
 		String mp4path = r.getFile().getCanonicalPath();
 		List<String> argv = new ArrayList<>(List.of(getPathToFFMPEG(), "-y"));
 		argv.addAll(inArgv);
-		logs.add(ProcessHelper.executeScript("generate MP4", addMp4OutParams(r, argv, mp4path).toArray(new String[]{})));
+		logs.add(ProcessHelper.exec("generate MP4", addMp4OutParams(r, argv, interview, mp4path)));
 		return mp4path;
 	}
 
@@ -351,13 +351,13 @@ public abstract class BaseConverter {
 		// Extract first Image for preview purpose
 		// ffmpeg -i movie.mp4 -vf  "thumbnail,scale=640:-1" -frames:v 1 movie.png
 		File png = f.getFile(EXTENSION_PNG);
-		String[] argv = new String[] { //
-				getPathToFFMPEG(), "-y" //
-				, "-i", mp4path //
-				, "-vf", "thumbnail,scale=640:-1" //
-				, "-frames:v", "1" //
-				, png.getCanonicalPath() };
-		logs.add(ProcessHelper.executeScript(String.format("generate preview PNG :: %s", f.getHash()), argv));
+		List<String> argv = List.of(
+				getPathToFFMPEG(), "-y"
+				, "-i", mp4path
+				, "-vf", "thumbnail,scale=640:-1"
+				, "-frames:v", "1"
+				, png.getCanonicalPath());
+		logs.add(ProcessHelper.exec("generate preview PNG :: " + f.getHash(), argv));
 	}
 
 	/**

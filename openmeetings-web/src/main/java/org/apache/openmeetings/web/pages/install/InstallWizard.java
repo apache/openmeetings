@@ -618,8 +618,9 @@ public class InstallWizard extends BootstrapWizard {
 		private void reportSuccess(TextField<String> path) {
 			path.success(path.getLabel().getObject() + " - " + getString("54"));
 		}
-		private boolean checkToolPath(TextField<String> path, String[] args) {
-			ProcessResult result = ProcessHelper.executeScript(path.getInputName() + " path:: '" + path.getValue() + "'", args);
+
+		private boolean checkToolPath(TextField<String> path, List<String> args) {
+			ProcessResult result = ProcessHelper.exec(path.getInputName() + " path:: '" + path.getValue() + "'", args);
 			if (!result.isOk()) {
 				path.error(result.getError().replaceAll(REGEX, ""));
 			} else {
@@ -629,15 +630,15 @@ public class InstallWizard extends BootstrapWizard {
 		}
 
 		private boolean checkMagicPath() {
-			return checkToolPath(imageMagicPath, new String[] {getToolPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), OPT_VERSION});
+			return checkToolPath(imageMagicPath, List.of(getToolPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), OPT_VERSION));
 		}
 
 		private boolean checkFfmpegPath() {
-			return checkToolPath(ffmpegPath, new String[] {getToolPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), OPT_VERSION});
+			return checkToolPath(ffmpegPath, List.of(getToolPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), OPT_VERSION));
 		}
 
 		private boolean checkSoxPath() {
-			return checkToolPath(soxPath, new String[] {getToolPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"});
+			return checkToolPath(soxPath, List.of(getToolPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"));
 		}
 
 		private boolean checkOfficePath() {

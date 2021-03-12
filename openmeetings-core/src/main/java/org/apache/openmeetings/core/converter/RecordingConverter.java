@@ -88,7 +88,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			String mp4path = convertToMp4(r, List.of(
 					"-itsoffset", formatMillis(diff(screenChunk.getStart(), r.getRecordStart())),
 					"-i", inputScreenFullFlv, "-i", wav.getCanonicalPath()
-					), logs);
+					), false, logs);
 			Dimension dim = getDimension(logs.getLast().getError(), null); // will return 100x100 for non-video to be able to play
 			if (dim != null) {
 				r.setWidth(dim.getWidth());
