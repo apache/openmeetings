@@ -54,7 +54,7 @@
 			</p>
 			<p>The issue was fixed in 6.0.0<br/>
 				All users are recommended to upgrade to Apache OpenMeetings 6.0.0</p>
-			<p>Credit: This issue was identified by Trung Le, Chi Tran, Ngo Van Thien</p>
+			<p>Credit: This issue was identified by Trung Le, Chi Tran, Linh Cua</p>
 		</section>
 		<section name="CVE-2020-13951 - Apache Openmeetings: DoS via public web service">
 			<p>Severity: High</p>
