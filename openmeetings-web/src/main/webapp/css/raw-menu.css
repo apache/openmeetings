@@ -58,7 +58,7 @@
 .room-block .menu .details .icon .profile img {
 	width: 28px;
 }
-html[dir="rtl"] .dropdown-menu {
+html[dir="rtl"] .navbar .dropdown-menu {
 	left: initial;
 	right: 0;
 }
