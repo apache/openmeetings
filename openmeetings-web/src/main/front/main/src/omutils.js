@@ -123,7 +123,10 @@ module.exports = {
 		($('body')[0]).style.setProperty(key, val);
 	}
 	, ping: function() {
-		setTimeout(() => _sendMessage({type: 'ping'}), 30000);
+		setTimeout(() => {
+			_sendMessage({type: 'ping'});
+			fetch('./ping');
+		}, 30000);
 	}
 	, notify: _notify
 	, requestNotifyPermission: _requestNotifyPermission
