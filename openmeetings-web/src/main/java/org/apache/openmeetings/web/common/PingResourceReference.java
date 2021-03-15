@@ -36,6 +36,6 @@ public class PingResourceReference extends ResourceReference {
 
 	@Override
 	public IResource getResource() {
-		return new CharSequenceResource("text/plain", "ping");
+		return new CharSequenceResource("text/plain", "pong");
 	}
 }

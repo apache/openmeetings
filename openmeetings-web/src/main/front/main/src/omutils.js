@@ -125,7 +125,7 @@ module.exports = {
 	, ping: function() {
 		setTimeout(() => {
 			_sendMessage({type: 'ping'});
-			fetch('./ping');
+			fetch('./ping', {cache: "no-store"});
 		}, 30000);
 	}
 	, notify: _notify
