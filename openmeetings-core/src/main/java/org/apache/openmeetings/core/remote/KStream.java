@@ -43,9 +43,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import javax.inject.Inject;
+
 import org.apache.openmeetings.core.sip.ISipCallbacks;
+import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.core.sip.SipStackProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
@@ -54,6 +58,7 @@ import org.apache.openmeetings.db.entity.record.RecordingChunk.Type;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.wicket.injection.Injector;
 import org.kurento.client.BaseRtpEndpoint;
 import org.kurento.client.Continuation;
 import org.kurento.client.IceCandidate;
@@ -75,7 +80,15 @@ import com.github.openjson.JSONObject;
 public class KStream extends AbstractStream implements ISipCallbacks {
 	private static final Logger log = LoggerFactory.getLogger(KStream.class);
 
-	private final KurentoHandler kHandler;
+	@Inject
+	private KurentoHandler kHandler;
+	@Inject
+	private StreamProcessor processor;
+	@Inject
+	private RecordingChunkDao chunkDao;
+	@Inject
+	private SipManager sipManager;
+
 	private final KRoom kRoom;
 	private final Date connectedSince;
 	private final StreamType streamType;
@@ -96,12 +109,12 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	private boolean hasScreen;
 	private boolean sipClient;
 
-	public KStream(final StreamDesc sd, KRoom kRoom, KurentoHandler kHandler) {
+	public KStream(final StreamDesc sd, KRoom kRoom) {
 		super(sd.getSid(), sd.getUid());
 		this.kRoom = kRoom;
 		streamType = sd.getType();
 		this.connectedSince = new Date();
-		this.kHandler = kHandler;
+		Injector.get().inject(this);
 		//TODO Min/MaxVideoSendBandwidth
 		//TODO Min/Max Audio/Video RecvBandwidth
 	}
@@ -189,7 +202,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 				flowoutFuture = Optional.of(new CompletableFuture<>().completeAsync(() -> {
 					log.warn("KStream will be dropped {}, sid {}, uid {}", sd, sid, uid);
 					if (StreamType.SCREEN == streamType) {
-						kHandler.getStreamProcessor().doStopSharing(sid, uid);
+						processor.doStopSharing(sid, uid);
 					}
 					stopBroadcast();
 					return null;
@@ -275,7 +288,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		listeners.put(uid, listener);
 
 		log.debug("PARTICIPANT {}: obtained endpoint for {}", uid, this.uid);
-		Client cur = kHandler.getStreamProcessor().getBySid(this.sid);
+		Client cur = processor.getBySid(this.sid);
 		if (cur == null) {
 			log.warn("Client for endpoint dooesn't exists");
 		} else {
@@ -338,9 +351,9 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		recorder = createRecorderEndpoint(pipeline, getRecUri(getRecordingChunk(getRoomId(), chunkUid)), profile);
 		setTags(recorder, uid);
 
-		recorder.addRecordingListener(evt -> chunkId = kRoom.getChunkDao().start(kRoom.getRecordingId(), type, chunkUid, sid));
+		recorder.addRecordingListener(evt -> chunkId = chunkDao.start(kRoom.getRecordingId(), type, chunkUid, sid));
 		recorder.addStoppedListener(evt -> {
-			kRoom.getChunkDao().stop(chunkId);
+			chunkDao.stop(chunkId);
 			chunkId = null;
 		});
 		switch (profile) {
@@ -459,7 +472,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 
 	private void doRemove(boolean remove) {
 		if (remove) {
-			kHandler.getStreamProcessor().release(this, false);
+			processor.release(this, false);
 		}
 	}
 
@@ -606,7 +619,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		if (count > 0) {
 			if (sipProcessor.isEmpty()) {
 				try {
-					sipProcessor = kHandler.getSipManager().createSipStackProcessor(
+					sipProcessor = sipManager.createSipStackProcessor(
 							randomUUID().toString()
 							, kRoom.getRoom()
 							, this);
@@ -644,7 +657,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		answerConsumer.accept(answer);
 		log.debug(answer);
 		if (sipClient) {
-			StreamDesc sd = kHandler.getStreamProcessor().getBySid(sid).getStream(uid);
+			StreamDesc sd = processor.getBySid(sid).getStream(uid);
 			try {
 				outgoingMedia = rtpEndpoint;
 				internalStartBroadcast(sd, sdp);

@@ -322,7 +322,7 @@ public class StreamProcessor implements IStreamProcessor {
 
 	private void startSharing(Client c, Optional<StreamDesc> osd, JSONObject msg, Activity a) {
 		if (kHandler.isConnected() && c.getRoomId() != null) {
-			kHandler.getRoom(c.getRoomId()).startSharing(this, cm, c, osd, msg, a);
+			kHandler.getRoom(c.getRoomId()).startSharing(c, osd, msg, a);
 		}
 	}
 

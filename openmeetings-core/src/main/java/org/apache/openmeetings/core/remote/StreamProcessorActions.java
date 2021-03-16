@@ -107,7 +107,7 @@ public class StreamProcessorActions {
 		try {
 			if (sender == null) {
 				KRoom room = kHandler.getRoom(c.getRoomId());
-				sender = room.join(sd, kHandler);
+				sender = room.join(sd);
 			}
 			if (msg.has("width")) {
 				sd.setWidth(msg.getInt("width")).setHeight(msg.getInt("height"));

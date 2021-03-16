@@ -56,7 +56,7 @@ class TestStreamProcessor implements IStreamProcessor {
 				if (user != null) {
 					user.release();
 				}
-				user = new KTestStream(c, msg, kHandler);
+				user = new KTestStream(c, msg);
 				streamByUid.put(c.getUid(), user);
 				break;
 			case "iceCandidate":
