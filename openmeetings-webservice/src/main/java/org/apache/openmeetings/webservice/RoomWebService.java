@@ -40,7 +40,6 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
-import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
@@ -54,6 +53,7 @@ import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.manager.IWhiteboardManager;
+import org.apache.openmeetings.db.mapper.RoomMapper;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.webservice.error.InternalServiceException;
@@ -89,7 +89,7 @@ public class RoomWebService extends BaseWebService {
 	@Autowired
 	private InvitationManager inviteManager;
 	@Autowired
-	private GroupDao groupDao;
+	private RoomMapper rMapper;
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of
@@ -190,7 +190,7 @@ public class RoomWebService extends BaseWebService {
 				} else {
 					room.setExternalType(externalType);
 					room.setExternalId(externalId);
-					r = room.get(roomDao, groupDao, fileDao);
+					r = rMapper.get(room);
 					r = updateRtoRoom(r, sd.getUserId());
 					return new RoomDTO(r);
 				}
@@ -219,7 +219,7 @@ public class RoomWebService extends BaseWebService {
 			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
-			Room r = room.get(roomDao, groupDao, fileDao);
+			Room r = rMapper.get(room);
 			r = updateRtoRoom(r, sd.getUserId());
 			return new RoomDTO(r);
 		});
@@ -430,7 +430,7 @@ public class RoomWebService extends BaseWebService {
 	{
 		log.debug("[hash] invite {}", invite);
 		return performCall(sid, User.Right.SOAP, sd -> {
-			Invitation i = invite.get(sd.getUserId(), userDao, roomDao);
+			Invitation i = rMapper.get(invite, sd.getUserId());
 			i = inviteDao.update(i);
 
 			if (i != null) {

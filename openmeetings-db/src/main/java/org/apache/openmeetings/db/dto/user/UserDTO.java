@@ -30,13 +30,10 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONObject;
 
@@ -74,27 +71,6 @@ public class UserDTO implements Serializable {
 		externalId = u.getExternalId();
 		externalType = u.externalType();
 		pictureUri = u.getPictureUri();
-	}
-
-	public User get(UserDao userDao, GroupDao groupDao) {
-		User u = id == null ? new User() : userDao.get(id);
-		u.setLogin(login);
-		u.setFirstname(firstname);
-		u.setLastname(lastname);
-		u.setRights(rights);
-		u.setLanguageId(languageId);
-		u.setAddress(address);
-		u.setTimeZoneId(timeZoneId);
-		if (Type.EXTERNAL == type || (!Strings.isEmpty(externalId) && !Strings.isEmpty(externalType))) {
-			type = Type.EXTERNAL;
-			if (u.getGroupUsers().stream().filter(gu -> gu.getGroup().isExternal() && gu.getGroup().getName().equals(externalType)).count() == 0) {
-				u.addGroup(groupDao.getExternal(externalType));
-			}
-			u.setExternalId(externalId);
-		}
-		u.setType(type == null ? Type.USER : type);
-		u.setPictureUri(pictureUri);
-		return u;
 	}
 
 	public static List<UserDTO> list(List<User> l) {

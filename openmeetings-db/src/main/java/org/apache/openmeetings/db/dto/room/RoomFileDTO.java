@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.db.dao.file.BaseFileItemDao;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 
 import com.github.openjson.JSONObject;
@@ -49,15 +48,6 @@ public class RoomFileDTO implements Serializable {
 		id = rf.getId();
 		fileId = rf.getFile().getId();
 		wbIdx = rf.getWbIdx();
-	}
-
-	public RoomFile get(BaseFileItemDao fileDao, Long roomId) {
-		RoomFile f = new RoomFile();
-		f.setId(id);
-		f.setRoomId(roomId);
-		f.setFile(fileDao.get(fileId));
-		f.setWbIdx(wbIdx);
-		return f;
 	}
 
 	public Long getId() {
@@ -89,20 +79,6 @@ public class RoomFileDTO implements Serializable {
 		if (rfl != null) {
 			for (RoomFile rf : rfl) {
 				r.add(new RoomFileDTO(rf));
-			}
-		}
-		return r;
-	}
-
-	public static List<RoomFile> get(Long roomId, List<RoomFileDTO> rfl, BaseFileItemDao fileDao) {
-		List<RoomFile> r = new ArrayList<>();
-		if (rfl != null) {
-			for (RoomFileDTO rf : rfl) {
-				RoomFile f = rf.get(fileDao, roomId);
-				if (f.getFile() == null) {
-					continue;
-				}
-				r.add(f);
 			}
 		}
 		return r;

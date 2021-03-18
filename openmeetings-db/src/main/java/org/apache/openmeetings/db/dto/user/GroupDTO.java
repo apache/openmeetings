@@ -24,7 +24,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.user.Group;
 
 @XmlRootElement
@@ -42,13 +41,6 @@ public class GroupDTO implements Serializable {
 		id = g.getId();
 		name = g.getName();
 		tag = g.getTag();
-	}
-
-	public Group get(GroupDao groupDao) {
-		Group g = id == null ? new Group() : groupDao.get(id);
-		g.setName(name);
-		g.setTag(tag);
-		return g;
 	}
 
 	public static List<GroupDTO> list(List<Group> l) {

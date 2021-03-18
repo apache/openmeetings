@@ -26,12 +26,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
-import org.apache.openmeetings.db.entity.user.User;
-import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONObject;
 
@@ -49,38 +45,6 @@ public class MeetingMemberDTO implements Serializable {
 	public MeetingMemberDTO(MeetingMember mm) {
 		this.id = mm.getId();
 		this.user = new UserDTO(mm.getUser());
-	}
-
-	public MeetingMember get(UserDao userDao, GroupDao groupDao, User owner) {
-		MeetingMember mm = new MeetingMember();
-		mm.setId(id);
-		if (user.getId() != null) {
-			mm.setUser(userDao.get(user.getId()));
-		} else {
-			User u = null;
-			if (User.Type.EXTERNAL == user.getType()) {
-				// try to get ext. user
-				u = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
-			}
-			if (u == null && user.getAddress() != null) {
-				u = userDao.getContact(user.getAddress().getEmail()
-						, user.getFirstname()
-						, user.getLastname()
-						, user.getLanguageId()
-						, user.getTimeZoneId()
-						, owner);
-			}
-			if (u == null) {
-				user.setType(User.Type.CONTACT);
-				u = user.get(userDao, groupDao);
-				u.getRights().clear();
-			}
-			if (Strings.isEmpty(u.getTimeZoneId())) {
-				u.setTimeZoneId(owner.getTimeZoneId());
-			}
-			mm.setUser(u);
-		}
-		return mm;
 	}
 
 	public Long getId() {

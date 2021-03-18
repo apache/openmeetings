@@ -33,12 +33,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.db.dao.file.BaseFileItemDao;
-import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
-import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
@@ -99,38 +95,6 @@ public class RoomDTO implements Serializable {
 		audioOnly = r.isAudioOnly();
 		hiddenElements = r.getHiddenElements();
 		files = RoomFileDTO.get(r.getFiles());
-	}
-
-	public Room get(RoomDao roomDao, GroupDao groupDao, BaseFileItemDao fileDao) {
-		Room r = id == null ? new Room() : roomDao.get(id);
-		r.setId(id);
-		r.setName(name);
-		r.setTag(tag);
-		r.setComment(comment);
-		r.setType(type);
-		r.setCapacity(capacity);
-		r.setAppointment(appointment);
-		r.setConfno(confno);
-		r.setIspublic(isPublic);
-		r.setDemoRoom(demo);
-		r.setClosed(closed);
-		r.setDemoTime(demoTime);
-		r.setExternalId(externalId);
-		if (!Strings.isEmpty(externalType)
-				&& r.getGroups().stream().filter(gu -> gu.getGroup().isExternal() && gu.getGroup().getName().equals(externalType)).count() == 0)
-		{
-			r.addGroup(groupDao.getExternal(externalType));
-		}
-		r.setRedirectURL(redirectUrl);
-		r.setModerated(moderated);
-		r.setWaitModerator(waitModerator);
-		r.setAllowUserQuestions(allowUserQuestions);
-		r.setAllowRecording(allowRecording);
-		r.setWaitRecording(waitRecording);
-		r.setAudioOnly(audioOnly);
-		r.setHiddenElements(hiddenElements);
-		r.setFiles(RoomFileDTO.get(id, files, fileDao));
-		return r;
 	}
 
 	public Long getId() {
@@ -219,6 +183,14 @@ public class RoomDTO implements Serializable {
 
 	public void setModerated(boolean moderated) {
 		this.moderated = moderated;
+	}
+
+	public boolean isWaitModerator() {
+		return waitModerator;
+	}
+
+	public void setWaitModerator(boolean waitModerator) {
+		this.waitModerator = waitModerator;
 	}
 
 	public boolean isAllowUserQuestions() {
