@@ -29,17 +29,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.file.BaseFileItemDao;
-import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
-import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 
 import com.github.openjson.JSONObject;
@@ -98,49 +92,6 @@ public class AppointmentDTO implements Serializable {
 		passwordProtected = a.isPasswordProtected();
 		connectedEvent = a.isConnectedEvent();
 		reminderEmailSend = a.isReminderEmailSend();
-	}
-
-	public Appointment get(UserDao userDao, GroupDao groupDao, RoomDao roomDao, BaseFileItemDao fileDao, AppointmentDao appointmentDao, User u) {
-		Appointment a = id == null ? new Appointment() : appointmentDao.get(id);
-		a.setId(id);
-		a.setTitle(title);
-		a.setLocation(location);
-		a.setStart(start.getTime());
-		a.setEnd(end.getTime());
-		a.setDescription(description);
-		a.setOwner(owner == null ? u : userDao.get(owner.getId()));
-		a.setInserted(inserted);
-		a.setUpdated(updated);
-		a.setDeleted(deleted);
-		a.setReminder(reminder);
-		a.setRoom(room.get(roomDao, groupDao, fileDao));
-		a.setIcalId(icalId);
-		List<MeetingMember> mml = new ArrayList<>();
-		for(MeetingMemberDTO mm : meetingMembers) {
-			MeetingMember m = null;
-			if (mm.getId() != null) {
-				//if ID is NOT null it should already be in the list
-				for (MeetingMember m1 : a.getMeetingMembers()) {
-					if (m1.getId().equals(mm.getId())) {
-						m = m1;
-						break;
-					}
-				}
-				if (m == null) {
-					throw new RuntimeException("Weird guest from different appointment is passed");
-				}
-			} else {
-				m = mm.get(userDao, groupDao, u);
-				m.setAppointment(a);
-			}
-			mml.add(m);
-		}
-		a.setMeetingMembers(mml);
-		a.setLanguageId(languageId);
-		a.setPasswordProtected(passwordProtected);
-		a.setConnectedEvent(connectedEvent);
-		a.setReminderEmailSend(reminderEmailSend);
-		return a;
 	}
 
 	public Long getId() {

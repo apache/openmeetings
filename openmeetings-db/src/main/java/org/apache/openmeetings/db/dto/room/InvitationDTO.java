@@ -18,25 +18,13 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
-import static java.util.UUID.randomUUID;
-
 import java.io.Serializable;
-import java.text.ParseException;
-import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
-import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.util.crypt.CryptProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
@@ -44,8 +32,6 @@ import com.github.openjson.JSONObject;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class InvitationDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(InvitationDTO.class);
-	private static final FastDateFormat SDF = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 
 	private String email;
 	private String firstname;
@@ -195,47 +181,6 @@ public class InvitationDTO implements Serializable {
 
 	public void setLanguageId(long languageId) {
 		this.languageId = languageId;
-	}
-
-	public Invitation get(Long userId, UserDao userDao, RoomDao roomDao) {
-		Invitation i = new Invitation();
-		i.setHash(randomUUID().toString());
-		i.setPasswordProtected(passwordProtected);
-		if (passwordProtected) {
-			i.setPassword(CryptProvider.get().hash(password));
-		}
-
-		i.setUsed(false);
-		i.setValid(valid);
-
-		try {
-			// valid period of Invitation
-			switch (valid) {
-				case PERIOD:
-					i.setValidFrom(new Date(SDF.parse(validFrom).getTime() - (5 * 60 * 1000)));
-					i.setValidTo(SDF.parse(validTo));
-					break;
-				case ENDLESS:
-				case ONE_TIME:
-				default:
-					break;
-			}
-		} catch (ParseException e) {
-			log.error("Unexpected error while creating invitation", e);
-			throw new RuntimeException(e);
-		}
-
-		i.setDeleted(false);
-
-		i.setInvitedBy(userDao.get(userId));
-		i.setInvitee(userDao.getContact(email, firstname, lastname, userId));
-		if (Type.CONTACT == i.getInvitee().getType()) {
-			i.getInvitee().setLanguageId(languageId);
-		}
-		i.setRoom(roomDao.get(roomId));
-		i.setInserted(new Date());
-		i.setAppointment(null);
-		return i;
 	}
 
 	public static InvitationDTO fromString(String s) {

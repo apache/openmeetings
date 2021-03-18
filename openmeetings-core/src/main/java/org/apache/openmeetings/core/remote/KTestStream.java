@@ -36,9 +36,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.wicket.injection.Injector;
 import org.kurento.client.Continuation;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.MediaPipeline;
@@ -55,7 +58,12 @@ import com.github.openjson.JSONObject;
 public class KTestStream extends AbstractStream {
 	private static final Logger log = LoggerFactory.getLogger(KTestStream.class);
 	private static final Map<String, String> TAGS = Map.of(TAG_MODE, MODE_TEST, TAG_ROOM, MODE_TEST);
-	private final KurentoHandler kHandler;
+
+	@Inject
+	private KurentoHandler kHandler;
+	@Inject
+	private TestStreamProcessor processor;
+
 	private MediaPipeline pipeline;
 	private WebRtcEndpoint webRtcEndpoint;
 	private PlayerEndpoint player;
@@ -65,9 +73,9 @@ public class KTestStream extends AbstractStream {
 	private ScheduledFuture<?> recHandle;
 	private int recTime;
 
-	public KTestStream(IWsClient c, JSONObject msg, KurentoHandler kHandler) {
+	public KTestStream(IWsClient c, JSONObject msg) {
 		super(null, c.getUid());
-		this.kHandler = kHandler;
+		Injector.get().inject(this);
 		createPipeline(() -> startTestRecording(c, msg));
 	}
 
@@ -251,7 +259,7 @@ public class KTestStream extends AbstractStream {
 		releasePlayer();
 		releaseRecorder();
 		if (remove) {
-			kHandler.getTestProcessor().release(this, true);
+			processor.release(this, true);
 		}
 	}
 }

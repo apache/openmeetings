@@ -40,13 +40,13 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.mapper.CalendarMapper;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.InternalServiceException;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -72,7 +72,7 @@ public class CalendarWebService extends BaseWebService {
 	@Autowired
 	private AppointmentDao dao;
 	@Autowired
-	private GroupDao groupDao;
+	private CalendarMapper calMapper;
 
 	/**
 	 * Load appointments by a start / end range for the current SID
@@ -247,7 +247,7 @@ public class CalendarWebService extends BaseWebService {
 						|| appointment.getOwner().getId().equals(u.getId());
 			}, sd -> {
 				User u = userDao.get(sd.getUserId());
-				Appointment a = appointment.get(userDao, groupDao, roomDao, fileDao, dao, u);
+				Appointment a = calMapper.get(appointment, u);
 				if (a.getRoom().getId() != null) {
 					if (a.getRoom().isAppointment()) {
 						a.getRoom().setIspublic(false);

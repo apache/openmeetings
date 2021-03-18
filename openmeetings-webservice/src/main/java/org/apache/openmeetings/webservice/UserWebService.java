@@ -58,6 +58,7 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.mapper.UserMapper;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.webservice.error.InternalServiceException;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -93,6 +94,8 @@ public class UserWebService extends BaseWebService {
 	private SOAPLoginDao soapDao;
 	@Autowired
 	private GroupDao groupDao;
+	@Autowired
+	private UserMapper uMapper;
 
 	/**
 	 * @param user - login or email of Openmeetings user with admin or SOAP-rights
@@ -182,7 +185,7 @@ public class UserWebService extends BaseWebService {
 			if (user.getLanguageId() == null) {
 				user.setLanguageId(1L);
 			}
-			User jsonUser = user.get(userDao, groupDao);
+			User jsonUser = uMapper.get(user);
 			IValidator<String> passValidator = new StrongPasswordValidator(false, jsonUser);
 			Validatable<String> passVal = new Validatable<>(user.getPassword());
 			passValidator.validate(passVal);

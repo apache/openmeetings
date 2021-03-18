@@ -62,6 +62,10 @@ public class BaseFileItemDao implements IDataProviderDao<BaseFileItem> {
 
 	@Override
 	public BaseFileItem get(Long id) {
+		return getBase(id);
+	}
+
+	public BaseFileItem getBase(Long id) {
 		if (id == null || id.longValue() <= 0) {
 			return null;
 		}
