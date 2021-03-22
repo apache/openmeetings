@@ -313,6 +313,19 @@
 				<role>pmc</role>
 			</roles>
 		</developer>
+		<developer>
+			<id>alialhaidary</id>
+			<name>Ali Alhaidary</name>
+			<email>ali.alhaidary@the5stars.org</email>
+			<organization>the5stars.org</organization>
+			<organizationUrl>https://the5stars.org</organizationUrl>
+			<roles>
+				<role>RTL Examinar</role>
+				<role>RTL Translator</role>
+				<role>Load tester</role>
+				<role>pmc</role>
+			</roles>
+		</developer>
 	</developers>
 	<contributors>
 		<contributor>
