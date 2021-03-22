@@ -47,6 +47,8 @@
 				<exclude>**/.project</exclude>
 				<exclude>**/*.iml</exclude>
 				<exclude>**/.settings/**</exclude>
+				<exclude>**/node_modules/**</exclude>
+				<exclude>**/package-lock.json</exclude>
 			</excludes>
 		</fileSet>
 	</fileSets>
