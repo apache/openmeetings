@@ -376,6 +376,9 @@ function _open(handler) {
 			ctrlBlk.attr('title', ctrlBlk.data('ttl-undock'));
 			if (roomMode) {
 				_setOpened();
+				if (typeof(window.WbArea) === 'object') {
+					window.WbArea.resize();
+				}
 			} else {
 				__setCssHeight(openedHeight);
 			}
@@ -397,6 +400,9 @@ function _close(handler) {
 			if (roomMode) {
 				__setCssWidth(closedSizePx);
 				_removeResize();
+				if (typeof(window.WbArea) === 'object') {
+					window.WbArea.resize();
+				}
 			} else {
 				__setCssHeight(closedSizePx);
 			}

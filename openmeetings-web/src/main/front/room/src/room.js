@@ -39,6 +39,7 @@ function _init(_options) {
 	Sharer.init();
 	UserList.init(options);
 	_setSize();
+	$(window).on('resize.omwb', window.WbArea.resize);
 }
 function __dockSetMode(mode) {
 	const icon = dock.find('i').removeClass('icon-dock icon-undock');
@@ -189,6 +190,7 @@ function _unload() {
 	$('.ui-dialog.user-video').remove();
 	$(window).off('keyup.openmeetings');
 	$(window).off('keydown.openmeetings');
+	$(window).off('resize.omwb');
 	$(window).off('keydown.om-sip');
 	$(window).off('keyup.om-sip');
 	$(document).off('click', _mouseHandler);

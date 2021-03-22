@@ -74,33 +74,24 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	height: calc(100% - var(--room-sidebar-header-height) - var(--buffer-size));
 }
 .room-block .sb-wb .sidebar .user-list .user.entry {
-	min-height: 60px;
+	min-height: 90px;
 	padding-left: 5px;
 	padding-top: 5px;
-	background-size: 55px;
+	background-size: 80px;
 	background-repeat: no-repeat;
 	background-position: 2px 2px;
 	position: relative;
 }
 .room-block .sb-wb .sidebar .user-list .user.entry:hover {
-	background-size: 75px;
-	min-height: 80px;
-}
-.room-block .sb-wb .sidebar .user-list .user.entry:hover .user.name {
-	padding: 0;
-	margin-top: 84px;
-	min-height: 18px;
+	background-size: 55px;
 }
 .room-block .sb-wb .sidebar .user-list .user.entry .user.actions {
 	display: none;
 }
-.room-block.narrow .sidebar .user-list .user.entry:hover .user.actions {
-	margin-top: 84px;
-}
 .room-block .sb-wb .sidebar .user-list .user.entry:hover .user.actions {
 	display: block;
 	padding: 0;
-	margin-right: 35px;
+	margin-top: 45px;
 }
 .room-block .sb-wb .sidebar .user-list .user.name {
 	line-height: 18px;
@@ -138,14 +129,14 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 .user-list .user.entry:hover .video-container
 , .user-list .user.entry:hover .video-container .video.audio-only
 {
-	width: 80px;
-	height: 80px;
+	width: 50px;
+	height: 50px;
 }
 .user-list .user.entry .video-container
 , .user-list .user.entry .video-container .video.audio-only
 {
-	width: 50px;
-	height: 50px;
+	width: 80px;
+	height: 80px;
 }
 .user-list .user.entry .video-container .footer {
 	display: none !important;

@@ -454,5 +454,14 @@ module.exports = class DrawWbArea extends WbAreaBase {
 				_getWbContent(wbId).remove();
 			});
 		};
+		this.resize = () => {
+			if (!_inited) {
+				return;
+			}
+			const tabs = $('.room-block .wb-block .tabs');
+			tabs.find('.wb-tab-content .wb-tab').each(function() {
+				$(this).data().resize();
+			});
+		};
 	}
 };
