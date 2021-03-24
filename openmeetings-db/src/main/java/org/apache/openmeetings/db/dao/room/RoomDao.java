@@ -60,7 +60,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	private static final Logger log = LoggerFactory.getLogger(RoomDao.class);
-	private static final String[] searchFields = {"name"};
+	private static final String[] searchFields = {"name", "comment"};
 	public static final String GRP_MODERATORS = "roomModerators";
 	public static final String GRP_GROUPS = "roomGroups";
 	public static final String GRP_FILES = "roomFiles";
@@ -245,6 +245,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 			room.setAllowUserQuestions(true);
 			room.setOwnerId(ownerId);
 			room.setAllowRecording(true);
+			room.setModerated(true);
 			room.hide(RoomElement.MICROPHONE_STATUS);
 
 			room = update(room, ownerId);

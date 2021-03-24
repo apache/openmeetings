@@ -52,6 +52,8 @@ public class AuthLevelUtil {
 		}
 		if (//admin user get superModerator level, no-one can kick him/her
 			hasAdminLevel(u.getRights())
+			// user personal room
+			|| u.getId().equals(r.getOwnerId())
 			// appointment owner is super moderator
 			|| (r.isAppointment() && a != null && u.getId().equals(a.getOwner().getId())))
 		{
