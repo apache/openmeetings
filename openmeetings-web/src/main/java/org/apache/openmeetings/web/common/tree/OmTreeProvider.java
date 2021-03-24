@@ -86,15 +86,12 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 			fRoot.add(r);
 		}
 		if (all && isRecordingsEnabled()) {
-			{
-				BaseFileItem r = createRoot(Application.getString("860"), RECORDINGS_MY, true);
-				r.setOwnerId(getUserId());
-				rRoot.add(r);
-			}
-			{
-				BaseFileItem r = createRoot(lblPublic, RECORDINGS_PUBLIC, true);
-				rRoot.add(r);
-			}
+			BaseFileItem my = createRoot(Application.getString("860"), RECORDINGS_MY, true);
+			my.setOwnerId(getUserId());
+			rRoot.add(my);
+
+			BaseFileItem pub = createRoot(lblPublic, RECORDINGS_PUBLIC, true);
+			rRoot.add(pub);
 		}
 		for (GroupUser gu : userDao.get(getUserId()).getGroupUsers()) {
 			Group g = gu.getGroup();

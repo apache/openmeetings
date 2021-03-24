@@ -414,28 +414,14 @@ public class InstallWizard extends BootstrapWizard {
 			pass.setVisible(props.getDbType() != DbType.H2);
 			try {
 				switch (props.getDbType()) {
-					case MSSQL: {
-						String url = props.getURL().substring("jdbc:sqlserver://".length());
-						String[] parts = url.split(";");
-						String[] hp = parts[0].split(":");
-						host.setModelObject(hp[0]);
-						port.setModelObject(Integer.parseInt(hp[1]));
-						dbname.setModelObject(parts[1].substring(parts[1].indexOf('=') + 1));
-						}
+					case MSSQL:
+						dbMssql(props);
 						break;
-					case ORACLE: {
-						String[] parts = props.getURL().split(":");
-						host.setModelObject(parts[3].substring(1));
-						port.setModelObject(Integer.parseInt(parts[4]));
-						dbname.setModelObject(parts[5]);
-						}
+					case ORACLE:
+						dbOracle(props);
 						break;
-					case H2: {
-						host.setModelObject("");
-						port.setModelObject(0);
-						String[] parts = props.getURL().split(";");
-						dbname.setModelObject(parts[0].substring("jdbc:h2:".length()));
-						}
+					case H2:
+						dbH2(props);
 						break;
 					default:
 						URI uri = URI.create(props.getURL().substring(5));
@@ -450,6 +436,29 @@ public class InstallWizard extends BootstrapWizard {
 			if (target != null) {
 				target.add(form);
 			}
+		}
+
+		private void dbMssql(ConnectionProperties props) {
+			String url = props.getURL().substring("jdbc:sqlserver://".length());
+			String[] parts = url.split(";");
+			String[] hp = parts[0].split(":");
+			host.setModelObject(hp[0]);
+			port.setModelObject(Integer.parseInt(hp[1]));
+			dbname.setModelObject(parts[1].substring(parts[1].indexOf('=') + 1));
+		}
+
+		private void dbOracle(ConnectionProperties props) {
+			String[] parts = props.getURL().split(":");
+			host.setModelObject(parts[3].substring(1));
+			port.setModelObject(Integer.parseInt(parts[4]));
+			dbname.setModelObject(parts[5]);
+		}
+
+		private void dbH2(ConnectionProperties props) {
+			host.setModelObject("");
+			port.setModelObject(0);
+			String[] parts = props.getURL().split(";");
+			dbname.setModelObject(parts[0].substring("jdbc:h2:".length()));
 		}
 
 		@Override

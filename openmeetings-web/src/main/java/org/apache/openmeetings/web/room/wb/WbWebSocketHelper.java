@@ -173,7 +173,7 @@ public class WbWebSocketHelper {
 				roomId
 				, new JSONObject().put("type", "wb")
 				, alwaysTrue()
-				, (o, c) -> o.put("func", WbAction.createObj.name())
+				, (o, c) -> o.put("func", WbAction.CREATE_OBJ.jsName())
 							.put("param", getObjWbJson(wbId, patchUrls(fi, c, f))));
 	}
 
@@ -182,7 +182,7 @@ public class WbWebSocketHelper {
 				roomId
 				, new JSONObject().put("type", "wb")
 				, check
-				, (o, c) -> o.put("func", meth.name())
+				, (o, c) -> o.put("func", meth.jsName())
 							.put("param", obj)
 			);
 	}

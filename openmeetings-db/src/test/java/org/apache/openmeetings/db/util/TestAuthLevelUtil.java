@@ -61,6 +61,7 @@ class TestAuthLevelUtil {
 	@Test
 	void testConference() {
 		User u = new User();
+		u.setId(1L);
 		Room r = new Room();
 		Set<Room.Right> rights = getRoomRight(u, r, null, 0);
 		assertEquals(2, rights.size(), "Result should NOT be empty");

@@ -277,21 +277,8 @@ public class OmUrlFragment implements Serializable {
 					basePanel = new WidgetsPanel(CHILD_ID);
 				}
 				break;
-			case room: {
-				Room r = null;
-				try {
-					Long roomId = Long.valueOf(type);
-					r = Application.get().getBean(RoomDao.class).get(roomId);
-				} catch(NumberFormatException ne) {
-					r = Application.get().getBean(RoomDao.class).get(type);
-				}
-				if (r != null) {
-					moveToServer(r);
-					basePanel = new RoomPanel(CHILD_ID, r);
-				} else {
-					basePanel = new OmDashboardPanel(CHILD_ID);
-				}
-			}
+			case room:
+				basePanel = getRoomPanel(type);
 				break;
 			case rooms:
 				basePanel = new RoomsSelectorPanel(CHILD_ID, type);
@@ -309,6 +296,22 @@ public class OmUrlFragment implements Serializable {
 				break;
 		}
 		return basePanel;
+	}
+
+	private static BasePanel getRoomPanel(String type) {
+		Room r = null;
+		try {
+			Long roomId = Long.valueOf(type);
+			r = Application.get().getBean(RoomDao.class).get(roomId);
+		} catch(NumberFormatException ne) {
+			r = Application.get().getBean(RoomDao.class).get(type);
+		}
+		if (r != null) {
+			moveToServer(r);
+			return new RoomPanel(CHILD_ID, r);
+		} else {
+			return new OmDashboardPanel(CHILD_ID);
+		}
 	}
 
 	public String getLink() {

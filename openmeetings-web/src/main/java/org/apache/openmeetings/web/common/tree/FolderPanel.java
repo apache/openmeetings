@@ -203,15 +203,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 					break;
 				case VIDEO:
 				case RECORDING:
-				{
-					style.append("recording ");
-					if (f instanceof Recording) {
-						Status st = ((Recording)f).getStatus();
-						if (Status.RECORDING == st || Status.CONVERTING == st) {
-							style.append("processing ");
-						}
-					}
-				}
+					setVideoStyle(f, style);
 					break;
 				case PRESENTATION:
 					style.append(CSS_CLASS_FILE).append("doc ");
@@ -226,6 +218,16 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 		String cls = f instanceof Recording ? "recorditem " : "fileitem ";
 		style.append(f.isReadOnly() ? "readonlyitem " : cls);
 		return style;
+	}
+
+	private void setVideoStyle(final BaseFileItem f, StringBuilder style) {
+		style.append("recording ");
+		if (f instanceof Recording) {
+			Status st = ((Recording)f).getStatus();
+			if (Status.RECORDING == st || Status.CONVERTING == st) {
+				style.append("processing ");
+			}
+		}
 	}
 
 	@Override

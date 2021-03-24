@@ -18,25 +18,43 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
+import java.util.stream.Stream;
+
 public enum WbAction {
-	create //create wb without additional calls
-	, createWb
-	, removeWb
-	, activateWb
-	, renameWb
-	, setSlide
-	, createObj
-	, modifyObj
-	, deleteObj
-	, clearAll
-	, clearSlide
-	, save
-	, load
-	, undo
-	, setSize
-	, download
-	, startRecording
-	, stopRecording
-	, videoStatus
-	, loadVideos
+	CREATE_WB("createWb")
+	, REMOVE_WB("removeWb")
+	, ACTIVATE_WB("activateWb")
+	, RENAME_WB("renameWb")
+	, SET_SLIDE("setSlide")
+	, CREATE_OBJ("createObj")
+	, MODIFY_OBJ("modifyObj")
+	, DELETE_OBJ("deleteObj")
+	, CLEAR_ALL("clearAll")
+	, CLEAR_SLIDE("clearSlide")
+	, SAVE("save")
+	, LOAD("load")
+	, UNDO("undo")
+	, SET_SIZE("setSize")
+	, DOWNLOAD("download")
+	, START_RECORDING("startRecording")
+	, STOP_RECORDING("stopRecording")
+	, VIDEO_STATUS("videoStatus")
+	, LOAD_VIDEOS("loadVideos");
+
+	private final String jsName;
+
+	private WbAction(String jsName) {
+		this.jsName = jsName;
+	}
+
+	public String jsName() {
+		return jsName;
+	}
+
+	public static WbAction of(String jsName) {
+		return Stream.of(WbAction.values())
+				.filter(a -> a.jsName.equals(jsName))
+				.findAny()
+				.orElse(null);
+	}
 }

@@ -223,8 +223,8 @@ public class WhiteboardManager implements IWhiteboardManager {
 			consumer.accept(wb);
 		}
 		wb = clear(roomId, wbId);
-		sendWbAll(roomId, WbAction.clearAll, new JSONObject().put("wbId", wbId));
-		sendWbAll(roomId, WbAction.setSize, wb.getAddJson());
+		sendWbAll(roomId, WbAction.CLEAR_ALL, new JSONObject().put("wbId", wbId));
+		sendWbAll(roomId, WbAction.SET_SIZE, wb.getAddJson());
 	}
 
 	@Override
@@ -236,7 +236,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 			if (consumer != null) {
 				consumer.accept(wb, arr);
 			}
-			sendWbAll(roomId, WbAction.clearSlide, new JSONObject()
+			sendWbAll(roomId, WbAction.CLEAR_SLIDE, new JSONObject()
 					.put("wbId", wbId)
 					.put(ATTR_SLIDE, slide));
 		}

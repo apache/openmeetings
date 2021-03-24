@@ -53,10 +53,10 @@ public class InterviewWbPanel extends AbstractWbPanel {
 	public void processWbAction(WbAction a, JSONObject obj, IPartialPageRequestHandler handler) throws IOException {
 		Client c = rp.getClient();
 		switch (a) {
-			case startRecording:
+			case START_RECORDING:
 				streamProcessor.startRecording(c);
 				break;
-			case stopRecording:
+			case STOP_RECORDING:
 				streamProcessor.stopRecording(c);
 				break;
 			default:

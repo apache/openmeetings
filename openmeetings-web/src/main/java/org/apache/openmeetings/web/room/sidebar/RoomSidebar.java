@@ -142,9 +142,9 @@ public class RoomSidebar extends Panel {
 				return;
 			}
 			Client self = room.getClient();
-			Action a = Action.valueOf(o.getString(PARAM_ACTION));
+			Action a = Action.of(o.getString(PARAM_ACTION));
 			switch (a) {
-				case kick:
+				case KICK:
 					if (self.hasRight(Right.MODERATOR)) {
 						final Client kickedClient = cm.get(uid);
 						if (kickedClient == null) {
@@ -155,33 +155,35 @@ public class RoomSidebar extends Panel {
 						}
 					}
 					break;
-				case muteOthers:
+				case MUTE_OTHERS:
 					if (room.getClient().hasRight(Right.MUTE_OTHERS)) {
 						WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), self, RoomMessage.Type.MUTE_OTHERS, uid));
 					}
 					break;
-				case mute:
-				{
-					Client c = cm.get(uid);
-					if (c == null || !c.hasActivity(Client.Activity.AUDIO)) {
-						return;
-					}
-					if (self.hasRight(Right.MODERATOR) || self.getUid().equals(c.getUid())) {
-						WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), self, RoomMessage.Type.MUTE
-								, new JSONObject()
-										.put("sid", self.getSid())
-										.put(PARAM_UID, uid)
-										.put("mute", o.getBoolean("mute")).toString()));
-					}
-				}
+				case MUTE:
+					muteRoomAction(uid, self, o);
 					break;
-				case toggleRight:
+				case TOGGLE_RIGHT:
 					toggleRight(handler, self, uid, o);
 					break;
 				default:
 			}
 		} catch (Exception e) {
 			log.error("Unexpected exception while toggle 'roomAction'", e);
+		}
+	}
+
+	private void muteRoomAction(String uid, Client self, JSONObject o) {
+		Client c = cm.get(uid);
+		if (c == null || !c.hasActivity(Client.Activity.AUDIO)) {
+			return;
+		}
+		if (self.hasRight(Right.MODERATOR) || self.getUid().equals(c.getUid())) {
+			WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), self, RoomMessage.Type.MUTE
+					, new JSONObject()
+							.put("sid", self.getSid())
+							.put(PARAM_UID, uid)
+							.put("mute", o.getBoolean("mute")).toString()));
 		}
 	}
 
