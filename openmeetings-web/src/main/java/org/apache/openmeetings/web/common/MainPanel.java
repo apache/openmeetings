@@ -319,22 +319,35 @@ public class MainPanel extends Panel {
 		}
 		createSettingsMenu(mmenu);
 		Set<Right> r = WebSession.getRights();
-		boolean isAdmin = hasAdminLevel(r);
-		if (isAdmin || hasGroupAdminLevel(r)) {
+		if (r.stream().anyMatch(right -> right.name().contains("ADMIN"))) {
+			boolean isAdmin = hasAdminLevel(r);
+			boolean isGrpAdmin = hasGroupAdminLevel(r);
 			// Administration Menu Points
 			List<INavbarComponent> l = new ArrayList<>();
-			l.add(getSubItem("125", "1454", MenuActions.ADMIN_USER));
-			if (isAdmin) {
+			if (isAdmin || isGrpAdmin) {
+				l.add(getSubItem("125", "1454", MenuActions.ADMIN_USER));
+			}
+			if (isAdmin || r.contains(Right.ADMIN_CONNECTIONS)) {
 				l.add(getSubItem("597", "1455", MenuActions.ADMIN_CONNECTION));
 			}
-			l.add(getSubItem("126", "1456", MenuActions.ADMIN_GROUP));
-			l.add(getSubItem("186", "1457", MenuActions.ADMIN_ROOM));
-			if (isAdmin) {
+			if (isAdmin || isGrpAdmin) {
+				l.add(getSubItem("126", "1456", MenuActions.ADMIN_GROUP));
+				l.add(getSubItem("186", "1457", MenuActions.ADMIN_ROOM));
+			}
+			if (isAdmin || r.contains(Right.ADMIN_CONFIG)) {
 				l.add(getSubItem("263", "1458", MenuActions.ADMIN_CONFIG));
+			}
+			if (isAdmin || r.contains(Right.ADMIN_LABEL)) {
 				l.add(getSubItem("348", "1459", MenuActions.ADMIN_LABEL));
+			}
+			if (isAdmin) {
 				l.add(getSubItem("1103", "1454", MenuActions.ADMIN_LDAP));
 				l.add(getSubItem("1571", "1572", MenuActions.ADMIN_OAUTH));
+			}
+			if (isAdmin || r.contains(Right.ADMIN_BACKUP)) {
 				l.add(getSubItem("367", "1461", MenuActions.ADMIN_BACKUP));
+			}
+			if (isAdmin) {
 				l.add(getSubItem("main.menu.admin.email", "main.menu.admin.email.desc", MenuActions.ADMIN_EMAIL));
 			}
 			mmenu.add(new OmMenuItem(getString("6"), l));

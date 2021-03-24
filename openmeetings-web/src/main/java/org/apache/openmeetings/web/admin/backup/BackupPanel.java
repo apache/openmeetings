@@ -41,6 +41,7 @@ import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -70,6 +71,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColo
  * @author swagner
  *
  */
+@AuthorizeInstantiation({"ADMIN", "ADMIN_BACKUP"})
 public class BackupPanel extends AdminBasePanel {
 	private static final Logger log = LoggerFactory.getLogger(BackupPanel.class);
 	private static final long serialVersionUID = 1L;

@@ -52,8 +52,4 @@ public abstract class RestrictiveChoiceProvider<T> extends ChoiceProvider<T> {
 		}
 		return c;
 	}
-
-	@Override
-	public void detach() {
-	}
 }
