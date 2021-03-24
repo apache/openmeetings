@@ -130,11 +130,11 @@ public class ProcessHelper {
 			res.setExitCode(proc.exitValue())
 				.setOut(inputWatcher.toString())
 				.setError(errorWatcher.toString());
+		} catch (InterruptedException e) {
+			onException(e, start, res);
+			Thread.currentThread().interrupt();
 		} catch (Throwable t) {
-			log.error("executeScript", t);
-			res.setExitCode(-1)
-				.setError(String.format("Exception after %s of work; %s", formatMillis(System.currentTimeMillis() - start), t.getMessage()))
-				.setException(t.toString());
+			onException(t, start, res);
 		} finally {
 			if (proc != null) {
 				errorWatcher.finish();
@@ -145,5 +145,13 @@ public class ProcessHelper {
 
 		debugCommandEnd(process);
 		return res;
+	}
+
+	private static void onException(Throwable t, long start, ProcessResult res) {
+		log.error("executeScript", t);
+		res.setExitCode(-1)
+			.setError("Exception after " + formatMillis(System.currentTimeMillis() - start)
+					+ " of work; " + t.getMessage())
+			.setException(t.toString());
 	}
 }

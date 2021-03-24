@@ -194,39 +194,43 @@ public abstract class BaseConverter {
 		}
 	}
 
-	protected RecordingChunk waitForTheStream(long chunkId) throws InterruptedException {
+	protected RecordingChunk waitForTheStream(long chunkId) {
 		RecordingChunk chunk = chunkDao.get(chunkId);
-		if (chunk.getStreamStatus() != Status.STOPPED) {
-			log.debug("### Chunk Stream not yet written to disk {}", chunkId);
-			long counter = 0;
-			long maxTimestamp = 0;
-			while(true) {
-				log.trace("### Stream not yet written Thread Sleep - {}", chunkId);
+		try {
+			if (chunk.getStreamStatus() != Status.STOPPED) {
+				log.debug("### Chunk Stream not yet written to disk {}", chunkId);
+				long counter = 0;
+				long maxTimestamp = 0;
+				while (true) {
+					log.trace("### Stream not yet written Thread Sleep - {}", chunkId);
 
-				chunk = chunkDao.get(chunkId);
+					chunk = chunkDao.get(chunkId);
 
-				if (chunk.getStreamStatus() == Status.STOPPED) {
-					printChunkInfo(chunk, "Stream now written");
-					log.debug("### Thread continue ... " );
-					break;
-				} else {
-					File chunkFlv = getRecordingChunk(chunk.getRecording().getRoomId(), chunk.getStreamName());
-					if (chunkFlv.exists() && maxTimestamp < chunkFlv.lastModified()) {
-						maxTimestamp = chunkFlv.lastModified();
-					}
-					if (maxTimestamp + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
-						log.debug("### long time without any update, closing ... ");
-						chunk.setStreamStatus(Status.STOPPED);
-						chunkDao.update(chunk);
+					if (chunk.getStreamStatus() == Status.STOPPED) {
+						printChunkInfo(chunk, "Stream now written");
+						log.debug("### Thread continue ... " );
 						break;
+					} else {
+						File chunkFlv = getRecordingChunk(chunk.getRecording().getRoomId(), chunk.getStreamName());
+						if (chunkFlv.exists() && maxTimestamp < chunkFlv.lastModified()) {
+							maxTimestamp = chunkFlv.lastModified();
+						}
+						if (maxTimestamp + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
+							log.debug("### long time without any update, closing ... ");
+							chunk.setStreamStatus(Status.STOPPED);
+							chunkDao.update(chunk);
+							break;
+						}
 					}
-				}
-				if (++counter % 1000 == 0) {
-					printChunkInfo(chunk, "Still waiting");
-				}
+					if (++counter % 1000 == 0) {
+						printChunkInfo(chunk, "Still waiting");
+					}
 
-				Thread.sleep(100L);
+					Thread.sleep(100L);
+				}
 			}
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 		}
 		return chunk;
 	}
