@@ -112,6 +112,8 @@ public class KurentoHandler {
 	private int watchThreadCount = 10;
 	@Value("${kurento.kuid}")
 	private String kuid;
+	@Value("${kurento.certificateType}")
+	private String certificateType;
 	private KurentoClient client;
 	private final AtomicBoolean connected = new AtomicBoolean(false);
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
@@ -389,6 +391,10 @@ public class KurentoHandler {
 
 	String getKuid() {
 		return kuid;
+	}
+
+	public String getCertificateType() {
+		return certificateType;
 	}
 
 	static int getFlowoutTimeout() {
