@@ -50,12 +50,12 @@ public abstract class AbstractStream {
 	public abstract void release(boolean remove);
 
 	public static WebRtcEndpoint createWebRtcEndpoint(MediaPipeline pipeline, Boolean recv,
-			String certificateType) {
+			CertificateKeyType certificateType) {
 		WebRtcEndpoint.Builder builder = new WebRtcEndpoint.Builder(pipeline);
 		// See https://doc-kurento.readthedocs.io/en/latest/features/security.html#media-plane-security-dtls
-		if (CertificateKeyType.RSA.name().equals(certificateType)) {
+		if (CertificateKeyType.RSA == certificateType) {
 			builder.withCertificateKeyType(CertificateKeyType.RSA);
-		} else if (CertificateKeyType.ECDSA.name().equals(certificateType)) {
+		} else if (CertificateKeyType.ECDSA == certificateType) {
 			builder.withCertificateKeyType(CertificateKeyType.ECDSA);
 		}
 		if (recv != null) {
