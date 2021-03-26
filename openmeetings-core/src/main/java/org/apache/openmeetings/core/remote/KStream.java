@@ -319,7 +319,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	}
 
 	private WebRtcEndpoint createEndpoint(String sid, String uid, boolean recv) {
-		WebRtcEndpoint endpoint = createWebRtcEndpoint(pipeline, recv);
+		WebRtcEndpoint endpoint = createWebRtcEndpoint(pipeline, recv, kHandler.getCertificateType());
 		setTags(endpoint, uid);
 		reApplyIceCandiates(endpoint, recv);
 

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import org.kurento.client.CertificateKeyType;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaProfileSpecType;
 import org.kurento.client.PlayerEndpoint;
@@ -48,8 +49,15 @@ public abstract class AbstractStream {
 
 	public abstract void release(boolean remove);
 
-	public static WebRtcEndpoint createWebRtcEndpoint(MediaPipeline pipeline, Boolean recv) {
+	public static WebRtcEndpoint createWebRtcEndpoint(MediaPipeline pipeline, Boolean recv,
+			CertificateKeyType certificateType) {
 		WebRtcEndpoint.Builder builder = new WebRtcEndpoint.Builder(pipeline);
+		// See https://doc-kurento.readthedocs.io/en/latest/features/security.html#media-plane-security-dtls
+		if (CertificateKeyType.RSA == certificateType) {
+			builder.withCertificateKeyType(CertificateKeyType.RSA);
+		} else if (CertificateKeyType.ECDSA == certificateType) {
+			builder.withCertificateKeyType(CertificateKeyType.ECDSA);
+		}
 		if (recv != null) {
 			if (recv) {
 				builder.recvonly();

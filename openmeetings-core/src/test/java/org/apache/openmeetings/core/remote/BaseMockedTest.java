@@ -114,7 +114,7 @@ public class BaseMockedTest {
 					return null;
 				}
 			});
-			streamMock.when(() -> AbstractStream.createWebRtcEndpoint(any(MediaPipeline.class), anyBoolean())).thenReturn(mock(WebRtcEndpoint.class));
+			streamMock.when(() -> AbstractStream.createWebRtcEndpoint(any(MediaPipeline.class), anyBoolean(), any())).thenReturn(mock(WebRtcEndpoint.class));
 			streamMock.when(() -> AbstractStream.createRecorderEndpoint(any(MediaPipeline.class), anyString(), any(MediaProfileSpecType.class))).thenReturn(mock(RecorderEndpoint.class));
 			streamMock.when(() -> AbstractStream.createPlayerEndpoint(any(MediaPipeline.class), anyString())).thenReturn(mock(PlayerEndpoint.class));
 

@@ -54,6 +54,7 @@ import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.wicket.util.string.Strings;
+import org.kurento.client.CertificateKeyType;
 import org.kurento.client.Continuation;
 import org.kurento.client.Endpoint;
 import org.kurento.client.EventListener;
@@ -112,6 +113,7 @@ public class KurentoHandler {
 	private int watchThreadCount = 10;
 	@Value("${kurento.kuid}")
 	private String kuid;
+	private CertificateKeyType certificateType;
 	private KurentoClient client;
 	private final AtomicBoolean connected = new AtomicBoolean(false);
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
@@ -389,6 +391,18 @@ public class KurentoHandler {
 
 	String getKuid() {
 		return kuid;
+	}
+
+	@Value("${kurento.certificateType}")
+	public void setCertificateType(String certificateType) {
+		if (certificateType.isEmpty()) {
+			return;
+		}
+		this.certificateType = CertificateKeyType.valueOf(certificateType);
+	}
+
+	public CertificateKeyType getCertificateType() {
+		return certificateType;
 	}
 
 	static int getFlowoutTimeout() {
