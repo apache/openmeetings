@@ -40,13 +40,19 @@
 			<p>
 				Please write to <a href="mailto:om.unipro@gmail.com">om.unipro@gmail.com</a> to get Unipro support
 			</p>
-			<p>As well as additionally for hosting offers:</p>
+			<p><b>Cloud based hosting for OpenMeetings at <a href="https://om-hosting.com" target="_blank">om-hosting.com</a></b></p>
+			<p>See the Dedicated and Elastic Private Cloud Data-Sheets with details at:</p>
 			<ul>
 				<li>
-					<a href="https://om-hosting.com" target="_blank">om-hosting.com</a>
-					Cloud based hosting for OpenMeetings
+					<b>Dedicated Servers</b> - 100, 200, and 400 concurrent users, see: <a href="https://om-hosting.com/dedicated-server-data-sheet/" target="_blank">Dedicated Server Data-Sheet</a>
+				</li>
+				<li>
+					<b>Elastic Private Cloud</b> - 800, 1600 or more concurrent users, including clustering of KMS, auto-scaling and load-balancing see: <a href="https://om-hosting.com/dedicated-server-data-sheet/" target="_blank">Elastic Private Cloud Data-Sheet</a> 
 				</li>
 			</ul>
+			<p>
+				To get in touch see <a href="https://om-hosting.com/about/">Contact Us</a> on their website
+			</p>
 			<p>
 				There are more companies offering installation, customization, hosting, conferencing and support services. You can add
 				yourself to the <a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Commercial+Support">wiki page</a>.
