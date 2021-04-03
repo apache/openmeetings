@@ -39,9 +39,15 @@
 			<artifactId>openmeetings-util</artifactId>
 		</dependency>
 		<dependency>
+			<!-- required for JAXB/CXF -->
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>2.3.3</version>
+		</dependency>
+		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-datastore-hazelcast</artifactId>
-			<version>${wickets.version}</version>
+			<version>${wicketstuff.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openjpa</groupId>

@@ -529,7 +529,7 @@ public class RoomPanel extends BasePanel {
 							wb.reloadWb(handler);
 						}
 						break;
-					case MODERATOR_IN_ROOM: {
+					case MODERATOR_IN_ROOM:
 						if (!r.isModerated() || !r.isWaitModerator()) {
 							log.warn("Something weird: `moderatorInRoom` in wrong room {}", r);
 						} else if (!curClient.hasRight(Room.Right.MODERATOR)) {
@@ -546,7 +546,6 @@ public class RoomPanel extends BasePanel {
 								}
 							}
 						}
-					}
 						break;
 					case WB_PUT_FILE:
 						onWbPutFile((TextRoomMessage)m);

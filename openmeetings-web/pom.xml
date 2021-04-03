@@ -556,7 +556,7 @@
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-dashboard-core</artifactId>
-			<version>${wickets.version}</version>
+			<version>${wicketstuff.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
@@ -576,37 +576,37 @@
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-core</artifactId>
-			<version>${wicketju.version}</version>
+			<version>${wicket-jquery-ui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui</artifactId>
-			<version>${wicketju.version}</version>
+			<version>${wicket-jquery-ui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-calendar</artifactId>
-			<version>${wicketju.version}</version>
+			<version>${wicket-jquery-ui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-plugins</artifactId>
-			<version>${wicketju.version}</version>
+			<version>${wicket-jquery-ui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-urlfragment</artifactId>
-			<version>${wickets.version}</version>
+			<version>${wicketstuff.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-select2</artifactId>
-			<version>${wickets.version}</version>
+			<version>${wicketstuff.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>jqplot</artifactId>
-			<version>${wickets.version}</version>
+			<version>${wicketstuff.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.agilecoders.wicket</groupId>

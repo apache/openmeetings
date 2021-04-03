@@ -20,13 +20,15 @@ package org.apache.openmeetings.web.app;
 
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
+import org.apache.wicket.util.crypt.ICrypt;
+import org.apache.wicket.util.crypt.SunJceCrypt;
 import org.apache.wicket.util.string.Strings;
 
 public class OmAuthenticationStrategy extends DefaultAuthenticationStrategy {
 	private static final String COOKIE_KEY = "LoggedIn";
 
-	public OmAuthenticationStrategy() {
-		super(COOKIE_KEY);
+	public OmAuthenticationStrategy(String encryptionKey) {
+		super(COOKIE_KEY, defaultCrypt(encryptionKey));
 	}
 
 	/**
@@ -64,5 +66,13 @@ public class OmAuthenticationStrategy extends DefaultAuthenticationStrategy {
 		if (type != Type.OAUTH) {
 			super.save(username, password, type.name(), String.valueOf(domainId));
 		}
+	}
+
+	private static ICrypt defaultCrypt(String encryptionKey) {
+		byte[] salt = SunJceCrypt.randomSalt();
+
+		SunJceCrypt crypt = new SunJceCrypt(salt, 1000);
+		crypt.setKey(encryptionKey);
+		return crypt;
 	}
 }

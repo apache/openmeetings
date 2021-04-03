@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -31,7 +32,8 @@ import org.junit.jupiter.api.Test;
 class TestOmAuthenticationStrategy extends AbstractWicketTester {
 	@Test
 	void test() {
-		OmAuthenticationStrategy s = new OmAuthenticationStrategy();
+		String encKey = randomUUID().toString();
+		OmAuthenticationStrategy s = new OmAuthenticationStrategy(encKey);
 		s.save(null, null, User.Type.OAUTH, null);
 		assertNull(s.load(), "Wasn't saved, should not be loaded");
 

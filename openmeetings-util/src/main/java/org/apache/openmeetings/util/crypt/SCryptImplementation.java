@@ -60,7 +60,7 @@ public class SCryptImplementation implements ICrypt {
 			props.load(is);
 			cost = Integer.valueOf(props.getProperty("scrypt.cost", "" + cost));
 		} catch (Exception e) {
-			log.error("Failed to initialize the cost", e);
+			log.error("Failed to initialize the cost {}", e.getMessage());
 		}
 	}
 

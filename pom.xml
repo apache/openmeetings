@@ -78,15 +78,15 @@
 		<frontend-maven-plugin.version>1.11.0</frontend-maven-plugin.version>
 		<!-- dependency versions -->
 		<junit.version>5.7.1</junit.version>
-		<wicket.version>9.2.0</wicket.version>
-		<wicketju.version>9.2.1</wicketju.version>
-		<wickets.version>9.2.0</wickets.version>
-		<wicket-bootstrap.version>5.0.3</wicket-bootstrap.version>
+		<wicket.version>9.3.0</wicket.version>
+		<wicket-jquery-ui.version>9.3.1</wicket-jquery-ui.version>
+		<wicketstuff.version>9.3.0</wicketstuff.version>
+		<wicket-bootstrap.version>5.0.4</wicket-bootstrap.version>
 		<font-awesome.version>5.15.2</font-awesome.version>
-		<spring.version>5.3.4</spring.version>
+		<spring.version>5.3.5</spring.version>
 		<tomcat.version>9.0.44</tomcat.version>
 		<ical4j.version>3.0.21</ical4j.version>
-		<cxf.version>3.4.2</cxf.version>
+		<cxf.version>3.4.3</cxf.version>
 		<io.prometheus.version>0.10.0</io.prometheus.version>
 		<aspectjtools.version>1.9.6</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
@@ -97,7 +97,7 @@
 		<commons-lang3.version>3.12.0</commons-lang3.version>
 		<javax.mail.version>1.6.2</javax.mail.version>
 		<openjpa.version>3.1.2</openjpa.version>
-		<asterisk-java.version>3.10.0</asterisk-java.version>
+		<asterisk-java.version>3.11.0</asterisk-java.version>
 		<commons-dbcp.version>2.8.0</commons-dbcp.version>
 		<commons-pool2.version>2.9.0</commons-pool2.version>
 		<commons-cli.version>1.4</commons-cli.version>
@@ -109,10 +109,10 @@
 		<mssql.version>9.2.1.jre11</mssql.version>
 		<ojdbc.version>19.10.0.0</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
-		<xstream.version>1.4.15</xstream.version>
+		<xstream.version>1.4.16</xstream.version>
 		<api-all.version>2.0.1</api-all.version>
 		<caldav4j.version>1.0.1</caldav4j.version>
-		<tika-parsers.version>1.25</tika-parsers.version>
+		<tika-parsers.version>1.26</tika-parsers.version>
 		<commons-text.version>1.9</commons-text.version>
 		<slf4j.version>1.7.30</slf4j.version>
 		<logback.version>1.2.3</logback.version>
@@ -659,14 +659,6 @@
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-log4j12</artifactId>
 					</exclusion>
-					<exclusion> <!-- TIKA-2801 -->
-						<groupId>com.google.guava</groupId>
-						<artifactId>guava</artifactId>
-					</exclusion>
-					<exclusion> <!-- TIKA-2801 -->
-						<groupId>com.google.protobuf</groupId>
-						<artifactId>protobuf-java</artifactId>
-					</exclusion>
 					<exclusion>
 						<groupId>xml-apis</groupId>
 						<artifactId>xml-apis</artifactId>
@@ -674,6 +666,10 @@
 					<exclusion>
 						<groupId>xerces</groupId>
 						<artifactId>xercesImpl</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.jaxb</groupId>
+						<artifactId>jaxb-runtime</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>

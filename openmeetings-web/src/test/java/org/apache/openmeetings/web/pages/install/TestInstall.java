@@ -51,7 +51,7 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.extensions.wizard.WizardButton;
-import org.apache.wicket.protocol.ws.WebSocketAwareCsrfPreventionRequestCycleListener;
+import org.apache.wicket.protocol.ws.WebSocketAwareResourceIsolationRequestCycleListener;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
 import org.apache.wicket.util.tester.FormTester;
@@ -99,7 +99,7 @@ public class TestInstall {
 		RequestCycleListenerCollection listeners = tester.getApplication().getRequestCycleListeners();
 		for (Iterator<IRequestCycleListener> iter = listeners.iterator(); iter.hasNext();) {
 			IRequestCycleListener l = iter.next();
-			if (l instanceof WebSocketAwareCsrfPreventionRequestCycleListener) {
+			if (l instanceof WebSocketAwareResourceIsolationRequestCycleListener) {
 				listeners.remove(l);
 				break;
 			}

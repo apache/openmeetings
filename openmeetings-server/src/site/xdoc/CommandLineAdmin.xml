@@ -53,7 +53,7 @@
  -r,--restore                        Restores OM
    -file <arg>                       file used for backup/restore/install
 --------------------------------------------------------------------------------------------------
- -l,--LDAP                           Import LDAP users into DB
+ -l,--ldap                           Import LDAP users into DB
    -d,--domain-id <arg>              LDAP domain Id
       --print-only                   (optional) Print users found instead of importing
 --------------------------------------------------------------------------------------------------

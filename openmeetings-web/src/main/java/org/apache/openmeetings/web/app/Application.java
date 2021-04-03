@@ -111,7 +111,7 @@ import org.apache.wicket.markup.head.filter.FilteringHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.IPageStore;
 import org.apache.wicket.pageStore.SerializingPageStore;
-import org.apache.wicket.protocol.ws.WebSocketAwareCsrfPreventionRequestCycleListener;
+import org.apache.wicket.protocol.ws.WebSocketAwareResourceIsolationRequestCycleListener;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
@@ -129,6 +129,7 @@ import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.wicketstuff.dashboard.WidgetRegistry;
@@ -190,11 +191,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private AppointmentDao appointmentDao;
 	@Autowired
 	private SipManager sipManager;
+	@Value("${remember.me.encryption.key}")
+	private String encryptionKey;
 
 	@Override
 	protected void init() {
 		setWicketApplicationName(super.getName());
-		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
+		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy(encryptionKey));
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 		getApplicationSettings().setInternalErrorPage(InternalErrorPage.class);
 		getExceptionSettings().setUnexpectedExceptionDisplay(ExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
@@ -263,7 +266,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//chain of Resource Loaders, if not found it will search in Wicket's internal
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
-		getRequestCycleListeners().add(new WebSocketAwareCsrfPreventionRequestCycleListener() {
+		getRequestCycleListeners().add(new WebSocketAwareResourceIsolationRequestCycleListener() {
 			@Override
 			public void onBeginRequest(RequestCycle cycle) {
 				String wsUrl = getWsUrl(cycle.getRequest().getUrl());
