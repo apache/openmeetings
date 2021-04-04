@@ -400,7 +400,7 @@ module.exports = class Wb {
 				}
 				switch(o.omType) {
 					case 'pointer':
-						new APointer(wb).create(canvases[o.slide], o);
+						new APointer(this).create(canvases[o.slide], o);
 						break;
 					case 'Video':
 						Player.create(canvases[o.slide], o, self);
@@ -433,7 +433,7 @@ module.exports = class Wb {
 				const o = _arr[i];
 				switch(o.omType) {
 					case 'pointer':
-						_modifyHandler(new APointer(wb).create(canvases[o.slide], o));
+						_modifyHandler(new APointer(this).create(canvases[o.slide], o));
 						break;
 					case 'Video':
 					{
