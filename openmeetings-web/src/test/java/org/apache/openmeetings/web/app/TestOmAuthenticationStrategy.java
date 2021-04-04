@@ -33,7 +33,7 @@ class TestOmAuthenticationStrategy extends AbstractWicketTester {
 	@Test
 	void test() {
 		String encKey = randomUUID().toString();
-		OmAuthenticationStrategy s = new OmAuthenticationStrategy(encKey);
+		OmAuthenticationStrategy s = new OmAuthenticationStrategy(encKey, "test");
 		s.save(null, null, User.Type.OAUTH, null);
 		assertNull(s.load(), "Wasn't saved, should not be loaded");
 

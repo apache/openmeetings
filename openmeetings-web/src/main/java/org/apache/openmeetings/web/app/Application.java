@@ -192,12 +192,14 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Autowired
 	private SipManager sipManager;
 	@Value("${remember.me.encryption.key}")
-	private String encryptionKey;
+	private String rememberMeKey;
+	@Value("${remember.me.encryption.salt}")
+	private String rememberMeSalt;
 
 	@Override
 	protected void init() {
 		setWicketApplicationName(super.getName());
-		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy(encryptionKey));
+		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy(rememberMeKey, rememberMeSalt));
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 		getApplicationSettings().setInternalErrorPage(InternalErrorPage.class);
 		getExceptionSettings().setUnexpectedExceptionDisplay(ExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);

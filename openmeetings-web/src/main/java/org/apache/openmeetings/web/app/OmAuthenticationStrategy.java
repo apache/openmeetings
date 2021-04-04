@@ -18,17 +18,25 @@
  */
 package org.apache.openmeetings.web.app;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Arrays;
+
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.util.crypt.ICrypt;
 import org.apache.wicket.util.crypt.SunJceCrypt;
 import org.apache.wicket.util.string.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OmAuthenticationStrategy extends DefaultAuthenticationStrategy {
+	private static final Logger log = LoggerFactory.getLogger(OmAuthenticationStrategy.class);
 	private static final String COOKIE_KEY = "LoggedIn";
 
-	public OmAuthenticationStrategy(String encryptionKey) {
-		super(COOKIE_KEY, defaultCrypt(encryptionKey));
+	public OmAuthenticationStrategy(String encryptionKey, String salt) {
+		super(COOKIE_KEY, defaultCrypt(encryptionKey, salt));
 	}
 
 	/**
@@ -68,11 +76,19 @@ public class OmAuthenticationStrategy extends DefaultAuthenticationStrategy {
 		}
 	}
 
-	private static ICrypt defaultCrypt(String encryptionKey) {
-		byte[] salt = SunJceCrypt.randomSalt();
+	private static ICrypt defaultCrypt(String encryptionKey, String saltStr) {
+		SunJceCrypt crypt = null;
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);)
+		{
+			ps.append(saltStr).append("om_secret");
+			byte[] salt = Arrays.copyOfRange(baos.toByteArray(), 0, 8);
 
-		SunJceCrypt crypt = new SunJceCrypt(salt, 1000);
-		crypt.setKey(encryptionKey);
+			crypt = new SunJceCrypt(salt, 1000);
+			crypt.setKey(encryptionKey);
+		} catch (IOException e) {
+			log.error("Enxpected error while creating crypt", e);
+		}
 		return crypt;
 	}
 }
