@@ -50,4 +50,6 @@ public interface IApplication {
 	//WS
 	void publishWsTopic(IClusterWsMessage msg);
 	Set<String> getWsUrls();
+
+	void updateTheme();
 }

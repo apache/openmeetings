@@ -351,6 +351,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_RECORDING_ENABLED:
 				reloadRecordingEnabled();
 				break;
+			case CONFIG_THEME:
+				reloadTheme();
+				break;
 		}
 		return entity;
 	}
@@ -493,6 +496,11 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setRecordingsEnabled(getBool(CONFIG_RECORDING_ENABLED, true));
 	}
 
+	private void reloadTheme() {
+		setTheme(getString(CONFIG_THEME, ""));
+		app.updateTheme();
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -520,6 +528,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadMailSettings();
 		reloadAppointmentSettings();
 		reloadRecordingEnabled();
+		reloadTheme();
 
 		updateCsp();
 	}

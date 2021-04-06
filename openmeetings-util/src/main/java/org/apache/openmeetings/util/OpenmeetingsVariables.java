@@ -113,6 +113,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_CSP_STYLE = "header.csp.style";
 	public static final String CONFIG_CSP_ENABLED = "header.csp.enabled";
 	public static final String CONFIG_RECORDING_ENABLED = "recording.enabled";
+	public static final String CONFIG_THEME = "ui.theme";
 
 	public static final int RECENT_ROOMS_COUNT = 5;
 	public static final int USER_LOGIN_MINIMUM_LENGTH = 4;
@@ -179,6 +180,7 @@ public class OpenmeetingsVariables {
 	private static int appointmentReminderMinutes = 15;
 	private static int appointmentPreStartMinutes = 5;
 	private static boolean recordingsEnabled = true;
+	private static String theme = "Sandstone";
 
 	private OpenmeetingsVariables() {}
 
@@ -609,5 +611,13 @@ public class OpenmeetingsVariables {
 
 	public static void setRecordingsEnabled(boolean enabled) {
 		recordingsEnabled = enabled;
+	}
+
+	public static String getTheme() {
+		return theme;
+	}
+
+	public static void setTheme(String inTheme) {
+		theme = inTheme;
 	}
 }

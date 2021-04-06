@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROC
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getTheme;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
@@ -40,6 +41,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 import javax.websocket.WebSocketContainer;
 
@@ -150,6 +152,7 @@ import com.hazelcast.topic.ITopic;
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
+import de.agilecoders.wicket.core.settings.NoopThemeProvider;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
 
@@ -298,7 +301,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getHeaderResponseDecorators().add(FilteringHeaderResponse::new);
 		super.init();
 		final IBootstrapSettings settings = new BootstrapSettings();
-		settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Sandstone));
 		Bootstrap.builder().withBootstrapSettings(settings).install(this);
 		WysiwygLibrarySettings.get().setBootstrapCssReference(null);
 		WysiwygLibrarySettings.get().setBootstrapDropDownJavaScriptReference(null);
@@ -652,6 +654,22 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	public Set<String> getWsUrls() {
 		return Set.copyOf(wsUrls);
+	}
+
+	@Override
+	public void updateTheme() {
+		BootswatchTheme theme = Stream.of(BootswatchTheme.values())
+				.filter(v -> v.name().equalsIgnoreCase(getTheme()))
+				.findFirst()
+				.orElse(null);
+		IBootstrapSettings settings = Bootstrap.getSettings(this);
+		settings.setThemeProvider(theme == null ? new NoopThemeProvider()
+				: new BootswatchThemeProvider(theme));
+		if (WebSession.exists()) {
+			settings.getActiveThemeProvider().setActiveTheme(theme == null
+					? settings.getThemeProvider().defaultTheme()
+					: settings.getThemeProvider().byName(theme.name()));
+		}
 	}
 
 	// package private for testing

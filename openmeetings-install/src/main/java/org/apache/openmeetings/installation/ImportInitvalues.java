@@ -105,6 +105,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT_CON;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_THEME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CSP_DATA;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CSP_FONT;
@@ -118,6 +119,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioRate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getTheme;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.SELF;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.STRICT_DYNAMIC;
 
@@ -396,6 +398,9 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_APPOINTMENT_PRE_START_MINUTES, String.valueOf(getAppointmentPreStartMinutes()), Configuration.Type.NUMBER
 				, "How many minutes before the start the room should be open (default: " + getAppointmentPreStartMinutes() + ")", VER_5_0_1);
 		addCfg(list, CONFIG_RECORDING_ENABLED, String.valueOf(true), Configuration.Type.BOOL, "Whether or not recording functionality is enabled", "6.0.0");
+		addCfg(list, CONFIG_THEME, getTheme(), Configuration.Type.STRING, "UI theme, possible values are Cerulean, Cosmo, Cyborg, Darkly, Flatly, "
+				+ "Journal, Litera, Lumen, Lux, Materia, Minty, Pulse, Sandstone, Simplex, Sketchy, Slate, Solar, Spacelab, Superhero, "
+				+ "United, Yeti", "6.1.0");
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {
