@@ -84,7 +84,7 @@
 		<wicket-bootstrap.version>5.0.4</wicket-bootstrap.version>
 		<font-awesome.version>5.15.2</font-awesome.version>
 		<spring.version>5.3.5</spring.version>
-		<tomcat.version>9.0.44</tomcat.version>
+		<tomcat.version>9.0.45</tomcat.version>
 		<ical4j.version>3.0.21</ical4j.version>
 		<cxf.version>3.4.3</cxf.version>
 		<io.prometheus.version>0.10.0</io.prometheus.version>
@@ -119,7 +119,7 @@
 		<jetty.version>9.4.38.v20210224</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.68</bcprov-jdk15on.version>
-		<mockito.version>3.8.0</mockito.version>
+		<mockito.version>3.9.0</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.16.0</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
