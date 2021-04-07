@@ -346,7 +346,7 @@ module.exports = class WbTools {
 						.confirmation({
 							confirmationEvent: 'om-clear-slide'
 							, onConfirm: function() {
-								OmUtil.wbAction({action: 'clearSlide', data: {wbId: wb.getId(), slide: slide}});
+								OmUtil.wbAction({action: 'clearSlide', data: {wbId: wb.getId(), slide: wb.slide}});
 							}
 						});
 					tools.find('.om-icon.save').click(function() {
