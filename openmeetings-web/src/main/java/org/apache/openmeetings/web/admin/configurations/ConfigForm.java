@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.configurations;
 
+import static org.apache.wicket.validation.validator.StringValidator.maximumLength;
+
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -153,7 +155,8 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 					validatable.error(new ValidationError(getString("error.cfg.exist")));
 				}
 			}
-		}));
+		}).add(maximumLength(255)));
+		valueS.add(maximumLength(255));
 		stringBox.add(valueS.setLabel(new ResourceModel("271"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		numberBox.add(valueN.setLabel(new ResourceModel("271"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		booleanBox.add(valueB.setLabel(new ResourceModel("271"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
