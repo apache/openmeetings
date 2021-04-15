@@ -363,6 +363,13 @@ module.exports = class WbTools {
 					//no-op
 			}
 		};
+		this.reactivateBtn() = () => {
+			const b = _getBtn();
+			if (__validBtn(b)) {
+				b.data().deactivate();
+				b.data().activate();
+			}
+		};
 		this.updateCoordinates = (o) => {
 			settings.find('.wb-dim-x').val(o.left);
 			settings.find('.wb-dim-y').val(o.top);

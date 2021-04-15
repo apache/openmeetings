@@ -65,11 +65,7 @@ module.exports = class Wb {
 					}
 					zoomBar.update(role, canvases.length);
 					if (ccount !== canvases.length) {
-						const b = _getBtn();
-						if (__validBtn(b)) {
-							b.data().deactivate();
-							b.data().activate();
-						}
+						WbTools.reactivateBtn();
 						self._showCurrentSlide();
 					}
 				}
