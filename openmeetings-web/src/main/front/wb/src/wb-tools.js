@@ -363,7 +363,7 @@ module.exports = class WbTools {
 					//no-op
 			}
 		};
-		this.reactivateBtn() = () => {
+		this.reactivateBtn = () => {
 			const b = _getBtn();
 			if (__validBtn(b)) {
 				b.data().deactivate();
