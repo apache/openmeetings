@@ -1,13 +1,6 @@
 <!--
 Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
-
-# Not implemented
-
-<div class="bd-callout bd-callout-danger">
-	Please NOTE: this functionality is not yet implemented in 5.0.x
-</div>
-
 # VoIP and SIP Integration
 
 There are multiple ways to integrate with VoIP and or SIP.
@@ -34,7 +27,7 @@ or for example somebody from the list of
 
 # Asterisk Integration
 
-You need Apache OpenMeetings <strong>version 5.1+</strong> to apply this guide!
+You need Apache OpenMeetings <strong>version 6.0+</strong> to apply this guide!
 
 You need Asterisk <strong>version 16+</strong> to apply this guide!
 
