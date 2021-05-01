@@ -54,7 +54,7 @@
 		<reflow-maven-skin.version>2.3.0</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-		<maven-project-info-reports-plugin.version>3.1.1</maven-project-info-reports-plugin.version>
+		<maven-project-info-reports-plugin.version>3.1.2</maven-project-info-reports-plugin.version>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
@@ -104,8 +104,8 @@
 		<dom4j.version>2.1.3</dom4j.version>
 		<commons-codec.version>1.15</commons-codec.version>
 		<commons-io.version>2.8.0</commons-io.version>
-		<postgresql.version>42.2.19</postgresql.version>
-		<mysql.version>8.0.23</mysql.version>
+		<postgresql.version>42.2.20</postgresql.version>
+		<mysql.version>8.0.24</mysql.version>
 		<mssql.version>9.2.1.jre11</mssql.version>
 		<ojdbc.version>19.10.0.0</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
