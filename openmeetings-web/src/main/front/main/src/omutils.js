@@ -75,7 +75,11 @@ function _notify(msg, tag, elseCallback) {
 			const opts = {
 					tag: tag
 				};
-			new Notification(msg, opts);
+			try {
+				new Notification(msg, opts);
+			} catch (e) {
+				console.error("Failed to create Notification" + e)
+			}
 		}
 		if (Notification.permission === 'granted') {
 			_newMessage();
