@@ -87,7 +87,7 @@
 		<tomcat.version>9.0.46</tomcat.version>
 		<ical4j.version>3.0.21</ical4j.version>
 		<cxf.version>3.4.3</cxf.version>
-		<io.prometheus.version>0.10.0</io.prometheus.version>
+		<io.prometheus.version>0.11.0</io.prometheus.version>
 		<aspectjtools.version>1.9.6</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.1</jettison.version>
@@ -99,7 +99,7 @@
 		<openjpa.version>3.2.0</openjpa.version>
 		<asterisk-java.version>3.12.0</asterisk-java.version>
 		<commons-dbcp.version>2.8.0</commons-dbcp.version>
-		<commons-pool2.version>2.9.0</commons-pool2.version>
+		<commons-pool2.version>2.10.0</commons-pool2.version>
 		<commons-cli.version>1.4</commons-cli.version>
 		<dom4j.version>2.1.3</dom4j.version>
 		<commons-codec.version>1.15</commons-codec.version>
@@ -119,7 +119,7 @@
 		<jetty.version>9.4.38.v20210224</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.68</bcprov-jdk15on.version>
-		<mockito.version>3.10.0</mockito.version>
+		<mockito.version>3.11.0</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.16.0</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
