@@ -57,7 +57,7 @@
 		<maven-project-info-reports-plugin.version>3.1.2</maven-project-info-reports-plugin.version>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
-		<maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
+		<maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
 		<maven-bundle-plugin.version>5.1.1</maven-bundle-plugin.version>
 		<maven-war-plugin.version>3.3.1</maven-war-plugin.version>
 		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
@@ -81,7 +81,7 @@
 		<wicket.version>9.3.0</wicket.version>
 		<wicket-jquery-ui.version>9.3.1</wicket-jquery-ui.version>
 		<wicketstuff.version>9.3.0</wicketstuff.version>
-		<wicket-bootstrap.version>5.0.4</wicket-bootstrap.version>
+		<wicket-bootstrap.version>5.0.5-SNAPSHOT</wicket-bootstrap.version>
 		<font-awesome.version>5.15.2</font-awesome.version>
 		<spring.version>5.3.8</spring.version>
 		<tomcat.version>9.0.46</tomcat.version>

@@ -29,7 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import org.apache.openmeetings.web.common.AbstractOmDateTimePicker;
+import org.apache.openmeetings.web.common.datetime.AbstractOmDateTimePicker;
 import org.junit.jupiter.api.Test;
 
 class TestDateTime {

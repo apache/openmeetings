@@ -40,6 +40,7 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.datetime.OmDateTimePicker;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
