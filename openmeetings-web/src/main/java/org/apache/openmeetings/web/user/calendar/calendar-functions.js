@@ -7,7 +7,8 @@ function onOmGotoClick() {
 	}
 	gotoSpan = gotoBtn.parent().find('.goto-span');
 	gotoSpan.datetimepicker({
-		format: 'L'
+		locale: $('#calendar').fullCalendar('option', 'locale')
+		, format: 'L'
 		, icons: {
 			time: 'fas fa-clock'
 			, date: 'fas fa-calendar'
