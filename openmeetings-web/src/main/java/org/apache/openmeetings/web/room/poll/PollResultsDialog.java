@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.room.poll;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior.newOkCancelDangerConfirm;
 
 import java.util.ArrayList;
@@ -334,14 +335,9 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 				public String getIdValue(RoomPoll object, int index) {
 					return object == null ? "" : "" + object.getId();
 				}
-			})).add(new AjaxFormComponentUpdatingBehavior("change") {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					dispForm.updateModel(select.getModelObject(), true, target);
-				}
-			}));
+			})).add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, target -> {
+				dispForm.updateModel(select.getModelObject(), true, target);
+			})));
 			updateModel(null);
 		}
 
@@ -375,14 +371,9 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 		protected void onInitialize() {
 			add(name, question, count);
 			chartType = new DropDownChoice<>("chartType", Model.of(chartSimple), List.of(chartSimple, chartPie));
-			add(chartType.add(new AjaxFormComponentUpdatingBehavior("change") {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					redraw(target, false);
-				}
-			}));
+			add(chartType.add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, target -> {
+				redraw(target, false);
+			})));
 			super.onInitialize();
 		}
 

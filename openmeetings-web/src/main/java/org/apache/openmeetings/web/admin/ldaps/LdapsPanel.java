@@ -62,16 +62,11 @@ public class LdapsPanel extends AdminBasePanel {
 				item.add(new Label("id"));
 				item.add(new Label("name"));
 				item.add(new Label("configFileName"));
-				item.add(new AjaxEventBehavior(EVT_CLICK) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						form.setModelObject(lc);
-						form.setNewRecordVisible(false);
-						target.add(form, listContainer);
-					}
-				});
+				item.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> {
+					form.setModelObject(lc);
+					form.setNewRecordVisible(false);
+					target.add(form, listContainer);
+				}));
 				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(lc.getId(), form.getModelObject().getId())));
 			}
 		};

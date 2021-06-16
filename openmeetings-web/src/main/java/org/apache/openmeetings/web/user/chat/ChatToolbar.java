@@ -213,14 +213,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 		toolbar.add(delBtn.setVisible(hasAdminLevel(getRights())).setOutputMarkupId(true)
 				.setOutputMarkupPlaceholderTag(true));
 		toolbar.add(save.setVisible(hasAdminLevel(getRights())).setOutputMarkupId(true)
-				.setOutputMarkupPlaceholderTag(true).add(new AjaxEventBehavior(EVT_CLICK) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						download.initiate(target);
-					}
-				}));
+				.setOutputMarkupPlaceholderTag(true).add(AjaxEventBehavior.onEvent(EVT_CLICK, download::initiate)));
 	}
 
 	private static JSONObject cleanMsg(String scope) {

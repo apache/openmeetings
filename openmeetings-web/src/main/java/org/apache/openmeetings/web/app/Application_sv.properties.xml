@@ -353,7 +353,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1137"><![CDATA[vill bjuda in dig till detta konferensrum:]]></entry>
 	<entry key="1138"><![CDATA[Inbjudningsmeddelande]]></entry>
 	<entry key="1143"><![CDATA[Tidszon]]></entry>
-	<entry key="1146"><![CDATA[Beskrivning]]></entry>
 	<entry key="1147"><![CDATA[Skapad av]]></entry>
 	<entry key="1151"><![CDATA[Ny {0} konferens:]]></entry>
 	<entry key="1152"><![CDATA[Detaljer:]]></entry>
@@ -554,6 +553,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.ERROR"><![CDATA[Fel]]></entry>
 	<entry key="admin.email.status.NONE"><![CDATA[None]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[Sänder]]></entry>
+	<entry key="admin.extra.group.label"><![CDATA[URL details]]></entry>
+	<entry key="admin.extra.link"><![CDATA[URL]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[dagar]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[Begränsningar aktiverade]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[Logga]]></entry>
@@ -826,6 +827,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="label.start"><![CDATA[Början]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Avbryt]]></entry>
+	<entry key="lbl.description"><![CDATA[Beskrivning]]></entry>
 	<entry key="lbl.email"><![CDATA[E-postadress]]></entry>
 	<entry key="lbl.enter"><![CDATA[Anslut]]></entry>
 	<entry key="lbl.general"><![CDATA[Allmänt]]></entry>
@@ -837,6 +839,9 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[E-posthantering]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
+	<entry key="main.menu.admin.extra"><![CDATA[Extra Menu]]></entry>
+	<entry key="main.menu.admin.extra.desc"><![CDATA[Custom links to room menu]]></entry>
+	<entry key="menu.extras"><![CDATA[Extras]]></entry>
 	<entry key="menu.polls"><![CDATA[Enkäter]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[Skaffa feedback utan att skapa en enkät]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[Skapa snabbenkät]]></entry>

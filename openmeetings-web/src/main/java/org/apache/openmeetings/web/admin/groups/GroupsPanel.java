@@ -75,17 +75,12 @@ public class GroupsPanel extends AdminBasePanel {
 					name.add(AttributeModifier.append("class", "external"));
 				}
 				item.add(name);
-				item.add(new AjaxEventBehavior(EVT_CLICK) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						form.setNewRecordVisible(false);
-						form.setModelObject(g);
-						form.updateView(target);
-						target.add(listContainer);
-					}
-				});
+				item.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> {
+					form.setNewRecordVisible(false);
+					form.setModelObject(g);
+					form.updateView(target);
+					target.add(listContainer);
+				}));
 				item.add(AttributeModifier.append(ATTR_CLASS, getRowClass(g.getId(), form.getModelObject().getId())));
 			}
 		};

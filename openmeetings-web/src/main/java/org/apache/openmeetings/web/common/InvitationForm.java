@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.CalendarHelper.getDate;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
 
 import java.time.LocalDateTime;
@@ -99,15 +100,10 @@ public abstract class InvitationForm extends Form<Invitation> {
 	@Override
 	protected void onInitialize() {
 		add(subject, message);
-		recipients.setLabel(new ResourceModel("216")).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				url.setModelObject(null);
-				updateButtons(target);
-			}
-		}).setOutputMarkupId(true);
+		recipients.setLabel(new ResourceModel("216")).setRequired(true).add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, target -> {
+			url.setModelObject(null);
+			updateButtons(target);
+		})).setOutputMarkupId(true);
 		add(new AjaxCheckBox("passwordProtected") {
 			private static final long serialVersionUID = 1L;
 
@@ -137,14 +133,9 @@ public abstract class InvitationForm extends Form<Invitation> {
 		add(from.setLabel(new ResourceModel("530")).setOutputMarkupId(true)
 				, to.setLabel(new ResourceModel("531")).setOutputMarkupId(true)
 				, timeZoneId.setOutputMarkupId(true));
-		timeZoneId.add(new AjaxFormComponentUpdatingBehavior("change") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				//no-op added to preserve selection
-			}
-		});
+		timeZoneId.add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, target -> {
+			//no-op added to preserve selection
+		}));
 		add(url.setOutputMarkupId(true));
 		add(lang, feedback.setOutputMarkupId(true));
 		super.onInitialize();

@@ -352,7 +352,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1137"><![CDATA[хотілося б запросити вас у кімнату для нарад:]]></entry>
 	<entry key="1138"><![CDATA[Запрошення]]></entry>
 	<entry key="1143"><![CDATA[Таймзона]]></entry>
-	<entry key="1146"><![CDATA[Опис]]></entry>
 	<entry key="1147"><![CDATA[Створено]]></entry>
 	<entry key="1151"><![CDATA[Нова конференція {0}:]]></entry>
 	<entry key="1152"><![CDATA[Деталі:]]></entry>
@@ -553,6 +552,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.ERROR"><![CDATA[Помилка]]></entry>
 	<entry key="admin.email.status.NONE"><![CDATA[Немає]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[Надсилається]]></entry>
+	<entry key="admin.extra.group.label"><![CDATA[URL details]]></entry>
+	<entry key="admin.extra.link"><![CDATA[URL]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[днів]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[Limits enabled]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[Logo]]></entry>
@@ -828,6 +829,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="label.start"><![CDATA[Початок]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Натисніть щоб відокремити панель]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Скасувати]]></entry>
+	<entry key="lbl.description"><![CDATA[Опис]]></entry>
 	<entry key="lbl.email"><![CDATA[E-mail:]]></entry>
 	<entry key="lbl.enter"><![CDATA[Вхід]]></entry>
 	<entry key="lbl.general"><![CDATA[Загальне]]></entry>
@@ -839,6 +841,9 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Управління листами]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Перевірка статусу надісланих листів]]></entry>
+	<entry key="main.menu.admin.extra"><![CDATA[Extra Menu]]></entry>
+	<entry key="main.menu.admin.extra.desc"><![CDATA[Custom links to room menu]]></entry>
+	<entry key="menu.extras"><![CDATA[Extras]]></entry>
 	<entry key="menu.polls"><![CDATA[Опитування]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[Gather feedback without creating a poll]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[Створити швидке опитування]]></entry>

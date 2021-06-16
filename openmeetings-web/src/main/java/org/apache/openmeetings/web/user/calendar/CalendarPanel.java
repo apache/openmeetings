@@ -282,15 +282,10 @@ public class CalendarPanel extends UserBasePanel {
 				final OmCalendar cal = item.getModelObject();
 				item.add(new WebMarkupContainer("item")
 						.add(new Label("name", cal.getTitle())));
-				item.add(new AjaxEventBehavior(EVT_CLICK) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						calendarDialog.show(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR, cal);
-						target.add(calendarDialog);
-					}
-				});
+				item.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> {
+					calendarDialog.show(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR, cal);
+					target.add(calendarDialog);
+				}));
 			}
 		});
 

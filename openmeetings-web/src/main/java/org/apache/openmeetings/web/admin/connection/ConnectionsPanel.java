@@ -132,36 +132,31 @@ public class ConnectionsPanel extends AdminBasePanel {
 					}.add(newOkCancelConfirm(this, getString("605"))));
 				}
 
-				item.add(new AjaxEventBehavior(EVT_CLICK) {
-					private static final long serialVersionUID = 1L;
+				item.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> {
+					Field[] ff = (item.getModelObject() instanceof KStreamDto ? KStreamDto.class : Client.class).getDeclaredFields();
+					RepeatingView lines = new RepeatingView("line");
+					Object c = item.getModelObject();
 
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						Field[] ff = (item.getModelObject() instanceof KStreamDto ? KStreamDto.class : Client.class).getDeclaredFields();
-						RepeatingView lines = new RepeatingView("line");
-						Object c = item.getModelObject();
-
-						for (Field f : ff) {
-							int mod = f.getModifiers();
-							if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) {
-								continue;
-							}
-							WebMarkupContainer line = new WebMarkupContainer(lines.newChildId());
-							line.add(new Label("name", f.getName()));
-							String val = "";
-							try {
-								f.setAccessible(true);
-								val = "" + f.get(c);
-							} catch (Exception e) {
-								//noop
-							}
-							line.add(new Label("value", val));
-							lines.add(line);
+					for (Field f : ff) {
+						int mod = f.getModifiers();
+						if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) {
+							continue;
 						}
-						details.addOrReplace(lines);
-						target.add(details.setVisible(true));
+						WebMarkupContainer line = new WebMarkupContainer(lines.newChildId());
+						line.add(new Label("name", f.getName()));
+						String val = "";
+						try {
+							f.setAccessible(true);
+							val = "" + f.get(c);
+						} catch (Exception e) {
+							//noop
+						}
+						line.add(new Label("value", val));
+						lines.add(line);
 					}
-				});
+					details.addOrReplace(lines);
+					target.add(details.setVisible(true));
+				}));
 
 				item.add(AttributeModifier.append(ATTR_CLASS, ROW_CLASS));
 			}

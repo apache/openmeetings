@@ -435,7 +435,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		try {
 			// get all users
 			TypedQuery<Long> query = em.createNamedQuery("selectMaxFromUsersWithSearch", Long.class);
-			query.setParameter("search", StringUtils.lowerCase(search));
+			query.setParameter("search", StringUtils.lowerCase(search, Locale.ROOT));
 			List<Long> ll = query.getResultList();
 			log.info("selectMaxFromUsers {}", ll.get(0));
 			return ll.get(0);

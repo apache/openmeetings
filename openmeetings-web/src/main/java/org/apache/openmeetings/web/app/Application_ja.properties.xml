@@ -352,7 +352,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1137"><![CDATA[会議への参加を依頼されています。依頼者＝]]></entry>
 	<entry key="1138"><![CDATA[参加依頼メッセージ]]></entry>
 	<entry key="1143"><![CDATA[タイムゾーン]]></entry>
-	<entry key="1146"><![CDATA[概要]]></entry>
 	<entry key="1147"><![CDATA[作成者]]></entry>
 	<entry key="1151"><![CDATA[{0}会議が設定されました:]]></entry>
 	<entry key="1152"><![CDATA[詳細:]]></entry>
@@ -553,6 +552,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.ERROR"><![CDATA[エラー]]></entry>
 	<entry key="admin.email.status.NONE"><![CDATA[無し]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[送信中]]></entry>
+	<entry key="admin.extra.group.label"><![CDATA[URL details]]></entry>
+	<entry key="admin.extra.link"><![CDATA[URL]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[日]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[制限を有効化]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[ロゴ]]></entry>
@@ -829,6 +830,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="label.start"><![CDATA[開始]]></entry>
 	<entry key="label.undock.panel"><![CDATA[クリックしてパネルを切り離す]]></entry>
 	<entry key="lbl.cancel"><![CDATA[キャンセル]]></entry>
+	<entry key="lbl.description"><![CDATA[概要]]></entry>
 	<entry key="lbl.email"><![CDATA[メールアドレス:]]></entry>
 	<entry key="lbl.enter"><![CDATA[入室]]></entry>
 	<entry key="lbl.general"><![CDATA[一般]]></entry>
@@ -840,6 +842,9 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[電子メール管理]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[システムで使用する電子メールのチェックを実行]]></entry>
+	<entry key="main.menu.admin.extra"><![CDATA[Extra Menu]]></entry>
+	<entry key="main.menu.admin.extra.desc"><![CDATA[Custom links to room menu]]></entry>
+	<entry key="menu.extras"><![CDATA[Extras]]></entry>
 	<entry key="menu.polls"><![CDATA[投票]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[投票を作成せずにフィードバックを収集]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[クイック投票を作成]]></entry>

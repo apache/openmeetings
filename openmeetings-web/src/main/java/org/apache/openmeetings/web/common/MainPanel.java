@@ -350,6 +350,9 @@ public class MainPanel extends Panel {
 			if (isAdmin) {
 				l.add(getSubItem("main.menu.admin.email", "main.menu.admin.email.desc", MenuActions.ADMIN_EMAIL));
 			}
+			if (isAdmin || isGrpAdmin) {
+				l.add(getSubItem("main.menu.admin.extra", "main.menu.admin.extra.desc", MenuActions.ADMIN_EXTRA));
+			}
 			mmenu.add(new OmMenuItem(getString("6"), l));
 		}
 		return mmenu;

@@ -229,14 +229,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				del.setIconType(FontAwesome5IconType.times_s)
 						.add(newOkCancelDangerConfirm(this, getString("833")));
 				item.add(del);
-				item.add(new AjaxEventBehavior(EVT_CLICK) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						selectFolder(item, item.getModelObject().getId(), target);
-					}
-				});
+				item.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> selectFolder(item, item.getModelObject().getId(), target)));
 				setFolderClass(item);
 			}
 		}).setOutputMarkupId(true));
@@ -281,22 +274,17 @@ public class MessagesContactsPanel extends UserBasePanel {
 				item.add(new Label("from", getDisplayName(m.getFrom())));
 				item.add(new Label("subject", m.getSubject()));
 				item.add(new Label("send", getDateFormat().format(m.getInserted())));
-				item.add(new AjaxEventBehavior(EVT_CLICK) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						long selected = id;
-						if (selectedMessages.contains(id)) {
-							selectedMessages.remove(id);
-							selected = selectedMessages.isEmpty() ? -1 : selectedMessages.iterator().next();
-						} else {
-							selectedMessages.add(id);
-						}
-						selectMessage(selected, target);
-						target.add(container);
+				item.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> {
+					long selected = id;
+					if (selectedMessages.contains(id)) {
+						selectedMessages.remove(id);
+						selected = selectedMessages.isEmpty() ? -1 : selectedMessages.iterator().next();
+					} else {
+						selectedMessages.add(id);
 					}
-				});
+					selectMessage(selected, target);
+					target.add(container);
+				}));
 				StringBuilder cssClass = new StringBuilder(m.getIsRead() ? "" : CSS_UNREAD);
 				if (selectedMessages.contains(id)) {
 					cssClass.append(" selected");
@@ -461,24 +449,14 @@ public class MessagesContactsPanel extends UserBasePanel {
 					item.add(AttributeModifier.append(ATTR_CLASS, CSS_UNREAD));
 				}
 				item.add(new Label("name", getName(uc)));
-				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior(EVT_CLICK) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						ContactsHelper.acceptUserContact(contactId);
-						updateContacts(target);
-					}
-				}).setVisible(uc.isPending()));
-				item.add(new WebMarkupContainer("decline").add(new AjaxEventBehavior(EVT_CLICK) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						contactDao.delete(contactId);
-						updateContacts(target);
-					}
-				}).setVisible(uc.isPending()));
+				item.add(new WebMarkupContainer("accept").add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> {
+					ContactsHelper.acceptUserContact(contactId);
+					updateContacts(target);
+				})).setVisible(uc.isPending()));
+				item.add(new WebMarkupContainer("decline").add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> {
+					contactDao.delete(contactId);
+					updateContacts(target);
+				})).setVisible(uc.isPending()));
 				item.add(new WebMarkupContainer("view").add(AttributeModifier.append("data-user-id", userId)));
 				item.add(new WebMarkupContainer("message").add(AttributeModifier.append("data-user-id", userId)).setVisible(!uc.isPending()));
 				BootstrapAjaxLink<String> del = new BootstrapAjaxLink<>("delete", Buttons.Type.Outline_Danger) {

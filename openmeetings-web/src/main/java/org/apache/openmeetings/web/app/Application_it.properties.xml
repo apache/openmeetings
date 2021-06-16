@@ -352,7 +352,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1137"><![CDATA[vuole invitarti alla stanza delle conferenze:]]></entry>
 	<entry key="1138"><![CDATA[Messaggio di invito]]></entry>
 	<entry key="1143"><![CDATA[Fuso orario]]></entry>
-	<entry key="1146"><![CDATA[Descrizione]]></entry>
 	<entry key="1147"><![CDATA[Creato da]]></entry>
 	<entry key="1151"><![CDATA[{0} nuove conferenze:]]></entry>
 	<entry key="1152"><![CDATA[Dettagli:]]></entry>
@@ -553,6 +552,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.ERROR"><![CDATA[Errore]]></entry>
 	<entry key="admin.email.status.NONE"><![CDATA[Nessuno]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[Spedizione]]></entry>
+	<entry key="admin.extra.group.label"><![CDATA[URL details]]></entry>
+	<entry key="admin.extra.link"><![CDATA[URL]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[giorni]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[Limits enabled]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[Logo]]></entry>
@@ -830,6 +831,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="label.start"><![CDATA[Inizio]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[annulla]]></entry>
+	<entry key="lbl.description"><![CDATA[Descrizione]]></entry>
 	<entry key="lbl.email"><![CDATA[EMail:]]></entry>
 	<entry key="lbl.enter"><![CDATA[Entra]]></entry>
 	<entry key="lbl.general"><![CDATA[Generale]]></entry>
@@ -841,6 +843,9 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Gestione Email]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Verifica elaborazione e-mails del sistema]]></entry>
+	<entry key="main.menu.admin.extra"><![CDATA[Extra Menu]]></entry>
+	<entry key="main.menu.admin.extra.desc"><![CDATA[Custom links to room menu]]></entry>
+	<entry key="menu.extras"><![CDATA[Extras]]></entry>
 	<entry key="menu.polls"><![CDATA[Sondaggi]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[Gather feedback without creating a poll]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[Crea un sondaggio rapido]]></entry>

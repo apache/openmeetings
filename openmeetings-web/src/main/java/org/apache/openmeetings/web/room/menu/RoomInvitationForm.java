@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room.menu;
 
 import static org.apache.openmeetings.web.app.WebSession.getRights;
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -87,15 +88,10 @@ public class RoomInvitationForm extends InvitationForm {
 			}
 		}));
 		groupContainer.add(
-			groups.setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					url.setModelObject(null);
-					updateButtons(target);
-				}
-			}).setOutputMarkupId(true)
+			groups.setRequired(true).add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, target -> {
+				url.setModelObject(null);
+				updateButtons(target);
+			})).setOutputMarkupId(true)
 			, new Radio<>("group", Model.of(InviteeType.group))
 		);
 		rdi.add(recipients, groupContainer.setVisible(showGroups));

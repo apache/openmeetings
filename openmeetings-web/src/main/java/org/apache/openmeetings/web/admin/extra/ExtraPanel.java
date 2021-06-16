@@ -16,75 +16,74 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.admin.email;
+package org.apache.openmeetings.web.admin.extra;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 
-import org.apache.openmeetings.db.dao.basic.MailMessageDao;
-import org.apache.openmeetings.db.entity.basic.MailMessage;
+import org.apache.openmeetings.db.dao.room.ExtraMenuDao;
+import org.apache.openmeetings.db.entity.room.ExtraMenu;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
-import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.data.SearchableGroupAdminDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 
-public class EmailPanel extends AdminBasePanel {
+@AuthorizeInstantiation({"ADMIN", "GROUP_ADMIN"})
+public class ExtraPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer list = new WebMarkupContainer("list");
-	private final EmailForm form;
+	private ExtraForm form;
 
-	public EmailPanel(String id) {
+	public ExtraPanel(String id) {
 		super(id);
-		SearchableDataView<MailMessage> dataView = new SearchableDataView<>("email",
-				new SearchableDataProvider<>(MailMessageDao.class))
+	}
+
+	@Override
+	protected void onInitialize() {
+		SearchableDataView<ExtraMenu> dataView = new SearchableDataView<>("menu",
+				new SearchableGroupAdminDataProvider<>(ExtraMenuDao.class))
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(Item<MailMessage> item) {
-				final MailMessage m = item.getModelObject();
+			protected void populateItem(Item<ExtraMenu> item) {
+				final ExtraMenu m = item.getModelObject();
 				item.add(new Label("id"));
-				item.add(new Label("status", getString("admin.email.status." + m.getStatus().name())));
-				item.add(new Label("subject"));
+				item.add(new Label("name"));
+				item.add(new Label("link"));
 				item.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> {
 					form.setModelObject(m);
 					target.add(form, list);
 				}));
-				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(m)));
+				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(m.getId(), form.getModelObject().getId())));
 			}
 		};
 		add(list.add(dataView).setOutputMarkupId(true));
 		final PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = 1L;
+			private static final long serialVersionUID = -1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				target.add(list);
 			}
 		};
-		DataViewContainer<MailMessage> container = new DataViewContainer<>(list, dataView, navigator);
+		DataViewContainer<ExtraMenu> container = new DataViewContainer<>(list, dataView, navigator);
 		container.addLink(new OmOrderByBorder<>("orderById", "id", container))
-				.addLink(new OmOrderByBorder<>("orderBySubject", "subject", container))
-				.addLink(new OmOrderByBorder<>("orderByStatus", "status", container));
+				.addLink(new OmOrderByBorder<>("orderByName", "name", container))
+				.addLink(new OmOrderByBorder<>("orderByLink", "link", container));
 		add(container.getLinks());
 		add(navigator);
 
-		form = new EmailForm("form", list, new MailMessage());
+		form = new ExtraForm("form", list, new ExtraMenu());
 		add(form);
-	}
-
-	private StringBuilder getRowClass(final MailMessage m) {
-		StringBuilder sb = getRowClass(m.getId(), form.getModelObject().getId());
-		if (MailMessage.Status.ERROR == m.getStatus()) {
-			sb.append(" bg-warning");
-		}
-		return sb;
+		super.onInitialize();
 	}
 }
