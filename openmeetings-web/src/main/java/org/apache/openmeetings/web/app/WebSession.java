@@ -37,7 +37,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -65,7 +64,6 @@ import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.db.util.LocaleHelper;
 import org.apache.openmeetings.util.OmException;
-import org.apache.openmeetings.web.app.ClientManager.InstantToken;
 import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
@@ -267,13 +265,12 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	public void checkToken(StringValue intoken) {
-		Optional<InstantToken> token = cm.getToken(intoken);
-		if (token.isPresent()) {
+		cm.getToken(intoken).ifPresent(token -> {
 			invalidateNow();
-			signIn(userDao.get(token.get().getUserId()));
-			log.debug("Cluster:: Token for room {} is found, signedIn ? {}", token.get().getRoomId(), userId != null);
-			area = RoomEnterBehavior.getRoomUrlFragment(token.get().getRoomId());
-		}
+			signIn(userDao.get(token.getUserId()));
+			log.debug("Cluster:: Token for room {} is found, signedIn ? {}", token.getRoomId(), userId != null);
+			area = RoomEnterBehavior.getRoomUrlFragment(token.getRoomId());
+		});
 	}
 
 	public boolean signIn(String secureHash, boolean markUsed) {

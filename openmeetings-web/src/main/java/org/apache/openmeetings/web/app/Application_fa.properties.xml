@@ -352,7 +352,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1137"><![CDATA[آیا مایلید شما را به اتاق کنفرانس دعوت کنم؟]]></entry>
 	<entry key="1138"><![CDATA[پیام دعوت]]></entry>
 	<entry key="1143"><![CDATA[منطقه زمانی]]></entry>
-	<entry key="1146"><![CDATA[توضیح]]></entry>
 	<entry key="1147"><![CDATA[ایجاد شده توسط]]></entry>
 	<entry key="1151"><![CDATA[کنفرانس جدید: {0}]]></entry>
 	<entry key="1152"><![CDATA[جزییات:]]></entry>
@@ -553,6 +552,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.ERROR"><![CDATA[خطا]]></entry>
 	<entry key="admin.email.status.NONE"><![CDATA[هیچ کدام]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[ارسال]]></entry>
+	<entry key="admin.extra.group.label"><![CDATA[URL details]]></entry>
+	<entry key="admin.extra.link"><![CDATA[URL]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[روزها]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[فعال کردن محدودیت ها]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[لوگو]]></entry>
@@ -825,6 +826,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="label.start"><![CDATA[شروع]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="lbl.cancel"><![CDATA[انصراف]]></entry>
+	<entry key="lbl.description"><![CDATA[توضیح]]></entry>
 	<entry key="lbl.email"><![CDATA[ایمیل:]]></entry>
 	<entry key="lbl.enter"><![CDATA[ورود]]></entry>
 	<entry key="lbl.general"><![CDATA[کلی]]></entry>
@@ -836,6 +838,9 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[مدیریت پست الکترونیک]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[اجرای ایمیل ها را توسط سیستم بررسی کنید]]></entry>
+	<entry key="main.menu.admin.extra"><![CDATA[Extra Menu]]></entry>
+	<entry key="main.menu.admin.extra.desc"><![CDATA[Custom links to room menu]]></entry>
+	<entry key="menu.extras"><![CDATA[Extras]]></entry>
 	<entry key="menu.polls"><![CDATA[نظرسنجی ها]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[Gather feedback without creating a poll]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[Create Quick Poll]]></entry>

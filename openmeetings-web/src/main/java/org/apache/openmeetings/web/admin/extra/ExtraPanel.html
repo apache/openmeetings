@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+-->
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+	<div class="adminPanelColumnTable col-6">
+		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
+		<table class="list-table table-striped table-hover">
+			<thead>
+				<tr>
+					<th class="col-1"><span wicket:id="orderById"></span><wicket:message key="188" /></th>
+					<th class="col-5"><span wicket:id="orderByName"></span><wicket:message key="165" /></th>
+					<th class="col-6"><span wicket:id="orderByLink"></span><wicket:message key="admin.extra.link" /></th>
+				</tr>
+			</thead>
+			<tbody wicket:id="list">
+				<tr wicket:id="menu">
+					<td class="col-1"><div class="col-wrapper"><span wicket:id="id"></span></div></td>
+					<td class="col-5"><div class="col-wrapper"><span wicket:id="name"></span></div></td>
+					<td class="col-6"><div class="col-wrapper"><span wicket:id="link"></span></div></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="adminPanelColumnForm col-6">
+		<form wicket:id="form" class="adminForm">
+			<div wicket:id="buttons"></div>
+			<div class="scrollcontent" id="adminForm">
+				<fieldset>
+					<legend><wicket:message key="admin.extra.group.label" /></legend>
+					<div class="formelement">
+						<label wicket:for="name" class="col-3 text-right"><wicket:message key="165" /></label>
+						<input type="text" wicket:id="name" class="col-8"/>
+					</div>
+					<div class="formelement">
+						<label wicket:for="link" class="col-3 text-right"><wicket:message key="admin.extra.link" /></label>
+						<input type="text" wicket:id="link" class="col-8"/>
+					</div>
+					<div class="formelement">
+						<label wicket:for="description" class="col-3 text-right"><wicket:message key="lbl.description" /></label>
+						<textarea wicket:id="description" class="col-8"></textarea>
+					</div>
+					<div class="formelement">
+						<label wicket:for="groups" class="col-3 text-right"><wicket:message key="126" /></label>
+						<div class="om-select2 p-0 d-inline-block col-8"><select class="input w-100" wicket:id="groups"></select></div>
+					</div>
+				</fieldset>
+			</div>
+		</form>
+	</div>
+</wicket:extend>
+</html>

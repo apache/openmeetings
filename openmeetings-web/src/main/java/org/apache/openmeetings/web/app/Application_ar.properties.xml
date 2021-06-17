@@ -352,7 +352,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1137"><![CDATA[يود دعوتك إلى غرفة الاجتماعات:]]></entry>
 	<entry key="1138"><![CDATA[رسالة دعوة]]></entry>
 	<entry key="1143"><![CDATA[المنطقه الزمنيه]]></entry>
-	<entry key="1146"><![CDATA[الوصف]]></entry>
 	<entry key="1147"><![CDATA[انشأ من قبل]]></entry>
 	<entry key="1151"><![CDATA[مؤتمر {0} جديد:]]></entry>
 	<entry key="1152"><![CDATA[التفاصيل:]]></entry>
@@ -553,6 +552,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.ERROR"><![CDATA[خطأ]]></entry>
 	<entry key="admin.email.status.NONE"><![CDATA[لا شيء]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[إرسال]]></entry>
+	<entry key="admin.extra.group.label"><![CDATA[URL details]]></entry>
+	<entry key="admin.extra.link"><![CDATA[URL]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[ايام]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[تمكين الحدود]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[شعار]]></entry>
@@ -828,6 +829,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="label.start"><![CDATA[بداية]]></entry>
 	<entry key="label.undock.panel"><![CDATA[انقر لإلغاء قفل اللوحة]]></entry>
 	<entry key="lbl.cancel"><![CDATA[الغاء]]></entry>
+	<entry key="lbl.description"><![CDATA[الوصف]]></entry>
 	<entry key="lbl.email"><![CDATA[البريد الإلكتروني]]></entry>
 	<entry key="lbl.enter"><![CDATA[أدخل]]></entry>
 	<entry key="lbl.general"><![CDATA[عام]]></entry>
@@ -839,6 +841,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="lbl.video"><![CDATA[فيديو]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[إدارة البريد الإلكتروني]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[تحقق من معالجة رسائل البريد الإلكتروني بواسطة النظام]]></entry>
+	<entry key="main.menu.admin.extra"><![CDATA[Extra Menu]]></entry>
+	<entry key="main.menu.admin.extra.desc"><![CDATA[Custom links to room menu]]></entry>
+	<entry key="menu.extras"><![CDATA[Extras]]></entry>
 	<entry key="menu.polls"><![CDATA[استطلاعات الرأي]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[جمع الملاحظات دون إنشاء استطلاع]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[إنشاء استطلاع سريع]]></entry>

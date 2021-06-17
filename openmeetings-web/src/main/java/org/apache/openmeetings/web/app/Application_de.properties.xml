@@ -352,7 +352,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1137"><![CDATA[möchte Sie in den Konferenzraum einladen:]]></entry>
 	<entry key="1138"><![CDATA[Einladung]]></entry>
 	<entry key="1143"><![CDATA[Zeitzone]]></entry>
-	<entry key="1146"><![CDATA[Beschreibung]]></entry>
 	<entry key="1147"><![CDATA[Erstellt von]]></entry>
 	<entry key="1151"><![CDATA[Neue {0} Konferenz:]]></entry>
 	<entry key="1152"><![CDATA[Details:]]></entry>
@@ -553,6 +552,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.ERROR"><![CDATA[Fehler]]></entry>
 	<entry key="admin.email.status.NONE"><![CDATA[keine]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[senden]]></entry>
+	<entry key="admin.extra.group.label"><![CDATA[URL details]]></entry>
+	<entry key="admin.extra.link"><![CDATA[URL]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[Tage]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[Begrenzungen aktiv]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[Logo]]></entry>
@@ -631,7 +632,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="error.contact.approved"><![CDATA[Der Nutzer wurde bereits bestätigt.]]></entry>
 	<entry key="error.contact.denied"><![CDATA[Der Nutzer wurde bereits abgelehnt.]]></entry>
 	<entry key="error.email.inuse"><![CDATA[Die E-Mail ist bereits registriert.]]></entry>
-	<entry key="error.hash.invalid"><![CDATA[Die Einladung ist nicht mehr gültig.]]></entry>
+	<entry key="error.hash.invalid"><![CDATA[Die Einladung ist nicht gültig]]></entry>
 	<entry key="error.hash.period"><![CDATA[Ihr Einladungscode ist ungültig. Er kann nur im angegebenen Zeitraum genutzt werden:]]></entry>
 	<entry key="error.hash.used"><![CDATA[Die Einladung ist nicht mehr gültig.]]></entry>
 	<entry key="error.login.inuse"><![CDATA[Der Nutzername ist bereits vergeben]]></entry>
@@ -834,6 +835,7 @@ Bitte <tt>openmeetings.log</tt> prüfen und die OpenMeetings-Entwickeler kontakt
 	<entry key="label.start"><![CDATA[Start]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Klicken, um das Panel abzudocken]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Abbrechen]]></entry>
+	<entry key="lbl.description"><![CDATA[Beschreibung]]></entry>
 	<entry key="lbl.email"><![CDATA[E-Mail:]]></entry>
 	<entry key="lbl.enter"><![CDATA[Betreten]]></entry>
 	<entry key="lbl.general"><![CDATA[Generell]]></entry>
@@ -845,6 +847,9 @@ Bitte <tt>openmeetings.log</tt> prüfen und die OpenMeetings-Entwickeler kontakt
 	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[E-Mail Management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[E-Mail-Prozess im System überprüfen]]></entry>
+	<entry key="main.menu.admin.extra"><![CDATA[Extra Menu]]></entry>
+	<entry key="main.menu.admin.extra.desc"><![CDATA[Custom links to room menu]]></entry>
+	<entry key="menu.extras"><![CDATA[Extras]]></entry>
 	<entry key="menu.polls"><![CDATA[Umfragen]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[Feedback ohne Umfage anzulegegen ]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[Schnelle Abstimmung erzeugen]]></entry>

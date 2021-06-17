@@ -71,16 +71,11 @@ public class UsersPanel extends AdminBasePanel {
 				item.add(new Label("login"));
 				item.add(new Label("firstname"));
 				item.add(new Label("lastname"));
-				item.add(new AjaxEventBehavior(EVT_CLICK) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						form.setModelObject(userDao.get(userId));
-						form.setNewRecordVisible(false);
-						form.update(target);
-					}
-				});
+				item.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> {
+					form.setModelObject(userDao.get(userId));
+					form.setNewRecordVisible(false);
+					form.update(target);
+				}));
 				StringBuilder cl = getRowClass(u.getId(), form.getModelObject().getId());
 				if (u.isDeleted()) {
 					cl.append(" deleted");

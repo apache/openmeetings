@@ -68,16 +68,11 @@ public class ConfigsPanel extends AdminBasePanel {
 				item.add(new Label("id"));
 				item.add(new Label("key"));
 				item.add(new Label("value"));
-				item.add(new AjaxEventBehavior(EVT_CLICK) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						form.setNewRecordVisible(false);
-						form.setModelObject(cfgDao.get(c.getId())); // force fetch lazy user
-						target.add(form, listContainer);
-					}
-				});
+				item.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> {
+					form.setNewRecordVisible(false);
+					form.setModelObject(cfgDao.get(c.getId())); // force fetch lazy user
+					target.add(form, listContainer);
+				}));
 				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(c.getId(), form.getModelObject().getId())));
 			}
 		};

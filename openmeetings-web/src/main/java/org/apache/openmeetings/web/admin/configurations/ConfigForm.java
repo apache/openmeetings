@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.configurations;
 
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 import static org.apache.wicket.validation.validator.StringValidator.maximumLength;
 
 import java.util.List;
@@ -137,14 +138,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 				}
 				return null;
 			}
-		}).setLabel(new ResourceModel("45")).add(new AjaxFormComponentUpdatingBehavior("change") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				update(target);
-			}
-		}));
+		}).setLabel(new ResourceModel("45")).add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, this::update)));
 		add(new RequiredTextField<String>("key").setLabel(new ResourceModel("265")).add(new IValidator<String>(){
 			private static final long serialVersionUID = 1L;
 

@@ -44,6 +44,7 @@
 		<class>org.apache.openmeetings.db.entity.room.RoomModerator</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomPoll</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomPollAnswer</class>
+		<class>org.apache.openmeetings.db.entity.room.ExtraMenu</class>
 		<class>org.apache.openmeetings.db.entity.server.LdapConfig</class>
 		<class>org.apache.openmeetings.db.entity.server.OAuthServer</class>
 		<class>org.apache.openmeetings.db.entity.server.Sessiondata</class>

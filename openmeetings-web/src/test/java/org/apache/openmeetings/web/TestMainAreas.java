@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_CONFIG;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_CONNECTION;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_EMAIL;
+import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_EXTRA;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_GROUP;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_LANG;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_LDAP;
@@ -45,6 +46,7 @@ import org.apache.openmeetings.web.admin.backup.BackupPanel;
 import org.apache.openmeetings.web.admin.configurations.ConfigsPanel;
 import org.apache.openmeetings.web.admin.connection.ConnectionsPanel;
 import org.apache.openmeetings.web.admin.email.EmailPanel;
+import org.apache.openmeetings.web.admin.extra.ExtraPanel;
 import org.apache.openmeetings.web.admin.groups.GroupsPanel;
 import org.apache.openmeetings.web.admin.labels.LangPanel;
 import org.apache.openmeetings.web.admin.ldaps.LdapsPanel;
@@ -252,6 +254,16 @@ class TestMainAreas extends AbstractWicketTester {
 	@Test
 	void testAdminEmail1() throws OmException {
 		checkUnauthArea(AreaKeys.admin, TYPE_EMAIL, groupAdminUsername, regularUsername);
+	}
+
+	@Test
+	void testAdminExtras() throws OmException {
+		checkArea(AreaKeys.admin, TYPE_EXTRA, ExtraPanel.class, adminUsername, groupAdminUsername);
+	}
+
+	@Test
+	void testAdminExtras1() throws OmException {
+		checkUnauthArea(AreaKeys.admin, TYPE_EXTRA, regularUsername);
 	}
 
 	@Test

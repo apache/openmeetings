@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user.calendar;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior.newOkCancelDangerConfirm;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
@@ -383,23 +384,13 @@ public class AppointmentDialog extends Modal<Appointment> {
 				, new Radio<>("group", Model.of(InviteeType.group))
 			);
 			if (showGroups) {
-				groups.add(new AjaxFormComponentUpdatingBehavior("change") {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onUpdate(AjaxRequestTarget target) {
-						// added to update model
-					}
-				}).setEnabled(false);
+				groups.add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, target -> {
+					// added to update model
+				})).setEnabled(false);
 			}
-			rdi.add(attendees.add(new AjaxFormComponentUpdatingBehavior("change") {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onUpdate(AjaxRequestTarget target) {
-						// added to update model
-					}
-				})
+			rdi.add(attendees.add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, target -> {
+					// added to update model
+				}))
 				, groupContainer.setVisible(showGroups)
 			);
 			rdi.add(new Radio<>("user", Model.of(InviteeType.user)));

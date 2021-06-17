@@ -63,20 +63,15 @@ public class InvitationsPanel extends UserBasePanel {
 				item.add(new Label("id"));
 				item.add(new Label("valid"/*, getString("admin.email.status." + m.getStatus().name())*/));
 				item.add(new Label("invitee", formatUser(i.getInvitee())));
-				item.add(new AjaxEventBehavior(EVT_CLICK) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						if (i.getId().equals(selected)) {
-							selected = null;
-						} else {
-							selected = i.getId();
-						}
-						form.setModelObject(i);
-						target.add(form, list);
+				item.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> {
+					if (i.getId().equals(selected)) {
+						selected = null;
+					} else {
+						selected = i.getId();
 					}
-				});
+					form.setModelObject(i);
+					target.add(form, list);
+				}));
 				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(i)));
 			}
 		};

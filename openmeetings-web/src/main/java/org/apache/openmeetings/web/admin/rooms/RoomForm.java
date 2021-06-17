@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.admin.AdminUserChoiceProvider.PAGE_SIZ
 import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior.newOkCancelDangerConfirm;
 import static org.apache.wicket.validation.validator.StringValidator.maximumLength;
 
@@ -277,35 +278,30 @@ public class RoomForm extends AdminBaseForm<Room> {
 			}
 		});
 		moderatorChoice.getSettings().setCloseOnSelect(true);
-		add(moderatorChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				Room r = RoomForm.this.getModelObject();
-				User u = moderator2add.getObject();
-				boolean found = false;
-				if (u != null) {
-					if (r.getModerators() == null) {
-						r.setModerators(new ArrayList<>());
-					}
-					for (RoomModerator rm : r.getModerators()) {
-						if (rm.getUser().getId().equals(u.getId())) {
-							found = true;
-							break;
-						}
-					}
-					if (!found) {
-						RoomModerator rm = new RoomModerator();
-						rm.setRoomId(r.getId());
-						rm.setUser(u);
-						r.getModerators().add(0, rm);
-						moderator2add.setObject(null);
-						target.add(moderatorContainer, moderatorChoice);
+		add(moderatorChoice.add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, target -> {
+			Room r = RoomForm.this.getModelObject();
+			User u = moderator2add.getObject();
+			boolean found = false;
+			if (u != null) {
+				if (r.getModerators() == null) {
+					r.setModerators(new ArrayList<>());
+				}
+				for (RoomModerator rm : r.getModerators()) {
+					if (rm.getUser().getId().equals(u.getId())) {
+						found = true;
+						break;
 					}
 				}
+				if (!found) {
+					RoomModerator rm = new RoomModerator();
+					rm.setRoomId(r.getId());
+					rm.setUser(u);
+					r.getModerators().add(0, rm);
+					moderator2add.setObject(null);
+					target.add(moderatorContainer, moderatorChoice);
+				}
 			}
-		}).setOutputMarkupId(true));
+		})).setOutputMarkupId(true));
 		add(moderatorContainer.add(new ListView<RoomModerator>("moderators") {
 			private static final long serialVersionUID = 1L;
 
