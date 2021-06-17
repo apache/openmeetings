@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.admin.groups;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 
 import java.util.Iterator;
@@ -70,6 +71,7 @@ public class GroupsPanel extends AdminBasePanel {
 			protected void populateItem(Item<Group> item) {
 				final Group g = item.getModelObject();
 				item.add(new Label("id"));
+				item.add(new WebMarkupContainer("default").setVisible(g.getId().equals(getDefaultGroup())));
 				Label name = new Label("name");
 				if (g.isExternal()) {
 					name.add(AttributeModifier.append("class", "external"));
