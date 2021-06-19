@@ -552,8 +552,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.ERROR"><![CDATA[خطأ]]></entry>
 	<entry key="admin.email.status.NONE"><![CDATA[لا شيء]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[إرسال]]></entry>
-	<entry key="admin.extra.group.label"><![CDATA[URL details]]></entry>
-	<entry key="admin.extra.link"><![CDATA[URL]]></entry>
+	<entry key="admin.extra.group.label"><![CDATA[تفاصيل الرابط]]></entry>
+	<entry key="admin.extra.link"><![CDATA[الرابط]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[ايام]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[تمكين الحدود]]></entry>
 	<entry key="admin.group.form.logo"><![CDATA[شعار]]></entry>
@@ -841,9 +841,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="lbl.video"><![CDATA[فيديو]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[إدارة البريد الإلكتروني]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[تحقق من معالجة رسائل البريد الإلكتروني بواسطة النظام]]></entry>
-	<entry key="main.menu.admin.extra"><![CDATA[Extra Menu]]></entry>
-	<entry key="main.menu.admin.extra.desc"><![CDATA[Custom links to room menu]]></entry>
-	<entry key="menu.extras"><![CDATA[Extras]]></entry>
+	<entry key="main.menu.admin.extra"><![CDATA[قائمة اضافية]]></entry>
+	<entry key="main.menu.admin.extra.desc"><![CDATA[روابط مكيفة لقائمة الغرفة]]></entry>
+	<entry key="menu.extras"><![CDATA[إضافات]]></entry>
 	<entry key="menu.polls"><![CDATA[استطلاعات الرأي]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[جمع الملاحظات دون إنشاء استطلاع]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[إنشاء استطلاع سريع]]></entry>
