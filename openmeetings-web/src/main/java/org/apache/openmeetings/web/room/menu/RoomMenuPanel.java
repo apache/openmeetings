@@ -208,7 +208,6 @@ public class RoomMenuPanel extends Panel {
 		boolean moder = room.getClient().hasRight(Room.Right.MODERATOR);
 		actionsSubMenu.update(moder, notExternalUser);
 		pollsSubMenu.update(moder, notExternalUser, r);
-		extrasSubMenu.update(moder);
 		menuPanel.update(handler);
 		StringBuilder roomClass = new StringBuilder("room name");
 		String roomTitle = "";

@@ -64,13 +64,10 @@ public class ExtrasSubMenu implements Serializable {
 				}
 			});
 		}
+		extraMenu.setVisible(extraMenu.hasItems());
 	}
 
 	OmMenuItem getMenu() {
 		return extraMenu;
-	}
-
-	public void update(final boolean moder) {
-		extraMenu.setVisible(moder);
 	}
 }

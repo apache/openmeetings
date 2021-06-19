@@ -86,6 +86,10 @@ public class OmMenuItem implements INavbarComponent {
 		this.visible = visible;
 	}
 
+	public boolean hasItems() {
+		return !items.isEmpty();
+	}
+
 	@Override
 	public AbstractLink create(String markupId) {
 		AbstractLink item;
