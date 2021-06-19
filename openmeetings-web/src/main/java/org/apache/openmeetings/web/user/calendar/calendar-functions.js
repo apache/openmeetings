@@ -29,7 +29,7 @@ function onOmGotoClick() {
 	gotoSpan
 		.off()
 		.on('hide.datetimepicker', function(e){
-			$('#calendar').fullCalendar('gotoDate', e.date.format('YYYY-MM-DD'));
+			$('#calendar').fullCalendar('gotoDate', e.date.startOf('day'));
 		})
 		.datetimepicker('show');
 }
