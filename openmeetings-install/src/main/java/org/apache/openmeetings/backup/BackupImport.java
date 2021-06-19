@@ -30,6 +30,8 @@ import static org.apache.openmeetings.db.bind.Constants.CHAT_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.CHAT_NODE;
 import static org.apache.openmeetings.db.bind.Constants.CONTACT_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.CONTACT_NODE;
+import static org.apache.openmeetings.db.bind.Constants.EXTRA_MENU_LIST_NODE;
+import static org.apache.openmeetings.db.bind.Constants.EXTRA_MENU_NODE;
 import static org.apache.openmeetings.db.bind.Constants.FILE_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.FILE_NODE;
 import static org.apache.openmeetings.db.bind.Constants.GROUP_LIST_NODE;
@@ -191,6 +193,7 @@ import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
 import org.apache.openmeetings.db.dao.file.BaseFileItemDao;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
+import org.apache.openmeetings.db.dao.room.ExtraMenuDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
@@ -210,6 +213,7 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingChunk;
+import org.apache.openmeetings.db.entity.room.ExtraMenu;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
@@ -347,6 +351,8 @@ public class BackupImport {
 	@Autowired
 	private GroupDao groupDao;
 	@Autowired
+	private ExtraMenuDao menuDao;
+	@Autowired
 	private DocumentConverter docConverter;
 
 	private final Map<Long, Long> ldapMap = new HashMap<>();
@@ -446,8 +452,10 @@ public class BackupImport {
 		progressHolder.setProgress(87);
 		importRoomFiles(f);
 		progressHolder.setProgress(92);
+		importExtraMenus(f);
+		progressHolder.setProgress(95);
 
-		log.info("Room files import complete, starting copy of files and folders");
+		log.info("Extra menus import complete, starting copy of files and folders");
 		/*
 		 * ##################### Import real files and folders
 		 */
@@ -1130,6 +1138,22 @@ public class BackupImport {
 			rf.setRoomId(r.getId());
 			r.getFiles().add(rf);
 			roomDao.update(r, null);
+		}, true);
+	}
+
+	void importExtraMenus(File base) throws Exception {
+		log.info("Room files complete, starting extra menus import");
+		Class<ExtraMenu> eClazz = ExtraMenu.class;
+		JAXBContext jc = JAXBContext.newInstance(eClazz);
+		Unmarshaller unmarshaller = jc.createUnmarshaller();
+		unmarshaller.setAdapter(new GroupAdapter(groupDao, groupMap));
+
+		readList(unmarshaller, base, "extraMenus.xml", EXTRA_MENU_LIST_NODE, EXTRA_MENU_NODE, eClazz, m -> {
+			if (Strings.isEmpty(m.getName()) || Strings.isEmpty(m.getLink())) {
+				return;
+			}
+			m.setId(null);
+			menuDao.update(m, null);
 		}, true);
 	}
 

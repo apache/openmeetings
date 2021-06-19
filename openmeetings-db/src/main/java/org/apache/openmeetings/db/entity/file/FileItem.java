@@ -23,6 +23,8 @@ import static org.apache.openmeetings.db.bind.Constants.FILE_NODE;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -48,6 +50,7 @@ import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 		+ "AND f.groupId = :groupId AND f.parentId IS NULL AND f.type IN :filter "
 		+ "ORDER BY f.type ASC, f.name")
 @XmlRootElement(name = FILE_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FileItem extends BaseFileItem {
 	private static final long serialVersionUID = 1L;
 

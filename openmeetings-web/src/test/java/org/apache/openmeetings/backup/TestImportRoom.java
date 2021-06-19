@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.backup;
 
+import static org.apache.openmeetings.backup.TestImport.BACKUP_ROOT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
@@ -33,7 +34,7 @@ class TestImportRoom extends AbstractTestImport {
 	@Test
 	void importRooms() throws Exception {
 		long roomsCount = roomDao.count();
-		File rooms = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/room/rooms.xml").toURI());
+		File rooms = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "room/rooms.xml").toURI());
 		backupImport.importRooms(rooms.getParentFile());
 		assertEquals(roomsCount + 1, roomDao.count(), "Room should be added");
 	}
@@ -41,7 +42,7 @@ class TestImportRoom extends AbstractTestImport {
 	@Test
 	void importRoomGroups() throws Exception {
 		//TODO need to check it somehow
-		File rooms = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/room/rooms.xml").toURI());
+		File rooms = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "room/rooms.xml").toURI());
 		backupImport.importRoomGroups(rooms.getParentFile());
 	}
 }

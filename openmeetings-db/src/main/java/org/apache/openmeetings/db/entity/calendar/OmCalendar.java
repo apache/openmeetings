@@ -32,6 +32,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -62,6 +64,7 @@ import org.apache.openmeetings.db.entity.user.User;
 		+ "  AND a.owner.id = :userId AND a.calendar.id = :calId")
 @NamedQuery(name = "getCalendarbyId", query = "SELECT c FROM OmCalendar c WHERE c.deleted = false AND c.id = :calId")
 @XmlRootElement(name = CALENDAR_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class OmCalendar extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 

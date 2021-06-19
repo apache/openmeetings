@@ -47,6 +47,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -98,6 +100,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 		@Index(name = "room_name_idx", columnList = "name")
 })
 @XmlRootElement(name = ROOM_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Room extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	public static final int CONFERENCE_TYPE_ID = 1;

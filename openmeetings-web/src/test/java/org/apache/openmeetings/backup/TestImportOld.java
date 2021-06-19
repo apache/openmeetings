@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.backup;
 
+import static org.apache.openmeetings.backup.TestImport.BACKUP_ROOT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -99,7 +100,7 @@ class TestImportOld extends AbstractTestImport {
 	 */
 	@Test
 	void importJira2423() throws Exception {
-		try (InputStream is = getClass().getClassLoader().getResourceAsStream("org/apache/openmeetings/backup/jira2423/backup_2423.zip")) {
+		try (InputStream is = getClass().getClassLoader().getResourceAsStream(BACKUP_ROOT + "jira2423/backup_2423.zip")) {
 			backupImport.performImport(is, new ProgressHolder());
 
 			Group grp2 = groupDao.get("group2_jira_2423");

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
+import static org.apache.openmeetings.db.bind.Constants.EXTRA_MENU_NODE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +35,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openmeetings.db.bind.adapter.LongAdapter;
@@ -48,6 +53,8 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 	, @NamedQuery(name = "countExtraMenus", query = "SELECT COUNT(m) FROM ExtraMenu m")
 })
 @Table(name = "extra_menu")
+@XmlRootElement(name = EXTRA_MENU_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ExtraMenu implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 

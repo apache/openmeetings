@@ -57,6 +57,8 @@ public class Constants {
 	public static final String POLL_NODE = "roompoll";
 	public static final String ROOM_FILE_LIST_NODE = "RoomFiles";
 	public static final String ROOM_FILE_NODE = "RoomFile";
+	public static final String EXTRA_MENU_LIST_NODE = "ExtraMenus";
+	public static final String EXTRA_MENU_NODE = "ExtraMenu";
 
 	private Constants() {
 		//shoudn't be used

@@ -293,7 +293,11 @@ public abstract class FileTreePanel extends Panel {
 						? fi.getOriginal() : fi.getFile(ext);
 				if (f != null && f.exists()) {
 					dwnldFile = f;
-					dwnldName = fi.getName() + "." + OmFileHelper.getFileExt(f.getName());
+					String fileExt = OmFileHelper.getFileExt(f.getName());
+					dwnldName = fi.getName();
+					if (!dwnldName.endsWith(fileExt)) {
+						dwnldName += "." + fileExt;
+					}
 					downloader.initiate(target);
 				}
 			}

@@ -57,6 +57,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -126,6 +128,7 @@ import org.apache.wicket.util.string.Strings;
 		, @Index(name = "type_idx", columnList = "type")
 })
 @XmlRootElement(name = USER_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class User extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	public static final String DISPLAY_NAME_NA = "N/A";

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.backup;
 
+import static org.apache.openmeetings.backup.TestImport.BACKUP_ROOT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -38,7 +39,7 @@ class TestImportUser extends AbstractTestImport {
 	@Test
 	void importUserNE() throws Exception {
 		Assertions.assertThrows(BackupException.class, () -> {
-			File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/config/skip/configs.xml").toURI());
+			File configs = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "config/skip/configs.xml").toURI());
 			backupImport.importUsers(configs.getParentFile());
 		});
 	}
@@ -46,7 +47,7 @@ class TestImportUser extends AbstractTestImport {
 	@Test
 	void importUsers() throws Exception {
 		long userCount = userDao.count();
-		File users = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/users.xml").toURI());
+		File users = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "user/users.xml").toURI());
 		backupImport.importUsers(users.getParentFile());
 		assertEquals(userCount + 8, userDao.count(), "Users should be added");
 		User ext = userDao.getExternalUser("234", "TheBestCms");
@@ -56,7 +57,7 @@ class TestImportUser extends AbstractTestImport {
 	@Test
 	void importNoLoginDeleted() throws Exception {
 		long userCount = userDao.count();
-		File users = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/skip/users.xml").toURI());
+		File users = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "user/skip/users.xml").toURI());
 		backupImport.importUsers(users.getParentFile());
 		assertEquals(userCount, userDao.count(), "No records should be added");
 	}
@@ -69,7 +70,7 @@ class TestImportUser extends AbstractTestImport {
 		for (LdapConfig cfg : ldapDao.get(0, Integer.MAX_VALUE)) {
 			ldapDao.delete(cfg, null);
 		}
-		File users = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/user/ldap/users.xml").toURI());
+		File users = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "user/ldap/users.xml").toURI());
 		backupImport.cleanup();
 		backupImport.importLdap(users.getParentFile());
 		List<LdapConfig> ldapConfigs = ldapDao.get("om_2294_ldap", 0, 100, null);

@@ -28,6 +28,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -47,6 +49,7 @@ import org.apache.openmeetings.db.entity.user.User;
 		+ "where c.roomId = :roomId AND c.deleted = false AND c.user.id = :userId")
 @Table(name = "room_moderator")
 @XmlRootElement(name = "room_moderator")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class RoomModerator extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 

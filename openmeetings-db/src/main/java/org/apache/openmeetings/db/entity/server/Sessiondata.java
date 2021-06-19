@@ -30,6 +30,8 @@ import javax.persistence.Index;
 import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -39,6 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 		@Index(name = "session_id_idx", columnList = "session_id", unique = true)
 })
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Sessiondata implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id

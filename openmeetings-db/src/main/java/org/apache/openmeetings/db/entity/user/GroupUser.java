@@ -28,6 +28,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -48,6 +50,7 @@ import org.apache.openmeetings.db.entity.HistoricalEntity;
 @NamedQuery(name = "getGroupModerators", query = "SELECT gu.user FROM GroupUser gu WHERE gu.deleted = false AND gu.moderator = true AND  gu.group.id = :id")
 @Table(name = "group_user")
 @XmlRootElement(name = "user_organisation")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class GroupUser extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	@Id

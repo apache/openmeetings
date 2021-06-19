@@ -25,6 +25,7 @@ import java.io.File;
 
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
+import org.apache.openmeetings.db.dao.room.ExtraMenuDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
@@ -34,6 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class TestImport extends AbstractTestImport {
+	public static final String BACKUP_ROOT = "org/apache/openmeetings/backup/";
 	@Autowired
 	private LdapConfigDao ldapDao;
 	@Autowired
@@ -44,17 +46,19 @@ class TestImport extends AbstractTestImport {
 	private RecordingDao recDao;
 	@Autowired
 	private PrivateMessageFolderDao msgFolderDao;
+	@Autowired
+	private ExtraMenuDao menuDao;
 
 	@Test
 	void importVersionNE() throws Exception {
-		File configs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/config/skip/configs.xml").toURI());
+		File configs = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "config/skip/configs.xml").toURI());
 		BackupVersion ver = BackupImport.getVersion(configs.getParentFile());
 		assertEquals(new BackupVersion(), ver);
 	}
 
 	@Test
 	void importVersion() throws Exception {
-		File version = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/version/version.xml").toURI());
+		File version = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "version/version.xml").toURI());
 		BackupVersion ver = BackupImport.getVersion(version.getParentFile());
 		assertEquals(5, ver.getMajor(), "major");
 		assertEquals(0, ver.getMinor(), "minor");
@@ -63,7 +67,7 @@ class TestImport extends AbstractTestImport {
 	@Test
 	void importGroups() throws Exception {
 		long grpCount = groupDao.count();
-		File groups = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/group/organizations.xml").toURI());
+		File groups = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "group/organizations.xml").toURI());
 		backupImport.importGroups(groups.getParentFile());
 		assertEquals(grpCount + 1, groupDao.count(), "Group should be added");
 	}
@@ -76,7 +80,7 @@ class TestImport extends AbstractTestImport {
 			cfgDao.update(def, null);
 		}
 		long ldapCount = ldapDao.count();
-		File ldaps = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/ldap/ldapconfigs.xml").toURI());
+		File ldaps = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "ldap/ldapconfigs.xml").toURI());
 		Long id = backupImport.importLdap(ldaps.getParentFile());
 		assertEquals(ldapCount + 1, ldapDao.count(), "Ldap should be added");
 		LdapConfig ldap = ldapDao.get(id);
@@ -86,7 +90,7 @@ class TestImport extends AbstractTestImport {
 	@Test
 	void importOauths() throws Exception {
 		long oauthCount = oauthDao.count();
-		File oauths = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/oauth/oauth2servers.xml").toURI());
+		File oauths = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "oauth/oauth2servers.xml").toURI());
 		backupImport.importOauth(oauths.getParentFile());
 		assertEquals(oauthCount + 2, oauthDao.count(), "OAuth should be added");
 	}
@@ -94,7 +98,7 @@ class TestImport extends AbstractTestImport {
 	@Test
 	void importChatSkip() throws Exception {
 		long chatCount = chatDao.get(0, Integer.MAX_VALUE).size();
-		File chats = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/chat/skip/chat_messages.xml").toURI());
+		File chats = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "chat/skip/chat_messages.xml").toURI());
 		backupImport.importChat(chats.getParentFile());
 		assertEquals(chatCount, chatDao.get(0, Integer.MAX_VALUE).size(), "No Chat messages should be added");
 	}
@@ -102,15 +106,23 @@ class TestImport extends AbstractTestImport {
 	@Test
 	void importChat() throws Exception {
 		long chatCount = chatDao.get(0, Integer.MAX_VALUE).size();
-		File chats = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/chat/chat_messages.xml").toURI());
+		File chats = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "chat/chat_messages.xml").toURI());
 		backupImport.importChat(chats.getParentFile());
 		assertEquals(chatCount + 3, chatDao.get(0, Integer.MAX_VALUE).size(), "Chat messages should be added");
 	}
 
 	@Test
+	void importExtraMenu() throws Exception {
+		long menuCount = menuDao.count();
+		File menus = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "menu/extraMenus.xml").toURI());
+		backupImport.importExtraMenus(menus.getParentFile());
+		assertEquals(menuCount + 3, menuDao.count(), "Extra menus should be added");
+	}
+
+	@Test
 	void importRecordings() throws Exception {
 		long recCount = recDao.get().size();
-		File recs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/file/flvRecordings.xml").toURI());
+		File recs = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "file/flvRecordings.xml").toURI());
 		backupImport.importRecordings(recs.getParentFile());
 		assertEquals(recCount + 4, recDao.get().size(), "Recordings should be added");
 	}
@@ -118,7 +130,7 @@ class TestImport extends AbstractTestImport {
 	@Test
 	void importMsgFolders() throws Exception {
 		long fldrCount = msgFolderDao.get(0, Integer.MAX_VALUE).size();
-		File fldrs = new File(getClass().getClassLoader().getResource("org/apache/openmeetings/backup/msg/privateMessageFolder.xml").toURI());
+		File fldrs = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "msg/privateMessageFolder.xml").toURI());
 		backupImport.importPrivateMsgFolders(fldrs.getParentFile());
 		assertEquals(fldrCount + 1, msgFolderDao.get(0, Integer.MAX_VALUE).size(), "Message folders should be added");
 	}

@@ -32,6 +32,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -53,6 +55,7 @@ import org.apache.openmeetings.db.entity.user.User;
 @NamedQuery(name="getMeetingMemberIdsByAppointment"
 		, query="SELECT mm.id FROM MeetingMember mm WHERE mm.deleted = false AND mm.appointment.id = :id")
 @XmlRootElement(name = MMEMBER_NODE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class MeetingMember extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
