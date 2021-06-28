@@ -51,7 +51,13 @@ module.exports = class Video {
 				cnts = {
 					video: true
 				};
-				promise = navigator.mediaDevices.getDisplayMedia(cnts);
+				if (OmUtil.isSafari()) {
+					promise = new Promise((resolve) => {
+						VideoUtil.askPermission(resolve);
+					}).then(() => navigator.mediaDevices.getDisplayMedia(cnts));
+				} else {
+					promise = navigator.mediaDevices.getDisplayMedia(cnts);
+				}
 			} else {
 				promise = new Promise(() => {
 					Sharer.close();

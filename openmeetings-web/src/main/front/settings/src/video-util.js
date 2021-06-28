@@ -240,7 +240,7 @@ function _askPermission(callback) {
 		perm.data('callbacks', []).dialog({
 			appendTo: '.room-block .room-container'
 			, dialogClass: "ask-video-play-permission"
-			, autoOpen: true
+			, autoOpen: false
 			, buttons: [
 				{
 					text: perm.data('btn-ok')
@@ -253,8 +253,9 @@ function _askPermission(callback) {
 				}
 			]
 		});
-	} else if (!perm.dialog('isOpen')) {
-		perm.dialog('open')
+	}
+	if (!perm.dialog('isOpen')) {
+		perm.dialog('open');
 	}
 	perm.data('callbacks').push(callback);
 }
