@@ -21,11 +21,16 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<table class="profile-panel widget">
+	<table class="widget table-striped table-hover">
+		<tr>
+			<th><wicket:message key="165"/></th>
+			<th><wicket:message key="lbl.description"/></th>
+			<th><wicket:message key="1590"/></th>
+		</tr>
 		<tr wicket:id="widgets">
 			<td wicket:id="name"></td>
 			<td wicket:id="description"></td>
-			<td><label wicket:for="display"><wicket:message key="1590"/></label>&nbsp;&nbsp;<input type="checkbox" wicket:id="display"/></td>
+			<td><input type="checkbox" wicket:id="display"/></td>
 		</tr>
 	</table>
 </wicket:panel>
