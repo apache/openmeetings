@@ -82,13 +82,13 @@
 		<wicket-jquery-ui.version>9.3.2-SNAPSHOT</wicket-jquery-ui.version>
 		<wicketstuff.version>9.3.0</wicketstuff.version>
 		<wicket-bootstrap.version>5.0.5-SNAPSHOT</wicket-bootstrap.version>
-		<font-awesome.version>5.15.2</font-awesome.version>
+		<font-awesome.version>5.15.3</font-awesome.version>
 		<spring.version>5.3.8</spring.version>
 		<tomcat.version>9.0.48</tomcat.version>
 		<ical4j.version>3.0.21</ical4j.version>
 		<cxf.version>3.4.4</cxf.version>
 		<io.prometheus.version>0.11.0</io.prometheus.version>
-		<aspectjtools.version>1.9.6</aspectjtools.version>
+		<aspectjtools.version>1.9.7</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.1</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
@@ -96,7 +96,7 @@
 		<h2.version>1.4.200</h2.version>
 		<commons-lang3.version>3.12.0</commons-lang3.version>
 		<javax.mail.version>1.6.2</javax.mail.version>
-		<openjpa.version>3.2.0</openjpa.version>
+		<openjpa.version>3.1.2</openjpa.version>
 		<asterisk-java.version>3.12.0</asterisk-java.version>
 		<commons-dbcp.version>2.8.0</commons-dbcp.version>
 		<commons-pool2.version>2.10.0</commons-pool2.version>
@@ -107,7 +107,7 @@
 		<postgresql.version>42.2.20</postgresql.version>
 		<mysql.version>8.0.25</mysql.version>
 		<mssql.version>9.2.1.jre11</mssql.version>
-		<ojdbc.version>19.10.0.0</ojdbc.version>
+		<ojdbc.version>19.11.0.0</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<xstream.version>1.4.17</xstream.version>
 		<api-all.version>2.0.1</api-all.version>
@@ -119,7 +119,7 @@
 		<jetty.version>9.4.42.v20210604</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.69</bcprov-jdk15on.version>
-		<mockito.version>3.11.1</mockito.version>
+		<mockito.version>3.11.2</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.16.0</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
