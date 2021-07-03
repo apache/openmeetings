@@ -30,11 +30,18 @@ module apache.openmeetings.core {
 	requires java.activation;
 	requires com.google.gson;
 	requires java.mail;
-	requires api.all;
-	requires org.apache.tika.parsers;
 	requires java.xml;
 	requires xstream;
 
 	requires jodconverter.core;
 	requires jodconverter.local;
+	requires org.apache.directory.ldap.api.all;
+	requires tika.core;
+	requires tika.parsers;
+	requires javax.inject;
+	requires wicket.ioc;
+	requires java.annotation;
+	requires apache.openmeetings.util;
+	requires asterisk.java;
+	requires jain.sip.ri;
 }

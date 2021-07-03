@@ -22,16 +22,16 @@ module apache.openmeetings.util {
 	exports org.apache.openmeetings.util.mail;
 	exports org.apache.openmeetings.util.process;
 	exports org.apache.openmeetings.util.ws;
+	exports org.apache.openmeetings.util.logging;
 
 	requires transitive javax.servlet.api;
 
-	requires transitive org.apache.wicket.util;
-	requires transitive org.apache.wicket.core;
-	requires transitive org.apache.wicket.extensions;
+	requires transitive wicket.util;
+	requires transitive wicket.core;
+	requires transitive wicket.extensions;
 
 	requires transitive org.apache.commons.codec;
 	requires transitive org.apache.commons.lang3;
-	requires transitive org.apache.tika.core;
 
 	requires transitive com.github.openjson;
 	requires transitive org.slf4j;
@@ -42,4 +42,8 @@ module apache.openmeetings.util {
 	requires transitive org.bouncycastle.provider;
 	requires transitive java.activation;
 	requires transitive org.mnode.ical4j.core;
+	requires transitive tika.core;
+	requires org.aspectj.tools;
+	requires spring.context;
+	requires simpleclient;
 }
