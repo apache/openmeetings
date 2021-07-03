@@ -23,31 +23,19 @@
 <wicket:extend>
 	<form wicket:id="signin" class="signin">
 		<div wicket:id="credentials">
-			<div class="form-group no-gutters">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="fa fa-user"></i></span>
-					</div>
-					<input wicket:id="login" class="form-control auto-focus" type="text" value="" wicket:message="placeholder:109,title:109"/>
-				</div>
+			<div class="input-group mb-1 g-0">
+				<span class="input-group-text"><i class="fa fa-user"></i></span>
+				<input wicket:id="login" class="form-control auto-focus" type="text" value="" wicket:message="placeholder:109,title:109"/>
 			</div>
-			<div class="form-group no-gutters">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="fa fa-lock"></i></span>
-					</div>
-					<input wicket:id="pass" class="form-control" type="password" value="" wicket:message="placeholder:110,title:110"/>
-				</div>
+			<div class="input-group mb-1 g-0">
+				<span class="input-group-text"><i class="fa fa-lock"></i></span>
+				<input wicket:id="pass" class="form-control" type="password" value="" wicket:message="placeholder:110,title:110"/>
 			</div>
-			<div class="form-group no-gutters" wicket:id="ldap">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="fa fa-users"></i></span>
-					</div>
-					<select wicket:id="domain" class="form-control" wicket:message="title:1118"></select>
-				</div>
+			<div class="input-group mb-1 g-0" wicket:id="ldap">
+				<span class="input-group-text"><i class="fa fa-users"></i></span>
+				<select wicket:id="domain" class="form-control" wicket:message="title:1118"></select>
 			</div>
-			<div class="row form-group no-gutters">
+			<div class="row mb-1 g-0">
 				<div class="col-6">
 					<div class="custom-control custom-checkbox">
 						<input type="checkbox" wicket:id="rememberMe" class="custom-control-input"/>
@@ -68,7 +56,7 @@
 			</div>
 		</div>
 		<div wicket:id="feedback" class="error"></div>
-		<div class="row no-gutters">
+		<div class="row g-0">
 			<div class="col-6"><a class="text-primary" wicket:id="privacy" target="_blank" rel="noopener noreferrer"><wicket:message key="register.privacy.statement"/></a></div>
 			<div class="col-5"><a class="text-primary" wicket:id="netTest" target="_blank" rel="noopener noreferrer"><wicket:message key="1527"/></a></div>
 		</div>
