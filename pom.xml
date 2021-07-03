@@ -79,7 +79,7 @@
 		<!-- dependency versions -->
 		<junit.version>5.7.1</junit.version>
 		<wicket.version>9.3.0</wicket.version>
-		<wicket-jquery-ui.version>9.3.2-SNAPSHOT</wicket-jquery-ui.version>
+		<wicket-jquery-ui.version>9.3.2</wicket-jquery-ui.version>
 		<wicketstuff.version>9.3.0</wicketstuff.version>
 		<wicket-bootstrap.version>5.0.5</wicket-bootstrap.version>
 		<font-awesome.version>5.15.3</font-awesome.version>
