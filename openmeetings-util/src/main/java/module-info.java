@@ -44,6 +44,6 @@ module apache.openmeetings.util {
 	requires transitive org.mnode.ical4j.core;
 	requires transitive tika.core;
 	requires org.aspectj.tools;
-	requires spring.context;
+	requires transitive spring.context;
 	requires simpleclient;
 }
