@@ -78,7 +78,7 @@
 		<frontend-maven-plugin.version>1.11.0</frontend-maven-plugin.version>
 		<!-- dependency versions -->
 		<junit.version>5.7.1</junit.version>
-		<wicket.version>9.3.0</wicket.version>
+		<wicket.version>9.4.0</wicket.version>
 		<wicket-jquery-ui.version>9.3.2</wicket-jquery-ui.version>
 		<wicketstuff.version>9.3.0</wicketstuff.version>
 		<wicket-bootstrap.version>5.0.5</wicket-bootstrap.version>
@@ -110,7 +110,7 @@
 		<ojdbc.version>19.11.0.0</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<xstream.version>1.4.17</xstream.version>
-		<api-all.version>2.0.1</api-all.version>
+		<api-all.version>2.1.0</api-all.version>
 		<caldav4j.version>1.0.1</caldav4j.version>
 		<tika-parsers.version>1.27</tika-parsers.version>
 		<commons-text.version>1.9</commons-text.version>
