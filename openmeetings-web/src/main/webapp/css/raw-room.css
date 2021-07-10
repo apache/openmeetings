@@ -108,13 +108,13 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	border-radius: 50%;
 }
 .room-block .sb-wb .sidebar .user-list .user.entry .om-icon.user-status.user {
-	background-color: var(--success);
+	background-color: var(--bs-success);
 }
 .room-block .sb-wb .sidebar .user-list .user.entry .om-icon.user-status.wb {
-	background-color: var(--warning);
+	background-color: var(--bs-warning);
 }
 .room-block .sb-wb .sidebar .user-list .user.entry .om-icon.user-status.mod {
-	background-color: var(--danger);
+	background-color: var(--bs-danger);
 }
 .room-block .sb-wb .sidebar .user-list .user.entry .om-icon.audio-activity {
 	position: absolute;
@@ -170,8 +170,8 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 .audio-activity.om-icon {
 	opacity: 0.2;
 	border-radius: 50%;
-	background-color: var(--success);
-	border: 1px solid var(--gray-dark);
+	background-color: var(--bs-success);
+	border: 1px solid var(--bs-gray-dark);
 }
 .typing-activity {
 	display: none;
@@ -182,7 +182,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	position: absolute;
 	left: 0;
 	animation: typing-ani 2s infinite;
-	color: var(--primary);
+	color: var(--bs-primary);
 }
 @keyframes typing-ani {
 	0% {
@@ -207,12 +207,12 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 .om-icon.volume-control a.volume-on::before {
 	content: "\f027";
 	font-size: 1.2em;
-	color: var(--secondary);
+	color: var(--bs-secondary);
 }
 .om-icon.volume-control a.volume-off::before {
 	content: "\f6a9";
 	font-size: 1.2em;
-	color: var(--danger);
+	color: var(--bs-danger);
 }
 .om-icon.volume-control .dropdown-menu {
 	width: 20px;
@@ -225,17 +225,17 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 .om-icon.volume-control .dropdown-menu .slider {
 	border-radius: 0;
 	background-color: white;
-	border-color: var(--secondary);
+	border-color: var(--bs-secondary);
 }
 .om-icon.volume-control .dropdown-menu .slider .ui-slider-range {
 	border-radius: 0;
-	background-color: var(--light);
+	background-color: var(--bs-light);
 }
 .om-icon.volume-control .dropdown-menu .slider .handle {
 	border-radius: 0;
-	background-color: var(--light);
-	border-color: var(--secondary);
-	color: var(--secondary);
+	background-color: var(--bs-light);
+	border-color: var(--bs-secondary);
+	color: var(--bs-secondary);
 }
 .user-video .om-icon.volume-control
 , .user-video .btn.btn-refresh
@@ -247,7 +247,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 .user-video .om-icon.volume-control {
 	border-radius: 0.2rem;
-	border: 1px solid var(--secondary);
+	border: 1px solid var(--bs-secondary);
 	margin-top: 3px;
 	padding: 1px;
 }
@@ -273,11 +273,11 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	font-size: .6em;
 }
 .right.om-icon i::before {
-	color: var(--success);
+	color: var(--bs-success);
 	content: "\f055";
 }
 .right.om-icon.granted i::before {
-	color: var(--danger);
+	color: var(--bs-danger);
 	content: "\f056";
 }
 .right.moderator.om-icon::before {
@@ -312,18 +312,18 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 .activity.cam.enabled.om-icon::before {
 	content: '\f03d';
-	color: var(--success);
+	color: var(--bs-success);
 }
 .activity.cam.om-icon, .activity.mic.om-icon {
 	display: none;
 }
 .activity.cam.om-icon::before {
 	content: '\f4e2';
-	color: var(--warning);
+	color: var(--bs-warning);
 }
 .activity.mic.enabled.om-icon::before {
 	content: '\f130';
-	color: var(--success);
+	color: var(--bs-success);
 }
 .om-icon.disabled {
 	filter: grayscale(100%);
@@ -332,11 +332,11 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 .activity.mic.om-icon::before {
 	content: '\f131';
-	color: var(--warning);
+	color: var(--bs-warning);
 }
 .room-block .sb-wb .sidebar .user-list .user.entry.current {
 	font-weight: bold;
-	background-color: var(--light);
+	background-color: var(--bs-light);
 }
 .dropdown-menu.video.volume, .dropdown-menu.video.volume li {
 	width: 20px;
@@ -404,7 +404,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 
 /************ VIDEO **************/
 .mic-on {
-	background-color: var(--warning);
+	background-color: var(--bs-warning);
 }
 .ui-dialog.video
 , .ui-dialog.sharer
@@ -417,14 +417,14 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 , .sharer .ui-dialog-titlebar
 , .wb-tool-settings .ui-dialog-titlebar
 {
-	background-color: var(--white);
+	background-color: var(--bs-white);
 }
 .sharer .ui-dialog-titlebar-close {
 	position: absolute;
 	top: 20px
 }
 .user-video .buttonpane {
-	background-color: var(--white);
+	background-color: var(--bs-white);
 	position: absolute;
 	right: 2px;
 	top: 2px
@@ -524,7 +524,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	right: -21px;
 	bottom: -16px;
 	background: repeating-linear-gradient(
-		var(--dark), var(--dark) 3px, transparent 3px, transparent 5px
+		var(--bs-dark), var(--bs-dark) 3px, transparent 3px, transparent 5px
 	);
 }
 .room-block .room-container .user-video .header {
@@ -664,7 +664,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	right: 40px;
 	bottom: 40px;
 	padding: 5px;
-	background-color: var(--info);
+	background-color: var(--bs-info);
 }
 #quick-vote .control {
 	display: inline-block;
@@ -685,10 +685,10 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	line-height: 1.2em;
 }
 #quick-vote .control.pro i::before {
-	color: var(--success);
+	color: var(--bs-success);
 }
 #quick-vote .control.con i::before {
-	color: var(--danger);
+	color: var(--bs-danger);
 }
 #quick-vote .close-btn {
 	float: right;
@@ -744,7 +744,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 .video .mute-others::before {
 	content: '\f3c9';
-	color: var(--warning);
+	color: var(--bs-warning);
 	line-height: 1em;
 	font-size: 2.5em;
 }

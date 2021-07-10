@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.admin.oauth;
 
 import static org.apache.openmeetings.web.app.UserManager.getRedirectUri;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;

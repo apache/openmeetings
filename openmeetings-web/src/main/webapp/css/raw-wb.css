@@ -36,7 +36,7 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 	display: inline-block;
 	width: 100%;
 	text-align: center;
-	color: var(--success);
+	color: var(--bs-success);
 }
 .room-block .sb-wb .wb-block .tabs {
 	height: calc(100% - var(--buffer-size));

@@ -25,7 +25,7 @@ import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
-import static org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
 import static org.apache.wicket.validation.validator.StringValidator.maximumLength;
 
 import java.util.ArrayList;

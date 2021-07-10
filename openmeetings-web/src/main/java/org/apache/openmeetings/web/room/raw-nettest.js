@@ -214,7 +214,7 @@ var NetTest = (function() {
 	function _setResult(val) {
 		const btn = _btn();
 		btn.addClass('complete').removeClass('started');
-		btn.parent().find('.value').html(val);
+		btn.parent().parent().find('.value').html(val);
 		testNext = btn.data('next');
 		if (!testNext) {
 			bulk = false;

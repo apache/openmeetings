@@ -26,7 +26,7 @@
 	position: relative;
 	padding: 5px;
 	margin-bottom: 3px;
-	border-bottom: 1px solid var(--secondary);
+	border-bottom: 1px solid var(--bs-secondary);
 }
 .activity.item button {
 	padding: 0 5px;

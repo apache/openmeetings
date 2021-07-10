@@ -31,36 +31,44 @@
 			<div class="card-body">
 				<h5 class="card-title"><i class="far fa-clock"></i>&nbsp;<wicket:message key="network.test.ping"/></h5>
 				<p class="card-text value"></p>
-				<button class="test-btn btn btn-block btn-outline not-started" data-measure="ping" data-start="true" data-next="jitter" wicket:message="data-lbl:network.test.ping">
-					<i class="fas"></i>
-				</button>
+				<div class="d-grid gap-2">
+					<button class="test-btn btn btn-outline not-started" data-measure="ping" data-start="true" data-next="jitter" wicket:message="data-lbl:network.test.ping">
+						<i class="fas"></i>
+					</button>
+				</div>
 			</div>
 		</div>
 		<div class="test-container card" id="test-jitter">
 			<div class="card-body">
 				<h5 class="card-title"><i class="far fa-clock"></i>&nbsp;<wicket:message key="network.test.jitter"/></h5>
 				<p class="card-text value"></p>
-				<button class="test-btn btn btn-block btn-outline not-started" data-measure="jitter" data-next="upload" wicket:message="data-lbl:network.test.jitter">
-					<i class="fas"></i>
-				</button>
+				<div class="d-grid gap-2">
+					<button class="test-btn btn btn-outline not-started" data-measure="jitter" data-next="upload" wicket:message="data-lbl:network.test.jitter">
+						<i class="fas"></i>
+					</button>
+				</div>
 			</div>
 		</div>
 		<div class="test-container card" id="test-upload">
 			<div class="card-body">
 				<h5 class="card-title"><i class="fas fa-file-upload"></i>&nbsp;<wicket:message key="network.test.upl"/></h5>
 				<p class="card-text value"></p>
-				<button class="test-btn btn btn-block btn-outline not-started" data-measure="upload" data-next="download" wicket:message="data-lbl:network.test.upl">
-					<i class="fas"></i>
-				</button>
+				<div class="d-grid gap-2">
+					<button class="test-btn btn btn-outline not-started" data-measure="upload" data-next="download" wicket:message="data-lbl:network.test.upl">
+						<i class="fas"></i>
+					</button>
+				</div>
 			</div>
 		</div>
 		<div class="test-container card" id="test-download">
 			<div class="card-body">
 				<h5 class="card-title"><i class="fas fa-file-download"></i>&nbsp;<wicket:message key="network.test.dwn"/></h5>
 				<p class="card-text value"></p>
-				<button class="test-btn btn btn-block btn-outline not-started" data-measure="download" wicket:message="data-lbl:network.test.dwn">
-					<i class="fas"></i>
-				</button>
+				<div class="d-grid gap-2">
+					<button class="test-btn btn btn-outline not-started" data-measure="download" wicket:message="data-lbl:network.test.dwn">
+						<i class="fas"></i>
+					</button>
+				</div>
 			</div>
 		</div>
 		<div class="output">

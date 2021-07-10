@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
