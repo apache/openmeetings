@@ -40,14 +40,16 @@
 			<p>
 				Please write to <a href="mailto:om.unipro@gmail.com">om.unipro@gmail.com</a> to get Unipro support
 			</p>
-			<p><b>Cloud based hosting for OpenMeetings at <a href="https://om-hosting.com" target="_blank">om-hosting.com</a></b></p>
-			<p>See the Dedicated and Elastic Private Cloud Data-Sheets with details at:</p>
+			<h5>Cloud based hosting for OpenMeetings</h5>
+			<p>Cloud based hosting for OpenMeetings at <a href="https://om-hosting.com" target="_blank">om-hosting.com</a><br/><br/>
+				See the Dedicated and Elastic Private Cloud Data-Sheets with details at:</p>
 			<ul>
 				<li>
 					<b>Dedicated Servers</b> - 100, 200, and 400 concurrent users, see: <a href="https://om-hosting.com/dedicated-server-data-sheet/" target="_blank">Dedicated Server Data-Sheet</a>
 				</li>
 				<li>
-					<b>Elastic Private Cloud</b> - 800, 1600 or more concurrent users, including clustering of KMS, auto-scaling and load-balancing see: <a href="https://om-hosting.com/dedicated-server-data-sheet/" target="_blank">Elastic Private Cloud Data-Sheet</a> 
+					<b>Elastic Private Cloud</b> - 800, 1600 or more concurrent users, including clustering of KMS, auto-scaling and load-balancing see: 
+					<a href="https://om-hosting.com/dedicated-server-data-sheet/" target="_blank">Elastic Private Cloud Data-Sheet</a>
 				</li>
 			</ul>
 			<p>
