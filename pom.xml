@@ -898,7 +898,7 @@
 					<configuration>
 						<doclint>none</doclint>
 						<additionalOptions>-html5</additionalOptions>
-						<source>${jdk.version}</source>
+						<source>8</source>
 						<javadocVersion>${jdk.version}</javadocVersion>
 						<links>
 							<link>https://openmeetings.apache.org/openmeetings-db/apidocs/</link>
@@ -1094,6 +1094,10 @@
 							<exclude>**/localhost.jks</exclude>
 							<exclude>**/node_modules/**</exclude>
 							<exclude>**/package-lock.json</exclude>
+							<exclude>**/target/**</exclude>
+							<exclude>**/.project</exclude>
+							<exclude>**/.classpath</exclude>
+							<exclude>**/.settings/**</exclude>
 						</excludes>
 					</configuration>
 				</plugin>
