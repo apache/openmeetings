@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache</groupId>
 		<artifactId>apache</artifactId>
-		<version>23</version>
+		<version>24</version>
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
@@ -83,7 +83,7 @@
 		<wicketstuff.version>9.4.0</wicketstuff.version>
 		<wicket-bootstrap.version>5.0.5</wicket-bootstrap.version>
 		<font-awesome.version>5.15.3</font-awesome.version>
-		<spring.version>5.3.8</spring.version>
+		<spring.version>5.3.9</spring.version>
 		<tomcat.version>9.0.50</tomcat.version>
 		<ical4j.version>3.0.21</ical4j.version>
 		<cxf.version>3.4.4</cxf.version>
@@ -121,7 +121,7 @@
 		<bcprov-jdk15on.version>1.69</bcprov-jdk15on.version>
 		<mockito.version>3.11.2</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
-		<kurento.version>6.16.0</kurento.version>
+		<kurento.version>6.16.1</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
 		<jasny-bootstrap.version>3.1.3-2</jasny-bootstrap.version>
 		<jodconverter.version>4.4.2</jodconverter.version>
