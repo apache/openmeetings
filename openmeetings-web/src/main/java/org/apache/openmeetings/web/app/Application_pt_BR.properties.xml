@@ -66,7 +66,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="82"><![CDATA[Flexible textbox]]></entry>
 	<entry key="84"><![CDATA[Tornar-se moderador]]></entry>
 	<entry key="85"><![CDATA[fechar]]></entry>
-	<entry key="86"><![CDATA[Italic]]></entry>
+	<entry key="86"><![CDATA[Itálico]]></entry>
 	<entry key="87"><![CDATA[negrito]]></entry>
 	<entry key="98"><![CDATA[Moderador:]]></entry>
 	<entry key="99"><![CDATA[A sala está cheia. Por favor tente novamente mais tarde.]]></entry>
@@ -125,8 +125,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="254"><![CDATA[de]]></entry>
 	<entry key="256"><![CDATA[Ir para página anterior]]></entry>
 	<entry key="257"><![CDATA[Ir para a próxima página]]></entry>
-	<entry key="259"><![CDATA[Zoom --]]></entry>
-	<entry key="260"><![CDATA[Zoom ++]]></entry>
+	<entry key="259"><![CDATA[- zoom]]></entry>
+	<entry key="260"><![CDATA[+ zoom]]></entry>
 	<entry key="263"><![CDATA[Configuração]]></entry>
 	<entry key="265"><![CDATA[Chave]]></entry>
 	<entry key="266"><![CDATA[Configuração]]></entry>
@@ -152,7 +152,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="311"><![CDATA[Esqueceu sua senha?]]></entry>
 	<entry key="312"><![CDATA[Redefinir a senha]]></entry>
 	<entry key="313"><![CDATA[Usando o endereço de e-mail]]></entry>
-	<entry key="314"><![CDATA[Using login]]></entry>
+	<entry key="314"><![CDATA[Usando login]]></entry>
 	<entry key="315"><![CDATA[Seu email]]></entry>
 	<entry key="316"><![CDATA[Seu login]]></entry>
 	<entry key="317"><![CDATA[Enviar e-mail com um link para redefinição]]></entry>
@@ -211,11 +211,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="531"><![CDATA[Valido até:]]></entry>
 	<entry key="537"><![CDATA[Verificar senha]]></entry>
 	<entry key="545"><![CDATA[x]]></entry>
-	<entry key="546"><![CDATA[x-axis]]></entry>
+	<entry key="546"><![CDATA[eixo-x]]></entry>
 	<entry key="547"><![CDATA[y]]></entry>
-	<entry key="548"><![CDATA[y-axis]]></entry>
-	<entry key="549"><![CDATA[w]]></entry>
-	<entry key="551"><![CDATA[h]]></entry>
+	<entry key="548"><![CDATA[eixo-y]]></entry>
+	<entry key="549"><![CDATA[l]]></entry>
+	<entry key="551"><![CDATA[a]]></entry>
 	<entry key="553"><![CDATA[Alterar transparência]]></entry>
 	<entry key="556"><![CDATA[A conexão com o servidor foi perdida. Você precisa reiniciar a aplicação e/ou verificar sua conexão com a internet.]]></entry>
 	<entry key="557"><![CDATA[Ponteiro]]></entry>
@@ -537,7 +537,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.audio"><![CDATA[requests permission to turn on micropone]]></entry>
 	<entry key="activities.request.right.moderator"><![CDATA[requests permission to be moderator]]></entry>
 	<entry key="activities.request.right.muteothers"><![CDATA[Perdir permissão para silenciar os outros]]></entry>
-	<entry key="activities.request.right.presenter"><![CDATA[requests permission to be presenter]]></entry>
+	<entry key="activities.request.right.presenter"><![CDATA[pede permissão para ser apresentador]]></entry>
 	<entry key="activities.request.right.remote"><![CDATA[requests permission to control screen during screen sharing]]></entry>
 	<entry key="activities.request.right.share"><![CDATA[solicita permissão para compartilhar/gravar tela]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[requests permission to turn on camera]]></entry>
@@ -571,7 +571,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.oauth.req.token.method"><![CDATA[Request token method]]></entry>
 	<entry key="admin.oauth.user.mapping"><![CDATA[User mapping]]></entry>
 	<entry key="admin.purge"><![CDATA[Purge]]></entry>
-	<entry key="admin.purge.desc"><![CDATA[Do you really want to purge this item? This can't be undone!]]></entry>
+	<entry key="admin.purge.desc"><![CDATA[Tem certeza de que deseja limpar este item? Isso não pode ser desfeito!]]></entry>
 	<entry key="admin.restore"><![CDATA[Restore]]></entry>
 	<entry key="admin.room.hidden.elements"><![CDATA[Hidden room elements]]></entry>
 	<entry key="admin.room.wait-moderator.info"><![CDATA[No one can use the room until moderator has joined]]></entry>
@@ -673,7 +673,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.dbname"><![CDATA[Specify the name of the database]]></entry>
 	<entry key="install.wizard.db.step.dbtype"><![CDATA[Choose DB type]]></entry>
 	<entry key="install.wizard.db.step.error.patch"><![CDATA[Unexpected error while patching persistence file: {0}]]></entry>
-	<entry key="install.wizard.db.step.errorprops"><![CDATA[Unable to get the properties]]></entry>
+	<entry key="install.wizard.db.step.errorprops"><![CDATA[Incapaz de obter as propriedades]]></entry>
 	<entry key="install.wizard.db.step.field.title"><![CDATA[DB configuration]]></entry>
 	<entry key="install.wizard.db.step.h2.name"><![CDATA[H2]]></entry>
 	<entry key="install.wizard.db.step.host"><![CDATA[Specify DB host]]></entry>

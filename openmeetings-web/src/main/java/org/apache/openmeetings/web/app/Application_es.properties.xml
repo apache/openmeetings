@@ -555,7 +555,7 @@ Las salas creadas via Calendario están listadas solamente en esta sección, dur
 	<entry key="admin.email.status.ERROR"><![CDATA[Error]]></entry>
 	<entry key="admin.email.status.NONE"><![CDATA[Ninguno]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[Enviando]]></entry>
-	<entry key="admin.extra.group.label"><![CDATA[URL details]]></entry>
+	<entry key="admin.extra.group.label"><![CDATA[Detalles URL]]></entry>
 	<entry key="admin.extra.link"><![CDATA[URL]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[días]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[Límites permitidos]]></entry>
@@ -843,8 +843,8 @@ por favor revise <tt> openmeetings.log </tt> y contacte a los desarrolladores de
 	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Gestión de correo]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Verifique el procesamiento de correos electrónicos por parte del sistema]]></entry>
-	<entry key="main.menu.admin.extra"><![CDATA[Extra Menu]]></entry>
-	<entry key="main.menu.admin.extra.desc"><![CDATA[Custom links to room menu]]></entry>
+	<entry key="main.menu.admin.extra"><![CDATA[Menu Extra]]></entry>
+	<entry key="main.menu.admin.extra.desc"><![CDATA[Personalizar links en el menu de salas]]></entry>
 	<entry key="menu.extras"><![CDATA[Extras]]></entry>
 	<entry key="menu.polls"><![CDATA[Encuestas]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[Recopilar comentarios sin crear una encuesta]]></entry>
