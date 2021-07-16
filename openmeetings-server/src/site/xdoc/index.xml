@@ -69,27 +69,21 @@
 		</section>
 		<section name="News">
 			<div class="bd-callout bd-callout-danger">
-				<h4>Version 6.0.0 released!</h4>
-				<div>Release 6.0.0, provides following improvements:<br/>
+				<h4>Version 6.1.0 released!</h4>
+				<div>Release 6.1.0, provides following improvements:<br/>
 					This release provides WebRTC audio/video/screen-sharing in the Room<br/>
 
-					Security:
-					<ul>
-						<li>TLS1.2. is used for OAuth</li>
-						<li>NetTest client count can be limited</li>
-						<li>Captcha is now configurable</li>
-						<li>Recordings can be globally disabled</li>
-					</ul>
 					Stability:
 					<ul>
-						<li>Audio/video in room is more stable</li>
+						<li>Room is more stable</li>
+						<li>Screen sharing on Safari is fixed</li>
+						<li>Recording in interview room is fixed</li>
 					</ul>
 					UI:
 					<ul>
-						<li>Translations are improved</li>
-						<li>Invitation form displayes time in client time zone</li>
-						<li>Notifications are displayed using JS Notification API</li>
-						<li>Video pods size can be fixed and configurable per-user</li>
+						<li>OM theme can selected in Admin -&gt; Config</li>
+						<li>Configurable Extra menu is added to the rooms</li>
+						<li>Date/time picker is better localized</li>
 					</ul>
 					<br/>
 					Other fixes and improvements
@@ -97,12 +91,12 @@
 				<br/>
 
 				<span>
-					40 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/6.0.0/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12348297">Detailed list</a>
+					27 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/6.1.0/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12349533">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2021-03-09)</span>
+				<span class="date">(2021-07-20)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>

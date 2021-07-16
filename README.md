@@ -56,6 +56,25 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+6.1.0
+-----
+[Release 6.1.0](https://archive.apache.org/dist/openmeetings/6.1.0), provides following improvements:
+
+This release provides WebRTC audio/video/screen-sharing in the Room
+
+Stability:
+* Room is more stable
+* Screen sharing on Safari is fixed
+* Recording in interview room is fixed
+
+UI:
+* OM theme can selected in Admin -> Config
+* Configurable Extra menu is added to the rooms
+* Date/time picker is better localized
+
+Some other fixes and improvements, 27 issues were addressed
+
+
 6.0.0
 -----
 [Release 6.0.0](https://www.apache.org/dyn/closer.lua/openmeetings/6.0.0), provides following improvements:

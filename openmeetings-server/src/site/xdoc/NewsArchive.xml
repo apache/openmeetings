@@ -54,6 +54,78 @@
 				<span class="date">(2020-12-05)</span>
 			</div>
 		</section>
+		<section name="Release 6.0.0">
+			<div class="bd-callout bd-callout-info">
+				<h4>Version 6.0.0 released!</h4>
+				<div>Release 6.0.0, provides following improvements:<br/>
+					This release provides WebRTC audio/video/screen-sharing in the Room<br/>
+
+					Security:
+					<ul>
+						<li>TLS1.2. is used for OAuth</li>
+						<li>NetTest client count can be limited</li>
+						<li>Captcha is now configurable</li>
+						<li>Recordings can be globally disabled</li>
+					</ul>
+					Stability:
+					<ul>
+						<li>Audio/video in room is more stable</li>
+					</ul>
+					UI:
+					<ul>
+						<li>Translations are improved</li>
+						<li>Invitation form displayes time in client time zone</li>
+						<li>Notifications are displayed using JS Notification API</li>
+						<li>Video pods size can be fixed and configurable per-user</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+				</div>
+				<br/>
+
+				<span>
+					40 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/6.0.0/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12348297">Detailed list</a>
+				</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/6.0.0">Archived download</a>.</span>
+				<span class="date">(2021-03-09)</span>
+			</div>
+		</section>
+		<section name="Release 5.1.0">
+			<div class="bd-callout bd-callout-info">
+				<h4>Version 5.1.0 released!</h4>
+				<div>Release 5.1.0, provides following improvements:<br/>
+					This release provides WebRTC audio/video/screen-sharing in the Room
+					Stability:
+					<ul>
+						<li>Room Audio/Video should be more stable</li>
+						<li>OM should work as expected after KMS server restart</li>
+						<li>Backup is further improved</li>
+						<li>Audio/Video connection established faster</li>
+						<li>Most recent versions of dependencies are used</li>
+					</ul>
+					UI:
+					<ul>
+						<li>User display name is used almost everywhere</li>
+						<li>Browser notifications are used to notify about new chat messages and moderator actions</li>
+						<li>Interview room was broken</li>
+						<li>Mute and "Mic status" were broken</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+				</div>
+				<br/>
+
+				<span>
+					52 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/5.1.0/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12349414">Detailed list</a>
+				</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/5.1.0">Archived download</a>.</span>
+				<span class="date">(2020-12-05)</span>
+			</div>
+		</section>
 		<section name="Release 5.0.1">
 			<div class="bd-callout bd-callout-info">
 				<h4>Version 5.0.1 released!</h4>

@@ -32,21 +32,21 @@
 			</p>
 			<subsection name="Latest Official WebRTC Release">
 				<p>
-					Apache OpenMeetings 6.0.0
+					Apache OpenMeetings 6.1.0
 				</p>
 				<ul>
 					<li>
 						Binaries:
 						<ul>
 							<li>
-								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/6.0.0/bin/apache-openmeetings-6.0.0.zip">apache-openmeetings-6.0.0.zip</a>
-								<a href="https://downloads.apache.org/openmeetings/6.0.0/bin/apache-openmeetings-6.0.0.zip.asc">[SIG]</a>
-								<a href="https://downloads.apache.org/openmeetings/6.0.0/bin/apache-openmeetings-6.0.0.zip.sha512">[SHA512]</a>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/6.1.0/bin/apache-openmeetings-6.1.0.zip">apache-openmeetings-6.1.0.zip</a>
+								<a href="https://downloads.apache.org/openmeetings/6.1.0/bin/apache-openmeetings-6.1.0.zip.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/6.1.0/bin/apache-openmeetings-6.1.0.zip.sha512">[SHA512]</a>
 							</li>
 							<li>
-								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/6.0.0/bin/apache-openmeetings-6.0.0.tar.gz">apache-openmeetings-6.0.0.tar.gz</a>
-								<a href="https://downloads.apache.org/openmeetings/6.0.0/bin/apache-openmeetings-6.0.0.tar.gz.asc">[SIG]</a>
-								<a href="https://downloads.apache.org/openmeetings/6.0.0/bin/apache-openmeetings-6.0.0.tar.gz.sha512">[SHA512]</a>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/6.1.0/bin/apache-openmeetings-6.1.0.tar.gz">apache-openmeetings-6.1.0.tar.gz</a>
+								<a href="https://downloads.apache.org/openmeetings/6.1.0/bin/apache-openmeetings-6.1.0.tar.gz.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/6.1.0/bin/apache-openmeetings-6.1.0.tar.gz.sha512">[SHA512]</a>
 							</li>
 						</ul>
 					</li>
@@ -54,22 +54,22 @@
 						Sources:
 						<ul>
 							<li>
-								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/6.0.0/src/apache-openmeetings-6.0.0-src.zip">apache-openmeetings-6.0.0-src.zip</a>
-								<a href="https://downloads.apache.org/openmeetings/6.0.0/src/apache-openmeetings-6.0.0-src.zip.asc">[SIG]</a>
-								<a href="https://downloads.apache.org/openmeetings/6.0.0/src/apache-openmeetings-6.0.0-src.zip.sha512">[SHA512]</a>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/6.1.0/src/apache-openmeetings-6.1.0-src.zip">apache-openmeetings-6.1.0-src.zip</a>
+								<a href="https://downloads.apache.org/openmeetings/6.1.0/src/apache-openmeetings-6.1.0-src.zip.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/6.1.0/src/apache-openmeetings-6.1.0-src.zip.sha512">[SHA512]</a>
 							</li>
 							<li>
-								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/6.0.0/src/apache-openmeetings-6.0.0-src.tar.gz">apache-openmeetings-6.0.0-src.tar.gz</a>
-								<a href="https://downloads.apache.org/openmeetings/6.0.0/src/apache-openmeetings-6.0.0-src.tar.gz.asc">[SIG]</a>
-								<a href="https://downloads.apache.org/openmeetings/6.0.0/src/apache-openmeetings-6.0.0-src.tar.gz.sha512">[SHA512]</a>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/6.1.0/src/apache-openmeetings-6.1.0-src.tar.gz">apache-openmeetings-6.1.0-src.tar.gz</a>
+								<a href="https://downloads.apache.org/openmeetings/6.1.0/src/apache-openmeetings-6.1.0-src.tar.gz.asc">[SIG]</a>
+								<a href="https://downloads.apache.org/openmeetings/6.1.0/src/apache-openmeetings-6.1.0-src.tar.gz.sha512">[SHA512]</a>
 							</li>
 						</ul>
 					</li>
 					<li>
-						Changes: <a href="https://downloads.apache.org/openmeetings/6.0.0/CHANGELOG.md">CHANGELOG.md</a>.
+						Changes: <a href="https://downloads.apache.org/openmeetings/6.1.0/CHANGELOG.md">CHANGELOG.md</a>.
 					</li>
 					<li>
-						Docker image: <a href="https://github.com/openmeetings/openmeetings-docker/tree/6.0.0">https://github.com/openmeetings/openmeetings-docker/tree/6.0.0</a>
+						Docker image: <a href="https://github.com/openmeetings/openmeetings-docker/tree/6.1.0">https://github.com/openmeetings/openmeetings-docker/tree/6.1.0</a>
 					</li>
 					<li>
 						<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Live+iso+OpenMeetings+on+Ubuntu">Live OM iso images by Alvaro</a>

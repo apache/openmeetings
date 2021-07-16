@@ -7,6 +7,47 @@ See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number 
 
 
 
+Release Notes - Openmeetings - Version 6.1.0
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-2412] - Audio/Video testing app doesn't work with Safari - No sound and countdown doesn't work
+    * [OPENMEETINGS-2582] - File download fails
+    * [OPENMEETINGS-2591] - Tool does not display correctly
+    * [OPENMEETINGS-2592] - Interview room recording is broken
+    * [OPENMEETINGS-2594] - unexpected session termination
+    * [OPENMEETINGS-2596] - Invalid dialog is displayed when room is closed
+    * [OPENMEETINGS-2597] - Source artifact contains redundant files
+    * [OPENMEETINGS-2599] - Make user default moderator in his/her own conference and presentation rooms
+    * [OPENMEETINGS-2606] - Clean slide is broken
+    * [OPENMEETINGS-2612] - google analatyics field should be limited to avoid overflow
+    * [OPENMEETINGS-2613] - empty user list in presentation room 
+    * [OPENMEETINGS-2616] - OM not working on Android Chrome
+    * [OPENMEETINGS-2624] - Untranslated calendar when change Language to japanese
+    * [OPENMEETINGS-2629] - Calendar picker can't sync to big calendar. 
+    * [OPENMEETINGS-2638] - The email link received from Calendar don´t work
+
+* New Feature
+    * [OPENMEETINGS-2605] - Add ability to choose theme via Admin->Config
+
+* Improvement
+    * [OPENMEETINGS-2546] - Admin Rights
+    * [OPENMEETINGS-2589] - Upload  file  icon needs  improving
+    * [OPENMEETINGS-2601] - Ability to configure Kurento::WebRtcEndpoint.CertificateKeyType
+    * [OPENMEETINGS-2604] - Help  menu  for  room
+    * [OPENMEETINGS-2625] - Mark default group in administration->groups
+    * [OPENMEETINGS-2632] - Wigets-page:  look&feel like other lists
+
+* Test
+    * [OPENMEETINGS-2587] - Error when push Recording or Share-desktop buttons
+
+* Task
+    * [OPENMEETINGS-2588] - Injections for non-beans can be better handled
+    * [OPENMEETINGS-2593] - (6.1.0) Library versions need to be updated
+    * [OPENMEETINGS-2600] - (6.1.0) Issues reported by Sonar should be addressed
+    * [OPENMEETINGS-2614] - (6.1.0) Label contributions from https://poeditor.com should be merged back
+
+
 Release Notes - Openmeetings - Version 6.0.0
 ================================================================================================================
 
