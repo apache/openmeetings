@@ -32,8 +32,8 @@
 	<description>Parent project for all OpenMeetings Maven modules. Required to hold general settings</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.outputTimestamp>1</project.build.outputTimestamp>
-		<maven.build.timestamp.format>yyyy/MM/dd HH:mm</maven.build.timestamp.format>
+		<project.build.outputTimestamp>${maven.build.timestamp}</project.build.outputTimestamp>
+		<!--maven.build.timestamp.format>yyyy/MM/dd HH:mm</maven.build.timestamp.format-->
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
 		<om.notquick.build>true</om.notquick.build>
@@ -901,6 +901,7 @@
 						<additionalOptions>-html5</additionalOptions>
 						<source>8</source>
 						<javadocVersion>${jdk.version}</javadocVersion>
+						<notimestamp>true</notimestamp>
 						<links>
 							<link>https://openmeetings.apache.org/openmeetings-db/apidocs/</link>
 						</links>
