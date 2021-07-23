@@ -49,8 +49,8 @@ module apache.openmeetings.db {
 	exports org.apache.openmeetings.db.util.ws;
 
 	requires transitive apache.openmeetings.util;
-	requires transitive wicket.request;
-	requires transitive wicket.native.websocket.core;
+	requires transitive org.apache.wicket.request;
+	requires transitive org.apache.wicket.websocket.core;
 	requires transitive spring.beans;
 	requires transitive spring.web;
 	requires transitive spring.core;
