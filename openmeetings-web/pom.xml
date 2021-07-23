@@ -46,7 +46,6 @@
 				<dependency>
 					<groupId>mysql</groupId>
 					<artifactId>mysql-connector-java</artifactId>
-					<version>${mysql.version}</version>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -187,14 +186,6 @@
 			<plugin>
 				<groupId>com.samaxes.maven</groupId>
 				<artifactId>minify-maven-plugin</artifactId>
-				<version>${minify-maven-plugin.version}</version>
-				<dependencies>
-					<dependency>
-						<groupId>com.google.javascript</groupId>
-						<artifactId>closure-compiler</artifactId>
-						<version>v20170521</version>
-					</dependency>
-				</dependencies>
 				<executions>
 					<execution>
 						<id>theme-minify</id>
@@ -482,32 +473,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-maven-plugin</artifactId>
-					<version>${jetty.version}</version>
-					<configuration>
-						<systemProperties>
-							<systemProperty>
-								<name>current_openmeetings_log_dir</name>
-								<value>${project.build.directory}</value>
-							</systemProperty>
-							<systemProperty>
-								<name>maven.project.build.directory.test-classes</name>
-								<value>${project.basedir}/src/test/resources</value>
-							</systemProperty>
-						</systemProperties>
-						<webApp>
-							<contextPath>/openmeetings</contextPath>
-							<descriptor>${project.basedir}/src/test/jetty/web.xml</descriptor>
-						</webApp>
-						<jettyXml>${project.basedir}/src/test/jetty/jetty.xml,${project.basedir}/src/test/jetty/jetty-ssl.xml,${project.basedir}/src/test/jetty/jetty-http.xml,${project.basedir}/src/test/jetty/jetty-https.xml</jettyXml>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 	<dependencies>
 		<dependency>
@@ -537,13 +502,6 @@
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>jasny-bootstrap</artifactId>
-			<version>${jasny-bootstrap.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.webjars</groupId>
-					<artifactId>bootstrap</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -556,72 +514,58 @@
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-dashboard-core</artifactId>
-			<version>${wicketstuff.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-auth-roles</artifactId>
-			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-native-websocket-javax</artifactId>
-			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-devutils</artifactId>
-			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-core</artifactId>
-			<version>${wicket-jquery-ui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui</artifactId>
-			<version>${wicket-jquery-ui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-calendar</artifactId>
-			<version>${wicket-jquery-ui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-plugins</artifactId>
-			<version>${wicket-jquery-ui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-urlfragment</artifactId>
-			<version>${wicketstuff.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-select2</artifactId>
-			<version>${wicketstuff.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>jqplot</artifactId>
-			<version>${wicketstuff.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.agilecoders.wicket</groupId>
 			<artifactId>wicket-bootstrap-extensions</artifactId>
-			<version>${wicket-bootstrap.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.agilecoders.wicket</groupId>
 			<artifactId>wicket-bootstrap-themes</artifactId>
-			<version>${wicket-bootstrap.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>font-awesome</artifactId>
-			<version>${font-awesome.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -638,7 +582,6 @@
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>jquery-ui-touch-punch</artifactId>
-			<version>0.2.3-2</version>
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
@@ -667,35 +610,22 @@
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-websocket</artifactId>
-			<version>${tomcat.version}</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-test-framework</artifactId>
-			<version>2.0.0.AM26</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.directory.api</groupId>
-					<artifactId>api-ldap-schema-data</artifactId>
-				</exclusion>
-			</exclusions>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-inline</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-junit-jupiter</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-params</artifactId>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

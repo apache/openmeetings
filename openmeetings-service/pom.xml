@@ -41,12 +41,10 @@
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-core</artifactId>
-			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-spring</artifactId>
-			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -55,14 +53,6 @@
 		<dependency>
 			<groupId>com.github.caldav4j</groupId>
 			<artifactId>caldav4j</artifactId>
-			<version>${caldav4j.version}</version>
-			<exclusions>
-				<exclusion>
-					<!-- Remove the need for ehcache, since we use the Methods directly -->
-					<groupId>net.sf.ehcache</groupId>
-					<artifactId>ehcache</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 	</dependencies>
 </project>

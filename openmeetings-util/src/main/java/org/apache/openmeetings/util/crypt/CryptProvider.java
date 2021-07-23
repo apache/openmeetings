@@ -23,9 +23,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassNa
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.jcip.annotations.ThreadSafe;
-
-@ThreadSafe
 public class CryptProvider {
 	private static final Logger log = LoggerFactory.getLogger(CryptProvider.class);
 	private static ICrypt crypt;

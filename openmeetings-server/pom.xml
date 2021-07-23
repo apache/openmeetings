@@ -152,7 +152,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>${exec-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>generate-configs-xml-site</id>

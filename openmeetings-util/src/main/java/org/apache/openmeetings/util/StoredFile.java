@@ -21,7 +21,7 @@ package org.apache.openmeetings.util;
 import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
-import static org.apache.tika.metadata.TikaMetadataKeys.RESOURCE_NAME_KEY;
+import static org.apache.tika.metadata.TikaCoreProperties.RESOURCE_NAME_KEY;
 import static org.apache.tika.mime.MediaType.application;
 
 import java.io.File;
