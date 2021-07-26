@@ -116,7 +116,7 @@
 		<tika-parsers.version>2.0.0</tika-parsers.version>
 		<commons-text.version>1.9</commons-text.version>
 		<slf4j.version>1.7.32</slf4j.version>
-		<logback.version>1.2.3</logback.version>
+		<logback.version>1.2.4</logback.version>
 		<jetty.version>9.4.43.v20210629</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.69</bcprov-jdk15on.version>
