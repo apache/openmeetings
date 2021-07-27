@@ -73,7 +73,7 @@
 		<keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>3.8.0.2131</sonar-maven-plugin.version>
-		<jacoco-maven-plugin.versoin>0.8.6</jacoco-maven-plugin.versoin>
+		<jacoco-maven-plugin.versoin>0.8.7</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>3.1</forbiddenapis.version>
 		<maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
 		<frontend-maven-plugin.version>1.11.0</frontend-maven-plugin.version>
@@ -716,6 +716,18 @@
 						<groupId>xerces</groupId>
 						<artifactId>xercesImpl</artifactId>
 					</exclusion>
+					<exclusion>
+						<groupId>org.apache.logging.log4j</groupId>
+						<artifactId>log4j-core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.logging.log4j</groupId>
+						<artifactId>log4j-slf4j-impl</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
@@ -728,6 +740,12 @@
 				<groupId>org.kurento</groupId>
 				<artifactId>kurento-client</artifactId>
 				<version>${kurento.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.jodconverter</groupId>
