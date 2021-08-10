@@ -46,20 +46,18 @@ import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
-import org.apache.openmeetings.db.entity.user.GroupUser;
-import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.RoomMessage.Type;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.NullStringer;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.QuickPollManager;
 import org.apache.openmeetings.web.app.TimerService;
@@ -332,47 +330,17 @@ public class RoomPanel extends BasePanel {
 		} else if (r.getId().equals(WebSession.get().getRoomId())) {
 			// secureHash/invitationHash, already checked
 		} else {
-			boolean allowed = false;
+			boolean allowed = Application.get().isRoomAllowedToUser(r, c.getUser());
 			String deniedMessage = null;
 			if (r.isAppointment()) {
 				Appointment a = apptDao.getByRoom(r.getId());
-				if (a != null && !a.isDeleted()) {
-					boolean isOwner = a.getOwner().getId().equals(getUserId());
-					allowed = isOwner;
-					log.debug("appointed room, isOwner ? {}", isOwner);
-					if (!allowed) {
-						for (MeetingMember mm : a.getMeetingMembers()) {
-							if (getUserId().equals(mm.getUser().getId())) {
-								allowed = true;
-								break;
-							}
-						}
-					}
-					if (allowed) {
-						Calendar cal = WebSession.getCalendar();
-						if (isOwner || cal.getTime().after(allowedStart(a.getStart())) && cal.getTime().before(a.getEnd())) {
-							eventDetail = new EventDetailDialog(EVENT_DETAILS_ID, a);
-						} else {
-							allowed = false;
-							deniedMessage = String.format("%s %s - %s", getString("error.hash.period"), getDateFormat().format(a.getStart()), getDateFormat().format(a.getEnd()));
-						}
-					}
-				}
-			} else {
-				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()));
-				log.debug("public ? {}, ownedId ? {} {}", r.getIspublic(), r.getOwnerId(), allowed);
-				if (!allowed) {
-					User u = c.getUser();
-					for (RoomGroup ro : r.getGroups()) {
-						for (GroupUser ou : u.getGroupUsers()) {
-							if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
-								allowed = true;
-								break;
-							}
-						}
-						if (allowed) {
-							break;
-						}
+				if (allowed) {
+					Calendar cal = WebSession.getCalendar();
+					if (a.isOwner(getUserId()) || cal.getTime().after(allowedStart(a.getStart())) && cal.getTime().before(a.getEnd())) {
+						eventDetail = new EventDetailDialog(EVENT_DETAILS_ID, a);
+					} else {
+						allowed = false;
+						deniedMessage = String.format("%s %s - %s", getString("error.hash.period"), getDateFormat().format(a.getStart()), getDateFormat().format(a.getEnd()));
 					}
 				}
 			}

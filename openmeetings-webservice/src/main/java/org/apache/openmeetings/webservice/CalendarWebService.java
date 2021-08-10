@@ -288,7 +288,7 @@ public class CalendarWebService extends BaseWebService {
 					return true;
 					// fine
 				}
-				if (AuthLevelUtil.hasUserLevel(rights) && a.getOwner().getId().equals(sd.getUserId())) {
+				if (AuthLevelUtil.hasUserLevel(rights) && a.isOwner(sd.getUserId())) {
 					return true;
 				}
 				return false;

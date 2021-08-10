@@ -630,6 +630,10 @@ public class Room extends HistoricalEntity {
 		this.files = files;
 	}
 
+	public boolean isOwner(Long userId) {
+		return ownerId != null && ownerId.equals(userId);
+	}
+
 	@Override
 	public String toString() {
 		return "Room [id=" + id + ", name=" + name + ", type=" + type + "]";

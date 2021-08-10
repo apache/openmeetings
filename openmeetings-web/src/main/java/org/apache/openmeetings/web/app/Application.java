@@ -41,6 +41,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.websocket.WebSocketContainer;
@@ -61,6 +62,7 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
@@ -521,23 +523,17 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		Room r = i.getRoom();
 		User u = i.getInvitee();
 		if (r != null) {
-			if (r.isAppointment() && i.getInvitedBy().getId().equals(u.getId())) {
-				link = getRoomUrlFragment(r.getId()).getLink();
+			if ((i.isPasswordProtected() && !r.isOwner(u.getId())) // invitation is password-protected and invitee is not owner
+					|| Type.CONTACT == u.getType() || Type.EXTERNAL == u.getType() || !get().isRoomAllowedToUser(r, u)) // no-access
+			{
+				PageParameters pp = new PageParameters();
+				pp.add(INVITATION_HASH, i.getHash());
+				if (u.getLanguageId() > 0) {
+					pp.add("language", u.getLanguageId());
+				}
+				link = urlForPage(HashPage.class, pp, baseUrl);
 			} else {
-				boolean allowed = Type.CONTACT != u.getType() && Type.EXTERNAL != u.getType();
-				if (allowed) {
-					allowed = get().isRoomAllowedToUser(r, u);
-				}
-				if (allowed) {
-					link = getRoomUrlFragment(r.getId()).getLink();
-				} else {
-					PageParameters pp = new PageParameters();
-					pp.add(INVITATION_HASH, i.getHash());
-					if (u.getLanguageId() > 0) {
-						pp.add("language", u.getLanguageId());
-					}
-					link = urlForPage(HashPage.class, pp, baseUrl);
-				}
+				link = getRoomUrlFragment(r.getId()).getLink();
 			}
 		}
 		Recording rec = i.getRecording();
@@ -551,30 +547,28 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (a == null || a.isDeleted()) {
 			return false;
 		}
-		if (a.getOwner().getId().equals(u.getId())) {
+		if (a.isOwner(u.getId())) {
 			log.debug("[isRoomAllowedToUser] appointed room, Owner entered");
 			return true;
 		}
-		for (MeetingMember mm : a.getMeetingMembers()) {
-			if (mm.getUser().getId().equals(u.getId())) {
-				return true;
-			}
-		}
-		return false;
+		return a.getMeetingMembers().stream()
+				.map(MeetingMember::getUser)
+				.map(User::getId)
+				.anyMatch(userId -> userId.equals(u.getId()));
 	}
 
 	private static boolean checkGroups(Room r, User u) {
 		if (null == r.getGroups()) { //u.getGroupUsers() can't be null due to user was able to login
 			return false;
 		}
-		for (RoomGroup ro : r.getGroups()) {
-			for (GroupUser ou : u.getGroupUsers()) {
-				if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
-					return true;
-				}
-			}
-		}
-		return false;
+		Set<Long> roomGroups = r.getGroups().stream()
+				.map(RoomGroup::getGroup)
+				.map(Group::getId)
+				.collect(Collectors.toSet());
+		return u.getGroupUsers().stream()
+				.map(GroupUser::getGroup)
+				.map(Group::getId)
+				.anyMatch(roomGroups::contains);
 	}
 
 	public boolean isRoomAllowedToUser(Room r, User u) {
@@ -584,13 +578,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (r.isAppointment()) {
 			Appointment a = appointmentDao.getByRoom(r.getId());
 			return checkAppointment(a, u);
-		} else {
-			if (r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(u.getId()))) {
-				log.debug("[isRoomAllowedToUser] public ? {} , ownedId ? {} ALLOWED", r.getIspublic(), r.getOwnerId());
-				return true;
-			}
-			return checkGroups(r, u);
 		}
+		if (r.getIspublic() || r.isOwner(u.getId())) {
+			log.debug("[isRoomAllowedToUser] public ? {} , ownedId ? {} ALLOWED", r.getIspublic(), r.getOwnerId());
+			return true;
+		}
+		return checkGroups(r, u);
 	}
 
 	public static boolean isUrlValid(String url) {

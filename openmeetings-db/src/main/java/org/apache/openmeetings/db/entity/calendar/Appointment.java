@@ -499,6 +499,10 @@ public class Appointment extends HistoricalEntity {
 		this.etag = etag;
 	}
 
+	public boolean isOwner(Long userId) {
+		return owner.getId().equals(userId);
+	}
+
 	@Override
 	public String toString() {
 		return "Appointment [id=" + id + ", title=" + title + ", start=" + start + ", end=" + end + ", owner=" + owner
