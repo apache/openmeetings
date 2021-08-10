@@ -85,7 +85,7 @@
 		<wicket-bootstrap.version>5.0.5</wicket-bootstrap.version>
 		<font-awesome.version>5.15.3</font-awesome.version>
 		<spring.version>5.3.9</spring.version>
-		<tomcat.version>9.0.50</tomcat.version>
+		<tomcat.version>9.0.52</tomcat.version>
 		<ical4j.version>3.0.21</ical4j.version>
 		<cxf.version>3.4.4</cxf.version>
 		<io.prometheus.version>0.11.0</io.prometheus.version>
