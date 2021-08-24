@@ -110,7 +110,7 @@
 		<mssql.version>9.4.0.jre11</mssql.version>
 		<ojdbc.version>19.11.0.0</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
-		<xstream.version>1.4.17</xstream.version>
+		<xstream.version>1.4.18</xstream.version>
 		<api-all.version>2.1.0</api-all.version>
 		<caldav4j.version>1.0.1</caldav4j.version>
 		<tika-parsers.version>2.0.0</tika-parsers.version>
