@@ -731,6 +731,11 @@
 				</exclusions>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.tika</groupId>
+				<artifactId>tika-core</artifactId>
+				<version>${tika-parsers.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>javax.websocket</groupId>
 				<artifactId>javax.websocket-api</artifactId>
 				<version>1.1</version>
