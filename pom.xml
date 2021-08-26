@@ -108,19 +108,19 @@
 		<postgresql.version>42.2.23</postgresql.version>
 		<mysql.version>8.0.26</mysql.version>
 		<mssql.version>9.4.0.jre11</mssql.version>
-		<ojdbc.version>19.11.0.0</ojdbc.version>
+		<ojdbc.version>19.12.0.0</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<xstream.version>1.4.18</xstream.version>
 		<api-all.version>2.1.0</api-all.version>
 		<caldav4j.version>1.0.1</caldav4j.version>
-		<tika-parsers.version>2.0.0</tika-parsers.version>
+		<tika-parsers.version>2.1.0</tika-parsers.version>
 		<commons-text.version>1.9</commons-text.version>
 		<slf4j.version>1.7.32</slf4j.version>
 		<logback.version>1.2.4</logback.version>
 		<jetty.version>9.4.43.v20210629</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.69</bcprov-jdk15on.version>
-		<mockito.version>3.11.2</mockito.version>
+		<mockito.version>3.12.4</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.16.1</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
