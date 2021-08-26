@@ -53,7 +53,7 @@
 	content: "\f104";
 }
 #chat .messageArea .msg-row.need-moderation {
-	background-color: var(--warning);
+	background-color: var(--bs-warning);
 }
 #chat .messageArea .time {
 	margin-right: 5px;

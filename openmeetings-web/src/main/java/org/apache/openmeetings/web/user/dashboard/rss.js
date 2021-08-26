@@ -12,7 +12,7 @@ function displayRss(entries) {
 			, bodyId = `om-rss-content${i}`
 			, markup = OmUtil.tmpl('#rss-item-template');
 		markup.find('.card-header').attr('id', headId);
-		markup.find('button').attr('data-target', `#${bodyId}`).attr('aria-controls', bodyId)
+		markup.find('button').attr('data-bs-target', `#${bodyId}`).attr('aria-controls', bodyId)
 			.append(entries[i].title);
 		markup.find('.collapse').attr('id', bodyId).attr('aria-labelledby', headId);
 		markup.find('.card-body').html(entries[i].content);

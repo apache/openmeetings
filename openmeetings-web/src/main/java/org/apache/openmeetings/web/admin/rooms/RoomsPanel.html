@@ -23,7 +23,7 @@
 <wicket:extend>
 	<div class="adminPanelColumnTable rooms col-6">
 		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
-		<table class="list-table table-striped table-hover">
+		<table class="list-table table table-striped table-hover">
 			<thead>
 				<tr>
 					<th class="col-1"><span wicket:id="orderById"></span><wicket:message key="188" /></th>
@@ -191,7 +191,7 @@
 							<button type="button" wicket:id="addFiles"></button>
 						</div>
 					</div>
-					<table class="list-table small table-striped table-hover">
+					<table class="list-table small table table-striped table-hover">
 						<thead>
 							<tr>
 								<th class="col-9"><wicket:message key="165" /></th>
@@ -204,7 +204,7 @@
 								<td class="col-9"><div class="col-wrapper w-auto"><span wicket:id="name"></span></div></td>
 								<td class="col-2"><span wicket:id="wbIdx"></span></td>
 								<td class="col-1">
-									<button wicket:id="delete" wicket:message="title:80" class="btn-sm p-0 pl-2 pr-2"></button>
+									<button wicket:id="delete" wicket:message="title:80" class="btn-sm p-0 px-2"></button>
 								</td>
 							</tr>
 						</tbody>
@@ -214,7 +214,7 @@
 				<!-- Users in this Room -->
 				<fieldset>
 					<legend><wicket:message key="407" /></legend>
-					<table class="list-table small table-striped table-hover">
+					<table class="list-table small table table-striped table-hover">
 						<thead>
 							<tr>
 								<th class="col-1"><wicket:message key="188" /></th>
@@ -227,7 +227,7 @@
 								<td class="col-1"><div class="col-wrapper"><span wicket:id="clientId"></span></div></td>
 								<td class="col-10"><div class="col-wrapper"><span wicket:id="clientLogin"></span></div></td>
 								<td class="col-1">
-									<button wicket:id="clientDelete" wicket:message="title:603" class="btn-sm p-0 pl-2 pr-2"></button>
+									<button wicket:id="clientDelete" wicket:message="title:603" class="btn-sm p-0 px-2"></button>
 								</td>
 							</tr>
 						</tbody>
@@ -258,7 +258,7 @@
 						<div class="om-select2 p-0 d-inline-block col-8"><select wicket:id="moderator2add" class="input w-100"></select></div>
 					</div>
 					<div class="formelement" wicket:id="moderatorContainer">
-						<table class="list-table small table-striped table-hover">
+						<table class="list-table small table table-striped table-hover">
 							<thead>
 								<tr>
 									<th class="col-1 overflow-hidden" wicket:message="title:817"><wicket:message key="817" /></th>
@@ -275,7 +275,7 @@
 									<td class="col-4"><div class="col-wrapper"><span wicket:id="new"/><span wicket:id="uName"></span></div></td>
 									<td class="col-5"><div class="col-wrapper overflow-hidden"><span wicket:id="email"></span></div></td>
 									<td class="col-1">
-										<button wicket:id="delete" wicket:message="title:80" class="btn-sm p-0 pl-2 pr-2"></button>
+										<button wicket:id="delete" wicket:message="title:80" class="btn-sm p-0 px-2"></button>
 									</td>
 								</tr>
 							</tbody>

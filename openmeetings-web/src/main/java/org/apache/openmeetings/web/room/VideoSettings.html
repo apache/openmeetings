@@ -20,14 +20,12 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<div class="modal fade video" id="video-settings" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="video-settings-title" aria-hidden="true">
+	<div class="modal fade video" id="video-settings" data-bs-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="video-settings-title" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
-				<div class="modal-header p-0 pr-2 pl-2">
+				<div class="modal-header p-0 px-2">
 					<h5 class="modal-title" id="video-settings-title"><wicket:message key="51"/></h5>
-					<button type="button" class="close p-0 pr-1 pl-1" data-dismiss="modal" aria-hidden="true" wicket:message="title:85,aria-label:85">
-						&times;
-					</button>
+					<button type="button" class="close p-0 px-1" data-bs-dismiss="modal" aria-hidden="true" wicket:message="title:85,aria-label:85"></button>
 				</div>
 				<div class="modal-body">
 					<div class="title"><wicket:message key="758"/></div>
@@ -80,7 +78,7 @@
 							</div>
 							<canvas class="level-meter" data-orientation="horizontal" wicket:message="title:767" width="250" height="16"></canvas>
 							<div class="sett-row right">
-								<div class="timer badge badge-primary"><span class="time"></span>&nbsp;<wicket:message key="network.test.sec"/></div>
+								<div class="timer badge bg-primary"><span class="time"></span>&nbsp;<wicket:message key="network.test.sec"/></div>
 								<div><button class="play btn btn-outline-primary"><i class="fas fa-play"></i>&nbsp;<wicket:message key="764"/></button></div>
 								<div class="clear"></div>
 							</div>

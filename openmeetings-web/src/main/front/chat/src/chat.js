@@ -214,7 +214,7 @@ function _addTab(id, label) {
 	if (!label) {
 		label = id === "chatTab-all" ? allPrefix : roomPrefix + id.substr(9);
 	}
-	const link = $('<a class="nav-link" data-toggle="tab" role="tab">')
+	const link = $('<a class="nav-link" data-bs-toggle="tab" role="tab">')
 		.attr('aria-controls', id)
 		.attr('href', '#' + id).text(label)
 		, li = $('<li class="nav-item">').append(link);

@@ -25,24 +25,20 @@
 	<div class="adminPanelColumnTable label col-6">
 		<form wicket:id="langForm" class="addLanguagePanel">
 			<div class="input-group input-group-sm">
-				<div class="input-group-prepend">
-					<button class="btn btn-outline-success" wicket:id="addLangBtn" wicket:message="title:362">
-						<i class="fas fa-plus"></i>
-					</button>
-					<button wicket:id="deleteLangBtn" wicket:message="title:363"></button>
-				</div>
+				<button class="btn btn-outline-success" wicket:id="addLangBtn" wicket:message="title:362">
+					<i class="fas fa-plus"></i>
+				</button>
+				<button wicket:id="deleteLangBtn" wicket:message="title:363"></button>
 				<select wicket:id="language" class="form-control"></select>
-				<div class="input-group-append">
-					<button wicket:id="export"></button>
-					<button class="fileupload fileupload-new m-0 btn btn-file btn-xs btn-primary" data-provides="fileupload">
-						<wicket:message key="387"/>
-						<input type="file" accept="text/xml" wicket:id="fileInput"/>
-					</button>
-				</div>
+				<button wicket:id="export"></button>
+				<button class="fileupload fileupload-new m-0 btn btn-file btn-xs btn-primary" data-provides="fileupload">
+					<wicket:message key="387"/>
+					<input type="file" accept="text/xml" wicket:id="fileInput"/>
+				</button>
 			</div>
 		</form>
 		<div class="adminNav" wicket:id="navigator">[dataview navigator]</div>
-		<table class="list-table table-striped table-hover">
+		<table class="list-table table table-striped table-hover">
 			<thead>
 				<tr>
 					<th class="col-6"><span wicket:id="orderByName"></span><wicket:message key="165" /></th>

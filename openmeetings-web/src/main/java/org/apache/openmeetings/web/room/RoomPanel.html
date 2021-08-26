@@ -37,14 +37,12 @@
 		<div wicket:id="nickname" class="room-nickname-dialog"></div>
 		<div wicket:id="client-kicked"></div>
 		<div wicket:id="wait-moderator" class="wait-moder"></div>
-		<div id="room-local-settings" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true">
+		<div id="room-local-settings" class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-hidden="true">
 			<div class="modal-dialog modal-sm" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title"><wicket:message key="edit.settings"/></h5>
-						<button type="button" class="close" data-dismiss="modal" wicket:message="aria-label:85">
-							<span aria-hidden="true">&times;</span>
-						</button>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" wicket:message="aria-label:85"></button>
 					</div>
 					<div class="modal-body">
 						<h5><wicket:message key="video.muteothers"/></h5>
@@ -78,20 +76,18 @@
 			</div>
 		</div>
 	</div>
-	<div id="disconnected-dlg" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true">
+	<div id="disconnected-dlg" class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-hidden="true">
 		<div class="modal-dialog modal-sm" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title"><wicket:message key="204"/></h5>
-					<button type="button" class="close" data-dismiss="modal" wicket:message="aria-label:85">
-						<span aria-hidden="true">&times;</span>
-					</button>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" wicket:message="aria-label:85"></button>
 				</div>
 				<div class="modal-body">
 					<wicket:message key="556"/>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
 						<i class="fas fa-sync-alt"></i>&nbsp;<wicket:message key="753"/>
 					</button>
 				</div>
@@ -125,38 +121,38 @@
 				<i class="m-2 warn fas fa-exclamation-triangle text-warning"></i><wicket:message key="ulist.user.muteothers.confirm"/>
 			</div>
 			<br/>
-			<input id="muteothers-confirm-dont-show" type="checkbox"/><label for="muteothers-confirm-dont-show" class="mr-2 ml-2"><wicket:message key="dont.ask.again"/></label>
+			<input id="muteothers-confirm-dont-show" type="checkbox"/><label for="muteothers-confirm-dont-show" class="mx-2"><wicket:message key="dont.ask.again"/></label>
 		</div>
 		<div id="clipboard-dialog" wicket:message="title:1121,data-btn-ok:54">
-			<p><span class="ui-icon ui-icon-alert align-left mr-2 mt-2 mb-3 ml-0"></span><span class="text"></span></p>
+			<p><span class="ui-icon ui-icon-alert align-left ms-2 mt-2 mb-3 me-0"></span><span class="text"></span></p>
 		</div>
 		<div id="quick-vote-template">
 			<div class="close-btn btn btn-outline-secondary btn-sm"
-				 wicket:message="title:85,data-btn-ok-label:54,data-btn-cancel-label:lbl.cancel,data-title:832,data-content:1419"
+				 wicket:message="title:85,data-btn-ok-label:54,data-btn-cancel-label:lbl.cancel,data-title:832,data-bs-content:1419"
 				 data-btn-ok-class="btn btn-sm btn-danger"
 				 data-btn-ok-icon-class="fas fa-exclamation-triangle">
 				<i class="fas fa-times"></i>
 			</div>
 			<div class="control pro clickable">
 				<i class="fas fa-plus-circle"></i>
-				<span class="badge badge-primary">0</span>
+				<span class="badge bg-primary">0</span>
 			</div>
 			<div class="control con">
 				<i class="fas fa-times-circle"></i>
-				<span class="badge badge-primary">0</span>
+				<span class="badge bg-primary">0</span>
 			</div>
 		</div>
 		<div id="sharer" wicket:message="title:730">
 			<h2 class="alert text-warning">Screen-sharing is not supported in your browser</h2>
 			<div class="container p-0 m-0">
-				<div class="row-no-gutters">
+				<div class="row g-0">
 					<label class="col-7"><wicket:message key="734"/></label>
 					<select name="type" class="type col-4 custom-select">
 						<option value="screen">Screen</option>
 						<option value="window">Window</option>
 					</select>
 				</div>
-				<div class="row-no-gutters">
+				<div class="row g-0">
 					<label class="col-7"><wicket:message key="1089"/></label>
 					<select name="fps" class="fps col-4 custom-select">
 						<option value="2">2 FPS</option>

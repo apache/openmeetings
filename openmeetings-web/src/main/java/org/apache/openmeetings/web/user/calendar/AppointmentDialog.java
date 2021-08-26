@@ -22,7 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnable
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
-import static org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
 
@@ -222,7 +222,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 			}
 		});
 		enterRoom.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
-		enterRoom.add(AttributeModifier.append("data-dismiss", "modal"));
+		enterRoom.add(AttributeModifier.append("data-bs-dismiss", "modal"));
 		delete = new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, null, Buttons.Type.Outline_Danger, new ResourceModel("80")) {
 			private static final long serialVersionUID = 1L;
 

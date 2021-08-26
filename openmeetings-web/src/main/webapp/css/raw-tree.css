@@ -53,18 +53,17 @@
 	line-height: 20px;
 	color: transparent;
 	height: var(--tree-header-height);
-	padding-top: 3px;
 	overflow: hidden;
 }
 .trash-toolbar .om-confirm-dialog {
-	color: var(--danger);
+	color: var(--bs-danger);
 }
 .trash-toolbar .om-icon.fileitem, .trash-toolbar .om-icon.recorditem {
 	display: none !important;
 }
 .trash-toolbar-hover {
 	color: inherit;
-	background-color: var(--light);
+	background-color: var(--bs-light);
 }
 .file-tree .info .details {
 	width: 100%;
@@ -99,8 +98,11 @@
 .trees .tree-node {
 	white-space: nowrap;
 }
+.trees .tree-node .tree-junction {
+	text-decoration: none;
+}
 .file-tree .trees .om-icon.active {
-	background-color: var(--info);
+	background-color: var(--bs-info);
 }
 .file-tree .trees .om-icon i {
 	display: none;
@@ -125,7 +127,7 @@
 	content: '\f008';
 }
 .broken.om-icon::before {
-	color: var(--danger);
+	color: var(--bs-danger);
 }
 .file-tree .trees .processing.om-icon i {
 	display: block;
@@ -192,7 +194,7 @@
 	padding: 0px;
 }
 .file.item .errors::before {
-	color: var(--warning);
+	color: var(--bs-warning);
 	content: '\f071';
 }
 .dialog.errors {
@@ -204,10 +206,10 @@
 	height: calc(100% - 50px);
 }
 .dialog.errors .alert {
-	color: var(--danger);
+	color: var(--bs-danger);
 }
 .dialog.errors .warn {
-	color: var(--warning);
+	color: var(--bs-warning);
 }
 .dialog.errors .message {
 	display: block;

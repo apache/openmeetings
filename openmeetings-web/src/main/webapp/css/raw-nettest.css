@@ -15,24 +15,24 @@
 .nettest .test-container button.not-started
 , .nettest .test-container button.started
 {
-	color: var(--secondary);
-	border-color: var(--secondary);
+	color: var(--bs-secondary);
+	border-color: var(--bs-secondary);
 }
 .nettest .test-container button:hover {
-	color: var(--white);
+	color: var(--bs-white);
 	border-color: transparent;
 }
 .nettest .test-container button.not-started:hover
 , .nettest .test-container button.started:hover
 {
-	background-color: var(--secondary);
+	background-color: var(--bs-secondary);
 }
 .nettest .test-container button.complete {
-	color: var(--success);
-	border-color: var(--success);
+	color: var(--bs-success);
+	border-color: var(--bs-success);
 }
 .nettest .test-container button.complete:hover {
-	background-color: var(--success);
+	background-color: var(--bs-success);
 }
 .nettest .test-container button.not-started i::before {
 	content: '\f04b';
@@ -45,6 +45,12 @@
 }
 .nettest .test-container button.complete i::before {
 	content: '\f00c';
+}
+.nettest .test-container .value {
+	min-height: 3em;
+}
+.nettest .test-container .card-title {
+	white-space: nowrap;
 }
 .nettest .output {
 	border-radius: 10px;

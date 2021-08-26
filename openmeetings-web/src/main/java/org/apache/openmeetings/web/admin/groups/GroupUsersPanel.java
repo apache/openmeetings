@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
-import static org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +40,10 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.badge.BadgeBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.badge.BootstrapBadge;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public class GroupUsersPanel extends Panel {
@@ -95,7 +95,7 @@ public class GroupUsersPanel extends Panel {
 				del.setIconType(FontAwesome5IconType.times_s)
 						.add(newOkCancelDangerConfirm(this, getString("833")));
 				item.add(del);
-				item.add(new BootstrapBadge("new", new ResourceModel("lbl.new"), BadgeBehavior.Type.Warning).setVisible((grpUser.getId() == null)));
+				item.add(new BootstrapBadge("new", new ResourceModel("lbl.new"), BackgroundColorBehavior.Color.Warning).setVisible((grpUser.getId() == null)));
 			}
 		};
 		add(dataView).setOutputMarkupId(true);

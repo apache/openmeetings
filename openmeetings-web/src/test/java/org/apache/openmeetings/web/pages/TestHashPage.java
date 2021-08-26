@@ -25,7 +25,7 @@ import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.pages.HashPage.PANEL_MAIN;
 import static org.apache.openmeetings.web.pages.HashPage.PANEL_RECORDING;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 import java.util.UUID;
@@ -67,7 +67,7 @@ class TestHashPage extends AbstractWicketTester {
 	private void checkAccessDenied(boolean visible) {
 		@SuppressWarnings("unchecked")
 		Modal<String> dlg = (Modal<String>)tester.getComponentFromLastRenderedPage("access-denied");
-		assertTrue(tester.getLastResponseAsString().contains("$('#" + dlg.getMarkupId() + "').modal({keyboard:true, show:" + visible + "});"));
+		assertEquals(visible, tester.getLastResponseAsString().contains("new bootstrap.Modal(document.getElementById('" + dlg.getMarkupId() + "')).show();"));
 	}
 
 	private void checkAccessDenied(PageParameters pp) {

@@ -17,9 +17,7 @@ function __alert(level, msg, autohideAfter) {
 	const holder = $('#alert-holder');
 	const curId = 'om-alert' + alertId++;
 	holder.append($(`<div id="${curId}" class="alert alert-${level} alert-dismissible fade show m-0" role="alert">${msg}
-			<button type="button" class="close" data-dismiss="alert" aria-label="${holder.data('lbl-close')}">
-				<span aria-hidden="true">&times;</span>
-			</button>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="${holder.data('lbl-close')}"></button>
 		</div>`));
 	if (autohideAfter > 0) {
 		setTimeout(() => { $(`#${curId}`).alert('close');}, autohideAfter);

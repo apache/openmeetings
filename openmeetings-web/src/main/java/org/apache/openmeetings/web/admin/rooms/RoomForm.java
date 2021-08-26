@@ -25,7 +25,7 @@ import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
-import static org.apache.openmeetings.web.common.confirmation.ConfirmationBehavior.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
 import static org.apache.wicket.validation.validator.StringValidator.maximumLength;
 
 import java.util.ArrayList;
@@ -80,11 +80,11 @@ import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.badge.BadgeBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.badge.BootstrapBadge;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
 public class RoomForm extends AdminBaseForm<Room> {
@@ -325,7 +325,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					.add(name)
 					.add(new Label("email", moderator.getUser().getAddress().getEmail()))
 					.add(del)
-					.add(new BootstrapBadge("new", new ResourceModel("lbl.new"), BadgeBehavior.Type.Warning).setVisible((moderator.getId() == null)));
+					.add(new BootstrapBadge("new", new ResourceModel("lbl.new"), BackgroundColorBehavior.Color.Warning).setVisible((moderator.getId() == null)));
 			}
 		}).setOutputMarkupId(true));
 
