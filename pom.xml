@@ -82,13 +82,13 @@
 		<wicket.version>9.4.0</wicket.version>
 		<wicket-jquery-ui.version>9.3.2</wicket-jquery-ui.version>
 		<wicketstuff.version>9.4.0</wicketstuff.version>
-		<wicket-bootstrap.version>6.0.0-M2</wicket-bootstrap.version>
+		<wicket-bootstrap.version>6.0.0-M3</wicket-bootstrap.version>
 		<font-awesome.version>5.15.3</font-awesome.version>
 		<spring.version>5.3.9</spring.version>
 		<tomcat.version>9.0.52</tomcat.version>
 		<ical4j.version>3.0.21</ical4j.version>
 		<cxf.version>3.4.4</cxf.version>
-		<io.prometheus.version>0.11.0</io.prometheus.version>
+		<io.prometheus.version>0.12.0</io.prometheus.version>
 		<aspectjtools.version>1.9.7</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.1</jettison.version>
