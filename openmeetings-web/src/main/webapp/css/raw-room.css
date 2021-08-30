@@ -142,7 +142,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	display: none !important;
 }
 .room-block .sb-wb .sidebar .icon-undock, .room-block .sb-wb .sidebar .icon-dock {
-	font-size: 1.6em;
+	font-size: 1.2em;
 	padding-top: 3px;
 }
 .room-block .sb-wb .sidebar .icon-dock:before {
