@@ -57,39 +57,39 @@
 				</executions>
 			</plugin>
 			<plugin>
-		      <groupId>io.openapitools.swagger</groupId>
-			<artifactId>swagger-maven-plugin</artifactId>
-			<configuration>
-				<resourcePackages>
-					<resourcePackage>org.apache.openmeetings.webservice</resourcePackage>
-				</resourcePackages>
-				<outputDirectory>${basedir}/target/</outputDirectory>
-				<outputFilename>appache-openmeetings-${project.version}-swagger</outputFilename>
-				<outputFormats>JSON,YAML</outputFormats>
-				<prettyPrint>true</prettyPrint>
-				<swaggerConfig>
-					<info>
-						<title>Apache OpenMeetings API</title>
-						<version>${project.version}</version>
-						<contact>
-							<email>dev@openmeetings.apache.org</email>
-							<name>Apache OpenMeetings Developer group</name>
-							<url>https://openmeetings.apache.org</url>
-						</contact>
-						<license>
-							<url>https://www.apache.org/licenses/LICENSE-2.0</url>
-							<name>The Apache Software License, Version 2.0</name>
-						</license>
-					</info>
-				</swaggerConfig>
-			</configuration>
-			<executions>
-				<execution>
-					<goals>
-						<goal>generate</goal>
-					</goals>
-				</execution>
-			</executions>
+				<groupId>io.openapitools.swagger</groupId>
+				<artifactId>swagger-maven-plugin</artifactId>
+				<configuration>
+					<resourcePackages>
+						<resourcePackage>org.apache.openmeetings.webservice</resourcePackage>
+					</resourcePackages>
+					<outputDirectory>${basedir}/target/</outputDirectory>
+					<outputFilename>appache-openmeetings-${project.version}-swagger</outputFilename>
+					<outputFormats>JSON,YAML</outputFormats>
+					<prettyPrint>true</prettyPrint>
+					<swaggerConfig>
+						<info>
+							<title>Apache OpenMeetings API</title>
+							<version>${project.version}</version>
+							<contact>
+								<email>dev@openmeetings.apache.org</email>
+								<name>Apache OpenMeetings Developer group</name>
+								<url>https://openmeetings.apache.org</url>
+							</contact>
+							<license>
+								<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+								<name>The Apache Software License, Version 2.0</name>
+							</license>
+						</info>
+					</swaggerConfig>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
 		    </plugin>
 		</plugins>
 	</build>
