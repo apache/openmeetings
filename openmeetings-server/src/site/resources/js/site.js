@@ -19,7 +19,7 @@
 */
 $(document).ready(function() {
 	// "New" markers
-	var topics = ["Call For Logo"];
+	var topics = ["Call For Logo", "REST API Swagger"];
 	for (var i = 0; i < topics.length; ++i) {
 		$('ul.nav li a[title="' + topics[i] + '"').append('&nbsp;&nbsp;<span class="badge badge-success">New</span>')
 	}
