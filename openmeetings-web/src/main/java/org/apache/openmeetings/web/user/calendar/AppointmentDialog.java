@@ -132,6 +132,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 
 	public AppointmentDialog(String id, CalendarPanel calendarPanel, CompoundPropertyModel<Appointment> model) {
 		super(id, model);
+		setMarkupId(id);
 		log.debug(" -- AppointmentDialog -- Current model {}", getModel().getObject());
 		this.calendarPanel = calendarPanel;
 		setOutputMarkupId(true);
@@ -370,6 +371,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 			//General
 			add(ownerPanel.add(owner));
 			boolean showGroups = AuthLevelUtil.hasAdminLevel(getRights());
+			groups.getSettings().setDropdownParent(AppointmentDialog.this.getMarkupId());
 			add(rdi.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 				private static final long serialVersionUID = 1L;
 
@@ -388,6 +390,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 					// added to update model
 				})).setEnabled(false);
 			}
+			attendees.getSettings().setDropdownParent(AppointmentDialog.this.getMarkupId());
 			rdi.add(attendees.add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, target -> {
 					// added to update model
 				}))

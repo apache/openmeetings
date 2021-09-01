@@ -52,7 +52,8 @@ public class RecordingsPanel extends UserBasePanel {
 	private final VideoInfo info = new VideoInfo("info");
 	private FileTreePanel fileTree;
 	private InvitationDialog invite;
-	private RecordingInvitationForm rif = new RecordingInvitationForm("form");
+	private final static String recordingInviteDialogId = "recordingInviteDialog";
+	private RecordingInvitationForm rif = new RecordingInvitationForm("form", recordingInviteDialogId);
 
 	@SpringBean
 	private RecordingDao recDao;
@@ -152,7 +153,7 @@ public class RecordingsPanel extends UserBasePanel {
 			}
 		});
 		add(video, info, addFolder);
-		add(invite = new InvitationDialog("invitation", rif));
+		add(invite = new InvitationDialog(recordingInviteDialogId, rif));
 		rif.setDialog(invite);
 
 		super.onInitialize();

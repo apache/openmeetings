@@ -57,7 +57,7 @@ public class RoomInvitationForm extends InvitationForm {
 	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.user));
 	private final Long roomId;
 	private final WebMarkupContainer groupContainer = new WebMarkupContainer("groupContainer");
-	final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
+	private final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
 			, new CollectionModel<>(new ArrayList<>())
 			, new GroupChoiceProvider());
 	final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
@@ -73,9 +73,14 @@ public class RoomInvitationForm extends InvitationForm {
 		, group
 	}
 
-	public RoomInvitationForm(String id, Long roomId) {
-		super(id);
+	public RoomInvitationForm(String id, Long roomId, String dropDownParentId) {
+		super(id, dropDownParentId);
 		this.roomId = roomId;
+	}
+
+	@Override
+	protected void onInitialize() {
+		groups.setLabel(new ResourceModel("126"));
 		boolean showGroups = AuthLevelUtil.hasAdminLevel(getRights());
 		add(rdi.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 			private static final long serialVersionUID = 1L;
@@ -98,11 +103,9 @@ public class RoomInvitationForm extends InvitationForm {
 		rdi.add(new Radio<>("user", Model.of(InviteeType.user)));
 		add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		sipContainer.add(new Label("room.confno", "")).setVisible(false);
-	}
-
-	@Override
-	protected void onInitialize() {
-		groups.setLabel(new ResourceModel("126"));
+		if (dropDownParentId != null) {
+			groups.getSettings().setDropdownParent(dropDownParentId);
+		}
 		super.onInitialize();
 	}
 

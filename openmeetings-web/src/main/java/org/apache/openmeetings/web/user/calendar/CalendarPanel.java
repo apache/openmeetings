@@ -123,7 +123,7 @@ public class CalendarPanel extends UserBasePanel {
 		final Form<Date> form = new Form<>("form");
 		add(form);
 
-		dialog = new AppointmentDialog("appointment", this, new CompoundPropertyModel<>(getDefault()));
+		dialog = new AppointmentDialog("calendarAppointment", this, new CompoundPropertyModel<>(getDefault()));
 		add(dialog);
 
 		boolean isRtl = isRtl();

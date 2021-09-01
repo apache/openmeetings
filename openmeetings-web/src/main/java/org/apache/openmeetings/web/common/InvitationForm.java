@@ -81,6 +81,8 @@ public abstract class InvitationForm extends Form<Invitation> {
 	protected final TextField<String> url = new TextField<>("url", Model.of((String)null));
 	protected final UserMultiChoice recipients = new UserMultiChoice("recipients", new CollectionModel<>(new ArrayList<>()));
 	protected InvitationDialog dialog;
+	protected String dropDownParentId;
+
 	@SpringBean
 	private InvitationDao inviteDao;
 	@SpringBean
@@ -93,8 +95,9 @@ public abstract class InvitationForm extends Form<Invitation> {
 		, SEND
 	}
 
-	protected InvitationForm(String id) {
+	protected InvitationForm(String id, String dropDownParentId) {
 		super(id, new CompoundPropertyModel<>(new Invitation()));
+		this.dropDownParentId = dropDownParentId;
 		setOutputMarkupId(true);
 	}
 
@@ -105,6 +108,9 @@ public abstract class InvitationForm extends Form<Invitation> {
 			url.setModelObject(null);
 			updateButtons(target);
 		})).setOutputMarkupId(true);
+		if (dropDownParentId != null) {
+			recipients.getSettings().setDropdownParent(dropDownParentId);
+		}
 		add(new AjaxCheckBox("passwordProtected") {
 			private static final long serialVersionUID = 1L;
 

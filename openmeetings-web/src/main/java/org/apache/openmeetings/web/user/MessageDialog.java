@@ -107,6 +107,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 
 	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
 		super(id, model);
+		setMarkupId(id);
 		form = new Form<>("form", getModel());
 	}
 
@@ -208,7 +209,9 @@ public class MessageDialog extends Modal<PrivateMessage> {
 		addButton(OmModalCloseButton.of());
 
 		form.add(feedback.setOutputMarkupId(true));
-		form.add(new UserMultiChoice("to", modelTo).setRequired(true));
+		final UserMultiChoice recepients = new UserMultiChoice("to", modelTo);
+		recepients.getSettings().setDropdownParent(MessageDialog.this.getMarkupId());
+		form.add(recepients.setRequired(true));
 		form.add(new TextField<String>("subject"));
 		OmWysiwygToolbar toolbar = new OmWysiwygToolbar("toolbarContainer");
 		form.add(toolbar);
