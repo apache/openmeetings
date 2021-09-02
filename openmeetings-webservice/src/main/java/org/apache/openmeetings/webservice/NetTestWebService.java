@@ -44,7 +44,7 @@ import org.springframework.stereotype.Service;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
- * 
+ *
  * The Service contains methods to trigger a network test
  *
  */
