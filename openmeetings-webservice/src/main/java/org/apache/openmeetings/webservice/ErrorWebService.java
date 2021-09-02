@@ -40,6 +40,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  *
  * The Service contains methods to get localized errors
@@ -51,6 +53,7 @@ import org.springframework.stereotype.Service;
 @WebService(serviceName="org.apache.openmeetings.webservice.ErrorWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
+@Tag(name = "ErrorService", description = "The Service contains methods to get localized errors")
 @Path("/error")
 public class ErrorWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(ErrorWebService.class);

@@ -41,7 +41,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+/**
+ * 
+ * The Service contains methods to trigger a network test
+ *
+ */
 @Service("netTestWebService")
+@Tag(name = "NetTestService", description = "The Service contains methods to trigger a network test")
 @Path("/networktest")
 public class NetTestWebService {
 	private static final Logger log = LoggerFactory.getLogger(NetTestWebService.class);

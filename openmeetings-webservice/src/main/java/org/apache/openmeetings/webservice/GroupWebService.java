@@ -56,6 +56,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  *
  * The Service contains methods to login and create hash to directly enter
@@ -68,6 +70,8 @@ import org.springframework.stereotype.Service;
 @WebService(serviceName="org.apache.openmeetings.webservice.GroupWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
+@Tag(name = "GroupService", description = "The Service contains methods to login and create hash to directly enter\n"
+		+ " conference rooms, recordings or the application in general")
 @Path("/group")
 public class GroupWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(GroupWebService.class);

@@ -129,6 +129,7 @@
 		<jaxb-runtime.version>2.3.3</jaxb-runtime.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM26</apacheds-test-framework.version>
+		<swagger.core.v3.version>2.1.10</swagger.core.v3.version>
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -957,6 +958,11 @@
 				<groupId>org.quartz-scheduler</groupId>
 				<artifactId>quartz</artifactId>
 				<version>${quartz.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.swagger.core.v3</groupId>
+				<artifactId>swagger-annotations</artifactId>
+				<version>${swagger.core.v3.version}</version>
 			</dependency>
 
 			<!-- TESTS -->

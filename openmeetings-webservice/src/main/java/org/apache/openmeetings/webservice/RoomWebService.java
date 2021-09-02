@@ -64,6 +64,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * RoomService contains methods to manipulate rooms and create invitation hash
  *
@@ -74,6 +76,7 @@ import org.springframework.stereotype.Service;
 @WebService(serviceName="org.apache.openmeetings.webservice.RoomWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
+@Tag(name = "RoomService", description = "RoomService contains methods to manipulate rooms and create invitation hash")
 @Path("/room")
 public class RoomWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(RoomWebService.class);

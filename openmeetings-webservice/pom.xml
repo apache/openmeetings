@@ -139,6 +139,10 @@
 			<artifactId>jettison</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-util</artifactId>
 			<version>${project.version}</version>

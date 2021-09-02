@@ -55,6 +55,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * CalendarService contains methods to create, edit delete calendar meetings
  *
@@ -65,6 +67,7 @@ import org.springframework.stereotype.Service;
 @WebService(serviceName="org.apache.openmeetings.webservice.CalendarWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
+@Tag(name = "CalendarService", description = "CalendarService contains methods to create, edit delete calendar meetings")
 @Path("/calendar")
 public class CalendarWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(CalendarWebService.class);
