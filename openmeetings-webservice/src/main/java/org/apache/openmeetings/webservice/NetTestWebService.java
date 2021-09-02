@@ -47,7 +47,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * 
  * The Service contains methods to trigger a network test
  *
- *
  */
 @Service("netTestWebService")
 @Tag(name = "NetTestService", description = "The Service contains methods to trigger a network test")
