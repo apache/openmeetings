@@ -26,6 +26,8 @@ import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAME;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Locale;
@@ -84,6 +86,8 @@ import org.springframework.stereotype.Service;
 @WebService(serviceName = USER_SERVICE_NAME, targetNamespace = TNS, portName = USER_SERVICE_PORT_NAME)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
+@Tag(name = "UserService", description = "The Service contains methods to login and create hash to directly enter\n"
+		+ " conference rooms, recordings or the application in general")
 @Path("/user")
 public class UserWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(UserWebService.class);

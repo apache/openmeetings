@@ -67,6 +67,8 @@ import org.springframework.stereotype.Service;
 
 import com.github.openjson.JSONArray;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * WbService contains methods to manipulate whiteboard contents
  *
@@ -75,6 +77,7 @@ import com.github.openjson.JSONArray;
 @WebService(serviceName="org.apache.openmeetings.webservice.WbWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
+@Tag(name = "WbService", description = "WbService contains methods to manipulate whiteboard contents")
 @Path("/wb")
 public class WbWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(WbWebService.class);

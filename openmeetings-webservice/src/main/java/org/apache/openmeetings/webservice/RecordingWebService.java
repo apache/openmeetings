@@ -45,6 +45,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  *
  * The Service contains methods to work with recordings
@@ -56,6 +58,7 @@ import org.springframework.stereotype.Service;
 @WebService(serviceName="org.apache.openmeetings.webservice.RecordingWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
+@Tag(name = "RecordingService", description = "The Service contains methods to work with recordings")
 @Path("/record")
 public class RecordingWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(RecordingWebService.class);

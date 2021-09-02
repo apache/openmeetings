@@ -32,6 +32,8 @@ import org.apache.openmeetings.db.dto.basic.Health;
 import org.apache.openmeetings.db.dto.basic.Info;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  *
  * The Service contains methods to get info about the system
@@ -43,6 +45,7 @@ import org.springframework.stereotype.Service;
 @WebService(serviceName="org.apache.openmeetings.webservice.InfoWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
+@Tag(name = "InfoService", description = "The Service contains methods to get info about the system")
 @Path("/info")
 public class InfoWebService {
 	/**
