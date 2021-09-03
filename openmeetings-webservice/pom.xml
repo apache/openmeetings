@@ -64,7 +64,7 @@
 						<resourcePackage>org.apache.openmeetings.webservice</resourcePackage>
 					</resourcePackages>
 					<outputDirectory>${basedir}/target/</outputDirectory>
-					<outputFilename>appache-openmeetings-${project.version}-swagger</outputFilename>
+					<outputFilename>apache-openmeetings-${project.version}-swagger</outputFilename>
 					<outputFormats>JSON,YAML</outputFormats>
 					<prettyPrint>true</prettyPrint>
 					<swaggerConfig>
@@ -81,6 +81,12 @@
 								<name>The Apache Software License, Version 2.0</name>
 							</license>
 						</info>
+						<servers>
+							<server>
+								<description>Om Demo Server</description>
+								<url>https://om.alteametasoft.com/openmeetings/services</url>
+							</server>
+						</servers>
 					</swaggerConfig>
 				</configuration>
 				<executions>
