@@ -81,6 +81,12 @@
 								<name>The Apache Software License, Version 2.0</name>
 							</license>
 						</info>
+						<servers>
+							<server>
+								<description>Om Demo Server</description>
+								<url>https://om.alteametasoft.com/openmeetings/services</url>
+							</server>
+						</servers>
 					</swaggerConfig>
 				</configuration>
 				<executions>
