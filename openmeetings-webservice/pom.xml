@@ -83,6 +83,10 @@
 						</info>
 						<servers>
 							<server>
+								<description>Your local OpenMeetings Server</description>
+								<url>http://localhost:5080/openmeetings/services</url>
+							</server>
+							<server>
 								<description>Om Demo Server</description>
 								<url>https://om.alteametasoft.com/openmeetings/services</url>
 							</server>
