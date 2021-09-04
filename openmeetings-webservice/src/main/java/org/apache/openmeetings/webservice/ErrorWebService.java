@@ -40,6 +40,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
@@ -74,7 +79,20 @@ public class ErrorWebService extends BaseWebService {
 	@WebMethod
 	@GET
 	@Path("/{key}/{lang}")
-	public ServiceResult get(@WebParam(name="key") @PathParam("key") String key, @WebParam(name="lang") @PathParam("lang") long lang) {
+	@Operation(
+			description = "Loads an Error-Object. If a Method returns a negative Result, its an\n"
+					+ " Error-id, it needs a languageId to specify in which language you want to\n"
+					+ " display/read the error-message. English has the Language-ID one, for\n"
+					+ " different one see the list of languages",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "error with the code given",
+						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "500", description = "Server error")
+			}
+		)
+	public ServiceResult get(
+			@Parameter(required = true, description = "the error key for ex. `error.unknown`") @WebParam(name="key") @PathParam("key") String key
+			, @Parameter(required = true, description = "The id of the language") @WebParam(name="lang") @PathParam("lang") long lang) {
 		try {
 			String eValue = LabelDao.getString(key, lang);
 			return new ServiceResult(eValue, Type.SUCCESS);
@@ -84,10 +102,25 @@ public class ErrorWebService extends BaseWebService {
 		return null;
 	}
 
+	/**
+	 * Logs an error to the log file for reporting
+	 *
+	 * @param sid The SID from getSession
+	 * @param message The message to log
+	 */
 	@WebMethod
 	@POST
 	@Path("/report/")
-	public void report(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="message") @QueryParam("message") String message) {
+	@Operation(
+			description = "Logs an error to the log file for reporting",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "Success"),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public void report(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @WebParam(name="sid") @QueryParam("sid") String sid
+			, @Parameter(required = true, description = "The message to log") @WebParam(name="message") @QueryParam("message") String message) {
 		if (sid != null && message != null) {
 			Sessiondata sd = check(sid);
 			if (sd.getId() != null) {
