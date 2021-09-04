@@ -190,7 +190,8 @@ public class UserWebService extends BaseWebService {
 			description = "Adds a new User like through the Frontend, but also does activates the\n"
 					+ " Account To do SSO see the methods to create a hash and use those ones!",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "list of users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))),
+					@ApiResponse(responseCode = "200", description = "list of users",
+						content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
