@@ -32,6 +32,10 @@ import org.apache.openmeetings.db.dto.basic.Health;
 import org.apache.openmeetings.db.dto.basic.Info;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
@@ -56,6 +60,13 @@ public class InfoWebService {
 	@WebMethod
 	@GET
 	@Path("/version")
+	@Operation(
+			description = "Method to get current OpenMeetings version",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "Current version", content = @Content(schema = @Schema(implementation = Info.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of server error")
+			}
+		)
 	public Info getVersion() {
 		return new Info();
 	}
@@ -68,6 +79,13 @@ public class InfoWebService {
 	@WebMethod
 	@GET
 	@Path("/health")
+	@Operation(
+			description = "Method to get health report for this OpenMeetings instance",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "health report", content = @Content(schema = @Schema(implementation = Health.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of server error")
+			}
+		)
 	public Health getHealth() {
 		return Health.INSTANCE;
 	}
