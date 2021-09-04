@@ -73,7 +73,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @WebService(serviceName="org.apache.openmeetings.webservice.CalendarWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
-@Tag(name = "CalendarService", description = "CalendarService contains methods to create, edit delete calendar meetings")
+@Tag(name = "CalendarService")
 @Path("/calendar")
 public class CalendarWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(CalendarWebService.class);

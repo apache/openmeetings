@@ -53,7 +53,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  *
  */
 @Service("netTestWebService")
-@Tag(name = "NetTestService", description = "The Service contains methods to trigger a network test")
+@Tag(name = "NetTestService")
 @Path("/networktest")
 public class NetTestWebService {
 	private static final Logger log = LoggerFactory.getLogger(NetTestWebService.class);
