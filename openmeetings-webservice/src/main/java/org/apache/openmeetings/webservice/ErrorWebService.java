@@ -58,7 +58,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @WebService(serviceName="org.apache.openmeetings.webservice.ErrorWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
-@Tag(name = "ErrorService", description = "The Service contains methods to get localized errors")
+@Tag(name = "ErrorService")
 @Path("/error")
 public class ErrorWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(ErrorWebService.class);

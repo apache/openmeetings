@@ -76,8 +76,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @WebService(serviceName="org.apache.openmeetings.webservice.GroupWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
-@Tag(name = "GroupService", description = "The Service contains methods to login and create hash to directly enter\n"
-		+ " conference rooms, recordings or the application in general")
+@Tag(name = "GroupService")
 @Path("/group")
 public class GroupWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(GroupWebService.class);

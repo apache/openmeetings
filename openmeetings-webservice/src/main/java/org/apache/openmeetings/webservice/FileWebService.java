@@ -77,8 +77,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @WebService(serviceName="org.apache.openmeetings.webservice.FileWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
-@Tag(name = "FileService", description = "Contains methods to import and upload files into the Files section of the\n"
-		+ " conference room and the personal drive of any USER")
+@Tag(name = "FileService")
 @Path("/file")
 public class FileWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(FileWebService.class);

@@ -82,7 +82,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 @WebService(serviceName="org.apache.openmeetings.webservice.RoomWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
-@Tag(name = "RoomService", description = "RoomService contains methods to manipulate rooms and create invitation hash")
+@Tag(name = "RoomService")
 @Path("/room")
 public class RoomWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(RoomWebService.class);

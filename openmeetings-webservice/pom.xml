@@ -81,6 +81,48 @@
 								<name>The Apache Software License, Version 2.0</name>
 							</license>
 						</info>
+						<tags>
+							<tag>
+								<name>UserService</name>
+								<description>The Service contains methods to login and create hash to directly enter conference rooms, recordings or the application in general</description>
+							</tag>
+							<tag>
+								<name>RoomService</name>
+								<description>RoomService contains methods to manipulate rooms and create invitation hash</description>
+							</tag>
+							<tag>
+								<name>FileService</name>
+								<description>Contains methods to import and upload files into the Files section of the conference room and the personal drive of any USER</description>
+							</tag>
+							<tag>
+								<name>WbService</name>
+								<description>WbService contains methods to manipulate whiteboard contents</description>
+							</tag>
+							<tag>
+								<name>CalendarService</name>
+								<description>CalendarService contains methods to create, edit delete calendar meetings</description>
+							</tag>
+							<tag>
+								<name>GroupService</name>
+								<description>The Service contains methods to login and create hash to directly enter conference rooms, recordings or the application in general</description>
+							</tag>
+							<tag>
+								<name>NetTestService</name>
+								<description>The Service contains methods to trigger a network test</description>
+							</tag>
+							<tag>
+								<name>RecordingService</name>
+								<description>The Service contains methods to work with recordings</description>
+							</tag>
+							<tag>
+								<name>InfoService</name>
+								<description>The Service contains methods to get info about the system</description>
+							</tag>
+							<tag>
+								<name>ErrorService</name>
+								<description>The Service contains methods to get localized errors</description>
+							</tag>
+						</tags>
 						<servers>
 							<server>
 								<description>Your local OpenMeetings Server</description>

@@ -82,7 +82,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @WebService(serviceName="org.apache.openmeetings.webservice.WbWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
-@Tag(name = "WbService", description = "WbService contains methods to manipulate whiteboard contents")
+@Tag(name = "WbService")
 @Path("/wb")
 public class WbWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(WbWebService.class);
