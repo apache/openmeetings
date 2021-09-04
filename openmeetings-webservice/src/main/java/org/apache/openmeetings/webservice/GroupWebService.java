@@ -56,6 +56,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
@@ -93,8 +99,17 @@ public class GroupWebService extends BaseWebService {
 	 */
 	@POST
 	@Path("/")
-	public ServiceResult add(@QueryParam("sid") @WebParam(name="sid") String sid
-			, @QueryParam("name") @WebParam(name="name") String name
+	@Operation(
+			description = "add a new group",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "ServiceResult with result type, and id of the group added",
+							content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public ServiceResult add(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "The name of the group") @QueryParam("name") @WebParam(name="name") String name
 			) throws ServiceException
 	{
 		log.debug("add:: name {}", name);
@@ -115,7 +130,16 @@ public class GroupWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/")
-	public List<GroupDTO> get(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
+	@Operation(
+			description = "Get the list of all groups",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "list of users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = GroupDTO.class)))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public List<GroupDTO> get(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			) throws ServiceException {
 		return performCall(sid, User.Right.SOAP, sd -> GroupDTO.list(groupDao.get(0, Integer.MAX_VALUE)));
 	}
 
@@ -134,10 +158,18 @@ public class GroupWebService extends BaseWebService {
 	 */
 	@POST
 	@Path("/{id}/users/{userid}")
+	@Operation(
+			description = "Add USER to a certain group",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "ServiceResult with result type, and id of the USER added, or error id in case of the error as text",
+						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
 	public ServiceResult addUser(
-			@QueryParam("sid") @WebParam(name="sid") String sid
-			, @PathParam("id") @WebParam(name="id") Long id
-			, @PathParam("userid") @WebParam(name="userid") Long userid
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "the USER id") @PathParam("id") @WebParam(name="id") Long id
+			, @Parameter(required = true, description = "the group id") @PathParam("userid") @WebParam(name="userid") Long userid
 			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
@@ -160,15 +192,23 @@ public class GroupWebService extends BaseWebService {
 	 *            the USER id
 	 * @param id
 	 *            the group id
-	 * @return {@link ServiceResult} with result type, and id of the USER added, or error id in case of the error as text
+	 * @return {@link ServiceResult} with result type, and id of the USER removed, or error id in case of the error as text
 	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@DELETE
 	@Path("/{id}/users/{userid}")
+	@Operation(
+			description = "Remove USER from a certain group",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "ServiceResult with result type, and id of the USER removed, or error id in case of the error as text",
+						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
 	public ServiceResult removeUser(
-			@QueryParam("sid") @WebParam(name="sid") String sid
-			, @PathParam("id") @WebParam(name="id") Long id
-			, @PathParam("userid") @WebParam(name="userid") Long userid
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "the USER id") @PathParam("id") @WebParam(name="id") Long id
+			, @Parameter(required = true, description = "the group id") @PathParam("userid") @WebParam(name="userid") Long userid
 			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
@@ -198,10 +238,18 @@ public class GroupWebService extends BaseWebService {
 	 */
 	@POST
 	@Path("/{id}/rooms/add/{roomid}")
+	@Operation(
+			description = "Adds a room to an group",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "ServiceResult with result type",
+						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
 	public ServiceResult addRoom(
-			@QueryParam("sid") @WebParam(name="sid") String sid
-			, @PathParam("id") @WebParam(name="id") Long id
-			, @PathParam("roomid") @WebParam(name="roomid") Long roomid
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "Id of group that the room is being paired with") @PathParam("id") @WebParam(name="id") Long id
+			, @Parameter(required = true, description = "Id of room to be added") @PathParam("roomid") @WebParam(name="roomid") Long roomid
 			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
@@ -246,13 +294,21 @@ public class GroupWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/users/{id}")
+	@Operation(
+			description = "Search users and return them",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "users found",
+						content = @Content(schema = @Schema(implementation = UserSearchResult.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
 	public UserSearchResult getUsers(
-			@QueryParam("sid") @WebParam(name="sid") String sid
-			, @PathParam("id") @WebParam(name="id") long id
-			, @QueryParam("start") @WebParam(name="start") int start
-			, @QueryParam("max") @WebParam(name="max") int max
-			, @QueryParam("orderby") @WebParam(name="orderby") String orderby
-			, @QueryParam("asc") @WebParam(name="asc") boolean asc
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "the group id") @PathParam("id") @WebParam(name="id") long id
+			, @Parameter(required = true, description = "first record") @QueryParam("start") @WebParam(name="start") int start
+			, @Parameter(required = true, description = "max records") @QueryParam("max") @WebParam(name="max") int max
+			, @Parameter(required = true, description = "orderby clause") @QueryParam("orderby") @WebParam(name="orderby") String orderby
+			, @Parameter(required = true, description = "asc or desc") @QueryParam("asc") @WebParam(name="asc") boolean asc
 			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
@@ -281,8 +337,17 @@ public class GroupWebService extends BaseWebService {
 	@WebMethod
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="id") @PathParam("id") long id
+	@Operation(
+			description = "Deletes a group",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "ServiceResult with result type",
+						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public ServiceResult delete(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @WebParam(name="sid") @QueryParam("sid") String sid
+			, @Parameter(required = true, description = "the id of the group") @WebParam(name="id") @PathParam("id") long id
 			) throws ServiceException
 	{
 		return performCall(sid, User.Right.ADMIN, sd -> {
