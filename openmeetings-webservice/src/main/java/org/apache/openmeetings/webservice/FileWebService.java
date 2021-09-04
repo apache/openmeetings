@@ -57,6 +57,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
@@ -92,8 +98,17 @@ public class FileWebService extends BaseWebService {
 	 */
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid
-			, @PathParam("id") @WebParam(name="id") Long id
+	@Operation(
+			description = "deletes files or folders based on it id",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "ServiceResult with result type",
+						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public ServiceResult delete(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "the id of the file or folder") @PathParam("id") @WebParam(name="id") Long id
 			) throws ServiceException
 	{
 		FileItem f = fileDao.get(id);
@@ -118,19 +133,27 @@ public class FileWebService extends BaseWebService {
 	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
-	 * @param externalId
-	 *            the od of the file or folder
 	 * @param externalType
 	 *            the externalType
+	 * @param externalId
+	 *            the id of the file or folder
 	 * @return {@link ServiceResult} with result type
 	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@DELETE
 	@Path("/{externaltype}/{externalid}")
+	@Operation(
+			description = "deletes a file by its external Id and type",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "ServiceResult with result type",
+						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
 	public ServiceResult deleteExternal(
-			@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="externaltype") @PathParam("externaltype") String externalType
-			, @WebParam(name="externalid") @PathParam("externalid") String externalId
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @WebParam(name="sid") @QueryParam("sid") String sid
+			, @Parameter(required = true, description = "the externalType") @WebParam(name="externaltype") @PathParam("externaltype") String externalType
+			, @Parameter(required = true, description = "the id of the file or folder") @WebParam(name="externalid") @PathParam("externalid") String externalId
 			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
@@ -147,7 +170,7 @@ public class FileWebService extends BaseWebService {
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
 	 * @param file
-	 *            the The file to be added
+	 *            the The file attributes to be added
 	 * @param stream
 	 *            the The file to be added
 	 * @return - Object created
@@ -157,9 +180,19 @@ public class FileWebService extends BaseWebService {
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/")
-	public FileItemDTO add(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @Multipart(value = "file", type = MediaType.APPLICATION_JSON) @WebParam(name="file") FileItemDTO file
-			, @Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM, required = false) @WebParam(name="stream") InputStream stream
+	@Operation(
+			description = "to add a folder to the private drive, set parentId = 0 and isOwner to 1/true and\n"
+					+ " externalUserId/externalUserType to a valid USER",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "Object created",
+						content = @Content(schema = @Schema(implementation = FileItemDTO.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public FileItemDTO add(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @WebParam(name="sid") @QueryParam("sid") String sid
+			, @Parameter(required = true, description = "the The file attributes to be added") @Multipart(value = "file", type = MediaType.APPLICATION_JSON) @WebParam(name="file") FileItemDTO file
+			, @Parameter(required = true, description = "the The file to be added") @Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM, required = false) @WebParam(name="stream") InputStream stream
 			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
@@ -191,14 +224,23 @@ public class FileWebService extends BaseWebService {
 	 *            The SID of the User. This SID must be marked as logged in
 	 * @param externalType
 	 *            External type for file listing
-	 * @return - the list of file for given external type
+	 * @return - the list of files for given external type
 	 * @throws {@link ServiceException} in case of any errors
 	 */
 	@WebMethod
 	@GET
 	@Path("/{externaltype}")
-	public List<FileItemDTO> getAllExternal(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="externaltype") @PathParam("externaltype") String externalType
+	@Operation(
+			description = "Get all files by external type",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "the list of files for given external type",
+						content = @Content(array = @ArraySchema(schema = @Schema(implementation = FileItemDTO.class)))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public List<FileItemDTO> getAllExternal(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @WebParam(name="sid") @QueryParam("sid") String sid
+			, @Parameter(required = true, description = "External type for file listing") @WebParam(name="externaltype") @PathParam("externaltype") String externalType
 			) throws ServiceException
 	{
 		log.debug("getAllExternal::externalType {}", externalType);
@@ -218,8 +260,17 @@ public class FileWebService extends BaseWebService {
 	@WebMethod
 	@GET
 	@Path("/room/{id}")
-	public FileExplorerObject getRoom(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="id") @PathParam("id") long roomId
+	@Operation(
+			description = "Get a File Explorer Object by a given ROOM",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "File Explorer Object by a given ROOM",
+							content = @Content(schema = @Schema(implementation = FileExplorerObject.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public FileExplorerObject getRoom(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @WebParam(name="sid") @QueryParam("sid") String sid
+			, @Parameter(required = true, description = "ROOM Id") @WebParam(name="id") @PathParam("id") long roomId
 			) throws ServiceException
 	{
 		log.debug("getRoom::roomId {}", roomId);
@@ -254,9 +305,18 @@ public class FileWebService extends BaseWebService {
 	@WebMethod
 	@GET
 	@Path("/room/{id}/{parent}")
-	public List<FileItemDTO> getRoomByParent(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="id") @PathParam("id") long roomId
-			, @WebParam(name="parent") @PathParam("parent") long parentId
+	@Operation(
+			description = "Get list of FileItemDTO by parent",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "list of file explorer items",
+							content = @Content(array = @ArraySchema(schema = @Schema(implementation = FileItemDTO.class)))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public List<FileItemDTO> getRoomByParent(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @WebParam(name="sid") @QueryParam("sid") String sid
+			, @Parameter(required = true, description = "the parent folder id") @WebParam(name="id") @PathParam("id") long roomId
+			, @Parameter(required = true, description = "the room id") @WebParam(name="parent") @PathParam("parent") long parentId
 			) throws ServiceException
 	{
 		log.debug("getRoomByParent {}", parentId);
@@ -291,9 +351,18 @@ public class FileWebService extends BaseWebService {
 	@WebMethod
 	@POST
 	@Path("/rename/{id}/{name}")
-	public FileItemDTO rename(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="id") @PathParam("id") long id
-			, @WebParam(name="name") @PathParam("name") String name
+	@Operation(
+			description = "update a file or folder name",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "resulting file object",
+							content = @Content(schema = @Schema(implementation = FileItemDTO.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public FileItemDTO rename(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @WebParam(name="sid") @QueryParam("sid") String sid
+			, @Parameter(required = true, description = "file or folder id") @WebParam(name="id") @PathParam("id") long id
+			, @Parameter(required = true, description = "new file or folder name") @WebParam(name="name") @PathParam("name") String name
 			) throws ServiceException
 	{
 		log.debug("rename {}", id);
@@ -320,10 +389,19 @@ public class FileWebService extends BaseWebService {
 	@WebMethod
 	@POST
 	@Path("/move/{roomid}/{id}/{parentid}")
-	public FileItemDTO move(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="id") @PathParam("id") long id
-			, @WebParam(name="roomid") @PathParam("roomid") long roomId
-			, @WebParam(name="parentid") @PathParam("parentid") long parentId
+	@Operation(
+			description = "move a file or folder",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "resulting file object",
+							content = @Content(schema = @Schema(implementation = FileItemDTO.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public FileItemDTO move(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @WebParam(name="sid") @QueryParam("sid") String sid
+			, @Parameter(required = true, description = "current file or folder id to be moved") @WebParam(name="id") @PathParam("id") long id
+			, @Parameter(required = true, description = "room this file need to be moved") @WebParam(name="roomid") @PathParam("roomid") long roomId
+			, @Parameter(required = true, description = "new parent folder id") @WebParam(name="parentid") @PathParam("parentid") long parentId
 			) throws ServiceException
 	{
 		log.debug("move {}", id);

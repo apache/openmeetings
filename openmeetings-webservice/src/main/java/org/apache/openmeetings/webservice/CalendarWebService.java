@@ -55,6 +55,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
@@ -92,9 +98,18 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/{start}/{end}")
-	public List<AppointmentDTO> range(@QueryParam("sid") @WebParam(name="sid") String sid
-			, @PathParam("start") @WebParam(name="start") Calendar start
-			, @PathParam("end") @WebParam(name="end") Calendar end
+	@Operation(
+			description = "Load appointments by a start / end range for the current SID",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "list of appointments in range",
+						content = @Content(array = @ArraySchema(schema = @Schema(implementation = AppointmentDTO.class)))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public List<AppointmentDTO> range(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "start time") @PathParam("start") @WebParam(name="start") Calendar start
+			, @Parameter(required = true, description = "end time") @PathParam("end") @WebParam(name="end") Calendar end
 			) throws ServiceException
 	{
 		log.debug("range : startdate - {} , enddate - {}"
@@ -121,11 +136,19 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/{userid}/{start}/{end}")
+	@Operation(
+			description = "Load appointments by a start / end range for the userId",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "list of appointments in range",
+						content = @Content(array = @ArraySchema(schema = @Schema(implementation = AppointmentDTO.class)))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
 	public List<AppointmentDTO> rangeForUser(
-			@QueryParam("sid") @WebParam(name="sid") String sid
-			, @PathParam("userid") @WebParam(name="userid") long userid
-			, @PathParam("start") @WebParam(name="start") Calendar start
-			, @PathParam("end") @WebParam(name="end") Calendar end
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "the userId the calendar events should be loaded") @PathParam("userid") @WebParam(name="userid") long userid
+			, @Parameter(required = true, description = "start time") @PathParam("start") @WebParam(name="start") Calendar start
+			, @Parameter(required = true, description = "end time") @PathParam("end") @WebParam(name="end") Calendar end
 			) throws ServiceException
 	{
 		log.debug("rangeForUser : startdate - {} , enddate - {}"
@@ -145,7 +168,17 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/next")
-	public AppointmentDTO next(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
+	@Operation(
+			description = "Get the next Calendar event for the current USER of the SID",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "next Calendar event",
+						content = @Content(schema = @Schema(implementation = AppointmentDTO.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public AppointmentDTO next(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			) throws ServiceException {
 		return performCall(sid, User.Right.ROOM, sd -> {
 			Appointment a = dao.getNext(sd.getUserId(), new Date());
 			return a == null ? null : new AppointmentDTO(a);
@@ -165,8 +198,17 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/next/{userid}")
-	public AppointmentDTO nextForUser(@QueryParam("sid") @WebParam(name="sid") String sid
-			, @PathParam("userid") @WebParam(name="userid") long userid
+	@Operation(
+			description = "Get the next Calendar event for userId",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "next Calendar event",
+						content = @Content(schema = @Schema(implementation = AppointmentDTO.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public AppointmentDTO nextForUser(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "the userId the calendar events should be loaded") @PathParam("userid") @WebParam(name="userid") long userid
 			) throws ServiceException
 	{
 		return performCall(sid, User.Right.SOAP, sd -> {
@@ -188,8 +230,17 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/room/{roomid}")
-	public AppointmentDTO getByRoom(@QueryParam("sid") @WebParam(name="sid") String sid
-			, @PathParam("roomid") @WebParam(name="roomid") long roomid
+	@Operation(
+			description = "Load a calendar event by its room id",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "calendar event by its room id",
+						content = @Content(schema = @Schema(implementation = AppointmentDTO.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public AppointmentDTO getByRoom(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "id of appointment special room") @PathParam("roomid") @WebParam(name="roomid") long roomid
 			) throws ServiceException
 	{
 		return performCall(sid, User.Right.ROOM, sd -> {
@@ -211,15 +262,24 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/title/{title}")
-	public List<AppointmentDTO> getByTitle(@QueryParam("sid") @WebParam(name="sid") String sid
-			, @PathParam("title") @WebParam(name="title") String title
+	@Operation(
+			description = "Search a calendar event for the current SID",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "calendar event list",
+						content = @Content(array = @ArraySchema(schema = @Schema(implementation = AppointmentDTO.class)))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public List<AppointmentDTO> getByTitle(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "the search string") @PathParam("title") @WebParam(name="title") String title
 			) throws ServiceException
 	{
 		return performCall(sid, User.Right.ROOM, sd -> AppointmentDTO.list(dao.searchByTitle(sd.getUserId(), title)));
 	}
 
 	/**
-	 * Save an appointment
+	 * Create an appointment
 	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
@@ -232,8 +292,17 @@ public class CalendarWebService extends BaseWebService {
 	@WebMethod
 	@POST
 	@Path("/")
-	public AppointmentDTO save(@QueryParam("sid") @WebParam(name="sid") String sid
-			, @FormParam("appointment") @WebParam(name="appointment") AppointmentDTO appointment
+	@Operation(
+			description = "Create an appointment",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "appointment saved",
+						content = @Content(schema = @Schema(implementation = AppointmentDTO.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public AppointmentDTO save(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "calendar event") @FormParam("appointment") @WebParam(name="appointment") AppointmentDTO appointment
 			) throws ServiceException
 	{
 		//Seems to be create
@@ -280,8 +349,22 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid
-			, @PathParam("id") @WebParam(name="id") Long id
+	@Operation(
+			description = "Delete a calendar event\n"
+					+ "\n"
+					+ " If the given sid is from an Administrator or Web-Service USER, the USER\n"
+					+ " can delete any appointment.\n"
+					+ " If the sid is assigned to a regular USER, he can only delete appointments\n"
+					+ " where he is also the owner/creator of the appointment",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "ServiceResult with result type",
+						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
+			}
+		)
+	public ServiceResult delete(
+			@Parameter(required = true, description = "The SID of the User. This SID must be marked as Loggedin") @QueryParam("sid") @WebParam(name="sid") String sid
+			, @Parameter(required = true, description = "the id to delete") @PathParam("id") @WebParam(name="id") Long id
 			) throws ServiceException
 	{
 		Appointment a = dao.get(id);

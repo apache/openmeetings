@@ -41,6 +41,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
@@ -73,11 +77,28 @@ public class NetTestWebService {
 		log.debug("MaxClients: {}", maxClients);
 	}
 
+	/**
+	 * Generate a sample for network test
+	 *
+	 * @param type one of ping, jitter, download, upload
+	 * @param inSize requests size of sample
+	 * @return Content as requested
+	 */
 	@RateLimited
 	@GET
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/")
-	public Response get(@QueryParam("type") String type, @QueryParam("size") int inSize) {
+	@Operation(
+			description = "Generate a sample for network test",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "Content as requested", content = @Content(mediaType = "application/octet-stream")),
+					@ApiResponse(responseCode = "400", description = "Unkown type or exceeding Max Upload size"),
+					@ApiResponse(responseCode = "500", description = "Server error")
+			}
+		)
+	public Response get(
+			@Parameter(required = true, description = "one of ping, jitter, download, upload") @QueryParam("type") String type
+			, @Parameter(required = true, description = "requests size of sample") @QueryParam("size") int inSize) {
 		final int size;
 		final TestType testType = getTypeByString(type);
 		log.debug("Network test:: get, {}, {}", testType, inSize);
@@ -132,11 +153,28 @@ public class NetTestWebService {
 				.build();
 	}
 
+	/**
+	 * Upload media to test upload speed
+	 *
+	 * @param size size of file
+	 * @param stream stream of file
+	 * @return Number of bytes uploaded
+	 * @throws IOException
+	 */
 	@RateLimited
 	@POST
 	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/")
-	public int upload(@QueryParam("size") int size, InputStream stream) throws IOException {
+	@Operation(
+			description = "Upload media to test upload speed",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "Number of bytes uploaded"),
+					@ApiResponse(responseCode = "500", description = "Server error")
+			}
+		)
+	public int upload(
+			@Parameter(required = true, description = "size") @QueryParam("size") int size
+			, @Parameter(required = true, description = "stream to upload") InputStream stream) throws IOException {
 		if (size > MAX_UPLOAD_SIZE) {
 			return -1;
 		}
