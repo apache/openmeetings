@@ -119,7 +119,7 @@ public class RecordingWebService extends BaseWebService {
 	@Operation(
 			description = "Gets a list of recordings created by particular external USER",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "list of recordings", 
+					@ApiResponse(responseCode = "200", description = "list of recordings",
 							content = @Content(array = @ArraySchema(schema = @Schema(implementation = RecordingDTO.class)))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
@@ -150,7 +150,7 @@ public class RecordingWebService extends BaseWebService {
 	@Operation(
 			description = "Gets a list of recordings",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "list of recordings", 
+					@ApiResponse(responseCode = "200", description = "list of recordings",
 							content = @Content(array = @ArraySchema(schema = @Schema(implementation = RecordingDTO.class)))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
@@ -179,7 +179,7 @@ public class RecordingWebService extends BaseWebService {
 	@Operation(
 			description = "Gets a list of recordings",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "list of recordings", 
+					@ApiResponse(responseCode = "200", description = "list of recordings",
 							content = @Content(array = @ArraySchema(schema = @Schema(implementation = RecordingDTO.class)))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
