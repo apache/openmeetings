@@ -280,7 +280,8 @@ public class UserWebService extends BaseWebService {
 	@Operation(
 			description = "Delete a certain user by its id",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "id of the user deleted, error code otherwise", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "id of the user deleted, error code otherwise",
+						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
