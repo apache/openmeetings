@@ -22,6 +22,7 @@ import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -48,6 +49,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Service("infoWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.InfoWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
+@Consumes(MediaType.MULTIPART_FORM_DATA)
 @Produces({MediaType.APPLICATION_JSON})
 @Tag(name = "InfoService")
 @Path("/info")
