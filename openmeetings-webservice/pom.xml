@@ -70,11 +70,23 @@
 					<swaggerConfig>
 						<info>
 							<title>Apache OpenMeetings API</title>
+							<description>
+							<![CDATA[
+								Integration API enables to connect to an OpenMeetings instance, eg for generating users, create links to directly access conference rooms.<br/><br/>
+								<b>It is mainly designed for Server2Server integration, for example to integrate into your website, CMS or 3rd party application</b><br/><br/>
+								For examples how to use the Rest API see <a href="https://openmeetings.apache.org/RestAPISample.html" target="_BLANK">https://openmeetings.apache.org/RestAPISample.html</a>.<br/><br/>
+								Community contributed modules for using this API include for example:
+								<ul>
+									<li><a href="https://openmeetings.apache.org/RestAPISample.html#how-to-integrate-using-nodejs" target="_BLANK"> Node.js module for using API</a></li>
+								</ul>
+								Other community plugins using this API for Moodle, SugarCRM, Drupal, Joomla can be found in the Configuration>Plugins section at <a href="https://openmeetings.apache.org" target="_BLANK">https://openmeetings.apache.org</a>
+							]]>
+							</description>
 							<version>${project.version}</version>
 							<contact>
 								<email>dev@openmeetings.apache.org</email>
-								<name>Apache OpenMeetings Developer group</name>
-								<url>https://openmeetings.apache.org</url>
+								<name>Apache OpenMeetings Rest Examples and Documentation</name>
+								<url>https://openmeetings.apache.org/RestAPISample.html</url>
 							</contact>
 							<license>
 								<url>https://www.apache.org/licenses/LICENSE-2.0</url>

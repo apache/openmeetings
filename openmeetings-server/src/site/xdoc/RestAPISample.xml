@@ -22,10 +22,13 @@
 	<body>
 		<section name="Introduction">
 			<p> For a detailed instruction which services, methods and params are available see the list in the <a href="/openmeetings-webservice/apidocs/index.html" target="_blank">SOAP/REST API</a> .
-				ALL methods that are implemented for the SOAP API are also available via REST.
+				ALL methods that are implemented for the SOAP API are also available via REST. 
 			</p>
+			<div class="bd-callout bd-callout-info">
+				There is a <a href="https://openmeetings.apache.org/swagger/" target="_blank">OpenAPI spec</a> published in swagger format.
+			</div>
 			<div>
-				you can query methods of each service using following suffixes
+				You can query methods of each service using following suffixes
 				<ul>
 					<li>SOAP: <tt>?wsdl</tt> suffix, for example <tt>https://localhost:5443/openmeetings/services/UserService?wsdl</tt></li>
 					<li>REST: as xml <tt>?_wadl</tt> for example <tt>https://localhost:5443/openmeetings/services/user?_wadl</tt></li>
@@ -36,7 +39,56 @@
 				</div>
 			</div>
 		</section>
-		<section name="How to get room hash via REST">
+		<section name="How to integrate using Node.js">
+			<p>You can integrate OpenMeetings via the Rest API into your Node project.</p>
+			<div class="bd-callout bd-callout-info">
+				There is a community sponsored free module for integrating with Node.JS see: <a href="https://www.npmjs.com/package/openmeetings-node-client" target="_blank">openmeetings-node-client</a>
+			</div>
+			<p>Install the module</p>
+<source>
+npm install openmeetings-node-client
+</source>
+			<p>Eg generate a unique hash to enter a conference room:</p>
+				<ol>
+					<li>Login to service</li>
+					<li>Generate Hash for entering a conference room</li>
+					<li>Construct Login URL</li>
+				</ol>
+<source>
+const {UserServiceApi, Configuration} = require("openmeetings-node-client");
+const BASE_URL = "http://localhost:5080/openmeetings"
+
+const config = new Configuration({
+    basePath: BASE_URL + "/services"
+})
+// 1. Login to service
+const loginResult = await userService.login("admin", "!HansHans")
+
+// 2. Generate Hash for entering a conference room
+const hashResult = await userService.getRoomHash(sessionId, {
+        firstname: "John",
+        lastname: "Doe",
+        externalId: "uniqueId1",
+        externalType: "myCMS",
+        login: "john.doe",
+        email: "john.doe@gmail.com"
+    }, {
+        roomId: 1,
+        moderator: true
+    })
+    
+// 3. Construct Login URL
+const loginUrl = `${BASE_URL}/hash?secure=${hashResult.message}`
+</source>
+		<p>Full sample source code for can be found at: 
+			<ol>
+				<li>JavaScript/ES6 example using simplistic Express website see <a href="https://github.com/om-hosting/openmeetings-node-js-sample-project" target="_BLANK">Github openmeetings-node-js-sample-project</a></li>
+				<li>TypeScript example using simplistic Express website <a href="https://github.com/om-hosting/openmeetings-node-sample-project" target="_BLANK">Github openmeetings-node-sample-project</a></li>
+			</ol>
+		</p>
+		<p>More in depth examples and use cases can be found at the module page <a href="https://www.npmjs.com/package/openmeetings-node-client" target="_blank">https://www.npmjs.com/package/openmeetings-node-client</a></p>
+		</section>
+		<section name="How to get room hash via REST vis jQuery">
 			<ul>
 				<li>
 					First of all you need to perform login and get authorized SID to perform authorized operations
