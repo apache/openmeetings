@@ -88,7 +88,7 @@ const loginUrl = `${BASE_URL}/hash?secure=${hashResult.message}`
 		</p>
 		<p>More in depth examples and use cases can be found at the module page <a href="https://www.npmjs.com/package/openmeetings-node-client" target="_blank">https://www.npmjs.com/package/openmeetings-node-client</a></p>
 		<div class="bd-callout bd-callout-info">
-			A sample Node.js sample use case for a website using Express.js can be found here: <a href="https://om-hosting.com/openmeetings-integration-nodejs/" target="_BLANK">https://om-hosting.com/openmeetings-integration-nodejs/</a>
+			A sample Node.js use case for a website using Express.js can be found here: <a href="https://om-hosting.com/openmeetings-integration-nodejs/" target="_BLANK">https://om-hosting.com/openmeetings-integration-nodejs/</a>
 		</div>
 		</section>
 		<section name="How to get room hash via REST via jQuery">
