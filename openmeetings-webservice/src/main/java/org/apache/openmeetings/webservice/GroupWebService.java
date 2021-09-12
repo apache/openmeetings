@@ -28,7 +28,6 @@ import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -76,7 +75,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Service("groupWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.GroupWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
-@Consumes(MediaType.MULTIPART_FORM_DATA)
 @Produces({MediaType.APPLICATION_JSON})
 @Tag(name = "GroupService")
 @Path("/group")

@@ -47,7 +47,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -92,7 +91,6 @@ import org.springframework.stereotype.Service;
 @Service("userWebService")
 @WebService(serviceName = USER_SERVICE_NAME, targetNamespace = TNS, portName = USER_SERVICE_PORT_NAME)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
-@Consumes(MediaType.MULTIPART_FORM_DATA)
 @Produces({MediaType.APPLICATION_JSON})
 @Tag(name = "UserService")
 @Path("/user")

@@ -76,7 +76,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Service("fileWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.FileWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
-@Consumes(MediaType.MULTIPART_FORM_DATA)
 @Produces({MediaType.APPLICATION_JSON})
 @Tag(name = "FileService")
 @Path("/file")
