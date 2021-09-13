@@ -60,7 +60,7 @@
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
 		<maven-bundle-plugin.version>5.1.1</maven-bundle-plugin.version>
-		<maven-war-plugin.version>3.3.1</maven-war-plugin.version>
+		<maven-war-plugin.version>3.3.2</maven-war-plugin.version>
 		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
 		<wagon-maven-plugin.version>2.0.2</wagon-maven-plugin.version>
 		<maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
@@ -80,7 +80,7 @@
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
 		<!-- dependency versions -->
 		<junit.version>5.7.1</junit.version>
-		<wicket.version>9.4.0</wicket.version>
+		<wicket.version>9.5.0</wicket.version>
 		<wicket-jquery-ui.version>9.3.2</wicket-jquery-ui.version>
 		<wicketstuff.version>9.4.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.0-M4-SNAPSHOT</wicket-bootstrap.version>
