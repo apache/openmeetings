@@ -151,7 +151,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -230,7 +229,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.XmlHelper;
-import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.crypt.SCryptImplementation;
@@ -382,7 +380,7 @@ public class BackupImport {
 	}
 
 	private static File unzip(InputStream is) throws IOException  {
-		File f = OmFileHelper.getNewDir(OmFileHelper.getUploadImportDir(), "import_" + CalendarPatterns.getTimeForStreamId(new Date()));
+		File f = OmFileHelper.getNewDir(OmFileHelper.getUploadImportDir(), randomUUID().toString());
 		log.debug("##### EXTRACTING BACKUP TO: {}", f);
 
 		try (ZipInputStream zis = new ZipInputStream(is)) {
@@ -406,86 +404,98 @@ public class BackupImport {
 	}
 
 	public void performImport(InputStream is, ProgressHolder progressHolder) throws Exception {
-		progressHolder.setProgress(0);
-		cleanup();
-		messageFolderMap.put(INBOX_FOLDER_ID, INBOX_FOLDER_ID);
-		messageFolderMap.put(SENT_FOLDER_ID, SENT_FOLDER_ID);
-		messageFolderMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
+		File f = null;
+		boolean success = false;
+		try {
+			progressHolder.setProgress(0);
+			cleanup();
+			messageFolderMap.put(INBOX_FOLDER_ID, INBOX_FOLDER_ID);
+			messageFolderMap.put(SENT_FOLDER_ID, SENT_FOLDER_ID);
+			messageFolderMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
 
-		File f = unzip(is);
+			f = unzip(is);
 
-		BackupVersion ver = getVersion(f);
-		progressHolder.setProgress(2);
-		importConfigs(f);
-		progressHolder.setProgress(7);
-		importGroups(f);
-		progressHolder.setProgress(12);
-		importLdap(f);
-		progressHolder.setProgress(17);
-		importOauth(f);
-		progressHolder.setProgress(22);
-		importUsers(f);
-		progressHolder.setProgress(27);
-		importRooms(f);
-		progressHolder.setProgress(32);
-		importRoomGroups(f);
-		progressHolder.setProgress(37);
-		importChat(f);
-		progressHolder.setProgress(42);
-		importCalendars(f);
-		progressHolder.setProgress(47);
-		importAppointments(f);
-		progressHolder.setProgress(52);
-		importMeetingMembers(f);
-		progressHolder.setProgress(57);
-		importRecordings(f);
-		progressHolder.setProgress(62);
-		importPrivateMsgFolders(f);
-		progressHolder.setProgress(67);
-		importContacts(f);
-		progressHolder.setProgress(72);
-		importPrivateMsgs(f);
-		progressHolder.setProgress(77);
-		List<FileItem> files = importFiles(f);
-		progressHolder.setProgress(82);
-		importPolls(f);
-		progressHolder.setProgress(87);
-		importRoomFiles(f);
-		progressHolder.setProgress(92);
-		importExtraMenus(f);
-		progressHolder.setProgress(95);
+			BackupVersion ver = getVersion(f);
+			progressHolder.setProgress(2);
+			importConfigs(f);
+			progressHolder.setProgress(7);
+			importGroups(f);
+			progressHolder.setProgress(12);
+			importLdap(f);
+			progressHolder.setProgress(17);
+			importOauth(f);
+			progressHolder.setProgress(22);
+			importUsers(f);
+			progressHolder.setProgress(27);
+			importRooms(f);
+			progressHolder.setProgress(32);
+			importRoomGroups(f);
+			progressHolder.setProgress(37);
+			importChat(f);
+			progressHolder.setProgress(42);
+			importCalendars(f);
+			progressHolder.setProgress(47);
+			importAppointments(f);
+			progressHolder.setProgress(52);
+			importMeetingMembers(f);
+			progressHolder.setProgress(57);
+			importRecordings(f);
+			progressHolder.setProgress(62);
+			importPrivateMsgFolders(f);
+			progressHolder.setProgress(67);
+			importContacts(f);
+			progressHolder.setProgress(72);
+			importPrivateMsgs(f);
+			progressHolder.setProgress(77);
+			List<FileItem> files = importFiles(f);
+			progressHolder.setProgress(82);
+			importPolls(f);
+			progressHolder.setProgress(87);
+			importRoomFiles(f);
+			progressHolder.setProgress(92);
+			importExtraMenus(f);
+			progressHolder.setProgress(95);
 
-		log.info("Extra menus import complete, starting copy of files and folders");
-		/*
-		 * ##################### Import real files and folders
-		 */
-		importFolders(f);
-		progressHolder.setProgress(97);
+			log.info("Extra menus import complete, starting copy of files and folders");
+			/*
+			 * ##################### Import real files and folders
+			 */
+			importFolders(f);
+			progressHolder.setProgress(97);
 
-		if (ver.compareTo(BackupVersion.get("4.0.0")) < 0) {
-			for (FileItem bfi : files) {
-				if (bfi.isDeleted()) {
-					continue;
-				}
-				if (BaseFileItem.Type.PRESENTATION == bfi.getType()) {
-					convertOldPresentation(bfi);
-					fileItemDao.updateBase(bfi);
-				}
-				if (BaseFileItem.Type.WML_FILE == bfi.getType()) {
-					try {
-						Whiteboard wb = WbConverter.convert(bfi);
-						wb.save(bfi.getFile().toPath());
-					} catch (Exception e) {
-						log.error("Unexpected error while converting WB", e);
+			if (ver.compareTo(BackupVersion.get("4.0.0")) < 0) {
+				for (FileItem bfi : files) {
+					if (bfi.isDeleted()) {
+						continue;
+					}
+					if (BaseFileItem.Type.PRESENTATION == bfi.getType()) {
+						convertOldPresentation(bfi);
+						fileItemDao.updateBase(bfi);
+					}
+					if (BaseFileItem.Type.WML_FILE == bfi.getType()) {
+						try {
+							Whiteboard wb = WbConverter.convert(bfi);
+							wb.save(bfi.getFile().toPath());
+						} catch (Exception e) {
+							log.error("Unexpected error while converting WB", e);
+						}
 					}
 				}
 			}
+			log.info("File explorer item import complete");
+			success = true;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (f != null) {
+				log.info("Clearing temp files ...");
+				FileUtils.deleteDirectory(f);
+			}
+			cleanup();
+			if (success) {
+				progressHolder.setProgress(100);
+			}
 		}
-		log.info("File explorer item import complete, clearing temp files");
-
-		FileUtils.deleteDirectory(f);
-		cleanup();
-		progressHolder.setProgress(100);
 	}
 
 	void cleanup() {
