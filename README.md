@@ -48,8 +48,8 @@ Builds and CI
 
 | Description | Jenkins CI |
 | :--- | :---: |
-| Master nightly | [![Build Status](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings//badge/icon)](https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings/) |
-| Master Pull Request | [![Build Status](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings-pr-build/badge/icon)](https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings-pr-build/) |
+| Master nightly | [![Build Status](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings/badge/icon)](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings/) |
+| Master Pull Request | [![Build Status](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings-pr-build/badge/icon)](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings-pr-build/) |
 
 Release Notes
 =============
