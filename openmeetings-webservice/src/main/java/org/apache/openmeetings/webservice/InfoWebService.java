@@ -30,6 +30,8 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dto.basic.Health;
 import org.apache.openmeetings.db.dto.basic.Info;
+import org.apache.openmeetings.webservice.schema.HealthWrapper;
+import org.apache.openmeetings.webservice.schema.InfoWrapper;
 import org.springframework.stereotype.Service;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,7 +65,7 @@ public class InfoWebService {
 	@Operation(
 			description = "Method to get current OpenMeetings version",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "Current version", content = @Content(schema = @Schema(implementation = Info.class))),
+					@ApiResponse(responseCode = "200", description = "Current version", content = @Content(schema = @Schema(implementation = InfoWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of server error")
 			}
 		)
@@ -82,7 +84,7 @@ public class InfoWebService {
 	@Operation(
 			description = "Method to get health report for this OpenMeetings instance",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "health report", content = @Content(schema = @Schema(implementation = Health.class))),
+					@ApiResponse(responseCode = "200", description = "health report", content = @Content(schema = @Schema(implementation = HealthWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of server error")
 			}
 		)
