@@ -51,7 +51,9 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.openmeetings.webservice.schema.GroupDTOListWrapper;
 import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
+import org.apache.openmeetings.webservice.schema.UserSearchResultWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +61,6 @@ import org.springframework.stereotype.Service;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -133,7 +134,8 @@ public class GroupWebService extends BaseWebService {
 	@Operation(
 			description = "Get the list of all groups",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "list of users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = GroupDTO.class)))),
+					@ApiResponse(responseCode = "200", description = "list of users",
+							content = @Content(schema = @Schema(implementation = GroupDTOListWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -298,7 +300,7 @@ public class GroupWebService extends BaseWebService {
 			description = "Search users and return them",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "users found",
-						content = @Content(schema = @Schema(implementation = UserSearchResult.class))),
+						content = @Content(schema = @Schema(implementation = UserSearchResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
