@@ -29,7 +29,6 @@ import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAM
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -70,6 +69,9 @@ import org.apache.openmeetings.db.mapper.UserMapper;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.webservice.error.InternalServiceException;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
+import org.apache.openmeetings.webservice.schema.UserDTOListWrapper;
+import org.apache.openmeetings.webservice.schema.UserDTOWrapper;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.IValidator;
@@ -118,7 +120,8 @@ public class UserWebService extends BaseWebService {
 	@Operation(
 			description = "Login and create sessionId required for sub-sequent calls",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "ServiceResult with error code or SID and userId", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "ServiceResult with error code or SID and userId",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error of server error")
 			}
 		)
@@ -158,7 +161,8 @@ public class UserWebService extends BaseWebService {
 	@Operation(
 			description = "Lists all users in the system!",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "list of users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))),
+					@ApiResponse(responseCode = "200", description = "list of users",
+							content = @Content(schema = @Schema(implementation = UserDTOListWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -190,7 +194,7 @@ public class UserWebService extends BaseWebService {
 					+ " Account To do SSO see the methods to create a hash and use those ones!",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "list of users",
-						content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))),
+						content = @Content(schema = @Schema(implementation = UserDTOWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -281,7 +285,7 @@ public class UserWebService extends BaseWebService {
 			description = "Delete a certain user by its id",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "id of the user deleted, error code otherwise",
-						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+						content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -316,7 +320,8 @@ public class UserWebService extends BaseWebService {
 	@Operation(
 			description = "Delete a certain user by its external user id",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "id of user deleted, or error code", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "id of user deleted, or error code",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -359,7 +364,8 @@ public class UserWebService extends BaseWebService {
 					+ " Session-Object you can use the SID + a RoomId to enter any Room. ...\n"
 					+ " Session-Hashs are deleted 15 minutes after the creation if not used.",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "secure hash or error code", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "secure hash or error code",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)

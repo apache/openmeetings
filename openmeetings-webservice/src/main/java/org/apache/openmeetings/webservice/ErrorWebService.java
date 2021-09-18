@@ -36,6 +36,7 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -86,7 +87,7 @@ public class ErrorWebService extends BaseWebService {
 					+ " different one see the list of languages",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "error with the code given",
-						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+						content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Server error")
 			}
 		)
