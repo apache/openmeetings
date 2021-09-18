@@ -50,6 +50,7 @@ import org.apache.openmeetings.db.mapper.CalendarMapper;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.InternalServiceException;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -358,7 +359,7 @@ public class CalendarWebService extends BaseWebService {
 					+ " where he is also the owner/creator of the appointment",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "ServiceResult with result type",
-						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+						content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)

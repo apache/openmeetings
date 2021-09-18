@@ -51,6 +51,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +103,7 @@ public class GroupWebService extends BaseWebService {
 			description = "add a new group",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "ServiceResult with result type, and id of the group added",
-							content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -161,7 +162,7 @@ public class GroupWebService extends BaseWebService {
 			description = "Add USER to a certain group",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "ServiceResult with result type, and id of the USER added, or error id in case of the error as text",
-						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+						content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -200,7 +201,7 @@ public class GroupWebService extends BaseWebService {
 			description = "Remove USER from a certain group",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "ServiceResult with result type, and id of the USER removed, or error id in case of the error as text",
-						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+						content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -241,7 +242,7 @@ public class GroupWebService extends BaseWebService {
 			description = "Adds a room to an group",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "ServiceResult with result type",
-						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+						content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -340,7 +341,7 @@ public class GroupWebService extends BaseWebService {
 			description = "Deletes a group",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "ServiceResult with result type",
-						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+						content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)

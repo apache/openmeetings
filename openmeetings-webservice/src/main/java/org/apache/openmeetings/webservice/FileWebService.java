@@ -52,6 +52,7 @@ import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.openmeetings.webservice.error.InternalServiceException;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +102,7 @@ public class FileWebService extends BaseWebService {
 			description = "deletes files or folders based on it id",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "ServiceResult with result type",
-						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+						content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -145,7 +146,7 @@ public class FileWebService extends BaseWebService {
 			description = "deletes a file by its external Id and type",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "ServiceResult with result type",
-						content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+						content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
