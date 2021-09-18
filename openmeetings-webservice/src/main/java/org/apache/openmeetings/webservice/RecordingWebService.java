@@ -40,6 +40,8 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.record.RecordingDTO;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.openmeetings.webservice.schema.RecordingDTOListWrapper;
+import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +49,6 @@ import org.springframework.stereotype.Service;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -88,7 +89,8 @@ public class RecordingWebService extends BaseWebService {
 	@Operation(
 			description = "Deletes a recording",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "serviceResult object with the result", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "serviceResult object with the result",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -120,7 +122,7 @@ public class RecordingWebService extends BaseWebService {
 			description = "Gets a list of recordings created by particular external USER",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "list of recordings",
-							content = @Content(array = @ArraySchema(schema = @Schema(implementation = RecordingDTO.class)))),
+							content = @Content(schema = @Schema(implementation = RecordingDTOListWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -151,7 +153,7 @@ public class RecordingWebService extends BaseWebService {
 			description = "Gets a list of recordings",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "list of recordings",
-							content = @Content(array = @ArraySchema(schema = @Schema(implementation = RecordingDTO.class)))),
+							content = @Content(schema = @Schema(implementation = RecordingDTOListWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -180,7 +182,7 @@ public class RecordingWebService extends BaseWebService {
 			description = "Gets a list of recordings",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "list of recordings",
-							content = @Content(array = @ArraySchema(schema = @Schema(implementation = RecordingDTO.class)))),
+							content = @Content(schema = @Schema(implementation = RecordingDTOListWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)

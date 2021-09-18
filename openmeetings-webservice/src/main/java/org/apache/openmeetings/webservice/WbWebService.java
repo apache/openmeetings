@@ -53,6 +53,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.manager.IWhiteboardManager;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -108,7 +109,8 @@ public class WbWebService extends BaseWebService {
 			description = "This method will remove all whiteboards from given room\n"
 					+ " and create empty one(s) for room files specified",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "serviceResult object with the result", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "serviceResult object with the result",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -139,7 +141,8 @@ public class WbWebService extends BaseWebService {
 	@Operation(
 			description = "This method will do the same as clean WB in the room (except for there will be no UNDO)",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "serviceResult object with the result", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "serviceResult object with the result",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -172,7 +175,8 @@ public class WbWebService extends BaseWebService {
 	@Operation(
 			description = "This method will do the same as clean slide in the room (except for there will be no UNDO)",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "serviceResult object with the result", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "serviceResult object with the result",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -208,7 +212,8 @@ public class WbWebService extends BaseWebService {
 	@Operation(
 			description = "This method will receive WB as binary data (png) and store it to temporary PDF/PNG file",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "serviceResult object with the result", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "serviceResult object with the result",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
