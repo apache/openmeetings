@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.webservice.schema;
 
-import org.apache.openmeetings.db.dto.basic.ServiceResult;
+import org.apache.openmeetings.db.dto.user.UserDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -32,19 +32,37 @@ import io.swagger.v3.oas.annotations.media.Schema;
  *
  */
 @Schema(example = "{\n"
-		+ "    \"serviceResult\": {\n"
-		+ "        \"message\": \"9dbb6907-61fc-42c0-a2b2-5dbfbe053ac6\",\n"
-		+ "        \"type\": \"SUCCESS\"\n"
-		+ "    }\n"
+		+ "  \"userDTO\": {\n"
+		+ "    \"address\": {\n"
+		+ "      \"created\": 1630191589000,\n"
+		+ "      \"deleted\": false,\n"
+		+ "      \"country\": \"NZ\",\n"
+		+ "      \"mail\": \"seba.wagner@gmail.com\"\n"
+		+ "    },\n"
+		+ "    \"firstname\": \"firstname\",\n"
+		+ "    \"id\": 1,\n"
+		+ "    \"languageId\": 1,\n"
+		+ "    \"lastname\": \"lastname\",\n"
+		+ "    \"login\": \"admin\",\n"
+		+ "    \"rights\": [\n"
+		+ "      \"ROOM\",\n"
+		+ "      \"SOAP\",\n"
+		+ "      \"DASHBOARD\",\n"
+		+ "      \"ADMIN\",\n"
+		+ "      \"LOGIN\"\n"
+		+ "    ],\n"
+		+ "    \"timeZoneId\": \"Europe/Berlin\",\n"
+		+ "    \"type\": \"USER\"\n"
+		+ "  }\n"
 		+ "}")
-public class ServiceResultWrapper {
-	private ServiceResult serviceResult;
+public class UserDTOWrapper {
+	private UserDTO userDTO;
 
-	public ServiceResult getServiceResult() {
-		return serviceResult;
+	public UserDTO getUserDTO() {
+		return userDTO;
 	}
 
-	public void setServiceResult(ServiceResult serviceResult) {
-		this.serviceResult = serviceResult;
+	public void setUserDTO(UserDTO userDTO) {
+		this.userDTO = userDTO;
 	}
 }
