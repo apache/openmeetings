@@ -52,6 +52,9 @@ import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.openmeetings.webservice.error.InternalServiceException;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.openmeetings.webservice.schema.FileExplorerObjectWrapper;
+import org.apache.openmeetings.webservice.schema.FileItemDTOListWrapper;
+import org.apache.openmeetings.webservice.schema.FileItemDTOWrapper;
 import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +63,6 @@ import org.springframework.stereotype.Service;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -185,7 +187,7 @@ public class FileWebService extends BaseWebService {
 					+ " externalUserId/externalUserType to a valid USER",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "Object created",
-						content = @Content(schema = @Schema(implementation = FileItemDTO.class))),
+						content = @Content(schema = @Schema(implementation = FileItemDTOWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -234,7 +236,7 @@ public class FileWebService extends BaseWebService {
 			description = "Get all files by external type",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "the list of files for given external type",
-						content = @Content(array = @ArraySchema(schema = @Schema(implementation = FileItemDTO.class)))),
+						content = @Content(schema = @Schema(implementation = FileItemDTOListWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -264,7 +266,7 @@ public class FileWebService extends BaseWebService {
 			description = "Get a File Explorer Object by a given ROOM",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "File Explorer Object by a given ROOM",
-							content = @Content(schema = @Schema(implementation = FileExplorerObject.class))),
+							content = @Content(schema = @Schema(implementation = FileExplorerObjectWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -309,7 +311,7 @@ public class FileWebService extends BaseWebService {
 			description = "Get list of FileItemDTO by parent",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "list of file explorer items",
-							content = @Content(array = @ArraySchema(schema = @Schema(implementation = FileItemDTO.class)))),
+							content = @Content(schema = @Schema(implementation = FileItemDTOListWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -355,7 +357,7 @@ public class FileWebService extends BaseWebService {
 			description = "update a file or folder name",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "resulting file object",
-							content = @Content(schema = @Schema(implementation = FileItemDTO.class))),
+							content = @Content(schema = @Schema(implementation = FileItemDTOWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -393,7 +395,7 @@ public class FileWebService extends BaseWebService {
 			description = "move a file or folder",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "resulting file object",
-							content = @Content(schema = @Schema(implementation = FileItemDTO.class))),
+							content = @Content(schema = @Schema(implementation = FileItemDTOWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
