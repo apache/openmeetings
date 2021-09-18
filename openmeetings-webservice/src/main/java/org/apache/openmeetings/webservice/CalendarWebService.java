@@ -50,6 +50,8 @@ import org.apache.openmeetings.db.mapper.CalendarMapper;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.InternalServiceException;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.openmeetings.webservice.schema.AppointmentDTOListWrapper;
+import org.apache.openmeetings.webservice.schema.AppointmentDTOWrapper;
 import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +60,6 @@ import org.springframework.stereotype.Service;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -103,7 +104,7 @@ public class CalendarWebService extends BaseWebService {
 			description = "Load appointments by a start / end range for the current SID",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "list of appointments in range",
-						content = @Content(array = @ArraySchema(schema = @Schema(implementation = AppointmentDTO.class)))),
+						content = @Content(schema = @Schema(implementation = AppointmentDTOListWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -141,7 +142,7 @@ public class CalendarWebService extends BaseWebService {
 			description = "Load appointments by a start / end range for the userId",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "list of appointments in range",
-						content = @Content(array = @ArraySchema(schema = @Schema(implementation = AppointmentDTO.class)))),
+							content = @Content(schema = @Schema(implementation = AppointmentDTOListWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -173,7 +174,7 @@ public class CalendarWebService extends BaseWebService {
 			description = "Get the next Calendar event for the current USER of the SID",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "next Calendar event",
-						content = @Content(schema = @Schema(implementation = AppointmentDTO.class))),
+						content = @Content(schema = @Schema(implementation = AppointmentDTOWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -203,7 +204,7 @@ public class CalendarWebService extends BaseWebService {
 			description = "Get the next Calendar event for userId",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "next Calendar event",
-						content = @Content(schema = @Schema(implementation = AppointmentDTO.class))),
+						content = @Content(schema = @Schema(implementation = AppointmentDTOWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -235,7 +236,7 @@ public class CalendarWebService extends BaseWebService {
 			description = "Load a calendar event by its room id",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "calendar event by its room id",
-						content = @Content(schema = @Schema(implementation = AppointmentDTO.class))),
+						content = @Content(schema = @Schema(implementation = AppointmentDTOWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -267,7 +268,7 @@ public class CalendarWebService extends BaseWebService {
 			description = "Search a calendar event for the current SID",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "calendar event list",
-						content = @Content(array = @ArraySchema(schema = @Schema(implementation = AppointmentDTO.class)))),
+							content = @Content(schema = @Schema(implementation = AppointmentDTOListWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -297,7 +298,7 @@ public class CalendarWebService extends BaseWebService {
 			description = "Create an appointment",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "appointment saved",
-						content = @Content(schema = @Schema(implementation = AppointmentDTO.class))),
+						content = @Content(schema = @Schema(implementation = AppointmentDTOWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
