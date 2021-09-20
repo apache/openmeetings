@@ -58,6 +58,10 @@ import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.webservice.error.InternalServiceException;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.openmeetings.webservice.schema.RoomDTOListWrapper;
+import org.apache.openmeetings.webservice.schema.RoomDTOWrapper;
+import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
+import org.apache.openmeetings.webservice.schema.UserDTOListWrapper;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +71,6 @@ import org.springframework.stereotype.Service;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -122,7 +125,8 @@ public class RoomWebService extends BaseWebService {
 				+ "	about that ROOM. The List of current-users in the room is Null if you get\n"
 				+ "	them via SOAP. The Roomtype can be 'conference', 'presentation' or 'interview'.",
 		responses = {
-				@ApiResponse(responseCode = "200", description = "list of public rooms", content = @Content(array = @ArraySchema(schema = @Schema(implementation = RoomDTO.class)))),
+				@ApiResponse(responseCode = "200", description = "list of public rooms",
+						content = @Content(schema = @Schema(implementation = RoomDTOListWrapper.class))),
 				@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 		}
 	)
@@ -149,7 +153,8 @@ public class RoomWebService extends BaseWebService {
 	@Operation(
 		description = "Returns a conference room object",
 		responses = {
-				@ApiResponse(responseCode = "200", description = "room with the id given", content = @Content(schema = @Schema(implementation = RoomDTO.class))),
+				@ApiResponse(responseCode = "200", description = "room with the id given",
+						content = @Content(schema = @Schema(implementation = RoomDTOWrapper.class))),
 				@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 		}
 	)
@@ -208,7 +213,8 @@ public class RoomWebService extends BaseWebService {
 				+ "	if yes it returns the room id if not, it will create the room and then\n"
 				+ "	return the room id of the newly created room",
 		responses = {
-				@ApiResponse(responseCode = "200", description = "id of the room or error code", content = @Content(schema = @Schema(implementation = RoomDTO.class))),
+				@ApiResponse(responseCode = "200", description = "id of the room or error code",
+						content = @Content(schema = @Schema(implementation = RoomDTOWrapper.class))),
 				@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 		}
 	)
@@ -255,7 +261,8 @@ public class RoomWebService extends BaseWebService {
 	@Operation(
 			description = "Adds a new ROOM like through the Frontend",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "Room object or throw error", content = @Content(schema = @Schema(implementation = RoomDTO.class))),
+					@ApiResponse(responseCode = "200", description = "Room object or throw error",
+							content = @Content(schema = @Schema(implementation = RoomDTOWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -286,7 +293,8 @@ public class RoomWebService extends BaseWebService {
 	@Operation(
 			description = "Delete a room by its room id",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "id of the room deleted", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "id of the room deleted",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -329,7 +337,8 @@ public class RoomWebService extends BaseWebService {
 					+ " inside the room and all users that try to enter it will be redirected to\n"
 					+ " the redirectURL that is defined in the ROOM-Object.",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "1 in case of success, -2 otherwise", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "1 in case of success, -2 otherwise",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -374,7 +383,8 @@ public class RoomWebService extends BaseWebService {
 					+ " inside the room and all users that try to enter it will be redirected to\n"
 					+ " the redirectURL that is defined in the ROOM-Object.",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "1 in case of success, -2 otherwise", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "1 in case of success, -2 otherwise",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -409,7 +419,8 @@ public class RoomWebService extends BaseWebService {
 	@Operation(
 			description = "Kick all uses of a certain room",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "true if USER was kicked, false otherwise", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "true if USER was kicked, false otherwise",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -445,7 +456,8 @@ public class RoomWebService extends BaseWebService {
 	@Operation(
 			description = "kick external USER from given room",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "'Kicked' if USER was 'Not kicked' otherwise", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "'Kicked' if USER was 'Not kicked' otherwise",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -475,7 +487,8 @@ public class RoomWebService extends BaseWebService {
 	@Operation(
 			description = "Returns the count of users currently in the ROOM with given id",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "number of users as int", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "number of users as int",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -501,7 +514,8 @@ public class RoomWebService extends BaseWebService {
 	@Operation(
 			description = "Returns list of users currently in the ROOM with given id",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "List of users in the room", content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))),
+					@ApiResponse(responseCode = "200", description = "List of users in the room",
+							content = @Content(schema = @Schema(implementation = UserDTOListWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -532,7 +546,8 @@ public class RoomWebService extends BaseWebService {
 	@Operation(
 			description = "Method to get invitation hash with given parameters",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "serviceResult object with the result", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "serviceResult object with the result",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
@@ -580,7 +595,8 @@ public class RoomWebService extends BaseWebService {
 			deprecated = true,
 			description = "Method to clean room white board (all objects will be purged) - Deprecated use WbService#resetWb method instead",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "serviceResult object with the result", content = @Content(schema = @Schema(implementation = ServiceResult.class))),
+					@ApiResponse(responseCode = "200", description = "serviceResult object with the result",
+							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
 					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
 			}
 		)
