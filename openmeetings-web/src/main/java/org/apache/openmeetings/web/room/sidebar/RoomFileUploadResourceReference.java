@@ -71,7 +71,10 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 	private static final String PARAM_TO_WB_NAME = "room-upload-to-wb";
 	private static final String PARAM_CLEAN_NAME = "room-upload-clean";
 	private static final String PARAM_SID_NAME = "room-upload-sid";
-	private static final String PARAM_LAST_SELECTED_NAME = "room-upload-last-selected";
+	public static final String PARAM_LAST_SELECTED_ID = "room-upload-last-selected-id";
+	public static final String PARAM_LAST_SELECTED_ROOM = "room-upload-last-selected-room";
+	public static final String PARAM_LAST_SELECTED_OWNER = "room-upload-last-selected-pwner";
+	public static final String PARAM_LAST_SELECTED_GROUP = "room-upload-last-selected-group";
 	private enum Status {
 		SUCCESS
 		, PROGRESS
@@ -114,9 +117,12 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 
 						final boolean toWb = multiPartRequest.getPostParameters().getParameterValue(PARAM_TO_WB_NAME).toBoolean(false);
 						final boolean clean = multiPartRequest.getPostParameters().getParameterValue(PARAM_CLEAN_NAME).toBoolean(false);
-						final long lastSelected = multiPartRequest.getPostParameters().getParameterValue(PARAM_LAST_SELECTED_NAME).toLong(-1L);
+						final long lastSelectedId = multiPartRequest.getPostParameters().getParameterValue(PARAM_LAST_SELECTED_ID).toLong(-1L);
+						final long lastSelectedRoom = multiPartRequest.getPostParameters().getParameterValue(PARAM_LAST_SELECTED_ROOM).toLong(-1L);
+						final long lastSelectedOwner = multiPartRequest.getPostParameters().getParameterValue(PARAM_LAST_SELECTED_OWNER).toLong(-1L);
+						final long lastSelectedGroup = multiPartRequest.getPostParameters().getParameterValue(PARAM_LAST_SELECTED_GROUP).toLong(-1L);
 						final String uuid = randomUUID().toString();
-						startRunnable(() -> convertAll(c, fileItems, uuid, toWb, clean, lastSelected));
+						startRunnable(() -> convertAll(c, fileItems, uuid, toWb, clean, lastSelectedId, lastSelectedRoom, lastSelectedOwner, lastSelectedGroup));
 
 						prepareResponse(response, Status.SUCCESS, uuid, Application.getString("54", langId));
 					} else {
@@ -157,8 +163,8 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 		return !r.isHidden(RoomElement.FILES) && c.hasRight(Right.PRESENTER);
 	}
 
-	private void convertAll(Client c, List<FileItem> files, String uuid, boolean toWb, boolean clean, long lastSelected) {
-		final BaseFileItem parent = fileDao.get(lastSelected);
+	private void convertAll(Client c, List<FileItem> files, String uuid, boolean toWb, boolean clean, long lastSelectedId, long lastSelectedRoom, long lastSelectedOwner, long lastSelectedGroup) {
+		final BaseFileItem parent = fileDao.get(lastSelectedId);
 		final long langId = getLangId(c);
 		final long totalSize = files.stream().mapToLong(FileItem::getSize).sum();
 		final AtomicInteger progress = new AtomicInteger(0);
@@ -170,7 +176,13 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 				f.setSize(size);
 				f.setName(curItem.getName());
 				if (parent == null || BaseFileItem.Type.RECORDING == parent.getType()) {
-					f.setOwnerId(getUserId());
+					if (lastSelectedGroup > -1) {
+						f.setGroupId(lastSelectedGroup);
+					} else if (lastSelectedRoom > -1) {
+						f.setRoomId(lastSelectedRoom);
+					} else {
+						f.setOwnerId(lastSelectedOwner > -1 ? lastSelectedOwner : getUserId());
+					}
 				} else {
 					f.setRoomId(parent.getRoomId());
 					f.setOwnerId(parent.getOwnerId());

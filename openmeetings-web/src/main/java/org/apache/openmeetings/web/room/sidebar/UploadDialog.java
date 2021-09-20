@@ -19,9 +19,12 @@
 package org.apache.openmeetings.web.room.sidebar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
+import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_GROUP;
+import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_ID;
+import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_OWNER;
+import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_ROOM;
 
-import org.apache.openmeetings.core.data.file.FileProcessor;
-import org.apache.openmeetings.db.dao.file.FileItemLogDao;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -35,7 +38,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
@@ -45,12 +47,10 @@ public class UploadDialog extends Modal<String> {
 	private final WebMarkupContainer form = new WebMarkupContainer("form");
 	private final RoomFilePanel roomFiles;
 	private final RoomPanel room;
-	private final WebMarkupContainer lastSelected = new WebMarkupContainer("lastSelected");
-
-	@SpringBean
-	private FileProcessor processor;
-	@SpringBean
-	private FileItemLogDao fileLogDao;
+	private final WebMarkupContainer lastSelectedId = new WebMarkupContainer("lastSelectedId");
+	private final WebMarkupContainer lastSelectedRoom = new WebMarkupContainer("lastSelectedRoom"); // required for "fake" root
+	private final WebMarkupContainer lastSelectedOwner = new WebMarkupContainer("lastSelectedOwner"); // required for "fake" root
+	private final WebMarkupContainer lastSelectedGroup = new WebMarkupContainer("lastSelectedGroup"); // required for "fake" root
 
 	public UploadDialog(String id, RoomPanel room, RoomFilePanel roomFiles) {
 		super(id);
@@ -72,7 +72,10 @@ public class UploadDialog extends Modal<String> {
 				.setOutputMarkupId(true)
 				.setOutputMarkupPlaceholderTag(true));
 		form.add(new WebMarkupContainer("sid").add(AttributeModifier.append("value", room.getClient().getSid())).setMarkupId("room-upload-sid").setOutputMarkupId(true));
-		form.add(lastSelected.setMarkupId("room-upload-last-selected").setOutputMarkupId(true));
+		form.add(lastSelectedId.setMarkupId(PARAM_LAST_SELECTED_ID).setOutputMarkupId(true));
+		form.add(lastSelectedRoom.setMarkupId(PARAM_LAST_SELECTED_ROOM).setOutputMarkupId(true));
+		form.add(lastSelectedOwner.setMarkupId(PARAM_LAST_SELECTED_OWNER).setOutputMarkupId(true));
+		form.add(lastSelectedGroup.setMarkupId(PARAM_LAST_SELECTED_GROUP).setOutputMarkupId(true));
 		add(BootstrapFileUploadBehavior.INSTANCE);
 		addButton(OmModalCloseButton.of("85"));
 
@@ -81,7 +84,14 @@ public class UploadDialog extends Modal<String> {
 
 	@Override
 	public Modal<String> show(IPartialPageRequestHandler handler) {
-		lastSelected.add(AttributeModifier.replace("value", roomFiles.getLastSelected().getId()));
+		BaseFileItem last = roomFiles.getLastSelected();
+		if (last.getId() == null) {
+			lastSelectedRoom.add(AttributeModifier.replace("value", last.getRoomId()));
+			lastSelectedOwner.add(AttributeModifier.replace("value", last.getOwnerId()));
+			lastSelectedGroup.add(AttributeModifier.replace("value", last.getGroupId()));
+		} else {
+			lastSelectedId.add(AttributeModifier.replace("value", last.getId()));
+		}
 		handler.add(form.setVisible(true));
 		handler.appendJavaScript("Upload.bindUpload();");
 		return super.show(handler);
