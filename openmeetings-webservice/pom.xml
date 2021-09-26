@@ -78,6 +78,7 @@
 								Community contributed modules for using this API include for example:
 								<ul>
 									<li><a href="https://openmeetings.apache.org/RestAPISample.html#how-to-integrate-using-nodejs" target="_BLANK"> Node.js module for using API</a></li>
+									<li><a href="https://openmeetings.apache.org/RestAPISample.html#how-to-integrate-using-php-and-composer" target="_BLANK"> PHP composer module for using API</a></li>
 								</ul>
 								Other community plugins using this API for Moodle, SugarCRM, Drupal, Joomla can be found in the Configuration>Plugins section at <a href="https://openmeetings.apache.org" target="_BLANK">https://openmeetings.apache.org</a>
 							]]>
