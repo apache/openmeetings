@@ -73,7 +73,7 @@
 				<div>You can now use a community contributed PHP composer module to make integration to OpenMeetings easier<br/><br/>
 					More information:
 					<ul>
-						<li>NPM module <a href="https://github.com/om-hosting/openmeetings-php-client" target="_blank">OpenMeetings PHP Client</a></li>
+						<li><a href="https://github.com/om-hosting/openmeetings-php-client" target="_blank">OpenMeetings PHP Client</a></li>
 						<li>OpenMeetings <a href="RestAPISample.html#how-to-integrate-using-php-and-composer">PHP Rest API sample</a></li>
 					</ul>
 					The PHP module makes use of the OpenMeetings Rest API which is now also available in OpenAPI 3.0 format: <a href="https://openmeetings.apache.org/swagger/" target="_blank">https://openmeetings.apache.org/swagger/</a>
