@@ -39,6 +39,66 @@
 				</div>
 			</div>
 		</section>
+		<section name="How to integrate using PHP and composer">
+			<p>You can integrate OpenMeetings via the Rest API into your PHP project.</p>
+			<div class="bd-callout bd-callout-info">
+				There is a community sponsored free module for integrating with see: <a href="https://github.com/om-hosting/openmeetings-php-client" target="_blank">openmeetings-php-client</a>
+			</div>
+			<p>Install the module</p>
+<source>
+php composer.phar install openmeetings-php-client
+</source>
+			<p>Eg generate a unique hash to enter a conference room:</p>
+				<ol>
+					<li>Login to service</li>
+					<li>Generate Hash for entering a conference room</li>
+					<li>Construct Login URL</li>
+				</ol>
+<source>
+$BASE_URL = "http://localhost:5080/openmeetings";
+
+//1. Login to service
+$config = new Configuration();
+$config->setHost($BASE_URL . '/services');
+$userApiInstance = new UserServiceApi(null, $config);
+$serviceResultLoginWrapper = $userApiInstance->login("soapuser", "!HansHans1");
+if ($serviceResultLoginWrapper->getServiceResult()->getType() != "SUCCESS") {
+    $text = "Login Failed " . $serviceResultLoginWrapper->getServiceResult()->getMessage();
+    return view('hello_index', ['text' => $text]);
+}
+$sid = $serviceResultLoginWrapper->getServiceResult()->getMessage();
+
+// 2. Generate Hash for entering a conference room
+$serviceResultHashWrapper = $userApiInstance->getRoomHash($sid,
+    new ExternalUserDTO(
+        array(
+            "firstname" => "John",
+            "lastname" => "Doe",
+            "external_id" => "uniqueId1",
+            "external_type" => "myCMS",
+            "login" => "john.doe",
+            "email" => "john.doe@gmail.com"
+        )
+    ),
+    new RoomOptionsDTO(
+        array(
+            "room_id" => 2,
+            "moderator" => true
+        )
+    )
+);
+
+// 3. Construct Login URL
+$hash = $serviceResultHashWrapper->getServiceResult()->getMessage();
+$url = $this->BASE_URL . "/hash?secure=".$hash;
+</source>
+		<p>Full sample source code can be found at <a href="https://github.com/om-hosting/openmeetings-php-laravel-sample-project" target="_BLANK">https://github.com/om-hosting/openmeetings-php-laravel-sample-project</a>
+		</p>
+		<p>You can find details about all API endpoints and examples at <a href="https://github.com/om-hosting/openmeetings-php-client#documentation-for-api-endpoints" target="_blank">https://github.com/om-hosting/openmeetings-php-client#documentation-for-api-endpoints</a></p>
+		<div class="bd-callout bd-callout-info">
+			A sample PHP use case for a website using Laravel can be found here: <a href="https://om-hosting.com/openmeetings-integration-php-composer/" target="_BLANK">https://om-hosting.com/openmeetings-integration-php-composer/</a>
+		</div>
+		</section>
 		<section name="How to integrate using Node.js">
 			<p>You can integrate OpenMeetings via the Rest API into your Node project.</p>
 			<div class="bd-callout bd-callout-info">
