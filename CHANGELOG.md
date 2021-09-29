@@ -29,6 +29,7 @@ Release Notes - Openmeetings - Version 6.2.0
 
 * Task
     * [OPENMEETINGS-2637] - Move to bootstrap 5
+    * [OPENMEETINGS-2640] - (6.2.0) Libraries should be updated 
 
 Release Notes - Openmeetings - Version 6.1.0
 ================================================================================================================
