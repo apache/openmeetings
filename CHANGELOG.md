@@ -5,7 +5,50 @@ Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+Release Notes - Openmeetings - Version 6.2.0
+================================================================================================================
 
+* Bug
+    * [OPENMEETINGS-2022] - the schedualed conference doesnot end on the end time it still continiues
+    * [OPENMEETINGS-2253] - Interruption of a video session when the microphone is turned on / off
+    * [OPENMEETINGS-2280] - Android landscape mode cannot sign up as virtual keyboard covers UI
+    * [OPENMEETINGS-2314] - Video windows are not initially aligned
+    * [OPENMEETINGS-2420] - Discuss and publish API Docs as swagger - Generate swagger from code
+    * [OPENMEETINGS-2566] - Moderator invitation form
+    * [OPENMEETINGS-2642] - When try access first page to install OM 7 appears 404
+    * [OPENMEETINGS-2648] - Import function for backup restore not working
+    * [OPENMEETINGS-2650] - OM 6.1.0 Firefox 87, 90 or 91 don´t show the two cams, and whe press exit button show a page with red text.
+    * [OPENMEETINGS-2652] - Can´t send invitation from rooms or Calendar
+* New Feature
+    * [OPENMEETINGS-2306] - Kick and terminate KStream from Admin>Connections
+    * [OPENMEETINGS-2645] - ADFS Oauth Options
+    * [OPENMEETINGS-2646] - Breakout Rooms
+    * [OPENMEETINGS-2649] - User permission to join public rooms without hashed invitation
+    * [OPENMEETINGS-2670] - Investigate background blur for webcam when publishing your camera
+    * [OPENMEETINGS-2673] - Sharing of system audio with Screenshare
+* Improvement
+    * [OPENMEETINGS-2043] - New checks should be added to network testing tool
+    * [OPENMEETINGS-2232] - CSS clean-up and move to SASS
+    * [OPENMEETINGS-2300] - Room File Tree Details panel - Add header - UI improvements
+    * [OPENMEETINGS-2414] - New video-pods design
+    * [OPENMEETINGS-2585] - Create IKurentoHandler and add methods to IStreamHandler to support alternative implementations for KMS
+    * [OPENMEETINGS-2639] - Add internal password user when send inivitation from room
+    * [OPENMEETINGS-2654] - Update build instructions with new commands for compiling NPM
+    * [OPENMEETINGS-2655] - Minor ui fix for icons, see attached screenshots
+    * [OPENMEETINGS-2660] - Updated Swagger Rest API Docs 
+    * [OPENMEETINGS-2661] - Updated Rest API Example
+    * [OPENMEETINGS-2664] - Fix CONSUMES tag so that generated swagger understands FormParams as multipart-form
+    * [OPENMEETINGS-2666] - Backup import should be improved
+    * [OPENMEETINGS-2667] - Generated swagger has incorrect response, missing root element in schema and provide example responses
+    * [OPENMEETINGS-2672] - More configuration for room
+    * [OPENMEETINGS-2674] - Updated Rest API Example for PHP integration
+* Test
+    * [OPENMEETINGS-2659] - Can´t clean whiteboard 
+    * [OPENMEETINGS-2665] - "Start sharing" icon TV not show it in some circunstanves
+
+* Task
+    * [OPENMEETINGS-2637] - Move to bootstrap 5
+    * [OPENMEETINGS-2640] - (7.0.0) Libraries should be updated
 
 Release Notes - Openmeetings - Version 6.1.0
 ================================================================================================================
@@ -26,10 +69,8 @@ Release Notes - Openmeetings - Version 6.1.0
     * [OPENMEETINGS-2624] - Untranslated calendar when change Language to japanese
     * [OPENMEETINGS-2629] - Calendar picker can't sync to big calendar. 
     * [OPENMEETINGS-2638] - The email link received from Calendar don´t work
-
 * New Feature
     * [OPENMEETINGS-2605] - Add ability to choose theme via Admin->Config
-
 * Improvement
     * [OPENMEETINGS-2546] - Admin Rights
     * [OPENMEETINGS-2589] - Upload  file  icon needs  improving
@@ -37,10 +78,8 @@ Release Notes - Openmeetings - Version 6.1.0
     * [OPENMEETINGS-2604] - Help  menu  for  room
     * [OPENMEETINGS-2625] - Mark default group in administration->groups
     * [OPENMEETINGS-2632] - Wigets-page:  look&feel like other lists
-
 * Test
     * [OPENMEETINGS-2587] - Error when push Recording or Share-desktop buttons
-
 * Task
     * [OPENMEETINGS-2588] - Injections for non-beans can be better handled
     * [OPENMEETINGS-2593] - (6.1.0) Library versions need to be updated
