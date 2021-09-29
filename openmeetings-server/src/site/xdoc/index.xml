@@ -71,7 +71,7 @@
 			<div class="bd-callout bd-callout-danger">
 				<div class="h4">Version 6.2.0 released!</div>
 				<div>Release 6.2.0, provides following improvements:<br/>
-					Ui improvements, stability fixes and updates adds OpenAPI spec<br/>
+					UI improvements, stability fixes and adds OpenAPI spec in 3.0.x format<br/>
 
 					Stability and UI:
 					<ul>
@@ -81,7 +81,7 @@
 					</ul>
 					Integration:
 					<ul>
-						<li>OpenAPI Spec in swagger format see <a href="https://openmeetings.apache.org/swagger">Swagger</a></li>
+						<li>OpenAPI Spec in 3.0.x format see <a href="https://openmeetings.apache.org/swagger">Swagger</a></li>
 						<li>Improved Integration examples for Node and PHP</li>
 					</ul>
 					<br/>
