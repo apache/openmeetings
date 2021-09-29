@@ -92,7 +92,7 @@
 				<span>
 					16 issues are fixed please check <br/>
 					<a href="https://www.apache.org/dist/openmeetings/6.2.0/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12349964&styleName=Html&projectId=12312720">Detailed list</a>
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12349964&amp;styleName=Html&amp;projectId=12312720">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2021-09-29)</span>
