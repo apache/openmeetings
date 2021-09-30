@@ -71,7 +71,7 @@ Integration:
 * OpenAPI Spec in swagger format see https://openmeetings.apache.org/swagger
 * Improved Integration examples for Node and PHP
 
-Some other fixes and improvements, 16 issues were addressed
+Some other fixes and improvements, 17 issues were addressed
 
 6.1.0
 -----
