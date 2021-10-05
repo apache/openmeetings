@@ -52,7 +52,9 @@ function _sendMessage(_m, _base) {
 	Wicket.WebSocket.send(msg);
 }
 function _requestNotifyPermission(callback, elseCallback) {
-	if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+	if (typeof Notification !== "undefined"
+		&& Notification.permission !== 'granted'
+		&& Notification.permission !== 'denied') {
 		function onRequest(permission) {
 			if (permission === 'granted') {
 				callback();
@@ -63,12 +65,16 @@ function _requestNotifyPermission(callback, elseCallback) {
 		} else {
 			Notification.requestPermission().then(onRequest);
 		}
-	} else if (typeof(elseCallback) === 'function') {
-		elseCallback();
+	} else {
+		_info("No notification API for this browser");
+		if (typeof(elseCallback) === 'function') {
+			elseCallback();
+		}
 	}
 }
 function _notify(msg, tag, elseCallback) {
-	if (window === window.parent) {
+	if (typeof Notification !== "undefined"
+		&& window === window.parent) {
 		function _newMessage() {
 			const opts = {
 					tag: tag
@@ -84,8 +90,11 @@ function _notify(msg, tag, elseCallback) {
 		} else {
 			_requestNotifyPermission(() => _newMessage());
 		}
-	} else if (typeof(elseCallback) === 'function') {
-		elseCallback();
+	} else {
+		_info("No notification API for this browser");
+		if (typeof(elseCallback) === 'function') {
+			elseCallback();
+		}
 	}
 }
 function _isSafari() {
