@@ -52,7 +52,7 @@ function _sendMessage(_m, _base) {
 	Wicket.WebSocket.send(msg);
 }
 function _requestNotifyPermission(callback, elseCallback) {
-	if (typeof Notification !== "undefined"
+	if (typeof(Notification) !== "undefined"
 		&& Notification.permission !== 'granted'
 		&& Notification.permission !== 'denied') {
 		function onRequest(permission) {
@@ -73,7 +73,7 @@ function _requestNotifyPermission(callback, elseCallback) {
 	}
 }
 function _notify(msg, tag, elseCallback) {
-	if (typeof Notification !== "undefined"
+	if (typeof(Notification) !== "undefined"
 		&& window === window.parent) {
 		function _newMessage() {
 			const opts = {
