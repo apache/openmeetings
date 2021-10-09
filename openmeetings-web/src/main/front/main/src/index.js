@@ -20,3 +20,10 @@ Object.assign(window, {
 		$('#busy-indicator').hide();
 	}
 });
+function _updateResize() {
+	const doc = document.documentElement
+    doc.style.setProperty('--app-height', `${window.innerHeight}px`)
+}
+$(window).on('resize', _updateResize);
+//initial resize
+_updateResize();
