@@ -2,7 +2,6 @@
 #menu .navbar {
 	padding-top: 0;
 	padding-bottom: 0;
-	height: var(--room-menu-height);
 }
 .room-block .menu .top.exit {
 	padding-left: 0;
