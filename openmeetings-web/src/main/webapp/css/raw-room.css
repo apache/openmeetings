@@ -32,7 +32,7 @@
 	left: 0;
 }
 .room-block .sb-wb .sidebar #room-sidebar-tabs {
-	height: calc(100% - var(--buffer-size) - var(--activities-height));
+	height: calc(100% - var(--activities-height));
 }
 .room-block .sb-wb .sidebar .tab {
 	padding: 5px 0 0 0;
