@@ -1,10 +1,10 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 :root {
-    --app-height: 100%;
+	--app-height: 100%;
 }
 html, body {
 	width: 100vw;
-    height: var(--app-height);
+	height: var(--app-height);
 	margin: 0;
 	padding: 0;
 	font-family: Arial, Helvetica, sans-serif;
