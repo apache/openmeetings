@@ -44,7 +44,7 @@ body.no-menu {
 }
 .main.room {
 	--header-height: 0px;
-	--room-menu-height: calc(22px + 1rem);
+	--room-menu-height: 40px;
 	--room-wb-tabs-height: 45px;
 	--room-sidebar-header-height: 37px;
 	--chat-width: 20px;

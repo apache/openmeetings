@@ -1,5 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 #menu .navbar {
+	padding-top: 0;
 	padding-bottom: 0;
 }
 .room-block .menu .top.exit {
