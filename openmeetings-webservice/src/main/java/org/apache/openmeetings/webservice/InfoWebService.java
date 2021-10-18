@@ -20,8 +20,6 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
-import java.util.Locale;
-
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ws.rs.GET;
@@ -49,9 +47,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  *
- * The Service contains methods to get info about the system
+ * The Service contains methods to get info about the system and manifest
  *
- * @author solomax
+ * @author solomax, sebawagner
  *
  */
 @Service("infoWebService")
@@ -108,7 +106,7 @@ public class InfoWebService {
 		manifest.put("name", OpenmeetingsVariables.getApplicationName() + " " + Version.getVersion());
 		manifest.put("short_name", OpenmeetingsVariables.getApplicationName() + " " + Version.getVersion());
 		manifest.put("description", "Openmeetings provides video conferencing, instant messaging, white board, collaborative document editing and other groupware tools.");
-		manifest.put("start_url", "/" + OpenmeetingsVariables.getApplicationName().toLowerCase(Locale.getDefault()) + "/?pwa=true");
+		manifest.put("start_url", "/" + OpenmeetingsVariables.getWebappPath() + "/?pwa=true");
 		manifest.put("scope", "/");
 		manifest.put("background_color", "#ffffff");
 		manifest.put("theme_color", "#ffffff");
@@ -125,7 +123,7 @@ public class InfoWebService {
 
 	private JSONObject generateIcon(String name, String dimension, String purpose) {
 		JSONObject icon = new JSONObject();
-		icon.put("src", "/" + OpenmeetingsVariables.getApplicationName().toLowerCase(Locale.getDefault()) + "/images/icons/" + name);
+		icon.put("src", "/" + OpenmeetingsVariables.getWebappPath() + "/images/icons/" + name);
 		icon.put("type", "image/png");
 		icon.put("sizes", dimension);
 		icon.put("purpose", purpose);
