@@ -248,6 +248,14 @@ public class OpenmeetingsVariables {
 		return baseUrl;
 	}
 
+	public static String getWebappPath() {
+		String webappPath = baseUrl;
+		if (webappPath.endsWith("/")) {
+			webappPath = webappPath.substring(0, webappPath.length() - 1);
+		}
+		return webappPath.substring(webappPath.lastIndexOf("/") + 1);
+	}
+
 	public static void setBaseUrl(String url) {
 		baseUrl = url;
 	}
