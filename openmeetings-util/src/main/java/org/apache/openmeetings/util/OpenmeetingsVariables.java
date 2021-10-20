@@ -259,7 +259,7 @@ public class OpenmeetingsVariables {
 		try {
 			return URI.create(new URI(baseUrl + "/").normalize().getPath());
 		} catch (URISyntaxException e) {
-			log.error("could not parse baseUrl", e);
+			log.warn("could not parse baseUrl");
 			return URI.create(DEFAULT_BASE_URL);
 		}
 	}
