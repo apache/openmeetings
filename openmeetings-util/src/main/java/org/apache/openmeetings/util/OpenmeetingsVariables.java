@@ -22,7 +22,6 @@ import static org.apache.wicket.csp.CSPDirectiveSrcValue.SELF;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.STRICT_DYNAMIC;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -255,12 +254,16 @@ public class OpenmeetingsVariables {
 		return baseUrl;
 	}
 
+	private static URI getWebappPath(String url) {
+		return URI.create(URI.create(url + "/").normalize().getPath());
+	}
+
 	public static URI getWebappPath() {
 		try {
-			return URI.create(new URI(baseUrl + "/").normalize().getPath());
-		} catch (URISyntaxException e) {
-			log.warn("could not parse baseUrl");
-			return URI.create(DEFAULT_BASE_URL);
+			return getWebappPath(baseUrl);
+		} catch (Exception e) {
+			log.warn("Error getting baseURL");
+			return getWebappPath(DEFAULT_BASE_URL);
 		}
 	}
 
