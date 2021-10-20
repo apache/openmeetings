@@ -255,13 +255,13 @@ public class OpenmeetingsVariables {
 		return baseUrl;
 	}
 
-	public static String getWebappPath() {
+	public static URI getWebappPath() {
 		try {
-			return new URI(baseUrl).getPath();
+			return URI.create(new URI(baseUrl + "/").normalize().getPath());
 		} catch (URISyntaxException e) {
 			log.error("could not parse baseUrl", e);
+			return URI.create(DEFAULT_BASE_URL);
 		}
-		return "";
 	}
 
 	public static void setBaseUrl(String url) {

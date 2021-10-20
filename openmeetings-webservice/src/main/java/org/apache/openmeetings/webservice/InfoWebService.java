@@ -20,6 +20,8 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
+import java.net.URI;
+
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ws.rs.GET;
@@ -102,11 +104,12 @@ public class InfoWebService {
 	@Path("/manifest.webmanifest")
 	@Produces({"application/manifest+json"})
 	public String getManifest() {
+		URI omPath = OpenmeetingsVariables.getWebappPath();
 		JSONObject manifest = new JSONObject();
 		manifest.put("name", OpenmeetingsVariables.getApplicationName() + " " + Version.getVersion());
 		manifest.put("short_name", OpenmeetingsVariables.getApplicationName() + " " + Version.getVersion());
 		manifest.put("description", "Openmeetings provides video conferencing, instant messaging, white board, collaborative document editing and other groupware tools.");
-		manifest.put("start_url",  OpenmeetingsVariables.getWebappPath() + "?pwa=true");
+		manifest.put("start_url",  omPath.resolve("?pwa=true"));
 		manifest.put("scope", "/");
 		manifest.put("background_color", "#ffffff");
 		manifest.put("theme_color", "#ffffff");
@@ -114,16 +117,16 @@ public class InfoWebService {
 		manifest.put("display", "standalone");
 		manifest.put("orientation", "landscape");
 		JSONArray icons = new JSONArray();
-		icons.put(generateIcon("manifest-icon-512.maskable.png", "512x512", "maskable"));
-		icons.put(generateIcon("manifest-icon-192.maskable.png", "192x192", "maskable"));
+		icons.put(generateIcon("manifest-icon-512.maskable.png", "512x512", "maskable", omPath));
+		icons.put(generateIcon("manifest-icon-192.maskable.png", "192x192", "maskable", omPath));
 		manifest.put("icons", icons);
 		manifest.put("prefer_related_applications", "false");
 		return manifest.toString(2);
 	}
 
-	private JSONObject generateIcon(String name, String dimension, String purpose) {
+	private JSONObject generateIcon(String name, String dimension, String purpose, URI omPath) {
 		JSONObject icon = new JSONObject();
-		icon.put("src", OpenmeetingsVariables.getWebappPath() + "images/icons/" + name);
+		icon.put("src", omPath.resolve("images/icons/" + name));
 		icon.put("type", "image/png");
 		icon.put("sizes", dimension);
 		icon.put("purpose", purpose);
