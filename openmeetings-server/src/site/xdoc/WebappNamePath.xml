@@ -20,13 +20,6 @@
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 	<body>
-		<section name="Customize Openmeetings logo">
-			<p>If you want to set up your logo in Openmeetings header you can do the following:</p>
-			<ol>
-				<li>create your logo image as PNG 40px height</li>
-				<li>replace <tt>/opt/om/webapps/openmeetings/css/images/logo.png</tt> with your logo file</li>
-			</ol>
-		</section>
 		<section name="Renaming /openmeetings context">
 			<p>
 				If you want to have
