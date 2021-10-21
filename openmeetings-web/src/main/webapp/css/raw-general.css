@@ -1,7 +1,12 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+:root {
+	--app-height: 100%;
+}
 html, body {
-	height: 100%;
+	width: 100vw;
+	height: var(--app-height);
 	margin: 0;
+	padding: 0;
 	font-family: Arial, Helvetica, sans-serif;
 	overflow-y: hidden;
 }

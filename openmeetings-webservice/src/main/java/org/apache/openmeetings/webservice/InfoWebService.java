@@ -20,6 +20,8 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
+import java.net.URI;
+
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ws.rs.GET;
@@ -30,9 +32,14 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dto.basic.Health;
 import org.apache.openmeetings.db.dto.basic.Info;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
+import org.apache.openmeetings.util.Version;
 import org.apache.openmeetings.webservice.schema.HealthWrapper;
 import org.apache.openmeetings.webservice.schema.InfoWrapper;
 import org.springframework.stereotype.Service;
+
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -42,9 +49,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  *
- * The Service contains methods to get info about the system
+ * The Service contains methods to get info about the system and manifest
  *
- * @author solomax
+ * @author solomax, sebawagner
  *
  */
 @Service("infoWebService")
@@ -91,4 +98,39 @@ public class InfoWebService {
 	public Health getHealth() {
 		return Health.INSTANCE;
 	}
+
+	@WebMethod
+	@GET
+	@Path("/manifest.webmanifest")
+	@Produces({"application/manifest+json"})
+	public String getManifest() {
+		URI omPath = OpenmeetingsVariables.getWebappPath();
+		JSONObject manifest = new JSONObject();
+		manifest.put("name", OpenmeetingsVariables.getApplicationName() + " " + Version.getVersion());
+		manifest.put("short_name", OpenmeetingsVariables.getApplicationName() + " " + Version.getVersion());
+		manifest.put("description", "Openmeetings provides video conferencing, instant messaging, white board, collaborative document editing and other groupware tools.");
+		manifest.put("start_url",  omPath.resolve("?pwa=true"));
+		manifest.put("scope", "/");
+		manifest.put("background_color", "#ffffff");
+		manifest.put("theme_color", "#ffffff");
+		manifest.put("dir", "auto");
+		manifest.put("display", "standalone");
+		manifest.put("orientation", "landscape");
+		JSONArray icons = new JSONArray();
+		icons.put(generateIcon("manifest-icon-512.maskable.png", "512x512", "maskable", omPath));
+		icons.put(generateIcon("manifest-icon-192.maskable.png", "192x192", "maskable", omPath));
+		manifest.put("icons", icons);
+		manifest.put("prefer_related_applications", "false");
+		return manifest.toString(2);
+	}
+
+	private JSONObject generateIcon(String name, String dimension, String purpose, URI omPath) {
+		JSONObject icon = new JSONObject();
+		icon.put("src", omPath.resolve("images/icons/" + name));
+		icon.put("type", "image/png");
+		icon.put("sizes", dimension);
+		icon.put("purpose", purpose);
+		return icon;
+	}
+
 }

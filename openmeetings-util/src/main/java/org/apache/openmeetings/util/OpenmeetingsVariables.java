@@ -21,9 +21,15 @@ package org.apache.openmeetings.util;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.SELF;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.STRICT_DYNAMIC;
 
+import java.net.URI;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.openjson.JSONObject;
 
 public class OpenmeetingsVariables {
+	private static final Logger log = LoggerFactory.getLogger(OpenmeetingsVariables.class);
 	public static final String ATTR_CLASS = "class";
 	public static final String ATTR_TITLE = "title";
 	public static final String ATTR_DISABLED = "disabled";
@@ -246,6 +252,19 @@ public class OpenmeetingsVariables {
 
 	public static String getBaseUrl() {
 		return baseUrl;
+	}
+
+	private static URI getWebappPath(String url) {
+		return URI.create(URI.create(url + "/").normalize().getPath());
+	}
+
+	public static URI getWebappPath() {
+		try {
+			return getWebappPath(baseUrl);
+		} catch (Exception e) {
+			log.warn("Error getting baseURL");
+			return getWebappPath(DEFAULT_BASE_URL);
+		}
 	}
 
 	public static void setBaseUrl(String url) {

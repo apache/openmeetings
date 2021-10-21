@@ -271,7 +271,7 @@ public class ImportInitvalues {
 						+ "It makes no sense to make this(%s) 'true' while "
 						+ "%s is 'false' cause you need to send a EMail.", CONFIG_EMAIL_VERIFICATION, CONFIG_EMAIL_AT_REGISTER), VER_2_0);
 
-		addCfg(list, CONFIG_APPLICATION_BASE_URL, cfg.getBaseUrl(), Configuration.Type.STRING, "Base URL your OPenmeetings installation will be accessible at.", "3.0.2");
+		addCfg(list, CONFIG_APPLICATION_BASE_URL, cfg.getBaseUrl(), Configuration.Type.STRING, "Base URL your Openmeetings installation will be accessible at.", "3.0.2");
 
 		// ***************************************
 		// ***************************************
