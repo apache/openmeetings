@@ -71,13 +71,15 @@
 			<div class="bd-callout bd-callout-danger">
 				<div class="h4">Version 6.2.0 released!</div>
 				<div>Release 6.2.0, provides following improvements:<br/>
-					UI improvements, stability fixes and adds OpenAPI spec in 3.0.x format<br/>
+					UI improvements, stability fixes, mobile version and adds OpenAPI spec in 3.0.x format<br/>
 
 					Stability and UI:
 					<ul>
 						<li>UI fixes</li>
 						<li>Modal PopUpFix</li>
 						<li>Upgrade to Bootstrap5</li>
+						<li>Fixes for Mobile Version and landscape mode</li>
+						<li>Improve ability for starting from Home Screen on Mobile device</li>
 					</ul>
 					Integration:
 					<ul>
@@ -90,7 +92,7 @@
 				<br/>
 
 				<span>
-					17 issues are fixed please check <br/>
+					28 issues are fixed please check <br/>
 					<a href="https://www.apache.org/dist/openmeetings/6.2.0/CHANGELOG.md">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12349964&amp;styleName=Html&amp;projectId=12312720">Detailed list</a>
 				</span>

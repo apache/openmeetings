@@ -9,10 +9,22 @@ Release Notes - Openmeetings - Version 6.2.0
 ================================================================================================================
 
 * Bug
+    * [OPENMEETINGS-2280] - Android landscape mode cannot sign up as virtual keyboard covers UI
     * [OPENMEETINGS-2420] - Discuss and publish API Docs as swagger - Generate swagger from code
     * [OPENMEETINGS-2642] - When try access first page to install OM 7 appears 404
     * [OPENMEETINGS-2650] - OM 6.1.0 Firefox 87, 90 or 91 don´t show the two cams, and whe press exit button show a page with red text.
     * [OPENMEETINGS-2652] - Can´t send invitation from rooms or Calendar
+    * [OPENMEETINGS-2678] - OpenMeetings using non support JavaScript API in iOS - ReferenceError: Can't find variable: Notification
+    * [OPENMEETINGS-2679] - Cant share Cam/Video on iOS/Mobile (Audio-Only works fine)
+    * [OPENMEETINGS-2680] - Openmeetings / next demo server issues
+    * [OPENMEETINGS-2681] - Gap in taking space of screen and part of conference moving into negative margin outside viewport
+
+
+* New Feature
+    * [OPENMEETINGS-2683] - Explore what features of manifest file are useful for OpenMeetings
+    * [OPENMEETINGS-2684] - Rotating device landscape in iOS leaves whitespace and doesn't use full height
+    * [OPENMEETINGS-2685] - Login form on Mobile screens not mobile-friendly sizes of buttons
+
 * Improvement
     * [OPENMEETINGS-2585] - Create IKurentoHandler and add methods to IStreamHandler to support alternative implementations for KMS
     * [OPENMEETINGS-2639] - Add internal password user when send inivitation from room
@@ -23,13 +35,18 @@ Release Notes - Openmeetings - Version 6.2.0
     * [OPENMEETINGS-2666] - Backup import should be improved
     * [OPENMEETINGS-2667] - Generated swagger has incorrect response, missing root element in schema and provide example responses
     * [OPENMEETINGS-2674] - Updated Rest API Example for PHP integration
+
 * Test
     * [OPENMEETINGS-2659] - Can´t clean whiteboard 
     * [OPENMEETINGS-2665] - "Start sharing" icon TV not show it in some circunstanves
 
 * Task
     * [OPENMEETINGS-2637] - Move to bootstrap 5
-    * [OPENMEETINGS-2640] - (6.2.0) Libraries should be updated 
+    * [OPENMEETINGS-2640] - (6.2.0) Libraries should be updated
+    * [OPENMEETINGS-2686] - Can't click buttons to share you webcam or microphone on mobile screen in portrait mode
+    * [OPENMEETINGS-2692] - Update manifest file path to use application.base.url
+    * [OPENMEETINGS-2693] - Update config for manifest icons to be able to customise icon easily
+
 
 Release Notes - Openmeetings - Version 6.1.0
 ================================================================================================================
