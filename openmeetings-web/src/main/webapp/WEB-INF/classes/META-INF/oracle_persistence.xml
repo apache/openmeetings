@@ -76,7 +76,7 @@
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			<property name="openjpa.DataCache" value="true" />
 			<property name="openjpa.QueryCache" value="true" />
-			<property name="openjpa.jdbc.DBDictionary" value="oracle(UseTriggersForAutoAssign=true, MaxAutoAssignNameLength=28, BatchLimit=100)" />
+			<property name="openjpa.jdbc.DBDictionary" value="oracle(MaxAutoAssignNameLength=28, BatchLimit=100)" />
 			<property name="openjpa.jdbc.QuerySQLCache" value="false" />
 			<!--property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=127.0.0.1)" /-->
 		</properties>
