@@ -20,6 +20,38 @@
 	</properties>
 
 	<body>
+		<section name="Past Releases">
+			<div class="bd-callout bd-callout-danger">
+				<div class="h4">Version 6.1.0 released!</div>
+				<div>Release 6.1.0, provides following improvements:<br/>
+					This release provides WebRTC audio/video/screen-sharing in the Room<br/>
+
+					Stability:
+					<ul>
+						<li>Room is more stable</li>
+						<li>Screen sharing on Safari is fixed</li>
+						<li>Recording in interview room is fixed</li>
+					</ul>
+					UI:
+					<ul>
+						<li>OM theme can selected in Admin -&gt; Config</li>
+						<li>Configurable Extra menu is added to the rooms</li>
+						<li>Date/time picker is better localized</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+				</div>
+				<br/>
+
+				<span>
+					27 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/6.1.0/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12349533">Detailed list</a>
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2021-07-20)</span>
+			</div>
+		</section>
 		<section name="Release 5.1.0">
 			<div class="bd-callout bd-callout-info">
 				<h4>Version 5.1.0 released!</h4>
