@@ -68,10 +68,8 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 	//This variable hold a reference to the UID of the StreamDesc that will be created
 	private String streamDescUID;
 
-	@Override
 	@BeforeEach
 	public void setup() {
-		super.setup();
 		User u = new User();
 		u.setId(USER_ID);
 		u.setFirstname("firstname");

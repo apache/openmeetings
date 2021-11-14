@@ -35,10 +35,8 @@ import org.kurento.client.Transaction;
 import com.github.openjson.JSONObject;
 
 class TestSetupFlowMocked extends BaseMockedTest {
-	@Override
 	@BeforeEach
 	public void setup() {
-		super.setup();
 		doReturn(true).when(handler).isConnected();
 		MSG_BASE.put(TAG_MODE, MODE_TEST);
 	}
