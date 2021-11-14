@@ -18,13 +18,14 @@
  */
 package org.apache.openmeetings.cli;
 
-import static org.apache.openmeetings.AbstractSpringTest.setOmHome;
+import static org.apache.openmeetings.AbstractOmServerTest.setOmHome;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.util.TimeZone;
 
 import org.apache.openjpa.lib.util.Files;
+import org.apache.openmeetings.IsolatedTest;
 import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -36,6 +37,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+@IsolatedTest
 class TestPatcher {
 	private static final String HOST = "myhost";
 	private static final String PORT = "6666";

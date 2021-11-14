@@ -25,12 +25,14 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassNa
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Date;
 import java.util.Random;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -39,14 +41,20 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.tomcat.util.scan.Constants;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 
-public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
-	private static final Logger log = LoggerFactory.getLogger(AbstractJUnitDefaults.class);
+@SpringJUnitWebConfig(locations={"classpath:applicationContext.xml"})
+@RegularTest
+public abstract class AbstractOmServerTest {
+	private static final Logger log = LoggerFactory.getLogger(AbstractOmServerTest.class);
 	private static final String timeZone = "Europe/Berlin";
 	public static final int ONE_HOUR = 60 * 60 * 1000;
 	public static final String adminUsername = "admin";
@@ -72,8 +80,18 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Autowired
 	protected Application app;
 
+	@BeforeAll
+	public static void init() {
+		setOmHome();
+		System.setProperty(Constants.SKIP_JARS_PROPERTY, "*");
+		LabelDao.initLanguageMap();
+		if (LabelDao.getLanguages().isEmpty()) {
+			fail("Failed to set languages");
+		}
+	}
+
 	@BeforeEach
-	public void setUp() throws Exception {
+	public void serverSetup() throws Exception {
 		if (app.getName() == null) {
 			app.setName(DEFAULT_CONTEXT_NAME);
 		}
@@ -82,6 +100,14 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		}
 		ensureApplication();
 		ensureSchema(userDao, importInitvalues);
+	}
+
+	public static void setOmHome() {
+		String webappsDir = System.getProperty("om.home", ".");
+		OmFileHelper.setOmHome(webappsDir);
+		if (!OmFileHelper.getOmHome().exists() || !OmFileHelper.getOmHome().isDirectory()) {
+			fail("Invalid directory is specified as OM HOME: " + webappsDir);
+		}
 	}
 
 	public static void ensureSchema(UserDao userDao, ImportInitvalues importInitvalues) throws Exception {

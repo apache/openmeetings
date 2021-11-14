@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestUserGroup extends AbstractJUnitDefaults {
+class TestUserGroup extends AbstractOmServerTest {
 	public static final String GROUP_NAME = "Test Group";
 	@Autowired
 	private GroupUserDao groupUserDao;
@@ -106,7 +106,7 @@ class TestUserGroup extends AbstractJUnitDefaults {
 	}
 
 	@Test
-	@Tag("org.apache.openmeetings.test.HeavyTests")
+	@Tag("heavy-test")
 	void add10kUsers() throws Exception {
 		List<Group> groups = groupDao.get(GROUP_NAME, 0, 1, null);
 		Group g = null;

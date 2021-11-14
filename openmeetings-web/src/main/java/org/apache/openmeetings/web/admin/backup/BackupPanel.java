@@ -28,7 +28,6 @@ import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.openmeetings.backup.BackupExport;
 import org.apache.openmeetings.backup.BackupImport;
@@ -91,19 +90,7 @@ public class BackupPanel extends AdminBasePanel {
 	private class BackupForm extends Form<Void> {
 		private static final long serialVersionUID = 1L;
 		private final Model<Boolean> includeFilesInBackup = Model.of(true);
-		private final FileUploadField fileUploadField = new FileUploadField("fileInput", new IModel<List<FileUpload>>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void setObject(List<FileUpload> object) {
-				//no-op
-			}
-
-			@Override
-			public List<FileUpload> getObject() {
-				return new ArrayList<>();
-			}
-		}) {
+		private final FileUploadField fileUploadField = new FileUploadField("fileInput", Model.ofList(new ArrayList<FileUpload>())) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

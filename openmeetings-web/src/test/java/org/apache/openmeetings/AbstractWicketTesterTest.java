@@ -47,8 +47,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AbstractWicketTester extends AbstractJUnitDefaults {
-	private static final Logger log = LoggerFactory.getLogger(AbstractWicketTester.class);
+public class AbstractWicketTesterTest extends AbstractOmServerTest {
+	private static final Logger log = LoggerFactory.getLogger(AbstractWicketTesterTest.class);
 	public static final String PATH_CHILD = "main-container:main:contents:child";
 	public static final String PATH_MENU = "main-container:main:topControls:menu:menu";
 	protected WicketTester tester;
@@ -77,10 +77,8 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 		return escapeMarkup(getString(lbl)).toString();
 	}
 
-	@Override
 	@BeforeEach
 	public void setUp() throws Exception {
-		super.setUp();
 		tester = getWicketTester(app);
 		assertNotNull(WebSession.get(), "Web session should not be null");
 		Locale[] locales = Locale.getAvailableLocales();

@@ -33,7 +33,7 @@ import java.time.LocalDate;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
@@ -45,7 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
 
-class TestExport extends AbstractJUnitDefaults {
+class TestExport extends AbstractOmServerTest {
 	@Autowired
 	private FileItemDao fileItemDao;
 

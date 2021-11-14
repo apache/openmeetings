@@ -19,11 +19,11 @@
 package org.apache.openmeetings.cli;
 
 import static org.apache.commons.io.FileUtils.deleteQuietly;
-import static org.apache.openmeetings.AbstractJUnitDefaults.adminUsername;
-import static org.apache.openmeetings.AbstractJUnitDefaults.email;
-import static org.apache.openmeetings.AbstractJUnitDefaults.group;
-import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
-import static org.apache.openmeetings.AbstractSpringTest.setOmHome;
+import static org.apache.openmeetings.AbstractOmServerTest.adminUsername;
+import static org.apache.openmeetings.AbstractOmServerTest.email;
+import static org.apache.openmeetings.AbstractOmServerTest.group;
+import static org.apache.openmeetings.AbstractOmServerTest.setOmHome;
+import static org.apache.openmeetings.AbstractOmServerTest.userpass;
 import static org.apache.openmeetings.cli.Admin.OM_HOME;
 import static org.apache.openmeetings.db.util.ApplicationHelper.destroyApplication;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
@@ -42,12 +42,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.openmeetings.IsolatedTest;
 import org.apache.wicket.Application;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+@IsolatedTest
 class TestAdmin {
 	private File tempFolder;
 

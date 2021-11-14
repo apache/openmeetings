@@ -16,16 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.smoke;
+package org.apache.openmeetings;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.apache.openmeetings.AbstractOmServerTest;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Tag;
 
-class TestSmokeBasic extends AbstractOmServerTest {
-	@Test
-	void createErrorValueAndTest() {
-		assertNotNull(userDao.get(1L));
-	}
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Tag("isolated")
+public @interface IsolatedTest {
 }

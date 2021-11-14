@@ -18,12 +18,12 @@
  */
 package org.apache.openmeetings.calendar;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class TestDatabaseStructureGetUserStart extends AbstractJUnitDefaults {
+class TestDatabaseStructureGetUserStart extends AbstractOmServerTest {
 	private static final Logger log = LoggerFactory.getLogger(TestDatabaseStructureGetUserStart.class);
 
 	@Test

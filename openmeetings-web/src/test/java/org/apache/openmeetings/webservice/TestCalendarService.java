@@ -19,11 +19,11 @@
 package org.apache.openmeetings.webservice;
 
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.AbstractJUnitDefaults.ONE_HOUR;
-import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
-import static org.apache.openmeetings.AbstractJUnitDefaults.createUser;
-import static org.apache.openmeetings.AbstractJUnitDefaults.getAppointment;
-import static org.apache.openmeetings.AbstractJUnitDefaults.getUser;
+import static org.apache.openmeetings.AbstractOmServerTest.ONE_HOUR;
+import static org.apache.openmeetings.AbstractOmServerTest.createPass;
+import static org.apache.openmeetings.AbstractOmServerTest.createUser;
+import static org.apache.openmeetings.AbstractOmServerTest.getAppointment;
+import static org.apache.openmeetings.AbstractOmServerTest.getUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -37,7 +37,7 @@ import java.util.List;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
@@ -69,7 +69,7 @@ class TestCalendarService extends AbstractWebServiceTest {
 		u = getBean(UserDao.class).get(u.getId());
 
 		Date start = new Date();
-		Appointment a = AbstractJUnitDefaults.createAppointment(getBean(AppointmentDao.class), getAppointment(u, r, start, new Date(start.getTime() + ONE_HOUR)));
+		Appointment a = AbstractOmServerTest.createAppointment(getBean(AppointmentDao.class), getAppointment(u, r, start, new Date(start.getTime() + ONE_HOUR)));
 
 		AppointmentDTO app = getClient(getCalendarUrl()).path("/room/" + a.getRoom().getId()).query("sid", sr.getMessage())
 				.get(AppointmentDTO.class);

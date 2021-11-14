@@ -20,12 +20,11 @@ package org.apache.openmeetings.webservice;
 
 import static java.util.UUID.randomUUID;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
-import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
-import static org.apache.openmeetings.AbstractJUnitDefaults.ensureSchema;
-import static org.apache.openmeetings.AbstractJUnitDefaults.soapUsername;
-import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
+import static org.apache.openmeetings.AbstractOmServerTest.createPass;
+import static org.apache.openmeetings.AbstractOmServerTest.ensureSchema;
+import static org.apache.openmeetings.AbstractOmServerTest.soapUsername;
+import static org.apache.openmeetings.AbstractOmServerTest.userpass;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -33,21 +32,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.catalina.LifecycleState;
-import org.apache.catalina.connector.Connector;
-import org.apache.catalina.startup.Tomcat;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
-import org.apache.openmeetings.AbstractSpringTest;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
@@ -58,12 +51,13 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.webservice.util.AppointmentMessageBodyReader;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+@Tag("webservice")
 public class AbstractWebServiceTest {
-	private static Tomcat tomcat;
 	private static final String HOST = "localhost";
 	private static final String CONTEXT = "/openmeetings";
 	private static int port = 8080;
@@ -72,6 +66,9 @@ public class AbstractWebServiceTest {
 	private static final String FILE_SERVICE_MOUNT = "file";
 	public static final String UNIT_TEST_EXT_TYPE = "om_unit_tests";
 	public static final long TIMEOUT = 5 * 60 * 1000;
+
+	@RegisterExtension
+	public static final CreateTomcatExtension tomcatExt = new CreateTomcatExtension(HOST, CONTEXT);
 
 	protected static <T> T getBean(Class<T> clazz) {
 		return ensureApplication().getBean(clazz);
@@ -103,37 +100,12 @@ public class AbstractWebServiceTest {
 
 	@BeforeAll
 	public static void initialize() throws Exception {
-		AbstractSpringTest.init();
-		tomcat = new Tomcat();
-		Connector connector = new Connector("HTTP/1.1");
-		connector.setProperty("address", InetAddress.getByName(HOST).getHostAddress());
-		connector.setPort(0);
-		tomcat.getService().addConnector(connector);
-		tomcat.setConnector(connector);
-		File wd = Files.createTempDirectory("om" + randomUUID().toString()).toFile();
-		tomcat.setBaseDir(wd.getCanonicalPath());
-		tomcat.getHost().setAppBase(wd.getCanonicalPath());
-		tomcat.getHost().setAutoDeploy(false);
-		tomcat.getHost().setDeployOnStartup(false);
-		tomcat.addWebapp(CONTEXT, getOmHome().getAbsolutePath());
-		tomcat.getConnector(); // to init the connector
-		tomcat.start();
-		port = tomcat.getConnector().getLocalPort();
+		port = tomcatExt.getPort();
 	}
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		ensureSchema(getBean(UserDao.class), getBean(ImportInitvalues.class));
-	}
-
-	@AfterAll
-	public static void destroy() throws Exception {
-		if (tomcat.getServer() != null && tomcat.getServer().getState() != LifecycleState.DESTROYED) {
-			if (tomcat.getServer().getState() != LifecycleState.STOPPED) {
-				tomcat.stop();
-			}
-			tomcat.destroy();
-		}
 	}
 
 	protected static CallResult<RoomDTO> createAndValidate(RoomDTO r) {

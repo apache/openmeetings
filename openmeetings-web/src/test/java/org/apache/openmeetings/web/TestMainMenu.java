@@ -20,7 +20,7 @@ package org.apache.openmeetings.web;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.openmeetings.AbstractWicketTester;
+import org.apache.openmeetings.AbstractWicketTesterTest;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.admin.backup.BackupPanel;
 import org.apache.openmeetings.web.admin.configurations.ConfigsPanel;
@@ -42,7 +42,7 @@ import org.junit.jupiter.api.Test;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 
-class TestMainMenu extends AbstractWicketTester {
+class TestMainMenu extends AbstractWicketTesterTest {
 	private void checkMenuItem(int idx1, Integer idx2, Class<? extends BasePanel> clazz) throws OmException {
 		testArea(adminUsername, p -> {
 			Navbar menu = (Navbar)p.get(PATH_MENU);

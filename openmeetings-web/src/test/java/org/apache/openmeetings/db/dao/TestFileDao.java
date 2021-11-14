@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -33,7 +33,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestFileDao extends AbstractJUnitDefaults {
+class TestFileDao extends AbstractOmServerTest {
 	@Autowired
 	protected FileItemDao fileDao;
 	@Autowired

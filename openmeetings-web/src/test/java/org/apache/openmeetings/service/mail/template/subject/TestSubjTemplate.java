@@ -29,7 +29,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.function.Consumer;
 
-import org.apache.openmeetings.AbstractWicketTester;
+import org.apache.openmeetings.AbstractWicketTesterTest;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.Group;
@@ -37,7 +37,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.util.string.Strings;
 import org.junit.jupiter.api.Test;
 
-class TestSubjTemplate extends AbstractWicketTester {
+class TestSubjTemplate extends AbstractWicketTesterTest {
 	private static void checkTemplate(SubjectEmailTemplate t) {
 		assertNotNull(t, "Template should be created");
 		assertFalse(Strings.isEmpty(t.getSubject()), "Subject should be not empty");

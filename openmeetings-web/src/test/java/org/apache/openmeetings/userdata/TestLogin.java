@@ -20,12 +20,12 @@ package org.apache.openmeetings.userdata;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
 import org.junit.jupiter.api.Test;
 
-class TestLogin extends AbstractJUnitDefaults {
+class TestLogin extends AbstractOmServerTest {
 	@Test
 	void testTestLogin() throws OmException {
 		User us = userDao.login(adminUsername, userpass);

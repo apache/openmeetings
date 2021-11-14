@@ -35,7 +35,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.util.mail.ByteArrayDataSource;
 import org.apache.openmeetings.util.mail.IcalHandler;
@@ -44,7 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestSendIcalMessage extends AbstractJUnitDefaults {
+class TestSendIcalMessage extends AbstractOmServerTest {
 	private static final Logger log = LoggerFactory.getLogger(TestSendIcalMessage.class);
 
 	@Autowired

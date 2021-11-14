@@ -26,21 +26,19 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AbstractTestImport extends AbstractJUnitDefaults {
+public class AbstractTestImport extends AbstractOmServerTest {
 	private String cryptClass = null;
 	@Autowired
 	protected BackupImport backupImport;
 
-	@Override
 	@BeforeEach
 	public void setUp() throws Exception {
-		super.setUp();
 		// Crypt class need to be preserved here to avoid overriding by backup import
 		cryptClass = getCryptClassName();
 	}

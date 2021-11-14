@@ -32,7 +32,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.openmeetings.AbstractWicketTester;
+import org.apache.openmeetings.AbstractWicketTesterTest;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.user.Group;
@@ -48,7 +48,7 @@ import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @ExtendWith(MockitoExtension.class)
-class TestJob extends AbstractWicketTester {
+class TestJob extends AbstractWicketTesterTest {
 	@Autowired
 	private CleanupJob cleanJob;
 	@Mock

@@ -20,10 +20,10 @@ package org.apache.openmeetings.webservice;
 
 import static java.util.UUID.randomUUID;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
-import static org.apache.openmeetings.AbstractJUnitDefaults.adminUsername;
-import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
-import static org.apache.openmeetings.AbstractJUnitDefaults.rnd;
-import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
+import static org.apache.openmeetings.AbstractOmServerTest.adminUsername;
+import static org.apache.openmeetings.AbstractOmServerTest.createPass;
+import static org.apache.openmeetings.AbstractOmServerTest.rnd;
+import static org.apache.openmeetings.AbstractOmServerTest.userpass;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -177,8 +177,20 @@ class TestUserService extends AbstractWebServiceTest {
 		ServiceResult r = login();
 		Collection<? extends UserDTO> users = getClient(getUserUrl())
 				.path("/")
-				.query("sid", r.getMessage()).getCollection(UserDTO.class);
+				.query("sid", r.getMessage())
+				.getCollection(UserDTO.class);
 		assertNotNull(users, "Collection should be not null");
 		assertFalse(users.isEmpty(), "Collection should be not empty");
+	}
+
+	@Test
+	void listNoAuth() {
+		Response r = getClient(getUserUrl())
+				.path("/")
+				.get();
+		assertEquals(500, r.getStatus(), "Not allowed error");
+		assertTrue(r.hasEntity());
+		ServiceResult result = r.readEntity(ServiceResult.class);
+		assertEquals(ServiceResult.Type.ERROR.name(), result.getType());
 	}
 }

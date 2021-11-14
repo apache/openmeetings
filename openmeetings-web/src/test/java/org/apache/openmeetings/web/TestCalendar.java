@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.apache.openmeetings.AbstractWicketTester;
+import org.apache.openmeetings.AbstractWicketTesterTest;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
@@ -38,7 +38,7 @@ import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 
-class TestCalendar extends AbstractWicketTester {
+class TestCalendar extends AbstractWicketTesterTest {
 	private static final String PATH_APPOINTMENT_DLG = String.format("%s:calendarAppointment", PATH_CHILD);
 	private static final String PATH_APPOINTMENT_DLG_FRM = String.format("%s:appForm", PATH_APPOINTMENT_DLG);
 

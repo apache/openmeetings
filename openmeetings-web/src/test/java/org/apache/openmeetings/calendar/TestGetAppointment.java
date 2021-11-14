@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestGetAppointment extends AbstractJUnitDefaults {
+class TestGetAppointment extends AbstractOmServerTest {
 	private static final Logger log = LoggerFactory.getLogger(TestGetAppointment.class);
 
 	@Autowired

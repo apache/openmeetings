@@ -24,13 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.List;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class TestConfig extends AbstractJUnitDefaults {
+class TestConfig extends AbstractOmServerTest {
 	private static final Logger log = LoggerFactory.getLogger(TestConfig.class);
 
 	@Test

@@ -20,7 +20,7 @@ package org.apache.openmeetings.service.mail.template;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.apache.openmeetings.AbstractWicketTester;
+import org.apache.openmeetings.AbstractWicketTesterTest;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.wicket.util.string.Strings;
@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class TestEmailTemplate extends AbstractWicketTester {
+class TestEmailTemplate extends AbstractWicketTesterTest {
 	private static void checkTemplate(String eml) {
 		assertFalse(Strings.isEmpty(eml), "Body should be not empty");
 	}

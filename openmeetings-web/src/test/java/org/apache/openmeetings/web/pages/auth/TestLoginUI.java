@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.openmeetings.AbstractWicketTester;
+import org.apache.openmeetings.AbstractWicketTesterTest;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
@@ -47,7 +47,7 @@ import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.tester.FormTester;
 import org.junit.jupiter.api.Test;
 
-class TestLoginUI extends AbstractWicketTester {
+class TestLoginUI extends AbstractWicketTesterTest {
 	private final static String PATH_REGISTER = "register:form";
 
 	private void checkLogin(String login, String pass) {

@@ -21,9 +21,11 @@ package org.apache.openmeetings.web.app;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import org.apache.openmeetings.RegularTest;
 import org.apache.wicket.request.Url;
 import org.junit.jupiter.api.Test;
 
+@RegularTest
 class TestApplicationMocked {
 	@Test
 	void testWsUrlIncomplete() {

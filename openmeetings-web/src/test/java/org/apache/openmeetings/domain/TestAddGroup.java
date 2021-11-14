@@ -20,14 +20,14 @@ package org.apache.openmeetings.domain;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class TestAddGroup extends AbstractJUnitDefaults {
+class TestAddGroup extends AbstractOmServerTest {
 	private static final Logger log = LoggerFactory.getLogger(TestAddGroup.class);
 
 	@Test

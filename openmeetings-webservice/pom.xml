@@ -47,7 +47,7 @@
 									<packages>org.apache.openmeetings.webservice</packages>
 								</group>
 							</groups>
-							<skip>${om.quick.build}</skip>
+							<skip>${site.skip}</skip>
 						</configuration>
 						<goals>
 							<goal>javadoc-no-fork</goal>
@@ -147,6 +147,7 @@
 							</server>
 						</servers>
 					</swaggerConfig>
+					<skip>${site.skip}</skip>
 				</configuration>
 				<executions>
 					<execution>

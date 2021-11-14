@@ -25,11 +25,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import javax.servlet.http.Cookie;
 
-import org.apache.openmeetings.AbstractWicketTester;
+import org.apache.openmeetings.AbstractWicketTesterTest;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 
-class TestOmAuthenticationStrategy extends AbstractWicketTester {
+class TestOmAuthenticationStrategy extends AbstractWicketTesterTest {
 	@Test
 	void test() {
 		String encKey = randomUUID().toString();

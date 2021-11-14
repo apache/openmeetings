@@ -72,7 +72,7 @@ cd ..; mvn clean install -PallModules,quick,mysql -pl openmeetings-util,openmeet
 			<p>In case you would like to develop Openmeetings you need to run <i>"unpacked"</i> build: </p>
 			<source>
 <![CDATA[
-mvn clean install -P allModules,unpacked,mysql -DskipTests=true -Dwicket.configuration=DEVELOPMENT
+mvn clean install -P allModules,unpacked,mysql -DskipTests=true -Dwicket.configuration=DEVELOPMENT -Dsite.skip=true
 ]]>
 			</source>
 			<p>After modifications are made you can run <i>"quick"</i> build: </p>

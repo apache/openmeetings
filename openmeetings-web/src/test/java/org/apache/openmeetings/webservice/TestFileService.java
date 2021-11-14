@@ -20,9 +20,9 @@ package org.apache.openmeetings.webservice;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.AbstractJUnitDefaults.UNIT_TEST_ARAB_EXT_TYPE;
-import static org.apache.openmeetings.AbstractJUnitDefaults.createUser;
-import static org.apache.openmeetings.AbstractJUnitDefaults.getUser;
+import static org.apache.openmeetings.AbstractOmServerTest.UNIT_TEST_ARAB_EXT_TYPE;
+import static org.apache.openmeetings.AbstractOmServerTest.createUser;
+import static org.apache.openmeetings.AbstractOmServerTest.getUser;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -45,14 +45,13 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.test.NonJenkinsTest;
 import org.apache.wicket.util.encoding.UrlEncoder;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class TestFileService extends AbstractWebServiceTest {
 
-	@Test
-	@Tag("org.apache.openmeetings.test.NonJenkinsTests")
+	@NonJenkinsTest
 	void addFileTest() throws IOException {
 		File img = null;
 		try {

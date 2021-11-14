@@ -24,13 +24,13 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class TestDatabaseStructureAppointment extends AbstractJUnitDefaults {
+class TestDatabaseStructureAppointment extends AbstractOmServerTest {
 	private static final Logger log = LoggerFactory.getLogger(TestDatabaseStructureAppointment.class);
 
 	@Test

@@ -52,7 +52,7 @@ import org.apache.directory.server.core.annotations.ApplyLdifFiles;
 import org.apache.directory.server.core.annotations.CreateDS;
 import org.apache.directory.server.core.annotations.CreatePartition;
 import org.apache.directory.server.protocol.shared.transport.Transport;
-import org.apache.openmeetings.AbstractWicketTester;
+import org.apache.openmeetings.AbstractWicketTesterTest;
 import org.apache.openmeetings.core.ldap.LdapLoginManager;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
@@ -71,7 +71,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 	})
 @CreateLdapServer(transports = { @CreateTransport(protocol = "LDAP", address = "localhost")})
 @ApplyLdifFiles({"schema/users.ldif"})
-class TestLdap extends AbstractWicketTester {
+class TestLdap extends AbstractWicketTesterTest {
 	private static final String CFG_SEARCH_BIND = UUID.randomUUID().toString();
 	private static final String BAD_PASSWORD = "bad password";
 	private static final String USER1 = "ldaptest1";

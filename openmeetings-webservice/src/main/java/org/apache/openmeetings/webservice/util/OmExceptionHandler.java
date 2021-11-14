@@ -16,16 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.smoke;
+package org.apache.openmeetings.webservice.util;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
 
-import org.apache.openmeetings.AbstractOmServerTest;
-import org.junit.jupiter.api.Test;
+import org.apache.openmeetings.db.dto.basic.ServiceResult;
+import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
+import org.apache.openmeetings.webservice.error.ServiceException;
 
-class TestSmokeBasic extends AbstractOmServerTest {
-	@Test
-	void createErrorValueAndTest() {
-		assertNotNull(userDao.get(1L));
+public class OmExceptionHandler implements ExceptionMapper<ServiceException> {
+	@Override
+	public Response toResponse(ServiceException exception) {
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+				.entity(new ServiceResult(exception.getMessage(), Type.ERROR))
+				.header("exception", exception.getMessage())
+				.build();
 	}
 }

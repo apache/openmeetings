@@ -24,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-import org.apache.openmeetings.AbstractWicketTester;
+import org.apache.openmeetings.AbstractWicketTesterTest;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Invitation;
@@ -36,7 +36,7 @@ import org.apache.openmeetings.service.room.InvitationManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestInvitation extends AbstractWicketTester {
+class TestInvitation extends AbstractWicketTesterTest {
 	@Autowired
 	private InvitationManager invitationManager;
 	@Autowired

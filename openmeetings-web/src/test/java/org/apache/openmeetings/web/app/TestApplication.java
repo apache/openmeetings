@@ -29,11 +29,11 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.junit.jupiter.api.Test;
 
-class TestApplication extends AbstractJUnitDefaults {
+class TestApplication extends AbstractOmServerTest {
 	@Test
 	void testMissing() {
 		assertEquals("[Missing]", app.getOmString("909", Locale.ENGLISH));

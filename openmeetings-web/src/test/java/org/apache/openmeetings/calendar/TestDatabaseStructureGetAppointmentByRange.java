@@ -23,14 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDefaults {
+class TestDatabaseStructureGetAppointmentByRange extends AbstractOmServerTest {
 	private static final Logger log = LoggerFactory.getLogger(TestDatabaseStructureGetAppointmentByRange.class);
 
 	@Test

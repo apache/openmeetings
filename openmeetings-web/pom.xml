@@ -65,21 +65,6 @@
 				<db_pass>openmeetings_test</db_pass>
 			</properties>
 		</profile>
-		<profile>
-			<id>Jenkins</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<inherited>true</inherited>
-						<configuration>
-							<excludedGroups>org.apache.openmeetings.test.HeavyTests,org.apache.openmeetings.test.NonJenkinsTests</excludedGroups>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
 	</profiles>
 	<build>
 		<plugins>
@@ -457,7 +442,7 @@
 				<inherited>true</inherited>
 				<configuration>
 					<workingDirectory>${project.build.directory}</workingDirectory>
-					<excludedGroups>org.apache.openmeetings.test.HeavyTests</excludedGroups>
+					<excludedGroups>heavy-test</excludedGroups>
 					<systemPropertyVariables>
 						<om.home>${project.build.directory}/test-root</om.home>
 						<languages.home>${project.build.directory}/test-root/languages</languages.home>
@@ -471,6 +456,29 @@
 					</additionalClasspathElements>
 					<skip>${maven.test.skip}</skip>
 				</configuration>
+				<executions>
+					<execution>
+						<id>default-test</id>
+						<configuration>
+							<groups>regular</groups>
+						</configuration>
+					</execution>
+					<execution>
+						<id>isolated-test</id>
+						<goals><goal>test</goal></goals>
+						<configuration>
+							<reuseForks>false</reuseForks>
+							<groups>isolated</groups>
+						</configuration>
+					</execution>
+					<execution>
+						<id>webservice-test</id>
+						<goals><goal>test</goal></goals>
+						<configuration>
+							<groups>webservice</groups>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

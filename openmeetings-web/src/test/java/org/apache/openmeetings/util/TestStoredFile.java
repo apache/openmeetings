@@ -25,10 +25,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractOmServerTest;
 import org.junit.jupiter.api.Test;
 
-class TestStoredFile extends AbstractJUnitDefaults {
+class TestStoredFile extends AbstractOmServerTest {
 	@Test
 	void testPng() throws FileNotFoundException, IOException {
 		File f = getDefaultProfilePicture();

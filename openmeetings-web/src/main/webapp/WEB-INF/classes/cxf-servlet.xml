@@ -59,6 +59,7 @@
 			<bean class="org.apache.openmeetings.webservice.util.AppointmentListMessageBodyWriter"/>
 			<bean class="org.apache.openmeetings.webservice.util.UserMessageBodyWriter"/>
 			<bean class="org.apache.openmeetings.webservice.util.OmParamConverterProvider"/>
+			<bean class="org.apache.openmeetings.webservice.util.OmExceptionHandler"/>
 		</jaxrs:providers>
 		<jaxrs:outInterceptors>
 			<bean id="allowOriginProvider" class="org.apache.openmeetings.webservice.util.AllowOriginProvider"/>

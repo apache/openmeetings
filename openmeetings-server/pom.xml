@@ -55,7 +55,6 @@
 			<properties>
 				<assembly.finalName>server</assembly.finalName>
 				<assembly.descriptor>quick</assembly.descriptor>
-				<site.skip>true</site.skip>
 			</properties>
 			<build>
 				<plugins>
