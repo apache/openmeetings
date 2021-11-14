@@ -442,7 +442,6 @@
 				<inherited>true</inherited>
 				<configuration>
 					<workingDirectory>${project.build.directory}</workingDirectory>
-					<excludedGroups>heavy-test</excludedGroups>
 					<systemPropertyVariables>
 						<om.home>${project.build.directory}/test-root</om.home>
 						<languages.home>${project.build.directory}/test-root/languages</languages.home>

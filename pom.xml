@@ -137,6 +137,7 @@
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
 		<jacoco.binary.path>${project.basedir}/../target/jacoco.exec</jacoco.binary.path>
+		<excluded.test.groups>heavy-test</excluded.test.groups>
 		<db_user></db_user>
 		<db_pass></db_pass>
 	</properties>
@@ -1251,6 +1252,7 @@
 					<configuration>
 						<forkCount>1</forkCount>
 						<reuseForks>true</reuseForks>
+						<excludedGroups>${excluded.test.groups}</excludedGroups>
 						<includes>
 							<include>**/Test*.java</include>
 						</includes>
@@ -1859,17 +1861,9 @@
 		</profile>
 		<profile>
 			<id>Jenkins</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<excludedGroups>heavy-test,non-jenkins</excludedGroups>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
+			<properties>
+				<excluded.test.groups>heavy-test,non-jenkins</excluded.test.groups>
+			</properties>
 		</profile>
 		<profile>
 			<id>only-eclipse</id>
