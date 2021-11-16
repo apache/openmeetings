@@ -31,11 +31,8 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.openmeetings.AbstractOmServerTest;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CreateTomcatExtension implements BeforeAllCallback {
-	private static final Logger log = LoggerFactory.getLogger(CreateTomcatExtension.class);
 	private String host;
 	private String context;
 	private int port = 8080;
