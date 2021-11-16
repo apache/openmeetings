@@ -144,7 +144,7 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 	 * @throws Exception
 	 */
 	private void testStartRecordWhenSharingWasNot() throws Exception {
-		JSONObject msg = new JSONObject(MSG_BASE.toString())
+		JSONObject msg = getBaseMsg()
 				.put("id", "wannaRecord")
 				.put("shareType", "shareType")
 				.put("fps", "fps")
@@ -163,7 +163,7 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 		//save UID for stopping the stream later
 		streamDescUID = streamDesc.getUid();
 
-		JSONObject msgBroadcastStarted = new JSONObject(MSG_BASE.toString())
+		JSONObject msgBroadcastStarted = getBaseMsg()
 				.put("id", "broadcastStarted")
 				.put("type", "kurento")
 				.put("uid", streamDescUID)
@@ -204,7 +204,7 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 		// Needed for stopping, needs to stop by sid
 		doReturn(c).when(streamProcessor).getBySid(c.getSid());
 
-		JSONObject msg = new JSONObject(MSG_BASE.toString())
+		JSONObject msg = getBaseMsg()
 				.put("id", "stopRecord")
 				.put("type", "kurento")
 				.put("uid", streamDescUID)

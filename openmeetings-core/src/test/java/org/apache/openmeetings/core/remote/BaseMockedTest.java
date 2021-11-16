@@ -89,8 +89,6 @@ public class BaseMockedTest {
 	@InjectMocks
 	protected KurentoHandler handler;
 
-	protected final static JSONObject MSG_BASE = new JSONObject();
-
 	@BeforeEach
 	public void baseSetup() {
 		Mockito.reset();
@@ -136,6 +134,10 @@ public class BaseMockedTest {
 			injectMock.when(() -> Injector.get()).thenReturn(injector);
 			task.run();
 		}
+	}
+
+	protected JSONObject getBaseMsg() {
+		return new JSONObject();
 	}
 
 	private boolean forInjection(Object o) {

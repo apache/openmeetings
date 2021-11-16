@@ -29,7 +29,7 @@ import com.github.openjson.JSONObject;
 class TestNotConnectedMocked extends BaseMockedTest {
 	@Test
 	void testNotConnected() {
-		handler.onMessage(null, MSG_BASE);
+		handler.onMessage(null, getBaseMsg());
 	}
 
 	@Test
