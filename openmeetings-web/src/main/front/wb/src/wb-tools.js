@@ -54,9 +54,7 @@ module.exports = class WbTools {
 			c.find('a').off().click(function(e) {
 				e.stopImmediatePropagation()
 				const stub = $(this).find('.stub');
-				if (stub.hasClass(ACTIVE)) {
-					$(this).dropdown('toggle')
-				} else {
+				if (!stub.hasClass(ACTIVE)) {
 					_btnClick(stub.data('toolType'));
 					stub.addClass(ACTIVE);
 				}
