@@ -19,20 +19,45 @@
 package org.apache.openmeetings.webservice;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.openmeetings.db.dto.basic.Health;
 import org.apache.openmeetings.db.dto.basic.Info;
 import org.junit.jupiter.api.Test;
+
+import com.github.openjson.JSONObject;
 
 class TestInfoService extends AbstractWebServiceTest {
 	private static final String INFO_SERVICE_MOUNT = "info";
 
 	@Test
 	void infoTest() {
-		Info info = getClient(getInfoUrl()).path("/version").get(Info.class);
+		Info info = getClient(getInfoUrl())
+				.path("/version")
+				.get(Info.class);
 		assertNotNull(info, "Valid info should be returned");
 		assertNotNull(info.getBuildDate(), "Valid BuildDate should be returned");
 		assertNotNull(info.getRevision(), "Valid Revision should be returned");
 		assertNotNull(info.getVersion(), "Valid Version should be returned");
+	}
+
+	@Test
+	void healthTest() {
+		Health health = getClient(getInfoUrl())
+				.path("/health")
+				.get(Health.class);
+		assertNotNull(health, "Valid health should be returned");
+		assertTrue(health.isDbOk(), "DB should be OK");
+	}
+
+	@Test
+	void manifestTest() {
+		String manifest = getClient(getInfoUrl())
+				.path("/manifest.webmanifest")
+				.get(String.class);
+		assertNotNull(manifest, "Valid manifestshould be returned");
+		JSONObject json = new JSONObject(manifest);
+		assertTrue(json.getBoolean("prefer_related_applications"), "the value should be of type Boolean");
 	}
 
 	protected static String getInfoUrl() {
