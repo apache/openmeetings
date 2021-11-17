@@ -18,9 +18,11 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.openmeetings.db.dto.basic.Health;
 import org.apache.openmeetings.db.dto.basic.Info;
 import org.junit.jupiter.api.Test;
@@ -52,12 +54,14 @@ class TestInfoService extends AbstractWebServiceTest {
 
 	@Test
 	void manifestTest() {
-		String manifest = getClient(getInfoUrl())
-				.path("/manifest.webmanifest")
+		WebClient c = getClient(getInfoUrl());
+		c.removeAllHeaders();
+		String manifest = c.path("/manifest.webmanifest")
+				.type("application/manifest+json")
 				.get(String.class);
 		assertNotNull(manifest, "Valid manifestshould be returned");
 		JSONObject json = new JSONObject(manifest);
-		assertTrue(json.getBoolean("prefer_related_applications"), "the value should be of type Boolean");
+		assertFalse(json.getBoolean("prefer_related_applications"), "the value should be of type Boolean");
 	}
 
 	protected static String getInfoUrl() {
