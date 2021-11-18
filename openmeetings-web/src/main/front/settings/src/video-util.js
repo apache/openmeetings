@@ -269,13 +269,15 @@ function _disconnect(node) {
 function _sharingSupported() {
 	const b = OmUtil.browser;
 	return (b.name === 'Edge' && b.major > 16)
-		|| b.name === 'Firefox'
-		|| b.name === 'Opera'
-		|| b.name === 'Yandex'
-		|| (OmUtil.isSafari() && typeof(navigator.mediaDevices.getDisplayMedia) === 'function')
-		|| OmUtil.isChrome()
-		|| OmUtil.isEdgeChromium()
-		|| (b.name === 'Mozilla' && b.major > 4);
+		|| (typeof(navigator.mediaDevices.getDisplayMedia) === 'function'
+			&& (b.name === 'Firefox'
+				|| b.name === 'Opera'
+				|| b.name === 'Yandex'
+				|| OmUtil.isSafari()
+				|| OmUtil.isChrome()
+				|| OmUtil.isEdgeChromium()
+				|| (b.name === 'Mozilla' && b.major > 4)
+			));
 }
 function _highlight(el, clazz, count) {
 	if (!el || el.length < 1 || el.hasClass('disabled') || count < 0) {

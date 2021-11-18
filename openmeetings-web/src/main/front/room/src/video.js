@@ -42,11 +42,6 @@ module.exports = class Video {
 					video: true
 				};
 				promise = navigator.getDisplayMedia(cnts);
-			} else if (b.name === 'Firefox') {
-				// https://mozilla.github.io/webrtc-landing/gum_test.html
-				cnts = Sharer.baseConstraints(sd);
-				cnts.video.mediaSource = sd.shareType;
-				promise = navigator.mediaDevices.getUserMedia(cnts);
 			} else if (VideoUtil.sharingSupported()) {
 				cnts = {
 					video: true
