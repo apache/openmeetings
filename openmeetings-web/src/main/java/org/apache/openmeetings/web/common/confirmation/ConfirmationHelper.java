@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.common.confirmation;
 
+import java.util.function.Consumer;
+
 import org.apache.wicket.Component;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
@@ -28,17 +30,24 @@ public class ConfirmationHelper {
 		return new ConfirmationBehavior(newOkCancelConfirmCfg(c, title));
 	}
 
-	public static ConfirmationConfig newOkCancelConfirmCfg(Component c, String title) {
+	public static ConfirmationBehavior newOkCancelDangerConfirm(Component c, String title) {
+		return newOkCancelDangerConfirm(c, title, null);
+	}
+
+	public static ConfirmationBehavior newOkCancelDangerConfirm(Component c, String title, Consumer<ConfirmationConfig> cfgCustomizer) {
+		ConfirmationConfig cfg = newOkCancelConfirmCfg(c, title)
+				.withBtnOkClass("btn btn-sm btn-danger")
+				.withBtnOkIconClass("fas fa-exclamation-triangle");
+		if (cfgCustomizer != null) {
+			cfgCustomizer.accept(cfg);
+		}
+		return new ConfirmationBehavior(cfg);
+	}
+
+	private static ConfirmationConfig newOkCancelConfirmCfg(Component c, String title) {
 		return new ConfirmationConfig()
 				.withBtnCancelLabel(c.getString("lbl.cancel"))
 				.withBtnOkLabel(c.getString("54"))
 				.withTitle(title);
-	}
-
-	public static ConfirmationBehavior newOkCancelDangerConfirm(Component c, String title) {
-		return new ConfirmationBehavior(newOkCancelConfirmCfg(c, title)
-				.withBtnOkClass("btn btn-sm btn-danger")
-				.withBtnOkIconClass("fas fa-exclamation-triangle")
-				);
 	}
 }

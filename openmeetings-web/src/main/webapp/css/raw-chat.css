@@ -7,6 +7,9 @@
 	width: var(--chat-width);
 	height: var(--chat-height);
 }
+.chat-delete.confirmation {
+	z-index: 2001;
+}
 #chatPanel #chatPopup {
 	height: 100%;
 }

@@ -209,7 +209,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 					});
 			}
 		};
-		delBtn.add(newOkCancelDangerConfirm(this, getString("832")));
+		delBtn.add(newOkCancelDangerConfirm(this, getString("832"), cfg -> cfg.withCustomClass("chat-delete")));
 		toolbar.add(delBtn.setVisible(hasAdminLevel(getRights())).setOutputMarkupId(true)
 				.setOutputMarkupPlaceholderTag(true));
 		toolbar.add(save.setVisible(hasAdminLevel(getRights())).setOutputMarkupId(true)

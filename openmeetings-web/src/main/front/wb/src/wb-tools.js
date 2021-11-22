@@ -324,6 +324,7 @@ module.exports = class WbTools {
 
 			const clearAll = tools.find('.om-icon.clear-all')
 				, sBtn = tools.find('.om-icon.settings');;
+			clearAll.attr('data-bs-placement', Settings.isRtl ? 'right' : 'left');
 			let _firstToolItem = true;
 			switch (role) {
 				case Role.PRESENTER:
