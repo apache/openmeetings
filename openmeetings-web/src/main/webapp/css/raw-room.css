@@ -34,12 +34,35 @@
 .room-block .sb-wb .sidebar #room-sidebar-tabs {
 	height: calc(100% - var(--activities-height));
 }
+.room-block .sb-wb .sidebar #room-sidebar-tabs .nav.nav-tabs {
+	flex-wrap: nowrap;
+	padding-inline-end: 40px;
+	gap: 5px;
+}
+.room-block .sb-wb .sidebar #room-sidebar-tabs .nav.nav-tabs .nav-item {
+	flex-direction: column;
+	flex-grow: 1;
+}
 .room-block .sb-wb .sidebar .tab {
 	padding: 5px 0 0 0;
+	width: 100%;
+	overflow: hidden;
 }
 .room-block .sb-wb .sidebar .tab i {
 	font-size: 2.0em;
 	vertical-align: top;
+}
+.room-block .sb-wb .sidebar .tab .label {
+	width: calc((var(--sidebar-width) - 50px) / 2 - 40px);
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.room-block .sb-wb .sidebar .tab.user {
+	padding-inline-end: 15px;
+}
+.room-block .sb-wb .sidebar .tab.user .label {
+	width: calc((var(--sidebar-width) - 50px) / 2 - 60px);
 }
 html[dir="rtl"] .room-block .sb-wb .sidebar {
 	right: 0;
@@ -364,10 +387,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 .room-block .sb-wb .sidebar .tab.om-icon.big {
 	line-height: 30px;
-	width: auto;
 	padding-left: 10px;
-	min-width: 100px;
-	max-width: 120px;
 	position: relative;
 }
 .room-block .sb-wb .sidebar .tab .badge {
@@ -375,22 +395,9 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	bottom: 0;
 	right: 2px;
 }
-.room-block .sb-wb .sidebar .tab.om-icon.big .label {
-	max-width: 60px;
-	display: inline-block;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	white-space: nowrap;
-}
 .room-block.narrow .sidebar .tab.om-icon.big {
-	max-width: 40px;
-	min-width: auto;
-	width: 40px;
 	padding-left: 6px;
 	padding-right: 0;
-}
-.room-block.narrow .sidebar .tab.om-icon.big .label {
-	display: none;
 }
 .room-block .wait-moder {
 	position: fixed;
@@ -774,9 +781,6 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 @media screen and (max-width: 1280px) {
 	.room-block .sb-wb .sidebar .tab.om-icon.big {
 		padding-right: 0;
-	}
-	.room-block.big .sb-wb .sidebar .tab.om-icon.big {
-		max-width: 80px;
 	}
 	.room-block .sb-wb .sidebar .user-list .user.name {
 		display: none;
