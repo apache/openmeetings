@@ -83,7 +83,7 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 	width: 30px;
 	height: 30px;
 }
-.room-block .sb-wb .wb-block .tools .dropleft .dropdown-toggle::before {
+.room-block .sb-wb .wb-block .tools .dropstart .dropdown-toggle::before {
 	vertical-align: bottom;
 	margin-right: 0;
 }
