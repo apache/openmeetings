@@ -12,9 +12,7 @@ function _setQuickPollRights() {
 			close
 				.confirmation({
 					confirmationEvent: 'bla'
-					, onConfirm: function() {
-						quickPollAction('close');
-					}
+					, onConfirm: () => quickPollAction('close')
 				});
 		} else {
 			close.hide();
