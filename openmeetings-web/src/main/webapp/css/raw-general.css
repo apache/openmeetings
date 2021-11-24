@@ -431,6 +431,9 @@ select.messages.selector {
 	min-height: var(--rooms-header-height);
 	max-height: var(--rooms-header-height);
 	height: var(--rooms-header-height);
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 #orgTabs, .rooms-area {
 	height: calc(100% - var(--rooms-header-height) - var(--buffer-size));

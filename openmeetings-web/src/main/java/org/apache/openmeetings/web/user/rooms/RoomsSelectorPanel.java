@@ -27,6 +27,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class RoomsSelectorPanel extends UserBasePanel {
@@ -58,8 +59,8 @@ public class RoomsSelectorPanel extends UserBasePanel {
 			desc = "778";
 			add(new RoomsPanel(PANEL_ID, roomDao.getPublicRooms()));
 		}
-		add(new Label("title", getString(title)));
-		add(new Label("desc", getString(desc)).setRenderBodyOnly(true));
+		add(new Label("title", new ResourceModel(title)));
+		add(new Label("desc", new ResourceModel(desc)).setRenderBodyOnly(true));
 		super.onInitialize();
 	}
 }
