@@ -1,14 +1,11 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 #chatPanel {
 	position: fixed;
-	z-index: 2000;
+	z-index: var(--chat-zindex);
 	bottom: 0px;
 	right: 10px;
 	width: var(--chat-width);
 	height: var(--chat-height);
-}
-.chat-delete.confirmation {
-	z-index: 2001;
 }
 #chatPanel #chatPopup {
 	height: 100%;
@@ -203,4 +200,7 @@ html[dir="rtl"] .main.room #chatPanel {
 }
 .chat-toolbar .chat-btn.under, .wysiwyg-toolbar .tool-btn.under {
 	text-decoration: underline;
+}
+.chat-delete.confirmation {
+	z-index: calc(var(--chat-zindex) + 1);
 }
