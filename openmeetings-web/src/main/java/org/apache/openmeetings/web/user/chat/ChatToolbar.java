@@ -26,7 +26,7 @@ import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
-import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirmCfg;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 
 import java.util.List;
@@ -55,6 +55,8 @@ import org.apache.wicket.util.resource.StringResourceStream;
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.IJQueryWidget.JQueryWidget;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.IWysiwygToolbar;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
 /**
  * Provides a custom implementation for com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.IWysiwygToolbar suitable
@@ -209,7 +211,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 					});
 			}
 		};
-		delBtn.add(newOkCancelDangerConfirm(this, getString("832"), cfg -> cfg.withCustomClass("chat-delete")));
+		delBtn.add(new ConfirmationBehavior(newOkCancelDangerConfirmCfg(this, getString("832")).withCustomClass("chat-delete")));
 		toolbar.add(delBtn.setVisible(hasAdminLevel(getRights())).setOutputMarkupId(true)
 				.setOutputMarkupPlaceholderTag(true));
 		toolbar.add(save.setVisible(hasAdminLevel(getRights())).setOutputMarkupId(true)

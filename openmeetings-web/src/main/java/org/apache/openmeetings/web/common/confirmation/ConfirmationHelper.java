@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.common.confirmation;
 
-import java.util.function.Consumer;
-
 import org.apache.wicket.Component;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
@@ -31,17 +29,13 @@ public class ConfirmationHelper {
 	}
 
 	public static ConfirmationBehavior newOkCancelDangerConfirm(Component c, String title) {
-		return newOkCancelDangerConfirm(c, title, null);
+		return new ConfirmationBehavior(newOkCancelDangerConfirmCfg(c, title));
 	}
 
-	public static ConfirmationBehavior newOkCancelDangerConfirm(Component c, String title, Consumer<ConfirmationConfig> cfgCustomizer) {
-		ConfirmationConfig cfg = newOkCancelConfirmCfg(c, title)
+	public static ConfirmationConfig newOkCancelDangerConfirmCfg(Component c, String title) {
+		return newOkCancelConfirmCfg(c, title)
 				.withBtnOkClass("btn btn-sm btn-danger")
 				.withBtnOkIconClass("fas fa-exclamation-triangle");
-		if (cfgCustomizer != null) {
-			cfgCustomizer.accept(cfg);
-		}
-		return new ConfirmationBehavior(cfg);
 	}
 
 	private static ConfirmationConfig newOkCancelConfirmCfg(Component c, String title) {

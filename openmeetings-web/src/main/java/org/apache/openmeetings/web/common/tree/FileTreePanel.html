@@ -23,29 +23,15 @@
 <wicket:panel>
 	<form wicket:id="form" class="h-100">
 	<div class="file-tree item drop area">
-		<div class="icons clear trash-toolbar" wicket:id="trash-toolbar" wicket:message="title:705">
+		<div class="icons clear trash-toolbar" wicket:id="trash-toolbar"
+				data-btn-ok-class="btn btn-sm btn-danger"
+				data-btn-ok-icon-class="fas fa-exclamation-triangle"
+				wicket:message="title:705, data-btn-ok-label:54, data-btn-cancel-label:lbl.cancel, data-title:80, data-bs-content:713">
 			<span wicket:id="upload" wicket:message="title:702"></span>
 			<span wicket:id="create" wicket:message="title:703"></span>
 			<span wicket:id="refresh" class="refresh om-icon big align-left clickable" wicket:message="title:lbl.refresh"></span>
 			<span wicket:id="trash"></span>
 			<div class="clear"></div>
-			<div id="om-js-trash-confirm" class="modal om-confirm-dialog" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="om-js-trash-confirm-header" aria-modal="true" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 class="modal-title" id="om-js-trash-confirm-header"><wicket:message key="80"/></h4>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-						</div>
-						<div class="modal-body"><wicket:message key="713"/></div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-outline-danger ok-btn">
-								<i class="fas fa-exclamation-triangle"></i>&nbsp;<wicket:message key="54"/>
-							</button>
-							<button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary"><wicket:message key="lbl.cancel"/></button>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 		<div wicket:id="tree-container" class="trees">
 			<div id="tree-anchor"></div>
@@ -67,6 +53,5 @@
 		<div wicket:id="errors"></div>
 	</div>
 	</form>
-	<div wicket:id="trash-confirm-dialog"></div>
 </wicket:panel>
 </html>
