@@ -38,8 +38,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.wicket.util.string.Strings;
@@ -120,6 +122,12 @@ public class InvitationDao implements IDataProviderDao<Invitation> {
 	public Invitation update(Invitation invitation) {
 		// [OPENMEETINGS-2441] in life cycle state  unmanaged while cascading persistence via field
 		invitation.setInvitedBy(em.find(User.class, invitation.getInvitedBy().getId()));
+		if (invitation.getRoom() != null) {
+			invitation.setRoom(em.find(Room.class, invitation.getRoom().getId()));
+		}
+		if (invitation.getRecording() != null) {
+			invitation.setRecording(em.find(Recording.class, invitation.getRecording().getId()));
+		}
 		if (invitation.getId() == null) {
 			em.persist(invitation);
 		} else {
