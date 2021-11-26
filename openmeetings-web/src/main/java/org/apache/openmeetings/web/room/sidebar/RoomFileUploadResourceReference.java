@@ -67,13 +67,13 @@ import com.github.openjson.JSONObject;
 public class RoomFileUploadResourceReference extends ResourceReference {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(RoomFileUploadResourceReference.class);
-	private static final String PARAM_FILE_NAME = "room-upload-file";
+	private static final String PARAM_FILE_NAME = "omws-upload-file";
+	private static final String PARAM_SID_NAME = "omws-upload-sid";
 	private static final String PARAM_TO_WB_NAME = "room-upload-to-wb";
 	private static final String PARAM_CLEAN_NAME = "room-upload-clean";
-	private static final String PARAM_SID_NAME = "room-upload-sid";
 	public static final String PARAM_LAST_SELECTED_ID = "room-upload-last-selected-id";
 	public static final String PARAM_LAST_SELECTED_ROOM = "room-upload-last-selected-room";
-	public static final String PARAM_LAST_SELECTED_OWNER = "room-upload-last-selected-pwner";
+	public static final String PARAM_LAST_SELECTED_OWNER = "room-upload-last-selected-owner";
 	public static final String PARAM_LAST_SELECTED_GROUP = "room-upload-last-selected-group";
 	private enum Status {
 		SUCCESS
@@ -225,7 +225,7 @@ public class RoomFileUploadResourceReference extends ResourceReference {
 	private JSONObject getBaseMessage(String uuid) {
 		return new JSONObject()
 				.put("uuid", uuid)
-				.put("type", "room-upload");
+				.put("type", "omws-upload");
 	}
 	private void sendError(Client c, String uuid, String msg) {
 		WebSocketHelper.sendClient(c, getBaseMessage(uuid)

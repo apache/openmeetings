@@ -87,7 +87,7 @@ public class RoomSidebar extends Panel {
 		add(fileTab.setVisible(!room.isInterview()), roomFiles.setVisible(!room.isInterview()));
 
 		add(addFolder, settings);
-		add(upload = new UploadDialog("upload", room, roomFiles));
+		add(upload = new UploadDialog("upload", roomFiles));
 		updateShowFiles(null);
 		add(activities = new ActivitiesPanel("activities", room));
 	}
