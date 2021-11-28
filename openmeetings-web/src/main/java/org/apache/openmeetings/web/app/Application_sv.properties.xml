@@ -323,8 +323,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1003"><![CDATA[SIP-nummer]]></entry>
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[Radera objekten endast på den aktuella bilden.]]></entry>
-	<entry key="1065"><![CDATA[Backup the System. The Backup includes all User generated data. The configuration is not included as well as the language labels. Because those values are imported with the System Installer. To update your System, export your old system (1) re-install into a new database the new package (2) and import the Backup file again (3). The Backup should be imported before generating data in the newly installed system.]]></entry>
-	<entry key="1066"><![CDATA[System Backup]]></entry>
 	<entry key="1076"><![CDATA[Rum med bara audio]]></entry>
 	<entry key="1077"><![CDATA[Om denna flagga är på, har användarna bara ljud och ingen video i konferensrummet. Detta kan vara bra för att spara bandbredd.]]></entry>
 	<entry key="1089"><![CDATA[Quality of the ScreenShare:]]></entry>
@@ -473,13 +471,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1485"><![CDATA[Rösta om det finns en enkät för detta konferensrum]]></entry>
 	<entry key="1488"><![CDATA[Ring externa personer via VoIP/SIP]]></entry>
 	<entry key="1489"><![CDATA[Skicka e-post med en direktlänk till detta rum]]></entry>
-	<entry key="1491"><![CDATA[Max uppladdningsstorlek]]></entry>
 	<entry key="1492"><![CDATA[Be moderatorn dela din vita tavla]]></entry>
 	<entry key="1493"><![CDATA[Börja privat chat]]></entry>
 	<entry key="1494"><![CDATA[Alla]]></entry>
 	<entry key="1500"><![CDATA[Värdnamn]]></entry>
 	<entry key="1504"><![CDATA[Publicerar. Användare:]]></entry>
-	<entry key="1505"><![CDATA[För att spara tid och internettrafik kan du uppgradera eller skapa och återställa säkerhetskopior från kommandoraden: <ol> <li>Gå till OM:s installationsmapp (t ex /opt/om)</li> <li>stoppa OM (t ex ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/idag_om_backup.zip (skapa säkerhetskopia av befintlig OM)</li> <li>ladda ned arkivet med nya OM</li> <li>mv /opt/om /opt/om.bak (flytta den fungerande versionen av OM för att vara på säkra sidan :))</li> <li>packa upp den hämtade OM till /opt/om</li> <li>./admin.sh -i -file ~/idag_om_backup.zip (eller ./admin.sh -i -file ~/idag_om_backup.zip --db-type mysql --db-user om_användare --db-pass om_användarens_lösenord' ifall du inte använder standarddatabasen)</li> <li>starta OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[Rum gemensamma till alla användare]]></entry>
 	<entry key="1507"><![CDATA[Rum gemensamma till den aktuella användargruppen]]></entry>
 	<entry key="1508"><![CDATA[Den aktuella användarens rum]]></entry>
@@ -489,8 +485,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Files panel opened by default]]></entry>
 	<entry key="1526"><![CDATA[Skapa URL]]></entry>
 	<entry key="1527"><![CDATA[Nätverkstest]]></entry>
-	<entry key="1536"><![CDATA[Systemimport]]></entry>
-	<entry key="1537"><![CDATA[Inkludera uppladdade filer och inspelningar i säkerhetskopian]]></entry>
 	<entry key="1538"><![CDATA[Aktivera SIP-tranport i rummet]]></entry>
 	<entry key="1546"><![CDATA[Välkommen]]></entry>
 	<entry key="1547"><![CDATA[Widget displaying basic user info and support links]]></entry>
@@ -543,6 +537,20 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.share"><![CDATA[ber om tillstånd att dela/spela in skärmen]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[ber om tillstånd att slå på kameran]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[ber om tillstånd att rita på vita tavlan]]></entry>
+	<entry key="admin.backup.add.files"><![CDATA[Inkludera uppladdade filer och inspelningar i säkerhetskopian]]></entry>
+	<entry key="admin.backup.cmd.line.desc"><![CDATA[För att spara tid och internettrafik kan du uppgradera eller skapa och återställa säkerhetskopior från kommandoraden: <ol> <li>Gå till OM:s installationsmapp (t ex /opt/om)</li> <li>stoppa OM (t ex ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/idag_om_backup.zip (skapa säkerhetskopia av befintlig OM)</li> <li>ladda ned arkivet med nya OM</li> <li>mv /opt/om /opt/om.bak (flytta den fungerande versionen av OM för att vara på säkra sidan :))</li> <li>packa upp den hämtade OM till /opt/om</li> <li>./admin.sh -i -file ~/idag_om_backup.zip (eller ./admin.sh -i -file ~/idag_om_backup.zip --db-type mysql --db-user om_användare --db-pass om_användarens_lösenord' ifall du inte använder standarddatabasen)</li> <li>starta OM</li> </ol>]]></entry>
+	<entry key="admin.backup.import.lbl"><![CDATA[Systemimport]]></entry>
+	<entry key="admin.backup.lbl"><![CDATA[System backup]]></entry>
+	<entry key="admin.backup.steps"><![CDATA[The backup includes are user generated data and configuration.<br/>
+To update your system,
+<ol>
+  <li>** Do DB backup, OM folder backup</li>
+  <li>export your old system</li>
+  <li>drop database</li>
+  <li>re-install the new package into a new database</li>
+  <li>and import the backup file again</li>
+  <li>The backup should be imported before your users will have access to the system</li>
+</ol>]]></entry>
 	<entry key="admin.email.body"><![CDATA[Meddelandetext]]></entry>
 	<entry key="admin.email.errorCount"><![CDATA[Antal fel]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[E-postmeddelande]]></entry>
@@ -653,6 +661,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.root.group"><![CDATA[Gruppfiler]]></entry>
 	<entry key="find.user"><![CDATA[Hitta användare]]></entry>
 	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
+	<entry key="form.max.upload.size"><![CDATA[Max uppladdningsstorlek]]></entry>
 	<entry key="goto.first"><![CDATA[Gå till första]]></entry>
 	<entry key="goto.last"><![CDATA[Gå till sista]]></entry>
 	<entry key="goto.next"><![CDATA[Gå till nästa]]></entry>

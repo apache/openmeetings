@@ -160,6 +160,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
@@ -403,11 +404,11 @@ public class BackupImport {
 		return f;
 	}
 
-	public void performImport(InputStream is, ProgressHolder progressHolder) throws Exception {
+	public void performImport(InputStream is, AtomicInteger progress) throws Exception {
 		File f = null;
 		boolean success = false;
 		try {
-			progressHolder.setProgress(0);
+			progress.set(0);
 			cleanup();
 			messageFolderMap.put(INBOX_FOLDER_ID, INBOX_FOLDER_ID);
 			messageFolderMap.put(SENT_FOLDER_ID, SENT_FOLDER_ID);
@@ -416,52 +417,52 @@ public class BackupImport {
 			f = unzip(is);
 
 			BackupVersion ver = getVersion(f);
-			progressHolder.setProgress(2);
+			progress.set(2);
 			importConfigs(f);
-			progressHolder.setProgress(7);
+			progress.set(7);
 			importGroups(f);
-			progressHolder.setProgress(12);
+			progress.set(12);
 			importLdap(f);
-			progressHolder.setProgress(17);
+			progress.set(17);
 			importOauth(f);
-			progressHolder.setProgress(22);
+			progress.set(22);
 			importUsers(f);
-			progressHolder.setProgress(27);
+			progress.set(27);
 			importRooms(f);
-			progressHolder.setProgress(32);
+			progress.set(32);
 			importRoomGroups(f);
-			progressHolder.setProgress(37);
+			progress.set(37);
 			importChat(f);
-			progressHolder.setProgress(42);
+			progress.set(42);
 			importCalendars(f);
-			progressHolder.setProgress(47);
+			progress.set(47);
 			importAppointments(f);
-			progressHolder.setProgress(52);
+			progress.set(52);
 			importMeetingMembers(f);
-			progressHolder.setProgress(57);
+			progress.set(57);
 			importRecordings(f);
-			progressHolder.setProgress(62);
+			progress.set(62);
 			importPrivateMsgFolders(f);
-			progressHolder.setProgress(67);
+			progress.set(67);
 			importContacts(f);
-			progressHolder.setProgress(72);
+			progress.set(72);
 			importPrivateMsgs(f);
-			progressHolder.setProgress(77);
+			progress.set(77);
 			List<FileItem> files = importFiles(f);
-			progressHolder.setProgress(82);
+			progress.set(82);
 			importPolls(f);
-			progressHolder.setProgress(87);
+			progress.set(87);
 			importRoomFiles(f);
-			progressHolder.setProgress(92);
+			progress.set(92);
 			importExtraMenus(f);
-			progressHolder.setProgress(95);
+			progress.set(95);
 
 			log.info("Extra menus import complete, starting copy of files and folders");
 			/*
 			 * ##################### Import real files and folders
 			 */
 			importFolders(f);
-			progressHolder.setProgress(97);
+			progress.set(97);
 
 			if (ver.compareTo(BackupVersion.get("4.0.0")) < 0) {
 				for (FileItem bfi : files) {
@@ -493,7 +494,7 @@ public class BackupImport {
 			}
 			cleanup();
 			if (success) {
-				progressHolder.setProgress(100);
+				progress.set(100);
 			}
 		}
 	}

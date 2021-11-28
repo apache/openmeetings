@@ -34,6 +34,7 @@ import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -49,7 +50,6 @@ import org.apache.openjpa.lib.log.Log;
 import org.apache.openjpa.lib.log.LogFactoryImpl.LogImpl;
 import org.apache.openmeetings.backup.BackupExport;
 import org.apache.openmeetings.backup.BackupImport;
-import org.apache.openmeetings.backup.ProgressHolder;
 import org.apache.openmeetings.core.ldap.LdapLoginManager;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
@@ -362,7 +362,7 @@ public class Admin {
 		backupDir.mkdirs();
 
 		BackupExport export = getApplicationContext().getBean(BackupExport.class);
-		export.performExport(f, includeFiles, new ProgressHolder());
+		export.performExport(f, includeFiles, new AtomicInteger());
 		FileUtils.deleteDirectory(backupDir);
 		backupDir.delete();
 	}
@@ -553,7 +553,7 @@ public class Admin {
 	private void processRestore(File backup) throws Exception {
 		try (InputStream is = new FileInputStream(backup)) {
 			BackupImport importCtrl = getApplicationContext().getBean(BackupImport.class);
-			importCtrl.performImport(is, new ProgressHolder());
+			importCtrl.performImport(is, new AtomicInteger());
 		}
 	}
 

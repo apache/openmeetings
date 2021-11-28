@@ -322,8 +322,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1003"><![CDATA[Номер SIP]]></entry>
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[Очистити об'єкти тільки на поточному слайді!]]></entry>
-	<entry key="1065"><![CDATA[Бекап системи. Включає всі дані, сгенеровані користувачем. Не включається конфігурація і мітки мови, тому що вони імпортуються системним инстоллятором. Для апдейта, сэкспортируйте вашу стару систему (1) преустановите нові пакети для нової бази даних (2) і симпортируйте файл бекапа знову (3). Бекап повинен бути симпортирован перед генерацією даних в новій системі.]]></entry>
-	<entry key="1066"><![CDATA[Системний бекап]]></entry>
 	<entry key="1076"><![CDATA[Тільки з аудіо]]></entry>
 	<entry key="1077"><![CDATA[Встановіть цей прапорець, і корист-чи будуть мати тільки звук опції без відео в кімнаті для нарад. Корисно для зменшення навантаження мережі.]]></entry>
 	<entry key="1089"><![CDATA[Якість загального доступу:]]></entry>
@@ -472,13 +470,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1485"><![CDATA[Проголосувати, якщо існує опитування для цієї кімнати]]></entry>
 	<entry key="1488"><![CDATA[Зателефонувати зовнішнім учасникам за допомогою VoIP/SIP]]></entry>
 	<entry key="1489"><![CDATA[Надіслати запрошення з прямим посиланням на цю кімнату]]></entry>
-	<entry key="1491"><![CDATA[Максимальний розмір завантажуваного файлу]]></entry>
 	<entry key="1492"><![CDATA[Запитувати дозвіл модератора на доступ до дошки]]></entry>
 	<entry key="1493"><![CDATA[Почати приватний чат]]></entry>
 	<entry key="1494"><![CDATA[Все]]></entry>
 	<entry key="1500"><![CDATA[Ім'я Сервера]]></entry>
 	<entry key="1504"><![CDATA[Повідомлення. Користувачеві:]]></entry>
-	<entry key="1505"><![CDATA[Що б зменшити час і інтернет трафік ви можете скористатися командним рядком admin для копіювання/відновлення/поновлення: <ol> <li>увійдіть у настановну папку OM (наприклад, /opt/om)</li> <li>зупиніть OM (./bin/shutdown.sh)</li> <li>виконуємо ./admin.sh -b -файл ~/today_om_backup.zip (створює резервну копію OM)</li> <li>завантажити новий дистрибутив OM</li> <li>mv /opt/om /opt/om.bak (переміщуємо робочу версію OM :))</li> <li>розпаковуємо дистрибутив OM в каталог /opt/om</li> <li>запускаємо ./admin.sh -i -file ~/today_om_backup.zip (або './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' у разі коли база даних відрізняється від бази за замовчуванням )</li> <li>запускаємо OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[Загальні кімнати для усіх користувачів]]></entry>
 	<entry key="1507"><![CDATA[Загальні кімнати для поточної групи користувачів]]></entry>
 	<entry key="1508"><![CDATA[Кімнати даного користувача]]></entry>
@@ -488,8 +484,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Відкривати панель файлів за умовчанням]]></entry>
 	<entry key="1526"><![CDATA[Згенерувати URL]]></entry>
 	<entry key="1527"><![CDATA[Тестування мережі]]></entry>
-	<entry key="1536"><![CDATA[Системний імпорт]]></entry>
-	<entry key="1537"><![CDATA[Включати завантажені файли і записи в бекап]]></entry>
 	<entry key="1538"><![CDATA[Дозволити SIP транспорт в кімнаті]]></entry>
 	<entry key="1546"><![CDATA[Ласкаво просимо]]></entry>
 	<entry key="1547"><![CDATA[Віджет, який містить основну інформацію про користувача і посилання на сайти підтримки]]></entry>
@@ -542,6 +536,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.share"><![CDATA[requests permission to share/record screen]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[requests permission to turn on camera]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[requests permission to draw on the whiteboard]]></entry>
+	<entry key="admin.backup.add.files"><![CDATA[Включати завантажені файли і записи в бекап]]></entry>
+	<entry key="admin.backup.cmd.line.desc"><![CDATA[Що б зменшити час і інтернет трафік ви можете скористатися командним рядком admin для копіювання/відновлення/поновлення: <ol> <li>увійдіть у настановну папку OM (наприклад, /opt/om)</li> <li>зупиніть OM (./bin/shutdown.sh)</li> <li>виконуємо ./admin.sh -b -файл ~/today_om_backup.zip (створює резервну копію OM)</li> <li>завантажити новий дистрибутив OM</li> <li>mv /opt/om /opt/om.bak (переміщуємо робочу версію OM :))</li> <li>розпаковуємо дистрибутив OM в каталог /opt/om</li> <li>запускаємо ./admin.sh -i -file ~/today_om_backup.zip (або './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' у разі коли база даних відрізняється від бази за замовчуванням )</li> <li>запускаємо OM</li> </ol>]]></entry>
+	<entry key="admin.backup.import.lbl"><![CDATA[Системний імпорт]]></entry>
+	<entry key="admin.backup.lbl"><![CDATA[Системний бекап]]></entry>
+	<entry key="admin.backup.steps"><![CDATA[Бекап системи. Включає всі дані, сгенеровані користувачем. Не включається конфігурація і мітки мови, тому що вони імпортуються системним инстоллятором. Для апдейта, сэкспортируйте вашу стару систему (1) преустановите нові пакети для нової бази даних (2) і симпортируйте файл бекапа знову (3). Бекап повинен бути симпортирован перед генерацією даних в новій системі.]]></entry>
 	<entry key="admin.email.body"><![CDATA[Текст]]></entry>
 	<entry key="admin.email.errorCount"><![CDATA[Кількість помилок]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[Повідомлення Email]]></entry>
@@ -652,6 +651,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.root.group"><![CDATA[Group files]]></entry>
 	<entry key="find.user"><![CDATA[Find user]]></entry>
 	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
+	<entry key="form.max.upload.size"><![CDATA[Максимальний розмір завантажуваного файлу]]></entry>
 	<entry key="goto.first"><![CDATA[На початок]]></entry>
 	<entry key="goto.last"><![CDATA[В кінець]]></entry>
 	<entry key="goto.next"><![CDATA[Наступне]]></entry>

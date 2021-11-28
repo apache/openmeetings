@@ -322,8 +322,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1003"><![CDATA[SIP番号]]></entry>
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[現在表示中のスライド内のオブジェクトだけを消去!]]></entry>
-	<entry key="1065"><![CDATA[システムをバックアップします。バックアップには、ユーザーが生成した、あらゆるデータが含まれます。サーバ設定、および各言語ラベルはバックアップされません。システムをより新しいバージョンにアップデートする場合は、<br>(1)まずバックアップ・ファイルにエクスポートし、<br>(2)新規に作成したデータベース上にアプリケーションを再インストールし、<br>(3)バックアップ・ファイルをインポート、してください。バックアップ・ファイルのインポートは、新システム上で最初に行う必要があります。]]></entry>
-	<entry key="1066"><![CDATA[システム･バックアップ]]></entry>
 	<entry key="1076"><![CDATA[音声のみの会議室]]></entry>
 	<entry key="1077"><![CDATA[このフラッグをオンにすると、ユーザーは会議室で音声のみ使用できるようになります(ビデオ無し)。これにより、ネットワーク帯域を節約することができます。]]></entry>
 	<entry key="1089"><![CDATA[画面共有の品質:]]></entry>
@@ -472,13 +470,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1485"><![CDATA[この会議室に投票にあれば投票する]]></entry>
 	<entry key="1488"><![CDATA[外部参加者をVoIP/SIP経由で招待する]]></entry>
 	<entry key="1489"><![CDATA[この会議室へのリンクを電子メールで送信する]]></entry>
-	<entry key="1491"><![CDATA[最大アップロード・サイズ]]></entry>
 	<entry key="1492"><![CDATA[ホワイトボードの共有をモデレータ（司会者）に要求する]]></entry>
 	<entry key="1493"><![CDATA[プライベート・チャットを開始する]]></entry>
 	<entry key="1494"><![CDATA[すべて]]></entry>
 	<entry key="1500"><![CDATA[サーバー名]]></entry>
 	<entry key="1504"><![CDATA[公開中。ユーザー：]]></entry>
-	<entry key="1505"><![CDATA[バックアップ／リストア／アップグレードを行なう際にコマンドライン・ツールを利用すると、時間とインターネット・トラフィックを節約することができます: <ol> <li>オープンミーティングスのインストール・ディレクトリに移動する (例：/opt/om)</li> <li>オープン・ミーティングスを停止する(例： ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (オープン・ミーティングスの現状バックアップを作成する)</li> <li>オープン・ミーティングスの最新アーカイブをダウンロードする</li> <li>mv /opt/om /opt/om.bak (必要に応じて、現環境を移動しておく)</li> <li>/opt/om にダウンロードしたアーカイブを展開する</li> <li>./admin.sh -i -file ~/today_om_backup.zip<br/> (既定のデータベースを使用していない場合は './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass')</li> <li>オープン・ミーティングスを起動する</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[全ユーザーに供用される会議室]]></entry>
 	<entry key="1507"><![CDATA[現ユーザー・グループに供用される会議室]]></entry>
 	<entry key="1508"><![CDATA[現ユーザーの会議室]]></entry>
@@ -488,8 +484,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[ファイル画面を既定で表示]]></entry>
 	<entry key="1526"><![CDATA[URLを生成]]></entry>
 	<entry key="1527"><![CDATA[ネットワーク・テスト]]></entry>
-	<entry key="1536"><![CDATA[システム・インポート]]></entry>
-	<entry key="1537"><![CDATA[バックアップにアップロード済みファイルと録音・録画を含める]]></entry>
 	<entry key="1538"><![CDATA[会議室のSIPトランスポートを有効にする]]></entry>
 	<entry key="1546"><![CDATA[ようこそ]]></entry>
 	<entry key="1547"><![CDATA[ユーザー基本情報／サポート・リンク ウィジェット]]></entry>
@@ -542,6 +536,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.share"><![CDATA[requests permission to share/record screen]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[requests permission to turn on camera]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[requests permission to draw on the whiteboard]]></entry>
+	<entry key="admin.backup.add.files"><![CDATA[バックアップにアップロード済みファイルと録音・録画を含める]]></entry>
+	<entry key="admin.backup.cmd.line.desc"><![CDATA[バックアップ／リストア／アップグレードを行なう際にコマンドライン・ツールを利用すると、時間とインターネット・トラフィックを節約することができます: <ol> <li>オープンミーティングスのインストール・ディレクトリに移動する (例：/opt/om)</li> <li>オープン・ミーティングスを停止する(例： ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (オープン・ミーティングスの現状バックアップを作成する)</li> <li>オープン・ミーティングスの最新アーカイブをダウンロードする</li> <li>mv /opt/om /opt/om.bak (必要に応じて、現環境を移動しておく)</li> <li>/opt/om にダウンロードしたアーカイブを展開する</li> <li>./admin.sh -i -file ~/today_om_backup.zip<br/> (既定のデータベースを使用していない場合は './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass')</li> <li>オープン・ミーティングスを起動する</li> </ol>]]></entry>
+	<entry key="admin.backup.import.lbl"><![CDATA[システム・インポート]]></entry>
+	<entry key="admin.backup.lbl"><![CDATA[システム･バックアップ]]></entry>
+	<entry key="admin.backup.steps"><![CDATA[システムをバックアップします。バックアップには、ユーザーが生成した、あらゆるデータが含まれます。サーバ設定、および各言語ラベルはバックアップされません。システムをより新しいバージョンにアップデートする場合は、<br>(1)まずバックアップ・ファイルにエクスポートし、<br>(2)新規に作成したデータベース上にアプリケーションを再インストールし、<br>(3)バックアップ・ファイルをインポート、してください。バックアップ・ファイルのインポートは、新システム上で最初に行う必要があります。]]></entry>
 	<entry key="admin.email.body"><![CDATA[本文]]></entry>
 	<entry key="admin.email.errorCount"><![CDATA[エラー数]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[電子メール・メッセージ]]></entry>
@@ -652,6 +651,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.root.group"><![CDATA[グループのファイル]]></entry>
 	<entry key="find.user"><![CDATA[ユーザーを検索]]></entry>
 	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
+	<entry key="form.max.upload.size"><![CDATA[最大アップロード・サイズ]]></entry>
 	<entry key="goto.first"><![CDATA[最初へ]]></entry>
 	<entry key="goto.last"><![CDATA[最後へ]]></entry>
 	<entry key="goto.next"><![CDATA[次へ]]></entry>

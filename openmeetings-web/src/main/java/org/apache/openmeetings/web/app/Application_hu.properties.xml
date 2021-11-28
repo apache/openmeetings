@@ -322,8 +322,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1003"><![CDATA[SIP Azonosító]]></entry>
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[Törli az objektumot a jelenelgi lapról!]]></entry>
-	<entry key="1065"><![CDATA[Rendszer mentése. A mentés minden felhazsnálói adatot ment. A konfiguráció és a nyelvek nincsenek benne. Because those values are imported with the System Installer. A rendszer frissítéséhez előbb nemtse el a régi adatokat(1) installálja újra az adatbázist is a telepítővel (2) végül importálja be a mentett adatokat (3). Az importálást elsőként hajtsa végre és csak után aadjon új adatokat a rendszerhez.]]></entry>
-	<entry key="1066"><![CDATA[Rendszer mentése]]></entry>
 	<entry key="1076"><![CDATA[Csak Audio szoba]]></entry>
 	<entry key="1077"><![CDATA[Kapcsolja be az opciót és a látogatók csak audio eszközt használhatnak, video-t nem. Jó megoldás alacsony sávszélesség esetén.]]></entry>
 	<entry key="1089"><![CDATA[Képernyőmegosztás minősége:]]></entry>
@@ -472,13 +470,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1485"><![CDATA[Válaszol, ha a szavazás ehhez a konferenciához tartozik]]></entry>
 	<entry key="1488"><![CDATA[Külső személy hívása VoIP/SIP]]></entry>
 	<entry key="1489"><![CDATA[Direkt belépési link küldése ehhez a szobához]]></entry>
-	<entry key="1491"><![CDATA[Maximális feltöltési méret]]></entry>
 	<entry key="1492"><![CDATA[Moderátort kéri, hogy ossza meg a tábládat]]></entry>
 	<entry key="1493"><![CDATA[Privát chat nyitása]]></entry>
 	<entry key="1494"><![CDATA[Mindenki]]></entry>
 	<entry key="1500"><![CDATA[Szerver neve]]></entry>
 	<entry key="1504"><![CDATA[Közzététel. Felhasználó:]]></entry>
-	<entry key="1505"><![CDATA[Időt és adatforgalmat takarít meg ha a parancssori admint használja a mentésekhez backup/restore/upgrade: <ol> <li>lépjen be az OM telepített könyvtárába (pl.: /opt/om)</li> <li>állítsa meg az OM-et (cmd: ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (backup készítése az aktuális OM -ről)</li> <li>töltse le az új OM-et</li> <li>mv /opt/om /opt/om.bak (A működő OM verziót őrizze meg :))</li> <li>Csomagolja ki az új OM-et /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' adja meg, ha nem az alapértelmezett DB hozzáférést használja )</li> <li>OM indítása</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[Közös termek minden felhasználó számára]]></entry>
 	<entry key="1507"><![CDATA[Közös termek a csoport felhasználói számára]]></entry>
 	<entry key="1508"><![CDATA[A felhasználó termei]]></entry>
@@ -488,8 +484,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Fileok panel alapbértelmezésben nyitva]]></entry>
 	<entry key="1526"><![CDATA[URL készítése]]></entry>
 	<entry key="1527"><![CDATA[Hálózat tesztelése]]></entry>
-	<entry key="1536"><![CDATA[Rendszer import]]></entry>
-	<entry key="1537"><![CDATA[Feltöltött fileok és felvételek betöltése a mentásből]]></entry>
 	<entry key="1538"><![CDATA[SIP átvitel engedélyezése a szobában]]></entry>
 	<entry key="1546"><![CDATA[Üdvözöljük]]></entry>
 	<entry key="1547"><![CDATA[Widgeten megjelenő felhasználói adatok és linkek]]></entry>
@@ -542,6 +536,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.share"><![CDATA[requests permission to share/record screen]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[requests permission to turn on camera]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[requests permission to draw on the whiteboard]]></entry>
+	<entry key="admin.backup.add.files"><![CDATA[Feltöltött fileok és felvételek betöltése a mentásből]]></entry>
+	<entry key="admin.backup.cmd.line.desc"><![CDATA[Időt és adatforgalmat takarít meg ha a parancssori admint használja a mentésekhez backup/restore/upgrade: <ol> <li>lépjen be az OM telepített könyvtárába (pl.: /opt/om)</li> <li>állítsa meg az OM-et (cmd: ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (backup készítése az aktuális OM -ről)</li> <li>töltse le az új OM-et</li> <li>mv /opt/om /opt/om.bak (A működő OM verziót őrizze meg :))</li> <li>Csomagolja ki az új OM-et /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' adja meg, ha nem az alapértelmezett DB hozzáférést használja )</li> <li>OM indítása</li> </ol>]]></entry>
+	<entry key="admin.backup.import.lbl"><![CDATA[Rendszer import]]></entry>
+	<entry key="admin.backup.lbl"><![CDATA[Rendszer mentése]]></entry>
+	<entry key="admin.backup.steps"><![CDATA[Rendszer mentése. A mentés minden felhazsnálói adatot ment. A konfiguráció és a nyelvek nincsenek benne. Because those values are imported with the System Installer. A rendszer frissítéséhez előbb nemtse el a régi adatokat(1) installálja újra az adatbázist is a telepítővel (2) végül importálja be a mentett adatokat (3). Az importálást elsőként hajtsa végre és csak után aadjon új adatokat a rendszerhez.]]></entry>
 	<entry key="admin.email.body"><![CDATA[Body]]></entry>
 	<entry key="admin.email.errorCount"><![CDATA[Error Count]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[Email message]]></entry>
@@ -652,6 +651,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.root.group"><![CDATA[Group files]]></entry>
 	<entry key="find.user"><![CDATA[Find user]]></entry>
 	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
+	<entry key="form.max.upload.size"><![CDATA[Maximális feltöltési méret]]></entry>
 	<entry key="goto.first"><![CDATA[ugrás az elsőre]]></entry>
 	<entry key="goto.last"><![CDATA[ugrás az utolsóra]]></entry>
 	<entry key="goto.next"><![CDATA[ugrás a következőre]]></entry>

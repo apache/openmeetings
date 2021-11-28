@@ -67,12 +67,27 @@ public class RoomUploadForm extends UploadForm {
 		} else {
 			lastSelectedId.add(AttributeModifier.replace("value", last.getId()));
 		}
-		super.show(handler, "roomUploadExtaBindFunc");
+		super.show(handler);
 	}
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomUploadForm.class, "room-upload.js"))));
+	}
+
+	@Override
+	protected String uploadLocation() {
+		return "." + UploadDialog.DIALOG_CLASS + " .modal-content .modal-footer";
+	}
+
+	@Override
+	protected String extraBindFunc() {
+		return "roomUploadExtaBindFunc";
+	}
+
+	@Override
+	protected String onCompleteFunc() {
+		return "roomUploadOnComplete";
 	}
 }

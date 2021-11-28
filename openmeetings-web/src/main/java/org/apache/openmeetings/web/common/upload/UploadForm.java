@@ -20,19 +20,24 @@ package org.apache.openmeetings.web.common.upload;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
 
+import java.text.DecimalFormat;
+
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.MainPanel;
+import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.lang.Bytes;
 
-public class UploadForm extends Panel {
+public abstract class UploadForm extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final String action;
 	protected final WebMarkupContainer form = new WebMarkupContainer("form");
@@ -49,27 +54,67 @@ public class UploadForm extends Panel {
 
 		add(form.add(AttributeModifier.append("data-max-size", getMaxUploadSize()))
 				.add(AttributeModifier.append("data-max-size-lbl", Bytes.bytes(getMaxUploadSize()).toString(WebSession.get().getLocale())))
+				.add(AttributeModifier.append("data-upload-lbl", getString(buttonLabelKey())))
 				.add(AttributeModifier.append("action", action))
 				.setOutputMarkupId(true)
 				.setOutputMarkupPlaceholderTag(true));
 		form.add(new WebMarkupContainer("sid")
 				.add(AttributeModifier.append("value", mainPanel.getClient().getSid()))
 				.setOutputMarkupId(true));
+		WebMarkupContainer file = new WebMarkupContainer("file");
+		if (allowMultiple()) {
+			file.add(AttributeModifier.append("multiple", "multiple"));
+		}
+		form.add(file);
+
+		form.add(new WebMarkupContainer("desc-block").setVisible(showDescBlock()));
+		// set max upload size in form as info text
+		Long maxBytes = getMaxUploadSize();
+		double megaBytes = maxBytes.doubleValue() / 1024 / 1024;
+		DecimalFormat formatter = new DecimalFormat("#,###.00"); //FIXME TODO locale based format
+		form.add(new Label("MaxUploadSize", formatter.format(megaBytes)));
+		form.add(new Label("btn-label", new ResourceModel(buttonLabelKey())));
+
+		add(new WebMarkupContainer("progress-title")
+				.add(AttributeModifier.append("data-processing-lbl", getString(processingLabelKey()))));
+		add(BootstrapFileUploadBehavior.INSTANCE);
 		super.onInitialize();
 	}
 
 	public void show(IPartialPageRequestHandler handler) {
-		show(handler, "null");
-	}
-
-	public void show(IPartialPageRequestHandler handler, String extraFunc) {
 		handler.add(form.setVisible(true));
-		handler.appendJavaScript("Upload.bindUpload(" + extraFunc +");");
+		handler.appendJavaScript("Upload.bindUpload(\"" + uploadLocation() + "\", "+ extraBindFunc() + ", " + onCompleteFunc() + ");");
 	}
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(UploadForm.class, "upload.js"))));
+	}
+
+	protected abstract String uploadLocation();
+
+	protected String extraBindFunc() {
+		return "null";
+	}
+
+	protected String onCompleteFunc() {
+		return "null";
+	}
+
+	protected boolean allowMultiple() {
+		return true;
+	}
+
+	protected boolean showDescBlock() {
+		return true;
+	}
+
+	protected String buttonLabelKey() {
+		return "593";
+	}
+
+	protected String processingLabelKey() {
+		return "upload.dlg.convert.title";
 	}
 }

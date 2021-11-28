@@ -58,6 +58,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -153,65 +154,65 @@ public class BackupExport {
 	@Autowired
 	private ExtraMenuDao menuDao;
 
-	public void performExport(File zip, boolean includeFiles, ProgressHolder progressHolder) throws Exception {
+	public void performExport(File zip, boolean includeFiles, AtomicInteger progress) throws Exception {
 		if (zip.getParentFile() != null && !zip.getParentFile().exists()) {
 			zip.getParentFile().mkdirs();
 		}
 		try (FileOutputStream fos = new FileOutputStream(zip); ZipOutputStream zos = new ZipOutputStream(fos)) {
-			progressHolder.setProgress(0);
+			progress.set(0);
 			/*
 			 * ##################### Backup Groups
 			 */
 			writeList(zos, "version.xml", VERSION_LIST_NODE, List.of(BackupVersion.get()));
-			progressHolder.setProgress(2);
+			progress.set(2);
 			exportGroups(zos);
-			progressHolder.setProgress(5);
+			progress.set(5);
 			exportUsers(zos);
-			progressHolder.setProgress(10);
+			progress.set(10);
 			exportRoom(zos);
-			progressHolder.setProgress(15);
+			progress.set(15);
 			exportRoomGroup(zos);
-			progressHolder.setProgress(17);
+			progress.set(17);
 			exportRoomFile(zos);
-			progressHolder.setProgress(17);
+			progress.set(17);
 			exportCalendar(zos);
-			progressHolder.setProgress(22);
+			progress.set(22);
 			exportAppointment(zos);
-			progressHolder.setProgress(25);
+			progress.set(25);
 			exportMeetingMember(zos);
-			progressHolder.setProgress(30);
+			progress.set(30);
 			exportLdap(zos);
-			progressHolder.setProgress(35);
+			progress.set(35);
 			exportOauth(zos);
-			progressHolder.setProgress(45);
+			progress.set(45);
 			exportPrivateMsg(zos);
-			progressHolder.setProgress(50);
+			progress.set(50);
 			exportPrivateMsgFolder(zos);
-			progressHolder.setProgress(55);
+			progress.set(55);
 			exportContacts(zos);
-			progressHolder.setProgress(60);
+			progress.set(60);
 			exportFile(zos);
-			progressHolder.setProgress(65);
+			progress.set(65);
 			exportRecording(zos);
-			progressHolder.setProgress(70);
+			progress.set(70);
 			exportPoll(zos);
-			progressHolder.setProgress(75);
+			progress.set(75);
 			exportConfig(zos);
-			progressHolder.setProgress(80);
+			progress.set(80);
 			exportChat(zos);
-			progressHolder.setProgress(85);
+			progress.set(85);
 			exportExtraMenus(zos);
-			progressHolder.setProgress(87);
+			progress.set(87);
 
 			if (includeFiles) {
-				exportFiles(progressHolder, zos);
+				exportFiles(progress, zos);
 			}
 		}
-		progressHolder.setProgress(100);
+		progress.set(100);
 		log.debug("---Done");
 	}
 
-	private void exportFiles(ProgressHolder progressHolder, ZipOutputStream zos) throws IOException {
+	private void exportFiles(AtomicInteger progress, ZipOutputStream zos) throws IOException {
 		//##################### Backup Room Files
 		for (File file : getUploadDir().listFiles()) {
 			String fName = file.getName();
@@ -224,7 +225,7 @@ public class BackupExport {
 		//##################### Backup Recording Files
 		final File recDir = getStreamsHibernateDir();
 		writeZipDir(BCKP_RECORD_FILES, recDir.toURI(), recDir, zos);
-		progressHolder.setProgress(90);
+		progress.set(90);
 
 		final File customCss = getCustomCss();
 		if (customCss != null && customCss.exists() && customCss.isFile()) {

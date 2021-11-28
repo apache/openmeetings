@@ -325,8 +325,6 @@ Las salas creadas via Calendario están listadas solamente en esta sección, dur
 	<entry key="1003"><![CDATA[Número SIP]]></entry>
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[Limpiar sólo los objetos de la presentación actual]]></entry>
-	<entry key="1065"><![CDATA[Resguarde el sistema. El backup incluye los datos generados por todos los usuario . La configuración no se incluye, al igual que las etiquetas de idiomas, ya que esos valores se importan con el instalador de sistema. Para actualizar su sistema, exporte los valores antiguos (1), reinstale en una nueva base de datos el nuevo paquete (2) e importe el archivo de backup de nuevo (3). El Backup debiera ser importado antes de generar los datos en el nuevo sistema de instalación.]]></entry>
-	<entry key="1066"><![CDATA[Sistema de resguardo (Backup)]]></entry>
 	<entry key="1076"><![CDATA[Sala de sólo audio]]></entry>
 	<entry key="1077"><![CDATA[Active esta bandera y los usuarios tendrán sólo la opción de Audio, sin vídeo, en la sala. Esto sería bueno para ahorrar ancho de banda.]]></entry>
 	<entry key="1089"><![CDATA[Calidad de la pantalla a compartir:]]></entry>
@@ -475,13 +473,11 @@ Las salas creadas via Calendario están listadas solamente en esta sección, dur
 	<entry key="1485"><![CDATA[Vote si hubiera una encuesta para esta sala de conferencias]]></entry>
 	<entry key="1488"><![CDATA[Llamada a gente externa via VoIP/SIP]]></entry>
 	<entry key="1489"><![CDATA[Enviar un correo con un enlace directo a esta sala]]></entry>
-	<entry key="1491"><![CDATA[Máximo peso de subida]]></entry>
 	<entry key="1492"><![CDATA[Pedir al moderador compartir tu pizarra]]></entry>
 	<entry key="1493"><![CDATA[Comenzar Chat Privado]]></entry>
 	<entry key="1494"><![CDATA[Todo]]></entry>
 	<entry key="1500"><![CDATA[Nombre del Servidor]]></entry>
 	<entry key="1504"><![CDATA[Publicando. Usuario:]]></entry>
-	<entry key="1505"><![CDATA[Para ahorrar tiempo y tráfico de internet puede emplear la linea de comandos como administrador para hacer backup/restaurar/actualizar: <ol> <li>ir al directorio de instalación en OM (por ejemplo /opt/om)</li> <li>detenga OM (por ejemplo ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (hacer backup del actual OM)</li> <li>descargar archivo con el nuevo OM</li> <li> (mover versión de trabajo de OM solo en el caso :))</li> <li>extraer el OM descargado a /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' en el caso de que esté usted empleando una base de datos DB distinta a la original )</li> <li>start OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[Salas comunes a todos los usuarios]]></entry>
 	<entry key="1507"><![CDATA[Salas comunes al grupo (organización) del usuarios actual]]></entry>
 	<entry key="1508"><![CDATA[Salas del usuario actual]]></entry>
@@ -491,8 +487,6 @@ Las salas creadas via Calendario están listadas solamente en esta sección, dur
 	<entry key="1516"><![CDATA[Panel de archivos abierto por defecto]]></entry>
 	<entry key="1526"><![CDATA[Generar URL]]></entry>
 	<entry key="1527"><![CDATA[Testeando la Red]]></entry>
-	<entry key="1536"><![CDATA[Importar sistema]]></entry>
-	<entry key="1537"><![CDATA[Incluir archivos subidos y grabaciones en el backup]]></entry>
 	<entry key="1538"><![CDATA[Permitir transporte SIP en la sala]]></entry>
 	<entry key="1546"><![CDATA[Bienvenid@s]]></entry>
 	<entry key="1547"><![CDATA[El Widget muestra información básica del usuario y enlaces soportados]]></entry>
@@ -545,6 +539,11 @@ Las salas creadas via Calendario están listadas solamente en esta sección, dur
 	<entry key="activities.request.right.share"><![CDATA[solicitar permiso para compartir/grabar pantalla]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[solicitar permiso para activar cámara]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[solicitar permiso para dibujar en la pizarra]]></entry>
+	<entry key="admin.backup.add.files"><![CDATA[Incluir archivos subidos y grabaciones en el backup]]></entry>
+	<entry key="admin.backup.cmd.line.desc"><![CDATA[Para ahorrar tiempo y tráfico de internet puede emplear la linea de comandos como administrador para hacer backup/restaurar/actualizar: <ol> <li>ir al directorio de instalación en OM (por ejemplo /opt/om)</li> <li>detenga OM (por ejemplo ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (hacer backup del actual OM)</li> <li>descargar archivo con el nuevo OM</li> <li> (mover versión de trabajo de OM solo en el caso :))</li> <li>extraer el OM descargado a /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' en el caso de que esté usted empleando una base de datos DB distinta a la original )</li> <li>start OM</li> </ol>]]></entry>
+	<entry key="admin.backup.import.lbl"><![CDATA[Importar sistema]]></entry>
+	<entry key="admin.backup.lbl"><![CDATA[Sistema de resguardo (Backup)]]></entry>
+	<entry key="admin.backup.steps"><![CDATA[Resguarde el sistema. El backup incluye los datos generados por todos los usuario . La configuración no se incluye, al igual que las etiquetas de idiomas, ya que esos valores se importan con el instalador de sistema. Para actualizar su sistema, exporte los valores antiguos (1), reinstale en una nueva base de datos el nuevo paquete (2) e importe el archivo de backup de nuevo (3). El Backup debiera ser importado antes de generar los datos en el nuevo sistema de instalación.]]></entry>
 	<entry key="admin.email.body"><![CDATA[Cuerpo]]></entry>
 	<entry key="admin.email.errorCount"><![CDATA[Cuenta de error]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[Mensaje de correo]]></entry>
@@ -655,6 +654,7 @@ Las salas creadas via Calendario están listadas solamente en esta sección, dur
 	<entry key="files.root.group"><![CDATA[Archivos de grupo (organizaciones)]]></entry>
 	<entry key="find.user"><![CDATA[Encontrar usuario]]></entry>
 	<entry key="fixed.video.pod.size"><![CDATA[Tamaño de pod de video fijo]]></entry>
+	<entry key="form.max.upload.size"><![CDATA[Máximo peso de subida]]></entry>
 	<entry key="goto.first"><![CDATA[ir al inicio]]></entry>
 	<entry key="goto.last"><![CDATA[ir al final]]></entry>
 	<entry key="goto.next"><![CDATA[Ir al siguiente]]></entry>

@@ -72,6 +72,7 @@ import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.Version;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
+import org.apache.openmeetings.web.admin.backup.BackupUploadResourceReference;
 import org.apache.openmeetings.web.common.PingResourceReference;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
 import org.apache.openmeetings.web.pages.ActivatePage;
@@ -336,6 +337,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountResource("/room/file/${id}", new RoomResourceReference());
 		mountResource("/room/preview/${id}", new RoomPreviewResourceReference());
 		mountResource("/room/file/upload", new RoomFileUploadResourceReference());
+		mountResource("/admin/backup/upload", new BackupUploadResourceReference());
 		mountResource("/profile/${id}", new ProfileImageResourceReference());
 		mountResource("/group/${id}", new GroupLogoResourceReference());
 		mountResource("/group/customcss/${id}", new GroupCustomCssResourceReference());

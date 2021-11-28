@@ -322,8 +322,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1003"><![CDATA[شماره SIP]]></entry>
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[فقط عناوین را از روی اسلاید فعلی پاک کنید.]]></entry>
-	<entry key="1065"><![CDATA[از سیستم پشتیبانی کنید. پشتیبانی شامل تمام داده هایی است که کاربر تولید کرده است.پیکربندی و همینطور برچسب های زبان شامل نمی شوند. زیرا این مقادیر با نصب کننده سیستم وارد می شوند. برای به روز رسانی سیستم ،سیستم قدیمی خود را خالی کنید(1)بسته جدید را در پایگاه داده جدید دوباره نصب نمایید(2)و فایل پشتیبان را دوباره وارد کنید(3)پشتیبان باید قبل از ورود اطلاعات به سیستم تازه نصب شده وارد شود.]]></entry>
-	<entry key="1066"><![CDATA[پشتیبانی سیستم]]></entry>
 	<entry key="1076"><![CDATA[اتاق فقط صوتی]]></entry>
 	<entry key="1077"><![CDATA[این علامت را روشن کنید و کابران تنها گزینه صوتی را خواهند داشت و گزینه ویدیو در اتاق کنفرانس را نخواهند داشت.به این صورت پهنای باند ذخیره می شود.]]></entry>
 	<entry key="1089"><![CDATA[کیفیت به اشتراک گذاری صفحه:]]></entry>
@@ -472,13 +470,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1485"><![CDATA[اگر رأی گیری برای اتاق کنفرانس وجود داشته باشد رأی دهید]]></entry>
 	<entry key="1488"><![CDATA[تماس با افراد خارج سازمان از طریق VoIP/SIP]]></entry>
 	<entry key="1489"><![CDATA[ارسال یک ایمیل با لینک مستقیم به این اتاق]]></entry>
-	<entry key="1491"><![CDATA[صفحه بارگذاری ماکزیمم]]></entry>
 	<entry key="1492"><![CDATA[درخواست از مدیر برای اشتراک وایت بورد]]></entry>
 	<entry key="1493"><![CDATA[شروع گفتگوی خصوصی]]></entry>
 	<entry key="1494"><![CDATA[همه]]></entry>
 	<entry key="1500"><![CDATA[نام سرور]]></entry>
 	<entry key="1504"><![CDATA[انتشار. کاربر:]]></entry>
-	<entry key="1505"><![CDATA[برای ذخیره زمان و ترافیک اینترنت شما می توانید از دستور زیر استفاده کنید backup/restore/upgrade: <ol> <li>go to OM install dir (for ex. /opt/om)</li> <li>stop OM (for ex. ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)</li> <li>download archive with new OM</li> <li>mv /opt/om /opt/om.bak (move working version of OM just in case :))</li> <li>extract downloaded OM to the /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )</li> <li>start OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[اتاق های مشترک برای تمام کاربران]]></entry>
 	<entry key="1507"><![CDATA[اتاق های مشترک برای گروه کاربر فعلی]]></entry>
 	<entry key="1508"><![CDATA[اتاق های کاربر فعلی]]></entry>
@@ -488,8 +484,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[جایگاه پوشه ها به طور پیش فرض باز است]]></entry>
 	<entry key="1526"><![CDATA[ایجاد URL]]></entry>
 	<entry key="1527"><![CDATA[تست شبکه]]></entry>
-	<entry key="1536"><![CDATA[ورودی سیستم]]></entry>
-	<entry key="1537"><![CDATA[فایل پشتیبان شامل پوشه های بارگذاری شده و ضبط ها نیز   می شود]]></entry>
 	<entry key="1538"><![CDATA[فعال سازی انتقال SIP در اتاق]]></entry>
 	<entry key="1546"><![CDATA[خوش آمدید]]></entry>
 	<entry key="1547"><![CDATA[ویجت اطلاعات اصلی کاربر را نمایش می دهد و لینک ها را پشتیبانی می کند]]></entry>
@@ -542,6 +536,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.share"><![CDATA[requests permission to share/record screen]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[requests permission to turn on camera]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[requests permission to draw on the whiteboard]]></entry>
+	<entry key="admin.backup.add.files"><![CDATA[فایل پشتیبان شامل پوشه های بارگذاری شده و ضبط ها نیز   می شود]]></entry>
+	<entry key="admin.backup.cmd.line.desc"><![CDATA[برای ذخیره زمان و ترافیک اینترنت شما می توانید از دستور زیر استفاده کنید backup/restore/upgrade: <ol> <li>go to OM install dir (for ex. /opt/om)</li> <li>stop OM (for ex. ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)</li> <li>download archive with new OM</li> <li>mv /opt/om /opt/om.bak (move working version of OM just in case :))</li> <li>extract downloaded OM to the /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )</li> <li>start OM</li> </ol>]]></entry>
+	<entry key="admin.backup.import.lbl"><![CDATA[ورودی سیستم]]></entry>
+	<entry key="admin.backup.lbl"><![CDATA[پشتیبانی سیستم]]></entry>
+	<entry key="admin.backup.steps"><![CDATA[از سیستم پشتیبانی کنید. پشتیبانی شامل تمام داده هایی است که کاربر تولید کرده است.پیکربندی و همینطور برچسب های زبان شامل نمی شوند. زیرا این مقادیر با نصب کننده سیستم وارد می شوند. برای به روز رسانی سیستم ،سیستم قدیمی خود را خالی کنید(1)بسته جدید را در پایگاه داده جدید دوباره نصب نمایید(2)و فایل پشتیبان را دوباره وارد کنید(3)پشتیبان باید قبل از ورود اطلاعات به سیستم تازه نصب شده وارد شود.]]></entry>
 	<entry key="admin.email.body"><![CDATA[بدنه]]></entry>
 	<entry key="admin.email.errorCount"><![CDATA[شمارش خطا]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[پیام ایمیل]]></entry>
@@ -652,6 +651,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.root.group"><![CDATA[فایل های گروهی]]></entry>
 	<entry key="find.user"><![CDATA[پیداکردن کاربر]]></entry>
 	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
+	<entry key="form.max.upload.size"><![CDATA[صفحه بارگذاری ماکزیمم]]></entry>
 	<entry key="goto.first"><![CDATA[بازگشت به اولین]]></entry>
 	<entry key="goto.last"><![CDATA[رفتن به آخر]]></entry>
 	<entry key="goto.next"><![CDATA[رفتن به بعدی]]></entry>

@@ -174,7 +174,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="379"><![CDATA[إيداع صور جديدة]]></entry>
 	<entry key="387"><![CDATA[إستيراد]]></entry>
 	<entry key="395"><![CDATA[تسجيلات]]></entry>
-	<entry key="398"><![CDATA[مستخدمين]]></entry>
+	<entry key="398"><![CDATA[مستخدم]]></entry>
 	<entry key="404"><![CDATA[إضغط على الغرفة للحصول على تفاصيلها]]></entry>
 	<entry key="406"><![CDATA[غرفة]]></entry>
 	<entry key="407"><![CDATA[مستخدمين في هذه الغرفة]]></entry>
@@ -322,8 +322,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1003"><![CDATA[رقم SIP]]></entry>
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[مسح الكائنات في الشريحة الحالية فقط]]></entry>
-	<entry key="1065"><![CDATA[النسخ الاحتياطي للنظام. يتضمن النسخ الاحتياطي جميع البيانات التي ينشئها المستخدم. لم يتم تضمين التكوين بالإضافة إلى تسميات اللغة. لأن هذه القيم يتم استيرادها باستخدام مثبت النظام. لتحديث نظامك ، قم بتصدير نظامك القديم (1) وأعد تثبيت الحزمة الجديدة (2) في قاعدة بيانات جديدة واستورد ملف النسخ الاحتياطي مرة أخرى (3). يجب استيراد النسخة الاحتياطية قبل إنشاء البيانات في النظام المثبت حديثًا.]]></entry>
-	<entry key="1066"><![CDATA[النسخ الاحتياطي للنظام]]></entry>
 	<entry key="1076"><![CDATA[غرفة لللصوت فقط]]></entry>
 	<entry key="1077"><![CDATA[قم بتشغيل هذه العلامة وسيكون لدى المستخدمين خيار الصوت فقط ولن يتوفر فيديو في غرفة المؤتمرات. يمكن أن يكون هذا جيدًا لتوفير الحزمه.]]></entry>
 	<entry key="1089"><![CDATA[جودة الشاشة:]]></entry>
@@ -472,13 +470,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1485"><![CDATA[صوّت إذا كان هناك تصويت لقاعة المؤتمرات هذه]]></entry>
 	<entry key="1488"><![CDATA[اتصل بأشخاص خارجيين عبر VoIP / SIP]]></entry>
 	<entry key="1489"><![CDATA[إرسال بريد إلكتروني مع رابط مباشر لهذه الغرفة]]></entry>
-	<entry key="1491"><![CDATA[أقصى حجم للتحميل]]></entry>
 	<entry key="1492"><![CDATA[اطلب من المشرف مشاركة السبورة]]></entry>
 	<entry key="1493"><![CDATA[ابدأ دردشة خاصة]]></entry>
 	<entry key="1494"><![CDATA[كل]]></entry>
 	<entry key="1500"><![CDATA[اسم الخادم]]></entry>
 	<entry key="1504"><![CDATA[مستخدم النشر:]]></entry>
-	<entry key="1505"><![CDATA[To save time and internet traffic you can use command line admin to backup/restore/upgrade: <ol> <li>go to OM install dir (for ex. /opt/om)</li> <li>stop OM (for ex. ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)</li> <li>download archive with new OM</li> <li>mv /opt/om /opt/om.bak (move working version of OM just in case :))</li> <li>extract downloaded OM to the /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )</li> <li>start OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[غرف مشتركة لجميع المستخدمين]]></entry>
 	<entry key="1507"><![CDATA[الغرف المشتركة لمجموعة المستخدمين الحالية]]></entry>
 	<entry key="1508"><![CDATA[غرف المستخدم الحالي]]></entry>
@@ -488,8 +484,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[تم فتح لوحة الملفات افتراضيًا]]></entry>
 	<entry key="1526"><![CDATA[توليد رابط URL]]></entry>
 	<entry key="1527"><![CDATA[اختبار الشبكة]]></entry>
-	<entry key="1536"><![CDATA[استيراد النظام]]></entry>
-	<entry key="1537"><![CDATA[تضمين الملفات والتسجيلات التي تم تحميلها في النسخ الاحتياطي]]></entry>
 	<entry key="1538"><![CDATA[قم بتمكين ناقل SIP في الغرفة]]></entry>
 	<entry key="1546"><![CDATA[أهلا بك]]></entry>
 	<entry key="1547"><![CDATA[القطعة تعرض معلومات المستخدم الأساسية وروابط الدعم]]></entry>
@@ -542,6 +536,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.share"><![CDATA[يطلب الإذن لمشاركة / تسجيل الشاشة]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[يطلب إذنًا لتشغيل الكاميرا]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[يطلب الإذن بالرسم على السبورة]]></entry>
+	<entry key="admin.backup.add.files"><![CDATA[تضمين الملفات والتسجيلات التي تم تحميلها في النسخ الاحتياطي]]></entry>
+	<entry key="admin.backup.cmd.line.desc"><![CDATA[To save time and internet traffic you can use command line admin to backup/restore/upgrade: <ol> <li>go to OM install dir (for ex. /opt/om)</li> <li>stop OM (for ex. ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)</li> <li>download archive with new OM</li> <li>mv /opt/om /opt/om.bak (move working version of OM just in case :))</li> <li>extract downloaded OM to the /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )</li> <li>start OM</li> </ol>]]></entry>
+	<entry key="admin.backup.import.lbl"><![CDATA[استيراد النظام]]></entry>
+	<entry key="admin.backup.lbl"><![CDATA[النسخ الاحتياطي للنظام]]></entry>
+	<entry key="admin.backup.steps"><![CDATA[النسخ الاحتياطي للنظام. يتضمن النسخ الاحتياطي جميع البيانات التي ينشئها المستخدم. لم يتم تضمين التكوين بالإضافة إلى تسميات اللغة. لأن هذه القيم يتم استيرادها باستخدام مثبت النظام. لتحديث نظامك ، قم بتصدير نظامك القديم (1) وأعد تثبيت الحزمة الجديدة (2) في قاعدة بيانات جديدة واستورد ملف النسخ الاحتياطي مرة أخرى (3). يجب استيراد النسخة الاحتياطية قبل إنشاء البيانات في النظام المثبت حديثًا.]]></entry>
 	<entry key="admin.email.body"><![CDATA[النص]]></entry>
 	<entry key="admin.email.errorCount"><![CDATA[عدد الأخطاء]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[رسالة الكترونية]]></entry>
@@ -652,6 +651,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.root.group"><![CDATA[ملفات المجموعة]]></entry>
 	<entry key="find.user"><![CDATA[البحث عن مستخدم]]></entry>
 	<entry key="fixed.video.pod.size"><![CDATA[حجم اطار الفيديو الثابت]]></entry>
+	<entry key="form.max.upload.size"><![CDATA[أقصى حجم للتحميل]]></entry>
 	<entry key="goto.first"><![CDATA[القفز إلى الأول]]></entry>
 	<entry key="goto.last"><![CDATA[القفز إلى الأخير]]></entry>
 	<entry key="goto.next"><![CDATA[القفز إلى التالي]]></entry>

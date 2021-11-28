@@ -22,41 +22,42 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-9.xsd">
 <wicket:panel>
 	<div wicket:id="feedback"></div>
-	<form wicket:id="backupUpload" class="adminForm adminBackupForm container">
-		<fieldset>
-			<legend><wicket:message key="1066" /></legend>
-			<div class="formelement">
-				<div><i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="1065" /></div>
-			</div>
-			<div class="formelement">
-				<div class="custom-control custom-checkbox m-2">
-					<input class="custom-control-input" type="checkbox" wicket:id="includeFilesInBackup" />
-					<label class="custom-control-label" wicket:for="includeFilesInBackup"><wicket:message key="1537" /></label>
+	<fieldset class="container">
+		<legend><wicket:message key="admin.backup.lbl"/></legend>
+		<form wicket:id="backupUpload" class="adminForm adminBackupForm">
+			<div class="card">
+				<div class="card-header"><wicket:message key="admin.backup.lbl"/></div>
+				<div class="card-body">
+					<p class="card-text">
+						<i class="fas fa-info-circle m-1 text-info"></i><span wicket:id="backupSteps"></span>
+					</p>
+					<div class="ps-4">
+						<div class="custom-control custom-checkbox m-2">
+							<input class="custom-control-input" type="checkbox" wicket:id="includeFilesInBackup" />
+							<label class="custom-control-label" wicket:for="includeFilesInBackup"><wicket:message key="admin.backup.add.files" /></label>
+						</div>
+						<!-- Perform Download -->
+						<button wicket:id="download"></button>
+						<div class="m-3" wicket:id="progress"></div>
+					</div>
 				</div>
 			</div>
-			<div class="formelement">
-				<div class="m-3" wicket:id="progress"></div>
+		</form>
+		<div class="card mt-2 backup-upload">
+			<div class="card-header"><wicket:message key="admin.backup.import.lbl"/></div>
+			<div class="card-body">
+				<div class="ps-4">
+					<div wicket:id="upload"></div>
+				</div>
 			</div>
-			<div class="formelement">
-				<!-- Perform Download -->
-				<button wicket:id="download"></button>
-				<!-- Perform Upload -->
-				<button class="fileinput fileinput-new d-inline m-0 btn btn-file btn-outline-primary" data-provides="fileinput" wicket:id="upload">
-					<wicket:message key="1536"/>
-					<input class="uploadFileField" wicket:id="fileInput" type="file"/>
-				</button>
-			</div>
-			<div class="formelement m-2">
-				<!-- Max upload size -->
-				<wicket:message key="1491" /> <span wicket:id="MaxUploadSize" /><span>MB</span>
-			</div>
-			<div class="formelement">
-				<!-- Backup CLI import information -->
-				<i class="fas fa-info-circle m-1 text-info"></i>
-				<div wicket:id="cmdLineDesc"></div>
-			</div>
-		</fieldset>
-	</form>
+			<div class="card-footer"></div>
+		</div>
+		<div class="formelement mt-2">
+			<!-- Backup CLI import information -->
+			<i class="fas fa-info-circle m-1 text-info"></i>
+			<div wicket:id="cmdLineDesc"></div>
+		</div>
+	</fieldset>
 </wicket:panel>
 </html>
 

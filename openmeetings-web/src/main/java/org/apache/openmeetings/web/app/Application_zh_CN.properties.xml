@@ -322,8 +322,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1003"><![CDATA[SIP号]]></entry>
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[清除此片子中的所有对象]]></entry>
-	<entry key="1065"><![CDATA[备份系统，包括所有用户产生的数据，不过不包括语言配置，这是由于语言的配置是有系统安装时候导入的。如果需要更新您的系统，需要导出旧系统然后，1）重新生成数据库；2）导入备份的文件；3）在系统产生任何数据前先导入备份的文件。]]></entry>
-	<entry key="1066"><![CDATA[系统备份]]></entry>
 	<entry key="1076"><![CDATA[只有音频]]></entry>
 	<entry key="1077"><![CDATA[勾选此项可以使得会议室只能有音频功能有利于节省带宽]]></entry>
 	<entry key="1089"><![CDATA[共享屏幕的质量:]]></entry>
@@ -472,13 +470,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1485"><![CDATA[投票，如果有一个民意调查的会议室]]></entry>
 	<entry key="1488"><![CDATA[通过VoIP/SIP调用外部人]]></entry>
 	<entry key="1489"><![CDATA[发送一封电子邮件，直接链接到这个房间]]></entry>
-	<entry key="1491"><![CDATA[最大上传大小]]></entry>
 	<entry key="1492"><![CDATA[请主持人分享您的白板]]></entry>
 	<entry key="1493"><![CDATA[开始私人聊天]]></entry>
 	<entry key="1494"><![CDATA[全部]]></entry>
 	<entry key="1500"><![CDATA[服务器名字]]></entry>
 	<entry key="1504"><![CDATA[发布. 用户:]]></entry>
-	<entry key="1505"><![CDATA[为了节省时间和网络流量，您可以使用命令行管理 backup/restore/upgrade: <ol> <li>到OM安装目录 (for ex. /opt/om)</li> <li>停止OM (for ex. ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (对当前OM产生备份)</li> <li>下载新OM的文件</li> <li>mv /opt/om /opt/om.bak (移动OM的工作版本只是以防万一 :))</li> <li>将下载的OM解压到 /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' 在使用非默认数据库的情况下 )</li> <li>启动OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[所有用户共同的房间]]></entry>
 	<entry key="1507"><![CDATA[当前用户群共同的房间]]></entry>
 	<entry key="1508"><![CDATA[当前用户的房间]]></entry>
@@ -488,8 +484,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[默认打开文件面板]]></entry>
 	<entry key="1526"><![CDATA[产生URL]]></entry>
 	<entry key="1527"><![CDATA[网络测试]]></entry>
-	<entry key="1536"><![CDATA[系统导入]]></entry>
-	<entry key="1537"><![CDATA[包括上传的文件和备份的记录]]></entry>
 	<entry key="1538"><![CDATA[在聊天室启动SIP传输]]></entry>
 	<entry key="1546"><![CDATA[欢迎]]></entry>
 	<entry key="1547"><![CDATA[小部件显示基本的用户信息和支持链接]]></entry>
@@ -542,6 +536,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.share"><![CDATA[requests permission to share/record screen]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[requests permission to turn on camera]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[requests permission to draw on the whiteboard]]></entry>
+	<entry key="admin.backup.add.files"><![CDATA[包括上传的文件和备份的记录]]></entry>
+	<entry key="admin.backup.cmd.line.desc"><![CDATA[为了节省时间和网络流量，您可以使用命令行管理 backup/restore/upgrade: <ol> <li>到OM安装目录 (for ex. /opt/om)</li> <li>停止OM (for ex. ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (对当前OM产生备份)</li> <li>下载新OM的文件</li> <li>mv /opt/om /opt/om.bak (移动OM的工作版本只是以防万一 :))</li> <li>将下载的OM解压到 /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' 在使用非默认数据库的情况下 )</li> <li>启动OM</li> </ol>]]></entry>
+	<entry key="admin.backup.import.lbl"><![CDATA[系统导入]]></entry>
+	<entry key="admin.backup.lbl"><![CDATA[系统备份]]></entry>
+	<entry key="admin.backup.steps"><![CDATA[备份系统，包括所有用户产生的数据，不过不包括语言配置，这是由于语言的配置是有系统安装时候导入的。如果需要更新您的系统，需要导出旧系统然后，1）重新生成数据库；2）导入备份的文件；3）在系统产生任何数据前先导入备份的文件。]]></entry>
 	<entry key="admin.email.body"><![CDATA[Body]]></entry>
 	<entry key="admin.email.errorCount"><![CDATA[Error Count]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[Email message]]></entry>
@@ -652,6 +651,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.root.group"><![CDATA[Group files]]></entry>
 	<entry key="find.user"><![CDATA[Find user]]></entry>
 	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
+	<entry key="form.max.upload.size"><![CDATA[最大上传大小]]></entry>
 	<entry key="goto.first"><![CDATA[到首页]]></entry>
 	<entry key="goto.last"><![CDATA[到最后一页]]></entry>
 	<entry key="goto.next"><![CDATA[到下一页]]></entry>

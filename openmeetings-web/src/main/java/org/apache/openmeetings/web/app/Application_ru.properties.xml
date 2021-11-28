@@ -322,8 +322,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1003"><![CDATA[Номер SIP]]></entry>
 	<entry key="1004"><![CDATA[Пин]]></entry>
 	<entry key="1005"><![CDATA[Очистить объекты только на текущем слайде!]]></entry>
-	<entry key="1065"><![CDATA[Бэкап системы. Включает все данные, сгенерированные пользователем. Не включается конфигурация и метки языка, потому что они импортируются системным инстоллятором. Для апдейта, сэкспортируйте вашу старую систему (1) преустановите новые пакеты для новой базы данных (2) и симпортируйте файл бэкапа снова (3). Бэкап должен быть симпортирован перед генерацией данных в новой системе.]]></entry>
-	<entry key="1066"><![CDATA[Системный бэкап]]></entry>
 	<entry key="1076"><![CDATA[Только с аудио]]></entry>
 	<entry key="1077"><![CDATA[Установите этот флаг, и польз-ли будут иметь только звук опции без видео в комнате для конференций. Полезно для уменьшения нагрузки сети.]]></entry>
 	<entry key="1089"><![CDATA[Качество общего доступа:]]></entry>
@@ -472,13 +470,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1485"><![CDATA[Проголосовать, если существует опрос для этой комнаты]]></entry>
 	<entry key="1488"><![CDATA[Позвонить внешним участникам при помощи VoIP/SIP]]></entry>
 	<entry key="1489"><![CDATA[Отправить приглашение с прямой ссылкой на эту комнату]]></entry>
-	<entry key="1491"><![CDATA[Максимальный размер загружаемого файла]]></entry>
 	<entry key="1492"><![CDATA[Запросить разрешение модератора на доступ к доске]]></entry>
 	<entry key="1493"><![CDATA[Начать приватный чат]]></entry>
 	<entry key="1494"><![CDATA[Все]]></entry>
 	<entry key="1500"><![CDATA[Имя Сервера]]></entry>
 	<entry key="1504"><![CDATA[Сообщение. Пользователю:]]></entry>
-	<entry key="1505"><![CDATA[Что бы уменьшить время и интернет траффик вы можете воспользоватся командной строкой admin для копирования/восстановления/обновления: <ol> <li>войдите в установочную папку OM (например /opt/om)</li> <li>остановите OM (./bin/shutdown.sh)</li> <li>выполняем ./admin.sh -b -file ~/today_om_backup.zip (создает резервную копию OM)</li> <li>загрузите новый дистрибутив OM</li> <li>mv /opt/om /opt/om.bak (перемещаем рабочую версию OM :))</li> <li>распаковываем дистрибутив OM в папку /opt/om</li> <li>запускаем ./admin.sh -i -file ~/today_om_backup.zip (или './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' в случае когда база данных отличается от базы по умолчанию )</li> <li>запускаем OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[Общие комнаты для всех пользователей]]></entry>
 	<entry key="1507"><![CDATA[Общие комнаты для текущей группы пользователей]]></entry>
 	<entry key="1508"><![CDATA[Комнаты данного пользователя]]></entry>
@@ -488,8 +484,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Открывать панель файлов по умолчанию]]></entry>
 	<entry key="1526"><![CDATA[Сгенерировать URL]]></entry>
 	<entry key="1527"><![CDATA[Тестирование сети]]></entry>
-	<entry key="1536"><![CDATA[Системный импорт]]></entry>
-	<entry key="1537"><![CDATA[Включать загруженные файлы и записи в бэкап]]></entry>
 	<entry key="1538"><![CDATA[Разрешить SIP транспорт в комнате]]></entry>
 	<entry key="1546"><![CDATA[Добро пожаловать]]></entry>
 	<entry key="1547"><![CDATA[Виджет, содержащий основную информацию о пользователе и ссылки на сайты поддержки]]></entry>
@@ -542,6 +536,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.share"><![CDATA[запрашивает право делать экран общим/записывать]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[запрашивает право включать камеру]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[запрашивает право рисовать на доске]]></entry>
+	<entry key="admin.backup.add.files"><![CDATA[Включать загруженные файлы и записи в бэкап]]></entry>
+	<entry key="admin.backup.cmd.line.desc"><![CDATA[Что бы уменьшить время и интернет траффик вы можете воспользоватся командной строкой admin для копирования/восстановления/обновления: <ol> <li>войдите в установочную папку OM (например /opt/om)</li> <li>остановите OM (./bin/shutdown.sh)</li> <li>выполняем ./admin.sh -b -file ~/today_om_backup.zip (создает резервную копию OM)</li> <li>загрузите новый дистрибутив OM</li> <li>mv /opt/om /opt/om.bak (перемещаем рабочую версию OM :))</li> <li>распаковываем дистрибутив OM в папку /opt/om</li> <li>запускаем ./admin.sh -i -file ~/today_om_backup.zip (или './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' в случае когда база данных отличается от базы по умолчанию )</li> <li>запускаем OM</li> </ol>]]></entry>
+	<entry key="admin.backup.import.lbl"><![CDATA[Системный импорт]]></entry>
+	<entry key="admin.backup.lbl"><![CDATA[Резервное копирование]]></entry>
+	<entry key="admin.backup.steps"><![CDATA[Бэкап системы. Включает все данные, сгенерированные пользователем. Не включается конфигурация и метки языка, потому что они импортируются системным инстоллятором. Для апдейта, сэкспортируйте вашу старую систему (1) преустановите новые пакеты для новой базы данных (2) и симпортируйте файл бэкапа снова (3). Бэкап должен быть симпортирован перед генерацией данных в новой системе.]]></entry>
 	<entry key="admin.email.body"><![CDATA[Текст]]></entry>
 	<entry key="admin.email.errorCount"><![CDATA[Количество ошибок]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[Почтовое сообщение]]></entry>
@@ -652,6 +651,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.root.group"><![CDATA[Файлы группы]]></entry>
 	<entry key="find.user"><![CDATA[Найти пользователя]]></entry>
 	<entry key="fixed.video.pod.size"><![CDATA[Фиксированный размер "окошка"]]></entry>
+	<entry key="form.max.upload.size"><![CDATA[Максимальный размер загружаемого файла]]></entry>
 	<entry key="goto.first"><![CDATA[к первому]]></entry>
 	<entry key="goto.last"><![CDATA[к последнему]]></entry>
 	<entry key="goto.next"><![CDATA[к следующему]]></entry>

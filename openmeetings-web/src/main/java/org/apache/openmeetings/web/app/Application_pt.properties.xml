@@ -322,8 +322,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1003"><![CDATA[SIP Number]]></entry>
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[Clear objects on current slide only!]]></entry>
-	<entry key="1065"><![CDATA[Backup the System. The Backup includes all User generated data. The configuration is not included as well as the language labels. Because those values are imported with the System Installer. To update your System, export your old system (1) re-install into a new database the new package (2) and import the Backup file again (3). The Backup should be imported before generating data in the newly installed system.]]></entry>
-	<entry key="1066"><![CDATA[System Backup]]></entry>
 	<entry key="1076"><![CDATA[Audio only room]]></entry>
 	<entry key="1077"><![CDATA[Turn this Flag on and the users will have only the Audio-Option and no Video in a conference room. This can by good to save bandwidth.]]></entry>
 	<entry key="1089"><![CDATA[Quality of the ScreenShare:]]></entry>
@@ -472,13 +470,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1485"><![CDATA[Vote if there is a poll for this conference room]]></entry>
 	<entry key="1488"><![CDATA[Call external people via VoIP/SIP]]></entry>
 	<entry key="1489"><![CDATA[Send an email with a direct link to this room]]></entry>
-	<entry key="1491"><![CDATA[Max upload size]]></entry>
 	<entry key="1492"><![CDATA[Ask moderator to share your whiteboard]]></entry>
 	<entry key="1493"><![CDATA[Start Private Chat]]></entry>
 	<entry key="1494"><![CDATA[All]]></entry>
 	<entry key="1500"><![CDATA[Server Name]]></entry>
 	<entry key="1504"><![CDATA[Publishing. User:]]></entry>
-	<entry key="1505"><![CDATA[To save time and internet traffic you can use command line admin to backup/restore/upgrade: <ol> <li>go to OM install dir (for ex. /opt/om)</li> <li>stop OM (for ex. ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)</li> <li>download archive with new OM</li> <li>mv /opt/om /opt/om.bak (move working version of OM just in case :))</li> <li>extract downloaded OM to the /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )</li> <li>start OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[Rooms common to all users]]></entry>
 	<entry key="1507"><![CDATA[Rooms common to the current user group]]></entry>
 	<entry key="1508"><![CDATA[Rooms of the current user]]></entry>
@@ -488,8 +484,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Files panel opened by default]]></entry>
 	<entry key="1526"><![CDATA[Generate URL]]></entry>
 	<entry key="1527"><![CDATA[Network testing]]></entry>
-	<entry key="1536"><![CDATA[System import]]></entry>
-	<entry key="1537"><![CDATA[Include uploaded files and recordings in backup]]></entry>
 	<entry key="1538"><![CDATA[Enable SIP transport in the room]]></entry>
 	<entry key="1546"><![CDATA[Welcome]]></entry>
 	<entry key="1547"><![CDATA[Widget displaying basic user info and support links]]></entry>
@@ -542,6 +536,20 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.share"><![CDATA[requests permission to share/record screen]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[requests permission to turn on camera]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[requests permission to draw on the whiteboard]]></entry>
+	<entry key="admin.backup.add.files"><![CDATA[Include uploaded files and recordings in backup]]></entry>
+	<entry key="admin.backup.cmd.line.desc"><![CDATA[To save time and internet traffic you can use command line admin to backup/restore/upgrade: <ol> <li>go to OM install dir (for ex. /opt/om)</li> <li>stop OM (for ex. ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)</li> <li>download archive with new OM</li> <li>mv /opt/om /opt/om.bak (move working version of OM just in case :))</li> <li>extract downloaded OM to the /opt/om</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )</li> <li>start OM</li> </ol>]]></entry>
+	<entry key="admin.backup.import.lbl"><![CDATA[System import]]></entry>
+	<entry key="admin.backup.lbl"><![CDATA[System backup]]></entry>
+	<entry key="admin.backup.steps"><![CDATA[The backup includes are user generated data and configuration.<br/>
+To update your system,
+<ol>
+  <li>** Do DB backup, OM folder backup</li>
+  <li>export your old system</li>
+  <li>drop database</li>
+  <li>re-install the new package into a new database</li>
+  <li>and import the backup file again</li>
+  <li>The backup should be imported before your users will have access to the system</li>
+</ol>]]></entry>
 	<entry key="admin.email.body"><![CDATA[Body]]></entry>
 	<entry key="admin.email.errorCount"><![CDATA[Error Count]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[Email message]]></entry>
@@ -652,6 +660,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.root.group"><![CDATA[Group files]]></entry>
 	<entry key="find.user"><![CDATA[Find user]]></entry>
 	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
+	<entry key="form.max.upload.size"><![CDATA[Max upload size]]></entry>
 	<entry key="goto.first"><![CDATA[ir ao primeiro]]></entry>
 	<entry key="goto.last"><![CDATA[ir ao último]]></entry>
 	<entry key="goto.next"><![CDATA[ir ao próximo]]></entry>

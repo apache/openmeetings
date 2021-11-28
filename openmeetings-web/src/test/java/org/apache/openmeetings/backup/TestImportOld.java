@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
@@ -66,7 +67,7 @@ class TestImportOld extends AbstractTestImport {
 			String name = backup.getName();
 			log.debug("Import of backup file : '{}' is started ...", name);
 			try (InputStream is = new FileInputStream(backup)) {
-				backupImport.performImport(is, new ProgressHolder());
+				backupImport.performImport(is, new AtomicInteger());
 				long newGroupCount = groupDao.count();
 				long newUserCount = userDao.count();
 				long newRoomCount = roomDao.count();
@@ -101,7 +102,7 @@ class TestImportOld extends AbstractTestImport {
 	@Test
 	void importJira2423() throws Exception {
 		try (InputStream is = getClass().getClassLoader().getResourceAsStream(BACKUP_ROOT + "jira2423/backup_2423.zip")) {
-			backupImport.performImport(is, new ProgressHolder());
+			backupImport.performImport(is, new AtomicInteger());
 
 			Group grp2 = groupDao.get("group2_jira_2423");
 			User usr2 = userDao.getByLogin("testUser2_jira_2423", User.Type.USER, null);

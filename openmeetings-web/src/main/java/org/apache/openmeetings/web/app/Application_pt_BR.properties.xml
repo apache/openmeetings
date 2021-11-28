@@ -322,8 +322,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1003"><![CDATA[Número SIP]]></entry>
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[Limpar objetos desenhados na lousa!]]></entry>
-	<entry key="1065"><![CDATA[Faça o backup do sistema. O backup inclui todos os dados de usuários. A configuração não está incluído, bem como as etiquetas de idiomas. Porque esses valores são importados com o instalador de sistema. Para atualizar seu sistema, exportar seu antigo sistema (1) re-instalar em um novo banco de dados um novo pacote (2) e importar o arquivo de backup novamente (3). O backup deve ser importado antes de gerar os dados no sistema recém-instalado.]]></entry>
-	<entry key="1066"><![CDATA[Backup do sistema]]></entry>
 	<entry key="1076"><![CDATA[Sala só com áudio]]></entry>
 	<entry key="1077"><![CDATA[Turn this Flag on and the users will have only the Audio-Option and no Video in a conference room. This can by good to save bandwidth.]]></entry>
 	<entry key="1089"><![CDATA[Qualidade do compartilhamento de tela:]]></entry>
@@ -472,13 +470,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1485"><![CDATA[Votar se houver uma enquete para esta sala de conferência]]></entry>
 	<entry key="1488"><![CDATA[Ligue para pessoas externas via VoIP/SIP]]></entry>
 	<entry key="1489"><![CDATA[Envie um email com um link direto para esta sala]]></entry>
-	<entry key="1491"><![CDATA[Tamanho máximo de upload]]></entry>
 	<entry key="1492"><![CDATA[Pergunte ao moderador para compartilhar sua lousa]]></entry>
 	<entry key="1493"><![CDATA[Começar bate-papo particular / privado]]></entry>
 	<entry key="1494"><![CDATA[Todos / tudo]]></entry>
 	<entry key="1500"><![CDATA[Nome do servidor]]></entry>
 	<entry key="1504"><![CDATA[Publicando...usuário]]></entry>
-	<entry key="1505"><![CDATA[Para ganhar tempo e economizar tráfego na internet você pode usar "command line admin" para backupear / restaurar / atualizar / upgrade:\n 1) Vá ao diretório instalador TVQWEB (por ex. /opt/om) \n 2) pare o TVQWEB (por ex. ./bin/shutdown.sh)\n 3) ./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)\n 4) download archive with new OM\n 5) mv /opt/om /opt/om.bak (move working version of OM just in case :))\n 6) extract downloaded OM to the /opt/om\n 7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )\n 8) start OM\n]]></entry>
 	<entry key="1506"><![CDATA[Salas comuns a todos os usuários]]></entry>
 	<entry key="1507"><![CDATA[Salas comuns ao atual grupo de usuários]]></entry>
 	<entry key="1508"><![CDATA[Salas do atual usuário]]></entry>
@@ -488,8 +484,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Painel de arquivos aberto por definição]]></entry>
 	<entry key="1526"><![CDATA[Gerar convite]]></entry>
 	<entry key="1527"><![CDATA[Teste de conexão]]></entry>
-	<entry key="1536"><![CDATA[Importação de sistema]]></entry>
-	<entry key="1537"><![CDATA[Incluir arquivos armazenados e gravações no backup]]></entry>
 	<entry key="1538"><![CDATA[Permitir "SIP transport" na sala]]></entry>
 	<entry key="1546"><![CDATA[Welcome]]></entry>
 	<entry key="1547"><![CDATA[Widget displaying basic user info and support links]]></entry>
@@ -542,6 +536,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.share"><![CDATA[solicita permissão para compartilhar/gravar tela]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[requests permission to turn on camera]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[requests permission to draw on the whiteboard]]></entry>
+	<entry key="admin.backup.add.files"><![CDATA[Incluir arquivos armazenados e gravações no backup]]></entry>
+	<entry key="admin.backup.cmd.line.desc"><![CDATA[Para ganhar tempo e economizar tráfego na internet você pode usar "command line admin" para backupear / restaurar / atualizar / upgrade:\n 1) Vá ao diretório instalador TVQWEB (por ex. /opt/om) \n 2) pare o TVQWEB (por ex. ./bin/shutdown.sh)\n 3) ./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)\n 4) download archive with new OM\n 5) mv /opt/om /opt/om.bak (move working version of OM just in case :))\n 6) extract downloaded OM to the /opt/om\n 7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )\n 8) start OM\n]]></entry>
+	<entry key="admin.backup.import.lbl"><![CDATA[Importação de sistema]]></entry>
+	<entry key="admin.backup.lbl"><![CDATA[Backup do sistema]]></entry>
+	<entry key="admin.backup.steps"><![CDATA[Faça o backup do sistema. O backup inclui todos os dados de usuários. A configuração não está incluído, bem como as etiquetas de idiomas. Porque esses valores são importados com o instalador de sistema. Para atualizar seu sistema, exportar seu antigo sistema (1) re-instalar em um novo banco de dados um novo pacote (2) e importar o arquivo de backup novamente (3). O backup deve ser importado antes de gerar os dados no sistema recém-instalado.]]></entry>
 	<entry key="admin.email.body"><![CDATA[Body]]></entry>
 	<entry key="admin.email.errorCount"><![CDATA[Contagem de erros]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[Mensagem de e-mail]]></entry>
@@ -652,6 +651,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.root.group"><![CDATA[Group files]]></entry>
 	<entry key="find.user"><![CDATA[Find user]]></entry>
 	<entry key="fixed.video.pod.size"><![CDATA[Fixed video pod size]]></entry>
+	<entry key="form.max.upload.size"><![CDATA[Tamanho máximo de upload]]></entry>
 	<entry key="goto.first"><![CDATA[ir para o primeiro]]></entry>
 	<entry key="goto.last"><![CDATA[ir para o último]]></entry>
 	<entry key="goto.next"><![CDATA[ir para o próximo]]></entry>

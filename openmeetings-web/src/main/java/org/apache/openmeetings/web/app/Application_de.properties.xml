@@ -322,8 +322,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1003"><![CDATA[SIP Nummer]]></entry>
 	<entry key="1004"><![CDATA[PIN]]></entry>
 	<entry key="1005"><![CDATA[Nur auf aktueller Seite löschen.]]></entry>
-	<entry key="1065"><![CDATA[Systembackup. Das Backup schließt alle von Nutzern erzeugten Daten ein. Die Konfiguration wird nicht ins Backup einbezogen, da diese Daten mit der Systeminstallation erstellt werden. Zum Update des Systems exportieren Sie das alte System (1), installieren Sie das neue Systempaket in eine neue Datenbank (2) und imporieren Sie das Backup des alten Systems (3). Achten Sie darauf, das Backup vorzunehmen, bevor im neuen System neue Daten erzeugt werden.]]></entry>
-	<entry key="1066"><![CDATA[Systembackup]]></entry>
 	<entry key="1076"><![CDATA[Raum nur mit Audio]]></entry>
 	<entry key="1077"><![CDATA[Mit dieser Funktion erlauben Sie im Raum nur Audioübertragung und schalten Video ab. Dies kann sinnvoll sein, um die benötigte Bandbreite zu reduzieren.]]></entry>
 	<entry key="1089"><![CDATA[Qualität der Übertragung:]]></entry>
@@ -472,13 +470,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1485"><![CDATA[Stimmen Sie ab, wenn es eine Umfrage für diesen Konferenzraum gibt]]></entry>
 	<entry key="1488"><![CDATA[Rufen Sie externe Personen über VoIP/SIP an]]></entry>
 	<entry key="1489"><![CDATA[Senden Sie eine E-Mail mit einem direkten Link zu diesem Raum]]></entry>
-	<entry key="1491"><![CDATA[Maximal Upload-Größe]]></entry>
 	<entry key="1492"><![CDATA[Fragen Sie den Moderator, um Ihr Whiteboard teilen]]></entry>
 	<entry key="1493"><![CDATA[Starte privaten Chat]]></entry>
 	<entry key="1494"><![CDATA[Alle]]></entry>
 	<entry key="1500"><![CDATA[Name des Servers]]></entry>
 	<entry key="1504"><![CDATA[Veröffentlichen. Nutzer:]]></entry>
-	<entry key="1505"><![CDATA[Um Zeit und Internet-Verkehr sparen, können Sie den Befehl admin für Backup/Wiederherstellen/Aktualisieren verwenden. <ol> <li>Gehen sie zum OM-Installationspfad (z.b. /opt/om)</li> <li>Stopen Sie OM (z.b. ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/heute_om_backup.zip (Backup vom bestehenden OM erstellen)</li> <li>Laden Sie die neue Version OM herunter</li> <li>mv /opt/om /opt/om.bak (kopieren Sie die existierende OM-Version für den Fall :))</li> <li>Entpacken Sie die heruntergeladene OM-Version nach /opt/om</li> <li>./admin.sh -i -file ~/heute_om_backup.zip (or './admin.sh -i -file ~/heute_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass', für den Fall, dass Sie eine Nicht-Standard-DB verwenden)</li> <li>Starten Sie OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[gemeinsame Räume für alle Nutzer]]></entry>
 	<entry key="1507"><![CDATA[gemeinsame Räume für die aktuelle Nutzer-Gruppe]]></entry>
 	<entry key="1508"><![CDATA[Räume des aktuellen Nutzers]]></entry>
@@ -488,8 +484,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Dateien-Fenster standardmäßig geöffnet]]></entry>
 	<entry key="1526"><![CDATA[URL generieren]]></entry>
 	<entry key="1527"><![CDATA[Netzwerk testen]]></entry>
-	<entry key="1536"><![CDATA[System Import]]></entry>
-	<entry key="1537"><![CDATA[Enthält hochgeladene Dateien und Aufnahmen im Backup]]></entry>
 	<entry key="1538"><![CDATA[Aktivieren Sie SIP-Verkehr im Raum]]></entry>
 	<entry key="1546"><![CDATA[Wilkommen]]></entry>
 	<entry key="1547"><![CDATA[Anzeige von Nutzerinformationen und Support-Links]]></entry>
@@ -542,6 +536,11 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.request.right.share"><![CDATA[Berechtigung anfragen, den Bildschirm aufzuzeichen/zu teilen]]></entry>
 	<entry key="activities.request.right.video"><![CDATA[Erlaubnis anfragen, um die Kamera einzuschalten]]></entry>
 	<entry key="activities.request.right.wb"><![CDATA[Erlaubnis anfragen, um auf das Zeichenbrett zeichnen zu können]]></entry>
+	<entry key="admin.backup.add.files"><![CDATA[Enthält hochgeladene Dateien und Aufnahmen im Backup]]></entry>
+	<entry key="admin.backup.cmd.line.desc"><![CDATA[Um Zeit und Internet-Verkehr sparen, können Sie den Befehl admin für Backup/Wiederherstellen/Aktualisieren verwenden. <ol> <li>Gehen sie zum OM-Installationspfad (z.b. /opt/om)</li> <li>Stopen Sie OM (z.b. ./bin/shutdown.sh)</li> <li>./admin.sh -b -file ~/heute_om_backup.zip (Backup vom bestehenden OM erstellen)</li> <li>Laden Sie die neue Version OM herunter</li> <li>mv /opt/om /opt/om.bak (kopieren Sie die existierende OM-Version für den Fall :))</li> <li>Entpacken Sie die heruntergeladene OM-Version nach /opt/om</li> <li>./admin.sh -i -file ~/heute_om_backup.zip (or './admin.sh -i -file ~/heute_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass', für den Fall, dass Sie eine Nicht-Standard-DB verwenden)</li> <li>Starten Sie OM</li> </ol>]]></entry>
+	<entry key="admin.backup.import.lbl"><![CDATA[System Import]]></entry>
+	<entry key="admin.backup.lbl"><![CDATA[Systembackup]]></entry>
+	<entry key="admin.backup.steps"><![CDATA[Systembackup. Das Backup schließt alle von Nutzern erzeugten Daten ein. Die Konfiguration wird nicht ins Backup einbezogen, da diese Daten mit der Systeminstallation erstellt werden. Zum Update des Systems exportieren Sie das alte System (1), installieren Sie das neue Systempaket in eine neue Datenbank (2) und imporieren Sie das Backup des alten Systems (3). Achten Sie darauf, das Backup vorzunehmen, bevor im neuen System neue Daten erzeugt werden.]]></entry>
 	<entry key="admin.email.body"><![CDATA[Nachrichtentext]]></entry>
 	<entry key="admin.email.errorCount"><![CDATA[Fehleranzahl]]></entry>
 	<entry key="admin.email.group.label"><![CDATA[E-Mail Nachricht]]></entry>
@@ -652,6 +651,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="files.root.group"><![CDATA[Gruppendateien]]></entry>
 	<entry key="find.user"><![CDATA[Nutzer finden]]></entry>
 	<entry key="fixed.video.pod.size"><![CDATA[Feste Größe der Videos]]></entry>
+	<entry key="form.max.upload.size"><![CDATA[Maximal Upload-Größe]]></entry>
 	<entry key="goto.first"><![CDATA[Zum Ersten]]></entry>
 	<entry key="goto.last"><![CDATA[Zum Letzten]]></entry>
 	<entry key="goto.next"><![CDATA[Zum Nächsten]]></entry>

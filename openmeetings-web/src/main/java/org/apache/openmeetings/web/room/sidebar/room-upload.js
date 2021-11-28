@@ -9,3 +9,6 @@ function roomUploadExtaBindFunc() {
 		}
 	});
 }
+function roomUploadOnComplete() {
+	$('#omws-upload-form').parents('.modal').modal('hide');
+}

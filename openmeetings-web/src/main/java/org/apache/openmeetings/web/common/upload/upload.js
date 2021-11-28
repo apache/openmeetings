@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Upload = (function() {
-	let progress, progressBar, progressTitle, curUid;
+	let progress, progressBar, progressTitle, curUid, onCompleteFunc;
 
 	function _setProgress(prg) {
 		const progressP = prg + '%';
@@ -22,7 +22,9 @@ var Upload = (function() {
 					case 'PROGRESS':
 						_setProgress(m.progress)
 						if (m.progress === 100) {
-							$('#omws-upload-form').parents('.modal').modal('hide');
+							if ('function' === typeof(onCompleteFunc)) {
+								onCompleteFunc();
+							}
 							_cleanup();
 						}
 						break;
@@ -35,22 +37,28 @@ var Upload = (function() {
 		}
 	}
 	function _cleanup() {
+		const form = $('#omws-upload-form')
+			, uploadBtn = $('#omws-upload-btn')
+			, fi = form.find('.fileinput');
+		fi.fileinput('clear');
+		form.show();
+		progress.addClass('d-none');
+		uploadBtn.attr('disabled', 'disabled');
 		Wicket.Event.unsubscribe('/websocket/message', _onWsMessage);
 	}
-	function _bindUpload(extaBindFunc) {
+	function _bindUpload(uploadLoc, extaBindFunc, _onCompleteFunc) {
+		onCompleteFunc = _onCompleteFunc;
 		const form = $('#omws-upload-form')
-				, fi = form.find('.fileinput')
+			, fi = form.find('.fileinput');
 		progress = form.parent().find('.progress-block');
 		progressTitle = progress.find('.progress-title');
 		progressBar = progress.find('.progress-bar');
 		_cleanup();
-		form.show();
-		progress.addClass('d-none');
 		let uploadBtn = $('#omws-upload-btn');
 		if (uploadBtn.length === 0) {
 			uploadBtn = $('<button id="omws-upload-btn" class="btn btn-outline-primary"></button>')
 				.text(form.data('upload-lbl'));
-			form.parents('.modal-content').find('.modal-footer').prepend(uploadBtn);
+			$(uploadLoc).prepend(uploadBtn);
 			uploadBtn.click(function() {
 				const cform = $('#omws-upload-form');
 				$.ajax({
@@ -72,7 +80,7 @@ var Upload = (function() {
 					}
 				}).done(function(data) {
 					curUid = data.uuid;
-					progressTitle.text(progressTitle.data('converting-lbl'));
+					progressTitle.text(progressTitle.data('processing-lbl'));
 					_setProgress(0);
 					Wicket.Event.subscribe('/websocket/message', _onWsMessage);
 				}).fail(function(e) {
@@ -80,7 +88,6 @@ var Upload = (function() {
 				});
 			});
 		}
-		uploadBtn.attr('disabled', 'disabled');
 		fi.off().on('change.bs.fileinput', function(event) {
 			event.stopPropagation();
 			const th = $(this)

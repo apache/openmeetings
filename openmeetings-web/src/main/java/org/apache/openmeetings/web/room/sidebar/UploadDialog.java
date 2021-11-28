@@ -19,14 +19,16 @@
 package org.apache.openmeetings.web.room.sidebar;
 
 import org.apache.openmeetings.web.common.OmModalCloseButton;
-import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.ResourceModel;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
 public class UploadDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
+	static final String DIALOG_CLASS = "room-file-upload-dlg";
 	private RoomUploadForm wsUpload;
 	private final RoomFilePanel roomFiles;
 
@@ -42,10 +44,16 @@ public class UploadDialog extends Modal<String> {
 		setBackdrop(Backdrop.STATIC);
 
 		add(wsUpload = new RoomUploadForm("wsupload", roomFiles));
-		add(BootstrapFileUploadBehavior.INSTANCE);
 		addButton(OmModalCloseButton.of("85"));
 
 		super.onInitialize();
+	}
+
+	@Override
+	protected WebMarkupContainer createDialog(String id) {
+		WebMarkupContainer dialog = super.createDialog(id);
+		dialog.add(AttributeModifier.append("class", DIALOG_CLASS));
+		return dialog;
 	}
 
 	@Override
