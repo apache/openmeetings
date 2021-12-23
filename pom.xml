@@ -95,7 +95,7 @@
 		<jettison.version>1.4.1</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
-		<h2.version>1.4.200</h2.version>
+		<h2.version>2.0.202</h2.version>
 		<commons-lang3.version>3.12.0</commons-lang3.version>
 		<jakarta.mail.version>2.0.1</jakarta.mail.version>
 		<openjpa.version>3.2.1-SNAPSHOT</openjpa.version>
