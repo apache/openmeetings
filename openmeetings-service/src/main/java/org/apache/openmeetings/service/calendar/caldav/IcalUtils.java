@@ -41,6 +41,7 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -57,8 +58,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
+import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.Parameter;
+import net.fortuna.ical4j.model.ParameterList;
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.parameter.Cn;
@@ -131,8 +135,7 @@ public class IcalUtils {
 			a.setDeleted(false);
 			a.setRoom(createDefaultRoom());
 			a.setReminder(Appointment.Reminder.NONE);
-			a = addVEventPropertiestoAppointment(a, event);
-			appointments.add(a);
+			appointments.add(addVEventPropertiestoAppointment(a, event));
 		}
 		return appointments;
 	}
@@ -353,21 +356,35 @@ public class IcalUtils {
 		return c.getTime();
 	}
 
-	/**
-	 * Adds the Appointment Properties to the given VEvent
-	 *
-	 * @param appointment Appointment whose properties are taken
-	 * @param meeting     VEvent of the Appointment
-	 * @return Updated VEvent
-	 */
-	private static void addVEventpropsfromAppointment(Appointment appointment, VEvent meeting) {
+	private net.fortuna.ical4j.model.TimeZone getTimazone(String tzid) {
+		net.fortuna.ical4j.model.TimeZone timeZone = TZ_REGISTRY.getTimeZone(tzid);
+		if (timeZone == null) {
+			throw new NoSuchElementException("Unable to get time zone by id provided: " + tzid);
+		}
+		return timeZone;
+	}
+
+	private Calendar getCalendar(net.fortuna.ical4j.model.TimeZone timeZone, List<CalendarComponent> events) {
+		List<CalendarComponent> comps = new ArrayList<>(events);
+		comps.add(0, timeZone.getVTimeZone());
+		return new Calendar(
+				new PropertyList(List.of(new ProdId(PROD_ID), Version.VERSION_2_0, CalScale.GREGORIAN))
+				, new ComponentList<>(comps));
+	}
+
+	private VEvent parseAppointment(Appointment appointment, net.fortuna.ical4j.model.TimeZone timeZone) {
+		ZonedDateTime start = getZoneDateTime(appointment.getStart(), timeZone.getID());
+		ZonedDateTime end = getZoneDateTime(appointment.getEnd(), timeZone.getID());
+
+		VEvent meeting = new VEvent(start, end, appointment.getTitle());
+		List<Property> mProperties = new ArrayList<>(meeting.getProperties().getAll());
 		if (appointment.getLocation() != null) {
-			meeting.getProperties().add(new Location(appointment.getLocation()));
+			mProperties.add(new Location(appointment.getLocation()));
 		}
 
-		meeting.getProperties().add(new Description(appointment.getDescription()));
-		meeting.getProperties().add(new Sequence(0));
-		meeting.getProperties().add(Transp.OPAQUE);
+		mProperties.add(new Description(appointment.getDescription()));
+		mProperties.add(new Sequence(0));
+		mProperties.add(Transp.OPAQUE);
 
 		String uid = appointment.getIcalId();
 		Uid ui;
@@ -379,53 +396,23 @@ public class IcalUtils {
 			ui = new Uid(uid);
 		}
 
-		meeting.getProperties().add(ui);
+		mProperties.add(ui);
 
 		if (appointment.getMeetingMembers() != null) {
 			for (MeetingMember meetingMember : appointment.getMeetingMembers()) {
-				Attendee attendee = new Attendee(URI.create(MAILTO
-						+ meetingMember.getUser().getAddress().getEmail()));
-				attendee.getParameters().add(Role.REQ_PARTICIPANT);
-				attendee.getParameters().add(new Cn(meetingMember.getUser().getLogin()));
-				meeting.getProperties().add(attendee);
+				mProperties.add(new Attendee(
+						new ParameterList(List.of(Role.REQ_PARTICIPANT, new Cn(meetingMember.getUser().getLogin())))
+						, URI.create(MAILTO + meetingMember.getUser().getAddress().getEmail())));
 			}
 		}
 		URI orgUri = URI.create(MAILTO + appointment.getOwner().getAddress().getEmail());
-		Attendee orgAtt = new Attendee(orgUri);
-		orgAtt.getParameters().add(Role.CHAIR);
 		Cn orgCn = new Cn(appointment.getOwner().getLogin());
-		orgAtt.getParameters().add(orgCn);
-		meeting.getProperties().add(orgAtt);
+		mProperties.add(new Attendee(new ParameterList(List.of(Role.CHAIR, orgCn)), orgUri));
 
-		Organizer organizer = new Organizer(orgUri);
-		organizer.getParameters().add(orgCn);
-		meeting.getProperties().add(organizer);
-	}
+		mProperties.add(new Organizer(new ParameterList(List.of(orgCn)), orgUri));
 
-	private net.fortuna.ical4j.model.TimeZone getTimazone(String tzid) {
-		net.fortuna.ical4j.model.TimeZone timeZone = TZ_REGISTRY.getTimeZone(tzid);
-		if (timeZone == null) {
-			throw new NoSuchElementException("Unable to get time zone by id provided: " + tzid);
-		}
-		return timeZone;
-	}
-
-	private Calendar getCalendar(net.fortuna.ical4j.model.TimeZone timeZone) {
-		Calendar icsCalendar = new Calendar();
-		icsCalendar.getProperties().add(new ProdId(PROD_ID));
-		icsCalendar.getProperties().add(Version.VERSION_2_0);
-		icsCalendar.getProperties().add(CalScale.GREGORIAN);
-		icsCalendar.getComponents().add(timeZone.getVTimeZone());
-		return icsCalendar;
-	}
-
-	private void parseAppointment(Appointment appointment, Calendar icsCalendar, net.fortuna.ical4j.model.TimeZone timeZone) {
-		ZonedDateTime start = getZoneDateTime(appointment.getStart(), timeZone.getID());
-		ZonedDateTime end = getZoneDateTime(appointment.getEnd(), timeZone.getID());
-
-		VEvent meeting = new VEvent(start, end, appointment.getTitle());
-		addVEventpropsfromAppointment(appointment, meeting);
-		icsCalendar.getComponents().add(meeting);
+		meeting.setProperties(new PropertyList(mProperties));
+		return meeting;
 	}
 
 	/**
@@ -437,10 +424,7 @@ public class IcalUtils {
 	public Calendar parseAppointmenttoCalendar(Appointment appointment) {
 		net.fortuna.ical4j.model.TimeZone timeZone = getTimazone(parseTimeZone(null, appointment.getOwner()).getID());
 
-		Calendar icsCalendar = getCalendar(timeZone);
-		parseAppointment(appointment, icsCalendar, timeZone);
-
-		return icsCalendar;
+		return getCalendar(timeZone, List.of(parseAppointment(appointment, timeZone)));
 	}
 
 	/**
@@ -453,11 +437,8 @@ public class IcalUtils {
 	public Calendar parseAppointmentstoCalendar(List<Appointment> appointments, Long ownerId) {
 		net.fortuna.ical4j.model.TimeZone timeZone = getTimazone(parseTimeZone(null, userDao.get(ownerId)).getID());
 
-		Calendar icsCalendar = getCalendar(timeZone);
-
-		for (Appointment appointment : appointments) {
-			parseAppointment(appointment, icsCalendar, timeZone);
-		}
-		return icsCalendar;
+		return getCalendar(timeZone, appointments.stream()
+				.map(appointment -> parseAppointment(appointment, timeZone))
+				.collect(Collectors.toList()));
 	}
 }
