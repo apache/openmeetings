@@ -18,13 +18,16 @@
  */
 package org.apache.openmeetings.util.mail;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.mail.MailUtil.MAILTO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
@@ -32,7 +35,11 @@ import org.slf4j.LoggerFactory;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.ComponentList;
+import net.fortuna.ical4j.model.Parameter;
+import net.fortuna.ical4j.model.ParameterList;
+import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
@@ -66,15 +73,13 @@ import net.fortuna.ical4j.validate.ValidationException;
  */
 public class IcalHandler {
 	private static final Logger log = LoggerFactory.getLogger(IcalHandler.class);
-	static {
-		System.setProperty("net.fortuna.ical4j.timezone.update.enabled", "false");
-		System.setProperty("net.fortuna.ical4j.timezone.cache.impl", "net.fortuna.ical4j.util.MapTimeZoneCache");
-	}
+	public static final TimeZoneRegistry TZ_REGISTRY = TimeZoneRegistryFactory.getInstance().createRegistry();
 
 	/** ICal instance */
 	private final Calendar icsCalendar;
 	private TimeZone timeZone;
 	private VEvent meeting;
+	private List<Property> meetingProperties = new ArrayList<>();
 	private Method method;
 
 	/** Creation of a new Event */
@@ -92,59 +97,53 @@ public class IcalHandler {
 		this.method = method;
 		log.debug("Icalhandler method type : {}", method);
 
-		icsCalendar = new Calendar();
-		icsCalendar.getProperties().add(new ProdId("-//Apache Openmeetings//OM Calendar//EN"));
-		icsCalendar.getProperties().add(Version.VERSION_2_0);
-		icsCalendar.getProperties().add(CalScale.GREGORIAN);
-		icsCalendar.getProperties().add(method);
+		icsCalendar = new Calendar(new PropertyList(List.of(
+				new ProdId("-//Apache Openmeetings//OM Calendar//EN")
+				, Version.VERSION_2_0
+				, CalScale.GREGORIAN
+				, method
+				)), new ComponentList<>());
 	}
 
-	public IcalHandler createVEvent(String tz, Date startDate, Date endDate, String name) {
-		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
-
-		timeZone = registry.getTimeZone(tz);
+	public IcalHandler createVEvent(ZonedDateTime start, ZonedDateTime end, String name) {
+		timeZone = TZ_REGISTRY.getTimeZone(start.getZone().getId());
 		if (timeZone == null) {
-			throw new NoSuchElementException("Unable to get time zone by id provided: " + tz);
+			throw new NoSuchElementException("Unable to get time zone by id provided: " + start.getZone());
 		}
 
-		DateTime start = new DateTime(startDate);
-		start.setTimeZone(timeZone);
-		DateTime end = new DateTime(endDate);
-		end.setTimeZone(timeZone);
-
 		meeting = new VEvent(start, end, name);
-		meeting.getProperties().add(Transp.OPAQUE);
-		meeting.getProperties().add(Status.VEVENT_CONFIRMED);
+		meetingProperties.addAll(meeting.getProperties().getAll());
+		meetingProperties.addAll(List.of(Transp.OPAQUE, Status.VEVENT_CONFIRMED));
 		return this;
 	}
 
-	public IcalHandler setCreated(Date date) {
-		meeting.getProperties().add(new Created(new DateTime(date)));
+	public IcalHandler setCreated(ZonedDateTime date) {
+		meetingProperties.add(new Created(date.toInstant()));
 		return this;
 	}
 
-	public IcalHandler setModified(Date date) {
-		meeting.getProperties().add(new LastModified(new DateTime(date == null ? new Date() : date)));
+	public IcalHandler setModified(ZonedDateTime date) {
+		meetingProperties.add(new LastModified((date == null ? ZonedDateTime.now() : date).toInstant()));
 		return this;
 	}
 
 	public IcalHandler setDescription(String description) {
-		meeting.getProperties().add(new Description(description));
+		meetingProperties.add(new Description(description));
 		return this;
 	}
 
 	public IcalHandler setLocation(String location) {
-		meeting.getProperties().add(new Location(location));
+		meetingProperties.add(new Location(location));
 		return this;
 	}
 
 	public IcalHandler setSequence(int seq) {
-		meeting.getProperties().add(new Sequence(seq));
+		meetingProperties.add(new Sequence(seq));
 		return this;
 	}
 
 	public IcalHandler setUid(String uid) {
-		meeting.getProperties().add(new Uid(uid));
+		meetingProperties.add(new Uid(uid));
 		return this;
 	}
 
@@ -153,31 +152,29 @@ public class IcalHandler {
 	}
 
 	public IcalHandler addOrganizer(String email, String name) {
-		Organizer orger = new Organizer(getMailto(email));
-		orger.getParameters().add(new Cn(name));
-		meeting.getProperties().add(orger);
+		meetingProperties.add(new Organizer(new ParameterList(List.of(new Cn(name))), getMailto(email)));
 		return this;
 	}
 
 	public IcalHandler addAttendee(String email, String display, boolean chair) {
-		Attendee uno = new Attendee(URI.create(MAILTO + email));
-		uno.getParameters().add(CuType.INDIVIDUAL);
-		uno.getParameters().add(chair ? Role.CHAIR : Role.REQ_PARTICIPANT);
+		List<Parameter> params = new ArrayList<>(List.of(
+				CuType.INDIVIDUAL
+				, chair ? Role.CHAIR : Role.REQ_PARTICIPANT
+				, new XParameter("X-NUM-GUESTS", "0")
+				, new Cn(display)));
 		if (Method.CANCEL == method) {
-			uno.getParameters().add(PartStat.DECLINED);
+			params.add(PartStat.DECLINED);
 		} else {
-			uno.getParameters().add(chair ? PartStat.ACCEPTED : PartStat.NEEDS_ACTION);
-			uno.getParameters().add(Rsvp.TRUE);
+			params.add(chair ? PartStat.ACCEPTED : PartStat.NEEDS_ACTION);
+			params.add(Rsvp.TRUE);
 		}
-		uno.getParameters().add(new XParameter("X-NUM-GUESTS", "0"));
-		uno.getParameters().add(new Cn(display));
-		meeting.getProperties().add(uno);
+		meetingProperties.add(new Attendee(new ParameterList(params), URI.create(MAILTO + email)));
 		return this;
 	}
 
 	public IcalHandler build() {
-		icsCalendar.getComponents().add(timeZone.getVTimeZone());
-		icsCalendar.getComponents().add(meeting);
+		meeting.setProperties(new PropertyList(meetingProperties));
+		icsCalendar.setComponents(new ComponentList<>(List.of(timeZone.getVTimeZone(), meeting)));
 		return this;
 	}
 
@@ -212,7 +209,7 @@ public class IcalHandler {
 	 * @throws ValidationException
 	 *             - in case of invalid calendar properties
 	 */
-	public byte[] toByteArray() throws ValidationException, IOException {
+	public byte[] toByteArray() throws IOException {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		CalendarOutputter outputter = new CalendarOutputter();
 		outputter.output(icsCalendar, bout);
@@ -224,6 +221,14 @@ public class IcalHandler {
 	 */
 	@Override
 	public String toString() {
-		return icsCalendar == null ? null : icsCalendar.toString();
+		if (icsCalendar == null) {
+			return null;
+		}
+		try {
+			return new String(toByteArray(), UTF_8);
+		} catch (IOException e) {
+			log.error("Unexpected error", e);
+		}
+		return null;
 	}
 }

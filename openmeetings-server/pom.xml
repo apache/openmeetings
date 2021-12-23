@@ -46,7 +46,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/apache/openmeetings.git</connection>
 		<developerConnection>scm:git:https://github.com/apache/openmeetings.git</developerConnection>
-		<url>https://github.com/apache/openmeetings/tree/6.2.0</url>
+		<url>https://github.com/apache/openmeetings.git</url>
 		<tag>HEAD</tag>
 	</scm>
 	<profiles>

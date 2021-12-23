@@ -26,14 +26,14 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setSmtpUseTls;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setSmtpUser;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import javax.mail.Message;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.mail.Message;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 
 /**
  *

@@ -18,10 +18,12 @@
  */
 package org.apache.openmeetings.web.util.logging;
 
+import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.management.Attribute;
@@ -30,7 +32,6 @@ import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 
-import org.apache.catalina.util.ServerInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -293,7 +294,14 @@ public class TomcatGenericExports extends Collector {
 	private void addVersionInfo(List<MetricFamilySamples> mfs) {
 		GaugeMetricFamily tomcatInfo = new GaugeMetricFamily("tomcat_info", "tomcat version info",
 				List.of("version", "build"));
-		tomcatInfo.addMetric(List.of(ServerInfo.getServerNumber(), ServerInfo.getServerBuilt()), 1);
+		try (InputStream is = getClass().getResourceAsStream("/org/apache/catalina/util/ServerInfo.properties")) {
+			Properties props = new Properties();
+			props.load(is);
+			//server info can be get as props.getProperty("server.info");
+			tomcatInfo.addMetric(List.of(props.getProperty("server.number"), props.getProperty("server.built")), 1);
+		} catch (Throwable t) {
+			log.warn("Unable to read Tomcat version: ", t);
+		}
 		mfs.add(tomcatInfo);
 	}
 

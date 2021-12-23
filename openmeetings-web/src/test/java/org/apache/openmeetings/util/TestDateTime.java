@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.util;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;

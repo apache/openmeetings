@@ -128,8 +128,12 @@
 			<artifactId>aspectjtools</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>jakarta.mail</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>io.prometheus</groupId>
-			<artifactId>simpleclient</artifactId>
+			<artifactId>simpleclient_servlet</artifactId>
 		</dependency>
 	</dependencies>
 </project>

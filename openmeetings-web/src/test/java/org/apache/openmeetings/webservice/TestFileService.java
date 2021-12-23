@@ -23,8 +23,8 @@ import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.AbstractOmServerTest.UNIT_TEST_ARAB_EXT_TYPE;
 import static org.apache.openmeetings.AbstractOmServerTest.createUser;
 import static org.apache.openmeetings.AbstractOmServerTest.getUser;
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.awt.Graphics;

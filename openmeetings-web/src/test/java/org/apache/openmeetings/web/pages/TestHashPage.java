@@ -25,7 +25,7 @@ import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.pages.HashPage.PANEL_MAIN;
 import static org.apache.openmeetings.web.pages.HashPage.PANEL_RECORDING;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Date;
 import java.util.UUID;

@@ -21,7 +21,7 @@ package org.apache.openmeetings.backup;
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.bind.Constants.FILE_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.USER_LIST_NODE;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

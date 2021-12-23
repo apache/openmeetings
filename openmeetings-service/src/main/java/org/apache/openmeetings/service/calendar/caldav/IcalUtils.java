@@ -20,20 +20,27 @@ package org.apache.openmeetings.service.calendar.caldav;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
+import static org.apache.openmeetings.util.CalendarHelper.getZoneDateTime;
+import static org.apache.openmeetings.util.mail.IcalHandler.TZ_REGISTRY;
 import static org.apache.openmeetings.util.mail.MailUtil.MAILTO;
 import static org.apache.openmeetings.util.mail.MailUtil.SCHEME_MAILTO;
 
 import java.net.URI;
 import java.text.ParsePosition;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -50,14 +57,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.ComponentList;
-import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.Property;
-import net.fortuna.ical4j.model.PropertyList;
-import net.fortuna.ical4j.model.Recur.Frequency;
-import net.fortuna.ical4j.model.TimeZoneRegistry;
-import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.parameter.Cn;
@@ -73,6 +74,7 @@ import net.fortuna.ical4j.model.property.Sequence;
 import net.fortuna.ical4j.model.property.Transp;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
+import net.fortuna.ical4j.transform.recurrence.Frequency;
 
 /**
  * Class which provides iCalendar Utilities.
@@ -81,6 +83,7 @@ import net.fortuna.ical4j.model.property.Version;
 @org.springframework.stereotype.Component
 public class IcalUtils {
 	private static final Logger log = LoggerFactory.getLogger(IcalUtils.class);
+	private static final List<String> acceptedFormats = List.of("yyyyMMdd'T'HHmmss", "yyyyMMdd'T'HHmmss'Z'", "yyyyMMdd");
 	public static final String PROD_ID = "-//Events Calendar//Apache Openmeetings//EN";
 
 	@Autowired
@@ -119,7 +122,7 @@ public class IcalUtils {
 	 */
 	public List<Appointment> parseCalendartoAppointments(Calendar calendar, Long ownerId) {
 		List<Appointment> appointments = new ArrayList<>();
-		ComponentList<CalendarComponent> events = calendar.getComponents(Component.VEVENT);
+		List<CalendarComponent> events = calendar.getComponents(Component.VEVENT);
 		User owner = userDao.get(ownerId);
 
 		for (CalendarComponent event : events) {
@@ -148,12 +151,20 @@ public class IcalUtils {
 		if (calendar == null) {
 			return a;
 		}
-		CalendarComponent event = calendar.getComponent(Component.VEVENT);
-		if (event != null) {
+		calendar.getComponent(Component.VEVENT).ifPresent(event -> {
 			a.setEtag(etag);
-			a = addVEventPropertiestoAppointment(a, event);
-		}
+			addVEventPropertiestoAppointment(a, event);
+		});
 		return a;
+	}
+
+	private Date getDate(CalendarComponent event, String prop) {
+		return getDate(event.getProperty(prop).get());
+	}
+
+	@SuppressWarnings("unchecked")
+	private Date getDate(Property prop) {
+		return Date.from(Instant.from(((DateProperty<? extends Temporal>)prop).getDate()));
 	}
 
 	/**
@@ -164,51 +175,21 @@ public class IcalUtils {
 	 * @return Updated Appointment
 	 */
 	private Appointment addVEventPropertiestoAppointment(Appointment a, CalendarComponent event) {
-		DateProperty dtstart = (DateProperty)event.getProperty(Property.DTSTART)
-				, dtend = (DateProperty)event.getProperty(Property.DTEND)
-				, dtstamp = (DateProperty)event.getProperty(Property.DTSTAMP)
-				, lastmod = (DateProperty)event.getProperty(Property.LAST_MODIFIED);
-		Property uid = event.getProperty(Property.UID),
-				description = event.getProperty(Property.DESCRIPTION),
-				summary = event.getProperty(Property.SUMMARY),
-				location = event.getProperty(Property.LOCATION),
-				organizer = event.getProperty(Property.ORGANIZER),
-				recur = event.getProperty(Property.RRULE);
-		PropertyList<Attendee> attendees = event.getProperties(Property.ATTENDEE);
+		event.getProperty(Property.UID).ifPresent(uid -> a.setIcalId(uid.getValue()));
 
-		if (uid != null) {
-			a.setIcalId(uid.getValue());
-		}
+		Date d = getDate(event, Property.DTSTART);
+		a.setStart(getDate(event, Property.DTSTART));
+		event.getProperty(Property.DTEND).ifPresentOrElse(dtend -> a.setEnd(getDate(dtend))
+				, () -> a.setEnd(addTimetoDate(d, java.util.Calendar.HOUR_OF_DAY, 1)));
 
-		Date d = dtstart.getDate();
-		a.setStart(d);
-		if (dtend == null) {
-			a.setEnd(addTimetoDate(d, java.util.Calendar.HOUR_OF_DAY, 1));
-		} else {
-			a.setEnd(dtend.getDate());
-		}
+		event.getProperty(Property.DTSTAMP).ifPresent(dtstamp -> a.setInserted(getDate(dtstamp)));
+		event.getProperty(Property.LAST_MODIFIED).ifPresent(lastmod -> a.setUpdated(getDate(lastmod)));
+		event.getProperty(Property.DESCRIPTION).ifPresent(description -> a.setDescription(description.getValue()));
+		event.getProperty(Property.SUMMARY).ifPresent(summary -> a.setTitle(summary.getValue()));
+		event.getProperty(Property.LOCATION).ifPresent(location -> a.setLocation(location.getValue()));
 
-		a.setInserted(dtstamp.getDate());
-
-		if (lastmod != null) {
-			a.setUpdated(lastmod.getDate());
-		}
-
-		if (description != null) {
-			a.setDescription(description.getValue());
-		}
-
-		if (summary != null) {
-			a.setTitle(summary.getValue());
-		}
-
-		if (location != null) {
-			a.setLocation(location.getValue());
-		}
-
-		if (recur != null) {
-			Parameter freq = recur.getParameter("FREQ");
-			if (freq != null) {
+		event.getProperty(Property.RRULE).ifPresent(recur -> {
+			recur.getParameters().getFirst("FREQ").ifPresent(freq -> {
 				if (freq.getValue().equals(Frequency.DAILY.name())) {
 					a.setIsDaily(true);
 				} else if (freq.getValue().equals(Frequency.WEEKLY.name())) {
@@ -218,22 +199,22 @@ public class IcalUtils {
 				} else if (freq.getValue().equals(Frequency.YEARLY.name())) {
 					a.setIsYearly(true);
 				}
-			}
-		}
+			});
+		});
 
 		Set<MeetingMember> attList = a.getMeetingMembers() == null ? new HashSet<>()
 				: new HashSet<>(a.getMeetingMembers());
-		String organizerEmail = null;
+		AtomicReference<String> organizerEmail = new AtomicReference<>();
 
 		//Note this value can be repeated in attendees as well.
-		if (organizer != null) {
+		event.getProperty(Property.ORGANIZER).ifPresent(organizer -> {
 			URI uri = URI.create(organizer.getValue());
 
 			//If the value of the organizer is an email
 			if (SCHEME_MAILTO.equals(uri.getScheme())) {
 				String email = uri.getSchemeSpecificPart();
 
-				organizerEmail = email;
+				organizerEmail.set(email);
 				if (!email.equals(a.getOwner().getAddress().getEmail())) {
 					//Contact or exist and owner
 					User org = userDao.getByEmail(email);
@@ -245,29 +226,26 @@ public class IcalUtils {
 					}
 				}
 			}
-		}
+		});
 
-		if (attendees != null && !attendees.isEmpty()) {
-			for (Property attendee : attendees) {
-				URI uri = URI.create(attendee.getValue());
-				if (SCHEME_MAILTO.equals(uri.getScheme())) {
-					String email = uri.getSchemeSpecificPart();
+		event.getProperties(Property.ATTENDEE).forEach(attendee -> {
+			URI uri = URI.create(attendee.getValue());
+			if (SCHEME_MAILTO.equals(uri.getScheme())) {
+				String email = uri.getSchemeSpecificPart();
 
-					Role role = attendee.getParameter(Role.CHAIR.getName());
-					if (role != null && role.getValue().equals(Role.CHAIR.getValue())
-							&& email.equals(organizerEmail)) {
-						continue;
-					}
-
-					User u = userDao.getByEmail(email);
-					if (u == null) {
-						u = userDao.getContact(email, a.getOwner());
-					}
-					attList.add(createMeetingMember(a, u));
-
+				Optional<Role> role = attendee.getParameters().getFirst(Role.CHAIR.getName());
+				if (role.isPresent() && role.get().getValue().equals(Role.CHAIR.getValue()) && email.equals(organizerEmail.get())) {
+					return;
 				}
+
+				User u = userDao.getByEmail(email);
+				if (u == null) {
+					u = userDao.getContact(email, a.getOwner());
+				}
+				attList.add(createMeetingMember(a, u));
+
 			}
-		}
+		});
 
 		a.setMeetingMembers(attList.isEmpty() ? null : new ArrayList<>(attList));
 
@@ -302,16 +280,15 @@ public class IcalUtils {
 	 * @return Parsed TimeZone
 	 */
 	public TimeZone parseTimeZone(Calendar calendar, User owner) {
-		if (calendar != null) {
-			Component timezone = calendar.getComponent(Component.VTIMEZONE);
-			if (timezone != null) {
-				Property tzid = timezone.getProperty(Property.TZID);
-				if (tzid != null) {
-					return getTimeZone(tzid.getValue());
-				}
-			}
-		}
-		return getTimeZone(owner);
+		return Optional.ofNullable(calendar)
+				.map(cal -> cal.getComponent(Component.VTIMEZONE))
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.map(timezone -> timezone.getProperty(Property.TZID))
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.map(tzid -> getTimeZone(tzid.getValue()))
+				.orElse(getTimeZone(owner));
 	}
 
 	/**
@@ -327,13 +304,9 @@ public class IcalUtils {
 			return null;
 		}
 
-		String[] acceptedFormats = {"yyyyMMdd'T'HHmmss", "yyyyMMdd'T'HHmmss'Z'", "yyyyMMdd"};
-		Parameter tzid = dt.getParameter(Parameter.TZID);
-		if (tzid == null) {
-			return parseDate(dt.getValue(), acceptedFormats, timeZone);
-		} else {
-			return parseDate(dt.getValue(), acceptedFormats, getTimeZone(tzid.getValue()));
-		}
+		return dt.getParameters().getFirst(Parameter.TZID)
+				.map(tzid -> parseDate(dt.getValue(), getTimeZone(tzid.getValue())))
+				.orElse(parseDate(dt.getValue(), timeZone));
 	}
 
 	/**
@@ -346,14 +319,14 @@ public class IcalUtils {
 	 * @return <code>java.util.Date</code> representation of string or
 	 * <code>null</code> if the Date could not be parsed.
 	 */
-	public Date parseDate(String str, String[] patterns, TimeZone inTimeZone) {
+	public Date parseDate(String str, TimeZone inTimeZone) {
 		FastDateFormat parser;
 		Locale locale = WebSession.get().getLocale();
 
 		TimeZone timeZone = str.endsWith("Z") ? TimeZone.getTimeZone("UTC") : inTimeZone;
 
 		ParsePosition pos = new ParsePosition(0);
-		for (String pattern : patterns) {
+		for (String pattern : acceptedFormats) {
 			parser = FastDateFormat.getInstance(pattern, timeZone, locale);
 			pos.setIndex(0);
 			Date date = parser.parse(str, pos);
@@ -373,42 +346,11 @@ public class IcalUtils {
 	 * @param amount Amount to be Added
 	 * @return New Date
 	 */
-	public Date addTimetoDate(Date date, int field, int amount) {
+	public Date addTimetoDate(Date date, int field, int amount) { //FIXME TODO
 		java.util.Calendar c = java.util.Calendar.getInstance();
 		c.setTime(date);
 		c.add(field, amount);
 		return c.getTime();
-	}
-
-	/**
-	 * Methods to parse Appointment to iCalendar according RFC 2445
-	 *
-	 * @param appointment to be converted to iCalendar
-	 * @return iCalendar representation of the Appointment
-	 */
-	public Calendar parseAppointmenttoCalendar(Appointment appointment) {
-		String tzid = parseTimeZone(null, appointment.getOwner()).getID();
-
-		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
-
-		net.fortuna.ical4j.model.TimeZone timeZone = registry.getTimeZone(tzid);
-		if (timeZone == null) {
-			throw new NoSuchElementException("Unable to get time zone by id provided: " + tzid);
-		}
-
-		Calendar icsCalendar = new Calendar();
-		icsCalendar.getProperties().add(new ProdId(PROD_ID));
-		icsCalendar.getProperties().add(Version.VERSION_2_0);
-		icsCalendar.getProperties().add(CalScale.GREGORIAN);
-		icsCalendar.getComponents().add(timeZone.getVTimeZone());
-
-		DateTime start = new DateTime(appointment.getStart()), end = new DateTime(appointment.getEnd());
-
-		VEvent meeting = new VEvent(start, end, appointment.getTitle());
-		addVEventpropsfromAppointment(appointment, meeting);
-		icsCalendar.getComponents().add(meeting);
-
-		return icsCalendar;
 	}
 
 	/**
@@ -460,6 +402,47 @@ public class IcalUtils {
 		meeting.getProperties().add(organizer);
 	}
 
+	private net.fortuna.ical4j.model.TimeZone getTimazone(String tzid) {
+		net.fortuna.ical4j.model.TimeZone timeZone = TZ_REGISTRY.getTimeZone(tzid);
+		if (timeZone == null) {
+			throw new NoSuchElementException("Unable to get time zone by id provided: " + tzid);
+		}
+		return timeZone;
+	}
+
+	private Calendar getCalendar(net.fortuna.ical4j.model.TimeZone timeZone) {
+		Calendar icsCalendar = new Calendar();
+		icsCalendar.getProperties().add(new ProdId(PROD_ID));
+		icsCalendar.getProperties().add(Version.VERSION_2_0);
+		icsCalendar.getProperties().add(CalScale.GREGORIAN);
+		icsCalendar.getComponents().add(timeZone.getVTimeZone());
+		return icsCalendar;
+	}
+
+	private void parseAppointment(Appointment appointment, Calendar icsCalendar, net.fortuna.ical4j.model.TimeZone timeZone) {
+		ZonedDateTime start = getZoneDateTime(appointment.getStart(), timeZone.getID());
+		ZonedDateTime end = getZoneDateTime(appointment.getEnd(), timeZone.getID());
+
+		VEvent meeting = new VEvent(start, end, appointment.getTitle());
+		addVEventpropsfromAppointment(appointment, meeting);
+		icsCalendar.getComponents().add(meeting);
+	}
+
+	/**
+	 * Methods to parse Appointment to iCalendar according RFC 2445
+	 *
+	 * @param appointment to be converted to iCalendar
+	 * @return iCalendar representation of the Appointment
+	 */
+	public Calendar parseAppointmenttoCalendar(Appointment appointment) {
+		net.fortuna.ical4j.model.TimeZone timeZone = getTimazone(parseTimeZone(null, appointment.getOwner()).getID());
+
+		Calendar icsCalendar = getCalendar(timeZone);
+		parseAppointment(appointment, icsCalendar, timeZone);
+
+		return icsCalendar;
+	}
+
 	/**
 	 * Parses a List of Appointments into a VCALENDAR component.
 	 *
@@ -468,27 +451,12 @@ public class IcalUtils {
 	 * @return VCALENDAR representation of the Appointments
 	 */
 	public Calendar parseAppointmentstoCalendar(List<Appointment> appointments, Long ownerId) {
-		String tzid = parseTimeZone(null, userDao.get(ownerId)).getID();
+		net.fortuna.ical4j.model.TimeZone timeZone = getTimazone(parseTimeZone(null, userDao.get(ownerId)).getID());
 
-		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
-
-		net.fortuna.ical4j.model.TimeZone timeZone = registry.getTimeZone(tzid);
-		if (timeZone == null) {
-			throw new NoSuchElementException("Unable to get time zone by id provided: " + tzid);
-		}
-
-		Calendar icsCalendar = new Calendar();
-		icsCalendar.getProperties().add(new ProdId(PROD_ID));
-		icsCalendar.getProperties().add(Version.VERSION_2_0);
-		icsCalendar.getProperties().add(CalScale.GREGORIAN);
-		icsCalendar.getComponents().add(timeZone.getVTimeZone());
+		Calendar icsCalendar = getCalendar(timeZone);
 
 		for (Appointment appointment : appointments) {
-			DateTime start = new DateTime(appointment.getStart()), end = new DateTime(appointment.getEnd());
-
-			VEvent meeting = new VEvent(start, end, appointment.getTitle());
-			addVEventpropsfromAppointment(appointment, meeting);
-			icsCalendar.getComponents().add(meeting);
+			parseAppointment(appointment, icsCalendar, timeZone);
 		}
 		return icsCalendar;
 	}

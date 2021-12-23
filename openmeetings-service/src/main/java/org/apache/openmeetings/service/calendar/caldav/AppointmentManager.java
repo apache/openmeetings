@@ -63,8 +63,6 @@ import org.w3c.dom.Element;
 
 import com.github.caldav4j.CalDAVConstants;
 
-import net.fortuna.ical4j.util.MapTimeZoneCache;
-
 /**
  * Class which does syncing and provides respective API's required for performing CalDAV Operations.
  * @author Ankush Mishra (ankushmishra9@gmail.com)
@@ -79,11 +77,6 @@ public class AppointmentManager {
 	private static final int MAX_TOTAL_CONNECTIONS = 10; // Max Connections, at one time in memory.
 
 	private PoolingHttpClientConnectionManager connmanager = null;
-
-	static {
-		// Disable TimeZone caching through JCache
-		System.setProperty("net.fortuna.ical4j.timezone.cache.impl", MapTimeZoneCache.class.getName());
-	}
 
 	@Autowired
 	private OmCalendarDao calendarDao;
