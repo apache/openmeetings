@@ -81,7 +81,7 @@
 		<!-- dependency versions -->
 		<junit.version>5.8.2</junit.version>
 		<wicket.version>9.7.0</wicket.version>
-		<wicket-jquery-ui.version>9.5.0</wicket-jquery-ui.version>
+		<wicket-jquery-ui.version>9.7.0</wicket-jquery-ui.version>
 		<wicketstuff.version>9.7.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.0-M6-SNAPSHOT</wicket-bootstrap.version>
 		<font-awesome.version>5.15.4</font-awesome.version>
@@ -95,7 +95,7 @@
 		<jettison.version>1.4.1</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
-		<h2.version>2.0.202</h2.version>
+		<h2.version>2.0.206</h2.version>
 		<commons-lang3.version>3.12.0</commons-lang3.version>
 		<jakarta.mail.version>2.0.1</jakarta.mail.version>
 		<openjpa.version>3.2.1-SNAPSHOT</openjpa.version>
@@ -114,7 +114,7 @@
 		<xstream.version>1.4.18</xstream.version>
 		<api-all.version>2.1.0</api-all.version>
 		<caldav4j.version>1.0.3</caldav4j.version>
-		<tika-parsers.version>2.2.0</tika-parsers.version>
+		<tika-parsers.version>2.2.1</tika-parsers.version>
 		<commons-text.version>1.9</commons-text.version>
 		<slf4j.version>1.7.32</slf4j.version>
 		<logback.version>1.2.4</logback.version>
@@ -131,7 +131,7 @@
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM26</apacheds-test-framework.version>
-		<swagger.version>2.1.11</swagger.version>
+		<swagger.version>2.1.12</swagger.version>
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
