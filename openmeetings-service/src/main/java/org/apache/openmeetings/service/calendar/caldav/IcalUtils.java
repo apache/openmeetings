@@ -192,7 +192,7 @@ public class IcalUtils {
 		event.getProperty(Property.LOCATION).ifPresent(location -> a.setLocation(location.getValue()));
 
 		event.getProperty(Property.RRULE).ifPresent(recur -> {
-			recur.getParameters().getFirst("FREQ").ifPresent(freq -> {
+			recur.getParameter("FREQ").ifPresent(freq -> {
 				if (freq.getValue().equals(Frequency.DAILY.name())) {
 					a.setIsDaily(true);
 				} else if (freq.getValue().equals(Frequency.WEEKLY.name())) {
@@ -236,7 +236,7 @@ public class IcalUtils {
 			if (SCHEME_MAILTO.equals(uri.getScheme())) {
 				String email = uri.getSchemeSpecificPart();
 
-				Optional<Role> role = attendee.getParameters().getFirst(Role.CHAIR.getName());
+				Optional<Role> role = attendee.getParameter(Role.CHAIR.getName());
 				if (role.isPresent() && role.get().getValue().equals(Role.CHAIR.getValue()) && email.equals(organizerEmail.get())) {
 					return;
 				}
@@ -307,7 +307,7 @@ public class IcalUtils {
 			return null;
 		}
 
-		return dt.getParameters().getFirst(Parameter.TZID)
+		return dt.getParameter(Parameter.TZID)
 				.map(tzid -> parseDate(dt.getValue(), getTimeZone(tzid.getValue())))
 				.orElse(parseDate(dt.getValue(), timeZone));
 	}
@@ -377,7 +377,7 @@ public class IcalUtils {
 		ZonedDateTime end = getZoneDateTime(appointment.getEnd(), timeZone.getID());
 
 		VEvent meeting = new VEvent(start, end, appointment.getTitle());
-		List<Property> mProperties = new ArrayList<>(meeting.getProperties().getAll());
+		List<Property> mProperties = new ArrayList<>(meeting.getProperties());
 		if (appointment.getLocation() != null) {
 			mProperties.add(new Location(appointment.getLocation()));
 		}
@@ -411,7 +411,7 @@ public class IcalUtils {
 
 		mProperties.add(new Organizer(new ParameterList(List.of(orgCn)), orgUri));
 
-		meeting.setProperties(new PropertyList(mProperties));
+		meeting.setPropertyList(new PropertyList(mProperties));
 		return meeting;
 	}
 

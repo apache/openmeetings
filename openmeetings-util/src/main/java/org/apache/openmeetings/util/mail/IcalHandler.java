@@ -112,7 +112,7 @@ public class IcalHandler {
 		}
 
 		meeting = new VEvent(start, end, name);
-		meetingProperties.addAll(meeting.getProperties().getAll());
+		meetingProperties.addAll(meeting.getProperties());
 		meetingProperties.addAll(List.of(Transp.OPAQUE, Status.VEVENT_CONFIRMED));
 		return this;
 	}
@@ -173,8 +173,8 @@ public class IcalHandler {
 	}
 
 	public IcalHandler build() {
-		meeting.setProperties(new PropertyList(meetingProperties));
-		icsCalendar.setComponents(new ComponentList<>(List.of(timeZone.getVTimeZone(), meeting)));
+		meeting.setPropertyList(new PropertyList(meetingProperties));
+		icsCalendar.setComponentList(new ComponentList<>(List.of(timeZone.getVTimeZone(), meeting)));
 		return this;
 	}
 

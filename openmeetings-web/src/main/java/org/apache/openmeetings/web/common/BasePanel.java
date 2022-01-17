@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.common;
 
 import java.io.IOException;
 
-import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.pages.BasePage;
@@ -55,7 +54,7 @@ public abstract class BasePanel extends Panel {
 	}
 
 	protected boolean isRtl() {
-		return FormatHelper.isRtlLanguage(WebSession.get().getLocale().toLanguageTag());
+		return WebSession.get().isRtlLocale();
 	}
 
 	/**

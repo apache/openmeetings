@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.pages;
 
-import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -34,11 +33,7 @@ public abstract class BaseNotInitedPage extends BasePage {
 
 	@Override
 	public boolean isRtl() {
-		boolean rtl = false;
-		if (Application.isInstalled()) {
-			rtl = FormatHelper.isRtlLanguage(WebSession.get().getLocale().toString());
-		}
-		return rtl;
+		return Application.isInstalled() ? WebSession.get().isRtlLocale() : false;
 	}
 
 	@Override
