@@ -86,7 +86,7 @@
 		<wicket-bootstrap.version>6.0.0-M6-SNAPSHOT</wicket-bootstrap.version>
 		<font-awesome.version>5.15.4</font-awesome.version>
 		<spring.version>5.3.15</spring.version>
-		<tomcat.version>9.0.56</tomcat.version>
+		<tomcat.version>9.0.58</tomcat.version>
 		<ical4j.version>4.0.0-alpha11</ical4j.version>
 		<cxf.version>3.5.0</cxf.version>
 		<io.prometheus.version>0.14.1</io.prometheus.version>
@@ -95,7 +95,7 @@
 		<jettison.version>1.4.1</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
-		<h2.version>2.0.206</h2.version>
+		<h2.version>2.1.210</h2.version>
 		<commons-lang3.version>3.12.0</commons-lang3.version>
 		<jakarta.mail.version>2.0.1</jakarta.mail.version>
 		<openjpa.version>3.2.1-SNAPSHOT</openjpa.version>
@@ -107,8 +107,8 @@
 		<commons-codec.version>1.15</commons-codec.version>
 		<commons-io.version>2.11.0</commons-io.version>
 		<postgresql.version>42.3.1</postgresql.version>
-		<mysql.version>8.0.27</mysql.version>
-		<mssql.version>9.4.0.jre11</mssql.version>
+		<mysql.version>8.0.28</mysql.version>
+		<mssql.version>9.4.1.jre11</mssql.version>
 		<ojdbc.version>19.13.0.0.1</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<xstream.version>1.4.18</xstream.version>
@@ -121,9 +121,9 @@
 		<jetty.version>9.4.44.v20210927</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
-		<mockito.version>4.2.0</mockito.version>
+		<mockito.version>4.3.1</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
-		<kurento.version>6.16.3</kurento.version>
+		<kurento.version>6.16.4</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
 		<jasny-bootstrap.version>3.1.3-2</jasny-bootstrap.version>
 		<jodconverter.version>4.4.2</jodconverter.version>
