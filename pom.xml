@@ -54,7 +54,7 @@
 		<license-maven-plugin.version>2.0.0</license-maven-plugin.version>
 		<reflow-maven-skin.version>2.3.0</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
-		<maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
+		<maven-compiler-plugin.version>3.10.0</maven-compiler-plugin.version>
 		<maven-project-info-reports-plugin.version>3.2.1</maven-project-info-reports-plugin.version>
 		<maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
