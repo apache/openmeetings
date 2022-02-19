@@ -15,7 +15,9 @@ REM #############################################
 set OM_HOME=%~dp0
 set OM_CONTEXT=openmeetings
 
+set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-modules java.se --add-exports java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED"
+
 set CLASSPATH=%OM_HOME%\*;%OM_HOME%\lib\*;%OM_HOME%\webapps\%OM_CONTEXT%\WEB-INF\lib\*;%OM_HOME%\webapps\%OM_CONTEXT%\WEB-INF;%OM_HOME%\webapps\%OM_CONTEXT%\WEB-INF\classes
 
-java -cp "%CLASSPATH%" -Dom_home=%OM_HOME% -Dcontext=%OM_CONTEXT% org.apache.openmeetings.cli.Admin %*
+java %JAVA_OPTS% -cp "%CLASSPATH%" -Dom_home=%OM_HOME% -Dcontext=%OM_CONTEXT% org.apache.openmeetings.cli.Admin %*
 

@@ -95,11 +95,6 @@ public class FileItemDao extends BaseFileItemDao {
 				.getResultList();
 	}
 
-	public FileItem getByHash(String hash) {
-		BaseFileItem bf = super.get(hash);
-		return bf instanceof FileItem ? (FileItem)bf : null;
-	}
-
 	@Override
 	public FileItem get(Long id) {
 		BaseFileItem bf = super.get(id);

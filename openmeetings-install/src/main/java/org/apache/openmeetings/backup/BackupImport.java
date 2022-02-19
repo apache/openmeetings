@@ -993,7 +993,7 @@ public class BackupImport {
 
 	private void checkHash(BaseFileItem file, BaseFileItemDao dao, BiConsumer<String, String> consumer) {
 		String oldHash = file.getHash();
-		if (Strings.isEmpty(oldHash) || !UUID_PATTERN.matcher(oldHash).matches() || dao.get(oldHash) != null) {
+		if (Strings.isEmpty(oldHash) || !UUID_PATTERN.matcher(oldHash).matches() || dao.get(oldHash, BaseFileItem.class) != null) {
 			file.setHash(randomUUID().toString());
 			hashMap.put(oldHash, file.getHash());
 			if (consumer != null) {

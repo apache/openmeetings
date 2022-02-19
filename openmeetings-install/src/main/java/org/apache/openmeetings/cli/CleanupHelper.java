@@ -80,7 +80,7 @@ public class CleanupHelper {
 		List<File> deleted = new ArrayList<>();
 		int missing = 0;
 		for (File f : list(parent, null)) {
-			FileItem item = fileDao.getByHash(f.getName());
+			FileItem item = fileDao.get(f.getName(), FileItem.class);
 			if (item == null) {
 				invalid.add(f);
 			} else if (item.isDeleted()) {
@@ -106,7 +106,7 @@ public class CleanupHelper {
 				continue;
 			}
 			String hash = f.getName().substring(0, f.getName().length() - EXTENSION_MP4.length() - 1);
-			Recording item = recordDao.getByHash(hash);
+			Recording item = recordDao.getAny(hash, Recording.class);
 			if (item == null) {
 				addAll(invalid, list(hash));
 			} else if (item.isDeleted()) {

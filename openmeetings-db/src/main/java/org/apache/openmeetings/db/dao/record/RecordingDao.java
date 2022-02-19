@@ -61,11 +61,6 @@ public class RecordingDao extends BaseFileItemDao {
 		return bf instanceof Recording ? (Recording)bf : null;
 	}
 
-	public Recording getByHash(String hash) {
-		BaseFileItem bf = super.get(hash);
-		return bf instanceof Recording ? (Recording)bf : null;
-	}
-
 	public List<Recording> getByExternalUser(String externalId, String externalType) {
 		log.debug("getByExternalUser :externalId: {}; externalType: {}", externalId, externalType);
 

@@ -110,10 +110,10 @@ class TestImportOld extends AbstractTestImport {
 			roomDao.getMyRooms(usr2.getId(), "bla", "bla1").forEach(r -> {
 				assertTrue(r.getComment().contains("user2_jira_2423"));
 			});
-			FileItem f1 = fileDao.getByHash("820b356c-2c96-4634-90c4-3e490432987f");
+			FileItem f1 = fileDao.get("820b356c-2c96-4634-90c4-3e490432987f", FileItem.class);
 			assertEquals(usr2.getId(), f1.getInsertedBy(), "Inserted by is wrong");
 			assertEquals(usr2.getId(), f1.getOwnerId(), "Owner is wrong");
-			FileItem f2 = fileDao.getByHash("7af3f90d-2a8d-44fa-9e0f-79fd87511cc6");
+			FileItem f2 = fileDao.get("7af3f90d-2a8d-44fa-9e0f-79fd87511cc6", FileItem.class);
 			assertEquals(grp2.getId(), f2.getGroupId(), "Group is wrong");
 		}
 	}
