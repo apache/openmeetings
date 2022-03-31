@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache</groupId>
 		<artifactId>apache</artifactId>
-		<version>24</version>
+		<version>25</version>
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
@@ -80,17 +80,17 @@
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
 		<!-- dependency versions -->
 		<junit.version>5.8.2</junit.version>
-		<wicket.version>9.8.0</wicket.version>
-		<wicket-jquery-ui.version>9.7.0</wicket-jquery-ui.version>
-		<wicketstuff.version>9.8.0</wicketstuff.version>
+		<wicket.version>9.9.0</wicket.version>
+		<wicket-jquery-ui.version>9.8.0</wicket-jquery-ui.version>
+		<wicketstuff.version>9.9.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version>
-		<font-awesome.version>6.0.0</font-awesome.version>
-		<spring.version>5.3.16</spring.version>
-		<tomcat.version>9.0.58</tomcat.version>
+		<font-awesome.version>6.1.0</font-awesome.version>
+		<spring.version>5.3.17</spring.version>
+		<tomcat.version>9.0.60</tomcat.version>
 		<ical4j.version>4.0.0-alpha11</ical4j.version>
-		<cxf.version>3.5.0</cxf.version>
+		<cxf.version>3.5.1</cxf.version>
 		<io.prometheus.version>0.15.0</io.prometheus.version>
-		<aspectjtools.version>1.9.8</aspectjtools.version>
+		<aspectjtools.version>1.9.9</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.1</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
@@ -99,7 +99,7 @@
 		<commons-lang3.version>3.12.0</commons-lang3.version>
 		<jakarta.mail.version>2.0.1</jakarta.mail.version>
 		<openjpa.version>3.2.1</openjpa.version>
-		<asterisk-java.version>3.26.0</asterisk-java.version>
+		<asterisk-java.version>3.28.0</asterisk-java.version>
 		<commons-dbcp.version>2.9.0</commons-dbcp.version>
 		<commons-pool2.version>2.11.1</commons-pool2.version>
 		<commons-cli.version>1.5.0</commons-cli.version>
@@ -109,7 +109,7 @@
 		<postgresql.version>42.3.3</postgresql.version>
 		<mysql.version>8.0.28</mysql.version>
 		<mssql.version>10.2.0.jre11</mssql.version>
-		<ojdbc.version>19.13.0.0.1</ojdbc.version>
+		<ojdbc.version>19.14.0.0</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<xstream.version>1.4.19</xstream.version>
 		<api-all.version>2.1.0</api-all.version>
@@ -118,12 +118,12 @@
 		<commons-text.version>1.9</commons-text.version>
 		<slf4j.version>1.7.35</slf4j.version>
 		<logback.version>1.2.10</logback.version>
-		<jetty.version>9.4.44.v20210927</jetty.version>
+		<jetty.version>9.4.45.v20220203</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
-		<mockito.version>4.3.1</mockito.version>
+		<mockito.version>4.4.0</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
-		<kurento.version>6.16.4</kurento.version>
+		<kurento.version>6.16.5</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
 		<jasny-bootstrap.version>3.1.3-2</jasny-bootstrap.version>
 		<jodconverter.version>4.4.2</jodconverter.version>
@@ -355,46 +355,34 @@
 			<post>mailto:user@openmeetings.apache.org</post>
 			<subscribe>mailto:user-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:user-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-user</archive>
-			<otherArchives>
-				<otherArchive>https://openmeetings.markmail.org</otherArchive>
-			</otherArchives>
+			<archive>https://lists.apache.org/list.html?user@openmeetings.apache.org</archive>
 		</mailingList>
 		<mailingList>
 			<name>Lista de usuarios en español</name>
 			<post>mailto:user-espanol@openmeetings.apache.org</post>
 			<subscribe>mailto:user-espanol-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:user-espanol-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-user-espanol</archive>
-			<otherArchives>
-				<otherArchive>https://openmeetings.markmail.org</otherArchive>
-			</otherArchives>
+			<archive>https://lists.apache.org/list.html?user-espanol@openmeetings.apache.org</archive>
 		</mailingList>
 		<mailingList>
 			<name>Русский список рассылки</name>
 			<post>mailto:user-russian@openmeetings.apache.org</post>
 			<subscribe>mailto:user-russian-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:user-russian-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-user-russian</archive>
-			<otherArchives>
-				<otherArchive>https://openmeetings.markmail.org</otherArchive>
-			</otherArchives>
+			<archive>https://lists.apache.org/list.html?user-russian@openmeetings.apache.org</archive>
 		</mailingList>
 		<mailingList>
 			<name>Development List</name>
 			<post>mailto:dev@openmeetings.apache.org</post>
 			<subscribe>mailto:dev-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:dev-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-dev</archive>
-			<otherArchives>
-				<otherArchive>https://openmeetings.markmail.org</otherArchive>
-			</otherArchives>
+			<archive>https://lists.apache.org/list.html?dev@openmeetings.apache.org</archive>
 		</mailingList>
 		<mailingList>
 			<name>Commits List</name>
 			<subscribe>mailto:commits-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>mailto:commits-unsubscribe@openmeetings.apache.org</unsubscribe>
-			<archive>https://mail-archives.apache.org/mod_mbox/openmeetings-commits/</archive>
+			<archive>https://lists.apache.org/list.html?commits@openmeetings.apache.org</archive>
 		</mailingList>
 		<mailingList>
 			<name>Security List</name>
