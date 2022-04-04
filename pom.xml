@@ -54,7 +54,7 @@
 		<license-maven-plugin.version>2.0.0</license-maven-plugin.version>
 		<reflow-maven-skin.version>2.3.0</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
-		<maven-compiler-plugin.version>3.10.0</maven-compiler-plugin.version>
+		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
 		<maven-project-info-reports-plugin.version>3.2.1</maven-project-info-reports-plugin.version>
 		<maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
@@ -85,12 +85,12 @@
 		<wicketstuff.version>9.9.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version>
 		<font-awesome.version>6.1.0</font-awesome.version>
-		<spring.version>5.3.17</spring.version>
-		<tomcat.version>9.0.60</tomcat.version>
+		<spring.version>5.3.18</spring.version>
+		<tomcat.version>9.0.62</tomcat.version>
 		<ical4j.version>4.0.0-alpha11</ical4j.version>
 		<cxf.version>3.5.1</cxf.version>
 		<io.prometheus.version>0.15.0</io.prometheus.version>
-		<aspectjtools.version>1.9.9</aspectjtools.version>
+		<aspectjtools.version>1.9.9.1</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.1</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
