@@ -25,6 +25,7 @@
 			<outputDirectory></outputDirectory>
 			<excludes>
 				<exclude>bin/*.sh</exclude>
+				<exclude>conf/context.xml</exclude>
 				<exclude>conf/server.xml</exclude>
 				<exclude>conf/web.xml</exclude>
 				<exclude>conf/tomcat-users*</exclude>
