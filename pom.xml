@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache</groupId>
 		<artifactId>apache</artifactId>
-		<version>25</version>
+		<version>26</version>
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
@@ -85,10 +85,10 @@
 		<wicketstuff.version>9.9.1</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version>
 		<font-awesome.version>6.1.0</font-awesome.version>
-		<spring.version>5.3.18</spring.version>
+		<spring.version>5.3.19</spring.version>
 		<tomcat.version>9.0.62</tomcat.version>
 		<ical4j.version>4.0.0-alpha11</ical4j.version>
-		<cxf.version>3.5.1</cxf.version>
+		<cxf.version>3.5.2</cxf.version>
 		<io.prometheus.version>0.15.0</io.prometheus.version>
 		<aspectjtools.version>1.9.9.1</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
