@@ -130,7 +130,7 @@ public class OpenmeetingsVariables {
 	public static final String DEFAULT_BASE_URL = "https://localhost:5443/openmeetings/";
 	public static final String DEFAULT_SIP_CONTEXT = "rooms";
 	public static final String DEFAULT_CSP_FONT = "https://fonts.gstatic.com";
-	public static final String DEFAULT_CSP_STYLE = "https://fonts.googleapis.com/css2";
+	public static final String DEFAULT_CSP_STYLE = SELF.getValue() + ",https://fonts.googleapis.com/css2";
 	public static final String DEFAULT_CSP_DATA = SELF.getValue() + ",data:";
 
 	private static String cryptClassName = null;

@@ -403,6 +403,7 @@ public class ImportInitvalues {
 				+ "United, Yeti", "6.1.0");
 		return list;
 	}
+
 	public void loadConfiguration(InstallationConfig cfg) {
 		for (Configuration c : initialCfgs(cfg)) {
 			cfgDao.update(c, null);
