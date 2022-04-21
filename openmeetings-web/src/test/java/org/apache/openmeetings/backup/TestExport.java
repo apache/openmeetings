@@ -64,14 +64,6 @@ class TestExport extends AbstractOmServerTest {
 		JAXBContext jc = JAXBContext.newInstance(eClazz);
 		Marshaller marshaller = jc.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		/* FIXME TODO
-		marshaller.setProperty(CharacterEscapeHandler.class.getName(), new CharacterEscapeHandler() {
-			@Override
-			public void escape(char[] ac, int i, int j, boolean flag, Writer writer) throws IOException {
-				writer.write(ac, i, j);
-			}
-		});
-		*/
 		StringWriter writer = new StringWriter();
 		marshaller.marshal(u, writer);
 		Assertions.assertNotNull(writer.getBuffer());
