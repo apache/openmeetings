@@ -65,8 +65,8 @@ public class ReminderJob extends AbstractJob {
 	@Autowired
 	private GroupUserDao groupUserDao;
 
-	//package private for testing
-	Map<Long, LocalDateTime> groupNotifications = new HashMap<>();
+	// public for testing
+	public Map<Long, LocalDateTime> groupNotifications = new HashMap<>();
 
 	public void remindMeetings() {
 		log.trace("ReminderJob.remindMeetings");

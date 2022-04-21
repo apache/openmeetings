@@ -85,7 +85,7 @@ class TestSubjTemplate extends AbstractWicketTesterTest {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			String getPrefix() {
+			public String getPrefix() {
 				return null;
 			}
 		};
