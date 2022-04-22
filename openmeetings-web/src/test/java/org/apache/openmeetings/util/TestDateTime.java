@@ -83,8 +83,11 @@ class TestDateTime {
 				.setLanguage("fr")
 				.setRegion("CA")
 				.build();
+		final String result = Runtime.version().feature() < 17
+				? "yy-MM-dd HH [h] mm" // java 11
+				: "y-MM-dd HH [h] mm"; // java 17
 		String format = AbstractOmDateTimePicker.getDateTimeFormat(loc);
-		assertEquals("yy-MM-dd HH [h] mm", AbstractOmDateTimePicker.patch(format));
+		assertEquals(result, AbstractOmDateTimePicker.patch(format));
 		format = AbstractOmDateTimePicker.getDateTimeFormat(Locale.ENGLISH);
 		assertEquals(format, AbstractOmDateTimePicker.patch(format));
 	}
