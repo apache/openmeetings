@@ -672,9 +672,9 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	bottom: 40px;
 	padding: 5px;
 	border: 1px solid;
-    border-radius: 0.2rem;
-    background-color: white;
-    border-color: var(--bs-info);
+	border-radius: 0.2rem;
+	background-color: white;
+	border-color: var(--bs-info);
 }
 #quick-vote .control {
 	display: inline-block;
