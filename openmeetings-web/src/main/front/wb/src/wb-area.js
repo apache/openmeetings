@@ -193,6 +193,7 @@ module.exports = class DrawWbArea extends WbAreaBase {
 				links.prop('disabled', true).addClass('disabled');
 				elems.find('button').remove();
 			}
+			__updateTabBarPreNextWhiteboardBTNs();
 			links.off()
 				.click(function(e) {
 					e.preventDefault();
@@ -220,6 +221,19 @@ module.exports = class DrawWbArea extends WbAreaBase {
 				const textSpan = _getWbTab($(this).parent().data('wb-id')).find('.wb-nav-tab-text').first();
 				textSpan.trigger('dblclick');
 			});
+		}
+		function __updateTabBarPreNextWhiteboardBTNs() {
+			if (role === Role.PRESENTER) {
+				const tabs = $('.room-block .wb-block .tabs');
+				const tabsNav = tabs.find('ul.nav-tabs li');
+				if (tabsNav.length > 1) {
+					tabs.find('.prev.om-icon').prop('disabled', false).removeClass('disabled');
+					tabs.find('.next.om-icon').prop('disabled', false).removeClass('disabled');
+				} else {
+					tabs.find('.prev.om-icon').prop('disabled', true).addClass('disabled');
+					tabs.find('.next.om-icon').prop('disabled', true).addClass('disabled');
+				}
+			}
 		}
 
 		this.init = (callback) => {
@@ -341,6 +355,7 @@ module.exports = class DrawWbArea extends WbAreaBase {
 			_getWbTab(obj.wbId).parent().remove();
 			_getWbContent(obj.wbId).remove();
 			_actionActivateWb(obj.prevWbId);
+			__updateTabBarPreNextWhiteboardBTNs();
 		};
 		this.load = (json) => {
 			if (!_inited) {
