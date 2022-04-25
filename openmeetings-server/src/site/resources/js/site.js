@@ -27,7 +27,7 @@ $(document).ready(function() {
 	$('.header .bannerRight').parent().append(
 		$('<div class="float-right">')
 			.append($('<a href="https://www.apache.org/events/current-event" class="apachecon-banner bannerRight">')
-				.append($('<img src="https://www.apache.org/events/current-event-234x60.png">'))
+				.append($('<img src="https://www.apachecon.com/acna2022/images/banner.png">'))
 				)
 		);
 })
