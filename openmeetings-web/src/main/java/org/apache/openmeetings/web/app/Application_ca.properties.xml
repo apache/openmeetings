@@ -974,6 +974,9 @@ Please visit {3} OM server and check them under Admin -> Groups]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[Please be patient ...]]></entry>
 	<entry key="warn.nogroup"><![CDATA[L'usuari va ser afegit, no obstant això haurà d'estar almenys en una organització per a poder iniciar la sessió.]]></entry>
 	<entry key="warn.notverified"><![CDATA[Ud s'ha registrat amb èxit. Li hem enviat un correu amb un codi de verificació. Per favor, revisi el seu compte de correu.]]></entry>
+	<entry key="wb.add.whiteboard"><![CDATA[Add new whiteboard to conference room]]></entry>
+	<entry key="wb.next.whiteboard"><![CDATA[Scroll whiteboard tabbar left]]></entry>
+	<entry key="wb.pre.whiteboard"><![CDATA[Scroll whiteboard tabbar right]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[Math formula]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Guide to LaTeX Syntax]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>

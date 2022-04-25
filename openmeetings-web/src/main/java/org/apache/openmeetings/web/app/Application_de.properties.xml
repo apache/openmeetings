@@ -969,6 +969,9 @@ Bitte am OM server {3} anmelden und sie unter Admininistration -> Gruppen prüfe
 	<entry key="wait-moderator.title"><![CDATA[Gedulden Sie sich bitte ...]]></entry>
 	<entry key="warn.nogroup"><![CDATA[Nutzer hinzugefügt. Vergessen Sie nicht, diesem Nutzer auch eine Organisation hinzuzufügen. Nutzer ohne Organisation können sich nicht einloggen.]]></entry>
 	<entry key="warn.notverified"><![CDATA[Sie haben sich erfolgreich angemeldet. Wir haben eine E-Mail mit einem Verifizierungscode an Ihre E-Mail-Adresse geschickt. Bitte überprüfen Sie Ihren Posteingang.]]></entry>
+	<entry key="wb.add.whiteboard"><![CDATA[Add new whiteboard to conference room]]></entry>
+	<entry key="wb.next.whiteboard"><![CDATA[Scroll whiteboard tabbar left]]></entry>
+	<entry key="wb.pre.whiteboard"><![CDATA[Scroll whiteboard tabbar right]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[Mathe Formeln]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Anleitung zur LaTeX Syntax]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://de.wikibooks.org/wiki/LaTeX-Kompendium:_Für_Mathematiker]]></entry>

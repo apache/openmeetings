@@ -973,6 +973,9 @@ vänligen ladda ned den dessförrinnan. ]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[Vänligen avvakta...]]></entry>
 	<entry key="warn.nogroup"><![CDATA[Användare tillagd, men du måste tilldela honom en Organisation för att kunna logga in.]]></entry>
 	<entry key="warn.notverified"><![CDATA[Du har registrerat dig med framgång. Vi har skickat ett e-postmeddelande till dig med din verifikationskod.]]></entry>
+	<entry key="wb.add.whiteboard"><![CDATA[Add new whiteboard to conference room]]></entry>
+	<entry key="wb.next.whiteboard"><![CDATA[Scroll whiteboard tabbar left]]></entry>
+	<entry key="wb.pre.whiteboard"><![CDATA[Scroll whiteboard tabbar right]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[Matematisk formel]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Guide till LaTeX-syntax]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>

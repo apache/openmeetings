@@ -965,6 +965,9 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="wait-moderator.title"><![CDATA[يرجى التحلي بالصبر ...]]></entry>
 	<entry key="warn.nogroup"><![CDATA[تمت إضافة المستخدم لكن يجب إنساب هذا المستخدم إلى تنظيم و إلا لن يمكنه تسجيل الدخول]]></entry>
 	<entry key="warn.notverified"><![CDATA[لقد سجلت بنجاح. سيتم إرسال بريد إلكتروني برمز التحقق إلى صندوق البريد الخاص بك.]]></entry>
+	<entry key="wb.add.whiteboard"><![CDATA[Add new whiteboard to conference room]]></entry>
+	<entry key="wb.next.whiteboard"><![CDATA[Scroll whiteboard tabbar left]]></entry>
+	<entry key="wb.pre.whiteboard"><![CDATA[Scroll whiteboard tabbar right]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[صيغ الرياضيات]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[دليل بناء الجملة الرياضاتيه]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>

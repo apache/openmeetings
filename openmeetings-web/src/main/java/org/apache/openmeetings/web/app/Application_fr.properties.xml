@@ -968,6 +968,9 @@ dans {1} jours. Si vous souhaitez sauvegarder cet enregistrement, veuillez le t�
 	<entry key="wait-moderator.title"><![CDATA[Patientez s'il vous plaît..]]></entry>
 	<entry key="warn.nogroup"><![CDATA[Utilisateur ajouté. Si vous ne l'avez pas assigné à une organisation, veuillez le faire sans quoi il ne pourra pas se connecter.]]></entry>
 	<entry key="warn.notverified"><![CDATA[Vous êtes enregistré. Nous vous avons envoyé un courriel avec un code de vérification. Regardez votre boite de messagerie.]]></entry>
+	<entry key="wb.add.whiteboard"><![CDATA[Add new whiteboard to conference room]]></entry>
+	<entry key="wb.next.whiteboard"><![CDATA[Scroll whiteboard tabbar left]]></entry>
+	<entry key="wb.pre.whiteboard"><![CDATA[Scroll whiteboard tabbar right]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[Formule mathématique]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Guide de la syntaxe LaTeX]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://fr.wikibooks.org/wiki/LaTeX/%C3%89crire_des_math%C3%A9matiques]]></entry>
