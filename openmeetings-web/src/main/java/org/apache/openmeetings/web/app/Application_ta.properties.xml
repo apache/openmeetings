@@ -988,4 +988,7 @@ Please visit {3} OM server and check them under Admin -> Groups]]></entry>
 	<entry key="wizard.button.finish"><![CDATA[Finish]]></entry>
 	<entry key="zoom.FULL_FIT"><![CDATA[Full-Fit]]></entry>
 	<entry key="zoom.PAGE_WIDTH"><![CDATA[Page Width]]></entry>
+	<entry key="wb.add.whiteboard"><![CDATA[Add new whiteboard to conference room]]></entry>
+	<entry key="wb.pre.whiteboard"><![CDATA[Scroll whiteboard tabbar right]]></entry>
+	<entry key="wb.next.whiteboard"><![CDATA[Scroll whiteboard tabbar left]]></entry>
 </properties>
