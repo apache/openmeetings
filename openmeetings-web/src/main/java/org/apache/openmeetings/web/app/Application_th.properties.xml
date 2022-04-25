@@ -974,6 +974,9 @@ Please visit {3} OM server and check them under Admin -> Groups]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[Please be patient ...]]></entry>
 	<entry key="warn.nogroup"><![CDATA[เพิ่มผู้ใช้แล้ว แต่คุณต้องมอบหมายผู้ใช้รายนี้ให้แก่องค์กรใดองค์กรหนึ่ง มิฉะนั้นเขาจะไม่สามารถลงชื่อเข้าใช้ได้]]></entry>
 	<entry key="warn.notverified"><![CDATA[You successfully signed up. We've send an EMail with a verification Code to your Mail. Please check your Inbox.]]></entry>
+	<entry key="wb.add.whiteboard"><![CDATA[Add new whiteboard to conference room]]></entry>
+	<entry key="wb.next.whiteboard"><![CDATA[Scroll whiteboard tabbar left]]></entry>
+	<entry key="wb.pre.whiteboard"><![CDATA[Scroll whiteboard tabbar right]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[Math formula]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Guide to LaTeX Syntax]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>

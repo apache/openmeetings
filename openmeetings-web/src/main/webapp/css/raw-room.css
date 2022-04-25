@@ -62,7 +62,7 @@
 	padding-inline-end: 15px;
 }
 .room-block .sb-wb .sidebar .tab.user .label {
-	width: calc((var(--sidebar-width) - 50px) / 2 - 60px);
+	width: calc((var(--sidebar-width) - 50px) / 2 - 80px);
 }
 html[dir="rtl"] .room-block .sb-wb .sidebar {
 	right: 0;
@@ -725,7 +725,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	display: inline-block;
 	list-style: none;
 	list-style-type: none;
-	padding: 0 .5em;
+	padding: 0 .3em;
 	border-bottom-width: inherit;
 	height: 25px;
 	position: absolute;

@@ -954,6 +954,9 @@ Please visit {3} OM server and check them under Admin -> Groups]]></entry>
 	<entry key="wait-moderator.title"><![CDATA[Please be patient ...]]></entry>
 	<entry key="warn.nogroup"><![CDATA[Felhasználó hozzáadva de hozzá kell rendelni Szervezethez, különben nem fog tudni bejelentkezni.]]></entry>
 	<entry key="warn.notverified"><![CDATA[Regisztráció kérését fogadtuk. Küldtünk egy megerősítést kérő linket a megadott e-mail címére, kérjük keresse fel az e-mail fiókját, a regisztrációs kérést vissza kell igazolnia!]]></entry>
+	<entry key="wb.add.whiteboard"><![CDATA[Add new whiteboard to conference room]]></entry>
+	<entry key="wb.next.whiteboard"><![CDATA[Scroll whiteboard tabbar left]]></entry>
+	<entry key="wb.pre.whiteboard"><![CDATA[Scroll whiteboard tabbar right]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[Math formula]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Guide to LaTeX Syntax]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>
