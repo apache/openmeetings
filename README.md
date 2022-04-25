@@ -19,7 +19,7 @@ Documentation for Installation and Upgrade:
   - https://openmeetings.apache.org/Upgrade.html
 
 Along with the developer mailing list archive:
-  - https://openmeetings.apache.org/mail-lists.html
+  - https://openmeetings.apache.org/mailing-lists.html
 
 
 System Requirements
