@@ -551,7 +551,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.email.status.ERROR"><![CDATA[Fehler]]></entry>
 	<entry key="admin.email.status.NONE"><![CDATA[keine]]></entry>
 	<entry key="admin.email.status.SENDING"><![CDATA[senden]]></entry>
-	<entry key="admin.extra.group.label"><![CDATA[URL details]]></entry>
+	<entry key="admin.extra.group.label"><![CDATA[URL Details]]></entry>
 	<entry key="admin.extra.link"><![CDATA[URL]]></entry>
 	<entry key="admin.group.form.days"><![CDATA[Tage]]></entry>
 	<entry key="admin.group.form.limited"><![CDATA[Begrenzungen aktiv]]></entry>
@@ -847,9 +847,9 @@ Bitte <tt>openmeetings.log</tt> prüfen und die OpenMeetings-Entwickeler kontakt
 	<entry key="lbl.video"><![CDATA[Video]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[E-Mail Management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[E-Mail-Prozess im System überprüfen]]></entry>
-	<entry key="main.menu.admin.extra"><![CDATA[Extra Menu]]></entry>
-	<entry key="main.menu.admin.extra.desc"><![CDATA[Custom links to room menu]]></entry>
-	<entry key="menu.extras"><![CDATA[Extras]]></entry>
+	<entry key="main.menu.admin.extra"><![CDATA[Zusätzliches Menü]]></entry>
+	<entry key="main.menu.admin.extra.desc"><![CDATA[Benutzerdefinierte Hyperlinks in Konferenz Menübar]]></entry>
+	<entry key="menu.extras"><![CDATA[Zusätzlich Einstellungen]]></entry>
 	<entry key="menu.polls"><![CDATA[Umfragen]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[Feedback ohne Umfage anzulegegen ]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[Schnelle Abstimmung erzeugen]]></entry>
@@ -969,9 +969,9 @@ Bitte am OM server {3} anmelden und sie unter Admininistration -> Gruppen prüfe
 	<entry key="wait-moderator.title"><![CDATA[Gedulden Sie sich bitte ...]]></entry>
 	<entry key="warn.nogroup"><![CDATA[Nutzer hinzugefügt. Vergessen Sie nicht, diesem Nutzer auch eine Organisation hinzuzufügen. Nutzer ohne Organisation können sich nicht einloggen.]]></entry>
 	<entry key="warn.notverified"><![CDATA[Sie haben sich erfolgreich angemeldet. Wir haben eine E-Mail mit einem Verifizierungscode an Ihre E-Mail-Adresse geschickt. Bitte überprüfen Sie Ihren Posteingang.]]></entry>
-	<entry key="wb.add.whiteboard"><![CDATA[Add new whiteboard to conference room]]></entry>
-	<entry key="wb.next.whiteboard"><![CDATA[Scroll whiteboard tabbar left]]></entry>
-	<entry key="wb.pre.whiteboard"><![CDATA[Scroll whiteboard tabbar right]]></entry>
+	<entry key="wb.add.whiteboard"><![CDATA[Neues Whiteboard zur Konferenz hinzufügen]]></entry>
+	<entry key="wb.next.whiteboard"><![CDATA[Whiteboard Tabbar nach links verschieben]]></entry>
+	<entry key="wb.pre.whiteboard"><![CDATA[Whiteboard Tabbar nach rechts verschieben]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[Mathe Formeln]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Anleitung zur LaTeX Syntax]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://de.wikibooks.org/wiki/LaTeX-Kompendium:_Für_Mathematiker]]></entry>
@@ -984,7 +984,4 @@ Bitte am OM server {3} anmelden und sie unter Admininistration -> Gruppen prüfe
 	<entry key="wizard.button.finish"><![CDATA[Ende]]></entry>
 	<entry key="zoom.FULL_FIT"><![CDATA[Vollformat]]></entry>
 	<entry key="zoom.PAGE_WIDTH"><![CDATA[Seitenbreite]]></entry>
-	<entry key="wb.add.whiteboard"><![CDATA[Add new whiteboard to conference room]]></entry>
-	<entry key="wb.pre.whiteboard"><![CDATA[Scroll whiteboard tabbar right]]></entry>
-	<entry key="wb.next.whiteboard"><![CDATA[Scroll whiteboard tabbar left]]></entry>
 </properties>
