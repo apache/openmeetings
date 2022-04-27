@@ -19,15 +19,16 @@
 */
 $(document).ready(function() {
 	// "New" markers
-	var topics = ["Call For Logo", "REST API Swagger"];
-	for (var i = 0; i < topics.length; ++i) {
-		$('ul.nav li a[title="' + topics[i] + '"').append('&nbsp;&nbsp;<span class="badge badge-success">New</span>')
+	["Call For Logo", "REST API Swagger"].forEach(
+		topic => $('ul.nav li a[title="' + topic + '"').append('&nbsp;&nbsp;<span class="badge badge-success">New</span>')
+	);
+	// "ApacheCon" banner on the right
+	$('.header .bannerRight').parent()
+		.append($('<div class="float-right">')
+			.append($('<a class="apachecon-banner bannerRight acevent" data-format="wide" data-width="250"></a>')));
+	const banners = $('.acevent>img');
+	if (banners.length !== 2) {
+		banners.remove();
+		render_snippet();
 	}
-	// "ACNA" banner on the right
-	$('.header .bannerRight').parent().append(
-		$('<div class="float-right">')
-			.append($('<a href="https://www.apache.org/events/current-event" class="apachecon-banner bannerRight">')
-				.append($('<img src="https://www.apache.org/events/current-event-234x60.png">'))
-				)
-		);
 })

@@ -75,9 +75,17 @@
 			<highlightJs>true</highlightJs>
 			<highlightJsTheme>github</highlightJsTheme>
 			<endContent>
+				<script src="https://www.apachecon.com/event-images/snippet.js"></script>
 				<script type="text/javascript" src="$resourcePath/js/site.js"></script>
-				<p class="text-center">Apache OpenMeetings, OpenMeetings, Apache, the Apache feather, and the Apache OpenMeetings project logo</p>
-				<p class="text-center">are trademarks of the Apache Software Foundation.</p>
+				<div class="text-center">
+					Apache OpenMeetings, OpenMeetings, Apache, the Apache feather, and the Apache OpenMeetings project logo
+				</div>
+				<div class="text-center">
+					are trademarks of the Apache Software Foundation.
+				</div>
+				<div class="text-center">
+					<a href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy policy</a>
+				</div>
 			</endContent>
 		</reflowSkin>
 	</custom>

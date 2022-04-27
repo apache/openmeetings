@@ -139,9 +139,7 @@
 				<div class="row">
 					<div class="col-md-1"></div>
 					<div class="col-md-8">
-						<a href="https://www.apache.org/events/current-event">
-							<img alt="ASF Current Events" src="https://www.apache.org/events/current-event-234x60.png"/>
-						</a>
+						<a href="#" class="acevent" data-format="wide" data-width="250"></a>
 					</div>
 				</div>
 			</div>
