@@ -171,3 +171,6 @@ html[dir="rtl"] .room-block .sb-wb .wb-block .tabs .wb-tabbar li a .wb-tab-close
 html[dir="rtl"] #video-settings .close {
 	margin: 0 auto 0 0;
 }
+html[dir="rtl"] .modal-header .btn-close {
+    margin: -0.5rem auto -0.5rem -0.5rem;
+}
