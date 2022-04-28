@@ -55,7 +55,7 @@
 		<reflow-maven-skin.version>2.3.0</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-		<maven-project-info-reports-plugin.version>3.2.2</maven-project-info-reports-plugin.version>
+		<maven-project-info-reports-plugin.version>3.3.0</maven-project-info-reports-plugin.version>
 		<maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
@@ -99,7 +99,7 @@
 		<commons-lang3.version>3.12.0</commons-lang3.version>
 		<jakarta.mail.version>2.0.1</jakarta.mail.version>
 		<openjpa.version>3.2.2</openjpa.version>
-		<asterisk-java.version>3.28.0</asterisk-java.version>
+		<asterisk-java.version>3.29.0</asterisk-java.version>
 		<commons-dbcp.version>2.9.0</commons-dbcp.version>
 		<commons-pool2.version>2.11.1</commons-pool2.version>
 		<commons-cli.version>1.5.0</commons-cli.version>
@@ -107,7 +107,7 @@
 		<commons-codec.version>1.15</commons-codec.version>
 		<commons-io.version>2.11.0</commons-io.version>
 		<postgresql.version>42.3.4</postgresql.version>
-		<mysql.version>8.0.28</mysql.version>
+		<mysql.version>8.0.29</mysql.version>
 		<mssql.version>10.2.0.jre11</mssql.version>
 		<ojdbc.version>19.14.0.0</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
@@ -121,7 +121,7 @@
 		<jetty.version>9.4.46.v20220331</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
-		<mockito.version>4.5.0</mockito.version>
+		<mockito.version>4.5.1</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.16.5</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
