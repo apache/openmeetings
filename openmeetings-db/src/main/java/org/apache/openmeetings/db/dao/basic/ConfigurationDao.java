@@ -21,7 +21,7 @@ package org.apache.openmeetings.db.dao.basic;
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.*;
-import static org.apache.openmeetings.util.Version.getLine;
+import static org.apache.openmeetings.util.OmVersion.getLine;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.SELF;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.STRICT_DYNAMIC;
 

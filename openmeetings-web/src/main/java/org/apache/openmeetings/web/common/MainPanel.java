@@ -103,7 +103,7 @@ public class MainPanel extends Panel {
 	private ChatPanel chat;
 	private MessageDialog newMessage;
 	private UserInfoDialog userInfo;
-	private BasePanel panel;
+	private BasePanel curPanel;
 	private InviteUserToRoomDialog inviteUser;
 
 	@SpringBean
@@ -119,9 +119,9 @@ public class MainPanel extends Panel {
 		this(id, null);
 	}
 
-	public MainPanel(String id, BasePanel panel) {
+	public MainPanel(String id, BasePanel curPanel) {
 		super(id);
-		this.panel = panel;
+		this.curPanel = curPanel;
 		setAuto(true);
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
@@ -161,8 +161,8 @@ public class MainPanel extends Panel {
 
 			@Override
 			protected void onConnect(WebSocketRequestHandler handler) {
-				if (panel != null) {
-					updateContents(panel, handler);
+				if (curPanel != null) {
+					updateContents(curPanel, handler);
 				}
 			}
 
@@ -191,7 +191,7 @@ public class MainPanel extends Panel {
 		});
 		menu = new MenuPanel("menu", getMainMenu());
 		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
-		add(contents.add(getClient() == null || panel == null ? empty : panel).setOutputMarkupId(true).setMarkupId("contents"));
+		add(contents.add(getClient() == null || curPanel == null ? empty : curPanel).setOutputMarkupId(true).setMarkupId("contents"));
 		topControls.add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
 		final AboutDialog about = new AboutDialog("aboutDialog");
 		topLinks.add(new AjaxLink<Void>("about") {
@@ -419,7 +419,7 @@ public class MainPanel extends Panel {
 			if (getClient() != null) {
 				updateContents(npanel, handler);
 			} else {
-				this.panel = npanel;
+				this.curPanel = npanel;
 			}
 			if (updateFragment) {
 				UrlFragment uf = new UrlFragment(handler);

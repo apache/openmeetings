@@ -63,7 +63,7 @@ public class ActivitiesPanel extends Panel {
 	private static final FastDateFormat df = FastDateFormat.getInstance("HH:mm:ss");
 	private final Map<String, Activity> activities = new LinkedHashMap<>();
 	private final RoomPanel room;
-	private final AbstractDefaultAjaxBehavior action = new AbstractDefaultAjaxBehavior() {
+	private final AbstractDefaultAjaxBehavior actionBehavior = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
 		private TextRoomMessage getRemoveMsg(String id) {
@@ -155,7 +155,7 @@ public class ActivitiesPanel extends Panel {
 		setVisible(!room.getRoom().isHidden(RoomElement.ACTIVITIES));
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
-		add(action);
+		add(actionBehavior);
 	}
 
 	private boolean shouldSkip(final boolean self, final Activity a) {

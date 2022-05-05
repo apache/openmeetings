@@ -63,7 +63,7 @@ public abstract class UploadResourceReference extends ResourceReference {
 	@SpringBean
 	private ClientManager cm;
 
-	public UploadResourceReference(Class<?> scope, String name) {
+	protected UploadResourceReference(Class<?> scope, String name) {
 		super(scope, name);
 		Injector.get().inject(this);
 	}

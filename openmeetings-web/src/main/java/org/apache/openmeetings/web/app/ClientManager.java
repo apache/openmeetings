@@ -107,14 +107,10 @@ public class ClientManager implements IClientManager {
 		onlineServers.putAll(servers());
 		map().addEntryListener(new ClientListener(), true);
 		rooms().addEntryListener(new RoomListener(), true);
-		servers().addEntryListener(new EntryUpdatedListener<String, ServerInfo>() {
-
-			@Override
-			public void entryUpdated(EntryEvent<String, ServerInfo> event) {
-				log.debug("Cluster:: Server was updated {} -> {}", event.getKey(), event.getValue());
-				onlineServers.put(event.getKey(), event.getValue());
-			}
-		}, true);
+		servers().addEntryListener((EntryUpdatedListener<String, ServerInfo>)(event -> {
+			log.debug("Cluster:: Server was updated {} -> {}", event.getKey(), event.getValue());
+			onlineServers.put(event.getKey(), event.getValue());
+		}), true);
 	}
 
 	public void add(Client c) {

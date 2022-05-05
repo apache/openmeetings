@@ -42,7 +42,7 @@ public abstract class UploadForm extends Panel {
 	private final String action;
 	protected final WebMarkupContainer form = new WebMarkupContainer("form");
 
-	public UploadForm(String id, String action) {
+	protected UploadForm(String id, String action) {
 		super(id);
 		this.action = action;
 		setRenderBodyOnly(true);

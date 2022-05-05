@@ -770,8 +770,6 @@ public class InstallWizard extends BootstrapWizard {
 					target.add(container.replace(new ErrorMessagePanel("status", getString("install.wizard.install.failed"), th))
 						, desc.setVisible(false)
 						);
-				} else {
-					//onComplete(target);
 				}
 				super.onPostProcessTarget(target);
 			}

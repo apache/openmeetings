@@ -474,19 +474,12 @@ public class BackupImport {
 						fileItemDao.updateBase(bfi);
 					}
 					if (BaseFileItem.Type.WML_FILE == bfi.getType()) {
-						try {
-							Whiteboard wb = WbConverter.convert(bfi);
-							wb.save(bfi.getFile().toPath());
-						} catch (Exception e) {
-							log.error("Unexpected error while converting WB", e);
-						}
+						convertWb(bfi);
 					}
 				}
 			}
 			log.info("File explorer item import complete");
 			success = true;
-		} catch (Exception e) {
-			throw e;
 		} finally {
 			if (f != null) {
 				log.info("Clearing temp files ...");
@@ -496,6 +489,15 @@ public class BackupImport {
 			if (success) {
 				progress.set(100);
 			}
+		}
+	}
+
+	private void convertWb(FileItem bfi) {
+		try {
+			Whiteboard wb = WbConverter.convert(bfi);
+			wb.save(bfi.getFile().toPath());
+		} catch (Exception e) {
+			log.error("Unexpected error while converting WB", e);
 		}
 	}
 

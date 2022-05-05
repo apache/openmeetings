@@ -48,11 +48,11 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public class RecordingsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
+	private static final String recordingInviteDialogId = "recordingInviteDialog";
 	private final VideoPlayer video = new VideoPlayer("video");
 	private final VideoInfo info = new VideoInfo("info");
 	private FileTreePanel fileTree;
 	private InvitationDialog invite;
-	private final static String recordingInviteDialogId = "recordingInviteDialog";
 	private RecordingInvitationForm rif = new RecordingInvitationForm("form", recordingInviteDialogId);
 
 	@SpringBean

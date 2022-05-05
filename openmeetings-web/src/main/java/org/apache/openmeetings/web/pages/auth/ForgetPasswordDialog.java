@@ -141,54 +141,6 @@ public class ForgetPasswordDialog extends Modal<String> {
 		this.s = s;
 	}
 
-	/**
-	 * reset a username by a given mail oder login by sending a mail to the
-	 * registered EMail-Address
-	 *
-	 * @param email - email of the user
-	 * @param username - username of the user
-	 * @return <code>true</code> in case reset was successful, <code>false</code> otherwise
-	 */
-	private boolean resetUser(String email, String username) {
-		try {
-			log.debug("resetUser {}", email);
-
-			// check if Mail given
-			if (!Strings.isEmpty(email)) {
-				User us = userDao.getByEmail(email);
-				if (us != null) {
-					sendHashByUser(us);
-					return true;
-				}
-			} else if (!Strings.isEmpty(username)) {
-				User us = userDao.getByLogin(username, User.Type.USER, null);
-				if (us != null) {
-					sendHashByUser(us);
-					return true;
-				}
-			}
-		} catch (Exception e) {
-			log.error("[resetUser]", e);
-		}
-		return false;
-	}
-
-	private void sendHashByUser(User us) {
-		log.debug("User: {}", us.getLogin());
-		us.setResethash(randomUUID().toString());
-		us.setResetDate(new Date());
-		userDao.update(us, null);
-		String resetLink = urlForPage(ResetPage.class
-				, new PageParameters().add("hash", us.getResethash())
-				, getBaseUrl());
-
-		String email = us.getAddress().getEmail();
-
-		String template = ResetPasswordTemplate.getEmail(resetLink);
-
-		mailHandler.send(email, Application.getString("517"), template); // Application should be used here to fill placeholder
-	}
-
 	private class ForgetPasswordForm extends Form<String> {
 		private static final long serialVersionUID = 1L;
 
@@ -268,6 +220,54 @@ public class ForgetPasswordDialog extends Modal<String> {
 			resetUser(type == Type.email ? nm : "", type == Type.login ? nm : "");
 			wasReset = true;
 			ForgetPasswordDialog.this.close(target);
+		}
+
+		/**
+		 * reset a username by a given mail oder login by sending a mail to the
+		 * registered EMail-Address
+		 *
+		 * @param email - email of the user
+		 * @param username - username of the user
+		 * @return <code>true</code> in case reset was successful, <code>false</code> otherwise
+		 */
+		private boolean resetUser(String email, String username) {
+			try {
+				log.debug("resetUser {}", email);
+
+				// check if Mail given
+				if (!Strings.isEmpty(email)) {
+					User us = userDao.getByEmail(email);
+					if (us != null) {
+						sendHashByUser(us);
+						return true;
+					}
+				} else if (!Strings.isEmpty(username)) {
+					User us = userDao.getByLogin(username, User.Type.USER, null);
+					if (us != null) {
+						sendHashByUser(us);
+						return true;
+					}
+				}
+			} catch (Exception e) {
+				log.error("[resetUser]", e);
+			}
+			return false;
+		}
+
+		private void sendHashByUser(User us) {
+			log.debug("User: {}", us.getLogin());
+			us.setResethash(randomUUID().toString());
+			us.setResetDate(new Date());
+			userDao.update(us, null);
+			String resetLink = urlForPage(ResetPage.class
+					, new PageParameters().add("hash", us.getResethash())
+					, getBaseUrl());
+
+			String email = us.getAddress().getEmail();
+
+			String template = ResetPasswordTemplate.getEmail(resetLink);
+
+			mailHandler.send(email, Application.getString("517"), template); // Application should be used here to fill placeholder
 		}
 	}
 }

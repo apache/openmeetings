@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.util;
 
-import static org.apache.openmeetings.util.Version.getBuildDate;
-import static org.apache.openmeetings.util.Version.getRevision;
-import static org.apache.openmeetings.util.Version.getVersion;
-import static org.apache.openmeetings.util.Version.logOMStarted;
+import static org.apache.openmeetings.util.OmVersion.getBuildDate;
+import static org.apache.openmeetings.util.OmVersion.getRevision;
+import static org.apache.openmeetings.util.OmVersion.getVersion;
+import static org.apache.openmeetings.util.OmVersion.logOMStarted;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

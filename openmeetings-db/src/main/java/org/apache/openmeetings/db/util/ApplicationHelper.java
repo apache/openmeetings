@@ -26,7 +26,6 @@ import static org.springframework.web.context.support.WebApplicationContextUtils
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -80,10 +79,7 @@ public class ApplicationHelper {
 				app.setServletContext(sc);
 				if (app.getWicketFilter() == null) {
 					final FilterConfig filterConfig = new FilterConfig() {
-						private final Map<String, String> initParameters = new HashMap<>();
-						{
-							initParameters.put(WicketFilter.FILTER_MAPPING_PARAM, "/servlet/*");
-						}
+						private final Map<String, String> initParameters = Map.of(WicketFilter.FILTER_MAPPING_PARAM, "/servlet/*");
 
 						@Override
 						public String getFilterName() {

@@ -222,13 +222,13 @@ public class IcalHandler {
 	@Override
 	public String toString() {
 		if (icsCalendar == null) {
-			return null;
+			return "";
 		}
 		try {
 			return new String(toByteArray(), UTF_8);
 		} catch (IOException e) {
 			log.error("Unexpected error", e);
 		}
-		return null;
+		return "";
 	}
 }

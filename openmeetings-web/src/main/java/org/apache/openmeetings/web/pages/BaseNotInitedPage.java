@@ -33,7 +33,7 @@ public abstract class BaseNotInitedPage extends BasePage {
 
 	@Override
 	public boolean isRtl() {
-		return Application.isInstalled() ? WebSession.get().isRtlLocale() : false;
+		return Application.isInstalled() && WebSession.get().isRtlLocale();
 	}
 
 	@Override

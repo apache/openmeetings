@@ -24,8 +24,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Version {
-	private static final Logger log = LoggerFactory.getLogger(Version.class);
+public class OmVersion {
+	private static final Logger log = LoggerFactory.getLogger(OmVersion.class);
 	private static final int TOTAL_LENGTH = 78;
 	private static String version = null;
 	private static String revision = null;
@@ -33,7 +33,7 @@ public class Version {
 	static {
 		try {
 			Properties props = new Properties();
-			try (InputStream is = Version.class.getResourceAsStream("version.properties")) {
+			try (InputStream is = OmVersion.class.getResourceAsStream("version.properties")) {
 				props.load(is);
 			}
 			version = props.getProperty("version");
@@ -44,7 +44,7 @@ public class Version {
 		}
 	}
 
-	private Version() {}
+	private OmVersion() {}
 
 	public static String getVersion() {
 		return version;

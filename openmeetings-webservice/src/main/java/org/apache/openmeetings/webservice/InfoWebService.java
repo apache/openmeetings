@@ -34,7 +34,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dto.basic.Health;
 import org.apache.openmeetings.db.dto.basic.Info;
-import org.apache.openmeetings.util.Version;
+import org.apache.openmeetings.util.OmVersion;
 import org.apache.openmeetings.webservice.schema.HealthWrapper;
 import org.apache.openmeetings.webservice.schema.InfoWrapper;
 import org.springframework.stereotype.Service;
@@ -107,8 +107,8 @@ public class InfoWebService {
 	public String getManifest() {
 		URI omPath = getWebappPath();
 		return new JSONObject()
-				.put("name", getApplicationName() + " " + Version.getVersion())
-				.put("short_name", getApplicationName() + " " + Version.getVersion())
+				.put("name", getApplicationName() + " " + OmVersion.getVersion())
+				.put("short_name", getApplicationName() + " " + OmVersion.getVersion())
 				.put("description", "Openmeetings provides video conferencing, instant messaging, white board, collaborative document editing and other groupware tools.")
 				.put("start_url",  omPath.resolve("?pwa=true"))
 				.put("scope", "/")

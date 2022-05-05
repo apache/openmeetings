@@ -162,12 +162,12 @@ public class IcalUtils {
 	}
 
 	private Date getDate(CalendarComponent event, String prop) {
-		return getDate(event.getProperty(prop).get());
+		return getDate(event.getProperty(prop).orElse(null));
 	}
 
 	@SuppressWarnings("unchecked")
 	private Date getDate(Property prop) {
-		return Date.from(Instant.from(((DateProperty<? extends Temporal>)prop).getDate()));
+		return prop == null ? null : Date.from(Instant.from(((DateProperty<? extends Temporal>)prop).getDate()));
 	}
 
 	/**

@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class ExtraMenuDao implements IGroupAdminDataProviderDao<ExtraMenu> {
-	public final static String[] searchFields = {"name", "link", "description"};
+	private static final String[] searchFields = {"name", "link", "description"};
 
 	@PersistenceContext
 	private EntityManager em;

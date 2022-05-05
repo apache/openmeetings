@@ -45,7 +45,7 @@ public class ExtraForm extends AdminBaseForm<ExtraMenu> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer list;
 	final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
-			, new CollectionModel<>(new ArrayList<Group>())
+			, new CollectionModel<>(new ArrayList<>())
 			, new GroupChoiceProvider());
 
 	@SpringBean

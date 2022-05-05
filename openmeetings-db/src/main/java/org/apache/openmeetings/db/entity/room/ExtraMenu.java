@@ -32,7 +32,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -46,12 +45,10 @@ import org.apache.openmeetings.db.bind.adapter.LongAdapter;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name = "getExtraMenuById", query = "SELECT m FROM ExtraMenu m WHERE m.id = :id")
-	, @NamedQuery(name = "getExtraMenus", query = "SELECT m FROM ExtraMenu m")
-	, @NamedQuery(name = "getExtraMenuByGroups", query = "SELECT m FROM ExtraMenu m WHERE m.groups IS NULL OR m.groups IN (:ids)")
-	, @NamedQuery(name = "countExtraMenus", query = "SELECT COUNT(m) FROM ExtraMenu m")
-})
+@NamedQuery(name = "getExtraMenuById", query = "SELECT m FROM ExtraMenu m WHERE m.id = :id")
+@NamedQuery(name = "getExtraMenus", query = "SELECT m FROM ExtraMenu m")
+@NamedQuery(name = "getExtraMenuByGroups", query = "SELECT m FROM ExtraMenu m WHERE m.groups IS NULL OR m.groups IN (:ids)")
+@NamedQuery(name = "countExtraMenus", query = "SELECT COUNT(m) FROM ExtraMenu m")
 @Table(name = "extra_menu")
 @XmlRootElement(name = EXTRA_MENU_NODE)
 @XmlAccessorType(XmlAccessType.FIELD)

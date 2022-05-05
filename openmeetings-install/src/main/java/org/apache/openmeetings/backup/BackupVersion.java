@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.openmeetings.db.bind.adapter.IntAdapter;
-import org.apache.openmeetings.util.Version;
+import org.apache.openmeetings.util.OmVersion;
 
 @XmlRootElement(name = VERSION_NODE)
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -74,7 +74,7 @@ public class BackupVersion implements Serializable, Comparable<BackupVersion> {
 	}
 
 	public static BackupVersion get() {
-		String ver = Version.getVersion();
+		String ver = OmVersion.getVersion();
 		return get(ver);
 	}
 

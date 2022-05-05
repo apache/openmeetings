@@ -24,6 +24,8 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.Confi
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
 public class ConfirmationHelper {
+	private ConfirmationHelper() {}
+
 	public static ConfirmationBehavior newOkCancelConfirm(Component c, String title) {
 		return new ConfirmationBehavior(newOkCancelConfirmCfg(c, title));
 	}

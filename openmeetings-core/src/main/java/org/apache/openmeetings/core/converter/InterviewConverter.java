@@ -247,7 +247,8 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			StringBuilder cols = new StringBuilder();
 			StringBuilder rows = new StringBuilder();
 			int colCount = 0;
-			for (int i = 0, j = 0; i < numPods; ++i) {
+			int j = 0;
+			for (int i = 0; i < numPods; ++i) {
 				colCount++;
 				args.add("-i");
 				args.add(pods.get(i));
