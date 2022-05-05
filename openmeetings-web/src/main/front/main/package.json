@@ -16,6 +16,6 @@
     "tinyify": "^3.0.0"
   },
   "dependencies": {
-    "ua-parser-js": "^0.7.24"
+    "ua-parser-js": "^1.0.2"
   }
 }
