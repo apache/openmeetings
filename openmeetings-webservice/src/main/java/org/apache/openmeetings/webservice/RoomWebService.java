@@ -68,12 +68,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * RoomService contains methods to manipulate rooms and create invitation hash
@@ -122,8 +122,8 @@ public class RoomWebService extends BaseWebService {
 	@Operation(
 		description = "Returns an Object of Type RoomsList which contains a list of\n"
 				+ " ROOM-Objects. Every ROOM-Object contains a Roomtype and all informations\n"
-				+ "	about that ROOM. The List of current-users in the room is Null if you get\n"
-				+ "	them via SOAP. The Roomtype can be 'conference', 'presentation' or 'interview'.",
+				+ " about that ROOM. The List of current-users in the room is Null if you get\n"
+				+ " them via SOAP. The Roomtype can be 'conference', 'presentation' or 'interview'.",
 		responses = {
 				@ApiResponse(responseCode = "200", description = "list of public rooms",
 						content = @Content(schema = @Schema(implementation = RoomDTOListWrapper.class))),
@@ -210,8 +210,8 @@ public class RoomWebService extends BaseWebService {
 	@Path("/{type}/{externaltype}/{externalid}")
 	@Operation(
 		description = "Checks if a room with this exteralId + externalType does exist,\n"
-				+ "	if yes it returns the room id if not, it will create the room and then\n"
-				+ "	return the room id of the newly created room",
+				+ " if yes it returns the room id if not, it will create the room and then\n"
+				+ " return the room id of the newly created room",
 		responses = {
 				@ApiResponse(responseCode = "200", description = "id of the room or error code",
 						content = @Content(schema = @Schema(implementation = RoomDTOWrapper.class))),

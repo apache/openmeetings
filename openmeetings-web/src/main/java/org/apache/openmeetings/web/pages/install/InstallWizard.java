@@ -125,7 +125,7 @@ public class InstallWizard extends BootstrapWizard {
 	private ImportInitvalues initvalues;
 
 	//onInit, applyState
-	public InstallWizard(String id, String title) {
+	public InstallWizard(String id) {
 		super(id);
 		setOutputMarkupPlaceholderTag(true);
 		setOutputMarkupId(true);

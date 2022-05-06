@@ -103,10 +103,7 @@ public class SCryptImplementation implements ICrypt {
 
 	@Override
 	public boolean fallback(String str, String hash) {
-		if (SHA256Implementation.verify(str, hash)) {
-			return true;
-		}
-		return false;
+		return SHA256Implementation.verify(str, hash);
 	}
 
 	@Override

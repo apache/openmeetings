@@ -397,10 +397,7 @@ public abstract class BaseFileItem extends HistoricalEntity {
 		} else if (!hash.equals(other.hash)) {
 			return false;
 		}
-		if (type != other.type) {
-			return false;
-		}
-		return true;
+		return type == other.type;
 	}
 
 	private class OriginalFilter implements FileFilter {

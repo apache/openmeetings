@@ -578,10 +578,9 @@ public class WbPanel extends AbstractWbPanel {
 		if (wbId == null) {
 			return;
 		}
-		if (!undoList.containsKey(wbId)) {
-			undoList.put(wbId, new LimitedLinkedList<>());
-		}
-		undoList.get(wbId).push(u);
+		undoList
+			.computeIfAbsent(wbId, id -> new LimitedLinkedList<>())
+			.push(u);
 	}
 
 	private UndoObject getUndo(Long wbId) {

@@ -508,6 +508,12 @@ public abstract class FileTreePanel extends Panel {
 		}
 	}
 
+	/**
+	 * This method can be overridden to provide more buttons
+	 *
+	 * @param markupId - markup id for buttons
+	 * @return the list of additional buttons
+	 */
 	protected List<AbstractLink> newOtherButtons(String markupId) {
 		return List.of();
 	}

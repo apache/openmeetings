@@ -69,8 +69,10 @@ public class WbConverter {
 	}
 
 	private static void add(Whiteboard wb, JSONObject o) {
-		String uid = randomUUID().toString();
-		wb.put(uid, o.put("uid", uid));
+		if (o != null) {
+			String uid = randomUUID().toString();
+			wb.put(uid, o.put("uid", uid));
+		}
 	}
 
 	private static JSONObject init(Whiteboard wb, List<?> props) {

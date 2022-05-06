@@ -145,10 +145,7 @@ public class BackupVersion implements Serializable, Comparable<BackupVersion> {
 		if (micro != other.micro) {
 			return false;
 		}
-		if (minor != other.minor) {
-			return false;
-		}
-		return true;
+		return minor == other.minor;
 	}
 
 	@Override

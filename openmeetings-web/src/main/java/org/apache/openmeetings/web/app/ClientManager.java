@@ -216,12 +216,12 @@ public class ClientManager implements IClientManager {
 	}
 
 	public void serverAdded(String serverId, String url) {
-		if (!onlineServers.containsKey(serverId)) {
+		onlineServers.computeIfAbsent(serverId, id -> {
 			ServerInfo si = new ServerInfo(url);
-			servers().put(serverId, si);
-			log.debug("Cluster:: server with id '{}' was added", serverId);
-			onlineServers.put(serverId, si);
-		}
+			servers().put(id, si);
+			log.debug("Cluster:: server with id '{}' was added", id);
+			return si;
+		});
 	}
 
 	public void serverRemoved(String serverId) {

@@ -140,9 +140,6 @@ public class GeneralUserForm extends Form<User> {
 	}
 
 	public void updateModelObject(User u, boolean isAdminForm) {
-		/*bday.getConfig()
-			.withDate(u.getAge() == null ? LocalDate.now() : u.getAge())
-			.withMaxDate(LocalDate.now());*/
 		grpUsers.clear();
 		grpUsers.addAll(u.getGroupUsers());
 		if (isAdminForm) {
