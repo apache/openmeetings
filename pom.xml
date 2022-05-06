@@ -80,9 +80,9 @@
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
 		<!-- dependency versions -->
 		<junit.version>5.8.2</junit.version>
-		<wicket.version>9.9.1</wicket.version>
+		<wicket.version>9.10.0</wicket.version>
 		<wicket-jquery-ui.version>9.8.0</wicket-jquery-ui.version>
-		<wicketstuff.version>9.9.1</wicketstuff.version>
+		<wicketstuff.version>9.10.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version>
 		<font-awesome.version>6.1.0</font-awesome.version>
 		<spring.version>5.3.19</spring.version>
