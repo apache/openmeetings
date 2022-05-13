@@ -20,8 +20,71 @@
 	</properties>
 
 	<body>
-		<section name="Past Releases">
-			<div class="bd-callout bd-callout-danger">
+		<section name="Release 6.2.0">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 6.2.0 released!</div>
+				<div>Release 6.2.0, provides following improvements:<br/>
+					UI improvements, stability fixes, mobile version and adds OpenAPI spec in 3.0.x format<br/>
+
+					Stability and UI:
+					<ul>
+						<li>UI fixes</li>
+						<li>Modal PopUpFix</li>
+						<li>Upgrade to Bootstrap5</li>
+						<li>Fixes for Mobile Version and landscape mode</li>
+						<li>Improve ability for starting from Home Screen on Mobile device</li>
+					</ul>
+					Integration:
+					<ul>
+						<li>OpenAPI Spec in 3.0.x format see <a href="https://openmeetings.apache.org/swagger">Swagger</a></li>
+						<li>Improved Integration examples for Node and PHP</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+				</div>
+				<br/>
+
+				<span>
+					28 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/6.2.0/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12349964&amp;styleName=Html&amp;projectId=12312720">Detailed list</a>
+				</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/6.2.0">Archived download</a>.</span>
+				<span class="date">(2021-09-29)</span>
+			</div>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">PHP integration using composer module</div>
+				<div>You can now use a community contributed PHP composer module to make integration to OpenMeetings easier<br/><br/>
+					More information:
+					<ul>
+						<li><a href="https://github.com/om-hosting/openmeetings-php-client" target="_blank">OpenMeetings PHP Client</a></li>
+						<li>OpenMeetings <a href="RestAPISample.html#how-to-integrate-using-php-and-composer">PHP Rest API sample</a></li>
+					</ul>
+					The PHP module makes use of the OpenMeetings Rest API which is now also available in OpenAPI 3.0 format: <a href="https://openmeetings.apache.org/swagger/" target="_blank">https://openmeetings.apache.org/swagger/</a>
+					<br/>
+					You can find details about all API endpoints and examples at <a href="https://github.com/om-hosting/openmeetings-php-client#documentation-for-api-endpoints" target="_blank">https://github.com/om-hosting/openmeetings-php-client#documentation-for-api-endpoints</a>
+				</div>
+				<br/>
+				<span class="date">(2021-09-26)</span>
+			</div>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">OpenAPI, Swagger and Node.js integration</div>
+				<div>You can now use a community contributed Node.js module as well as use the OpenAPI Swagger Spec to make integration to OpenMeetings easier<br/><br/>
+					More information:
+					<ul>
+						<li>NPM module <a href="https://www.npmjs.com/package/openmeetings-node-client" target="_blank">OpenMeetings-Node-Client</a></li>
+						<li>OpenMeetings <a href="RestAPISample.html#how-to-integrate-using-nodejs">Rest API sample and Integration Docs</a></li>
+					</ul>
+					The Node.js module makes use of the OpenMeetings Rest API which is now also available in OpenAPI 3.0 format: <a href="https://openmeetings.apache.org/swagger/" target="_blank">https://openmeetings.apache.org/swagger/</a>
+					<br/>
+					There are examples for using the node module with JavaScript/ES6 as well as TypeScript available.
+				</div>
+				<br/>
+				<span class="date">(2021-09-13)</span>
+			</div>
+		</section>
+		<section name="Release 6.1.0">
+			<div class="bd-callout bd-callout-info">
 				<div class="h4">Version 6.1.0 released!</div>
 				<div>Release 6.1.0, provides following improvements:<br/>
 					This release provides WebRTC audio/video/screen-sharing in the Room<br/>
@@ -48,8 +111,46 @@
 					<a href="https://www.apache.org/dist/openmeetings/6.1.0/CHANGELOG.md">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12349533">Detailed list</a>
 				</span>
-				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/6.1.0">Archived download</a>.</span>
 				<span class="date">(2021-07-20)</span>
+			</div>
+		</section>
+		<section name="Release 6.0.0">
+			<div class="bd-callout bd-callout-info">
+				<h4>Version 6.0.0 released!</h4>
+				<div>Release 6.0.0, provides following improvements:<br/>
+					This release provides WebRTC audio/video/screen-sharing in the Room<br/>
+
+					Security:
+					<ul>
+						<li>TLS1.2. is used for OAuth</li>
+						<li>NetTest client count can be limited</li>
+						<li>Captcha is now configurable</li>
+						<li>Recordings can be globally disabled</li>
+					</ul>
+					Stability:
+					<ul>
+						<li>Audio/video in room is more stable</li>
+					</ul>
+					UI:
+					<ul>
+						<li>Translations are improved</li>
+						<li>Invitation form displayes time in client time zone</li>
+						<li>Notifications are displayed using JS Notification API</li>
+						<li>Video pods size can be fixed and configurable per-user</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+				</div>
+				<br/>
+
+				<span>
+					40 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/6.0.0/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12348297">Detailed list</a>
+				</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/6.0.0">Archived download</a>.</span>
+				<span class="date">(2021-03-09)</span>
 			</div>
 		</section>
 		<section name="Release 5.1.0">

@@ -69,22 +69,15 @@
 		</section>
 		<section name="News">
 			<div class="bd-callout bd-callout-danger">
-				<div class="h4">Version 6.2.0 released!</div>
-				<div>Release 6.2.0, provides following improvements:<br/>
-					UI improvements, stability fixes, mobile version and adds OpenAPI spec in 3.0.x format<br/>
+				<div class="h4">Version 6.3.0 released!</div>
+				<div>Release 6.3.0, provides following improvements:<br/>
 
 					Stability and UI:
 					<ul>
-						<li>UI fixes</li>
-						<li>Modal PopUpFix</li>
-						<li>Upgrade to Bootstrap5</li>
-						<li>Fixes for Mobile Version and landscape mode</li>
-						<li>Improve ability for starting from Home Screen on Mobile device</li>
-					</ul>
-					Integration:
-					<ul>
-						<li>OpenAPI Spec in 3.0.x format see <a href="https://openmeetings.apache.org/swagger">Swagger</a></li>
-						<li>Improved Integration examples for Node and PHP</li>
+						<li>Multiple WB fixes</li>
+						<li>Confirm popups are unified</li>
+						<li>Multiple fixes for latest Safari</li>
+						<li>Libraries are updated with most recent versions</li>
 					</ul>
 					<br/>
 					Other fixes and improvements
@@ -92,42 +85,12 @@
 				<br/>
 
 				<span>
-					28 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/6.2.0/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12349964&amp;styleName=Html&amp;projectId=12312720">Detailed list</a>
+					26 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/6.3.0/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12351702">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2021-09-29)</span>
-			</div>
-			<div class="bd-callout bd-callout-danger">
-				<div class="h4">PHP integration using composer module</div>
-				<div>You can now use a community contributed PHP composer module to make integration to OpenMeetings easier<br/><br/>
-					More information:
-					<ul>
-						<li><a href="https://github.com/om-hosting/openmeetings-php-client" target="_blank">OpenMeetings PHP Client</a></li>
-						<li>OpenMeetings <a href="RestAPISample.html#how-to-integrate-using-php-and-composer">PHP Rest API sample</a></li>
-					</ul>
-					The PHP module makes use of the OpenMeetings Rest API which is now also available in OpenAPI 3.0 format: <a href="https://openmeetings.apache.org/swagger/" target="_blank">https://openmeetings.apache.org/swagger/</a>
-					<br/>
-					You can find details about all API endpoints and examples at <a href="https://github.com/om-hosting/openmeetings-php-client#documentation-for-api-endpoints" target="_blank">https://github.com/om-hosting/openmeetings-php-client#documentation-for-api-endpoints</a>
-				</div>
-				<br/>
-				<span class="date">(2021-09-26)</span>
-			</div>
-			<div class="bd-callout bd-callout-danger">
-				<div class="h4">OpenAPI, Swagger and Node.js integration</div>
-				<div>You can now use a community contributed Node.js module as well as use the OpenAPI Swagger Spec to make integration to OpenMeetings easier<br/><br/>
-					More information:
-					<ul>
-						<li>NPM module <a href="https://www.npmjs.com/package/openmeetings-node-client" target="_blank">OpenMeetings-Node-Client</a></li>
-						<li>OpenMeetings <a href="RestAPISample.html#how-to-integrate-using-nodejs">Rest API sample and Integration Docs</a></li>
-					</ul>
-					The Node.js module makes use of the OpenMeetings Rest API which is now also available in OpenAPI 3.0 format: <a href="https://openmeetings.apache.org/swagger/" target="_blank">https://openmeetings.apache.org/swagger/</a>
-					<br/>
-					There are examples for using the node module with JavaScript/ES6 as well as TypeScript available.
-				</div>
-				<br/>
-				<span class="date">(2021-09-13)</span>
+				<span class="date">(2022-05-17)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
@@ -444,6 +407,7 @@
 					</div>
 				</div>
 			</subsection>
+			<!-- HACK to make whimsy sutisfied: https://www.apache.org/events/current-event-234x60.png -->
 		</section>
 	</body>
 </document>

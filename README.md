@@ -56,6 +56,19 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+6.3.0
+-----
+[Release 6.3.0](https://www.apache.org/dyn/closer.lua/openmeetings/6.3.0), provides following improvements:
+
+Stability and UI:
+* Multiple WB fixes
+* Confirm popups are unified
+* Multiple fixes for latest Safari
+* Libraries are updated with most recent versions
+
+Some other fixes and improvements, 26 issues were addressed
+
+
 6.2.0
 -----
 [Release 6.2.0](https://archive.apache.org/dist/openmeetings/6.2.0), provides following improvements:
@@ -74,6 +87,7 @@ Integration:
 * Improved Integration examples for Node and PHP
 
 Some other fixes and improvements, 28 issues were addressed
+
 
 6.1.0
 -----
@@ -96,7 +110,7 @@ Some other fixes and improvements, 27 issues were addressed
 
 6.0.0
 -----
-[Release 6.0.0](https://www.apache.org/dyn/closer.lua/openmeetings/6.0.0), provides following improvements:
+[Release 6.0.0](https://archive.apache.org/dist/openmeetings/6.0.0), provides following improvements:
 
 This release provides WebRTC audio/video/screen-sharing in the Room
 

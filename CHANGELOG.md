@@ -5,6 +5,44 @@ Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+Release Notes - Openmeetings - Version 6.3.0
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-2644] - Unable to access the room/whiteboard, grey popup
+    * [OPENMEETINGS-2647] - Content Security Policy Errors/Warning
+    * [OPENMEETINGS-2648] - Import function for backup restore not working
+    * [OPENMEETINGS-2687] - Fileupload button could be pressed twice,
+    * [OPENMEETINGS-2690] - Enter button for rooms too small for languages other than english
+    * [OPENMEETINGS-2700] - Wrong behaviour when screensharing is not possible
+    * [OPENMEETINGS-2702] - WB tools: impossible to select another item in the same group
+    * [OPENMEETINGS-2706] - Confirm window for delete whiteboard behind chat
+    * [OPENMEETINGS-2707] - My rooms Infotext to long, overlaps rooms
+    * [OPENMEETINGS-2708] - Submenues in Whiteboard toolbar do not behave correctly
+    * [OPENMEETINGS-2709] - Participant list the name of the "Users" tab is hidden by the count
+    * [OPENMEETINGS-2710] - Unenroll user from the room is broken
+    * [OPENMEETINGS-2712] - Error messages hidden by open chart
+    * [OPENMEETINGS-2714] - "Encountered unmanaged object" while saving invitation
+    * [OPENMEETINGS-2719] - close mark in RTL about
+    * [OPENMEETINGS-2722] - Deleted recordings are not reported by CLI admin
+    * [OPENMEETINGS-2725] - User and files tab bar doesn't show text, mouse-over seems slightly too big
+
+* Improvement
+    * [OPENMEETINGS-2488] - Different styles of confirmation popups
+    * [OPENMEETINGS-2701] - Error info is lost in web services
+    * [OPENMEETINGS-2726] - Give quick poll popup some border styles
+    * [OPENMEETINGS-2727] - Add tooltip to whiteboard tab-buttons to add and scroll tabbar
+    * [OPENMEETINGS-2728] - Update project website media server config docu
+
+* Test
+    * [OPENMEETINGS-2724] - Login page looks unstructured on Safari 15.4 OSx 12.3 - OM 7.0.0 #93
+
+* Task
+    * [OPENMEETINGS-2675] - (6.3.0) Libraries should be updated
+    * [OPENMEETINGS-2695] - Update website screenshots
+    * [OPENMEETINGS-2703] - (6.3.0) Sonar issues need to be addressed
+
+
 Release Notes - Openmeetings - Version 6.2.0
 ================================================================================================================
 
@@ -18,7 +56,6 @@ Release Notes - Openmeetings - Version 6.2.0
     * [OPENMEETINGS-2679] - Cant share Cam/Video on iOS/Mobile (Audio-Only works fine)
     * [OPENMEETINGS-2680] - Openmeetings / next demo server issues
     * [OPENMEETINGS-2681] - Gap in taking space of screen and part of conference moving into negative margin outside viewport
-
 
 * New Feature
     * [OPENMEETINGS-2683] - Explore what features of manifest file are useful for OpenMeetings
@@ -67,8 +104,10 @@ Release Notes - Openmeetings - Version 6.1.0
     * [OPENMEETINGS-2624] - Untranslated calendar when change Language to japanese
     * [OPENMEETINGS-2629] - Calendar picker can't sync to big calendar. 
     * [OPENMEETINGS-2638] - The email link received from Calendar don´t work
+
 * New Feature
     * [OPENMEETINGS-2605] - Add ability to choose theme via Admin->Config
+
 * Improvement
     * [OPENMEETINGS-2546] - Admin Rights
     * [OPENMEETINGS-2589] - Upload  file  icon needs  improving
@@ -76,8 +115,10 @@ Release Notes - Openmeetings - Version 6.1.0
     * [OPENMEETINGS-2604] - Help  menu  for  room
     * [OPENMEETINGS-2625] - Mark default group in administration->groups
     * [OPENMEETINGS-2632] - Wigets-page:  look&feel like other lists
+
 * Test
     * [OPENMEETINGS-2587] - Error when push Recording or Share-desktop buttons
+
 * Task
     * [OPENMEETINGS-2588] - Injections for non-beans can be better handled
     * [OPENMEETINGS-2593] - (6.1.0) Library versions need to be updated
