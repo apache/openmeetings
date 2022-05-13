@@ -85,7 +85,7 @@
 		<wicketstuff.version>9.10.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version>
 		<font-awesome.version>6.1.0</font-awesome.version>
-		<spring.version>5.3.19</spring.version>
+		<spring.version>5.3.20</spring.version>
 		<tomcat.version>9.0.62</tomcat.version>
 		<ical4j.version>4.0.0-alpha11</ical4j.version>
 		<cxf.version>3.5.2</cxf.version>
