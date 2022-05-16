@@ -34,6 +34,7 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,7 +140,7 @@ public class BaseFileItemDao implements IDataProviderDao<BaseFileItem> {
 	}
 
 	@Override
-	public List<BaseFileItem> get(String search, long start, long count, String order) {
+	public List<BaseFileItem> get(String search, long start, long count, SortParam<String> order) {
 		throw UNSUPPORTED;
 	}
 

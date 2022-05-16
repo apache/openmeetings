@@ -152,7 +152,7 @@ public class GroupUsersPanel extends Panel {
 			list.addAll(users2add);
 			list.addAll(search == null && getSort() == null
 					? getDao().get(groupId, first, count)
-					: getDao().get(groupId, search, first, count, getSortStr()));
+					: getDao().get(groupId, search, first, count, getSort()));
 
 			return list.iterator();
 		}

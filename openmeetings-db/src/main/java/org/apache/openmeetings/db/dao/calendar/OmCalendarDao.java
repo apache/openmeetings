@@ -28,6 +28,7 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,7 +118,7 @@ public class OmCalendarDao implements IDataProviderDao<OmCalendar> {
 	}
 
 	@Override
-	public List<OmCalendar> get(String search, long start, long count, String order) {
+	public List<OmCalendar> get(String search, long start, long count, SortParam<String> order) {
 		throw UNSUPPORTED;
 	}
 

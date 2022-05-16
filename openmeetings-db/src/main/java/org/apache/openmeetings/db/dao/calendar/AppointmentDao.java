@@ -45,6 +45,7 @@ import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.manager.IInvitationManager;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -285,7 +286,7 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 	}
 
 	@Override
-	public List<Appointment> get(String search, long start, long count, String order) {
+	public List<Appointment> get(String search, long start, long count, SortParam<String> order) {
 		throw UNSUPPORTED;
 	}
 

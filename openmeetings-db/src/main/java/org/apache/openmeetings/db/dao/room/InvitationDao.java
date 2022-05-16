@@ -18,16 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
-import static org.apache.openmeetings.db.entity.room.Invitation.BY_ALL;
-import static org.apache.openmeetings.db.entity.room.Invitation.BY_GROUP;
-import static org.apache.openmeetings.db.entity.room.Invitation.BY_USER;
-import static org.apache.openmeetings.db.entity.room.Invitation.SELECT_COUNT;
-import static org.apache.openmeetings.db.entity.room.Invitation.SELECT_I;
-import static org.apache.openmeetings.db.util.DaoHelper.appendSort;
-import static org.apache.openmeetings.db.util.DaoHelper.appendWhereClause;
-import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
+import static org.apache.openmeetings.db.util.DaoHelper.getRoot;
 import static org.apache.openmeetings.util.CalendarHelper.getZoneId;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -36,14 +28,22 @@ import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.DaoHelper;
 import org.apache.openmeetings.util.CalendarHelper;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +53,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class InvitationDao implements IDataProviderDao<Invitation> {
+	private static final List<String> searchFields = List.of("invitee.firstname", "invitee.lastname", "invitee.login");
 	private static final Logger log = LoggerFactory.getLogger(InvitationDao.class);
 
 	@PersistenceContext
@@ -70,21 +71,9 @@ public class InvitationDao implements IDataProviderDao<Invitation> {
 		return get(null, start, count, null);
 	}
 
-	private static String getQuery(String head, String tail, String search) {
-		return getQuery(head, tail, search, null);
-	}
-
-	private static String getQuery(String head, String tail, String search, String sort) {
-		StringBuilder sb = new StringBuilder(head);
-		sb.append(tail);
-		appendWhereClause(sb, search, "i", "invitee.firstname", "invitee.lastname", "invitee.login");
-		return appendSort(sb, "i", sort).toString();
-	}
-
 	@Override
-	public List<Invitation> get(String search, long start, long count, String order) {
-		return setLimits(em.createQuery(getQuery(SELECT_I, BY_ALL, search, order), Invitation.class)
-				, start, count).getResultList();
+	public List<Invitation> get(String search, long start, long count, SortParam<String> sort) {
+		return DaoHelper.get(em, Invitation.class, false, search, searchFields, true, null, sort, start, count);
 	}
 
 	@Override
@@ -94,29 +83,44 @@ public class InvitationDao implements IDataProviderDao<Invitation> {
 
 	@Override
 	public long count(String search) {
-		return em.createQuery(getQuery(SELECT_COUNT, BY_ALL, search), Long.class).getSingleResult();
+		return DaoHelper.count(em, Invitation.class, search, searchFields, true, null);
 	}
 
-	public List<Invitation> getGroup(String search, long start, long count, Long userId, String order) {
-		return setLimits(em.createQuery(getQuery(SELECT_I, BY_GROUP, search, order), Invitation.class)
-					.setParameter(PARAM_USER_ID, userId)
-				, start, count).getResultList();
+	private Predicate getGroupFilter(Long userId, CriteriaBuilder builder, CriteriaQuery<?> query) {
+		Subquery<Long> subquery = query.subquery(Long.class);
+		Root<GroupUser> root = subquery.from(GroupUser.class);
+		subquery.select(root.get("user").get("id"));
+		subquery.where(builder.in(root.get("group").get("id")).value(DaoHelper.groupAdminQuery(userId, builder, subquery)));
+
+		Root<Invitation> mainRoot = getRoot(query, Invitation.class);
+		return builder.in(mainRoot.get("invitedBy").get("id")).value(subquery);
+	}
+
+	public List<Invitation> getGroup(String search, long start, long count, Long userId, SortParam<String> sort) {
+		return DaoHelper.get(em, Invitation.class, false, search, searchFields, true
+				, (builder, query) -> getGroupFilter(userId, builder, query)
+				, sort, start, count);
 	}
 
 	public long countGroup(String search, Long userId) {
-		return em.createQuery(getQuery(SELECT_COUNT, BY_GROUP, search), Long.class)
-				.setParameter(PARAM_USER_ID, userId).getSingleResult();
+		return DaoHelper.count(em, Invitation.class, search, searchFields, true
+				, (builder, query) -> getGroupFilter(userId, builder, query));
 	}
 
-	public List<Invitation> getUser(String search, long start, long count, Long userId, String order) {
-		return setLimits(em.createQuery(getQuery(SELECT_I, BY_USER, search, order), Invitation.class)
-					.setParameter(PARAM_USER_ID, userId)
-				, start, count).getResultList();
+	private Predicate getUserFilter(Long userId, CriteriaBuilder builder, CriteriaQuery<?> query) {
+		Root<Invitation> root = getRoot(query, Invitation.class);
+		return builder.equal(root.get("invitedBy").get("id"), userId);
+	}
+
+	public List<Invitation> getUser(String search, long start, long count, Long userId, SortParam<String> sort) {
+		return DaoHelper.get(em, Invitation.class, false, search, searchFields, true
+				, (builder, query) -> getUserFilter(userId, builder, query)
+				, sort, start, count);
 	}
 
 	public long countUser(String search, Long userId) {
-		return em.createQuery(getQuery(SELECT_COUNT, BY_USER, search), Long.class)
-				.setParameter(PARAM_USER_ID, userId).getSingleResult();
+		return DaoHelper.count(em, Invitation.class, search, searchFields, true
+				, (builder, query) -> getUserFilter(userId, builder, query));
 	}
 
 	public Invitation update(Invitation invitation) {

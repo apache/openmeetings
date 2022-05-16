@@ -53,19 +53,11 @@ public class SearchableDataProvider<T extends IDataProviderEntity> extends Sorta
 		return get().getBean(clazz);
 	}
 
-	protected String getSortStr() {
-		String result = null;
-		if (getSort() != null) {
-			result = getSort().getProperty() + " " + (getSort().isAscending() ? "ASC" : "DESC");
-		}
-		return result;
-	}
-
 	@Override
 	public Iterator<? extends T> iterator(long first, long count) {
 		return (search == null && getSort() == null
 			? getDao().get(first, count)
-			: getDao().get(search, first, count, getSortStr())).iterator();
+			: getDao().get(search, first, count, getSort())).iterator();
 	}
 
 	@Override

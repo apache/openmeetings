@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
+import static org.apache.openmeetings.db.util.DaoHelper.getRoot;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.db.util.DaoHelper.single;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
@@ -28,18 +29,23 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.DaoHelper;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
 public class GroupUserDao implements IDataProviderDao<GroupUser> {
-	private static final String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.address.email"};
+	private static final List<String> searchFields = List.of("user.lastname", "user.firstname", "user.login", "user.address.email");
 	private static final String PARAM_GROUPID = "groupId";
 	@PersistenceContext
 	private EntityManager em;
@@ -57,15 +63,19 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	}
 
 	@Override
-	public List<GroupUser> get(String search, long start, long count, String sort) {
+	public List<GroupUser> get(String search, long start, long count, SortParam<String> sort) {
 		throw UNSUPPORTED;
 	}
 
-	public List<GroupUser> get(long groupId, String search, long start, long count, String sort) {
-		return setLimits(
-				em.createQuery(DaoHelper.getSearchQuery(GroupUser.class.getSimpleName(), "ou", null, search, false, false, "ou.group.id = :groupId", sort, searchFields), GroupUser.class)
-					.setParameter(PARAM_GROUPID, groupId)
-				, start, count).getResultList();
+	private Predicate getGroupFilter(Long groupId, CriteriaBuilder builder, CriteriaQuery<?> query) {
+		Root<GroupUser> root = getRoot(query, GroupUser.class);
+		return builder.equal(root.get("group").get("id"), groupId);
+	}
+
+	public List<GroupUser> get(long groupId, String search, long start, long count, SortParam<String> sort) {
+		return DaoHelper.get(em, GroupUser.class, false, search, searchFields, false
+				, (builder, query) -> getGroupFilter(groupId, builder, query)
+				, sort, start, count);
 	}
 
 	public List<GroupUser> get(long groupId, long start, long count) {
@@ -95,8 +105,7 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 
 	@Override
 	public long count(String search) {
-		return em.createQuery(DaoHelper.getSearchQuery(GroupUser.class.getSimpleName(), "ou", search, false, true, null, searchFields), Long.class)
-				.getSingleResult();
+		return DaoHelper.count(em, GroupUser.class, search, searchFields, false, null);
 	}
 
 	public long count(long groupId) {

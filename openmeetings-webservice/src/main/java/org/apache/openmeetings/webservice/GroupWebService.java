@@ -54,6 +54,7 @@ import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.openmeetings.webservice.schema.GroupDTOListWrapper;
 import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
 import org.apache.openmeetings.webservice.schema.UserSearchResultWrapper;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -319,7 +320,7 @@ public class GroupWebService extends BaseWebService {
 			result.setRecords(groupUserDao.count(id));
 			result.setResult(new ArrayList<>());
 			String order = isAlphanumeric(orderby) ? orderby : "id";
-			for (GroupUser ou : groupUserDao.get(id, null, start, max, order + " " + (asc ? "ASC" : "DESC"))) {
+			for (GroupUser ou : groupUserDao.get(id, null, start, max, order == null ? null : new SortParam<>(order, asc))) {
 				result.getResult().add(ou.getUser());
 			}
 			return new UserSearchResult(result);

@@ -20,6 +20,7 @@ package org.apache.openmeetings.db.dao.user;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.util.DaoHelper.fillLazy;
+import static org.apache.openmeetings.db.util.DaoHelper.getRoot;
 import static org.apache.openmeetings.db.util.DaoHelper.getStringParam;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.db.util.DaoHelper.single;
@@ -35,22 +36,28 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.AsteriskSipUser;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
@@ -61,6 +68,7 @@ import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.crypt.ICrypt;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +86,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDao implements IGroupAdminDataProviderDao<User> {
 	private static final Logger log = LoggerFactory.getLogger(UserDao.class);
 	private static final String PARAM_EMAIL = "email";
-	private static final String[] searchFields = {"lastname", "firstname", "login", "address.email", "address.town"};
+	private static final List<String> searchFields = List.of("lastname", "firstname", "login", "address.email", "address.town");
+	private static final List<String> guSearchFields = searchFields.stream().map(f -> "user." + f).collect(Collectors.toList());
 	public static final String FETCH_GROUP_GROUP = "groupUsers";
 	public static final String FETCH_GROUP_BACKUP = "backupexport";
 
@@ -123,81 +132,102 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				, first, count).getResultList();
 	}
 
-	private static String getAdditionalJoin(boolean filterContacts) {
-		return filterContacts ? "LEFT JOIN u.groupUsers ou" : null;
+	private Predicate getContactsFilter(CriteriaBuilder builder, CriteriaQuery<?> query) {
+		Root<User> root = getRoot(query, User.class);
+		return builder.notEqual(root.get("type"), Type.CONTACT);
 	}
 
-	private static String getAdditionalWhere(boolean excludeContacts, Map<String, Object> params) {
-		if (excludeContacts) {
-			params.put("contact", Type.CONTACT);
-			return "u.type <> :contact";
-		}
-		return null;
+	private Predicate getOwnerContactsFilter(Long ownerId, CriteriaBuilder builder, CriteriaQuery<?> query) {
+		Root<User> root = getRoot(query, User.class);
+		root.join("groupUsers", JoinType.LEFT);
+
+		Subquery<Long> subquery = query.subquery(Long.class);
+		Root<GroupUser> subRoot = subquery.from(GroupUser.class);
+		subquery.select(subRoot.get("group").get("id"));
+		subquery.where(builder.equal(subRoot.get("user").get("id"), ownerId));
+		return builder.or(
+				builder.and(builder.notEqual(root.get("type"), Type.CONTACT), root.get("groupUsers").get("group").get("id").in(subquery))
+				, builder.and(builder.equal(root.get("type"), Type.CONTACT), builder.equal(root.get("ownerId"), ownerId))
+				);
 	}
 
-	private static String getAdditionalWhere(boolean filterContacts, Long ownerId, Map<String, Object> params) {
+	private List<User> get(String search, Long start, Long count, SortParam<String> sort, boolean filterContacts, Long currentUserId, boolean filterDeleted) {
 		if (filterContacts) {
-			params.put("ownerId", ownerId);
-			params.put("contact", Type.CONTACT);
-			return "((u.type <> :contact AND ou.group.id IN (SELECT ou.group.id FROM GroupUser ou WHERE ou.user.id = :ownerId)) "
-				+ "OR (u.type = :contact AND u.ownerId = :ownerId))";
+			return DaoHelper.get(em, User.class
+					, true, search, searchFields, true
+					, (b, q) -> getOwnerContactsFilter(currentUserId, b, q)
+					, sort, start, count);
+		} else {
+			return DaoHelper.get(em, User.class, false, search, searchFields, filterDeleted
+					, null, sort, start, count);
 		}
-		return null;
-	}
-
-	private static void setAdditionalParams(TypedQuery<?> q, Map<String, Object> params) {
-		for (Map.Entry<String, Object> me: params.entrySet()) {
-			q.setParameter(me.getKey(), me.getValue());
-		}
-	}
-
-	private List<User> get(String search, Long start, Long count, String order, boolean filterContacts, Long currentUserId, boolean filterDeleted) {
-		Map<String, Object> params = new HashMap<>();
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, filterDeleted, false
-				, getAdditionalWhere(filterContacts, currentUserId, params), order, searchFields), User.class);
-		setAdditionalParams(setLimits(q, start, count), params);
-		return q.getResultList();
 	}
 
 	// This is AdminDao method
-	public List<User> get(String search, boolean excludeContacts, long first, long count) {
-		Map<String, Object> params = new HashMap<>();
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", null, search, true, true, false
-				, getAdditionalWhere(excludeContacts, params), null, searchFields), User.class);
-		setAdditionalParams(setLimits(q, first, count), params);
-		return q.getResultList();
+	public List<User> get(String search, boolean excludeContacts, long start, long count) {
+		return DaoHelper.get(em, User.class, false, search, searchFields, true
+				, excludeContacts ? (b, q) -> getContactsFilter(b, q) : null
+				, null, start, count);
 	}
 
-	public List<User> get(String search, long start, long count, String sort, boolean filterContacts, Long currentUserId) {
+	public List<User> get(String search, long start, long count, SortParam<String> sort, boolean filterContacts, Long currentUserId) {
 		return get(search, start, count, sort, filterContacts, currentUserId, true);
 	}
 
 	@Override
-	public List<User> adminGet(String search, long start, long count, String order) {
-		return get(search, start, count, order, false, null, false);
+	public List<User> adminGet(String search, long start, long count, SortParam<String> sort) {
+		return get(search, start, count, sort, false, null, false);
+	}
+
+	private Predicate getAdminFilter(Long adminId, CriteriaBuilder builder, CriteriaQuery<?> query) {
+		Root<GroupUser> root = getRoot(query, GroupUser.class);
+		return builder.in(root.get("group").get("id")).value(DaoHelper.groupAdminQuery(adminId, builder, query));
 	}
 
 	@Override
-	public List<User> adminGet(String search, Long adminId, long start, long count, String order) {
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, false, false
-				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", order, searchFields), User.class);
-		q.setParameter("adminId", adminId);
-		return setLimits(q, start, count).getResultList();
+	public List<User> adminGet(String search, Long adminId, long start, long count, SortParam<String> sort) {
+		return DaoHelper.get(em, GroupUser.class, User.class
+				, (builder, root) -> root.get("user")
+				, true, search, guSearchFields, false
+				, (b, q) -> getAdminFilter(adminId, b, q)
+				, sort, start, count);
+	}
+
+	private Predicate getProfileFilter(Long userId, String userOffers, String userSearches, CriteriaBuilder builder, CriteriaQuery<?> query) {
+		Root<User> root = getRoot(query, User.class);
+		Predicate result = getOwnerContactsFilter(userId, builder, query);
+		if (!Strings.isEmpty(userOffers)) {
+			result = builder.and(result, DaoHelper.like("userOffers", getStringParam(userOffers), builder, root));
+		}
+		if (!Strings.isEmpty(userSearches)) {
+			result = builder.and(result, DaoHelper.like("userSearches", getStringParam(userSearches), builder, root));
+		}
+		return result;
+	}
+
+	public List<User> searchUserProfile(Long userId, String search, String userOffers, String userSearches, SortParam<String> sort, long start, long count) {
+		return DaoHelper.get(em, User.class
+				, true, search, searchFields, true
+				, (b, q) -> getProfileFilter(userId, userOffers, userSearches, b, q)
+				, sort, start, count);
 	}
 
 	private long count(String search, boolean filterContacts, Long currentUserId, boolean filterDeleted) {
-		Map<String, Object> params = new HashMap<>();
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, filterDeleted, true
-				, getAdditionalWhere(filterContacts, currentUserId, params), null, searchFields), Long.class);
-		setAdditionalParams(q, params);
-		return q.getSingleResult();
+		if (filterContacts) {
+			return DaoHelper.count(em, User.class
+					, (builder, root) -> builder.countDistinct(root)
+					, search, searchFields, filterDeleted
+					, (b, q) -> getOwnerContactsFilter(currentUserId, b, q));
+		} else {
+			return DaoHelper.count(em, User.class, search, searchFields, filterDeleted
+					, null);
+		}
 	}
 
 	@Override
 	public long count() {
-		// get all users
-		TypedQuery<Long> q = em.createNamedQuery("countNondeletedUsers", Long.class);
-		return q.getSingleResult();
+		return em.createNamedQuery("countNondeletedUsers", Long.class)
+				.getSingleResult();
 	}
 
 	@Override
@@ -220,10 +250,17 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	@Override
 	public long adminCount(String search, Long adminId) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, false, true
-				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", null, searchFields), Long.class);
-		q.setParameter("adminId", adminId);
-		return q.getSingleResult();
+		return DaoHelper.count(em, GroupUser.class
+				, (builder, root) -> builder.countDistinct(root.get("user"))
+				, search, guSearchFields, false
+				, (b, q) -> getAdminFilter(adminId, b, q));
+	}
+
+	public Long searchCountUserProfile(Long userId, String search, String userOffers, String userSearches) {
+		return DaoHelper.count(em, User.class
+				, (builder, root) -> builder.countDistinct(root)
+				, search, searchFields, true
+				, (b, q) -> getProfileFilter(userId, userOffers, userSearches, b, q));
 	}
 
 	@Override
@@ -524,48 +561,6 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				, FETCH_GROUP_GROUP));
 	}
 
-	private <T> TypedQuery<T> getUserProfileQuery(Class<T> clazz, Long userId, String text, String offers, String search, String orderBy, boolean asc) {
-		Map<String, Object> params = new HashMap<>();
-		boolean filterContacts = true;
-		boolean count = clazz.isAssignableFrom(Long.class);
-
-		StringBuilder sb = new StringBuilder("SELECT ");
-		sb.append(count ? "COUNT(" : "").append("DISTINCT u").append(count ? ") " : " ")
-			.append("FROM User u ").append(getAdditionalJoin(filterContacts)).append(" WHERE u.deleted = false AND ")
-			.append(getAdditionalWhere(filterContacts, userId, params));
-		if (!Strings.isEmpty(offers)) {
-			sb.append(" AND (LOWER(u.userOffers) LIKE :userOffers) ");
-			params.put("userOffers", getStringParam(offers));
-		}
-		if (!Strings.isEmpty(search)) {
-			sb.append(" AND (LOWER(u.userSearchs) LIKE :userSearchs) ");
-			params.put("userSearchs", getStringParam(search));
-		}
-		if (!Strings.isEmpty(text)) {
-			sb.append(" AND (LOWER(u.login) LIKE :search ")
-				.append("OR LOWER(u.firstname) LIKE :search ")
-				.append("OR LOWER(u.lastname) LIKE :search ")
-				.append("OR LOWER(u.address.email) LIKE :search ")
-				.append("OR LOWER(u.address.town) LIKE :search " + ") ");
-			params.put("search", getStringParam(text));
-		}
-		if (!count && !Strings.isEmpty(orderBy)) {
-			sb.append(" ORDER BY ").append(orderBy).append(asc ? " ASC" : " DESC");
-		}
-		TypedQuery<T> query = em.createQuery(sb.toString(), clazz);
-		setAdditionalParams(query, params);
-		return query;
-	}
-
-	public List<User> searchUserProfile(Long userId, String text, String offers, String search, String orderBy, long start, long max, boolean asc) {
-		return setLimits(getUserProfileQuery(User.class, userId, text, offers, search, orderBy, asc)
-				, start, max).getResultList();
-	}
-
-	public Long searchCountUserProfile(Long userId, String text, String offers, String search) {
-		return getUserProfileQuery(Long.class, userId, text, offers, search, null, false).getSingleResult();
-	}
-
 	public User getExternalUser(String extId, String extType) {
 		return single(fillLazy(em
 				, oem -> oem.createNamedQuery("getExternalUser", User.class)
@@ -576,8 +571,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	@Override
-	public List<User> get(String search, long start, long count, String order) {
-		return get(search, start, count, order, false, Long.valueOf(-1));
+	public List<User> get(String search, long start, long count, SortParam<String> sort) {
+		return get(search, start, count, sort, false, Long.valueOf(-1));
 	}
 
 	public Set<Right> getRights(Long id) {

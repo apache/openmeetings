@@ -212,7 +212,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	@Override
-	public List<StringLabel> get(String search, long start, long count, String order) {
+	public List<StringLabel> get(String search, long start, long count, SortParam<String> order) {
 		throw UNSUPPORTED;
 	}
 

@@ -20,15 +20,27 @@ package org.apache.openmeetings.db.util;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.AbstractQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.openjpa.persistence.OpenJPAEntityManager;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
+import org.apache.openmeetings.db.entity.user.GroupUser;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.util.string.Strings;
 
 public class DaoHelper {
@@ -36,89 +48,132 @@ public class DaoHelper {
 
 	private DaoHelper() {}
 
-	public static String getSearchQuery(String table, String alias, String search, boolean filterDeleted, boolean count, String sort, String... fields) {
-		return getSearchQuery(table, alias, search, false, filterDeleted, count, sort, fields);
-	}
-
-	public static String getSearchQuery(String table, String alias, String search, boolean distinct, boolean filterDeleted, boolean count, String sort, String... fields) {
-		return getSearchQuery(table, alias, null, search, distinct, filterDeleted, count, null, sort, fields);
-	}
-
-	public static String getSearchQuery(String table, String alias, String join, String search, boolean filterDeleted, boolean count, String additionalWhere, String sort, String... fields) {
-		return getSearchQuery(table, alias, join, search, false, filterDeleted, count, additionalWhere, sort, fields);
-	}
-
-	public static String getSearchQuery(String table, String alias, String join, String search, boolean distinct, boolean filterDeleted, boolean count, String additionalWhere, String sort, String... fields) {
-		StringBuilder sb = new StringBuilder("SELECT ");
-		if (count) {
-			sb.append("COUNT(");
-		}
-		if (distinct) {
-			sb.append("DISTINCT ");
-		}
-		sb.append(alias);
-		if (count) {
-			sb.append(")");
-		}
-		sb.append(" FROM ").append(table).append(" ").append(alias);
-		if (!Strings.isEmpty(join)) {
-			sb.append(" ").append(join);
-		}
-		sb.append(" WHERE 1 = 1 ");
-		if (filterDeleted) {
-			sb.append("AND ").append(alias).append(".deleted = false ");
-		}
-		appendWhereClause(sb, search, alias, fields);
-		if (!Strings.isEmpty(additionalWhere)) {
-			sb.append("AND ").append(additionalWhere);
-		}
-		return appendSort(sb, alias, sort).toString();
-	}
-
-	public static StringBuilder appendWhereClause(StringBuilder sb, String search, String alias, String... fields) {
-		if (!Strings.isEmpty(search) && fields != null) {
-			boolean notEmpty = false;
-			StringBuilder inSb = new StringBuilder();
-			String[] searchItems = search.replace("\'", "").replace("\"", "").split(" ");
-			for (int i = 0; i < searchItems.length; ++i) {
-				if (searchItems[i].isEmpty()) {
-					continue;
-				}
-				if (i == 0) {
-					notEmpty = true;
-					inSb.append(" (");
-				} else {
-					inSb.append(" OR ");
-				}
-				StringBuilder placeholder = new StringBuilder();
-				placeholder.append("%").append(StringUtils.lowerCase(searchItems[i], Locale.ROOT)).append("%");
-
-				inSb.append("(");
-				for (int j = 0; j < fields.length; ++j) {
-					if (j != 0) {
-						inSb.append(" OR ");
-					}
-					inSb.append("lower(").append(alias).append(".").append(fields[j]).append(") LIKE '").append(placeholder).append("' ");
-				}
-				inSb.append(")");
-			}
-			if (notEmpty) {
-				inSb.append(") ");
-				sb.append(" AND").append(inSb);
-			}
-		}
-		return sb;
-	}
-
-	public static StringBuilder appendSort(StringBuilder sb, String alias, String sort) {
-		if (!Strings.isEmpty(sort)) {
-			sb.append(" ORDER BY ").append(alias).append(".").append(sort);
-		}
-		return sb;
-	}
-
 	public static String getStringParam(String param) {
-		return param == null ? "%" : "%" + StringUtils.lowerCase(param, Locale.ROOT) + "%";
+		return "%" + StringUtils.lowerCase(param, Locale.ROOT) + "%";
+	}
+
+	public static <T> long count(EntityManager em
+			, Class<T> clazz
+			, String search
+			, List<String> searchFields
+			, boolean noDeleted
+			, BiFunction<CriteriaBuilder, CriteriaQuery<?>, Predicate> filter)
+	{
+		return count(em, clazz, (builder, root) -> builder.count(root), search, searchFields, noDeleted, filter);
+	}
+
+	public static <T> long count(EntityManager em
+			, Class<T> clazz
+			, BiFunction<CriteriaBuilder, Root<T>, Expression<Long>> queuePath
+			, String search
+			, List<String> searchFields
+			, boolean noDeleted
+			, BiFunction<CriteriaBuilder, CriteriaQuery<?>, Predicate> filter)
+	{
+		CriteriaQuery<Long> query = query(em, clazz, Long.class, queuePath, false, search, searchFields, noDeleted, filter, null);
+		return em.createQuery(query).getSingleResult();
+	}
+
+	public static <T> List<T> get(
+			EntityManager em
+			, Class<T> clazz
+			, boolean distinct
+			, String search
+			, List<String> searchFields
+			, boolean noDeleted
+			, BiFunction<CriteriaBuilder, CriteriaQuery<?>, Predicate> filter
+			, SortParam<String> sort
+			, long start
+			, long count)
+	{
+		return get(em, clazz, clazz, (builder, root) -> root
+				, distinct, search, searchFields, noDeleted, filter, sort, start, count);
+	}
+
+	public static <T, R> List<T> get(
+			EntityManager em
+			, Class<R> rootClazz
+			, Class<T> clazz
+			, BiFunction<CriteriaBuilder, Root<R>, Expression<T>> queuePath
+			, boolean distinct
+			, String search
+			, List<String> searchFields
+			, boolean noDeleted
+			, BiFunction<CriteriaBuilder, CriteriaQuery<?>, Predicate> filter
+			, SortParam<String> sort
+			, long start
+			, long count)
+	{
+		CriteriaQuery<T> query = query(em, rootClazz, clazz, queuePath, distinct, search, searchFields, noDeleted, filter, sort);
+		return setLimits(em.createQuery(query), start, count).getResultList();
+	}
+
+	public static <T, R> CriteriaQuery<T> query(
+			EntityManager em
+			, Class<R> rootClazz
+			, Class<T> clazz
+			, BiFunction<CriteriaBuilder, Root<R>, Expression<T>> queuePath
+			, boolean distinct
+			, String search
+			, List<String> searchFields
+			, boolean noDeleted
+			, BiFunction<CriteriaBuilder, CriteriaQuery<?>, Predicate> filter
+			, SortParam<String> sort)
+	{
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+		CriteriaQuery<T> query = builder.createQuery(clazz);
+		Root<R> root = query.from(rootClazz);
+		query.select(queuePath.apply(builder, root));
+		if (distinct) {
+			query.distinct(distinct);
+		}
+
+		query.where(search(search, searchFields, noDeleted, filter, builder, root, query));
+		sort(sort, builder, root, query);
+		return query;
+	}
+
+	public static <T, Q> Predicate search(String search
+			, List<String> searchFields
+			, boolean noDeleted
+			, BiFunction<CriteriaBuilder, CriteriaQuery<?>, Predicate> filter
+			, CriteriaBuilder builder
+			, Root<T> root
+			, CriteriaQuery<Q> query)
+	{
+		Predicate result = builder.isNull(null);
+		if (noDeleted) {
+			result = builder.and(result, builder.equal(root.get("deleted"), false));
+		}
+		if (filter != null) {
+			result = builder.and(result, filter.apply(builder, query));
+		}
+		if (!Strings.isEmpty(search)) {
+			Predicate[] criterias = Stream.of(search.replace("\'", "").replace("\"", "").split(" "))
+					.filter(searchItem -> !searchItem.isEmpty())
+					.map(DaoHelper::getStringParam)
+					.flatMap(searchItem -> searchFields.stream().map(col -> like(col, searchItem, builder, root)))
+					.toArray(Predicate[]::new);
+			result = builder.and(result, builder.or(criterias));
+		}
+		return result;
+	}
+
+	public static <T> Predicate like(String col, String searchItem, CriteriaBuilder builder, Path<T> root) {
+		Path<String> colPath = null;
+		String[] cols = col.split("[.]");
+		for(String s : cols) {
+			colPath = colPath == null ? root.get(s) : colPath.get(s);
+		}
+		return builder.like(builder.lower(colPath), "%" + searchItem + "%");
+	}
+
+	public static <T, Q> void sort(SortParam<String> sort, CriteriaBuilder builder, Root<T> root, CriteriaQuery<Q> query) {
+		if (sort != null && !Strings.isEmpty(sort.getProperty())) {
+			query.orderBy(sort.isAscending()
+					? builder.asc(root.get(sort.getProperty()))
+					: builder.desc(root.get(sort.getProperty())));
+		}
 	}
 
 	public static <T> TypedQuery<T> setLimits(TypedQuery<T> q, Long first, Long max) {
@@ -148,5 +203,22 @@ public class DaoHelper {
 
 	public static <T> T single(List<T> l) {
 		return l.isEmpty() ? null : l.get(0);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Root<T> getRoot(CriteriaQuery<?> query, Class<T> clazz) {
+		return query.getRoots().stream()
+				.filter(r -> clazz.equals(r.getModel().getJavaType()))
+				.map(r -> (Root<T>)r)
+				.findAny()
+				.orElseThrow();
+	}
+
+	public static Subquery<Long> groupAdminQuery(Long userId, CriteriaBuilder builder, AbstractQuery<?> parentQ) {
+		Subquery<Long> query = parentQ.subquery(Long.class);
+		Root<GroupUser> root = query.from(GroupUser.class);
+		query.select(root.get("group").get("id"));
+		query.where(builder.and(builder.isTrue(root.get("moderator")), builder.equal(root.get("user").get("id"), userId)));
+		return query;
 	}
 }

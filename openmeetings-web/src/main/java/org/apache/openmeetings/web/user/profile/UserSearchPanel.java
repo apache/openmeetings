@@ -22,7 +22,7 @@ import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,6 +35,7 @@ import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -54,11 +55,10 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 public class UserSearchPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final List<Integer> itemsPerPage = List.of(10, 25, 50, 75, 100, 200, 500, 1000, 2500, 5000);
+	private static final SortParam<String> orderBy = new SortParam<>("firstname", true);
 	private final TextField<String> text = new TextField<>("text", Model.of(""));
 	private final TextField<String> search = new TextField<>("search", Model.of(""));
 	private final TextField<String> offer = new TextField<>("offer", Model.of(""));
-	private String orderBy = "u.firstname";
-	private boolean asc = true;
 	private boolean searched = false;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	@SpringBean
@@ -94,8 +94,8 @@ public class UserSearchPanel extends UserBasePanel {
 
 			@Override
 			public Iterator<? extends User> iterator(long first, long count) {
-				return searched ? userDao.searchUserProfile(getUserId(), text.getModelObject(), offer.getModelObject(), search.getModelObject(), orderBy, first, count, asc).iterator()
-						: new ArrayList<User>().iterator();
+				return searched ? userDao.searchUserProfile(getUserId(), text.getModelObject(), offer.getModelObject(), search.getModelObject(), orderBy, first, count).iterator()
+						: Collections.emptyIterator();
 			}
 
 			@Override

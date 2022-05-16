@@ -20,8 +20,8 @@ package org.apache.openmeetings.db.dao.basic;
 
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.*;
 import static org.apache.openmeetings.util.OmVersion.getLine;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.*;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.SELF;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.STRICT_DYNAMIC;
 
@@ -34,7 +34,6 @@ import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openjpa.conf.OpenJPAConfiguration;
 import org.apache.openjpa.event.RemoteCommitProvider;
@@ -51,6 +50,7 @@ import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.Application;
 import org.apache.wicket.csp.CSPDirective;
 import org.apache.wicket.csp.CSPHeaderConfiguration;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -79,7 +79,7 @@ import com.github.openjson.JSONObject;
 @Transactional
 public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private static final Logger log = LoggerFactory.getLogger(ConfigurationDao.class);
-	private static final String[] searchFields = {"key", "value"};
+	private static final List<String> searchFields = List.of("key", "value");
 
 	@PersistenceContext
 	private EntityManager em;
@@ -202,9 +202,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	@Override
-	public List<Configuration> get(String search, long start, long count, String sort) {
-		return setLimits(em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, false, sort, searchFields), Configuration.class)
-				, start, count).getResultList();
+	public List<Configuration> get(String search, long start, long count, SortParam<String> sort) {
+		return DaoHelper.get(em, Configuration.class, true, search, searchFields, false, null, sort, start, count);
 	}
 
 	@Override
@@ -214,8 +213,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	@Override
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, true, null, searchFields), Long.class);
-		return q.getSingleResult();
+		return DaoHelper.count(em, Configuration.class, search, searchFields, true, null);
 	}
 
 	@Override

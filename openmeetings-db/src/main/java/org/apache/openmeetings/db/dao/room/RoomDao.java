@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.room;
 
 import static org.apache.openmeetings.db.util.DaoHelper.fillLazy;
+import static org.apache.openmeetings.db.util.DaoHelper.getRoot;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.db.util.DaoHelper.single;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
@@ -37,6 +38,10 @@ import java.util.TimeZone;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -49,6 +54,7 @@ import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.manager.ISipManager;
 import org.apache.openmeetings.db.util.DaoHelper;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +66,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	private static final Logger log = LoggerFactory.getLogger(RoomDao.class);
-	private static final String[] searchFields = {"name", "comment"};
+	private static final List<String> searchFields = List.of("name", "comment");
 	public static final String GRP_MODERATORS = "roomModerators";
 	public static final String GRP_GROUPS = "roomGroups";
 	public static final String GRP_FILES = "roomFiles";
@@ -117,37 +123,41 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	}
 
 	@Override
-	public List<Room> get(String search, long start, long count, String sort) {
-		return setLimits(em.createQuery(DaoHelper.getSearchQuery("Room", "r", search, true, false, sort, searchFields), Room.class)
-				, start, count).getResultList();
+	public List<Room> get(String search, long start, long count, SortParam<String> sort) {
+		return DaoHelper.get(em, Room.class, false, search, searchFields, true, null, sort, start, count);
+	}
+
+	private Predicate getAdminFilter(Long adminId, CriteriaBuilder builder, CriteriaQuery<?> query) {
+		Root<RoomGroup> root = getRoot(query, RoomGroup.class);
+		return builder.in(root.get("group").get("id")).value(DaoHelper.groupAdminQuery(adminId, builder, query));
 	}
 
 	@Override
-	public List<Room> adminGet(String search, Long adminId, long start, long count, String order) {
-		return setLimits(em.createQuery(DaoHelper.getSearchQuery("RoomGroup rg, IN(rg.room)", "r", null, search, true, true, false
-				, "rg.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", order, searchFields), Room.class)
-					.setParameter("adminId", adminId)
-				, start, count).getResultList();
+	public List<Room> adminGet(String search, Long adminId, long start, long count, SortParam<String> sort) {
+		return DaoHelper.get(em, RoomGroup.class, Room.class
+				, (builder, root) -> root.get("room")
+				, true, search, searchFields, false
+				, (b, q) -> getAdminFilter(adminId, b, q)
+				, sort, start, count);
 	}
 
 	@Override
 	public long count() {
-		TypedQuery<Long> q = em.createNamedQuery("countRooms", Long.class);
-		return q.getSingleResult();
+		return em.createNamedQuery("countRooms", Long.class)
+				.getSingleResult();
 	}
 
 	@Override
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Room", "r", search, true, true, null, searchFields), Long.class);
-		return q.getSingleResult();
+		return DaoHelper.count(em, Room.class, search, searchFields, true, null);
 	}
 
 	@Override
 	public long adminCount(String search, Long adminId) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("RoomGroup rg, IN(rg.room)", "r", null, search, true, true, true
-				, "rg.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", null, searchFields), Long.class);
-		q.setParameter("adminId", adminId);
-		return q.getSingleResult();
+		return DaoHelper.count(em, RoomGroup.class
+				, (builder, root) -> builder.countDistinct(root.get("room"))
+				, search, searchFields, false
+				, (b, q) -> getAdminFilter(adminId, b, q));
 	}
 
 	public List<Room> getPublicRooms() {

@@ -18,35 +18,33 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
-import static org.apache.openmeetings.db.util.DaoHelper.getSearchQuery;
+import static org.apache.openmeetings.db.util.DaoHelper.getRoot;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.db.util.DaoHelper.single;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.ExtraMenu;
-import org.apache.openmeetings.db.entity.user.Group;
-import org.apache.openmeetings.db.entity.user.GroupUser;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.openmeetings.db.util.DaoHelper;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
 public class ExtraMenuDao implements IGroupAdminDataProviderDao<ExtraMenu> {
-	private static final String[] searchFields = {"name", "link", "description"};
+	private static final List<String> searchFields = List.of("name", "link", "description");
 
 	@PersistenceContext
 	private EntityManager em;
-
-	@Autowired
-	private UserDao userDao;
 
 	@Override
 	public ExtraMenu get(Long id) {
@@ -65,11 +63,8 @@ public class ExtraMenuDao implements IGroupAdminDataProviderDao<ExtraMenu> {
 	}
 
 	@Override
-	public List<ExtraMenu> get(String search, long start, long count, String order) {
-		return setLimits(
-				em.createQuery(getSearchQuery("ExtraMenu", "m", search, false, false, order, searchFields)
-						, ExtraMenu.class)
-				, start, count).getResultList();
+	public List<ExtraMenu> get(String search, long start, long count, SortParam<String> sort) {
+		return DaoHelper.get(em, ExtraMenu.class, false, search, searchFields, false, null, sort, start, count);
 	}
 
 	public List<ExtraMenu> getByGroups(List<Long> groups) {
@@ -85,8 +80,7 @@ public class ExtraMenuDao implements IGroupAdminDataProviderDao<ExtraMenu> {
 
 	@Override
 	public long count(String search) {
-		return em.createQuery(getSearchQuery("ExtraMenu", "m", search, false, true, null, searchFields), Long.class)
-				.getSingleResult();
+		return DaoHelper.count(em, ExtraMenu.class, search, searchFields, false, null);
 	}
 
 	@Override
@@ -105,25 +99,20 @@ public class ExtraMenuDao implements IGroupAdminDataProviderDao<ExtraMenu> {
 	}
 
 	@Override
-	public List<ExtraMenu> adminGet(String search, Long adminId, long start, long count, String order) {
-		final String additionalWhere = getGroupFilter(adminId);
-		return setLimits(em.createQuery(getSearchQuery("ExtraMenu", "m", null, search, false, false, additionalWhere, order, searchFields), ExtraMenu.class)
-				, start, count).getResultList();
+	public List<ExtraMenu> adminGet(String search, Long adminId, long start, long count, SortParam<String> sort) {
+		return DaoHelper.get(em, ExtraMenu.class, true, search, searchFields, false
+				, (builder, query) -> getGroupFilter(adminId, builder, query)
+				, sort, start, count);
 	}
 
 	@Override
 	public long adminCount(String search, Long adminId) {
-		final String additionalWhere = getGroupFilter(adminId);
-		return em.createQuery(getSearchQuery("ExtraMenu", "m", null, search, false, true, additionalWhere, null, searchFields), Long.class)
-				.getSingleResult();
+		return DaoHelper.count(em, ExtraMenu.class, search, searchFields, false
+				, (builder, query) -> getGroupFilter(adminId, builder, query));
 	}
 
-	private String getGroupFilter(Long adminId) {
-		return userDao.get(adminId).getGroupUsers().stream()
-				.filter(GroupUser::isModerator)
-				.map(GroupUser::getGroup)
-				.map(Group::getId)
-				.map(String::valueOf)
-				.collect(Collectors.joining(", ", "m.groups IN (", ")"));
+	private Predicate getGroupFilter(Long adminId, CriteriaBuilder builder, CriteriaQuery<?> query) {
+		Root<ExtraMenu> root = getRoot(query, ExtraMenu.class);
+		return builder.in(root.get("groups")).value(DaoHelper.groupAdminQuery(adminId, builder, query));
 	}
 }
