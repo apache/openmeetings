@@ -506,7 +506,7 @@ public class BackupImport {
 		}
 	}
 
-	void cleanup() {
+	public void cleanup() {
 		ldapMap.clear();
 		oauthMap.clear();
 		userMap.clear();
