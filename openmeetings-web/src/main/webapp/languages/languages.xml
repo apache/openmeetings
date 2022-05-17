@@ -34,7 +34,7 @@
 	<lang id="13" code="ko" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">korean</lang>
 	<lang id="14" code="ar" tip="ادخل الرمز هنا" rangeStart="1" rangeEnd="9">عربي</lang>
 	<lang id="15" code="ja" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">japanese</lang>
-	<lang id="16" code="in" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">indonesian</lang>
+	<lang id="16" code="id" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">indonesian</lang>
 	<lang id="17" code="hu" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">hungarian</lang>
 	<lang id="18" code="tr" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">turkish</lang>
 	<lang id="19" code="uk" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">ukrainian</lang>
@@ -46,7 +46,7 @@
 	<lang id="25" code="pl" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">polish</lang>
 	<lang id="26" code="el" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">greek</lang>
 	<lang id="27" code="nl" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">dutch</lang>
-	<lang id="28" code="iw" tip="Only capital Latin letters A-Z" rangeStart="א" rangeEnd="ת">hebrew</lang>
+	<lang id="28" code="he" tip="Only capital Latin letters A-Z" rangeStart="א" rangeEnd="ת">hebrew</lang>
 	<lang id="29" code="ca" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">catalan</lang>
 	<lang id="30" code="bg" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">bulgarian</lang>
 	<lang id="31" code="da" tip="Only capital Latin letters A-Z" rangeStart="A" rangeEnd="Z">danish</lang>

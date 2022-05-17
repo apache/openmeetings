@@ -40,7 +40,7 @@
 		<logback.console></logback.console>
 		<db>h2</db>
 		<autoModuleName>apache.openmeetings.parent</autoModuleName>
-		<jdk.version>11</jdk.version>
+		<jdk.version>17</jdk.version>
 		<!-- plugin versions -->
 		<maven-javadoc-plugin.version>3.4.0</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>

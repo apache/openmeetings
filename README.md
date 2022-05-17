@@ -24,7 +24,7 @@ Along with the developer mailing list archive:
 
 System Requirements
 ===================
-You need a platform that supports [Java SE 11](https://www.oracle.com/java/technologies/javase-downloads.html).
+You need a platform that supports [Java SE 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html).
 
 
 Building and running
@@ -32,7 +32,7 @@ Building and running
 To build from source code:
 
   - Requirements:
-    Sources compilation require `Java SE 11`, [Apache Maven 3.5.0 or later](https://maven.apache.org/).
+    Sources compilation require `Java SE 17`, [Apache Maven 3.5.0 or later](https://maven.apache.org/).
   - To build the OpenMeetings project run mvn in the root directory:
      `mvn clean install -PallModules`
   - To run the OpenMeetings project:
