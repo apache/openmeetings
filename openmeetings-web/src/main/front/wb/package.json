@@ -18,7 +18,7 @@
     "tinyify": "^3.0.0"
   },
   "dependencies": {
-    "fabric": "^4.6.0",
+    "fabric": "^5.2.1",
     "mathjax-full": "^3.2.0"
   }
 }
