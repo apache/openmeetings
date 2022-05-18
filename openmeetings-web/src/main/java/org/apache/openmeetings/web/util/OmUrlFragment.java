@@ -94,7 +94,7 @@ public class OmUrlFragment implements Serializable {
 		, ROOM
 		, ROOMS;
 
-		public String area() {
+		public String zone() {
 			return name().toLowerCase(Locale.ROOT);
 		}
 
@@ -230,7 +230,7 @@ public class OmUrlFragment implements Serializable {
 		String[] arr = Application.get().getBean(ConfigurationDao.class).getString(CONFIG_DEFAULT_LANDING_ZONE, "").split("/");
 		if (arr != null && arr.length == 2) {
 			try {
-				return new OmUrlFragment(AreaKeys.valueOf(arr[0]), arr[1]);
+				return new OmUrlFragment(AreaKeys.of(arr[0]), arr[1]);
 			} catch (Exception e) {
 				// no-op
 			}
@@ -333,7 +333,7 @@ public class OmUrlFragment implements Serializable {
 	}
 
 	public String getLink() {
-		return getBaseUrl() + "#" + getArea().area() + "/" + getType();
+		return getBaseUrl() + "#" + getArea().zone() + "/" + getType();
 	}
 
 	private static void moveToServer(Room r) {

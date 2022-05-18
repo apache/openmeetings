@@ -91,7 +91,7 @@ class TestMainAreas extends AbstractWicketTesterTest {
 		for (String user : users) {
 			log.debug("Positive test:: area: {}, type: {} for user: {}", area, type, user);
 			testArea(user, p -> {
-				tester.getRequest().setParameter(area.name(), type);
+				tester.getRequest().setParameter(area.zone(), type);
 				tester.executeBehavior((AbstractAjaxBehavior)p.getBehaviorById(0));
 				tester.assertComponent(PATH_CHILD, clazz);
 				if (consumer != null) {
@@ -105,7 +105,7 @@ class TestMainAreas extends AbstractWicketTesterTest {
 		for (String user : users) {
 			log.debug("Positive test:: area: {}, type: {} for user: {}", area, type, user);
 			testArea(user, p -> {
-				tester.getRequest().setParameter(area.name(), type);
+				tester.getRequest().setParameter(area.zone(), type);
 				AbstractAjaxBehavior authBehavior = (AbstractAjaxBehavior)p.getBehaviorById(0);
 				try {
 					tester.executeBehavior(authBehavior);

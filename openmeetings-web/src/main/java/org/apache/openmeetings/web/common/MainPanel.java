@@ -423,7 +423,7 @@ public class MainPanel extends Panel {
 			}
 			if (updateFragment) {
 				UrlFragment uf = new UrlFragment(handler);
-				uf.set(f.getArea().area(), f.getType());
+				uf.set(f.getArea().zone(), f.getType());
 			}
 		}
 	}
