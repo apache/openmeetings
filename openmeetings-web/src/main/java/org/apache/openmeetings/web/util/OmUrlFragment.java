@@ -97,6 +97,7 @@ public class OmUrlFragment implements Serializable {
 		public String area() {
 			return name().toLowerCase(Locale.ROOT);
 		}
+
 		public static AreaKeys of(String val) {
 			return val == null ? null : AreaKeys.valueOf(val.toUpperCase(Locale.ROOT));
 		}

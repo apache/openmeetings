@@ -509,13 +509,14 @@ public class KurentoHandler {
 
 		@Override
 		public void onEvent(ObjectCreatedEvent evt) {
-			log.debug("Kurento::ObjectCreated -> {}, source {}", evt.getObject(), evt.getSource());
-			if (evt.getObject() instanceof MediaPipeline) {
+			MediaObject obj = evt.getObject();
+			log.debug("Kurento::ObjectCreated -> {}, source {}", obj, evt.getSource());
+			if (obj instanceof MediaPipeline) {
 				// room created
-				final String roid = evt.getObject().getId();
+				final String roid = obj.getId();
 
 				checkPipeline(roid);
-			} else if (evt.getObject() instanceof Endpoint curPoint) {
+			} else if (obj instanceof Endpoint curPoint) {
 				// endpoint created
 				final String eoid = curPoint.getId();
 				final Class<? extends Endpoint> clazz = getEndpointClass(curPoint);
