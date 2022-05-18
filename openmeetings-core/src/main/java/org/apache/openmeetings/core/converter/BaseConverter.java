@@ -179,7 +179,7 @@ public abstract class BaseConverter {
 	}
 
 	protected RecordingChunk waitForTheStream(long chunkId) {
-		RecordingChunk chunk;
+		RecordingChunk chunk = null;
 		try {
 			long counter = 0;
 			long maxTimestamp = 0;

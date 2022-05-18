@@ -483,7 +483,7 @@ public class KurentoHandler {
 					return;
 				}
 				// still alive
-				Endpoint point = client.getById(eoid, clazz);
+				Endpoint point = client.getById(endpointOid, clazz);
 				Map<String, String> tags = tagsAsMap(point);
 				try {
 					Map<String, String> pipeTags = tagsAsMap(point.getMediaPipeline());
