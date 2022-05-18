@@ -110,8 +110,8 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
 				f.setName(getEditor().getModelObject());
-				if (f instanceof Recording) {
-					recDao.update((Recording)f);
+				if (f instanceof Recording rec) {
+					recDao.update(rec);
 				} else {
 					fileDao.update((FileItem)f);
 				}
@@ -153,8 +153,8 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 		f.setOwnerId(p.getOwnerId());
 		f.setRoomId(p.getRoomId());
 		f.setGroupId(p.getGroupId());
-		if (f instanceof Recording) {
-			recDao.update((Recording)f);
+		if (f instanceof Recording rec) {
+			recDao.update(rec);
 		} else {
 			fileDao.update((FileItem)f);
 		}
@@ -216,9 +216,8 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 	@Override
 	public void onDrop(AjaxRequestTarget target, Component component) {
 		Object o = component.getDefaultModelObject();
-		if (o instanceof BaseFileItem) {
+		if (o instanceof BaseFileItem f) {
 			BaseFileItem p = (BaseFileItem)getDefaultModelObject();
-			BaseFileItem f = (BaseFileItem)o;
 			if (treePanel.isSelected(f)) {
 				moveAll(target, p);
 			} else {

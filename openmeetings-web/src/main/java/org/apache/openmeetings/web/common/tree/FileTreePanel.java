@@ -190,8 +190,7 @@ public abstract class FileTreePanel extends Panel {
 			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
-				if (o instanceof BaseFileItem) {
-					BaseFileItem f = (BaseFileItem)o;
+				if (o instanceof BaseFileItem f) {
 					if (isSelected(f)) {
 						deleteAll(target);
 					} else {

@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
@@ -53,6 +54,7 @@ import org.apache.directory.api.ldap.model.message.AliasDerefMode;
 import org.apache.directory.api.ldap.model.message.SearchRequestImpl;
 import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.api.ldap.model.name.Dn;
+import org.apache.directory.api.ldap.model.name.Rdn;
 import org.apache.directory.ldap.client.api.EntryCursorImpl;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
@@ -166,6 +168,53 @@ public class LdapLoginManager {
 		return getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_LOGIN, LDAP_KEY_LOGIN);
 	}
 
+	private User doLogin(LdapWorker w, String login, String passwd, Long domainId) throws Exception {
+		User u = null;
+		boolean authenticated = true;
+		Dn userDn = null;
+		Entry entry = null;
+		switch (w.options.type) {
+			case SEARCHANDBIND:
+				Map.Entry<Dn, Entry> search = searchAndBind(w, login, passwd);
+				userDn = search.getKey();
+				entry = search.getValue();
+				break;
+			case SIMPLEBIND:
+				userDn = new Dn(String.format(w.options.userDn, login));
+				w.conn.bind(userDn, passwd);
+				break;
+			case NONE:
+			default:
+				authenticated = false;
+				break;
+		}
+		u = authenticated ? userDao.getByLogin(login, Type.LDAP, domainId) : userDao.login(login, passwd);
+		log.debug("getByLogin:: authenticated ? {}, login = '{}', domain = {}, user = {}", authenticated, login, domainId, u);
+		if (u == null && Provisionning.AUTOCREATE != w.options.prov) {
+			log.error("User not found in OM DB and Provisionning.AUTOCREATE was not set");
+			throw BAD_CREDENTIALS;
+		}
+		if (authenticated && entry == null) {
+			if (w.options.useAdminForAttrs) {
+				bindAdmin(w.conn, w.options);
+			}
+			entry = w.conn.lookup(userDn);
+		}
+		switch (w.options.prov) {
+			case AUTOUPDATE, AUTOCREATE:
+				u = w.getUser(entry, u);
+				if (w.options.syncPasswd) {
+					u.updatePassword(passwd);
+				}
+				u = userDao.update(u, null);
+				u = w.setUserPicture(entry, u);
+				break;
+			case NONE:
+			default:
+				break;
+		}
+		return u;
+	}
 	/**
 	 * Ldap Login
 	 *
@@ -188,49 +237,7 @@ public class LdapLoginManager {
 		try (LdapWorker w = new LdapWorker(domainId)) {
 			String login = w.options.useLowerCase ? inLogin.toLowerCase(Locale.ROOT) : inLogin;
 
-			boolean authenticated = true;
-			Dn userDn = null;
-			Entry entry = null;
-			switch (w.options.type) {
-				case SEARCHANDBIND:
-					Map.Entry<Dn, Entry> search = searchAndBind(w, login, passwd);
-					userDn = search.getKey();
-					entry = search.getValue();
-					break;
-				case SIMPLEBIND:
-					userDn = new Dn(String.format(w.options.userDn, login));
-					w.conn.bind(userDn, passwd);
-					break;
-				case NONE:
-				default:
-					authenticated = false;
-					break;
-			}
-			u = authenticated ? userDao.getByLogin(login, Type.LDAP, domainId) : userDao.login(login, passwd);
-			log.debug("getByLogin:: authenticated ? {}, login = '{}', domain = {}, user = {}", authenticated, login, domainId, u);
-			if (u == null && Provisionning.AUTOCREATE != w.options.prov) {
-				log.error("User not found in OM DB and Provisionning.AUTOCREATE was not set");
-				throw BAD_CREDENTIALS;
-			}
-			if (authenticated && entry == null) {
-				if (w.options.useAdminForAttrs) {
-					bindAdmin(w.conn, w.options);
-				}
-				entry = w.conn.lookup(userDn);
-			}
-			switch (w.options.prov) {
-				case AUTOUPDATE, AUTOCREATE:
-					u = w.getUser(entry, u);
-					if (w.options.syncPasswd) {
-						u.updatePassword(passwd);
-					}
-					u = userDao.update(u, null);
-					u = w.setUserPicture(entry, u);
-					break;
-				case NONE:
-				default:
-					break;
-			}
+			u = doLogin(w, login, passwd, domainId);
 		} catch (LdapAuthenticationException ae) {
 			log.error("Not authenticated.", ae);
 			throw BAD_CREDENTIALS;
@@ -342,68 +349,94 @@ public class LdapLoginManager {
 			conn = new LdapNetworkConnection(options.host, options.port, options.secure);
 		}
 
-		public User setUserPicture(Entry entry, User inUser) throws LdapInvalidAttributeValueException {
-			Attribute a = getAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE, "");
+		private User updatePic(User inUser, InputStream is, StoredFile sf) {
 			User u = inUser;
-			if (a != null) {
-				Value val = a.get();
-				if (val != null && val.getBytes() != null) {
-					InputStream is = new ByteArrayInputStream(val.getBytes());
-					StoredFile sf = new StoredFile("picture", is);
-					if (sf.isImage()) {
-						Path tempImage = null;
-						try {
-							tempImage = Files.createTempFile("omLdap", "img");
-							FileUtils.copyToFile(is, tempImage.toFile());
-							imageConverter.convertImageUserProfile(tempImage.toFile(), inUser.getId(), sf.isAsIs());
-							u = userDao.get(inUser.getId());
-						} catch (Exception e) {
-							log.error("Unable to store binary image from LDAP", e);
-						} finally {
-							if (tempImage != null) {
-								try {
-									Files.deleteIfExists(tempImage);
-								} catch (IOException e) {
-									log.error("Unexpected error while clean-up", e);
-								}
-							}
-						}
-					} else {
-						u.setPictureUri(val.getString());
+			Path tempImage = null;
+			try {
+				tempImage = Files.createTempFile("omLdap", "img");
+				FileUtils.copyToFile(is, tempImage.toFile());
+				imageConverter.convertImageUserProfile(tempImage.toFile(), inUser.getId(), sf.isAsIs());
+				u = userDao.get(inUser.getId());
+			} catch (Exception e) {
+				log.error("Unable to store binary image from LDAP", e);
+			} finally {
+				if (tempImage != null) {
+					try {
+						Files.deleteIfExists(tempImage);
+					} catch (IOException e) {
+						log.error("Unexpected error while clean-up", e);
 					}
 				}
 			}
-			if (Strings.isEmpty(u.getPictureUri()) && !Strings.isEmpty(options.pictureUri)) {
-				u.setPictureUri(options.pictureUri);
-			}
-			return userDao.update(u, null);
+			return u;
 		}
 
-		public User getUser(Entry entry, User u) throws LdapException, CursorException, OmException, IOException {
+		public User setUserPicture(Entry entry, User inUser) throws LdapInvalidAttributeValueException {
+			User user = Optional.ofNullable(getAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE, ""))
+					.map(Attribute::get)
+					.filter(val -> val != null && val.getBytes() != null)
+					.map(val -> {
+						User u = inUser;
+						InputStream is = new ByteArrayInputStream(val.getBytes());
+						StoredFile sf = new StoredFile("picture", is);
+						if (sf.isImage()) {
+							u = updatePic(inUser, is, sf);
+						} else {
+							u.setPictureUri(val.getString());
+						}
+						return u;
+					}).orElse(inUser);
+			if (Strings.isEmpty(user.getPictureUri()) && !Strings.isEmpty(options.pictureUri)) {
+				user.setPictureUri(options.pictureUri);
+			}
+			return userDao.update(user, null);
+		}
+
+		private User create(Entry entry) throws LdapInvalidAttributeValueException {
+			User u = getNewUserInstance(null);
+			u.setType(Type.LDAP);
+			u.getRights().remove(Right.LOGIN);
+			u.setDomainId(domainId);
+			Group g = groupDao.get(getDefaultGroup());
+			if (g != null) {
+				u.addGroup(g);
+			}
+			String login = getLogin(config, entry);
+			if (ldapCfg.getAddDomainToUserName()) {
+				login = login + "@" + ldapCfg.getDomain();
+			}
+			if (options.useLowerCase) {
+				login = login.toLowerCase(Locale.ROOT);
+			}
+			u.setLogin(login);
+			u.setShowContactDataToContacts(true);
+			u.setAddress(new Address());
+			return u;
+		}
+
+		private List<Dn> getGroupDns(Entry entry, User u) throws IOException, LdapException, CursorException {
+			List<Dn> groups = new ArrayList<>();
+			if (GroupMode.ATTRIBUTE == options.groupMode) {
+				Attribute attr = getAttr(config, entry, CONFIGKEY_LDAP_KEY_GROUP, LDAP_KEY_GROUP);
+				if (attr != null) {
+					for (Value v : attr) {
+						groups.add(new Dn(v.getString()));
+					}
+				}
+			} else if (GroupMode.QUERY == options.groupMode) {
+				Dn baseDn = new Dn(options.searchBase);
+				String searchQ = String.format(options.groupQuery, u.getLogin());
+				fillGroups(baseDn, searchQ, groups);
+			}
+			return groups;
+		}
+
+		public User getUser(Entry entry, User user) throws LdapException, CursorException, OmException, IOException {
 			if (entry == null) {
 				log.error("LDAP entry is null, search or lookup by Dn failed");
 				throw BAD_CREDENTIALS;
 			}
-			if (u == null) {
-				u = getNewUserInstance(null);
-				u.setType(Type.LDAP);
-				u.getRights().remove(Right.LOGIN);
-				u.setDomainId(domainId);
-				Group g = groupDao.get(getDefaultGroup());
-				if (g != null) {
-					u.addGroup(g);
-				}
-				String login = getLogin(config, entry);
-				if (ldapCfg.getAddDomainToUserName()) {
-					login = login + "@" + ldapCfg.getDomain();
-				}
-				if (options.useLowerCase) {
-					login = login.toLowerCase(Locale.ROOT);
-				}
-				u.setLogin(login);
-				u.setShowContactDataToContacts(true);
-				u.setAddress(new Address());
-			}
+			User u = user == null ? create(entry) : user;
 			u.setLastname(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_LASTNAME, LDAP_KEY_LASTNAME));
 			u.setFirstname(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_FIRSTNAME, LDAP_KEY_FIRSTNAME));
 			u.getAddress().setEmail(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_MAIL, LDAP_KEY_MAIL));
@@ -420,42 +453,30 @@ public class LdapLoginManager {
 			}
 			u.setTimeZoneId(getTimeZone(tz).getID());
 
-			List<Dn> groups = new ArrayList<>();
-			if (GroupMode.ATTRIBUTE == options.groupMode) {
-				Attribute attr = getAttr(config, entry, CONFIGKEY_LDAP_KEY_GROUP, LDAP_KEY_GROUP);
-				if (attr != null) {
-					for (Value v : attr) {
-						groups.add(new Dn(v.getString()));
-					}
-				}
-			} else if (GroupMode.QUERY == options.groupMode) {
-				Dn baseDn = new Dn(options.searchBase);
-				String searchQ = String.format(options.groupQuery, u.getLogin());
-				fillGroups(baseDn, searchQ, groups);
-			}
-			for (Dn g : groups) {
-				String name = g.getRdn().getValue();
-				if (!Strings.isEmpty(name)) {
-					Group o = groupDao.get(name);
-					boolean found = false;
-					if (o == null) {
-						o = new Group();
-						o.setName(name);
-						o = groupDao.update(o, u.getId());
-					} else {
-						for (GroupUser ou : u.getGroupUsers()) {
-							if (ou.getGroup().getName().equals(name)) {
-								found = true;
-								break;
+			getGroupDns(entry, u).stream()
+					.map(Dn::getRdn)
+					.map(Rdn::getValue)
+					.filter(name -> !Strings.isEmpty(name))
+					.forEach(name -> {
+						Group o = groupDao.get(name);
+						boolean found = false;
+						if (o == null) {
+							o = new Group();
+							o.setName(name);
+							o = groupDao.update(o, u.getId());
+						} else {
+							for (GroupUser ou : u.getGroupUsers()) {
+								if (ou.getGroup().getName().equals(name)) {
+									found = true;
+									break;
+								}
 							}
 						}
-					}
-					if (!found) {
-						u.addGroup(o);
-						log.debug("Going to add user to group:: {}", name);
-					}
-				}
-			}
+						if (!found) {
+							u.addGroup(o);
+							log.debug("Going to add user to group:: {}", name);
+						}
+					});
 			return u;
 		}
 

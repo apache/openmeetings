@@ -228,56 +228,65 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 		return pStart;
 	}
 
+	private static void fillFinalArgsOnlyPod(List<String> args, String pod, File wav) throws IOException {
+		args.add("-i");
+		args.add(pod);
+		args.add("-i");
+		args.add(wav.getCanonicalPath());
+		args.add("-map");
+		args.add("0:v");
+	}
+
+	private static void fillFinalArgsGrid(List<String> args, List<String> pods, File wav, int w) throws IOException {
+		final int numPods = pods.size();
+		/* Creating grid
+		 * ffmpeg -i top_l.mp4 -i top_r.mp4 -i bottom_l.mp4 -i bottom_r.mp4 -i audio.mp4 \
+		 *	-filter_complex "[0:v][1:v]hstack=inputs=2[t];[2:v][3:v]hstack=inputs=2[b];[t][b]vstack=inputs=2[v]" \
+		 *	-map "[v]" -map 4:a -c:a copy -shortest output.mp4
+		 */
+		StringBuilder cols = new StringBuilder();
+		StringBuilder rows = new StringBuilder();
+		int colCount = 0;
+		int j = 0;
+		for (int i = 0; i < numPods; ++i) {
+			colCount++;
+			args.add("-i");
+			args.add(pods.get(i));
+			cols.append('[').append(i).append(":v]");
+			if (i != 0 && colCount % w == 0) {
+				cols.append("hstack=inputs=").append(colCount);
+				if (j == 0 && i == numPods - 1) {
+					cols.append("[v]");
+				} else {
+					cols.append("[c").append(j).append("];");
+				}
+				rows.append("[c").append(j).append(']');
+				j++;
+				colCount = 0;
+			}
+			if (i == numPods - 1) {
+				if (j > 1) {
+					rows.append("vstack=inputs=").append(j).append("[out];[out]pad=ceil(iw/2)*2:ceil(ih/2)*2[v]");
+				} else {
+					rows.setLength(0);
+				}
+			}
+		}
+		args.add("-i");
+		args.add(wav.getCanonicalPath());
+		args.add("-filter_complex");
+		args.add(cols.append(rows).toString());
+		args.add("-map");
+		args.add("[v]");
+	}
+
 	private static List<String> getFinalArgs(List<String> pods, File wav, int w) throws IOException {
 		final int numPods = pods.size();
 		List<String> args = new ArrayList<>();
 		if (numPods == 1) {
-			args.add("-i");
-			args.add(pods.get(0));
-			args.add("-i");
-			args.add(wav.getCanonicalPath());
-			args.add("-map");
-			args.add("0:v");
+			fillFinalArgsOnlyPod(args, pods.get(0), wav);
 		} else {
-			/* Creating grid
-			 * ffmpeg -i top_l.mp4 -i top_r.mp4 -i bottom_l.mp4 -i bottom_r.mp4 -i audio.mp4 \
-			 *	-filter_complex "[0:v][1:v]hstack=inputs=2[t];[2:v][3:v]hstack=inputs=2[b];[t][b]vstack=inputs=2[v]" \
-			 *	-map "[v]" -map 4:a -c:a copy -shortest output.mp4
-			 */
-			StringBuilder cols = new StringBuilder();
-			StringBuilder rows = new StringBuilder();
-			int colCount = 0;
-			int j = 0;
-			for (int i = 0; i < numPods; ++i) {
-				colCount++;
-				args.add("-i");
-				args.add(pods.get(i));
-				cols.append('[').append(i).append(":v]");
-				if (i != 0 && colCount % w == 0) {
-					cols.append("hstack=inputs=").append(colCount);
-					if (j == 0 && i == numPods - 1) {
-						cols.append("[v]");
-					} else {
-						cols.append("[c").append(j).append("];");
-					}
-					rows.append("[c").append(j).append(']');
-					j++;
-					colCount = 0;
-				}
-				if (i == numPods - 1) {
-					if (j > 1) {
-						rows.append("vstack=inputs=").append(j).append("[out];[out]pad=ceil(iw/2)*2:ceil(ih/2)*2[v]");
-					} else {
-						rows.setLength(0);
-					}
-				}
-			}
-			args.add("-i");
-			args.add(wav.getCanonicalPath());
-			args.add("-filter_complex");
-			args.add(cols.append(rows).toString());
-			args.add("-map");
-			args.add("[v]");
+			fillFinalArgsGrid(args, pods, wav, w);
 		}
 		args.add("-map");
 		args.add(numPods + ":a");

@@ -427,86 +427,100 @@ public class KurentoHandler {
 			scheduler = Executors.newScheduledThreadPool(watchThreadCount);
 		}
 
+		private void checkPipeline(String roomOid) {
+			scheduler.schedule(() -> {
+				if (client == null) {
+					return;
+				}
+				// still alive
+				MediaPipeline pipe = client.getById(roomOid, MediaPipeline.class);
+				Map<String, String> tags = tagsAsMap(pipe);
+				try {
+					final String inKuid = tags.get(TAG_KUID);
+					if (inKuid != null && ignoredKuids.contains(inKuid)) {
+						return;
+					}
+					if (validTestPipeline(tags)) {
+						return;
+					}
+					if (kuid.equals(inKuid)) {
+						KStream stream = streamProcessor.getByUid(tags.get(TAG_STREAM_UID));
+						if (stream != null) {
+							if (stream.getRoomId().equals(Long.valueOf(tags.get(TAG_ROOM)))
+									&& stream.getPipeline().getId().equals(pipe.getId()))
+							{
+								return;
+							} else {
+								stream.release();
+							}
+						}
+					}
+				} catch (Exception e) {
+					log.warn("Unexpected error while checking MediaPipeline {}, tags: {}", pipe.getId(), tags, e);
+				}
+				log.warn("Invalid MediaPipeline {} detected, will be dropped, tags: {}", pipe.getId(), tags);
+				pipe.release();
+			}, objCheckTimeout, MILLISECONDS);
+		}
+
+		private Class<? extends Endpoint> getEndpointClass(Endpoint curPoint) {
+			Class<? extends Endpoint> clazz = null;
+			if (curPoint instanceof WebRtcEndpoint) {
+				clazz = WebRtcEndpoint.class;
+			} else if (curPoint instanceof RecorderEndpoint) {
+				clazz = RecorderEndpoint.class;
+			} else if (curPoint instanceof PlayerEndpoint) {
+				clazz = PlayerEndpoint.class;
+			} else if (curPoint instanceof RtpEndpoint) {
+				clazz = RtpEndpoint.class;
+			}
+			return clazz;
+		}
+
+		private void checkEndpoint(String endpointOid, Class<? extends Endpoint> clazz) {
+			scheduler.schedule(() -> {
+				if (client == null || clazz == null) {
+					return;
+				}
+				// still alive
+				Endpoint point = client.getById(eoid, clazz);
+				Map<String, String> tags = tagsAsMap(point);
+				try {
+					Map<String, String> pipeTags = tagsAsMap(point.getMediaPipeline());
+					final String inKuid = pipeTags.get(TAG_KUID);
+					if (ignoredKuids.contains(inKuid)) {
+						return;
+					}
+					if (validTestPipeline(pipeTags)) {
+						return;
+					}
+					KStream stream = streamProcessor.getByUid(tags.get("outUid"));
+					log.debug("Kurento::ObjectCreated -> New Endpoint {} detected, tags: {}, kStream: {}", point.getId(), tags, stream);
+					if (stream != null && stream.contains(tags.get("uid"))) {
+						return;
+					}
+				} catch (Exception e) {
+					log.warn("Unexpected error while checking Endpoint {}, tags: {}", point.getId(), tags, e);
+				}
+				log.warn("Invalid Endpoint {} detected, will be dropped, tags: {}", point.getId(), tags);
+				point.release();
+			}, objCheckTimeout, MILLISECONDS);
+		}
+
 		@Override
 		public void onEvent(ObjectCreatedEvent evt) {
 			log.debug("Kurento::ObjectCreated -> {}, source {}", evt.getObject(), evt.getSource());
 			if (evt.getObject() instanceof MediaPipeline) {
 				// room created
 				final String roid = evt.getObject().getId();
-				scheduler.schedule(() -> {
-					if (client == null) {
-						return;
-					}
-					// still alive
-					MediaPipeline pipe = client.getById(roid, MediaPipeline.class);
-					Map<String, String> tags = tagsAsMap(pipe);
-					try {
-						final String inKuid = tags.get(TAG_KUID);
-						if (inKuid != null && ignoredKuids.contains(inKuid)) {
-							return;
-						}
-						if (validTestPipeline(tags)) {
-							return;
-						}
-						if (kuid.equals(inKuid)) {
-							KStream stream = streamProcessor.getByUid(tags.get(TAG_STREAM_UID));
-							if (stream != null) {
-								if (stream.getRoomId().equals(Long.valueOf(tags.get(TAG_ROOM)))
-										&& stream.getPipeline().getId().equals(pipe.getId()))
-								{
-									return;
-								} else {
-									stream.release();
-								}
-							}
-						}
-					} catch (Exception e) {
-						log.warn("Unexpected error while checking MediaPipeline {}, tags: {}", pipe.getId(), tags, e);
-					}
-					log.warn("Invalid MediaPipeline {} detected, will be dropped, tags: {}", pipe.getId(), tags);
-					pipe.release();
-				}, objCheckTimeout, MILLISECONDS);
+
+				checkPipeline(roid);
 			} else if (evt.getObject() instanceof Endpoint curPoint) {
 				// endpoint created
 				final String eoid = curPoint.getId();
-				Class<? extends Endpoint> clazz = null;
-				if (curPoint instanceof WebRtcEndpoint) {
-					clazz = WebRtcEndpoint.class;
-				} else if (curPoint instanceof RecorderEndpoint) {
-					clazz = RecorderEndpoint.class;
-				} else if (curPoint instanceof PlayerEndpoint) {
-					clazz = PlayerEndpoint.class;
-				} else if (curPoint instanceof RtpEndpoint) {
-					clazz = RtpEndpoint.class;
-				}
-				final Class<? extends Endpoint> fClazz = clazz;
-				scheduler.schedule(() -> {
-					if (client == null || fClazz == null) {
-						return;
-					}
-					// still alive
-					Endpoint point = client.getById(eoid, fClazz);
-					Map<String, String> tags = tagsAsMap(point);
-					try {
-						Map<String, String> pipeTags = tagsAsMap(point.getMediaPipeline());
-						final String inKuid = pipeTags.get(TAG_KUID);
-						if (ignoredKuids.contains(inKuid)) {
-							return;
-						}
-						if (validTestPipeline(pipeTags)) {
-							return;
-						}
-						KStream stream = streamProcessor.getByUid(tags.get("outUid"));
-						log.debug("Kurento::ObjectCreated -> New Endpoint {} detected, tags: {}, kStream: {}", point.getId(), tags, stream);
-						if (stream != null && stream.contains(tags.get("uid"))) {
-							return;
-						}
-					} catch (Exception e) {
-						log.warn("Unexpected error while checking Endpoint {}, tags: {}", point.getId(), tags, e);
-					}
-					log.warn("Invalid Endpoint {} detected, will be dropped, tags: {}", point.getId(), tags);
-					point.release();
-				}, objCheckTimeout, MILLISECONDS);
+				final Class<? extends Endpoint> clazz = getEndpointClass(curPoint);
+
+				checkEndpoint(eoid, clazz);
 			}
 		}
 

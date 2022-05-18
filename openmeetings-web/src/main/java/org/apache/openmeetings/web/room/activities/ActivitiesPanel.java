@@ -223,6 +223,8 @@ public class ActivitiesPanel extends Panel {
 			case REQ_RIGHT_HAVE_QUESTION:
 				text = String.format(fmt, name, getString("activities.ask.question"), df.format(a.getCreated()));
 				break;
+			default:
+				break;
 		}
 		final JSONObject aobj = new JSONObject()
 			.put("id", a.getId())
@@ -243,6 +245,8 @@ public class ActivitiesPanel extends Panel {
 			case ROOM_ENTER, ROOM_EXIT:
 				aobj.put("accept", false);
 				aobj.put("decline", false);
+				break;
+			default:
 				break;
 		}
 		handler.appendJavaScript(new StringBuilder("Activities.add(").append(aobj.toString()).append(");"));
@@ -269,6 +273,8 @@ public class ActivitiesPanel extends Panel {
 				break;
 			case ROOM_ENTER, ROOM_EXIT:
 				cls.append("bg-white auto-clean");
+			default:
+				break;
 		}
 		return cls;
 	}

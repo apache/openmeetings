@@ -796,7 +796,7 @@ public class RoomPanel extends BasePanel {
 						if (!c.getRoom().isAudioOnly() && !activityAllowed(c, Client.Activity.VIDEO, c.getRoom())) {
 							c.allow(Room.Right.VIDEO);
 						}
-						streamProcessor.toggleActivity(c, c.getRoom().isAudioOnly()
+						streamProcessor.onToggleActivity(c, c.getRoom().isAudioOnly()
 								? Client.Activity.AUDIO
 								: Client.Activity.AUDIO_VIDEO);
 					}

@@ -287,12 +287,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			@Override
 			public void onEndRequest(RequestCycle cycle) {
 				Response resp = cycle.getResponse();
-				if (resp instanceof WebResponse wresp) {
-					if (wresp.isHeaderSupported()) {
-						wresp.setHeader("X-XSS-Protection", "1; mode=block");
-						wresp.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
-						wresp.setHeader("X-Content-Type-Options", "nosniff");
-					}
+				if (resp instanceof WebResponse wresp && wresp.isHeaderSupported()) {
+					wresp.setHeader("X-XSS-Protection", "1; mode=block");
+					wresp.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+					wresp.setHeader("X-Content-Type-Options", "nosniff");
 				}
 			}
 		});

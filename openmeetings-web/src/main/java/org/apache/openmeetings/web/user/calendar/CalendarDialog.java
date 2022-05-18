@@ -358,6 +358,8 @@ public class CalendarDialog extends Modal<OmCalendar> {
 					target.add(delete.setVisible(isOwner(c)));
 				}
 				target.add(save.setVisible(isOwner(c)));
+			default:
+				break;
 		}
 	}
 
@@ -464,6 +466,8 @@ public class CalendarDialog extends Modal<OmCalendar> {
 					pass.setEnabled(true);
 					gcal.setEnabled(false);
 					setGCalVisibility(calendar);
+					break;
+				default:
 					break;
 			}
 		}
