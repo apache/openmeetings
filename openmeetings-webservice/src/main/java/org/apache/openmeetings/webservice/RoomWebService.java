@@ -22,7 +22,6 @@ import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -120,10 +119,11 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/public/{type}")
 	@Operation(
-		description = "Returns an Object of Type RoomsList which contains a list of\n"
-				+ " ROOM-Objects. Every ROOM-Object contains a Roomtype and all informations\n"
-				+ " about that ROOM. The List of current-users in the room is Null if you get\n"
-				+ " them via SOAP. The Roomtype can be 'conference', 'presentation' or 'interview'.",
+		description = """
+				Returns an Object of Type RoomsList which contains a list of
+				 ROOM-Objects. Every ROOM-Object contains a Roomtype and all informations
+				  about that ROOM. The List of current-users in the room is Null if you get
+				   them via SOAP. The Roomtype can be 'conference', 'presentation' or 'interview'.""",
 		responses = {
 				@ApiResponse(responseCode = "200", description = "list of public rooms",
 						content = @Content(schema = @Schema(implementation = RoomDTOListWrapper.class))),
@@ -209,9 +209,10 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/{type}/{externaltype}/{externalid}")
 	@Operation(
-		description = "Checks if a room with this exteralId + externalType does exist,\n"
-				+ " if yes it returns the room id if not, it will create the room and then\n"
-				+ " return the room id of the newly created room",
+		description = """
+				Checks if a room with this exteralId + externalType does exist,
+				 if yes it returns the room id if not, it will create the room and then
+				 return the room id of the newly created room""",
 		responses = {
 				@ApiResponse(responseCode = "200", description = "id of the room or error code",
 						content = @Content(schema = @Schema(implementation = RoomDTOWrapper.class))),
@@ -333,9 +334,10 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/close/{id}")
 	@Operation(
-			description = "Method to remotely close rooms. If a room is closed all users\n"
-					+ " inside the room and all users that try to enter it will be redirected to\n"
-					+ " the redirectURL that is defined in the ROOM-Object.",
+			description = """
+					Method to remotely close rooms. If a room is closed all users
+					 inside the room and all users that try to enter it will be redirected to
+					  the redirectURL that is defined in the ROOM-Object.""",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "1 in case of success, -2 otherwise",
 							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
@@ -379,9 +381,10 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/open/{id}")
 	@Operation(
-			description = "Method to remotely open rooms. If a room is closed all users\n"
-					+ " inside the room and all users that try to enter it will be redirected to\n"
-					+ " the redirectURL that is defined in the ROOM-Object.",
+			description = """
+					Method to remotely open rooms. If a room is closed all users
+					 inside the room and all users that try to enter it will be redirected to
+					  the redirectURL that is defined in the ROOM-Object.""",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "1 in case of success, -2 otherwise",
 							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
@@ -524,11 +527,11 @@ public class RoomWebService extends BaseWebService {
 			, @Parameter(required = true, description = "roomId id of the room to get users") @WebParam(name="roomid") @PathParam("roomid") Long roomId
 			) throws ServiceException
 	{
-		return performCall(sid, User.Right.SOAP, sd -> {
-			return clientManager.streamByRoom(roomId)
+		return performCall(sid, User.Right.SOAP
+				, sd -> clientManager.streamByRoom(roomId)
 					.map(c -> new UserDTO(c.getUser()))
-					.collect(Collectors.toList());
-		});
+					.toList()
+					);
 	}
 
 	/**

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_VALUE;
 import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_GROUP;
 import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_ID;
 import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_OWNER;
@@ -61,11 +62,11 @@ public class RoomUploadForm extends UploadForm {
 	public void show(IPartialPageRequestHandler handler) {
 		BaseFileItem last = roomFiles.getLastSelected();
 		if (last.getId() == null) {
-			lastSelectedRoom.add(AttributeModifier.replace("value", last.getRoomId()));
-			lastSelectedOwner.add(AttributeModifier.replace("value", last.getOwnerId()));
-			lastSelectedGroup.add(AttributeModifier.replace("value", last.getGroupId()));
+			lastSelectedRoom.add(AttributeModifier.replace(ATTR_VALUE, last.getRoomId()));
+			lastSelectedOwner.add(AttributeModifier.replace(ATTR_VALUE, last.getOwnerId()));
+			lastSelectedGroup.add(AttributeModifier.replace(ATTR_VALUE, last.getGroupId()));
 		} else {
-			lastSelectedId.add(AttributeModifier.replace("value", last.getId()));
+			lastSelectedId.add(AttributeModifier.replace(ATTR_VALUE, last.getId()));
 		}
 		super.show(handler);
 	}

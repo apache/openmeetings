@@ -41,7 +41,6 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -191,7 +190,7 @@ public class IcalUtils {
 		event.getProperty(Property.SUMMARY).ifPresent(summary -> a.setTitle(summary.getValue()));
 		event.getProperty(Property.LOCATION).ifPresent(location -> a.setLocation(location.getValue()));
 
-		event.getProperty(Property.RRULE).ifPresent(recur -> {
+		event.getProperty(Property.RRULE).ifPresent(recur ->
 			recur.getParameter("FREQ").ifPresent(freq -> {
 				if (freq.getValue().equals(Frequency.DAILY.name())) {
 					a.setIsDaily(true);
@@ -202,8 +201,8 @@ public class IcalUtils {
 				} else if (freq.getValue().equals(Frequency.YEARLY.name())) {
 					a.setIsYearly(true);
 				}
-			});
-		});
+			})
+		);
 
 		Set<MeetingMember> attList = a.getMeetingMembers() == null ? new HashSet<>()
 				: new HashSet<>(a.getMeetingMembers());
@@ -438,7 +437,7 @@ public class IcalUtils {
 		net.fortuna.ical4j.model.TimeZone timeZone = getTimazone(parseTimeZone(null, userDao.get(ownerId)).getID());
 
 		return getCalendar(timeZone, appointments.stream()
-				.map(appointment -> parseAppointment(appointment, timeZone))
-				.collect(Collectors.toList()));
+				.map(appointment -> (CalendarComponent)parseAppointment(appointment, timeZone))
+				.toList());
 	}
 }

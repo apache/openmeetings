@@ -54,6 +54,7 @@ public abstract class UploadResourceReference extends ResourceReference {
 	private static final Logger log = LoggerFactory.getLogger(UploadResourceReference.class);
 	private static final String PARAM_FILE_NAME = "omws-upload-file";
 	private static final String PARAM_SID_NAME = "omws-upload-sid";
+	private static final String ATTR_STATUS = "status";
 	private enum Status {
 		SUCCESS
 		, PROGRESS
@@ -117,7 +118,7 @@ public abstract class UploadResourceReference extends ResourceReference {
 			@Override
 			public void writeData(Attributes attributes) throws IOException {
 				attributes.getResponse().write(new JSONObject()
-						.put("status", status.name())
+						.put(ATTR_STATUS, status.name())
 						.put("message", msg)
 						.put("uuid", uuid)
 						.toString());
@@ -133,7 +134,7 @@ public abstract class UploadResourceReference extends ResourceReference {
 
 	protected void sendError(Client c, String uuid, String msg) {
 		WebSocketHelper.sendClient(c, getBaseMessage(uuid)
-				.put("status", Status.ERROR.name())
+				.put(ATTR_STATUS, Status.ERROR.name())
 				.put("message", msg));
 	}
 
@@ -141,7 +142,7 @@ public abstract class UploadResourceReference extends ResourceReference {
 		if (cur > progress.get()) {
 			progress.set(cur);
 			WebSocketHelper.sendClient(c, getBaseMessage(uuid)
-					.put("status", Status.PROGRESS.name())
+					.put(ATTR_STATUS, Status.PROGRESS.name())
 					.put("progress", cur));
 		}
 	}

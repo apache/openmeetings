@@ -84,10 +84,7 @@ public class BackupPanel extends AdminBasePanel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(feedback.setOutputMarkupId(true));
-
-		add(new BackupForm("backupUpload"));
-		add(upload = new UploadForm("upload", "" + RequestCycle.get().urlFor(new BackupUploadResourceReference(), new PageParameters())) {
+		upload = new UploadForm("upload", "" + RequestCycle.get().urlFor(new BackupUploadResourceReference(), new PageParameters())) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -114,10 +111,13 @@ public class BackupPanel extends AdminBasePanel {
 			protected String processingLabelKey() {
 				return "admin.backup.import.lbl";
 			}
-		});
-		add(new Label("cmdLineDesc", new ResourceModel("admin.backup.cmd.line.desc"))
-				.setEscapeModelStrings(false)
-				.setRenderBodyOnly(true));
+		};
+		add(feedback.setOutputMarkupId(true)
+				, new BackupForm("backupUpload")
+				, upload
+				, new Label("cmdLineDesc", new ResourceModel("admin.backup.cmd.line.desc"))
+					.setEscapeModelStrings(false)
+					.setRenderBodyOnly(true));
 	}
 
 	@Override
@@ -163,9 +163,7 @@ public class BackupPanel extends AdminBasePanel {
 					}.respond(attributes);
 				}
 			});
-			add(downloader);
-			// add an download button
-			add(download = new BootstrapAjaxButton("download", new ResourceModel("admin.backup.lbl"), this, Buttons.Type.Outline_Primary) {
+			download = new BootstrapAjaxButton("download", new ResourceModel("admin.backup.lbl"), this, Buttons.Type.Outline_Primary) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -187,9 +185,9 @@ public class BackupPanel extends AdminBasePanel {
 					// repaint the feedback panel so errors are shown
 					target.add(feedback);
 				}
-			});
+			};
 			download.setIconType(FontAwesome5IconType.file_download_s);
-			add(progressBar = new UpdatableProgressBar("progress", new Model<>(0), BackgroundColorBehavior.Color.Info, true) {
+			progressBar = new UpdatableProgressBar("progress", new Model<>(0), BackgroundColorBehavior.Color.Info, true) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -215,11 +213,14 @@ public class BackupPanel extends AdminBasePanel {
 					downloader.initiate(target);
 					super.onComplete(target);
 				}
-			});
+			};
 			progressBar.updateInterval(Duration.ofSeconds(1)).stop(null).striped(false).setVisible(false).setOutputMarkupPlaceholderTag(true);
-			add(new Label("backupSteps", new ResourceModel("admin.backup.steps"))
-					.setEscapeModelStrings(false)
-					.setRenderBodyOnly(true));
+			add(downloader);
+			add(progressBar
+					, download
+					, new Label("backupSteps", new ResourceModel("admin.backup.steps"))
+						.setEscapeModelStrings(false)
+						.setRenderBodyOnly(true));
 			super.onInitialize();
 		}
 

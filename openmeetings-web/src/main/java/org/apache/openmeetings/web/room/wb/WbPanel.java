@@ -47,7 +47,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
@@ -145,7 +144,7 @@ public class WbPanel extends AbstractWbPanel {
 					, List.of(OmFileHelper.getPublicClipartsDir().list())
 						.stream()
 						.sorted()
-						.collect(Collectors.toList()))
+						.toList())
 			{
 				private static final long serialVersionUID = 1L;
 

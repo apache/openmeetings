@@ -592,10 +592,16 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return new UrlValidator(new String[] {"http", "https"}).isValid(url);
 	}
 
+	private static String getValidBaseUrl(String inBaseUrl) {
+		if (isUrlValid(inBaseUrl)) {
+			return inBaseUrl;
+		}
+		return isUrlValid(getBaseUrl()) ? getBaseUrl() : "";
+	}
+
 	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp, String inBaseUrl) {
 		RequestCycle rc = RequestCycle.get();
-		String baseUrl = isUrlValid(inBaseUrl) ? inBaseUrl
-				: (isUrlValid(getBaseUrl()) ? getBaseUrl() : "");
+		String baseUrl = getValidBaseUrl(inBaseUrl);
 		if (!Strings.isEmpty(baseUrl) && !baseUrl.endsWith("/")) {
 			baseUrl += "/";
 		}

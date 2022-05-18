@@ -31,30 +31,31 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * See https://issues.apache.org/jira/browse/OPENMEETINGS-2667
  *
  */
-@Schema(example = "{\n"
-		+ "  \"userDTO\": {\n"
-		+ "    \"address\": {\n"
-		+ "      \"created\": 1630191589000,\n"
-		+ "      \"deleted\": false,\n"
-		+ "      \"country\": \"NZ\",\n"
-		+ "      \"mail\": \"seba.wagner@gmail.com\"\n"
-		+ "    },\n"
-		+ "    \"firstname\": \"firstname\",\n"
-		+ "    \"id\": 1,\n"
-		+ "    \"languageId\": 1,\n"
-		+ "    \"lastname\": \"lastname\",\n"
-		+ "    \"login\": \"admin\",\n"
-		+ "    \"rights\": [\n"
-		+ "      \"ROOM\",\n"
-		+ "      \"SOAP\",\n"
-		+ "      \"DASHBOARD\",\n"
-		+ "      \"ADMIN\",\n"
-		+ "      \"LOGIN\"\n"
-		+ "    ],\n"
-		+ "    \"timeZoneId\": \"Europe/Berlin\",\n"
-		+ "    \"type\": \"USER\"\n"
-		+ "  }\n"
-		+ "}")
+@Schema(example = """
+		{
+		  "userDTO": {
+		  "address": {
+		    "created": 1630191589000,
+		    "deleted": false,
+		    "country": "NZ",
+		    "mail": "seba.wagner@gmail.com"
+		  },
+		  "firstname": "firstname",
+		  "id": 1,
+		  "languageId": 1,
+		  "lastname": "lastname",
+		  "login": "admin",
+		  "rights": [
+		    "ROOM",
+		    "SOAP",
+		    "DASHBOARD",
+		    "ADMIN",
+		    "LOGIN"
+		  ],
+		  "timeZoneId": "Europe/Berlin",
+		  "type": "USER"
+		  }
+		}""")
 public class UserDTOWrapper {
 	private UserDTO userDTO;
 

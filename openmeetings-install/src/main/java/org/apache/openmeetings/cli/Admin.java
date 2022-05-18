@@ -185,10 +185,12 @@ public class Admin {
 	private void usage() {
 		OmHelpFormatter formatter = new OmHelpFormatter();
 		formatter.setWidth(100);
-		formatter.printHelp("admin", "Please specify one of the required parameters.", opts, "Examples:\n" +
-				"\t./admin.sh -b\n" +
-				"\t./admin.sh -i -v -file backup_31_07_2012_12_07_51.zip --drop\n" +
-				"\t./admin.sh -i -v -user admin -email someemail@gmail.com -tz \"Asia/Tehran\" -group \"yourgroup\" --db-type mysql --db-host localhost");
+		formatter.printHelp("admin", "Please specify one of the required parameters.", opts
+		, """
+			Examples:
+			./admin.sh -b
+			./admin.sh -i -v -file backup_31_07_2012_12_07_51.zip --drop
+			./admin.sh -i -v -user admin -email someemail@gmail.com -tz "Asia/Tehran" -group "yourgroup" --db-type mysql --db-host localhost""");
 	}
 
 	private void handleError(Exception e) {

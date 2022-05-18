@@ -33,117 +33,119 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * See https://issues.apache.org/jira/browse/OPENMEETINGS-2667
  *
  */
-@Schema(example = "{\n"
-		+ "    \"appointmentDTO\": [\n"
-		+ "        {\n"
-		+ "            \"connectedEvent\": false,\n"
-		+ "            \"deleted\": false,\n"
-		+ "            \"description\": \"Comments\",\n"
-		+ "            \"end\": \"2021-09-23T12:31:00+1200\",\n"
-		+ "            \"icalId\": \"7507ab5d-81ec-458a-bdb1-48d102978e49\",\n"
-		+ "            \"id\": 1,\n"
-		+ "            \"inserted\": \"2021-09-19T11:31:37+1200\",\n"
-		+ "            \"meetingMembers\": [\n"
-		+ "                {\n"
-		+ "                    \"id\": 1,\n"
-		+ "                    \"user\": {\n"
-		+ "                        \"address\": {\n"
-		+ "                            \"country\": \"NZ\",\n"
-		+ "                            \"deleted\": false,\n"
-		+ "                            \"email\": \"seba.wagner@gmail.com\",\n"
-		+ "                            \"id\": 1,\n"
-		+ "                            \"inserted\": {\n"
-		+ "                                \"date\": 29,\n"
-		+ "                                \"day\": 0,\n"
-		+ "                                \"hours\": 10,\n"
-		+ "                                \"minutes\": 59,\n"
-		+ "                                \"month\": 7,\n"
-		+ "                                \"ownerField\": 1,\n"
-		+ "                                \"seconds\": 49,\n"
-		+ "                                \"time\": 1630191589000,\n"
-		+ "                                \"timezoneOffset\": -720,\n"
-		+ "                                \"year\": 121\n"
-		+ "                            }\n"
-		+ "                        },\n"
-		+ "                        \"firstname\": \"firstname\",\n"
-		+ "                        \"id\": 1,\n"
-		+ "                        \"languageId\": 1,\n"
-		+ "                        \"lastname\": \"lastname\",\n"
-		+ "                        \"login\": \"admin\",\n"
-		+ "                        \"rights\": [\n"
-		+ "                            \"ROOM\",\n"
-		+ "                            \"SOAP\",\n"
-		+ "                            \"DASHBOARD\",\n"
-		+ "                            \"ADMIN\",\n"
-		+ "                            \"LOGIN\"\n"
-		+ "                        ],\n"
-		+ "                        \"timeZoneId\": \"Europe/Berlin\",\n"
-		+ "                        \"type\": \"USER\"\n"
-		+ "                    }\n"
-		+ "                }\n"
-		+ "            ],\n"
-		+ "            \"owner\": {\n"
-		+ "                \"address\": {\n"
-		+ "                    \"country\": \"NZ\",\n"
-		+ "                    \"deleted\": false,\n"
-		+ "                    \"email\": \"seba.wagner@gmail.com\",\n"
-		+ "                    \"id\": 1,\n"
-		+ "                    \"inserted\": {\n"
-		+ "                        \"date\": 29,\n"
-		+ "                        \"day\": 0,\n"
-		+ "                        \"hours\": 10,\n"
-		+ "                        \"minutes\": 59,\n"
-		+ "                        \"month\": 7,\n"
-		+ "                        \"ownerField\": 1,\n"
-		+ "                        \"seconds\": 49,\n"
-		+ "                        \"time\": 1630191589000,\n"
-		+ "                        \"timezoneOffset\": -720,\n"
-		+ "                        \"year\": 121\n"
-		+ "                    }\n"
-		+ "                },\n"
-		+ "                \"firstname\": \"firstname\",\n"
-		+ "                \"id\": 1,\n"
-		+ "                \"languageId\": 1,\n"
-		+ "                \"lastname\": \"lastname\",\n"
-		+ "                \"login\": \"admin\",\n"
-		+ "                \"rights\": [\n"
-		+ "                    \"ROOM\",\n"
-		+ "                    \"SOAP\",\n"
-		+ "                    \"DASHBOARD\",\n"
-		+ "                    \"ADMIN\",\n"
-		+ "                    \"LOGIN\"\n"
-		+ "                ],\n"
-		+ "                \"timeZoneId\": \"Europe/Berlin\",\n"
-		+ "                \"type\": \"USER\"\n"
-		+ "            },\n"
-		+ "            \"passwordProtected\": false,\n"
-		+ "            \"reminder\": \"ICAL\",\n"
-		+ "            \"reminderEmailSend\": false,\n"
-		+ "            \"room\": {\n"
-		+ "                \"allowRecording\": true,\n"
-		+ "                \"allowUserQuestions\": false,\n"
-		+ "                \"appointment\": true,\n"
-		+ "                \"audioOnly\": false,\n"
-		+ "                \"capacity\": 50,\n"
-		+ "                \"closed\": false,\n"
-		+ "                \"demo\": false,\n"
-		+ "                \"files\": [],\n"
-		+ "                \"hiddenElements\": [\n"
-		+ "                    \"MICROPHONE_STATUS\"\n"
-		+ "                ],\n"
-		+ "                \"id\": 11,\n"
-		+ "                \"moderated\": false,\n"
-		+ "                \"name\": \"New Event\",\n"
-		+ "                \"public\": false,\n"
-		+ "                \"type\": \"CONFERENCE\",\n"
-		+ "                \"waitModerator\": false,\n"
-		+ "                \"waitRecording\": false\n"
-		+ "            },\n"
-		+ "            \"start\": \"2021-09-23T11:31:00+1200\",\n"
-		+ "            \"title\": \"New Event\"\n"
-		+ "        }\n"
-		+ "    ]\n"
-		+ "}")
+@Schema(example = """
+		{
+		  "appointmentDTO": [
+		    {
+		      "connectedEvent": false,
+		      "deleted": false,
+		      "description": "Comments",
+		      "end": "2021-09-23T12:31:00+1200",
+		      "icalId": "7507ab5d-81ec-458a-bdb1-48d102978e49",
+		      "id": 1,
+		      "inserted": "2021-09-19T11:31:37+1200",
+		      "meetingMembers": [
+		        {
+		          "id": 1,
+		          "user": {
+		            "address": {
+		              "country": "NZ",
+		              "deleted": false,
+		              "email": "seba.wagner@gmail.com",
+		              "id": 1,
+		              "inserted": {
+		                "date": 29,
+		                "day": 0,
+		                "hours": 10,
+		                "minutes": 59,
+		                "month": 7,
+		                "ownerField": 1,
+		                "seconds": 49,
+		                "time": 1630191589000,
+		                "timezoneOffset": -720,
+		                "year": 121
+		              }
+		            },
+		            "firstname": "firstname",
+		            "id": 1,
+		            "languageId": 1,
+		            "lastname": "lastname",
+		            "login": "admin",
+		            "rights": [
+		              "ROOM",
+		              "SOAP",
+		              "DASHBOARD",
+		              "ADMIN",
+		              "LOGIN"
+		            ],
+		            "timeZoneId": "Europe/Berlin",
+		            "type": "USER"
+		          }
+		        }
+		      ],
+		      "owner": {
+		        "address": {
+		          "country": "NZ",
+		          "deleted": false,
+		          "email": "seba.wagner@gmail.com",
+		          "id": 1,
+		          "inserted": {
+		            "date": 29,
+		            "day": 0,
+		            "hours": 10,
+		            "minutes": 59,
+		            "month": 7,
+		            "ownerField": 1,
+		            "seconds": 49,
+		            "time": 1630191589000,
+		            "timezoneOffset": -720,
+		            "year": 121
+		          }
+		        },
+		        "firstname": "firstname",
+		        "id": 1,
+		        "languageId": 1,
+		        "lastname": "lastname",
+		        "login": "admin",
+		        "rights": [
+		          "ROOM",
+		          "SOAP",
+		          "DASHBOARD",
+		          "ADMIN",
+		          "LOGIN"
+		        ],
+		        "timeZoneId": "Europe/Berlin",
+		        "type": "USER"
+		      },
+		      "passwordProtected": false,
+		      "reminder": "ICAL",
+		      "reminderEmailSend": false,
+		      "room": {
+		        "allowRecording": true,
+		        "allowUserQuestions": false,
+		        "appointment": true,
+		        "audioOnly": false,
+		        "capacity": 50,
+		        "closed": false,
+		        "demo": false,
+		        "files": [],
+		        "hiddenElements": [
+		          "MICROPHONE_STATUS"
+		        ],
+		        "id": 11,
+		        "moderated": false,
+		        "name": "New Event",
+		        "public": false,
+		        "type": "CONFERENCE",
+		        "waitModerator": false,
+		        "waitRecording": false
+		      },
+		      "start": "2021-09-23T11:31:00+1200",
+		      "title": "New Event"
+		    }
+		  ]
+		}
+		""")
 public class AppointmentDTOListWrapper {
 	private List<AppointmentDTO> appointmentDTO;
 

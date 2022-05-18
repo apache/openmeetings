@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.webservice.schema;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import org.apache.openmeetings.db.dto.basic.Health;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  *
@@ -31,13 +31,14 @@ import org.apache.openmeetings.db.dto.basic.Health;
  * See https://issues.apache.org/jira/browse/OPENMEETINGS-2667
  *
  */
-@Schema(example = "{\n"
-		+ "    \"health\": {\n"
-		+ "        \"inited\": true,\n"
-		+ "        \"installed\": true,\n"
-		+ "        \"dbOk\": true\n"
-		+ "    }\n"
-		+ "}")
+@Schema(example = """
+		{
+		  "health": {
+		    "inited": true,
+		    "installed": true,
+		    "dbOk": true
+		  }
+		}""")
 public class HealthWrapper {
 	private Health health;
 

@@ -31,41 +31,42 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * See https://issues.apache.org/jira/browse/OPENMEETINGS-2667
  *
  */
-@Schema(example = "{\n"
-		+ "    \"fileExplorerObject\": {\n"
-		+ "        \"userHome\": {\n"
-		+ "            \"id\": 2,\n"
-		+ "            \"name\": \"OpenMeetings-NodeJS-Use-Case_preview.jpg\",\n"
-		+ "            \"hash\": \"f802b727-5bfc-4273-8c90-939ea15bf388\",\n"
-		+ "            \"ownerId\": 1,\n"
-		+ "            \"size\": 391449,\n"
-		+ "            \"type\": \"IMAGE\",\n"
-		+ "            \"width\": 2193,\n"
-		+ "            \"height\": 1823\n"
-		+ "        },\n"
-		+ "        \"roomHome\": [\n"
-		+ "            {\n"
-		+ "                \"id\": 4,\n"
-		+ "                \"name\": \"Folder1\",\n"
-		+ "                \"hash\": \"fad982f0-2468-4b10-9b6c-be3648f55143\",\n"
-		+ "                \"roomId\": 7,\n"
-		+ "                \"type\": \"FOLDER\"\n"
-		+ "            },\n"
-		+ "            {\n"
-		+ "                \"id\": 3,\n"
-		+ "                \"name\": \"browsers-768x768.png\",\n"
-		+ "                \"hash\": \"91902c95-9944-435e-a54d-a2b64158758b\",\n"
-		+ "                \"roomId\": 7,\n"
-		+ "                \"size\": 325415,\n"
-		+ "                \"type\": \"IMAGE\",\n"
-		+ "                \"width\": 768,\n"
-		+ "                \"height\": 768\n"
-		+ "            }\n"
-		+ "        ],\n"
-		+ "        \"userHomeSize\": 1444970,\n"
-		+ "        \"roomHomeSize\": 334311\n"
-		+ "    }\n"
-		+ "}")
+@Schema(example = """
+		{
+		  "fileExplorerObject": {
+		    "userHome": {
+		      "id": 2,
+		      "name": "OpenMeetings-NodeJS-Use-Case_preview.jpg",
+		      "hash": "f802b727-5bfc-4273-8c90-939ea15bf388",
+		      "ownerId": 1,
+		      "size": 391449,
+		      "type": "IMAGE",
+		      "width": 2193,
+		      "height": 1823
+		    },
+		    "roomHome": [
+		      {
+		        "id": 4,
+		        "name": "Folder1",
+		        "hash": "fad982f0-2468-4b10-9b6c-be3648f55143",
+		        "roomId": 7,
+		        "type": "FOLDER"
+		      },
+		      {
+		        "id": 3,
+		        "name": "browsers-768x768.png",
+		        "hash": "91902c95-9944-435e-a54d-a2b64158758b",
+		        "roomId": 7,
+		        "size": 325415,
+		        "type": "IMAGE",
+		        "width": 768,
+		        "height": 768
+		      }
+		    ],
+		    "userHomeSize": 1444970,
+		    "roomHomeSize": 334311
+		  }
+		}""")
 public class FileExplorerObjectWrapper {
 	private FileExplorerObject fileExplorerObject;
 

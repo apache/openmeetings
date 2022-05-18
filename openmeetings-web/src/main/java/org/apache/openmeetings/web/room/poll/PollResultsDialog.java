@@ -327,17 +327,20 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public Object getDisplayValue(RoomPoll object) {
-					return object == null ? "" : String.format("%s%s", object.getName(), object.isArchived() ? "" : String.format(" (%s)", getString("1413")));
+				public Object getDisplayValue(RoomPoll poll) {
+					if (poll == null) {
+						return "";
+					}
+					return poll.getName() + (poll.isArchived() ? "" : " (" + getString("1413") + ")");
 				}
 
 				@Override
-				public String getIdValue(RoomPoll object, int index) {
-					return object == null ? "" : "" + object.getId();
+				public String getIdValue(RoomPoll poll, int index) {
+					return poll == null ? "" : "" + poll.getId();
 				}
-			})).add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, target -> {
-				dispForm.updateModel(select.getModelObject(), true, target);
-			})));
+			})).add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE
+					, target -> dispForm.updateModel(select.getModelObject(), true, target)
+					)));
 			updateModel(null);
 		}
 
@@ -371,9 +374,9 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 		protected void onInitialize() {
 			add(name, question, count);
 			chartType = new DropDownChoice<>("chartType", Model.of(chartSimple), List.of(chartSimple, chartPie));
-			add(chartType.add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, target -> {
-				redraw(target, false);
-			})));
+			add(chartType.add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE
+					, target -> redraw(target, false)
+					)));
 			super.onInitialize();
 		}
 

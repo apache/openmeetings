@@ -78,8 +78,9 @@ class TestAdmin {
 	}
 
 	private static void checkError(String... args) throws Exception {
+		Admin a = new Admin();
 		try {
-			new Admin().process(args);
+			a.process(args);
 			fail();
 		} catch (ExitException ee) {
 			assertTrue(true);

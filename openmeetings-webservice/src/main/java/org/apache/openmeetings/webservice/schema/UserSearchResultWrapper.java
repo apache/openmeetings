@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.webservice.schema;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import org.apache.openmeetings.db.dto.user.UserSearchResult;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  *
@@ -31,56 +31,57 @@ import org.apache.openmeetings.db.dto.user.UserSearchResult;
  * See https://issues.apache.org/jira/browse/OPENMEETINGS-2667
  *
  */
-@Schema(example = "{\n"
-		+ "    \"userSearchResult\": {\n"
-		+ "        \"objectName\": \"org.apache.openmeetings.db.entity.user.User\",\n"
-		+ "        \"records\": 2,\n"
-		+ "        \"result\": [\n"
-		+ "            {\n"
-		+ "                \"address\": {\n"
-		+ "                    \"created\": 1631958373000,\n"
-		+ "                    \"deleted\": false,\n"
-		+ "                    \"country\": \"NZ\",\n"
-		+ "                    \"mail\": \"test@test.com\"\n"
-		+ "                },\n"
-		+ "                \"id\": 3,\n"
-		+ "                \"languageId\": 1,\n"
-		+ "                \"login\": \"soapuser\",\n"
-		+ "                \"rights\": [\n"
-		+ "                    \"ROOM\",\n"
-		+ "                    \"SOAP\",\n"
-		+ "                    \"DASHBOARD\",\n"
-		+ "                    \"ADMIN\",\n"
-		+ "                    \"LOGIN\"\n"
-		+ "                ],\n"
-		+ "                \"timeZoneId\": \"Europe/Berlin\",\n"
-		+ "                \"type\": \"USER\"\n"
-		+ "            },\n"
-		+ "            {\n"
-		+ "                \"address\": {\n"
-		+ "                    \"created\": 1630191589000,\n"
-		+ "                    \"deleted\": false,\n"
-		+ "                    \"country\": \"NZ\",\n"
-		+ "                    \"mail\": \"seba.wagner@gmail.com\"\n"
-		+ "                },\n"
-		+ "                \"firstname\": \"firstname\",\n"
-		+ "                \"id\": 1,\n"
-		+ "                \"languageId\": 1,\n"
-		+ "                \"lastname\": \"lastname\",\n"
-		+ "                \"login\": \"admin\",\n"
-		+ "                \"rights\": [\n"
-		+ "                    \"ROOM\",\n"
-		+ "                    \"SOAP\",\n"
-		+ "                    \"DASHBOARD\",\n"
-		+ "                    \"ADMIN\",\n"
-		+ "                    \"LOGIN\"\n"
-		+ "                ],\n"
-		+ "                \"timeZoneId\": \"Europe/Berlin\",\n"
-		+ "                \"type\": \"USER\"\n"
-		+ "            }\n"
-		+ "        ]\n"
-		+ "    }\n"
-		+ "}")
+@Schema(example = """
+		{
+		  "userSearchResult": {
+		    "objectName": "org.apache.openmeetings.db.entity.user.User",
+		    "records": 2,
+		    "result": [
+		      {
+		        "address": {
+		          "created": 1631958373000,
+		          "deleted": false,
+		          "country": "NZ",
+		          "mail": "test@test.com"
+		        },
+		        "id": 3,
+		        "languageId": 1,
+		        "login": "soapuser",
+		        "rights": [
+		          "ROOM",
+		          "SOAP",
+		          "DASHBOARD",
+		          "ADMIN",
+		          "LOGIN"
+		        ],
+		        "timeZoneId": "Europe/Berlin",
+		        "type": "USER"
+		      },
+		      {
+		        "address": {
+		          "created": 1630191589000,
+		          "deleted": false,
+		          "country": "NZ",
+		          "mail": "seba.wagner@gmail.com"
+		        },
+		        "firstname": "firstname",
+		        "id": 1,
+		        "languageId": 1,
+		        "lastname": "lastname",
+		        "login": "admin",
+		        "rights": [
+		          "ROOM",
+		          "SOAP",
+		          "DASHBOARD",
+		          "ADMIN",
+		          "LOGIN"
+		        ],
+		        "timeZoneId": "Europe/Berlin",
+		        "type": "USER"
+		      }
+		    ]
+		  }
+		}""")
 public class UserSearchResultWrapper {
 	private UserSearchResult userSearchResult;
 

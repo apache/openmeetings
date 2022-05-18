@@ -26,7 +26,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Map.Entry;
 
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
@@ -137,7 +137,8 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		mappingView.setModelObject(getModelObject().getMapping().entrySet()
 				.stream()
 				.map(SimpleEntry::new)
-				.collect(Collectors.toList()));
+				.map(e -> (Entry<String, String>)e)
+				.toList());
 		return mappingView;
 	}
 

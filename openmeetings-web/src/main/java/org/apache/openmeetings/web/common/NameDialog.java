@@ -38,7 +38,6 @@ public abstract class NameDialog extends Modal<String> {
 	private final Form<String> form;
 	protected final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final String name;
-	private RequiredTextField<String> title;
 
 	protected NameDialog(String id) {
 		this(id, null);
@@ -68,8 +67,10 @@ public abstract class NameDialog extends Modal<String> {
 			}
 		}); // add
 		addButton(OmModalCloseButton.of());
+		RequiredTextField<String> title = new RequiredTextField<>("title", getModel());
+		title.setLabel(getLabel());
 		form.add(new Label("label", getLabel())
-				, title = new RequiredTextField<>("title", getModel())
+				, title
 				, feedback.setOutputMarkupId(true)
 				, new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
 					private static final long serialVersionUID = 1L;
@@ -84,7 +85,6 @@ public abstract class NameDialog extends Modal<String> {
 						NameDialog.this.onError(target);
 					}
 				});
-		title.setLabel(getLabel());
 		add(form.setOutputMarkupId(true));
 		super.onInitialize();
 	}

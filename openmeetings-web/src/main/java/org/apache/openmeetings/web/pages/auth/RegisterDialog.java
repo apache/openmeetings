@@ -61,6 +61,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAja
 public class RegisterDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(RegisterDialog.class);
+	private static final String FLD_EMAIL = "email";
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final IModel<String> tzModel = Model.of(WebSession.get().getClientTZCode());
 	private final RegisterForm form = new RegisterForm("form");
@@ -155,8 +156,6 @@ public class RegisterDialog extends Modal<String> {
 		private PasswordTextField passwordField;
 		private RequiredTextField<String> emailField;
 		private RequiredTextField<String> loginField;
-		private RequiredTextField<String> firstNameField;
-		private RequiredTextField<String> lastNameField;
 
 		public RegisterForm(String id) {
 			super(id);
@@ -167,24 +166,14 @@ public class RegisterDialog extends Modal<String> {
 		protected void onInitialize() {
 			super.onInitialize();
 			add(feedback.setOutputMarkupId(true));
-			add(firstNameField = new RequiredTextField<>("firstName", new PropertyModel<>(RegisterDialog.this, "firstName")));
-			add(lastNameField = new RequiredTextField<>("lastName", new PropertyModel<>(RegisterDialog.this, "lastName")));
-			add(loginField = new RequiredTextField<>("login", new PropertyModel<>(RegisterDialog.this, "login")));
-			add(passwordField = new PasswordTextField("password", new PropertyModel<>(RegisterDialog.this, "password")));
-			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<>()).setResetPassword(true));
-			add(emailField = new RequiredTextField<>("email", new PropertyModel<>(RegisterDialog.this, "email")) {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected String[] getInputTypes() {
-					return new String[] {"email"};
-				}
-			});
-			add(captcha = new Captcha("captcha"));
-			firstNameField.setLabel(new ResourceModel("117"));
-			lastNameField.setLabel(new ResourceModel("136"));
-			loginField.add(minimumLength(getMinLoginLength())).setLabel(new ResourceModel("114"));
-			passwordField.setResetPassword(true).add(new StrongPasswordValidator(new User()) {
+			RequiredTextField<String> firstNameField = new RequiredTextField<>("firstName", new PropertyModel<>(RegisterDialog.this, "firstName"));
+			RequiredTextField<String> lastNameField = new RequiredTextField<>("lastName", new PropertyModel<>(RegisterDialog.this, "lastName"));
+			add(firstNameField.setLabel(new ResourceModel("117")));
+			add(lastNameField.setLabel(new ResourceModel("136")));
+			loginField = new RequiredTextField<>("login", new PropertyModel<>(RegisterDialog.this, "login"));
+			add(loginField.add(minimumLength(getMinLoginLength())).setLabel(new ResourceModel("114")));
+			passwordField = new PasswordTextField("password", new PropertyModel<>(RegisterDialog.this, "password"));
+			add(passwordField.setResetPassword(true).add(new StrongPasswordValidator(new User()) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -196,9 +185,20 @@ public class RegisterDialog extends Modal<String> {
 					setUser(u);
 					super.validate(pass);
 				}
-			}).setLabel(new ResourceModel("110"));
-			confirmPassword.setLabel(new ResourceModel("116"));
-			emailField.add(RfcCompliantEmailAddressValidator.getInstance()).setLabel(new ResourceModel("119"));
+			}).setLabel(new ResourceModel("110")));
+			confirmPassword = new PasswordTextField("confirmPassword", new Model<>()).setResetPassword(true);
+			add(confirmPassword.setLabel(new ResourceModel("116")));
+			emailField = new RequiredTextField<>(FLD_EMAIL, new PropertyModel<>(RegisterDialog.this, FLD_EMAIL)) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected String[] getInputTypes() {
+					return new String[] {FLD_EMAIL};
+				}
+			};
+			add(emailField.add(RfcCompliantEmailAddressValidator.getInstance()).setLabel(new ResourceModel("119")));
+			add(captcha = new Captcha("captcha"));
+			loginField.add(minimumLength(getMinLoginLength())).setLabel(new ResourceModel("114"));
 			AjaxButton ab = new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;
 			};

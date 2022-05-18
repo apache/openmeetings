@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.entity.room;
 
 import java.util.Date;
+import java.util.stream.Stream;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -59,12 +60,20 @@ public class Invitation extends HistoricalEntity {
 	}
 
 	public enum Valid {
-		ONE_TIME
-		, PERIOD
-		, ENDLESS;
+		ONE_TIME(3)
+		, PERIOD(2)
+		, ENDLESS(1);
+		private final int code;
+
+		private Valid(int code) {
+			this.code = code;
+		}
 
 		public static Valid fromInt(int valid) {
-			return valid == 1 ? ENDLESS : (valid == 2 ? PERIOD : ONE_TIME);
+			return Stream.of(Valid.values())
+					.filter(v -> v.code == valid)
+					.findAny()
+					.orElse(ONE_TIME);
 		}
 	}
 

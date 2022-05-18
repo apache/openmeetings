@@ -1183,11 +1183,13 @@
 								</module>
 								<module name="TreeWalker">
 									<module name="UnusedImports"></module>
-									<module name="RegexpSinglelineJava">
+									<!-- FIXME TODO commented out due to it is unclear what to do with text blocks :(((
+										https://github.com/checkstyle/checkstyle/issues/1405#issuecomment-1129608815 -->
+									<!--module name="RegexpSinglelineJava">
 										<property name="format" value="^\t* "/>
 										<property name="message" value="Indent must use tab characters"/>
 										<property name="ignoreComments" value="true"/>
-									</module>
+									</module-->
 								</module>
 								<module name="RegexpSingleline">
 									<property name="format" value="\s+$"/>
@@ -1201,6 +1203,13 @@
 						<failsOnError>true</failsOnError>
 						<excludes>**/module-info.java</excludes>
 					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>com.puppycrawl.tools</groupId>
+							<artifactId>checkstyle</artifactId>
+							<version>10.2</version> <!-- FIXME TODO: should be removed after checkstyle plugin will be updated -->
+						</dependency>
+					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

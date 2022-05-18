@@ -33,7 +33,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.openmeetings.core.remote.KurentoHandler;
@@ -322,7 +321,7 @@ public class ClientManager implements IClientManager {
 	private List<Client> getByKeys(Long userId, String sessionId) {
 		return map().values().stream()
 				.filter(c -> c.sameUserId(userId) && c.getSessionId().equals(sessionId))
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	public void invalidate(Long userId, String sessionId) {

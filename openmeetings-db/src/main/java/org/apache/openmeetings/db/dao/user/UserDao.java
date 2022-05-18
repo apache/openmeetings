@@ -40,7 +40,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -87,9 +86,10 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	private static final Logger log = LoggerFactory.getLogger(UserDao.class);
 	private static final String PARAM_EMAIL = "email";
 	private static final List<String> searchFields = List.of("lastname", "firstname", "login", "address.email", "address.town");
-	private static final List<String> guSearchFields = searchFields.stream().map(f -> "user." + f).collect(Collectors.toList());
-	public static final String FETCH_GROUP_GROUP = "groupUsers";
-	public static final String FETCH_GROUP_BACKUP = "backupexport";
+	private static final List<String> guSearchFields = searchFields.stream().map(f -> "user." + f).toList();
+	private static final String FIELD_GROUP = "group";
+	public static final String FETCH_GROUP_GROUP = "Group_Users";
+	public static final String FETCH_GROUP_BACKUP = "Backup_Export";
 
 	@PersistenceContext
 	private EntityManager em;
@@ -143,10 +143,10 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 		Subquery<Long> subquery = query.subquery(Long.class);
 		Root<GroupUser> subRoot = subquery.from(GroupUser.class);
-		subquery.select(subRoot.get("group").get("id"));
+		subquery.select(subRoot.get(FIELD_GROUP).get("id"));
 		subquery.where(builder.equal(subRoot.get("user").get("id"), ownerId));
 		return builder.or(
-				builder.and(builder.notEqual(root.get("type"), Type.CONTACT), root.get("groupUsers").get("group").get("id").in(subquery))
+				builder.and(builder.notEqual(root.get("type"), Type.CONTACT), root.get("groupUsers").get(FIELD_GROUP).get("id").in(subquery))
 				, builder.and(builder.equal(root.get("type"), Type.CONTACT), builder.equal(root.get("ownerId"), ownerId))
 				);
 	}
@@ -166,7 +166,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	// This is AdminDao method
 	public List<User> get(String search, boolean excludeContacts, long start, long count) {
 		return DaoHelper.get(em, User.class, false, search, searchFields, true
-				, excludeContacts ? (b, q) -> getContactsFilter(b, q) : null
+				, excludeContacts ? this::getContactsFilter : null
 				, null, start, count);
 	}
 
@@ -181,7 +181,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	private Predicate getAdminFilter(Long adminId, CriteriaBuilder builder, CriteriaQuery<?> query) {
 		Root<GroupUser> root = getRoot(query, GroupUser.class);
-		return builder.in(root.get("group").get("id")).value(DaoHelper.groupAdminQuery(adminId, builder, query));
+		return builder.in(root.get(FIELD_GROUP).get("id")).value(DaoHelper.groupAdminQuery(adminId, builder, query));
 	}
 
 	@Override

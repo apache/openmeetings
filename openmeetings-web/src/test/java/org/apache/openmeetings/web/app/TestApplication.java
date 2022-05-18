@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -45,7 +44,7 @@ class TestApplication extends AbstractOmServerTest {
 		final String prevAppName = getApplicationName();
 		try {
 			setApplicationName(newAppName);
-			List<Locale> locales = LabelDao.getLanguages().stream().map(Entry::getValue).collect(Collectors.toList());
+			List<Locale> locales = LabelDao.getLanguages().stream().map(Entry::getValue).toList();
 			for (Locale l : locales) {
 				for (String key : Application.STRINGS_WITH_APP) {
 					final String str = app.getOmString(key, l);

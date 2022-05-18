@@ -21,15 +21,5 @@ package org.apache.openmeetings.core.util.ws;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 
-public class WsMessageRoomMsg implements IClusterWsMessage {
-	private static final long serialVersionUID = 1L;
-	private final RoomMessage msg;
-
-	public WsMessageRoomMsg(RoomMessage msg) {
-		this.msg = msg;
-	}
-
-	public RoomMessage getMsg() {
-		return msg;
-	}
+public record WsMessageRoomMsg(RoomMessage msg) implements IClusterWsMessage {
 }

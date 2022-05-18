@@ -33,20 +33,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * See https://issues.apache.org/jira/browse/OPENMEETINGS-2667
  *
  */
-@Schema(example = "{\n"
-		+ "  \"fileItemDTO\": [\n"
-		+ "    {\n"
-		+ "      \"id\": 2,\n"
-		+ "      \"name\": \"OpenMeetings-NodeJS-Use-Case_preview.jpg\",\n"
-		+ "      \"hash\": \"f802b727-5bfc-4273-8c90-939ea15bf388\",\n"
-		+ "      \"ownerId\": 1,\n"
-		+ "      \"size\": 391449,\n"
-		+ "      \"type\": \"IMAGE\",\n"
-		+ "      \"width\": 2193,\n"
-		+ "      \"height\": 1823\n"
-		+ "    }\n"
-		+ "  ]\n"
-		+ "}")
+@Schema(example = """
+		{
+		  "fileItemDTO": [
+		  {
+		    "id": 2,
+		    "name": "OpenMeetings-NodeJS-Use-Case_preview.jpg",
+		    "hash": "f802b727-5bfc-4273-8c90-939ea15bf388",
+		    "ownerId": 1,
+		    "size": 391449,
+		    "type": "IMAGE",
+		    "width": 2193,
+		    "height": 1823
+		  }
+		  ]
+		}""")
 public class FileItemDTOListWrapper {
 	private List<FileItemDTO> fileItemDTO;
 

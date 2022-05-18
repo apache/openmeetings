@@ -45,7 +45,6 @@ public class ChangePasswordDialog extends Modal<String> {
 	private final PasswordTextField current = new PasswordTextField("current", Model.of((String)null));
 	private final PasswordTextField pass = new PasswordTextField("pass", Model.of((String)null));
 	private final PasswordTextField pass2 = new PasswordTextField("pass2", Model.of((String)null));
-	private StrongPasswordValidator passValidator;
 	private final Form<String> form = new Form<>("form") {
 		private static final long serialVersionUID = 1L;
 
@@ -101,7 +100,7 @@ public class ChangePasswordDialog extends Modal<String> {
 			}
 		}); //send
 		addButton(OmModalCloseButton.of());
-		passValidator = new StrongPasswordValidator(userDao.get(getUserId()));
+		StrongPasswordValidator passValidator = new StrongPasswordValidator(userDao.get(getUserId()));
 		add(form.add(
 				current.setLabel(new ResourceModel("current.password")).setRequired(true).setOutputMarkupId(true)
 				, pass.setLabel(new ResourceModel("328")).add(passValidator).setOutputMarkupId(true)

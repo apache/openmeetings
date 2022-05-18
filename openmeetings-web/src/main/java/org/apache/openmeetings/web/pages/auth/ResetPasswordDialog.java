@@ -70,7 +70,6 @@ public class ResetPasswordDialog extends Modal<String> {
 
 	private class ResetForm extends Form<String> {
 		private static final long serialVersionUID = 1L;
-		private TextField<String> login;
 		private PasswordTextField confirmPassword;
 
 		private ResetForm(String id) {
@@ -81,11 +80,13 @@ public class ResetPasswordDialog extends Modal<String> {
 		protected void onInitialize() {
 			super.onInitialize();
 			add(feedback.setOutputMarkupId(true));
-			add(login = new TextField<>("login", Model.of(user.getLogin())));
-			login.setOutputMarkupId(true);
+			TextField<String> login = new TextField<>("login", Model.of(user.getLogin()));
+			add(login.setOutputMarkupId(true));
 			add(password = new PasswordTextField("password", new Model<>()));
-			password.setLabel(new ResourceModel("328")).setOutputMarkupId(true);
-			password.setRequired(false).add(new StrongPasswordValidator(user));
+			password.setLabel(new ResourceModel("328"))
+					.add(new StrongPasswordValidator(user))
+					.setRequired(false)
+					.setOutputMarkupId(true);
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<>()));
 			confirmPassword.setLabel(new ResourceModel("116")).setOutputMarkupId(true);
 

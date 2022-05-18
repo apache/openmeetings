@@ -111,9 +111,11 @@ public class OmHelpFormatter extends HelpFormatter {
 			final String key = me.getKey();
 			List<OmOption> options = me.getValue();
 			Collections.sort(options, (o1, o2) -> {
-					boolean o1opt = !o1.isOptional(key);
-					boolean o2opt = !o2.isOptional(key);
-					return (o1opt && o2opt || !o1opt && !o2opt) ? (o1.getOpt() == null ? 1 : -1) : (o1opt ? -1 : 1);
+					boolean o1mandatory = !o1.isOptional(key);
+					boolean o2mandatory = !o2.isOptional(key);
+					int shortNameVal = o1.getOpt() == null ? 1 : -1;
+					int mandatoryVal = o1mandatory ? -1 : 1;
+					return (o1mandatory && o2mandatory || !o1mandatory && !o2mandatory) ? shortNameVal : mandatoryVal;
 				});
 			if (opts.hasOption(key)) {
 				options.add(0, (OmOption)opts.getOption(key));

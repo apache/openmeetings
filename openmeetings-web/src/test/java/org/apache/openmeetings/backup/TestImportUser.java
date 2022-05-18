@@ -38,8 +38,8 @@ class TestImportUser extends AbstractTestImport {
 
 	@Test
 	void importUserNE() throws Exception {
+		File configs = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "config/skip/configs.xml").toURI());
 		Assertions.assertThrows(BackupException.class, () -> {
-			File configs = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "config/skip/configs.xml").toURI());
 			backupImport.importUsers(configs.getParentFile());
 		});
 	}

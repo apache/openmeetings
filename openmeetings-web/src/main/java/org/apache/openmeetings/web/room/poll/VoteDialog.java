@@ -104,7 +104,10 @@ public class VoteDialog extends Modal<RoomPollAnswer> {
 	}
 
 	static String getName(Component c, User u) {
-		return u == null ? "" : (getUserId().equals(u.getId()) ? c.getString("1411") : u.getDisplayName());
+		if (u == null) {
+			return  "";
+		}
+		return getUserId().equals(u.getId()) ? c.getString("1411") : u.getDisplayName();
 	}
 
 	public void updateModel(IPartialPageRequestHandler target, RoomPoll rp) {

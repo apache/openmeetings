@@ -126,7 +126,6 @@ public abstract class FileTreePanel extends Panel {
 	private final Form<Void> form = new Form<>("form");
 	private final NameDialog addFolder;
 	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
-	private ConfirmationBehavior trashConfirm;
 	private final Long roomId;
 	private boolean readOnly = true;
 	private final Component createDir = new WebMarkupContainer("create").add(new AjaxEventBehavior(EVT_CLICK) {
@@ -222,7 +221,7 @@ public abstract class FileTreePanel extends Panel {
 			}
 		});
 
-		trashConfirm = new ConfirmationBehavior(newOkCancelDangerConfirmCfg(trashToolbar, getString("80")).withContent(getString("713"))) {
+		ConfirmationBehavior trashConfirm = new ConfirmationBehavior(newOkCancelDangerConfirmCfg(trashToolbar, getString("80")).withContent(getString("713"))) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

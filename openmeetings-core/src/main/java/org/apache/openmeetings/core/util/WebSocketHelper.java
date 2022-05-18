@@ -117,7 +117,7 @@ public class WebSocketHelper {
 
 	public static boolean send(IClusterWsMessage msg) {
 		if (msg instanceof WsMessageRoomMsg) {
-			sendRoom(((WsMessageRoomMsg)msg).getMsg(), false);
+			sendRoom(((WsMessageRoomMsg)msg).msg(), false);
 		} else if (msg instanceof WsMessageRoomOthers) {
 			WsMessageRoomOthers m = (WsMessageRoomOthers)msg;
 			sendRoomOthers(m.getRoomId(), m.getUid(), m.getMsg(), false);
@@ -128,7 +128,7 @@ public class WebSocketHelper {
 			WsMessageUser m = (WsMessageUser)msg;
 			sendUser(m.getUserId(), m.getMsg(), null, false);
 		} else if (msg instanceof WsMessageAll) {
-			sendAll(((WsMessageAll)msg).getMsg(), false);
+			sendAll(((WsMessageAll)msg).msg(), false);
 		}
 		return true;
 	}

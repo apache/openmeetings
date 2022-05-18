@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.cli;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_VALUE;
+
 import java.io.File;
 
 import javax.xml.XMLConstants;
@@ -93,7 +95,7 @@ public abstract class ConnectionPropertiesPatcher {
 		XPathExpression expr = xPath.compile("/persistence/persistence-unit/properties/property[@name='openjpa.ConnectionProperties']");
 
 		Element element = (Element)expr.evaluate(doc, XPathConstants.NODE);
-		return element.getAttributeNode("value");
+		return element.getAttributeNode(ATTR_VALUE);
 	}
 
 	public static void patch(ConnectionProperties props) throws Exception {

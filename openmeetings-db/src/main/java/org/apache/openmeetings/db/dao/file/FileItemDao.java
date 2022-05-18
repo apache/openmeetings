@@ -23,7 +23,6 @@ import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.TypedQuery;
 
@@ -203,14 +202,14 @@ public class FileItemDao extends BaseFileItemDao {
 		return setLimits(em.createNamedQuery("getAllFileItemsForRoom", BaseFileItem.class)
 					.setParameter("folder", Type.FOLDER)
 					.setParameter("roomId", roomId)
-					.setParameter("groups", groups.parallelStream().map(Group::getId).collect(Collectors.toList()))
+					.setParameter("groups", groups.parallelStream().map(Group::getId).toList())
 					.setParameter("name", String.format("%%%s%%", search == null ? "" : search))
 				, start, count).getResultList();
 	}
 
 	public List<BaseFileItem> get(Collection<String> ids) {
 		return em.createNamedQuery("getFileItemsByIds", BaseFileItem.class)
-				.setParameter("ids", ids.parallelStream().map(Long::valueOf).collect(Collectors.toList()))
+				.setParameter("ids", ids.parallelStream().map(Long::valueOf).toList())
 				.getResultList();
 	}
 

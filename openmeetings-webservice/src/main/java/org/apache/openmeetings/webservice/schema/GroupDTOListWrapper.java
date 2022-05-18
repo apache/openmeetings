@@ -33,18 +33,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * See https://issues.apache.org/jira/browse/OPENMEETINGS-2667
  *
  */
-@Schema(example = "{\n"
-		+ "    \"groupDTO\": [\n"
-		+ "        {\n"
-		+ "            \"id\": 1,\n"
-		+ "            \"name\": \"admin\"\n"
-		+ "        },\n"
-		+ "        {\n"
-		+ "            \"id\": 2,\n"
-		+ "            \"name\": \"myCMS\"\n"
-		+ "        }\n"
-		+ "    ]\n"
-		+ "}")
+@Schema(example = """
+		{
+		  "groupDTO": [
+		    {
+		      "id": 1,
+		      "name": "admin"
+		    },
+		    {
+		      "id": 2,
+		      "name": "myCMS"
+		    }
+		  ]
+		}""")
 public class GroupDTOListWrapper {
 	private List<GroupDTO> groupDTO;
 

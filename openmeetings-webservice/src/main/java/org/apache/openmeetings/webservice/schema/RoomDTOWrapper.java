@@ -31,26 +31,27 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * See https://issues.apache.org/jira/browse/OPENMEETINGS-2667
  *
  */
-@Schema(example = "{\n"
-		+ "    \"roomDTO\": {\n"
-		+ "        \"id\": 2,\n"
-		+ "        \"name\": \"Public Conference Room [install.room.public.conference]\",\n"
-		+ "        \"comment\": \"\",\n"
-		+ "        \"type\": \"CONFERENCE\",\n"
-		+ "        \"capacity\": 32,\n"
-		+ "        \"appointment\": false,\n"
-		+ "        \"isPublic\": true,\n"
-		+ "        \"demo\": false,\n"
-		+ "        \"closed\": false,\n"
-		+ "        \"moderated\": false,\n"
-		+ "        \"waitModerator\": false,\n"
-		+ "        \"allowUserQuestions\": true,\n"
-		+ "        \"allowRecording\": true,\n"
-		+ "        \"waitRecording\": false,\n"
-		+ "        \"audioOnly\": false,\n"
-		+ "        \"hiddenElements\": \"MICROPHONE_STATUS\"\n"
-		+ "    }\n"
-		+ "}")
+@Schema(example = """
+		{
+		  "roomDTO": {
+		    "id": 2,
+		    "name": "Public Conference Room [install.room.public.conference]",
+		    "comment": "",
+		    "type": "CONFERENCE",
+		    "capacity": 32,
+		    "appointment": false,
+		    "isPublic": true,
+		    "demo": false,
+		    "closed": false,
+		    "moderated": false,
+		    "waitModerator": false,
+		    "allowUserQuestions": true,
+		    "allowRecording": true,
+		    "waitRecording": false,
+		    "audioOnly": false,
+		    "hiddenElements": "MICROPHONE_STATUS"
+		  }
+		}""")
 public class RoomDTOWrapper {
 	private RoomDTO roomDTO;
 

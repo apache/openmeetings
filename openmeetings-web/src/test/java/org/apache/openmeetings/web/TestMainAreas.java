@@ -106,8 +106,9 @@ class TestMainAreas extends AbstractWicketTesterTest {
 			log.debug("Positive test:: area: {}, type: {} for user: {}", area, type, user);
 			testArea(user, p -> {
 				tester.getRequest().setParameter(area.name(), type);
+				AbstractAjaxBehavior authBehavior = (AbstractAjaxBehavior)p.getBehaviorById(0);
 				try {
-					tester.executeBehavior((AbstractAjaxBehavior)p.getBehaviorById(0));
+					tester.executeBehavior(authBehavior);
 					fail("Not authorized");
 				} catch (UnauthorizedInstantiationException e) {
 					assertTrue(true, "Exception is expected");

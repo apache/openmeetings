@@ -33,84 +33,85 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * See https://issues.apache.org/jira/browse/OPENMEETINGS-2667
  *
  */
-@Schema(example = "{\n"
-		+ "    \"roomDTO\": [\n"
-		+ "        {\n"
-		+ "            \"id\": 2,\n"
-		+ "            \"name\": \"Public Conference Room [install.room.public.conference]\",\n"
-		+ "            \"comment\": \"\",\n"
-		+ "            \"type\": \"CONFERENCE\",\n"
-		+ "            \"capacity\": 32,\n"
-		+ "            \"appointment\": false,\n"
-		+ "            \"isPublic\": true,\n"
-		+ "            \"demo\": false,\n"
-		+ "            \"closed\": false,\n"
-		+ "            \"moderated\": false,\n"
-		+ "            \"waitModerator\": false,\n"
-		+ "            \"allowUserQuestions\": true,\n"
-		+ "            \"allowRecording\": true,\n"
-		+ "            \"waitRecording\": false,\n"
-		+ "            \"audioOnly\": false,\n"
-		+ "            \"hiddenElements\": \"MICROPHONE_STATUS\"\n"
-		+ "        },\n"
-		+ "        {\n"
-		+ "            \"id\": 3,\n"
-		+ "            \"name\": \"Public Video Only Room [install.room.public.video.only]\",\n"
-		+ "            \"comment\": \"\",\n"
-		+ "            \"type\": \"CONFERENCE\",\n"
-		+ "            \"capacity\": 32,\n"
-		+ "            \"appointment\": false,\n"
-		+ "            \"isPublic\": true,\n"
-		+ "            \"demo\": false,\n"
-		+ "            \"closed\": false,\n"
-		+ "            \"moderated\": false,\n"
-		+ "            \"waitModerator\": false,\n"
-		+ "            \"allowUserQuestions\": true,\n"
-		+ "            \"allowRecording\": true,\n"
-		+ "            \"waitRecording\": false,\n"
-		+ "            \"audioOnly\": false,\n"
-		+ "            \"hiddenElements\": [\n"
-		+ "                \"WHITEBOARD\",\n"
-		+ "                \"MICROPHONE_STATUS\"\n"
-		+ "            ]\n"
-		+ "        },\n"
-		+ "        {\n"
-		+ "            \"id\": 4,\n"
-		+ "            \"name\": \"Public Video And Whiteboard Room [install.room.public.video.wb]\",\n"
-		+ "            \"comment\": \"\",\n"
-		+ "            \"type\": \"CONFERENCE\",\n"
-		+ "            \"capacity\": 32,\n"
-		+ "            \"appointment\": false,\n"
-		+ "            \"isPublic\": true,\n"
-		+ "            \"demo\": false,\n"
-		+ "            \"closed\": false,\n"
-		+ "            \"moderated\": false,\n"
-		+ "            \"waitModerator\": false,\n"
-		+ "            \"allowUserQuestions\": true,\n"
-		+ "            \"allowRecording\": true,\n"
-		+ "            \"waitRecording\": false,\n"
-		+ "            \"audioOnly\": false,\n"
-		+ "            \"hiddenElements\": \"MICROPHONE_STATUS\"\n"
-		+ "        },\n"
-		+ "        {\n"
-		+ "            \"id\": 7,\n"
-		+ "            \"name\": \"Conference room with microphone option set [install.room.conference.micro]\",\n"
-		+ "            \"comment\": \"\",\n"
-		+ "            \"type\": \"CONFERENCE\",\n"
-		+ "            \"capacity\": 32,\n"
-		+ "            \"appointment\": false,\n"
-		+ "            \"isPublic\": true,\n"
-		+ "            \"demo\": false,\n"
-		+ "            \"closed\": false,\n"
-		+ "            \"moderated\": false,\n"
-		+ "            \"waitModerator\": false,\n"
-		+ "            \"allowUserQuestions\": true,\n"
-		+ "            \"allowRecording\": true,\n"
-		+ "            \"waitRecording\": false,\n"
-		+ "            \"audioOnly\": false\n"
-		+ "        }\n"
-		+ "    ]\n"
-		+ "}")
+@Schema(example = """
+		{
+		  "roomDTO": [
+		    {
+		      "id": 2,
+		      "name": "Public Conference Room [install.room.public.conference]",
+		      "comment": "",
+		      "type": "CONFERENCE",
+		      "capacity": 32,
+		      "appointment": false,
+		      "isPublic": true,
+		      "demo": false,
+		      "closed": false,
+		      "moderated": false,
+		      "waitModerator": false,
+		      "allowUserQuestions": true,
+		      "allowRecording": true,
+		      "waitRecording": false,
+		      "audioOnly": false,
+		      "hiddenElements": "MICROPHONE_STATUS"
+		    },
+		    {
+		      "id": 3,
+		      "name": "Public Video Only Room [install.room.public.video.only]",
+		      "comment": "",
+		      "type": "CONFERENCE",
+		      "capacity": 32,
+		      "appointment": false,
+		      "isPublic": true,
+		      "demo": false,
+		      "closed": false,
+		      "moderated": false,
+		      "waitModerator": false,
+		      "allowUserQuestions": true,
+		      "allowRecording": true,
+		      "waitRecording": false,
+		      "audioOnly": false,
+		      "hiddenElements": [
+		        "WHITEBOARD",
+		        "MICROPHONE_STATUS"
+		      ]
+		    },
+		    {
+		      "id": 4,
+		      "name": "Public Video And Whiteboard Room [install.room.public.video.wb]",
+		      "comment": "",
+		      "type": "CONFERENCE",
+		      "capacity": 32,
+		      "appointment": false,
+		      "isPublic": true,
+		      "demo": false,
+		      "closed": false,
+		      "moderated": false,
+		      "waitModerator": false,
+		      "allowUserQuestions": true,
+		      "allowRecording": true,
+		      "waitRecording": false,
+		      "audioOnly": false,
+		      "hiddenElements": "MICROPHONE_STATUS"
+		    },
+		    {
+		      "id": 7,
+		      "name": "Conference room with microphone option set [install.room.conference.micro]",
+		      "comment": "",
+		      "type": "CONFERENCE",
+		      "capacity": 32,
+		      "appointment": false,
+		      "isPublic": true,
+		      "demo": false,
+		      "closed": false,
+		      "moderated": false,
+		      "waitModerator": false,
+		      "allowUserQuestions": true,
+		      "allowRecording": true,
+		      "waitRecording": false,
+		      "audioOnly": false
+		    }
+		  ]
+		}""")
 public class RoomDTOListWrapper {
 	private List<RoomDTO> roomDTO;
 

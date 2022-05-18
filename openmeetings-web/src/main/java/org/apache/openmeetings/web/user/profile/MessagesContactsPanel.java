@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_VALUE;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
@@ -564,7 +565,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 		emptySelection(target);
 		selectDropDown.setModelObject(SELECT_CHOOSE);
 		moveDropDown.setModelObject(notMoveFolder);
-		deleteBtn.add(AttributeModifier.replace("value", Application.getString(TRASH_FOLDER_ID.equals(id) ? "1256" : "80")));
+		deleteBtn.add(AttributeModifier.replace(ATTR_VALUE, Application.getString(TRASH_FOLDER_ID.equals(id) ? "1256" : "80")));
 		readBtn.setEnabled(false);
 		unreadBtn.setEnabled(false);
 		if (target != null) {

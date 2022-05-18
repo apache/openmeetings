@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -199,7 +198,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 			public void query(String term, int page, Response<RoomGroup> response) {
 				response.addAll(orgRooms.stream()
 						.filter(rg -> Strings.isEmpty(term) || rg.getGroup().getName().contains(term))
-						.collect(Collectors.toList())
+						.toList()
 						);
 			}
 
@@ -431,7 +430,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 	void updateClients(AjaxRequestTarget target) {
 		long roomId = getModelObject().getId() != null ? getModelObject().getId() : 0;
-		clients.setDefaultModelObject(cm.streamByRoom(roomId).collect(Collectors.toList()));
+		clients.setDefaultModelObject(cm.streamByRoom(roomId).toList());
 		target.add(clientsContainer);
 	}
 

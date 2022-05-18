@@ -32,6 +32,7 @@ public class OpenmeetingsVariables {
 	private static final Logger log = LoggerFactory.getLogger(OpenmeetingsVariables.class);
 	public static final String ATTR_CLASS = "class";
 	public static final String ATTR_TITLE = "title";
+	public static final String ATTR_VALUE = "value";
 	public static final String ATTR_DISABLED = "disabled";
 	public static final String PARAM_USER_ID = "userId";
 	public static final String PARAM_STATUS = "status";

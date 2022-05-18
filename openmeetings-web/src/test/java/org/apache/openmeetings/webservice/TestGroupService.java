@@ -91,7 +91,8 @@ class TestGroupService extends AbstractWebServiceTest {
 		ServiceResult sr = login();
 		RoomDTO rdto = new RoomDTO();
 		rdto.setName("Group WS Room");
-		Assertions.assertThrows(BadRequestException.class, () -> create(sr.getMessage(), rdto));
+		String msg = sr.getMessage();
+		Assertions.assertThrows(BadRequestException.class, () -> create(msg, rdto));
 	}
 
 	@Test

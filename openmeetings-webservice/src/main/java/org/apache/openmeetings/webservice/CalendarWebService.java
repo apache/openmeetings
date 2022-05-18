@@ -352,12 +352,13 @@ public class CalendarWebService extends BaseWebService {
 	@DELETE
 	@Path("/{id}")
 	@Operation(
-			description = "Delete a calendar event\n"
-					+ "\n"
-					+ " If the given sid is from an Administrator or Web-Service USER, the USER\n"
-					+ " can delete any appointment.\n"
-					+ " If the sid is assigned to a regular USER, he can only delete appointments\n"
-					+ " where he is also the owner/creator of the appointment",
+			description = """
+					Delete a calendar event
+
+					 If the given sid is from an Administrator or Web-Service USER, the USER
+					 can delete any appointment.
+					 If the sid is assigned to a regular USER, he can only delete appointments
+					 where he is also the owner/creator of the appointment""",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "ServiceResult with result type",
 						content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),

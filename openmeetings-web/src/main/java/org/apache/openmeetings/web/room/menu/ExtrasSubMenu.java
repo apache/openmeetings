@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.room.menu;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.openmeetings.db.dao.room.ExtraMenuDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -53,7 +52,7 @@ public class ExtrasSubMenu implements Serializable {
 		List<Long> groups = roomDao.get(room.getRoom().getId()).getGroups().stream()
 				.map(RoomGroup::getGroup)
 				.map(Group::getId)
-				.collect(Collectors.toList());
+				.toList();
 		for (ExtraMenu em : menuDao.getByGroups(groups)) {
 			extraMenu.add(new OmMenuItem(em.getName(), em.getDescription()) {
 				private static final long serialVersionUID = 1L;

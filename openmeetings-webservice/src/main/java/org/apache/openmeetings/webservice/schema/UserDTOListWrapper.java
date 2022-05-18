@@ -33,71 +33,72 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * See https://issues.apache.org/jira/browse/OPENMEETINGS-2667
  *
  */
-@Schema(example = "{\n"
-		+ "    \"userDTO\": [\n"
-		+ "        {\n"
-		+ "            \"address\": {\n"
-		+ "                \"created\": 1630191589000,\n"
-		+ "                \"deleted\": false,\n"
-		+ "                \"country\": \"NZ\",\n"
-		+ "                \"mail\": \"seba.wagner@gmail.com\"\n"
-		+ "            },\n"
-		+ "            \"firstname\": \"firstname\",\n"
-		+ "            \"id\": 1,\n"
-		+ "            \"languageId\": 1,\n"
-		+ "            \"lastname\": \"lastname\",\n"
-		+ "            \"login\": \"admin\",\n"
-		+ "            \"rights\": [\n"
-		+ "                \"ROOM\",\n"
-		+ "                \"SOAP\",\n"
-		+ "                \"DASHBOARD\",\n"
-		+ "                \"ADMIN\",\n"
-		+ "                \"LOGIN\"\n"
-		+ "            ],\n"
-		+ "            \"timeZoneId\": \"Europe/Berlin\",\n"
-		+ "            \"type\": \"USER\"\n"
-		+ "        },\n"
-		+ "        {\n"
-		+ "            \"address\": {\n"
-		+ "                \"created\": 1631324533000,\n"
-		+ "                \"deleted\": false,\n"
-		+ "                \"country\": \"NZ\",\n"
-		+ "                \"mail\": \"john.doe@gmail.com\"\n"
-		+ "            },\n"
-		+ "            \"externalId\": \"uniqueId1\",\n"
-		+ "            \"externalType\": \"myCMS\",\n"
-		+ "            \"firstname\": \"John\",\n"
-		+ "            \"id\": 2,\n"
-		+ "            \"languageId\": 1,\n"
-		+ "            \"lastname\": \"Doe\",\n"
-		+ "            \"login\": \"john.doe\",\n"
-		+ "            \"pictureUri\": \"\",\n"
-		+ "            \"rights\": \"ROOM\",\n"
-		+ "            \"timeZoneId\": \"Europe/Berlin\",\n"
-		+ "            \"type\": \"EXTERNAL\"\n"
-		+ "        },\n"
-		+ "        {\n"
-		+ "            \"address\": {\n"
-		+ "                \"created\": 1631958373000,\n"
-		+ "                \"deleted\": false,\n"
-		+ "                \"country\": \"NZ\",\n"
-		+ "                \"mail\": \"test@test.com\"\n"
-		+ "            },\n"
-		+ "            \"id\": 3,\n"
-		+ "            \"languageId\": 1,\n"
-		+ "            \"login\": \"soapuser\",\n"
-		+ "            \"rights\": [\n"
-		+ "                \"ROOM\",\n"
-		+ "                \"SOAP\",\n"
-		+ "                \"DASHBOARD\",\n"
-		+ "                \"ADMIN\",\n"
-		+ "                \"LOGIN\"\n"
-		+ "            ],\n"
-		+ "            \"timeZoneId\": \"Europe/Berlin\",\n"
-		+ "            \"type\": \"USER\"\n"
-		+ "        }\n"
-		+ "    ]\n"
-		+ "}")
+@Schema(example = """
+		{
+		  "userDTO": [
+		    {
+		      "address": {
+		        "created": 1630191589000,
+		        "deleted": false,
+		        "country": "NZ",
+		        "mail": "seba.wagner@gmail.com"
+		      },
+		      "firstname": "firstname",
+		      "id": 1,
+		      "languageId": 1,
+		      "lastname": "lastname",
+		      "login": "admin",
+		      "rights": [
+		        "ROOM",
+		        "SOAP",
+		        "DASHBOARD",
+		        "ADMIN",
+		        "LOGIN"
+		      ],
+		      "timeZoneId": "Europe/Berlin",
+		      "type": "USER"
+		    },
+		    {
+		      "address": {
+		        "created": 1631324533000,
+		        "deleted": false,
+		        "country": "NZ",
+		        "mail": "john.doe@gmail.com"
+		      },
+		      "externalId": "uniqueId1",
+		      "externalType": "myCMS",
+		      "firstname": "John",
+		      "id": 2,
+		      "languageId": 1,
+		      "lastname": "Doe",
+		      "login": "john.doe",
+		      "pictureUri": "",
+		      "rights": "ROOM",
+		      "timeZoneId": "Europe/Berlin",
+		      "type": "EXTERNAL"
+		    },
+		    {
+		      "address": {
+		        "created": 1631958373000,
+		        "deleted": false,
+		        "country": "NZ",
+		        "mail": "test@test.com"
+		      },
+		      "id": 3,
+		      "languageId": 1,
+		      "login": "soapuser",
+		      "rights": [
+		        "ROOM",
+		        "SOAP",
+		        "DASHBOARD",
+		        "ADMIN",
+		        "LOGIN"
+		      ],
+		      "timeZoneId": "Europe/Berlin",
+		      "type": "USER"
+		    }
+		  ]
+		}""")
 public class UserDTOListWrapper {
 	private List<UserDTO> userDTO;
 

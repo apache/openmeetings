@@ -189,11 +189,12 @@ public class SignInPage extends BaseInitedPage {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(OnDomReadyHeaderItem.forScript(""
-				+ "$('#signin-dialog, #register-dialog, #forget-dialog').on('shown.bs.modal', function () {\n"
-				+ "	$(this).find('.auto-focus').trigger('focus');\n"
-				+ "})"
-				));
+		response.render(OnDomReadyHeaderItem.forScript(
+				"""
+				$('#signin-dialog, #register-dialog, #forget-dialog').on('shown.bs.modal', function () {
+					$(this).find('.auto-focus').trigger('focus');
+				})
+				"""));
 	}
 
 	boolean allowRegister() {

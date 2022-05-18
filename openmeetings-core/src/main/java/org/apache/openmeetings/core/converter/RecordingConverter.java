@@ -91,8 +91,8 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 					), false, logs);
 			Dimension dim = getDimension(logs.getLast().getError(), null); // will return 100x100 for non-video to be able to play
 			if (dim != null) {
-				r.setWidth(dim.getWidth());
-				r.setHeight(dim.getHeight());
+				r.setWidth(dim.width());
+				r.setHeight(dim.height());
 			}
 
 			finalizeRec(r, mp4path, logs);

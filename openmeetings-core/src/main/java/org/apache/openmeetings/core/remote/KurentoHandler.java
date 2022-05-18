@@ -118,7 +118,6 @@ public class KurentoHandler {
 	private final AtomicBoolean connected = new AtomicBoolean(false);
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
 	private final Set<String> ignoredKuids = new HashSet<>();
-	private Runnable check;
 
 	@Autowired
 	private IClientManager cm;
@@ -139,7 +138,7 @@ public class KurentoHandler {
 
 	@PostConstruct
 	public void init() {
-		check = () -> {
+		Runnable check = () -> {
 			try {
 				if (client != null) {
 					return;

@@ -26,7 +26,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.openmeetings.core.remote.KurentoHandler;
@@ -81,7 +80,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 						, streamProcessor.getStreams()
 						.stream()
 						.map(KStreamDto::new)
-					).collect(Collectors.toList());
+					).toList();
 			}
 
 			@Override

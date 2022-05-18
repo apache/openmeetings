@@ -54,6 +54,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public class UserSearchPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
+	private static final String ATTR_USER_ID = "data-user-id";
 	private static final List<Integer> itemsPerPage = List.of(10, 25, 50, 75, 100, 200, 500, 1000, 2500, 5000);
 	private static final SortParam<String> orderBy = new SortParam<>("firstname", true);
 	private final TextField<String> text = new TextField<>("text", Model.of(""));
@@ -121,11 +122,11 @@ public class UserSearchPanel extends UserBasePanel {
 				item.add(new Label("tz", getTimeZone(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
-				item.add(new WebMarkupContainer("view").add(AttributeModifier.append("data-user-id", userId)));
+				item.add(new WebMarkupContainer("view").add(AttributeModifier.append(ATTR_USER_ID, userId)));
 				item.add(new WebMarkupContainer("add").setVisible(userId != getUserId() && !contactDao.isContact(userId, getUserId()))
-						.add(AttributeModifier.append("data-user-id", userId)));
-				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(AttributeModifier.append("data-user-id", userId)));
-				item.add(new WebMarkupContainer("invite").setVisible(userId != getUserId()).add(AttributeModifier.append("data-user-id", userId)));
+						.add(AttributeModifier.append(ATTR_USER_ID, userId)));
+				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(AttributeModifier.append(ATTR_USER_ID, userId)));
+				item.add(new WebMarkupContainer("invite").setVisible(userId != getUserId()).add(AttributeModifier.append(ATTR_USER_ID, userId)));
 			}
 		};
 

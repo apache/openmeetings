@@ -81,10 +81,11 @@ public class ErrorWebService extends BaseWebService {
 	@GET
 	@Path("/{key}/{lang}")
 	@Operation(
-			description = "Loads an Error-Object. If a Method returns a negative Result, its an\n"
-					+ " Error-id, it needs a languageId to specify in which language you want to\n"
-					+ " display/read the error-message. English has the Language-ID one, for\n"
-					+ " different one see the list of languages",
+			description = """
+					Loads an Error-Object. If a Method returns a negative Result, its an
+					 Error-id, it needs a languageId to specify in which language you want to
+					 display/read the error-message. English has the Language-ID one, for
+					 different one see the list of languages""",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "error with the code given",
 						content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),

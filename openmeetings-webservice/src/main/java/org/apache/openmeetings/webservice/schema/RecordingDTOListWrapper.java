@@ -33,23 +33,24 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * See https://issues.apache.org/jira/browse/OPENMEETINGS-2667
  *
  */
-@Schema(example = "{\n"
-		+ "    \"recordingDTO\": [\n"
-		+ "        {\n"
-		+ "            \"id\": 1,\n"
-		+ "            \"name\": \"Recording [file.name.recording]19/09/21, 12:43 am\",\n"
-		+ "            \"hash\": \"1ee00bf1-6cb6-44d2-bb91-cfbe96e2ae19\",\n"
-		+ "            \"roomId\": 7,\n"
-		+ "            \"status\": \"PROCESSED\",\n"
-		+ "            \"interview\": false,\n"
-		+ "            \"start\": \"2021-09-19T10:43:39+12:00\",\n"
-		+ "            \"end\": \"2021-09-19T10:43:56+12:00\",\n"
-		+ "            \"width\": 1792,\n"
-		+ "            \"height\": 1120,\n"
-		+ "            \"ownerId\": 1\n"
-		+ "        }\n"
-		+ "    ]\n"
-		+ "}")
+@Schema(example = """
+		{
+		  "recordingDTO": [
+		    {
+		      "id": 1,
+		      "name": "Recording [file.name.recording]19/09/21, 12:43 am",
+		      "hash": "1ee00bf1-6cb6-44d2-bb91-cfbe96e2ae19",
+		      "roomId": 7,
+		      "status": "PROCESSED",
+		      "interview": false,
+		      "start": "2021-09-19T10:43:39+12:00",
+		      "end": "2021-09-19T10:43:56+12:00",
+		      "width": 1792,
+		      "height": 1120,
+		      "ownerId": 1
+		    }
+		  ]
+		}""")
 public class RecordingDTOListWrapper {
 	private List<RecordingDTO> recordingDTO;
 

@@ -153,7 +153,8 @@ public class RecordingsPanel extends UserBasePanel {
 			}
 		});
 		add(video, info, addFolder);
-		add(invite = new InvitationDialog(recordingInviteDialogId, rif));
+		invite = new InvitationDialog(recordingInviteDialogId, rif);
+		add(invite);
 		rif.setDialog(invite);
 
 		super.onInitialize();

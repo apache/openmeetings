@@ -31,12 +31,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * See https://issues.apache.org/jira/browse/OPENMEETINGS-2667
  *
  */
-@Schema(example = "{\n"
-		+ "    \"serviceResult\": {\n"
-		+ "        \"message\": \"9dbb6907-61fc-42c0-a2b2-5dbfbe053ac6\",\n"
-		+ "        \"type\": \"SUCCESS\"\n"
-		+ "    }\n"
-		+ "}")
+@Schema(example = """
+		{
+		  "serviceResult": {
+		    "message": "9dbb6907-61fc-42c0-a2b2-5dbfbe053ac6",
+		    "type": "SUCCESS"
+		  }
+		}""")
 public class ServiceResultWrapper {
 	private ServiceResult serviceResult;
 
