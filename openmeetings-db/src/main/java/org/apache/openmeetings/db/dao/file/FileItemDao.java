@@ -97,7 +97,7 @@ public class FileItemDao extends BaseFileItemDao {
 	@Override
 	public FileItem get(Long id) {
 		BaseFileItem bf = super.get(id);
-		return bf instanceof FileItem ? (FileItem)bf : null;
+		return bf instanceof FileItem fi ? fi : null;
 	}
 
 	public FileItem get(String externalId, String externalType) {
@@ -235,9 +235,7 @@ public class FileItemDao extends BaseFileItemDao {
 			if (f.exists()) {
 				File base = OmFileHelper.getUploadFilesDir();
 				switch (f.getType()) {
-					case IMAGE:
-					case PRESENTATION:
-					case VIDEO:
+					case IMAGE, PRESENTATION, VIDEO:
 						File tFolder = new File(base, f.getHash());
 
 						if (tFolder.exists()) {

@@ -88,7 +88,7 @@ public class WebSocketHelper {
 	}
 
 	public static void sendClient(final IWsClient omClient, final RoomMessage m) {
-		log.trace("Sending WebSocket message to client: {} {}", m.getType(), m instanceof TextRoomMessage ? ((TextRoomMessage)m).getText() : "");
+		log.trace("Sending WebSocket message to client: {} {}", m.getType(), m instanceof TextRoomMessage txtMsg ? txtMsg.getText() : "");
 		sendClient(omClient, c -> {
 			try {
 				c.sendMessage(m);
@@ -116,19 +116,16 @@ public class WebSocketHelper {
 	}
 
 	public static boolean send(IClusterWsMessage msg) {
-		if (msg instanceof WsMessageRoomMsg) {
-			sendRoom(((WsMessageRoomMsg)msg).msg(), false);
-		} else if (msg instanceof WsMessageRoomOthers) {
-			WsMessageRoomOthers m = (WsMessageRoomOthers)msg;
-			sendRoomOthers(m.getRoomId(), m.getUid(), m.getMsg(), false);
-		} else if (msg instanceof WsMessageRoom) {
-			WsMessageRoom m = (WsMessageRoom)msg;
-			sendRoom(m.getRoomId(), m.getMsg(), false);
-		} else if (msg instanceof WsMessageUser) {
-			WsMessageUser m = (WsMessageUser)msg;
-			sendUser(m.getUserId(), m.getMsg(), null, false);
-		} else if (msg instanceof WsMessageAll) {
-			sendAll(((WsMessageAll)msg).msg(), false);
+		if (msg instanceof WsMessageRoomMsg msgRoom) {
+			sendRoom(msgRoom.msg(), false);
+		} else if (msg instanceof WsMessageRoomOthers msgRoomOthers) {
+			sendRoomOthers(msgRoomOthers.getRoomId(), msgRoomOthers.getUid(), msgRoomOthers.getMsg(), false);
+		} else if (msg instanceof WsMessageRoom roomMsg) {
+			sendRoom(roomMsg.getRoomId(), roomMsg.getMsg(), false);
+		} else if (msg instanceof WsMessageUser msgUser) {
+			sendUser(msgUser.getUserId(), msgUser.getMsg(), null, false);
+		} else if (msg instanceof WsMessageAll msgAll) {
+			sendAll(msgAll.msg(), false);
 		}
 		return true;
 	}
@@ -141,7 +138,7 @@ public class WebSocketHelper {
 		if (publish) {
 			publish(new WsMessageRoomMsg(m));
 		}
-		log.trace("Sending WebSocket message to room: {} {}", m.getType(), m instanceof TextRoomMessage ? ((TextRoomMessage)m).getText() : "");
+		log.trace("Sending WebSocket message to room: {} {}", m.getType(), m instanceof TextRoomMessage txtMsg ? txtMsg.getText() : "");
 		sendRoom(m.getRoomId(), (t, c) -> t.sendMessage(m), alwaysTrue());
 	}
 

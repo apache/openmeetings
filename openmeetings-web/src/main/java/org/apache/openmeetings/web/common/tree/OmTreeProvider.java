@@ -137,8 +137,7 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 
 	public List<BaseFileItem> getByParent(BaseFileItem node, Long id) {
 		List<BaseFileItem> list = new ArrayList<>();
-		if (node instanceof Recording) {
-			Recording rec = (Recording)node;
+		if (node instanceof Recording rec) {
 			List<Recording> recList;
 			if (id == null) {
 				if (node.getOwnerId() == null) {

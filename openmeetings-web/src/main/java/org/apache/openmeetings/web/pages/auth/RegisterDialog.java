@@ -248,8 +248,8 @@ public class RegisterDialog extends Modal<String> {
 			try {
 				Object o = userManager.registerUser(login, password, lastName
 						, firstName, email, country, lang, tzModel.getObject());
-				if (o instanceof String) {
-					registerInfo.setModelObject(getString((String)o));
+				if (o instanceof String str) {
+					registerInfo.setModelObject(getString(str));
 					target.add(registerInfo.get("content"));
 				}
 			} catch (Exception e) {

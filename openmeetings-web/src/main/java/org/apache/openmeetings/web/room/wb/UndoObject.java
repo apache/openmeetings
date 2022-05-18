@@ -29,9 +29,9 @@ public class UndoObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum Type {
-		add
-		, remove
-		, modify
+		ADD
+		, REMOVE
+		, MODIFY
 	}
 	private final Type type;
 	private final String object;

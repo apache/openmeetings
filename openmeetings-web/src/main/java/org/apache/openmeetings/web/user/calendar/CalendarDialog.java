@@ -195,9 +195,7 @@ public class CalendarDialog extends Modal<OmCalendar> {
 					case DELETE_APPOINTMENT:
 						deleteAppointment(a);
 						break;
-					case SYNC_CALENDAR:
-						break;
-					case UPDATE_CALENDAR:
+					case SYNC_CALENDAR, UPDATE_CALENDAR:
 						break;
 					default:
 						break;
@@ -232,9 +230,7 @@ public class CalendarDialog extends Modal<OmCalendar> {
 					calendarPanel.refresh(handler);
 				}
 				break;
-			case DELETE_APPOINTMENT:
-				break;
-			case UPDATE_APPOINTMENT:
+			case DELETE_APPOINTMENT, UPDATE_APPOINTMENT:
 				break;
 			default:
 				break;
@@ -351,9 +347,7 @@ public class CalendarDialog extends Modal<OmCalendar> {
 
 	public void setButtons(IPartialPageRequestHandler target) {
 		switch (type) {
-			case UPDATE_APPOINTMENT:
-			case DELETE_APPOINTMENT:
-			case SYNC_CALENDAR:
+			case UPDATE_APPOINTMENT, DELETE_APPOINTMENT, SYNC_CALENDAR:
 				target.add(delete.setVisible(false), save.setVisible(true));
 				break;
 			case UPDATE_CALENDAR:
@@ -463,9 +457,7 @@ public class CalendarDialog extends Modal<OmCalendar> {
 					}
 					setGCalVisibility(calendar);
 					break;
-				case SYNC_CALENDAR:
-				case UPDATE_APPOINTMENT:
-				case DELETE_APPOINTMENT:
+				case SYNC_CALENDAR, UPDATE_APPOINTMENT, DELETE_APPOINTMENT:
 					title.setEnabled(false);
 					url.setEnabled(false);
 					username.setEnabled(true);
@@ -520,35 +512,36 @@ public class CalendarDialog extends Modal<OmCalendar> {
 		 */
 		@Override
 		protected void onValidate() {
-			if (!hasError()) {
-				switch (type) {
-					case UPDATE_CALENDAR:
-						if (getModelObject().getId() != null || gcal.getModelObject()) {
+			if (hasError()) {
+				return;
+			}
+			switch (type) {
+				case UPDATE_CALENDAR:
+					if (getModelObject().getId() != null || gcal.getModelObject()) {
+						return;
+					}
+				case UPDATE_APPOINTMENT, DELETE_APPOINTMENT, SYNC_CALENDAR:
+					try {
+						OmCalendar calendar = getModelObject();
+						if (url.isEnabled()) {
+							calendar.setHref(url.getInput());
+						}
+						HttpClient client = calendarPanel.getHttpClient();
+						HttpClientContext context = calendarPanel.getHttpClientContext();
+
+						apptManager.provideCredentials(context, calendar,
+								new UsernamePasswordCredentials(username.getInput(), pass.getInput()));
+						if (apptManager.testConnection(client, context, calendar)) {
 							return;
 						}
-					case UPDATE_APPOINTMENT:
-					case DELETE_APPOINTMENT:
-					case SYNC_CALENDAR:
-						try {
-							OmCalendar calendar = getModelObject();
-							if (url.isEnabled()) {
-								calendar.setHref(url.getInput());
-							}
-							HttpClient client = calendarPanel.getHttpClient();
-							HttpClientContext context = calendarPanel.getHttpClientContext();
+					} catch (Exception e) {
+						log.error("Error executing the TestConnection", e);
+					}
 
-							apptManager.provideCredentials(context, calendar,
-									new UsernamePasswordCredentials(username.getInput(), pass.getInput()));
-							if (apptManager.testConnection(client, context, calendar)) {
-								return;
-							}
-						} catch (Exception e) {
-							log.error("Error executing the TestConnection", e);
-						}
-
-						error(getString("calendar.error"));
-						break;
-				}
+					error(getString("calendar.error"));
+					break;
+				default:
+					break;
 			}
 		}
 	}

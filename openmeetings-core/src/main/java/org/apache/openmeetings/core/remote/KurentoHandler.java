@@ -466,9 +466,8 @@ public class KurentoHandler {
 					log.warn("Invalid MediaPipeline {} detected, will be dropped, tags: {}", pipe.getId(), tags);
 					pipe.release();
 				}, objCheckTimeout, MILLISECONDS);
-			} else if (evt.getObject() instanceof Endpoint) {
+			} else if (evt.getObject() instanceof Endpoint curPoint) {
 				// endpoint created
-				Endpoint curPoint = (Endpoint)evt.getObject();
 				final String eoid = curPoint.getId();
 				Class<? extends Endpoint> clazz = null;
 				if (curPoint instanceof WebRtcEndpoint) {

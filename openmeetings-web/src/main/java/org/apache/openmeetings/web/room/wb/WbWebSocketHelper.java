@@ -51,17 +51,16 @@ public class WbWebSocketHelper {
 	}
 
 	public static boolean send(IClusterWsMessage inMsg) {
-		if (inMsg instanceof WsMessageWb) {
-			WsMessageWb m = (WsMessageWb)inMsg;
-			if (m.getUid() == null) {
-				sendWbAll(m.getRoomId(), m.getMeth(), m.getObj(), false);
+		if (inMsg instanceof WsMessageWb msg) {
+			if (msg.getUid() == null) {
+				sendWbAll(msg.getRoomId(), msg.getMeth(), msg.getObj(), false);
 			} else {
-				sendWbOthers(m.getRoomId(), m.getMeth(), m.getObj(), m.getUid(), false);
+				sendWbOthers(msg.getRoomId(), msg.getMeth(), msg.getObj(), msg.getUid(), false);
 			}
 			return true;
-		} else if (inMsg instanceof WsMessageWbFile) {
-			WsMessageWbFile m = (WsMessageWbFile)inMsg;
-			sendWbFile(m.getRoomId(), m.getWbId(), m.getRoomUid(), m.getFile(), m.getFileItem(), false);
+		} else if (inMsg instanceof WsMessageWbFile fileMsg) {
+			sendWbFile(fileMsg.getRoomId(), fileMsg.getWbId()
+					, fileMsg.getRoomUid(), fileMsg.getFile(), fileMsg.getFileItem(), false);
 			return true;
 		}
 		return false;
@@ -149,8 +148,7 @@ public class WbWebSocketHelper {
 	private static JSONObject patchUrls(BaseFileItem fi, Client c, JSONObject inFile) {
 		JSONObject f = new JSONObject(inFile.toString()); // deep copy to ensure thread safety
 		switch (fi.getType()) {
-			case VIDEO:
-			case RECORDING:
+			case VIDEO, RECORDING:
 				f.put(PARAM__SRC, patchUrl(f.getString(PARAM__SRC), c));
 				f.put(PARAM__POSTER, patchUrl(f.getString(PARAM__POSTER), c));
 				break;

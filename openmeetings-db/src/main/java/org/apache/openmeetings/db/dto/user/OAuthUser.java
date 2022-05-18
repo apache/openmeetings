@@ -106,8 +106,7 @@ public class OAuthUser implements Serializable {
 		// will only check 1 additional level
 		for (String key : json.keySet()) {
 			Object o = json.get(key);
-			if (o instanceof JSONArray) {
-				JSONArray ja = (JSONArray)o;
+			if (o instanceof JSONArray ja) {
 				//Assuming here array consist of objects
 				for (int i = 0; i < ja.length(); ++i) {
 					JSONObject jao = ja.getJSONObject(i);
@@ -116,8 +115,7 @@ public class OAuthUser implements Serializable {
 						return res;
 					}
 				}
-			} else if (o instanceof JSONObject) {
-				JSONObject jo = (JSONObject)o;
+			} else if (o instanceof JSONObject jo) {
 				JSONObject res = getJSON(jo, prop);
 				if (res != null) {
 					return res;

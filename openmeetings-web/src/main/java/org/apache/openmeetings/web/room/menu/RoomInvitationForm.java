@@ -54,7 +54,7 @@ import org.wicketstuff.select2.Select2MultiChoice;
 public class RoomInvitationForm extends InvitationForm {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(RoomInvitationForm.class);
-	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.user));
+	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.USER));
 	private final Long roomId;
 	private final WebMarkupContainer groupContainer = new WebMarkupContainer("groupContainer");
 	private final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
@@ -69,8 +69,8 @@ public class RoomInvitationForm extends InvitationForm {
 	private InvitationManager invitationManager;
 
 	enum InviteeType {
-		user
-		, group
+		USER
+		, GROUP
 	}
 
 	public RoomInvitationForm(String id, Long roomId, String dropDownParentId) {
@@ -87,7 +87,7 @@ public class RoomInvitationForm extends InvitationForm {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				boolean groupsEnabled = InviteeType.group == rdi.getModelObject();
+				boolean groupsEnabled = InviteeType.GROUP == rdi.getModelObject();
 				updateButtons(target);
 				target.add(groups.setEnabled(groupsEnabled), recipients.setEnabled(!groupsEnabled));
 			}
@@ -97,10 +97,10 @@ public class RoomInvitationForm extends InvitationForm {
 				url.setModelObject(null);
 				updateButtons(target);
 			})).setOutputMarkupId(true)
-			, new Radio<>("group", Model.of(InviteeType.group))
+			, new Radio<>("group", Model.of(InviteeType.GROUP))
 		);
 		rdi.add(recipients, groupContainer.setVisible(showGroups));
-		rdi.add(new Radio<>("user", Model.of(InviteeType.user)));
+		rdi.add(new Radio<>("user", Model.of(InviteeType.USER)));
 		add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		sipContainer.add(new Label("room.confno", "")).setVisible(false);
 		if (dropDownParentId != null) {
@@ -111,7 +111,7 @@ public class RoomInvitationForm extends InvitationForm {
 
 	@Override
 	protected void updateButtons(AjaxRequestTarget target) {
-		if (rdi.getModelObject() == InviteeType.user) {
+		if (rdi.getModelObject() == InviteeType.USER) {
 			super.updateButtons(target);
 		} else {
 			Collection<Group> to = groups.getModelObject();
@@ -132,12 +132,12 @@ public class RoomInvitationForm extends InvitationForm {
 		}
 		groups.setModelObject(new ArrayList<>());
 		groups.setEnabled(false);
-		rdi.setModelObject(InviteeType.user);
+		rdi.setModelObject(InviteeType.USER);
 	}
 
 	@Override
 	public void onClick(AjaxRequestTarget target, InvitationForm.Action action) {
-		if (InvitationForm.Action.SEND == action && Strings.isEmpty(url.getModelObject()) && rdi.getModelObject() == InviteeType.group) {
+		if (InvitationForm.Action.SEND == action && Strings.isEmpty(url.getModelObject()) && rdi.getModelObject() == InviteeType.GROUP) {
 			final String userbaseUrl = WebSession.get().getExtendedProperties().getBaseUrl();
 			for (Group g : groups.getModelObject()) {
 				for (GroupUser ou : groupUserDao.get(g.getId(), 0, Integer.MAX_VALUE)) {

@@ -259,9 +259,9 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		final BaseRtpEndpoint endpoint = getEndpointForUser(sid, uid);
 		final String sdpAnswer = endpoint.processOffer(sdpOffer);
 
-		if (endpoint instanceof WebRtcEndpoint) {
+		if (endpoint instanceof WebRtcEndpoint rtcEndpoint) {
 			log.debug("gather candidates, sid {}, uid {}", sid, uid);
-			((WebRtcEndpoint)endpoint).gatherCandidates(); // this one might throw Exception
+			rtcEndpoint.gatherCandidates(); // this one might throw Exception
 		}
 		log.trace("USER {}: SdpAnswer is {}", this.uid, sdpAnswer);
 		kHandler.sendClient(sid, newKurentoMsg()

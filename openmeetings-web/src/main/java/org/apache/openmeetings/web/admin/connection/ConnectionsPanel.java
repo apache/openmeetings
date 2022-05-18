@@ -101,8 +101,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 
 			@Override
 			protected void populateItem(final Item<IDataProviderEntity> item) {
-				if (item.getModelObject() instanceof KStreamDto) {
-					KStreamDto kStream = (KStreamDto)item.getModelObject();
+				if (item.getModelObject() instanceof KStreamDto kStream) {
 					item.add(new Label("type", kStream.getType() + " " + kStream.getStreamType()));
 					item.add(new Label("login", kStream.getUid()));
 					item.add(new Label("since", getDateFormat().format(kStream.getConnectedSince())));
@@ -110,8 +109,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 					item.add(new Label("server", ""));
 					item.add(new Label("kick", ""));
 				}
-				if (item.getModelObject() instanceof Client) {
-					Client c = (Client)item.getModelObject();
+				if (item.getModelObject() instanceof Client c) {
 					item.add(new Label("type", "html5"));
 					item.add(new Label("login", c.getUser().getLogin()));
 					item.add(new Label("since", getDateFormat().format(c.getConnectedSince())));

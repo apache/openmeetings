@@ -94,8 +94,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	public void updateClusterAddresses(String addresses) throws UnknownHostException {
 		OpenJPAConfiguration cfg = ((OpenJPAEntityManagerSPI)OpenJPAPersistence.cast(em)).getConfiguration();
 		RemoteCommitProvider prov = cfg.getRemoteCommitEventManager().getRemoteCommitProvider();
-		if (prov instanceof TCPRemoteCommitProvider) {
-			((TCPRemoteCommitProvider)prov).setAddresses(addresses);
+		if (prov instanceof TCPRemoteCommitProvider tcpProv) {
+			tcpProv.setAddresses(addresses);
 		}
 	}
 
@@ -312,20 +312,12 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 					, CONFIG_CSP_MEDIA, CONFIG_CSP_SCRIPT, CONFIG_CSP_STYLE, CONFIG_CSP_ENABLED:
 				updateCsp();
 				break;
-			case CONFIG_SMTP_SERVER:
-			case CONFIG_SMTP_PORT:
-			case CONFIG_SMTP_SYSTEM_EMAIL:
-			case CONFIG_SMTP_USER:
-			case CONFIG_SMTP_PASS:
-			case CONFIG_SMTP_TLS:
-			case CONFIG_SMTP_SSL:
-			case CONFIG_REPLY_TO_ORGANIZER:
-			case CONFIG_SMTP_TIMEOUT_CON:
-			case CONFIG_SMTP_TIMEOUT:
+			case CONFIG_SMTP_SERVER, CONFIG_SMTP_PORT, CONFIG_SMTP_SYSTEM_EMAIL, CONFIG_SMTP_USER
+					, CONFIG_SMTP_PASS, CONFIG_SMTP_TLS, CONFIG_SMTP_SSL, CONFIG_REPLY_TO_ORGANIZER
+					, CONFIG_SMTP_TIMEOUT_CON, CONFIG_SMTP_TIMEOUT:
 				reloadMailSettings();
 				break;
-			case CONFIG_APPOINTMENT_REMINDER_MINUTES:
-			case CONFIG_APPOINTMENT_PRE_START_MINUTES:
+			case CONFIG_APPOINTMENT_REMINDER_MINUTES, CONFIG_APPOINTMENT_PRE_START_MINUTES:
 				reloadAppointmentSettings();
 				break;
 			case CONFIG_RECORDING_ENABLED:
@@ -333,6 +325,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				break;
 			case CONFIG_THEME:
 				reloadTheme();
+				break;
+			default:
 				break;
 		}
 		return entity;

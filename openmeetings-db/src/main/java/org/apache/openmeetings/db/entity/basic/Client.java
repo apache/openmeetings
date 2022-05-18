@@ -196,8 +196,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 	public Client set(Activity a) {
 		activities.add(a);
 		switch (a) {
-			case VIDEO:
-			case AUDIO:
+			case VIDEO, AUDIO:
 				if (hasActivity(Activity.AUDIO) && hasActivity(Activity.VIDEO)) {
 					activities.add(Activity.AUDIO_VIDEO);
 				}
@@ -214,8 +213,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 	public Client remove(Activity a) {
 		activities.remove(a);
 		switch (a) {
-			case VIDEO:
-			case AUDIO:
+			case VIDEO, AUDIO:
 				activities.remove(Activity.AUDIO_VIDEO);
 				break;
 			case AUDIO_VIDEO:

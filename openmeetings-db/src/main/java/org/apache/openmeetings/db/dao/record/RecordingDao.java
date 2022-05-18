@@ -58,7 +58,7 @@ public class RecordingDao extends BaseFileItemDao {
 	@Override
 	public Recording get(Long id) {
 		BaseFileItem bf = super.get(id);
-		return bf instanceof Recording ? (Recording)bf : null;
+		return bf instanceof Recording rec ? rec : null;
 	}
 
 	public List<Recording> getByExternalUser(String externalId, String externalType) {

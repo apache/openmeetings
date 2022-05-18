@@ -202,8 +202,7 @@ public class InvitationManager implements IInvitationManager {
 				invitation.setValidFrom(allowedStart(mmStart));
 				invitation.setValidTo(mmEnd);
 				break;
-			case ENDLESS:
-			case ONE_TIME:
+			case ENDLESS, ONE_TIME:
 			default:
 				break;
 		}

@@ -406,8 +406,8 @@ public class MainPanel extends Panel {
 
 	private BasePanel getCurrentPanel() {
 		Component prev = contents.get(CHILD_ID);
-		if (prev instanceof BasePanel) {
-			return (BasePanel)prev;
+		if (prev instanceof BasePanel basePrev) {
+			return basePrev;
 		}
 		return null;
 	}

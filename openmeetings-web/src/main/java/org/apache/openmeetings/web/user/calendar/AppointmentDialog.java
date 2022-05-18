@@ -108,14 +108,14 @@ public class AppointmentDialog extends Modal<Appointment> {
 	private final CalendarPanel calendarPanel;
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
-	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.user));
+	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.USER));
 	private final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
 			, new CollectionModel<>(new ArrayList<>())
 			, new GroupChoiceProvider());
 	private final UserMultiChoice attendees = new UserMultiChoice("attendees", new CollectionModel<>(new ArrayList<>()));
 	private enum InviteeType {
-		user
-		, group
+		USER
+		, GROUP
 	}
 	@SpringBean
 	private RoomDao roomDao;
@@ -154,7 +154,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 				final List<MeetingMember> mms = a.getMeetingMembers() == null ? new ArrayList<>() : a.getMeetingMembers();
 				Set<Long> currentIds = new HashSet<>();
 				List<User> users = new ArrayList<>();
-				if (InviteeType.group == rdi.getModelObject()) {
+				if (InviteeType.GROUP == rdi.getModelObject()) {
 					//lets iterate through all group users
 					for (Group g : groups.getModelObject()) {
 						for (GroupUser gu : groupUserDao.get(g.getId(), 0, Integer.MAX_VALUE)) {
@@ -352,7 +352,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 				cals.setEnabled(false);
 			}
 
-			rdi.setModelObject(InviteeType.user);
+			rdi.setModelObject(InviteeType.USER);
 			attendees.setModelObject(new ArrayList<>());
 			if (a.getMeetingMembers() != null) {
 				for (MeetingMember mm : a.getMeetingMembers()) {
@@ -377,13 +377,13 @@ public class AppointmentDialog extends Modal<Appointment> {
 
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
-					boolean groupsEnabled = InviteeType.group == rdi.getModelObject();
+					boolean groupsEnabled = InviteeType.GROUP == rdi.getModelObject();
 					target.add(groups.setEnabled(groupsEnabled), attendees.setEnabled(!groupsEnabled));
 				}
 			}));
 			groupContainer.add(
 				groups.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true)
-				, new Radio<>("group", Model.of(InviteeType.group))
+				, new Radio<>("group", Model.of(InviteeType.GROUP))
 			);
 			if (showGroups) {
 				groups.add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, target -> {
@@ -396,7 +396,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 				}))
 				, groupContainer.setVisible(showGroups)
 			);
-			rdi.add(new Radio<>("user", Model.of(InviteeType.user)));
+			rdi.add(new Radio<>("user", Model.of(InviteeType.USER)));
 
 			add(new TextField<String>("location"));
 			OmWysiwygToolbar toolbar = new OmWysiwygToolbar("toolbarContainer");

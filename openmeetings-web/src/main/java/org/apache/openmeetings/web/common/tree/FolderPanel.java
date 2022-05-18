@@ -178,16 +178,6 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 		}
 	}
 
-	private void setVideoStyle(final BaseFileItem f, StringBuilder style) {
-		style.append("recording ");
-		if (f instanceof Recording) {
-			Status st = ((Recording)f).getStatus();
-			if (Status.RECORDING == st || Status.CONVERTING == st) {
-				style.append("processing ");
-			}
-		}
-	}
-
 	@Override
 	public boolean isStopEventEnabled() {
 		return false;
@@ -242,6 +232,16 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 	private class StyleBehavior extends Behavior {
 		private static final long serialVersionUID = 1L;
 
+		private void setVideoStyle(final BaseFileItem f, StringBuilder style) {
+			style.append("recording ");
+			if (f instanceof Recording rec) {
+				Status st = rec.getStatus();
+				if (Status.RECORDING == st || Status.CONVERTING == st) {
+					style.append("processing ");
+				}
+			}
+		}
+
 		private CharSequence getItemStyle() {
 			final BaseFileItem f = (BaseFileItem)getDefaultModelObject();
 			boolean open = State.EXPANDED == treePanel.tree.getState(f);
@@ -265,8 +265,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 					case WML_FILE:
 						style.append(CSS_CLASS_FILE).append("wml ");
 						break;
-					case VIDEO:
-					case RECORDING:
+					case VIDEO, RECORDING:
 						setVideoStyle(f, style);
 						break;
 					case PRESENTATION:

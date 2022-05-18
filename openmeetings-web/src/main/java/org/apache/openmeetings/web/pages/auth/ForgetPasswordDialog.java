@@ -68,7 +68,7 @@ public class ForgetPasswordDialog extends Modal<String> {
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final IValidator<String> emailValidator = RfcCompliantEmailAddressValidator.getInstance();
 	private final RequiredTextField<String> name = new RequiredTextField<>("name", Model.of((String)null));
-	private final RadioGroup<Type> rg = new RadioGroup<>("type", Model.of(Type.email));
+	private final RadioGroup<Type> rg = new RadioGroup<>("type", Model.of(Type.EMAIL));
 	private final WebMarkupContainer label = new WebMarkupContainer("label");
 	private final Captcha captcha = new Captcha("captcha");
 	private ForgetPasswordForm form = new ForgetPasswordForm("form");
@@ -82,8 +82,8 @@ public class ForgetPasswordDialog extends Modal<String> {
 	private MailHandler mailHandler;
 
 	enum Type {
-		email
-		, login
+		EMAIL
+		, LOGIN
 	}
 
 	public ForgetPasswordDialog(String id, Modal<String> forgetInfoDialog) {
@@ -106,12 +106,12 @@ public class ForgetPasswordDialog extends Modal<String> {
 	}
 
 	private void updateLabel(IPartialPageRequestHandler handler) {
-		IModel<String> lbl = new ResourceModel(rg.getModelObject() == Type.email ? "315" : "316");
+		IModel<String> lbl = new ResourceModel(rg.getModelObject() == Type.EMAIL ? "315" : "316");
 		name.setLabel(lbl);
-		name.add(AttributeModifier.replace("type", rg.getModelObject() == Type.email ? "email" : "text"));
+		name.add(AttributeModifier.replace("type", rg.getModelObject() == Type.EMAIL ? "email" : "text"));
 		name.add(AttributeModifier.replace("title", lbl));
 		name.add(AttributeModifier.replace("placeholder", lbl));
-		label.add(AttributeModifier.replace("class", rg.getModelObject() == Type.email ? "fa fa-at" : "fa fa-user"));
+		label.add(AttributeModifier.replace("class", rg.getModelObject() == Type.EMAIL ? "fa fa-at" : "fa fa-user"));
 		if (handler != null) {
 			handler.add(name, label);
 		}
@@ -120,7 +120,7 @@ public class ForgetPasswordDialog extends Modal<String> {
 	@Override
 	public Modal<String> show(IPartialPageRequestHandler handler) {
 		name.setModelObject(null);
-		rg.setModelObject(Type.email);
+		rg.setModelObject(Type.EMAIL);
 		captcha.refresh(handler);
 		handler.add(rg);
 		updateLabel(handler);
@@ -155,8 +155,8 @@ public class ForgetPasswordDialog extends Modal<String> {
 			add(label.setOutputMarkupId(true));
 			add(name.setOutputMarkupId(true));
 			add(captcha);
-			add(rg.add(new Radio<>("email", Model.of(Type.email)))
-					.add(new Radio<>("login", Model.of(Type.login)))
+			add(rg.add(new Radio<>("email", Model.of(Type.EMAIL)))
+					.add(new Radio<>("login", Model.of(Type.LOGIN)))
 					.setOutputMarkupId(true));
 			rg.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 				private static final long serialVersionUID = 1L;
@@ -188,13 +188,13 @@ public class ForgetPasswordDialog extends Modal<String> {
 			if (n != null) {
 				IValidatable<String> val = new Validatable<>(n);
 				Type type = rg.getConvertedInput();
-				if (type == Type.email) {
+				if (type == Type.EMAIL) {
 					emailValidator.validate(val);
 					if (!val.isValid()) {
 						error(getString("234"));
 					}
 				}
-				if (type == Type.login && n.length() < getMinLoginLength()) {
+				if (type == Type.LOGIN && n.length() < getMinLoginLength()) {
 					error(getString("104"));
 				}
 			}
@@ -217,7 +217,7 @@ public class ForgetPasswordDialog extends Modal<String> {
 		private void onSubmit(AjaxRequestTarget target) {
 			String nm = name.getModelObject();
 			Type type = rg.getModelObject();
-			resetUser(type == Type.email ? nm : "", type == Type.login ? nm : "");
+			resetUser(type == Type.EMAIL ? nm : "", type == Type.LOGIN ? nm : "");
 			wasReset = true;
 			ForgetPasswordDialog.this.close(target);
 		}

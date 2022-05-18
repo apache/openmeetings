@@ -137,16 +137,16 @@ public abstract class AbstractOmDateTimePicker<T extends Serializable> extends F
 
 	public static String getDateTimeFormat(Locale loc) {
 		DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, loc);
-		if (fmt instanceof SimpleDateFormat) {
-			return ((SimpleDateFormat)fmt).toPattern();
+		if (fmt instanceof SimpleDateFormat sfmt) {
+			return sfmt.toPattern();
 		}
 		return DEFAULT_DATE_TIME_FORMAT;
 	}
 
 	public static String getDateFormat() {
 		DateFormat fmt = DateFormat.getDateInstance(DateFormat.SHORT, Session.get().getLocale());
-		if (fmt instanceof SimpleDateFormat) {
-			return ((SimpleDateFormat)fmt).toPattern();
+		if (fmt instanceof SimpleDateFormat sfmt) {
+			return sfmt.toPattern();
 		}
 		return DEFAULT_DATE_FORMAT;
 	}

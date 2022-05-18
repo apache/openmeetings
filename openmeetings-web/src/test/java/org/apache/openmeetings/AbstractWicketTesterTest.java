@@ -47,7 +47,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AbstractWicketTesterTest extends AbstractOmServerTest {
+public abstract class AbstractWicketTesterTest extends AbstractOmServerTest {
 	private static final Logger log = LoggerFactory.getLogger(AbstractWicketTesterTest.class);
 	public static final String PATH_CHILD = "main-container:main:contents:child";
 	public static final String PATH_MENU = "main-container:main:topControls:menu:menu";

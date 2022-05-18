@@ -132,8 +132,7 @@ public class RoomMapper {
 					i.setValidFrom(new Date(SDF.parse(dto.getValidFrom()).getTime() - (5 * 60 * 1000)));
 					i.setValidTo(SDF.parse(dto.getValidTo()));
 					break;
-				case ENDLESS:
-				case ONE_TIME:
+				case ENDLESS, ONE_TIME:
 				default:
 					break;
 			}

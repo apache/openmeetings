@@ -395,6 +395,8 @@ public class MessagesContactsPanel extends UserBasePanel {
 						selectedMessages.clear();
 						selectedMessages.addAll(readMessages);
 						break;
+					default:
+						break;
 				}
 				target.add(container);
 			}

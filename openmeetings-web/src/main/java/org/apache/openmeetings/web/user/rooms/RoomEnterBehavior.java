@@ -37,7 +37,7 @@ public class RoomEnterBehavior extends AjaxEventBehavior {
 	}
 
 	public static OmUrlFragment getRoomUrlFragment(Long roomId) {
-		return new OmUrlFragment(AreaKeys.room, "" + roomId);
+		return new OmUrlFragment(AreaKeys.ROOM, "" + roomId);
 	}
 
 	public static void roomEnter(MainPage page, IPartialPageRequestHandler handler, Long roomId) {

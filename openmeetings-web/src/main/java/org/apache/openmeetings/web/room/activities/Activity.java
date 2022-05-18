@@ -27,17 +27,17 @@ import java.util.Date;
 public class Activity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public enum Type {
-		roomEnter
-		, roomExit
-		, reqRightModerator(true)
-		, reqRightPresenter(true)
-		, reqRightWb(true)
-		, reqRightShare(true)
-		, reqRightRemote(true)
-		, reqRightA(true)
-		, reqRightAv(true)
-		, reqRightMuteOthers(true)
-		, haveQuestion(true);
+		ROOM_ENTER
+		, ROOM_EXIT
+		, REQ_RIGHT_MODERATOR(true)
+		, REQ_RIGHT_PRESENTER(true)
+		, REQ_RIGHT_WB(true)
+		, REQ_RIGHT_SHARE(true)
+		, REQ_RIGHT_REMOTE(true)
+		, REQ_RIGHT_A(true)
+		, REQ_RIGHT_AV(true)
+		, REQ_RIGHT_MUTE_OTHERS(true)
+		, REQ_RIGHT_HAVE_QUESTION(true);
 
 		private final boolean action;
 

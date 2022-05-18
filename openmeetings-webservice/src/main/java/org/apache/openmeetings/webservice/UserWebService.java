@@ -248,8 +248,8 @@ public class UserWebService extends BaseWebService {
 
 			if (ouser == null) {
 				throw new InternalServiceException(UNKNOWN.getMessage());
-			} else if (ouser instanceof String) {
-				throw new InternalServiceException((String)ouser);
+			} else if (ouser instanceof String str) {
+				throw new InternalServiceException(str);
 			}
 
 			User u = (User)ouser;

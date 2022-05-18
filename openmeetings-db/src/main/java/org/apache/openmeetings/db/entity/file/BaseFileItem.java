@@ -335,8 +335,7 @@ public abstract class BaseFileItem extends HistoricalEntity {
 						f = new File(d, String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_PDF : ext));
 					}
 					break;
-				case POLL_CHART:
-				case FOLDER:
+				case POLL_CHART, FOLDER:
 				default:
 			}
 		}
