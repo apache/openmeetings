@@ -219,8 +219,7 @@ public class LdapLoginManager {
 				entry = w.conn.lookup(userDn);
 			}
 			switch (w.options.prov) {
-				case AUTOUPDATE:
-				case AUTOCREATE:
+				case AUTOUPDATE, AUTOCREATE:
 					u = w.getUser(entry, u);
 					if (w.options.syncPasswd) {
 						u.updatePassword(passwd);

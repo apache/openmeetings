@@ -151,8 +151,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 			case AUDIO_ONLY:
 				profile = MediaProfileSpecType.WEBM_AUDIO_ONLY;
 				break;
-			case SCREEN:
-			case VIDEO_ONLY:
+			case SCREEN, VIDEO_ONLY:
 			default:
 				profile = MediaProfileSpecType.WEBM_VIDEO_ONLY;
 				break;

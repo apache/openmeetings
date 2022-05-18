@@ -1129,7 +1129,7 @@
 					<configuration>
 						<doclint>none</doclint>
 						<additionalOptions>-html5</additionalOptions>
-						<source>8</source>
+						<source>${jdk.version}</source>
 						<javadocVersion>${jdk.version}</javadocVersion>
 						<notimestamp>true</notimestamp>
 						<links>

@@ -233,16 +233,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			entity = em.merge(entity);
 		}
 		switch (key) {
-			case CONFIG_CAM_FPS:
-			case CONFIG_MIC_ECHO:
-			case CONFIG_MIC_NOISE:
-			case CONFIG_MIC_RATE:
-			case CONFIG_KEYCODE_ARRANGE:
-			case CONFIG_KEYCODE_MUTE_OTHERS:
-			case CONFIG_KEYCODE_MUTE:
-			case CONFIG_KEYCODE_QUICKPOLL:
-			case CONFIG_KEYCODE_ARRANGE_RESIZE:
-			case CONFIG_AUTO_OPEN_SHARING:
+			case CONFIG_CAM_FPS, CONFIG_MIC_ECHO, CONFIG_MIC_NOISE, CONFIG_MIC_RATE, CONFIG_KEYCODE_ARRANGE
+					, CONFIG_KEYCODE_MUTE_OTHERS, CONFIG_KEYCODE_MUTE, CONFIG_KEYCODE_QUICKPOLL
+					, CONFIG_KEYCODE_ARRANGE_RESIZE, CONFIG_AUTO_OPEN_SHARING:
 				reloadRoomSettings();
 				break;
 			case CONFIG_MAX_UPLOAD_SIZE:
@@ -281,11 +274,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_REST_ALLOW_ORIGIN:
 				reloadRestAllowOrigin();
 				break;
-			case CONFIG_LOGIN_MIN_LENGTH:
-			case CONFIG_PASS_MIN_LENGTH:
-			case CONFIG_PASS_CHECK_UPPER:
-			case CONFIG_PASS_CHECK_DIGIT:
-			case CONFIG_PASS_CHECK_SPECIAL:
+			case CONFIG_LOGIN_MIN_LENGTH, CONFIG_PASS_MIN_LENGTH, CONFIG_PASS_CHECK_UPPER
+					, CONFIG_PASS_CHECK_DIGIT, CONFIG_PASS_CHECK_SPECIAL:
 				reloadLoginPassword();
 				break;
 			case CONFIG_DEFAULT_GROUP_ID:
@@ -303,9 +293,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_CHAT_SEND_ON_ENTER:
 				reloadChatSendOnEnter();
 				break;
-			case CONFIG_REGISTER_FRONTEND:
-			case CONFIG_REGISTER_SOAP:
-			case CONFIG_REGISTER_OAUTH:
+			case CONFIG_REGISTER_FRONTEND, CONFIG_REGISTER_SOAP, CONFIG_REGISTER_OAUTH:
 				reloadRegister();
 				break;
 			case CONFIG_EMAIL_VERIFICATION:
@@ -320,14 +308,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_MYROOMS_ENABLED:
 				reloadMyRoomsEnabled();
 				break;
-			case CONFIG_GOOGLE_ANALYTICS_CODE:
-			case CONFIG_CSP_FONT:
-			case CONFIG_CSP_FRAME:
-			case CONFIG_CSP_IMAGE:
-			case CONFIG_CSP_MEDIA:
-			case CONFIG_CSP_SCRIPT:
-			case CONFIG_CSP_STYLE:
-			case CONFIG_CSP_ENABLED:
+			case CONFIG_GOOGLE_ANALYTICS_CODE, CONFIG_CSP_FONT, CONFIG_CSP_FRAME, CONFIG_CSP_IMAGE
+					, CONFIG_CSP_MEDIA, CONFIG_CSP_SCRIPT, CONFIG_CSP_STYLE, CONFIG_CSP_ENABLED:
 				updateCsp();
 				break;
 			case CONFIG_SMTP_SERVER:

@@ -203,8 +203,7 @@ public class SipStackProcessor implements SipListenerExt {
 					doDestroy();
 				}
 				break;
-			case TRYING:
-			case RINGING:
+			case TRYING, RINGING:
 				break;
 			default:
 				log.debug("No handler for response: \n\n{}", resp);
