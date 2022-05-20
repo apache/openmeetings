@@ -22,12 +22,14 @@ import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.bind.Constants.FILE_LIST_NODE;
 import static org.apache.openmeetings.db.bind.Constants.USER_LIST_NODE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 
 import javax.xml.bind.JAXBContext;
@@ -51,7 +53,9 @@ class TestExport extends AbstractOmServerTest {
 
 	@Test
 	void exportMain() throws Exception {
-		BackupExport.main(new String[] {File.createTempFile("gereral", "cfg").getCanonicalPath()});
+		String backupPath = File.createTempFile("gereral", "cfg").getCanonicalPath();
+		BackupExport.main(new String[] {backupPath});
+		assertTrue(Paths.get(backupPath).toFile().exists(), "Backup should be created");
 	}
 
 	@Test

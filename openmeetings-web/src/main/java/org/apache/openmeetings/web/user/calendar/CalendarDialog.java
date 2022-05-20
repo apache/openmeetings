@@ -358,6 +358,7 @@ public class CalendarDialog extends Modal<OmCalendar> {
 					target.add(delete.setVisible(isOwner(c)));
 				}
 				target.add(save.setVisible(isOwner(c)));
+				break;
 			default:
 				break;
 		}

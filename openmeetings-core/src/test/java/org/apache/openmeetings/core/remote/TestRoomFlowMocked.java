@@ -25,6 +25,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -78,6 +80,8 @@ class TestRoomFlowMocked extends BaseMockedTest {
 	void testNoClient() {
 		runWrapped(() -> {
 			handler.onMessage(null, getBaseMsg().put("id", "aa"));
+
+			verify(streamProcessor, times(0)).onMessage(any(), any(), any());
 		});
 	}
 
@@ -89,6 +93,8 @@ class TestRoomFlowMocked extends BaseMockedTest {
 	void testNoRoom() {
 		runWrapped(() -> {
 			handler.onMessage(getClient(), getBaseMsg().put("id", "aa"));
+
+			verify(streamProcessor, times(0)).onMessage(any(), any(), any());
 		});
 	}
 
@@ -119,6 +125,8 @@ class TestRoomFlowMocked extends BaseMockedTest {
 	void testWannaRecord1() throws Exception {
 		JSONObject msg = getBaseMsg().put("id", "wannaRecord");
 		handler.onMessage(getClientWithRoom(), msg);
+
+		verify(streamProcessor, times(1)).onMessage(any(), any(), any());
 	}
 
 	private Client getClientFull() {
@@ -136,6 +144,8 @@ class TestRoomFlowMocked extends BaseMockedTest {
 			c.getRoom().setType(Room.Type.INTERVIEW);
 			doReturn(c.getRoom()).when(roomDao).get(ROOM_ID);
 			handler.onMessage(c, msg);
+
+			verify(streamProcessor, times(1)).onMessage(any(), any(), any());
 		});
 	}
 

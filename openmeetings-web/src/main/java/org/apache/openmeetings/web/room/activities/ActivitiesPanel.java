@@ -273,6 +273,7 @@ public class ActivitiesPanel extends Panel {
 				break;
 			case ROOM_ENTER, ROOM_EXIT:
 				cls.append("bg-white auto-clean");
+				break;
 			default:
 				break;
 		}

@@ -25,6 +25,8 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.TAG_MODE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import org.apache.openmeetings.db.entity.basic.WsClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,6 +53,8 @@ class TestSetupFlowMocked extends BaseMockedTest {
 			JSONObject msg = getBaseMsg().put("id", "wannaRecord");
 			WsClient c = new WsClient("sessionId", 0);
 			handler.onMessage(c, msg);
+
+			verify(testProcessor, times(1)).onMessage(any(), any(), any());
 		});
 	}
 
@@ -81,6 +85,8 @@ class TestSetupFlowMocked extends BaseMockedTest {
 					.put("id", "play")
 					.put("sdpOffer", "sdpOffer"));
 			testProcessor.destroy();
+
+			verify(testProcessor, times(6)).onMessage(any(), any(), any());
 		});
 	}
 
@@ -92,6 +98,8 @@ class TestSetupFlowMocked extends BaseMockedTest {
 					.put(KurentoHandler.PARAM_CANDIDATE, new JSONObject());
 			WsClient c = new WsClient("sessionId", 0);
 			handler.onMessage(c, msg);
+
+			verify(testProcessor, times(1)).onMessage(any(), any(), any());
 		});
 	}
 
@@ -101,6 +109,8 @@ class TestSetupFlowMocked extends BaseMockedTest {
 			JSONObject msg = getBaseMsg().put("id", "wannaPlay");
 			WsClient c = new WsClient("sessionId", 0);
 			handler.onMessage(c, msg);
+
+			verify(testProcessor, times(1)).onMessage(any(), any(), any());
 		});
 	}
 
@@ -110,6 +120,8 @@ class TestSetupFlowMocked extends BaseMockedTest {
 			JSONObject msg = getBaseMsg().put("id", "play");
 			WsClient c = new WsClient("sessionId", 0);
 			handler.onMessage(c, msg);
+
+			verify(testProcessor, times(1)).onMessage(any(), any(), any());
 		});
 	}
 }
