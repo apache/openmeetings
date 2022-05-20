@@ -1,6 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 require('fabric');
 
+// HACK!!!!! to avoid eval to determine MathJax version
+window.PACKAGE_VERSION = '3.2.1';
+
 // Based on this example: https://github.com/mathjax/MathJax-demos-node/blob/master/preload/tex2svg
 const packages = 'base, autoload, require, ams, newcommand, noundefined'.split(/\s*,\s*/);
 

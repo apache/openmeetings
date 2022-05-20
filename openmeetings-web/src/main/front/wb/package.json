@@ -19,6 +19,6 @@
   },
   "dependencies": {
     "fabric": "^5.2.1",
-    "mathjax-full": "^3.2.0"
+    "mathjax-full": "^3.2.1"
   }
 }
