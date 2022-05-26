@@ -150,9 +150,14 @@ public abstract class InvitationForm extends Form<Invitation> {
 
 	protected void updateButtons(AjaxRequestTarget target) {
 		Collection<User> recpnts = recipients.getModelObject();
+		boolean generateEnabled = false;
+		if (recpnts.size() == 1) {
+			User u = recpnts.iterator().next();
+			generateEnabled = getUserId().equals(u.getId()) || User.Type.CONTACT == u.getType();
+		}
 		target.add(
 				dialog.getSend().setEnabled(!recpnts.isEmpty())
-				, dialog.getGenerate().setEnabled(recpnts.size() == 1)
+				, dialog.getGenerate().setEnabled(generateEnabled)
 				);
 	}
 
