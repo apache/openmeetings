@@ -18,52 +18,42 @@
  */
 package org.apache.openmeetings.calendar;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class TestDatabaseStructureAppointment extends AbstractOmServerTest {
-	private static final Logger log = LoggerFactory.getLogger(TestDatabaseStructureAppointment.class);
+	private static String getTzId() {
+		return TimeZone.getDefault().getID();
+	}
+
+	private static Date getDate(int hour, int minute) {
+		return CalendarHelper.getDate(LocalDateTime.of(2008, 8, 17, 12, 28), getTzId());
+	}
+
+	private void createAppointment(int startHour, int startMinute, int endHour, int endMinute) {
+		Appointment a = getAppointment(getDate(startHour, startMinute), getDate(endHour, endMinute));
+		appointmentDao.update(a, a.getOwner().getId());
+	}
 
 	@Test
-	void testAddingGroup() {
-		try {
-			Calendar cal = Calendar.getInstance();
-			cal.set(2008, 9, 2);
-			cal.get(Calendar.DAY_OF_MONTH);
-			cal.getTime();
+	void testAddingGroup() throws Exception {
+		Date date = CalendarHelper.getDate(LocalDate.of(2008, 8, 17), getTzId());
+		Date date2 = CalendarHelper.getDate(LocalDate.of(2008, 8, 18), getTzId());
 
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = format.parse("2008-17-08");
-			Date date2 = format.parse("2008-18-08");
+		createAppointment(12, 28, 23, 15);
+		createAppointment(1, 1, 3, 52);
 
-			List<Appointment> listAppoints = appointmentDao.getInRange(1L, date, date2);
-			// List<Appointment> listAppoints = appointmentDao.searchAppointmentsByName("%");
-			// appointmentDao.getNextAppointmentById(1L);
-			// appointmentDao.addAppointment("mezo", 1L, "Pforzheim", "zweiter", Calendar.getInstance().getTime(),
-			// 		date, null, true, null, null, 1L,1L);
-			// appointmentDao.addAppointment("testap", "erster Test",Calendar.getInstance().getTime(),
-			// 		Calendar.getInstance().getTime(), true, false, false, false, new Long(1), 1L);
-			log.debug("Anzahl: " + listAppoints.size());
-
-			for (Appointment appoints : listAppoints) {
-				log.debug("Termin: " + appoints.getTitle() + " startDate: " + appoints.getStart() + " endDate: " + appoints.getEnd());
-				log.debug("MeetingMembers: " + appoints.getMeetingMembers().size());
-			}
-
-			for (Iterator<Appointment> iter = listAppoints.iterator(); iter.hasNext();) {
-				log.debug("" + iter.next());
-			}
-		} catch (Exception err) {
-			log.error("[testAddingGroup]", err);
-		}
+		List<Appointment> listAppoints = appointmentDao.getInRange(1L, date, date2);
+		assertEquals(2, listAppoints.size(), "Exactly 2 appointments should retrieved");
 	}
 }

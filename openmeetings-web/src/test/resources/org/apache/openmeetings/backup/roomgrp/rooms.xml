@@ -26,49 +26,8 @@ see http://openmeetings.apache.org/Upgrade.html for Details
  --><root>
    <rooms>
       <room>
-         <rooms_id><![CDATA[1]]></rooms_id>
-         <name><![CDATA[public Interview Room]]></name>
-         <roomtypeId><![CDATA[4]]></roomtypeId>
-         <deleted><![CDATA[false]]></deleted>
-         <ispublic><![CDATA[true]]></ispublic>
-         <numberOfPartizipants><![CDATA[2]]></numberOfPartizipants>
-         <appointment><![CDATA[false]]></appointment>
-         <isDemoRoom><![CDATA[false]]></isDemoRoom>
-         <isModeratedRoom><![CDATA[false]]></isModeratedRoom>
-         <allowUserQuestions><![CDATA[true]]></allowUserQuestions>
-         <isAudioOnly><![CDATA[false]]></isAudioOnly>
-         <allowFontStyles><![CDATA[true]]></allowFontStyles>
-         <isClosed><![CDATA[false]]></isClosed>
-         <waitForRecording><![CDATA[false]]></waitForRecording>
-         <allowRecording><![CDATA[true]]></allowRecording>
-         <chatModerated><![CDATA[false]]></chatModerated>
-         <chatOpened><![CDATA[false]]></chatOpened>
-         <filesOpened><![CDATA[false]]></filesOpened>
-         <autoVideoSelect><![CDATA[false]]></autoVideoSelect>
-         <room_moderators class="org.apache.openjpa.util.java$util$ArrayList$proxy">
-            <room_moderator>
-               <is_supermoderator><![CDATA[false]]></is_supermoderator>
-               <user_id><![CDATA[1725]]></user_id>
-            </room_moderator>
-            <room_moderator>
-               <is_supermoderator><![CDATA[false]]></is_supermoderator>
-               <user_id><![CDATA[1]]></user_id>
-            </room_moderator>
-         </room_moderators>
-         <sipEnabled><![CDATA[false]]></sipEnabled>
-         <hide_element class="org.apache.openjpa.util.java$util$HashSet$proxy">
-            <roomElement><![CDATA[TopBar]]></roomElement>
-            <roomElement><![CDATA[ActionMenu]]></roomElement>
-            <roomElement><![CDATA[PollMenu]]></roomElement>
-            <roomElement><![CDATA[ScreenSharing]]></roomElement>
-            <roomElement><![CDATA[MicrophoneStatus]]></roomElement>
-            <roomElement><![CDATA[UserCount]]></roomElement>
-            <roomElement><![CDATA[FILES]]></roomElement>
-         </hide_element>
-      </room>
-      <room>
          <rooms_id><![CDATA[666]]></rooms_id>
-         <name><![CDATA[public Interview Room]]></name>
+         <name><![CDATA[public Devil's Room]]></name>
          <roomtypeId><![CDATA[4]]></roomtypeId>
          <deleted><![CDATA[false]]></deleted>
          <ispublic><![CDATA[true]]></ispublic>
@@ -86,7 +45,7 @@ see http://openmeetings.apache.org/Upgrade.html for Details
          <chatOpened><![CDATA[false]]></chatOpened>
          <filesOpened><![CDATA[false]]></filesOpened>
          <autoVideoSelect><![CDATA[false]]></autoVideoSelect>
-         <tag><![CDATA[test_w_grps]]></tag>
+         <tag><![CDATA[testWgrps]]></tag>
          <room_moderators class="org.apache.openjpa.util.java$util$ArrayList$proxy">
             <room_moderator>
                <is_supermoderator><![CDATA[false]]></is_supermoderator>

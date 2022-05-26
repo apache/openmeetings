@@ -20,10 +20,12 @@ package org.apache.openmeetings.backup;
 
 import static org.apache.openmeetings.backup.TestImport.BACKUP_ROOT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,8 +43,12 @@ class TestImportRoom extends AbstractTestImport {
 
 	@Test
 	void importRoomGroups() throws Exception {
-		//TODO need to check it somehow
-		File rooms = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "room/rooms.xml").toURI());
+		File rooms = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "roomgrp/rooms.xml").toURI());
+		backupImport.importRooms(rooms.getParentFile());
 		backupImport.importRoomGroups(rooms.getParentFile());
+
+		Room r = roomDao.get("testWgrps");
+		assertNotNull(r, "Room should be imported");
+		assertEquals(1, r.getGroups().size(), "Room should belongs to 1 group");
 	}
 }

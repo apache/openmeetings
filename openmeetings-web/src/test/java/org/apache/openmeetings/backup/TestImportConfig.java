@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REPLY_TO_ORGANIZER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
@@ -65,5 +66,6 @@ class TestImportConfig extends AbstractTestImport {
 	void importConfigs() throws Exception {
 		File configs = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "config/configs.xml").toURI());
 		backupImport.importConfigs(configs.getParentFile());
+		assertEquals("ml.abracadabra.com", cfgDao.get(CONFIG_SMTP_SERVER).getValue(), "SMTP server should be updated");
 	}
 }

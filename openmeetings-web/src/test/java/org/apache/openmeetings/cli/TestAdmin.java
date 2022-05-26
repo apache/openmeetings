@@ -131,7 +131,10 @@ class TestAdmin {
 		//backup
 		a.process("-b");
 		//backup to file
-		a.process("-b", Files.createTempFile("omtempbackup", null).toFile().getCanonicalPath());
+		File backup = Files.createTempFile("omtempbackup", null).toFile();
+		a.process("-b", backup.getCanonicalPath());
+		assertTrue(backup.exists(), "backup Should be created");
+		assertTrue(Files.size(backup.toPath()) > 0, "backup shouldn't be empty");
 	}
 
 	@Test

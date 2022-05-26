@@ -68,7 +68,7 @@ see http://openmeetings.apache.org/Upgrade.html for Details
       <config>
          <id><![CDATA[6]]></id>
          <key><![CDATA[smtp_server]]></key>
-         <value><![CDATA[ml.unipro.ru]]></value>
+         <value><![CDATA[ml.abracadabra.com]]></value>
          <created class="java.util.Date"><![CDATA[1502426201387]]></created>
          <comment><![CDATA[this is the smtp server to send messages]]></comment>
          <deleted><![CDATA[false]]></deleted>
