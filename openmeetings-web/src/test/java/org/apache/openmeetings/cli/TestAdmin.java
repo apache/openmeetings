@@ -141,5 +141,6 @@ class TestAdmin {
 	void testFilesNoDb() throws Exception {
 		//clean-up report
 		new Admin().process("-f");
+		assertTrue(true, "No exception is thrown");
 	}
 }
