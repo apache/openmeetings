@@ -29,8 +29,8 @@ see https://openmeetings.apache.org/Upgrade.html for Details
          <created class="java.util.Date"><![CDATA[1576589928000]]></created>
          <updated class="java.util.Date"><![CDATA[1539919117000]]></updated>
          <deleted><![CDATA[false]]></deleted>
-         <organisation_id><![CDATA[1]]></organisation_id>
-         <name><![CDATA[unit_test_1]]></name>
+         <organisation_id><![CDATA[1001]]></organisation_id>
+         <name><![CDATA[TheBestCms]]></name>
          <limited><![CDATA[false]]></limited>
          <restricted><![CDATA[false]]></restricted>
          <maxFilesSize><![CDATA[0]]></maxFilesSize>
@@ -38,7 +38,7 @@ see https://openmeetings.apache.org/Upgrade.html for Details
          <maxRooms><![CDATA[0]]></maxRooms>
          <recordingTtl><![CDATA[0]]></recordingTtl>
          <reminderDays><![CDATA[0]]></reminderDays>
-         <external><![CDATA[false]]></external>
+         <external><![CDATA[true]]></external>
       </organisation>
    </organisations>
 </root>

@@ -22,7 +22,7 @@
 	<body>
 		<section name="Introduction">
 			<p> For a detailed instruction which services, methods and params are available see the list in the <a href="/openmeetings-webservice/apidocs/index.html" target="_blank">SOAP/REST API</a> .
-				ALL methods that are implemented for the SOAP API are also available via REST. 
+				ALL methods that are implemented for the SOAP API are also available via REST.
 			</p>
 			<div class="bd-callout bd-callout-info">
 				There is a <a href="https://openmeetings.apache.org/swagger/" target="_blank">OpenAPI spec</a> published in swagger format.
@@ -136,11 +136,11 @@ const hashResult = await userService.getRoomHash(sessionId, {
         roomId: 1,
         moderator: true
     })
-    
+
 // 3. Construct Login URL
 const loginUrl = `${BASE_URL}/hash?secure=${hashResult.message}`
 </source>
-		<p>Full sample source code for can be found at: 
+		<p>Full sample source code for can be found at:
 			<ol>
 				<li>JavaScript/ES6 example using simplistic Express website see <a href="https://github.com/om-hosting/openmeetings-node-js-sample-project" target="_BLANK">Github openmeetings-node-js-sample-project</a></li>
 				<li>TypeScript example using simplistic Express website <a href="https://github.com/om-hosting/openmeetings-node-sample-project" target="_BLANK">Github openmeetings-node-sample-project</a></li>

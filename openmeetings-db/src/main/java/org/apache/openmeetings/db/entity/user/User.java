@@ -319,14 +319,6 @@ public class User extends HistoricalEntity {
 	@XmlElement(name = "externalUserId", required = false)
 	private String externalId;
 
-	@XmlElement(name = "externalUserType", required = false)
-	@Transient
-	/**
-	 * @deprecated External group should be used instead
-	 */
-	@Deprecated(since = "5.0")
-	private String externalType;
-
 	/**
 	 * java.util.TimeZone Id
 	 */
@@ -577,22 +569,6 @@ public class User extends HistoricalEntity {
 				: groupUsers.stream().filter(gu -> gu.getGroup().isExternal()).findFirst()
 				.map(gu -> gu.getGroup().getName());
 		return extType.isPresent() ? extType.get() : null;
-	}
-
-	/**
-	 * @deprecated External group should be used instead
-	 */
-	@Deprecated(since = "5.0")
-	public String getExternalType() {
-		return externalType;
-	}
-
-	/**
-	 * @deprecated External group should be used instead
-	 */
-	@Deprecated(since = "5.0")
-	public void setExternalType(String externalType) {
-		this.externalType = externalType;
 	}
 
 	public Sessiondata getSessionData() {

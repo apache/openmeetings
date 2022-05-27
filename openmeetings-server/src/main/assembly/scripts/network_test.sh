@@ -41,7 +41,7 @@ test_jitter_with_ping (){
 ## $2 - count of send packets
 
 COUNT_PACKETS=1000
-if [ -z "$1" ]; then 
+if [ -z "$1" ]; then
   ping -c 1000 -f -s $1 $TESTING_HOST 2>&1 >${1}b.out.txt
 else
   ping -c $2 -f -s $1 $TESTING_HOST 2>&1 >${1}b.out.txt
@@ -58,7 +58,7 @@ if [ "$JITTER" -lt "0" ];then
 fi
 echo "Jitter = $JITTER for $COUNT_PACKETS packets with size $1 bites (ping)"
 echo "Max latency is $MAX"
-if [ "$AVG" != "0"  ]; then 
+if [ "$AVG" != "0"  ]; then
   let "JITTERPS=$JITTER*100/$AVG"
   echo "Jitter = $JITTERPS % from $AVG ms"
 fi
@@ -116,8 +116,8 @@ echo "========================================"
   ssh $SSH_LOGIN@$TESTING_HOST "ps -C iperf|cut -d \" \" -f1 | xargs kill -9" >>server_log.txt 2>&1 &
   echo "End outbound test"
   sleep 2
-  echo 
-  #Upload test 
+  echo
+  #Upload test
   #Comment: This we can use any port for testing, I use 12100
   PORT=12100
   echo "Start inbound test"

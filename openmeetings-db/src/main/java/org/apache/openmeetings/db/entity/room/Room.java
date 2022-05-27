@@ -46,7 +46,6 @@ import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -219,14 +218,6 @@ public class Room extends HistoricalEntity {
 	@Column(name = "external_id")
 	@XmlElement(name = "externalId", required = false)
 	private String externalId;
-
-	@XmlElement(name = "externalType", required = false)
-	@Transient
-	/**
-	 * @deprecated External group should be used instead
-	 */
-	@Deprecated(since = "5.0")
-	private String externalType;
 
 	@Column(name = "demo_room", nullable = false)
 	@XmlElement(name = "isDemoRoom", required = false)
@@ -456,22 +447,6 @@ public class Room extends HistoricalEntity {
 				: groups.stream().filter(rg -> rg.getGroup().isExternal()).findFirst()
 				.map(gu -> gu.getGroup().getName());
 		return extType.isPresent() ? extType.get() : null;
-	}
-
-	/**
-	 * @deprecated External group should be used instead
-	 */
-	@Deprecated(since = "5.0")
-	public String getExternalType() {
-		return externalType;
-	}
-
-	/**
-	 * @deprecated External group should be used instead
-	 */
-	@Deprecated(since = "5.0")
-	public void setExternalType(String externalType) {
-		this.externalType = externalType;
 	}
 
 	public boolean isAllowUserQuestions() {

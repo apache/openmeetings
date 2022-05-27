@@ -639,6 +639,35 @@ public class BackupImport {
 				}, false);
 	}
 
+	private void checkByType(User u) {
+		if (u.getType() == User.Type.LDAP) {
+			if (u.getDomainId() != null && ldapMap.containsKey(u.getDomainId())) {
+				u.setDomainId(ldapMap.get(u.getDomainId()));
+			} else {
+				log.error("Unable to find Domain for ID: {}", u.getDomainId());
+			}
+		}
+		if (u.getType() == User.Type.OAUTH) {
+			if (u.getDomainId() != null && oauthMap.containsKey(u.getDomainId())) {
+				u.setDomainId(oauthMap.get(u.getDomainId()));
+			} else {
+				log.error("Unable to find Domain for ID: {}", u.getDomainId());
+			}
+		}
+	}
+
+	private void checkLogin(User u, Set<UserKey> userLogins) {
+		if (u.getType() == User.Type.CONTACT && u.getLogin().length() < getMinLoginLength()) {
+			u.setLogin(randomUUID().toString());
+		}
+		if (userLogins.contains(new UserKey(u))) {
+			log.warn("LOGIN is duplicated for USER {}", u);
+			String updateLogin = String.format("modified_by_import_<%s>%s", randomUUID(), u.getLogin());
+			u.setLogin(updateLogin);
+		}
+		userLogins.add(new UserKey(u));
+	}
+
 	/*
 	 * ##################### Import Users
 	 */
@@ -646,20 +675,18 @@ public class BackupImport {
 		log.info("OAuth2 servers import complete, starting user import");
 		String jNameTimeZone = getDefaultTimezone();
 		//add existent emails from database
-		List<User>  users = userDao.getAllUsers();
 		final Set<String> userEmails = new HashSet<>();
 		final Set<UserKey> userLogins = new HashSet<>();
-		for (User u : users){
+		userDao.getAllUsers().stream().forEach(u -> {
 			if (u.getAddress() != null && !Strings.isEmpty(u.getAddress().getEmail())) {
 				userEmails.add(u.getAddress().getEmail());
 			}
 			userLogins.add(new UserKey(u));
-		}
+		});
 		Class<User> eClazz = User.class;
 		JAXBContext jc = JAXBContext.newInstance(eClazz);
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
 		unmarshaller.setAdapter(new GroupAdapter(groupDao, groupMap));
-		int minLoginLength = getMinLoginLength();
 
 		readList(unmarshaller, base, "users.xml", USER_LIST_NODE, USER_NODE, eClazz, u -> {
 			if (u.getLogin() == null || u.isDeleted()) {
@@ -674,26 +701,8 @@ public class BackupImport {
 				}
 				userEmails.add(u.getAddress().getEmail());
 			}
-			if (u.getType() == User.Type.LDAP) {
-				if (u.getDomainId() != null && ldapMap.containsKey(u.getDomainId())) {
-					u.setDomainId(ldapMap.get(u.getDomainId()));
-				} else {
-					log.error("Unable to find Domain for ID: {}", u.getDomainId());
-				}
-			}
-			if (u.getType() == User.Type.OAUTH) {
-				if (u.getDomainId() != null && oauthMap.containsKey(u.getDomainId())) {
-					u.setDomainId(oauthMap.get(u.getDomainId()));
-				} else {
-					log.error("Unable to find Domain for ID: {}", u.getDomainId());
-				}
-			}
-			if (userLogins.contains(new UserKey(u))) {
-				log.warn("LOGIN is duplicated for USER {}", u);
-				String updateLogin = String.format("modified_by_import_<%s>%s", randomUUID(), u.getLogin());
-				u.setLogin(updateLogin);
-			}
-			userLogins.add(new UserKey(u));
+			checkByType(u);
+			checkLogin(u, userLogins);
 			if (u.getGroupUsers() != null) {
 				for (Iterator<GroupUser> iter = u.getGroupUsers().iterator(); iter.hasNext();) {
 					GroupUser gu = iter.next();
@@ -703,9 +712,6 @@ public class BackupImport {
 					}
 					gu.setUser(u);
 				}
-			}
-			if (u.getType() == User.Type.CONTACT && u.getLogin().length() < minLoginLength) {
-				u.setLogin(randomUUID().toString());
 			}
 
 			String tz = u.getTimeZoneId();
@@ -720,10 +726,6 @@ public class BackupImport {
 			}
 			if (AuthLevelUtil.hasLoginLevel(u.getRights()) && !Strings.isEmpty(u.getActivatehash())) {
 				u.setActivatehash(null);
-			}
-			if (u.getExternalType() != null) {
-				Group g = groupDao.getExternal(u.getExternalType());
-				u.addGroup(g);
 			}
 			userDao.update(u, Long.valueOf(-1));
 			userMap.put(userId, u.getId());
@@ -1401,7 +1403,9 @@ public class BackupImport {
 				return false;
 			}
 			UserKey other = (UserKey) obj;
-			return Objects.equals(domainId, other.domainId) && Objects.equals(login, other.login) && type == other.type;
+			return Objects.equals(domainId, other.domainId)
+					&& Objects.equals(login, other.login)
+					&& type == other.type;
 		}
 	}
 }

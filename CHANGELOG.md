@@ -67,14 +67,14 @@ Release Notes - Openmeetings - Version 6.2.0
     * [OPENMEETINGS-2639] - Add internal password user when send inivitation from room
     * [OPENMEETINGS-2654] - Update build instructions with new commands for compiling NPM
     * [OPENMEETINGS-2655] - Minor ui fix for icons, see attached screenshots
-    * [OPENMEETINGS-2660] - Updated Swagger Rest API Docs 
+    * [OPENMEETINGS-2660] - Updated Swagger Rest API Docs
     * [OPENMEETINGS-2661] - Updated Rest API Example
     * [OPENMEETINGS-2666] - Backup import should be improved
     * [OPENMEETINGS-2667] - Generated swagger has incorrect response, missing root element in schema and provide example responses
     * [OPENMEETINGS-2674] - Updated Rest API Example for PHP integration
 
 * Test
-    * [OPENMEETINGS-2659] - Can´t clean whiteboard 
+    * [OPENMEETINGS-2659] - Can´t clean whiteboard
     * [OPENMEETINGS-2665] - "Start sharing" icon TV not show it in some circunstanves
 
 * Task
@@ -99,10 +99,10 @@ Release Notes - Openmeetings - Version 6.1.0
     * [OPENMEETINGS-2599] - Make user default moderator in his/her own conference and presentation rooms
     * [OPENMEETINGS-2606] - Clean slide is broken
     * [OPENMEETINGS-2612] - google analatyics field should be limited to avoid overflow
-    * [OPENMEETINGS-2613] - empty user list in presentation room 
+    * [OPENMEETINGS-2613] - empty user list in presentation room
     * [OPENMEETINGS-2616] - OM not working on Android Chrome
     * [OPENMEETINGS-2624] - Untranslated calendar when change Language to japanese
-    * [OPENMEETINGS-2629] - Calendar picker can't sync to big calendar. 
+    * [OPENMEETINGS-2629] - Calendar picker can't sync to big calendar.
     * [OPENMEETINGS-2638] - The email link received from Calendar don´t work
 
 * New Feature
@@ -136,7 +136,7 @@ Release Notes - Openmeetings - Version 6.0.0
     * [OPENMEETINGS-2533] - Create New Group From Moderator
     * [OPENMEETINGS-2534] - RSS widget can break menu
     * [OPENMEETINGS-2535] - New chat notifications are too annoying
-    * [OPENMEETINGS-2539] - Voice Indicator disappears 
+    * [OPENMEETINGS-2539] - Voice Indicator disappears
     * [OPENMEETINGS-2542] - Notifications are not working in FF
     * [OPENMEETINGS-2543] - Error when adding google calendar
     * [OPENMEETINGS-2544] - Joining via URL room does not have 'exit' link
@@ -145,7 +145,7 @@ Release Notes - Openmeetings - Version 6.0.0
     * [OPENMEETINGS-2559] - Openmeetings instalaltion failing with oracle as DB set up
     * [OPENMEETINGS-2564] - Video does not play on WB
     * [OPENMEETINGS-2565] - Typo in RoomDTO getExternal - doesn't return correct room
-    * [OPENMEETINGS-2570] - Wrong German translation on "Reset password" popup 
+    * [OPENMEETINGS-2570] - Wrong German translation on "Reset password" popup
     * [OPENMEETINGS-2573] - FlowState.NOT_FLOWING Type Audio should not stop broadcast as can start flowing again
     * [OPENMEETINGS-2575] - Log file fills up with ping messages
     * [OPENMEETINGS-2581] - saving whiteboard content and puttting it back onto it _ error
@@ -172,7 +172,7 @@ Release Notes - Openmeetings - Version 6.0.0
     * [OPENMEETINGS-2578] - TLSv1.2 should be used as SSLContext protocol
 
 * Test
-    * [OPENMEETINGS-2507] - Need push "allow cam-mic button" twice 
+    * [OPENMEETINGS-2507] - Need push "allow cam-mic button" twice
     * [OPENMEETINGS-2571] - Tests for getExternal should be added
 
 * Wish

@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License") http://www.apache
 # Media Server Installation
 
 ## Install Kurento Media server
-Each instance of OpenMeetings requires a running Kurento Media Server (KMS). There is a complete list of installation modes here: 
+Each instance of OpenMeetings requires a running Kurento Media Server (KMS). There is a complete list of installation modes here:
 <a href="https://doc-kurento.readthedocs.io/en/stable/user/installation.html">Install Kurento Media server</a>
 
 The default config of OpenMeetings and Kurento Media Server is a 1:1 mapping. Each OpenMeetings instance is mapped exactly to 1 KMS instance as well as OpenMeetings and KMS running on the same host.
@@ -20,10 +20,10 @@ The quickest and easiest way to run KMS is via Docker. But running the following
 // for example /home/$user/work/openmeetings
 export OM_HOME=$YOUR_PATH
 // for example export OM_HOME=/Users/wagns1/Documents/apache/openmeetings/_REPO/openmeetings/openmeetings-web/target/openmeetings-web-5.0.0-M5-SNAPSHOT
- 
+
 docker run -v $OM_HOME/data:$OM_HOME/data -p 8888:8888 kurento/kurento-media-server
 ```
-Assuming OpenMeetings runs on your machine locally above will work without any config changes in OpenMeetings and is the most common way to spin up a development environment. 
+Assuming OpenMeetings runs on your machine locally above will work without any config changes in OpenMeetings and is the most common way to spin up a development environment.
 
 ## Specify/Install Turn server
 
@@ -59,6 +59,6 @@ kurento.certificateType=
 
 in your local $OM_HOME/webapps/openmeetings/WEB-INF/classes/openmeetings.properties file. A server restart is required in order for changes to take affect.
 
-## Other installation and configuration resources 
+## Other installation and configuration resources
 
 See the Wiki for much more detailed and linux distribution specific instructions: <a href="https://cwiki.apache.org/confluence/display/openmeetings/tutorials+for+installing+openmeetings+and+tools">https://cwiki.apache.org/confluence/display/openmeetings/tutorials+for+installing+openmeetings+and+tools</a>

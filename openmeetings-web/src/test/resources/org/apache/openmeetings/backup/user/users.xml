@@ -239,6 +239,12 @@ see http://openmeetings.apache.org/Upgrade.html for Details
          <type><![CDATA[eXtErNaL]]></type>
          <rights class="org.apache.openjpa.util.java$util$HashSet$proxy"/>
          <externalUserId>234</externalUserId>
+         <organisations class="org.apache.openjpa.util.java$util$ArrayList$proxy">
+            <user_organisation>
+               <organisation_id><![CDATA[1001]]></organisation_id>
+               <moderator><![CDATA[false]]></moderator>
+            </user_organisation>
+         </organisations>
          <externalUserType>TheBestCms</externalUserType>
       </user>
    </users>
