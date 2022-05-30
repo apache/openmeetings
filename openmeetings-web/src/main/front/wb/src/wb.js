@@ -458,7 +458,11 @@ module.exports = class Wb {
 			for (let i = 1; i < canvases.length; ++i) {
 				const cc = $('#can-' + this.id + '-slide-' + i).closest('.canvas-container');
 				cc.remove();
-				canvases[i].dispose();
+				try { // FIXME TODO HACK
+					canvases[i].dispose();
+				} catch {
+					//no-op
+				}
 			}
 			$('.room-block .wb-block .wb-video').remove();
 			canvases.splice(1);
