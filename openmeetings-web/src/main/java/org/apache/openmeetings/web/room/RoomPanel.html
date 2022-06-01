@@ -47,27 +47,27 @@
 					<div class="modal-body">
 						<h5><wicket:message key="video.muteothers"/></h5>
 						<div class="row justify-content-end">
-							<div class="custom-control custom-checkbox col-10">
-								<input type="checkbox" class="custom-control-input" id="muteOthersAsk">
-								<label class="custom-control-label" for="muteOthersAsk"><wicket:message key="dont.ask.again"/></label>
+							<div class="form-check col-10">
+								<input type="checkbox" class="form-check-input" id="muteOthersAsk">
+								<label class="form-check-label" for="muteOthersAsk"><wicket:message key="dont.ask.again"/></label>
 							</div>
 						</div>
 						<h5 class="mt-2"><wicket:message key="244"/></h5>
 						<div class="row justify-content-end">
-							<div class="custom-control custom-checkbox col-10">
-								<input type="checkbox" class="custom-control-input" id="chatNotify">
-								<label class="custom-control-label" for="chatNotify"><wicket:message key="sound.enable"/></label>
+							<div class="form-check col-10">
+								<input type="checkbox" class="form-check-input" id="chatNotify">
+								<label class="form-check-label" for="chatNotify"><wicket:message key="sound.enable"/></label>
 							</div>
-							<div class="custom-control custom-checkbox col-10">
-								<input type="checkbox" class="custom-control-input" id="sendOnCtrlEnter">
-								<label class="custom-control-label" for="sendOnCtrlEnter"><wicket:message key="send.on.ctrl.enter"/></label>
+							<div class="form-check col-10">
+								<input type="checkbox" class="form-check-input" id="sendOnCtrlEnter">
+								<label class="form-check-label" for="sendOnCtrlEnter"><wicket:message key="send.on.ctrl.enter"/></label>
 							</div>
 						</div>
 						<h5 class="mt-2"><wicket:message key="lbl.video"/></h5>
 						<div class="row justify-content-end">
-							<div class="custom-control custom-checkbox col-10">
-								<input type="checkbox" class="custom-control-input" id="fixedVideoPod">
-								<label class="custom-control-label" for="fixedVideoPod"><wicket:message key="fixed.video.pod.size"/></label>
+							<div class="form-check col-10">
+								<input type="checkbox" class="form-check-input" id="fixedVideoPod">
+								<label class="form-check-label" for="fixedVideoPod"><wicket:message key="fixed.video.pod.size"/></label>
 							</div>
 							<div id="video-sizes-container" class="col-10"></div>
 						</div>
@@ -147,14 +147,14 @@
 			<div class="container p-0 m-0">
 				<div class="row g-0">
 					<label class="col-7"><wicket:message key="734"/></label>
-					<select name="type" class="type col-4 custom-select">
+					<select name="type" class="type col-4 form-select">
 						<option value="screen">Screen</option>
 						<option value="window">Window</option>
 					</select>
 				</div>
 				<div class="row g-0">
 					<label class="col-7"><wicket:message key="1089"/></label>
-					<select name="fps" class="fps col-4 custom-select">
+					<select name="fps" class="fps col-4 form-select">
 						<option value="2">2 FPS</option>
 						<option value="5">5 FPS</option>
 						<option value="10" selected>10 FPS</option>

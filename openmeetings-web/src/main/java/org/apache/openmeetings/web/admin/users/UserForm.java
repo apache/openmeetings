@@ -47,7 +47,7 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import org.apache.openmeetings.web.common.ComunityUserForm;
+import org.apache.openmeetings.web.common.CommunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.util.DateLabel;
@@ -166,7 +166,7 @@ public class UserForm extends AdminBaseForm<User> {
 				return Right.valueOf(id);
 			}
 		}));
-		mainContainer.add(new ComunityUserForm("comunity", getModel()));
+		mainContainer.add(new CommunityUserForm("comunity", getModel()));
 		remove(validationBehavior);
 		setNewRecordVisible(true);
 	}

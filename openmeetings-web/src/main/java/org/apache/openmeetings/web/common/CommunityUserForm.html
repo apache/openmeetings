@@ -25,29 +25,36 @@
 		<div>
 			<div class="d-inline-block col-3"></div>
 			<div class="d-inline-block col-8">
-				<input wicket:id="everybody" type="radio" /><label wicket:for="everybody"><wicket:message key="1160"/></label>
+				<input wicket:id="everybody" type="radio" class="form-check-input me-2"/>
+				<label wicket:for="everybody" class="form-check-label"><wicket:message key="1160"/></label>
 			</div>
 		</div>
 		<div>
 			<div class="d-inline-block col-3"></div>
 			<div class="d-inline-block col-8">
-				<input wicket:id="contact" type="radio" /><label wicket:for="contact"><wicket:message key="1168"/></label>
+				<input wicket:id="contact" type="radio" class="form-check-input me-2"/>
+				<label wicket:for="contact" class="form-check-label"><wicket:message key="1168"/></label>
 			</div>
 		</div>
 		<div>
 			<div class="d-inline-block col-3"></div>
 			<div class="d-inline-block col-8">
-				<input wicket:id="nobody" type="radio" /><label wicket:for="nobody"><wicket:message key="1169"/></label>
+				<input wicket:id="nobody" type="radio" class="form-check-input me-2"/>
+				<label wicket:for="nobody" class="form-check-label"><wicket:message key="1169"/></label>
 			</div>
 		</div>
 	</div>
-	<div class="formelement">
+	<div class="formelement row">
 		<label wicket:for="userOffers" class="col-3"><wicket:message key="1162" /></label>
-		<textarea wicket:id="userOffers" class="col-8"/>
+		<div class="col-8 p-0">
+			<textarea wicket:id="userOffers" class="form-control"/>
+		</div>
 	</div>
-	<div class="formelement">
+	<div class="formelement row">
 		<label wicket:for="userSearchs" class="col-3"><wicket:message key="1163" /></label>
-		<textarea wicket:id="userSearchs" class="col-8"/>
+		<div class="col-8 p-0">
+			<textarea wicket:id="userSearchs" class="form-control"/>
+		</div>
 	</div>
 </wicket:panel>
 </html>

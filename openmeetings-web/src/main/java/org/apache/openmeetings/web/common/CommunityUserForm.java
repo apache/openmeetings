@@ -28,10 +28,10 @@ import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-public class ComunityUserForm extends Form<User> {
+public class CommunityUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
 
-	public ComunityUserForm(String id, IModel<User> model) {
+	public CommunityUserForm(String id, IModel<User> model) {
 		super(id, model);
 
 		RadioGroup<Long> rg = new RadioGroup<>("community_settings", new IModel<Long>() {
@@ -39,7 +39,7 @@ public class ComunityUserForm extends Form<User> {
 
 			@Override
 			public Long getObject() {
-				User u = ComunityUserForm.this.getModelObject();
+				User u = CommunityUserForm.this.getModelObject();
 				if (u.isShowContactData()) {
 					return 1L;
 				} else if (u.isShowContactDataToContacts()) {
@@ -50,7 +50,7 @@ public class ComunityUserForm extends Form<User> {
 
 			@Override
 			public void setObject(Long choice) {
-				User u = ComunityUserForm.this.getModelObject();
+				User u = CommunityUserForm.this.getModelObject();
 				if (choice.equals(1L)) {
 					u.setShowContactData(true);
 					u.setShowContactDataToContacts(false);

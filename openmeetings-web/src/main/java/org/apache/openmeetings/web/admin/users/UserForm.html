@@ -27,33 +27,48 @@
 				<wicket:message key="143" />
 			</legend>
 			<div class="formelement row">
-				<span class="col-3 text-right"></span>
+				<span class="form-label col-3 text-right"></span>
 				<span class="col-8" wicket:id="avatar"></span>
 			</div>
-			<div class="formelement">
-				<label wicket:for="login" class="col-3 text-right"><wicket:message key="108" /></label><input type="text" wicket:id="login" class="col-8"/>
+			<div class="formelement row">
+				<label wicket:for="login" class="form-label col-3 text-right"><wicket:message key="108" /></label>
+				<div class="col-8 p-0">
+					<input type="text" wicket:id="login" class="form-control"/>
+				</div>
 			</div>
-			<div class="formelement">
-				<label wicket:for="password" class="col-3 text-right"><wicket:message key="110" /></label><input type="password" wicket:id="password" class="col-8"/>
+			<div class="formelement row">
+				<label wicket:for="password" class="form-label col-3 text-right"><wicket:message key="110" /></label>
+				<div class="col-8 p-0">
+					<input type="password" wicket:id="password" class="form-control"/>
+				</div>
 			</div>
 			<form wicket:id="general"></form>
-			<div class="formelement">
-				<label wicket:for="type" class="col-3 text-right"><wicket:message key="45" /></label><select wicket:id="type" class="custom-select col-8"></select>
+			<div class="formelement row">
+				<label wicket:for="type" class="form-label col-3 text-right"><wicket:message key="45" /></label>
+				<div class="col-8 p-0">
+					<select wicket:id="type" class="form-select"></select>
+				</div>
 			</div>
-			<div class="formelement" wicket:id="domain">
-				<label wicket:for="domainId" class="col-3 text-right"><wicket:message key="1118" /></label><select wicket:id="domainId" class="col-8"></select>
+			<div class="formelement row" wicket:id="domain">
+				<label wicket:for="domainId" class="form-label col-3 text-right"><wicket:message key="1118" /></label>
+				<div class="col-8 p-0">
+					<select wicket:id="domainId" class="form-select"></select>
+				</div>
 			</div>
-			<div class="formelement">
-				<label class="col-3 text-right"><wicket:message key="1308" /></label><span wicket:id="ownerId" class="col-8"/>
+			<div class="formelement row">
+				<label class="form-label col-3 text-right"><wicket:message key="1308" /></label>
+				<span wicket:id="ownerId" class="col-8"/>
 			</div>
-			<div class="formelement">
-				<label class="col-3 text-right"><wicket:message key="1110" /></label><span wicket:id="inserted" class="col-8"/>
+			<div class="formelement row">
+				<label class="form-label col-3 text-right"><wicket:message key="1110" /></label>
+				<span wicket:id="inserted" class="col-8"/>
 			</div>
-			<div class="formelement">
-				<label class="col-3 text-right"><wicket:message key="1112" /></label><span wicket:id="updated" class="col-8"/>
+			<div class="formelement row">
+				<label class="form-label col-3 text-right"><wicket:message key="1112" /></label>
+				<span wicket:id="updated" class="col-8"/>
 			</div>
-			<div class="formelement">
-				<label wicket:for="rights" class="col-3 text-right"><wicket:message key="881" /></label>
+			<div class="formelement row">
+				<label wicket:for="rights" class="form-label col-3 text-right"><wicket:message key="881" /></label>
 				<div class="om-select2 p-0 d-inline-block col-8"><select class="input w-100" wicket:id="rights"></select></div>
 			</div>
 		</fieldset>

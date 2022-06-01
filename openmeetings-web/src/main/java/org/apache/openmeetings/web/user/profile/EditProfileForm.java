@@ -26,7 +26,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.common.ComunityUserForm;
+import org.apache.openmeetings.web.common.CommunityUserForm;
 import org.apache.openmeetings.web.common.FormActionsPanel;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
@@ -123,7 +123,7 @@ public class EditProfileForm extends Form<User> {
 		}.setVisible(checkPassword));
 		add(userForm);
 		add(new UploadableProfileImagePanel("img", getUserId()));
-		add(new ComunityUserForm("comunity", getModel()));
+		add(new CommunityUserForm("comunity", getModel()));
 
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second

@@ -46,44 +46,58 @@
 			<div class="scrollcontent" id="adminForm">
 				<fieldset>
 					<legend><wicket:message key="266" /></legend>
-					<div class="formelement">
-						<label wicket:for="type" class="col-3 text-right"><wicket:message key="45" /></label>
-						<select class="custom-select col-8" wicket:id="type"></select>
-					</div>
-					<div class="formelement">
-						<label wicket:for="key" class="col-3 text-right"><wicket:message key="265" /></label>
-						<input class="col-8" type="text" wicket:id="key"/>
-					</div>
-					<div class="formelement">
-						<div wicket:id="string-box">
-							<label wicket:for="valueS" class="col-3 text-right"><wicket:message key="271" /></label>
-							<textarea class="col-8" wicket:id="valueS"/>
+					<div class="formelement row">
+						<label wicket:for="type" class="form-label col-3 text-right"><wicket:message key="45" /></label>
+						<div class="col-8 p-0">
+							<select class="form-select" wicket:id="type"></select>
 						</div>
-						<div wicket:id="number-box">
-							<label wicket:for="valueN" class="col-3 text-right"><wicket:message key="271" /></label>
-							<input class="col-8" type="number" wicket:id="valueN"/>
+					</div>
+					<div class="formelement row">
+						<label wicket:for="key" class="form-label col-3 text-right"><wicket:message key="265" /></label>
+						<div class="col-8 p-0">
+							<input class="form-control" type="text" wicket:id="key"/>
 						</div>
-						<div wicket:id="boolean-box">
-							<label wicket:for="valueB" class="col-3 text-right"><wicket:message key="271" /></label>
+					</div>
+					<div class="formelement row">
+						<div wicket:id="string-box" class="row">
+							<label wicket:for="valueS" class="form-label col-3 text-right"><wicket:message key="271" /></label>
+							<div class="col-8 p-0">
+								<textarea class="form-control" wicket:id="valueS"/>
+							</div>
+						</div>
+						<div wicket:id="number-box" class="row">
+							<label wicket:for="valueN" class="form-label col-3 text-right"><wicket:message key="271" /></label>
+							<div class="col-8 p-0">
+								<input class="form-control" type="number" wicket:id="valueN"/>
+							</div>
+						</div>
+						<div wicket:id="boolean-box" class="row">
+							<label wicket:for="valueB" class="form-label col-3 text-right"><wicket:message key="271" /></label>
 							<div class="onoffswitch">
 								<input type="checkbox" class="onoff-checkbox" wicket:id="valueB"/>
 								<label class="onoff-label clickable" wicket:for="valueB"></label>
 							</div>
 						</div>
-						<div wicket:id="hotkey-box">
-							<label wicket:for="value" class="col-3 text-right"><wicket:message key="271" /></label>
-							<input type="text" class="hotkey-input" wicket:id="value"/>
+						<div wicket:id="hotkey-box" class="row">
+							<label wicket:for="value" class="form-label col-3 text-right"><wicket:message key="271" /></label>
+							<div class="col-8 p-0">
+								<input type="text" class="hotkey-input form-control" wicket:id="value"/>
+							</div>
 						</div>
 					</div>
-					<div class="formelement">
-						<label class="col-3 text-right"><wicket:message key="268" /></label><span wicket:id="updated"/>
+					<div class="formelement row">
+						<label class="form-labelcol-3 text-right"><wicket:message key="268" /></label>
+						<span wicket:id="updated"/>
 					</div>
-					<div class="formelement">
-						<label class="col-3 text-right"><wicket:message key="269" /></label><span wicket:id="user.login"/>
+					<div class="formelement row">
+						<label class="form-labelcol-3 text-right"><wicket:message key="269" /></label>
+						<span wicket:id="user.login"/>
 					</div>
-					<div class="formelement">
-						<label class="col-3 text-right" wicket:for="comment"><wicket:message key="196" /></label>
-						<textarea class="col-8" wicket:id="comment"/>
+					<div class="formelement row">
+						<label class="form-label col-3 text-right" wicket:for="comment"><wicket:message key="196" /></label>
+						<div class="col-8 p-0">
+							<textarea class="form-control" wicket:id="comment"/>
+						</div>
 					</div>
 				</fieldset>
 				<div class="bottom-bumper"></div>
