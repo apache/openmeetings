@@ -33,8 +33,10 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.lang.Bytes;
 import org.slf4j.Logger;
@@ -50,6 +52,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 	private final FileUploadField fileUploadField = new FileUploadField("image", new ListModel<>());
 	private final Form<Void> form = new Form<>("form");
 	private final boolean delayed;
+	private HiddenField<Boolean> deleted = new HiddenField<>("imgDeleted", Model.of(false));
 
 	protected UploadableImagePanel(String id, boolean delayed) {
 		super(id);
@@ -66,7 +69,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.bytes(getMaxUploadSize()));
 		// Model is necessary here to avoid writing image to the User object
-		form.add(fileUploadField);
+		form.add(fileUploadField, deleted);
 		form.add(new UploadProgressBar("progress", form, fileUploadField));
 		form.addOrReplace(getImage());
 		if (delayed) {
@@ -105,12 +108,27 @@ public abstract class UploadableImagePanel extends ImagePanel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		if (delayed) {
-			response.render(OnDomReadyHeaderItem.forScript("$('#" + form.getOutputMarkupId() + " .remove').click(function() {$(this).parent().find('.fileinput').fileinput('clear');})"));
+			response.render(OnDomReadyHeaderItem.forScript("""
+					(function(){
+						const form = $('#%s')
+							, fileinput = form.find('.fileinput')
+							, deleted = form.find('#imgDeleted');
+						fileinput.off('change.bs.fileinput').on('change.bs.fileinput', function() {
+							deleted.val(false);
+						});
+						form.siblings('.remove').off()
+							.click(function() {
+								fileinput.fileinput('clear');
+								deleted.val(true);
+							});
+					})();
+					""".formatted(form.getMarkupId())));
 		}
 	}
 
 	@Override
 	public void update() {
+		deleted.setModelObject(false);
 		profile.addOrReplace(new WebMarkupContainer("img").setVisible(false));
 		form.addOrReplace(getImage());
 	}
@@ -121,23 +139,31 @@ public abstract class UploadableImagePanel extends ImagePanel {
 	}
 
 	public void process(Optional<AjaxRequestTarget> target) {
-		FileUpload fu = fileUploadField.getFileUpload();
-		if (fu != null) {
-			File temp = null;
+		if (delayed && Boolean.TRUE.equals(deleted.getModelObject())) {
 			try {
-				temp = fu.writeToTempFile();
-				StoredFile sf = new StoredFile(fu.getClientFileName(), temp);
-				if (sf.isImage()) {
-					processImage(sf, temp);
-				}
+				deleteImage();
 			} catch (Exception e) {
 				log.error("Error", e);
-			} finally {
-				if (temp != null && temp.exists()) {
-					log.debug("Temp file was deleted ? {}", temp.delete());
+			}
+		} else {
+			FileUpload fu = fileUploadField.getFileUpload();
+			if (fu != null) {
+				File temp = null;
+				try {
+					temp = fu.writeToTempFile();
+					StoredFile sf = new StoredFile(fu.getClientFileName(), temp);
+					if (sf.isImage()) {
+						processImage(sf, temp);
+					}
+				} catch (Exception e) {
+					log.error("Error", e);
+				} finally {
+					if (temp != null && temp.exists()) {
+						log.debug("Temp file was deleted ? {}", temp.delete());
+					}
+					fu.closeStreams();
+					fu.delete();
 				}
-				fu.closeStreams();
-				fu.delete();
 			}
 		}
 		update(target);
