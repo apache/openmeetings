@@ -21,25 +21,31 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-9.xsd">
 <wicket:panel>
-	<div class="formelement">
-		<label class="col-3 text-right" wicket:for="subject"><wicket:message key="215" /></label>
-		<input class="col-8" type="text" wicket:id="subject"/>
+	<div class="formelement row">
+		<label class="form-label col-3 text-right" wicket:for="subject"><wicket:message key="215" /></label>
+		<div class="col-8 p-0">
+			<input class="form-control" type="text" wicket:id="subject"/>
+		</div>
 	</div>
 	<wicket:child/>
-	<div class="formelement">
-		<label class="col-3 text-right" wicket:for="message"><wicket:message key="217" /></label>
-		<textarea class="col-8" wicket:id="message"></textarea>
+	<div class="formelement row">
+		<label class="form-label col-3 text-right" wicket:for="message"><wicket:message key="217" /></label>
+		<div class="col-8 p-0">
+			<textarea class="form-control" wicket:id="message"></textarea>
+		</div>
 	</div>
 	<div class="formelement">
-		<label class="col-3 text-right" wicket:for="passwordProtected"><wicket:message key="524" /></label>
-		<input wicket:id="passwordProtected" type="checkbox"/>
+		<label class="form-label col-3 text-right" wicket:for="passwordProtected"><wicket:message key="524" /></label>
+		<input wicket:id="passwordProtected" type="checkbox" class="form-check-input"/>
 	</div>
-	<div class="formelement">
-		<label class="col-3 text-right" wicket:for="password"><wicket:message key="110" /></label>
-		<input class="col-8" wicket:id="password" type="password"/>
+	<div class="formelement row">
+		<label class="form-label col-3 text-right" wicket:for="password"><wicket:message key="110" /></label>
+		<div class="col-8 p-0">
+			<input class="form-control" wicket:id="password" type="password"/>
+		</div>
 	</div>
-	<div class="formelement">
-		<label class="col-3 text-right" wicket:for="valid"><wicket:message key="526" /></label>
+	<div class="formelement row">
+		<label class="form-label col-3 text-right" wicket:for="valid"><wicket:message key="526" /></label>
 		<div class="col-8 d-inline-block" wicket:id="valid">
 			<div class="form-check form-check-inline">
 				<input class="form-check-input" type="radio" wicket:id="one"/>
@@ -55,24 +61,28 @@
 			</div>
 		</div>
 	</div>
-	<div class="formelement">
-		<label class="col-3 text-right" wicket:for="from"><wicket:message key="530" /></label>
+	<div class="formelement row">
+		<label class="form-label col-3 text-right" wicket:for="from"><wicket:message key="530" /></label>
 		<div class="d-inline-block col-8 p-0"><span class="date time picker" wicket:id="from"></span></div>
 	</div>
-	<div class="formelement">
-		<label class="col-3 text-right" wicket:for="to"><wicket:message key="531" /></label>
+	<div class="formelement row">
+		<label class="form-label col-3 text-right" wicket:for="to"><wicket:message key="531" /></label>
 		<div class="d-inline-block col-8 p-0"><span class="date time picker" wicket:id="to"></span></div>
 	</div>
-	<div class="formelement">
-		<label class="col-3 text-right" wicket:for="timeZoneId"><wicket:message key="1143" /></label>
-		<select class="form-select col-8" wicket:id="timeZoneId"/>
+	<div class="formelement row">
+		<label class="form-label col-3 text-right" wicket:for="timeZoneId"><wicket:message key="1143" /></label>
+		<div class="col-8 p-0">
+			<select class="form-select" wicket:id="timeZoneId"/>
+		</div>
 	</div>
-	<div class="formelement">
-		<label class="col-3 text-right" wicket:for="language"><wicket:message key="59" /></label>
-		<select class="form-select col-8" wicket:id="language"/>
+	<div class="formelement row">
+		<label class="form-label col-3 text-right" wicket:for="language"><wicket:message key="59" /></label>
+		<div class="col-8 p-0">
+			<select class="form-select" wicket:id="language"/>
+		</div>
 	</div>
-	<div class="formelement">
-		<input class="col-12 text-right" wicket:id="url" type="text" readonly="readonly"/>
+	<div class="formelement row">
+		<input class="text-right form-control" wicket:id="url" type="text" readonly="readonly"/>
 	</div>
 	<span wicket:id="feedback"></span>
 </wicket:panel>

@@ -46,53 +46,61 @@
 			<div class="scrollcontent" id="adminForm">
 				<fieldset>
 					<legend><wicket:message key="1107" /></legend>
-					<div class="formelement">
-						<label wicket:for="name" class="col-3 text-right"><wicket:message key="165" /></label>
-						<input type="text" wicket:id="name" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="name" class="form-label col-3 text-right"><wicket:message key="165" /></label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="name" class="form-control"/>
+						</div>
 					</div>
 					<div class="formelement">
-						<label wicket:for="active" class="col-3 text-right"><wicket:message key="1109" /></label>
-						<input type="checkbox" class="formcheckbox" wicket:id="active"/>
+						<label wicket:for="active" class="form-label col-3 text-right"><wicket:message key="1109" /></label>
+						<input type="checkbox" class="formcheckbox form-check-input" wicket:id="active"/>
 					</div>
-					<div class="formelement">
-						<label class="col-3 text-right"><wicket:message key="1110" /></label>
+					<div class="formelement row">
+						<label class="form-label col-3 text-right"><wicket:message key="1110" /></label>
 						<span wicket:id="inserted" class="col-8"/>
 					</div>
-					<div class="formelement">
-						<label class="col-3 text-right"><wicket:message key="1111" /></label>
+					<div class="formelement row">
+						<label class="form-label col-3 text-right"><wicket:message key="1111" /></label>
 						<span wicket:id="insertedby.login" class="col-8"/>
 					</div>
-					<div class="formelement">
-						<label class="col-3 text-right"><wicket:message key="1112" /></label>
+					<div class="formelement row">
+						<label class="form-label col-3 text-right"><wicket:message key="1112" /></label>
 						<span wicket:id="updated" class="col-8"/>
 					</div>
-					<div class="formelement">
-						<label class="col-3 text-right"><wicket:message key="269" /></label>
+					<div class="formelement row">
+						<label class="form-label col-3 text-right"><wicket:message key="269" /></label>
 						<span wicket:id="updatedby.login" class="col-8"/>
 					</div>
-					<div class="formelement">
+					<div class="formelement row">
 						<div>
 							<div class="col-3 d-inline-block"></div>
 							<div class="col-8 d-inline-block"><i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="1114" /></div>
 						</div>
-						<label wicket:for="configFileName" class="col-3 text-right"><wicket:message key="1115" /></label>
-						<input type="text" wicket:id="configFileName" class="col-8"/>
+						<label wicket:for="configFileName" class="form-label col-3 text-right"><wicket:message key="1115" /></label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="configFileName" class="form-control"/>
+						</div>
 					</div>
 					<div class="formelement">
 						<div>
 							<div class="col-3 d-inline-block"></div>
 							<div class="col-8 d-inline-block"><i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="1116" /></div>
 						</div>
-						<label wicket:for="addDomainToUserName" class="col-3 text-right"><wicket:message key="1117" /></label>
-						<input type="checkbox" class="formcheckbox" wicket:id="addDomainToUserName"/>
+						<label wicket:for="addDomainToUserName" class="form-label col-3 text-right"><wicket:message key="1117" /></label>
+						<input type="checkbox" class="formcheckbox form-check-input" wicket:id="addDomainToUserName"/>
 					</div>
-					<div class="formelement">
-						<label wicket:for="domain" class="col-3 text-right"><wicket:message key="1118" /></label>
-						<input type="text" wicket:id="domain" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="domain" class="form-label col-3 text-right"><wicket:message key="1118" /></label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="domain" class="form-control"/>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="comment" class="col-3 text-right"><wicket:message key="196" /></label>
-						<textarea wicket:id="comment" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="comment" class="form-label col-3 text-right"><wicket:message key="196" /></label>
+						<div class="col-8 p-0">
+							<textarea wicket:id="comment" class="form-control"/>
+						</div>
 					</div>
 				</fieldset>
 				<div class="bottom-bumper"></div>

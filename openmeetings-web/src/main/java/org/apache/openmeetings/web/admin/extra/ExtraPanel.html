@@ -46,20 +46,26 @@
 			<div class="scrollcontent" id="adminForm">
 				<fieldset>
 					<legend><wicket:message key="admin.extra.group.label" /></legend>
-					<div class="formelement">
-						<label wicket:for="name" class="col-3 text-right"><wicket:message key="165" /></label>
-						<input type="text" wicket:id="name" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="name" class="form-label col-3 text-right"><wicket:message key="165" /></label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="name" class="form-control"/>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="link" class="col-3 text-right"><wicket:message key="admin.extra.link" /></label>
-						<input type="text" wicket:id="link" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="link" class="form-label col-3 text-right"><wicket:message key="admin.extra.link" /></label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="link" class="form-control"/>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="description" class="col-3 text-right"><wicket:message key="lbl.description" /></label>
-						<textarea wicket:id="description" class="col-8"></textarea>
+					<div class="formelement row">
+						<label wicket:for="description" class="form-label col-3 text-right"><wicket:message key="lbl.description" /></label>
+						<div class="col-8 p-0">
+							<textarea wicket:id="description" class="form-control"></textarea>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="groups" class="col-3 text-right"><wicket:message key="126" /></label>
+					<div class="formelement row">
+						<label wicket:for="groups" class="form-label col-3 text-right"><wicket:message key="126" /></label>
 						<div class="om-select2 p-0 d-inline-block col-8"><select class="input w-100" wicket:id="groups"></select></div>
 					</div>
 				</fieldset>

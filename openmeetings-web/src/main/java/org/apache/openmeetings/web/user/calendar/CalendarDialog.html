@@ -24,25 +24,33 @@
 	<form wicket:id="calform" class="appointmentPopUp">
 		<span wicket:id="feedback"></span>
 		<div id="tabs">
-			<div>
-				<label class="col-3" wicket:for="title"><wicket:message key="572"/></label>
-				<input class="col-8" type="text" wicket:id="title"/>
+			<div class="row">
+				<label class="form-label col-3" wicket:for="title"><wicket:message key="572"/></label>
+				<div class="col-8 p-0">
+					<input class="form-control" type="text" wicket:id="title"/>
+				</div>
+			</div>
+			<div class="row">
+				<label class="form-label col-3" wicket:for="url"><span wicket:id="urlLabel"/></label>
+				<div class="col-8 p-0">
+					<input class="form-control" type="url" wicket:id="url"/>
+				</div>
+			</div>
+			<div class="row">
+				<label class="form-label col-3" wicket:for="login"><span wicket:id="userLabel"/></label>
+				<div class="col-8 p-0">
+					<input class="form-control" type="text" wicket:id="login"/>
+				</div>
+			</div>
+			<div class="row">
+				<label class="form-label col-3" wicket:for="password"><span wicket:id="passLabel"/></label>
+				<div class="col-8 p-0">
+					<input class="form-control" type="password" wicket:id="password"/>
+				</div>
 			</div>
 			<div>
-				<label class="col-3" wicket:for="url"><span wicket:id="urlLabel"/></label>
-				<input class="col-8" type="url" wicket:id="url"/>
-			</div>
-			<div>
-				<label class="col-3" wicket:for="login"><span wicket:id="userLabel"/></label>
-				<input class="col-8" type="text" wicket:id="login"/>
-			</div>
-			<div>
-				<label class="col-3" wicket:for="password"><span wicket:id="passLabel"/></label>
-				<input class="col-8" type="password" wicket:id="password"/>
-			</div>
-			<div>
-				<label class="col-3" wicket:for="gcal"><wicket:message key="calendar.gcal"/></label>
-				<input type="checkbox" wicket:id="gcal"/>
+				<label class="form-label col-3" wicket:for="gcal"><wicket:message key="calendar.gcal"/></label>
+				<input type="checkbox" wicket:id="gcal" class="form-check-input"/>
 			</div>
 		</div>
 	</form>

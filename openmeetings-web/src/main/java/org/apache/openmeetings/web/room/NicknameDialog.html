@@ -22,18 +22,22 @@
 <wicket:extend>
 	<form wicket:id="form">
 		<div wicket:id="feedback"></div>
-		<div class="table">
-			<div>
-				<div class="column label"><label wicket:for="subject"><wicket:message key="135" /></label></div>
-				<div class="column data"><input type="text" wicket:id="firstname" class="input"/></div>
+		<div class="row">
+			<label wicket:for="firstname" class="form-label col-4"><wicket:message key="135" /></label>
+			<div class="col-7">
+				<input type="text" wicket:id="firstname" class="input form-control"/>
 			</div>
-			<div>
-				<div class="column label"><label wicket:for="subject"><wicket:message key="136" /></label></div>
-				<div class="column data"><input type="text" wicket:id="lastname" class="input"/></div>
+		</div>
+		<div class="row">
+			<label wicket:for="lastname" class="form-label col-4"><wicket:message key="136" /></label>
+			<div class="col-7">
+				<input type="text" wicket:id="lastname" class="input form-control"/>
 			</div>
-			<div>
-				<div class="column label"><label wicket:for="subject"><wicket:message key="119" /></label></div>
-				<div class="column data"><input type="text" wicket:id="address.email" class="input"/></div>
+		</div>
+		<div class="row">
+			<label wicket:for="address.email" class="form-label col-4"><wicket:message key="119" /></label>
+			<div class="col-7">
+				<input type="text" wicket:id="address.email" class="input form-control"/>
 			</div>
 		</div>
 	</form>

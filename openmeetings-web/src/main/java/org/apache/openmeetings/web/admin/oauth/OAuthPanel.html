@@ -45,65 +45,91 @@
 				<fieldset>
 					<legend><wicket:message key="1581"/></legend>
 					<div class="formelement">
-						<label wicket:for="isEnabled" class="col-3 text-right"><wicket:message key="1109"/></label>
-						<input type="checkbox" class="formcheckbox" wicket:id="isEnabled"/>
+						<label wicket:for="isEnabled" class="form-label col-3 text-right"><wicket:message key="1109"/></label>
+						<input type="checkbox" class="formcheckbox form-check-input" wicket:id="isEnabled"/>
 					</div>
-					<div class="formelement">
-						<label wicket:for="name" class="col-3 text-right"><wicket:message key="165"/></label>
-						<input type="text" wicket:id="name" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="name" class="form-label col-3 text-right"><wicket:message key="165"/></label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="name" class="form-control"/>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="iconUrl" class="col-3 text-right"><wicket:message key="1575"/></label>
-						<input type="text" wicket:id="iconUrl" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="iconUrl" class="form-label col-3 text-right"><wicket:message key="1575"/></label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="iconUrl" class="form-control"/>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="clientId" class="col-3 text-right">client_id</label>
-						<input type="text" wicket:id="clientId" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="clientId" class="form-label col-3 text-right">client_id</label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="clientId" class="form-control"/>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="clientSecret" class="col-3 text-right">client_secret</label>
-						<input type="text" wicket:id="clientSecret" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="clientSecret" class="form-label col-3 text-right">client_secret</label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="clientSecret" class="form-control"/>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="redirectUri" class="col-3 text-right"><wicket:message key="1587"/></label>
-						<input type="text" readonly="readonly" wicket:id="redirectUri" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="redirectUri" class="form-label col-3 text-right"><wicket:message key="1587"/></label>
+						<div class="col-8 p-0">
+							<input type="text" readonly="readonly" wicket:id="redirectUri" class="form-control"/>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="requestKeyUrl" class="col-3 text-right"><wicket:message key="1578"/></label>
-						<input type="text" wicket:id="requestKeyUrl" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="requestKeyUrl" class="form-label col-3 text-right"><wicket:message key="1578"/></label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="requestKeyUrl" class="form-control"/>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="requestTokenMethod" class="col-3 text-right"><wicket:message key="admin.oauth.req.token.method"/></label>
-						<select wicket:id="requestTokenMethod" class="form-select col-8"></select>
+					<div class="formelement row">
+						<label wicket:for="requestTokenMethod" class="form-label col-3 text-right"><wicket:message key="admin.oauth.req.token.method"/></label>
+						<div class="col-8 p-0">
+							<select wicket:id="requestTokenMethod" class="form-select"></select>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="requestTokenUrl" class="col-3 text-right"><wicket:message key="1579"/></label>
-						<input type="text" wicket:id="requestTokenUrl" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="requestTokenUrl" class="form-label col-3 text-right"><wicket:message key="1579"/></label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="requestTokenUrl" class="form-control"/>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="requestTokenAttributes" class="col-3 text-right"><wicket:message key="1586"/></label>
-						<input type="text" wicket:id="requestTokenAttributes" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="requestTokenAttributes" class="form-label col-3 text-right"><wicket:message key="1586"/></label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="requestTokenAttributes" class="form-control"/>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="requestInfoMethod" class="col-3 text-right"><wicket:message key="admin.oauth.req.info.method"/></label>
-						<select wicket:id="requestInfoMethod" class="form-select col-8"></select>
+					<div class="formelement row">
+						<label wicket:for="requestInfoMethod" class="form-label col-3 text-right"><wicket:message key="admin.oauth.req.info.method"/></label>
+						<div class="col-8 p-0">
+							<select wicket:id="requestInfoMethod" class="form-select"></select>
+						</div>
 					</div>
-					<div class="formelement">
-						<label wicket:for="requestInfoUrl" class="col-3 text-right"><wicket:message key="1580"/></label>
-						<input type="text" wicket:id="requestInfoUrl" class="col-8"/>
+					<div class="formelement row">
+						<label wicket:for="requestInfoUrl" class="form-label col-3 text-right"><wicket:message key="1580"/></label>
+						<div class="col-8 p-0">
+							<input type="text" wicket:id="requestInfoUrl" class="form-control"/>
+						</div>
 					</div>
 				</fieldset>
 				<!-- Attribute mapping -->
 				<fieldset>
 					<legend><wicket:message key="admin.oauth.user.mapping" /></legend>
 					<div wicket:id="mappingForm">
-						<div class="formelement">
-							<label wicket:for="omAttr" class="col-3 text-right"><wicket:message key="admin.oauth.attr.om" /></label>
-							<input type="text" wicket:id="omAttr" class="col-8"/>
+						<div class="formelement row">
+							<label wicket:for="omAttr" class="form-label col-3 text-right"><wicket:message key="admin.oauth.attr.om" /></label>
+							<div class="col-8 p-0">
+								<input type="text" wicket:id="omAttr" class="form-control"/>
+							</div>
 						</div>
-						<div class="formelement">
-							<label wicket:for="oauthAttr" class="col-3 text-right"><wicket:message key="admin.oauth.attr.oauth" /></label>
-							<input type="text" wicket:id="oauthAttr" class="col-8"/>
+						<div class="formelement row">
+							<label wicket:for="oauthAttr" class="form-label col-3 text-right"><wicket:message key="admin.oauth.attr.oauth" /></label>
+							<div class="col-8 p-0">
+								<input type="text" wicket:id="oauthAttr" class="form-control"/>
+							</div>
 						</div>
 						<div class="col-3 d-inline-block"></div>
 						<div class="col-8 d-inline-block">

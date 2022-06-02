@@ -31,42 +31,52 @@
 			</ul>
 			<div class="tab-content">
 				<div id="tab1" class="tab-pane fade show active pt-1" role="tabpanel" aria-labelledby="tab1-tab">
-					<div>
-						<label wicket:for="title" class="col-3 p-0"><wicket:message key="572" /></label>
-						<input class="col-8" type="text" wicket:id="title" />
+					<div class="row">
+						<label wicket:for="title" class="form-label col-3 p-0"><wicket:message key="572" /></label>
+						<div class="col-8 p-0">
+							<input class="form-control" type="text" wicket:id="title" />
+						</div>
 					</div>
-					<div>
-						<label wicket:for="start" class="col-3 p-0"><wicket:message key="label.start" /></label>
+					<div class="row">
+						<label wicket:for="start" class="form-label col-3 p-0"><wicket:message key="label.start" /></label>
 						<div class="d-inline-block col-8 p-0"><span class="date time picker" wicket:id="start"></span></div>
 					</div>
-					<div>
-						<label wicket:for="end" class="col-3 p-0"><wicket:message key="label.end" /></label>
+					<div class="row">
+						<label wicket:for="end" class="form-label col-3 p-0"><wicket:message key="label.end" /></label>
 						<div class="d-inline-block col-8 p-0"><span class="date time picker" wicket:id="end"></span></div>
 					</div>
-					<div wicket:id="owner-row">
-						<label class="col-3 p-0"><wicket:message key="1156" /></label>
+					<div wicket:id="owner-row" class="row">
+						<label class="form-label col-3 p-0"><wicket:message key="1156" /></label>
 						<span class="col-8" wicket:id="aowner"></span>
 					</div>
 					<div wicket:id="inviteeType">
-						<div>
-							<label wicket:for="attendees" class="col-3 p-0"><input type="radio" wicket:id="user"/><label wicket:for="user"><wicket:message key="803" /></label></label>
+						<div class="row">
+							<label wicket:for="attendees" class="form-label col-3 p-0">
+								<input type="radio" wicket:id="user" class="form-check-input"/>
+								<label wicket:for="user" class="form-check-label"><wicket:message key="803" /></label>
+							</label>
 							<div class="om-select2 p-0 d-inline-block col-8" wicket:message="title:1588">
 								<select class="attendees w-100" wicket:id="attendees"></select>
 							</div>
 						</div>
-						<div wicket:id="groupContainer">
-							<label wicket:for="groups" class="col-3 p-0"><input type="radio" wicket:id="group"/><label wicket:for="group"><wicket:message key="126" /></label></label>
+						<div wicket:id="groupContainer" class="row">
+							<label wicket:for="groups" class="form-label col-3 p-0">
+								<input type="radio" wicket:id="group" class="form-check-input"/>
+								<label wicket:for="group" class="form-check-label"><wicket:message key="126" /></label>
+							</label>
 							<div class="om-select2 p-0 d-inline-block col-8">
 								<select wicket:id="groups" class="input invitees w-100"></select>
 							</div>
 						</div>
 					</div>
-					<div>
-						<label wicket:for="location" class="col-3 p-0"><wicket:message key="569" /></label>
-						<input class="col-8" type="text" wicket:id="location" />
+					<div class="row">
+						<label wicket:for="location" class="form-label col-3 p-0"><wicket:message key="569" /></label>
+						<div class="col-8 p-0">
+							<input class="form-control" type="text" wicket:id="location" />
+						</div>
 					</div>
-					<div>
-						<label wicket:for="description" class="col-3 p-0"><wicket:message key="196" /></label>
+					<div class="row">
+						<label wicket:for="description" class="form-label col-3 p-0"><wicket:message key="196" /></label>
 						<div class="d-inline-block col-8 p-0">
 							<div wicket:id="toolbarContainer"></div>
 							<div wicket:id="description"></div>
@@ -75,43 +85,55 @@
 				</div>
 				<div id="tab2" class="tab-pane fade pt-1" role="tabpanel" aria-labelledby="tab2-tab">
 					<div wicket:enclosure="createRoom">
-						<input type="checkbox" wicket:id="createRoom" /><label wicket:for="createRoom"><wicket:message key="1509" /></label>
+						<input type="checkbox" wicket:id="createRoom" class="form-check-input"/>
+						<label wicket:for="createRoom" class="form-check-label"><wicket:message key="1509" /></label>
 					</div>
 					<div wicket:id="create-room-block">
-						<div>
-							<label wicket:for="type" class="col-3 p-0"><wicket:message key="619" /></label>
-							<select class="form-select col-8" wicket:id="type" ></select>
+						<div class="row">
+							<label wicket:for="type" class="form-label col-3 p-0"><wicket:message key="619" /></label>
+							<div class="col-8 p-0">
+								<select class="form-select" wicket:id="type" ></select>
+							</div>
 						</div>
-						<div>
-							<label class="col-3 p-0" wicket:for="moderated"><wicket:message key="640" /></label>
-							<input type="checkbox" wicket:id="moderated" />
+						<div class="row">
+							<label class="form-label col-3 p-0" wicket:for="moderated"><wicket:message key="640" /></label>
+							<input type="checkbox" wicket:id="moderated" class="form-check-input p-0"/>
 						</div>
 					</div>
-					<div>
-						<label wicket:for="groom" class="col-3 p-0"><wicket:message key="406" /></label>
-						<select class="form-select col-8" wicket:id="groom" ></select>
+					<div class="row">
+						<label wicket:for="groom" class="form-label col-3 p-0"><wicket:message key="406" /></label>
+						<div class="col-8 p-0">
+							<select class="form-select" wicket:id="groom" ></select>
+						</div>
 					</div>
-					<div wicket:id="sip-container">
-						<label class="col-3 p-0"><wicket:message key="1003"/></label>
+					<div wicket:id="sip-container" class="row">
+						<label class="form-label col-3 p-0"><wicket:message key="1003"/></label>
 						<span class="col-8" wicket:id="room.confno"></span>
 					</div>
 				</div>
 				<div id="tab3" class="tab-pane fade pt-1" role="tabpanel" aria-labelledby="tab3-tab">
-					<div>
-						<label wicket:for="reminder" class="col-3 p-0"><wicket:message key="565" /></label>
-						<select class="form-select col-8" wicket:id="reminder"></select>
+					<div class="row">
+						<label wicket:for="reminder" class="form-label col-3 p-0"><wicket:message key="565" /></label>
+						<div class="col-8 p-0">
+							<select class="form-select" wicket:id="reminder"></select>
+						</div>
 					</div>
 					<div>
-						<input type="checkbox" wicket:id="passwordProtected" /><label wicket:for="passwordProtected"><wicket:message key="524" /></label>
+						<input type="checkbox" wicket:id="passwordProtected"  class="form-check-input"/>
+						<label wicket:for="passwordProtected" class="form-check-label"><wicket:message key="524" /></label>
 					</div>
-					<div>
-						<label wicket:for="password" class="col-3 p-0"><wicket:message key="110" /></label>
-						<input class="col-8" type="password" wicket:id="password" />
+					<div class="row">
+						<label wicket:for="password" class="form-label col-3 p-0"><wicket:message key="110" /></label>
+						<div class="col-8 p-0">
+							<input class="form-control" type="password" wicket:id="password" />
+						</div>
 					</div>
 					<div><wicket:message key="1445" /></div>
-					<div>
-						<label wicket:for="calendar" class="col-3 p-0"><wicket:message key="162" /></label>
-						<select class="form-select col-8" wicket:id="calendar"></select>
+					<div class="row">
+						<label wicket:for="calendar" class="form-label col-3 p-0"><wicket:message key="162" /></label>
+						<div class="col-8 p-0">
+							<select class="form-select" wicket:id="calendar"></select>
+						</div>
 					</div>
 				</div>
 			</div>

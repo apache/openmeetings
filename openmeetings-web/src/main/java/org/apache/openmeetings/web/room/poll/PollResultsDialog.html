@@ -23,8 +23,10 @@
 <wicket:extend>
 	<form wicket:id="selForm">
 		<div class="row">
-			<div class="col-4"><wicket:message key="1412"/></div>
-			<select class="form-select col-7" wicket:id="polls"></select>
+			<label wicket:for="polls" class="form-label col-4"><wicket:message key="1412"/></label>
+			<div class="col-7 p-0">
+				<select class="form-select" wicket:id="polls"></select>
+			</div>
 		</div>
 	</form>
 	<form wicket:id="dispForm">
@@ -37,12 +39,14 @@
 			<div class="col-11"><span wicket:id="question"></span></div>
 		</div>
 		<div class="row">
-			<div class="col-4"><wicket:message key="39"/>&nbsp;(<span wicket:id="count"></span>)</div>
-			<select class="form-select col-7" wicket:id="chartType"></select>
+			<label wicket:for="chartType" class="form-label col-4"><wicket:message key="39"/>&nbsp;(<span wicket:id="count"></span>)</label>
+			<div class="col-7 p-0">
+				<select class="form-select" wicket:id="chartType"></select>
+			</div>
 		</div>
 	</form>
 	<div class="row">
-		<div class="col-4"><wicket:message key="40"/></div>
+		<label class="form-label col-4"><wicket:message key="40"/></label>
 		<div class="col-7" wicket:id="chart" id="room-poll-chart"></div>
 	</div>
 </wicket:extend>

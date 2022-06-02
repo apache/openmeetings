@@ -136,7 +136,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 				close(target);
 			}
 		});
-		delete.setIconType(FontAwesome5IconType.times_s).add(newOkCancelDangerConfirm(this, getString("1421")));
+		delete.setIconType(FontAwesome5IconType.trash_s).add(newOkCancelDangerConfirm(this, getString("1421")));
 		delete.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		addButton(clone = new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, null, Buttons.Type.Outline_Danger, new ResourceModel("poll.clone")) {
 			private static final long serialVersionUID = 1L;

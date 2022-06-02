@@ -30,9 +30,11 @@
 						<wicket:message key="143" />
 					</legend>
 					<button type="button" wicket:id="changePwd" id="changePwd"></button>
-					<div class="formelement" wicket:enclosure="passwd">
-						<label class="col-3 text-right" wicket:for="passwd"><wicket:message key="current.password" /></label>
-						<input type="password" wicket:id="passwd" class="col-8"/>
+					<div class="formelement row" wicket:enclosure="passwd">
+						<label class="form-label col-3 text-right" wicket:for="passwd"><wicket:message key="current.password" /></label>
+						<div class="col-8 p-0">
+							<input type="password" wicket:id="passwd" class="form-control"/>
+						</div>
 					</div>
 					<form wicket:id="general"></form>
 				</fieldset>

@@ -321,10 +321,6 @@ table.messages td.from, table.messages td.subject {
 	position: absolute;
 	left: 4px;
 }
-.messages.column.label {
-	width: 20px;
-	min-height: inherit;
-}
 input[type="text"].messages.text {
 	width: 100%;
 }
@@ -512,23 +508,8 @@ select.messages.selector {
 .no-close .ui-dialog-titlebar-close {
 	display: none;
 }
-.table, .msg-row {
+.msg-row {
 	position: relative;
-}
-.table .column {
-	display: inline-block;
-	margin-bottom: 5px;
-	min-height: auto; /* IE */
-	min-height: initial;
-	float: none;
-	margin-right: 0;
-}
-.table .column.label {
-	width: 20%;
-}
-.table .column.data {
-	width: 75%;
-	vertical-align: middle;
 }
 .col-wrapper {
 	word-wrap: break-word;

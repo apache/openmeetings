@@ -23,12 +23,12 @@
 <wicket:extend>
 	<form wicket:id="addLangForm">
 		<div wicket:id="feedback"></div>
-		<table>
-			<tr>
-				<td><wicket:message key="1422" /></td>
-				<td><input type="text" wicket:id="iso" /></td>
-			</tr>
-		</table>
+		<div class="row">
+			<label wicket:for="iso" class="form-label col-3 text-right"><wicket:message key="1422"/></label>
+			<div class="col-8 p-0">
+				<input type="text" wicket:id="iso" class="form-control"/>
+			</div>
+		</div>
 	</form>
 </wicket:extend>
 </html>
