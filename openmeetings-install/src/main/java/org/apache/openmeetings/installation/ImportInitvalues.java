@@ -580,6 +580,24 @@ public class ImportInitvalues {
 				.addMapping(PARAM_EMAIL, EMAIL_PARAM)
 				.addMapping(PARAM_FNAME, FNAME_PARAM)
 				.addMapping(PARAM_LNAME, LNAME_PARAM), null);
+
+		// keycloak
+		oauthDao.update(new OAuthServer()
+				.setName("keycloak")
+				.setIconUrl("https://www.keycloak.org/resources/images/keycloak_icon_512px.svg")
+				.setEnabled(false)
+				.setClientId(CLIENT_PLACEHOLDER)
+				.setClientSecret(SECRET_PLACEHOLDER)
+				.setRequestKeyUrl("<KeycloakBaseUrl>/auth/realms/uweslan/protocol/openid-connect/auth?redirect_uri={$redirect_uri}&client_id={$client_id}&response_type=code&scope=email")
+				.setRequestTokenUrl("<KeycloakBaseUrl>/auth/realms/<--custom-realm-->/protocol/openid-connect/token")
+				.setRequestTokenMethod(RequestTokenMethod.POST)
+				.setRequestTokenAttributes("code={$code}&client_id={$client_id}&client_secret={$client_secret}&redirect_uri={$redirect_uri}&grant_type=authorization_code")
+				.setRequestInfoUrl("<KeycloakBaseUrl>/auth/realms/<--custom-realm-->/protocol/openid-connect/userinfo")
+				.setRequestInfoMethod(RequestInfoMethod.HEADER)
+				.addMapping(PARAM_LOGIN, EMAIL_PARAM)
+				.addMapping(PARAM_EMAIL, EMAIL_PARAM)
+				.addMapping(PARAM_FNAME, "given_name")
+				.addMapping(PARAM_LNAME, "family_name"), null);
 	}
 
 	// ------------------------------------------------------------------------------
