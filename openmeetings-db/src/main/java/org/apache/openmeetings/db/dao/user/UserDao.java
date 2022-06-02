@@ -59,7 +59,6 @@ import org.apache.openmeetings.db.entity.user.AsteriskSipUser;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.DaoHelper;
@@ -110,11 +109,9 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 */
 	public static User getNewUserInstance(User currentUser) {
 		User user = new User();
-		user.setSalutation(Salutation.MR);
 		user.setRights(getDefaultRights());
 		user.setLanguageId(getDefaultLang());
 		user.setTimeZoneId(getTimeZone(currentUser).getID());
-		user.setAge(LocalDate.now());
 		user.setLastlogin(new Date());
 		Address address = new Address();
 		address.setCountry(Locale.getDefault().getCountry());
