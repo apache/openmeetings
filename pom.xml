@@ -81,7 +81,7 @@
 		<!-- dependency versions -->
 		<junit.version>5.8.2</junit.version>
 		<wicket.version>9.10.0</wicket.version>
-		<wicket-jquery-ui.version>9.8.0</wicket-jquery-ui.version>
+		<wicket-jquery-ui.version>9.8.1</wicket-jquery-ui.version>
 		<wicketstuff.version>9.10.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version>
 		<font-awesome.version>6.1.0</font-awesome.version>
@@ -121,7 +121,7 @@
 		<jetty.version>9.4.46.v20220331</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
-		<mockito.version>4.6.0</mockito.version>
+		<mockito.version>4.6.1</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.16.5</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
