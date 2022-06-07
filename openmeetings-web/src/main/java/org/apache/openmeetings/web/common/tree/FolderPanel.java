@@ -247,32 +247,31 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 			StringBuilder style = new StringBuilder("big om-icon ");
 			if (f.getId() == null) {
 				style.append(CSS_CLASS_FILE).append(f.getHash().indexOf("my") > -1 ? "my " : "public ");
-			} else {
-				if (BaseFileItem.Type.FOLDER != f.getType() && !f.exists()) {
-					style.append("broken ");
-				}
-				switch(f.getType()) {
-					case FOLDER:
-						style.append(CSS_CLASS_FILE).append(open ? "folder-open " : "folder ");
-						break;
-					case IMAGE:
-						style.append(CSS_CLASS_FILE).append("image ");
-						break;
-					case POLL_CHART:
-						style.append(CSS_CLASS_FILE).append("chart ");
-						break;
-					case WML_FILE:
-						style.append(CSS_CLASS_FILE).append("wml ");
-						break;
-					case VIDEO, RECORDING:
-						setVideoStyle(f, style);
-						break;
-					case PRESENTATION:
-						style.append(CSS_CLASS_FILE).append("doc ");
-						break;
-					default:
-						break;
-				}
+			}
+			if (BaseFileItem.Type.FOLDER != f.getType() && !f.exists()) {
+				style.append("broken ");
+			}
+			switch(f.getType()) {
+				case FOLDER:
+					style.append(CSS_CLASS_FILE).append(open ? "folder-open " : "folder ");
+					break;
+				case IMAGE:
+					style.append(CSS_CLASS_FILE).append("image ");
+					break;
+				case POLL_CHART:
+					style.append(CSS_CLASS_FILE).append("chart ");
+					break;
+				case WML_FILE:
+					style.append(CSS_CLASS_FILE).append("wml ");
+					break;
+				case VIDEO, RECORDING:
+					setVideoStyle(f, style);
+					break;
+				case PRESENTATION:
+					style.append(CSS_CLASS_FILE).append("doc ");
+					break;
+				default:
+					break;
 			}
 			if (treePanel.isSelected(f)) {
 				style.append("active ");

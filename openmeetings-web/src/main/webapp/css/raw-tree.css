@@ -135,9 +135,6 @@
 .file.om-icon, .recording.om-icon {
 	padding-left: 34px;
 }
-.my.file.om-icon::before {
-	content: '\f015';
-}
 .public.file.om-icon::before {
 	content: '\f0ac';
 }
@@ -164,6 +161,9 @@
 }
 .selected .file.item {
 	background-color: #0099FF;
+}
+.my.file.om-icon::before {
+	content: '\f015';
 }
 .tree-theme-windows span.tree-content {
 	display: flex !important;
