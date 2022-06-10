@@ -280,3 +280,43 @@ protocol=wss
 bind=0.0.0.0
 ; All other transport parameters are ignored for wss transports.
 ```
+
+## Call from room to external number
+Modify `/etc/asterisk/sip.conf`
+
+**Add your external provider**
+
+```
+register => tls://<name>:<password>@sipnet.ru
+
+[SIPNET]
+type=friend
+username=<name>
+secret=<password>
+callerid=<caller id> ; can be commented out
+host=sipnet.ru
+nat=route
+fromuser=<fromuser> ; can be commented out
+fromdomain=sipnet.ru
+dtmfmode=rfc2833
+insecure=very
+context=rooms
+disallow=all
+allow=alaw
+canreinvite=no
+callbackextension=<extension for incoming calls> ; can be commented out
+```
+
+Modify `/etc/asterisk/extensions.conf`
+
+**Add external numbers you are going to call to [rooms-out] section**
+
+```
+[rooms-out]
+; *****************************************************
+; Extensions for outgoing calls from Openmeetings room.
+; *****************************************************
+exten => _00000,1,Answer
+exten => _00000,n,Dial(SIP/00000@SIPNET,30)
+exten => _00000s,n,HangUp
+```
