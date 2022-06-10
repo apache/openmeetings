@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.wicket.ThreadContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,8 @@ public class TimerService {
 	private SipManager sipManager;
 	@Autowired
 	private KurentoHandler kHandler;
+	@Autowired
+	private Application app;
 
 	@PostConstruct
 	private void init() {
@@ -69,6 +72,7 @@ public class TimerService {
 		modCheckMap.put(
 				roomId
 				, new CompletableFuture<>().completeAsync(() -> {
+					ThreadContext.setApplication(app);
 					log.warn("Moderator room check {}", roomId);
 					if (cm.streamByRoom(roomId).findAny().isEmpty()) {
 						modCheckMap.remove(roomId);
@@ -85,6 +89,7 @@ public class TimerService {
 		sipCheckMap.put(
 				roomId
 				, new CompletableFuture<>().completeAsync(() -> {
+					ThreadContext.setApplication(app);
 					log.trace("Sip room check {}", roomId);
 					Optional<Client> sipClient = cm.streamByRoom(roomId).filter(Client::isSip).findAny();
 					cm.streamByRoom(roomId).filter(Predicate.not(Client::isSip)).findAny().ifPresentOrElse(c -> {

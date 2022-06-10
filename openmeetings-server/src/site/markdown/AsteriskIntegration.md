@@ -45,9 +45,9 @@ sudo apt update && sudo apt upgrade
 sudo apt install build-essential
 
 sudo mkdir /usr/src/asterisk && cd /usr/src/asterisk
-sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-16.13.0.tar.gz
-sudo tar -xvzf asterisk-16.13.0.tar.gz
-cd ./asterisk-16.13.0
+sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-18.12.1.tar.gz
+sudo tar -xvzf asterisk-18.12.1.tar.gz
+cd ./asterisk-18.12.1
 sudo make clean
 sudo contrib/scripts/install_prereq install
 sudo ./configure
@@ -80,7 +80,13 @@ Modify `[modules]` section of `/etc/asterisk/modules.conf`
 **Add/uncomment the following lines**
 
 ```
-preload => res_config_mysql.so
+preload = res_config_mysql.so
+```
+
+**Remove/Comment following lines**
+
+```
+;noload = chan_sip.so
 ```
 
 ### Configure MySQL module:
@@ -93,8 +99,8 @@ Set valid data for MySQL in `/etc/asterisk/res_config_mysql.conf`:
 [general]
 dbhost = 127.0.0.1
 dbname = openmeetings
-dbuser = root
-dbpass =
+dbuser = om_db_admin
+dbpass = 12345
 dbport = 3306
 dbsock = /var/lib/mysql/mysql.sock
 dbcharset = utf8
