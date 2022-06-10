@@ -47,6 +47,7 @@ import java.util.stream.Stream;
 import javax.websocket.WebSocketContainer;
 
 import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.core.remote.KStream;
 import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.core.util.ChatWebSocketHelper;
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -56,6 +57,7 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -368,6 +370,18 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			});
 		} catch (Exception err) {
 			log.error("[appStart]", err);
+		}
+		{ //scope
+			// warm-up Inject
+			Client c = new Client(null, 1, null, null);
+			KStream stream = null;
+			try {
+				stream = new KStream(c.addStream(Client.StreamType.WEBCAM, Activity.AUDIO_VIDEO), null);
+			} finally {
+				if (stream != null) {
+					stream.release();
+				}
+			}
 		}
 	}
 

@@ -219,7 +219,7 @@ public class SipManager implements ISipManager {
 	 * @param r
 	 *            room to be connected to the call
 	 */
-	public void joinToConfCall(String number, Room r) {
+	public void callExternalNumber(String number, Room r) {
 		String sipNumber = getSipNumber(r);
 		if (sipNumber == null) {
 			log.warn("Failed to get SIP number for room: {}", r);
@@ -244,7 +244,7 @@ public class SipManager implements ISipManager {
 		}
 
 		HangupAction ha = new HangupAction(
-				String.format("Local/%s@rooms-originate-.*$", sipNumber)
+				String.format("/^Local/%s@rooms-originate-.*$/", sipNumber)
 				, 16 // AST_CAUSE_NORMAL_CLEARING
 				);
 		exec(ha);

@@ -109,6 +109,6 @@ public class SipDialerDialog extends Modal<String> {
 	 * @param target - {@link AjaxRequestTarget} to perform additional actions(s) if any
 	 */
 	protected void onSubmit(AjaxRequestTarget target) {
-		sipDao.joinToConfCall(number.getModelObject(), room.getRoom());
+		sipDao.callExternalNumber(number.getModelObject(), room.getRoom());
 	}
 }

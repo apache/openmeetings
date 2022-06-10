@@ -190,6 +190,7 @@ public class RoomPanel extends BasePanel {
 				showIdeaAlert(target, getString("1315"));
 			}
 			wb.update(target);
+			jsInited = true;
 		}
 
 		private CharSequence sendClientsOnInit() {
@@ -257,6 +258,7 @@ public class RoomPanel extends BasePanel {
 	};
 	Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
 	private boolean avInited = false;
+	private boolean jsInited = false;
 
 	@SpringBean
 	private ClientManager cm;
@@ -419,6 +421,9 @@ public class RoomPanel extends BasePanel {
 
 	@Override
 	public void onEvent(IEvent<?> event) {
+		if (!jsInited) {
+			return;
+		}
 		Client curClient = getClient();
 		if (curClient != null && event.getPayload() instanceof WebSocketPushPayload) {
 			WebSocketPushPayload wsEvent = (WebSocketPushPayload) event.getPayload();

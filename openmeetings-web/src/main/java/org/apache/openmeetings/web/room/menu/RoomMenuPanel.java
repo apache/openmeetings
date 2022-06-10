@@ -228,7 +228,7 @@ public class RoomMenuPanel extends Panel {
 		handler.add(roomName.add(AttributeModifier.replace(ATTR_CLASS, roomClass), AttributeModifier.replace(ATTR_TITLE, roomTitle)));
 		handler.add(askBtn.setVisible(!moder && r.isAllowUserQuestions()));
 		handler.add(shareBtn.setVisible(room.screenShareAllowed()));
-		handler.appendJavaScript("if (typeof(Sharer) === 'object') {$('#share-dlg-btn').off().click(Sharer.open);}");
+		handler.appendJavaScript("$('#share-dlg-btn').off().click(Sharer.open);");
 	}
 
 	public void updatePoll(IPartialPageRequestHandler handler, Long createdBy) {
