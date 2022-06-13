@@ -1380,6 +1380,7 @@
 							<exclude>**/.project</exclude>
 							<exclude>**/.classpath</exclude>
 							<exclude>**/.settings/**</exclude>
+							<exclude>.gitattributes</exclude>
 						</excludes>
 					</configuration>
 				</plugin>
