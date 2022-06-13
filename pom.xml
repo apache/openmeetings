@@ -69,7 +69,7 @@
 		<xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
 		<saxon.version>8.7</saxon.version>
 		<buildnumber-maven-plugin.version>3.0.0</buildnumber-maven-plugin.version>
-		<apache-rat-plugin.version>0.13</apache-rat-plugin.version>
+		<apache-rat-plugin.version>0.14</apache-rat-plugin.version>
 		<keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
