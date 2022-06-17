@@ -83,19 +83,19 @@
 		<wicket.version>9.11.0-SNAPSHOT</wicket.version>
 		<wicket-jquery-ui.version>9.8.1</wicket-jquery-ui.version>
 		<wicketstuff.version>9.10.0</wicketstuff.version>
-		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version>
-		<font-awesome.version>6.1.0</font-awesome.version>
-		<spring.version>5.3.20</spring.version>
+		<wicket-bootstrap.version>6.0.0-M7</wicket-bootstrap.version>
+		<font-awesome.version>6.1.1</font-awesome.version>
+		<spring.version>5.3.21</spring.version>
 		<tomcat.version>9.0.64</tomcat.version>
-		<ical4j.version>4.0.0-alpha11</ical4j.version>
+		<ical4j.version>4.0.0-beta1</ical4j.version>
 		<cxf.version>3.5.2</cxf.version>
-		<io.prometheus.version>0.15.0</io.prometheus.version>
+		<io.prometheus.version>0.16.0</io.prometheus.version>
 		<aspectjtools.version>1.9.9.1</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.5.0</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
-		<h2.version>2.1.212</h2.version>
+		<h2.version>2.1.214</h2.version>
 		<commons-lang3.version>3.12.0</commons-lang3.version>
 		<jakarta.mail.version>2.0.1</jakarta.mail.version>
 		<openjpa.version>3.2.2</openjpa.version>
@@ -131,7 +131,7 @@
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM26</apacheds-test-framework.version>
-		<swagger.version>2.2.0</swagger.version>
+		<swagger.version>2.2.1</swagger.version>
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>

@@ -191,6 +191,6 @@ public class MailMessage extends HistoricalEntity {
 	}
 
 	public String getIcsMethod() {
-		return icsMethod == null ? Method.REQUEST.getValue() : icsMethod;
+		return icsMethod == null ? Method.VALUE_REQUEST : icsMethod;
 	}
 }

@@ -67,16 +67,16 @@ import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.parameter.Cn;
 import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.property.Attendee;
-import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.DateProperty;
 import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.Organizer;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Sequence;
-import net.fortuna.ical4j.model.property.Transp;
 import net.fortuna.ical4j.model.property.Uid;
-import net.fortuna.ical4j.model.property.Version;
+import net.fortuna.ical4j.model.property.immutable.ImmutableCalScale;
+import net.fortuna.ical4j.model.property.immutable.ImmutableTransp;
+import net.fortuna.ical4j.model.property.immutable.ImmutableVersion;
 import net.fortuna.ical4j.transform.recurrence.Frequency;
 
 /**
@@ -367,7 +367,7 @@ public class IcalUtils {
 		List<CalendarComponent> comps = new ArrayList<>(events);
 		comps.add(0, timeZone.getVTimeZone());
 		return new Calendar(
-				new PropertyList(List.of(new ProdId(PROD_ID), Version.VERSION_2_0, CalScale.GREGORIAN))
+				new PropertyList(List.of(new ProdId(PROD_ID), ImmutableVersion.VERSION_2_0, ImmutableCalScale.GREGORIAN))
 				, new ComponentList<>(comps));
 	}
 
@@ -383,7 +383,7 @@ public class IcalUtils {
 
 		mProperties.add(new Description(appointment.getDescription()));
 		mProperties.add(new Sequence(0));
-		mProperties.add(Transp.OPAQUE);
+		mProperties.add(ImmutableTransp.OPAQUE);
 
 		String uid = appointment.getIcalId();
 		Uid ui;

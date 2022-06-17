@@ -51,7 +51,6 @@ import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.parameter.Rsvp;
 import net.fortuna.ical4j.model.parameter.XParameter;
 import net.fortuna.ical4j.model.property.Attendee;
-import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.Created;
 import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.LastModified;
@@ -60,10 +59,12 @@ import net.fortuna.ical4j.model.property.Method;
 import net.fortuna.ical4j.model.property.Organizer;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Sequence;
-import net.fortuna.ical4j.model.property.Status;
-import net.fortuna.ical4j.model.property.Transp;
 import net.fortuna.ical4j.model.property.Uid;
-import net.fortuna.ical4j.model.property.Version;
+import net.fortuna.ical4j.model.property.immutable.ImmutableCalScale;
+import net.fortuna.ical4j.model.property.immutable.ImmutableMethod;
+import net.fortuna.ical4j.model.property.immutable.ImmutableStatus;
+import net.fortuna.ical4j.model.property.immutable.ImmutableTransp;
+import net.fortuna.ical4j.model.property.immutable.ImmutableVersion;
 import net.fortuna.ical4j.validate.ValidationException;
 
 /**
@@ -83,9 +84,9 @@ public class IcalHandler {
 	private Method method;
 
 	/** Creation of a new Event */
-	public static final Method ICAL_METHOD_REQUEST = Method.REQUEST;
-	public static final Method ICAL_METHOD_CANCEL = Method.CANCEL;
-	public static final Method ICAL_METHOD_REFRESH = Method.REFRESH;
+	public static final Method ICAL_METHOD_REQUEST = ImmutableMethod.REQUEST;
+	public static final Method ICAL_METHOD_CANCEL = ImmutableMethod.CANCEL;
+	public static final Method ICAL_METHOD_REFRESH = ImmutableMethod.REFRESH;
 
 	/**
 	 * Constructor
@@ -99,8 +100,8 @@ public class IcalHandler {
 
 		icsCalendar = new Calendar(new PropertyList(List.of(
 				new ProdId("-//Apache Openmeetings//OM Calendar//EN")
-				, Version.VERSION_2_0
-				, CalScale.GREGORIAN
+				, ImmutableVersion.VERSION_2_0
+				, ImmutableCalScale.GREGORIAN
 				, method
 				)), new ComponentList<>());
 	}
@@ -113,7 +114,7 @@ public class IcalHandler {
 
 		meeting = new VEvent(start, end, name);
 		meetingProperties.addAll(meeting.getProperties());
-		meetingProperties.addAll(List.of(Transp.OPAQUE, Status.VEVENT_CONFIRMED));
+		meetingProperties.addAll(List.of(ImmutableTransp.OPAQUE, ImmutableStatus.VEVENT_CONFIRMED));
 		return this;
 	}
 
@@ -162,7 +163,7 @@ public class IcalHandler {
 				, chair ? Role.CHAIR : Role.REQ_PARTICIPANT
 				, new XParameter("X-NUM-GUESTS", "0")
 				, new Cn(display)));
-		if (Method.CANCEL == method) {
+		if (ImmutableMethod.CANCEL.equals(method)) {
 			params.add(PartStat.DECLINED);
 		} else {
 			params.add(chair ? PartStat.ACCEPTED : PartStat.NEEDS_ACTION);
