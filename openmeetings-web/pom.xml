@@ -491,6 +491,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
+			<artifactId>openmeetings-mediaserver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-webservice</artifactId>
 		</dependency>
 		<dependency>

@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.room.sidebar;
 
 import static org.apache.openmeetings.web.app.Application.kickUser;
 
-import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -40,6 +39,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
+import org.apache.openmeetings.mediaserver.remote.StreamProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

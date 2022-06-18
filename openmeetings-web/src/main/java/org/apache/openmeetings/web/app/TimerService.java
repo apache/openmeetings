@@ -29,7 +29,6 @@ import java.util.function.Predicate;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -39,6 +38,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.wicket.ThreadContext;
+import org.apache.openmeetings.mediaserver.remote.KurentoHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
