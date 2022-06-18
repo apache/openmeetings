@@ -34,8 +34,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.openmeetings.core.remote.KurentoHandler;
-import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -65,6 +63,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
+import org.apache.openmeetings.mediaserver.remote.KurentoHandler;
+import org.apache.openmeetings.mediaserver.remote.StreamProcessor;
 
 import com.github.openjson.JSONObject;
 

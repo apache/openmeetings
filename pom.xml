@@ -133,6 +133,7 @@
 		<apacheds-test-framework.version>2.0.0.AM26</apacheds-test-framework.version>
 		<swagger.version>2.2.1</swagger.version>
 		<bytebuddy.version>1.12.12</bytebuddy.version>
+		<annotation-api.version>1.3.2</annotation-api.version>
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -421,6 +422,11 @@
 			<dependency>
 				<groupId>org.apache.openmeetings</groupId>
 				<artifactId>openmeetings-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.openmeetings</groupId>
+				<artifactId>openmeetings-mediaserver</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -953,6 +959,11 @@
 				<groupId>io.swagger.core.v3</groupId>
 				<artifactId>swagger-annotations</artifactId>
 				<version>${swagger.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.annotation</groupId>
+				<artifactId>javax.annotation-api</artifactId>
+				<version>${annotation-api.version}</version>
 			</dependency>
 
 			<!-- TESTS -->
@@ -1700,6 +1711,7 @@
 				<module>openmeetings-util</module>
 				<module>openmeetings-db</module>
 				<module>openmeetings-core</module>
+				<module>openmeetings-mediaserver</module>
 				<module>openmeetings-install</module>
 				<module>openmeetings-service</module>
 				<module>openmeetings-webservice</module>

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.remote;
+package org.apache.openmeetings.mediaserver.remote;
 
 public interface IStreamProcessor {
 	void release(AbstractStream stream, boolean releaseStream);

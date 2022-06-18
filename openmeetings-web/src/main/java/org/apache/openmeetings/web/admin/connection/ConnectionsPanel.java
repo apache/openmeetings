@@ -28,8 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.apache.openmeetings.core.remote.KurentoHandler;
-import org.apache.openmeetings.core.remote.StreamProcessor;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -48,6 +46,8 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.openmeetings.mediaserver.remote.KurentoHandler;
+import org.apache.openmeetings.mediaserver.remote.StreamProcessor;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;

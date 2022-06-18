@@ -17,7 +17,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.remote;
+package org.apache.openmeetings.mediaserver.remote;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 

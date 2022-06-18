@@ -86,10 +86,6 @@
 			<artifactId>spring-webmvc</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.kurento</groupId>
-			<artifactId>kurento-client</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.asteriskjava</groupId>
 			<artifactId>asterisk-java</artifactId>
 		</dependency>
@@ -102,6 +98,10 @@
 			<groupId>com.sun.activation</groupId>
 			<artifactId>jakarta.activation</artifactId> <!-- required for jakarta.mail -->
 			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
