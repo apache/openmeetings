@@ -871,11 +871,6 @@
 				<version>${mysql.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
-				<version>${mysql.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>net.bytebuddy</groupId>
 				<artifactId>byte-buddy</artifactId>
 				<version>${bytebuddy.version}</version>
