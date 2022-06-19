@@ -63,10 +63,10 @@
 		<section name="Tips and Gotchas">
 			<p>Eclipse ANSI colors plugin for colors in console</p>
 			<source><![CDATA[
-MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded
+MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded -Dwicket.ioc.useByteBuddy=true
 
 #Quick rebuild and run
-cd ..; mvn clean install -PallModules,quick,mysql -pl openmeetings-util,openmeetings-core; cd openmeetings-web; MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded
+cd ..; mvn clean install -PallModules,quick,mysql -pl openmeetings-util,openmeetings-core; cd openmeetings-web; MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded -Dwicket.ioc.useByteBuddy=true
 
 			]]></source>
 			<p>In case you would like to develop Openmeetings you need to run <i>"unpacked"</i> build: </p>
