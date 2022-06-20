@@ -343,6 +343,9 @@
 		<contributor>
 			<name>Thibault Le Meur</name>
 		</contributor>
+		<contributor>
+			<name>Horace Miles</name>
+		</contributor>
 	</contributors>
 	<scm>
 		<connection>scm:git:https://github.com/apache/openmeetings.git</connection>
