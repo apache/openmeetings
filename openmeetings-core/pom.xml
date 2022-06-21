@@ -51,10 +51,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-util</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-db</artifactId>
 		</dependency>
 		<dependency>
@@ -100,6 +96,12 @@
 		<dependency>
 			<groupId>javax.sip</groupId>
 			<artifactId>jain-sip-ri</artifactId>
+		</dependency>
+		<!-- FIXME TODO -->
+		<dependency>
+			<groupId>com.sun.activation</groupId>
+			<artifactId>jakarta.activation</artifactId> <!-- required for jakarta.mail -->
+			<version>2.0.1</version>
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>

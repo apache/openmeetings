@@ -61,6 +61,7 @@ import org.mockito.Spy;
 import org.mockito.internal.configuration.injection.scanner.MockScanner;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,7 +125,7 @@ public class BaseMockedTest {
 
 			labelMock.when(() -> LabelDao.getLanguage(any(Long.class))).thenReturn(new OmLanguage(1L, Locale.ENGLISH));
 			appHelpMock.when(() -> ApplicationHelper.ensureApplication(any(Long.class))).thenReturn(mock(IApplication.class));
-			Injector injector = mock(Injector.class, withSettings().lenient());
+			Injector injector = mock(Injector.class, withSettings().strictness(Strictness.LENIENT));
 			doAnswer(new Answer<Void>() {
 				@Override
 				public Void answer(InvocationOnMock invocation) throws Throwable {

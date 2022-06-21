@@ -318,7 +318,6 @@
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>false</overWriteSnapshots>
 							<overWriteIfNewer>false</overWriteIfNewer>
-							<excludeTransitive>false</excludeTransitive>
 						</configuration>
 					</execution>
 					<execution>
@@ -488,23 +487,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-util</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-db</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-install</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-service</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
@@ -585,12 +568,6 @@
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>jquery-ui-touch-punch</artifactId>
-		</dependency>
-		<!-- FIXME TODO -->
-		<dependency>
-			<groupId>com.sun.activation</groupId>
-			<artifactId>jakarta.activation</artifactId> <!-- required for jakarta.mail -->
-			<version>2.0.1</version>
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
