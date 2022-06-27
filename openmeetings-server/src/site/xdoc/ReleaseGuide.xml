@@ -27,7 +27,7 @@
 					<p>To build a binary release of OpenMeetings you need: </p>
 					<ul>
 						<li>JDK17</li>
-						<li>Apache Maven 3.5.0</li>
+						<li>Apache Maven 3.6.0</li>
 						<li>Git Command line client</li>
 						<li>A text editor</li>
 						<li>You need to be online! The build process actively downloads needed libraries and dependencies.</li>

@@ -44,7 +44,7 @@
 		<!-- plugin versions -->
 		<maven-javadoc-plugin.version>3.4.0</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
-		<maven-site-plugin.version>4.0.0-M1</maven-site-plugin.version>
+		<maven-site-plugin.version>4.0.0-M2</maven-site-plugin.version>
 		<exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
 		<maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
@@ -132,7 +132,7 @@
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM26</apacheds-test-framework.version>
 		<swagger.version>2.2.1</swagger.version>
-		<bytebuddy.version>1.12.10</bytebuddy.version>
+		<bytebuddy.version>1.12.12</bytebuddy.version>
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -1450,7 +1450,7 @@
 										<version>[${jdk.version}.0,)</version>
 									</requireJavaVersion>
 									<requireMavenVersion>
-										<version>3.5.0</version>
+										<version>3.6.0</version>
 									</requireMavenVersion>
 								</rules>
 								<failFast>true</failFast>
