@@ -42,7 +42,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
-import org.apache.openmeetings.mediaserver.remote.KurentoHandler;
+import org.apache.openmeetings.mediaserver.KurentoHandler;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;

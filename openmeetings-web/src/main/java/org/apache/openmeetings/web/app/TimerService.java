@@ -38,7 +38,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.wicket.ThreadContext;
-import org.apache.openmeetings.mediaserver.remote.KurentoHandler;
+import org.apache.openmeetings.mediaserver.KurentoHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

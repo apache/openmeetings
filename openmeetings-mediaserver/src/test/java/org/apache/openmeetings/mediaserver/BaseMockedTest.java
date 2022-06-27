@@ -17,7 +17,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.mediaserver.remote;
+package org.apache.openmeetings.mediaserver;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -41,14 +41,14 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.db.entity.label.OmLanguage;
 import org.apache.openmeetings.db.util.ApplicationHelper;
-import org.apache.openmeetings.mediaserver.remote.AbstractStream;
-import org.apache.openmeetings.mediaserver.remote.KRoom;
-import org.apache.openmeetings.mediaserver.remote.KStream;
-import org.apache.openmeetings.mediaserver.remote.KTestStream;
-import org.apache.openmeetings.mediaserver.remote.KurentoHandler;
-import org.apache.openmeetings.mediaserver.remote.StreamProcessor;
-import org.apache.openmeetings.mediaserver.remote.StreamProcessorActions;
-import org.apache.openmeetings.mediaserver.remote.TestStreamProcessor;
+import org.apache.openmeetings.mediaserver.AbstractStream;
+import org.apache.openmeetings.mediaserver.KRoom;
+import org.apache.openmeetings.mediaserver.KStream;
+import org.apache.openmeetings.mediaserver.KTestStream;
+import org.apache.openmeetings.mediaserver.KurentoHandler;
+import org.apache.openmeetings.mediaserver.StreamProcessor;
+import org.apache.openmeetings.mediaserver.StreamProcessorActions;
+import org.apache.openmeetings.mediaserver.TestStreamProcessor;
 import org.apache.wicket.injection.Injector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;

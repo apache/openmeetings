@@ -63,8 +63,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
-import org.apache.openmeetings.mediaserver.remote.KurentoHandler;
-import org.apache.openmeetings.mediaserver.remote.StreamProcessor;
+import org.apache.openmeetings.mediaserver.KurentoHandler;
+import org.apache.openmeetings.mediaserver.StreamProcessor;
 
 import com.github.openjson.JSONObject;
 

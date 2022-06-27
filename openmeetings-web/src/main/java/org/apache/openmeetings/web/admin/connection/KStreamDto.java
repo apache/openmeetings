@@ -23,7 +23,7 @@ import java.util.Date;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.entity.record.RecordingChunk.Type;
-import org.apache.openmeetings.mediaserver.remote.KStream;
+import org.apache.openmeetings.mediaserver.KStream;
 
 /**
  * A KStream for the Wicket UI to display. This object can be serialized, otherwise

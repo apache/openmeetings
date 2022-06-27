@@ -17,10 +17,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.mediaserver.remote;
+package org.apache.openmeetings.mediaserver;
 
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.PARAM_CANDIDATE;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.sendError;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.PARAM_CANDIDATE;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.sendError;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;

@@ -132,7 +132,7 @@ import org.apache.wicket.settings.ExceptionSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.validator.UrlValidator;
-import org.apache.openmeetings.mediaserver.remote.KStream;
+import org.apache.openmeetings.mediaserver.KStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

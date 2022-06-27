@@ -26,7 +26,7 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.wb.WbPanel.WB_JS_REFERENCE;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.activityAllowed;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.activityAllowed;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -98,8 +98,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.string.Strings;
-import org.apache.openmeetings.mediaserver.remote.KurentoHandler;
-import org.apache.openmeetings.mediaserver.remote.StreamProcessor;
+import org.apache.openmeetings.mediaserver.KurentoHandler;
+import org.apache.openmeetings.mediaserver.StreamProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

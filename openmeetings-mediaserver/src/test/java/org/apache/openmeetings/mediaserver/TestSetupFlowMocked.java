@@ -17,11 +17,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.mediaserver.remote;
+package org.apache.openmeetings.mediaserver;
 
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.MODE_TEST;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.PARAM_CANDIDATE;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.TAG_MODE;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.MODE_TEST;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.PARAM_CANDIDATE;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.TAG_MODE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.apache.openmeetings.db.entity.basic.WsClient;
-import org.apache.openmeetings.mediaserver.remote.KurentoHandler;
+import org.apache.openmeetings.mediaserver.KurentoHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kurento.client.MediaPipeline;

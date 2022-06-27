@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.mediaserver.remote;
+package org.apache.openmeetings.mediaserver;
 
 import org.kurento.client.CertificateKeyType;
 import org.kurento.client.MediaPipeline;

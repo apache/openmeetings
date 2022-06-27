@@ -19,16 +19,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.mediaserver.remote;
+package org.apache.openmeetings.mediaserver;
 
 import static java.util.UUID.randomUUID;
 import static java.util.concurrent.CompletableFuture.delayedExecutor;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.PARAM_CANDIDATE;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.PARAM_ICE;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.TAG_ROOM;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.TAG_STREAM_UID;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.getFlowoutTimeout;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.newKurentoMsg;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.PARAM_CANDIDATE;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.PARAM_ICE;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.TAG_ROOM;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.TAG_STREAM_UID;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.getFlowoutTimeout;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.util.OmFileHelper.getRecUri;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 

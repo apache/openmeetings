@@ -26,7 +26,7 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.openmeetings.mediaserver.remote.StreamProcessor;
+import org.apache.openmeetings.mediaserver.StreamProcessor;
 
 import com.github.openjson.JSONObject;
 

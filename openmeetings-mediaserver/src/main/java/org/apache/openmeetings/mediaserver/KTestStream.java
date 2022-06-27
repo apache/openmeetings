@@ -16,15 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.mediaserver.remote;
+package org.apache.openmeetings.mediaserver;
 
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.MODE_TEST;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.PARAM_CANDIDATE;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.TAG_MODE;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.TAG_ROOM;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.sendError;
-import static org.apache.openmeetings.mediaserver.remote.TestStreamProcessor.newTestKurentoMsg;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.MODE_TEST;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.PARAM_CANDIDATE;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.TAG_MODE;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.TAG_ROOM;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.sendError;
+import static org.apache.openmeetings.mediaserver.TestStreamProcessor.newTestKurentoMsg;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WEBM;
 import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;

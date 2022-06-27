@@ -17,11 +17,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.mediaserver.remote;
+package org.apache.openmeetings.mediaserver;
 
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.PARAM_ICE;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.activityAllowed;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.newKurentoMsg;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.PARAM_ICE;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.activityAllowed;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isRecordingsEnabled;
 
 import java.util.Collection;

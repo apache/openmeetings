@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.mediaserver.remote.KurentoHandler.KURENTO_TYPE;
+import static org.apache.openmeetings.mediaserver.KurentoHandler.KURENTO_TYPE;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -43,7 +43,7 @@ import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.protocol.ws.api.message.ErrorMessage;
 import org.apache.wicket.protocol.ws.api.message.TextMessage;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.openmeetings.mediaserver.remote.KurentoHandler;
+import org.apache.openmeetings.mediaserver.KurentoHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

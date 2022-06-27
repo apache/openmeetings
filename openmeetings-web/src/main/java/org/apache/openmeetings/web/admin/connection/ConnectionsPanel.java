@@ -46,8 +46,8 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.openmeetings.mediaserver.remote.KurentoHandler;
-import org.apache.openmeetings.mediaserver.remote.StreamProcessor;
+import org.apache.openmeetings.mediaserver.KurentoHandler;
+import org.apache.openmeetings.mediaserver.StreamProcessor;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
