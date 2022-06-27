@@ -44,7 +44,7 @@
 		<!-- plugin versions -->
 		<maven-javadoc-plugin.version>3.4.0</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
-		<maven-site-plugin.version>4.0.0-M2</maven-site-plugin.version>
+		<maven-site-plugin.version>4.0.0-M1</maven-site-plugin.version>
 		<exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
 		<maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
