@@ -198,7 +198,7 @@ public class FileItemDao extends BaseFileItemDao {
 		return update(f);
 	}
 
-	public List<BaseFileItem> getAllRoomFiles(String search, long start, long count, Long roomId/*, Long ownerId*/, List<Group> groups) {
+	public List<BaseFileItem> getAllRoomFiles(String search, long start, long count, Long roomId, List<Group> groups) {
 		return setLimits(em.createNamedQuery("getAllFileItemsForRoom", BaseFileItem.class)
 					.setParameter("folder", Type.FOLDER)
 					.setParameter("roomId", roomId)

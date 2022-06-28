@@ -161,12 +161,9 @@ public class WbPanel extends AbstractWbPanel {
 	@Override
 	void internalWbLoad(StringBuilder sb) {
 		Long langId = rp.getClient().getUser().getLanguageId();
-		Map<Long, List<BaseFileItem>> files = wbm.get(rp.getRoom(), langId);
-		for (Map.Entry<Long, List<BaseFileItem>> e : files.entrySet()) {
-			for (BaseFileItem fi : e.getValue()) {
-				sendFileToWb(e.getKey(), fi, false);
-			}
-		}
+		wbm.initFiles(rp.getRoom(), langId, (wbs, wbIdx, roomFiles) -> {
+			roomFiles.forEach(rf -> addFileToWb(wbs, wbIdx, rf.getFile(), false, false));
+		});
 		Whiteboards wbs = wbm.get(roomId, langId);
 		loadWhiteboards(sb, rp.getClient(), wbs, wbm.list(roomId));
 		JSONObject wbj = getWbJson(wbs.getActiveWb());
@@ -487,75 +484,83 @@ public class WbPanel extends AbstractWbPanel {
 		wb.setHeight(Math.max(wb.getHeight(), (int)(h * scale)));
 	}
 
-	private void sendFileToWb(Long wbId, final BaseFileItem fi, boolean clean) {
-		if (isVisible() && fi.getId() != null) {
-			Whiteboards wbs = wbm.get(roomId);
-			String wuid = randomUUID().toString();
-			Whiteboard wb = wbs.get(wbId == null ? wbs.getActiveWb() : wbId);
-			if (wb == null) {
-				return;
-			}
-			switch (fi.getType()) {
-				case FOLDER:
-					//do nothing
-					break;
-				case WML_FILE:
-				{
-					File f = fi.getFile();
-					if (f.exists() && f.isFile()) {
-						try (BufferedReader br = Files.newBufferedReader(f.toPath())) {
-							final boolean[] updated = {false};
-							JSONArray arr = getArray(new JSONObject(new JSONTokener(br)), o -> {
-									wb.put(o.getString("uid"), o);
-									updated[0] = true;
-									return addFileUrl(rp.getClient(), wbs.getUid(), o, bf -> updateWbSize(wb, bf));
-								});
+	private void addFileToWb(Whiteboards wbs, Whiteboard wb, final BaseFileItem fi, boolean clean, boolean sendAndUpdate) {
+		if (fi.getId() == null || wb == null) {
+			return;
+		}
+		switch (fi.getType()) {
+			case FOLDER:
+				//do nothing
+				break;
+			case WML_FILE:
+			{
+				File f = fi.getFile();
+				if (f.exists() && f.isFile()) {
+					try (BufferedReader br = Files.newBufferedReader(f.toPath())) {
+						final boolean[] updated = {false};
+						JSONArray arr = getArray(new JSONObject(new JSONTokener(br)), o -> {
+								wb.put(o.getString("uid"), o);
+								updated[0] = true;
+								return addFileUrl(rp.getClient(), wbs.getUid(), o, bf -> updateWbSize(wb, bf));
+							});
+						if (sendAndUpdate) {
 							if (updated[0]) {
 								wbm.update(roomId, wb);
 							}
 							sendWbAll(WbAction.SET_SIZE, wb.getAddJson());
 							sendWbAll(WbAction.LOAD, getObjWbJson(wb.getId(), arr));
-						} catch (Exception e) {
-							log.error("Unexpected error while loading WB", e);
 						}
+					} catch (Exception e) {
+						log.error("Unexpected error while loading WB", e);
 					}
 				}
-					break;
-				case POLL_CHART:
-					break;
-				default:
-				{
-					JSONObject file = new JSONObject()
-							.put(ATTR_FILE_ID, fi.getId())
-							.put(ATTR_FILE_TYPE, fi.getType().name())
-							.put("count", fi.getCount())
-							.put(ATTR_TYPE, "image")
-							.put("left", UPLOAD_WB_LEFT)
-							.put("top", UPLOAD_WB_TOP)
-							.put(ATTR_WIDTH, fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
-							.put(ATTR_HEIGHT, fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight())
-							.put("uid", wuid)
-							.put(ATTR_SLIDE, wb.getSlide())
-							;
-					if (BaseFileItem.Type.VIDEO == fi.getType() || BaseFileItem.Type.RECORDING == fi.getType()) {
-						file.put(ATTR_OMTYPE, "Video");
-						file.put(PARAM_STATUS, new JSONObject()
-								.put("paused", true)
-								.put("pos", 0.0)
-								.put(PARAM_UPDATED, System.currentTimeMillis()));
-					}
-					final String ruid = wbs.getUid();
-					if (clean) {
-						wbm.clearAll(roomId, wb.getId(), addUndo);
-					}
-					wb.put(wuid, file);
-					updateWbSize(wb, fi);
+			}
+				break;
+			case POLL_CHART:
+				break;
+			default:
+			{
+				String wuid = randomUUID().toString();
+				JSONObject file = new JSONObject()
+						.put(ATTR_FILE_ID, fi.getId())
+						.put(ATTR_FILE_TYPE, fi.getType().name())
+						.put("count", fi.getCount())
+						.put(ATTR_TYPE, "image")
+						.put("left", UPLOAD_WB_LEFT)
+						.put("top", UPLOAD_WB_TOP)
+						.put(ATTR_WIDTH, fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
+						.put(ATTR_HEIGHT, fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight())
+						.put("uid", wuid)
+						.put(ATTR_SLIDE, wb.getSlide())
+						;
+				if (BaseFileItem.Type.VIDEO == fi.getType() || BaseFileItem.Type.RECORDING == fi.getType()) {
+					file.put(ATTR_OMTYPE, "Video");
+					file.put(PARAM_STATUS, new JSONObject()
+							.put("paused", true)
+							.put("pos", 0.0)
+							.put(PARAM_UPDATED, System.currentTimeMillis()));
+				}
+				final String ruid = wbs.getUid();
+				if (clean) {
+					wbm.clearAll(roomId, wb.getId(), addUndo);
+				}
+				wb.put(wuid, file);
+				updateWbSize(wb, fi);
+				if (sendAndUpdate) {
 					wbm.update(roomId, wb);
 					sendWbAll(WbAction.SET_SIZE, wb.getAddJson());
 					WbWebSocketHelper.sendWbFile(roomId, wb.getId(), ruid, file, fi);
 				}
-					break;
 			}
+				break;
+		}
+	}
+
+	private void sendFileToWb(Long wbId, final BaseFileItem fi, boolean clean) {
+		if (isVisible()) {
+			Whiteboards wbs = wbm.get(roomId);
+			Whiteboard wb = wbs.get(wbId == null ? wbs.getActiveWb() : wbId);
+			addFileToWb(wbs, wb, fi, clean, true);
 		}
 	}
 

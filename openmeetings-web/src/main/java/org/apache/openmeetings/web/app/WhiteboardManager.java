@@ -23,23 +23,20 @@ import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplicatio
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.sendWbAll;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
-import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.user.User;
@@ -140,35 +137,29 @@ public class WhiteboardManager implements IWhiteboardManager {
 		return wbs;
 	}
 
-	public Map<Long, List<BaseFileItem>> get(Room r, Long langId) {
-		Map<Long, List<BaseFileItem>> result = new HashMap<>();
+	public void initFiles(Room r, Long langId, TriConsumer<Whiteboards, Whiteboard, List<RoomFile>> creator) {
 		if (!contains(r.getId())
 				&& r.getFiles() != null
 				&& !r.getFiles().isEmpty()
 				&& map().tryLock(r.getId()))
 		{
 			try {
-				TreeMap<Long, List<BaseFileItem>> files = new TreeMap<>();
-				for (RoomFile rf : r.getFiles()) {
-					List<BaseFileItem> bfl = files.get(rf.getWbIdx());
-					if (bfl == null) {
-						files.put(rf.getWbIdx(), new ArrayList<>());
-						bfl = files.get(rf.getWbIdx());
-					}
-					bfl.add(rf.getFile());
-				}
-				Whiteboards wbs = getOrCreate(r.getId(), null);
-				for (Map.Entry<Long, List<BaseFileItem>> e : files.entrySet()) {
-					Whiteboard wb = add(wbs, langId);
-					wbs.setActiveWb(wb.getId());
-					result.put(wb.getId(), e.getValue());
-				}
-				update(wbs);
+				getOrCreate(r.getId(), wbs -> {
+					r.getFiles().stream()
+						.sorted((rf1, rf2) -> (int)(rf1.getWbIdx() - rf2.getWbIdx()))
+						.collect(Collectors.groupingBy(f -> f.getWbIdx()))
+						.forEach((wbIdx, fileList) -> {
+							log.trace("WBS init, processing idx {}", wbIdx);
+							Whiteboard wb = add(wbs, langId);
+							wbs.setActiveWb(wb.getId());
+							creator.accept(wbs, wb, fileList);
+						});
+					update(wbs);
+				});
 			} finally {
 				map().unlock(r.getId());
 			}
 		}
-		return result;
 	}
 
 	public Whiteboards get(Long roomId, Long langId) {
@@ -291,5 +282,10 @@ public class WhiteboardManager implements IWhiteboardManager {
 			log.trace("WbListener::Remove");
 			onlineWbs.remove(event.getKey());
 		}
+	}
+
+	@FunctionalInterface
+	public static interface TriConsumer<T, U, S> {
+		void accept(T t, U u, S s);
 	}
 }
