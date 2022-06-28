@@ -27,7 +27,7 @@ $(document).ready(function() {
 		.append($('<div class="float-right">')
 			.append($('<a class="apachecon-banner bannerRight acevent" data-format="wide" data-width="250"></a>')));
 	const banners = $('.acevent>img');
-	if (banners.length !== 2) {
+	if (banners.length > 0 && banners.length !== 2) {
 		banners.remove();
 		render_snippet();
 	}
