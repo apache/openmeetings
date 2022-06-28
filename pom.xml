@@ -83,7 +83,7 @@
 		<wicket.version>9.11.0-SNAPSHOT</wicket.version>
 		<wicket-jquery-ui.version>9.8.1</wicket-jquery-ui.version>
 		<wicketstuff.version>9.10.0</wicketstuff.version>
-		<wicket-bootstrap.version>6.0.0-M7</wicket-bootstrap.version>
+		<wicket-bootstrap.version>6.0.0-M8-SNAPSHOT</wicket-bootstrap.version>
 		<font-awesome.version>6.1.1</font-awesome.version>
 		<spring.version>5.3.21</spring.version>
 		<tomcat.version>9.0.64</tomcat.version>
