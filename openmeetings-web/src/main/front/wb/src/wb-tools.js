@@ -329,7 +329,8 @@ module.exports = class WbTools {
 			switch (role) {
 				case Role.PRESENTER:
 					clearAll.confirmation({
-						confirmationEvent: 'om-clear-all'
+						title: clearAll.attr('title')
+						, confirmationEvent: 'om-clear-all'
 						, onConfirm: () => OmUtil.wbAction({action: 'clearAll', data: {wbId: wb.getId()}})
 					}).removeClass('disabled');
 				case Role.WHITEBOARD:
@@ -348,11 +349,12 @@ module.exports = class WbTools {
 					tools.find('.om-icon.math').click(function() {
 						math.show();
 					});
-					tools.find('.om-icon.clear-slide')
-						.confirmation({
-							confirmationEvent: 'om-clear-slide'
-							, onConfirm: () => OmUtil.wbAction({action: 'clearSlide', data: {wbId: wb.getId(), slide: wb.slide}})
-						});
+					const clearSlide = tools.find('.om-icon.clear-slide');
+					clearSlide.confirmation({
+						title: clearSlide.attr('title')
+						, confirmationEvent: 'om-clear-slide'
+						, onConfirm: () => OmUtil.wbAction({action: 'clearSlide', data: {wbId: wb.getId(), slide: wb.slide}})
+					});
 					tools.find('.om-icon.save').click(function() {
 						OmUtil.wbAction({action: 'save', data: {wbId: wb.getId()}});
 					});

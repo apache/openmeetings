@@ -169,18 +169,19 @@ module.exports = class DrawWbArea extends WbAreaBase {
 						.position({my: 'left top', collision: 'none', of: _getWbTab(wbId)});
 				});
 			link.append(OmUtil.tmpl('#wb-tab-close'));
-			li.find('button')
-				.confirmation({
-					confirmationEvent: 'bla'
-					, onConfirm: function() {
-						const prevLi = li.prev()
-							, prevWbId = prevLi.length > 0 ? prevLi.find('a').data('wb-id') : -1;
-						OmUtil.wbAction({action: 'removeWb', data: {
-							wbId: wbId
-							, prevWbId: prevWbId
-						}});
-					}
-				});
+			const closeBtn = li.find('button');
+			closeBtn.confirmation({
+				title: closeBtn.attr('title')
+				, confirmationEvent: 'bla'
+				, onConfirm: function() {
+					const prevLi = li.prev()
+						, prevWbId = prevLi.length > 0 ? prevLi.find('a').data('wb-id') : -1;
+					OmUtil.wbAction({action: 'removeWb', data: {
+						wbId: wbId
+						, prevWbId: prevWbId
+					}});
+				}
+			});
 		}
 		function __initTab(elems) {
 			const links = elems.find('a');
