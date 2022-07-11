@@ -80,15 +80,15 @@
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
 		<!-- dependency versions -->
 		<junit.version>5.8.2</junit.version>
-		<wicket.version>9.11.0-SNAPSHOT</wicket.version>
+		<wicket.version>9.11.0</wicket.version>
 		<wicket-jquery-ui.version>9.8.1</wicket-jquery-ui.version>
-		<wicketstuff.version>9.10.0</wicketstuff.version>
+		<wicketstuff.version>9.11.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.0-M8-SNAPSHOT</wicket-bootstrap.version>
 		<font-awesome.version>6.1.1</font-awesome.version>
 		<spring.version>5.3.21</spring.version>
 		<tomcat.version>9.0.64</tomcat.version>
 		<ical4j.version>4.0.0-beta1</ical4j.version>
-		<cxf.version>3.5.2</cxf.version>
+		<cxf.version>3.5.3</cxf.version>
 		<io.prometheus.version>0.16.0</io.prometheus.version>
 		<aspectjtools.version>1.9.9.1</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
@@ -118,7 +118,7 @@
 		<commons-text.version>1.9</commons-text.version>
 		<slf4j.version>1.7.36</slf4j.version>
 		<logback.version>1.2.11</logback.version>
-		<jetty.version>9.4.46.v20220331</jetty.version>
+		<jetty.version>9.4.48.v20220622</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
 		<mockito.version>4.6.1</mockito.version>
