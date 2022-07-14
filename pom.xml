@@ -38,7 +38,6 @@
 		<om.notquick.build>true</om.notquick.build>
 		<logback.console></logback.console>
 		<db>h2</db>
-		<autoModuleName>apache.openmeetings.parent</autoModuleName>
 		<jdk.version>17</jdk.version>
 		<minimalMavenBuildVersion>3.8.7</minimalMavenBuildVersion>
 		<minimalJavaBuildVersion>${jdk.version}</minimalJavaBuildVersion>
@@ -656,11 +655,6 @@
 				<version>${wicketstuff.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.googlecode.wicket-jquery-ui</groupId>
-				<artifactId>wicket-jquery-ui-calendar</artifactId>
-				<version>${wicket-jquery-ui.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
 				<version>${javax.servlet-api.version}</version>
@@ -811,11 +805,6 @@
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>${commons-io.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>wicketstuff-datastore-hazelcast</artifactId>
-				<version>${wicketstuff.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.openjpa</groupId>
@@ -1202,7 +1191,6 @@
 								<Built-On>${maven.build.timestamp}</Built-On>
 								<Git-Revision>${buildNumber}</Git-Revision>
 								<Product-Version>${project.version}</Product-Version>
-								<Automatic-Module-Name>${autoModuleName}</Automatic-Module-Name>
 							</manifestEntries>
 						</archive>
 					</configuration>

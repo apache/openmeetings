@@ -17,28 +17,30 @@
  * under the License.
  */
 
-module apache.openmeetings.core {
-	requires transitive apache.openmeetings.db;
+module org.apache.openmeetings.core {
+	exports org.apache.openmeetings.core.converter;
+	exports org.apache.openmeetings.core.data.file;
+	exports org.apache.openmeetings.core.ldap;
+	exports org.apache.openmeetings.core.mail;
+	exports org.apache.openmeetings.core.notifier;
+	exports org.apache.openmeetings.core.rss;
+	exports org.apache.openmeetings.core.sip;
+	exports org.apache.openmeetings.core.util;
+
+	requires transitive org.apache.openmeetings.db;
 
 	requires transitive org.apache.commons.io;
+	requires transitive java.annotation;
+	requires transitive java.xml;
 
-	requires kurento.client;
-	requires kurento.commons;
-	requires kurento.jsonrpc.client;
-	requires java.activation;
-	requires com.google.gson;
-	requires java.mail;
-	requires java.xml;
 	requires xstream;
 
 	requires jodconverter.core;
 	requires jodconverter.local;
 	requires org.apache.directory.ldap.api.all;
-	requires tika.parsers;
 	requires javax.inject;
-	requires wicket.ioc;
-	requires java.annotation;
-	requires apache.openmeetings.util;
 	requires asterisk.java;
 	requires jain.sip.ri;
+	requires org.apache.tika.parsers;
+	requires jakarta.mail;
 }

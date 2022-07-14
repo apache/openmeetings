@@ -31,7 +31,6 @@
 	<description>Module for utility classes being used by all OpenMeetings modules</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<autoModuleName>apache.openmeetings.util</autoModuleName>
 	</properties>
 	<build>
 		<plugins>

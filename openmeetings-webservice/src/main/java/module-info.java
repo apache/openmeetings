@@ -16,16 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.util.logging;
 
-import io.prometheus.client.exporter.MetricsServlet;
+module org.apache.openmeetings.webservice {
+	requires transitive org.apache.openmeetings.service;
 
-public class OpenMeetingsMetricsServlet extends MetricsServlet {
-	private static final long serialVersionUID = 1L;
+	requires transitive java.ws.rs;
 
-	public OpenMeetingsMetricsServlet() {
-		super();
-		new TomcatGenericExports(false).register();
-	}
-
+	requires java.jws;
+	requires org.apache.cxf.core;
+	requires io.swagger.v3.oas.annotations;
+	requires org.apache.cxf.frontend.jaxrs;
+	requires org.apache.pdfbox;
+	requires java.desktop;
+	requires java.xml.ws;
 }

@@ -16,16 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.util.logging;
 
-import io.prometheus.client.exporter.MetricsServlet;
+module org.apache.openmeetings.mediaserver {
+	exports org.apache.openmeetings.mediaserver;
 
-public class OpenMeetingsMetricsServlet extends MetricsServlet {
-	private static final long serialVersionUID = 1L;
+	requires transitive org.apache.openmeetings.core;
+	requires transitive org.apache.wicket.ioc;
 
-	public OpenMeetingsMetricsServlet() {
-		super();
-		new TomcatGenericExports(false).register();
-	}
-
+	requires kurento.client;
+	requires kurento.jsonrpc.client;
+	requires kurento.commons;
+	requires javax.inject;
+	requires com.google.gson;
 }

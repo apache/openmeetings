@@ -31,7 +31,6 @@
 	<description>Module for OpenMeetings MediaServer classes and services</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<autoModuleName>apache.openmeetings.mediaserver</autoModuleName>
 	</properties>
 	<dependencies>
 		<dependency>

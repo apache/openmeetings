@@ -17,32 +17,30 @@
  * under the License.
  */
 module org.apache.openmeetings.util {
-	requires transitive org.apache.wicket.util;
-	requires transitive org.apache.wicket.core;
-	requires transitive org.apache.wicket.extensions;
-
-	requires transitive org.apache.commons.codec;
-	requires transitive org.apache.commons.lang3;
-
-	requires transitive com.github.openjson;
-	requires transitive org.slf4j;
-	requires transitive org.bouncycastle.provider;
-	requires transitive jakarta.activation;
-	requires transitive org.mnode.ical4j.core;
-	requires org.aspectj.tools;
-	requires transitive javax.servlet.api;
-	requires transitive tika.core;
-	requires transitive spring.context;
-	requires transitive logback.classic;
-	requires transitive logback.core;
-	requires transitive dom4j;
-	requires transitive jcip.annotations;
-	requires simpleclient;
-
 	exports org.apache.openmeetings.util;
 	exports org.apache.openmeetings.util.crypt;
 	exports org.apache.openmeetings.util.mail;
 	exports org.apache.openmeetings.util.process;
 	exports org.apache.openmeetings.util.ws;
 	exports org.apache.openmeetings.util.logging;
+
+	requires transitive org.apache.wicket.util;
+	requires transitive org.apache.wicket.core;
+	requires transitive org.apache.wicket.extensions;
+	requires transitive org.apache.commons.lang3;
+	requires transitive com.github.openjson;
+	requires transitive org.slf4j;
+	requires transitive javax.servlet.api;
+	requires transitive org.apache.tika.core;
+	requires transitive spring.context;
+	requires transitive org.apache.commons.codec;
+
+	requires org.bouncycastle.provider;
+	requires jakarta.activation;
+	requires org.mnode.ical4j.core;
+	requires org.aspectj.tools;
+	requires dom4j;
+	requires simpleclient;
+	requires ch.qos.logback.classic;
+	requires ch.qos.logback.core;
 }

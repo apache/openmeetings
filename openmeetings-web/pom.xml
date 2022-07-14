@@ -32,7 +32,6 @@
 	<properties>
 		<old-backups.dir>${project.build.directory}/test-data</old-backups.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<autoModuleName>apache.openmeetings.web</autoModuleName>
 	</properties>
 	<profiles>
 		<profile>

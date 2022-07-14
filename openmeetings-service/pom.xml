@@ -31,7 +31,6 @@
 	<description>Module for OpenMeetings schedulers, mail templates and managers.</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<autoModuleName>apache.openmeetings.service</autoModuleName>
 	</properties>
 	<dependencies>
 		<dependency>

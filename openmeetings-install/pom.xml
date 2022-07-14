@@ -31,7 +31,6 @@
 	<description>Module for OpenMeetings command line admin and classes necessary for installer.</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<autoModuleName>apache.openmeetings.install</autoModuleName>
 	</properties>
 	<dependencies>
 		<dependency>

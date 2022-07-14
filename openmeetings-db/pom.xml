@@ -31,7 +31,6 @@
 	<description>OpenMeetings module for all Database/DTO related classes</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<autoModuleName>apache.openmeetings.db</autoModuleName>
 	</properties>
 	<dependencies>
 		<dependency>

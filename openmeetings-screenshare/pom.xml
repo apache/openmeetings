@@ -37,7 +37,6 @@
 		<key.alias>screen</key.alias>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<jnlp.out.dir>${project.build.directory}/jnlp</jnlp.out.dir>
-		<autoModuleName>apache.openmeetings.screenshare</autoModuleName>
 	</properties>
 	<dependencies>
 		<dependency>

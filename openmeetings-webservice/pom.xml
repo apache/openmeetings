@@ -31,7 +31,6 @@
 	<description>Module for OpenMeetings CXF based web services.</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<autoModuleName>apache.openmeetings.webservice</autoModuleName>
 	</properties>
 	<build>
 		<plugins>

@@ -16,8 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-module apache.openmeetings.db {
+module org.apache.openmeetings.db {
 	exports org.apache.openmeetings;
+	exports org.apache.openmeetings.db.bind;
+	exports org.apache.openmeetings.db.bind.adapter;
 	exports org.apache.openmeetings.db.dao;
 	exports org.apache.openmeetings.db.dao.basic;
 	exports org.apache.openmeetings.db.dao.calendar;
@@ -45,19 +47,20 @@ module apache.openmeetings.db {
 	exports org.apache.openmeetings.db.entity.server;
 	exports org.apache.openmeetings.db.entity.user;
 	exports org.apache.openmeetings.db.manager;
+	exports org.apache.openmeetings.db.mapper;
 	exports org.apache.openmeetings.db.util;
 	exports org.apache.openmeetings.db.util.ws;
 
-	requires transitive apache.openmeetings.util;
+	requires transitive org.apache.openmeetings.util;
 	requires transitive org.apache.wicket.request;
 	requires transitive org.apache.wicket.websocket.core;
+	requires transitive org.apache.commons.text;
+	requires transitive java.xml.bind;
+	requires transitive org.apache.openjpa;
 	requires transitive spring.beans;
 	requires transitive spring.web;
 	requires transitive spring.core;
 
 	requires spring.tx;
 	requires javax.persistence;
-	requires openjpa;
-	requires java.xml.bind;
-	requires org.apache.commons.text;
 }

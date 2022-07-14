@@ -31,7 +31,6 @@
 	<description>Module for OpenMeetings core classes and services</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<autoModuleName>apache.openmeetings.core</autoModuleName>
 	</properties>
 	<build>
 		<plugins>

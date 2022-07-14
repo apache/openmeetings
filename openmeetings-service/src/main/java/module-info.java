@@ -16,16 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.util.logging;
 
-import io.prometheus.client.exporter.MetricsServlet;
+module org.apache.openmeetings.service {
+	exports org.apache.openmeetings.service.calendar.caldav;
+	exports org.apache.openmeetings.service.mail;
+	exports org.apache.openmeetings.service.mail.template;
+	exports org.apache.openmeetings.service.room;
 
-public class OpenMeetingsMetricsServlet extends MetricsServlet {
-	private static final long serialVersionUID = 1L;
+	requires transitive org.apache.openmeetings.core;
 
-	public OpenMeetingsMetricsServlet() {
-		super();
-		new TomcatGenericExports(false).register();
-	}
+	requires transitive org.apache.wicket.spring;
 
+	requires org.apache.httpcomponents.httpcore;
+	requires org.apache.httpcomponents.httpclient;
+	requires jackrabbit.webdav;
+	requires caldav4j;
 }

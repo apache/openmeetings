@@ -40,7 +40,6 @@
 		<om.webapp>webapps/openmeetings</om.webapp>
 		<root.webapp>webapps/ROOT</root.webapp>
 		<server-file.dir>web-server</server-file.dir>
-		<autoModuleName>apache.openmeetings.server</autoModuleName>
 	</properties>
 	<url>https://openmeetings.apache.org</url>
 	<scm>
