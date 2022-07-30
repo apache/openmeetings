@@ -63,12 +63,28 @@
 		<section name="Tips and Gotchas">
 			<p>Eclipse ANSI colors plugin for colors in console</p>
 			<source><![CDATA[
-MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded -Dwicket.ioc.useByteBuddy=true
+MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded -Dwicket.configuration=DEVELOPMENT -Dwicket.ioc.useByteBuddy=true
 
 #Quick rebuild and run
-cd ..; mvn clean install -PallModules,quick,mysql -pl openmeetings-util,openmeetings-core; cd openmeetings-web; MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded -Dwicket.ioc.useByteBuddy=true
+cd ..; mvn clean install -PallModules,quick,mysql -pl openmeetings-util,openmeetings-core; cd openmeetings-web; MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded -Dwicket.configuration=DEVELOPMENT -Dwicket.ioc.useByteBuddy=true
 
 			]]></source>
+			<p>Run OpenMeetings with Embedded Jetty for Development purpose in JDK17</p>
+			<source>
+<![CDATA[
+# ANSI console colors and fix Hazelcast warnings for access
+export MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n --add-modules java.se --add-exports java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED'
+
+# Just run Webapp, requires other modules to be compiled separated if changed
+cd openmeetings-webapp
+mvn install -P allModules,quick,mysql jetty:run-exploded -Dwicket.configuration=DEVELOPMENT -Dwicket.ioc.useByteBuddy=true
+
+# OpenMeetings logs for embedded jetty are in
+cd openmeetings-webapp
+tail -f -n 1000 target/openmeetings.log
+]]>
+			</source>
+			
 			<p>In case you would like to develop Openmeetings you need to run <i>"unpacked"</i> build: </p>
 			<source>
 <![CDATA[
