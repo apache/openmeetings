@@ -42,7 +42,7 @@
 		<autoModuleName>apache.openmeetings.parent</autoModuleName>
 		<jdk.version>17</jdk.version>
 		<!-- plugin versions -->
-		<maven-javadoc-plugin.version>3.4.0</maven-javadoc-plugin.version>
+		<maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 		<maven-site-plugin.version>3.12.1</maven-site-plugin.version>
 		<exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
@@ -55,7 +55,7 @@
 		<reflow-maven-skin.version>2.3.0</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-		<maven-project-info-reports-plugin.version>3.3.0</maven-project-info-reports-plugin.version>
+		<maven-project-info-reports-plugin.version>3.4.1</maven-project-info-reports-plugin.version>
 		<maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
@@ -121,7 +121,7 @@
 		<jetty.version>9.4.48.v20220622</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
-		<mockito.version>4.6.1</mockito.version>
+		<mockito.version>4.7.0</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.16.5</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
