@@ -14,10 +14,10 @@
   "devDependencies": {
     "browserify": "^17.0.0",
     "esmify": "^2.1.1",
-    "terser": "^5.13.1"
+    "terser": "^5.15.0"
   },
   "dependencies": {
-    "fabric": "^5.2.1",
+    "fabric": "^5.2.4",
     "mathjax-full": "^3.2.2"
   }
 }
