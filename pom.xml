@@ -75,7 +75,7 @@
 		<sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.versoin>0.8.8</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>3.3</forbiddenapis.version>
-		<maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
+		<maven-checkstyle-plugin.version>3.2.0</maven-checkstyle-plugin.version>
 		<frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
 		<!-- dependency versions -->
@@ -87,7 +87,7 @@
 		<font-awesome.version>6.1.2</font-awesome.version>
 		<spring.version>5.3.22</spring.version>
 		<tomcat.version>9.0.65</tomcat.version>
-		<ical4j.version>4.0.0-beta1</ical4j.version>
+		<ical4j.version>4.0.0-beta2</ical4j.version>
 		<cxf.version>3.5.3</cxf.version>
 		<io.prometheus.version>0.16.0</io.prometheus.version>
 		<aspectjtools.version>1.9.9.1</aspectjtools.version>
@@ -106,18 +106,18 @@
 		<dom4j.version>2.1.3</dom4j.version>
 		<commons-codec.version>1.15</commons-codec.version>
 		<commons-io.version>2.11.0</commons-io.version>
-		<postgresql.version>42.4.1</postgresql.version>
+		<postgresql.version>42.5.0</postgresql.version>
 		<mysql.version>8.0.30</mysql.version>
 		<mssql.version>11.2.0.jre17</mssql.version>
-		<ojdbc.version>19.15.0.0.1</ojdbc.version>
+		<ojdbc.version>19.16.0.0</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<xstream.version>1.4.19</xstream.version>
-		<api-all.version>2.1.1</api-all.version>
+		<api-all.version>2.1.2</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
 		<tika-parsers.version>2.4.1</tika-parsers.version>
 		<commons-text.version>1.9</commons-text.version>
-		<slf4j.version>1.7.36</slf4j.version>
-		<logback.version>1.2.11</logback.version>
+		<slf4j.version>2.0.0</slf4j.version>
+		<logback.version>1.4.0</logback.version>
 		<jetty.version>9.4.48.v20220622</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
@@ -132,7 +132,7 @@
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM26</apacheds-test-framework.version>
 		<swagger.version>2.2.2</swagger.version>
-		<bytebuddy.version>1.12.13</bytebuddy.version>
+		<bytebuddy.version>1.12.14</bytebuddy.version>
 		<annotation-api.version>1.3.2</annotation-api.version>
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js</sonar.exclusions>
@@ -1237,7 +1237,7 @@
 						<dependency>
 							<groupId>com.puppycrawl.tools</groupId>
 							<artifactId>checkstyle</artifactId>
-							<version>10.3.1</version> <!-- FIXME TODO: should be removed after checkstyle plugin will be updated -->
+							<version>10.3.2</version> <!-- FIXME TODO: should be removed after checkstyle plugin will be updated -->
 						</dependency>
 					</dependencies>
 				</plugin>

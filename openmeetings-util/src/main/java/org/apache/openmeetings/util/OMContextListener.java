@@ -43,8 +43,8 @@ public class OMContextListener implements ServletContextListener {
 			System.setProperty(LOG_DIR_PROP, "logs");
 		}
 		System.setProperty("webapp.contextPath", String.format("/%s", ctx));
-		LoggerContext context = (LoggerContext)LoggerFactory.getILoggerFactory();
 		try {
+			LoggerContext context = (LoggerContext)LoggerFactory.getILoggerFactory();
 			JoranConfigurator configurator = new JoranConfigurator();
 			configurator.setContext(context);
 			context.reset();
