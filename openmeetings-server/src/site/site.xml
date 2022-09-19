@@ -113,6 +113,7 @@
 			</item>
 			<item name="Misc" href="#misc">
 				<item name="Get version info" href="/GetVersionInfo.html" />
+				<item name="Frequently Asked Questions" href="/FAQ.html" />
 			</item>
 		</menu>
 		<menu name="Development">

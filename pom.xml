@@ -56,7 +56,7 @@
 		<reflow-theme>cerulean</reflow-theme>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
 		<maven-project-info-reports-plugin.version>3.4.1</maven-project-info-reports-plugin.version>
-		<maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
+		<maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
 		<maven-bundle-plugin.version>5.1.4</maven-bundle-plugin.version>
@@ -69,7 +69,7 @@
 		<xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
 		<saxon.version>8.7</saxon.version>
 		<buildnumber-maven-plugin.version>3.0.0</buildnumber-maven-plugin.version>
-		<apache-rat-plugin.version>0.14</apache-rat-plugin.version>
+		<apache-rat-plugin.version>0.15</apache-rat-plugin.version>
 		<keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
@@ -85,7 +85,7 @@
 		<wicketstuff.version>9.11.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version>
 		<font-awesome.version>6.1.2</font-awesome.version>
-		<spring.version>5.3.22</spring.version>
+		<spring.version>5.3.23</spring.version>
 		<tomcat.version>9.0.65</tomcat.version>
 		<ical4j.version>4.0.0-beta2</ical4j.version>
 		<cxf.version>3.5.3</cxf.version>
@@ -108,7 +108,7 @@
 		<commons-io.version>2.11.0</commons-io.version>
 		<postgresql.version>42.5.0</postgresql.version>
 		<mysql.version>8.0.30</mysql.version>
-		<mssql.version>11.2.0.jre17</mssql.version>
+		<mssql.version>11.2.1.jre17</mssql.version>
 		<ojdbc.version>19.16.0.0</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<xstream.version>1.4.19</xstream.version>
@@ -116,23 +116,23 @@
 		<caldav4j.version>1.0.5</caldav4j.version>
 		<tika-parsers.version>2.4.1</tika-parsers.version>
 		<commons-text.version>1.9</commons-text.version>
-		<slf4j.version>2.0.0</slf4j.version>
-		<logback.version>1.4.0</logback.version>
-		<jetty.version>9.4.48.v20220622</jetty.version>
+		<slf4j.version>2.0.1</slf4j.version>
+		<logback.version>1.4.1</logback.version>
+		<jetty.version>9.4.49.v20220914</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
-		<mockito.version>4.7.0</mockito.version>
+		<mockito.version>4.8.0</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.16.5</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
 		<jasny-bootstrap.version>3.1.3-2</jasny-bootstrap.version>
-		<jodconverter.version>4.4.2</jodconverter.version>
+		<jodconverter.version>4.4.3</jodconverter.version>
 		<jaxb-runtime.version>2.3.5</jaxb-runtime.version>
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM26</apacheds-test-framework.version>
 		<swagger.version>2.2.2</swagger.version>
-		<bytebuddy.version>1.12.14</bytebuddy.version>
+		<bytebuddy.version>1.12.16</bytebuddy.version>
 		<annotation-api.version>1.3.2</annotation-api.version>
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js</sonar.exclusions>
