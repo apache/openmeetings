@@ -7,7 +7,7 @@ Licensed under the Apache License, Version 2.0 (the "License") http://www.apache
 A: If you change `mail.smtp.port` from the default (25) you may have to add a permission for your port to the catalina securty policy e.g.
 
 ```
-Add following section to ${OM_HOME}/conf/catalina.policy.
+Add the following section to ${OM_HOME}/conf/catalina.policy.
 
 // Permissions for jakarta mail
 grant {
