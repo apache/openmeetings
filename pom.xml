@@ -52,7 +52,7 @@
 		<checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
 		<maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
 		<license-maven-plugin.version>2.0.0</license-maven-plugin.version>
-		<reflow-maven-skin.version>2.3.0</reflow-maven-skin.version>
+		<reflow-maven-skin.version>2.3.1</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
 		<maven-project-info-reports-plugin.version>3.4.1</maven-project-info-reports-plugin.version>
@@ -81,12 +81,12 @@
 		<!-- dependency versions -->
 		<junit.version>5.9.1</junit.version>
 		<wicket.version>9.11.0</wicket.version>
-		<wicket-jquery-ui.version>9.8.1</wicket-jquery-ui.version>
+		<wicket-jquery-ui.version>9.11.0</wicket-jquery-ui.version>
 		<wicketstuff.version>9.11.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version>
 		<font-awesome.version>6.1.2</font-awesome.version>
 		<spring.version>5.3.23</spring.version>
-		<tomcat.version>9.0.65</tomcat.version>
+		<tomcat.version>9.0.67</tomcat.version>
 		<ical4j.version>4.0.0-beta2</ical4j.version>
 		<cxf.version>3.5.3</cxf.version>
 		<io.prometheus.version>0.16.0</io.prometheus.version>
@@ -131,7 +131,7 @@
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM26</apacheds-test-framework.version>
-		<swagger.version>2.2.2</swagger.version>
+		<swagger.version>2.2.3</swagger.version>
 		<bytebuddy.version>1.12.17</bytebuddy.version>
 		<annotation-api.version>1.3.2</annotation-api.version>
 		<!--  Exclude all generated code  -->
