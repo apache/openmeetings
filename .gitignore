@@ -7,6 +7,9 @@
 .idea
 *.iml
 
+# VSCode
+.vscode
+
 # Maven
 target
 
