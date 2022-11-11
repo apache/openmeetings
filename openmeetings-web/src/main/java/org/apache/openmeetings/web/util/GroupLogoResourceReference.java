@@ -86,7 +86,7 @@ public class GroupLogoResourceReference extends FileSystemResourceReference {
 						Room r = ws.getInvitation().getRoom() == null ? null : roomDao.get(ws.getInvitation().getRoom().getId());
 						if (r != null && r.getGroups() != null) {
 							for (RoomGroup rg : r.getGroups()) {
-								if (id.equals(rg.getGroup().getId())) {
+								if (rg.getGroup().getId().equals(id)) {
 									allowed = true;
 									break;
 								}

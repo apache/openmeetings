@@ -45,9 +45,9 @@
 		<maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 		<maven-site-plugin.version>4.0.0-M3</maven-site-plugin.version>
-		<exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
+		<exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
-		<maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
+		<maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
 		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
 		<checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
 		<maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
@@ -59,7 +59,7 @@
 		<maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
-		<maven-bundle-plugin.version>5.1.4</maven-bundle-plugin.version>
+		<maven-bundle-plugin.version>5.1.8</maven-bundle-plugin.version>
 		<maven-war-plugin.version>3.3.2</maven-war-plugin.version>
 		<maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
 		<wagon-maven-plugin.version>2.0.2</wagon-maven-plugin.version>
@@ -70,11 +70,11 @@
 		<saxon.version>8.7</saxon.version>
 		<buildnumber-maven-plugin.version>3.0.0</buildnumber-maven-plugin.version>
 		<apache-rat-plugin.version>0.15</apache-rat-plugin.version>
-		<keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
+		<keytool-maven-plugin.version>1.6</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.versoin>0.8.8</jacoco-maven-plugin.versoin>
-		<forbiddenapis.version>3.3</forbiddenapis.version>
+		<forbiddenapis.version>3.4</forbiddenapis.version>
 		<maven-checkstyle-plugin.version>3.2.0</maven-checkstyle-plugin.version>
 		<frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
@@ -87,7 +87,7 @@
 		<font-awesome.version>6.2.0</font-awesome.version>
 		<spring.version>5.3.23</spring.version>
 		<tomcat.version>9.0.68</tomcat.version>
-		<ical4j.version>4.0.0-beta2</ical4j.version>
+		<ical4j.version>4.0.0-beta3</ical4j.version>
 		<cxf.version>3.5.4</cxf.version>
 		<io.prometheus.version>0.16.0</io.prometheus.version>
 		<aspectjtools.version>1.9.9.1</aspectjtools.version>
@@ -114,14 +114,14 @@
 		<xstream.version>1.4.19</xstream.version>
 		<api-all.version>2.1.2</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
-		<tika-parsers.version>2.5.0</tika-parsers.version>
+		<tika-parsers.version>2.6.0</tika-parsers.version>
 		<commons-text.version>1.10.0</commons-text.version>
 		<slf4j.version>2.0.3</slf4j.version>
 		<logback.version>1.4.4</logback.version>
 		<jetty.version>9.4.49.v20220914</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
-		<mockito.version>4.8.0</mockito.version>
+		<mockito.version>4.8.1</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.18.0</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
@@ -131,9 +131,10 @@
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM26</apacheds-test-framework.version>
-		<swagger.version>2.2.4</swagger.version>
+		<swagger.version>2.2.6</swagger.version>
 		<bytebuddy.version>1.12.18</bytebuddy.version>
 		<annotation-api.version>1.3.2</annotation-api.version>
+		<jsr305.version>3.0.2</jsr305.version>
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -875,8 +876,8 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
+				<groupId>com.mysql</groupId>
+				<artifactId>mysql-connector-j</artifactId>
 				<version>${mysql.version}</version>
 			</dependency>
 			<dependency>
@@ -964,6 +965,12 @@
 				<groupId>javax.annotation</groupId>
 				<artifactId>javax.annotation-api</artifactId>
 				<version>${annotation-api.version}</version>
+			</dependency>
+			<dependency>
+				<!-- required for @NonNull, temporary -->
+				<groupId>com.google.code.findbugs</groupId>
+				<artifactId>jsr305</artifactId>
+				<version>${jsr305.version}</version>
 			</dependency>
 
 			<!-- TESTS -->

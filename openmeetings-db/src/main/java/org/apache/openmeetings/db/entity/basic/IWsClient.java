@@ -20,6 +20,8 @@ package org.apache.openmeetings.db.entity.basic;
 
 import java.io.Serializable;
 
+import javax.annotation.Nonnull;
+
 /**
  * Necessary for temp clients being created on HashPage
  *
@@ -28,7 +30,7 @@ import java.io.Serializable;
  *
  */
 public interface IWsClient extends Serializable {
-	String getUid();
+	@Nonnull String getUid();
 	int getPageId();
 	String getSessionId();
 }

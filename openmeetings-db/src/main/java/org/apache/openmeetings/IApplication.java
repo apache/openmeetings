@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
 
 import org.apache.openmeetings.db.entity.room.Invitation;
@@ -48,7 +49,7 @@ public interface IApplication {
 	void updateJpaAddresses();
 
 	//WS
-	void publishWsTopic(IClusterWsMessage msg);
+	void publishWsTopic(@Nonnull IClusterWsMessage msg);
 	Set<String> getWsUrls();
 
 	void updateTheme();

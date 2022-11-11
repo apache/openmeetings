@@ -20,6 +20,8 @@ package org.apache.openmeetings.db.entity.basic;
 
 import static java.util.UUID.randomUUID;
 
+import javax.annotation.Nonnull;
+
 /**
  * Temporary class for test recording, will be unified
  * @author solomax
@@ -48,6 +50,7 @@ public class WsClient implements IWsClient {
 	}
 
 	@Override
+	@Nonnull
 	public String getUid() {
 		return uid;
 	}

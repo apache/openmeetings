@@ -92,6 +92,11 @@
 			<artifactId>ojdbc10</artifactId>
 		</dependency>
 		<dependency>
+			<!-- required for @NonNull, temporary -->
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-util</artifactId>
 			<version>${project.version}</version>

@@ -136,9 +136,13 @@ public class ProcessHelper {
 		} catch (Throwable t) {
 			onException(t, start, res);
 		} finally {
-			if (proc != null) {
+			if (errorWatcher != null) {
 				errorWatcher.finish();
+			}
+			if (inputWatcher != null) {
 				inputWatcher.finish();
+			}
+			if (proc != null) {
 				proc.destroy();
 			}
 		}

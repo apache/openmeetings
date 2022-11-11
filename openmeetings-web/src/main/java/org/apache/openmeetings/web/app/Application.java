@@ -44,6 +44,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
 import javax.websocket.WebSocketContainer;
 
 import org.apache.openmeetings.IApplication;
@@ -659,7 +660,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	@Override
-	public void publishWsTopic(IClusterWsMessage msg) {
+	public void publishWsTopic(@Nonnull IClusterWsMessage msg) {
 		hazelWsTopic.publish(msg);
 	}
 

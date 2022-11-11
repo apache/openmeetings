@@ -29,7 +29,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.apache.openmeetings.db.entity.basic.WsClient;
-import org.apache.openmeetings.mediaserver.KurentoHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kurento.client.MediaPipeline;

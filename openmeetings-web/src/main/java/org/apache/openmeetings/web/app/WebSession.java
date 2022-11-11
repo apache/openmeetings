@@ -285,7 +285,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			log.debug("Do we have data for hash ? {}", (sd.getXml() != null));
 			if (sd.getXml() != null) {
 				RemoteSessionObject remoteUser = RemoteSessionObject.fromString(sd.getXml());
-				log.debug("Hash data was parsed successfuly ? {}, containg exterlaId ? {}", (remoteUser != null), !Strings.isEmpty(remoteUser.getExternalId()));
+				log.debug("Hash data was parsed successfuly; containg exterlaId ? {}", !Strings.isEmpty(remoteUser.getExternalId()));
 				if (!Strings.isEmpty(remoteUser.getExternalId())) {
 					Room r;
 					if (Strings.isEmpty(soapLogin.getExternalRoomId()) || Strings.isEmpty(soapLogin.getExternalType())) {

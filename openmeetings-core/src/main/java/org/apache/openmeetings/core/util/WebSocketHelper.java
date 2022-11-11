@@ -28,6 +28,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
+
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.ws.WsMessageAll;
 import org.apache.openmeetings.core.util.ws.WsMessageRoom;
@@ -216,7 +218,7 @@ public class WebSocketHelper {
 		}).start();
 	}
 
-	public static void publish(IClusterWsMessage m) {
+	public static void publish(@Nonnull IClusterWsMessage m) {
 		IApplication app = getApp();
 		new Thread(() -> app.publishWsTopic(m)).start();
 	}

@@ -119,7 +119,9 @@ public class StreamProcessorActions {
 				}
 			});
 		} catch (KurentoServerException e) {
-			sender.release();
+			if (sender != null) {
+				sender.release();
+			}
 			WebSocketHelper.sendClient(c, StreamProcessor.newStoppedMsg(sd));
 			sendError(c, "Failed to start broadcast: " + e.getMessage());
 			log.error("Failed to start broadcast", e);

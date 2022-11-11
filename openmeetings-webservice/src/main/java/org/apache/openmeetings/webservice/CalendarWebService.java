@@ -114,9 +114,7 @@ public class CalendarWebService extends BaseWebService {
 			, @Parameter(required = true, description = "end time") @PathParam("end") @WebParam(name="end") Calendar end
 			) throws ServiceException
 	{
-		log.debug("range : startdate - {} , enddate - {}"
-				, start == null ? "" : start.getTime()
-				, end == null ? "" : end.getTime());
+		log.debug("range : startdate - {} , enddate - {}", start.getTime(), end.getTime());
 		return performCall(sid, User.Right.ROOM
 				, sd -> AppointmentDTO.list(dao.getInRange(sd.getUserId(), start.getTime(), end.getTime())));
 	}
@@ -153,9 +151,7 @@ public class CalendarWebService extends BaseWebService {
 			, @Parameter(required = true, description = "end time") @PathParam("end") @WebParam(name="end") Calendar end
 			) throws ServiceException
 	{
-		log.debug("rangeForUser : startdate - {} , enddate - {}"
-				, start == null ? "" : start.getTime()
-				, end == null ? "" : end.getTime());
+		log.debug("rangeForUser : startdate - {} , enddate - {}", start.getTime(), end.getTime());
 		return performCall(sid, User.Right.SOAP
 				, sd -> AppointmentDTO.list(dao.getInRange(userid, start.getTime(), end.getTime())));
 	}

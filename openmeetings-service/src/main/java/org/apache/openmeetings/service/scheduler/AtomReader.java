@@ -86,8 +86,8 @@ public class AtomReader {
 				XMLEventReader reader = inputFactory.createXMLEventReader(is);
 				int i = 0;
 				JSONObject obj = null;
-				StringBuilder val = null;
-				Spec spec = null;
+				StringBuilder val = new StringBuilder(); // for NPE safety
+				Spec spec = new Spec(""); // for NPE safety
 				Field f = null;
 				while (reader.hasNext()) {
 					XMLEvent evt = reader.nextEvent();
