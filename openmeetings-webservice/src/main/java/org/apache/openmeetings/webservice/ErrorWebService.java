@@ -48,13 +48,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-/**
- *
- * The Service contains methods to get localized errors
- *
- * @author solomax
- *
- */
 @Service("errorWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.ErrorWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.ext.logging.LoggingFeature")

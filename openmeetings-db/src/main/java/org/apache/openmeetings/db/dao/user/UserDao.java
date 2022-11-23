@@ -76,7 +76,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * CRUD operations for {@link User}
  *
- * @author swagner, solomax, vasya
+ * @author swagner, vasya
  *
  */
 @Repository

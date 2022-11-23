@@ -52,7 +52,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  *
  * The Service contains methods to get info about the system and manifest
  *
- * @author solomax, sebawagner
+ * @author sebawagner
  *
  */
 @Service("infoWebService")

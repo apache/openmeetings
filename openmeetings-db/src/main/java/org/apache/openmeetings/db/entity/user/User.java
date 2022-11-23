@@ -90,7 +90,7 @@ import org.apache.wicket.util.string.Strings;
  * Entity to store user data, password field is {@link FetchType#LAZY}, so that
  * is why there is an extra udpate statement at this moment
  *
- * @author sebawagner, solomax
+ * @author sebawagner
  *
  */
 @Entity

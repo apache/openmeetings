@@ -66,10 +66,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
 
-/**
- * @author solomax
- *
- */
 public class PollResultsDialog extends Modal<RoomPoll> {
 	private static final long serialVersionUID = 1L;
 	private static final String[] NUM_TICKS = new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};

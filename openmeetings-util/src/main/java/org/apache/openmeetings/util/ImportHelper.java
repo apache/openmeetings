@@ -25,7 +25,7 @@ import java.util.Map;
  *
  * Get some of the default values for the upload
  *
- * @author solomax, swagner
+ * @author swagner
  *
  */
 public class ImportHelper {

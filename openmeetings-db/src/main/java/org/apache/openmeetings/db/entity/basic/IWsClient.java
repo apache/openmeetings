@@ -26,7 +26,6 @@ import javax.annotation.Nonnull;
  * Necessary for temp clients being created on HashPage
  *
  * {@link org.apache.openmeetings.db.entity.basic.Client}
- * @author solomax
  *
  */
 public interface IWsClient extends Serializable {

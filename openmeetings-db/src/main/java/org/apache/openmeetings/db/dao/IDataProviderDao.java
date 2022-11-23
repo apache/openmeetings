@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * General interface to perform CRUD operations on entities
  *
- * @author solomax, swagner
+ * @author swagner
  *
  * @param <T> entity type for this provider
  */

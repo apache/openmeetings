@@ -24,7 +24,6 @@ import javax.annotation.Nonnull;
 
 /**
  * Temporary class for test recording, will be unified
- * @author solomax
  *
  */
 public class WsClient implements IWsClient {

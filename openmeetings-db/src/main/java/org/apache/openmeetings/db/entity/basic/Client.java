@@ -46,10 +46,6 @@ import org.apache.wicket.util.string.Strings;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
-/**
- * @author solomax
- *
- */
 public class Client implements IDataProviderEntity, IWsClient {
 	private static final long serialVersionUID = 1L;
 

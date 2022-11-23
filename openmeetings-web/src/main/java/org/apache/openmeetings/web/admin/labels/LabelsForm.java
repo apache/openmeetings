@@ -32,7 +32,7 @@ import org.apache.wicket.model.ResourceModel;
 /**
  * Add/edit/delete {@link StringLabel}
  *
- * @author solomax, swagner
+ * @author swagner
  *
  */
 public class LabelsForm extends AdminBaseForm<StringLabel> {

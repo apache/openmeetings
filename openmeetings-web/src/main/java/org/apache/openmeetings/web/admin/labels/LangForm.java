@@ -38,7 +38,7 @@ import org.apache.wicket.model.PropertyModel;
 /**
  * Modify the language selection, add/delete language
  *
- * @author solomax, swagner
+ * @author swagner
  *
  */
 public class LangForm extends Form<Void> {

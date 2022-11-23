@@ -70,7 +70,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5I
 /**
  * Language Editor, add/insert/update Label and add/delete language contains several Forms and one list
  *
- * @author solomax, swagner
+ * @author swagner
  *
  */
 @AuthorizeInstantiation({"ADMIN", "ADMIN_LABEL"})

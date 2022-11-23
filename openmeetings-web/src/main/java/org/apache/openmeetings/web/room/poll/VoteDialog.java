@@ -52,10 +52,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-/**
- * @author solomax
- *
- */
 public class VoteDialog extends Modal<RoomPollAnswer> {
 	private static final long serialVersionUID = 1L;
 	private static final List<Integer> answers = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);

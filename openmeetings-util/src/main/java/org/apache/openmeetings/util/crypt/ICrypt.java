@@ -23,7 +23,7 @@ package org.apache.openmeetings.util.crypt;
  * https://openmeetings.apache.org/CustomCryptMechanism.html see:
  * https://crackstation.net/hashing-security.htm
  *
- * @author sebastianwagner, solomax
+ * @author sebastianwagner
  *
  */
 

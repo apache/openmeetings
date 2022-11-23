@@ -65,7 +65,7 @@ import org.slf4j.LoggerFactory;
  *
  * CRUD operations for {@link StringLabel}
  *
- * @author solomax, swagner
+ * @author swagner
  *
  */
 public class LabelDao implements IDataProviderDao<StringLabel>{

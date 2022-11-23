@@ -58,8 +58,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  *
  * The Service contains methods to work with recordings
  *
- * @author solomax
- *
  */
 @Service("recordWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.RecordingWebService", targetNamespace = TNS)
