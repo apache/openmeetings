@@ -5,11 +5,7 @@ module.exports = class MicLevel {
 	constructor() {
 		let ctx, mic, analyser, vol = .0, vals = new RingBuffer(100);
 
-		this.meterPeer = (rtcPeer, cnvs, _micActivity, _error, connectAudio) => {
-			if (!rtcPeer || ('function' !== typeof(rtcPeer.getLocalStream) && 'function' !== typeof(rtcPeer.getRemoteStream))) {
-				return;
-			}
-			const stream = rtcPeer.getLocalStream() || rtcPeer.getRemoteStream();
+		this.meterStream = (stream, cnvs, _micActivity, _error, connectAudio) => {
 			if (!stream || stream.getAudioTracks().length < 1) {
 				return;
 			}

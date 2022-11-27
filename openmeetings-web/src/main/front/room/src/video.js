@@ -105,9 +105,7 @@ module.exports = class Video {
 								data.aDest = data.aCtx.createMediaStreamDestination();
 								data.analyser.connect(data.aDest);
 								_stream = data.aDest.stream;
-								stream.getVideoTracks().forEach(function(track) {
-									_stream.addTrack(track);
-								});
+								stream.getVideoTracks().forEach(track => _stream.addTrack(track));
 							}
 						}
 						state.data = data;
@@ -131,86 +129,69 @@ module.exports = class Video {
 					});
 			});
 		}
-		function __attachListener(state) {
-			if (!state.disposed && state.data.rtcPeer) {
-				const pc = state.data.rtcPeer.peerConnection;
-				pc.onconnectionstatechange = function(event) {
-					console.warn(`!!RTCPeerConnection state changed: ${pc.connectionState}, user: ${sd.user.displayName}, uid: ${sd.uid}`);
-					switch(pc.connectionState) {
-						case "connected":
-							if (sd.self) {
-								// The connection has become fully connected
-								OmUtil.alert('info', `Connection to Media server has been established`, 3000);//notify user
-							}
-							break;
-						case "disconnected":
-						case "failed":
-							//connection has been dropped
-							OmUtil.alert('warning', `Media server connection for user ${sd.user.displayName} is ${pc.connectionState}, will try to re-connect`, 3000);//notify user
-							_refresh();
-							break;
-						case "closed":
-							// The connection has been closed
-							break;
+		function __connectionStateChangeListener(state) {
+			const pc = state.data.rtcPeer.pc;
+			console.warn(`!!RTCPeerConnection state changed: ${pc.connectionState}, user: ${sd.user.displayName}, uid: ${sd.uid}`);
+			switch(pc.connectionState) {
+				case "connected":
+					if (sd.self) {
+						// The connection has become fully connected
+						OmUtil.alert('info', `Connection to Media server has been established`, 3000);//notify user
 					}
-				}
+					break;
+				case "disconnected":
+				case "failed":
+					//connection has been dropped
+					OmUtil.alert('warning', `Media server connection for user ${sd.user.displayName} is ${pc.connectionState}, will try to re-connect`, 3000);//notify user
+					_refresh();
+					break;
+				case "closed":
+					// The connection has been closed
+					break;
 			}
 		}
 		function __createSendPeer(msg, state, cnts) {
 			state.options = {
-				videoStream: state.stream
+				mediaStream: state.stream
 				, mediaConstraints: cnts
-				, onicecandidate: self.onIceCandidate
+				, onIceCandidate: self.onIceCandidate
+				, onConnectionStateChange: () => __connectionStateChangeListener(state)
 			};
-			if (!isSharing) {
-				state.options.localVideo = __getVideo(state);
-			}
+			const vid = __getVideo(state);
+			vid.srcObject = state.stream;
+
 			const data = state.data;
-			data.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
-				VideoUtil.addIceServers(state.options, msg)
-				, function (error) {
-					if (state.disposed || true === data.rtcPeer.cleaned) {
-						return;
+			data.rtcPeer = new WebRtcPeerSendonly(VideoUtil.addIceServers(state.options, msg));
+			if (data.analyser) {
+				level = new MicLevel();
+				level.meter(data.analyser, lm, _micActivity, OmUtil.error);
+			}
+			data.rtcPeer.createOffer()
+				.then(sdpOffer => {
+					data.rtcPeer.processLocalOffer(sdpOffer);
+					OmUtil.log('Invoking Sender SDP offer callback function');
+					const bmsg = {
+							id : 'broadcastStarted'
+							, uid: sd.uid
+							, sdpOffer: sdpOffer.sdp
+						}, vtracks = state.stream.getVideoTracks();
+					if (vtracks && vtracks.length > 0) {
+						const vts = vtracks[0].getSettings();
+						vidSize.width = vts.width;
+						vidSize.height = vts.height;
+						bmsg.width = vts.width;
+						bmsg.height = vts.height;
+						bmsg.fps = vts.frameRate;
 					}
-					if (error) {
-						return OmUtil.error(error);
+					VideoMgrUtil.sendMessage(bmsg);
+					if (isSharing) {
+						Sharer.setShareState(Sharer.SHARE_STARTED);
 					}
-					if (data.analyser) {
-						level = new MicLevel();
-						level.meter(data.analyser, lm, _micActivity, OmUtil.error);
+					if (isRecording) {
+						Sharer.setRecState(Sharer.SHARE_STARTED);
 					}
-					data.rtcPeer.generateOffer(function(genErr, offerSdp) {
-						if (state.disposed || true === data.rtcPeer.cleaned) {
-							return;
-						}
-						if (genErr) {
-							return OmUtil.error('Sender sdp offer error ' + genErr);
-						}
-						OmUtil.log('Invoking Sender SDP offer callback function');
-						const bmsg = {
-								id : 'broadcastStarted'
-								, uid: sd.uid
-								, sdpOffer: offerSdp
-							}, vtracks = state.stream.getVideoTracks();
-						if (vtracks && vtracks.length > 0) {
-							const vts = vtracks[0].getSettings();
-							vidSize.width = vts.width;
-							vidSize.height = vts.height;
-							bmsg.width = vts.width;
-							bmsg.height = vts.height;
-							bmsg.fps = vts.frameRate;
-						}
-						VideoMgrUtil.sendMessage(bmsg);
-						if (isSharing) {
-							Sharer.setShareState(Sharer.SHARE_STARTED);
-						}
-						if (isRecording) {
-							Sharer.setRecState(Sharer.SHARE_STARTED);
-						}
-					});
-				});
-			data.rtcPeer.cleaned = false;
-			__attachListener(state);
+				})
+				.catch(error => OmUtil.error(error));
 		}
 		function _createSendPeer(msg, state) {
 			if (isSharing || isRecording) {
@@ -222,36 +203,23 @@ module.exports = class Video {
 		function _createResvPeer(msg, state) {
 			__createVideo(state);
 			const options = VideoUtil.addIceServers({
-				remoteVideo : __getVideo(state)
-				, onicecandidate : self.onIceCandidate
+				mediaConstraints: {audio: true, video: true}
+				, onIceCandidate : self.onIceCandidate
+				, onConnectionStateChange: () => __connectionStateChangeListener(state)
 			}, msg);
 			const data = state.data;
-			data.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
-				options
-				, function(error) {
-					if (state.disposed || true === data.rtcPeer.cleaned) {
-						return;
-					}
-					if (error) {
-						return OmUtil.error(error);
-					}
-					data.rtcPeer.generateOffer(function(genErr, offerSdp) {
-						if (state.disposed || true === data.rtcPeer.cleaned) {
-							return;
-						}
-						if (genErr) {
-							return OmUtil.error('Receiver sdp offer error ' + genErr);
-						}
-						OmUtil.log('Invoking Receiver SDP offer callback function');
-						VideoMgrUtil.sendMessage({
-							id : 'addListener'
-							, sender: sd.uid
-							, sdpOffer: offerSdp
-						});
+			data.rtcPeer = new WebRtcPeerRecvonly(options);
+			data.rtcPeer.createOffer()
+				.then(sdpOffer => {
+					data.rtcPeer.processLocalOffer(sdpOffer);
+					OmUtil.log('Invoking Receiver SDP offer callback function');
+					VideoMgrUtil.sendMessage({
+						id : 'addListener'
+						, sender: sd.uid
+						, sdpOffer: sdpOffer.sdp
 					});
-				});
-			data.rtcPeer.cleaned = false;
-			__attachListener(state);
+				})
+				.catch(genErr => OmUtil.error('Receiver sdp offer error ' + genErr));
 		}
 		function _handleMicStatus(state) {
 			if (!footer || !footer.is(':visible')) {
@@ -513,7 +481,6 @@ module.exports = class Video {
 					delete state.options.videoStream;
 					delete state.options.mediaConstraints;
 					delete state.options.onicecandidate;
-					delete state.options.localVideo;
 					state.options = null;
 				}
 				_cleanData(state.data);
@@ -557,7 +524,7 @@ module.exports = class Video {
 					const data = state.data
 						, videoEl = state.video[0];
 					if (data.rtcPeer && (!videoEl.srcObject || !videoEl.srcObject.active)) {
-						videoEl.srcObject = sd.self ? data.rtcPeer.getLocalStream() : data.rtcPeer.getRemoteStream();
+						videoEl.srcObject = data.rtcPeer.stream;
 					}
 				}
 			});
@@ -567,39 +534,30 @@ module.exports = class Video {
 			if (!state || state.disposed || !state.data.rtcPeer || state.data.rtcPeer.cleaned) {
 				return;
 			}
-			state.data.rtcPeer.processAnswer(answer, function (error) {
-				if (true === this.cleaned) {
-					return;
-				}
-				const video = __getVideo(state);
-				if (this.peerConnection.signalingState === 'stable' && video && video.paused) {
-					video.play().catch(function (err) {
-						if ('NotAllowedError' === err.name) {
-							VideoUtil.askPermission(function () {
-								video.play();
-							});
-						}
-					});
-					return;
-				}
-				if (error) {
-					OmUtil.error(error, true);
-				}
-			});
+			state.data.rtcPeer.processRemoteAnswer(answer)
+				.then(() => {
+					const video = __getVideo(state);
+					const rStream = state.data.rtcPeer.pc.getRemoteStreams()[0];
+					if (rStream) {
+						video.srcObject = rStream;
+					}
+					if (state.data.rtcPeer.pc.signalingState === 'stable' && video && video.paused) {
+						video.play().catch(err => {
+							if ('NotAllowedError' === err.name) {
+								VideoUtil.askPermission(() => video.play());
+							}
+						});
+					}
+				})
+				.catch(error => OmUtil.error(error, true));
 		}
 		function _processIceCandidate(candidate) {
 			const state = states.length > 0 ? states[0] : null;
 			if (!state || state.disposed || !state.data.rtcPeer || state.data.rtcPeer.cleaned) {
 				return;
 			}
-			state.data.rtcPeer.addIceCandidate(candidate, function (error) {
-				if (true === this.cleaned) {
-					return;
-				}
-				if (error) {
-					OmUtil.error('Error adding candidate: ' + error, true);
-				}
-			});
+			state.data.rtcPeer.addIceCandidate(candidate)
+				.catch(error => OmUtil.error('Error adding candidate: ' + error, true));
 		}
 		function _init(_msg) {
 			sd = _msg.stream;

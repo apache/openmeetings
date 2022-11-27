@@ -184,11 +184,10 @@ function _cleanStream(stream) {
 		stream.getTracks().forEach(track => track.stop());
 	}
 }
-function _cleanPeer(peer) {
-	if (!!peer) {
-		peer.cleaned = true;
+function _cleanPeer(rtcPeer) {
+	if (!!rtcPeer) {
 		try {
-			const pc = peer.peerConnection;
+			const pc = rtcPeer.pc;
 			if (!!pc) {
 				pc.getSenders().forEach(sender => {
 					try {
@@ -208,22 +207,8 @@ function _cleanPeer(peer) {
 						OmUtil.log('Failed to clean receiver' + e);
 					}
 				});
-				pc.onconnectionstatechange = null;
-				pc.ontrack = null;
-				pc.onremovetrack = null;
-				pc.onremovestream = null;
-				pc.onicecandidate = null;
-				pc.oniceconnectionstatechange = null;
-				pc.onsignalingstatechange = null;
-				pc.onicegatheringstatechange = null;
-				pc.onnegotiationneeded = null;
 			}
-			peer.dispose();
-			peer.removeAllListeners('icecandidate');
-			delete peer.generateOffer;
-			delete peer.processAnswer;
-			delete peer.processOffer;
-			delete peer.addIceCandidate;
+			rtcPeer.dispose();
 		} catch(e) {
 			//no-op
 		}

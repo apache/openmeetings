@@ -1,7 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const MicLevel = require('./mic-level');
 const VideoUtil = require('./video-util');
-const kurentoUtils = require('kurento-utils');
 
 const DEV_AUDIO = 'audioinput'
 	, DEV_VIDEO = 'videoinput'
@@ -149,7 +148,7 @@ function _setCntsDimensions(cnts) {
 //each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
 // min/ideal/max/exact/mandatory can also be used
 function _constraints(sd, callback) {
-	_getDevConstraints(function(devCnts){
+	_getDevConstraints(function(devCnts) {
 		const cnts = {};
 		if (devCnts.video && false === o.audioOnly && VideoUtil.hasCam(sd) && s.video.cam > -1) {
 			cnts.video = {
@@ -202,39 +201,32 @@ function _readValues(msg, func) {
 	_constraints(null, function(cnts) {
 		if (cnts.video !== false || cnts.audio !== false) {
 			const options = VideoUtil.addIceServers({
-				localVideo: vid[0]
-				, mediaConstraints: cnts
+				mediaConstraints: cnts
+				, onIceCandidate: _onIceCandidate
 			}, msg);
-			rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
-				options
-				, function(error) {
-					if (error) {
-						if (true === rtcPeer.cleaned) {
-							return;
-						}
-						return OmUtil.error(error);
-					}
+			navigator.mediaDevices.getUserMedia(cnts)
+				.then(stream => {
+					vid[0].srcObject = stream;
+					options.mediaStream = stream;
+
+					rtcPeer = new WebRtcPeerSendonly(options);
 					if (cnts.audio) {
 						lm.show();
 						level = new MicLevel();
-						level.meterPeer(rtcPeer, lm, function(){}, OmUtil.error, false);
+						level.meterStream(stream, lm, function(){}, OmUtil.error, false);
 					} else {
 						lm.hide();
 					}
-					rtcPeer.generateOffer(function(error, _offerSdp) {
-						if (error) {
-							if (true === rtcPeer.cleaned) {
-								return;
-							}
-							return OmUtil.error('Error generating the offer');
-						}
-						if (typeof(func) === 'function') {
-							func(_offerSdp, cnts);
-						} else {
-							_allowRec(true);
-						}
-					});
-				});
+					return rtcPeer.createOffer();
+				})
+				.then(sdpOffer => {
+					rtcPeer.processLocalOffer(sdpOffer);
+					if (typeof(func) === 'function') {
+						func(sdpOffer.sdp, cnts);
+					} else {
+						_allowRec(true);
+					}
+				}).catch(_ => OmUtil.error('Error generating the offer'));
 		}
 		if (!msg) {
 			_updateRec();
@@ -384,75 +376,49 @@ function _onKMessage(m) {
 					, video: cnts.video !== false
 					, audio: cnts.audio !== false
 				}, MsgBase);
-				rtcPeer.on('icecandidate', _onIceCandidate);
 			});
 			break;
-		case 'canPlay':
-			{
-				const options = VideoUtil.addIceServers({
-					remoteVideo: vid[0]
-					, mediaConstraints: {audio: true, video: true}
-					, onicecandidate: _onIceCandidate
-				}, m);
-				_clear();
-				rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
-					options
-					, function(error) {
-						if (error) {
-							if (true === rtcPeer.cleaned) {
-								return;
-							}
-							return OmUtil.error(error);
-						}
-						rtcPeer.generateOffer(function(error, offerSdp) {
-							if (error) {
-								if (true === rtcPeer.cleaned) {
-									return;
-								}
-								return OmUtil.error('Error generating the offer');
-							}
-							OmUtil.sendMessage({
-								id : 'play'
-								, sdpOffer: offerSdp
-							}, MsgBase);
-						});
-					});
-				}
+		case 'canPlay': {
+			const options = VideoUtil.addIceServers({
+				mediaConstraints: {audio: true, video: true}
+				, onIceCandidate: _onIceCandidate
+			}, m);
+			_clear();
+			rtcPeer = new WebRtcPeerRecvonly(options);
+			rtcPeer.createOffer()
+				.then(sdpOffer => {
+					rtcPeer.processLocalOffer(sdpOffer);
+					OmUtil.sendMessage({
+						id : 'play'
+						, sdpOffer: sdpOffer.sdp
+					}, MsgBase);
+				})
+				.catch(_ => OmUtil.error('Error generating the offer'));
+			}
 			break;
 		case 'playResponse':
 			OmUtil.log('Play SDP answer received from server. Processing ...');
-			rtcPeer.processAnswer(m.sdpAnswer, function(error) {
-				if (error) {
-					if (true === rtcPeer.cleaned) {
-						return;
-					}
-					return OmUtil.error(error);
-				}
-				lm.show();
-				level = new MicLevel();
-				level.meterPeer(rtcPeer, lm, function(){}, OmUtil.error, true);
-			});
+
+			rtcPeer.processRemoteAnswer(m.sdpAnswer)
+				.then(() => {
+					const stream = rtcPeer.stream;
+					if (stream) {
+						vid[0].srcObject = stream;
+						lm.show();
+						level = new MicLevel();
+						level.meterStream(stream, lm, function(){}, OmUtil.error, true);
+					};
+				})
+				.catch(error => OmUtil.error(error));
 			break;
 		case 'startResponse':
 			OmUtil.log('SDP answer received from server. Processing ...');
-			rtcPeer.processAnswer(m.sdpAnswer, function(error) {
-				if (error) {
-					if (true === rtcPeer.cleaned) {
-						return;
-					}
-					return OmUtil.error(error);
-				}
-			});
+			rtcPeer.processRemoteAnswer(m.sdpAnswer)
+				.catch(error => OmUtil.error(error));
 			break;
 		case 'iceCandidate':
-			rtcPeer.addIceCandidate(m.candidate, function(error) {
-				if (error) {
-					if (true === rtcPeer.cleaned) {
-						return;
-					}
-					return OmUtil.error('Error adding candidate: ' + error);
-				}
-			});
+			rtcPeer.addIceCandidate(m.candidate)
+				.catch(error => OmUtil.error('Error adding candidate: ' + error));
 			break;
 		case 'recording':
 			timer.show().find('.time').text(m.time);
