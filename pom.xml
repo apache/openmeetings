@@ -99,7 +99,7 @@
 		<commons-lang3.version>3.12.0</commons-lang3.version>
 		<jakarta.mail.version>2.0.1</jakarta.mail.version>
 		<openjpa.version>3.2.2</openjpa.version>
-		<asterisk-java.version>3.36.1</asterisk-java.version>
+		<asterisk-java.version>3.37.0</asterisk-java.version>
 		<commons-dbcp.version>2.9.0</commons-dbcp.version>
 		<commons-pool2.version>2.11.1</commons-pool2.version>
 		<commons-cli.version>1.5.0</commons-cli.version>
@@ -109,14 +109,14 @@
 		<postgresql.version>42.5.1</postgresql.version>
 		<mysql.version>8.0.31</mysql.version>
 		<mssql.version>11.2.1.jre17</mssql.version>
-		<ojdbc.version>19.16.0.0</ojdbc.version>
+		<ojdbc.version>19.17.0.0</ojdbc.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<xstream.version>1.4.19</xstream.version>
 		<api-all.version>2.1.2</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
 		<tika-parsers.version>2.6.0</tika-parsers.version>
 		<commons-text.version>1.10.0</commons-text.version>
-		<slf4j.version>2.0.4</slf4j.version>
+		<slf4j.version>2.0.5</slf4j.version>
 		<logback.version>1.4.5</logback.version>
 		<jetty.version>9.4.49.v20220914</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
