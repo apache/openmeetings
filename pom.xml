@@ -86,13 +86,13 @@
 		<wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version>
 		<font-awesome.version>6.2.0</font-awesome.version>
 		<spring.version>5.3.24</spring.version>
-		<tomcat.version>9.0.69</tomcat.version>
+		<tomcat.version>9.0.70</tomcat.version>
 		<ical4j.version>4.0.0-beta4</ical4j.version>
 		<cxf.version>3.5.4</cxf.version>
 		<io.prometheus.version>0.16.0</io.prometheus.version>
 		<aspectjtools.version>1.9.9.1</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
-		<jettison.version>1.5.2</jettison.version>
+		<jettison.version>1.5.3</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
 		<h2.version>2.1.214</h2.version>
