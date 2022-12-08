@@ -14,7 +14,7 @@
   "devDependencies": {
     "browserify": "^17.0.0",
     "esmify": "^2.1.1",
-    "terser": "^5.15.0"
+    "terser": "^5.16.1"
   },
   "dependencies": {
     "fabric": "^5.2.4",
