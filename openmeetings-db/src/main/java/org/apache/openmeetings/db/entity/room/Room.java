@@ -377,6 +377,10 @@ public class Room extends HistoricalEntity {
 		this.type = type;
 	}
 
+	public boolean isInterview() {
+		return Type.INTERVIEW == type;
+	}
+
 	public boolean getIspublic() {
 		return ispublic;
 	}

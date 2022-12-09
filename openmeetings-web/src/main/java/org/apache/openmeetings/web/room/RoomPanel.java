@@ -26,7 +26,6 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.wb.WbPanel.WB_JS_REFERENCE;
-import static org.apache.openmeetings.mediaserver.KurentoHandler.activityAllowed;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -144,7 +143,6 @@ public class RoomPanel extends BasePanel {
 		}
 	}
 	private final Room r;
-	private final boolean interview;
 	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
 	private final AbstractDefaultAjaxBehavior roomEnter = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
@@ -158,7 +156,7 @@ public class RoomPanel extends BasePanel {
 					.put("uid", c.getUid())
 					.put("userId", c.getUserId())
 					.put("rights", c.toJson(true).getJSONArray("rights"))
-					.put("interview", interview)
+					.put("interview", r.isInterview())
 					.put("audioOnly", r.isAudioOnly())
 					.put("allowRecording", r.isAllowRecording())
 					.put("questions", r.isAllowUserQuestions())
@@ -212,7 +210,7 @@ public class RoomPanel extends BasePanel {
 			if (streams.length() > 0) {
 				sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers(getClient())).append(");");
 			}
-			if (interview && streamProcessor.recordingAllowed(getClient())) {
+			if (r.isInterview() && streamProcessor.recordingAllowed(getClient())) {
 				sb.append("WbArea.setRecEnabled(true);");
 			}
 			if (!Strings.isEmpty(sb)) {
@@ -280,8 +278,7 @@ public class RoomPanel extends BasePanel {
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
-		this.interview = Room.Type.INTERVIEW == r.getType();
-		this.wb = interview ? new InterviewWbPanel("whiteboard", this) : new WbPanel("whiteboard", this);
+		this.wb = r.isInterview() ? new InterviewWbPanel("whiteboard", this) : new WbPanel("whiteboard", this);
 	}
 
 	public void startDownload(IPartialPageRequestHandler handler, String type, String fuid) {
@@ -300,7 +297,7 @@ public class RoomPanel extends BasePanel {
 		room.setOutputMarkupPlaceholderTag(true);
 		room.add(menu = new RoomMenuPanel("menu", this));
 		room.add(AttributeModifier.append("data-room-id", r.getId()));
-		if (interview) {
+		if (r.isInterview()) {
 			room.add(new WebMarkupContainer("wb-area").add(wb));
 		} else {
 			Droppable<BaseFileItem> wbArea = new Droppable<>("wb-area") {
@@ -629,7 +626,7 @@ public class RoomPanel extends BasePanel {
 
 	private void updateInterviewRecordingButtons(IPartialPageRequestHandler handler) {
 		Client curClient = getClient();
-		if (interview && curClient.hasRight(Right.MODERATOR)) {
+		if (r.isInterview() && curClient.hasRight(Right.MODERATOR)) {
 			if (streamProcessor.isRecording(r.getId())) {
 				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
 			} else if (streamProcessor.recordingAllowed(getClient())) {
@@ -761,12 +758,14 @@ public class RoomPanel extends BasePanel {
 		for (Right right : rights) {
 			client.deny(right);
 		}
-		if (client.hasActivity(Client.Activity.AUDIO) && !client.hasRight(Right.AUDIO)) {
-			client.remove(Client.Activity.AUDIO);
-		}
-		if (client.hasActivity(Client.Activity.VIDEO) && !client.hasRight(Right.VIDEO)) {
-			client.remove(Client.Activity.VIDEO);
-		}
+		client.getCamStreams().forEach(sd -> {
+			if (sd.has(Client.Activity.AUDIO) && !client.hasRight(Right.AUDIO)) {
+				sd.remove(Client.Activity.AUDIO);
+			}
+			if (sd.has(Client.Activity.VIDEO) && !client.hasRight(Right.VIDEO)) {
+				sd.remove(Client.Activity.VIDEO);
+			}
+		});
 		rightsUpdated(client);
 	}
 
@@ -795,10 +794,10 @@ public class RoomPanel extends BasePanel {
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.CONFERENCE == r.getType()) {
-						if (!activityAllowed(c, Client.Activity.AUDIO, c.getRoom())) {
+						if (!c.isAllowed(Client.Activity.AUDIO)) {
 							c.allow(Room.Right.AUDIO);
 						}
-						if (!c.getRoom().isAudioOnly() && !activityAllowed(c, Client.Activity.VIDEO, c.getRoom())) {
+						if (!c.getRoom().isAudioOnly() && !c.isAllowed(Client.Activity.VIDEO)) {
 							c.allow(Room.Right.VIDEO);
 						}
 						streamProcessor.onToggleActivity(c, c.getRoom().isAudioOnly()
@@ -845,7 +844,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public boolean isInterview() {
-		return interview;
+		return r.isInterview();
 	}
 
 	private void createWaitModerator(final boolean autoopen) {

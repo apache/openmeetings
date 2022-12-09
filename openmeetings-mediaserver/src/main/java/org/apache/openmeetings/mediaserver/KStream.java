@@ -52,7 +52,7 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
-import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
+import org.apache.openmeetings.db.entity.basic.StreamDesc;
 import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.entity.record.RecordingChunk.Type;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
@@ -123,9 +123,9 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		if (outgoingMedia != null) {
 			release(false);
 		}
-		hasAudio = sd.hasActivity(Activity.AUDIO);
-		hasVideo = sd.hasActivity(Activity.VIDEO);
-		hasScreen = sd.hasActivity(Activity.SCREEN);
+		hasAudio = sd.has(Activity.AUDIO);
+		hasVideo = sd.has(Activity.VIDEO);
+		hasScreen = sd.has(Activity.SCREEN);
 		sipClient = OmFileHelper.SIP_USER_ID.equals(sd.getClient().getUserId());
 		if ((sdpOffer.indexOf("m=audio") > -1 && !hasAudio)
 				|| (sdpOffer.indexOf("m=video") > -1 && !hasVideo && StreamType.SCREEN != streamType))
@@ -295,10 +295,10 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 			if (sd == null) {
 				log.warn("Stream for endpoint dooesn't exists");
 			} else {
-				if (sd.hasActivity(Activity.AUDIO)) {
+				if (sd.has(Activity.AUDIO)) {
 					outgoingMedia.connect(listener, MediaType.AUDIO);
 				}
-				if (StreamType.SCREEN == streamType || sd.hasActivity(Activity.VIDEO)) {
+				if (StreamType.SCREEN == streamType || sd.has(Activity.VIDEO)) {
 					outgoingMedia.connect(listener, MediaType.VIDEO);
 				}
 			}

@@ -24,9 +24,9 @@ import static org.apache.openmeetings.mediaserver.KurentoHandler.sendError;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.ScreenStreamDesc;
+import org.apache.openmeetings.db.entity.basic.StreamDesc;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
-import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
-import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.util.logging.TimedApplication;
 import org.apache.wicket.util.string.Strings;
@@ -79,7 +79,7 @@ public class StreamProcessorActions {
 			if (sd == null) {
 				return;
 			}
-			if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !sd.hasActivity(Activity.SCREEN)) {
+			if (sd instanceof ScreenStreamDesc scr && scr.has(Activity.RECORD) && !scr.has(Activity.SCREEN)) {
 				return;
 			}
 			sender.addListener(c.getSid(), c.getUid(), msg.getString("sdpOffer"));
@@ -114,7 +114,7 @@ public class StreamProcessorActions {
 				cm.update(c);
 			}
 			streamProcessor.startBroadcast(sender, sd, msg.getString("sdpOffer"), () -> {
-				if (StreamType.SCREEN == sd.getType() && sd.hasActivity(Activity.RECORD) && !streamProcessor.isRecording(c.getRoomId())) {
+				if (sd instanceof ScreenStreamDesc scr && scr.has(Activity.RECORD) && !streamProcessor.isRecording(c.getRoomId())) {
 					streamProcessor.startRecording(c);
 				}
 			});

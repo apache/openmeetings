@@ -11,6 +11,13 @@ module.exports = class Video {
 			, lm, level, userSpeaks = false, muteOthers
 			, hasVideo, isSharing, isRecording;
 
+		function __getState() {
+			const state = states.length > 0 ? states[0] : null;
+			if (!state || state.disposed) {
+				return null;
+			}
+			return state;
+		}
 		function __getVideo(_state) {
 			const vid = self.video(_state);
 			return vid && vid.length > 0 ? vid[0] : null;
@@ -69,12 +76,12 @@ module.exports = class Video {
 		}
 		function _getVideoStream(msg, state, callback) {
 			VideoSettings.constraints(sd, function(cnts) {
-				if ((VideoUtil.hasCam(sd) && !cnts.video) || (VideoUtil.hasMic(sd) && !cnts.audio)) {
+				if (VideoUtil.hasCam(sd) !== cnts.videoEnabled || VideoUtil.hasMic(sd) !== cnts.audioEnabled) {
 					VideoMgrUtil.sendMessage({
 						id : 'devicesAltered'
 						, uid: sd.uid
-						, audio: !!cnts.audio
-						, video: !!cnts.video
+						, audio: cnts.audioEnabled
+						, video: cnts.videoEnabled
 					});
 				}
 				if (!cnts.audio && !cnts.video) {
@@ -87,6 +94,8 @@ module.exports = class Video {
 						if (state.disposed || msg.instanceUid !== v.data('instance-uid')) {
 							return;
 						}
+						stream.getVideoTracks().forEach(track => track.enabled = cnts.videoEnabled);
+						stream.getAudioTracks().forEach(track => track.enabled = cnts.audioEnabled);
 						state.localStream = stream;
 						let _stream = stream;
 						const data = {};
@@ -158,7 +167,7 @@ module.exports = class Video {
 				, onConnectionStateChange: () => __connectionStateChangeListener(state)
 			};
 			const vid = __getVideo(state);
-			vid.srcObject = state.stream;
+			VideoUtil.playSrc(vid, state.stream);
 
 			const data = state.data;
 			data.rtcPeer = new WebRtcPeerSendonly(VideoUtil.addIceServers(state.options, msg));
@@ -294,12 +303,16 @@ module.exports = class Video {
 						VideoMgrUtil.close(sd.uid, true);
 					});
 				}
+				const ui = v.closest('.ui-dialog');
+				const parent = $('.room-block .room-container .sb-wb');
+				ui.draggable('option', 'containment', parent);
+				ui.resizable('option', 'containment', parent);
 			}
 			_initDialogBtns(opts);
 		}
 		function _initDialogBtns(opts) {
-			function noDblClick(e) {
-				e.dblclick(function(e) {
+			function noDblClick(elem) {
+				elem.dblclick(function(e) {
 					e.stopImmediatePropagation();
 					return false;
 				});
@@ -359,10 +372,37 @@ module.exports = class Video {
 				&& prevA.every(function(value, index) { return value === sd.activities[index]})
 				&& prevW === sd.width && prevH === sd.height
 				&& prevCam == sd.cam && prevMic === sd.mic;
+			const camChanged = sd.camEnabled !== _c.camEnabled
+				, micChanged = sd.micEnabled !== _c.micEnabled
 			if (sd.self && !same) {
 				_cleanup();
 				v.remove();
 				_init({stream: sd, iceServers: iceServers});
+			} else if (camChanged || micChanged) {
+				sd.micEnabled = _c.micEnabled;
+				sd.camEnabled = _c.camEnabled;
+				const state = __getState();
+				if (camChanged) {
+					v.off();
+					if (v.dialog('instance')) {
+						v.dialog('destroy');
+					}
+					v.remove();
+					__initUI(v.data('instance-uid'));
+					__createVideo(state);
+					VideoUtil.playSrc(state.video[0], state.stream || state.rStream);
+					if (state.data.analyser) {
+						lm = vc.find('.level-meter');
+						level.setCanvas(lm);
+					}
+				}
+				if (micChanged) {
+					__updateVideo(state);
+				}
+				if (sd.self) {
+					state.localStream.getVideoTracks().forEach(track => track.enabled = sd.camEnabled);
+					state.localStream.getAudioTracks().forEach(track => track.enabled = sd.micEnabled);
+				}
 			}
 		}
 		function __createVideo(state) {
@@ -384,9 +424,13 @@ module.exports = class Video {
 				vc.parents('.ui-dialog').removeClass('audio-only');
 				state.video.attr('poster', sd.user.pictureUri);
 			} else {
+				state.video.attr('poster', null);
 				vc.addClass('audio-only');
 			}
 			vc.append(state.video);
+			__updateVideo(state);
+		}
+		function __updateVideo(state) {
 			if (VideoUtil.hasMic(sd)) {
 				const volIco = vol.create(self)
 				if (hasVideo) {
@@ -478,14 +522,14 @@ module.exports = class Video {
 			while(state = states.pop()) {
 				state.disposed = true;
 				if (state.options) {
-					delete state.options.videoStream;
 					delete state.options.mediaConstraints;
-					delete state.options.onicecandidate;
+					delete state.options.onIceCandidate;
 					state.options = null;
 				}
 				_cleanData(state.data);
 				VideoUtil.cleanStream(state.localStream);
 				VideoUtil.cleanStream(state.stream);
+				VideoUtil.cleanStream(state.rStream);
 				state.data = null;
 				state.localStream = null;
 				state.stream = null;
@@ -530,43 +574,30 @@ module.exports = class Video {
 			});
 		}
 		function _processSdpAnswer(answer) {
-			const state = states.length > 0 ? states[0] : null;
-			if (!state || state.disposed || !state.data.rtcPeer || state.data.rtcPeer.cleaned) {
+			const state = __getState();
+			if (!state || !state.data.rtcPeer) {
 				return;
 			}
 			state.data.rtcPeer.processRemoteAnswer(answer)
 				.then(() => {
 					const video = __getVideo(state);
-					const rStream = state.data.rtcPeer.pc.getRemoteStreams()[0];
-					if (rStream) {
-						video.srcObject = rStream;
-					}
-					if (state.data.rtcPeer.pc.signalingState === 'stable' && video && video.paused) {
-						video.play().catch(err => {
-							if ('NotAllowedError' === err.name) {
-								VideoUtil.askPermission(() => video.play());
-							}
-						});
-					}
+					state.rStream = state.data.rtcPeer.pc.getRemoteStreams()[0];
+					VideoUtil.playSrc(video, state.rStream);
 				})
 				.catch(error => OmUtil.error(error, true));
 		}
 		function _processIceCandidate(candidate) {
-			const state = states.length > 0 ? states[0] : null;
-			if (!state || state.disposed || !state.data.rtcPeer || state.data.rtcPeer.cleaned) {
+			const state = __getState();
+			if (!state || !state.data.rtcPeer) {
 				return;
 			}
 			state.data.rtcPeer.addIceCandidate(candidate)
 				.catch(error => OmUtil.error('Error adding candidate: ' + error, true));
 		}
-		function _init(_msg) {
-			sd = _msg.stream;
-			_msg.instanceUid = uuidv4();
+		function __initUI(instanceUid) {
 			if (!vol) {
 				vol = new Volume();
 			}
-			iceServers = _msg.iceServers;
-			sd.activities = sd.activities.sort();
 			isSharing = VideoUtil.isSharing(sd);
 			isRecording = VideoUtil.isRecording(sd);
 			const _id = VideoUtil.getVid(sd.uid)
@@ -575,7 +606,7 @@ module.exports = class Video {
 				, _h = sd.height
 				, opts = Room.getOptions();
 			sd.self = sd.cuid === opts.uid;
-			const contSel = _initContainer(_id, name, opts, _msg.instanceUid);
+			const contSel = _initContainer(_id, name, opts, instanceUid);
 			footer = v.find('.footer');
 			if (!opts.showMicStatus) {
 				footer.hide();
@@ -605,7 +636,13 @@ module.exports = class Video {
 			if (hasVideo) {
 				vc.width(_w).height(_h);
 			}
-
+		}
+		function _init(_msg) {
+			sd = _msg.stream;
+			sd.activities = sd.activities.sort();
+			_msg.instanceUid = uuidv4();
+			iceServers = _msg.iceServers;
+			__initUI(_msg.instanceUid);
 			_refresh(_msg);
 		}
 
@@ -633,7 +670,7 @@ module.exports = class Video {
 		};
 		this.reattachStream = _reattachStream;
 		this.video = function(_state) {
-			const state = _state || (states.length > 0 ? states[0] : null);
+			const state = _state || __getState();
 			if (!state || state.disposed) {
 				return null;
 			}

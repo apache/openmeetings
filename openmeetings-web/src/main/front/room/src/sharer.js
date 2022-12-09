@@ -28,6 +28,9 @@ function _init() {
 		, autoOpen: false
 		, resizable: false
 	});
+	const ui = sharer.closest('.ui-dialog');
+	const parent = $('.room-block .room-container .sb-wb');
+	ui.draggable('option', 'containment', parent);
 	fixJQueryUIDialogTouch(sharer);
 
 	if (!VideoUtil.sharingSupported()) {

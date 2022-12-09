@@ -134,8 +134,9 @@ function _updateClient(c) {
 	}
 	const self = c.uid === options.uid
 		, le = _getClient(c.uid)
-		, hasAudio = VideoUtil.hasMic(c)
-		, hasVideo = VideoUtil.hasCam(c)
+		, selfCamStream = c.streams.find(s => s.type === 'WEBCAM')
+		, hasAudio = VideoUtil.hasMic(self && selfCamStream ? selfCamStream : c)
+		, hasVideo = VideoUtil.hasCam(self && selfCamStream ? selfCamStream : c)
 		, speaks = le.find('.audio-activity');
 	if (le.length === 0) {
 		return;
@@ -194,20 +195,20 @@ function _updateClient(c) {
 		__activityAVIcon(
 				header
 				, '.activity.cam'
-				, () => !options.audioOnly && UserListUtil.hasRight('VIDEO')
+				, () => !options.audioOnly && UserListUtil.hasRight(VideoUtil.CAM_ACTIVITY)
 				, () => hasVideo
 				, () => Settings.load().video.cam < 0)
 			.off().click(function() {
-				VideoManager.toggleActivity('VIDEO');
+				VideoManager.toggleActivity(VideoUtil.CAM_ACTIVITY);
 			});;
 		__rightAudioIcon(c, header);
 		__activityAVIcon(
 				header
-				, '.activity.mic', () => UserListUtil.hasRight('AUDIO')
+				, '.activity.mic', () => UserListUtil.hasRight(VideoUtil.MIC_ACTIVITY)
 				, () => hasAudio
 				, () => Settings.load().video.mic < 0)
 			.off().click(function() {
-				VideoManager.toggleActivity('AUDIO');
+				VideoManager.toggleActivity(VideoUtil.MIC_ACTIVITY);
 			});
 		__rightOtherIcons(c, header);
 	}

@@ -3,9 +3,11 @@ const RingBuffer = require('./ring-buffer');
 
 module.exports = class MicLevel {
 	constructor() {
-		let ctx, mic, analyser, vol = .0, vals = new RingBuffer(100);
+		let ctx, mic, analyser
+			, cnvs, canvasCtx, WIDTH, HEIGHT, horiz
+			, vol = .0, vals = new RingBuffer(100);
 
-		this.meterStream = (stream, cnvs, _micActivity, _error, connectAudio) => {
+		this.meterStream = (stream, _cnvs, _micActivity, _error, connectAudio) => {
 			if (!stream || stream.getAudioTracks().length < 1) {
 				return;
 			}
@@ -22,26 +24,30 @@ module.exports = class MicLevel {
 				if (connectAudio) {
 					analyser.connect(ctx.destination);
 				}
-				this.meter(analyser, cnvs, _micActivity, _error);
+				this.meter(analyser, _cnvs, _micActivity, _error);
 			} catch (err) {
 				_error(err);
 			}
 		};
-		this.meter = (_analyser, cnvs, _micActivity, _error) => {
+		this.setCanvas = (_cnvs) => {
+			cnvs = _cnvs;
+			const canvas = cnvs[0];
+			canvasCtx = canvas.getContext('2d');
+			WIDTH = canvas.width;
+			HEIGHT = canvas.height;
+			horiz = cnvs.data('orientation') === 'horizontal';
+		};
+		this.meter = (_analyser, _cnvs, _micActivity, _error) => {
+			this.setCanvas(_cnvs);
 			try {
 				analyser = _analyser;
 				analyser.minDecibels = -90;
 				analyser.maxDecibels = -10;
 				analyser.fftSize = 256;
-				const canvas = cnvs[0]
-					, color = $('body').css('--level-color')
-					, canvasCtx = canvas.getContext('2d')
+				const color = $('body').css('--level-color')
 					, al = analyser.frequencyBinCount
-					, arr = new Uint8Array(al)
-					, horiz = cnvs.data('orientation') === 'horizontal';
+					, arr = new Uint8Array(al);
 				function update() {
-					const WIDTH = canvas.width
-						, HEIGHT = canvas.height;
 					canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 					if (!!analyser && cnvs.length > 0) {
 						if (cnvs.is(':visible')) {

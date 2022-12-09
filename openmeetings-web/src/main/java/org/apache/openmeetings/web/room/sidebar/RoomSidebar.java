@@ -175,7 +175,7 @@ public class RoomSidebar extends Panel {
 
 	private void muteRoomAction(String uid, Client self, JSONObject o) {
 		Client c = cm.get(uid);
-		if (c == null || !c.hasActivity(Client.Activity.AUDIO)) {
+		if (c == null || !c.has(Client.Activity.AUDIO)) {
 			return;
 		}
 		if (self.hasRight(Right.MODERATOR) || self.getUid().equals(c.getUid())) {

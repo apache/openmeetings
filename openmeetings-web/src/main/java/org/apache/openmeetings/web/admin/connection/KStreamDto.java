@@ -53,7 +53,7 @@ public class KStreamDto implements IDataProviderEntity {
 		roomId = kStream.getRoomId();
 		connectedSince = kStream.getConnectedSince();
 		streamType = kStream.getStreamType();
-		profile = kStream.getProfile().toString();
+		profile = "" + kStream.getProfile();
 		recorder = (kStream.getRecorder() == null) ? null : kStream.getRecorder().toString();
 		chunkId = kStream.getChunkId();
 		type = kStream.getType();

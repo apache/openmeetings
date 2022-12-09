@@ -20,16 +20,12 @@
 package org.apache.openmeetings.mediaserver;
 
 import static org.apache.openmeetings.mediaserver.KurentoHandler.PARAM_ICE;
-import static org.apache.openmeetings.mediaserver.KurentoHandler.activityAllowed;
 import static org.apache.openmeetings.mediaserver.KurentoHandler.newKurentoMsg;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isRecordingsEnabled;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
@@ -39,8 +35,10 @@ import org.apache.openmeetings.core.converter.RecordingConverter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.ScreenStreamDesc;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
-import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
+import org.apache.openmeetings.db.entity.basic.StreamDesc;
+import org.apache.openmeetings.db.entity.basic.WebcamStreamDesc;
 import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -56,7 +54,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
-import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 @Component
@@ -85,7 +82,6 @@ public class StreamProcessor implements IStreamProcessor {
 	@TimedApplication
 	void onMessage(Client c, final String cmdId, JSONObject msg) {
 		final String uid = msg.optString("uid");
-		Optional<StreamDesc> osd;
 		log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
 		switch (cmdId) {
 			case "devicesAltered":
@@ -106,11 +102,12 @@ public class StreamProcessor implements IStreamProcessor {
 			case "addListener":
 				streamProcessorActions.addListener(c, msg);
 				break;
-			case "wannaShare":
-				osd = c.getScreenStream();
-				if (screenShareAllowed(c) || (osd.isPresent() && !osd.get().hasActivity(Activity.SCREEN))) {
+			case "wannaShare": {
+				Optional<ScreenStreamDesc> osd = c.getScreenStream();
+				if (screenShareAllowed(c) || (osd.isPresent() && !osd.get().has(Activity.SCREEN))) {
 					startSharing(c, osd, msg, Activity.SCREEN);
 				}
+			}
 				break;
 			case "wannaRecord":
 				onWannaRecord(c, msg);
@@ -133,22 +130,21 @@ public class StreamProcessor implements IStreamProcessor {
 	private void onDeviceAltered(Client c, String uid, JSONObject msg) {
 		StreamDesc sd = c.getStream(uid);
 		if (sd != null) {
-			if (!msg.getBoolean("audio") && c.hasActivity(Activity.AUDIO)) {
-				c.remove(Activity.AUDIO);
+			if (!msg.getBoolean("audio") && sd.has(Activity.AUDIO)) {
+				sd.remove(Activity.AUDIO);
 			}
-			if (!msg.getBoolean("video") && c.hasActivity(Activity.VIDEO)) {
-				c.remove(Activity.VIDEO);
+			if (!msg.getBoolean("video") && sd.has(Activity.VIDEO)) {
+				sd.remove(Activity.VIDEO);
 			}
-			sd.setActivities();
 			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 		}
 	}
 
 	private void onWannaRecord(Client c, JSONObject msg) {
-		Optional<StreamDesc> osd = c.getScreenStream();
+		Optional<ScreenStreamDesc> osd = c.getScreenStream();
 		if (recordingAllowed(c)) {
 			Room r = c.getRoom();
-			if (Room.Type.INTERVIEW == r.getType()) {
+			if (r.isInterview()) {
 				log.warn("This shouldn't be called for interview room");
 				return;
 			}
@@ -174,25 +170,6 @@ public class StreamProcessor implements IStreamProcessor {
 		stream.startBroadcast(sd, sdpOffer, then);
 	}
 
-	private static boolean isBroadcasting(final Client c) {
-		return c.hasAnyActivity(Activity.AUDIO, Activity.VIDEO);
-	}
-
-	private Set<String> cleanWebCams(Client c, List<StreamDesc> streams) {
-		Set<String> closed = new HashSet<>();
-		streams.stream()
-			.filter(lsd -> StreamType.WEBCAM == lsd.getType())
-			.forEach(lsd -> {
-				KStream s = getByUid(lsd.getUid());
-				if (s != null) {
-					s.stopBroadcast();
-				}
-				c.removeStream(lsd.getUid());
-				closed.add(lsd.getUid());
-			});
-		return closed;
-	}
-
 	@TimedApplication
 	public void onToggleActivity(Client c, Activity a) {
 		log.info("PARTICIPANT {}: trying to toggle activity {}", c, a);
@@ -200,8 +177,7 @@ public class StreamProcessor implements IStreamProcessor {
 			return;
 		}
 
-		if (activityAllowed(c, a, c.getRoom())) {
-			boolean wasBroadcasting = isBroadcasting(c);
+		if (c.isAllowed(a)) {
 			if (a == Activity.AUDIO && !c.isMicEnabled()) {
 				return;
 			}
@@ -211,58 +187,42 @@ public class StreamProcessor implements IStreamProcessor {
 			if (a == Activity.AUDIO_VIDEO && !c.isMicEnabled() && !c.isCamEnabled()) {
 				return;
 			}
-			c.toggle(a);
-			List<StreamDesc> streams = c.getStreams();
-			if (!isBroadcasting(c)) {
-				Set<String> closed = cleanWebCams(c, streams);
-				if (!closed.isEmpty()) {
-					cm.update(c);
-					checkStreams(c.getRoomId());
-					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
+			Optional<WebcamStreamDesc> cam = c.getCamStreams().findFirst();
+			if (cam.isPresent()) {
+				WebcamStreamDesc camStr = cam.get();
+				camStr.toggle(a);
+				if (!camStr.isBroadcasting()) {
+					KStream s = getByUid(camStr.getUid());
+					if (s != null) {
+						s.stopBroadcast();
+					}
+					c.removeStream(camStr.getUid());
 				}
+				cm.update(c);
+				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 			} else {
-				StreamDesc sd = c.addStream(StreamType.WEBCAM);
-				Set<String> closed = wasBroadcasting ? cleanWebCams(c, streams) : Set.of();
-				cm.update(c.restoreActivities(sd));
+				StreamDesc sd = c.addStream(StreamType.WEBCAM, a);
 				log.debug("User {}: has started broadcast", sd.getUid());
 				kHandler.sendClient(sd.getSid(), newKurentoMsg()
 						.put("id", "broadcast")
 						.put("stream", sd.toJson(true))
-						.put("cleanup", new JSONArray(closed))
 						.put(PARAM_ICE, kHandler.getTurnServers(c, false)));
 			}
 		}
 	}
 
-	private void constraintsChanged(Client c) {
-		//constraints were changed
-		c.getStreams().stream()
-			.filter(sd -> StreamType.WEBCAM == sd.getType())
-			.findFirst()
-			.ifPresent(sd -> {
-				sd.setActivities();
-				cm.update(c);
-			});
-	}
-
 	public void rightsUpdated(Client c) {
-		Optional<StreamDesc> osd = c.getScreenStream();
+		Optional<ScreenStreamDesc> osd = c.getScreenStream();
 		if (osd.isPresent() && !hasRightsToShare(c)) {
 			stopSharing(c, osd.get().getUid());
 		}
-		if (isBroadcasting(c)) {
-			constraintsChanged(c);
-		} else {
-			c.getStreams().stream()
-				.filter(sd -> StreamType.WEBCAM == sd.getType())
-				.forEach(sd -> {
-					KStream stream = streamByUid.get(sd.getUid());
-					if (stream != null) {
-						KRoom room = kHandler.getRoom(c.getRoomId());
-						room.onStopBroadcast(stream);
-					}
-				});
-		}
+		c.getCamStreams()
+			.filter(sd -> !sd.isBroadcasting())
+			.map(sd -> streamByUid.get(sd.getUid()))
+			.forEach(stream -> {
+				KRoom room = kHandler.getRoom(c.getRoomId());
+				room.onStopBroadcast(stream);
+			});
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 	}
 
@@ -279,7 +239,7 @@ public class StreamProcessor implements IStreamProcessor {
 		{
 			log.info("No more screen streams in the room, stopping sharing");
 			kRoom.stopSharing();
-			if (Room.Type.INTERVIEW != kRoom.getRoom().getType() && kRoom.isRecording()) {
+			if (!kRoom.getRoom().isInterview() && kRoom.isRecording()) {
 				log.info("No more screen streams in the non-interview room, stopping recording");
 				kRoom.stopRecording(null);
 			}
@@ -300,7 +260,7 @@ public class StreamProcessor implements IStreamProcessor {
 			return false;
 		}
 		Room r = c.getRoom();
-		return r != null && Room.Type.INTERVIEW != r.getType()
+		return r != null && !r.isInterview()
 				&& !r.isHidden(RoomElement.SCREEN_SHARING)
 				&& c.hasRight(Right.SHARE);
 	}
@@ -318,7 +278,7 @@ public class StreamProcessor implements IStreamProcessor {
 		if (!room.isSharing() || !c.getSid().equals(room.getSharingUser().getString("sid"))) {
 			return;
 		}
-		Optional<StreamDesc> osd = c.getScreenStream();
+		Optional<ScreenStreamDesc> osd = c.getScreenStream();
 		if (osd.isPresent()) {
 			stopSharing(c, osd.get().getUid());
 		} else {
@@ -327,7 +287,7 @@ public class StreamProcessor implements IStreamProcessor {
 		stopRecording(c);
 	}
 
-	private void startSharing(Client c, Optional<StreamDesc> osd, JSONObject msg, Activity a) {
+	private void startSharing(Client c, Optional<ScreenStreamDesc> osd, JSONObject msg, Activity a) {
 		if (kHandler.isConnected() && c.getRoomId() != null) {
 			kHandler.getRoom(c.getRoomId()).startSharing(c, osd, msg, a);
 		}
@@ -349,8 +309,8 @@ public class StreamProcessor implements IStreamProcessor {
 			return;
 		}
 		if (isRecording(c.getRoomId())) {
-			StreamDesc sd = c.getStream(uid);
-			sd.removeActivity(Activity.SCREEN);
+			ScreenStreamDesc sd = (ScreenStreamDesc)c.getStream(uid);
+			sd.remove(Activity.SCREEN);
 			cm.update(c);
 			KStream sender = getByUid(uid);
 			sender.pauseSharing();
@@ -379,14 +339,12 @@ public class StreamProcessor implements IStreamProcessor {
 		StreamDesc sd = null;
 		if (c.getRoomId() != null) {
 			sd = c.getStream(uid);
-			if (sd != null && StreamType.SCREEN == sd.getType()) {
+			if (sd instanceof ScreenStreamDesc scr) {
 				c.removeStream(uid);
 				cm.update(c);
 				checkStreams(c.getRoomId());
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
-				kHandler.sendShareUpdated(sd
-						.removeActivity(Activity.SCREEN)
-						.removeActivity(Activity.RECORD));
+				kHandler.sendShareUpdated(scr.remove(Activity.SCREEN).remove(Activity.RECORD));
 			}
 		}
 		return sd;
@@ -429,7 +387,7 @@ public class StreamProcessor implements IStreamProcessor {
 
 		// In case this user wasn't shareing his screen we also need to close that one
 		c.getScreenStream().ifPresent(sd -> {
-			if (!sd.hasActivity(Activity.SCREEN)) {
+			if (!sd.has(Activity.SCREEN)) {
 				pauseSharing(c, sd.getUid());
 			}
 		});
@@ -516,11 +474,6 @@ public class StreamProcessor implements IStreamProcessor {
 			StreamDesc sd = c.getStream(uid);
 			if (sd != null) {
 				c.removeStream(uid);
-				if (StreamType.WEBCAM == sd.getType()) {
-					for (Activity a : sd.getActivities()) {
-						c.remove(a);
-					}
-				}
 				cm.update(c);
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 			}

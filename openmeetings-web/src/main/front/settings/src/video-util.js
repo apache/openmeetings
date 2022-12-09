@@ -18,10 +18,18 @@ function _isRecording(sd) {
 	return !!sd && 'SCREEN' === sd.type && sd.activities.includes(REC_ACTIVITY);
 }
 function _hasMic(sd) {
-	return !sd || sd.activities.includes(MIC_ACTIVITY);
+	if (!sd) {
+		return true;
+	}
+	const enabled = sd.micEnabled !== false;
+	return sd.activities.includes(MIC_ACTIVITY) && enabled;
 }
 function _hasCam(sd) {
-	return !sd || sd.activities.includes(CAM_ACTIVITY);
+	if (!sd) {
+		return true;
+	}
+	const enabled = sd.camEnabled !== false;
+	return sd.activities.includes(CAM_ACTIVITY) && enabled;
 }
 function _hasVideo(sd) {
 	return _hasCam(sd) || _isSharing(sd) || _isRecording(sd);
@@ -276,10 +284,24 @@ function _highlight(el, clazz, count) {
 		next();
 	});
 }
+function _playSrc(_video, _stream) {
+	if (_stream && _video) {
+		_video.srcObject = _stream;
+		if (_video.paused) {
+			_video.play().catch(err => {
+				if ('NotAllowedError' === err.name) {
+					_askPermission(() => _video.play());
+				}
+			});
+		}
+	}
+}
 
 module.exports = {
 	VIDWIN_SEL: VIDWIN_SEL
 	, VID_SEL: VID_SEL
+	, CAM_ACTIVITY: CAM_ACTIVITY
+	, MIC_ACTIVITY: MIC_ACTIVITY
 
 	, getVid: _getVid
 	, isSharing: _isSharing
@@ -305,4 +327,5 @@ module.exports = {
 	, disconnect: _disconnect
 	, sharingSupported: _sharingSupported
 	, highlight: _highlight
+	, playSrc: _playSrc
 };

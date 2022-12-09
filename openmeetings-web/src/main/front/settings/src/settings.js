@@ -149,8 +149,11 @@ function _setCntsDimensions(cnts) {
 // min/ideal/max/exact/mandatory can also be used
 function _constraints(sd, callback) {
 	_getDevConstraints(function(devCnts) {
-		const cnts = {};
-		if (devCnts.video && false === o.audioOnly && VideoUtil.hasCam(sd) && s.video.cam > -1) {
+		const cnts = {
+			videoEnabled: VideoUtil.hasCam(sd)
+			, audioEnabled: VideoUtil.hasMic(sd)
+		};
+		if (devCnts.video && false === o.audioOnly && s.video.cam > -1) {
 			cnts.video = {
 				frameRate: o.camera.fps
 			};
@@ -167,7 +170,7 @@ function _constraints(sd, callback) {
 		} else {
 			cnts.video = false;
 		}
-		if (devCnts.audio && VideoUtil.hasMic(sd) && s.video.mic > -1) {
+		if (devCnts.audio && s.video.mic > -1) {
 			cnts.audio = {
 				sampleRate: o.microphone.rate
 				, echoCancellation: o.microphone.echo
@@ -206,7 +209,7 @@ function _readValues(msg, func) {
 			}, msg);
 			navigator.mediaDevices.getUserMedia(cnts)
 				.then(stream => {
-					vid[0].srcObject = stream;
+					VideoUtil.playSrc(vid[0], stream);
 					options.mediaStream = stream;
 
 					rtcPeer = new WebRtcPeerSendonly(options);
@@ -403,7 +406,7 @@ function _onKMessage(m) {
 				.then(() => {
 					const stream = rtcPeer.stream;
 					if (stream) {
-						vid[0].srcObject = stream;
+						VideoUtil.playSrc(vid[0], stream);
 						lm.show();
 						level = new MicLevel();
 						level.meterStream(stream, lm, function(){}, OmUtil.error, true);

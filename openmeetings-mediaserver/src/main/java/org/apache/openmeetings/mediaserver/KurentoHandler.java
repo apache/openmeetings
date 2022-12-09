@@ -44,11 +44,9 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.Client.Activity;
-import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
+import org.apache.openmeetings.db.entity.basic.StreamDesc;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
@@ -318,24 +316,6 @@ public class KurentoHandler {
 
 	static JSONObject newKurentoMsg() {
 		return new JSONObject().put("type", KURENTO_TYPE);
-	}
-
-	public static boolean activityAllowed(Client c, Activity a, Room room) {
-		boolean r = false;
-		switch (a) {
-			case AUDIO:
-				r = c.hasRight(Right.AUDIO);
-				break;
-			case VIDEO:
-				r = !room.isAudioOnly() && c.hasRight(Right.VIDEO);
-				break;
-			case AUDIO_VIDEO:
-				r = !room.isAudioOnly() && c.hasRight(Right.AUDIO) && c.hasRight(Right.VIDEO);
-				break;
-			default:
-				break;
-		}
-		return r;
 	}
 
 	public JSONArray getTurnServers(Client c) {

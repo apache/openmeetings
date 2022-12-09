@@ -34,8 +34,9 @@ import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.ScreenStreamDesc;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
-import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
+import org.apache.openmeetings.db.entity.basic.StreamDesc;
 import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -119,7 +120,6 @@ public class KRoom {
 
 			log.debug("##REC:: recording in room {} is starting ::", room.getId());
 			Room r = c.getRoom();
-			boolean interview = Room.Type.INTERVIEW == r.getType();
 
 			Date now = new Date();
 
@@ -127,7 +127,7 @@ public class KRoom {
 
 			rec.setHash(randomUUID().toString());
 			final FastDateFormat fdf = FormatHelper.getDateTimeFormat(c.getUser());
-			rec.setName(app.getOmString(interview ? "file.name.interview" : "file.name.recording", c.getUser().getLanguageId())
+			rec.setName(app.getOmString(r.isInterview() ? "file.name.interview" : "file.name.recording", c.getUser().getLanguageId())
 					+ fdf.format(new Date()));
 			User u = c.getUser();
 			recordingUser.put("login", u.getLogin());
@@ -137,7 +137,7 @@ public class KRoom {
 			Long ownerId = User.Type.CONTACT == u.getType() ? u.getOwnerId() : u.getId();
 			rec.setInsertedBy(ownerId);
 			rec.setType(BaseFileItem.Type.RECORDING);
-			rec.setInterview(interview);
+			rec.setInterview(r.isInterview());
 
 			rec.setRoomId(room.getId());
 			rec.setRecordStart(now);
@@ -146,9 +146,9 @@ public class KRoom {
 			rec.setStatus(Recording.Status.RECORDING);
 			log.debug("##REC:: recording created by USER: {}", ownerId);
 
-			Optional<StreamDesc> osd = c.getScreenStream();
+			Optional<ScreenStreamDesc> osd = c.getScreenStream();
 			if (osd.isPresent()) {
-				osd.get().addActivity(Activity.RECORD);
+				osd.get().add(Activity.RECORD);
 				cm.update(c);
 				rec.setWidth(osd.get().getWidth());
 				rec.setHeight(osd.get().getHeight());
@@ -180,9 +180,9 @@ public class KRoom {
 				u = new User();
 			} else {
 				u = c.getUser();
-				Optional<StreamDesc> osd = c.getScreenStream();
+				Optional<ScreenStreamDesc> osd = c.getScreenStream();
 				if (osd.isPresent()) {
-					osd.get().removeActivity(Activity.RECORD);
+					osd.get().remove(Activity.RECORD);
 					cm.update(c);
 					kHandler.sendShareUpdated(osd.get());
 				}
@@ -208,11 +208,11 @@ public class KRoom {
 		return new JSONObject(sharingUser.toString());
 	}
 
-	public void startSharing(Client c, Optional<StreamDesc> osd, JSONObject msg, Activity a) {
-		StreamDesc sd;
+	public void startSharing(Client c, Optional<ScreenStreamDesc> osd, JSONObject msg, Activity a) {
+		ScreenStreamDesc sd;
 		if (sharingStarted.compareAndSet(false, true)) {
 			sharingUser.put("sid", c.getSid());
-			sd = c.addStream(StreamType.SCREEN, a);
+			sd = (ScreenStreamDesc)c.addStream(StreamType.SCREEN, a);
 			cm.update(c);
 			log.debug("Stream.UID {}: sharing has been started, activity: {}", sd.getUid(), a);
 			kHandler.sendClient(sd.getSid(), newKurentoMsg()
@@ -221,9 +221,9 @@ public class KRoom {
 							.put("shareType", msg.getString("shareType"))
 							.put("fps", msg.getString("fps")))
 					.put(PARAM_ICE, kHandler.getTurnServers(c)));
-		} else if (osd.isPresent() && !osd.get().hasActivity(a)) {
+		} else if (osd.isPresent() && !osd.get().has(a)) {
 			sd = osd.get();
-			sd.addActivity(a);
+			sd.add(a);
 			cm.update(c);
 			kHandler.sendShareUpdated(sd);
 			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
@@ -255,7 +255,6 @@ public class KRoom {
 					.ifPresent(c -> {
 						StreamDesc sd = c.addStream(StreamType.WEBCAM, Activity.AUDIO);
 						sd.setWidth(120).setHeight(90);
-						c.restoreActivities(sd);
 						KStream stream = join(sd);
 						stream.startBroadcast(sd, "", () -> {});
 						cm.update(c);
