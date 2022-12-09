@@ -26,8 +26,9 @@ public class ScreenStreamDesc extends StreamDesc {
 		super(sd);
 	}
 
-	public ScreenStreamDesc(final Client client) {
+	public ScreenStreamDesc(final Client client, Activity toggle) {
 		super(client, StreamType.SCREEN);
+		add(toggle);
 		setWidth(800);
 		setHeight(600);
 	}

@@ -201,7 +201,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 
 	public StreamDesc addStream(StreamType stype, Activity toggle) {
 		StreamDesc sd = switch(stype) {
-			case SCREEN -> new ScreenStreamDesc(this);
+			case SCREEN -> new ScreenStreamDesc(this, toggle);
 			case WEBCAM -> new WebcamStreamDesc(this, toggle);
 		};
 		streams.put(sd.getUid(), sd);
