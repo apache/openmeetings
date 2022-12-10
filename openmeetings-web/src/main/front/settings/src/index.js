@@ -1,7 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-const VideoUtil = require('./video-util');
 require('webrtc-adapter');
-const {v4: uuidv4} = require('uuid');
+const VideoUtil = require('./video-util');
 const {WebRtcPeerRecvonly, WebRtcPeerSendonly} = require('./WebRtcPeer');
 
 if (window.hasOwnProperty('isSecureContext') === false) {
@@ -16,6 +15,4 @@ Object.assign(window, {
 	, WebRtcPeerRecvonly: WebRtcPeerRecvonly
 	, WebRtcPeerSendonly: WebRtcPeerSendonly
 	, VideoSettings: require('./settings')
-
-	, uuidv4: uuidv4
 });

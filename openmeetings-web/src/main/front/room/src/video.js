@@ -270,7 +270,7 @@ module.exports = class Video {
 			if (hasVideo) {
 				if (opts.interview) {
 					const area = $('.pod-area');
-					const contId = uuidv4();
+					const contId = crypto.randomUUID();
 					contSel = '#' + contId;
 					area.append($('<div class="pod"></div>').attr('id', contId));
 					WbArea.updateAreaClass();
@@ -640,7 +640,7 @@ module.exports = class Video {
 		function _init(_msg) {
 			sd = _msg.stream;
 			sd.activities = sd.activities.sort();
-			_msg.instanceUid = uuidv4();
+			_msg.instanceUid = crypto.randomUUID();
 			iceServers = _msg.iceServers;
 			__initUI(_msg.instanceUid);
 			_refresh(_msg);

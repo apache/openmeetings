@@ -124,7 +124,7 @@ module.exports = class Wb {
 			switch(o.omType) {
 				case 'textbox':
 				case 'i-text':
-					o.uid = uuidv4();
+					o.uid = crypto.randomUUID();
 					o.slide = this.slide;
 					objCreatedHandler(o);
 					break;
@@ -179,7 +179,7 @@ module.exports = class Wb {
 			}
 		}
 		function pathCreatedHandler(o) {
-			o.path.uid = uuidv4();
+			o.path.uid = crypto.randomUUID();
 			o.path.slide = this.slide;
 			o.path.omType = 'freeDraw';
 			objCreatedHandler(o.path);

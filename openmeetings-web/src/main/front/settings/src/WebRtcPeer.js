@@ -529,7 +529,7 @@ class WebRtcPeer {
 	 * @hidden
 	 */
 	generateUniqueId() {
-		return uuidv4();
+		return crypto.randomUUID();
 	}
 
 	get stream() {
