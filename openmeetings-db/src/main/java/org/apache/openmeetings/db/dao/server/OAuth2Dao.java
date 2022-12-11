@@ -21,7 +21,6 @@ package org.apache.openmeetings.db.dao.server;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterOauth;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -49,7 +48,7 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 
 	public List<OAuthServer> getActive() {
 		if (!isAllowRegisterOauth()) {
-			return new ArrayList<>();
+			return List.of();
 		}
 		TypedQuery<OAuthServer> query = em.createNamedQuery("getEnabledOAuthServers", OAuthServer.class);
 		return query.getResultList();

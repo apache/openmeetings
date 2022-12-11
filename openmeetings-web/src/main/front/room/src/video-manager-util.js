@@ -1,10 +1,24 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 let share;
 
+function __savePod(v) {
+	const opts = Room.getOptions();
+	if (!opts.interview && v && v.find('video').length > 0 && v.data('clientType') === 'WEBCAM' && v.dialog('instance')) {
+		const userUI = $(`#user${v.data('clientUid')}`)
+			, widget = v.dialog('widget');
+		userUI.data('video-pod', {
+			x: widget.css('left')
+			, y: widget.css('top')
+			, w: widget.css('width')
+			, h: widget.css('height')
+		});
+	}
+}
 function _closeV(v) {
 	if (!v || v.length < 1) {
 		return;
 	}
+	__savePod(v);
 	if (v.dialog('instance') !== undefined) {
 		v.dialog('destroy');
 	}
@@ -48,6 +62,7 @@ module.exports = {
 	, sendMessage: (_m) => {
 		OmUtil.sendMessage(_m, {type: 'kurento'});
 	}
+	, savePod: __savePod
 	, closeV: _closeV
 	, close: (uid, showShareBtn) => {
 		const v = $('#' + VideoUtil.getVid(uid));

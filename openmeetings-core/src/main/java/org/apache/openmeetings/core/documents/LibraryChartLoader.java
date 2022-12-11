@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -40,8 +39,7 @@ public class LibraryChartLoader {
 
 	private LibraryChartLoader() {}
 
-	@SuppressWarnings("rawtypes")
-	public static List loadChart(File dir, String fileName) {
+	public static List<?> loadChart(File dir, String fileName) {
 		try {
 			File file = new File(dir, fileName + CHART_EXT);
 
@@ -53,11 +51,11 @@ public class LibraryChartLoader {
 			try (InputStream is = new FileInputStream(file);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(is, UTF_8)))
 			{
-				return (List) xStream.fromXML(reader);
+				return (List<?>) xStream.fromXML(reader);
 			}
 		} catch (Exception err) {
 			log.error("Unexpected error while loading chart", err);
 		}
-		return new ArrayList<>();
+		return List.of();
 	}
 }

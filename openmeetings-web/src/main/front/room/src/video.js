@@ -383,6 +383,7 @@ module.exports = class Video {
 				sd.camEnabled = _c.camEnabled;
 				const state = __getState();
 				if (camChanged) {
+					VideoMgrUtil.savePod(v);
 					v.off();
 					if (v.dialog('instance')) {
 						v.dialog('destroy');
@@ -409,7 +410,18 @@ module.exports = class Video {
 			const _id = VideoUtil.getVid(sd.uid);
 			_resizeDlgArea(size.width, size.height);
 			if (hasVideo && !isSharing && !isRecording) {
-				VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VIDWIN_SEL, _id), sd.width, sd.height + 25));
+				// let's try to restore size+position
+				const opts = Room.getOptions()
+					, stored = $(`#user${sd.cuid}`).data('video-pod');
+				if (!opts.interview && stored) {
+					const widget = v.dialog('widget');
+					widget.css('left', stored.x);
+					widget.css('top', stored.y)
+					widget.css('width', stored.w);
+					widget.css('height', stored.h)
+				} else {
+					VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VIDWIN_SEL, _id), sd.width, sd.height + 25));
+				}
 			}
 			state.video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 				.attr('playsinline', 'playsinline')
@@ -515,6 +527,7 @@ module.exports = class Video {
 			data.rtcPeer = null;
 		}
 		function _cleanup(evt) {
+			VideoMgrUtil.savePod(v);
 			delete vidSize.width;
 			delete vidSize.height;
 			OmUtil.log('!!Disposing participant ' + sd.uid);

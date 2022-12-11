@@ -57,6 +57,6 @@ public abstract class AdminUserChoiceProvider extends ChoiceProvider<User> {
 		for (String id : inIds) {
 			ids.add(Long.valueOf(id));
 		}
-		return new ArrayList<>(userDao.get(ids));
+		return userDao.get(ids);
 	}
 }
