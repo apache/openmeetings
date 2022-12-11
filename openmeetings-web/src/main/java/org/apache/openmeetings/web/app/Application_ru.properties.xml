@@ -888,6 +888,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.YES_NO"><![CDATA[Да/Нет]]></entry>
 	<entry key="profile.invitation"><![CDATA[Приглашение]]></entry>
 	<entry key="profile.invitations"><![CDATA[Приглашения]]></entry>
+	<entry key="ptt.info"><![CDATA[Ваш микрофон отключен. Вы можете удерживать Ctrl+Пробел (Cmd+Пробел), чтобы временно включить звук (Push-to-Talk)]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Записи группы]]></entry>
 	<entry key="register.privacy.accept"><![CDATA[Нажимая на кнопку "${register}", Вы соглашаетесь с нашим ${link}.]]></entry>
 	<entry key="register.privacy.statement"><![CDATA[соглашением о конфиденциальности]]></entry>

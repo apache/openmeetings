@@ -44,7 +44,7 @@ function _onReceive(msg) {
 function _onKMessage(m) {
 	switch (m.id) {
 		case 'clientLeave':
-			$(VID_SEL + '[data-client-uid="' + m.uid + '"]').each(function() {
+			$(`${VID_SEL}[data-client-uid="${m.uid}"]`).each(function() {
 				VideoMgrUtil.closeV($(this));
 			});
 			if (share.data('cuid') === m.uid) {
@@ -113,6 +113,8 @@ function _init() {
 	share = $('.room-block .room-container').find('.btn.shared');
 	VideoMgrUtil.init(share);
 	inited = true;
+	$(window).on('keydown.push-to-talk', {enable: true}, _onPtt);
+	$(window).on('keyup.push-to-talk', {enable: false}, _onPtt);
 }
 function _update(c) {
 	if (!inited) {
@@ -141,7 +143,7 @@ function _update(c) {
 			$(this).data().setRights(c.rights);
 		});
 	}
-	$('[data-client-uid="' + c.cuid + '"]').each(function() {
+	$(`[data-client-uid="${c.cuid}"]`).each(function() {
 		const sd = $(this).data().stream();
 		if (!streamMap[sd.uid]) {
 			//not-inited/invalid video window
@@ -185,10 +187,10 @@ function _play(streams, iceServers) {
 	});
 }
 function _find(uid) {
-	return $(VID_SEL + '[data-client-uid="' + uid + '"][data-client-type="WEBCAM"]');
+	return $(`${VID_SEL}[data-client-uid="${uid}"][data-client-type="WEBCAM"]`);
 }
 function _userSpeaks(uid, active) {
-	const u = $('#user' + uid + ' .audio-activity')
+	const u = $(`#user${uid} .audio-activity`)
 		, v = _find(uid).parent();
 	if (active) {
 		u.addClass('speaking');
@@ -224,6 +226,14 @@ function _toggleActivity(activity) {
 		, activity: activity
 	});
 }
+function _onPtt(e) {
+	if ((e.ctrlKey || e.metaKey) && 'Space' === e.code) {
+		const v = _find(Room.getOptions().uid);
+		if (v.length > 0 && v.data()) {
+			v.data().pushToTalk(e.data.enable);
+		}
+	}
+}
 
 module.exports = {
 	init: _init
@@ -234,6 +244,8 @@ module.exports = {
 	, muteOthers: _muteOthers
 	, toggleActivity: _toggleActivity
 	, destroy: function() {
+		$(window).off('keydown.push-to-talk');
+		$(window).off('keyup.push-to-talk');
 		Wicket.Event.unsubscribe('/websocket/message', _onWsMessage);
 	}
 };

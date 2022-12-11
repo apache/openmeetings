@@ -17,6 +17,9 @@ function _isSharing(sd) {
 function _isRecording(sd) {
 	return !!sd && 'SCREEN' === sd.type && sd.activities.includes(REC_ACTIVITY);
 }
+function _hasActivity(sd, act) {
+	return !!sd && sd.activities.includes(act);
+}
 function _hasMic(sd) {
 	if (!sd) {
 		return true;
@@ -228,29 +231,27 @@ function _setPos(v, pos) {
 	}
 }
 function _askPermission(callback) {
-	const perm = $('#ask-permission');
-	if (undefined === perm.dialog('instance')) {
-		perm.data('callbacks', []).dialog({
-			appendTo: '.room-block .room-container'
-			, dialogClass: "ask-video-play-permission"
-			, autoOpen: false
-			, buttons: [
-				{
-					text: perm.data('btn-ok')
-					, click: function() {
-						while (perm.data('callbacks').length > 0) {
-							perm.data('callbacks').pop()();
-						}
-						$(this).dialog('close');
-					}
-				}
-			]
+	const data = $('.sidebar').data('bs.confirmation');
+	if (typeof(data) === 'object') {
+		data.config.buttons[0].onClick = function() {callback();};
+	} else {
+		const perm = $('#ask-permission');
+		$('.sidebar').confirmation({
+			title: perm.attr('title')
+			, placement: Settings.isRtl ? 'right' : 'left'
+			, singleton: true
+			, rootSelector: '.sidebar'
+			, html: true
+			, content: perm.html()
+			, buttons: [{
+				class: 'btn btn-sm btn-warning'
+				, label: perm.data('btn-ok')
+				, value: perm.data('btn-ok')
+				, onClick: function() {callback();}
+			}]
 		});
 	}
-	if (!perm.dialog('isOpen')) {
-		perm.dialog('open');
-	}
-	perm.data('callbacks').push(callback);
+	$('.sidebar').confirmation('show');
 }
 function _disconnect(node) {
 	try {
@@ -309,6 +310,7 @@ module.exports = {
 	, hasMic: _hasMic
 	, hasCam: _hasCam
 	, hasVideo: _hasVideo
+	, hasActivity: _hasActivity
 	, getRects: _getRects
 	, getPos: _getPos
 	, container: _container

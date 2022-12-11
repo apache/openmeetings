@@ -889,6 +889,7 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="poll.type.YES_NO"><![CDATA[Si/No]]></entry>
 	<entry key="profile.invitation"><![CDATA[Invito]]></entry>
 	<entry key="profile.invitations"><![CDATA[Inviti]]></entry>
+	<entry key="ptt.info"><![CDATA[Your microphone is muted. You can hold Ctrl+Space (Cmd+Space) to temporary unmute it (Push-to-Talk)]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
 	<entry key="register.privacy.accept"><![CDATA[By clicking "${register}", you agree to our ${link}.]]></entry>
 	<entry key="register.privacy.statement"><![CDATA[privacy statement]]></entry>

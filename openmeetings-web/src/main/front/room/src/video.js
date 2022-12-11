@@ -97,6 +97,9 @@ module.exports = class Video {
 						stream.getVideoTracks().forEach(track => track.enabled = cnts.videoEnabled);
 						stream.getAudioTracks().forEach(track => track.enabled = cnts.audioEnabled);
 						state.localStream = stream;
+						if (__pttEnabled(state)) {
+							OmUtil.alert('warning', $('#user-video').data('ptt-info'), 10000);
+						}
 						let _stream = stream;
 						const data = {};
 						if (stream.getAudioTracks().length !== 0) {
@@ -658,9 +661,25 @@ module.exports = class Video {
 			__initUI(_msg.instanceUid);
 			_refresh(_msg);
 		}
+		function __pttEnabled(state) {
+			return sd && sd.self && state && state.localStream
+					&& VideoUtil.hasActivity(sd, VideoUtil.MIC_ACTIVITY) && !sd.micEnabled;
+		}
 
 		this.update = _update;
 		this.refresh = _refresh;
+		this.pushToTalk = (enable) => {
+			const state = __getState();
+			if (__pttEnabled(state)) {
+				state.localStream.getAudioTracks().forEach(track => track.enabled = enable);
+				const classes = document.querySelector('#room-sidebar-tab-users .header .om-icon.activity.mic.clickable').classList;
+				if (enable) {
+					classes.add('push-to-talk');
+				} else {
+					classes.remove('push-to-talk');
+				}
+			}
+		};
 		this.mute = function(_mute) {
 			vol.mute(_mute);
 		};

@@ -893,6 +893,7 @@ Bitte <tt>openmeetings.log</tt> prüfen und die OpenMeetings-Entwickeler kontakt
 	<entry key="poll.type.YES_NO"><![CDATA[Ja/Nein]]></entry>
 	<entry key="profile.invitation"><![CDATA[Einladung]]></entry>
 	<entry key="profile.invitations"><![CDATA[Einladungen]]></entry>
+	<entry key="ptt.info"><![CDATA[Your microphone is muted. You can hold Ctrl+Space (Cmd+Space) to temporary unmute it (Push-to-Talk)]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Gruppen-Aufnahmen]]></entry>
 	<entry key="register.privacy.accept"><![CDATA[Mit Klick auf "${register}" stimmen Sie unseren ${link} zu.]]></entry>
 	<entry key="register.privacy.statement"><![CDATA[Datenschutzerklärung]]></entry>

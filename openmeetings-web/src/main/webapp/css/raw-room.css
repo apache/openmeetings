@@ -357,6 +357,9 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	content: '\f131';
 	color: var(--bs-warning);
 }
+.activity.mic.om-icon.push-to-talk::before {
+	color: var(--bs-info);
+}
 .room-block .sb-wb .sidebar .user-list .user.entry.current {
 	font-weight: bold;
 	background-color: var(--bs-light);
