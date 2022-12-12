@@ -37,7 +37,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Objects;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -347,14 +347,14 @@ public abstract class FileTreePanel extends Panel {
 	}
 
 	private void deleteAll(AjaxRequestTarget target) {
-		for (Entry<String, BaseFileItem> e : selected.entrySet()) {
-			BaseFileItem f = e.getValue();
+		for (BaseFileItem f : selected.values()) {
 			if (!f.isReadOnly()) {
 				delete(f, target);
 			}
 		}
-		updateSelected(target);
+		updateSelected(target); // update nodes
 		selected.clear();
+		updateSelected(target); // update trash icon
 	}
 
 	void delete(BaseFileItem f, IPartialPageRequestHandler handler) {
@@ -377,9 +377,9 @@ public abstract class FileTreePanel extends Panel {
 			createDir.add(AttributeModifier.replace(ATTR_CLASS, CREATE_DIR_CLASS + (readOnly ? DISABLED_CLASS : "")));
 			upload.setEnabled(!readOnly);
 			upload.add(AttributeModifier.replace(ATTR_CLASS, UPLOAD_CLASS + (readOnly ? DISABLED_CLASS : "")));
-			trash.add(AttributeModifier.replace(ATTR_CLASS, TRASH_CLASS + (readOnly ? DISABLED_CLASS : "")));
+			updateTrash(handler);
 			if (handler != null) {
-				handler.add(createDir, upload, trash);
+				handler.add(createDir, upload);
 				update(handler);
 			}
 		}
@@ -431,8 +431,17 @@ public abstract class FileTreePanel extends Panel {
 	}
 
 	private void updateSelected(AjaxRequestTarget target) {
-		for (Entry<String, BaseFileItem> e : selected.entrySet()) {
-			updateNode(target, e.getValue());
+		for (BaseFileItem f : selected.values()) {
+			updateNode(target, f);
+		}
+		updateTrash(target);
+	}
+
+	private void updateTrash(IPartialPageRequestHandler handler) {
+		final boolean hasDeletable = selected.values().stream().map(f -> f.getId()).anyMatch(Objects::nonNull);
+		trash.add(AttributeModifier.replace(ATTR_CLASS, TRASH_CLASS + (hasDeletable && !readOnly ? "" : DISABLED_CLASS)));
+		if (handler != null) {
+			handler.add(trash);
 		}
 	}
 

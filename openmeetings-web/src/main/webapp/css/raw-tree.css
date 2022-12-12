@@ -183,6 +183,7 @@
 }
 .file.item .name {
 	padding-top: 10px;
+	padding-inline-start: 5px;
 }
 .tree-node .file.item .errors {
 	position: absolute;
