@@ -159,7 +159,7 @@ function _load() {
 	$(window).on('keydown.om-sip', SipDialer.keyDown);
 	$(window).on('keyup.om-sip', SipDialer.keyUp);
 	$(document).click(_mouseHandler);
-	_addNoSleep();
+	document.addEventListener('click', _addNoSleep, false);
 	SipDialer.init();
 }
 function _addNoSleep() {
@@ -168,6 +168,7 @@ function _addNoSleep() {
 	noSleep.enable();
 }
 function _removeNoSleep() {
+	document.removeEventListener('click', _addNoSleep, false);
 	if (noSleep) {
 		noSleep.disable();
 		noSleep = null;
