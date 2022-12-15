@@ -22,53 +22,45 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-9.xsd">
 <wicket:extend>
 	<form wicket:id="form">
-		<table class="w-100 private-message">
-			<tr>
-				<td colspan="2" wicket:id="feedback"></td>
-			</tr>
-			<tr>
-				<td class="messages column label"><wicket:message key="1210"/></td>
-				<td wicket:message="title:1588" class="om-select2 full-width"><select class="messages text to" wicket:id="to"></select></td>
-			</tr>
-			<tr>
-				<td class="messages column label"><wicket:message key="1211"/></td>
-				<td><input class="messages text form-control" type="text" wicket:id="subject"/></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<div wicket:id="toolbarContainer"></div>
-					<div class="private message body" wicket:id="message"></div>
-				</td>
-			</tr>
-			<tr wicket:enclosure="bookedRoom">
-				<td colspan="2"><input type="checkbox" wicket:id="bookedRoom" /><label wicket:for="bookedRoom"><wicket:message key="1218"/></label></td>
-			</tr>
-			<tr wicket:id="roomParamsBlock">
-				<td colspan="2" wicket:id="roomParams">
-					<table class="w-100">
-						<tr>
-							<td>
-								<table>
-									<tr>
-										<td><wicket:message key="45"/></td>
-										<td><select class="form-select messages selector" wicket:id="room.type"></select></td>
-									</tr>
-									<tr>
-										<td><wicket:message key="label.start" /></td>
-										<td><span class="date time picker" wicket:id="start"></span></td>
-									</tr>
-									<tr>
-										<td><wicket:message key="label.end" /></td>
-										<td><span class="date time picker" wicket:id="end"></span></td>
-									</tr>
-								</table>
-							</td>
-							<td><i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="1221" /></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
+		<td wicket:id="feedback"></td>
+		<div class="formelement row">
+			<label wicket:for="to" class="form-label col-2 text-right"><wicket:message key="1210" /></label>
+			<div class="om-select2 p-0 d-inline-block col-9"><select class="input w-100" wicket:id="to"></select></div>
+		</div>
+		<div class="formelement row">
+			<label wicket:for="subject" class="form-label col-2 text-right"><wicket:message key="1211" /></label>
+			<div class="col-9 p-0">
+				<input type="text" wicket:id="subject" class="form-control"/>
+			</div>
+		</div>
+		<div wicket:id="toolbarContainer"></div>
+		<div class="private message body" wicket:id="message"></div>
+		<div class="mt-1 mb-1" wicket:enclosure="bookedRoom">
+			<input type="checkbox" wicket:id="bookedRoom" /><label wicket:for="bookedRoom"><wicket:message key="1218"/></label>
+		</div>
+		<div wicket:id="roomParamsBlock">
+			<div class="row" wicket:id="roomParams">
+				<div class="col-7">
+					<div class="formelement row">
+						<label wicket:for="room.type" class="form-label col-2 text-right"><wicket:message key="45" /></label>
+						<div class="col-10 p-0">
+							<select wicket:id="room.type" class="form-select"/>
+						</div>
+					</div>
+					<div class="formelement row">
+						<label wicket:for="start" class="form-label col-2 text-right"><wicket:message key="label.start" /></label>
+						<div class="d-inline-block col-10 p-0"><span class="date time picker" wicket:id="start"></span></div>
+					</div>
+					<div class="formelement row">
+						<label wicket:for="end" class="form-label col-2 text-right"><wicket:message key="label.end" /></label>
+						<div class="d-inline-block col-10 p-0"><span class="date time picker" wicket:id="end"></span></div>
+					</div>
+				</div>
+				<div class="col-5">
+					<i class="fas fa-info-circle m-1 text-info"></i><wicket:message key="1221" />
+				</div>
+			</div>
+		</div>
 	</form>
 </wicket:extend>
 </html>

@@ -340,10 +340,13 @@ select.messages.selector {
 	margin-left: 10px;
 }
 #messagesTable tr.selected {
-	background-color: #d7ebf9;
+	background-color: var(--bs-light);
 }
 #messagesTable tr.unread {
 	font-weight: bold;
+}
+#messagesTable tr.unread>td:nth-child(1)::before {
+    content: '*'
 }
 .fht-tbody {
 	background-color: white;
