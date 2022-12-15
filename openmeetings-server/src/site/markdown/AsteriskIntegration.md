@@ -137,7 +137,7 @@ encryption=no
 avpf=yes
 icesupport=yes
 directmedia=no
-allow=!all,ulaw,opus,vp8
+allow=!all,opus,h264
 ```
 
 ### Configure extensions:
