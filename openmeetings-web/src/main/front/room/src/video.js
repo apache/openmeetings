@@ -442,6 +442,9 @@ module.exports = class Video {
 				state.video.attr('poster', null);
 				vc.addClass('audio-only');
 			}
+			if (self) {
+				state.video[0].muted = true;
+			}
 			vc.append(state.video);
 			__updateVideo(state);
 		}
