@@ -118,7 +118,7 @@
 		<commons-text.version>1.10.0</commons-text.version>
 		<slf4j.version>2.0.6</slf4j.version>
 		<logback.version>1.4.5</logback.version>
-		<jetty.version>9.4.49.v20220914</jetty.version>
+		<jetty.version>9.4.50.v20221201</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
 		<mockito.version>4.10.0</mockito.version>
