@@ -370,7 +370,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 			add(feedback.setOutputMarkupId(true));
 			//General
 			add(ownerPanel.add(owner));
-			boolean showGroups = AuthLevelUtil.hasAdminLevel(getRights());
+			boolean showGroups = AuthLevelUtil.hasAdminLevel(getRights()) || AuthLevelUtil.hasGroupAdminLevel(getRights());
 			groups.getSettings().setDropdownParent(AppointmentDialog.this.getMarkupId());
 			add(rdi.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 				private static final long serialVersionUID = 1L;

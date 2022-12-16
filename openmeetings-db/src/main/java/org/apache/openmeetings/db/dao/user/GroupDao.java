@@ -43,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 	private static final List<String> searchFields = List.of("name");
+	private static final List<String> guSearchFields = List.copyOf(searchFields.stream().map(n -> "group." + n).toList());
 	@PersistenceContext
 	private EntityManager em;
 
@@ -82,14 +83,15 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 
 	private Predicate getAdminFilter(Long adminId, CriteriaBuilder builder, CriteriaQuery<?> query) {
 		Root<GroupUser> root = getRoot(query, GroupUser.class);
-		return builder.and(builder.equal(root.get("user").get("id"), adminId), builder.isTrue(root.get("moderator")));
+		return builder.and(builder.equal(root.get("user").get("id"), adminId)
+						, builder.isTrue(root.get("moderator")));
 	}
 
 	@Override
 	public List<Group> adminGet(String search, Long adminId, long start, long count, SortParam<String> sort) {
 		return DaoHelper.get(em, GroupUser.class, Group.class
 				, (builder, root) -> root.get("group")
-				, true, search, searchFields, true
+				, true, search, guSearchFields, true
 				, (b, q) -> getAdminFilter(adminId, b, q)
 				, sort, start, count);
 	}
@@ -108,7 +110,7 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 	public long adminCount(String search, Long adminId) {
 		return DaoHelper.count(em, GroupUser.class
 				, (builder, root) -> builder.countDistinct(root.get("group"))
-				, search, searchFields, false
+				, search, guSearchFields, false
 				, (b, q) -> getAdminFilter(adminId, b, q.distinct(true)));
 	}
 

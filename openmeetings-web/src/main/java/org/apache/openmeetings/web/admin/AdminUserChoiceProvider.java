@@ -48,7 +48,7 @@ public abstract class AdminUserChoiceProvider extends ChoiceProvider<User> {
 	@Override
 	public void query(String term, int page, Response<User> response) {
 		response.addAll(userDao.get(term, true, page * PAGE_SIZE, PAGE_SIZE));
-		response.setHasMore(PAGE_SIZE == response.getResults().size());
+		response.setHasMore(page * PAGE_SIZE + response.getResults().size() < userDao.count(term, true, -1L));
 	}
 
 	@Override

@@ -81,7 +81,7 @@ public class RoomInvitationForm extends InvitationForm {
 	@Override
 	protected void onInitialize() {
 		groups.setLabel(new ResourceModel("126"));
-		boolean showGroups = AuthLevelUtil.hasAdminLevel(getRights());
+		boolean showGroups = AuthLevelUtil.hasAdminLevel(getRights()) || AuthLevelUtil.hasGroupAdminLevel(getRights());
 		add(rdi.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 			private static final long serialVersionUID = 1L;
 

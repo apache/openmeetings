@@ -19,10 +19,10 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 
 import org.apache.openmeetings.db.dao.user.GroupDao;
@@ -30,7 +30,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
@@ -39,6 +39,7 @@ import org.wicketstuff.select2.Response;
 
 public class GroupChoiceProvider extends ChoiceProvider<Group> {
 	private static final long serialVersionUID = 1L;
+	public static final long PAGE_SIZE = 5;
 	@SpringBean
 	private GroupDao groupDao;
 	@SpringBean
@@ -50,13 +51,13 @@ public class GroupChoiceProvider extends ChoiceProvider<Group> {
 
 	@Override
 	public void query(String term, int page, Response<Group> response) {
-		if (WebSession.getRights().contains(User.Right.ADMIN)) {
-			List<Group> groups = groupDao.get(0, Integer.MAX_VALUE);
-			for (Group g : groups) {
-				if (Strings.isEmpty(term) || g.getName().toLowerCase(Locale.ROOT).contains(term.toLowerCase(Locale.ROOT))) {
-					response.add(g);
-				}
-			}
+		long count;
+		if (AuthLevelUtil.hasAdminLevel(getRights())) {
+			count = groupDao.count(term);
+			response.addAll(groupDao.get(term, page * PAGE_SIZE, PAGE_SIZE, null));
+		} else if (AuthLevelUtil.hasGroupAdminLevel(getRights())) {
+			response.addAll(groupDao.adminGet(term, getUserId(), page * PAGE_SIZE, PAGE_SIZE, null));
+			count = groupDao.adminCount(term, getUserId());
 		} else {
 			User u = userDao.get(getUserId());
 			for (GroupUser ou : u.getGroupUsers()) {
@@ -64,7 +65,9 @@ public class GroupChoiceProvider extends ChoiceProvider<Group> {
 					response.add(ou.getGroup());
 				}
 			}
+			count = u.getGroupUsers().size();
 		}
+		response.setHasMore(page * PAGE_SIZE + response.getResults().size() < count);
 	}
 
 	@Override

@@ -20,11 +20,15 @@ package org.apache.openmeetings.user;
 
 import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
@@ -66,7 +70,7 @@ class TestUserGroup extends AbstractOmServerTest {
 	void addGroup() {
 		Group g = new Group();
 		g.setName(GROUP_NAME);
-		Long groupId = groupDao.update(g, null).getId(); //inserted by not checked
+		Long groupId = groupDao.update(g, null).getId();
 		assertNotNull(groupId, "New Group have valid id");
 
 		List<GroupUser> ul = groupUserDao.get(groupId, 0, 9999);
@@ -89,6 +93,38 @@ class TestUserGroup extends AbstractOmServerTest {
 		checkEmptyGroup("dao.getByLogin(user)", userDao.getByLogin(u.getLogin(), u.getType(), u.getDomainId()));
 	}
 
+	private Long addGroupUser(User u, String grpNameUq, boolean moderator) {
+		Group g = new Group();
+		g.setName(grpNameUq + randomUUID().toString());
+		g = groupDao.update(g, null);
+		GroupUser gu = new GroupUser(g, u);
+		gu.setModerator(moderator);
+		u.getGroupUsers().add(gu);
+		return g.getId();
+	}
+
+	@Test
+	void groupAdmin() throws Exception {
+		String uuid = randomUUID().toString();
+		User u = getUser(uuid);
+		u.setGroupUsers(new ArrayList<>());
+
+		final String uniquePart = randomUUID().toString().replace('-', '_');
+		Long idG1 = addGroupUser(u, uniquePart, true);
+		Long idG2 = addGroupUser(u, uniquePart, true);
+		Long idG3 = addGroupUser(u, uniquePart, false);
+
+		u = userDao.update(u, null);
+
+		assertEquals(2, groupDao.adminCount(uniquePart, u.getId()), "Count: There should be exatly 2 groups");
+
+		List<Group> groups = groupDao.adminGet(uniquePart, u.getId(), 0, 10, null);
+		assertEquals(2, groups.size(), "List: There should be exatly 2 groups");
+		Set<Long> groupIds = groups.stream().map(Group::getId).collect(Collectors.toSet());
+		assertTrue(groupIds.contains(idG1), "First group should be found");
+		assertTrue(groupIds.contains(idG2), "Second group should be found");
+		assertFalse(groupIds.contains(idG3), "Third group should NOT be found");
+	}
 
 	@Test
 	void addLdapUserWithoutGroup() throws Exception {
