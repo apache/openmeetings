@@ -97,7 +97,7 @@ public class ProcessHelper {
 		return exec(process, argv, Map.of(), optional);
 	}
 
-	private static ProcessResult exec(String process, List<String> argv, Map<? extends String, ? extends String> env, boolean optional) {
+	private static ProcessResult exec(String process, List<String> argv, Map<String, String> env, boolean optional) {
 		ProcessResult res = new ProcessResult()
 				.setProcess(process)
 				.setOptional(optional);

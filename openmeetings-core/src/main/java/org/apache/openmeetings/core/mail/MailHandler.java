@@ -32,7 +32,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isSmtpUseSsl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSmtpUseTls;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Calendar;
@@ -118,11 +117,11 @@ public class MailHandler {
 		return msg;
 	}
 
-	private MimeMessage appendBody(MimeMessage msg, MailMessage m) throws MessagingException, IOException {
+	private MimeMessage appendBody(MimeMessage msg, MailMessage m) throws MessagingException {
 		return appendBody(msg, m.getBody());
 	}
 
-	public MimeMessage appendBody(MimeMessage msg, String body) throws MessagingException, IOException {
+	public MimeMessage appendBody(MimeMessage msg, String body) throws MessagingException {
 		// -- Set the subject and body text --
 		msg.setDataHandler(new DataHandler(new ByteArrayDataSource(body, "text/html; charset=\"utf-8\"")));
 

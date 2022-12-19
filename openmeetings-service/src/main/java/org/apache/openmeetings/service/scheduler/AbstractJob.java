@@ -22,7 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.function.BiConsumer;
+import java.util.function.ObjLongConsumer;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
@@ -39,7 +39,7 @@ public abstract class AbstractJob {
 	@Autowired
 	RecordingDao recordingDao;
 
-	void processExpiringRecordings(boolean notified, BiConsumer<Recording, Long> consumer) {
+	void processExpiringRecordings(boolean notified, ObjLongConsumer<Recording> consumer) {
 		if (!isInitComplete()) {
 			return;
 		}

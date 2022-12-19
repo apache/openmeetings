@@ -26,7 +26,7 @@ import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM__SRC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_SRC_UND;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -202,7 +202,7 @@ public class WbConverter {
 		add(wb, init(wb, props)
 				.put(ATTR_TYPE, TYPE_IMAGE)
 				.put("omType", "Clipart")
-				.put(PARAM__SRC, src)
+				.put(PARAM_SRC_UND, src)
 				.put("angle", props.get(3)));
 	}
 

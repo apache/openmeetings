@@ -40,7 +40,7 @@ public abstract class StreamDesc implements Serializable, Cloneable {
 	private int width;
 	private int height;
 
-	public StreamDesc(StreamDesc sd) {
+	protected StreamDesc(StreamDesc sd) {
 		this.client = sd.client;
 		this.uid = sd.uid;
 		this.type = sd.type;
@@ -49,7 +49,7 @@ public abstract class StreamDesc implements Serializable, Cloneable {
 		this.activities.addAll(sd.activities);
 	}
 
-	public StreamDesc(final Client client, StreamType type) {
+	protected StreamDesc(final Client client, StreamType type) {
 		this.client = client;
 		this.uid = randomUUID().toString();
 		this.type = type;

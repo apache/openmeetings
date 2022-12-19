@@ -117,7 +117,7 @@ public class CalendarDialog extends Modal<OmCalendar> {
 						HttpClient client = calendarPanel.getHttpClient();
 						HttpClientContext context = calendarPanel.getHttpClientContext();
 
-						if (form.gcal.getModelObject()) {
+						if (Boolean.TRUE.equals(form.gcal.getModelObject())) {
 							c.setSyncType(OmCalendar.SyncType.GOOGLE_CALENDAR);
 							c.setToken(form.username.getModelObject());
 							if (c.getId() == null) {
@@ -389,7 +389,7 @@ public class CalendarDialog extends Modal<OmCalendar> {
 			@Override
 			public void validate(IValidatable<String> validatable) {
 				//Only Validate when It's not a Google Calendar i.e a URL
-				if (!gcal.getModelObject()) {
+				if (Boolean.FALSE.equals(gcal.getModelObject())) {
 					super.validate(validatable);
 				}
 			}
@@ -506,7 +506,7 @@ public class CalendarDialog extends Modal<OmCalendar> {
 
 			//Add new AttributeModifier to change the type of URLTextField, to text for
 			//Google Calendar and to URL for a normal CalDAV calendar
-			url.add(AttributeModifier.replace("type", gcal.getModelObject() ? "text" : "url"));
+			url.add(AttributeModifier.replace("type", Boolean.TRUE.equals(gcal.getModelObject()) ? "text" : "url"));
 		}
 
 

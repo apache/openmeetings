@@ -438,7 +438,9 @@ public abstract class FileTreePanel extends Panel {
 	}
 
 	private void updateTrash(IPartialPageRequestHandler handler) {
-		final boolean hasDeletable = selected.values().stream().map(f -> f.getId()).anyMatch(Objects::nonNull);
+		final boolean hasDeletable = selected.values().stream()
+				.map(BaseFileItem::getId)
+				.anyMatch(Objects::nonNull);
 		trash.add(AttributeModifier.replace(ATTR_CLASS, TRASH_CLASS + (hasDeletable && !readOnly ? "" : DISABLED_CLASS)));
 		if (handler != null) {
 			handler.add(trash);

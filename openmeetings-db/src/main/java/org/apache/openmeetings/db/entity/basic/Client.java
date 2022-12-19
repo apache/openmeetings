@@ -223,14 +223,14 @@ public class Client implements IDataProviderEntity, IWsClient {
 	public Optional<ScreenStreamDesc> getScreenStream() {
 		return streams.values().stream()
 				.filter(sd -> StreamType.SCREEN == sd.getType())
-				.map(sd -> (ScreenStreamDesc)sd)
+				.map(ScreenStreamDesc.class::cast)
 				.findFirst();
 	}
 
 	public Stream<WebcamStreamDesc> getCamStreams() {
 		return streams.values().stream()
 				.filter(sd -> StreamType.WEBCAM == sd.getType())
-				.map(sd -> (WebcamStreamDesc)sd);
+				.map(WebcamStreamDesc.class::cast);
 	}
 
 	public Date getConnectedSince() {

@@ -590,7 +590,7 @@ public class BackupImport {
 	/*
 	 * ##################### Import Groups
 	 */
-	void importGroups(File base) throws Exception {
+	void importGroups(File base) {
 		log.info("Configs import complete, starting group import");
 		readList(base, "organizations.xml", GROUP_LIST_NODE, GROUP_NODE, Group.class, g -> {
 			Long oldId = g.getId();
@@ -968,7 +968,7 @@ public class BackupImport {
 	/*
 	 * ##################### Import Recordings
 	 */
-	void importRecordings(File base) throws Exception {
+	void importRecordings(File base) {
 		log.info("Meeting members import complete, starting recordings server import");
 		final Map<Long, Long> folders = new HashMap<>();
 		saveTree(base, "flvRecordings.xml", RECORDING_LIST_NODE, RECORDING_NODE, Recording.class, folders, r -> {
@@ -1083,7 +1083,7 @@ public class BackupImport {
 	/*
 	 * ##################### Import File-Explorer Items
 	 */
-	private List<FileItem> importFiles(File base) throws Exception {
+	private List<FileItem> importFiles(File base) {
 		log.info("Private message import complete, starting file explorer item import");
 		List<FileItem> result = new ArrayList<>();
 		final Map<Long, Long> folders = new HashMap<>();

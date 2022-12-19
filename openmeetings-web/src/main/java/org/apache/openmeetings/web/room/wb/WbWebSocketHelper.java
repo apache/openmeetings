@@ -22,7 +22,7 @@ import static org.apache.openmeetings.core.util.WebSocketHelper.alwaysTrue;
 import static org.apache.openmeetings.core.util.WebSocketHelper.publish;
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_SRC;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM__SRC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_SRC_UND;
 
 import java.util.function.Predicate;
 
@@ -44,7 +44,7 @@ import com.github.openjson.JSONObject;
 
 public class WbWebSocketHelper {
 	public static final String PARAM_OBJ = "obj";
-	private static final String PARAM__POSTER = "_poster";
+	private static final String PARAM_POSTER_UND = "_poster";
 
 	private WbWebSocketHelper() {
 		// denied
@@ -116,17 +116,17 @@ public class WbWebSocketHelper {
 		switch (fi.getType()) {
 			case VIDEO:
 				ref = new RoomResourceReference();
-				file.put(PARAM__SRC, urlFor(ref, pp));
-				file.put(PARAM__POSTER, urlFor(new RoomPreviewResourceReference(), pp));
+				file.put(PARAM_SRC_UND, urlFor(ref, pp));
+				file.put(PARAM_POSTER_UND, urlFor(new RoomPreviewResourceReference(), pp));
 				break;
 			case RECORDING:
 				ref = new Mp4RecordingResourceReference();
-				file.put(PARAM__SRC, urlFor(ref, pp));
-				file.put(PARAM__POSTER, urlFor(new PngRecordingResourceReference(), pp));
+				file.put(PARAM_SRC_UND, urlFor(ref, pp));
+				file.put(PARAM_POSTER_UND, urlFor(new PngRecordingResourceReference(), pp));
 				break;
 			case PRESENTATION:
 				ref = new RoomResourceReference();
-				file.put(PARAM__SRC, urlFor(ref, pp));
+				file.put(PARAM_SRC_UND, urlFor(ref, pp));
 				break;
 			default:
 				ref = new RoomResourceReference();
@@ -149,11 +149,11 @@ public class WbWebSocketHelper {
 		JSONObject f = new JSONObject(inFile.toString()); // deep copy to ensure thread safety
 		switch (fi.getType()) {
 			case VIDEO, RECORDING:
-				f.put(PARAM__SRC, patchUrl(f.getString(PARAM__SRC), c));
-				f.put(PARAM__POSTER, patchUrl(f.getString(PARAM__POSTER), c));
+				f.put(PARAM_SRC_UND, patchUrl(f.getString(PARAM_SRC_UND), c));
+				f.put(PARAM_POSTER_UND, patchUrl(f.getString(PARAM_POSTER_UND), c));
 				break;
 			case PRESENTATION:
-				f.put(PARAM__SRC, patchUrl(f.getString(PARAM__SRC), c));
+				f.put(PARAM_SRC_UND, patchUrl(f.getString(PARAM_SRC_UND), c));
 				break;
 			default:
 				f.put(PARAM_SRC, patchUrl(f.getString(PARAM_SRC), c));

@@ -371,7 +371,7 @@ public class LdapLoginManager {
 			return u;
 		}
 
-		public User setUserPicture(Entry entry, User inUser) throws LdapInvalidAttributeValueException {
+		public User setUserPicture(Entry entry, User inUser) {
 			User user = Optional.ofNullable(getAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE, ""))
 					.map(Attribute::get)
 					.filter(val -> val != null && val.getBytes() != null)

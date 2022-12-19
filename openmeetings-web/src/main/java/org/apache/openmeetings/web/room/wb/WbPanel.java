@@ -127,7 +127,7 @@ public class WbPanel extends AbstractWbPanel {
 	private final SerializableBiConsumer<Whiteboard, Boolean> addUndo = (wb, redo) -> {
 		JSONArray arr = getArray(wb.toJson(), null);
 		if (arr.length() != 0) {
-			if (!redo) {
+			if (Boolean.FALSE.equals(redo)) {
 				cleanRedo(wb.getId());
 			}
 			addUndo(wb.getId(), new UndoObject(WbAction.CLEAR_ALL
@@ -203,7 +203,7 @@ public class WbPanel extends AbstractWbPanel {
 		}
 		//presenter-right
 		if (c.hasRight(Right.PRESENTER)) {
-			processActionPresenter(c, a, obj, redo, handler);
+			processActionPresenter(c, a, obj, redo);
 		}
 		//wb-right
 		if (c.hasRight(Right.PRESENTER) || c.hasRight(Right.WHITEBOARD)) {
@@ -211,7 +211,7 @@ public class WbPanel extends AbstractWbPanel {
 		}
 	}
 
-	private boolean processActionGeneral(Client c, WbAction a, JSONObject obj, IPartialPageRequestHandler handler) throws IOException {
+	private boolean processActionGeneral(Client c, WbAction a, JSONObject obj, IPartialPageRequestHandler handler) {
 		switch (a) {
 			case CREATE_OBJ, MODIFY_OBJ:
 			{
@@ -232,39 +232,15 @@ public class WbPanel extends AbstractWbPanel {
 				return true;
 			}
 			case LOAD_VIDEOS:
-			{
-				StringBuilder sb = new StringBuilder("WbArea.initVideos(");
-				JSONArray arr = new JSONArray();
-				for (Entry<Long, Whiteboard> entry : wbm.list(roomId)) {
-					Whiteboard wb = entry.getValue();
-					for (JSONObject o : wb.list()) {
-						String ft = o.optString(ATTR_FILE_TYPE);
-						if (BaseFileItem.Type.RECORDING.name().equals(ft) || BaseFileItem.Type.VIDEO.name().equals(ft)) {
-							JSONObject status = o.optJSONObject(PARAM_STATUS);
-							if (status == null) {
-								continue;
-							}
-							JSONObject sts = new JSONObject(status.toString()); //copy
-							sts.put("pos", sts.getDouble("pos") + (System.currentTimeMillis() - sts.getLong(PARAM_UPDATED)) * 1. / 1000);
-							arr.put(new JSONObject()
-									.put("wbId", wb.getId())
-									.put("uid", o.getString("uid"))
-									.put(ATTR_SLIDE, o.getString(ATTR_SLIDE))
-									.put(PARAM_STATUS, sts));
-						}
-					}
-				}
-				sb.append(arr.toString()).append(");");
-				handler.appendJavaScript(sb);
+				loadVideos(handler);
 				return true;
-			}
 			default:
 				break;
 		}
 		return false;
 	}
 
-	private void processActionPresenter(Client c, WbAction a, JSONObject obj, boolean redo, IPartialPageRequestHandler handler) throws IOException {
+	private void processActionPresenter(Client c, WbAction a, JSONObject obj, boolean redo) {
 		switch (a) {
 			case CREATE_WB:
 			{
@@ -480,6 +456,32 @@ public class WbPanel extends AbstractWbPanel {
 		}
 	}
 
+	private void loadVideos(IPartialPageRequestHandler handler) {
+		StringBuilder sb = new StringBuilder("WbArea.initVideos(");
+		JSONArray arr = new JSONArray();
+		for (Entry<Long, Whiteboard> entry : wbm.list(roomId)) {
+			Whiteboard wb = entry.getValue();
+			for (JSONObject o : wb.list()) {
+				String ft = o.optString(ATTR_FILE_TYPE);
+				if (BaseFileItem.Type.RECORDING.name().equals(ft) || BaseFileItem.Type.VIDEO.name().equals(ft)) {
+					JSONObject status = o.optJSONObject(PARAM_STATUS);
+					if (status == null) {
+						continue;
+					}
+					JSONObject sts = new JSONObject(status.toString()); //copy
+					sts.put("pos", sts.getDouble("pos") + (System.currentTimeMillis() - sts.getLong(PARAM_UPDATED)) * 1. / 1000);
+					arr.put(new JSONObject()
+							.put("wbId", wb.getId())
+							.put("uid", o.getString("uid"))
+							.put(ATTR_SLIDE, o.getString(ATTR_SLIDE))
+							.put(PARAM_STATUS, sts));
+				}
+			}
+		}
+		sb.append(arr.toString()).append(");");
+		handler.appendJavaScript(sb);
+	}
+
 	@Override
 	protected String getRole() {
 		String role = ROLE_NONE;
@@ -672,8 +674,7 @@ public class WbPanel extends AbstractWbPanel {
 		if (deq == null || deq.isEmpty()) {
 			return null;
 		}
-		UndoObject redoObj = deq.pop();
-		return redoObj;
+		return deq.pop();
 	}
 
 	private static class LimitedLinkedList<T> extends LinkedList<T> {

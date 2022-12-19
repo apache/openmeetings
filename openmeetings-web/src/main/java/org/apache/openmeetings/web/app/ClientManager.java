@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
@@ -332,7 +332,7 @@ public class ClientManager implements IClientManager {
 		}
 	}
 
-	private String getServerUrl(Map.Entry<String, ServerInfo> e, Room r, Function<String, String> generator) {
+	private String getServerUrl(Map.Entry<String, ServerInfo> e, Room r, UnaryOperator<String> generator) {
 		final String curServerId = app.getServerId();
 		String serverId = e.getKey();
 		if (!curServerId.equals(serverId)) {
@@ -342,12 +342,12 @@ public class ClientManager implements IClientManager {
 		return null;
 	}
 
-	public String getServerUrl(Room r, Function<String, String> inGenerator) {
+	public String getServerUrl(Room r, UnaryOperator<String> inGenerator) {
 		if (onlineServers.size() == 1) {
 			log.debug("Cluster:: The only server found");
 			return null;
 		}
-		Function<String, String> generator = inGenerator == null ? baseUrl -> {
+		UnaryOperator<String> generator = inGenerator == null ? baseUrl -> {
 			String uuid = UUID.randomUUID().toString();
 			tokens().put(uuid, new InstantToken(getUserId(), r.getId()));
 			return Application.urlForPage(SignInPage.class, new PageParameters().add(TOKEN_PARAM, uuid), baseUrl);

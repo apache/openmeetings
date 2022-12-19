@@ -299,7 +299,7 @@ public class TomcatGenericExports extends Collector {
 			props.load(is);
 			//server info can be get as props.getProperty("server.info");
 			tomcatInfo.addMetric(List.of(props.getProperty("server.number"), props.getProperty("server.built")), 1);
-		} catch (Throwable t) {
+		} catch (Exception t) {
 			log.warn("Unable to read Tomcat version: ", t);
 		}
 		mfs.add(tomcatInfo);

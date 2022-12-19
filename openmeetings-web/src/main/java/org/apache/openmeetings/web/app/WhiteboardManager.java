@@ -147,7 +147,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 				getOrCreate(r.getId(), wbs -> {
 					r.getFiles().stream()
 						.sorted((rf1, rf2) -> (int)(rf1.getWbIdx() - rf2.getWbIdx()))
-						.collect(Collectors.groupingBy(f -> f.getWbIdx()))
+						.collect(Collectors.groupingBy(RoomFile::getWbIdx))
 						.forEach((wbIdx, fileList) -> {
 							log.trace("WBS init, processing idx {}", wbIdx);
 							Whiteboard wb = add(wbs, langId);

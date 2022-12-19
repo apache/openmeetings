@@ -37,7 +37,7 @@ public class OpenmeetingsVariables {
 	public static final String PARAM_USER_ID = "userId";
 	public static final String PARAM_STATUS = "status";
 	public static final String PARAM_SRC = "src";
-	public static final String PARAM__SRC = "_src";
+	public static final String PARAM_SRC_UND = "_src";
 	public static final String CONFIG_CRYPT = "crypt.class.name";
 	public static final String CONFIG_DASHBOARD_SHOW_CHAT = "dashboard.show.chat";
 	public static final String CONFIG_DASHBOARD_SHOW_MYROOMS = "dashboard.show.myrooms";

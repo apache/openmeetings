@@ -69,7 +69,7 @@ public class WebSocketHelper {
 			sendClient(omClient, c -> {
 				try {
 					c.sendMessage(b, 0, b.length);
-				} catch (Throwable e) {
+				} catch (Exception e) {
 					log.error("Error while sending binary message to client", e);
 				}
 			});
@@ -82,7 +82,7 @@ public class WebSocketHelper {
 			sendClient(omClient, c -> {
 				try {
 					c.sendMessage(msg.toString());
-				} catch (Throwable e) {
+				} catch (Exception e) {
 					log.error("Error while sending message to client", e);
 				}
 			});
@@ -94,7 +94,7 @@ public class WebSocketHelper {
 		sendClient(omClient, c -> {
 			try {
 				c.sendMessage(m);
-			} catch (Throwable e) {
+			} catch (Exception e) {
 				log.error("Error while sending message to client", e);
 			}
 		});
