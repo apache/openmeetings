@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[Ok]]></entry>
 	<entry key="59"><![CDATA[Langue :]]></entry>
 	<entry key="62"><![CDATA[Nettoyer le tableau blanc]]></entry>
-	<entry key="70"><![CDATA[Annuler]]></entry>
 	<entry key="72"><![CDATA[Sélectionner un objet]]></entry>
 	<entry key="73"><![CDATA[Texte]]></entry>
 	<entry key="74"><![CDATA[Dessiner]]></entry>
@@ -975,6 +974,8 @@ dans {1} jours. Si vous souhaitez sauvegarder cet enregistrement, veuillez le t�
 	<entry key="wb.tool.math.formula"><![CDATA[Formule mathématique]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Guide de la syntaxe LaTeX]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://fr.wikibooks.org/wiki/LaTeX/%C3%89crire_des_math%C3%A9matiques]]></entry>
+	<entry key="wb.tool.redo"><![CDATA[Redo]]></entry>
+	<entry key="wb.tool.undo"><![CDATA[Annuler]]></entry>
 	<entry key="wb.tool.white-out"><![CDATA[Effacez]]></entry>
 	<entry key="widget.recent.desc"><![CDATA[Cet espace affiche les salles que vous avez fréquenté récemment ]]></entry>
 	<entry key="widget.recent.title"><![CDATA[Salles récentes]]></entry>

@@ -33,17 +33,31 @@ public class UndoObject implements Serializable {
 		, REMOVE
 		, MODIFY
 	}
+	private final WbAction action;
+	private final String origObject;
 	private final Type type;
 	private final String object;
 
-	public UndoObject(Type type, JSONObject obj) {
+	public UndoObject(WbAction action, JSONObject origObj, Type type, JSONObject obj) {
+		this.action = action;
+		this.origObject = origObj.toString(new NullStringer());
 		this.type = type;
 		this.object = obj.toString(new NullStringer());
 	}
 
-	public UndoObject(Type type, JSONArray arr) {
+	public UndoObject(WbAction action, JSONObject origObj, Type type, JSONArray arr) {
+		this.action = action;
+		this.origObject = origObj.toString(new NullStringer());
 		this.type = type;
 		this.object = arr.toString(new NullStringer());
+	}
+
+	public WbAction getAction() {
+		return action;
+	}
+
+	public JSONObject getOrigObject() {
+		return new JSONObject(origObject);
 	}
 
 	public Type getType() {

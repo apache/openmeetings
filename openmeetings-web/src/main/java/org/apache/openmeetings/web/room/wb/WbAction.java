@@ -34,6 +34,7 @@ public enum WbAction {
 	, SAVE("save")
 	, LOAD("load")
 	, UNDO("undo")
+	, REDO("redo")
 	, SET_SIZE("setSize")
 	, DOWNLOAD("download")
 	, START_RECORDING("startRecording")

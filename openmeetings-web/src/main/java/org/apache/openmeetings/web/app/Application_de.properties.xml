@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[Ok]]></entry>
 	<entry key="59"><![CDATA[Kurssprache:]]></entry>
 	<entry key="62"><![CDATA[Zeichenbrett leeren]]></entry>
-	<entry key="70"><![CDATA[Rückgängig]]></entry>
 	<entry key="72"><![CDATA[Markieren]]></entry>
 	<entry key="73"><![CDATA[Text]]></entry>
 	<entry key="74"><![CDATA[Frei zeichnen]]></entry>
@@ -976,6 +975,8 @@ Bitte am OM server {3} anmelden und sie unter Admininistration -> Gruppen prüfe
 	<entry key="wb.tool.math.formula"><![CDATA[Mathe Formeln]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Anleitung zur LaTeX Syntax]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://de.wikibooks.org/wiki/LaTeX-Kompendium:_Für_Mathematiker]]></entry>
+	<entry key="wb.tool.redo"><![CDATA[Redo]]></entry>
+	<entry key="wb.tool.undo"><![CDATA[Rückgängig]]></entry>
 	<entry key="wb.tool.white-out"><![CDATA[Löschen]]></entry>
 	<entry key="widget.recent.desc"><![CDATA[Hier finden Sie kürzlich benutzte Räume.]]></entry>
 	<entry key="widget.recent.title"><![CDATA[kürzlich benutzte Räum]]></entry>

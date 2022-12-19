@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[はい]]></entry>
 	<entry key="59"><![CDATA[言語:]]></entry>
 	<entry key="62"><![CDATA[ホワイトボードのクリア]]></entry>
-	<entry key="70"><![CDATA[取り消し]]></entry>
 	<entry key="72"><![CDATA[オブジェクト選択]]></entry>
 	<entry key="73"><![CDATA[文字列]]></entry>
 	<entry key="74"><![CDATA[自由線]]></entry>
@@ -973,6 +972,8 @@ Please visit {3} OM server and check them under Admin -> Groups]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[数式]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Guide to LaTeX Syntax]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>
+	<entry key="wb.tool.redo"><![CDATA[Redo]]></entry>
+	<entry key="wb.tool.undo"><![CDATA[取り消し]]></entry>
 	<entry key="wb.tool.white-out"><![CDATA[White-Out]]></entry>
 	<entry key="widget.recent.desc"><![CDATA[あなたが最近開設した会議室を表示します。]]></entry>
 	<entry key="widget.recent.title"><![CDATA[最近の会議室]]></entry>

@@ -46,7 +46,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
@@ -73,7 +73,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
-import org.danekja.java.util.function.serializable.SerializableConsumer;
+import org.danekja.java.util.function.serializable.SerializableBiConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,6 +94,7 @@ public class WbPanel extends AbstractWbPanel {
 	private final Long roomId;
 	private long wb2save = -1;
 	private final Map<Long, Deque<UndoObject>> undoList = new HashMap<>();
+	private final Map<Long, Deque<UndoObject>> redoList = new HashMap<>();
 	private final NameDialog fileName = new NameDialog("filename") {
 		private static final long serialVersionUID = 1L;
 
@@ -123,10 +124,15 @@ public class WbPanel extends AbstractWbPanel {
 			return new ResourceModel("144");
 		}
 	};
-	private final SerializableConsumer<Whiteboard> addUndo = wb -> {
+	private final SerializableBiConsumer<Whiteboard, Boolean> addUndo = (wb, redo) -> {
 		JSONArray arr = getArray(wb.toJson(), null);
 		if (arr.length() != 0) {
-			addUndo(wb.getId(), new UndoObject(UndoObject.Type.REMOVE, arr));
+			if (!redo) {
+				cleanRedo(wb.getId());
+			}
+			addUndo(wb.getId(), new UndoObject(WbAction.CLEAR_ALL
+					, new JSONObject().put("wbId", wb.getId())
+					, UndoObject.Type.REMOVE, arr));
 		}
 	};
 	@SpringBean
@@ -161,9 +167,9 @@ public class WbPanel extends AbstractWbPanel {
 	@Override
 	void internalWbLoad(StringBuilder sb) {
 		Long langId = rp.getClient().getUser().getLanguageId();
-		wbm.initFiles(rp.getRoom(), langId, (wbs, wbIdx, roomFiles) -> {
-			roomFiles.forEach(rf -> addFileToWb(wbs, wbIdx, rf.getFile(), false, false));
-		});
+		wbm.initFiles(rp.getRoom(), langId, (wbs, wbIdx, roomFiles)
+				-> roomFiles.forEach(rf -> addFileToWb(wbs, wbIdx, rf.getFile(), false, false))
+		);
 		Whiteboards wbs = wbm.get(roomId, langId);
 		loadWhiteboards(sb, rp.getClient(), wbs, wbm.list(roomId));
 		JSONObject wbj = getWbJson(wbs.getActiveWb());
@@ -188,13 +194,31 @@ public class WbPanel extends AbstractWbPanel {
 		if (c == null) {
 			return;
 		}
+		doAction(c, a, obj, false, handler);
+	}
+
+	private void doAction(Client c, WbAction a, JSONObject obj, boolean redo, IPartialPageRequestHandler handler) throws IOException {
+		if (processActionGeneral(c, a, obj, handler)) {
+			return;
+		}
+		//presenter-right
+		if (c.hasRight(Right.PRESENTER)) {
+			processActionPresenter(c, a, obj, redo, handler);
+		}
+		//wb-right
+		if (c.hasRight(Right.PRESENTER) || c.hasRight(Right.WHITEBOARD)) {
+			processActionWhiteboard(c, a, obj, false, handler);
+		}
+	}
+
+	private boolean processActionGeneral(Client c, WbAction a, JSONObject obj, IPartialPageRequestHandler handler) throws IOException {
 		switch (a) {
 			case CREATE_OBJ, MODIFY_OBJ:
 			{
 				JSONObject o = obj.optJSONObject("obj");
 				if (o != null && "pointer".equals(o.getString(ATTR_OMTYPE))) {
 					sendWbOthers(a, obj);
-					return;
+					return true;
 				}
 			}
 				break;
@@ -205,7 +229,7 @@ public class WbPanel extends AbstractWbPanel {
 				if (moder && !r.isHidden(RoomElement.ACTION_MENU)) {
 					rp.startDownload(handler, obj.getString("type"), obj.getString("fuid"));
 				}
-				return;
+				return true;
 			}
 			case LOAD_VIDEOS:
 			{
@@ -232,200 +256,227 @@ public class WbPanel extends AbstractWbPanel {
 				}
 				sb.append(arr.toString()).append(");");
 				handler.appendJavaScript(sb);
-				return;
+				return true;
 			}
 			default:
 				break;
 		}
+		return false;
+	}
 
-		//presenter-right
-		if (c.hasRight(Right.PRESENTER)) {
-			switch (a) {
-				case CREATE_WB:
-				{
-					Whiteboard wb = wbm.add(roomId, c.getUser().getLanguageId());
-					sendWbAll(WbAction.CREATE_WB, wb.getAddJson());
-				}
-					break;
-				case REMOVE_WB:
-				{
-					long id = obj.optLong("wbId", -1);
-					if (id > -1) {
-						long prevId = obj.optLong("prevWbId", -1);
-						wbm.remove(roomId, id, prevId);
-						sendWbAll(WbAction.REMOVE_WB, obj);
-					}
-				}
-					break;
-				case ACTIVATE_WB:
-				{
-					long wbId = obj.optLong("wbId", -1);
-					if (wbId > -1) {
-						wbm.activate(roomId, wbId);
-						sendWbAll(WbAction.ACTIVATE_WB, obj);
-					}
-				}
-					break;
-				case RENAME_WB:
-				{
-					Whiteboard wb = wbm.get(roomId).get(obj.optLong("wbId", -1));
-					if (wb != null) {
-						wbm.update(roomId, wb.setName(obj.getString("name")));
-						sendWbAll(WbAction.RENAME_WB, obj);
-					}
-				}
-					break;
-				case SET_SLIDE:
-				{
-					Whiteboard wb = wbm.get(roomId).get(obj.optLong("wbId", -1));
-					if (wb != null) {
-						wb.setSlide(obj.optInt(ATTR_SLIDE, 0));
-						wbm.update(roomId, wb);
-						sendWbOthers(WbAction.SET_SLIDE, obj);
-					}
-				}
-					break;
-				case CLEAR_ALL:
-				{
-					wbm.clearAll(roomId, obj.getLong("wbId"), addUndo);
-				}
-					break;
-				case SET_SIZE:
-				{
-					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
-					wb.setWidth(obj.getInt(ATTR_WIDTH));
-					wb.setHeight(obj.getInt(ATTR_HEIGHT));
-					wb.setZoom(obj.getDouble(ATTR_ZOOM));
-					wb.setZoomMode(ZoomMode.valueOf(obj.getString("zoomMode")));
-					wbm.update(roomId, wb);
-					sendWbOthers(WbAction.SET_SIZE, wb.getAddJson());
-				}
-					break;
-				default:
-					break;
+	private void processActionPresenter(Client c, WbAction a, JSONObject obj, boolean redo, IPartialPageRequestHandler handler) throws IOException {
+		switch (a) {
+			case CREATE_WB:
+			{
+				Whiteboard wb = wbm.add(roomId, c.getUser().getLanguageId());
+				sendWbAll(WbAction.CREATE_WB, wb.getAddJson());
 			}
-		}
-		//wb-right
-		if (c.hasRight(Right.PRESENTER) || c.hasRight(Right.WHITEBOARD)) {
-			switch (a) {
-				case CREATE_OBJ:
-				{
-					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
-					JSONObject o = obj.getJSONObject("obj");
-					wb.put(o.getString("uid"), o);
+				break;
+			case REMOVE_WB:
+			{
+				long id = obj.optLong("wbId", -1);
+				if (id > -1) {
+					long prevId = obj.optLong("prevWbId", -1);
+					wbm.remove(roomId, id, prevId);
+					sendWbAll(WbAction.REMOVE_WB, obj);
+				}
+			}
+				break;
+			case ACTIVATE_WB:
+			{
+				long wbId = obj.optLong("wbId", -1);
+				if (wbId > -1) {
+					wbm.activate(roomId, wbId);
+					sendWbAll(WbAction.ACTIVATE_WB, obj);
+				}
+			}
+				break;
+			case RENAME_WB:
+			{
+				Whiteboard wb = wbm.get(roomId).get(obj.optLong("wbId", -1));
+				if (wb != null) {
+					wbm.update(roomId, wb.setName(obj.getString("name")));
+					sendWbAll(WbAction.RENAME_WB, obj);
+				}
+			}
+				break;
+			case SET_SLIDE:
+			{
+				Whiteboard wb = wbm.get(roomId).get(obj.optLong("wbId", -1));
+				if (wb != null) {
+					wb.setSlide(obj.optInt(ATTR_SLIDE, 0));
 					wbm.update(roomId, wb);
-					addUndo(wb.getId(), new UndoObject(UndoObject.Type.ADD, o));
+					sendWbOthers(WbAction.SET_SLIDE, obj);
+				}
+			}
+				break;
+			case CLEAR_ALL:
+			{
+				wbm.clearAll(roomId, obj.getLong("wbId"), redo, addUndo);
+			}
+				break;
+			case SET_SIZE:
+			{
+				Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
+				wb.setWidth(obj.getInt(ATTR_WIDTH));
+				wb.setHeight(obj.getInt(ATTR_HEIGHT));
+				wb.setZoom(obj.getDouble(ATTR_ZOOM));
+				wb.setZoomMode(ZoomMode.valueOf(obj.getString("zoomMode")));
+				wbm.update(roomId, wb);
+				sendWbOthers(WbAction.SET_SIZE, wb.getAddJson());
+			}
+				break;
+			default:
+				break;
+		}
+	}
+
+	private void processActionWhiteboard(Client c, WbAction a, JSONObject obj, boolean redo, IPartialPageRequestHandler handler) throws IOException {
+		switch (a) {
+			case CREATE_OBJ:
+			{
+				Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
+				JSONObject o = obj.getJSONObject("obj");
+				wb.put(o.getString("uid"), o);
+				wbm.update(roomId, wb);
+				addUndo(wb.getId(), new UndoObject(a, obj, UndoObject.Type.ADD, o));
+				if (redo) {
+					sendWbAll(WbAction.CREATE_OBJ, obj);
+				} else {
+					cleanRedo(wb.getId());
 					sendWbOthers(WbAction.CREATE_OBJ, obj);
 				}
-					break;
-				case MODIFY_OBJ:
-				{
-					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
-					JSONArray arr = obj.getJSONArray("obj");
-					JSONArray undo = new JSONArray();
-					for (int i = 0; i < arr.length(); ++i) {
-						JSONObject oi = arr.getJSONObject(i);
-						String uid = oi.getString("uid");
-						JSONObject po = wb.get(uid);
-						if (po != null) {
-							undo.put(po);
-							wb.put(uid, oi);
-						}
-					}
-					if (arr.length() != 0) {
-						wbm.update(roomId, wb);
-						addUndo(wb.getId(), new UndoObject(UndoObject.Type.MODIFY, undo));
-					}
-					sendWbOthers(WbAction.MODIFY_OBJ, obj);
-				}
-					break;
-				case DELETE_OBJ:
-				{
-					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
-					JSONArray arr = obj.getJSONArray("obj");
-					JSONArray undo = new JSONArray();
-					for (int i = 0; i < arr.length(); ++i) {
-						JSONObject oi = arr.getJSONObject(i);
-						JSONObject u = wb.remove(oi.getString("uid"));
-						if (u != null) {
-							undo.put(u);
-						}
-					}
-					if (undo.length() != 0) {
-						wbm.update(roomId, wb);
-						addUndo(wb.getId(), new UndoObject(UndoObject.Type.REMOVE, undo));
-					}
-					sendWbAll(WbAction.DELETE_OBJ, obj);
-				}
-					break;
-				case CLEAR_SLIDE:
-				{
-					wbm.cleanSlide(roomId, obj.getLong("wbId"), obj.getInt(ATTR_SLIDE)
-							, (wb, arr) -> addUndo(wb.getId(), new UndoObject(UndoObject.Type.REMOVE, arr)));
-				}
-					break;
-				case SAVE:
-					wb2save = obj.getLong("wbId");
-					fileName.show(handler);
-					break;
-				case UNDO:
-				{
-					Long wbId = obj.getLong("wbId");
-					UndoObject uo = getUndo(wbId);
-					if (uo != null) {
-						Whiteboard wb = wbm.get(roomId).get(wbId);
-						switch (uo.getType()) {
-							case ADD:
-							{
-								JSONObject o = new JSONObject(uo.getObject());
-								wb.remove(o.getString("uid"));
-								wbm.update(roomId, wb);
-								sendWbAll(WbAction.DELETE_OBJ, obj.put("obj", new JSONArray().put(o)));
-							}
-								break;
-							case REMOVE:
-							{
-								JSONArray arr = new JSONArray(uo.getObject());
-								for (int i  = 0; i < arr.length(); ++i) {
-									JSONObject o = arr.getJSONObject(i);
-									wb.put(o.getString("uid"), o);
-								}
-								wbm.update(roomId, wb);
-								sendWbAll(WbAction.CREATE_OBJ, obj.put("obj", new JSONArray(uo.getObject())));
-							}
-								break;
-							case MODIFY:
-							{
-								JSONArray arr = new JSONArray(uo.getObject());
-								for (int i  = 0; i < arr.length(); ++i) {
-									JSONObject o = arr.getJSONObject(i);
-									wb.put(o.getString("uid"), o);
-								}
-								wbm.update(roomId, wb);
-								sendWbAll(WbAction.MODIFY_OBJ, obj.put("obj", arr));
-							}
-								break;
-						}
-					}
-				}
-					break;
-				case VIDEO_STATUS:
-				{
-					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
-					String uid = obj.getString("uid");
-					JSONObject po = wb.get(uid);
-					if (po != null && "Video".equals(po.getString(ATTR_OMTYPE))) {
-						JSONObject ns = obj.getJSONObject(PARAM_STATUS);
-						po.put(PARAM_STATUS, ns.put(PARAM_UPDATED, System.currentTimeMillis()));
-						wbm.update(roomId, wb.put(uid, po));
-						obj.put(ATTR_SLIDE, po.getInt(ATTR_SLIDE));
-						sendWbAll(WbAction.VIDEO_STATUS, obj);
-					}
-				}
-					break;
-				default:
-					break;
 			}
+				break;
+			case MODIFY_OBJ:
+			{
+				Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
+				JSONArray arr = obj.getJSONArray("obj");
+				JSONArray undo = new JSONArray();
+				for (int i = 0; i < arr.length(); ++i) {
+					JSONObject oi = arr.getJSONObject(i);
+					String uid = oi.getString("uid");
+					JSONObject po = wb.get(uid);
+					if (po != null) {
+						undo.put(po);
+						wb.put(uid, oi);
+					}
+				}
+				if (arr.length() != 0) {
+					wbm.update(roomId, wb);
+					addUndo(wb.getId(), new UndoObject(a, obj, UndoObject.Type.MODIFY, undo));
+					if (redo) {
+						sendWbAll(WbAction.MODIFY_OBJ, obj);
+					} else {
+						cleanRedo(wb.getId());
+						sendWbOthers(WbAction.MODIFY_OBJ, obj);
+					}
+				}
+			}
+				break;
+			case DELETE_OBJ:
+			{
+				Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
+				JSONArray arr = obj.getJSONArray("obj");
+				JSONArray undo = new JSONArray();
+				for (int i = 0; i < arr.length(); ++i) {
+					JSONObject oi = arr.getJSONObject(i);
+					JSONObject u = wb.remove(oi.getString("uid"));
+					if (u != null) {
+						undo.put(u);
+					}
+				}
+				if (undo.length() != 0) {
+					wbm.update(roomId, wb);
+					addUndo(wb.getId(), new UndoObject(a, obj, UndoObject.Type.REMOVE, undo));
+				}
+				if (!redo) {
+					cleanRedo(wb.getId());
+				}
+				sendWbAll(WbAction.DELETE_OBJ, obj);
+			}
+				break;
+			case CLEAR_SLIDE:
+			{
+				wbm.cleanSlide(roomId, obj.getLong("wbId"), obj.getInt(ATTR_SLIDE)
+						, (wb, arr) -> {
+							if (!redo) {
+								cleanRedo(wb.getId());
+							}
+							addUndo(wb.getId(), new UndoObject(a, obj, UndoObject.Type.REMOVE, arr));
+						});
+			}
+				break;
+			case SAVE:
+				wb2save = obj.getLong("wbId");
+				fileName.show(handler);
+				break;
+			case UNDO:
+			{
+				Long wbId = obj.getLong("wbId");
+				UndoObject uo = getUndo(wbId);
+				if (uo != null) {
+					Whiteboard wb = wbm.get(roomId).get(wbId);
+					switch (uo.getType()) {
+						case ADD:
+						{
+							JSONObject o = new JSONObject(uo.getObject());
+							wb.remove(o.getString("uid"));
+							wbm.update(roomId, wb);
+							sendWbAll(WbAction.DELETE_OBJ, obj.put("obj", new JSONArray().put(o)));
+						}
+							break;
+						case REMOVE:
+						{
+							JSONArray arr = new JSONArray(uo.getObject());
+							for (int i  = 0; i < arr.length(); ++i) {
+								JSONObject o = arr.getJSONObject(i);
+								wb.put(o.getString("uid"), o);
+							}
+							wbm.update(roomId, wb);
+							sendWbAll(WbAction.CREATE_OBJ, obj.put("obj", new JSONArray(uo.getObject())));
+						}
+							break;
+						case MODIFY:
+						{
+							JSONArray arr = new JSONArray(uo.getObject());
+							for (int i  = 0; i < arr.length(); ++i) {
+								JSONObject o = arr.getJSONObject(i);
+								wb.put(o.getString("uid"), o);
+							}
+							wbm.update(roomId, wb);
+							sendWbAll(WbAction.MODIFY_OBJ, obj.put("obj", arr));
+						}
+							break;
+					}
+				}
+			}
+				break;
+			case REDO:
+			{
+				Long wbId = obj.getLong("wbId");
+				UndoObject uo = getRedo(wbId);
+				if (uo != null) {
+					processActionWhiteboard(c, uo.getAction(), uo.getOrigObject(), true, handler);
+				}
+			}
+				break;
+			case VIDEO_STATUS:
+			{
+				Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
+				String uid = obj.getString("uid");
+				JSONObject po = wb.get(uid);
+				if (po != null && "Video".equals(po.getString(ATTR_OMTYPE))) {
+					JSONObject ns = obj.getJSONObject(PARAM_STATUS);
+					po.put(PARAM_STATUS, ns.put(PARAM_UPDATED, System.currentTimeMillis()));
+					wbm.update(roomId, wb.put(uid, po));
+					obj.put(ATTR_SLIDE, po.getInt(ATTR_SLIDE));
+					sendWbAll(WbAction.VIDEO_STATUS, obj);
+				}
+			}
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -462,7 +513,7 @@ public class WbPanel extends AbstractWbPanel {
 		return file;
 	}
 
-	private static JSONArray getArray(JSONObject wb, Function<JSONObject, JSONObject> postprocess) {
+	private static JSONArray getArray(JSONObject wb, UnaryOperator<JSONObject> postprocess) {
 		JSONObject items = wb.getJSONObject(ITEMS_KEY);
 		JSONArray arr = new JSONArray();
 		for (String uid : items.keySet()) {
@@ -493,28 +544,7 @@ public class WbPanel extends AbstractWbPanel {
 				//do nothing
 				break;
 			case WML_FILE:
-			{
-				File f = fi.getFile();
-				if (f.exists() && f.isFile()) {
-					try (BufferedReader br = Files.newBufferedReader(f.toPath())) {
-						final boolean[] updated = {false};
-						JSONArray arr = getArray(new JSONObject(new JSONTokener(br)), o -> {
-								wb.put(o.getString("uid"), o);
-								updated[0] = true;
-								return addFileUrl(rp.getClient(), wbs.getUid(), o, bf -> updateWbSize(wb, bf));
-							});
-						if (sendAndUpdate) {
-							if (updated[0]) {
-								wbm.update(roomId, wb);
-							}
-							sendWbAll(WbAction.SET_SIZE, wb.getAddJson());
-							sendWbAll(WbAction.LOAD, getObjWbJson(wb.getId(), arr));
-						}
-					} catch (Exception e) {
-						log.error("Unexpected error while loading WB", e);
-					}
-				}
-			}
+				addWmlFileToWb(wbs, wb, fi, sendAndUpdate);
 				break;
 			case POLL_CHART:
 				break;
@@ -542,7 +572,7 @@ public class WbPanel extends AbstractWbPanel {
 				}
 				final String ruid = wbs.getUid();
 				if (clean) {
-					wbm.clearAll(roomId, wb.getId(), addUndo);
+					wbm.clearAll(roomId, wb.getId(), false, addUndo);
 				}
 				wb.put(wuid, file);
 				updateWbSize(wb, fi);
@@ -553,6 +583,29 @@ public class WbPanel extends AbstractWbPanel {
 				}
 			}
 				break;
+		}
+	}
+
+	private void addWmlFileToWb(Whiteboards wbs, Whiteboard wb, final BaseFileItem fi, boolean sendAndUpdate) {
+		File f = fi.getFile();
+		if (f.exists() && f.isFile()) {
+			try (BufferedReader br = Files.newBufferedReader(f.toPath())) {
+				final boolean[] updated = {false};
+				JSONArray arr = getArray(new JSONObject(new JSONTokener(br)), o -> {
+						wb.put(o.getString("uid"), o);
+						updated[0] = true;
+						return addFileUrl(rp.getClient(), wbs.getUid(), o, bf -> updateWbSize(wb, bf));
+					});
+				if (sendAndUpdate) {
+					if (updated[0]) {
+						wbm.update(roomId, wb);
+					}
+					sendWbAll(WbAction.SET_SIZE, wb.getAddJson());
+					sendWbAll(WbAction.LOAD, getObjWbJson(wb.getId(), arr));
+				}
+			} catch (Exception e) {
+				log.error("Unexpected error while loading WB", e);
+			}
 		}
 	}
 
@@ -587,11 +640,40 @@ public class WbPanel extends AbstractWbPanel {
 	}
 
 	private UndoObject getUndo(Long wbId) {
-		if (wbId == null || !undoList.containsKey(wbId)) {
+		if (wbId == null) {
 			return null;
 		}
 		Deque<UndoObject> deq = undoList.get(wbId);
-		return deq.isEmpty() ? null : deq.pop();
+		if (deq == null || deq.isEmpty()) {
+			return null;
+		}
+		UndoObject undoObj = deq.pop();
+		redoList
+			.computeIfAbsent(wbId, id -> new LimitedLinkedList<>())
+			.push(undoObj);
+		return undoObj;
+	}
+
+	private void cleanRedo(Long wbId) {
+		if (wbId == null) {
+			return;
+		}
+		Deque<UndoObject> redoDeq = redoList.get(wbId);
+		if (redoDeq != null) {
+			redoDeq.clear();
+		}
+	}
+
+	private UndoObject getRedo(Long wbId) {
+		if (wbId == null) {
+			return null;
+		}
+		Deque<UndoObject> deq = redoList.get(wbId);
+		if (deq == null || deq.isEmpty()) {
+			return null;
+		}
+		UndoObject redoObj = deq.pop();
+		return redoObj;
 	}
 
 	private static class LimitedLinkedList<T> extends LinkedList<T> {

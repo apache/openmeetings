@@ -361,6 +361,9 @@ module.exports = class WbTools {
 					tools.find('.om-icon.undo').click(function() {
 						OmUtil.wbAction({action: 'undo', data: {wbId: wb.getId()}});
 					});
+					tools.find('.om-icon.redo').click(function() {
+						OmUtil.wbAction({action: 'redo', data: {wbId: wb.getId()}});
+					});
 					_initSettings();
 					_initMath();
 				case Role.NONE:

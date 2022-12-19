@@ -144,7 +144,10 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 	content: '\f0c7';
 }
 .room-block .sb-wb .wb-block .tools .om-icon.big.undo::before {
-	content: '\f0e2';
+	content: '\f3e5';
+}
+.room-block .sb-wb .wb-block .tools .om-icon.big.redo::before {
+	content: '\f064';
 }
 .room-block .sb-wb .wb-block .tools .om-icon.big.math::before {
 	content: '\f534';

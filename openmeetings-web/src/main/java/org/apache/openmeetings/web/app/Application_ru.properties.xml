@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[ОК]]></entry>
 	<entry key="59"><![CDATA[Язык курса:]]></entry>
 	<entry key="62"><![CDATA[Очистить доску]]></entry>
-	<entry key="70"><![CDATA[Отмена]]></entry>
 	<entry key="72"><![CDATA[Выбрать объект]]></entry>
 	<entry key="73"><![CDATA[Текст]]></entry>
 	<entry key="74"><![CDATA[Рисование]]></entry>
@@ -973,6 +972,8 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="wb.tool.math.formula"><![CDATA[Математическая формула]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Инструкция по синтаксису LaTeX]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>
+	<entry key="wb.tool.redo"><![CDATA[Вернуть]]></entry>
+	<entry key="wb.tool.undo"><![CDATA[Отмена]]></entry>
 	<entry key="wb.tool.white-out"><![CDATA[Корректор]]></entry>
 	<entry key="widget.recent.desc"><![CDATA[Эта секция отображает комнаты в которые Вы недавно заходили]]></entry>
 	<entry key="widget.recent.title"><![CDATA[Последние комнаты]]></entry>

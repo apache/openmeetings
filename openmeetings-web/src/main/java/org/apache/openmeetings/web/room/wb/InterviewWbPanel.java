@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.room.wb;
 import java.io.IOException;
 
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -42,11 +41,6 @@ public class InterviewWbPanel extends AbstractWbPanel {
 	@Override
 	protected String getRole() {
 		return rp.getClient().hasRight(Right.MODERATOR) ? Right.MODERATOR.name() : ROLE_NONE;
-	}
-
-	@Override
-	public void sendFileToWb(final BaseFileItem fi, boolean clean) {
-		//no-op
 	}
 
 	@Override

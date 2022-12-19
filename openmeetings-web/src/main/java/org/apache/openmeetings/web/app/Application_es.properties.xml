@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[Aceptar]]></entry>
 	<entry key="59"><![CDATA[Idioma]]></entry>
 	<entry key="62"><![CDATA[Borrar pizarra]]></entry>
-	<entry key="70"><![CDATA[Deshacer]]></entry>
 	<entry key="72"><![CDATA[Seleccionar un objeto]]></entry>
 	<entry key="73"><![CDATA[Texto]]></entry>
 	<entry key="74"><![CDATA[Pintar]]></entry>
@@ -974,6 +973,8 @@ Por favor visite el {3} servidor de OM y compruébelo en Admin -> Grupos]]></ent
 	<entry key="wb.tool.math.formula"><![CDATA[Fórmula matemática]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Guía de sintaxis de LaTex]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>
+	<entry key="wb.tool.redo"><![CDATA[Redo]]></entry>
+	<entry key="wb.tool.undo"><![CDATA[Deshacer]]></entry>
 	<entry key="wb.tool.white-out"><![CDATA[Borrador]]></entry>
 	<entry key="widget.recent.desc"><![CDATA[Esta sección presenta las salas que recientemente visitaste]]></entry>
 	<entry key="widget.recent.title"><![CDATA[Salas recientes]]></entry>

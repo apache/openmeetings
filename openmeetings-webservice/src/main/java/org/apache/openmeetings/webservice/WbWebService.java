@@ -154,7 +154,7 @@ public class WbWebService extends BaseWebService {
 	{
 		log.debug("[cleanWb] room id {}, wb id {}", roomId, wbId);
 		return performCall(sid, User.Right.SOAP, sd -> {
-			wbManager.clearAll(roomId, wbId, null);
+			wbManager.clearAll(roomId, wbId, false, null);
 			return new ServiceResult("", Type.SUCCESS);
 		});
 	}

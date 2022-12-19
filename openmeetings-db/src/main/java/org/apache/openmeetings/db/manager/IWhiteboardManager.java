@@ -19,7 +19,6 @@
 package org.apache.openmeetings.db.manager;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
@@ -29,6 +28,6 @@ import com.github.openjson.JSONArray;
 public interface IWhiteboardManager {
 	Whiteboards get(Long roomId);
 	void reset(Long roomId, Long userId);
-	void clearAll(Long roomId, long wbId, Consumer<Whiteboard> consumer);
+	void clearAll(Long roomId, long wbId, boolean redo, BiConsumer<Whiteboard, Boolean> consumer);
 	void cleanSlide(Long roomId, long wbId, int slide, BiConsumer<Whiteboard, JSONArray> consumer);
 }

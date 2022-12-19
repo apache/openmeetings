@@ -205,13 +205,13 @@ public class WhiteboardManager implements IWhiteboardManager {
 	}
 
 	@Override
-	public void clearAll(Long roomId, long wbId, Consumer<Whiteboard> consumer) {
+	public void clearAll(Long roomId, long wbId, boolean redo, BiConsumer<Whiteboard, Boolean> addUndo) {
 		Whiteboard wb = get(roomId).get(wbId);
 		if (wb == null) {
 			return;
 		}
-		if (consumer != null) {
-			consumer.accept(wb);
+		if (addUndo != null) {
+			addUndo.accept(wb, redo);
 		}
 		wb = clear(roomId, wbId);
 		sendWbAll(roomId, WbAction.CLEAR_ALL, new JSONObject().put("wbId", wbId));

@@ -53,7 +53,6 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[OK]]></entry>
 	<entry key="59"><![CDATA[Språk]]></entry>
 	<entry key="62"><![CDATA[Rensa vita tavlan]]></entry>
-	<entry key="70"><![CDATA[Ångra]]></entry>
 	<entry key="72"><![CDATA[Välj ett objekt]]></entry>
 	<entry key="73"><![CDATA[Text]]></entry>
 	<entry key="74"><![CDATA[Måla]]></entry>
@@ -980,6 +979,8 @@ vänligen ladda ned den dessförrinnan. ]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[Matematisk formel]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[Guide till LaTeX-syntax]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>
+	<entry key="wb.tool.redo"><![CDATA[Redo]]></entry>
+	<entry key="wb.tool.undo"><![CDATA[Ångra]]></entry>
 	<entry key="wb.tool.white-out"><![CDATA[White-Out]]></entry>
 	<entry key="widget.recent.desc"><![CDATA[Denna sektion visar rum nyligen skapade av dig]]></entry>
 	<entry key="widget.recent.title"><![CDATA[Senaste rum]]></entry>
