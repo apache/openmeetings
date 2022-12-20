@@ -96,7 +96,7 @@ public class WebcamStreamDesc extends StreamDesc {
 				camEnabled = !camEnabled;
 				break;
 			default:
-		};
+		}
 	}
 
 	public boolean isBroadcasting() {

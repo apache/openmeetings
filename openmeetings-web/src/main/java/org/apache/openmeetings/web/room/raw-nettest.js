@@ -1,5 +1,5 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var NetTest = (function() {
+const NetTest = (function() {
 	const self = {}, PINGS = 10, LIMIT = 2000, URL = './services/networktest/'
 		, DELAY = 3000, KB = 1024, MB = KB * KB;
 	let output, lbls, tests, testName, testLabel, testNext, bulk = true;

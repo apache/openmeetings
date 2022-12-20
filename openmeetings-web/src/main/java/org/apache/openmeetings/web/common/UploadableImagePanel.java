@@ -49,6 +49,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5I
 public abstract class UploadableImagePanel extends ImagePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(UploadableImagePanel.class);
+	private static final String ERROR = "Error";
 	private final FileUploadField fileUploadField = new FileUploadField("image", new ListModel<>());
 	private final Form<Void> form = new Form<>("form");
 	private final boolean delayed;
@@ -83,7 +84,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 					try {
 						deleteImage();
 					} catch (Exception e) {
-						log.error("Error", e);
+						log.error(ERROR, e);
 					}
 					update(Optional.of(target));
 				}
@@ -143,7 +144,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 			try {
 				deleteImage();
 			} catch (Exception e) {
-				log.error("Error", e);
+				log.error(ERROR, e);
 			}
 		} else {
 			FileUpload fu = fileUploadField.getFileUpload();
@@ -156,7 +157,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 						processImage(sf, temp);
 					}
 				} catch (Exception e) {
-					log.error("Error", e);
+					log.error(ERROR, e);
 				} finally {
 					if (temp != null && temp.exists()) {
 						log.debug("Temp file was deleted ? {}", temp.delete());

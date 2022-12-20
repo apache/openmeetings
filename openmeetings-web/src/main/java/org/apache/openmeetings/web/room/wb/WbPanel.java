@@ -198,20 +198,24 @@ public class WbPanel extends AbstractWbPanel {
 	}
 
 	private void doAction(Client c, WbAction a, JSONObject obj, boolean redo, IPartialPageRequestHandler handler) throws IOException {
-		if (processActionGeneral(c, a, obj, handler)) {
+		if (doActionGeneral(c, a, obj, handler)) {
 			return;
 		}
+		doActionInternal(c, a, obj, redo, handler);
+	}
+
+	private void doActionInternal(Client c, WbAction a, JSONObject obj, boolean redo, IPartialPageRequestHandler handler) throws IOException {
 		//presenter-right
 		if (c.hasRight(Right.PRESENTER)) {
-			processActionPresenter(c, a, obj, redo);
+			doActionPresenter(c, a, obj, redo);
 		}
 		//wb-right
 		if (c.hasRight(Right.PRESENTER) || c.hasRight(Right.WHITEBOARD)) {
-			processActionWhiteboard(c, a, obj, false, handler);
+			doActionWhiteboard(c, a, obj, false, handler);
 		}
 	}
 
-	private boolean processActionGeneral(Client c, WbAction a, JSONObject obj, IPartialPageRequestHandler handler) {
+	private boolean doActionGeneral(Client c, WbAction a, JSONObject obj, IPartialPageRequestHandler handler) {
 		switch (a) {
 			case CREATE_OBJ, MODIFY_OBJ:
 			{
@@ -240,7 +244,7 @@ public class WbPanel extends AbstractWbPanel {
 		return false;
 	}
 
-	private void processActionPresenter(Client c, WbAction a, JSONObject obj, boolean redo) {
+	private void doActionPresenter(Client c, WbAction a, JSONObject obj, boolean redo) {
 		switch (a) {
 			case CREATE_WB:
 			{
@@ -307,7 +311,7 @@ public class WbPanel extends AbstractWbPanel {
 		}
 	}
 
-	private void processActionWhiteboard(Client c, WbAction a, JSONObject obj, boolean redo, IPartialPageRequestHandler handler) throws IOException {
+	private void doActionWhiteboard(Client c, WbAction a, JSONObject obj, boolean redo, IPartialPageRequestHandler handler) throws IOException {
 		switch (a) {
 			case CREATE_OBJ:
 			{
@@ -433,7 +437,7 @@ public class WbPanel extends AbstractWbPanel {
 				Long wbId = obj.getLong("wbId");
 				UndoObject uo = getRedo(wbId);
 				if (uo != null) {
-					processActionWhiteboard(c, uo.getAction(), uo.getOrigObject(), true, handler);
+					doActionInternal(c, uo.getAction(), uo.getOrigObject(), true, handler);
 				}
 			}
 				break;

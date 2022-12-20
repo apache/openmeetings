@@ -117,7 +117,7 @@ public abstract class AbstractOmDateTimePicker<T extends Serializable> extends F
 	public static String patch(String format) {
 		// in Java free text is escaped with single-quotes
 		// moment.js uses []
-		return format.replaceAll("[']([^']*)[']", "\\[$1\\]");
+		return format.replaceAll("'([^']*)'", "\\[$1\\]");
 	}
 
 	public static String getDateTimeFormat() {

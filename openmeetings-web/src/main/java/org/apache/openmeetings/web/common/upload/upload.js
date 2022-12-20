@@ -1,5 +1,5 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var Upload = (function() {
+const Upload = (function() {
 	let progress, progressBar, progressTitle, curUid, onCompleteFunc;
 
 	function _setProgress(prg) {

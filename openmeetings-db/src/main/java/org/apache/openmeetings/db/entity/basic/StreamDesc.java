@@ -22,8 +22,8 @@ import static java.util.UUID.randomUUID;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamType;
@@ -33,7 +33,7 @@ import com.github.openjson.JSONObject;
 
 public abstract class StreamDesc implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
-	protected final Set<Activity> activities = ConcurrentHashMap.newKeySet();
+	protected final /*serializable*/ KeySetView<Activity, Boolean> activities = ConcurrentHashMap.newKeySet();
 	private final Client client;
 	private final String uid;
 	private final StreamType type;
