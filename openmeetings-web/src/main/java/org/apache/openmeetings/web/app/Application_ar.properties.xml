@@ -886,7 +886,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.YES_NO"><![CDATA[نعم / لا]]></entry>
 	<entry key="profile.invitation"><![CDATA[رسالة دعوة]]></entry>
 	<entry key="profile.invitations"><![CDATA[الدعوات]]></entry>
-	<entry key="ptt.info"><![CDATA[Your microphone is muted. You can hold Ctrl+Space (Cmd+Space) to temporary unmute it (Push-to-Talk)]]></entry>
+	<entry key="ptt.info"><![CDATA[تم كتم صوت الميكروفون. يمكنك الضغط باستمرار على Ctrl+Space (Cmd+Space) لإلغاء كتم الصوت مؤقتًا (اضغط لتتحدث)]]></entry>
 	<entry key="recordings.root.group"><![CDATA[تسجيلات المجموعة]]></entry>
 	<entry key="register.privacy.accept"><![CDATA[بالنقر على "${register}" ، فإنك توافق على  ${link} الخاص بنا.]]></entry>
 	<entry key="register.privacy.statement"><![CDATA[بيان الخصوصية]]></entry>
@@ -971,7 +971,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="wb.tool.math.formula"><![CDATA[صيغ الرياضيات]]></entry>
 	<entry key="wb.tool.math.guide.lbl"><![CDATA[دليل بناء الجملة الرياضاتيه]]></entry>
 	<entry key="wb.tool.math.guide.url"><![CDATA[https://en.wikibooks.org/wiki/LaTeX/Mathematics]]></entry>
-	<entry key="wb.tool.redo"><![CDATA[Redo]]></entry>
+	<entry key="wb.tool.redo"><![CDATA[إعادة]]></entry>
 	<entry key="wb.tool.undo"><![CDATA[الغاء]]></entry>
 	<entry key="wb.tool.white-out"><![CDATA[تبييض]]></entry>
 	<entry key="widget.recent.desc"><![CDATA[تعرض هذه الأقسام الغرف التي فتحتها مؤخرًا]]></entry>
