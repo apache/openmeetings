@@ -16,6 +16,14 @@ module.exports = class WbAreaBase {
 		}
 
 		this.wsinit = () => {
+			$('.room-block .wb-block .wb-area .fullscreen').off().on('click', function() {
+				const area = this.closest('.wb-area');
+				if (document.fullscreenElement) {
+					document.exitFullscreen();
+				} else {
+					this.closest('.wb-area').requestFullscreen();
+				}
+			});
 			// it seems `super` can't be called from lambda
 			Wicket.Event.subscribe("/websocket/message", _wbWsHandler);
 		};

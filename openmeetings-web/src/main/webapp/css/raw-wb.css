@@ -15,6 +15,7 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 }
 .room-block .sb-wb .wb-block .wb-area {
 	height: 100%;
+	background-color: var(--bs-body-bg);
 }
 .room-block .sb-wb .wb-block.droppable-hover .wb-area {
 	visibility: hidden;
@@ -59,6 +60,14 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 .room-block .sb-wb .wb-block .tabs .wb-tab-content {
 	height: calc(100% - var(--room-wb-tabs-height));
 	position: relative;
+}
+.room-block .sb-wb .wb-block .tabs .wb-tab-content .fullscreen {
+	position: absolute;
+	right: 40px;
+}
+html[dir="rtl"] .room-block .sb-wb .wb-block .tabs .wb-tab-content .fullscreen {
+	right: initial;
+	left: 40px;
 }
 .room-block .sb-wb .wb-block .tabs .wb-tab-content .tab-pane {
 	height: 100%;
