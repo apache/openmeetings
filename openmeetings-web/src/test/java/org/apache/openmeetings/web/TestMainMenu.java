@@ -35,6 +35,11 @@ import org.apache.openmeetings.web.admin.users.UsersPanel;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.user.calendar.CalendarPanel;
 import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
+import org.apache.openmeetings.web.user.profile.EditProfilePanel;
+import org.apache.openmeetings.web.user.profile.InvitationsPanel;
+import org.apache.openmeetings.web.user.profile.MessagesContactsPanel;
+import org.apache.openmeetings.web.user.profile.UserSearchPanel;
+import org.apache.openmeetings.web.user.profile.WidgetsPanel;
 import org.apache.openmeetings.web.user.record.RecordingsPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
@@ -43,15 +48,15 @@ import org.junit.jupiter.api.Test;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 
 class TestMainMenu extends AbstractWicketTesterTest {
-	private void checkMenuItem(int idx1, Integer idx2, Class<? extends BasePanel> clazz) throws OmException {
+	private void checkMenuItem(int menuIdx, Integer subMenuIdx, Class<? extends BasePanel> clazz) throws OmException {
 		testArea(adminUsername, p -> {
 			Navbar menu = (Navbar)p.get(PATH_MENU);
 			assertNotNull(menu);
-			String path = "container:collapse:navLeftListEnclosure:navLeftList:" + idx1;
-			if (idx2 == null) {
+			String path = "container:collapse:navLeftListEnclosure:navLeftList:" + menuIdx;
+			if (subMenuIdx == null) {
 				path += ":component";
 			} else {
-				path += ":component:dropdown-menu:buttons:" + idx2 + ":button";
+				path += ":component:dropdown-menu:buttons:" + subMenuIdx + ":button";
 			}
 			tester.executeBehavior((AbstractAjaxBehavior)menu.get(path).getBehaviorById(0));
 
@@ -87,6 +92,31 @@ class TestMainMenu extends AbstractWicketTesterTest {
 	@Test
 	void testRecordings() throws OmException {
 		checkMenuItem(2, null, RecordingsPanel.class);
+	}
+
+	@Test
+	void testSettingsMessages() throws OmException {
+		checkMenuItem(3, 0, MessagesContactsPanel.class);
+	}
+
+	@Test
+	void testSettingsProfile() throws OmException {
+		checkMenuItem(3, 1, EditProfilePanel.class);
+	}
+
+	@Test
+	void testSettingsSearch() throws OmException {
+		checkMenuItem(3, 2, UserSearchPanel.class);
+	}
+
+	@Test
+	void testSettingsInvitations() throws OmException {
+		checkMenuItem(3, 3, InvitationsPanel.class);
+	}
+
+	@Test
+	void testSettingsWidgets() throws OmException {
+		checkMenuItem(3, 4, WidgetsPanel.class);
 	}
 
 	@Test
