@@ -71,8 +71,12 @@ public class UserSearchPanel extends UserBasePanel {
 
 	public UserSearchPanel(String id) {
 		super(id);
+	}
 
-		add(new Form<Void>("form") {
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		container.add(new Form<Void>("form") {
 			private static final long serialVersionUID = 1L;
 
 			@Override

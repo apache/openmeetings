@@ -488,6 +488,7 @@ select.messages.selector {
 }
 .profile {
 	position: relative;
+	display: inline-block;
 }
 .profile img {
 	width: 125px;
@@ -497,7 +498,7 @@ select.messages.selector {
 }
 .profile .remove {
 	position: absolute;
-	right: 5px;
+	right: -10px;
 	top: 5px;
 	border: 1px solid #cccc;
 	padding: 0px 7px;
