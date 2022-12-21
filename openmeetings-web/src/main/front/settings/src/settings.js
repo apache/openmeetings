@@ -209,7 +209,6 @@ function _readValues(msg, func) {
 			}, msg);
 			navigator.mediaDevices.getUserMedia(cnts)
 				.then(stream => {
-					vid[0].muted = true;
 					VideoUtil.playSrc(vid[0], stream);
 					options.mediaStream = stream;
 
@@ -407,7 +406,6 @@ function _onKMessage(m) {
 				.then(() => {
 					const stream = rtcPeer.stream;
 					if (stream) {
-						vid[0].muted = false;
 						VideoUtil.playSrc(vid[0], stream);
 						lm.show();
 						level = new MicLevel();
