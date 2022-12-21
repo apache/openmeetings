@@ -173,6 +173,7 @@ module.exports = class DrawWbArea extends WbAreaBase {
 			closeBtn.confirmation({
 				title: closeBtn.attr('title')
 				, confirmationEvent: 'bla'
+				, container: '.room-block .wb-block .wb-area'
 				, onConfirm: function() {
 					const prevLi = li.prev()
 						, prevWbId = prevLi.length > 0 ? prevLi.find('a').data('wb-id') : -1;

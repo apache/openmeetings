@@ -331,6 +331,7 @@ module.exports = class WbTools {
 					clearAll.confirmation({
 						title: clearAll.attr('title')
 						, confirmationEvent: 'om-clear-all'
+						, container: wbEl[0]
 						, onConfirm: () => OmUtil.wbAction({action: 'clearAll', data: {wbId: wb.getId()}})
 					}).removeClass('disabled');
 				case Role.WHITEBOARD:
@@ -352,6 +353,7 @@ module.exports = class WbTools {
 					const clearSlide = tools.find('.om-icon.clear-slide');
 					clearSlide.confirmation({
 						title: clearSlide.attr('title')
+						, container: wbEl[0]
 						, confirmationEvent: 'om-clear-slide'
 						, onConfirm: () => OmUtil.wbAction({action: 'clearSlide', data: {wbId: wb.getId(), slide: wb.slide}})
 					});
