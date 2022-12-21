@@ -170,7 +170,7 @@ module.exports = class Video {
 				, onConnectionStateChange: () => __connectionStateChangeListener(state)
 			};
 			const vid = __getVideo(state);
-			VideoUtil.playSrc(vid, state.stream);
+			VideoUtil.playSrc(vid, state.stream, true);
 
 			const data = state.data;
 			data.rtcPeer = new WebRtcPeerSendonly(VideoUtil.addIceServers(state.options, msg));
@@ -394,7 +394,7 @@ module.exports = class Video {
 					v.remove();
 					__initUI(v.data('instance-uid'));
 					__createVideo(state);
-					VideoUtil.playSrc(state.video[0], state.stream || state.rStream);
+					VideoUtil.playSrc(state.video[0], state.stream || state.rStream, sd.self);
 					if (state.data.analyser) {
 						lm = vc.find('.level-meter');
 						level.setCanvas(lm);
@@ -598,7 +598,7 @@ module.exports = class Video {
 				.then(() => {
 					const video = __getVideo(state);
 					state.rStream = state.data.rtcPeer.pc.getRemoteStreams()[0];
-					VideoUtil.playSrc(video, state.rStream);
+					VideoUtil.playSrc(video, state.rStream, false);
 				})
 				.catch(error => OmUtil.error(error, true));
 		}

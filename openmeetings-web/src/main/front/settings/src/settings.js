@@ -209,7 +209,7 @@ function _readValues(msg, func) {
 			}, msg);
 			navigator.mediaDevices.getUserMedia(cnts)
 				.then(stream => {
-					VideoUtil.playSrc(vid[0], stream);
+					VideoUtil.playSrc(vid[0], stream, true);
 					options.mediaStream = stream;
 
 					rtcPeer = new WebRtcPeerSendonly(options);
@@ -406,7 +406,7 @@ function _onKMessage(m) {
 				.then(() => {
 					const stream = rtcPeer.stream;
 					if (stream) {
-						VideoUtil.playSrc(vid[0], stream);
+						VideoUtil.playSrc(vid[0], stream, false);
 						lm.show();
 						level = new MicLevel();
 						level.meterStream(stream, lm, function(){}, OmUtil.error, true);

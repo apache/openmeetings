@@ -285,13 +285,13 @@ function _highlight(el, clazz, count) {
 		next();
 	});
 }
-function _playSrc(_video, _stream) {
+function _playSrc(_video, _stream, mute) {
 	if (_stream && _video) {
 		_video.srcObject = _stream;
 		if (_video.paused) {
-			_video.play().catch(err => {
+			_video.play().then(() => _video.muted = mute).catch(err => {
 				if ('NotAllowedError' === err.name) {
-					_askPermission(() => _video.play());
+					_askPermission(() => _video.play().then(() => _video.muted = mute));
 				}
 			});
 		}
