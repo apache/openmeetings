@@ -47,7 +47,7 @@ class TestCalendar extends AbstractWicketTesterTest {
 		testArea(regularUsername, p -> {
 			Navbar menu = (Navbar)p.get(PATH_MENU);
 			assertNotNull(menu);
-			tester.executeBehavior((AbstractAjaxBehavior)menu.get("collapse:navLeftListEnclosure:navLeftList:0:component:dropdown-menu:buttons:1:button").getBehaviorById(0));
+			tester.executeBehavior((AbstractAjaxBehavior)menu.get("container:collapse:navLeftListEnclosure:navLeftList:0:component:dropdown-menu:buttons:1:button").getBehaviorById(0));
 
 			tester.assertComponent(PATH_CHILD, CalendarPanel.class);
 			CalendarPanel cal = (CalendarPanel)p.get(PATH_CHILD);

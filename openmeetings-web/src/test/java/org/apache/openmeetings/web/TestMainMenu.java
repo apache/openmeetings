@@ -47,7 +47,7 @@ class TestMainMenu extends AbstractWicketTesterTest {
 		testArea(adminUsername, p -> {
 			Navbar menu = (Navbar)p.get(PATH_MENU);
 			assertNotNull(menu);
-			String path = "collapse:navLeftListEnclosure:navLeftList:" + idx1;
+			String path = "container:collapse:navLeftListEnclosure:navLeftList:" + idx1;
 			if (idx2 == null) {
 				path += ":component";
 			} else {
