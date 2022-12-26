@@ -49,7 +49,7 @@
 <#function licensesKey licenses>
   <#local result = "">
   <#list licenses?sort as license>
-      <#if license?contains("Apache License, Version 2.0")><#return "Apache License Version 2.0"></#if><#-- FIXME TODO overriding mapping-->
+      <#if license?contains("Apache License, Version 2.0")><#return "Apache License Version 2.0"></#if>
       <#if license?lower_case?contains("apache")><#return license></#if>
       <#if license?contains("Eclipse Public License")><#return license></#if>
       <#if license?contains("Common Development and Distribution License")><#return license></#if>

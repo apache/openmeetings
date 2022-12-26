@@ -65,7 +65,6 @@ public class RegisterDialog extends Modal<String> {
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final IModel<String> tzModel = Model.of(WebSession.get().getClientTZCode());
 	private final RegisterForm form = new RegisterForm("form");
-	private SignInDialog s;
 	private Captcha captcha;
 	private String firstName;
 	private String lastName;
@@ -76,15 +75,13 @@ public class RegisterDialog extends Modal<String> {
 	private Long lang;
 	private boolean wasRegistered = false;
 
-	private final Modal<String> registerInfo;
 	@SpringBean
 	private IUserManager userManager;
 	@SpringBean
 	private UserDao userDao;
 
-	public RegisterDialog(String id, Modal<String> registerInfo) {
+	public RegisterDialog(String id) {
 		super(id);
-		this.registerInfo = registerInfo;
 	}
 
 	@Override
@@ -98,10 +95,6 @@ public class RegisterDialog extends Modal<String> {
 		add(new Label("register", getString("121")).setRenderBodyOnly(true), new BookmarkablePageLink<>("link", PrivacyPage.class));
 		reset(null);
 		super.onInitialize();
-	}
-
-	public void setSignInDialog(SignInDialog s) {
-		this.s = s;
 	}
 
 	public void setClientTimeZone() {
@@ -130,6 +123,7 @@ public class RegisterDialog extends Modal<String> {
 		if (sendConfirmation && sendEmailAtRegister) {
 			messageCode = "warn.notverified";
 		}
+		Modal<String> registerInfo = getRegisterInfo();
 		registerInfo.setModelObject(getString(messageCode));
 		handler.add(registerInfo.get("content"));
 		reset(handler);
@@ -140,7 +134,8 @@ public class RegisterDialog extends Modal<String> {
 	@Override
 	public void onClose(IPartialPageRequestHandler handler) {
 		if (!wasRegistered) {
-			s.show(handler);
+			SignInDialog signin = (SignInDialog)getPage().get("signin");
+			signin.show(handler);
 		}
 	}
 
@@ -148,6 +143,11 @@ public class RegisterDialog extends Modal<String> {
 	protected void onDetach() {
 		tzModel.detach();
 		super.onDetach();
+	}
+
+	@SuppressWarnings("unchecked")
+	private Modal<String> getRegisterInfo() {
+		return (Modal<String>)getPage().get("registerInfo");
 	}
 
 	class RegisterForm extends StatelessForm<Void> {
@@ -219,13 +219,7 @@ public class RegisterDialog extends Modal<String> {
 				error(getString("error.login.inuse"));
 			}
 			if (hasErrorMessage()) {
-				// add random timeout
-				try {
-					Thread.sleep((long)(10 * Math.random() * 1000));
-				} catch (InterruptedException e) {
-					log.error("Unexpected exception while sleeting", e);
-					Thread.currentThread().interrupt();
-				}
+				SignInDialog.penalty();
 			}
 		}
 
@@ -244,6 +238,7 @@ public class RegisterDialog extends Modal<String> {
 		}
 
 		private void onSubmit(AjaxRequestTarget target) {
+			Modal<String> registerInfo = getRegisterInfo();
 			wasRegistered = true;
 			try {
 				Object o = userManager.registerUser(login, password, lastName

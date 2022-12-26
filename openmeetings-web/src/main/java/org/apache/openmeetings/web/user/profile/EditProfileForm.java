@@ -19,6 +19,8 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
 
 import java.time.Duration;
 
@@ -31,8 +33,10 @@ import org.apache.openmeetings.web.common.FormActionsPanel;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.pages.PrivacyPage;
+import org.apache.openmeetings.web.pages.auth.SignInDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
@@ -45,29 +49,27 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
 
 public class EditProfileForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(EditProfileForm.class);
 	private final PasswordTextField passwd = new PasswordTextField("passwd", new Model<>());
 	private final GeneralUserForm userForm;
-	private final ChangePasswordDialog chPwdDlg;
 	private boolean checkPassword;
 	private FormActionsPanel<User> actions;
+	private BootstrapAjaxLink<String> toggleOtp;
 
 	@SpringBean
 	private UserDao userDao;
 
-	public EditProfileForm(String id, final ChangePasswordDialog chPwdDlg) {
+	public EditProfileForm(String id) {
 		super(id);
 		setModel(new CompoundPropertyModel<>(userDao.get(getUserId())));
 		userForm = new GeneralUserForm("general", getModel(), false);
-		this.chPwdDlg = chPwdDlg;
 		this.checkPassword = User.Type.OAUTH != getModelObject().getType();
 	}
 
@@ -118,9 +120,30 @@ public class EditProfileForm extends Form<User> {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				chPwdDlg.show(target);
+				ChangePasswordDialog dlg = (ChangePasswordDialog)findParent(EditProfilePanel.class).get("changePasswdDlg");
+				dlg.show(target);
 			}
 		}.setVisible(checkPassword));
+		toggleOtp = new BootstrapAjaxLink<>("toggleOtp", null, Buttons.Type.Outline_Danger, Model.of("")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				User u = EditProfileForm.this.getModelObject();
+				if (u.getOtpSecret() == null) {
+					ToggleOtpDialog dlg = (ToggleOtpDialog)findParent(EditProfilePanel.class).get("toggleOtpDlg");
+					dlg.setModel(EditProfileForm.this.getModel());
+					dlg.show(target);
+				} else {
+					u.setOtpSecret(null);
+					u.setOtpRecoveryCodes(null);
+					updateOtpButton(false, target);
+				}
+			}
+		};
+		add(toggleOtp.setOutputMarkupId(true).setVisible(isOtpEnabled() && checkPassword));
+		updateOtpButton(getModelObject().getOtpSecret() != null, null);
+
 		add(userForm);
 		add(new UploadableProfileImagePanel("img", getUserId()));
 		add(new CommunityUserForm("comunity", getModel()));
@@ -143,13 +166,7 @@ public class EditProfileForm extends Form<User> {
 			String p = passwd.getConvertedInput();
 			if (!Strings.isEmpty(p) && !userDao.verifyPassword(getModelObject().getId(), p)) {
 				error(getString("231"));
-				// add random timeout
-				try {
-					Thread.sleep(6 + (long)(10 * Math.random() * 1000));
-				} catch (InterruptedException e) {
-					log.error("Unexpected exception while sleeping", e);
-					Thread.currentThread().interrupt();
-				}
+				SignInDialog.penalty();
 			}
 		}
 		super.onValidate();
@@ -164,5 +181,20 @@ public class EditProfileForm extends Form<User> {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(OnDomReadyHeaderItem.forScript("$('.profile-edit-form .my-info').off().click(function() {showUserInfo(" + getUserId() + ");});"));
+	}
+
+	// package private for ToggleOtpDialog
+	void updateOtpButton(boolean enabled, IPartialPageRequestHandler handler) {
+		if (enabled) {
+			toggleOtp.add(newOkCancelDangerConfirm(this, getString("otp.disable.confirm")));
+		} else {
+			toggleOtp.getBehaviors(ConfirmationBehavior.class).stream().forEach(b -> toggleOtp.remove(b));
+		}
+		toggleOtp.setLabel(new ResourceModel(enabled ? "otp.disable" : "otp.enable"));
+		toggleOtp.setIconType(enabled ? FontAwesome6IconType.square_check_r : FontAwesome6IconType.square_r);
+		toggleOtp.setType(enabled ? Buttons.Type.Outline_Danger : Buttons.Type.Primary);
+		if (handler != null) {
+			handler.add(toggleOtp);
+		}
 	}
 }

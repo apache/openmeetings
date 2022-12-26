@@ -243,7 +243,6 @@ module.exports = class DrawWbArea extends WbAreaBase {
 			this.wsinit();
 			_doInit(callback);
 		};
-		//FIXME TODO self.getWb = _getWb;
 		this.setRole = (_role) => {
 			if (!_inited) {
 				return;

@@ -326,6 +326,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_THEME:
 				reloadTheme();
 				break;
+			case CONFIG_OTP_ENABLED:
+				reloadOtpEnabled();
+				break;
 			default:
 				break;
 		}
@@ -475,6 +478,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		app.updateTheme();
 	}
 
+	private void reloadOtpEnabled() {
+		setOtpEnabled(getBool(CONFIG_OTP_ENABLED, false));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -503,6 +510,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadAppointmentSettings();
 		reloadRecordingEnabled();
 		reloadTheme();
+		reloadOtpEnabled();
 
 		updateCsp();
 	}

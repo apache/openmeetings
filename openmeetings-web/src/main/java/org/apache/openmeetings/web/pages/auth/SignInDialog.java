@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.UserManager.showAuth;
 import static org.apache.openmeetings.web.pages.HashPage.APP;
@@ -29,8 +30,10 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
@@ -82,8 +85,6 @@ public class SignInDialog extends Modal<String> {
 	private final PasswordTextField passField = new PasswordTextField("pass", Model.of(""));
 	private final RequiredTextField<String> loginField = new RequiredTextField<>("login", Model.of(""));
 	private boolean rememberMe = false;
-	private RegisterDialog register;
-	private ForgetPasswordDialog f;
 	private LdapConfig domain;
 	private NotificationPanel feedback = new NotificationPanel("feedback");
 	@SpringBean
@@ -92,6 +93,8 @@ public class SignInDialog extends Modal<String> {
 	private LdapConfigDao ldapDao;
 	@SpringBean
 	private OAuth2Dao oauthDao;
+	@SpringBean
+	private UserDao userDao;
 
 	public SignInDialog(String id) {
 		super(id);
@@ -112,10 +115,13 @@ public class SignInDialog extends Modal<String> {
 
 			public void onClick(AjaxRequestTarget target) {
 				SignInDialog.this.close(target);
+
+				RegisterDialog register = (RegisterDialog)getPage().get("register");
 				register.setClientTimeZone();
 				register.show(target);
 			}
 		}.setVisible(OpenmeetingsVariables.isAllowRegisterFrontend()));
+
 
 		super.onInitialize();
 	}
@@ -123,14 +129,6 @@ public class SignInDialog extends Modal<String> {
 	@Override
 	protected Component createHeaderCloseButton(String id) {
 		return super.createHeaderCloseButton(id).setVisible(false);
-	}
-
-	public void setRegisterDialog(RegisterDialog r) {
-		this.register = r;
-	}
-
-	public void setForgetPasswordDialog(ForgetPasswordDialog f) {
-		this.f = f;
 	}
 
 	class SignInForm extends StatelessForm<String> {
@@ -170,7 +168,9 @@ public class SignInDialog extends Modal<String> {
 				@Override
 				public void onClick(AjaxRequestTarget target) {
 					SignInDialog.this.close(target);
-					f.show(target);
+
+					ForgetPasswordDialog forget = (ForgetPasswordDialog)getPage().get("forget");
+					forget.show(target);
 				}
 			});
 			add(new WebMarkupContainer("netTest").add(AttributeModifier.append("href"
@@ -241,41 +241,86 @@ public class SignInDialog extends Modal<String> {
 			RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(this::onSubmit);
 		}
 
-		protected void onSubmit(AjaxRequestTarget target) {
-			final String login = String.format(domain.getAddDomainToUserName() ? "%s@%s" : "%s"
-					, loginField.getModelObject(), domain.getDomain());
+		private void processOtp(final String login, AjaxRequestTarget target) {
+			boolean signedIn = false;
+			boolean checkOtp = false;
 			final String password = passField.getModelObject();
-			OmAuthenticationStrategy strategy = getAuthenticationStrategy();
-			WebSession ws = WebSession.get();
-			Type type = domain.getId() > 0 ? Type.LDAP : Type.USER;
-			boolean signIn = false;
+			User u = null;
 			try {
-				signIn = ws.signIn(login, password, type, domain.getId());
+				u = userDao.login(login, password);
+				signedIn = u != null;
+				checkOtp = signedIn && u.getOtpSecret() != null;
 			} catch (OmException e) {
 				error(getString(e.getKey()));
 				target.add(feedback);
 			}
-			if (signIn) {
-				setResponsePage(Application.get().getHomePage());
-				if (rememberMe) {
-					strategy.save(login, password, type, domain.getId());
-				} else {
-					strategy.remove();
+			if (signedIn) {
+				if (checkOtp) {
+					OtpDialog otp = (OtpDialog)getPage().get("otpDialog");
+					otp.setModelObject(u);
+					SignInDialog.this.close(target);
+					otp.show(target);
+					return;
 				}
+				WebSession ws = WebSession.get();
+				ws.signIn(u);
+			}
+			finalStep(signedIn, Type.USER, target);
+		}
+
+		protected void onSubmit(AjaxRequestTarget target) {
+			final String login = getLogin();
+			final String password = passField.getModelObject();
+			WebSession ws = WebSession.get();
+			Type type = domain.getId() > 0 ? Type.LDAP : Type.USER;
+			if (isOtpEnabled() && Type.USER == type) {
+				processOtp(login, target);
+				return;
+			}
+			boolean signedIn = false;
+			try {
+				signedIn = ws.signIn(login, password, type, domain.getId());
+			} catch (OmException e) {
+				error(getString(e.getKey()));
+				target.add(feedback);
+			}
+			finalStep(signedIn, type, target);
+		}
+
+	}
+
+	private String getLogin() {
+		return String.format(domain.getAddDomainToUserName() ? "%s@%s" : "%s", loginField.getModelObject(), domain.getDomain());
+	}
+
+	// package private for OTP-Dialog
+	void finalStep(boolean signedIn, final Type type, AjaxRequestTarget target) {
+		OmAuthenticationStrategy strategy = getAuthenticationStrategy();
+		if (signedIn) {
+			setResponsePage(Application.get().getHomePage());
+			if (rememberMe) {
+				final String login = getLogin();
+				strategy.save(login, passField.getModelObject(), type, domain.getId());
 			} else {
-				if (!hasErrorMessage()) {
-					error(getString("error.bad.credentials"));
-					target.add(feedback);
-				}
-				// add random timeout
-				try {
-					Thread.sleep(6 + (long)(10 * Math.random() * 1000));
-				} catch (InterruptedException e) {
-					log.error("Unexpected exception while sleeping", e);
-					Thread.currentThread().interrupt();
-				}
 				strategy.remove();
 			}
+		} else {
+			if (!hasErrorMessage()) {
+				error(getString("error.bad.credentials"));
+				target.add(feedback);
+			}
+			penalty();
+			strategy.remove();
+		}
+	}
+
+	public static void penalty() {
+		// add random timeout
+		try {
+			Thread.sleep(6 + (long)(10 * Math.random() * 1000));
+		} catch (InterruptedException e) {
+			log.error("Unexpected exception while sleeping", e);
+			Thread.currentThread().interrupt();
 		}
 	}
 }

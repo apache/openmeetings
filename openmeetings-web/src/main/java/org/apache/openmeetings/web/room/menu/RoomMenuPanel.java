@@ -69,7 +69,7 @@ import org.apache.openmeetings.mediaserver.StreamProcessor;
 import com.github.openjson.JSONObject;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
 
 public class RoomMenuPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -142,7 +142,7 @@ public class RoomMenuPanel extends Panel {
 
 	@Override
 	protected void onInitialize() {
-		exitMenuItem = new OmMenuItem(getString("308"), getString("309"), FontAwesome5IconType.sign_out_alt_s) {
+		exitMenuItem = new OmMenuItem(getString("308"), getString("309"), FontAwesome6IconType.right_from_bracket_s) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

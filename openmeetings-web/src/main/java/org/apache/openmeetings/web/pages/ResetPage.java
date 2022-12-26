@@ -50,7 +50,7 @@ public class ResetPage extends BaseNotInitedPage {
 		if (resetHash != null) {
 			User user = userDao.getUserByHash(resetHash);
 			if (user != null) {
-				add(new ResetPasswordDialog("resetPassword", user, resetInfo));
+				add(new ResetPasswordDialog("resetPassword", user));
 				add(resetInfo.header(new ResourceModel("325"))
 						.addButton(OmModalCloseButton.of("54"))
 						.setUseCloseHandler(true));

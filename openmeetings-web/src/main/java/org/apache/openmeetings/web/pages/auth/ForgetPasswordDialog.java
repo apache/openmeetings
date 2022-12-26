@@ -72,8 +72,6 @@ public class ForgetPasswordDialog extends Modal<String> {
 	private final WebMarkupContainer label = new WebMarkupContainer("label");
 	private final Captcha captcha = new Captcha("captcha");
 	private ForgetPasswordForm form = new ForgetPasswordForm("form");
-	private SignInDialog s;
-	private final Modal<String> forgetInfoDialog;
 	private boolean wasReset = false;
 
 	@SpringBean
@@ -86,9 +84,8 @@ public class ForgetPasswordDialog extends Modal<String> {
 		, LOGIN
 	}
 
-	public ForgetPasswordDialog(String id, Modal<String> forgetInfoDialog) {
+	public ForgetPasswordDialog(String id) {
 		super(id);
-		this.forgetInfoDialog = forgetInfoDialog;
 	}
 
 	@Override
@@ -131,14 +128,13 @@ public class ForgetPasswordDialog extends Modal<String> {
 	@Override
 	public void onClose(IPartialPageRequestHandler handler) {
 		if (wasReset) {
-			forgetInfoDialog.show(handler);
+			@SuppressWarnings("unchecked")
+			Modal<String> forgetInfo = (Modal<String>)getPage().get("forgetInfo");
+			forgetInfo.show(handler);
 		} else {
-			s.show(handler);
+			SignInDialog signin = (SignInDialog)getPage().get("signin");
+			signin.show(handler);
 		}
-	}
-
-	public void setSignInDialog(SignInDialog s) {
-		this.s = s;
 	}
 
 	private class ForgetPasswordForm extends Form<String> {

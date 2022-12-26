@@ -85,7 +85,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.SplitButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
 
 public abstract class FileTreePanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -266,7 +266,7 @@ public abstract class FileTreePanel extends Panel {
 					public void onClick(AjaxRequestTarget target) {
 						onDownlownClick(target, ext);
 					}
-				}.setIconType(FontAwesome5IconType.download_s);
+				}.setIconType(FontAwesome6IconType.download_s);
 			}
 
 			@Override

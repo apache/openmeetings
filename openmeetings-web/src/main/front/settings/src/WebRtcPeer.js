@@ -230,13 +230,13 @@ class WebRtcPeer {
 
 						OmUtil.info(`[createOffer] Video sender Degradation Preference set: ${sendParams.degradationPreference}`);
 
-						// FIXME: Firefox implements degradationPreference on each individual encoding!
+						// Firefox implements degradationPreference on each individual encoding!
 						// (set it on every element of the sendParams.encodings array)
 
 						needSetParams = true;
 					}
 
-					// FIXME: Check that the simulcast encodings were applied.
+					// Check that the simulcast encodings were applied.
 					// Firefox doesn't implement `RTCRtpTransceiverInit.sendEncodings`
 					// so the only way to enable simulcast is with `RTCRtpSender.setParameters()`.
 					//

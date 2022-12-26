@@ -26,8 +26,13 @@ public class EditProfilePanel extends UserBasePanel {
 	public EditProfilePanel(String id) {
 		super(id);
 		setOutputMarkupId(true);
+	}
 
-		final ChangePasswordDialog chPwdDlg = new ChangePasswordDialog("changePasswd");
-		add(chPwdDlg, new EditProfileForm("form", chPwdDlg));
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(new ChangePasswordDialog("changePasswdDlg"));
+		add(new ToggleOtpDialog("toggleOtpDlg"));
+		add(new EditProfileForm("form"));
 	}
 }

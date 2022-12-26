@@ -373,6 +373,14 @@ public class User extends HistoricalEntity {
 	@XmlJavaTypeAdapter(LongAdapter.class)
 	private Long domainId; // LDAP config id for LDAP, OAuth server id for OAuth
 
+	@Column(name = "otp_secret")
+	@XmlElement(name = "otpSecret", required = false)
+	private String otpSecret;
+
+	@Column(name = "otp_recovery", length=350)
+	@XmlElement(name = "otpRecovery", required = false)
+	private String otpRecoveryCodes;
+
 	@Override
 	public Long getId() {
 		return id;
@@ -656,6 +664,22 @@ public class User extends HistoricalEntity {
 
 	public void setDomainId(Long domainId) {
 		this.domainId = domainId;
+	}
+
+	public String getOtpSecret() {
+		return otpSecret;
+	}
+
+	public void setOtpSecret(String otpSecret) {
+		this.otpSecret = otpSecret;
+	}
+
+	public String getOtpRecoveryCodes() {
+		return otpRecoveryCodes;
+	}
+
+	public void setOtpRecoveryCodes(String otpRecoveryCodes) {
+		this.otpRecoveryCodes = otpRecoveryCodes;
 	}
 
 	@Override

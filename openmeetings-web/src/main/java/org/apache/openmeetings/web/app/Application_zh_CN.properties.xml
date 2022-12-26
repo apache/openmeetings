@@ -882,6 +882,16 @@ please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></e
 	<entry key="network.test.upl.time"><![CDATA[Upload time]]></entry>
 	<entry key="notification.chat.message"><![CDATA[You have new chat message(s)]]></entry>
 	<entry key="notification.room.activity"><![CDATA[You have new activities, please check "Activities&Action"]]></entry>
+	<entry key="otp.disable"><![CDATA[Disable One Time Password]]></entry>
+	<entry key="otp.disable.confirm"><![CDATA[Are you sure you want to disable OTP? Security level will be lowered.]]></entry>
+	<entry key="otp.enable"><![CDATA[Enable One Time Password]]></entry>
+	<entry key="otp.enabled"><![CDATA[One Time Password enabled]]></entry>
+	<entry key="otp.fallback.desc"><![CDATA[Please save these one-time codes in secret place, they can be used in case you will loose access to your mobile device.]]></entry>
+	<entry key="otp.fallback.invalid"><![CDATA[Wrong Recovery code]]></entry>
+	<entry key="otp.fallback.label"><![CDATA[Recovery code]]></entry>
+	<entry key="otp.invalid"><![CDATA[Wrong One Time Password]]></entry>
+	<entry key="otp.label"><![CDATA[One Time Password]]></entry>
+	<entry key="otp.qr.desc"><![CDATA[Please open Google Authenticator and scan this QR code]]></entry>
 	<entry key="poll.clone"><![CDATA[Clone]]></entry>
 	<entry key="poll.type.NUMERIC"><![CDATA[数字 1-10]]></entry>
 	<entry key="poll.type.YES_NO"><![CDATA[是/否]]></entry>

@@ -42,15 +42,13 @@ public class ResetPasswordDialog extends Modal<String> {
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private PasswordTextField password;
 	private final User user;
-	private final Modal<String> resetInfo;
 
 	@SpringBean
 	private UserDao userDao;
 
-	public ResetPasswordDialog(String id, final User user, Modal<String> resetInfo) {
+	public ResetPasswordDialog(String id, final User user) {
 		super(id);
 		this.user = user;
-		this.resetInfo = resetInfo;
 	}
 
 	@Override
@@ -132,6 +130,8 @@ public class ResetPasswordDialog extends Modal<String> {
 			try {
 				userDao.resetPassword(user, password.getConvertedInput());
 				ResetPasswordDialog.this.close(target);
+				@SuppressWarnings("unchecked")
+				Modal<String> resetInfo = (Modal<String>)getPage().get("resetInfo");
 				resetInfo.show(target);
 			} catch (Exception e) {
 				error(e.getMessage());

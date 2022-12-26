@@ -73,7 +73,7 @@
 						</div>
 						<div wicket:id="boolean-box" class="row">
 							<label wicket:for="valueB" class="form-label col-3 text-right"><wicket:message key="271" /></label>
-							<div class="onoffswitch">
+							<div class="onoffswitch col-8 p-0">
 								<input type="checkbox" class="onoff-checkbox" wicket:id="valueB"/>
 								<label class="onoff-label clickable" wicket:for="valueB"></label>
 							</div>
@@ -86,12 +86,16 @@
 						</div>
 					</div>
 					<div class="formelement row">
-						<label class="form-labelcol-3 text-right"><wicket:message key="268" /></label>
-						<span wicket:id="updated"/>
+						<label class="form-label col-3 text-right"><wicket:message key="268" /></label>
+						<div class="col-8 p-0">
+							<span wicket:id="updated"/>
+						</div>
 					</div>
 					<div class="formelement row">
-						<label class="form-labelcol-3 text-right"><wicket:message key="269" /></label>
-						<span wicket:id="user.login"/>
+						<label class="form-label col-3 text-right"><wicket:message key="269" /></label>
+						<div class="col-8 p-0">
+							<span wicket:id="user.login"/>
+						</div>
 					</div>
 					<div class="formelement row">
 						<label class="form-label col-3 text-right" wicket:for="comment"><wicket:message key="196" /></label>

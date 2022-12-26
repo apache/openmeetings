@@ -348,7 +348,7 @@ public class IcalUtils {
 	 * @param amount Amount to be Added
 	 * @return New Date
 	 */
-	public Date addTimetoDate(Date date, int field, int amount) { //FIXME TODO
+	public Date addTimetoDate(Date date, int field, int amount) {
 		java.util.Calendar c = java.util.Calendar.getInstance();
 		c.setTime(date);
 		c.add(field, amount);

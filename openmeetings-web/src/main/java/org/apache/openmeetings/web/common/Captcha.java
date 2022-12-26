@@ -41,7 +41,7 @@ import org.apache.wicket.validation.ValidationError;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.Icon;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
 
 public class Captcha extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -105,7 +105,7 @@ public class Captcha extends Panel {
 
 			@Override
 			protected Icon newIcon(String markupId) {
-				return new Icon(markupId, FontAwesome5IconType.sync_s);
+				return new Icon(markupId, FontAwesome6IconType.rotate_s);
 			}
 		});
 	}

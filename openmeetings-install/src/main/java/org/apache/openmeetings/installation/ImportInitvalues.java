@@ -106,6 +106,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_THEME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OTP_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CSP_DATA;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CSP_FONT;
@@ -294,8 +295,12 @@ public class ImportInitvalues {
 		// additional settings
 		// ***************************************
 
-		addCfg(list, CONFIG_SCREENSHARING_QUALITY, "1", Configuration.Type.NUMBER,
-				"Default selection in ScreenSharing Quality:\n 0 - bigger frame rate, no resize\n 1 - no resize\n 2 - size == 1/2 of selected area\n 3 - size == 3/8 of selected area", VER_3_0_3);
+		addCfg(list, CONFIG_SCREENSHARING_QUALITY, "1", Configuration.Type.NUMBER, """
+				Default selection in ScreenSharing Quality:
+				 0 - bigger frame rate, no resize
+				 1 - no resize
+				 2 - size == 1/2 of selected area
+				 3 - size == 3/8 of selected area""", VER_3_0_3);
 
 		addCfg(list, CONFIG_SCREENSHARING_FPS, "10", Configuration.Type.NUMBER, "Default selection in ScreenSharing FPS", VER_3_0_3);
 		addCfg(list, CONFIG_SCREENSHARING_FPS_SHOW, String.valueOf(true), Configuration.Type.BOOL, "Is screensharing FPS should be displayed or not", VER_3_0_3);
@@ -345,9 +350,9 @@ public class ImportInitvalues {
 						+ ", admin/group, admin/room, admin/config, admin/lang, admin/ldap, admin/oauth2, admin/backup, admin/email", "2.1.x");
 
 		// oauth2 params
-		addCfg(list, CONFIG_IGNORE_BAD_SSL, String.valueOf(false), Configuration.Type.BOOL,
-				"Set \"yes\" or \"no\" to enable/disable ssl certifications checking for OAuth2\n"
-				+ "WARNING: it is not secure", VER_3_0);
+		addCfg(list, CONFIG_IGNORE_BAD_SSL, String.valueOf(false), Configuration.Type.BOOL, """
+				Set "yes" or "no" to enable/disable ssl certifications checking for OAuth2
+				WARNING: it is not secure to ignore bad SSL""", VER_3_0);
 
 		addCfg(list, CONFIG_REDIRECT_URL_FOR_EXTERNAL, "", Configuration.Type.STRING,
 				"Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost", VER_3_0);
@@ -401,6 +406,8 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_THEME, getTheme(), Configuration.Type.STRING, "UI theme, possible values are Cerulean, Cosmo, Cyborg, Darkly, Flatly, "
 				+ "Journal, Litera, Lumen, Lux, Materia, Minty, Pulse, Sandstone, Simplex, Sketchy, Slate, Solar, Spacelab, Superhero, "
 				+ "United, Yeti", "6.1.0");
+
+		addCfg(list, CONFIG_OTP_ENABLED, String.valueOf(false), Configuration.Type.BOOL, "Whether or not Time-based One Time Passwords are enabled", "6.3.0");
 		return list;
 	}
 

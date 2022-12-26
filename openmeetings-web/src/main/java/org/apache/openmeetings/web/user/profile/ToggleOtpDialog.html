@@ -21,23 +21,24 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-9.xsd">
 <wicket:extend>
-	<button type="button" class="btn btn-xs btn-outline-secondary remove" wicket:id="remove" wicket:message="title:80">
-		<span aria-hidden="true">×</span>
-	</button>
-	<form wicket:id="form" class="img-upload">
-		<div class="fileinput fileinput-new m-0" data-provides="fileinput">
-			<div class="fileinput-preview" data-trigger="fileinput">
-				<img wicket:id="img"/>
-			</div>
-			<div>
-				<span class="btn btn-file btn-xs btn-primary">
-					<wicket:message key="379"/>
-					<input type="file" accept="image/*" wicket:id="image"/>
-				</span>
+	<form wicket:id="form">
+		<div class="formelement row pb-2">
+			<label class="form-label col-4 text-right" wicket:for="current"><wicket:message key="current.password"/></label>
+			<div class="col-7 p-0">
+				<input type="password" wicket:id="current" class="form-control"/>
 			</div>
 		</div>
-		<span wicket:id="progress">[progressbar]</span>
-		<input type="hidden" id="imgDeleted" wicket:id="imgDeleted"/>
+		<div class="row">
+			<div class="col-6">
+				<div><wicket:message key="otp.qr.desc"/></div>
+				<img class="col-12" wicket:id="qr"/>
+			</div>
+			<div class="col-6">
+				<div><wicket:message key="otp.fallback.desc"/></div>
+				<textarea class="col-12" wicket:id="codes" readonly="readonly" rows="5"></textarea>
+			</div>
+		</div>
+		<div wicket:id="feedback" class="error"></div>
 	</form>
 </wicket:extend>
 </html>

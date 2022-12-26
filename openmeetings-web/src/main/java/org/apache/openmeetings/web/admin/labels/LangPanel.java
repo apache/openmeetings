@@ -65,7 +65,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButt
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
 
 /**
  * Language Editor, add/insert/update Label and add/delete language contains several Forms and one list
@@ -242,7 +242,7 @@ public class LangPanel extends AdminBasePanel {
 				target.add(listContainer);
 			}
 		};
-		langForm.add(delLngBtn.setIconType(FontAwesome5IconType.times_s)
+		langForm.add(delLngBtn.setIconType(FontAwesome6IconType.xmark_s)
 				.add(newOkCancelDangerConfirm(this, getString("833"))));
 		super.onInitialize();
 	}

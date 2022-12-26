@@ -573,6 +573,14 @@
 			<groupId>org.webjars</groupId>
 			<artifactId>jquery-ui-touch-punch</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>dev.samstevens.totp</groupId>
+			<artifactId>totp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>

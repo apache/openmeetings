@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 class TestStoredFile {
 	@Test
 	void testAudio() {
-		final String[] exts = {"aif", "aifc", "aiff", "au", "mp3", "flac", "wav"}; //TODO enlarge
+		final String[] exts = {"aif", "aifc", "aiff", "au", "mp3", "flac", "wav"};
 		for (String ext : exts) {
 			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
 			assertTrue(sf.isVideo(), String.format("Files of type '%s' should be treated as Video", ext));
@@ -39,7 +39,7 @@ class TestStoredFile {
 
 	@Test
 	void testVideo() {
-		final String[] exts = {"avi", "mov", "flv", "mp4"}; //TODO enlarge
+		final String[] exts = {"avi", "mov", "flv", "mp4"};
 		for (String ext : exts) {
 			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
 			assertTrue(sf.isVideo(), String.format("Files of type '%s' should be treated as Video", ext));
@@ -58,7 +58,7 @@ class TestStoredFile {
 				"wpg", // Word Perfect Graphics
 				"bmp", "ico", // Microsoft Icon
 				"tga", // Truevision Targa
-				"jpg", "jpeg"}; //TODO enlarge
+				"jpg", "jpeg"};
 		for (String ext : exts) {
 			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
 			assertTrue(sf.isImage(), String.format("Files of type '%s' should be treated as Image", ext));

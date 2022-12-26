@@ -62,7 +62,6 @@ class TestRecordingService extends AbstractWebServiceTest {
 		boolean found = false;
 		for (RecordingDTO rdo : recs) {
 			if (r.getId().equals(rdo.getId())) {
-				//TODO check room, user
 				found = true;
 				break;
 			}

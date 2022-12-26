@@ -78,8 +78,8 @@ function __rightVideoIcon(c, elem) {
 function __rightOtherIcons(c, elem) {
 	__rightIcon(c, elem, ['PRESENTER'], '.right.presenter', () => !options.interview && $('.wb-area').is(':visible'));
 	__rightIcon(c, elem, ['WHITEBOARD', 'PRESENTER'], '.right.wb', () => !options.interview && $('.wb-area').is(':visible'));
-	__rightIcon(c, elem, ['SHARE'], '.right.screen-share', () => true); //FIXME TODO getRoomPanel().screenShareAllowed()
-	__rightIcon(c, elem, ['REMOTE_CONTROL'], '.right.remote-control', () => true); //FIXME TODO getRoomPanel().screenShareAllowed()
+	__rightIcon(c, elem, ['SHARE'], '.right.screen-share', () => true);
+	__rightIcon(c, elem, ['REMOTE_CONTROL'], '.right.remote-control', () => true);
 	__rightIcon(c, elem, ['MODERATOR'], '.right.moderator', () => true);
 }
 function __setStatus(c, le) {

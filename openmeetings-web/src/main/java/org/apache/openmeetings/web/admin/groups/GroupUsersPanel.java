@@ -44,7 +44,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.badge.BootstrapBadge;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
 
 public class GroupUsersPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -92,7 +92,7 @@ public class GroupUsersPanel extends Panel {
 						target.add(GroupUsersPanel.this);
 					}
 				};
-				del.setIconType(FontAwesome5IconType.times_s)
+				del.setIconType(FontAwesome6IconType.xmark_s)
 						.add(newOkCancelDangerConfirm(this, getString("833")));
 				item.add(del);
 				item.add(new BootstrapBadge("new", new ResourceModel("lbl.new"), BackgroundColorBehavior.Color.Warning).setVisible((grpUser.getId() == null)));

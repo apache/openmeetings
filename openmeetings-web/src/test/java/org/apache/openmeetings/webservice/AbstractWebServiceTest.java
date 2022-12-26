@@ -136,7 +136,6 @@ public abstract class AbstractWebServiceTest {
 		assertEquals(r.getName(), room1.getName(), "Room with same Name should be returned");
 		assertEquals(r.getExternalType(), room1.getExternalType(), "Room with same ExternalType should be returned");
 		assertEquals(r.getExternalId(), room1.getExternalId(), "Room with same ExternalId should be returned");
-		//TODO check other fields
 		return new CallResult<>(sid, room1);
 	}
 

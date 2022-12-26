@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 #contents #calendar .fc-gotoBtn-button::before {
-	font-family: 'Font Awesome 5 Free';
+	font-family: 'Font Awesome 6 Free';
 	font-weight: 900;
 	content: "\f133";
 	font-size: 1em;
@@ -31,7 +31,7 @@
 #wrapper-panel-frame .main-form, #calendar {
 	height: 100%;
 }
-/* FIXME TODO bootstrap override */
+/* bootstrap override */
 .table-bordered {
 	border: 1px solid #dee2e6;
 }

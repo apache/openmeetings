@@ -115,8 +115,6 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		streamType = sd.getType();
 		this.connectedSince = new Date();
 		Injector.get().inject(this);
-		//TODO Min/MaxVideoSendBandwidth
-		//TODO Min/Max Audio/Video RecvBandwidth
 	}
 
 	public void startBroadcast(final StreamDesc sd, final String sdpOffer, Runnable then) {

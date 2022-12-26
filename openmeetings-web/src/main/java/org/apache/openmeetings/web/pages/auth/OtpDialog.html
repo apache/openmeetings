@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+-->
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-9.xsd">
+<wicket:extend>
+	<form wicket:id="form" class="signin-forget">
+		<div class="row mb-1 ms-2 me-2 g-0" wicket:id="type">
+			<div class="col-6">
+				<div class="form-check form-check-inline">
+					<label class="form-check-label" wicket:for="type-otp"><wicket:message key="otp.label" /></label>
+					<input class="form-check-input" type="radio" wicket:id="type-otp"/>
+				</div>
+			</div>
+			<div class="col-5">
+				<div class="form-check form-check-inline">
+					<label class="form-check-label" wicket:for="type-fallback"><wicket:message key="otp.fallback.label" /></label>
+					<input class="form-check-input" type="radio" wicket:id="type-fallback"/>
+				</div>
+			</div>
+		</div>
+		<div class="input-group mb-1 g-0" wicket:id="otp-block">
+			<span class="input-group-text"><i class="fa fa-key"></i></span>
+			<input wicket:id="otp" class="form-control auto-focus" type="number" value="" maxlength="6"/>
+		</div>
+		<div class="input-group mb-1 g-0" wicket:id="fallback-block">
+			<span class="input-group-text"><i class="fa fa-key"></i></span>
+			<input wicket:id="fallback" class="form-control auto-focus" type="text" value=""/>
+		</div>
+		<div wicket:id="feedback"></div>
+		<input type="submit" wicket:id="submit" hidden="hidden"/>
+	</form>
+</wicket:extend>
+</html>

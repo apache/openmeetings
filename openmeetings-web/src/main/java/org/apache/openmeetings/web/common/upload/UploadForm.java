@@ -71,7 +71,7 @@ public abstract class UploadForm extends Panel {
 		// set max upload size in form as info text
 		Long maxBytes = getMaxUploadSize();
 		double megaBytes = maxBytes.doubleValue() / 1024 / 1024;
-		DecimalFormat formatter = new DecimalFormat("#,###.00"); //FIXME TODO locale based format
+		DecimalFormat formatter = new DecimalFormat("#,###.00");
 		form.add(new Label("MaxUploadSize", formatter.format(megaBytes)));
 		form.add(new Label("btn-label", new ResourceModel(buttonLabelKey())));
 

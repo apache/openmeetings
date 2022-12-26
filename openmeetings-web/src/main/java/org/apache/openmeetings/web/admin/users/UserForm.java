@@ -25,6 +25,7 @@ import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendRegisterEmail;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
@@ -56,6 +57,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -96,6 +98,7 @@ public class UserForm extends AdminBaseForm<User> {
 	private final DropDownChoice<Long> domainId = new DropDownChoice<>("domainId");
 	private final PasswordDialog adminPass;
 	private final UploadableProfileImagePanel avatar = new UploadableProfileImagePanel("avatar", null);
+	private final CheckBox otpEnabled = new CheckBox("otp-enabled", Model.of(false));
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean
@@ -121,6 +124,7 @@ public class UserForm extends AdminBaseForm<User> {
 		mainContainer.add(generalForm = new GeneralUserForm("general", getModel(), true));
 		mainContainer.add(password.setResetPassword(false).setLabel(new ResourceModel("110")).setRequired(false)
 				.add(passValidator = new StrongPasswordValidator(getModelObject())));
+		mainContainer.add(otpEnabled.setLabel(new ResourceModel("otp.enabled")));
 		login.setLabel(new ResourceModel("108"));
 		mainContainer.add(login.add(minimumLength(getMinLoginLength())));
 
@@ -180,16 +184,19 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
-		boolean nd = !getModelObject().isDeleted();
-		boolean isNew = getModelObject().getId() == null;
+		User u = getModelObject();
+		boolean nd = !u.isDeleted();
+		boolean isNew = u.getId() == null;
 		mainContainer.setEnabled(nd);
+		otpEnabled.setModelObject(u.getOtpSecret() != null)
+				.setEnabled(isOtpEnabled() && u.getOtpSecret() != null); // admin can only disable OTP
 		setSaveVisible(nd);
 		setDelVisible(nd && !isNew);
 		setRestoreVisible(!nd);
 		setPurgeVisible(!isNew);
 		password.setModelObject(null);
-		generalForm.updateModelObject(getModelObject(), true);
-		passValidator.setUser(getModelObject());
+		generalForm.updateModelObject(u, true);
+		passValidator.setUser(u);
 	}
 
 	@Override
@@ -254,6 +261,10 @@ public class UserForm extends AdminBaseForm<User> {
 		}
 		if (isNew && DISPLAY_NAME_NA.equals(u.getDisplayName())) {
 			u.resetDisplayName();
+		}
+		if (Boolean.FALSE.equals(otpEnabled.getModelObject())) {
+			u.setOtpSecret(null);
+			u.setOtpRecoveryCodes(null);
 		}
 		try {
 			u = userDao.update(u, pass, getUserId());

@@ -23,6 +23,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.web.common.OmModalCloseButton;
+import org.apache.openmeetings.web.pages.auth.SignInDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
@@ -31,8 +32,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
@@ -41,7 +40,6 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAja
 
 public class ChangePasswordDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(ChangePasswordDialog.class);
 	private final PasswordTextField current = new PasswordTextField("current", Model.of((String)null));
 	private final PasswordTextField pass = new PasswordTextField("pass", Model.of((String)null));
 	private final PasswordTextField pass2 = new PasswordTextField("pass2", Model.of((String)null));
@@ -53,13 +51,7 @@ public class ChangePasswordDialog extends Modal<String> {
 			String p = current.getConvertedInput();
 			if (!Strings.isEmpty(p) && !userDao.verifyPassword(getUserId(), p)) {
 				error(getString("231"));
-				// add random timeout
-				try {
-					Thread.sleep(6 + (long)(10 * Math.random() * 1000));
-				} catch (InterruptedException e) {
-					log.error("Unexpected exception while sleeping", e);
-					Thread.currentThread().interrupt();
-				}
+				SignInDialog.penalty();
 			}
 			String p1 = pass.getConvertedInput();
 			if (!Strings.isEmpty(p1) && !p1.equals(pass2.getConvertedInput())) {

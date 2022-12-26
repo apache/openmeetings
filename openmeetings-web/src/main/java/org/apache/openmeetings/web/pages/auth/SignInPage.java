@@ -84,7 +84,7 @@ public class SignInPage extends BaseInitedPage {
 			signin.show(handler);
 		}
 	};
-	private final ForgetPasswordDialog forget = new ForgetPasswordDialog("forget", forgetInfoDialog);
+	private final ForgetPasswordDialog forget = new ForgetPasswordDialog("forget");
 	private final Modal<String> registerInfoDialog = new TextContentModal("registerInfo", Model.of("")) {
 		private static final long serialVersionUID = 1L;
 
@@ -107,7 +107,8 @@ public class SignInPage extends BaseInitedPage {
 			signin.show(handler);
 		}
 	};
-	RegisterDialog r = new RegisterDialog("register", registerInfoDialog);
+	RegisterDialog r = new RegisterDialog("register");
+	private final OtpDialog otpDialog = new OtpDialog("otpDialog", Model.of());
 	@SpringBean
 	private ConfigurationDao cfgDao;
 	@SpringBean
@@ -168,10 +169,6 @@ public class SignInPage extends BaseInitedPage {
 		super.onInitialize();
 
 		signin = new SignInDialog("signin");
-		signin.setRegisterDialog(r);
-		signin.setForgetPasswordDialog(forget);
-		r.setSignInDialog(signin);
-		forget.setSignInDialog(signin);
 		add(signin.setVisible(!WebSession.get().isKickedByAdmin()),
 				r.setVisible(allowRegister()), forget, kick.setVisible(WebSession.get().isKickedByAdmin()));
 		add(forgetInfoDialog
@@ -184,6 +181,7 @@ public class SignInPage extends BaseInitedPage {
 				.addButton(OmModalCloseButton.of("54"))
 				.setUseCloseHandler(true)
 		);
+		add(otpDialog);
 	}
 
 	@Override

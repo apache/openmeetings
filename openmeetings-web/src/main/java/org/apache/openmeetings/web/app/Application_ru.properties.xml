@@ -882,6 +882,16 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="network.test.upl.time"><![CDATA[Время загрузки]]></entry>
 	<entry key="notification.chat.message"><![CDATA[У Вас есть новые сообщения в чате]]></entry>
 	<entry key="notification.room.activity"><![CDATA[У Вас новый запрос, пожалуйста проверьте "Активность и действия"]]></entry>
+	<entry key="otp.disable"><![CDATA[Выключить одноразовые коды]]></entry>
+	<entry key="otp.disable.confirm"><![CDATA[Вы уверены что хотите отключить вход по одноразовому коду? Уровень безопасности будет понижен.]]></entry>
+	<entry key="otp.enable"><![CDATA[Включить одноразовые коды]]></entry>
+	<entry key="otp.enabled"><![CDATA[Проверка одноразового кода включена]]></entry>
+	<entry key="otp.fallback.desc"><![CDATA[Пожалуйста сохраните эти одноразовые пароли в секретном месте, ими можно будет воспользоваться если Вы потеряете доступ к своему мобильному.]]></entry>
+	<entry key="otp.fallback.invalid"><![CDATA[Неверный запасной код]]></entry>
+	<entry key="otp.fallback.label"><![CDATA[Сохранённый код]]></entry>
+	<entry key="otp.invalid"><![CDATA[Неверный код]]></entry>
+	<entry key="otp.label"><![CDATA[Одноразовый код]]></entry>
+	<entry key="otp.qr.desc"><![CDATA[Пожалуйста откройте приложение Google Authenticator и просканируйте этот код.]]></entry>
 	<entry key="poll.clone"><![CDATA[Клонировать]]></entry>
 	<entry key="poll.type.NUMERIC"><![CDATA[Число 1 - 10]]></entry>
 	<entry key="poll.type.YES_NO"><![CDATA[Да/Нет]]></entry>

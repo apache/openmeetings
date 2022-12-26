@@ -53,7 +53,7 @@ import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.urlfragment.AsyncUrlFragmentAwarePage;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5CssReference;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6CssReference;
 
 public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = 1L;
@@ -144,7 +144,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 					.append(getGaCode()).append("', ").append(isMainPage()).append(");");
 			response.render(OnDomReadyHeaderItem.forScript(script));
 		}
-		response.render(CssHeaderItem.forReference(FontAwesome5CssReference.instance()));
+		response.render(CssHeaderItem.forReference(FontAwesome6CssReference.instance()));
 		response.render(new FilteredHeaderItem(CssHeaderItem.forUrl("css/custom.css"), CUSTOM_CSS_FILTER));
 	}
 

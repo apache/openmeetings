@@ -30,7 +30,7 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 	background-position: center;
 }
 .room-block .sb-wb .wb-block.droppable-hover .wb-drop-area::before {
-	font-family: 'Font Awesome 5 Free';
+	font-family: 'Font Awesome 6 Free';
 	font-weight: 400;
 	font-size: 20em;
 	content: '\f358';

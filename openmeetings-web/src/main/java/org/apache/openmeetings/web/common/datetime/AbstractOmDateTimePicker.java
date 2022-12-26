@@ -40,7 +40,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.AbstractDateTimePickerWithIcon;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerIconConfig;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
 
 public abstract class AbstractOmDateTimePicker<T extends Serializable> extends FormComponentPanel<T> {
 	private static final long serialVersionUID = 1L;
@@ -66,13 +66,13 @@ public abstract class AbstractOmDateTimePicker<T extends Serializable> extends F
 				.useLocale(WebSession.get().getLocale().toLanguageTag())
 				.withFormat(patch(format))
 				.withKeepInvalid(true)
-				.with(new DatetimePickerIconConfig().useDateIcon(FontAwesome5IconType.calendar_s)
-						.useTimeIcon(FontAwesome5IconType.clock_s).useUpIcon(FontAwesome5IconType.arrow_up_s)
-						.useDownIcon(FontAwesome5IconType.arrow_down_s)
-						.usePreviousIcon(FontAwesome5IconType.arrow_left_s)
-						.useNextIcon(FontAwesome5IconType.arrow_right_s)
-						.useTodayIcon(FontAwesome5IconType.calendar_check_s).useClearIcon(FontAwesome5IconType.eraser_s)
-						.useCloseIcon(FontAwesome5IconType.times_s));
+				.with(new DatetimePickerIconConfig().useDateIcon(FontAwesome6IconType.calendar_s)
+						.useTimeIcon(FontAwesome6IconType.clock_s).useUpIcon(FontAwesome6IconType.arrow_up_s)
+						.useDownIcon(FontAwesome6IconType.arrow_down_s)
+						.usePreviousIcon(FontAwesome6IconType.arrow_left_s)
+						.useNextIcon(FontAwesome6IconType.arrow_right_s)
+						.useTodayIcon(FontAwesome6IconType.calendar_check_s).useClearIcon(FontAwesome6IconType.eraser_s)
+						.useCloseIcon(FontAwesome6IconType.xmark_s));
 		picker = new AbstractDateTimePickerWithIcon<>("picker", new Model<>(getModelObject()), config) {
 			private static final long serialVersionUID = 1L;
 
