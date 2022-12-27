@@ -579,38 +579,4 @@ public class RoomWebService extends BaseWebService {
 			}
 		});
 	}
-
-	/**
-	 * @deprecated please use {@link WbWebService#resetWb(String, long)} method instead
-	 *
-	 * Method to clean room white board (all objects will be purged)
-	 *
-	 * @param sid - The SID of the User. This SID must be marked as Loggedin
-	 * @param id - id of the room to clean
-	 * @return - serviceResult object with the result
-	 * @throws {@link ServiceException} in case of any errors
-	 */
-	@Deprecated(since = "5.0.0-M3")
-	@WebMethod
-	@GET
-	@Path("/cleanwb/{id}")
-	@Operation(
-			deprecated = true,
-			description = "Method to clean room white board (all objects will be purged) - Deprecated use WbService#resetWb method instead",
-			responses = {
-					@ApiResponse(responseCode = "200", description = "serviceResult object with the result",
-							content = @Content(schema = @Schema(implementation = ServiceResultWrapper.class))),
-					@ApiResponse(responseCode = "500", description = "Error in case of invalid credentials or server error")
-			}
-		)
-	public ServiceResult cleanWb(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="id") @PathParam("id") long id
-			) throws ServiceException
-	{
-		log.debug("[cleanwb] room id {}", id);
-		return performCall(sid, User.Right.SOAP, sd -> {
-			wbManager.reset(id, sd.getUserId());
-			return new ServiceResult("", Type.SUCCESS);
-		});
-	}
 }
