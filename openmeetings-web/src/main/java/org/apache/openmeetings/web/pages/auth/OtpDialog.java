@@ -102,7 +102,7 @@ public class OtpDialog extends Modal<User> {
 			@Override
 			protected String[] getInputTypes() {
 				return new String[]{"number"};
-			};
+			}
 		};
 		private final RequiredTextField<String> fallbackField = new RequiredTextField<>("fallback", Model.of(""));
 
