@@ -560,7 +560,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 					try {
 						cspConfig.add(key, str.trim());
 					} catch (Exception e) {
-						log.error("Enexpected error while adding CSP rule: key '{}', value '{}', part '{}'", key, val, str, e);
+						log.error("Unexpected error while adding CSP rule: key '{}', value '{}', part '{}'", key, val, str, e);
 					}
 				}
 			}
