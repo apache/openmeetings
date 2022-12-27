@@ -165,9 +165,7 @@ public class OtpDialog extends Modal<User> {
 			String otp = otpField.getConvertedInput();
 			try {
 				Integer.valueOf(otp);
-				if (otpManager.verify(u.getOtpSecret(), otp)) {
-					return;
-				} else {
+				if (!otpManager.verify(u.getOtpSecret(), otp)) {
 					error(getString("otp.invalid"));
 				}
 			} catch (NumberFormatException e) {

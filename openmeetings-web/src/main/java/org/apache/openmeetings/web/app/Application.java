@@ -372,16 +372,18 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		} catch (Exception err) {
 			log.error("[appStart]", err);
 		}
-		{ //scope
-			// warm-up Inject
-			Client c = new Client(null, 1, null, null);
-			KStream stream = null;
-			try {
-				stream = new KStream(c.addStream(Client.StreamType.WEBCAM, Activity.AUDIO_VIDEO), null);
-			} finally {
-				if (stream != null) {
-					stream.release();
-				}
+		warmup();
+	}
+
+	private void warmup() {
+		// warm-up Inject
+		Client c = new Client(null, 1, null, null);
+		KStream stream = null;
+		try {
+			stream = new KStream(c.addStream(Client.StreamType.WEBCAM, Activity.AUDIO_VIDEO), null);
+		} finally {
+			if (stream != null) {
+				stream.release();
 			}
 		}
 	}
