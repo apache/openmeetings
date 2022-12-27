@@ -52,9 +52,9 @@ import dev.samstevens.totp.time.NtpTimeProvider;
 public class OtpManager {
 	private static final Logger log = LoggerFactory.getLogger(OtpManager.class);
 	// these properties are hardcoded into Google Authenticator :(
-	private static final int digits = 6;
-	private static final int period = 30;
-	private static final HashingAlgorithm alg = HashingAlgorithm.SHA1;
+	private static final int DIGITS = 6;
+	private static final int PERIOD = 30;
+	private static final HashingAlgorithm ALGORITHM = HashingAlgorithm.SHA1;
 
 	private final SecretGenerator secretGenerator = new DefaultSecretGenerator(128);
 	private CodeGenerator codeGenerator;
@@ -68,9 +68,9 @@ public class OtpManager {
 
 	@PostConstruct
 	public void init() throws UnknownHostException {
-		codeGenerator = new DefaultCodeGenerator(alg, digits);
+		codeGenerator = new DefaultCodeGenerator(ALGORITHM, DIGITS);
 		final DefaultCodeVerifier verifier = new DefaultCodeVerifier(codeGenerator, new NtpTimeProvider(ntpServer, ntpTimeout));
-		verifier.setTimePeriod(period);
+		verifier.setTimePeriod(PERIOD);
 		codeVerifier = verifier;
 	}
 
@@ -83,9 +83,9 @@ public class OtpManager {
 			.label(userEmail)
 			.secret(secret)
 			.issuer(Strings.isEmpty(issuer) ? getApplicationName() : issuer)
-			.algorithm(alg)
-			.digits(digits)
-			.period(period)
+			.algorithm(ALGORITHM)
+			.digits(DIGITS)
+			.period(PERIOD)
 			.build();
 		QrGenerator generator = new ZxingPngQrGenerator();
 		try {

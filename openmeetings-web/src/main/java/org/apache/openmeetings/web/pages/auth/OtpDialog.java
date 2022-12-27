@@ -99,6 +99,7 @@ public class OtpDialog extends Modal<User> {
 		private final RequiredTextField<String> otpField = new RequiredTextField<>("otp", Model.of("")) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected String[] getInputTypes() {
 				return new String[]{"number"};
 			};
