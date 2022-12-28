@@ -47,6 +47,8 @@ import dev.samstevens.totp.recovery.RecoveryCodeGenerator;
 import dev.samstevens.totp.secret.DefaultSecretGenerator;
 import dev.samstevens.totp.secret.SecretGenerator;
 import dev.samstevens.totp.time.NtpTimeProvider;
+import dev.samstevens.totp.time.SystemTimeProvider;
+import dev.samstevens.totp.time.TimeProvider;
 
 @Service
 public class OtpManager {
@@ -69,7 +71,14 @@ public class OtpManager {
 	@PostConstruct
 	public void init() throws UnknownHostException {
 		codeGenerator = new DefaultCodeGenerator(ALGORITHM, DIGITS);
-		final DefaultCodeVerifier verifier = new DefaultCodeVerifier(codeGenerator, new NtpTimeProvider(ntpServer, ntpTimeout));
+		TimeProvider timeProvider;
+		try {
+			timeProvider = new NtpTimeProvider(ntpServer, ntpTimeout);
+		} catch (UnknownHostException e) {
+			log.error("Unable to create NTP time provider, fallback to system, Please CHECK your setup", e);
+			timeProvider = new SystemTimeProvider();
+		}
+		final DefaultCodeVerifier verifier = new DefaultCodeVerifier(codeGenerator, timeProvider);
 		verifier.setTimePeriod(PERIOD);
 		codeVerifier = verifier;
 	}
