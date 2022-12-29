@@ -986,12 +986,8 @@ public class BackupImport {
 	/*
 	 * ##################### Import Recordings
 	 */
-<<<<<<< HEAD
-	void importRecordings(File base) {
-=======
 	// public for testing
-	public void importRecordings(File base) throws Exception {
->>>>>>> 2590e5123 (The build is green)
+	public void importRecordings(File base) {
 		log.info("Meeting members import complete, starting recordings server import");
 		final Map<Long, Long> folders = new HashMap<>();
 		saveTree(base, "flvRecordings.xml", RECORDING_LIST_NODE, RECORDING_NODE, Recording.class, folders, r -> {
