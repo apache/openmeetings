@@ -90,7 +90,7 @@
 		<ical4j.version>4.0.0-beta4</ical4j.version>
 		<cxf.version>3.5.5</cxf.version>
 		<io.prometheus.version>0.16.0</io.prometheus.version>
-		<aspectjtools.version>1.9.9.1</aspectjtools.version>
+		<aspectjtools.version>1.9.19</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.5.3</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
@@ -113,7 +113,7 @@
 		<mysql.version>8.0.31</mysql.version>
 		<mssql.version>11.2.1.jre17</mssql.version>
 		<ojdbc.version>19.17.0.0</ojdbc.version>
-		<xstream.version>1.4.19</xstream.version>
+		<xstream.version>1.4.20</xstream.version>
 		<api-all.version>2.1.2</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
 		<tika-parsers.version>2.6.0</tika-parsers.version>
@@ -122,12 +122,12 @@
 		<jetty.version>9.4.50.v20221201</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
-		<mockito.version>4.10.0</mockito.version>
+		<mockito.version>4.11.0</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.18.0</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
 		<jasny-bootstrap.version>3.1.3-2</jasny-bootstrap.version>
-		<jodconverter.version>4.4.4</jodconverter.version>
+		<jodconverter.version>4.4.5</jodconverter.version>
 		<jaxb-runtime.version>2.3.7</jaxb-runtime.version>
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
