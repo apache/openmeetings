@@ -34,8 +34,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Form;
+import jakarta.ws.rs.core.Response;
 
 import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;

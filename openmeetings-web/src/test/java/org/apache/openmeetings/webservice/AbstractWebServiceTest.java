@@ -19,7 +19,6 @@
 package org.apache.openmeetings.webservice;
 
 import static java.util.UUID.randomUUID;
-import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.apache.openmeetings.AbstractOmServerTest.createPass;
 import static org.apache.openmeetings.AbstractOmServerTest.ensureSchema;
 import static org.apache.openmeetings.AbstractOmServerTest.soapUsername;
@@ -34,9 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
@@ -55,6 +51,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
+import jakarta.ws.rs.core.Form;
+import jakarta.ws.rs.core.MediaType;
 
 @Tag("webservice")
 public abstract class AbstractWebServiceTest {
@@ -115,7 +114,7 @@ public abstract class AbstractWebServiceTest {
 	protected static RoomDTO create(String sid, RoomDTO r) {
 		return getClient(getRoomUrl())
 				.query("sid", sid)
-				.type(APPLICATION_FORM_URLENCODED)
+				.type(MediaType.APPLICATION_FORM_URLENCODED)
 				.post(new Form().param("room", r.toString()), RoomDTO.class);
 	}
 
@@ -146,7 +145,7 @@ public abstract class AbstractWebServiceTest {
 		UserDTO user = getClient(getUserUrl())
 				.path("/")
 				.query("sid", r.getMessage())
-				.type(APPLICATION_FORM_URLENCODED)
+				.type(MediaType.APPLICATION_FORM_URLENCODED)
 				.post(new Form().param("user", dto.toString()).param("confirm", "" + false), UserDTO.class);
 		assertNotNull(user.getId());
 		u.setId(user.getId());

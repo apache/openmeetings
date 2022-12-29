@@ -23,18 +23,18 @@ import static org.apache.openmeetings.AbstractOmServerTest.userpass;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collection;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.core.Response;
 
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.GroupDTO;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class TestGroupService extends AbstractWebServiceTest {
@@ -92,7 +92,7 @@ class TestGroupService extends AbstractWebServiceTest {
 		RoomDTO rdto = new RoomDTO();
 		rdto.setName("Group WS Room");
 		String msg = sr.getMessage();
-		Assertions.assertThrows(BadRequestException.class, () -> create(msg, rdto));
+		assertThrows(BadRequestException.class, () -> create(msg, rdto));
 	}
 
 	@Test

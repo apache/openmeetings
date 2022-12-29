@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.webservice.util;
 
-import javax.ws.rs.ext.ParamConverter;
+import jakarta.ws.rs.ext.ParamConverter;
 
 import org.apache.openmeetings.db.dto.user.UserDTO;
 

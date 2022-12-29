@@ -29,9 +29,9 @@ import java.util.Enumeration;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextEvent;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.IWebSession;

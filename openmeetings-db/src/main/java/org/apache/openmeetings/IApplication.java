@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;

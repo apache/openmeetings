@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.webservice.error;
 
-import javax.xml.ws.WebFault;
+import jakarta.xml.ws.WebFault;
 
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 

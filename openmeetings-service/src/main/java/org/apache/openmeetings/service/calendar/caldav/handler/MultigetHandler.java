@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
-import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 
 import java.io.IOException;
 import java.util.List;

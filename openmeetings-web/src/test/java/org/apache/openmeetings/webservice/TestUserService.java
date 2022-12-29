@@ -19,7 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static java.util.UUID.randomUUID;
-import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.apache.openmeetings.AbstractOmServerTest.adminUsername;
 import static org.apache.openmeetings.AbstractOmServerTest.createPass;
 import static org.apache.openmeetings.AbstractOmServerTest.rnd;
@@ -35,8 +35,8 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Form;
+import jakarta.ws.rs.core.Response;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;

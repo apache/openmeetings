@@ -25,7 +25,7 @@ import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT;
 import java.text.ParseException;
 import java.util.Date;
 
-import javax.ws.rs.ext.ParamConverter;
+import jakarta.ws.rs.ext.ParamConverter;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.wicket.util.string.Strings;

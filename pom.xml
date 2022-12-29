@@ -83,14 +83,14 @@
 
 		<!-- dependency versions -->
 		<junit.version>5.10.1</junit.version>
-		<wicket.version>9.16.0</wicket.version>
-		<wicket-jquery-ui.version>9.12.0</wicket-jquery-ui.version>
-		<wicketstuff.version>9.16.0</wicketstuff.version>
-		<wicket-bootstrap.version>6.0.5</wicket-bootstrap.version>
-		<spring.version>5.3.31</spring.version>
-		<tomcat.version>9.0.84</tomcat.version>
+		<wicket.version>10.0.0-M2</wicket.version>
+		<wicket-jquery-ui.version>10.0.0-M1</wicket-jquery-ui.version>
+		<wicketstuff.version>10.0.0-M2</wicketstuff.version>
+		<wicket-bootstrap.version>7.0.1</wicket-bootstrap.version>
+		<spring.version>6.1.2</spring.version>
+		<tomcat.version>10.1.17</tomcat.version>
 		<ical4j.version>4.0.0-rc1</ical4j.version>
-		<cxf.version>3.6.2</cxf.version>
+		<cxf.version>4.0.3</cxf.version>
 		<io.prometheus.version>0.16.0</io.prometheus.version>
 		<aspectjtools.version>1.9.21</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
@@ -121,7 +121,7 @@
 		<tika-parsers.version>2.9.1</tika-parsers.version>
 		<slf4j.version>2.0.9</slf4j.version>
 		<logback.version>1.4.14</logback.version>
-		<jetty.version>9.4.53.v20231009</jetty.version>
+		<jetty.version>12.0.4</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.77</bcprov.version>
 		<mockito.version>5.2.0</mockito.version>
@@ -130,8 +130,8 @@
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
 		<jasny-bootstrap.version>3.1.3-2</jasny-bootstrap.version>
 		<jodconverter.version>4.4.7</jodconverter.version>
-		<jaxb-runtime.version>2.3.9</jaxb-runtime.version>
-		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+		<jaxb-runtime.version>4.0.4</jaxb-runtime.version>
+		<jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
 		<swagger.version>2.2.19</swagger.version>
@@ -539,7 +539,7 @@
 						<artifactId>*</artifactId>
 					</exclusion>
 					<exclusion>
-						<groupId>javax.servlet</groupId>
+						<groupId>jakarta.servlet</groupId>
 						<artifactId>*</artifactId>
 					</exclusion>
 				</exclusions>
@@ -554,7 +554,7 @@
 						<artifactId>*</artifactId>
 					</exclusion>
 					<exclusion>
-						<groupId>javax.servlet</groupId>
+						<groupId>jakarta.servlet</groupId>
 						<artifactId>*</artifactId>
 					</exclusion>
 					<exclusion>
@@ -654,10 +654,9 @@
 				<artifactId>wicketstuff-datastore-hazelcast</artifactId>
 				<version>${wicketstuff.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>javax.servlet-api</artifactId>
-				<version>${javax.servlet-api.version}</version>
+				<groupId>jakarta.servlet</groupId>
+				<artifactId>jakarta.servlet-api</artifactId>
+				<version>${jakarta.servlet-api.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -1043,8 +1042,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
