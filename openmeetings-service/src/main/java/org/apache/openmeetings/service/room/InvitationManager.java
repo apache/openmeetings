@@ -50,8 +50,10 @@ import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.mail.IcalHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 /**
  *
@@ -62,9 +64,9 @@ import org.springframework.stereotype.Component;
 public class InvitationManager implements IInvitationManager {
 	private static final Logger log = LoggerFactory.getLogger(InvitationManager.class);
 
-	@Autowired
+	@Inject
 	private InvitationDao invitationDao;
-	@Autowired
+	@Inject
 	private MailHandler mailHandler;
 
 	/**

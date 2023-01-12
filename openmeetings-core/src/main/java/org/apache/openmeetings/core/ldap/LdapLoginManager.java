@@ -74,8 +74,10 @@ import org.apache.openmeetings.util.StoredFile;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 /**
  * Management of optional LDAP Login
@@ -134,13 +136,14 @@ public class LdapLoginManager {
 		, ATTRIBUTE
 		, QUERY
 	}
-	@Autowired
+
+	@Inject
 	private LdapConfigDao ldapConfigDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
-	@Autowired
+	@Inject
 	private ImageConverter imageConverter;
 
 	private static void bindAdmin(LdapConnection conn, LdapOptions options) throws LdapException {

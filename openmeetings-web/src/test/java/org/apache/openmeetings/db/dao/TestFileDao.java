@@ -31,12 +31,14 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 class TestFileDao extends AbstractOmServerTest {
-	@Autowired
+	@Inject
 	protected FileItemDao fileDao;
-	@Autowired
+	@Inject
 	protected GroupDao groupDao;
 
 	@Test

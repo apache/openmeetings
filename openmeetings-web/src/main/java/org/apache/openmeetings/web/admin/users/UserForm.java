@@ -68,7 +68,6 @@ import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.slf4j.Logger;
@@ -77,6 +76,7 @@ import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 /**
  * CRUD operations in form for {@link User}
@@ -99,13 +99,14 @@ public class UserForm extends AdminBaseForm<User> {
 	private final PasswordDialog adminPass;
 	private final UploadableProfileImagePanel avatar = new UploadableProfileImagePanel("avatar", null);
 	private final CheckBox otpEnabled = new CheckBox("otp-enabled", Model.of(false));
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private EmailManager emainManager;
-	@SpringBean
+	@Inject
 	private LdapConfigDao ldapDao;
-	@SpringBean
+	@Inject
 	private OAuth2Dao oauthDao;
 
 	public UserForm(String id, WebMarkupContainer listContainer, final User user, final PasswordDialog adminPass, Modal<String> warning) {

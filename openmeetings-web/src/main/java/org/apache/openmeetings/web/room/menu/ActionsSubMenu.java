@@ -36,7 +36,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.IAjaxCallListener;
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
+
 
 public class ActionsSubMenu implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -56,7 +58,8 @@ public class ActionsSubMenu implements Serializable {
 	private OmMenuItem resetWb;
 	private OmMenuItem localSettings;
 	private final boolean visible;
-	@SpringBean
+
+	@Inject
 	private WhiteboardManager wbManager;
 
 	public ActionsSubMenu(final RoomPanel room, final RoomMenuPanel mp) {

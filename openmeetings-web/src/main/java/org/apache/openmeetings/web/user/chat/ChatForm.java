@@ -48,7 +48,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,18 +56,20 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
+import jakarta.inject.Inject;
+
 public class ChatForm extends Form<Void> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(ChatForm.class);
 	private final HiddenField<String> activeTab = new HiddenField<>("activeTab", Model.of(""));
 
-	@SpringBean
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private ChatDao chatDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private RoomDao roomDao;
 
 	public ChatForm(String id) {

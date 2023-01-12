@@ -52,10 +52,11 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+
+import jakarta.inject.Inject;
 
 /**
  * Handle {@link Configuration} items as list and form
@@ -82,7 +83,8 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	};
 	private final CheckBox valueB = new CheckBox("valueB");
 	private final TextField<String> valueH = new TextField<>("value");
-	@SpringBean
+
+	@Inject
 	private ConfigurationDao cfgDao;
 
 	public ConfigForm(String id, WebMarkupContainer listContainer, Configuration configuration) {

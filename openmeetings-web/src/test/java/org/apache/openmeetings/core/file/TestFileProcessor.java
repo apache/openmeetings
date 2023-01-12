@@ -35,12 +35,14 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 class TestFileProcessor extends AbstractOmServerTest {
 	private static final String FILE_NAME = "test_name";
 
-	@Autowired
+	@Inject
 	protected FileProcessor processor;
 
 	@Test

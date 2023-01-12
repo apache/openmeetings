@@ -26,10 +26,12 @@ import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 class TestAuth extends AbstractOmServerTest {
-	@Autowired
+	@Inject
 	private SessiondataDao sessionDao;
 
 	@Test

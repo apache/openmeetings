@@ -70,7 +70,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.CollectionModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
@@ -78,6 +78,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButt
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 public class MessageDialog extends Modal<PrivateMessage> {
 	private static final long serialVersionUID = 1L;
@@ -89,17 +90,20 @@ public class MessageDialog extends Modal<PrivateMessage> {
 	private final OmDateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 	private boolean isPrivate = false;
 	private final IModel<Collection<User>> modelTo = new CollectionModel<>(new ArrayList<>());
-	@SpringBean
+
+	@Inject
 	private RoomDao roomDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
+	private ConfigurationDao cfgDao;
+	@Inject
 	private AppointmentDao apptDao;
-	@SpringBean
+	@Inject
 	private PrivateMessageDao msgDao;
-	@SpringBean
+	@Inject
 	private IInvitationManager inviteManager;
-	@SpringBean
+	@Inject
 	private MailHandler handler;
 
 	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {

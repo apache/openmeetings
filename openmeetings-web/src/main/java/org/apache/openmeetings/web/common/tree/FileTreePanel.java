@@ -69,7 +69,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.resource.FileSystemResource;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -86,6 +85,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.SplitBut
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import jakarta.inject.Inject;
 
 public abstract class FileTreePanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -138,9 +138,9 @@ public abstract class FileTreePanel extends Panel {
 	});
 	private final Component upload = new WebMarkupContainer("upload");
 
-	@SpringBean
+	@Inject
 	private RecordingDao recDao;
-	@SpringBean
+	@Inject
 	private FileItemDao fileDao;
 
 	protected FileTreePanel(String id, Long roomId, NameDialog addFolder) {

@@ -41,17 +41,19 @@ import org.jodconverter.local.LocalConverter;
 import org.jodconverter.local.office.LocalOfficeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 @Component
 public class DocumentConverter {
 	private static final Logger log = LoggerFactory.getLogger(DocumentConverter.class);
 	private static final String JOD_JOD_NAME = "doJodConvert";
 
-	@Autowired
+	@Inject
 	protected ConfigurationDao cfgDao;
-	@Autowired
+	@Inject
 	private ImageConverter imageConverter;
 
 	public ProcessResultList convertPDF(FileItem f, StoredFile sf) throws Exception {

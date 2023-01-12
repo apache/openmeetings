@@ -28,11 +28,12 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,7 +46,7 @@ import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 public class ProfileImageResourceReference extends ResourceReference {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(ProfileImageResourceReference.class);
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public ProfileImageResourceReference() {

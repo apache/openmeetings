@@ -45,7 +45,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
@@ -56,6 +56,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 /**
  * Multipurpose Calendar Dialog form. This provides the ability to ask for a user prompt,
@@ -73,9 +74,10 @@ public class CalendarDialog extends Modal<OmCalendar> {
 	private UserCalendarForm form;
 	private List<OmCalendar> cals; //List of calendars for syncing
 	private int calIndex = 0;
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private AppointmentManager apptManager;
 
 	public enum DIALOG_TYPE {

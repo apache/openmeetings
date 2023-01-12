@@ -35,14 +35,16 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
 
 @AuthorizeInstantiation({"ADMIN", "GROUP_ADMIN"})
 public class RoomsPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private RoomForm form;
-	@SpringBean
+
+	@Inject
 	private RoomDao roomDao;
 
 	public RoomsPanel(String id) {

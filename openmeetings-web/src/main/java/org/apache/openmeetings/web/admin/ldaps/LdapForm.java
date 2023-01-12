@@ -33,7 +33,8 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
 
 /**
  * Form components to insert/update/delete {@link LdapConfig}
@@ -44,7 +45,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class LdapForm extends AdminBaseForm<LdapConfig> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer listContainer;
-	@SpringBean
+
+	@Inject
 	private LdapConfigDao ldapDao;
 
 	public LdapForm(String id, WebMarkupContainer listContainer, final LdapConfig ldapConfig) {

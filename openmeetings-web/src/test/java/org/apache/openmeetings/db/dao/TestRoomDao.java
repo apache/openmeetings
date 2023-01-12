@@ -34,11 +34,13 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 class TestRoomDao extends AbstractOmServerTest {
 	private static final Logger log = LoggerFactory.getLogger(TestRoomDao.class);
-	@Autowired
+	@Inject
 	protected RoomDao roomDao;
 
 	@Test

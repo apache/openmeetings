@@ -35,7 +35,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
 
 public class InvitationDetails extends Form<Invitation>{
 	private static final long serialVersionUID = 1L;
@@ -45,7 +46,8 @@ public class InvitationDetails extends Form<Invitation>{
 	private final Label invitee = new Label("invitee", Model.of(""));
 	private final DateLabel from = new DateLabel("validFrom", Model.of((Date)null));
 	private final DateLabel to = new DateLabel("validTo", Model.of((Date)null));
-	@SpringBean
+
+	@Inject
 	private InvitationDao inviteDao;
 
 	public InvitationDetails(String id, final WebMarkupContainer list, Invitation i) {

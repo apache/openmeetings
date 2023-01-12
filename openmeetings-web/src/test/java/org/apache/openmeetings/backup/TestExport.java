@@ -30,6 +30,7 @@ import java.io.StringWriter;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 
+import jakarta.inject.Inject;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 
@@ -41,10 +42,9 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 class TestExport extends AbstractOmServerTest {
-	@Autowired
+	@Inject
 	private FileItemDao fileItemDao;
 
 	@Test

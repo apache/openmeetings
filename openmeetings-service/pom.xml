@@ -53,5 +53,10 @@
 			<groupId>com.github.caldav4j</groupId>
 			<artifactId>caldav4j</artifactId>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-webdav</artifactId>
+			<classifier>jakarta</classifier>
+		</dependency>
+</dependencies>
 </project>

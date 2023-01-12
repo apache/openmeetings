@@ -37,16 +37,18 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 class TestImportOld extends AbstractTestImport {
 	private static final Logger log = LoggerFactory.getLogger(TestImportOld.class);
 
-	@Autowired
+	@Inject
 	private RoomDao roomDao;
-	@Autowired
+	@Inject
 	private MeetingMemberDao meetingMemberDao;
-	@Autowired
+	@Inject
 	private FileItemDao fileDao;
 
 	@Test

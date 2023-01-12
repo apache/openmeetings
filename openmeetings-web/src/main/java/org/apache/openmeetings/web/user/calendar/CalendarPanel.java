@@ -59,7 +59,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +71,7 @@ import com.googlecode.wicket.jquery.ui.calendar.EventSource.GoogleCalendar;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import jakarta.inject.Inject;
 
 public class CalendarPanel extends UserBasePanel {
 	private static final Logger log = LoggerFactory.getLogger(CalendarPanel.class);
@@ -104,11 +105,11 @@ public class CalendarPanel extends UserBasePanel {
 	// Context for the HttpClient. Mainly used for credentials.
 	private transient HttpClientContext context = null;
 
-	@SpringBean
+	@Inject
 	private AppointmentDao apptDao;
-	@SpringBean
+	@Inject
 	private AppointmentManager apptManager;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public CalendarPanel(String id) {

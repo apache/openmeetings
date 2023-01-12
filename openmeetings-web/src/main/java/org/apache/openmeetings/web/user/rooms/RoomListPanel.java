@@ -41,12 +41,13 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import jakarta.inject.Inject;
 
 public class RoomListPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -101,7 +102,8 @@ public class RoomListPanel extends Panel {
 			}.add(AttributeModifier.append(ATTR_TITLE, new ResourceModel("lbl.refresh"))));
 		}
 	};
-	@SpringBean
+
+	@Inject
 	private ClientManager cm;
 
 	public RoomListPanel(String id, List<Room> rooms, final String label) {

@@ -47,7 +47,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.wicketstuff.jqplot.behavior.JqPlotBehavior;
 import org.wicketstuff.jqplot.behavior.JqPlotCssResourceReference;
 import org.wicketstuff.jqplot.behavior.JqPlotJavascriptResourceReference;
@@ -65,6 +65,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import jakarta.inject.Inject;
 
 public class PollResultsDialog extends Modal<RoomPoll> {
 	private static final long serialVersionUID = 1L;
@@ -82,9 +83,10 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 	private String chartPie;
 	private final CreatePollDialog createPoll;
 	private DropDownChoice<String> chartType;
-	@SpringBean
+
+	@Inject
 	private PollDao pollDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public PollResultsDialog(String id, CreatePollDialog createPoll, Long roomId) {

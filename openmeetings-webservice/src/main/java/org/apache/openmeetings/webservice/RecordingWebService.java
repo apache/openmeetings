@@ -22,6 +22,7 @@ import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.List;
 
+import jakarta.inject.Inject;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
@@ -44,7 +45,7 @@ import org.apache.openmeetings.webservice.schema.RecordingDTOListWrapper;
 import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,7 +69,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class RecordingWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(RecordingWebService.class);
 
-	@Autowired
+	@Inject
 	private RecordingDao recordingDao;
 
 	/**

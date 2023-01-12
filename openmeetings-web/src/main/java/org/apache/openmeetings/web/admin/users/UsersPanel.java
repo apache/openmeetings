@@ -40,10 +40,10 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.ColorBehavior;
+import jakarta.inject.Inject;
 
 @AuthorizeInstantiation({"ADMIN", "GROUP_ADMIN"})
 public class UsersPanel extends AdminBasePanel {
@@ -51,7 +51,8 @@ public class UsersPanel extends AdminBasePanel {
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private final PasswordDialog adminPass = new PasswordDialog("adminPass");
 	private UserForm form;
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
 
 	public UsersPanel(String id) {

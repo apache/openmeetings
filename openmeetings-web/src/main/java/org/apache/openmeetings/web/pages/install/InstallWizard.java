@@ -87,7 +87,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,6 +103,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.components.progress.Upda
 import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 import de.agilecoders.wicket.extensions.wizard.BootstrapWizard;
+import jakarta.inject.Inject;
 
 public class InstallWizard extends BootstrapWizard {
 	private static final long serialVersionUID = 1L;
@@ -123,7 +124,7 @@ public class InstallWizard extends BootstrapWizard {
 	private final List<Button> buttons = new ArrayList<>(4);
 	private WizardButtonBar btnBar;
 
-	@SpringBean
+	@Inject
 	private ImportInitvalues initvalues;
 
 	//onInit, applyState

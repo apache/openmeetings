@@ -67,6 +67,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.extension.RegisterExtension;
+
+import jakarta.inject.Inject;
 
 @ExtendWith(ApacheDSTestExtension.class)
 @CreateDS(name = "omDS",
@@ -98,7 +101,7 @@ public class TestLdap extends AbstractWicketTesterTest {
 	/** The current revision */
 	public static long revision = 0L;
 
-	@Autowired
+	@Inject
 	private LdapConfigDao ldapDao;
 
 	@BeforeAll

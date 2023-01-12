@@ -81,7 +81,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.protocol.ws.api.message.AbstractClientMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.urlfragment.UrlFragment;
@@ -90,6 +89,7 @@ import com.github.openjson.JSONObject;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
+import jakarta.inject.Inject;
 
 public class MainPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -106,11 +106,13 @@ public class MainPanel extends Panel {
 	private BasePanel curPanel;
 	private InviteUserToRoomDialog inviteUser;
 
-	@SpringBean
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
+	private ConfigurationDao cfgDao;
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private RoomDao roomDao;
 
 	public MainPanel(String id) {

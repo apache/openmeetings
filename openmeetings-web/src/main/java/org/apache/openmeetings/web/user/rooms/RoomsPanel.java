@@ -38,8 +38,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.ByteArrayResource;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.io.IOUtils;
+
+import jakarta.inject.Inject;
 
 public class RoomsPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
@@ -52,11 +54,12 @@ public class RoomsPanel extends UserPanel {
 	private List<Client> clientsInRoom = null;
 	private final List<Room> rooms;
 	private Long roomId = 0L;
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private RoomDao roomDao;
 
 	public RoomsPanel(String id, List<Room> rooms) {

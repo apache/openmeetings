@@ -47,13 +47,14 @@ import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import jakarta.inject.Inject;
 
 public class EditProfileForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
@@ -63,7 +64,7 @@ public class EditProfileForm extends Form<User> {
 	private FormActionsPanel<User> actions;
 	private BootstrapAjaxLink<String> toggleOtp;
 
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public EditProfileForm(String id) {

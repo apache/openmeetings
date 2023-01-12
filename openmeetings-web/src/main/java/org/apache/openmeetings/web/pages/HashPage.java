@@ -53,8 +53,9 @@ import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
+
+import jakarta.inject.Inject;
 
 public class HashPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
@@ -78,9 +79,9 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	private final StringValue swf;
 	private final StringValue app;
 
-	@SpringBean
+	@Inject
 	private RoomDao roomDao;
-	@SpringBean
+	@Inject
 	private RecordingDao recDao;
 
 	public HashPage(PageParameters p) {

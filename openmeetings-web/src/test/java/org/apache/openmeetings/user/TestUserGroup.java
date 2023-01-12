@@ -38,11 +38,13 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 class TestUserGroup extends AbstractOmServerTest {
 	public static final String GROUP_NAME = "Test Group";
-	@Autowired
+	@Inject
 	private GroupUserDao groupUserDao;
 
 	private User getValidUser() {

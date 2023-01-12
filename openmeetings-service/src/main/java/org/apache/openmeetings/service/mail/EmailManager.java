@@ -30,8 +30,10 @@ import org.apache.wicket.Application;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 /**
  * @author swagner
@@ -41,7 +43,7 @@ import org.springframework.stereotype.Component;
 public class EmailManager {
 	private static final Logger log = LoggerFactory.getLogger(EmailManager.class);
 
-	@Autowired
+	@Inject
 	private MailHandler mailHandler;
 
 	private static IApplication getApp() {

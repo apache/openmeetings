@@ -61,7 +61,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.flow.RedirectToUrlException;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 import org.apache.openmeetings.mediaserver.KurentoHandler;
 import org.apache.openmeetings.mediaserver.StreamProcessor;
@@ -70,6 +70,7 @@ import com.github.openjson.JSONObject;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import jakarta.inject.Inject;
 
 public class RoomMenuPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -106,15 +107,16 @@ public class RoomMenuPanel extends Panel {
 	private final PollsSubMenu pollsSubMenu;
 	private final ActionsSubMenu actionsSubMenu;
 	private final ExtrasSubMenu extrasSubMenu;
-	@SpringBean
+
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private ConfigurationDao cfgDao;
-	@SpringBean
+	@Inject
 	private ChatDao chatDao;
-	@SpringBean
+	@Inject
 	private KurentoHandler kHandler;
-	@SpringBean
+	@Inject
 	private StreamProcessor streamProcessor;
 
 	public RoomMenuPanel(String id, final RoomPanel room) {

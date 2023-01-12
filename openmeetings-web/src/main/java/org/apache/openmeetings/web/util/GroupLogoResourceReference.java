@@ -27,6 +27,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.io.File;
 import java.io.IOException;
 
+import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -40,7 +41,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.resource.FileSystemResourceReference;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,9 +49,10 @@ import org.slf4j.LoggerFactory;
 public class GroupLogoResourceReference extends FileSystemResourceReference {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(GroupLogoResourceReference.class);
-	@SpringBean
+
+	@Inject
 	private GroupUserDao groupUserDao;
-	@SpringBean
+	@Inject
 	private RoomDao roomDao;
 
 	public GroupLogoResourceReference() {

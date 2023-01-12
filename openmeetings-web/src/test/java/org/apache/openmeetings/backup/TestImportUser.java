@@ -30,10 +30,12 @@ import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 class TestImportUser extends AbstractTestImport {
-	@Autowired
+	@Inject
 	private LdapConfigDao ldapDao;
 
 	@Test

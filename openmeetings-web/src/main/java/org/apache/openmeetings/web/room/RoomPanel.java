@@ -92,7 +92,7 @@ import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceStreamResource;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.string.Strings;
@@ -113,6 +113,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Alert;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal.Backdrop;
+import jakarta.inject.Inject;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
 
 @AuthorizeInstantiation("ROOM")
@@ -257,21 +258,21 @@ public class RoomPanel extends BasePanel {
 	private boolean avInited = false;
 	private boolean jsInited = false;
 
-	@SpringBean
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private AppointmentDao apptDao;
-	@SpringBean
+	@Inject
 	private QuickPollManager qpollManager;
-	@SpringBean
+	@Inject
 	private KurentoHandler kHandler;
-	@SpringBean
+	@Inject
 	private StreamProcessor streamProcessor;
-	@SpringBean
+	@Inject
 	private TimerService timerService;
-	@SpringBean
+	@Inject
 	private FileItemDao fileDao;
 
 	public RoomPanel(String id, Room r) {

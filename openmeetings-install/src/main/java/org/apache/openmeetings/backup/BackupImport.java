@@ -167,8 +167,9 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
@@ -236,7 +237,7 @@ import org.apache.openmeetings.util.crypt.SCryptImplementation;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -322,41 +323,41 @@ public class BackupImport {
 			);
 	private static final Pattern UUID_PATTERN = Pattern.compile("^[\\da-f]{8}(?:-[\\da-f]{4}){3}-[\\da-f]{12}$");
 
-	@Autowired
+	@Inject
 	private AppointmentDao appointmentDao;
-	@Autowired
+	@Inject
 	private OmCalendarDao calendarDao;
-	@Autowired
+	@Inject
 	private RoomDao roomDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private RecordingDao recordingDao;
-	@Autowired
+	@Inject
 	private PrivateMessageFolderDao privateMessageFolderDao;
-	@Autowired
+	@Inject
 	private PrivateMessageDao privateMessageDao;
-	@Autowired
+	@Inject
 	private MeetingMemberDao meetingMemberDao;
-	@Autowired
+	@Inject
 	private LdapConfigDao ldapConfigDao;
-	@Autowired
+	@Inject
 	private FileItemDao fileItemDao;
-	@Autowired
+	@Inject
 	private UserContactDao userContactDao;
-	@Autowired
+	@Inject
 	private PollDao pollDao;
-	@Autowired
+	@Inject
 	private ConfigurationDao cfgDao;
-	@Autowired
+	@Inject
 	private ChatDao chatDao;
-	@Autowired
+	@Inject
 	private OAuth2Dao auth2Dao;
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
-	@Autowired
+	@Inject
 	private ExtraMenuDao menuDao;
-	@Autowired
+	@Inject
 	private DocumentConverter docConverter;
 
 	private final Map<Long, Long> ldapMap = new HashMap<>();

@@ -31,15 +31,17 @@ import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
+import jakarta.inject.Inject;
 
 public class RoomsTabbedPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
-	@SpringBean
+
+	@Inject
 	private RoomDao roomDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public RoomsTabbedPanel(String id) {

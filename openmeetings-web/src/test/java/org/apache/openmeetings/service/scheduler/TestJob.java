@@ -45,15 +45,17 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 @ExtendWith(MockitoExtension.class)
 class TestJob extends AbstractWicketTesterTest {
-	@Autowired
+	@Inject
 	private CleanupJob cleanJob;
 	@Mock
 	private MailHandler mailHandler;
-	@Autowired
+	@Inject
 	@InjectMocks
 	private ReminderJob reminderJob;
 

@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.util.logging;
 
-import io.prometheus.client.exporter.MetricsServlet;
+//INCOMPATIBLE with Jackarta! import io.prometheus.client.exporter.MetricsServlet;
 
-public class OpenMeetingsMetricsServlet extends MetricsServlet {
+public class OpenMeetingsMetricsServlet /*extends MetricsServlet*/ {
 	private static final long serialVersionUID = 1L;
 
 	public OpenMeetingsMetricsServlet() {

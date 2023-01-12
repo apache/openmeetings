@@ -76,11 +76,12 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import jakarta.inject.Inject;
 
 public class MessagesContactsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
@@ -125,13 +126,14 @@ public class MessagesContactsPanel extends UserBasePanel {
 		, List.of(notMoveFolder)
 		, new LambdaChoiceRenderer<>(PrivateMessageFolder::getFolderName, f -> "" + f.getId()));
 	private WebMarkupContainer selectedFolder;
-	@SpringBean
+
+	@Inject
 	private PrivateMessageDao msgDao;
-	@SpringBean
+	@Inject
 	private PrivateMessageFolderDao folderDao;
-	@SpringBean
+	@Inject
 	private UserContactDao contactDao;
-	@SpringBean
+	@Inject
 	private AppointmentDao apptDao;
 
 	public MessagesContactsPanel(String id) {

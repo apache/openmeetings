@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.DoubleConsumer;
 
-import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload2.FileItem;
 import org.apache.openmeetings.core.data.file.FileProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
@@ -44,11 +44,13 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.upload.UploadResourceReference;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.protocol.http.servlet.MultipartServletWebRequest;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
+
+import jakarta.inject.Inject;
 
 public class RoomFileUploadResourceReference extends UploadResourceReference {
 	private static final long serialVersionUID = 1L;
@@ -60,11 +62,11 @@ public class RoomFileUploadResourceReference extends UploadResourceReference {
 	public static final String PARAM_LAST_SELECTED_OWNER = "room-upload-last-selected-owner";
 	public static final String PARAM_LAST_SELECTED_GROUP = "room-upload-last-selected-group";
 
-	@SpringBean
+	@Inject
 	private FileProcessor processor;
-	@SpringBean
+	@Inject
 	private FileItemLogDao fileLogDao;
-	@SpringBean
+	@Inject
 	private FileItemDao fileDao;
 
 	public RoomFileUploadResourceReference() {

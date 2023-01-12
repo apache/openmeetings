@@ -24,13 +24,15 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
+
+import jakarta.inject.Inject;
 
 public class ActivatePage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 1L;
 	public static final String ACTIVATION_PARAM = "u";
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
 
 	public ActivatePage(PageParameters pp) {

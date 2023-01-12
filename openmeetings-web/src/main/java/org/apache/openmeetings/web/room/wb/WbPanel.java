@@ -69,7 +69,9 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
+
 import org.apache.wicket.util.string.Strings;
 import org.danekja.java.util.function.serializable.SerializableBiConsumer;
 import org.slf4j.Logger;
@@ -78,6 +80,8 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.github.openjson.JSONTokener;
+
+import jakarta.inject.Inject;
 
 public class WbPanel extends AbstractWbPanel {
 	private static final long serialVersionUID = 1L;
@@ -132,9 +136,10 @@ public class WbPanel extends AbstractWbPanel {
 					, UndoObject.Type.REMOVE, arr));
 		}
 	};
-	@SpringBean
+
+	@Inject
 	private WhiteboardManager wbm;
-	@SpringBean
+	@Inject
 	private FileItemDao fileDao;
 
 	public WbPanel(String id, RoomPanel rp) {

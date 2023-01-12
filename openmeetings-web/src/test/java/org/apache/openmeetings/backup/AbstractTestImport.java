@@ -30,11 +30,13 @@ import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 public class AbstractTestImport extends AbstractOmServerTest {
 	private String cryptClass = null;
-	@Autowired
+	@Inject
 	protected BackupImport backupImport;
 
 	@BeforeEach

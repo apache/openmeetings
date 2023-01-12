@@ -32,9 +32,10 @@ import org.apache.openmeetings.web.user.rooms.RoomListPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 public class InviteUserToRoomDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -42,9 +43,10 @@ public class InviteUserToRoomDialog extends Modal<String> {
 	private RoomListPanel privateRooms;
 	private final InviteUserMessageDialog inviteMsg = new InviteUserMessageDialog("inviteMsg");
 	private Long userId;
-	@SpringBean
+
+	@Inject
 	private RoomDao roomDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	private class InviteRoomListPanel extends RoomListPanel {

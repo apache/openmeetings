@@ -44,19 +44,25 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.openmeetings.mediaserver.KurentoHandler;
 import org.apache.openmeetings.mediaserver.StreamProcessor;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import jakarta.inject.Inject;
 
 @AuthorizeInstantiation({"ADMIN", "ADMIN_CONNECTIONS"})
 public class ConnectionsPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
-	@SpringBean
+
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
+	private KurentoHandler kHandler;
+	@Inject
 	private StreamProcessor streamProcessor;
+	@Inject
+	private IUserManager userManager;
 
 	public ConnectionsPanel(String id) {
 		super(id);

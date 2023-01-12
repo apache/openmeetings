@@ -46,23 +46,25 @@ import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONArray;
 
+import jakarta.inject.Inject;
+
 @Component("reminderJob")
 public class ReminderJob extends AbstractJob {
 	private static Logger log = LoggerFactory.getLogger(ReminderJob.class);
-	@Autowired
+	@Inject
 	private AppointmentLogic appointmentLogic;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private MailHandler mailHandler;
-	@Autowired
+	@Inject
 	private ConfigurationDao cfgDao;
-	@Autowired
+	@Inject
 	private GroupUserDao groupUserDao;
 
 	// public for testing

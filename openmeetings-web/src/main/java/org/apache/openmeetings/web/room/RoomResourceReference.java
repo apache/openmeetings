@@ -38,17 +38,20 @@ import org.apache.openmeetings.web.util.FileItemResourceReference;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.StringValue;
+
+import jakarta.inject.Inject;
 
 public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 	private static final long serialVersionUID = 1L;
 	private static final String DEFAULT_NAME = "wb-room-file";
-	@SpringBean
+
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private FileItemDao fileDao;
-	@SpringBean
+	@Inject
 	private GroupUserDao groupUserDao;
 
 	public RoomResourceReference() {

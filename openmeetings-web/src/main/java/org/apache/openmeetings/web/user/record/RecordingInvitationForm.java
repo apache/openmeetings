@@ -21,12 +21,15 @@ package org.apache.openmeetings.web.user.record;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.web.common.InvitationForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
+
 
 public class RecordingInvitationForm extends InvitationForm {
 	private static final long serialVersionUID = 1L;
 	private Long recordingId;
-	@SpringBean
+
+	@Inject
 	private RecordingDao recDao;
 
 	public RecordingInvitationForm(String id, String dropDownParentId) {

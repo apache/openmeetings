@@ -41,7 +41,8 @@ import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
 
 public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 	private static final long serialVersionUID = 1L;
@@ -57,11 +58,12 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 	private final String lblPublic;
 	private final String lblGroupFile;
 	private final String lblGroupRec;
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private RecordingDao recDao;
-	@SpringBean
+	@Inject
 	private FileItemDao fileDao;
 
 	public OmTreeProvider(Long roomId) {

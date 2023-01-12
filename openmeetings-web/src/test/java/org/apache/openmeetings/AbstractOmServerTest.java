@@ -48,8 +48,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+
+import jakarta.inject.Inject;
 
 @SpringJUnitWebConfig(locations={"classpath:applicationContext.xml"})
 @RegularTest
@@ -67,17 +69,17 @@ public abstract class AbstractOmServerTest {
 	public static final String UNIT_TEST_ARAB_EXT_TYPE = "النُّجُومُ الخَمْسَةِ";
 	public static final Random rnd = new Random();
 
-	@Autowired
+	@Inject
 	protected AppointmentDao appointmentDao;
-	@Autowired
+	@Inject
 	protected UserDao userDao;
-	@Autowired
+	@Inject
 	protected GroupDao groupDao;
-	@Autowired
+	@Inject
 	private ImportInitvalues importInitvalues;
-	@Autowired
+	@Inject
 	protected ConfigurationDao cfgDao;
-	@Autowired
+	@Inject
 	protected Application app;
 
 	@BeforeAll

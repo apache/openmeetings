@@ -27,10 +27,12 @@ import java.io.File;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 class TestImportRoom extends AbstractTestImport {
-	@Autowired
+	@Inject
 	private RoomDao roomDao;
 
 	@Test

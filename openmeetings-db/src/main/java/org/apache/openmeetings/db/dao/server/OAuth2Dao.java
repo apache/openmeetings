@@ -24,8 +24,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegister
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -33,7 +34,7 @@ import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.util.DaoHelper;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +44,8 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 	private static final List<String> searchFields = List.of("name");
 	@PersistenceContext
 	private EntityManager em;
-	@Autowired
+
+	@Inject
 	private ConfigurationDao cfgDao;
 
 	public List<OAuthServer> getActive() {

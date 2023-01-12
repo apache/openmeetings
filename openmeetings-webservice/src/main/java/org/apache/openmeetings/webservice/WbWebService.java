@@ -30,6 +30,7 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
+import jakarta.inject.Inject;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
@@ -64,7 +65,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import com.github.openjson.JSONArray;
@@ -89,9 +90,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class WbWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(WbWebService.class);
 
-	@Autowired
+	@Inject
 	private IWhiteboardManager wbManager;
-	@Autowired
+	@Inject
 	private IClientManager cm;
 
 	/**

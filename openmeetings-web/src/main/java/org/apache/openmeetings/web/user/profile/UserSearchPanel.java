@@ -47,10 +47,11 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import jakarta.inject.Inject;
 
 public class UserSearchPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
@@ -62,11 +63,12 @@ public class UserSearchPanel extends UserBasePanel {
 	private final TextField<String> offer = new TextField<>("offer", Model.of(""));
 	private boolean searched = false;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private UserContactDao contactDao;
-	@SpringBean
+	@Inject
 	private ClientManager cm;
 
 	public UserSearchPanel(String id) {

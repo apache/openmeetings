@@ -48,7 +48,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hazelcast.core.EntryEvent;
@@ -57,6 +56,8 @@ import com.hazelcast.map.listener.EntryAddedListener;
 import com.hazelcast.map.listener.EntryRemovedListener;
 import com.hazelcast.map.listener.EntryUpdatedListener;
 import com.hazelcast.query.Predicates;
+
+import jakarta.inject.Inject;
 
 @Component
 public class ClientManager implements IClientManager {
@@ -70,13 +71,13 @@ public class ClientManager implements IClientManager {
 	private final Map<Long, Set<String>> onlineRooms = new ConcurrentHashMap<>();
 	private final Map<String, ServerInfo> onlineServers = new ConcurrentHashMap<>();
 
-	@Autowired
+	@Inject
 	private ConferenceLogDao confLogDao;
-	@Autowired
+	@Inject
 	private Application app;
-	@Autowired
+	@Inject
 	private KurentoHandler kHandler;
-	@Autowired
+	@Inject
 	private TimerService timerService;
 
 	private IMap<String, Client> map() {

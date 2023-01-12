@@ -31,13 +31,16 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
+
 
 public class RoomsSelectorPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final String PANEL_ID = "rooms";
 	private final String type;
-	@SpringBean
+
+	@Inject
 	private RoomDao roomDao;
 
 	public RoomsSelectorPanel(String id, String type) {

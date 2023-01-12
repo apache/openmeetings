@@ -136,7 +136,6 @@ import org.apache.wicket.validation.validator.UrlValidator;
 import org.apache.openmeetings.mediaserver.KStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -161,6 +160,7 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.NoopThemeProvider;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
+import jakarta.inject.Inject;
 
 @Component
 public class Application extends AuthenticatedWebApplication implements IApplication {
@@ -182,23 +182,23 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private String serverId;
 	private final Set<String> wsUrls = new HashSet<>();
 
-	@Autowired
+	@Inject
 	private ApplicationContext ctx;
-	@Autowired
+	@Inject
 	private ConfigurationDao cfgDao;
-	@Autowired
+	@Inject
 	private RecordingDao recordingDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private UserManager userManager;
-	@Autowired
+	@Inject
 	private ClientManager cm;
-	@Autowired
+	@Inject
 	private WhiteboardManager wbManager;
-	@Autowired
+	@Inject
 	private AppointmentDao appointmentDao;
-	@Autowired
+	@Inject
 	private SipManager sipManager;
 	@Value("${remember.me.encryption.key}")
 	private String rememberMeKey;

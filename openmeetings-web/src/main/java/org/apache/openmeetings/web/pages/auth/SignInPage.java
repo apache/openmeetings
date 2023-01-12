@@ -43,7 +43,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +51,7 @@ import com.github.openjson.JSONException;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
+import jakarta.inject.Inject;
 
 public class SignInPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
@@ -108,10 +108,11 @@ public class SignInPage extends BaseInitedPage {
 	};
 	RegisterDialog r = new RegisterDialog("register");
 	private final OtpDialog otpDialog = new OtpDialog("otpDialog", Model.of());
-
-	@SpringBean
+	@Inject
+	private ConfigurationDao cfgDao;
+	@Inject
 	private UserManager userManager;
-	@SpringBean
+	@Inject
 	private OAuth2Dao oauthDao;
 
 	public SignInPage() throws InterruptedException {

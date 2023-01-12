@@ -41,8 +41,10 @@ import org.apache.wicket.ThreadContext;
 import org.apache.openmeetings.mediaserver.KurentoHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
+
+import jakarta.inject.Inject;
 
 @Service
 public class TimerService {
@@ -53,13 +55,13 @@ public class TimerService {
 	private final Map<Long, CompletableFuture<Object>> modCheckMap = new ConcurrentHashMap<>();
 	private final Map<Long, CompletableFuture<Object>> sipCheckMap = new ConcurrentHashMap<>();
 
-	@Autowired
+	@Inject
 	private ClientManager cm;
-	@Autowired
+	@Inject
 	private SipManager sipManager;
-	@Autowired
+	@Inject
 	private KurentoHandler kHandler;
-	@Autowired
+	@Inject
 	private Application app;
 
 	@PostConstruct

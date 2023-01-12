@@ -60,12 +60,12 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.CollectionModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import jakarta.inject.Inject;
 
 public abstract class InvitationForm extends Form<Invitation> {
 	private static final long serialVersionUID = 1L;
@@ -83,11 +83,11 @@ public abstract class InvitationForm extends Form<Invitation> {
 	protected InvitationDialog dialog;
 	protected String dropDownParentId;
 
-	@SpringBean
+	@Inject
 	private InvitationDao inviteDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private InvitationManager inviteManager;
 
 	public enum Action {

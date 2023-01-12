@@ -34,9 +34,10 @@ import org.apache.openmeetings.util.mail.IcalHandler;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 import jakarta.activation.DataHandler;
+import jakarta.inject.Inject;
 import jakarta.mail.BodyPart;
 import jakarta.mail.Message;
 import jakarta.mail.Multipart;
@@ -48,7 +49,7 @@ import jakarta.mail.internet.MimeMultipart;
 class TestSendIcalMessage extends AbstractOmServerTest {
 	private static final Logger log = LoggerFactory.getLogger(TestSendIcalMessage.class);
 
-	@Autowired
+	@Inject
 	private MailHandler mailHandler;
 
 	String subject = "test iCal";

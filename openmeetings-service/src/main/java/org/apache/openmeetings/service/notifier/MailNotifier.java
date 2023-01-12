@@ -33,14 +33,16 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IInvitationManager;
 import org.apache.openmeetings.service.mail.template.subject.AppointmentReminderTemplate;
 import org.apache.openmeetings.service.mail.template.subject.SubjectEmailTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 @Component
 public class MailNotifier implements INotifier {
-	@Autowired
+	@Inject
 	private NotifierService notifier;
-	@Autowired
+	@Inject
 	private IInvitationManager invitationManager;
 
 	@PostConstruct

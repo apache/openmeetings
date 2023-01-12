@@ -45,11 +45,13 @@ import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.CollectionModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.Select2MultiChoice;
+
+import jakarta.inject.Inject;
 
 public class RoomInvitationForm extends InvitationForm {
 	private static final long serialVersionUID = 1L;
@@ -61,11 +63,12 @@ public class RoomInvitationForm extends InvitationForm {
 			, new CollectionModel<>(new ArrayList<>())
 			, new GroupChoiceProvider());
 	final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
-	@SpringBean
+
+	@Inject
 	private RoomDao roomDao;
-	@SpringBean
+	@Inject
 	private GroupUserDao groupUserDao;
-	@SpringBean
+	@Inject
 	private InvitationManager invitationManager;
 
 	enum InviteeType {

@@ -69,12 +69,14 @@ import org.kurento.client.WebRtcEndpoint;
 import org.kurento.jsonrpc.client.JsonRpcClientNettyWebSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
+
+import jakarta.inject.Inject;
 
 @Component
 public class KurentoHandler {
@@ -117,13 +119,13 @@ public class KurentoHandler {
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
 	private final Set<String> ignoredKuids = new HashSet<>();
 
-	@Autowired
+	@Inject
 	private IClientManager cm;
-	@Autowired
+	@Inject
 	private RoomDao roomDao;
-	@Autowired
+	@Inject
 	private TestStreamProcessor testProcessor;
-	@Autowired
+	@Inject
 	private StreamProcessor streamProcessor;
 
 	boolean isConnected() {

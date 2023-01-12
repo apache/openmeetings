@@ -67,7 +67,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +78,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
+import jakarta.inject.Inject;
 
 public class SignInDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -87,13 +88,14 @@ public class SignInDialog extends Modal<String> {
 	private boolean rememberMe = false;
 	private LdapConfig domain;
 	private NotificationPanel feedback = new NotificationPanel("feedback");
-	@SpringBean
+
+	@Inject
 	private ConfigurationDao cfgDao;
-	@SpringBean
+	@Inject
 	private LdapConfigDao ldapDao;
-	@SpringBean
+	@Inject
 	private OAuth2Dao oauthDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public SignInDialog(String id) {

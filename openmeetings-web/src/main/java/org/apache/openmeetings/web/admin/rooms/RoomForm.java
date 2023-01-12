@@ -72,7 +72,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.CollectionModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
@@ -85,6 +84,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import jakarta.inject.Inject;
 
 public class RoomForm extends AdminBaseForm<Room> {
 	private static final long serialVersionUID = 1L;
@@ -120,15 +120,16 @@ public class RoomForm extends AdminBaseForm<Room> {
 	private IModel<User> moderator2add = Model.of((User)null);
 	private IModel<Collection<BaseFileItem>> files2add = new CollectionModel<>(new ArrayList<>());
 	private IModel<Long> wbIdx = Model.of(0L);
-	@SpringBean
+
+	@Inject
 	private GroupDao groupDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private FileItemDao fileDao;
-	@SpringBean
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private RoomDao roomDao;
 
 	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {

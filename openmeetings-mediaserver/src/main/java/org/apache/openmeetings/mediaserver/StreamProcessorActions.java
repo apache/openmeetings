@@ -34,20 +34,22 @@ import org.kurento.client.IceCandidate;
 import org.kurento.client.internal.server.KurentoServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONObject;
+
+import jakarta.inject.Inject;
 
 @Component
 public class StreamProcessorActions {
 	private static final Logger log = LoggerFactory.getLogger(StreamProcessorActions.class);
 
-	@Autowired
+	@Inject
 	private IClientManager cm;
-	@Autowired
+	@Inject
 	private KurentoHandler kHandler;
-	@Autowired
+	@Inject
 	private StreamProcessor streamProcessor;
 
 	@TimedApplication

@@ -40,15 +40,18 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.wicketstuff.dashboard.Dashboard;
 import org.wicketstuff.dashboard.Widget;
 import org.wicketstuff.dashboard.WidgetDescriptor;
 import org.wicketstuff.dashboard.web.DashboardContext;
 
+import jakarta.inject.Inject;
+
 public class WidgetsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
-	@SpringBean
+
+	@Inject
 	private ConfigurationDao cfgDao;
 
 	public WidgetsPanel(String id) {

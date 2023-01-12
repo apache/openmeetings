@@ -81,10 +81,12 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONObject;
+
+import jakarta.inject.Inject;
 
 /**
  *
@@ -95,15 +97,15 @@ import com.github.openjson.JSONObject;
 public class UserManager implements IUserManager {
 	private static final Logger log = LoggerFactory.getLogger(UserManager.class);
 
-	@Autowired
+	@Inject
 	private ConfigurationDao cfgDao;
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private EmailManager emailManager;
-	@Autowired
+	@Inject
 	private IClientManager cm;
 	private HttpClient httpClient;
 

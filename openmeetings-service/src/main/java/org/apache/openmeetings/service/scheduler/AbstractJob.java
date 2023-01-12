@@ -30,13 +30,15 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 public abstract class AbstractJob {
 	private static Logger log = LoggerFactory.getLogger(AbstractJob.class);
-	@Autowired
+	@Inject
 	GroupDao groupDao;
-	@Autowired
+	@Inject
 	RecordingDao recordingDao;
 
 	void processExpiringRecordings(boolean notified, ObjLongConsumer<Recording> consumer) {

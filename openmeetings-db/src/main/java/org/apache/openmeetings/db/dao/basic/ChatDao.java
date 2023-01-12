@@ -24,8 +24,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.springframework.stereotype.Repository;

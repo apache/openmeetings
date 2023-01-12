@@ -86,7 +86,6 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -95,6 +94,8 @@ import org.wicketstuff.dashboard.Dashboard;
 import org.wicketstuff.dashboard.Widget;
 import org.wicketstuff.dashboard.WidgetFactory;
 import org.wicketstuff.dashboard.web.DashboardContext;
+
+import jakarta.inject.Inject;
 
 public class WebSession extends AbstractAuthenticatedWebSession implements IWebSession {
 	private static final long serialVersionUID = 1L;
@@ -118,23 +119,23 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private Long recordingId = null;
 	private boolean kickedByAdmin = false;
 	private ExtendedClientProperties extProps = new ExtendedClientProperties();
-	@SpringBean
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private InvitationDao inviteDao;
-	@SpringBean
+	@Inject
 	private SOAPLoginDao soapDao;
-	@SpringBean
+	@Inject
 	private SessiondataDao sessionDao;
-	@SpringBean
+	@Inject
 	private GroupDao groupDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private LdapLoginManager ldapManager;
-	@SpringBean
+	@Inject
 	private ConfigurationDao cfgDao;
-	@SpringBean
+	@Inject
 	private RoomDao roomDao;
 
 	public WebSession(Request request) {

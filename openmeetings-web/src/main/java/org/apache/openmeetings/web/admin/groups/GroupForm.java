@@ -52,8 +52,9 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.select2.Select2Choice;
+
+import jakarta.inject.Inject;
 
 public class GroupForm extends AdminBaseForm<Group> {
 	private static final long serialVersionUID = 1L;
@@ -93,11 +94,12 @@ public class GroupForm extends AdminBaseForm<Group> {
 			return getString("admin.group.form.logo");
 		}
 	};
-	@SpringBean
+
+	@Inject
 	private ImageConverter imageConverter;
-	@SpringBean
+	@Inject
 	private GroupUserDao groupUserDao;
-	@SpringBean
+	@Inject
 	private GroupDao groupDao;
 
 	public GroupForm(String id, WebMarkupContainer groupList, Group group) {

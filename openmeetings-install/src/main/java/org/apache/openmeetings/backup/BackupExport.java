@@ -62,8 +62,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Marshaller;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
@@ -101,7 +102,7 @@ import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 /**
@@ -120,39 +121,39 @@ public class BackupExport {
  ###############################################
 """;
 
-	@Autowired
+	@Inject
 	private AppointmentDao appointmentDao;
-	@Autowired
+	@Inject
 	private OmCalendarDao calendarDao;
-	@Autowired
+	@Inject
 	private FileItemDao fileItemDao;
-	@Autowired
+	@Inject
 	private RecordingDao recordingDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private MeetingMemberDao meetingMemberDao;
-	@Autowired
+	@Inject
 	private LdapConfigDao ldapConfigDao;
-	@Autowired
+	@Inject
 	private PrivateMessageDao privateMessageDao;
-	@Autowired
+	@Inject
 	private PrivateMessageFolderDao privateMessageFolderDao;
-	@Autowired
+	@Inject
 	private UserContactDao userContactDao;
-	@Autowired
+	@Inject
 	private PollDao pollManager;
-	@Autowired
+	@Inject
 	private ConfigurationDao configurationDao;
-	@Autowired
+	@Inject
 	private ChatDao chatDao;
-	@Autowired
+	@Inject
 	private OAuth2Dao auth2Dao;
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
-	@Autowired
+	@Inject
 	private RoomDao roomDao;
-	@Autowired
+	@Inject
 	private ExtraMenuDao menuDao;
 
 	public void performExport(File zip, boolean includeFiles, AtomicInteger progress) throws Exception {

@@ -32,21 +32,23 @@ import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 class TestImport extends AbstractTestImport {
 	public static final String BACKUP_ROOT = "org/apache/openmeetings/backup/";
-	@Autowired
+	@Inject
 	private LdapConfigDao ldapDao;
-	@Autowired
+	@Inject
 	private OAuth2Dao oauthDao;
-	@Autowired
+	@Inject
 	private ChatDao chatDao;
-	@Autowired
+	@Inject
 	private RecordingDao recDao;
-	@Autowired
+	@Inject
 	private PrivateMessageFolderDao msgFolderDao;
-	@Autowired
+	@Inject
 	private ExtraMenuDao menuDao;
 
 	@Test

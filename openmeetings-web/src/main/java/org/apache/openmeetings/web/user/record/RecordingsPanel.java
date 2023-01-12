@@ -41,10 +41,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import jakarta.inject.Inject;
 
 public class RecordingsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
@@ -55,13 +56,13 @@ public class RecordingsPanel extends UserBasePanel {
 	private InvitationDialog invite;
 	private RecordingInvitationForm rif = new RecordingInvitationForm("form", INVITE_DIALOG_ID);
 
-	@SpringBean
+	@Inject
 	private RecordingDao recDao;
-	@SpringBean
+	@Inject
 	private InterviewConverter interviewConverter;
-	@SpringBean
+	@Inject
 	private RecordingConverter recordingConverter;
-	@SpringBean
+	@Inject
 	private RecordingChunkDao chunkDao;
 
 	public RecordingsPanel(String id) {

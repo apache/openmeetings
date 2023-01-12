@@ -57,11 +57,13 @@ import org.apache.openmeetings.service.calendar.caldav.handler.WebDAVSyncHandler
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
 
 import com.github.caldav4j.CalDAVConstants;
+
+import jakarta.inject.Inject;
 
 /**
  * Class which does syncing and provides respective API's required for performing CalDAV Operations.
@@ -78,11 +80,11 @@ public class AppointmentManager {
 
 	private PoolingHttpClientConnectionManager connmanager = null;
 
-	@Autowired
+	@Inject
 	private OmCalendarDao calendarDao;
-	@Autowired
+	@Inject
 	private AppointmentDao appointmentDao;
-	@Autowired
+	@Inject
 	private IcalUtils utils;
 
 	/**

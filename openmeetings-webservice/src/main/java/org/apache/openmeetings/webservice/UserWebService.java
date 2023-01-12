@@ -30,6 +30,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Locale;
 
+import jakarta.inject.Inject;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
@@ -72,7 +73,7 @@ import org.apache.wicket.validation.Validatable;
 import org.apache.wicket.validation.ValidationError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -99,13 +100,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class UserWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(UserWebService.class);
 
-	@Autowired
+	@Inject
 	private IUserManager userManager;
-	@Autowired
+	@Inject
 	private SOAPLoginDao soapDao;
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
-	@Autowired
+	@Inject
 	private UserMapper uMapper;
 
 	/**

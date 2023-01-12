@@ -26,10 +26,12 @@ import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 class TestOmCalendar extends AbstractOmServerTest {
-	@Autowired
+	@Inject
 	private OmCalendarDao calendarDao;
 
 	@Test

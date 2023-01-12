@@ -30,10 +30,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
@@ -49,7 +50,7 @@ import org.apache.openmeetings.db.manager.IInvitationManager;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,15 +60,17 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 	private static final Logger log = LoggerFactory.getLogger(AppointmentDao.class);
 	private static final String PARAM_START = "start";
 	private static final String PARAM_CALID = "calId";
+
 	@PersistenceContext
 	private EntityManager em;
-	@Autowired
+
+	@Inject
 	private MeetingMemberDao meetingMemberDao;
-	@Autowired
+	@Inject
 	private RoomDao roomDao;
-	@Autowired
+	@Inject
 	private ConfigurationDao cfgDao;
-	@Autowired
+	@Inject
 	private IInvitationManager invitationManager;
 
 	/*

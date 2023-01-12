@@ -43,14 +43,16 @@ import org.apache.wicket.util.string.Strings;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 class TestAppointmentAddAppointment extends AbstractWicketTesterTest {
 	private static final Logger log = LoggerFactory.getLogger(TestAppointmentAddAppointment.class);
 
-	@Autowired
+	@Inject
 	private AppointmentLogic appointmentLogic;
-	@Autowired
+	@Inject
 	private MeetingMemberDao meetingMemberDao;
 
 	private static void setTime(Appointment a) {

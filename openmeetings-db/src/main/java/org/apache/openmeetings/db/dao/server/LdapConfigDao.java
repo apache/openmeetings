@@ -24,10 +24,11 @@ import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -36,7 +37,7 @@ import org.apache.openmeetings.db.util.DaoHelper;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +57,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	@PersistenceContext
 	private EntityManager em;
 
-	@Autowired
+	@Inject
 	private UserDao userDao;
 
 	@Override

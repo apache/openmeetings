@@ -50,11 +50,13 @@ import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.logging.TimedApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONObject;
+
+import jakarta.inject.Inject;
 
 @Component
 public class StreamProcessor implements IStreamProcessor {
@@ -64,19 +66,19 @@ public class StreamProcessor implements IStreamProcessor {
 	 */
 	private final Map<String, KStream> streamByUid = new ConcurrentHashMap<>();
 
-	@Autowired
+	@Inject
 	private IClientManager cm;
-	@Autowired
+	@Inject
 	private RecordingDao recDao;
-	@Autowired
+	@Inject
 	private KurentoHandler kHandler;
-	@Autowired
+	@Inject
 	private TaskExecutor taskExecutor;
-	@Autowired
+	@Inject
 	private RecordingConverter recordingConverter;
-	@Autowired
+	@Inject
 	private InterviewConverter interviewConverter;
-	@Autowired
+	@Inject
 	private StreamProcessorActions streamProcessorActions;
 
 	@TimedApplication

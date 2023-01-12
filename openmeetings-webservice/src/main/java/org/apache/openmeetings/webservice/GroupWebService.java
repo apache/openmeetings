@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import jakarta.inject.Inject;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
@@ -57,7 +58,7 @@ import org.apache.openmeetings.webservice.schema.UserSearchResultWrapper;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -84,9 +85,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class GroupWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(GroupWebService.class);
 
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
-	@Autowired
+	@Inject
 	private GroupUserDao groupUserDao;
 
 	/**

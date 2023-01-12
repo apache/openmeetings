@@ -29,12 +29,13 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 public class ResetPasswordDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -43,7 +44,7 @@ public class ResetPasswordDialog extends Modal<String> {
 	private PasswordTextField password;
 	private final User user;
 
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public ResetPasswordDialog(String id, final User user) {

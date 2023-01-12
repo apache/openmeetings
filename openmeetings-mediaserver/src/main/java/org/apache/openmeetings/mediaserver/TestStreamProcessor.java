@@ -31,16 +31,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.kurento.client.IceCandidate;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONObject;
+
+import jakarta.inject.Inject;
 
 @Component
 class TestStreamProcessor implements IStreamProcessor {
 	private final Map<String, KTestStream> streamByUid = new ConcurrentHashMap<>();
 
-	@Autowired
+	@Inject
 	private KurentoHandler kHandler;
 
 	void onMessage(IWsClient c, final String cmdId, JSONObject msg) {

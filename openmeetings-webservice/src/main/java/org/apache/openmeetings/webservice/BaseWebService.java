@@ -36,18 +36,20 @@ import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 public abstract class BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(BaseWebService.class);
 
-	@Autowired
+	@Inject
 	protected SessiondataDao sessionDao;
-	@Autowired
+	@Inject
 	protected UserDao userDao;
-	@Autowired
+	@Inject
 	protected RoomDao roomDao;
-	@Autowired
+	@Inject
 	protected FileItemDao fileDao;
 
 	// this one is fail safe

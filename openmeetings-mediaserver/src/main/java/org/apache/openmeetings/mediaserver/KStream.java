@@ -43,7 +43,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.openmeetings.core.sip.ISipCallbacks;
 import org.apache.openmeetings.core.sip.SipManager;

@@ -29,7 +29,8 @@ import org.apache.openmeetings.db.util.LocaleHelper;
 import org.apache.openmeetings.service.mail.template.OmTextLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
 
 public class RecordingExpiringTemplate extends SubjectEmailTemplate {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +38,7 @@ public class RecordingExpiringTemplate extends SubjectEmailTemplate {
 	private long remainingDays;
 	private final User u;
 
-	@SpringBean
+	@Inject
 	protected RoomDao roomDao;
 
 	private RecordingExpiringTemplate(User u, final Recording rec, long remainingDays) {

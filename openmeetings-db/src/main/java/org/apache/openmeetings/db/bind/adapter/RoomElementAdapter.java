@@ -20,7 +20,7 @@ package org.apache.openmeetings.db.bind.adapter;
 
 import java.util.Locale;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.wicket.util.string.Strings;

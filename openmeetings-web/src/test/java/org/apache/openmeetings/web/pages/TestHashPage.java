@@ -50,18 +50,19 @@ import org.apache.wicket.util.string.Strings;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 class TestHashPage extends AbstractWicketTesterTest {
 	private static final Logger log = LoggerFactory.getLogger(TestHashPage.class);
 
-	@Autowired
+	@Inject
 	protected RoomDao roomDao;
-	@Autowired
+	@Inject
 	protected RecordingDao recDao;
-	@Autowired
+	@Inject
 	protected InvitationDao inviteDao;
 
 	private void checkAccessDenied(boolean visible) {

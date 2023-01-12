@@ -35,18 +35,20 @@ import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 @Component
 public class AppointmentLogic {
 	private static final Logger log = LoggerFactory.getLogger(AppointmentLogic.class);
 
-	@Autowired
+	@Inject
 	private AppointmentDao appointmentDao;
-	@Autowired
+	@Inject
 	private InvitationDao invitationDao;
-	@Autowired
+	@Inject
 	private NotifierService notifierService;
 
 	// --------------------------------------------------------------------------------------------

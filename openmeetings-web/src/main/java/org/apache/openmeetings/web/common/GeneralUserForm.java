@@ -47,10 +47,11 @@ import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
+
+import jakarta.inject.Inject;
 
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
@@ -58,9 +59,10 @@ public class GeneralUserForm extends Form<User> {
 	private final List<GroupUser> grpUsers = new ArrayList<>();
 	private final AjaxOmDatePicker bday = new AjaxOmDatePicker("age");
 	private final boolean isAdminForm;
-	@SpringBean
+
+	@Inject
 	private GroupDao groupDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public GeneralUserForm(String id, IModel<User> model, boolean isAdminForm) {

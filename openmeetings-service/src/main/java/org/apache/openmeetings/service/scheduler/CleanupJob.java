@@ -34,9 +34,11 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 @Component("cleanupJob")
 public class CleanupJob extends AbstractJob {
@@ -50,11 +52,11 @@ public class CleanupJob extends AbstractJob {
 	@Value("${job.cleanup.conf.log.ttl}")
 	private long confLogTtl = 7 * 24 * 60 * 60 * 1000L; // 7 days
 
-	@Autowired
+	@Inject
 	private SessiondataDao sessionDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private ConferenceLogDao confLogDao;
 
 	public void cleanTestSetup() {
