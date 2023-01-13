@@ -102,6 +102,7 @@
 		<openjpa.version>3.2.2</openjpa.version>
 		<jakarta.persistence.version>3.1.0</jakarta.persistence.version>
 		<jakarta.transaction.version>2.0.1</jakarta.transaction.version>
+		<jakarta.annotation.version>2.1.1</jakarta.annotation.version>
 		<asterisk-java.version>3.39.0</asterisk-java.version>
 		<commons-lang3.version>3.14.0</commons-lang3.version>
 		<commons-dbcp.version>2.11.0</commons-dbcp.version>
@@ -832,6 +833,11 @@
 				<groupId>jakarta.transaction</groupId>
 				<artifactId>jakarta.transaction-api</artifactId>
 				<version>${jakarta.transaction.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>jakarta.annotation</groupId>
+				<artifactId>jakarta.annotation-api</artifactId>
+				<version>${jakarta.annotation.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>

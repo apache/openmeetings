@@ -22,7 +22,7 @@ import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 
 import java.util.TimeZone;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.apache.openmeetings.core.notifier.INotifier;
 import org.apache.openmeetings.core.notifier.NotifierService;

@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PreDestroy;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;

@@ -39,10 +39,10 @@
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
-	<context:annotation-config />
 	<!-- Start annotation Prometheus metrics
 	<aop:aspectj-autoproxy/>
 	End annotation -->
+	<context:annotation-config />
 	<context:component-scan base-package="org.apache.openmeetings" />
 
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"

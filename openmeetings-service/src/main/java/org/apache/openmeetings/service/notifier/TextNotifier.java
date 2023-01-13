@@ -20,7 +20,7 @@ package org.apache.openmeetings.service.notifier;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REMINDER_MESSAGE;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.apache.openmeetings.core.notifier.INotifier;
 import org.apache.openmeetings.core.notifier.NotifierService;

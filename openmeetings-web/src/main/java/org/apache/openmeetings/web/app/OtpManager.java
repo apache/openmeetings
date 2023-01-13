@@ -24,7 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationN
 
 import java.net.UnknownHostException;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 

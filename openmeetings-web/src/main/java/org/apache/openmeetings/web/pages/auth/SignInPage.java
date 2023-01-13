@@ -108,6 +108,7 @@ public class SignInPage extends BaseInitedPage {
 	};
 	RegisterDialog r = new RegisterDialog("register");
 	private final OtpDialog otpDialog = new OtpDialog("otpDialog", Model.of());
+
 	@Inject
 	private ConfigurationDao cfgDao;
 	@Inject
