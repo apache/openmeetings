@@ -122,7 +122,7 @@
 		<jetty.version>9.4.50.v20221201</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
-		<mockito.version>4.11.0</mockito.version>
+		<mockito.version>5.0.0</mockito.version>
 		<quartz.version>2.3.2</quartz.version>
 		<kurento.version>6.18.0</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
