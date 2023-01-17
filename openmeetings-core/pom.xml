@@ -119,10 +119,6 @@
 			<artifactId>jakarta.activation</artifactId> <!-- required for jakarta.mail -->
 			<version>2.0.1</version>
 		</dependency>
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>javax.annotation-api</artifactId>
-		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
