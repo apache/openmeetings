@@ -113,12 +113,6 @@
 			<groupId>javax.sip</groupId>
 			<artifactId>jain-sip-ri</artifactId>
 		</dependency>
-		<!-- FIXME TODO -->
-		<dependency>
-			<groupId>com.sun.activation</groupId>
-			<artifactId>jakarta.activation</artifactId> <!-- required for jakarta.mail -->
-			<version>2.0.1</version>
-		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
