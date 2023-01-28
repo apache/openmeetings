@@ -4,6 +4,9 @@ title: OpenMeetings 3.1.2 released
 date: '2016-08-12T22:58:06+00:00'
 permalink: openmeetings_3_1_2_released
 ---
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
 Release v3.1.2 contains 55 enhancements and fixes and 1 patch for a security vulnerability.<br/>
 Security Fix: CVE-2016-3089 - Apache OpenMeetings XSS in SWF panel<br/><br/>
 Other security relevant updates:
@@ -19,7 +22,7 @@ Other fixes in admin, localisation, installer, invitations, room etc.
 <br/><br/>
 For a complete list of changes, see: <a href="https://www.apache.org/dist/openmeetings/3.1.2/CHANGELOG" target="_BLANK">https://www.apache.org/dist/openmeetings/3.1.2/CHANGELOG</a>
 <br/><br/>
-Downloads and documentation is available from our project website: <br/><a href="http://openmeetings.apache.org/downloads.html" target=_blank">http://openmeetings.apache.org/downloads.html</a><br/>
+Downloads and documentation is available from our project website: <br/><a href="http://openmeetings.apache.org/downloads.html" target="_blank">http://openmeetings.apache.org/downloads.html</a><br/>
 <br/>
 <b>Update (15/08/2015)</b><br/>
 OpenMeetings modules are now also available individually as Maven dependencies, see: <a href="https://repository.apache.org/#nexus-search;quick~openmeetings" target="_BLANK">https://repository.apache.org/#nexus-search;quick~openmeetings</a><br/><br/>

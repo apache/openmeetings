@@ -4,6 +4,9 @@ title: OpenMeetings on the road to graduate from Incubator
 date: '2012-12-07T01:53:18+00:00'
 permalink: openmeetings_on_the_road_to
 ---
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
 We are happy to announce that the vote was successful to graduate OpenMeetings from the Incubator,
 the result of the vote can be seen here <a href="http://markmail.org/message/zlu2jc23ls4hopjo" target="_BLANK">http://markmail.org/message/zlu2jc23ls4hopjo</a>.<br/>
 <br/>

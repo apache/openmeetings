@@ -4,15 +4,18 @@ title: Apache Openmeetings 2.1.1 released
 date: '2013-07-12T07:42:00+00:00'
 permalink: apache_openmeetings_2_1_11
 ---
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
 The Apache Openmeetings PMC is proud to announce Apache Openmeetings 2.1.1!<br/>
 <br/>
 This is a bug fix release for the 2.1.x tree and the second release as Top Level Apache Project!<br/>
 <br/>
 Please download and build the distribution yourself, or use our convenience binary package<br/>
 <br/>
-<ul><
-<li>Sources: <a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.1/src" target="_blank">http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.1/src</a></li>
-<li>Binaries: <a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.1/bin" target="_black">http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.1/bin</a></li>
+<ul>
+	<li>Sources: <a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.1/src" target="_blank">http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.1/src</a></li>
+	<li>Binaries: <a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.1/bin" target="_black">http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.1/bin</a></li>
 </ul>
 <br/>
 Or in general see: <a href="http://openmeetings.apache.org/downloads.html">http://openmeetings.apache.org/downloads.html</a>
@@ -50,7 +53,7 @@ Configurable hot key for Mute/Unmute have been added.<br/>
 </li>
 <li>[<a href='https://issues.apache.org/jira/browse/OPENMEETINGS-503'>OPENMEETINGS-503</a>] -         Openmeetings does not logout on the Recording panel
 </li>
-<li>[<a href='https://issues.apache.org/jira/browse/OPENMEETINGS-507'>OPENMEETINGS-507</a>] -         Error message is shown when user save the Profile settings 
+<li>[<a href='https://issues.apache.org/jira/browse/OPENMEETINGS-507'>OPENMEETINGS-507</a>] -         Error message is shown when user save the Profile settings
 </li>
 <li>[<a href='https://issues.apache.org/jira/browse/OPENMEETINGS-537'>OPENMEETINGS-537</a>] -         Pop menu  in conference for files shows &quot;Delete folder&quot;
 </li>

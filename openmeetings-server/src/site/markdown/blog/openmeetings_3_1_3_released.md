@@ -4,6 +4,9 @@ title: OpenMeetings 3.1.3 released
 date: '2016-10-03T07:23:16+00:00'
 permalink: openmeetings_3_1_3_released
 ---
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
 Release v3.1.3 contains 21 enhancements and fixes. The main improvement of this release is to fix the RTMP-Streaming over SSL in both possible modes. The two available modes are:
 <ul>
   <li>Native RTMPs</li>

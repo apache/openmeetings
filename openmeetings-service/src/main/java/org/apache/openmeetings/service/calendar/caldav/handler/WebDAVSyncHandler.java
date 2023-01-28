@@ -152,7 +152,7 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 
 	/**
 	 * {@inheritDoc}
-	 * <br><br>
+	 * <br/><br/>
 	 * Note: This Uses EtagsHandler for Updating.
 	 */
 	@Override
@@ -164,8 +164,8 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 
 	/**
 	 * {@inheritDoc}
-	 * <br><br>
-	 * Note: This Uses EtagsHandler for Deleting.<br>
+	 * <br/><br/>
+	 * Note: This Uses EtagsHandler for Deleting.<br/>
 	 */
 	@Override
 	public boolean deleteItem(Appointment appointment) {

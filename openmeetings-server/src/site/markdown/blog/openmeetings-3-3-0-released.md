@@ -4,6 +4,9 @@ title: OpenMeetings 3.3.0 released
 date: '2017-07-14T10:09:11+00:00'
 permalink: openmeetings-3-3-0-released
 ---
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
 Version 3.3.0 includes new features, bug fixes and security fixes. <br/>
  <br/>
 Enhancements around:

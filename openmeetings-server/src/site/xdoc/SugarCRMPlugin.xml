@@ -59,7 +59,7 @@
 
 		<section name="Demo video">
 			<p>The demo video of SugarCRM plugin show you the plugin in action </p>
-			<iframe width="640" height="390" src="https://www.youtube.com/embed/xrDbcXqxDq8" frameborder="0" allowfullscreen=""></iframe>
+			<iframe width="640" height="390" src="https://www.youtube.com/embed/xrDbcXqxDq8" frameborder="0" allow="fullscreen"></iframe>
 		</section>
 
 	</body>

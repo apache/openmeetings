@@ -4,6 +4,9 @@ title: Apache Openmeetings 2.2.0 released
 date: '2013-12-14T20:51:25+00:00'
 permalink: apache_openmeetings_2_2_0
 ---
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
 <b>The Apache Openmeetings PMC is proud to announce Apache Openmeetings 2.2.0!</b><br/>
 <br/>
 This is a bug fix release for version 2.1.1<br/>

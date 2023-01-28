@@ -4,6 +4,9 @@ title: OpenMeetings v6.0.0 - Security and Performance, webRTC Stability and UI i
 date: '2021-03-14T19:36:46+00:00'
 permalink: openmeetings-v6-0-0-security
 ---
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
 OpenMeetings v6.0.0 is the second major release since migrating all audio & video components to webRTC and HTML5. There are a number of fixes and improvements in Security as well as webRTC handling as part of this release.
  <br/>
  <br/>
@@ -11,7 +14,7 @@ OpenMeetings v6.0.0 is the second major release since migrating all audio & vide
  <br/>
  <br/>
 <b>Performance metrics using Prometheus and load tests</b><br/>
-v6.0.0 introduces the ability to configure <a href="https://prometheus.io/" target="_BLANK">Prometheus metrics</a> to be generated. The metrics are disabled by default. There is detailed documentation on how to configure and enable the export and what type of metrics are available - <a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Prometheus+Logging+and+Metrics" target="_BLANK">Prometheus+Logging+and+Metrics</a>. 
+v6.0.0 introduces the ability to configure <a href="https://prometheus.io/" target="_BLANK">Prometheus metrics</a> to be generated. The metrics are disabled by default. There is detailed documentation on how to configure and enable the export and what type of metrics are available - <a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Prometheus+Logging+and+Metrics" target="_BLANK">Prometheus+Logging+and+Metrics</a>.
 You can find example for load tests and performance metrics using above statistics - <a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Performance+Testing" target="_BLANK">Performance+Testing</a>
 <br/>
  <br/>
@@ -42,5 +45,5 @@ Most of the UI code relevant for the conference room has been migrated to be bui
 </ul>
  <br/>
 Full ChangeLog is available from <a href="https://github.com/apache/openmeetings/blob/6.0.0/CHANGELOG.md">Github</a>,
-downloads of v6.0.0 are available from <a href="https://openmeetings.apache.org/downloads.html" href="_BLANK">openmeetings.apache.org/downloads.html</a>
+downloads of v6.0.0 are available from <a href="https://openmeetings.apache.org/downloads.html" target="_BLANK">openmeetings.apache.org/downloads.html</a>
  <br/> <br/>

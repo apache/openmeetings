@@ -4,10 +4,13 @@ title: Apache OpenMeetings 2.1.1 in Azure VMDepot
 date: '2013-10-05T04:38:59+00:00'
 permalink: apache_openmeetings_2_1_12
 ---
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
 <p>Azure is Microsofts Cloud based service, similar to Amazon or the great <a href="http://cloudstack.apache.org" target="_blank">Apache Cloudstack</a>. Microsoft Open Technologies provides a VMDepot for sharing images for Azure. Which is great cause it can save you quite a bit of time!</p>
 <p>
 The  OpenMeetings project made version v2.1.1 of Apache OpenMeetings available at VMDepot: </p>
-<p><a href="http://vmdepot.msopentech.com/Vhd/Show?vhdId=5568&version=5604" target="_BLANK">http://vmdepot.msopentech.com/Vhd/Show?vhdId=5568&version=5604</a></p> 
+<p><a href="http://vmdepot.msopentech.com/Vhd/Show?vhdId=5568&amp;version=5604" target="_BLANK">http://vmdepot.msopentech.com/Vhd/Show?vhdId=5568&amp;version=5604</a></p>
 <p>
 For anyone not familiar with Azure those are step by step instructions on how to get your copy of the VM running:</p>
 <h4>1) Login your Azure admin panel at https://manage.windowsazure.com</h4>
@@ -41,7 +44,7 @@ For anyone not familiar with Azure those are step by step instructions on how to
 </li>
 <li><p>OpenMeetings</p>
 <p>user: admin</p>
-<p>pass: ~9$bfg+}^&/<X~a</p>
+<p>pass: &#126;9$bfg+}^&amp;/&lt;X&#126;a</p>
 </li>
 </ul>
 <br/><br/>
