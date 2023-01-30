@@ -339,8 +339,16 @@ public class Client implements IDataProviderEntity, IWsClient {
 				a.put("country", user.getAddress().getCountry());
 			}
 		}
+		final int level;
+		if (hasRight(Right.MODERATOR)) {
+			level = 5;
+		} else if(hasRight(Right.WHITEBOARD)) {
+			level = 3;
+		} else {
+			level = 1;
+		}
 		return o.put("user", u)
-				.put("level", hasRight(Right.MODERATOR) ? 5 : (hasRight(Right.WHITEBOARD) ? 3 : 1));
+				.put("level", level);
 	}
 
 	// package private for StremDesc

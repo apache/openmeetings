@@ -59,7 +59,7 @@ public class DaoHelper {
 			, boolean noDeleted
 			, BiFunction<CriteriaBuilder, CriteriaQuery<?>, Predicate> filter)
 	{
-		return count(em, clazz, (builder, root) -> builder.count(root), search, searchFields, noDeleted, filter);
+		return count(em, clazz, CriteriaBuilder::count, search, searchFields, noDeleted, filter);
 	}
 
 	public static <T> long count(EntityManager em

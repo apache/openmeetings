@@ -59,7 +59,6 @@ public class OtpManager {
 	private static final HashingAlgorithm ALGORITHM = HashingAlgorithm.SHA1;
 
 	private final SecretGenerator secretGenerator = new DefaultSecretGenerator(128);
-	private CodeGenerator codeGenerator;
 	private CodeVerifier codeVerifier;
 	@Value("${otp.issuer}")
 	private String issuer = "";
@@ -70,7 +69,7 @@ public class OtpManager {
 
 	@PostConstruct
 	public void init() throws UnknownHostException {
-		codeGenerator = new DefaultCodeGenerator(ALGORITHM, DIGITS);
+		CodeGenerator codeGenerator = new DefaultCodeGenerator(ALGORITHM, DIGITS);
 		TimeProvider timeProvider;
 		try {
 			timeProvider = new NtpTimeProvider(ntpServer, ntpTimeout);

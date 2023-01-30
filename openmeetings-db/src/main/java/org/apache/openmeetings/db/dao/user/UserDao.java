@@ -212,7 +212,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	private long count(String search, boolean filterContacts, Long currentUserId, boolean filterDeleted) {
 		if (filterContacts) {
 			return DaoHelper.count(em, User.class
-					, (builder, root) -> builder.countDistinct(root)
+					, CriteriaBuilder::countDistinct
 					, search, searchFields, filterDeleted
 					, (b, q) -> getOwnerContactsFilter(currentUserId, b, q));
 		} else {
@@ -255,7 +255,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	public Long searchCountUserProfile(Long userId, String search, String userOffers, String userSearches) {
 		return DaoHelper.count(em, User.class
-				, (builder, root) -> builder.countDistinct(root)
+				, CriteriaBuilder::countDistinct
 				, search, searchFields, true
 				, (b, q) -> getProfileFilter(userId, userOffers, userSearches, b, q));
 	}
