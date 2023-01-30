@@ -1,12 +1,15 @@
----
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
+<!---
 layout: post
 title: Apache Openmeetings 2.1.1 released
 date: '2013-07-12T07:42:00+00:00'
 permalink: apache_openmeetings_2_1_11
----
-<!--
-Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
+
+# Apache Openmeetings 2.1.1 released
+
 The Apache Openmeetings PMC is proud to announce Apache Openmeetings 2.1.1!<br/>
 <br/>
 This is a bug fix release for the 2.1.x tree and the second release as Top Level Apache Project!<br/>

@@ -1,12 +1,15 @@
----
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
+<!---
 layout: post
 title: 'Google Summer of Code 2012 at Apache OpenMeetings '
 date: '2012-09-11T07:57:16+00:00'
 permalink: google_summer_of_code_2012
----
-<!--
-Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
+
+# Google Summer of Code 2012 at Apache OpenMeetings
+
 We were very happy to have 3 official students participating in the <a href="http://www.google-melange.com/gsoc/homepage/google/gsoc2012" target="_BLANK" rel="nofollow">Google Summer of Code 2012 program</a>! There was even a 4th student that worked on his proposal even not accepted officially as there have been not enough slots available. All students met their goals some even did more then required.<br/>
 As OpenMeetings is about making virtual conferences we organized a weekly virtual meeting to catch up with everybody. It was sometimes difficult to attend for everybody as the students and mentors are situated in different timezones, starting with GMT-4 to GMT+7. But we had a chance to talk to everybody face to face several times during the summer!<br/>
 <br/>

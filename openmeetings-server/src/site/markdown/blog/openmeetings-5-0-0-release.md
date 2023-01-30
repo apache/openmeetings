@@ -1,12 +1,15 @@
----
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
+<!---
 layout: post
 title: OpenMeetings 5.0.0 release - Migration to HTML5 webRTC and Wicket 9.0.0
 date: '2020-08-28T04:46:46+00:00'
 permalink: openmeetings-5-0-0-release
----
-<!--
-Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
+
+# OpenMeetings 5.0.0 release - Migration to HTML5 webRTC and Wicket 9.0.0
+
 OpenMeetings v5.0.0 is the first main release of a HTML5 version of the Web-Conferencing software. All features are using native browser components. There are no plugins required and you can share your webcam and microphone as well as your screen just using HTML5 and JavaScript!
  <br/>
  <br/>

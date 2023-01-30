@@ -1,12 +1,15 @@
----
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
+<!---
 layout: post
 title: OpenMeetings 3.1.1 released
 date: '2016-03-31T20:02:45+00:00'
 permalink: openmeetings_3_1_1_released
----
-<!--
-Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
+
+# OpenMeetings 3.1.1 released
+
 Release v3.1.1 contains 74 fixes, including improvements and new features. Most notably the migration to a new SOAP/REST API.
 Additionally it contains 9 critical security fixes that have been privately shared via the Apache Software Foundation as security report.<br/>
 <br/>

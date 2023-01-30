@@ -1,13 +1,15 @@
----
-layout: post
-title: OpenMeetings v6.2.0 - OpenAPI Swagger API, Node, PHP integration and Mobile
-  version
-date: '2021-10-25T20:55:06+00:00'
-permalink: openmeetings-v6-2-0-openapi
----
 <!--
 Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
+<!---
+layout: post
+title: OpenMeetings v6.2.0 - OpenAPI Swagger API, Node, PHP integration and Mobile version
+date: '2021-10-25T20:55:06+00:00'
+permalink: openmeetings-v6-2-0-openapi
+-->
+
+# OpenMeetings v6.2.0 - OpenAPI Swagger API, Node, PHP integration and Mobile version
+
 <h2>Mobile conference room improvements</h2>
 OpenMeetings v6.2.0 improves the Mobile version of OpenMeetings: UI improvements around viewport and the ability to save OpenMeetings to the Mobile device home screen so it can be started similar to a native mobile app:<br/><br/>
 <b>(1) Add to Home Screen  / (2) Home screen icon / (3) iOS in landscape mode</b><br/>

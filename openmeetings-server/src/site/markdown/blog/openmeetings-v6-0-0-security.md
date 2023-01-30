@@ -1,12 +1,15 @@
----
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
+<!---
 layout: post
 title: OpenMeetings v6.0.0 - Security and Performance, webRTC Stability and UI improvements
 date: '2021-03-14T19:36:46+00:00'
 permalink: openmeetings-v6-0-0-security
----
-<!--
-Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
+
+# OpenMeetings v6.0.0 - Security and Performance, webRTC Stability and UI improvements
+
 OpenMeetings v6.0.0 is the second major release since migrating all audio & video components to webRTC and HTML5. There are a number of fixes and improvements in Security as well as webRTC handling as part of this release.
  <br/>
  <br/>

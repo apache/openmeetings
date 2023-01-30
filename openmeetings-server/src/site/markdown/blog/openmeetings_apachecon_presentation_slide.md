@@ -1,12 +1,15 @@
----
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
+<!---
 layout: post
 title: OpenMeetings ApacheCon Presentation Slide
 date: '2012-11-08T20:49:21+00:00'
 permalink: openmeetings_apachecon_presentation_slide
----
-<!--
-Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
+
+# OpenMeetings ApacheCon Presentation Slide
+
 Today we had the chance to do a quick presentation at the Fast Feather Track at ApacheCon Europe in Sinsheim.<br/>
 <br/>
 This was our presentation:<br/>

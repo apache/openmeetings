@@ -1,12 +1,15 @@
----
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
+<!---
 layout: post
 title: OpenMeetings 3.1.2 released
 date: '2016-08-12T22:58:06+00:00'
 permalink: openmeetings_3_1_2_released
----
-<!--
-Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
+
+# OpenMeetings 3.1.2 released
+
 Release v3.1.2 contains 55 enhancements and fixes and 1 patch for a security vulnerability.<br/>
 Security Fix: CVE-2016-3089 - Apache OpenMeetings XSS in SWF panel<br/><br/>
 Other security relevant updates:

@@ -1,12 +1,15 @@
----
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
+<!---
 layout: post
 title: Apache OpenMeetings 2.0 Incubating released
 date: '2012-07-26T09:18:41+00:00'
 permalink: apache_openmeetings_2_0_incubating
----
-<!--
-Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
+
+# Apache OpenMeetings 2.0 Incubating released
+
 <span style="vertical-align:baseline;font-variant:normal;font-style:normal;font-size:13px;background-color:transparent;text-decoration:none;font-family:Arial;font-weight:bold">We are happy to announce Version 2.0 of Apache OpenMeetings Incubating!</span><br/>
 <span style="vertical-align:baseline;font-variant:normal;font-style:normal;font-size:13px;background-color:transparent;text-decoration:none;font-family:Arial;font-weight:bold"></span><br/>
 <span style="vertical-align:baseline;font-variant:normal;font-style:normal;font-size:13px;background-color:transparent;text-decoration:none;font-family:Arial;font-weight:normal">This is our first release as Apache project and there have been major changes almost everywhere in the application.</span><br/>

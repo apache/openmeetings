@@ -1,12 +1,15 @@
----
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
+<!---
 layout: post
 title: 'Apache OpenMeetings Moodle Plugin 1.4 Incubating released! '
 date: '2012-09-04T08:38:45+00:00'
 permalink: apache_openmeetings_moodle_plugin_1
----
-<!--
-Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
+
+# Apache OpenMeetings Moodle Plugin 1.4 Incubating released!
+
 The plugin enables integration of Apache OpenMeetings Incubating <a href="http://incubator.apache.org/openmeetings/" target="_BLANK">http://incubator.apache.org/openmeetings/</a>) conference rooms in the popular e-learning LMS Moodle (<a href="http://www.moodle.org" target="_BLANK">http://www.moodle.org</a>).
 <br/><br/>
 <b>Add virtual conference rooms to courses</b> Moodle organizes learning units in courses. The plugin enables teachers/course moderators of Moodle to add new conference rooms to courses.

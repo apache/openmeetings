@@ -1,12 +1,15 @@
----
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
+<!---
 layout: post
 title: Apache OpenMeetings 2.1.1 in Azure VMDepot
 date: '2013-10-05T04:38:59+00:00'
 permalink: apache_openmeetings_2_1_12
----
-<!--
-Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
+
+# Apache OpenMeetings 2.1.1 in Azure VMDepot
+
 <p>Azure is Microsofts Cloud based service, similar to Amazon or the great <a href="http://cloudstack.apache.org" target="_blank">Apache Cloudstack</a>. Microsoft Open Technologies provides a VMDepot for sharing images for Azure. Which is great cause it can save you quite a bit of time!</p>
 <p>
 The  OpenMeetings project made version v2.1.1 of Apache OpenMeetings available at VMDepot: </p>
