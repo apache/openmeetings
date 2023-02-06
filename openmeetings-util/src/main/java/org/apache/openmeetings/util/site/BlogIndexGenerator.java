@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.openmeetings.util.XmlExport;
 import org.apache.wicket.util.string.Strings;
@@ -101,11 +102,13 @@ public class BlogIndexGenerator {
 		sb.append("<!--").append(XmlExport.LICENSE).append("-->").append(System.lineSeparator())
 				.append("# Apache OpenMeetings blog posts").append(System.lineSeparator())
 				.append(System.lineSeparator());
-		Files.walk(Paths.get(args[0])).map(BlogIndexGenerator::toLink)
-				.filter(Objects::nonNull)
-				.filter(Link::isValid)
-				.sorted((link1, link2) -> link1.published().compareTo(link2.published()))
-				.forEach(link -> addLink(sb, link));
+		try (Stream<Path> walk = Files.walk(Paths.get(args[0]))) {
+			walk.map(BlogIndexGenerator::toLink)
+					.filter(Objects::nonNull)
+					.filter(Link::isValid)
+					.sorted((link1, link2) -> link1.published().compareTo(link2.published()))
+					.forEach(link -> addLink(sb, link));
+		}
 		Path outDir = Paths.get(args[1]);
 		Files.createDirectories(outDir);
 		Files.write(outDir.resolve("index.md")
