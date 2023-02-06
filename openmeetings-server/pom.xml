@@ -158,6 +158,12 @@
 						<goals>
 							<goal>java</goal>
 						</goals>
+						<configuration>
+							<mainClass>org.apache.openmeetings.backup.BackupExport</mainClass>
+							<arguments>
+								<argument>${project.build.directory}/generated-sources/GeneralConfiguration.xml</argument>
+							</arguments>
+						</configuration>
 					</execution>
 					<execution>
 						<id>generate-configs-xml-build</id>
@@ -165,6 +171,40 @@
 						<goals>
 							<goal>java</goal>
 						</goals>
+						<configuration>
+							<mainClass>org.apache.openmeetings.backup.BackupExport</mainClass>
+							<arguments>
+								<argument>${project.build.directory}/generated-sources/GeneralConfiguration.xml</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-blog-idx-site</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>org.apache.openmeetings.util.site.BlogIndexGenerator</mainClass>
+							<arguments>
+								<argument>${project.basedir}/src/site/markdown/blog</argument>
+								<argument>${project.build.directory}/generated-site/markdown/blog</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-blog-idx-build</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>org.apache.openmeetings.util.site.BlogIndexGenerator</mainClass>
+							<arguments>
+								<argument>${project.basedir}/src/site/markdown/blog</argument>
+								<argument>${project.build.directory}/generated-site/markdown/blog</argument>
+							</arguments>
+						</configuration>
 					</execution>
 				</executions>
 				<configuration>
@@ -172,10 +212,6 @@
 					<includeProjectDependencies>true</includeProjectDependencies>
 					<includePluginDependencies>true</includePluginDependencies>
 					<addOutputToClasspath>true</addOutputToClasspath>
-					<mainClass>org.apache.openmeetings.backup.BackupExport</mainClass>
-					<arguments>
-						<argument>${project.build.directory}/generated-sources/GeneralConfiguration.xml</argument>
-					</arguments>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -390,7 +426,14 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
+			<artifactId>openmeetings-util</artifactId>
+			<version>${project.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-install</artifactId>
+			<version>${project.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
