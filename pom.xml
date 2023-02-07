@@ -42,7 +42,7 @@
 		<autoModuleName>apache.openmeetings.parent</autoModuleName>
 		<jdk.version>17</jdk.version>
 		<!-- plugin versions -->
-		<maven-javadoc-plugin.version>3.4.0</maven-javadoc-plugin.version>
+		<maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M8</maven-surefire-plugin.version>
 		<maven-site-plugin.version>4.0.0-M3</maven-site-plugin.version>
 		<exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
@@ -1176,12 +1176,13 @@
 					<configuration>
 						<doclint>none</doclint>
 						<additionalOptions>-html5</additionalOptions>
-						<source>8</source>
+						<source>${jdk.version}</source>
 						<javadocVersion>${jdk.version}</javadocVersion>
 						<notimestamp>true</notimestamp>
 						<links>
 							<link>https://openmeetings.apache.org/openmeetings-db/apidocs/</link>
 						</links>
+						<skip>true</skip>
 					</configuration>
 				</plugin>
 				<plugin>
