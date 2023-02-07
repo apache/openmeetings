@@ -56,9 +56,26 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+7.0.0
+-----
+[Release 7.0.0](https://www.apache.org/dyn/closer.lua/openmeetings/7.0.0), provides following improvements:
+
+IMPORTANT: Java 17 is required
+
+UI and Security:
+* Microphone on/off doesn't interrupt the streaming
+* Stability fix at Safari
+* Full screen mode for WB
+* Redo tool for WB
+* 2-factor authentication
+* Libraries are updated with most recent versions
+
+Some other fixes and improvements, 28 issues were addressed
+
+
 6.3.0
 -----
-[Release 6.3.0](https://www.apache.org/dyn/closer.lua/openmeetings/6.3.0), provides following improvements:
+[Release 6.3.0](https://archive.apache.org/dist/openmeetings/6.3.0), provides following improvements:
 
 Stability and UI:
 * Multiple WB fixes

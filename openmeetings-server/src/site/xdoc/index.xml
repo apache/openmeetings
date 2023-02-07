@@ -69,14 +69,20 @@
 		</section>
 		<section name="News">
 			<div class="bd-callout bd-callout-danger">
-				<div class="h4">Version 6.3.0 released!</div>
-				<div>Release 6.3.0, provides following improvements:<br/>
+				<div class="h4">Version 7.0.0 released!</div>
+				<div>Release 7.0.0, provides following improvements:<br/>
+					<div class="bd-callout bd-callout-info">
+						<br/>
+						IMPORTANT: Java 17 is required
+					</div>
 
-					Stability and UI:
+					UI and Security:
 					<ul>
-						<li>Multiple WB fixes</li>
-						<li>Confirm popups are unified</li>
-						<li>Multiple fixes for latest Safari</li>
+						<li>Microphone on/off doesn't interrupt the streaming</li>
+						<li>Stability fix at Safari</li>
+						<li>Full screen mode for WB</li>
+						<li>Redo tool for WB</li>
+						<li>2-factor authentication</li>
 						<li>Libraries are updated with most recent versions</li>
 					</ul>
 					<br/>
@@ -85,12 +91,12 @@
 				<br/>
 
 				<span>
-					26 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/6.3.0/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12351702">Detailed list</a>
+					28 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/7.0.0/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12350648">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2022-05-17)</span>
+				<span class="date">(2023-02-11)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>

@@ -5,6 +5,46 @@ Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+Release Notes - Openmeetings - Version 7.0.0
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-2253] - Interruption of a video session when the microphone is turned on / off
+    * [OPENMEETINGS-2471] - Invitation email format
+    * [OPENMEETINGS-2566] - Moderator invitation form
+    * [OPENMEETINGS-2677] - MacOS Safari - Javascript error Unhandled Promise Rejection
+    * [OPENMEETINGS-2688] - Administration->Groups: delete of logo icon does not work
+    * [OPENMEETINGS-2715] - Recordings: "Bin" icon always enabled
+    * [OPENMEETINGS-2737] - Incomplete Address when dialing OM Conference room
+    * [OPENMEETINGS-2738] - Documents are not deleted from white board
+    * [OPENMEETINGS-2739] - auth security issue
+    * [OPENMEETINGS-2740] - Build#141 do not login
+    * [OPENMEETINGS-2741] - Confirmation dialog does not go, build#148
+    * [OPENMEETINGS-2743] - Jetty mode does not work with JDK17 / Source code level
+    * [OPENMEETINGS-2745] - RoomFiles are missing some times
+    * [OPENMEETINGS-2748] - Embedded Jetty fails to initialise openmeetings webapp in JDK17
+    * [OPENMEETINGS-2749] - Hazelcast warning in JDK17
+
+* New Feature
+    * [OPENMEETINGS-2753] - Redo should be added to WB tool
+    * [OPENMEETINGS-2754] - Full screen mode for WB
+    * [OPENMEETINGS-2755] - 2 factor authentication
+
+* Improvement
+    * [OPENMEETINGS-2626] - After self registering an account wrong defaults in salutation and birthday
+    * [OPENMEETINGS-2627] - Administration->OAuth2: Add an example entry for Keycloak
+    * [OPENMEETINGS-2658] - Email sent to user created by admin - no links to application
+    * [OPENMEETINGS-2716] - Dialogs below settings not responsive
+    * [OPENMEETINGS-2721] - UI improvement: bootstrap dropdown
+    * [OPENMEETINGS-2734] - OM should be migrated to java17
+    * [OPENMEETINGS-2742] - Create maven module to isolate KMS integration
+
+* Task
+    * [OPENMEETINGS-2732] - (7.0.0) Libraries should be updated
+    * [OPENMEETINGS-2733] - (7.0.0) Sonar issues need to be addressed
+    * [OPENMEETINGS-2736] - (7.0.0) All translations from PoEditor should be synced
+
+
 Release Notes - Openmeetings - Version 6.3.0
 ================================================================================================================
 
