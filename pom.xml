@@ -26,13 +26,13 @@
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
-	<version>7.0.0-SNAPSHOT</version>
+	<version>7.0.0</version>
 	<packaging>pom</packaging>
 	<name>Openmeetings</name>
 	<description>Parent project for all OpenMeetings Maven modules. Required to hold general settings</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.outputTimestamp>${maven.build.timestamp}</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2023-02-07T04:44:11Z</project.build.outputTimestamp>
 		<!--maven.build.timestamp.format>yyyy/MM/dd HH:mm</maven.build.timestamp.format-->
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
@@ -354,7 +354,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/apache/openmeetings.git</connection>
 		<developerConnection>scm:git:https://github.com/apache/openmeetings.git</developerConnection>
-		<url>https://github.com/apache/openmeetings.git</url>
+		<url>https://github.com/apache/openmeetings/tree/7.0.0</url>
 		<tag>HEAD</tag>
 	</scm>
 	<mailingLists>
