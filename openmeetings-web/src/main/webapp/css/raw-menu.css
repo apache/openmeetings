@@ -58,6 +58,10 @@
 .room-block .menu .details .icon .profile img {
 	width: 28px;
 }
+
+html[dir="rtl"] .navbar .navbar-nav.me-auto {
+	margin-right: unset !important;
+}
 html[dir="rtl"] .navbar .dropdown-menu {
 	left: initial;
 	right: 0;

@@ -78,6 +78,7 @@
 		<maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
 		<frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
+		<plexus-utils.version>3.5.0</plexus-utils.version>
 		<!-- dependency versions -->
 		<junit.version>5.9.2</junit.version>
 		<wicket.version>9.12.0</wicket.version>
@@ -1438,6 +1439,13 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>keytool-maven-plugin</artifactId>
 					<version>${keytool-maven-plugin.version}</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.codehaus.plexus</groupId>
+							<artifactId>plexus-utils</artifactId>
+							<version>${plexus-utils.version}</version>
+						</dependency>
+					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -1535,6 +1543,11 @@
 							<groupId>com.google.javascript</groupId>
 							<artifactId>closure-compiler</artifactId>
 							<version>v20170521</version>
+						</dependency>
+						<dependency>
+							<groupId>org.codehaus.plexus</groupId>
+							<artifactId>plexus-utils</artifactId>
+							<version>${plexus-utils.version}</version>
 						</dependency>
 					</dependencies>
 				</plugin>
