@@ -316,7 +316,6 @@ public class IcalUtils {
 	 * Note: Replace FastDateFormat to java.time, when shifting to Java 8 or higher.
 	 *
 	 * @param str      Date representation in String.
-	 * @param patterns Patterns to parse the date against
 	 * @param inTimeZone Timezone of the Date.
 	 * @return <code>java.util.Date</code> representation of string or
 	 * <code>null</code> if the Date could not be parsed.

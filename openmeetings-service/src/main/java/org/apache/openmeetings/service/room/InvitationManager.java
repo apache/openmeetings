@@ -139,7 +139,7 @@ public class InvitationManager implements IInvitationManager {
 	}
 
 	/**
-	 * @author vasya
+	 * Setting invitation for the appointment, sending emails if needed
 	 *
 	 * @param a - appointment this link is related to
 	 * @param member - attendee being processed

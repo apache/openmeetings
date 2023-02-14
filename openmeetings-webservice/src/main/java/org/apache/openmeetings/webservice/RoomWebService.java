@@ -51,7 +51,6 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
-import org.apache.openmeetings.db.manager.IWhiteboardManager;
 import org.apache.openmeetings.db.mapper.RoomMapper;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.service.room.InvitationManager;
@@ -93,8 +92,6 @@ public class RoomWebService extends BaseWebService {
 	private IUserManager userManager;
 	@Autowired
 	private IClientManager clientManager;
-	@Autowired
-	private IWhiteboardManager wbManager;
 	@Autowired
 	private InvitationDao inviteDao;
 	@Autowired

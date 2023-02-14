@@ -43,20 +43,7 @@ public class RemoteSessionObject {
 	}
 
 	/**
-	 * @param username
-	 *            - username
-	 * @param firstname
-	 *            - first name
-	 * @param lastname
-	 *            - last name
-	 * @param pictureUrl
-	 *            - picture url
-	 * @param email
-	 *            - email
-	 * @param externalId
-	 *            - external user id
-	 * @param externalType
-	 *            - external user type
+	 * @param user - {@link ExternalUserDTO} object
 	 *
 	 *            06.09.2009 17:05:48 sebastianwagner
 	 */
