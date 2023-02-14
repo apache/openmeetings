@@ -27,10 +27,8 @@
 				<i>Tested with IBM DB2 Express-C 9.7.x</i>
 				<ul>
 					<li>
-						Get the IBM Data Server Driver for JDBC and SQLJ from IBM website:
-						<a
-							href="https://www14.software.ibm.com/webapp/iwm/web/preLogin.do?source=swg-idsdjs">https://www14.software.ibm.com/webapp/iwm/web/preLogin.do?source=swg-idsdjs
-						</a>
+						Get the IBM Data Server Driver for JDBC and SQLJ from Maven central:
+						<a href="https://repo1.maven.org/maven2/com/ibm/db2/jcc/">https://repo1.maven.org/maven2/com/ibm/db2/jcc/</a>
 					</li>
 					<li>Copy JDBC driver db2jcc4.jar to
 						webapps/openmeetings/WEB-INF/lib/

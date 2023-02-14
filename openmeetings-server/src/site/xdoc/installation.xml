@@ -162,8 +162,8 @@
 								. You should get FFMPEG in an up to date copy! OpenMeetings is
 								tested with FFMPEG Version 10.3 and latest build from GIT
 								For Windows you can download a Build for example from
-								<a href="http://ffmpeg.zeranoe.com/builds/" target="_blank"
-									rel="nofollow">http://ffmpeg.zeranoe.com/builds/ </a>
+								<a href="https://ffmpeg.org/download.html" target="_blank"
+									rel="nofollow">https://ffmpeg.org/download.html </a>
 								Linux or OSx Users should be able to use one of the various
 								Installation Instructions on the Web. You need to enable
 								libmp3lame and libx264!
@@ -230,7 +230,7 @@
 		</section>
 		<section name="Useful Links">
 			<ul>
-				<li>for VoIP and SIP Integration see also <a href="voip-sip-integration.html">VoIPAndSIP</a></li>
+				<li>for VoIP and SIP Integration see also <a href="AsteriskIntegration.html">VoIP and SIP</a></li>
 				<li><a href="http://meetingslive.sourceforge.net/" rel="nofollow">http://meetingslive.sourceforge.net/</a></li>
 				<li>
 					<a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=27837303"

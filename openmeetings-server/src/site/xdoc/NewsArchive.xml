@@ -1413,7 +1413,7 @@
 			</div>
 			<div class="bd-callout bd-callout-info">
 				<div class="h4">Update: Builds are available at</div>
-				<span><a href="https://builds.apache.org/view/M-R/view/OpenMeetings/" target="_blank" rel="nofollow">builds.apache.org</a></span>
+				<span><a href="https://ci-builds.apache.org/job/OpenMeetings/" target="_blank" rel="nofollow">builds.apache.org</a></span>
 				<span class="date">(2012-08-03)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
