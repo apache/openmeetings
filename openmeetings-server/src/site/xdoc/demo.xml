@@ -30,16 +30,8 @@
 					<th>Description</th>
 				</tr>
 				<tr>
-					<td><a href="https://om.alteametasoft.com/openmeetings" target="_blank" rel="nofollow">https://om.alteametasoft.com/openmeetings</a></td>
-					<td>Latest release version of OpenMeetings</td>
-				</tr>
-				<tr>
 					<td><a href="https://demo-openmeetings.apache.org/openmeetings" target="_blank" rel="nofollow">https://demo-openmeetings.apache.org/openmeetings</a></td>
 					<td>Next major version of OpenMeetings</td>
-				</tr>
-				<tr>
-					<td><a href="https://om.alteametasoft.com:8443/next" target="_blank" rel="nofollow">https://om.alteametasoft.com:8443/next</a></td>
-					<td>Next version of OpenMeetings</td>
 				</tr>
 			</table>
 		</section>
