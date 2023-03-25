@@ -64,7 +64,7 @@
 		<maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
 		<wagon-maven-plugin.version>2.0.2</wagon-maven-plugin.version>
 		<maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
-		<maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
+		<maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
 		<replacer.version>1.5.3</replacer.version>
 		<xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
 		<saxon.version>8.7</saxon.version>
@@ -86,7 +86,7 @@
 		<wicketstuff.version>9.12.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.2</wicket-bootstrap.version>
 		<font-awesome.version>6.3.0</font-awesome.version>
-		<spring.version>5.3.25</spring.version>
+		<spring.version>5.3.26</spring.version>
 		<tomcat.version>9.0.73</tomcat.version>
 		<ical4j.version>4.0.0-beta6</ical4j.version>
 		<cxf.version>3.5.5</cxf.version>
@@ -133,7 +133,7 @@
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM26</apacheds-test-framework.version>
-		<swagger.version>2.2.8</swagger.version>
+		<swagger.version>2.2.9</swagger.version>
 		<bytebuddy.version>1.14.2</bytebuddy.version>
 		<annotation-api.version>1.3.2</annotation-api.version>
 		<jsr305.version>3.0.2</jsr305.version>
