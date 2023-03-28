@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterOauth;
 
@@ -25,7 +26,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -50,15 +50,14 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 		if (!isAllowRegisterOauth()) {
 			return List.of();
 		}
-		TypedQuery<OAuthServer> query = em.createNamedQuery("getEnabledOAuthServers", OAuthServer.class);
-		return query.getResultList();
+		return em.createNamedQuery("getEnabledOAuthServers", OAuthServer.class)
+				.getResultList();
 	}
 
 	@Override
 	public OAuthServer get(Long id) {
-		List<OAuthServer> list = em.createNamedQuery("getOAuthServerById", OAuthServer.class)
-				.setParameter("id", id).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createNamedQuery("getOAuthServerById", OAuthServer.class)
+				.setParameter("id", id).getResultList());
 	}
 
 	@Override
@@ -74,8 +73,8 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 
 	@Override
 	public long count() {
-		TypedQuery<Long> q = em.createNamedQuery("countOAuthServers", Long.class);
-		return q.getSingleResult();
+		return em.createNamedQuery("countOAuthServers", Long.class)
+				.getSingleResult();
 	}
 
 	@Override

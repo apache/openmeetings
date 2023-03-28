@@ -20,11 +20,13 @@ package org.apache.openmeetings.invitiation;
 
 import static org.apache.openmeetings.util.CalendarHelper.getDate;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.apache.openmeetings.AbstractWicketTesterTest;
+import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Invitation;
@@ -38,20 +40,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class TestInvitation extends AbstractWicketTesterTest {
 	@Autowired
+	private InvitationDao inviteDao;
+	@Autowired
 	private InvitationManager invitationManager;
 	@Autowired
 	private RoomDao roomDao;
 
-	@Test
-	void testSendInvitationLink() throws Exception {
+	private Invitation create(Valid valid) {
+		return create(valid, false);
+	}
+
+	private Invitation create(Valid valid, boolean createApp) {
+		LocalDateTime base = LocalDateTime.now().plusDays(1).withHour(12).withMinute(0).withSecond(0);
 		User us = userDao.getByLogin(adminUsername, User.Type.USER, null);
 
-		LocalDateTime from = LocalDateTime.now().plusDays(1).withHour(12).withMinute(0).withSecond(0);
-		User invitee = userDao.getContact("sebawagner@apache.org", "Testname", "Testlastname", us.getId());
-		Invitation i = invitationManager.getInvitation(invitee, roomDao.get(1L),
-				false, "", Valid.ONE_TIME
+		Date from = getDate(base, "GMT");
+		Date to = getDate(base.plusHours(2), "GMT");
+		Appointment app = null;
+		Room r = roomDao.get(1L);
+		if (createApp) {
+			app = getAppointment(us, r, from, to);
+			appointmentDao.update(app, null, false);
+		}
+		return invitationManager.getInvitation(
+				userDao.getContact("sebawagner@apache.org", "Testname", "Testlastname", us.getId())
+				, r
+				, false, "", valid
 				, us, us.getLanguageId(),
-				getDate(from, "GMT"), getDate(from.plusHours(2), "GMT"), null);
+				from, to, app);
+	}
+
+
+	@Test
+	void testSendInvitationLink() throws Exception {
+		Invitation i = create(Valid.ONE_TIME);
 
 		invitationManager.sendInvitationLink(i, MessageType.CREATE, "subject", "message", false, null);
 		assertNotNull(i);
@@ -59,21 +81,18 @@ class TestInvitation extends AbstractWicketTesterTest {
 
 	@Test
 	void testSendCancel() throws Exception {
-		User us = userDao.getByLogin(adminUsername, User.Type.USER, null);
-
-		LocalDateTime from = LocalDateTime.now().plusDays(1).withHour(12).withMinute(0).withSecond(0);
-		Date start = getDate(from, "GMT");
-		Date end = getDate(from.plusHours(2), "GMT");
-		Room r = roomDao.get(1L);
-		User invitee = userDao.getContact("sebawagner@apache.org", "Testname", "Testlastname", us.getId());
-		Appointment app = getAppointment(us, r, start, end);
-		appointmentDao.update(app, null, false);
-		Invitation i = invitationManager.getInvitation(invitee, r,
-				false, "", Valid.ONE_TIME
-				, us, us.getLanguageId(),
-				start, end, app);
+		Invitation i = create(Valid.ONE_TIME, true);
 
 		invitationManager.sendInvitationLink(i, MessageType.CANCEL, "subject", "message", true, "https://localhost:5443/openmeetings");
 		assertNotNull(i);
+	}
+
+	@Test
+	void testGetByHash() {
+		final Invitation i1 = create(Valid.ENDLESS);
+		final String hash = i1.getHash();
+
+		assertNull(inviteDao.getByHash(hash.substring(0, 2) + '%', false));
+		assertNotNull(inviteDao.getByHash(hash, false));
 	}
 }

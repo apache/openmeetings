@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.calendar;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
@@ -75,15 +76,13 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 	// -----------------------------------------------------------------------------------------------
 	@Override
 	public Appointment get(Long id) {
-		List<Appointment> list = em.createNamedQuery("getAppointmentById", Appointment.class)
-				.setParameter("id", id).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createNamedQuery("getAppointmentById", Appointment.class)
+				.setParameter("id", id).getResultList());
 	}
 
 	public Appointment getAny(Long id) {
-		List<Appointment> list = em.createNamedQuery("getAppointmentByIdAny", Appointment.class)
-				.setParameter("id", id).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createNamedQuery("getAppointmentByIdAny", Appointment.class)
+				.setParameter("id", id).getResultList());
 	}
 
 	public List<Appointment> get() {

@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.db.util.DaoHelper.getRoot;
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 
 import java.util.Collection;
@@ -49,9 +50,8 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 
 	@Override
 	public Group get(Long id) {
-		List<Group> list = em.createNamedQuery("getGroupById", Group.class)
-				.setParameter("id", id).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createNamedQuery("getGroupById", Group.class)
+				.setParameter("id", id).getResultList());
 	}
 
 	public Group get(String name) {

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 
@@ -66,17 +67,16 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 
 	@Override
 	public PrivateMessageFolder get(Long id) {
-		final String hql = "select c from PrivateMessageFolder c where c.id = :id ";
-
-		List<PrivateMessageFolder> list = em.createQuery(hql, PrivateMessageFolder.class)
-				.setParameter("id", id).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createQuery("select c from PrivateMessageFolder c where c.id = :id "
+					, PrivateMessageFolder.class)
+				.setParameter("id", id).getResultList());
 	}
 
 	@Override
 	public List<PrivateMessageFolder> get(long start, long count) {
 		return setLimits(
-				em.createQuery("SELECT c FROM PrivateMessageFolder c ORDER BY c.id", PrivateMessageFolder.class)
+				em.createQuery("SELECT c FROM PrivateMessageFolder c ORDER BY c.id"
+					, PrivateMessageFolder.class)
 				, start, count)
 				.getResultList();
 	}

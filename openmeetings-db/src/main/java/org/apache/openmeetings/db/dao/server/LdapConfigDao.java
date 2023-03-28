@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 
 import java.util.ArrayList;
@@ -60,9 +61,8 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 
 	@Override
 	public LdapConfig get(Long id) {
-		List<LdapConfig> list = em.createNamedQuery("getLdapConfigById", LdapConfig.class)
-				.setParameter("id", id).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createNamedQuery("getLdapConfigById", LdapConfig.class)
+				.setParameter("id", id).getResultList());
 	}
 
 	public List<LdapConfig> getActive() {

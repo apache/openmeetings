@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
 import java.util.Date;
@@ -85,9 +86,8 @@ public class PollDao {
 
 	public RoomPoll getByRoom(Long roomId) {
 		log.debug(" :: getPoll :: {}", roomId);
-		List<RoomPoll> list = em.createNamedQuery("getPoll", RoomPoll.class)
-				.setParameter(PARAM_ROOMID, roomId).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createNamedQuery("getPoll", RoomPoll.class)
+				.setParameter(PARAM_ROOMID, roomId).getResultList());
 	}
 
 	public List<RoomPoll> get() {

@@ -19,9 +19,9 @@
 package org.apache.openmeetings.db.dao.server;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -74,20 +74,16 @@ public class SOAPLoginDao {
 		}
 		try {
 			//MSSql find nothing in case SID is passed as-is without wildcarting '%hash%'
-			List<SOAPLogin> sList = em.createNamedQuery("getSoapLoginByHash", SOAPLogin.class)
-					.setParameter("hash", String.format("%%%s%%", hash))
-					.getResultList();
+			SOAPLogin sl = only(em.createNamedQuery("getSoapLoginByHash", SOAPLogin.class)
+					.setParameter("hash", '%' + hash + '%')
+					.getResultList());
 
-			if (sList.size() == 1) {
-				SOAPLogin sl = sList.get(0);
+			if (sl != null) {
 				if (hash.equals(sl.getHash())) {
 					return sl;
 				} else {
 					log.error("[get]: Wrong SOAPLogin was found by hash! {}", hash);
 				}
-			}
-			if (sList.size() > 1) {
-				log.error("[get]: there are more then one SOAPLogin with identical hash! {}", hash);
 			}
 		} catch (Exception ex2) {
 			log.error("[get]: ", ex2);

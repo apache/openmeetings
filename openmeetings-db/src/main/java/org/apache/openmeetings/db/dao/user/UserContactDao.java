@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
@@ -78,12 +79,10 @@ public class UserContactDao {
 	}
 
 	public UserContact get(Long userId, Long ownerId) {
-		List<UserContact> ll = em.createNamedQuery("getContactByUserOwner", UserContact.class)
+		return only(em.createNamedQuery("getContactByUserOwner", UserContact.class)
 				.setParameter(PARAM_USER_ID, userId)
 				.setParameter(PARAM_OWNERID, ownerId)
-				.getResultList();
-		log.info("number of contacts:: {}", (ll == null ? null : ll.size()));
-		return ll != null && ll.size() == 1 ? ll.get(0) : null;
+				.getResultList());
 	}
 
 	public boolean isContact(Long userId, Long ownerId) {
@@ -118,9 +117,8 @@ public class UserContactDao {
 	}
 
 	public UserContact get(Long id) {
-		List<UserContact> list = em.createNamedQuery("getUserContactsById", UserContact.class)
-				.setParameter("id", id).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createNamedQuery("getUserContactsById", UserContact.class)
+				.setParameter("id", id).getResultList());
 	}
 
 	public List<UserContact> get() {

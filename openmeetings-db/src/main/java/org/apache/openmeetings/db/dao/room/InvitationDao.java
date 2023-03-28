@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.room;
 
 import static org.apache.openmeetings.db.util.DaoHelper.getRoot;
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.util.CalendarHelper.getZoneId;
 
 import java.time.LocalDateTime;
@@ -61,9 +62,8 @@ public class InvitationDao implements IDataProviderDao<Invitation> {
 
 	@Override
 	public Invitation get(Long invId) {
-		List<Invitation> list = em.createNamedQuery("getInvitationbyId", Invitation.class)
-				.setParameter("id", invId).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createNamedQuery("getInvitationbyId", Invitation.class)
+				.setParameter("id", invId).getResultList());
 	}
 
 	@Override
@@ -159,10 +159,14 @@ public class InvitationDao implements IDataProviderDao<Invitation> {
 		}
 	}
 
+	private Invitation get(String hash) {
+		Invitation i = only(em.createNamedQuery("getInvitationByHashCode", Invitation.class)
+				.setParameter("hashCode", hash).getResultList());
+		return i != null && i.getHash().equals(hash) ? i : null;
+	}
+
 	public Invitation getByHash(String hash, boolean hidePass) {
-		List<Invitation> list = em.createNamedQuery("getInvitationByHashCode", Invitation.class)
-				.setParameter("hashCode", hash).getResultList();
-		Invitation i = list != null && list.size() == 1 ? list.get(0) : null;
+		Invitation i = get(hash);
 		if (i != null) {
 			switch (i.getValid()) {
 				case ONE_TIME:

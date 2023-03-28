@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.calendar;
 
+import static org.apache.openmeetings.db.util.DaoHelper.only;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,9 +41,8 @@ public class MeetingMemberDao {
 	private EntityManager em;
 
 	public MeetingMember get(Long id) {
-		List<MeetingMember> list = em.createNamedQuery("getMeetingMemberById", MeetingMember.class)
-				.setParameter("id", id).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createNamedQuery("getMeetingMemberById", MeetingMember.class)
+				.setParameter("id", id).getResultList());
 	}
 
 	public List<MeetingMember> get() {

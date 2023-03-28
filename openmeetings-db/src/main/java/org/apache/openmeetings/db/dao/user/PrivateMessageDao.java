@@ -21,6 +21,7 @@ package org.apache.openmeetings.db.dao.user;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.db.util.DaoHelper.getStringParam;
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 
 import java.util.Collection;
@@ -82,9 +83,8 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 
 	@Override
 	public PrivateMessage get(Long id) {
-		List<PrivateMessage> list = em.createNamedQuery("getPrivateMessageById", PrivateMessage.class)
-				.setParameter("id", id).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createNamedQuery("getPrivateMessageById", PrivateMessage.class)
+				.setParameter("id", id).getResultList());
 	}
 
 	@Override

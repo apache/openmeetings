@@ -42,8 +42,11 @@ import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.util.string.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DaoHelper {
+	private static final Logger log = LoggerFactory.getLogger(DaoHelper.class);
 	public static final UnsupportedOperationException UNSUPPORTED = new UnsupportedOperationException("Should not be used");
 
 	private DaoHelper() {}
@@ -202,6 +205,13 @@ public class DaoHelper {
 	}
 
 	public static <T> T single(List<T> l) {
+		return l.isEmpty() ? null : l.get(0);
+	}
+
+	public static <T> T only(List<T> l) {
+		if (l.size() > 1) {
+			log.error("More than one ({}) record found", l.size());
+		}
 		return l.isEmpty() ? null : l.get(0);
 	}
 

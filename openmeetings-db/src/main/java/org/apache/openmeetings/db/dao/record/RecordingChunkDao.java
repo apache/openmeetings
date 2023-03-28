@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.record;
 
+import static org.apache.openmeetings.db.util.DaoHelper.only;
+
 import java.util.Date;
 import java.util.List;
 
@@ -44,9 +46,8 @@ public class RecordingChunkDao {
 	private RecordingDao recordingDao;
 
 	public RecordingChunk get(Long id) {
-		List<RecordingChunk> list = em.createNamedQuery("getChunkById", RecordingChunk.class)
-				.setParameter("id", id).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createNamedQuery("getChunkById", RecordingChunk.class)
+				.setParameter("id", id).getResultList());
 	}
 
 	public List<RecordingChunk> getByRecording(Long recordingId) {

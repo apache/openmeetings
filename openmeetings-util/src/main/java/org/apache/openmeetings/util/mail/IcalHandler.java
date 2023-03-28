@@ -169,7 +169,7 @@ public class IcalHandler {
 			params.add(chair ? PartStat.ACCEPTED : PartStat.NEEDS_ACTION);
 			params.add(Rsvp.TRUE);
 		}
-		meetingProperties.add(new Attendee(new ParameterList(params), URI.create(MAILTO + email)));
+		meetingProperties.add(new Attendee(new ParameterList(params), getMailto(email)));
 		return this;
 	}
 

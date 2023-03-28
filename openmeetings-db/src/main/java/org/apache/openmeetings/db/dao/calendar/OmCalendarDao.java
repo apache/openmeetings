@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.calendar;
 
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
@@ -53,9 +54,8 @@ public class OmCalendarDao implements IDataProviderDao<OmCalendar> {
 	 */
 	@Override
 	public OmCalendar get(Long calId) {
-		List<OmCalendar> list = em.createNamedQuery("getCalendarbyId", OmCalendar.class)
-				.setParameter("calId", calId).getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+		return only(em.createNamedQuery("getCalendarbyId", OmCalendar.class)
+				.setParameter("calId", calId).getResultList());
 	}
 
 	/**

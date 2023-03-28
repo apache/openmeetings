@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.file;
 
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 
 import java.io.File;
@@ -103,10 +104,9 @@ public class FileItemDao extends BaseFileItemDao {
 	public FileItem get(String externalId, String externalType) {
 		log.debug("get started");
 
-		List<FileItem> list = em.createNamedQuery("getFileExternal", FileItem.class)
+		return only(em.createNamedQuery("getFileExternal", FileItem.class)
 				.setParameter("externalFileId", externalId).setParameter("externalType", externalType)
-				.getResultList();
-		return list.size() == 1 ? list.get(0) : null;
+				.getResultList());
 	}
 
 	public List<FileItem> get() {
