@@ -45,10 +45,21 @@
 				Please NOTE: only security issues should be reported to this list.
 			</p>
 		</section>
+		<section name="CVE-2023-28326: Apache OpenMeetings: allows user impersonation">
+			<p>Severity: Critical</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: from 2.0.0 before 7.0.0</p>
+			<p>Description: Attacker can elevate their privileges in any room<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-28326">CVE-2023-28326</a>
+			</p>
+			<p>The issue was fixed in 7.0.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 7.0.0</p>
+			<p>Credit: This issue was identified by Dennis Zimmt</p>
+		</section>
 		<section name="CVE-2021-27576 - Apache OpenMeetings: bandwidth can be overloaded with public web service">
 			<p>Severity: Low</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: 4.0.0 - 5.1.0</p>
+			<p>Versions Affected: from 4.0.0 before 6.0.0</p>
 			<p>Description: NetTest web service can be used to overload the bandwidth of the server<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-27576">CVE-2021-27576</a>
 			</p>
@@ -59,7 +70,7 @@
 		<section name="CVE-2020-13951 - Apache Openmeetings: DoS via public web service">
 			<p>Severity: High</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: 4.0.0 - 5.0.0</p>
+			<p>Versions Affected: from 4.0.0 before 5.0.1</p>
 			<p>Description: NetTest web service can be used to perform Denial of Service attack<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-13951">CVE-2020-13951</a>
 			</p>
@@ -92,7 +103,7 @@
 		<section name="CVE-2018-1286 - Apache OpenMeetings - Insufficient Access Controls">
 			<p>Severity: Medium</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 3.0.0 - 4.0.1</p>
+			<p>Versions Affected: from 3.0.0 before 4.0.2</p>
 			<p>Description: CRUD operations on privileged users are not password protected allowing an authenticated attacker
 				to deny service for privileged users.<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1286">CVE-2018-1286</a>
@@ -104,7 +115,7 @@
 		<section name="CVE-2017-7663 - Apache OpenMeetings - XSS in chat">
 			<p>Severity: High</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 3.2.0</p>
+			<p>Versions Affected: 3.2.0</p>
 			<p>Description: Both global and Room chat are vulnerable to XSS attack<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7663">CVE-2017-7663</a>
 			</p>
@@ -115,7 +126,7 @@
 		<section name="CVE-2017-7664 - Apache OpenMeetings - Missing XML Validation">
 			<p>Severity: High</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 3.1.0</p>
+			<p>Versions Affected: from 3.1.0 before 3.3.0</p>
 			<p>Description: Uploaded XML documents were not correctly validated<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7664">CVE-2017-7664</a>
 			</p>
@@ -126,7 +137,7 @@
 		<section name="CVE-2017-7666 - Apache OpenMeetings Missing Secure Headers">
 			<p>Severity: High</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Versions Affected: from 1.0.0 before 3.3.0</p>
 			<p>Description: Apache Openmeetings is vulnerable to Cross-Site Request Forgery (CSRF)
 					attacks, XSS attacks, click-jacking, and MIME based attacks<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7666">CVE-2017-7666</a>
@@ -138,7 +149,7 @@
 		<section name="CVE-2017-7673 - Apache OpenMeetings  Insufficient check in dialogs with passwords">
 			<p>Severity: High</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Versions Affected: from 1.0.0 before 3.3.0</p>
 			<p>Description: Apache OpenMeetings uses not very strong cryptographic storage,
 					captcha is not used in registration and forget password dialogs and auth forms
 					missing brute force protection<br/>
@@ -151,7 +162,7 @@
 		<section name="CVE-2017-7680 - Apache OpenMeetings - Insecure crossdomain.xml policy">
 			<p>Severity: Low</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Versions Affected: from 1.0.0 before 3.3.0</p>
 			<p>Description: Apache OpenMeetings has an overly permissive
 					crossdomain.xml file. This allows for flash content to be loaded
 					from untrusted domains.<br/>
@@ -164,7 +175,7 @@
 		<section name="CVE-2017-7681 - Apache OpenMeetings - SQL injection in web services">
 			<p>Severity: High</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Versions Affected: from 1.0.0 before 3.3.0</p>
 			<p>Description: Apache OpenMeetings is vulnerable to SQL injection
 					This allows authenticated users to modify the structure of the existing
 					query and leak the structure of other queries being made by the
@@ -178,7 +189,7 @@
 		<section name="CVE-2017-7682 - Apache OpenMeetings - Business Logic Bypass">
 			<p>Severity: Medium</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 3.2.0</p>
+			<p>Versions Affected: 3.2.0</p>
 			<p>Description: Apache OpenMeetings is vulnerable to parameter manipulation
 					attacks, as a result attacker has access to restricted areas.<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7682">CVE-2017-7682</a>
@@ -190,7 +201,7 @@
 		<section name="CVE-2017-7683 - Apache OpenMeetings - Information Disclosure">
 			<p>Severity: Lowest</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Versions Affected: from 1.0.0 before 3.3.0</p>
 			<p>Description: Apache OpenMeetings displays Tomcat version and
 					detailed error stack trace which is not secure.<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7683">CVE-2017-7683</a>
@@ -202,7 +213,7 @@
 		<section name="CVE-2017-7684 - Apache OpenMeetings - Insecure File Upload">
 			<p>Severity: Low</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Versions Affected: from 1.0.0 before 3.3.0</p>
 			<p>Description: Apache OpenMeetings doesn't check contents of files
 					being uploaded. An attacker can cause a denial of service by
 					uploading multiple large files to the server<br/>
@@ -215,7 +226,7 @@
 		<section name="CVE-2017-7685 - Apache OpenMeetings - Insecure HTTP Methods">
 			<p>Severity: Lowest</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Versions Affected: from 1.0.0 before 3.3.0</p>
 			<p>Description: Apache OpenMeetingsrespond to the following insecure HTTP
 					Methods: PUT, DELETE, HEAD, and PATCH.<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7685">CVE-2017-7685</a>
@@ -227,7 +238,7 @@
 		<section name="CVE-2017-7688 - Apache OpenMeetings - Insecure Password Update">
 			<p>Severity: Low</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Versions Affected: from 1.0.0 before 3.3.0</p>
 			<p>Description: Apache OpenMeetings updates user password in insecure manner.<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7688">CVE-2017-7688</a>
 			</p>
@@ -238,7 +249,7 @@
 		<section name="CVE-2017-5878 - RED5/AMF Unmarshalling RCE">
 			<p>Severity: Critical</p>
 			<p>Vendor: Red5</p>
-			<p>Versions Affected: Apache OpenMeetings 3.1.3 and earlier</p>
+			<p>Versions Affected: before 3.1.4</p>
 			<p>Description: The AMF unmarshallers in Red5 Media Server before 1.0.8 do not restrict the
 				classes for which it performs deserialization, which allows remote attackers to execute
 				arbitrary code via crafted serialized Java data.<br/>
@@ -251,7 +262,7 @@
 		<section name="CVE-2016-8736 - Apache Openmeetings RMI Registry Java Deserialization RCE">
 			<p>Severity: Moderate</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 3.1.0</p>
+			<p>Versions Affected: from 3.1.0 before 3.1.2</p>
 			<p>Description: Apache Openmeetings is vulnerable to Remote Code Execution via RMI deserialization attack<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-8736">CVE-2016-8736</a>
 			</p>
@@ -262,7 +273,7 @@
 		<section name="CVE-2016-3089 - Apache OpenMeetings XSS in SWF panel">
 			<p>Severity: Moderate</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 3.1.0</p>
+			<p>Versions Affected: from 3.1.0 before 3.1.2</p>
 			<p>Description: The value of the URL's "swf" query parameter is interpolated into the JavaScript tag without
 				being escaped, leading to the reflected XSS.<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-3089">CVE-2016-3089</a>
@@ -273,7 +284,7 @@
 		<section name="CVE-2016-0783 - Predictable password reset token">
 			<p>Severity: Critical</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 1.9.x - 3.1.0</p>
+			<p>Versions Affected: from 1.9.x before 3.1.1</p>
 			<p>Description: The hash generated by the external password reset function is generated by concatenating the user
 				name and the current system time, and then hashing it using MD5. This is highly predictable and
 				can be cracked in seconds by an attacker with knowledge of the user name of an OpenMeetings
@@ -286,7 +297,7 @@
 		<section name="CVE-2016-0784 - ZIP file path traversal">
 			<p>Severity: Moderate</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 1.9.x - 3.1.0</p>
+			<p>Versions Affected: from 1.9.x before 3.1.1</p>
 			<p>Description: The Import/Export System Backups functionality in the OpenMeetings Administration menu
 				(http://domain:5080/openmeetings/#admin/backup) is vulnerable to path traversal via specially
 				crafted file names within ZIP archives. By uploading an archive containing a file named
@@ -302,7 +313,7 @@
 		<section name="CVE-2016-2163 - Stored Cross Site Scripting in Event description">
 			<p>Severity: Moderate</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 1.9.x - 3.0.7</p>
+			<p>Versions Affected: from 1.9.x before 3.1.1</p>
 			<p>Description: When creating an event, it is possible to create clickable URL links in the event description. These
 				links will be present inside the event details once a participant enters the room via the event. It is
 				possible to create a link like "javascript:alert('xss')", which will execute once the link is clicked. As
@@ -316,7 +327,7 @@
 		<section name="CVE-2016-2164 - Arbitrary file read via SOAP API">
 			<p>Severity: Critical</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 1.9.x - 3.0.7</p>
+			<p>Versions Affected: from 1.9.x before 3.1.1</p>
 			<p>Description: When attempting to upload a file via the API using the importFileByInternalUserId or importFile
 				methods in the FileService, it is possible to read arbitrary files from the system. This is due to that
 				Java's URL class is used without checking what protocol handler is specified in the API call.<br/>
