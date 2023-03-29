@@ -133,6 +133,11 @@
     SET https://github.com/apache/openmeetings/tree/5.0.1
 						]]></source>
 					</li>
+					<li>Add timestamp to parent pom (properties section)
+						<source>
+							<project.build.outputTimestamp>YEAR-MONTH-DAY_OF_MONTHT00:00:00Z</project.build.outputTimestamp>
+						</source>
+					</li>
 					<li>
 						Create a TAG and commit it to the Git<br/>
 						<source>

@@ -68,11 +68,11 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	static final String HASH = "secure";
 	static final String LANG = "language";
 	private final WebMarkupContainer recContainer = new WebMarkupContainer(PANEL_RECORDING);
-	private final VideoInfo vi = new VideoInfo("info");
-	private final VideoPlayer vp = new VideoPlayer("player");
+	private final VideoInfo videoInfo = new VideoInfo("info");
+	private final VideoPlayer videoPlayer = new VideoPlayer("player");
 	private boolean error = true;
-	private MainPanel mp = null;
-	private RoomPanel rp = null;
+	private MainPanel mainPanel = null;
+	private RoomPanel roomPanel = null;
 	private final PageParameters p;
 
 	@SpringBean
@@ -91,9 +91,9 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		Room room = roomDao.get(roomId);
 		if (room != null && !room.isDeleted()) {
 			error = false;
-			rp = new RoomPanel(CHILD_ID, room);
-			mp = new MainPanel(PANEL_MAIN, rp);
-			replace(mp);
+			roomPanel = new RoomPanel(CHILD_ID, room);
+			mainPanel = new MainPanel(PANEL_MAIN, roomPanel);
+			replace(mainPanel);
 		}
 	}
 
@@ -128,11 +128,11 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 			} else {
 				Recording rec = i.getRecording();
 				if (rec != null) {
-					vi.setVisible(!i.isPasswordProtected());
-					vp.setVisible(!i.isPasswordProtected());
+					videoInfo.setVisible(!i.isPasswordProtected());
+					videoPlayer.setVisible(!i.isPasswordProtected());
 					if (!i.isPasswordProtected()) {
-						vi.update(null, rec);
-						vp.update(null, rec);
+						videoInfo.update(null, rec);
+						videoPlayer.update(null, rec);
 					}
 					recContainer.setVisible(true);
 					error = false;
@@ -140,9 +140,9 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				Room r = i.getRoom();
 				if (r != null && !r.isDeleted()) {
 					createRoom(r.getId());
-					if (i.isPasswordProtected() && rp != null) {
-						mp.getChat().setVisible(false);
-						rp.setOutputMarkupPlaceholderTag(true).setVisible(false);
+					if (i.isPasswordProtected() && roomPanel != null) {
+						mainPanel.getChat().setVisible(false);
+						roomPanel.setOutputMarkupPlaceholderTag(true).setVisible(false);
 					}
 				}
 			}
@@ -153,8 +153,8 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 			} else if (recId != null) {
 				recContainer.setVisible(true);
 				Recording rec = recDao.get(recId);
-				vi.update(null, rec);
-				vp.update(null, rec);
+				videoInfo.update(null, rec);
+				videoPlayer.update(null, rec);
 				error = false;
 			} else {
 				createRoom(roomId);
@@ -197,8 +197,8 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				error = false;
 			}
 		}
-		add(recContainer.add(vi.setOutputMarkupPlaceholderTag(true),
-				vp.setOutputMarkupPlaceholderTag(true)), new InvitationPasswordDialog("i-pass", this));
+		add(recContainer.add(videoInfo.setOutputMarkupPlaceholderTag(true),
+				videoPlayer.setOutputMarkupPlaceholderTag(true)), new InvitationPasswordDialog("i-pass", this));
 		remove(urlParametersReceivingBehavior);
 		add(new IconTextModal("access-denied")
 				.withLabel(errorMsg)
@@ -217,11 +217,11 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	@Override
 	public void update(AjaxRequestTarget target) {
 		Invitation i = WebSession.get().getInvitation();
-		if (i.getRoom() != null && rp != null) {
-			rp.show(target);
+		if (i.getRoom() != null && roomPanel != null) {
+			roomPanel.show(target);
 		} else if (i.getRecording() != null) {
-			target.add(vi.update(target, i.getRecording()).setVisible(true)
-					, vp.update(target, i.getRecording()).setVisible(true));
+			target.add(videoInfo.update(target, i.getRecording()).setVisible(true)
+					, videoPlayer.update(target, i.getRecording()).setVisible(true));
 		}
 	}
 }

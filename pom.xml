@@ -1190,7 +1190,6 @@
 					<configuration>
 						<source>${jdk.version}</source>
 						<target>${jdk.version}</target>
-						<optimize>true</optimize>
 						<debug>true</debug>
 						<encoding>UTF-8</encoding>
 					</configuration>
@@ -1247,7 +1246,6 @@
 							</module>
 						</checkstyleRules>
 						<includeTestSourceDirectory>true</includeTestSourceDirectory>
-						<encoding>UTF-8</encoding>
 						<consoleOutput>true</consoleOutput>
 						<failsOnError>true</failsOnError>
 						<excludes>**/module-info.java</excludes>

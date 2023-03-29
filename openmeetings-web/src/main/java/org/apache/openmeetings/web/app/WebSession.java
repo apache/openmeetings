@@ -341,7 +341,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private void setUser(User u, Set<Right> rights) {
 		changeSessionId(); // required to prevent session fixation
 		userId = u.getId();
-		if (rights == null || rights.isEmpty()) {
+		if (rights == null) {
 			Set<Right> r = new HashSet<>(u.getRights());
 			if (u.getGroupUsers() != null && !AuthLevelUtil.hasAdminLevel(r)) {
 				for (GroupUser gu : u.getGroupUsers()) {
