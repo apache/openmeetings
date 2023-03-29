@@ -320,7 +320,7 @@ module.exports = {
 	, cleanPeer: _cleanPeer
 	, addIceServers: function(opts, m) {
 		if (m && m.iceServers && m.iceServers.length > 0) {
-			opts.configuration = {iceServers: m.iceServers};
+			opts.iceServers = m.iceServers;
 		}
 		return opts;
 	}
