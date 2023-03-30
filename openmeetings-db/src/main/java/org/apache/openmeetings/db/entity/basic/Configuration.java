@@ -70,6 +70,7 @@ public class Configuration extends HistoricalEntity {
 		, NUMBER
 		, BOOL
 		, HOTKEY
+		, PATH
 	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -314,6 +314,11 @@ public class BackupImport {
 			, entry(CONFIG_MIC_NOISE, Configuration.Type.BOOL)
 			, entry(CONFIG_EXT_PROCESS_TTL, Configuration.Type.NUMBER)
 			, entry(CONFIG_RECORDING_ENABLED, Configuration.Type.BOOL)
+			// ConfigForm.PATHS should also be updated
+			, entry(CONFIG_PATH_FFMPEG, Configuration.Type.PATH)
+			, entry(CONFIG_PATH_IMAGEMAGIC, Configuration.Type.PATH)
+			, entry(CONFIG_PATH_OFFICE, Configuration.Type.PATH)
+			, entry(CONFIG_PATH_SOX, Configuration.Type.PATH)
 			);
 	private static final Pattern UUID_PATTERN = Pattern.compile("^[\\da-f]{8}(?:-[\\da-f]{4}){3}-[\\da-f]{12}$");
 
