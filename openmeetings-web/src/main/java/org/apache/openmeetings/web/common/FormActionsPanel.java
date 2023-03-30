@@ -43,7 +43,7 @@ public abstract class FormActionsPanel<T> extends Panel {
 
 	@Override
 	protected void onInitialize() {
-		add(feedback.setOutputMarkupId(true));
+		add(feedback.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 
 		// add a save button that can be used to submit the form via ajax
 		add(saveBtn = new AjaxButton("btn-save", form) {

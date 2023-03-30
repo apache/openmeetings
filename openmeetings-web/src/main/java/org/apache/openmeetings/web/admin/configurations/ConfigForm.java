@@ -18,10 +18,17 @@
  */
 package org.apache.openmeetings.web.admin.configurations;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFFICE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 import static org.apache.wicket.validation.validator.StringValidator.maximumLength;
 
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
@@ -59,6 +66,7 @@ import org.apache.wicket.validation.ValidationError;
  */
 public class ConfigForm extends AdminBaseForm<Configuration> {
 	private static final long serialVersionUID = 1L;
+	private static final Set<String> PATHS = Set.of(CONFIG_PATH_FFMPEG, CONFIG_PATH_IMAGEMAGIC, CONFIG_PATH_OFFICE, CONFIG_PATH_SOX);
 	private final WebMarkupContainer listContainer;
 	private final WebMarkupContainer stringBox = new WebMarkupContainer("string-box");
 	private final WebMarkupContainer numberBox = new WebMarkupContainer("number-box");
@@ -90,7 +98,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 
 	private void update(AjaxRequestTarget target) {
 		Configuration c = getModelObject();
-		stringBox.setVisible(Type.STRING == c.getType());
+		stringBox.setVisible(Type.PATH == c.getType() || Type.STRING == c.getType());
 		numberBox.setVisible(Type.NUMBER == c.getType());
 		booleanBox.setVisible(Type.BOOL == c.getType());
 		hotkeyBox.setVisible(Type.HOTKEY == c.getType());
@@ -151,6 +159,21 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 			}
 		}).add(maximumLength(255)));
 		valueS.add(maximumLength(255));
+		valueS.add(new IValidator<String>(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void validate(IValidatable<String> validatable) {
+				Configuration c = getModelFixType();
+				if (Type.PATH == c.getType()) {
+					try {
+						Path.of(validatable.getValue());
+					} catch (InvalidPathException e) {
+						validatable.error(new ValidationError(e.getMessage()));
+					}
+				}
+			}
+		});
 		stringBox.add(valueS.setLabel(new ResourceModel("271"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		numberBox.add(valueN.setLabel(new ResourceModel("271"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		booleanBox.add(valueB.setLabel(new ResourceModel("271"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
@@ -159,13 +182,21 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		setNewRecordVisible(true);
 	}
 
+	private Configuration getModelFixType() {
+		Configuration c = ConfigForm.this.getModelObject();
+		if (c.getKey() != null && PATHS.contains(c.getKey())) {
+			c.setType(Type.PATH);
+		}
+		return c;
+	}
+
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		Configuration c = cfgDao.forceGet(getModelObject().getKey());
 		if (c != null && c.isDeleted() && !c.getId().equals(getModelObject().getId())) {
 			getModelObject().setId(c.getId());
 		}
-		setModelObject(cfgDao.update(getModelObject(), WebSession.getUserId()));
+		setModelObject(cfgDao.update(getModelFixType(), WebSession.getUserId()));
 		setNewRecordVisible(false);
 		target.add(listContainer);
 		refresh(target);
