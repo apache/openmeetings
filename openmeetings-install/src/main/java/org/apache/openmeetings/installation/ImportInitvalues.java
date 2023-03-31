@@ -251,12 +251,12 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_DOCUMENT_QUALITY, String.valueOf(cfg.getDocQuality()), Configuration.Type.NUMBER,
 				"compression quality for conversion of PDF to images (should be an integer between 1 and 100, with a default value of 90)", VER_2_0);
 
-		addCfg(list, CONFIG_PATH_IMAGEMAGIC, cfg.getImageMagicPath(), Configuration.Type.STRING, "Path to ImageMagick tools", VER_2_0);
+		addCfg(list, CONFIG_PATH_IMAGEMAGIC, cfg.getImageMagicPath(), Configuration.Type.PATH, "Path to ImageMagick tools", VER_2_0);
 
-		addCfg(list, CONFIG_PATH_SOX, cfg.getSoxPath(), Configuration.Type.STRING, "Path To SoX-Tools", VER_2_0);
+		addCfg(list, CONFIG_PATH_SOX, cfg.getSoxPath(), Configuration.Type.PATH, "Path To SoX-Tools", VER_2_0);
 
-		addCfg(list, CONFIG_PATH_FFMPEG, cfg.getFfmpegPath(), Configuration.Type.STRING, "Path To FFMPEG", VER_2_0);
-		addCfg(list, CONFIG_PATH_OFFICE, cfg.getOfficePath(), Configuration.Type.STRING,
+		addCfg(list, CONFIG_PATH_FFMPEG, cfg.getFfmpegPath(), Configuration.Type.PATH, "Path To FFMPEG", VER_2_0);
+		addCfg(list, CONFIG_PATH_OFFICE, cfg.getOfficePath(), Configuration.Type.PATH,
 				"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically", VER_2_0);
 
 		addCfg(list, CONFIG_DASHBOARD_RSS_FEED1, cfg.getUrlFeed(), Configuration.Type.STRING, "Feed URL 1", VER_1_9);
