@@ -190,7 +190,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 
 	private void internalStartBroadcast(final StreamDesc sd, final String sdpOffer) {
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> log.warn("Media stream terminated {}", sd));
-		flowoutSubscription = outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
+		flowoutSubscription = outgoingMedia.addMediaFlowOutStateChangedListener(evt -> {
 			log.info("Media Flow OUT STATE :: {}, mediaType {}, source {}, sid {}, uid {}"
 					, evt.getState(), evt.getMediaType(), evt.getSource(), sid, uid);
 			if (MediaFlowState.NOT_FLOWING == evt.getState()
@@ -208,7 +208,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 				dropFlowoutFuture();
 			}
 		});
-		outgoingMedia.addMediaFlowInStateChangeListener(evt -> log.warn("Media Flow IN :: {}, {}, {}, sid {}, uid {}"
+		outgoingMedia.addMediaFlowInStateChangedListener(evt -> log.warn("Media Flow IN :: {}, {}, {}, sid {}, uid {}"
 				, evt.getState(), evt.getMediaType(), evt.getSource(), sid, uid));
 		if (!sipClient) {
 			addListener(sd.getSid(), sd.getUid(), sdpOffer);
@@ -232,7 +232,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 
 	public void broadcastRestarted() {
 		if (outgoingMedia != null && flowoutSubscription != null) {
-			outgoingMedia.removeMediaFlowOutStateChangeListener(flowoutSubscription);
+			outgoingMedia.removeMediaFlowOutStateChangedListener(flowoutSubscription);
 		}
 		dropFlowoutFuture();
 	}
