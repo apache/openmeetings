@@ -76,7 +76,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 			if (!isInstalled() && ! (this instanceof InstallWizardPage)) {
 				throw new RestartResponseException(InstallWizardPage.class);
 			}
-		} else {
+		} else if (!(this instanceof NotInitedPage)) {
 			throw new RestartResponseException(NotInitedPage.class);
 		}
 		options.put("fragmentIdentifierSuffix", "");
