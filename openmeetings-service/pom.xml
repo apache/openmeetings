@@ -55,8 +55,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
-			<artifactId>jackrabbit-webdav</artifactId>
-			<classifier>jakarta</classifier>
+			<artifactId>jackrabbit-webdav-jakarta</artifactId>
 		</dependency>
 </dependencies>
 </project>
