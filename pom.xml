@@ -1191,6 +1191,7 @@
 						<source>${jdk.version}</source>
 						<target>${jdk.version}</target>
 						<debug>true</debug>
+						<showDeprecation>true</showDeprecation>
 						<encoding>UTF-8</encoding>
 					</configuration>
 				</plugin>
