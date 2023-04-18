@@ -53,7 +53,7 @@
 		<reflow-maven-skin.version>2.3.3</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-		<maven-project-info-reports-plugin.version>3.4.2</maven-project-info-reports-plugin.version>
+		<maven-project-info-reports-plugin.version>3.4.3</maven-project-info-reports-plugin.version>
 		<maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
@@ -85,7 +85,7 @@
 		<wicket-bootstrap.version>6.0.2</wicket-bootstrap.version>
 		<font-awesome.version>6.4.0</font-awesome.version>
 		<spring.version>5.3.27</spring.version>
-		<tomcat.version>9.0.73</tomcat.version>
+		<tomcat.version>9.0.74</tomcat.version>
 		<ical4j.version>4.0.0-beta7</ical4j.version>
 		<cxf.version>3.5.5</cxf.version>
 		<io.prometheus.version>0.16.0</io.prometheus.version>
