@@ -114,37 +114,6 @@
 				<logback.console><![CDATA[<appender-ref ref="CONSOLE" />]]></logback.console>
 			</properties>
 		</profile>
-		<profile>
-			<id>prepare-web-server</id>
-			<activation>
-				<file>
-					<missing>web-server/apache-tomcat-9.0.74.tar.gz</missing> <!-- TODO should be in-sync with global property -->
-				</file>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>wagon-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>download-web-server</id>
-								<phase>process-resources</phase>
-								<goals>
-									<goal>download-single</goal>
-								</goals>
-								<configuration>
-									<url>https://archive.apache.org/dist/tomcat/tomcat-9/v${tomcat.version}/bin</url>
-									<fromFile>apache-tomcat-${tomcat.version}.tar.gz</fromFile>
-									<toDir>${server-file.dir}</toDir>
-									<skip>${server.dwnd.skip}</skip>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
 	</profiles>
 	<build>
 		<plugins>
@@ -266,6 +235,24 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>get-tomcat</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${server-file.dir}</outputDirectory>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.apache.tomcat</groupId>
+									<artifactId>tomcat</artifactId>
+									<version>${tomcat.version}</version>
+									<type>tar.gz</type>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+					<execution>
 						<id>unpack-css-js-site</id>
 						<phase>pre-site</phase>
 						<goals>
@@ -373,7 +360,7 @@
 						</goals>
 						<configuration>
 							<target>
-								<untar src="${server-file.dir}/apache-tomcat-${tomcat.version}.tar.gz" dest="${project.build.directory}"
+								<untar src="${server-file.dir}/tomcat-${tomcat.version}.tar.gz" dest="${project.build.directory}"
 									compression="gzip" overwrite="true"/>
 							</target>
 							<skip>${om.quick.build}</skip>
