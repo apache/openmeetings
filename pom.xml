@@ -60,7 +60,6 @@
 		<maven-bundle-plugin.version>5.1.8</maven-bundle-plugin.version>
 		<maven-war-plugin.version>3.3.2</maven-war-plugin.version>
 		<maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
-		<wagon-maven-plugin.version>2.0.2</wagon-maven-plugin.version>
 		<maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
 		<maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
 		<replacer.version>1.5.3</replacer.version>
@@ -82,7 +81,7 @@
 		<wicket.version>9.13.0</wicket.version>
 		<wicket-jquery-ui.version>9.12.0</wicket-jquery-ui.version>
 		<wicketstuff.version>9.13.0</wicketstuff.version>
-		<wicket-bootstrap.version>6.0.2</wicket-bootstrap.version>
+		<wicket-bootstrap.version>6.0.3</wicket-bootstrap.version>
 		<font-awesome.version>6.4.0</font-awesome.version>
 		<spring.version>5.3.27</spring.version>
 		<tomcat.version>9.0.74</tomcat.version>
@@ -1311,11 +1310,6 @@
 					<extensions>true</extensions>
 				</plugin>
 				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>wagon-maven-plugin</artifactId>
-					<version>${wagon-maven-plugin.version}</version>
-				</plugin>
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-antrun-plugin</artifactId>
 					<version>${maven-antrun-plugin.version}</version>
@@ -2066,20 +2060,6 @@
 												<versionRange>[1.5,)</versionRange>
 												<goals>
 													<goal>generateKeyPair</goal>
-												</goals>
-											</pluginExecutionFilter>
-											<action>
-												<ignore></ignore>
-											</action>
-										</pluginExecution>
-										<pluginExecution>
-											<pluginExecutionFilter>
-												<groupId>org.codehaus.mojo</groupId>
-												<artifactId>wagon-maven-plugin</artifactId>
-												<versionRange>[1.0-beta-5,)</versionRange>
-												<goals>
-													<goal>download</goal>
-													<goal>download-single</goal>
 												</goals>
 											</pluginExecutionFilter>
 											<action>
