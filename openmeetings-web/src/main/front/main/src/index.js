@@ -22,7 +22,7 @@ Object.assign(window, {
 });
 function _updateResize() {
 	const doc = document.documentElement
-    doc.style.setProperty('--app-height', `${window.innerHeight}px`)
+	doc.style.setProperty('--app-height', `${window.innerHeight}px`)
 }
 $(window).on('resize', _updateResize);
 //initial resize
