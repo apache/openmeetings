@@ -14,6 +14,7 @@
 
 # /etc/systemd/system/openmeetings.service
 # sudo systemctl daemon-reload
+# sudo systemctl enable openmeetings
 # sudo systemctl restart openmeetings
 
 [Unit]

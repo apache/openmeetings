@@ -90,12 +90,16 @@ class WebRtcPeer {
 		};
 		this.pc.addEventListener('icecandidate', this._iceCandidateListener);
 
-		this._signalingStateChangeListener = () => {
+		this._signalingStateChangeListener = async () => {
 			if (this.pc.signalingState === 'stable') {
 				// SDP Offer/Answer finished. Add stored remote candidates.
 				while (this.iceCandidateList.length > 0) {
 					let candidate = this.iceCandidateList.shift();
-					this.pc.addIceCandidate(candidate);
+					try {
+						await this.pc.addIceCandidate(candidate);
+					} catch (error) {
+						console.error('Error when calling RTCPeerConnection#addIceCandidate for RTCPeerConnection ' + this.getId(), error);
+					}
 				}
 			}
 		};
@@ -488,12 +492,12 @@ class WebRtcPeer {
 							' (' +
 							otherId +
 							') change to "disconnected". Possible network disconnection';
-						logger.warn(msg1);
+						console.warn(msg1);
 						this.configuration.onIceConnectionStateException(ExceptionEventName.ICE_CONNECTION_DISCONNECTED, msg1);
 						break;
 					case 'failed':
 						const msg2 = 'IceConnectionState of RTCPeerConnection ' + this.configuration.id + ' (' + otherId + ') to "failed"';
-						logger.error(msg2);
+						console.error(msg2);
 						this.configuration.onIceConnectionStateException(ExceptionEventName.ICE_CONNECTION_FAILED, msg2);
 						break;
 					case 'closed':
@@ -505,17 +509,17 @@ class WebRtcPeer {
 						OmUtil.log('IceConnectionState of RTCPeerConnection ' + this.configuration.id + ' (' + otherId + ') change to "new"');
 						break;
 					case 'checking':
-						logger.log(
+						OmUtil.log(
 							'IceConnectionState of RTCPeerConnection ' + this.configuration.id + ' (' + otherId + ') change to "checking"'
 						);
 						break;
 					case 'connected':
-						logger.log(
+						OmUtil.log(
 							'IceConnectionState of RTCPeerConnection ' + this.configuration.id + ' (' + otherId + ') change to "connected"'
 						);
 						break;
 					case 'completed':
-						logger.log(
+						OmUtil.log(
 							'IceConnectionState of RTCPeerConnection ' + this.configuration.id + ' (' + otherId + ') change to "completed"'
 						);
 						break;
