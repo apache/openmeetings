@@ -128,11 +128,12 @@ class WebRtcPeer {
 			this._signalingStateChangeListener = undefined;
 			if (this._iceConnectionStateChangeListener) {
 				this.pc.removeEventListener('iceconnectionstatechange', this._iceConnectionStateChangeListener);
+				this._iceConnectionStateChangeListener = undefined;
 			}
 			if (this.configuration.onConnectionStateChange) {
 				this.pc.removeEventListener('connectionstatechange', this.configuration.onConnectionStateChange);
 			}
-				this.configuration = {};
+			this.configuration = {};
 			this.pc.close();
 			this.remoteCandidatesQueue = [];
 			this.localCandidatesQueue = [];
