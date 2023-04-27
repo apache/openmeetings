@@ -214,6 +214,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 				target.add(feedback);
 			}
 		});
+		save.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		addButton(enterRoom = new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, null, Buttons.Type.Outline_Success, new ResourceModel("lbl.enter")) {
 			private static final long serialVersionUID = 1L;
 
@@ -243,10 +244,11 @@ public class AppointmentDialog extends Modal<Appointment> {
 		form.setModelObject(a);
 		form.start.setModelObject(getDateTime(a.getStart()));
 		form.end.setModelObject(getDateTime(a.getEnd()));
-		form.setEnabled(isOwner(a));
+		final boolean isOwner = isOwner(a);
+		form.setEnabled(isOwner);
 		log.debug(" -- setModelObjectWithAjaxTarget -- Current model {}", a);
 		if (a.getId() != null) {
-			delete.setVisible(isOwner(a));
+			delete.setVisible(isOwner);
 			enterRoom.setVisible(a.getRoom() != null);
 		} else {
 			delete.setVisible(false);
@@ -255,7 +257,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 		if (a.getRoom() != null) {
 			sipContainer.replace(new Label("room.confno", a.getRoom().getConfno())).setVisible(a.getRoom().isSipEnabled());
 		}
-		save.setVisible(isOwner(a));
+		save.setVisible(isOwner);
 		target.add(form, delete, enterRoom, save);
 		super.setModelObject(a);
 	}
