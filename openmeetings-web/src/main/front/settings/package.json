@@ -17,6 +17,6 @@
   },
   "dependencies": {
     "freeice": "2.2.2",
-    "webrtc-adapter": "^8.2.0"
+    "webrtc-adapter": "^8.2.2"
   }
 }
