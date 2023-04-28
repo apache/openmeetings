@@ -34,7 +34,14 @@ public class BootstrapFileUploadBehavior extends Behavior {
 			= new WebjarsJavaScriptResourceReference("/jasny-bootstrap/current/js/jasny-bootstrap.js");
 	private static final ResourceReference BOOTSTRAP_FILEINPUT_CSS_REFERENCE
 			= new WebjarsCssResourceReference("/jasny-bootstrap/current/css/jasny-bootstrap.css");
-	public static final BootstrapFileUploadBehavior INSTANCE = new BootstrapFileUploadBehavior();
+
+	private static class Holder {
+		private static final BootstrapFileUploadBehavior INSTANCE = new BootstrapFileUploadBehavior();
+	}
+
+	public static BootstrapFileUploadBehavior getInstance() {
+		return Holder.INSTANCE;
+	}
 
 	private BootstrapFileUploadBehavior() {
 	}

@@ -30,12 +30,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Health implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public static final Health INSTANCE = new Health();
 	private boolean inited;
 	private boolean installed;
 	private boolean dbOk;
 
-	public Health() {
+	private static class Holder {
+		private static final Health INSTANCE = new Health();
+	}
+
+	public static Health getInstance() {
+		return Holder.INSTANCE;
+	}
+
+	private Health() {
 		inited = isInitComplete();
 	}
 

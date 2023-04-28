@@ -77,7 +77,7 @@ public abstract class UploadForm extends Panel {
 
 		add(new WebMarkupContainer("progress-title")
 				.add(AttributeModifier.append("data-processing-lbl", getString(processingLabelKey()))));
-		add(BootstrapFileUploadBehavior.INSTANCE);
+		add(BootstrapFileUploadBehavior.getInstance());
 		super.onInitialize();
 	}
 

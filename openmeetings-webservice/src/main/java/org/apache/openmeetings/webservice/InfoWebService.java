@@ -97,7 +97,7 @@ public class InfoWebService {
 			}
 		)
 	public Health getHealth() {
-		return Health.INSTANCE;
+		return Health.getInstance();
 	}
 
 	@WebMethod

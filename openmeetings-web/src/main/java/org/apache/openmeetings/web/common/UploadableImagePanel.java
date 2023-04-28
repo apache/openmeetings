@@ -102,7 +102,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 			});
 		}
 		add(form.setOutputMarkupId(true));
-		add(BootstrapFileUploadBehavior.INSTANCE);
+		add(BootstrapFileUploadBehavior.getInstance());
 	}
 
 	@Override

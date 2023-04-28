@@ -229,7 +229,7 @@ public class LangPanel extends AdminBasePanel {
 				addLang.show(target);
 			}
 		});
-		add(BootstrapFileUploadBehavior.INSTANCE);
+		add(BootstrapFileUploadBehavior.getInstance());
 		final BootstrapAjaxButton delLngBtn = new BootstrapAjaxButton("deleteLangBtn", Buttons.Type.Outline_Danger) {
 			private static final long serialVersionUID = 1L;
 

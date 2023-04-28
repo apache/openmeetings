@@ -128,7 +128,7 @@ public class ReminderJob extends AbstractJob {
 		} catch (Exception e) {
 			log.error("DB seems to be down");
 		}
-		Health.INSTANCE.setInited(isInitComplete())
+		Health.getInstance().setInited(isInitComplete())
 				.setInstalled(CryptProvider.get() != null)
 				.setDbOk(dbOk);
 	}
