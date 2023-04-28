@@ -1254,7 +1254,7 @@
 						<dependency>
 							<groupId>com.puppycrawl.tools</groupId>
 							<artifactId>checkstyle</artifactId>
-							<version>10.6.0</version> <!-- FIXME TODO: should be removed after checkstyle plugin will be updated -->
+							<version>10.10.0</version> <!-- FIXME TODO: should be removed after checkstyle plugin will be updated -->
 						</dependency>
 					</dependencies>
 				</plugin>
