@@ -231,26 +231,24 @@ function _setPos(v, pos) {
 	}
 }
 function _askPermission(callback) {
-	const data = $('.sidebar').data('bs.confirmation');
-	if (typeof(data) === 'object') {
-		data.config.buttons[0].onClick = function() {callback();};
-	} else {
-		const perm = $('#ask-permission');
-		$('.sidebar').confirmation({
-			title: perm.attr('title')
-			, placement: Settings.isRtl ? 'right' : 'left'
-			, singleton: true
-			, rootSelector: '.sidebar'
-			, html: true
-			, content: perm.html()
-			, buttons: [{
-				class: 'btn btn-sm btn-warning'
-				, label: perm.data('btn-ok')
-				, value: perm.data('btn-ok')
-				, onClick: function() {callback();}
-			}]
-		});
-	}
+	const perm = $('#ask-permission');
+	$('.sidebar').confirmation({
+		title: perm.attr('title')
+		, placement: Settings.isRtl ? 'right' : 'left'
+		, singleton: true
+		, rootSelector: '.sidebar'
+		, html: true
+		, content: perm.html()
+		, buttons: [{
+			class: 'btn btn-sm btn-warning'
+			, label: perm.data('btn-ok')
+			, value: perm.data('btn-ok')
+			, onClick: function() {
+				callback();
+				$('.sidebar').confirmation('dispose');
+			}
+		}]
+	});
 	$('.sidebar').confirmation('show');
 }
 function _disconnect(node) {
