@@ -366,7 +366,6 @@ public class Admin {
 		BackupExport export = getApplicationContext().getBean(BackupExport.class);
 		export.performExport(f, includeFiles, new AtomicInteger());
 		FileUtils.deleteDirectory(backupDir);
-		backupDir.delete();
 	}
 
 	private void processFiles() throws IOException {

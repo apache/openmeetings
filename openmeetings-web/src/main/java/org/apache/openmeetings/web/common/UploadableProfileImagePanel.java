@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir
 import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 
 import java.io.File;
+import java.nio.file.Files;
 
 import org.apache.openmeetings.core.converter.ImageConverter;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -59,9 +60,7 @@ public class UploadableProfileImagePanel extends UploadableImagePanel {
 	@Override
 	protected void deleteImage() throws Exception {
 		File f = new File(getUploadProfilesUserDir(userId), OmFileHelper.getName(PROFILE_FILE_NAME, EXTENSION_PNG));
-		if (f.exists()) {
-			f.delete();
-		}
+		Files.deleteIfExists(f.toPath());
 	}
 
 	@Override

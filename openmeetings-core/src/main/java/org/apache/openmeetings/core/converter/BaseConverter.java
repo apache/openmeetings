@@ -34,6 +34,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getVideoPreset;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -118,10 +119,8 @@ public abstract class BaseConverter {
 		r.setDuration(formatMillis(diff(r.getRecordEnd(), r.getRecordStart())));
 	}
 
-	protected void deleteFileIfExists(File f) {
-		if (f.exists()) {
-			f.delete();
-		}
+	protected void deleteFileIfExists(File f) throws IOException {
+		Files.deleteIfExists(f.toPath());
 	}
 
 	private List<String> mergeAudioToWaves(List<File> waveFiles, File wav) throws IOException {
@@ -375,12 +374,10 @@ public abstract class BaseConverter {
 		}
 	}
 
-	protected void postProcess(List<File> waveFiles) {
+	protected void postProcess(List<File> waveFiles) throws IOException {
 		// Delete Wave Files
 		for (File audio : waveFiles) {
-			if (audio.exists()) {
-				audio.delete();
-			}
+			Files.deleteIfExists(audio.toPath());
 		}
 	}
 }

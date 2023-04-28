@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -308,9 +309,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 			URL u = appClass.getResource(getLabelFileName(l));
 			if (u != null) {
 				File f = new File(u.toURI());
-				if (f.exists()) {
-					f.delete();
-				}
+				Files.deleteIfExists(f.toPath());
 			}
 		} catch (Exception e) {
 			log.error("Unexpected error while deleting language", e);

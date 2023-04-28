@@ -24,6 +24,8 @@ import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
@@ -75,7 +77,7 @@ public class CleanupJob extends AbstractJob {
 				}
 				for (File file : files) {
 					log.debug("expired TEST SETUP found: {}", file.getCanonicalPath());
-					file.delete();
+					Files.deleteIfExists(file.toPath());
 				}
 			}
 		} catch (Exception e) {
@@ -91,7 +93,7 @@ public class CleanupJob extends AbstractJob {
 		try {
 			sessionDao.clearSessionTable(sessionTimeout);
 		} catch (Exception err){
-			log.error("execute",err);
+			log.error("execute", err);
 		}
 	}
 
@@ -101,9 +103,13 @@ public class CleanupJob extends AbstractJob {
 			if (days < 0) {
 				log.debug("cleanExpiredRecordings:: following recording will be deleted {}", rec);
 				File f = rec.getFile(EXTENSION_MP4);
-				if (f != null && f.exists()) {
-					f.delete();
-				}
+				if (f != null) {
+					try {
+						Files.deleteIfExists(f.toPath());
+					} catch (IOException err){
+						log.error("Unexpected exception while clen-up expired recording", err);
+					}
+							}
 				recordingDao.delete(rec);
 			}
 		});

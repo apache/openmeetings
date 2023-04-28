@@ -31,6 +31,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimez
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -374,7 +376,11 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			update(u, userId);
 			// this should be last action, so file will be deleted in case there were no errors
 			if (pic != null) {
-				pic.delete();
+				try {
+					Files.deleteIfExists(pic.toPath());
+				} catch (IOException e) {
+					log.error("Unexpected exception while delete pic");
+				}
 			}
 		}
 	}

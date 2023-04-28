@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
 
 import java.io.File;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Optional;
 import java.util.function.DoubleConsumer;
 
@@ -94,7 +95,7 @@ public class FileProcessor {
 			throw e;
 		} finally {
 			if (temp != null && temp.exists() && temp.isFile()) {
-				log.debug("Clean up was successful ? {}", temp.delete());
+				log.debug("Clean up was successful ? {}", Files.deleteIfExists(temp.toPath()));
 			}
 		}
 		return logs;

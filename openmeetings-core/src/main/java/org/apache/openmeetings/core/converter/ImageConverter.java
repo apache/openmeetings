@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.DoubleConsumer;
@@ -106,7 +107,7 @@ public class ImageConverter extends BaseConverter {
 
 		if (!skipConvertion) {
 			// Delete old one
-			file.delete();
+			Files.deleteIfExists(file.toPath());
 		}
 
 		String img = destinationFile.getName();

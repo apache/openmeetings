@@ -31,6 +31,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collection;
 
 import javax.imageio.ImageIO;
@@ -67,8 +68,8 @@ class TestFileService extends AbstractWebServiceTest {
 			assertEquals(width, cr.getObj().getWidth(), "Width should be determined");
 			assertEquals(height, cr.getObj().getHeight(), "Height should be Image");
 		} finally {
-			if (img != null && img.exists()) {
-				img.delete();
+			if (img != null) {
+				Files.deleteIfExists(img.toPath());
 			}
 		}
 	}
