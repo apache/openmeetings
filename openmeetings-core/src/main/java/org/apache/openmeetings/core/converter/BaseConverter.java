@@ -374,10 +374,14 @@ public abstract class BaseConverter {
 		}
 	}
 
-	protected void postProcess(List<File> waveFiles) throws IOException {
+	protected void postProcess(List<File> waveFiles) {
 		// Delete Wave Files
 		for (File audio : waveFiles) {
-			Files.deleteIfExists(audio.toPath());
+			try {
+				Files.deleteIfExists(audio.toPath());
+			} catch (IOException e) {
+				log.error("Unexpected error while deleting waveFile {}", audio, e);
+			}
 		}
 	}
 }
