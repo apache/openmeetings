@@ -27,6 +27,7 @@ import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.Optional;
 
 import org.apache.openmeetings.core.converter.ImageConverter;
@@ -82,8 +83,8 @@ public class GroupForm extends AdminBaseForm<Group> {
 		protected void deleteImage() throws Exception {
 			Long groupId = GroupForm.this.getModelObject().getId();
 			File flogo = new File(getGroupLogoDir(), String.format("logo%s.png", groupId));
-			if (groupId != null && flogo.exists()) {
-				flogo.delete();
+			if (groupId != null) {
+				Files.deleteIfExists(flogo.toPath());
 			}
 		}
 

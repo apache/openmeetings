@@ -22,7 +22,7 @@ const NetTest = (function() {
 		_initTests();
 		$('.nettest button[data-start="true"]').click()
 	}
-	function __repeat(options) {
+	function __cleanOptions(options) {
 		if (isNaN(options.attempts)) {
 			options.attempts = 0;
 		}
@@ -34,23 +34,29 @@ const NetTest = (function() {
 			options.results = [];
 			options.lresults = [];
 		}
+	}
+	function __stepsDone(options) {
+		if (--options.astep > 0) {
+			options.step = options.measures;
+			options.results.push(options.lresults);
+			options.lresults = [];
+			__repeat(options);
+		} else {
+			if (options.attempts > 0) {
+				options.results.push(options.lresults);
+			} else {
+				options.results = options.lresults;
+			}
+			options.onend(options.results);
+		}
+	}
+	function __repeat(options) {
+		__cleanOptions(options);
 		if (options.step < 0) {
 			return; //might happen in case of error
 		}
 		if (options.step === 0) {
-			if (--options.astep > 0) {
-				options.step = options.measures;
-				options.results.push(options.lresults);
-				options.lresults = [];
-				__repeat(options);
-			} else {
-				if (options.attempts > 0) {
-					options.results.push(options.lresults);
-				} else {
-					options.results = options.lresults;
-				}
-				options.onend(options.results);
-			}
+			__stepsDone(options);
 		} else {
 			options.action(options.params, res => {
 				if (res.ok) {

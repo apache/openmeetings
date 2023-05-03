@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSiz
 import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelConfirm;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.Optional;
 
 import org.apache.openmeetings.util.StoredFile;
@@ -139,6 +140,29 @@ public abstract class UploadableImagePanel extends ImagePanel {
 		target.ifPresent(t -> t.add(profile, form));
 	}
 
+	private void processImage(FileUpload fu) {
+		if (fu != null) {
+			try {
+				File temp = null;
+				try {
+					temp = fu.writeToTempFile();
+					StoredFile sf = new StoredFile(fu.getClientFileName(), temp);
+					if (sf.isImage()) {
+						processImage(sf, temp);
+					}
+				} finally {
+					if (temp != null) {
+						log.debug("Temp file was deleted ? {}", Files.deleteIfExists(temp.toPath()));
+					}
+					fu.closeStreams();
+					fu.delete();
+				}
+			} catch (Exception e) {
+				log.error(ERROR, e);
+			}
+		}
+	}
+
 	public void process(Optional<AjaxRequestTarget> target) {
 		if (delayed && Boolean.TRUE.equals(deleted.getModelObject())) {
 			try {
@@ -148,24 +172,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 			}
 		} else {
 			FileUpload fu = fileUploadField.getFileUpload();
-			if (fu != null) {
-				File temp = null;
-				try {
-					temp = fu.writeToTempFile();
-					StoredFile sf = new StoredFile(fu.getClientFileName(), temp);
-					if (sf.isImage()) {
-						processImage(sf, temp);
-					}
-				} catch (Exception e) {
-					log.error(ERROR, e);
-				} finally {
-					if (temp != null && temp.exists()) {
-						log.debug("Temp file was deleted ? {}", temp.delete());
-					}
-					fu.closeStreams();
-					fu.delete();
-				}
-			}
+			processImage(fu);
 		}
 		update(target);
 	}
