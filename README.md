@@ -56,9 +56,30 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+
+7.1.0
+-----
+[Release 7.1.0](https://www.apache.org/dyn/closer.lua/openmeetings/7.1.0), provides following improvements:
+
+IMPORTANT: Java 17 and KMS 6.18.0+ are required
+
+Security:
+* Invitation hash check made strict
+* Set of user permissions is fixed
+* Paths entered in Admin->Config are being verified
+* All dependencies are updated with most recent versions
+
+Stability:
+* TURN server config is passed to the client
+
+***3 security vulnerabilities were addressed***
+
+Some other fixes and improvements, 12 issues were addressed
+
+
 7.0.0
 -----
-[Release 7.0.0](https://www.apache.org/dyn/closer.lua/openmeetings/7.0.0), provides following improvements:
+[Release 7.0.0](https://archive.apache.org/dist/openmeetings/7.0.0), provides following improvements:
 
 IMPORTANT: Java 17 is required
 
