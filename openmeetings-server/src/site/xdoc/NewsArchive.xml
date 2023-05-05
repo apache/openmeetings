@@ -20,6 +20,40 @@
 	</properties>
 
 	<body>
+		<section name="Release 7.0.0">
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Version 7.0.0 released!</div>
+				<div>Release 7.0.0, provides following improvements:<br/>
+					<div class="bd-callout bd-callout-info">
+						<br/>
+						IMPORTANT: Java 17 is required
+					</div>
+
+					UI and Security:
+					<ul>
+						<li>Microphone on/off doesn't interrupt the streaming</li>
+						<li>Stability fix at Safari</li>
+						<li>Full screen mode for WB</li>
+						<li>Redo tool for WB</li>
+						<li>2-factor authentication</li>
+						<li>Libraries are updated with most recent versions</li>
+					</ul>
+					<br/>
+					<div class="bd-callout bd-callout-danger">1 security vulnerability was addressed</div>
+					<br/>
+					Other fixes and improvements
+				</div>
+				<br/>
+
+				<span>
+					28 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/7.0.0/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12350648">Detailed list</a>
+				</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/7.0.0">Archived download</a>.</span>
+				<span class="date">(2023-02-11)</span>
+			</div>
+		</section>
 		<section name="Release 6.3.0">
 			<div class="bd-callout bd-callout-info">
 				<div class="h4">Version 6.3.0 released!</div>

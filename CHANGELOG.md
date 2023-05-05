@@ -3,10 +3,41 @@ Apache OpenMeetings Change Log
 Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 
 See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
-See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
+See https://www.cve.org/CVERecord?id=CVE-* (where * is the number of CVE below)
+
+
+Release Notes - Openmeetings - Version 7.1.0
+================================================================================================================
+
+* Vulnerability
+    * CVE-2023-28936: Apache OpenMeetings: insufficient check of invitation hash
+    * CVE-2023-29032: Apache OpenMeetings: allows bypass authentication
+    * CVE-2023-29246: Apache OpenMeetings: allows null-byte Injection
+
+* Bug
+    * [OPENMEETINGS-2760] - Room name overlap on menu in RTL
+    * [OPENMEETINGS-2763] - Turn server is not being set
+    * [OPENMEETINGS-2764] - Permissions are incorrectly being set
+    * [OPENMEETINGS-2765] - Paths should be verified in configuration
+    * [OPENMEETINGS-2767] - WebRTC connection is not established in FF
+    * [OPENMEETINGS-2768] - Save button is hidden
+    * [OPENMEETINGS-2769] - Ask permission confirmation pops out event when it shouldn't
+
+* Improvement
+    * [OPENMEETINGS-2761] - Missing German Translations for new OTP-dialogs
+    * [OPENMEETINGS-2762] - Invitation hash check should be more strict
+
+* Task
+    * [OPENMEETINGS-2757] - (7.1.0) Libraries should be updated
+    * [OPENMEETINGS-2758] - (7.1.0) Sonar issues need to be addressed
+    * [OPENMEETINGS-2759] - (7.1.0) All translations from PoEditor should be synced
+
 
 Release Notes - Openmeetings - Version 7.0.0
 ================================================================================================================
+
+* Vulnerability
+    * CVE-2023-28326: Apache OpenMeetings: allows user impersonation
 
 * Bug
     * [OPENMEETINGS-2253] - Interruption of a video session when the microphone is turned on / off
