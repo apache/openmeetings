@@ -72,7 +72,7 @@
 			<p>Vendor: The Apache Software Foundation</p>
 			<p>Versions Affected: from 2.0.0 before 7.0.0</p>
 			<p>Description: An attacker who has gained access to an admin account can perform RCE via null-byte injection<br/>
-				<a href="https://www.cve.org/CVERecord?id=2023-29246">2023-29246</a>
+				<a href="https://www.cve.org/CVERecord?id=CVE-2023-29246">CVE-2023-29246</a>
 			</p>
 			<p>The issue was fixed in 7.1.0<br/>
 				All users are recommended to upgrade to Apache OpenMeetings 7.1.0</p>
