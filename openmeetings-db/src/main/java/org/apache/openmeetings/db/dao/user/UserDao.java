@@ -22,6 +22,7 @@ import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.util.DaoHelper.fillLazy;
 import static org.apache.openmeetings.db.util.DaoHelper.getRoot;
 import static org.apache.openmeetings.db.util.DaoHelper.getStringParam;
+import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.db.util.DaoHelper.single;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
@@ -45,7 +46,6 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
@@ -434,7 +434,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return !Strings.isEmpty(login) && login.length() >= getMinLoginLength();
 	}
 
-	public User getByLogin(String login, Type type, Long domainId) {
+	public User getByLogin(String _login, Type type, Long domainId) {
+		String login = _login == null ? null : _login.trim().toLowerCase(Locale.ROOT);
 		return single(fillLazy(em
 				, oem -> oem.createNamedQuery("getUserByLogin", User.class)
 					.setParameter("login", login)
@@ -447,7 +448,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return getByEmail(email, User.Type.USER, null);
 	}
 
-	public User getByEmail(String email, User.Type type, Long domainId) {
+	public User getByEmail(String _email, User.Type type, Long domainId) {
+		String email = _email == null ? null : _email.trim().toLowerCase(Locale.ROOT);
 		return single(fillLazy(em
 				, oem -> oem.createNamedQuery("getUserByEmail", User.class)
 					.setParameter(PARAM_EMAIL, email)
@@ -474,9 +476,9 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	public Long selectMaxFromUsersWithSearch(String search) {
 		try {
 			// get all users
-			TypedQuery<Long> query = em.createNamedQuery("selectMaxFromUsersWithSearch", Long.class);
-			query.setParameter("search", StringUtils.lowerCase(search, Locale.ROOT));
-			List<Long> ll = query.getResultList();
+			List<Long> ll = em.createNamedQuery("selectMaxFromUsersWithSearch", Long.class)
+					.setParameter("search", StringUtils.lowerCase(search, Locale.ROOT))
+					.getResultList();
 			log.info("selectMaxFromUsers {}", ll.get(0));
 			return ll.get(0);
 		} catch (Exception ex2) {
@@ -493,12 +495,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 * @return <code>true</code> if entered password is correct
 	 */
 	public boolean verifyPassword(Long userId, String password) {
-		List<String> l = em.createNamedQuery("getPassword", String.class)
-			.setParameter(PARAM_USER_ID, userId).getResultList();
-		if (l == null || l.size() != 1) {
-			return false;
-		}
-		String hash = l.get(0);
+		String hash = only(em.createNamedQuery("getPassword", String.class)
+				.setParameter(PARAM_USER_ID, userId).getResultList());
 		ICrypt crypt = CryptProvider.get();
 		if (crypt.verify(password, hash)) {
 			return true;
@@ -605,7 +603,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 * @return User object in case of successful login
 	 * @throws OmException in case of any issue
 	 */
-	public User login(String userOrEmail, String userpass) throws OmException {
+	public User login(String _userOrEmail, String userpass) throws OmException {
+		String userOrEmail = _userOrEmail == null ? null : _userOrEmail.trim().toLowerCase(Locale.ROOT);
 		List<User> users = em.createNamedQuery("getUserByLoginOrEmail", User.class)
 				.setParameter("userOrEmail", userOrEmail)
 				.setParameter("type", Type.USER)
@@ -614,7 +613,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		log.debug("login:: {} users were found", users.size());
 
 		if (users.isEmpty()) {
-			log.debug("No users was found: {}", userOrEmail);
+			log.debug("No users were found: {}", userOrEmail);
 			return null;
 		}
 		User u = users.get(0);
