@@ -23,165 +23,34 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap');
-
-    @media only screen and (max-width: 620px) {
-      table.body h1 {
-        font-size: 28px !important;
-        margin-bottom: 10px !important;
-      }
-
-      table.body p,
-      table.body td,
-      table.body span,
-      table.body a {
-        font-size: 16px !important;
-      }
-
-      table.body .wrapper,
-      table.body .article {
-        padding: 10px !important;
-      }
-
-      table.body .content {
-        padding: 0 !important;
-      }
-
-      table.body .container {
-        padding: 0 !important;
-        width: 100% !important;
-      }
-
-      table.body .main {
-        border-left-width: 0 !important;
-        border-radius: 0 !important;
-        border-right-width: 0 !important;
-      }
-
-      table.body .btn table {
-        width: 100% !important;
-      }
-
-      table.body .btn a {
-        width: 100% !important;
-      }
-
-    }
-
-    @mwedia all {
-      body {
-        background-color: #f6f6f6;
-        font-family: sans-serif;
-        -webkit-font-smoothing: antialiased;
-        font-size: 14px;
-        line-height: 1.4;
-        margin: 0;
-        padding: 0;
-        -ms-text-size-adjust: 100%;
-        -webkit-text-size-adjust: 100%;
-        font-family: 'Montserrat', sans-serif;
-        font-size: 14px;
-      }
-
-    }
-  </style>
 </head>
 
 <wicket:extend>
-
-  <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6; width: 100%;" width="100%" bgcolor="#f6f6f6">
-      <tr>
-          <td style="font-family: 'Montserrat', sans-serif; font-size: 14px; vertical-align: top;" valign="top">&nbsp;</td>
-          <td class="container" style="font-family: 'Montserrat', sans-serif; font-size: 14px; vertical-align: top; display: block; max-width: 580px; padding: 10px; width: 580px; margin: 0 auto;" width="580" valign="top">
-              <div class="content" style="box-sizing: border-box; display: block; margin: 0 auto; max-width: 580px; padding: 10px;">
-                  <!-- START CONTAINER -->
-                  <table role="presentation" class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background: #ffffff; border-radius: 3px; width: 100%;" width="100%">
-                      <!-- START MAIN MSG -->
-                      <tr>
-                          <td class="wrapper" style="font-family: 'Montserrat', sans-serif; font-size: 14px; vertical-align: top; box-sizing: border-box; padding: 20px;" valign="top">
-                              <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;" width="100%">
-                                  <tr>
-                                      <td style="font-family: 'Montserrat', sans-serif; font-size: 14px; vertical-align: top;" valign="top">
-                                        <!-- INVITATION LABEL -->
-                                          <span wicket:id="titleLbl" style="font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: normal; margin: 0; margin-bottom: 15px;"></span>
-                                          <!-- END INVITATION LABEL -->
-                                          <br /><br />
-                                          <!-- INVITATION MSG -->
-                                          <!-- <span wicket:id="titleLbl" style="font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: bold; margin: 0; margin-bottom: 20px;"></span><br /><br /> -->
-                                          <span wicket:id="userLbl"></span> <span wicket:id="user"></span><br/>
-                                          <span wicket:id="messageLbl"></span> <span wicket:id="message"></span><br/>
-                                          <!-- END INVITATION MSG -->
-                                          <br />
-                                          <table
-                                              role="presentation"
-                                              border="0"
-                                              cellpadding="0"
-                                              cellspacing="0"
-                                              class="btn btn-primary"
-                                              style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-sizing: border-box; width: 100%;"
-                                              width="100%"
-                                          >
-                                              <tbody>
-                                                  <tr>
-                                                      <td align="left" style="font-family: 'Montserrat', sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 15px;" valign="top">
-                                                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: auto;">
-                                                              <tbody>
-                                                                  <tr>
-                                                                      <td>
-                                                                        <!-- URLs INVITATION -->
-                                                                          <div wicket:id="links"> <br>
-                                                                              <td
-                                                                              >
-                                                                              <span wicket:id="comment_for_link1"></span><br/><br />
-                                                                              <!-- URL 1 INVITATION BTN -->
-                                                                                  <a wicket:id="invitation_link1"
-                                                                                      style="border: solid 1px #3498db;
-                                                                                          border-radius: 5px;
-                                                                                          box-sizing: border-box;
-                                                                                          cursor: pointer;
-                                                                                          display: inline-block;
-                                                                                          font-size: 14px;
-                                                                                          font-weight: bold;
-                                                                                          margin: 0;
-                                                                                          padding: 12px 25px;
-                                                                                          text-decoration: none;
-                                                                                          text-transform: capitalize;
-                                                                                          background-color: #3498db;
-                                                                                          border-color: #3498db;
-                                                                                          color: #ffffff;">
-                                                                                  <span wicket:id="clickMe"></span>
-                                                                                  </a>
-                                                                                  <!-- END URL 1 INVITATION BTN -->
-                                                                                  <br /><br />
-                                                                                  <!-- URL 2 PLAIN TEXT -->
-                                                                                  <span wicket:id="comment_for_link2"></span><br/><br />
-		                                                                              <span wicket:id="invitation_link2"></span>
-                                                                                  <!-- END URL 2 PLAIN TEXT -->
-                                                                              </td>
-                                                                          </div>
-                                                                          <!-- END URLs INVITATION -->
-                                                                      </td>
-                                                                  </tr>
-                                                              </tbody>
-                                                          </table>
-                                                      </td>
-                                                  </tr>
-                                              </tbody>
-                                          </table>
-                                        </td>
-                                  </tr>
-                              </table>
-                          </td>
-                      </tr>
-                      <!-- END MAIN MSG -->
-                  </table>
-                  <!-- END CONTAINER -->
-              </div>
-          </td>
-      </tr>
-  </table>
-
+  <div class="main" style="background-color: #f5f5f5;font-family: 'Segoe UI', sans-serif;-webkit-font-smoothing: antialiased;font-size: 14px;line-height: 1.4;margin: 0;padding: 0;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <div class="container" style="max-width: 580px;margin: 0 auto;padding: 20px;width: 100%;">
+      <div class="wrapper" style="max-width: 540px;margin: 0 auto;padding: 15px;width: 100%;border-radius: 5px;background-color: #fff;">
+        <h2 style="font-size: 25px;font-weight: normal;margin: 0;margin-bottom: 15px;">
+          <strong>
+            <span wicket:id="titleLbl" style="margin-bottom: 1em;"></span>
+          </strong>
+        </h2>
+        <span wicket:id="userLbl" style="margin-bottom: 1em;"></span> <span wicket:id="user" style="margin-bottom: 1em;"></span><br>
+        <span wicket:id="messageLbl" style="margin-bottom: 1em;"></span> <span wicket:id="message" style="margin-bottom: 1em;"></span>
+        <br><br>
+        <div wicket:id="links" class="action">
+          <span wicket:id="comment_for_link1" style="margin-bottom: 1em;"></span><br><br>
+          <a wicket:id="invitation_link1" style="color: #ffffff;text-decoration: none;box-sizing: border-box;cursor: pointer;display: inline-block;font-weight: bold;margin: 0;border-radius: 5px;padding: 12px 25px;background-color: #3498db;border-color: #3498db;">
+            <span wicket:id="clickMe" style="margin-bottom: 1em;"></span>
+          </a>
+          <br><br>
+          <span wicket:id="comment_for_link2" style="margin-bottom: 1em;"></span>
+          <br><br>
+          <span wicket:id="invitation_link2" style="margin-bottom: 1em;"></span>
+          <br><br>
+        </div>
+      </div>
+    </div>
+  </div>
 </wicket:extend>
 
 </html>
