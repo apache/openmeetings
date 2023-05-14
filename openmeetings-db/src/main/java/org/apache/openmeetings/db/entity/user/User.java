@@ -100,26 +100,74 @@ import org.apache.wicket.util.string.Strings;
 })
 @NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.id = :id")
 @NamedQuery(name = "getUsersByIds", query = "select c from User c where c.id IN :ids")
-@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))")
-@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.address.email = :email AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))")
-@NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash")
+@NamedQuery(name = "getUserByLogin", query = """
+	SELECT u
+	FROM User u
+	WHERE
+		u.deleted = false
+		AND u.type = :type
+		AND lower(trim(both from u.login)) = :login
+		AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))""")
+@NamedQuery(name = "getUserByEmail", query = """
+	SELECT u
+	FROM User u
+	WHERE
+		u.deleted = false
+		AND u.type = :type
+		AND lower(trim(both from u.address.email)) = :email
+		AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))""")
+@NamedQuery(name = "getUserByHash",  query = """
+	SELECT u
+	FROM User u
+	WHERE
+		u.deleted = false
+		AND u.type = :type
+		AND u.resethash = :resethash""")
 @NamedQuery(name = "getUserByExpiredHash",  query = "SELECT u FROM User u WHERE u.resetDate < :date")
-@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.address.email = :email AND u.type = :type AND u.ownerId = :ownerId")
-@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "SELECT count(c.id) FROM User c "
-		+ "WHERE c.deleted = false AND ("
-		+ "lower(c.login) LIKE :search "
-		+ "OR lower(c.firstname) LIKE :search "
-		+ "OR lower(c.lastname) LIKE :search )")
+@NamedQuery(name = "getContactByEmailAndUser", query = """
+	SELECT u
+	FROM User u
+	WHERE
+		u.deleted = false
+		AND u.address.email = :email
+		AND u.type = :type
+		AND u.ownerId = :ownerId""")
+@NamedQuery(name = "selectMaxFromUsersWithSearch", query = """
+	SELECT count(c.id)
+	FROM User c
+	WHERE
+		c.deleted = false
+		AND (
+			lower(c.login) LIKE :search
+			OR lower(c.firstname) LIKE :search
+			OR lower(c.lastname) LIKE :search
+		)""")
 @NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u ORDER BY u.id")
 @NamedQuery(name = "getPassword", query = "SELECT u.password FROM User u WHERE u.deleted = false AND u.id = :userId ")
 @NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.id = :userId")
 @NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false")
 @NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false")
 @NamedQuery(name = "getUsersByGroupId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.groupUsers.group.id = :groupId")
-@NamedQuery(name = "getExternalUser", query = "SELECT gu.user FROM GroupUser gu WHERE "
-		+ "gu.group.deleted = false AND gu.group.external = true AND gu.group.name = :externalType "
-		+ "AND gu.user.deleted = false AND gu.user.type = :type AND gu.user.externalId = :externalId")
-@NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.address.email = :userOrEmail)")
+@NamedQuery(name = "getExternalUser", query = """
+	SELECT gu.user
+	FROM GroupUser gu
+	WHERE
+		gu.group.deleted = false
+		AND gu.group.external = true
+		AND gu.group.name = :externalType
+		AND gu.user.deleted = false
+		AND gu.user.type = :type
+		AND gu.user.externalId = :externalId""")
+@NamedQuery(name = "getUserByLoginOrEmail", query = """
+	SELECT u
+	FROM User u
+	WHERE
+		u.deleted = false
+		AND u.type = :type
+		AND (
+			lower(trim(both from u.login)) = :userOrEmail
+			OR lower(trim(both from u.address.email)) = :userOrEmail
+		)""")
 @Table(name = "om_user", indexes = {
 		@Index(name = "login_idx", columnList = "login")
 		, @Index(name = "lastname_idx", columnList = "lastname")

@@ -18,7 +18,10 @@
  */
 package org.apache.openmeetings.userdata;
 
+import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.Locale;
 
 import org.apache.openmeetings.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.user.User;
@@ -32,4 +35,28 @@ class TestLogin extends AbstractOmServerTest {
 		assertNotNull(us, "User is unable to login");
 	}
 
+	private User prepareUser() throws Exception {
+		User u = getUser(randomUUID().toString());
+		u.setLogin(" AB" + u.getLogin() + " ");
+		u.getAddress().setEmail(" CD_" + u.getAddress().getEmail() + " ");
+		u.updatePassword(userpass);
+		u.addGroup(groupDao.get(group));
+		return userDao.update(u, null);
+	}
+
+	@Test
+	void testMixedCaseLogin() throws Exception {
+		final String login = prepareUser().getLogin();
+
+		User us = userDao.login(login.toUpperCase(Locale.ROOT), userpass);
+		assertNotNull(us, "Uppercase User is unable to login");
+	}
+
+	@Test
+	void testMixedCaseEmail() throws Exception {
+		final String email = prepareUser().getAddress().getEmail();
+
+		User us = userDao.login(email.toUpperCase(Locale.ROOT), userpass);
+		assertNotNull(us, "Uppercase Email is unable to login");
+	}
 }
