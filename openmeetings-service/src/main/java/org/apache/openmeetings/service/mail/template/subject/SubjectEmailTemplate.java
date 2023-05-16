@@ -20,11 +20,11 @@ package org.apache.openmeetings.service.mail.template.subject;
 
 import java.util.Locale;
 
-import org.apache.openmeetings.service.mail.template.AbstractTemplatePanel;
+import org.apache.openmeetings.service.mail.template.AbstractTemplatePage;
 import org.apache.wicket.core.util.string.ComponentRenderer;
 import org.apache.wicket.markup.html.panel.Fragment;
 
-public abstract class SubjectEmailTemplate extends AbstractTemplatePanel {
+public abstract class SubjectEmailTemplate extends AbstractTemplatePage {
 	private static final long serialVersionUID = 1L;
 	private String email = null;
 	private String subject = null;
@@ -35,7 +35,7 @@ public abstract class SubjectEmailTemplate extends AbstractTemplatePanel {
 	}
 
 	SubjectEmailTemplate create() {
-		email = ComponentRenderer.renderComponent(this).toString();
+		email = renderEmail();
 		subject = ComponentRenderer.renderComponent(getSubjectFragment()).toString();
 		created = true;
 		return this;
