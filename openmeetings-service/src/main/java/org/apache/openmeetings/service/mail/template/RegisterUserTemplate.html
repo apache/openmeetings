@@ -26,33 +26,33 @@
 </head>
 
 <wicket:extend>
-  <div class="main" style="background-color: #f5f5f5;font-family: 'Segoe UI', sans-serif;-webkit-font-smoothing: antialiased;font-size: 14px;line-height: 1.4;margin: 0;padding: 0;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-  <div class="container" style="max-width: 580px;margin: 0 auto;padding: 20px;width: 100%;">
-    <div class="wrapper" style="max-width: 540px;margin: 0 auto;padding: 15px;width: 100%;border-radius: 5px;background-color: #fff;">
-      <h2 style="font-size: 25px;font-weight: normal;margin: 0;margin-bottom: 15px;">
-        <span wicket:id="registrationLbl" style="margin-bottom: 1em;"></span>
-      </h2>
-      <strong>
-        <wicket:message key="507"></wicket:message>
-      </strong>
-      <br>
-      <wicket:message key="108"></wicket:message> <span wicket:id="username" style="margin-bottom: 1em;"></span><br>
-      <wicket:message key="lbl.email"></wicket:message> <span wicket:id="email" style="margin-bottom: 1em;"></span><br>
-      <span style="margin-bottom: 1em;"><a wicket:id="url" style="color: #007bff;text-decoration: none;"></a></span><br><br>
-      <div wicket:id="verification" class="action">
-        <span style="margin-bottom: 1em;">
-          <wicket:message key="667"></wicket:message>
-        </span><br><br>
-        <a wicket:id="verification_url1" style="color: #ffffff;text-decoration: none;box-sizing: border-box;cursor: pointer;display: inline-block;font-weight: bold;margin: 0;border-radius: 5px;padding: 12px 25px;background-color: #3498db;border-color: #3498db;">
-          <wicket:message key="668"></wicket:message>
-        </a>
-        <br><br>
-        <span wicket:id="verification_url2" style="margin-bottom: 1em;"></span> <br>
-        <br>
+  <div class="main">
+    <div class="container">
+      <div class="wrapper">
+        <h2>
+          <span wicket:id="registrationLbl"></span>
+        </h2>
+        <strong>
+          <wicket:message key="507" />
+        </strong>
+        <br />
+        <wicket:message key="108" /> <span wicket:id="username"></span><br />
+        <wicket:message key="lbl.email" /> <span wicket:id="email"></span><br />
+        <span><a wicket:id="url"></a></span><br /><br />
+        <div wicket:id="verification" class="action">
+          <span>
+            <wicket:message key="667" />
+          </span><br /><br>
+          <a wicket:id="verification_url1">
+            <wicket:message key="668" />
+          </a>
+          <br /><br />
+          <span wicket:id="verification_url2"></span> <br />
+          <br />
+        </div>
+        <span wicket:id="groupLbl"></span>
       </div>
-      <span wicket:id="groupLbl" style="margin-bottom: 1em;"></span>
     </div>
-  </div>
   </div>
 </wicket:extend>
 
