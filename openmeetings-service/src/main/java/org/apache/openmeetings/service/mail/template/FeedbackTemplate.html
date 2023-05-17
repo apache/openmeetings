@@ -20,12 +20,23 @@
 -->
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-9.xsd">
-<wicket:extend>
-	<strong><span wicket:id="appname"></span> - Feedback</strong><br />
-	Message from User: <span wicket:id="username"></span><br/>
-	Mail: <span wicket:id="email"></span><br/>
-	Message: <span wicket:id="message"></span><br/><br/>
-	<strong>Click on this link to participate in the Meeting:</strong><br/>
-	<a wicket:id="invitation_link">Click here to enter room</a><br/>
-</wicket:extend>
+<div class="main">
+  <div class="container">
+    <div class="wrapper">
+      <h2>
+        <strong><span wicket:id="appname"></span> - Feedback</strong>
+      </h2>
+      Message from User: <span wicket:id="username"></span><br />
+      Mail: <span wicket:id="email"></span><br />
+      Message: <span wicket:id="message"></span><br /><br />
+      <div class="action">
+        <span>
+          <strong>Click on this link to participate in the Meeting:</strong><br />
+        </span><br />
+        <a wicket:id="invitation_link">Click here to enter room</a>
+        <br />
+      </div>
+    </div>
+  </div>
+</div>
 </html>
