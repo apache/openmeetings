@@ -20,11 +20,10 @@ package org.apache.openmeetings.service.mail.template;
 
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.LocaleHelper;
-import org.apache.wicket.core.util.string.ComponentRenderer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 
-public class RequestContactTemplate extends AbstractTemplatePanel {
+public class RequestContactTemplate extends AbstractTemplatePage {
 	private static final long serialVersionUID = 1L;
 
 	private RequestContactTemplate(User userToAdd, User user) {
@@ -38,6 +37,6 @@ public class RequestContactTemplate extends AbstractTemplatePanel {
 	}
 
 	public static String getEmail(User userToAdd, User user) {
-		return ComponentRenderer.renderComponent(new RequestContactTemplate(userToAdd, user)).toString();
+		return new RequestContactTemplate(userToAdd, user).renderEmail();
 	}
 }

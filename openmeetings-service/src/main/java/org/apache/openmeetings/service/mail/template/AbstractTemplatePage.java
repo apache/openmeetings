@@ -22,25 +22,40 @@ import java.util.Locale;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.IWebSession;
+import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
+import org.apache.wicket.core.util.string.ComponentRenderer;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.protocol.http.mock.MockHttpServletRequest;
+import org.apache.wicket.protocol.http.mock.MockHttpSession;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public abstract class AbstractTemplatePanel extends Panel {
+public abstract class AbstractTemplatePage extends WebPage {
 	private static final long serialVersionUID = 1L;
-	public static final String COMP_ID = "template";
+	public static final String COMP_ID = "container";
 	protected final Locale locale;
+	protected final ComponentRenderer renderer;
 
 	@SpringBean
 	protected IApplication app;
 
-	protected AbstractTemplatePanel(Locale locale) {
-		super(COMP_ID);
+	protected AbstractTemplatePage(Locale locale) {
 		this.locale = locale;
-		add(new TransparentWebMarkupContainer("container").add(AttributeModifier.append("dir", Session.isRtlLanguage(this.locale) ? "rtl" : "ltr")));
+		add(new TransparentWebMarkupContainer(COMP_ID).add(AttributeModifier.append("dir", Session.isRtlLanguage(this.locale) ? "rtl" : "ltr")));
+		final Application a = Application.get();
+		renderer = new ComponentRenderer(a) {
+			@Override
+			protected Request newRequest() {
+				return new ServletWebRequest(
+						new MockHttpServletRequest(a, new MockHttpSession(app.getServletContext()), app.getServletContext())
+						, "");
+			}
+		};
 	}
 
 	public static IWebSession getOmSession() {
@@ -49,5 +64,9 @@ public abstract class AbstractTemplatePanel extends Panel {
 
 	public String getString(String id, Locale locale, String... params) {
 		return app.getOmString(id, locale, params);
+	}
+
+	protected String renderEmail() {
+		return renderer.renderPage(() -> this).toString();
 	}
 }

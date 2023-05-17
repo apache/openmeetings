@@ -53,6 +53,8 @@ import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.urlfragment.AsyncUrlFragmentAwarePage;
 
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapResourcesBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6CssReference;
 
 public abstract class BasePage extends AsyncUrlFragmentAwarePage {
@@ -145,6 +147,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 			response.render(OnDomReadyHeaderItem.forScript(script));
 		}
 		response.render(CssHeaderItem.forReference(FontAwesome6CssReference.instance()));
+		BootstrapResourcesBehavior.instance().renderHead(Bootstrap.getSettings(getApplication()), response);
 		response.render(new FilteredHeaderItem(CssHeaderItem.forUrl("css/custom.css"), CUSTOM_CSS_FILTER));
 	}
 

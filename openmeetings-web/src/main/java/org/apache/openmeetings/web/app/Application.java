@@ -303,7 +303,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		getHeaderResponseDecorators().add(FilteringHeaderResponse::new);
 		super.init();
-		final IBootstrapSettings settings = new BootstrapSettings();
+		final IBootstrapSettings settings = new BootstrapSettings().setAutoAppendResources(false);
 		Bootstrap.builder().withBootstrapSettings(settings).install(this);
 		WysiwygLibrarySettings.get().setBootstrapCssReference(null);
 		WysiwygLibrarySettings.get().setBootstrapDropDownJavaScriptReference(null);
