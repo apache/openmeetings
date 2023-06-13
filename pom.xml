@@ -85,9 +85,9 @@
 		<wicket-bootstrap.version>6.0.4</wicket-bootstrap.version>
 		<font-awesome.version>6.4.0</font-awesome.version>
 		<spring.version>5.3.27</spring.version>
-		<tomcat.version>9.0.75</tomcat.version>
+		<tomcat.version>9.0.76</tomcat.version>
 		<ical4j.version>4.0.0-beta7</ical4j.version>
-		<cxf.version>3.5.5</cxf.version>
+		<cxf.version>3.6.1</cxf.version>
 		<io.prometheus.version>0.16.0</io.prometheus.version>
 		<aspectjtools.version>1.9.19</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
@@ -103,7 +103,7 @@
 		<commons-pool2.version>2.11.1</commons-pool2.version>
 		<commons-cli.version>1.5.0</commons-cli.version>
 		<commons-codec.version>1.15</commons-codec.version>
-		<commons-io.version>2.12.0</commons-io.version>
+		<commons-io.version>2.13.0</commons-io.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<commons-text.version>1.10.0</commons-text.version>
 		<commons-net.version>3.9.0</commons-net.version>
