@@ -53,9 +53,9 @@
 			<source>mvn org.sonatype.ossindex.maven:ossindex-maven-plugin:audit -f pom.xml</source>
 		</section>
 		<section name="Check for updates">
-			<source>mvn versions:display-dependency-updates</source>
-			<source>mvn versions:display-plugin-updates</source>
-			<source>mvn versions:display-property-updates</source>
+			<source>mvn versions:display-dependency-updates -DincludeParent</source>
+			<source>mvn versions:display-plugin-updates -DincludeParent</source>
+			<source>mvn versions:display-property-updates -DincludeParent</source>
 		</section>
 		<section name="Check dependencies">
 			<source>mvn org.apache.maven.plugins:maven-dependency-plugin:analyze-only</source>
@@ -84,7 +84,7 @@ cd openmeetings-webapp
 tail -f -n 1000 target/openmeetings.log
 ]]>
 			</source>
-			
+
 			<p>In case you would like to develop Openmeetings you need to run <i>"unpacked"</i> build: </p>
 			<source>
 <![CDATA[
