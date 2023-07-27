@@ -21,12 +21,13 @@ package org.apache.openmeetings.web.room.sidebar;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.ThreadHelper.startRunnable;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.DoubleConsumer;
 
-import org.apache.commons.fileupload2.FileItem;
+import org.apache.commons.fileupload2.core.FileItem;
 import org.apache.openmeetings.core.data.file.FileProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
@@ -149,7 +150,11 @@ public class RoomFileUploadResourceReference extends UploadResourceReference {
 				log.error("Unexpected error while processing uploaded file", e);
 				sendError(c, uuid, e.getMessage() == null ? "Unexpected error" : e.getMessage());
 			} finally {
-				curItem.delete();
+				try {
+					curItem.delete();
+				} catch (IOException e) {
+					log.error("IOException while deleting FileItem ", e);
+				}
 			}
 			currentSize += size;
 			sendProgress(c, uuid, progress, (int)(100 * currentSize / totalSize));

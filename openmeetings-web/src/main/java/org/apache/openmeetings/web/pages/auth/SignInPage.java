@@ -110,8 +110,6 @@ public class SignInPage extends BaseInitedPage {
 	private final OtpDialog otpDialog = new OtpDialog("otpDialog", Model.of());
 
 	@Inject
-	private ConfigurationDao cfgDao;
-	@Inject
 	private UserManager userManager;
 	@Inject
 	private OAuth2Dao oauthDao;

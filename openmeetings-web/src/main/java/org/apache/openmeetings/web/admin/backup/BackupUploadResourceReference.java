@@ -21,13 +21,14 @@ package org.apache.openmeetings.web.admin.backup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.web.util.ThreadHelper.startRunnable;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.fileupload2.FileItem;
+import org.apache.commons.fileupload2.core.FileItem;
 import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.user.User;
@@ -88,7 +89,13 @@ public class BackupUploadResourceReference extends UploadResourceReference {
 				log.error("Exception on panel backup download ", e);
 				sendError(c, uuid, e.getMessage() == null ? "Unexpected error" : e.getMessage());
 			} finally {
-				fileItems.forEach(FileItem::delete);
+				fileItems.forEach(fi -> {
+					try {
+						fi.delete();
+					} catch (IOException e) {
+						log.error("IOException while deleting FileItem ", e);
+					}
+				});
 				timer.cancel();
 			}
 			sendProgress(c, uuid, lastProgress, 100);

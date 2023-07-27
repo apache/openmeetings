@@ -109,8 +109,6 @@ public class MainPanel extends Panel {
 	@Inject
 	private ClientManager cm;
 	@Inject
-	private ConfigurationDao cfgDao;
-	@Inject
 	private UserDao userDao;
 	@Inject
 	private RoomDao roomDao;

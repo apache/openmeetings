@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
 
-import org.apache.commons.fileupload2.FileItem;
+import org.apache.commons.fileupload2.core.FileItem;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.web.app.Application;

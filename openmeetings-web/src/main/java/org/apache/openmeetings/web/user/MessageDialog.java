@@ -96,8 +96,6 @@ public class MessageDialog extends Modal<PrivateMessage> {
 	@Inject
 	private UserDao userDao;
 	@Inject
-	private ConfigurationDao cfgDao;
-	@Inject
 	private AppointmentDao apptDao;
 	@Inject
 	private PrivateMessageDao msgDao;
