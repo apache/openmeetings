@@ -36,6 +36,7 @@
 				<include>LICENSE</include>
 				<include>NOTICE.md</include>
 				<include>README.md</include>
+				<include>src/**</include>
 				<include>openmeetings-*/**</include>
 			</includes>
 			<excludes>
@@ -49,6 +50,8 @@
 				<exclude>**/.settings/**</exclude>
 				<exclude>**/node_modules/**</exclude>
 				<exclude>**/package-lock.json</exclude>
+				<exclude>**/.apt_generated/**</exclude>
+				<exclude>**/.apt_generated_tests/**</exclude>
 			</excludes>
 		</fileSet>
 	</fileSets>
