@@ -55,14 +55,14 @@
 		<version.maven-assembly-plugin>3.6.0</version.maven-assembly-plugin>
 		<version.maven-dependency-plugin>3.6.0</version.maven-dependency-plugin>
 		<version.maven-war-plugin>3.4.0</version.maven-war-plugin>
-		<version.maven-clean-plugin>3.2.0</version.maven-clean-plugin>
+		<version.maven-clean-plugin>3.3.1</version.maven-clean-plugin>
 		<version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
 		<version.maven-resources-plugin>3.3.1</version.maven-resources-plugin>
 		<version.maven-gpg-plugin>3.1.0</version.maven-gpg-plugin>
 		<version.apache-rat-plugin>0.15</version.apache-rat-plugin>
 		<version.checksum-maven-plugin>1.11</version.checksum-maven-plugin>
 
-		<maven-bundle-plugin.version>5.1.8</maven-bundle-plugin.version>
+		<maven-bundle-plugin.version>5.1.9</maven-bundle-plugin.version>
 		<maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
 		<exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
@@ -83,15 +83,15 @@
 		<plexus-utils.version>3.5.1</plexus-utils.version>
 
 		<!-- dependency versions -->
-		<junit.version>5.9.3</junit.version>
+		<junit.version>5.10.0</junit.version>
 		<wicket.version>9.14.0</wicket.version>
 		<wicket-jquery-ui.version>9.12.0</wicket-jquery-ui.version>
 		<wicketstuff.version>9.14.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.4</wicket-bootstrap.version>
 		<font-awesome.version>6.4.0</font-awesome.version>
-		<spring.version>5.3.28</spring.version>
-		<tomcat.version>9.0.76</tomcat.version>
-		<ical4j.version>4.0.0-beta8</ical4j.version>
+		<spring.version>5.3.29</spring.version>
+		<tomcat.version>9.0.78</tomcat.version>
+		<ical4j.version>4.0.0-beta9</ical4j.version>
 		<cxf.version>3.6.1</cxf.version>
 		<io.prometheus.version>0.16.0</io.prometheus.version>
 		<aspectjtools.version>1.9.19</aspectjtools.version>
@@ -114,7 +114,7 @@
 		<commons-net.version>3.9.0</commons-net.version>
 		<dom4j.version>2.1.4</dom4j.version>
 		<postgresql.version>42.6.0</postgresql.version>
-		<mysql.version>8.0.33</mysql.version>
+		<mysql.version>8.1.0</mysql.version>
 		<mssql.version>12.2.0.jre11</mssql.version>
 		<ojdbc.version>19.19.0.0</ojdbc.version>
 		<xstream.version>1.4.20</xstream.version>
