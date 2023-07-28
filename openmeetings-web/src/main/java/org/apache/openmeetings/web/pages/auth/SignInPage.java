@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegister
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.User;
@@ -109,8 +108,7 @@ public class SignInPage extends BaseInitedPage {
 	};
 	RegisterDialog r = new RegisterDialog("register");
 	private final OtpDialog otpDialog = new OtpDialog("otpDialog", Model.of());
-	@SpringBean
-	private ConfigurationDao cfgDao;
+
 	@SpringBean
 	private UserManager userManager;
 	@SpringBean

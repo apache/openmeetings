@@ -23,7 +23,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -44,8 +43,6 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 	private ClientManager cm;
 	@SpringBean
 	private GroupUserDao groupUserDao;
-	@SpringBean
-	private UserDao userDao;
 
 	protected RecordingResourceReference(String name) {
 		super(name);

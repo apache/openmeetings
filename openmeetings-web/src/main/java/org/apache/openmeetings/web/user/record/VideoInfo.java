@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 
-import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -40,8 +39,6 @@ public class VideoInfo extends Panel {
 	private final Label roomNameLbl = new Label("roomName", Model.of(""));
 	@SpringBean
 	private RoomDao roomDao;
-	@SpringBean
-	private RecordingChunkDao chunkDao;
 
 	public VideoInfo(String id) {
 		super(id);

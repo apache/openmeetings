@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
@@ -127,8 +126,6 @@ public class AppointmentDialog extends Modal<Appointment> {
 	private GroupUserDao groupUserDao;
 	@SpringBean
 	private AppointmentManager apptManager;
-	@SpringBean
-	private ConfigurationDao cfgDao;
 
 	public AppointmentDialog(String id, CalendarPanel calendarPanel, CompoundPropertyModel<Appointment> model) {
 		super(id, model);

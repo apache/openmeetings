@@ -26,7 +26,6 @@ import java.util.List;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
@@ -76,8 +75,6 @@ public class CalendarDialog extends Modal<OmCalendar> {
 	private int calIndex = 0;
 	@SpringBean
 	private UserDao userDao;
-	@SpringBean
-	private AppointmentDao apptDao;
 	@SpringBean
 	private AppointmentManager apptManager;
 

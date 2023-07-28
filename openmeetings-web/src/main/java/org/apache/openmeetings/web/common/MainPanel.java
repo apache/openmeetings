@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -108,8 +107,6 @@ public class MainPanel extends Panel {
 
 	@SpringBean
 	private ClientManager cm;
-	@SpringBean
-	private ConfigurationDao cfgDao;
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean

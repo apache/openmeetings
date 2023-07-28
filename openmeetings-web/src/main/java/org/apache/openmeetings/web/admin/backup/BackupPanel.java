@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.openmeetings.backup.BackupExport;
-import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
@@ -74,8 +73,6 @@ public class BackupPanel extends AdminBasePanel {
 
 	@SpringBean
 	private BackupExport backupExport;
-	@SpringBean
-	private BackupImport backupImport;
 
 	public BackupPanel(String id) {
 		super(id);

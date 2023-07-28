@@ -34,7 +34,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -111,8 +110,6 @@ public class CalendarPanel extends UserBasePanel {
 	private AppointmentManager apptManager;
 	@SpringBean
 	private UserDao userDao;
-	@SpringBean
-	private ConfigurationDao cfgDao;
 
 	public CalendarPanel(String id) {
 		super(id);
