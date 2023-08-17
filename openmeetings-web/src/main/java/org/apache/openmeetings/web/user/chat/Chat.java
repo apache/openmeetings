@@ -50,11 +50,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptUrlReferenceHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -171,7 +171,7 @@ public class Chat extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(Chat.class, "chat.js"))) {
+		response.render(new PriorityHeaderItem(new JavaScriptUrlReferenceHeaderItem("js/chat.js", "om-chat") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -182,7 +182,7 @@ public class Chat extends Panel {
 						, new PriorityHeaderItem(JavaScriptHeaderItem.forScript("jQuery.fn.tooltip = bstooltip;", "restore-bs-tooltip"))
 						);
 			}
-		});
+		}));
 		response.render(new PriorityHeaderItem(getNamedFunction("chatActivity", chatActivity, explicit(PARAM_TYPE), explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID))));
 
 		if (showDashboardChat) {

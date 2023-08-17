@@ -29,17 +29,17 @@ import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptUrlReferenceHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.pages.BrowserInfoForm;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import com.github.openjson.JSONObject;
 
 public class OmAjaxClientInfoBehavior extends AjaxClientInfoBehavior {
 	private static final long serialVersionUID = 1L;
-	private static final JavaScriptResourceReference MAIN_JS = new JavaScriptResourceReference(MainPanel.class, "main.js") {
+	private static final JavaScriptUrlReferenceHeaderItem MAIN_JS = new JavaScriptUrlReferenceHeaderItem("js/main.js", "om-main") {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -51,7 +51,7 @@ public class OmAjaxClientInfoBehavior extends AjaxClientInfoBehavior {
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(MAIN_JS)));
+		response.render(new PriorityHeaderItem(MAIN_JS));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(
 				String.format("OmUtil.init(%s)", new JSONObject()
 						.put("debug", DEVELOPMENT == Application.get().getConfigurationType()))

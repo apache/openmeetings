@@ -25,14 +25,12 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 
 import com.github.openjson.JSONObject;
 
 public class VideoSettings extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final ResourceReference SETTINGS_JS_REFERENCE = new JavaScriptResourceReference(VideoSettings.class, "settings.js");
+	public static final PriorityHeaderItem VIDEO_SETTINGS_JS = new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/settings.js"));
 	public static final String URL = "url";
 	public static final String FALLBACK = "fallback";
 
@@ -44,7 +42,7 @@ public class VideoSettings extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(SETTINGS_JS_REFERENCE)));
+		response.render(VIDEO_SETTINGS_JS);
 	}
 
 	public static JSONObject getInitJson(String sid) {

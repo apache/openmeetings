@@ -25,7 +25,7 @@ import static org.apache.openmeetings.db.entity.calendar.Appointment.allowedStar
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.room.wb.WbPanel.WB_JS_REFERENCE;
+import static org.apache.openmeetings.web.room.VideoSettings.VIDEO_SETTINGS_JS;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -91,7 +91,6 @@ import org.apache.wicket.protocol.ws.api.BaseWebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.FileResourceStream;
@@ -690,13 +689,15 @@ public class RoomPanel extends BasePanel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE)));
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "room.js"))) {
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/room.js")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public List<HeaderItem> getDependencies() {
-				return List.of(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(JQueryUILibrarySettings.get().getJavaScriptReference())));
+				return List.of(
+					VIDEO_SETTINGS_JS,
+					new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/wb.js"))
+					, new PriorityHeaderItem(JavaScriptHeaderItem.forReference(JQueryUILibrarySettings.get().getJavaScriptReference())));
 			}
 		});
 		response.render(JavaScriptHeaderItem.forReference(TouchPunchResourceReference.instance()));

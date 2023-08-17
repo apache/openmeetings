@@ -69,8 +69,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.danekja.java.util.function.serializable.SerializableBiConsumer;
@@ -90,7 +88,6 @@ public class WbPanel extends AbstractWbPanel {
 	private static final int DEFAULT_WIDTH = 640;
 	private static final int DEFAULT_HEIGHT = 480;
 	private static final int UNDO_SIZE = 20;
-	public static final ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "wb.js");
 	private final Long roomId;
 	private long wb2save = -1;
 	private final Map<Long, Deque<UndoObject>> undoList = new HashMap<>();

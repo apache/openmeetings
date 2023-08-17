@@ -81,92 +81,20 @@
 						<goals><goal>install-node-and-npm</goal></goals>
 					</execution>
 					<execution>
-						<id>main-install</id>
+						<id>npm-install</id>
 						<goals><goal>npm</goal></goals>
 						<configuration>
-							<workingDirectory>src/main/front/main</workingDirectory>
+							<workingDirectory>src/main/front</workingDirectory>
 						</configuration>
 					</execution>
 					<execution>
-						<id>main</id>
+						<id>js</id>
 						<goals><goal>npm</goal></goals>
 						<configuration>
 							<arguments>run build</arguments>
-							<workingDirectory>src/main/front/main</workingDirectory>
+							<workingDirectory>src/main/front</workingDirectory>
 							<environmentVariables>
-								<outDir>${project.build.directory}/generated-sources/js/org/apache/openmeetings/web/common/</outDir>
-							</environmentVariables>
-						</configuration>
-					</execution>
-					<execution>
-						<id>chat-install</id>
-						<goals><goal>npm</goal></goals>
-						<configuration>
-							<workingDirectory>src/main/front/chat</workingDirectory>
-						</configuration>
-					</execution>
-					<execution>
-						<id>chat</id>
-						<goals><goal>npm</goal></goals>
-						<configuration>
-							<arguments>run build</arguments>
-							<workingDirectory>src/main/front/chat</workingDirectory>
-							<environmentVariables>
-								<outDir>${project.build.directory}/generated-sources/js/org/apache/openmeetings/web/user/chat/</outDir>
-							</environmentVariables>
-						</configuration>
-					</execution>
-					<execution>
-						<id>settings-install</id>
-						<goals><goal>npm</goal></goals>
-						<configuration>
-							<workingDirectory>src/main/front/settings</workingDirectory>
-						</configuration>
-					</execution>
-					<execution>
-						<id>settings</id>
-						<goals><goal>npm</goal></goals>
-						<configuration>
-							<arguments>run build</arguments>
-							<workingDirectory>src/main/front/settings</workingDirectory>
-							<environmentVariables>
-								<outDir>${project.build.directory}/generated-sources/js/org/apache/openmeetings/web/room/</outDir>
-							</environmentVariables>
-						</configuration>
-					</execution>
-					<execution>
-						<id>room-install</id>
-						<goals><goal>npm</goal></goals>
-						<configuration>
-							<workingDirectory>src/main/front/room</workingDirectory>
-						</configuration>
-					</execution>
-					<execution>
-						<id>room</id>
-						<goals><goal>npm</goal></goals>
-						<configuration>
-							<arguments>run build</arguments>
-							<workingDirectory>src/main/front/room</workingDirectory>
-							<environmentVariables>
-								<outDir>${project.build.directory}/generated-sources/js/org/apache/openmeetings/web/room/</outDir>
-							</environmentVariables>
-						</configuration>
-					</execution>
-					<execution>
-						<id>wb-install</id>
-						<goals><goal>npm</goal></goals>
-						<configuration>
-							<workingDirectory>src/main/front/wb</workingDirectory>
-						</configuration>
-					</execution>
-					<execution>
-						<id>wb</id>
-						<goals><goal>npm</goal></goals>
-						<configuration>
-							<arguments>run build</arguments>
-							<workingDirectory>src/main/front/wb</workingDirectory>
-							<environmentVariables>
-								<outDir>${project.build.directory}/generated-sources/js/org/apache/openmeetings/web/room/wb/</outDir>
+								<outDir>${project.build.directory}/${project.build.finalName}/js/</outDir>
 							</environmentVariables>
 						</configuration>
 					</execution>
