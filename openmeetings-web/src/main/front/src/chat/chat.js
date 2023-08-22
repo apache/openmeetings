@@ -226,15 +226,15 @@ function _addTab(id, label) {
 	tabs.find('.nav.nav-tabs').append(li);
 	const msgArea = OmUtil.tmpl('#chat-msg-area-template', id);
 	tabs.find('.tab-content').append(msgArea);
-	msgArea.append($('<div class="clear icons actions align-left">').addClass('short')
+	msgArea.append($('<div class="clear icons actions float-start">').addClass('short')
 			.append(OmUtil.tmpl('#chat-actions-short-template')));
-	msgArea.append($('<div class="clear icons actions align-left">').addClass('short-mod')
+	msgArea.append($('<div class="clear icons actions float-start">').addClass('short-mod')
 			.append(OmUtil.tmpl('#chat-actions-short-template'))
 			.append(OmUtil.tmpl('#chat-actions-accept-template')));
-	msgArea.append($('<div class="clear icons actions align-left">').addClass('full')
+	msgArea.append($('<div class="clear icons actions float-start">').addClass('full')
 			.append(OmUtil.tmpl('#chat-actions-short-template'))
 			.append(OmUtil.tmpl('#chat-actions-others-template').children().clone()));
-	msgArea.append($('<div class="clear icons actions align-left">').addClass('full-mod')
+	msgArea.append($('<div class="clear icons actions float-start">').addClass('full-mod')
 			.append(OmUtil.tmpl('#chat-actions-short-template'))
 			.append(OmUtil.tmpl('#chat-actions-others-template').children().clone())
 			.append(OmUtil.tmpl('#chat-actions-accept-template')));
@@ -317,7 +317,10 @@ function _addMessage(m) {
 				area.data('lastDate', cm.date);
 			}
 			area.append(msg);
-			msg.find('.user-row')[0].style.backgroundImage = 'url(' + (!!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now()) + ')';
+			msg.find('.user-row')[0].style.cssText = `
+				background-image: url(${(!!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now())});
+				background-position-x: ${Settings.isRtl ? 'right' : 'left'};
+			`;
 
 			msg.find('.msg').html(CSSEmoticon.emoticonize(!!cm.message ? cm.message : ""));
 			if (btm) {
@@ -509,9 +512,7 @@ $(function() {
 						}
 						break;
 					case "typing":
-						if (typeof(typingActivity) === "function") {
-							_typingActivity(m.uid, m.active);
-						}
+						_typingActivity(m.uid, m.active);
 						break;
 				}
 			}

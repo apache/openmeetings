@@ -21,7 +21,7 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-9.xsd">
 <wicket:extend>
-	<div wicket:id="feedback" class="feedback"></div>
+	<div wicket:id="feedback" class="feedback position-absolute top-0 end-0"></div>
 	<div class="adminPanelColumnTable label col-6">
 		<form wicket:id="langForm" class="addLanguagePanel">
 			<div class="input-group input-group-sm">
@@ -58,7 +58,7 @@
 			<div class="actions" wicket:id="buttons"></div>
 			<div class="scrollcontent" id="adminForm">
 				<fieldset>
-					<legend><wicket:message key="353" /></legend>
+					<legend class="text-end"><wicket:message key="353" /></legend>
 					<div class="formelement row">
 						<label wicket:for="key" class="form-label col-3 text-right"><wicket:message key="165" /></label>
 						<div class="col-8 p-0">

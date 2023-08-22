@@ -4,20 +4,18 @@
 	padding-bottom: 0;
 }
 .room-block .menu .top.exit {
-	padding-left: 0;
+	padding-inline-start: 0;
 }
 .room-block .menu .details {
 	position: absolute;
 	top: 0;
-	margin-right: 5px;
-	right: 0;
+	margin-inline-end: 5px;
 	display: inline-block;
 	z-index: calc(var(--menu-zindex) + 1);
 }
 .room-block .menu .details .room {
-	float: right;
 	padding-top: 5px;
-	padding-right: 5px;
+	padding-inline-end: 5px;
 }
 .room-block .menu .details .room.name {
 	font-weight: bold;
@@ -28,15 +26,10 @@
 .room-block .menu .details .icon {
 	width: 30px;
 	height: 30px;
-	background-repeat: no-repeat;
-	background-position: 5px 5px;
-	background-size: 22px;
-	float: right;
 	padding: 0;
 }
 .room-block .menu .details .detail-btn {
 	padding: 0.1rem 0.4rem;
-	float: right;
 	position: relative;
 }
 .room-block .menu .details .detail-btn i::before {
@@ -48,7 +41,6 @@
 }
 .room-block .menu .details .detail-btn i.add-on {
 	position: absolute;
-	left: 5px;
 	color: var(--bs-warning);
 	bottom:  0;
 }
@@ -57,15 +49,4 @@
 }
 .room-block .menu .details .icon .profile img {
 	width: 28px;
-}
-
-html[dir="rtl"] .navbar .navbar-nav.me-auto {
-	margin-right: unset !important;
-}
-html[dir="rtl"] .navbar .dropdown-menu {
-	left: initial;
-	right: 0;
-}
-html[dir="rtl"] .dropdown-menu .dropdown-item {
-	text-align: right;
 }

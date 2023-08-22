@@ -56,7 +56,7 @@ import com.googlecode.wicket.jquery.ui.interaction.droppable.IDroppableListener;
 
 public class FolderPanel extends Panel implements IDraggableListener, IDroppableListener {
 	private static final long serialVersionUID = 1L;
-	private static final String CSS_CLASS_FILE = "file ";
+	private static final String CSS_CLASS_FILE = "file ps-5 ";
 	private static final String PARAM_MOD = "mod";
 	private static final String PARAM_SHIFT = "s";
 	private static final String PARAM_CTRL = "c";

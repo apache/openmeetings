@@ -333,7 +333,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 						PrivateMessage pm = newDlg.reset(true).getModelObject();
 						pm.setTo(opm.getFrom());
 						pm.setSubject(String.format("%s %s", getString("messages.subject.re"), opm.getSubject()));
-						pm.setMessage(String.format("<br/><blockquote class=\"quote\">%s</blockquote>", opm.getMessage()));
+						pm.setMessage(String.format("<br/><blockquote class=\"border-start quote\">%s</blockquote>", opm.getMessage()));
 						newDlg.show(target);
 					}
 				}
@@ -498,9 +498,9 @@ public class MessagesContactsPanel extends UserBasePanel {
 	}
 
 	private void setDefaultFolderClass() {
-		inbox.add(AttributeModifier.replace(ATTR_CLASS, "email inbox clickable"));
-		sent.add(AttributeModifier.replace(ATTR_CLASS, "email sent clickable"));
-		trash.add(AttributeModifier.replace(ATTR_CLASS, "email trash clickable"));
+		inbox.add(AttributeModifier.replace(ATTR_CLASS, "email text-start inbox clickable"));
+		sent.add(AttributeModifier.replace(ATTR_CLASS, "email text-start sent clickable"));
+		trash.add(AttributeModifier.replace(ATTR_CLASS, "email text-start trash clickable"));
 	}
 
 	private static void selectFolder(WebMarkupContainer folder) {
@@ -508,7 +508,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 	}
 
 	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {
-		folder.add(AttributeModifier.replace(ATTR_CLASS, "email folder clickable"));
+		folder.add(AttributeModifier.replace(ATTR_CLASS, "email text-start folder clickable"));
 		if (folder.getModelObject().getId().equals(selectedFolderModel.getObject())) {
 			selectFolder(folder);
 		}

@@ -41,9 +41,6 @@
 .file-tree .footer .sizes {
 	display: inline-block;
 }
-.file-tree .footer .sizes .size {
-	padding-left: 5px;
-}
 .file-tree .footer .buttons .other-buttons {
 	display: inline-block;
 	margin: 0 2px;
@@ -131,9 +128,6 @@
 }
 .file-tree .trees .processing.om-icon i {
 	display: block;
-}
-.file.om-icon, .recording.om-icon {
-	padding-left: 34px;
 }
 .public.file.om-icon::before {
 	content: '\f0ac';
@@ -225,4 +219,10 @@
 .upload.om-icon::before {
 	content: '\f574';
 	padding: 0 7px;
+}
+
+
+html[dir="rtl"] .trees .om-icon.big::before {
+	left: initial;
+	right: 3px;
 }

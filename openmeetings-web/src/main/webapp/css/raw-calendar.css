@@ -19,7 +19,6 @@
 }
 #calendarlistcontainer {
 	width: 20%;
-	float: left;
 	display: inline-block;
 	overflow-y: auto;
 }

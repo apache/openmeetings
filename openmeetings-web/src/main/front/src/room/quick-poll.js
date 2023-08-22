@@ -26,6 +26,7 @@ function _update(obj) {
 		if (qv.length === 0) {
 			const wbArea = $('.room-block .wb-block');
 			qv = OmUtil.tmpl('#quick-vote-template', 'quick-vote');
+			qv.attr('class', 'end-0');
 			wbArea.append(qv);
 		}
 		const pro = qv.find('.control.pro')

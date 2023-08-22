@@ -8,8 +8,6 @@
 	width: 300px;
 	height: 300px;
 	top: 30px;
-	right:  0;
-	left: auto;
 	z-index: 3050;
 }
 .room-block .event-details.modal .modal-dialog {
@@ -28,8 +26,6 @@
 	position: absolute;
 	height: 100%;
 	top: 0;
-	right: auto;
-	left: 0;
 }
 .room-block .sb-wb .sidebar #room-sidebar-tabs {
 	height: calc(100% - var(--activities-height));
@@ -64,10 +60,6 @@
 .room-block .sb-wb .sidebar .tab.user .label {
 	width: calc((var(--sidebar-width) - 50px) / 2 - 80px);
 }
-html[dir="rtl"] .room-block .sb-wb .sidebar {
-	right: 0;
-	left: auto;
-}
 .room-block .sb-wb .sidebar #busy-indicator {
 	margin: 8px;
 }
@@ -81,7 +73,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	border-color: #bebec3;
 }
 #room-sidebar-tab-users .header {
-	padding-left: 5px;
+	padding-inline-start: 5px;
 	height: var(--room-sidebar-header-height);
 }
 #room-sidebar-tab-users .header .om-icon {
@@ -98,11 +90,11 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 .room-block .sb-wb .sidebar .user-list .user.entry {
 	min-height: 90px;
-	padding-left: 5px;
+	padding-inline-start: 5px;
 	padding-top: 5px;
 	background-size: 80px;
 	background-repeat: no-repeat;
-	background-position: 2px 2px;
+	background-position: var(--background-start) 2px;
 	position: relative;
 }
 .room-block .sb-wb .sidebar .user-list .user.entry:hover {
@@ -120,8 +112,8 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	line-height: 18px;
 	height: 18px;
 	padding: 0;
-	padding-left: 64px;
-	margin-right: 20px;
+	padding-inline-start: 64px;
+	margin-inline-end: 20px;
 	overflow: hidden;
 }
 .room-block.narrow .sidebar .user-list .user.name {
@@ -187,7 +179,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	width: 14px;
 	height: 14px;
 	min-height: 14px;
-	margin-right: 2px;
+	margin-inline-end: 2px;
 	margin-left: unset;
 }
 .audio-activity.om-icon {
@@ -386,21 +378,21 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	width: 130px;
 }
 .sip .button-row #sip-dialer-btn-erase {
-	margin-left: 5px;
+	margin-inline-start: 5px;
 }
 .room-block .sb-wb .sidebar .tab.om-icon.big {
 	line-height: 30px;
-	padding-left: 10px;
+	padding-inline-start: 10px;
 	position: relative;
 }
 .room-block .sb-wb .sidebar .tab .badge {
 	position: absolute;
 	bottom: 0;
-	right: 2px;
+	margin-inline-end: 2px;
 }
 .room-block.narrow .sidebar .tab.om-icon.big {
-	padding-left: 6px;
-	padding-right: 0;
+	padding-inline-start: 6px;
+	padding-inline-end: 0;
 }
 .room-block .wait-moder {
 	position: fixed;
@@ -435,15 +427,12 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 .user-video .buttonpane {
 	background-color: var(--bs-white);
-	position: absolute;
-	right: 2px;
-	top: 2px
 }
 .ui-dialog.video .ui-dialog-content {
 	overflow: hidden;
 }
 .ui-dialog.video .ui-dialog-titlebar {
-	padding-left: 10px;
+	padding-inline-start: 10px;
 	border: none;
 }
 .ui-dialog.video.user-video.user-speaks {
@@ -474,11 +463,11 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 .modal.video .vid-block {
 	min-width: 300px;
-	padding-left: 305px;
+	padding-inline-start: 305px;
 }
 .modal.video .warn {
 	float: right;
-	margin-right: .3em;
+	margin-inline-end: .3em;
 }
 .modal.video .sett-container {
 	position: relative;
@@ -488,7 +477,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	padding-top: 10px;
 }
 .modal.video .sett-row.right {
-	text-align: right;
+	text-align: var(--text-align-end);
 }
 .modal.video .vid-block .video-conainer {
 	overflow: auto;
@@ -544,7 +533,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	overflow: hidden;
 }
 .room-block .room-container .user-video .header .ui-dialog-title {
-	padding-left: 5px;
+	padding-inline-start: 5px;
 }
 .room-block .room-container .user-video .video {
 	min-width: 40px;
@@ -671,7 +660,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 #quick-vote {
 	position: absolute;
-	right: 40px;
+	margin-inline-end: 40px;
 	bottom: 40px;
 	padding: 5px;
 	border: 1px solid;
@@ -688,7 +677,6 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 #quick-vote .control .badge {
 	position: absolute;
-	right: 0;
 	bottom: 0;
 	font-size: 0.5em;
 }
@@ -703,7 +691,6 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	color: var(--bs-danger);
 }
 #quick-vote .close-btn {
-	float: right;
 	padding: 0 0.4rem;
 }
 .main.room.INTERVIEW #quick-vote {
@@ -736,7 +723,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	height: 25px;
 	position: absolute;
 	top: 5px;
-	right: 5px;
+	margin-inline-end: 5px;
 }
 .video .mute-others {
 	position: absolute;
@@ -786,7 +773,7 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 }
 @media screen and (max-width: 1280px) {
 	.room-block .sb-wb .sidebar .tab.om-icon.big {
-		padding-right: 0;
+		padding-inline-end: 0;
 	}
 	.room-block .sb-wb .sidebar .user-list .user.name {
 		display: none;
@@ -794,4 +781,9 @@ html[dir="rtl"] .room-block .sb-wb .sidebar {
 	.room-block.big .sb-wb .sidebar .user-list .user.name {
 		display: block;
 	}
+}
+
+html[dir="rtl"] .main.room #chatPanel {
+    right: initial;
+    left: 0px;
 }

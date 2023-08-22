@@ -274,7 +274,7 @@ module.exports = class WbTools {
 						err.text(msg);
 						StaticTMath.highlight(err);
 					});
-			}).parent().css('text-align', Settings.isRtl ? 'left' : 'right');
+			});
 			math.draggable({
 				scroll: false
 				, handle: '.ui-dialog-titlebar'

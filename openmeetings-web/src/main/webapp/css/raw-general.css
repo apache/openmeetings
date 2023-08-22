@@ -9,7 +9,19 @@ html, body {
 	padding: 0;
 	font-family: Arial, Helvetica, sans-serif;
 	overflow-y: hidden;
+
+	--text-align-start: left;
+	--text-align-end: right;
+	--background-start: left;
+	--background-end: right;
 }
+html[dir="rtl"] {
+	--text-align-start: right;
+	--text-align-end: left;
+	--background-start: right;
+	--background-end: left;
+}
+
 .main-loader {
 	height: 100%;
 }
@@ -23,12 +35,12 @@ html, body {
 	padding-bottom: 20px;
 }
 .signin .oauth-section .provider {
-	background-position: 0 0;
+	background-position: var(--background-start) 0;
 	background-size: 24px;
 	background-repeat: no-repeat;
 	height: 24px;
 	display: inline-block;
-	padding-left: 20px;
+	padding-inline-start: 20px;
 	vertical-align: bottom;
 }
 .signin .or-seperator {
@@ -44,39 +56,38 @@ html, body {
 	z-index: 1;
 }
 .signin-forget .form-check-label {
-	padding-right: 10px;
+	padding-inline-end: 10px;
 }
 #header {
 	font-size: 28px;
 	line-height: 40px;
 	font-weight: bold;
-	background-image: url(images/logo.png);
-	background-repeat: no-repeat;
-	padding-left: 80px;
-	margin-left: 20px;
+	padding-inline-start: 80px;
+	margin-inline-start: 20px;
 	height: var(--header-height);
 }
-#topLinks {
-	position: absolute;
-	top: 10px;
-	right: 10px;
+#header .logo {
+	display: inline-block;
+	background-image: url(images/logo.png);
+	background-repeat: no-repeat;
+	height: var(--header-height);
+	width: 80px;
 }
-
+#topLinks {
+	--bs-border-width: 1px;
+	--bs-border-style: solid;
+	--bs-border-color: black;
+}
 #topLinks span {
 	padding-right: 5px;
 	padding-left: 5px;
-	border-right: 1px solid black;
 	white-space: nowrap;
 }
 
-#topLinks span:last-child {
-	border-right: none;
-}
 #busy-indicator {
 	display: none;
 	z-index: 1000;
 	position: absolute;
-	right: 0;
 	margin: 2px;
 	font-size: 2em;
 	line-height: 1.2em;
@@ -97,7 +108,7 @@ html, body {
 	height: calc(100% - 50px);
 }
 .pagedEntityListPanel, .addLanguagePanel {
-	margin-left: 2px;
+	margin-inline-start: 2px;
 	display: inline-block;
 }
 .pagedEntityListPanel .pagination {
@@ -165,17 +176,8 @@ html, body {
 .ui-dialog {
 	box-shadow: 3px 3px 4px #000;
 }
-.start_step1, .start_step2, .start_step3, .start_step4 {
+.start_step {
 	margin: 5px 0px 5px 0px;
-}
-.start_step2 {
-	margin-left: 20px;
-}
-.start_step3 {
-	margin-left: 40px;
-}
-.start_step4 {
-	margin-left: 60px;
 }
 .widget {
 	width: 100%;
@@ -192,23 +194,17 @@ html, body {
 #feeds .card .card-body, .text-pre {
 	white-space: pre;
 }
-.align-left {
-	float: left;
-}
-.align-right {
-	float: right;
-}
 .clear {
 	clear: both;
 }
 .om-icon {
 	background-repeat: no-repeat !important;
-	background-position: 0 0 !important;
+	background-position: var(--background-start) 0 !important;
 	background-size: 16px;
 	width: 18px;
 	height: 18px;
 	border: none;
-	margin-left: 2px;
+	margin-inline-start: 2px;
 	margin-top: 2px;
 	display: inline-block;
 	position: relative;
@@ -252,9 +248,12 @@ html, body {
 	padding: 0;
 }
 .private.message.body .quote {
-	border-left: 1px solid #cccccc;
-	margin-left: 10px;
-	padding-left: 10px;
+	--bs-border-width: 1px;
+	--bs-border-style: solid;
+	--bs-border-color: #cccccc;
+
+	margin-inline-start: 10px;
+	padding-inline-start: 10px;
 }
 table.messages {
 	width: 100%;
@@ -290,12 +289,8 @@ table.messages td.from, table.messages td.subject {
 	overflow-wrap: break-word;
 }
 .email {
-	background-repeat: no-repeat !important;
-	background-position: 5px 3px !important;
-	background-size: 16px 16px !important;
 	padding-top: 2px;
 	display: block;
-	text-align:left;
 }
 .email.selected {
 	border: 1px solid #cccccc;
@@ -307,12 +302,10 @@ table.messages td.from, table.messages td.subject {
 }
 .email.folder .delete {
 	position:absolute;
-	right: 2px;
 	top: 2px;
 	font-weight: normal;
 	padding: 0;
 	display: inline-block;
-	background-position: 0;
 	width: 18px;
 	height: 18px;
 }
@@ -330,14 +323,6 @@ textarea.messages.body {
 }
 select.messages.selector {
 	width: 220px;
-}
-.info-title {
-	background-image: url(images/information.png);
-	background-repeat: no-repeat;
-	width: 16px;
-	height: 16px;
-	display: inline-block;
-	margin-left: 10px;
 }
 #messagesTable tr.selected {
 	background-color: var(--bs-light);
@@ -357,16 +342,11 @@ select.messages.selector {
 .room-list .room-row button.refresh {
 	padding: 0 0.25rem;
 }
-.room-list .room-row button.enter {
-	position: absolute;
-	right: 10px;
-	top: 10px;
-}
 .select2-results .user.external, .select2-selection .user.external
 , .select2-results .user.internal, .select2-selection .user.internal {
-	padding-left: 18px;
+	padding-inline-start: 18px;
 	background-repeat: no-repeat;
-	background-position: 0px 2px;
+	background-position: var(--background-start) 2px;
 }
 .select2-results .user.external, .select2-selection .user.external {
 	background-image: url(images/user_go.png);
@@ -420,8 +400,8 @@ select.messages.selector {
 }
 .page.recording-panel .video, .page.recording-panel .info {
 	display: inline-block;
-	float: left;
-	padding-left: 20px;
+	float: inline-start;
+	padding-inline-start: 20px;
 }
 .page.recording-panel .video {
 	min-width: 400px;
@@ -474,17 +454,16 @@ select.messages.selector {
 }
 .user.info.panel legend {
 	font-style: italic;
-	text-align: right;
 }
 .user.info.panel fieldset table, .user.info.panel fieldset table textarea {
 	width: 100%;
 }
-#topControls #wicketDebugBar {
+.main-container #wicketDebugBar {
 	right: initial;
 	top: initial;
 	z-index: 2;
-	bottom: 0;
 	position: fixed;
+	margin-inline-end: 25px;
 }
 .profile {
 	position: relative;
@@ -497,9 +476,6 @@ select.messages.selector {
 	font-size: 12px;
 }
 .profile .remove {
-	position: absolute;
-	right: -10px;
-	top: 5px;
 	border: 1px solid #cccc;
 	padding: 0px 7px;
 }
@@ -548,7 +524,7 @@ select.messages.selector {
 }
 .list-table th {
 	overflow: hidden;
-	text-align: left;
+	text-align: var(--text-align-start);
 }
 .bottom-bumper {
 	height: 30px;
@@ -737,9 +713,6 @@ select.messages.selector {
 	height: calc(100% - 65px);
 }
 #alert-holder {
-	position: fixed;
-	right: 0;
-	bottom: 0;
 	z-index: calc(var(--chat-zindex) + 2);
 }
 .popover.confirmation.show {

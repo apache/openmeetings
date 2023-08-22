@@ -31,7 +31,10 @@ module.exports = {
 		'../wb/wb-area': 'DrawWbArea',
 	},
 	plugins: [
-		new CircularDependencyPlugin(),
+		new CircularDependencyPlugin({
+			exclude: /node_modules/,
+			failOnError: true,
+		}),
 	],
 	output: {
 		path: `${process.env.outDir}`,

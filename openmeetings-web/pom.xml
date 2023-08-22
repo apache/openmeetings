@@ -115,7 +115,6 @@
 								<cssSourceFile>raw-variables.css</cssSourceFile>
 								<cssSourceFile>raw-nettest.css</cssSourceFile>
 								<cssSourceFile>raw-general.css</cssSourceFile>
-								<cssSourceFile>raw-general-rtl.css</cssSourceFile>
 								<cssSourceFile>raw-activities.css</cssSourceFile>
 								<cssSourceFile>raw-admin.css</cssSourceFile>
 								<cssSourceFile>raw-calendar.css</cssSourceFile>
@@ -488,10 +487,6 @@
 		<dependency>
 			<groupId>de.agilecoders.wicket</groupId>
 			<artifactId>wicket-bootstrap-themes</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>font-awesome</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

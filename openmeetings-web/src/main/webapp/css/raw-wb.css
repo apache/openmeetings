@@ -6,10 +6,6 @@
 	top: 0;
 	left: calc(var(--sidebar-width) + var(--buffer-size));
 }
-html[dir="rtl"] .room-block .sb-wb .wb-block {
-	right: calc(var(--sidebar-width) + var(--buffer-size));
-	left: auto;
-}
 .room-block .sb-wb .wb-block.droppable-hover {
 	border: 0;
 }
@@ -44,14 +40,14 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 }
 .room-block .sb-wb .wb-block .tabs .wb-tabbar li a {
 	position: relative;
-	padding-right: 25px;
+	padding-inline-end: 25px;
 }
 .wb-tab-close {
 	width: 20px;
 	height: 20px;
 	position: absolute;
 	top: 0px;
-	right: 2px;
+	margin-inline-end: 2px;
 }
 .btn-outline-secondary.btn-no-border {
 	border: none;
@@ -63,11 +59,7 @@ html[dir="rtl"] .room-block .sb-wb .wb-block {
 }
 .room-block .sb-wb .wb-block .tabs .wb-tab-content .fullscreen {
 	position: absolute;
-	right: 40px;
-}
-html[dir="rtl"] .room-block .sb-wb .wb-block .tabs .wb-tab-content .fullscreen {
-	right: initial;
-	left: 40px;
+	margin-inline-end: 40px;
 }
 .room-block .sb-wb .wb-block .tabs .wb-tab-content .tab-pane {
 	height: 100%;
@@ -85,7 +77,7 @@ html[dir="rtl"] .room-block .sb-wb .wb-block .tabs .wb-tab-content .fullscreen {
 	vertical-align: top;
 	background-size: 27px;
 	margin: 0;
-	background-position: 4px !important;
+	background-position: var(--background-start) !important;
 	position: relative;
 }
 .room-block .sb-wb .wb-block .tools .om-icon.big.stub {
@@ -94,7 +86,7 @@ html[dir="rtl"] .room-block .sb-wb .wb-block .tabs .wb-tab-content .fullscreen {
 }
 .room-block .sb-wb .wb-block .tools .dropstart .dropdown-toggle::before {
 	vertical-align: bottom;
-	margin-right: 0;
+	margin-inline-end: 0;
 }
 .room-block .sb-wb .wb-block .tools .dropdown-menu .om-icon.big {
 	float: none;
@@ -106,7 +98,7 @@ html[dir="rtl"] .room-block .sb-wb .wb-block .tabs .wb-tab-content .fullscreen {
 	border: 1px solid #6b6565;
 }
 .room-block .sb-wb .wb-block .tools .om-icon.big::before {
-	padding-left: 5px;
+	padding-inline-start: 5px;
 }
 .room-block .sb-wb .wb-block .tools .drawings .om-icon.big.stub::before
 , .room-block .sb-wb .wb-block .tools .om-icon.big.math::before
@@ -209,23 +201,17 @@ html[dir="rtl"] .room-block .sb-wb .wb-block .tabs .wb-tab-content .fullscreen {
 }
 .wb-tool-settings .ui-dialog-titlebar-close, .wb-formula .ui-dialog-titlebar-close {
 	position: absolute;
-	right: .3em;
+	margin-inline-end: .3em;
 	top: 5px;
 	width: 20px;
 	padding: 1px;
 	height: 20px;
 }
-html[dir="rtl"] .wb-tool-settings .ui-dialog-titlebar-close
-, html[dir="rtl"] .wb-formula .ui-dialog-titlebar-close
-{
-	left: .3em;
-	right: auto;
-}
 .wb-tool-settings .header, .wb-formula .header {
 	padding: 5px;
 }
 .wb-tool-settings .header .ui-dialog-title, .wb-formula .header .ui-dialog-title {
-	padding-left: 10px;
+	padding-inline-start: 10px;
 }
 .wb-tool-settings .tab.props {
 	padding: 5px 10px;
@@ -237,7 +223,7 @@ html[dir="rtl"] .wb-tool-settings .ui-dialog-titlebar-close
 }
 .wb-tool-settings .tab.props .block {
 	display: inline;
-	padding-left: 5px;
+	padding-inline-start: 5px;
 }
 .wb-tool-settings .tab.props .block.lbl {
 	width: 1em;
@@ -292,8 +278,8 @@ html[dir="rtl"] .wb-tool-settings .ui-dialog-titlebar-close
 	left: auto !important;
 }
 .wb-tabbar {
-	padding-left: 70px !important;
-	padding-right: 35px !important;
+	padding-inline-start: 70px !important;
+	padding-inline-end: 35px !important;
 	min-height: 40px;
 }
 .wb-tabbar .scroll-container {
@@ -313,13 +299,13 @@ html[dir="rtl"] .wb-tool-settings .ui-dialog-titlebar-close
 	top: 3px;
 }
 .wb-tabbar .add {
-	left: 2px;
+	margin-inline-start: 2px;
 }
 .wb-tabbar .prev {
-	left: 35px;
+	margin-inline-start: 35px;
 }
 .wb-tabbar .next {
-	right: 2px;
+	margin-inline-end: 2px;
 }
 .room-block .sb-wb .wb-block .tabs .wb-tab-content .wb-with-zoom {
 	width: calc(100% - 40px);
@@ -341,7 +327,7 @@ html[dir="rtl"] .wb-tool-settings .ui-dialog-titlebar-close
 }
 .room-block .sb-wb .wb-block .tabs .wb-tab-content .scroll-container .canvas-container {
 	margin-top: 5px;
-	margin-left: 5px;
+	margin-inline-start: 5px;
 	border: 1px solid #888888;
 	box-shadow: 5px 5px 5px #888888;
 }
@@ -361,14 +347,20 @@ html[dir="rtl"] .wb-tool-settings .ui-dialog-titlebar-close
 }
 .wb-area .wb-zoom .settings-group {
 	display: none;
-	margin-left: 2px;
+	margin-inline-start: 2px;
 }
 .wb-area .wb-zoom .doc-group {
-	margin-left: 5px;
+	margin-inline-start: 5px;
 }
 .wb-area .wb-zoom .zoom-group {
-	margin-left: 2px;
+	margin-inline-start: 2px;
 }
 #wb-rename-menu {
 	display: none;
+}
+
+
+html[dir="rtl"] .room-block .sb-wb .wb-block {
+	left: initial;
+	right: calc(var(--sidebar-width) + var(--buffer-size));
 }

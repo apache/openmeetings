@@ -118,3 +118,12 @@ span.css-emoticon.nintendo-controller {
 	border-radius: 0;
 	background: linear-gradient(to right, #a5aabd, #74798c);
 }
+
+html[dir="rtl"] span.css-emoticon.un-transformed-emoticon
+, html[dir="rtl"] span.css-emoticon.animated-emoticon:hover
+{
+	transform: rotate(0deg) !important;
+}
+html[dir="rtl"] span.css-emoticon {
+	transform: rotate(-90deg) !important;
+}

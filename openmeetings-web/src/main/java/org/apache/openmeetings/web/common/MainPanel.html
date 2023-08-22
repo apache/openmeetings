@@ -21,17 +21,17 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-9.xsd">
 <wicket:panel>
 	<div wicket:id="topControls">
-		<div wicket:id="topLinks">
-			<span id="logout"><a wicket:id="logout" href="#" wicket:message="title:310"><wicket:message key="310"/></a></span>
-			<span id="reportBug"><a target="_blank" href="https://issues.apache.org/jira/browse/OPENMEETINGS" rel="noopener noreferrer"><wicket:message key="284"/></a></span>
+		<div wicket:id="topLinks" class="position-absolute top-0 end-0 mt-2 me-2">
+			<span id="logout" class="border-end"><a wicket:id="logout" href="#" wicket:message="title:310"><wicket:message key="310"/></a></span>
+			<span id="reportBug" class="border-end"><a target="_blank" href="https://issues.apache.org/jira/browse/OPENMEETINGS" rel="noopener noreferrer"><wicket:message key="284"/></a></span>
 			<span><a wicket:id="about"><wicket:message key="1549"/></a></span>
 		</div>
-		<div id="busy-indicator"><i class="fas fa-spinner fa-spin"></i></div>
+		<div id="busy-indicator" class="end-0"><i class="fas fa-spinner fa-spin"></i></div>
 		<div wicket:id="menu"></div>
 	</div>
-	<div wicket:id="dev" id="devMenu"/>
+	<div wicket:id="dev"/>
 	<div wicket:id="contents"><div wicket:id="child" class="child-panel h-100"></div></div>
-	<div wicket:id="chatPanel" class="closed"></div>
+	<div wicket:id="chatPanel" class="closed end-0 me-3"></div>
 	<div wicket:id="aboutDialog"></div>
 	<div wicket:id="userInfoDialog"></div>
 	<div wicket:id="newMessageDialog"></div>

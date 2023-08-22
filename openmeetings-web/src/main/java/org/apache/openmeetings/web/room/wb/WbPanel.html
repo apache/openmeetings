@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		<div class="wb-tab-content tab-content">
-			<button type="button" class="fullscreen btn btn-outline-secondary">
+			<button type="button" class="fullscreen btn btn-outline-secondary end-0">
 				<i class="fa-solid fa-up-right-and-down-left-from-center"></i>
 			</button>
 		</div>
@@ -37,11 +37,11 @@
 	<div hidden="hidden">
 		<div id="wb-text-style-block"></div>
 		<div id="wb-tabbar-ctrls-left">
-			<div wicket:message="title:wb.add.whiteboard" class="add clickable om-icon big"></div>
-			<div wicket:message="title:wb.pre.whiteboard" class="prev clickable om-icon big disabled"></div>
+			<div wicket:message="title:wb.add.whiteboard" class="add clickable om-icon big start-0"></div>
+			<div wicket:message="title:wb.pre.whiteboard" class="prev clickable om-icon big start-0 disabled"></div>
 		</div>
 		<div id="wb-tabbar-ctrls-right">
-			<div wicket:message="title:wb.next.whiteboard" class="next clickable om-icon big disabled"></div>
+			<div wicket:message="title:wb.next.whiteboard" class="next clickable om-icon big end-0 disabled"></div>
 		</div>
 		<ul>
 			<li id="wb-area-tab" class="nav-item">
@@ -50,7 +50,7 @@
 				</a>
 			</li>
 		</ul>
-		<button id="wb-tab-close" class="btn btn-sm btn-outline-secondary btn-no-border wb-tab-close"
+		<button id="wb-tab-close" class="btn btn-sm btn-outline-secondary btn-no-border wb-tab-close end-0"
 				wicket:message="title:85,data-btn-ok-label:54,data-btn-cancel-label:lbl.cancel,data-title:832,data-bs-content:1313"
 				data-btn-ok-class="btn btn-sm btn-danger"
 				data-btn-ok-icon-class="fas fa-exclamation-triangle"
@@ -189,13 +189,13 @@
 			<div wicket:message="title:wb.tool.math.formula" class="header ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle">
 				<span class="ui-dialog-title"><wicket:message key="wb.tool.math.formula"/></span>
 			</div>
-			<button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" wicket:message="title:85">
+			<button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close end-0" wicket:message="title:85">
 				<span class="ui-button-icon ui-icon ui-icon-closethick"></span>
 				<span class="ui-button-icon-space"> </span>
 				<wicket:message key="85"/>
 			</button>
 			<div class="text-container"><textarea></textarea></div>
-			<div>
+			<div class="text-start">
 				<a class="latex-guide" wicket:message="href:wb.tool.math.guide.url" target="_blank"><wicket:message key="wb.tool.math.guide.lbl"/></a>
 				<button class="update-btn"><wicket:message key="lbl.update"/></button>
 			</div>

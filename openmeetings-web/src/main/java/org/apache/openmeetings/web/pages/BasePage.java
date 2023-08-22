@@ -59,8 +59,8 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6C
 
 public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = 1L;
-	public static final String ALIGN_LEFT = "align-left ";
-	public static final String ALIGN_RIGHT = "align-right ";
+	public static final String ALIGN_LEFT = "float-start ";
+	public static final String ALIGN_RIGHT = "float-end ";
 	public static final String CUSTOM_CSS_FILTER = "customCSS";
 	private final Map<String, String> options = new HashMap<>();
 	private HeaderPanel header;
