@@ -9,13 +9,14 @@ html, body {
 	padding: 0;
 	font-family: Arial, Helvetica, sans-serif;
 	overflow-y: hidden;
-
+}
+body {
 	--text-align-start: left;
 	--text-align-end: right;
 	--background-start: left;
 	--background-end: right;
 }
-html[dir="rtl"] {
+html[dir="rtl"] body {
 	--text-align-start: right;
 	--text-align-end: left;
 	--background-start: right;
