@@ -131,8 +131,8 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
 		super.renderHead(response);
 		final String suffix = DEVELOPMENT == getApplication().getConfigurationType() ? "" : ".min";
-		response.render(CssHeaderItem.forUrl(String.format("css/theme_om/jquery-ui%s.css", suffix)));
-		response.render(CssHeaderItem.forUrl("css/theme.css"));
+		response.render(CssHeaderItem.forUrl("css/theme_om/jquery-ui" + suffix + ".css"));
+		response.render(CssHeaderItem.forUrl("css/theme" + suffix + ".css"));
 		if (!Strings.isEmpty(getGaCode())) {
 			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BasePage.class, "om-ga.js") {
 				private static final long serialVersionUID = 1L;

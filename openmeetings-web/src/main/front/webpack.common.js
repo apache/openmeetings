@@ -37,6 +37,6 @@ module.exports = {
 		}),
 	],
 	output: {
-		path: `${process.env.outDir}`,
+		path: `${process.env.outDir}/js/`,
 	},
 };

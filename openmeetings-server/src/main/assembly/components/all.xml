@@ -109,6 +109,8 @@
 			<outputDirectory>${om.webapp}</outputDirectory>
 			<excludes>
 				<exclude>WEB-INF/classes/**</exclude>
+				<exclude>js/*.txt</exclude>
+				<exclude>css/*.js</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>

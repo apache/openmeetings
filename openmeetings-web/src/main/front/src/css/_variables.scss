@@ -1,4 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+:root {
+	--app-height: 100%;
+}
 body {
 	--header-height: 50px;
 	--menu-height: 36px;
@@ -15,6 +18,17 @@ body {
 	--chat-msg-height: 80px;
 	--chat-send-width: 32px;
 	--chat-zindex: 2000;
+
+	--text-align-start: left;
+	--text-align-end: right;
+	--background-start: left;
+	--background-end: right;
+}
+html[dir="rtl"] body {
+	--text-align-start: right;
+	--text-align-end: left;
+	--background-start: right;
+	--background-end: left;
 }
 body.no-header {
 	--header-height: 0px;

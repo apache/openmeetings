@@ -1,0 +1,32 @@
+/* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+.signin {
+	.oauth-section {
+		padding-bottom: 20px;
+
+		.provider {
+			background-position: var(--background-start) 0;
+			background-size: 24px;
+			background-repeat: no-repeat;
+			height: 24px;
+			display: inline-block;
+			padding-inline-start: 20px;
+			vertical-align: bottom;
+		}
+	}
+	.or-seperator {
+		margin-top: 20px;
+		text-align: center;
+		border-top: 1px solid #cccccc;
+
+		i {
+			padding: 0 10px;
+			background: #ffffff;
+			position: relative;
+			top: -11px;
+			z-index: 1;
+		}
+	}
+}
+.signin-forget .form-check-label {
+	padding-inline-end: 10px;
+}

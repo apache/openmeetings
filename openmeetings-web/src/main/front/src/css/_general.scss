@@ -1,7 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-:root {
-	--app-height: 100%;
-}
+@import "variables";
+
 html, body {
 	width: 100vw;
 	height: var(--app-height);
@@ -9,18 +8,6 @@ html, body {
 	padding: 0;
 	font-family: Arial, Helvetica, sans-serif;
 	overflow-y: hidden;
-}
-body {
-	--text-align-start: left;
-	--text-align-end: right;
-	--background-start: left;
-	--background-end: right;
-}
-html[dir="rtl"] body {
-	--text-align-start: right;
-	--text-align-end: left;
-	--background-start: right;
-	--background-end: left;
 }
 
 .main-loader {
@@ -32,33 +19,6 @@ html[dir="rtl"] body {
 .main {
 	height: 100%;
 }
-.signin .oauth-section {
-	padding-bottom: 20px;
-}
-.signin .oauth-section .provider {
-	background-position: var(--background-start) 0;
-	background-size: 24px;
-	background-repeat: no-repeat;
-	height: 24px;
-	display: inline-block;
-	padding-inline-start: 20px;
-	vertical-align: bottom;
-}
-.signin .or-seperator {
-	margin-top: 20px;
-	text-align: center;
-	border-top: 1px solid #cccccc;
-}
-.signin .or-seperator i {
-	padding: 0 10px;
-	background: #ffffff;
-	position: relative;
-	top: -11px;
-	z-index: 1;
-}
-.signin-forget .form-check-label {
-	padding-inline-end: 10px;
-}
 #header {
 	font-size: 28px;
 	line-height: 40px;
@@ -66,25 +26,25 @@ html[dir="rtl"] body {
 	padding-inline-start: 80px;
 	margin-inline-start: 20px;
 	height: var(--header-height);
-}
-#header .logo {
-	display: inline-block;
-	background-image: url(images/logo.png);
-	background-repeat: no-repeat;
-	height: var(--header-height);
-	width: 80px;
+
+	.logo {
+		display: inline-block;
+		background-image: url(images/logo.png);
+		background-repeat: no-repeat;
+		height: var(--header-height);
+		width: 80px;
+	}
 }
 #topLinks {
 	--bs-border-width: 1px;
 	--bs-border-style: solid;
 	--bs-border-color: black;
+	span {
+		padding-right: 5px;
+		padding-left: 5px;
+		white-space: nowrap;
+	}
 }
-#topLinks span {
-	padding-right: 5px;
-	padding-left: 5px;
-	white-space: nowrap;
-}
-
 #busy-indicator {
 	display: none;
 	z-index: 1000;
@@ -112,47 +72,50 @@ html[dir="rtl"] body {
 	margin-inline-start: 2px;
 	display: inline-block;
 }
-.pagedEntityListPanel .pagination {
-	display: inline-block;
+.pagedEntityListPanel {
+	.pagination {
+		display: inline-block;
+	}
+	select {
+		padding: 0px 0px;
+		border: solid 1px #aacfe4;
+		width: 60px;
+		font-size: 12px;
+		display: inline;
+		float: none;
+	}
+	input {
+		font-size: 14px;
+		padding: 0px 0px;
+		border: solid 1px #aacfe4;
+		width: 100px;
+		height: 20px;
+		margin: 2px 2px;
+		display: inline;
+		float: none;
+	}
 }
 .searchForm {
 	display: inline-block;
 	vertical-align: top;
-}
-.searchForm input[type="button"] {
-	padding: .2em .5em;
-	font-size: smaller;
-}
-.pagedEntityListPanel select, .adminForm .pagedEntityListPanel select {
-	padding: 0px 0px;
-	border: solid 1px #aacfe4;
-	width: 60px;
-	font-size: 12px;
-	display: inline;
-	float: none;
-}
-.searchForm input[type="text"], .adminForm .searchForm input[type="text"] {
-	width: 140px;
-	float: none;
-	display: inline-block;
-}
-.searchForm input[type="submit"], .adminForm .searchForm input[type="submit"] {
-	width: auto;
-	float: none;
-	display: inline-block;
-	border: 2px outset buttonface;
-	padding: 1px 6px;
-	font-size: 12px;
-}
-.pagedEntityListPanel input, .adminForm .pagedEntityListPanel input {
-	font-size: 14px;
-	padding: 0px 0px;
-	border: solid 1px #aacfe4;
-	width: 100px;
-	height: 20px;
-	margin: 2px 2px;
-	display: inline;
-	float: none;
+
+	input[type="button"] {
+		padding: .2em .5em;
+		font-size: smaller;
+	}
+	input[type="text"] {
+		width: 140px;
+		float: none;
+		display: inline-block;
+	}
+	input[type="submit"] {
+		width: auto;
+		float: none;
+		display: inline-block;
+		border: 2px outset buttonface;
+		padding: 1px 6px;
+		font-size: 12px;
+	}
 }
 .centered {
 	text-align: center;
@@ -209,33 +172,35 @@ html[dir="rtl"] body {
 	margin-top: 2px;
 	display: inline-block;
 	position: relative;
-}
-.om-icon.big {
-	width: 34px;
-	height: 34px;
-}
-.om-icon::before {
-	font-family: 'Font Awesome 6 Free';
-	font-weight: 900;
-	color: var(--bs-secondary);
-	font-size: 1.2em;
-	vertical-align: text-bottom;
-	line-height: 1em;
-}
-.om-icon.big::before {
-	font-size: 2.0em;
-	line-height: 1.2em;
-}
-.add.om-icon::before {
-	content: '\f055';
-}
-.online.om-icon::before {
-	color: var(--bs-success);
-	content: '\f111';
-}
-.offline.om-icon::before {
-	color: var(--bs-danger);
-	content: '\f111';
+
+	&.big {
+		width: 34px;
+		height: 34px;
+
+		&::before {
+			font-size: 2.0em;
+			line-height: 1.2em;
+		}
+	}
+	&::before {
+		font-family: 'Font Awesome 6 Free';
+		font-weight: 900;
+		color: var(--bs-secondary);
+		font-size: 1.2em;
+		vertical-align: text-bottom;
+		line-height: 1em;
+	}
+	&.add::before {
+		content: '\f055';
+	}
+	&.online::before {
+		color: var(--bs-success);
+		content: '\f111';
+	}
+	&.offline::before {
+		color: var(--bs-danger);
+		content: '\f111';
+	}
 }
 .message {
 	margin: 50px;
@@ -478,7 +443,7 @@ select.messages.selector {
 	font-size: 12px;
 }
 .profile .remove {
-	border: 1px solid #cccc;
+	border: 1px solid #cccccc;
 	padding: 0px 7px;
 }
 .room.list.container {
@@ -638,16 +603,6 @@ select.messages.selector {
 .captcha-img {
 	vertical-align: bottom;
 }
-.installer-note {
-	margin-top: 20px;
-	padding: 0.7em;
-}
-.installer-important {
-	font-size: 1.2em;
-}
-.installer-less-important {
-	font-size: 1.1em;
-}
 .main.privacy {
 	max-width: 800px;
 	padding: 20px;
@@ -685,28 +640,6 @@ select.messages.selector {
 .private-message .ui-autocomplete {
 	z-index: 999 !important;
 }
-.abstractWizard .adminForm div.formelement {
-	max-width: 600px;
-}
-.abstractWizard .adminForm label {
-	width: 240px;
-}
-.abstractWizard ul.paramList {
-	list-style-type: none;
-}
-.abstractWizard ul.paramList li {
-	padding-top: 5px;
-}
-.abstractWizard ul.paramList label {
-	width: 350px;
-	display: inline-block;
-}
-.abstractWizard input, .abstractWizard select {
-	width: 280px;
-}
-.abstractWizard input[type=checkbox], .abstractWizard input[type=radio] {
-	width: auto;
-}
 .img-upload .btn.btn-file {
 	width: 120px;
 	padding: 0;
@@ -719,10 +652,6 @@ select.messages.selector {
 }
 .popover.confirmation.show {
 	z-index: 3000;
-}
-.installer {
-	overflow-y: auto;
-	height: calc(100% - var(--header-height));
 }
 .overflow-break-word {
 	overflow-wrap: break-word;

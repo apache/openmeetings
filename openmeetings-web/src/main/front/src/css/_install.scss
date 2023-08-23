@@ -1,0 +1,44 @@
+/* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+.abstractWizard {
+	.adminForm {
+		div.formelement {
+			max-width: 600px;
+		}
+
+		label {
+			width: 240px;
+		}
+	}
+	ul.paramList {
+		list-style-type: none;
+
+		li {
+			padding-top: 5px;
+		}
+		label {
+			width: 350px;
+			display: inline-block;
+		}
+	}
+	& input, & select {
+		width: 280px;
+	}
+	& input[type=checkbox], & input[type=radio] {
+		width: auto;
+	}
+}
+
+.installer-note {
+	margin-top: 20px;
+	padding: 0.7em;
+}
+.installer-important {
+	font-size: 1.2em;
+}
+.installer-less-important {
+	font-size: 1.1em;
+}
+.installer {
+	overflow-y: auto;
+	height: calc(100% - var(--header-height));
+}

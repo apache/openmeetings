@@ -4,14 +4,20 @@
 	"description": "",
 	"main": "./src/index.js",
 	"scripts": {
-		"build-dev": "webpack --config webpack.dev.js",
-		"build-prod": "webpack --config webpack.prod.js",
+		"build-dev": "webpack --config webpack.dev.js && webpack --config webpack-css.dev.js",
+		"build-prod": "webpack --config webpack.prod.js && webpack --config webpack-css.prod.js",
 		"build": "npm run build-dev && npm run build-prod"
 	},
 	"author": "",
 	"license": "Apache-2.0",
 	"rat-license": "Licensed under the Apache License, Version 2.0 (the \"License\") http://www.apache.org/licenses/LICENSE-2.0",
 	"devDependencies": {
+		"sass-loader": "^13.3.2",
+		"style-loader": "^3.3.3",
+		"css-loader": "^6.8.1",
+		"ignore-loader": "^0.1.2",
+		"mini-css-extract-plugin": "^2.7.6",
+		"node-sass": "^9.0.0",
 		"circular-dependency-plugin": "^5.2.2",
 		"webpack": "^5.88.2",
 		"webpack-cli": "^5.1.4",
