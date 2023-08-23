@@ -327,7 +327,7 @@ public class OmFileHelper {
 		File f = new File(dir, getName(name, ext));
 		int recursiveNumber = 0;
 		while (f.exists()) {
-			f = new File(dir, name + "_" + (recursiveNumber++) + ext);
+			f = new File(dir, name + "_" + (recursiveNumber++) + "." + ext);
 		}
 		f.createNewFile();
 		return f;

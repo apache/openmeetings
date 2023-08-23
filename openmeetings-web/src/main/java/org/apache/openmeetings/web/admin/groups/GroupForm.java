@@ -76,7 +76,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 
 		@Override
 		protected void processImage(StoredFile sf, File f) throws Exception {
-			imageConverter.resize(f, getGroupLogo(GroupForm.this.getModelObject().getId(), false), null, 28);
+			imageConverter.resize(f, getGroupLogo(GroupForm.this.getModelObject().getId(), false), null, 28, true);
 		}
 
 		@Override

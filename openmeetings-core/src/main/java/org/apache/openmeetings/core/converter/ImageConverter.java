@@ -87,28 +87,20 @@ public class ImageConverter extends BaseConverter {
 		return logs;
 	}
 
-	public ProcessResultList convertImageUserProfile(File file, Long userId, boolean skipConvertion) throws Exception {
+	public ProcessResultList convertImageUserProfile(File file, Long userId) throws Exception {
 		ProcessResultList returnMap = new ProcessResultList();
 
 		// User Profile Update
-		File[] files = getUploadProfilesUserDir(userId).listFiles(fi -> fi.getName().endsWith(EXTENSION_PNG));
-		if (files != null) {
-			for (File f : files) {
-				FileUtils.deleteQuietly(f);
-			}
-		}
+		Files.newDirectoryStream(
+				getUploadProfilesUserDir(userId).toPath()
+				, fi -> fi.toString().endsWith(EXTENSION_PNG))
+					.forEach(path -> FileUtils.deleteQuietly(path.toFile()));
 
 		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(userId), PROFILE_FILE_NAME, EXTENSION_PNG);
-		if (!skipConvertion) {
-			returnMap.add(convertSinglePng(file, destinationFile));
-		} else {
-			FileUtils.copyFile(file, destinationFile);
-		}
+		returnMap.add(resize(file, destinationFile, 250, 250, true));
 
-		if (!skipConvertion) {
-			// Delete old one
-			Files.deleteIfExists(file.toPath());
-		}
+		// Delete old one
+		Files.deleteIfExists(file.toPath());
 
 		String img = destinationFile.getName();
 		User us = userDao.get(userId);
@@ -159,9 +151,9 @@ public class ImageConverter extends BaseConverter {
 		return ProcessHelper.exec("convertSinglePng", argv);
 	}
 
-	public ProcessResult resize(File in, File out, Integer width, Integer height) throws IOException {
+	public ProcessResult resize(File in, File out, Integer width, Integer height, boolean max) throws IOException {
 		List<String> argv = List.of(getPathToConvert()
-				, "-resize", (width == null ? "" : width) + (height == null ? "" : "x" + height)
+				, "-resize", (width == null ? "" : width) + (height == null ? "" : "x" + height) + (max ? ">" : "")
 				, in.getCanonicalPath(), out.getCanonicalPath());
 		return ProcessHelper.exec("resize", argv);
 	}

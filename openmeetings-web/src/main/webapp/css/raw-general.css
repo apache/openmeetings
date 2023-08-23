@@ -471,7 +471,8 @@ select.messages.selector {
 	display: inline-block;
 }
 .profile img {
-	width: 125px;
+	max-width: 125px;
+	max-height: 125px;
 }
 .date.time.picker {
 	font-size: 12px;

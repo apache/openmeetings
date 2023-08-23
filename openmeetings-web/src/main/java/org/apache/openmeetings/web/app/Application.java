@@ -307,6 +307,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		Bootstrap.builder().withBootstrapSettings(settings).install(this);
 		WysiwygLibrarySettings.get().setBootstrapCssReference(null);
 		WysiwygLibrarySettings.get().setBootstrapDropDownJavaScriptReference(null);
+		WysiwygLibrarySettings.get().setPrettifyJavaScriptReference(null);
 
 		// register some widgets
 		final DashboardContext dashboardContext = getDashboardContext();

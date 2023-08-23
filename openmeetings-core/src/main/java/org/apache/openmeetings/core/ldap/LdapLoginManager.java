@@ -355,7 +355,7 @@ public class LdapLoginManager {
 			try {
 				tempImage = Files.createTempFile("omLdap", "img");
 				FileUtils.copyToFile(is, tempImage.toFile());
-				imageConverter.convertImageUserProfile(tempImage.toFile(), inUser.getId(), sf.isAsIs());
+				imageConverter.convertImageUserProfile(tempImage.toFile(), inUser.getId());
 				u = userDao.get(inUser.getId());
 			} catch (Exception e) {
 				log.error("Unable to store binary image from LDAP", e);

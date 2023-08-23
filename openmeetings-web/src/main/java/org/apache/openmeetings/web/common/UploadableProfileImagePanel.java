@@ -54,7 +54,7 @@ public class UploadableProfileImagePanel extends UploadableImagePanel {
 
 	@Override
 	protected void processImage(StoredFile sf, File f) throws Exception {
-		converter.convertImageUserProfile(f, userId, sf.isAsIs());
+		converter.convertImageUserProfile(f, userId);
 	}
 
 	@Override
