@@ -3,50 +3,60 @@
 	padding-top: 0;
 	padding-bottom: 0;
 }
-.room-block .menu .top.exit {
-	padding-inline-start: 0;
-}
-.room-block .menu .details {
-	position: absolute;
-	top: 0;
-	margin-inline-end: 5px;
-	display: inline-block;
-	z-index: calc(var(--menu-zindex) + 1);
-}
-.room-block .menu .details .room {
-	padding-top: 5px;
-	padding-inline-end: 5px;
-}
-.room-block .menu .details .room.name {
-	font-weight: bold;
-}
-.room-block .menu .details .room.name.screen {
-	color: var(--bs-danger);
-}
-.room-block .menu .details .icon {
-	width: 30px;
-	height: 30px;
-	padding: 0;
-}
-.room-block .menu .details .detail-btn {
-	padding: 0.1rem 0.4rem;
-	position: relative;
-}
-.room-block .menu .details .detail-btn i::before {
-	font-size: 1.4em;
-	line-height: 1.2em;
-}
-.room-block .menu .details .detail-btn.shared {
-	display: none;
-}
-.room-block .menu .details .detail-btn i.add-on {
-	position: absolute;
-	color: var(--bs-warning);
-	bottom:  0;
-}
-.room-block .menu .details .icon .profile {
-	margin-top: 3px;
-}
-.room-block .menu .details .icon .profile img {
-	width: 28px;
+.room-block .menu {
+	.top.exit {
+		padding-inline-start: 0;
+	}
+	.details {
+		position: absolute;
+		top: 0;
+		margin-inline-end: 5px;
+		display: inline-block;
+		z-index: calc(var(--menu-zindex) + 1);
+
+		.room {
+			padding-top: 5px;
+			padding-inline-end: 5px;
+
+			&.name {
+				font-weight: bold;
+
+				&.screen {
+					color: var(--bs-danger);
+				}
+			}
+		}
+		.icon {
+			width: 30px;
+			height: 30px;
+			padding: 0;
+
+			.profile {
+				margin-top: 3px;
+
+				img {
+					width: 28px;
+				}
+			}
+		}
+		.detail-btn {
+			padding: 0.1rem 0.4rem;
+			position: relative;
+
+			i {
+				&.add-on {
+					position: absolute;
+					color: var(--bs-warning);
+					bottom:  0;
+				}
+				&::before {
+					font-size: 1.4em;
+					line-height: 1.2em;
+				}
+			}
+			&.shared {
+				display: none;
+			}
+		}
+	}
 }

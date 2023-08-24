@@ -6,68 +6,71 @@
 .nettest {
 	padding: 20px;
 	height: 100%;
-}
-.nettest .test-container {
-	display: inline-block;
-	position: relative;
-	width: 200px;
-}
-.nettest .test-container button.not-started
-, .nettest .test-container button.started
-{
-	color: var(--bs-secondary);
-	border-color: var(--bs-secondary);
-}
-.nettest .test-container button:hover {
-	color: var(--bs-white);
-	border-color: transparent;
-}
-.nettest .test-container button.not-started:hover
-, .nettest .test-container button.started:hover
-{
-	background-color: var(--bs-secondary);
-}
-.nettest .test-container button.complete {
-	color: var(--bs-success);
-	border-color: var(--bs-success);
-}
-.nettest .test-container button.complete:hover {
-	background-color: var(--bs-success);
-}
-.nettest .test-container button.not-started i::before {
-	content: '\f04b';
-}
-.nettest .test-container button.started i {
-	animation: fa-spin 2s linear infinite;
-}
-.nettest .test-container button.started i::before {
-	content: '\f110';
-}
-.nettest .test-container button.complete i::before {
-	content: '\f00c';
-}
-.nettest .test-container .value {
-	min-height: 3em;
-}
-.nettest .test-container .card-title {
-	white-space: nowrap;
-}
-.nettest .output {
-	border-radius: 10px;
-	border: 1px solid #cccccc;
-	min-height: calc(100% - 170px);
-	max-height: calc(100% - 170px);
-	margin-top: 20px;
-	overflow: auto;
-}
-.nettest output .module {
-	color: #6b0df7;
-	padding: 0 5px;
-}
-.nettest output .delim {
-	color: green;
-}
-.nettest output .value {
-	color: green;
-	padding: 0 5px;
+
+	.test-container {
+		display: inline-block;
+		position: relative;
+		width: 200px;
+
+		button {
+			&.not-started, &.started {
+				color: var(--bs-secondary);
+				border-color: var(--bs-secondary);
+			}
+			&:hover {
+				color: var(--bs-white);
+				border-color: transparent;
+			}
+			&.not-started:hover, &.started:hover {
+				background-color: var(--bs-secondary);
+			}
+			&.complete {
+				color: var(--bs-success);
+				border-color: var(--bs-success);
+
+				&:hover {
+					background-color: var(--bs-success);
+				}
+				i::before {
+					content: '\f00c';
+				}
+			}
+			&.not-started i::before {
+				content: '\f04b';
+			}
+			&.started i {
+				animation: fa-spin 2s linear infinite;
+
+				&::before {
+					content: '\f110';
+				}
+			}
+		}
+		.value {
+			min-height: 3em;
+		}
+		.card-title {
+			white-space: nowrap;
+		}
+	}
+	.output {
+		border-radius: 10px;
+		border: 1px solid #cccccc;
+		min-height: calc(100% - 170px);
+		max-height: calc(100% - 170px);
+		margin-top: 20px;
+		overflow: auto;
+
+		.module {
+			color: #6b0df7;
+			padding: 0 5px;
+		}
+		.delim {
+			color: green;
+		}
+		.value {
+			color: green;
+			padding: 0 5px;
+		}
+	}
 }

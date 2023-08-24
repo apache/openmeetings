@@ -33,12 +33,87 @@ span.css-emoticon {
 	transition-property: color, background, transform;
 	transition-duration: 1s, 1s;
 	transition-timing-function: linear, ease-in;
-}
-/* Styles for two-character emoticons that need more letter-spacing for proportionality */
-span.css-emoticon.spaced-emoticon {
-	padding-left: 0.2em;
-	width: 1.34em;
-	letter-spacing: 0.2em;
+
+	/* Styles for two-character emoticons that need more letter-spacing for proportionality */
+	&.spaced-emoticon {
+		padding-left: 0.2em;
+		width: 1.34em;
+		letter-spacing: 0.2em;
+
+		&.small-emoticon {
+			padding-left: 0;
+			width: 1.82em;
+			letter-spacing: 0.1em;
+		}
+	}
+	/* Styles for emoticons that need to have smaller characters to fit inside the circle */
+	&.small-emoticon {
+		font-size: 0.55em;
+		width: 1.82em;
+		height: 1.82em;
+		line-height: 1.72em;
+		border-radius: 1.82em;
+	}
+	/* Styles for additional colors */
+	&.red-emoticon {
+		background-color: #eb0542;
+		background-image: linear-gradient(to right, #fa376e, #eb0542);
+	}
+	&.pink-emoticon {
+		background-color: #ff8fd4;
+		background-image: linear-gradient(to right, #ffade1, #ff8fd4);
+	}
+	/* styles for emoticons that need no rotation, like O_o */
+	&.no-rotate {
+		transform: rotate(0deg);
+		box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+		font-size: 0.45em;
+		width: 2.2em;
+		height: 2.2em;
+		line-height: 1.9em;
+		border-radius: 2.2em;
+		background-image: linear-gradient(#fff4c8, #fc0);
+
+		&.red-emoticon {
+			background-image: linear-gradient(#fa376e, #eb0542);
+		}
+		&.pink-emoticon {
+			background-image: linear-gradient(#ffade1, #ff8fd4);
+		}
+	}
+	/* Styles for emoticons that need to be rotated counter-clockwise, like <3 */
+	&.counter-rotated {
+		transform: rotate(-90deg);
+		box-shadow: -1px 1px 2px rgba(0,0,0,0.5);
+		background-image: linear-gradient(to left, #fff4c8, #fc0);
+
+		&.red-emoticon {
+			background-image: linear-gradient(to left, #fa376e, #eb0542);
+		}
+		&.pink-emoticon {
+			background-image: linear-gradient(to left, #ffade1, #ff8fd4);
+		}
+	}
+	/* Styles for animated states */
+	&.un-transformed-emoticon, &.animated-emoticon:hover {
+		letter-spacing: inherit;
+		color: inherit;
+		overflow: visible;
+		transform: rotate(0deg);
+		background: none;
+		background-image: none;
+		box-shadow: none;
+		border-color: transparent;
+	}
+	&.nintendo-controller {
+		font-size: .8em;
+		height: 1.2em;
+		line-height: 1em;
+		width: 2.7em;
+		vertical-align: bottom;
+		border-radius: 0;
+		background: linear-gradient(to right, #a5aabd, #74798c);
+	}
 }
 /* This is a dirty dirty hack, because webkit doesn't properly do the padding+width=total-width as it should
 	I think the width of the border may be throwing things off, because it's more noticable for small icons */
@@ -47,83 +122,11 @@ span.css-emoticon.spaced-emoticon {
 		width: 1.4em;
 	}
 }
-/* Styles for emoticons that need to have smaller characters to fit inside the circle */
-span.css-emoticon.small-emoticon {
-	font-size: 0.55em;
-	width: 1.82em;
-	height: 1.82em;
-	line-height: 1.72em;
-	border-radius: 1.82em;
-}
-span.css-emoticon.small-emoticon.spaced-emoticon {
-	padding-left: 0;
-	width: 1.82em;
-	letter-spacing: 0.1em;
-}
-/* Styles for additional colors */
-span.css-emoticon.red-emoticon {
-	background-color: #eb0542;
-	background-image: linear-gradient(to right, #fa376e, #eb0542);
-}
-span.css-emoticon.pink-emoticon {
-	background-color: #ff8fd4;
-	background-image: linear-gradient(to right, #ffade1, #ff8fd4);
-}
-/* styles for emoticons that need no rotation, like O_o */
-span.css-emoticon.no-rotate {
-	transform: rotate(0deg);
-	box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-	font-size: 0.45em;
-	width: 2.2em;
-	height: 2.2em;
-	line-height: 1.9em;
-	border-radius: 2.2em;
-	background-image: linear-gradient(#fff4c8, #fc0);
-}
-span.css-emoticon.no-rotate.red-emoticon {
-	background-image: linear-gradient(#fa376e, #eb0542);
-}
-span.css-emoticon.no-rotate.pink-emoticon {
-	background-image: linear-gradient(#ffade1, #ff8fd4);
-}
-/* Styles for emoticons that need to be rotated counter-clockwise, like <3 */
-span.css-emoticon.counter-rotated {
-	transform: rotate(-90deg);
-	box-shadow: -1px 1px 2px rgba(0,0,0,0.5);
-	background-image: linear-gradient(to left, #fff4c8, #fc0);
-}
-span.css-emoticon.counter-rotated.red-emoticon {
-	background-image: linear-gradient(to left, #fa376e, #eb0542);
-}
-span.css-emoticon.counter-rotated.pink-emoticon {
-	background-image: linear-gradient(to left, #ffade1, #ff8fd4);
-}
-/* Styles for animated states */
-span.css-emoticon.un-transformed-emoticon, span.css-emoticon.animated-emoticon:hover {
-	letter-spacing: inherit;
-	color: inherit;
-	overflow: visible;
-	transform: rotate(0deg);
-	background: none;
-	background-image: none;
-	box-shadow: none;
-	border-color: transparent;
-}
-span.css-emoticon.nintendo-controller {
-	font-size: .8em;
-	height: 1.2em;
-	line-height: 1em;
-	width: 2.7em;
-	vertical-align: bottom;
-	border-radius: 0;
-	background: linear-gradient(to right, #a5aabd, #74798c);
-}
 
-html[dir="rtl"] span.css-emoticon.un-transformed-emoticon
-, html[dir="rtl"] span.css-emoticon.animated-emoticon:hover
-{
-	transform: rotate(0deg) !important;
-}
 html[dir="rtl"] span.css-emoticon {
 	transform: rotate(-90deg) !important;
+
+	&.un-transformed-emoticon, &.animated-emoticon:hover {
+		transform: rotate(0deg) !important;
+	}
 }

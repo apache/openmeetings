@@ -39,23 +39,25 @@ import com.github.openjson.JSONObject;
 
 public class OmAjaxClientInfoBehavior extends AjaxClientInfoBehavior {
 	private static final long serialVersionUID = 1L;
-	private static final JavaScriptUrlReferenceHeaderItem MAIN_JS = new JavaScriptUrlReferenceHeaderItem("js/main.js", "om-main") {
+	public static final PriorityHeaderItem MAIN_JS = new PriorityHeaderItem(new JavaScriptUrlReferenceHeaderItem("js/main.js", "om-main") {
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		public List<HeaderItem> getDependencies() {
 			return List.of(JavaScriptHeaderItem.forReference(BrowserInfoForm.JS));
 		}
-	};
+	});
+	public static final PriorityHeaderItem MAIN_JS_INIT = new PriorityHeaderItem(
+		JavaScriptHeaderItem.forScript(
+				String.format("OmUtil.init(%s)", new JSONObject()
+						.put("debug", DEVELOPMENT == Application.get().getConfigurationType()))
+				, "om-util-init"));
 
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
-		response.render(new PriorityHeaderItem(MAIN_JS));
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(
-				String.format("OmUtil.init(%s)", new JSONObject()
-						.put("debug", DEVELOPMENT == Application.get().getConfigurationType()))
-				, "om-util-init")));
+		response.render(MAIN_JS);
+		response.render(MAIN_JS_INIT);
 	}
 
 	@Override

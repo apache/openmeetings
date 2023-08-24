@@ -2,16 +2,17 @@
 /* dashboard more responsive */
 #contents .dashboard {
 	display: flex;
-}
-#contents .dashboard > div:nth-child(1) {
-	width: 50%;
-}
-#contents .dashboard > div:nth-child(2) {
-	width: 50%;
-}
-#contents .dashboard .column {
-	width: 100%;
-	float: none;
+
+	> div:nth-child(1) {
+		width: 50%;
+	}
+	> div:nth-child(2) {
+		width: 50%;
+	}
+	.column {
+		width: 100%;
+		float: none;
+	}
 }
 
 /* Chat send button width */
@@ -25,12 +26,13 @@
 @media screen and (max-width: 900px), (orientation: portrait) {
 	.dashboard {
 		flex-wrap: wrap;
-	}
-	.dashboard > div:nth-child(1) {
-		flex-basis: 100%;
-	}
-	.dashboard > div:nth-child(2) {
-		flex-basis: 100%;
+
+		> div:nth-child(1) {
+			flex-basis: 100%;
+		}
+		> div:nth-child(2) {
+			flex-basis: 100%;
+		}
 	}
 	body {
 		font-size: 1.5vmax;

@@ -6,39 +6,43 @@
 }
 .adminNav {
 	height: var(--nav-height);
-}
-.adminNav .goto {
-	text-overflow: ellipsis;
-	max-width: 25px;
-	overflow: hidden;
-	display: inline-block;
+
+	.goto {
+		text-overflow: ellipsis;
+		max-width: 25px;
+		overflow: hidden;
+		display: inline-block;
+	}
 }
 .adminPanelColumnTable {
 	display: inline-block;
 	vertical-align: top;
 	height: 100%;
 	min-width: var(--list-width);
-}
-.adminPanelColumnTable.label .lblNav {
-	height: var(--lbl-nav-height);
+
+	&.label .lblNav {
+		height: var(--lbl-nav-height);
+	}
 }
 .adminPanelColumnForm {
 	display: inline-block;
 	vertical-align: top;
 	height: calc(100% - var(--buffer-size));
 	min-width: 450px;
-}
-.adminPanelColumnForm .adminForm {
-	height: 100%;
-}
-.adminPanelColumnForm .adminForm .actions {
-	height: var(--actions-height);
-	padding-top: 5px;
-}
-.adminPanelColumnForm div.scrollcontent {
-	height: calc(100% - var(--actions-height));
-	vertical-align: top;
-	overflow-y: auto;
+
+	.adminForm {
+		height: 100%;
+
+		.actions {
+			height: var(--actions-height);
+			padding-top: 5px;
+		}
+	}
+	div.scrollcontent {
+		height: calc(100% - var(--actions-height));
+		vertical-align: top;
+		overflow-y: auto;
+	}
 }
 .adminForm legend, .installer legend {
 	padding: 0.5em 1em;
@@ -62,17 +66,19 @@
 }
 .onoffswitch {
 	display:inline-block;
-}
-.onoffswitch .onoff-checkbox {
-	display: none !important;
+
+	.onoff-checkbox {
+		display: none !important;
+	}
 }
 .onoff-label {
 	margin: 0;
-}
-.onoff-label::before {
-	font-family: 'Font Awesome 6 Free';
-	font-weight: 900;
-	font-size: 2.2em;
+
+	&::before {
+		font-family: 'Font Awesome 6 Free';
+		font-weight: 900;
+		font-size: 2.2em;
+	}
 }
 .onoff-checkbox + .onoff-label::before {
 	content: '\f204';

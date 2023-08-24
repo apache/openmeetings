@@ -1,0 +1,48 @@
+/* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+#room-poll-chart {
+	height: 300px;
+}
+#quick-vote {
+	position: absolute;
+	margin-inline-end: 40px;
+	bottom: 40px;
+	padding: 5px;
+	border: 1px solid;
+	border-radius: 0.2rem;
+	background-color:var(--bs-light);
+	border-color: var(--bs-info);
+
+	.control {
+		display: inline-block;
+		width: 48px;
+		height: 48px;
+		position: relative;
+		font-size: 1.5em;
+
+		.badge {
+			position: absolute;
+			bottom: 0;
+			font-size: 0.5em;
+		}
+		i::before {
+			font-size: 2.0em;
+			line-height: 1.2em;
+		}
+		&.pro i::before {
+			color: var(--bs-success);
+		}
+		&.con i::before {
+			color: var(--bs-danger);
+		}
+	}
+	.close-btn {
+		padding: 0 0.4rem;
+	}
+}
+.main.room.INTERVIEW #quick-vote {
+	z-index: 100;
+	right: 10px;
+	bottom: 0;
+	padding: 0px 5px 0px 5px;
+	height: 40px;
+}

@@ -1,0 +1,106 @@
+/* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+.main.room.INTERVIEW .wb-block .wb-area {
+	.pod-area {
+		width: 100%;
+		height: calc(100% - var(--rec-btn-height));
+	}
+	.rec-btn {
+		z-index: 100;
+		border-radius: 30px;
+		position: absolute;
+		right: 50%;
+		bottom: 0px;
+		width: 40px;
+		height: var(--rec-btn-height);
+
+		.ui-button-icon.ui-icon.stop, .ui-button-icon.ui-icon.record {
+			background-image: none;
+			background-color: red;
+		}
+		.ui-button-icon.ui-icon.record {
+			border-radius: 15px;
+		}
+	}
+}
+.pod-area {
+	display: inline-grid;
+
+	.empty {
+		grid-area: e;
+	}
+
+	&.max2, &.max3 {
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: repeat(2, 1fr);
+	}
+	&.max2 {
+		grid-template-areas:
+			"e a a"
+			"b a a";
+	}
+	&.max3 {
+		grid-template-areas:
+			"b1 a a"
+			"b2 a a";
+	}
+	&.max5, &.max9, &.max13 {
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-areas:
+			"b1 a a b2"
+			"b3 a a b4";
+	}
+	&.max5 {
+		grid-template-rows: repeat(2, 1fr);
+	}
+	&.max9 {
+		grid-template-rows: repeat(3, 1fr);
+	}
+	&.max13 {
+		grid-template-rows: repeat(4, 1fr);
+	}
+	&.max17, &.max25, &.max33 {
+		grid-template-columns: repeat(8, 1fr);
+		grid-template-areas:
+			"b01 b02 a a a a b03 b04"
+			"b05 b06 a a a a b07 b08"
+			"b09 b10 a a a a b11 b12"
+			"b13 b14 a a a a b15 b16";
+	}
+	&.max17 {
+		grid-template-rows: repeat(4, 1fr);
+	}
+	&.max25 {
+		grid-template-rows: repeat(5, 1fr);
+	}
+	&.max33 {
+		grid-template-rows: repeat(6, 1fr);
+	}
+	.pod-big, .pod {
+		position: relative;
+		padding: 2px;
+		margin: 2px;
+		overflow: hidden;
+
+		.user-video.ui-dialog {
+			height: calc(100% - var(--buffer-size)) !important;
+			width:  calc(100% - var(--buffer-size)) !important;
+		}
+	}
+	.pod-big {
+		grid-area: a;
+		border: 1px solid #cccccc;
+		border-radius: 8px;
+		background-image: url(images/drop.png);
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: 64px;
+
+		&.ui-hightlight {
+			box-shadow: 3px 3px 4px blue;
+		}
+	}
+	.pod.ui-sortable-placeholder {
+		background-color: whitesmoke;
+		visibility: visible !important;
+	}
+}

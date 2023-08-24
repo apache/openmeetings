@@ -2,32 +2,35 @@
 #activities {
 	height: var(--activities-height);
 	overflow: hidden;
-}
-#activities .ui-resizable-handle {
-	width: 100%;
-}
-#activities .control.block {
-	white-space: nowrap;
-}
-#activities .control.block .label {
-	display: inline-block;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-#activities .ctrl {
-	padding-left: 20px;
-	padding-right: 20px;
-}
-#activities .area {
-	height: calc(100% - 46px);
-	overflow-y: auto;
+
+	.ui-resizable-handle {
+		width: 100%;
+	}
+	.control.block {
+		white-space: nowrap;
+
+		.label {
+			display: inline-block;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+	.ctrl {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+	.area {
+		height: calc(100% - 46px);
+		overflow-y: auto;
+	}
 }
 .activity.item {
 	position: relative;
 	padding: 5px;
 	margin-bottom: 3px;
 	border-bottom: 1px solid var(--bs-secondary);
-}
-.activity.item button {
-	padding: 0 5px;
+
+	button {
+		padding: 0 5px;
+	}
 }
