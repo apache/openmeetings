@@ -10,7 +10,7 @@ const msgIdPrefix = 'chat-msg-id-'
 	, SEND_ENTER = 'enter', SEND_CTRL = 'ctrl'
 	, audio = new Audio('./public/chat_message.mp3')
 	;
-let p, ctrlBlk, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
+let chatPanel, ctrlBlk, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
 	, roomPrefix = "Room ", typingTimer, roomMode = false
 	, editor = $('#chatMessage .wysiwyg-editor'), muted = false, sendOn, DEF_SEND
 	, userId, inited = false, newMsgNotification
@@ -115,7 +115,7 @@ function initToolbar() {
 	CSSEmoticon.animate();
 }
 function isClosed() {
-	return p.hasClass('closed');
+	return chatPanel.hasClass('closed');
 }
 function activateTab(id) {
 	if (isClosed()) {
@@ -145,8 +145,8 @@ function _reinit(opts) {
 	roomPrefix = opts.room;
 	DEF_SEND = opts.sendOnEnter === true ? SEND_ENTER : SEND_CTRL;
 	sendOn = DEF_SEND;
-	p = $('#chatPanel');
-	clearTimeout(p.data('timeout'));
+	chatPanel = $('#chatPanel');
+	clearTimeout(chatPanel.data('timeout'));
 	ctrlBlk = $('#chatPopup .control.block');
 	newMsgNotification = ctrlBlk.data('new-msg');
 	editor = $('#chatMessage .wysiwyg-editor');
@@ -166,15 +166,14 @@ function _reinit(opts) {
 		_removeResize();
 	} else {
 		ctrlBlk.attr('title', '');
-		p.removeClass('room opened').addClass('closed')
-			.off('mouseenter mouseleave')
-			.resizable({
+		chatPanel.removeClass('room opened').addClass('closed')
+			.off('mouseenter mouseleave').resizable({
 				handles: 'n, ' + (Settings.isRtl ? 'e' : 'w')
 				, disabled: isClosed()
 				, minHeight: 195
 				, minWidth: 260
 				, stop: function(_, ui) {
-					p.css({'top': '', 'left': ''});
+					chatPanel.css({'top': '', 'left': ''});
 					openedHeight = ui.size.height + 'px';
 					__setCssHeight(openedHeight);
 					__setCssWidth(ui.size.width);
@@ -329,7 +328,7 @@ function _addMessage(m) {
 		}
 		if (notify) {
 			ctrlBlk.addClass('bg-warning');
-			if (p.is(':visible') && !muted) {
+			if (chatPanel.is(':visible') && !muted) {
 				OmUtil.notify(newMsgNotification, 'new_chat_msg', () => {
 					// impossible to use Notification API from iFrame
 					audio.play()
@@ -346,19 +345,19 @@ function _addMessage(m) {
 }
 function _setOpened() {
 	__setCssWidth(openedWidth);
-	p.resizable({
+	chatPanel.resizable({
 		handles: (Settings.isRtl ? 'e' : 'w')
 		, minWidth: 165
 		, stop: function(_, ui) {
-			p.css({'left': '', 'width': '', 'height': ''});
+			chatPanel.css({'left': '', 'width': '', 'height': ''});
 			openedWidth = ui.size.width + 'px';
 			__setCssWidth(openedWidth);
 		}
 	});
 }
 function _removeResize() {
-	if (p.resizable('instance') !== undefined) {
-		p.resizable('destroy');
+	if (chatPanel.resizable('instance') !== undefined) {
+		chatPanel.resizable('destroy');
 	}
 }
 function _open(handler) {
@@ -369,12 +368,12 @@ function _open(handler) {
 			opts = {width: openedWidth};
 		} else {
 			opts = {height: openedHeight};
-			p.resizable("option", "disabled", false);
+			chatPanel.resizable("option", "disabled", false);
 		}
-		p.removeClass('closed').animate(opts, 1000, function() {
+		chatPanel.removeClass('closed').animate(opts, 1000, function() {
 			__hideActions();
-			p.removeClass('closed');
-			p.css({'height': '', 'width': ''});
+			chatPanel.removeClass('closed');
+			chatPanel.css({'height': '', 'width': ''});
 			if (typeof(handler) === 'function') {
 				handler();
 			}
@@ -398,10 +397,10 @@ function _close(handler) {
 			opts = {width: closedSizePx};
 		} else {
 			opts = {height: closedSizePx};
-			p.resizable("option", "disabled", true);
+			chatPanel.resizable("option", "disabled", true);
 		}
-		p.animate(opts, 1000, function() {
-			p.addClass('closed').css({'height': '', 'width': ''});
+		chatPanel.animate(opts, 1000, function() {
+			chatPanel.addClass('closed').css({'height': '', 'width': ''});
 			if (roomMode) {
 				__setCssWidth(closedSizePx);
 				_removeResize();
