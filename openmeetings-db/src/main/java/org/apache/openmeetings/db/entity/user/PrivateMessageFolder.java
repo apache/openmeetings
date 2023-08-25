@@ -27,6 +27,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -43,6 +44,9 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @Table(name = "private_message_folder")
 @XmlRootElement(name = MSG_FOLDER_NODE)
 @XmlAccessorType(XmlAccessType.FIELD)
+@NamedQuery(name = "getMsgFolders", query = "SELECT f FROM PrivateMessageFolder f ORDER BY f.id")
+@NamedQuery(name = "getMsgFolderById", query = "SELECT f FROM PrivateMessageFolder f WHERE f.id = :id")
+@NamedQuery(name = "getMsgFolderByUser", query = "SELECT f FROM PrivateMessageFolder f WHERE f.userId = :userId")
 public class PrivateMessageFolder implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id

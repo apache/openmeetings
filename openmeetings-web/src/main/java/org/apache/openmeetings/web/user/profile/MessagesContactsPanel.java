@@ -162,7 +162,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 		super(id);
 		notMoveFolder.setId(MOVE_CHOOSE);
 		notMoveFolder.setFolderName(Application.getString("1243"));
-		foldersModel.setObject(folderDao.get(0, Integer.MAX_VALUE));
+		foldersModel.setObject(folderDao.getByUser(getUserId()));
 		updateMoveModel();
 
 		final NameDialog addFolder = new NameDialog("addFolder") {
@@ -172,7 +172,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
 				folderDao.addPrivateMessageFolder(getModelObject(), getUserId());
-				foldersModel.setObject(folderDao.get(0, Integer.MAX_VALUE));
+				foldersModel.setObject(folderDao.getByUser(getUserId()));
 				updateMoveModel();
 				target.add(folders, moveDropDown);
 			}
@@ -222,7 +222,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						folderDao.delete(item.getModelObject(), getUserId());
-						foldersModel.setObject(folderDao.get(0, Integer.MAX_VALUE));
+						foldersModel.setObject(folderDao.getByUser(getUserId()));
 						updateMoveModel();
 						target.add(folders, moveDropDown);
 					}
