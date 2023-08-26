@@ -89,7 +89,7 @@
 		<wicketstuff.version>9.14.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.5-SNAPSHOT</wicket-bootstrap.version>
 		<spring.version>5.3.29</spring.version>
-		<tomcat.version>9.0.79</tomcat.version>
+		<tomcat.version>9.0.80</tomcat.version>
 		<ical4j.version>4.0.0-beta9</ical4j.version>
 		<cxf.version>3.6.1</cxf.version>
 		<io.prometheus.version>0.16.0</io.prometheus.version>
