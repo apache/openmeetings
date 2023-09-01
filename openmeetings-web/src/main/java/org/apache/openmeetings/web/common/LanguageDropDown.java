@@ -24,8 +24,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
 public class LanguageDropDown extends DropDownChoice<Long> {
@@ -47,18 +47,6 @@ public class LanguageDropDown extends DropDownChoice<Long> {
 			languages.add(e.getKey());
 		}
 		setChoices(languages);
-		setChoiceRenderer(new ChoiceRenderer<Long>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Object getDisplayValue(Long object) {
-				return LabelDao.getLocale(object).getDisplayName();
-			}
-
-			@Override
-			public String getIdValue(Long object, int index) {
-				return "" + object;
-			}
-		});
+		setChoiceRenderer(new LambdaChoiceRenderer<>(id -> LabelDao.getLocale(id).getDisplayName(), String::valueOf));
 	}
 }

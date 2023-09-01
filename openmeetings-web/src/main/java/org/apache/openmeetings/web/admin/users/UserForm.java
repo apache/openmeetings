@@ -58,9 +58,9 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
@@ -338,19 +338,7 @@ public class UserForm extends AdminBaseForm<User> {
 			}
 		}
 		domainId.setChoices(ids);
-		domainId.setChoiceRenderer(new ChoiceRenderer<Long>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Object getDisplayValue(Long object) {
-				return values.get(object);
-			}
-
-			@Override
-			public String getIdValue(Long object, int index) {
-				return "" + object;
-			}
-		});
+		domainId.setChoiceRenderer(new LambdaChoiceRenderer<>(id -> values.get(id), String::valueOf));
 		domain.setVisible(u.getType() == Type.LDAP || u.getType() == Type.OAUTH);
 		if (target != null) {
 			target.add(domain);

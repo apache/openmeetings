@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
 public class CountryDropDown extends DropDownChoice<String>  {
@@ -41,28 +41,6 @@ public class CountryDropDown extends DropDownChoice<String>  {
 		List<String> countries = new ArrayList<>(getCountries());
 		countries.sort((c1, c2) -> getCountryName(c1, getLocale()).compareTo(getCountryName(c2, getLocale())));
 		setChoices(countries);
-		setChoiceRenderer(new IChoiceRenderer<String>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public String getIdValue(String code, int index) {
-				return code;
-			}
-
-			@Override
-			public Object getDisplayValue(String code) {
-				return getCountryName(code, getLocale());
-			}
-
-			@Override
-			public String getObject(String id, IModel<? extends List<? extends String>> choices) {
-				for (String code : choices.getObject()) {
-					if (code.equals(id)) {
-						return code;
-					}
-				}
-				return null;
-			}
-		});
+		setChoiceRenderer(new LambdaChoiceRenderer<>(code -> getCountryName(code, getLocale()), code -> code));
 	}
 }

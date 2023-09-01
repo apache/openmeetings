@@ -344,6 +344,7 @@ public class UserManager implements IUserManager {
 		Map<String, String> params = new HashMap<>();
 		params.put("{$client_id}", s.getClientId());
 		params.put("{$redirect_uri}", getRedirectUri(s));
+		params.put("{$state}", randomUUID().toString());
 		return params;
 	}
 

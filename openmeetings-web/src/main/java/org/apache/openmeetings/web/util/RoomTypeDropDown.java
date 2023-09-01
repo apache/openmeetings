@@ -22,8 +22,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
 
 public class RoomTypeDropDown extends DropDownChoice<Type> {
 	private static final long serialVersionUID = 1L;
@@ -31,28 +30,6 @@ public class RoomTypeDropDown extends DropDownChoice<Type> {
 	public RoomTypeDropDown(String id) {
 		super(id);
 		setChoices(List.of(Type.values()));
-		setChoiceRenderer(new IChoiceRenderer<Type>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public String getIdValue(Type rt, int index) {
-				return rt.name();
-			}
-
-			@Override
-			public Object getDisplayValue(Type rt) {
-				return getString("room.type." + rt.name());
-			}
-
-			@Override
-			public Type getObject(String id, IModel<? extends List<? extends Type>> choices) {
-				for (Type rt : choices.getObject()) {
-					if (rt.name().equals(id)) {
-						return rt;
-					}
-				}
-				return null;
-			}
-		});
+		setChoiceRenderer(new LambdaChoiceRenderer<>(rt -> getString("room.type." + rt.name()), Type::name));
 	}
 }

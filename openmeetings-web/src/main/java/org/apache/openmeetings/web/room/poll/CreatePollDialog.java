@@ -32,9 +32,9 @@ import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -118,19 +118,7 @@ public class CreatePollDialog extends Modal<RoomPoll> {
 			add(new RequiredTextField<String>("name").setLabel(new ResourceModel("1410")));
 			add(new TextArea<String>("question"));
 			add(new DropDownChoice<>("type", List.of(RoomPoll.Type.values())
-					, new ChoiceRenderer<RoomPoll.Type>() {
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						public Object getDisplayValue(RoomPoll.Type pt) {
-							return getString("poll.type." + pt.name());
-						}
-
-						@Override
-						public String getIdValue(RoomPoll.Type pt, int index) {
-							return pt.name();
-						}
-					})
+					, new LambdaChoiceRenderer<>(pt -> getString("poll.type." + pt.name()), RoomPoll.Type::name))
 					.setRequired(true).setLabel(new ResourceModel("21")));
 			add(feedback.setOutputMarkupId(true));
 			super.onInitialize();

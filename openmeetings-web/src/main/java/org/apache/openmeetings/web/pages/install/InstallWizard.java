@@ -76,6 +76,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -275,19 +276,8 @@ public class InstallWizard extends BootstrapWizard {
 		private final TextField<String> pass = new TextField<>("password");
 		private final Form<ConnectionProperties> form = new Form<>("form", new CompoundPropertyModel<>(getProps(null))) {
 			private static final long serialVersionUID = 1L;
-			private final DropDownChoice<DbType> db = new DropDownChoice<>("dbType", List.of(DbType.values()), new ChoiceRenderer<DbType>() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public Object getDisplayValue(DbType object) {
-					return getString(String.format("install.wizard.db.step.%s.name", object.dbName()));
-				}
-
-				@Override
-				public String getIdValue(DbType object, int index) {
-					return object.name();
-				}
-			});
+			private final DropDownChoice<DbType> db = new DropDownChoice<>("dbType", List.of(DbType.values())
+					, new LambdaChoiceRenderer<>(db -> getString("install.wizard.db.step." + db.dbName() + ".name"), DbType::name));
 
 			@Override
 			protected void onInitialize() {
@@ -880,19 +870,7 @@ public class InstallWizard extends BootstrapWizard {
 		public TzDropDown(String id) {
 			super(id);
 			setChoices(AVAILABLE_TIMEZONES);
-			setChoiceRenderer(new ChoiceRenderer<String>() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public Object getDisplayValue(String object) {
-					return object;
-				}
-
-				@Override
-				public String getIdValue(String object, int index) {
-					return object;
-				}
-			});
+			setChoiceRenderer(new LambdaChoiceRenderer<>(str -> str, str -> str));
 		}
 
 		public void setOption() {

@@ -70,7 +70,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
@@ -421,29 +421,8 @@ public class AppointmentDialog extends Modal<Appointment> {
 			add(new DropDownChoice<>(
 					"reminder"
 					, List.of(Reminder.values())
-					, new IChoiceRenderer<Reminder>() {
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						public Object getDisplayValue(Reminder art) {
-							return getString("appointment.reminder." + art.name());
-						}
-
-						@Override
-						public String getIdValue(Reminder art, int index) {
-							return art.name();
-						}
-
-						@Override
-						public Reminder getObject(String id, IModel<? extends List<? extends Reminder>> choices) {
-							for (Reminder art : choices.getObject()) {
-								if (art.name().equals(id)) {
-									return art;
-								}
-							}
-							return null;
-						}
-					}));
+					, new LambdaChoiceRenderer<>(Reminder::name, art -> getString("appointment.reminder." + art.name()))
+					));
 			add(new AjaxCheckBox("passwordProtected") {
 				private static final long serialVersionUID = 1L;
 

@@ -30,9 +30,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -59,19 +59,7 @@ public class LangForm extends Form<Void> {
 		languages = new DropDownChoice<>("language"
 				, new PropertyModel<>(langPanel, "language")
 				, getLanguages()
-				, new ChoiceRenderer<Map.Entry<Long, Locale>>() {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public Object getDisplayValue(Map.Entry<Long, Locale> object) {
-						return object.getValue().getDisplayName();
-					}
-
-					@Override
-					public String getIdValue(Map.Entry<Long, Locale> object, int index) {
-						return "" + object.getKey();
-					}
-				});
+				, new LambdaChoiceRenderer<>(e -> e.getValue().getDisplayName(), e -> "" + e.getKey()));
 
 		languages.add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;

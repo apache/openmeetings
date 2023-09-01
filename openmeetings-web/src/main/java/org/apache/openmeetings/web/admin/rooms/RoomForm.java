@@ -58,9 +58,9 @@ import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -150,19 +150,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 		add(new DropDownChoice<>("capacity", //
 				DROPDOWN_NUMBER_OF_PARTICIPANTS, //
-				new ChoiceRenderer<Long>() {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public Object getDisplayValue(Long id) {
-						return id;
-					}
-
-					@Override
-					public String getIdValue(Long id, int index) {
-						return "" + id;
-					}
-				}));
+				new LambdaChoiceRenderer<>(num -> num, String::valueOf)));
 
 		add(new RoomTypeDropDown("type").setRequired(true).setLabel(new ResourceModel("45")));
 

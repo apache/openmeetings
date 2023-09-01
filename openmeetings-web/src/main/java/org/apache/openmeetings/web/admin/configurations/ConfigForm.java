@@ -45,12 +45,11 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -124,29 +123,9 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		add(new TextArea<String>("comment"));
 		update(null);
 
-		add(new DropDownChoice<>("type", List.of(Type.values()), new IChoiceRenderer<Type>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public String getIdValue(Type rt, int index) {
-				return rt.name();
-			}
-
-			@Override
-			public Object getDisplayValue(Type rt) {
-				return rt.name();
-			}
-
-			@Override
-			public Type getObject(String id, IModel<? extends List<? extends Type>> choices) {
-				for (Type rt : choices.getObject()) {
-					if (rt.name().equals(id)) {
-						return rt;
-					}
-				}
-				return null;
-			}
-		}).setLabel(new ResourceModel("45")).add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, this::update)));
+		add(new DropDownChoice<>("type", List.of(Type.values()), new LambdaChoiceRenderer<>(Type::name, Type::name))
+				.setLabel(new ResourceModel("45"))
+				.add(AjaxFormComponentUpdatingBehavior.onUpdate(EVT_CHANGE, this::update)));
 		add(new RequiredTextField<String>("key").setLabel(new ResourceModel("265")).add(new IValidator<String>(){
 			private static final long serialVersionUID = 1L;
 

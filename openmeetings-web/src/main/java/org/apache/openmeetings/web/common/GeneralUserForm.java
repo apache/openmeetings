@@ -37,9 +37,9 @@ import org.apache.openmeetings.web.common.datetime.AjaxOmDatePicker;
 import org.apache.openmeetings.web.util.CountryDropDown;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -78,19 +78,7 @@ public class GeneralUserForm extends Form<User> {
 		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new DropDownChoice<>("salutation"
 				, List.of(Salutation.values())
-				, new ChoiceRenderer<Salutation>() {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public Object getDisplayValue(Salutation object) {
-						return getString("user.salutation." + object.name());
-					}
-
-					@Override
-					public String getIdValue(Salutation object, int index) {
-						return object.name();
-					}
-				}));
+				, new LambdaChoiceRenderer<>(s -> getString("user.salutation." + s.name()), Salutation::name)));
 		add(new TextField<String>("firstname"));
 		add(new TextField<String>("lastname"));
 		add(new TextField<String>("displayName").setEnabled(isAdminForm || isDisplayNameEditable()));

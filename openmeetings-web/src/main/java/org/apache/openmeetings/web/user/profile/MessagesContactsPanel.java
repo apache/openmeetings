@@ -66,8 +66,8 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
@@ -119,35 +119,11 @@ public class MessagesContactsPanel extends UserBasePanel {
 	private final DropDownChoice<String> selectDropDown = new DropDownChoice<>(
 		"msgSelect", Model.of(SELECT_CHOOSE)
 		, List.of(SELECT_CHOOSE, SELECT_ALL, SELECT_NONE, SELECT_UNREAD, SELECT_READ)
-		, new ChoiceRenderer<String>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Object getDisplayValue(String object) {
-				return Application.getString(object);
-			}
-
-			@Override
-			public String getIdValue(String object, int index) {
-				return object;
-			}
-		});
+		, new LambdaChoiceRenderer<>(str -> Application.getString(str), str -> str));
 	private final PrivateMessageFolder notMoveFolder = new PrivateMessageFolder();
 	private final DropDownChoice<PrivateMessageFolder> moveDropDown = new DropDownChoice<>("msgMove", Model.of(notMoveFolder)
 		, List.of(notMoveFolder)
-		, new ChoiceRenderer<PrivateMessageFolder>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Object getDisplayValue(PrivateMessageFolder object) {
-				return object.getFolderName();
-			}
-
-			@Override
-			public String getIdValue(PrivateMessageFolder object, int index) {
-				return "" + object.getId();
-			}
-		});
+		, new LambdaChoiceRenderer<>(PrivateMessageFolder::getFolderName, f -> "" + f.getId()));
 	private WebMarkupContainer selectedFolder;
 	@SpringBean
 	private PrivateMessageDao msgDao;
