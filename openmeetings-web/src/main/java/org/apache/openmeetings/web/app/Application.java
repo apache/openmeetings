@@ -167,7 +167,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
 	private static boolean isInstalled;
 	private static final String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
-	private static final String SERVER_CONTAINER_SERVLET_CONTEXT_ATTRIBUTE = "javax.websocket.server.ServerContainer";
+	private static final String SERVER_CONTAINER_SERVLET_CONTEXT_ATTRIBUTE = "jakarta.websocket.server.ServerContainer";
 	public static final String NAME_ATTR_KEY = "name";
 	public static final String SERVER_URL_ATTR_KEY = "server.url";
 	//additional maps for faster searching should be created
