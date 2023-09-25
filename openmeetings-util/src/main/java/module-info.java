@@ -39,7 +39,7 @@ module org.apache.openmeetings.util {
 	requires jakarta.activation;
 	requires org.mnode.ical4j.core;
 	requires org.aspectj.tools;
-	requires dom4j;
+	requires org.dom4j;
 	requires simpleclient;
 	requires ch.qos.logback.classic;
 	requires ch.qos.logback.core;

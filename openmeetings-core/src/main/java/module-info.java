@@ -41,6 +41,5 @@ module org.apache.openmeetings.core {
 	requires javax.inject;
 	requires asterisk.java;
 	requires jain.sip.ri;
-	requires org.apache.tika.parsers;
 	requires jakarta.mail;
 }
