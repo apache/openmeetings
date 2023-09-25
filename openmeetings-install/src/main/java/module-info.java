@@ -22,9 +22,32 @@ module org.apache.openmeetings.install {
 	exports org.apache.openmeetings.cli;
 	exports org.apache.openmeetings.installation;
 
-	requires transitive org.apache.openmeetings.core;
+	requires com.github.openjson;
+
+	requires org.apache.commons.io;
+	requires org.apache.commons.lang3;
+
+	requires org.apache.openjpa;
+
+	requires org.apache.openmeetings.core;
+	requires org.apache.openmeetings.db;
+	requires org.apache.openmeetings.util;
+
+	requires org.apache.wicket.core;
+	requires org.apache.wicket.request;
+	requires org.apache.wicket.util;
+
+	requires jakarta.inject;
+	requires jakarta.xml.bind;
+
+	requires spring.context;
+	requires spring.context.support;
+	requires spring.web;
+
 	requires java.desktop;
 	requires commons.cli;
-	requires spring.context.support;
 	requires quartz;
+	requires xstream;
+
+	requires org.slf4j;
 }

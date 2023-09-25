@@ -22,7 +22,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.ServletContext;
 
 import org.apache.openmeetings.db.entity.room.Invitation;

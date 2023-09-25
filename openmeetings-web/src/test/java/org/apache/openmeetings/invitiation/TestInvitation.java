@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-import org.apache.openmeetings.AbstractWicketTesterTest;
+import org.apache.openmeetings.web.AbstractWicketTesterTest;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;

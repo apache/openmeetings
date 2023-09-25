@@ -18,12 +18,35 @@
  */
 
 module org.apache.openmeetings.web {
+	requires org.apache.openmeetings.core;
+	requires org.apache.openmeetings.db;
 	requires org.apache.openmeetings.install;
 	requires org.apache.openmeetings.mediaserver;
+	requires org.apache.openmeetings.service;
+	requires org.apache.openmeetings.util;
 	requires org.apache.openmeetings.webservice;
 
+	requires com.github.openjson;
+
+	requires totp;
+
+	requires org.apache.commons.io;
+	requires org.apache.commons.fileupload2.core;
+	requires org.apache.commons.fileupload2.jakarta;
+	requires org.apache.commons.lang3;
+
+	requires org.apache.httpcomponents.httpclient;
+
 	requires org.apache.wicket.auth.roles;
+	requires org.apache.wicket.core;
 	requires org.apache.wicket.devutils;
+	requires org.apache.wicket.extensions;
+	requires org.apache.wicket.ioc;
+	requires org.apache.wicket.request;
+	requires org.apache.wicket.spring;
+	requires org.apache.wicket.util;
+	requires org.apache.wicket.websocket.core;
+
 	requires wicketstuff.dashboard.core;
 	requires wicketstuff.datastore.hazelcast;
 	requires wicketstuff.select2;
@@ -39,12 +62,25 @@ module org.apache.openmeetings.web {
 	requires wicket.jquery.ui.core;
 	requires wicket.jquery.ui.plugins;
 
+	requires jakarta.annotation;
+	requires jakarta.inject;
+	requires jakarta.servlet;
+	requires jakarta.websocket.client;
+	requires jakarta.ws.rs;
+
 	requires java.net.http;
+	requires java.management;
 	requires java.sql;
-	requires javax.websocket.api;
+
 	requires com.hazelcast.core;
 	requires org.danekja.jdk.serializable.functional;
+	requires simpleclient.servlet.jakarta;
+	requires xstream;
+
+	requires spring.beans;
+	requires spring.context;
 	requires spring.orm;
-	requires java.management;
-	requires simpleclient.servlet;
+	requires spring.web;
+
+	requires org.slf4j;
 }

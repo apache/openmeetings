@@ -19,10 +19,10 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isDisplayNameEditable;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isDisplayNameEditable;
 
 import java.util.ArrayList;
 import java.util.List;

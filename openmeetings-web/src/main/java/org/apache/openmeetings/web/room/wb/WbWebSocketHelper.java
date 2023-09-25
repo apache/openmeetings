@@ -28,12 +28,12 @@ import java.util.function.Predicate;
 
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
-import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.openmeetings.web.room.RoomPreviewResourceReference;
 import org.apache.openmeetings.web.room.RoomResourceReference;
 import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
 import org.apache.openmeetings.web.user.record.PngRecordingResourceReference;
+import org.apache.openmeetings.util.NullStringer;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;

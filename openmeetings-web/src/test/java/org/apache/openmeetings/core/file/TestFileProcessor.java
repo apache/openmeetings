@@ -28,7 +28,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Optional;
 
-import org.apache.openmeetings.AbstractOmServerTest;
+import org.apache.openmeetings.web.AbstractOmServerTest;
 import org.apache.openmeetings.core.data.file.FileProcessor;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;

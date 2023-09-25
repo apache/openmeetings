@@ -20,7 +20,7 @@ package org.apache.openmeetings.domain;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.openmeetings.AbstractOmServerTest;
+import org.apache.openmeetings.web.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;

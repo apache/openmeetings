@@ -20,9 +20,9 @@ package org.apache.openmeetings.webservice;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.AbstractOmServerTest.UNIT_TEST_ARAB_EXT_TYPE;
-import static org.apache.openmeetings.AbstractOmServerTest.createUser;
-import static org.apache.openmeetings.AbstractOmServerTest.getUser;
+import static org.apache.openmeetings.web.AbstractOmServerTest.UNIT_TEST_ARAB_EXT_TYPE;
+import static org.apache.openmeetings.web.AbstractOmServerTest.createUser;
+import static org.apache.openmeetings.web.AbstractOmServerTest.getUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

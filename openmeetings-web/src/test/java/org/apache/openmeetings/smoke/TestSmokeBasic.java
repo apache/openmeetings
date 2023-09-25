@@ -20,7 +20,7 @@ package org.apache.openmeetings.smoke;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.openmeetings.AbstractOmServerTest;
+import org.apache.openmeetings.web.AbstractOmServerTest;
 import org.junit.jupiter.api.Test;
 
 class TestSmokeBasic extends AbstractOmServerTest {

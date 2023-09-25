@@ -51,16 +51,32 @@ module org.apache.openmeetings.db {
 	exports org.apache.openmeetings.db.util;
 	exports org.apache.openmeetings.db.util.ws;
 
-	requires transitive org.apache.openmeetings.util;
-	requires transitive org.apache.wicket.request;
-	requires transitive org.apache.wicket.websocket.core;
-	requires transitive org.apache.commons.text;
-	requires transitive java.xml.bind;
-	requires transitive org.apache.openjpa;
-	requires transitive spring.beans;
-	requires transitive spring.web;
-	requires transitive spring.core;
+	requires com.github.openjson;
 
+	requires org.apache.commons.lang3;
+	requires org.apache.commons.text;
+
+	requires org.apache.openjpa;
+
+	requires org.apache.openmeetings.util;
+
+	requires org.apache.wicket.core;
+	requires org.apache.wicket.extensions;
+	requires org.apache.wicket.request;
+	requires org.apache.wicket.util;
+	requires org.apache.wicket.websocket.core;
+
+	requires spring.beans;
+	requires spring.web;
+	requires spring.core;
 	requires spring.tx;
-	requires javax.persistence;
+	requires spring.context;
+
+	requires jakarta.annotation;
+	requires jakarta.inject;
+	requires jakarta.persistence;
+	requires jakarta.servlet;
+	requires jakarta.xml.bind;
+
+	requires org.slf4j;
 }

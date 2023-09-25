@@ -27,19 +27,36 @@ module org.apache.openmeetings.core {
 	exports org.apache.openmeetings.core.sip;
 	exports org.apache.openmeetings.core.util;
 
-	requires transitive org.apache.openmeetings.db;
+	requires com.github.openjson;
 
-	requires transitive org.apache.commons.io;
-	requires transitive java.annotation;
-	requires transitive java.xml;
+	requires jakarta.annotation;
+	requires jakarta.inject;
+	requires jakarta.mail;
+
+	requires org.apache.commons.io;
+	requires org.apache.commons.lang3;
+
+	requires org.apache.tika.core;
+	requires org.apache.tika.parser.image;
+
+	requires org.apache.openmeetings.db;
+	requires org.apache.openmeetings.util;
+
+	requires org.apache.wicket.core;
+	requires org.apache.wicket.websocket.core;
+	requires org.apache.wicket.util;
+
+	requires java.xml;
 
 	requires xstream;
 
 	requires jodconverter.core;
 	requires jodconverter.local;
 	requires org.apache.directory.ldap.api.all;
-	requires javax.inject;
 	requires asterisk.java;
 	requires jain.sip.ri;
-	requires jakarta.mail;
+
+	requires spring.context;
+
+	requires org.slf4j;
 }

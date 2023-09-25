@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.user.record;
 
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.List;
 

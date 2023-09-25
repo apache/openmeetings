@@ -19,9 +19,9 @@
 package org.apache.openmeetings.web.pages.auth;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.web.app.Application.urlForPage;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
-import static org.apache.openmeetings.web.app.Application.urlForPage;
 
 import java.util.Date;
 

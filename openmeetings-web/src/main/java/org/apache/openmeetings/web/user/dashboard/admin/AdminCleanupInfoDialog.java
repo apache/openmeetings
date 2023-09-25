@@ -23,10 +23,10 @@ import static org.apache.openmeetings.cli.CleanupHelper.getFileUnit;
 import static org.apache.openmeetings.cli.CleanupHelper.getImportUnit;
 import static org.apache.openmeetings.cli.CleanupHelper.getProfileUnit;
 import static org.apache.openmeetings.cli.CleanupHelper.getRecUnit;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
 import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
-import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
 
 import org.apache.openmeetings.cli.CleanupEntityUnit;
 import org.apache.openmeetings.cli.CleanupUnit;

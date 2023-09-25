@@ -19,13 +19,13 @@
 package org.apache.openmeetings.web.admin.rooms;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isRecordingsEnabled;
 import static org.apache.openmeetings.web.admin.AdminUserChoiceProvider.PAGE_SIZE;
 import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isRecordingsEnabled;
 import static org.apache.wicket.validation.validator.StringValidator.maximumLength;
 
 import java.util.ArrayList;

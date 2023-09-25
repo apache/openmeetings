@@ -384,10 +384,7 @@ public class BackupExport {
 		writeList(zos, "extraMenus.xml", EXTRA_MENU_LIST_NODE, list);
 	}
 
-	/*
-	 * Package private for tests
-	 */
-	static <T> ByteArrayOutputStream stream(String listElement, List<T> list) throws Exception {
+	public static <T> ByteArrayOutputStream stream(String listElement, List<T> list) throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream(10 * 1024); //10K
 		writeList(baos, listElement, list);
 		return baos;

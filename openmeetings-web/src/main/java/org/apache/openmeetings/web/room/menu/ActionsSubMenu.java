@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.io.Serializable;
 

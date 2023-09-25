@@ -20,8 +20,8 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.sendWbAll;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 
 import java.util.List;
 import java.util.Map;

@@ -23,7 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setBaseUrl;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.openmeetings.AbstractOmServerTest;
+import org.apache.openmeetings.web.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.junit.jupiter.api.Test;

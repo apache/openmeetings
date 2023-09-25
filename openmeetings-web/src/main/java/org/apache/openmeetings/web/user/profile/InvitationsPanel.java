@@ -19,9 +19,9 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.db.util.FormatHelper.formatUser;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 
 import java.util.Iterator;
 import java.util.Set;

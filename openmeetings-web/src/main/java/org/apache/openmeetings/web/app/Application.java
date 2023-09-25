@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
+import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
+import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
@@ -28,9 +31,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
-import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
-import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
-import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.wicketstuff.dashboard.DashboardContextInitializer.DASHBOARD_CONTEXT_KEY;
 
 import java.io.File;
@@ -44,8 +44,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
-import javax.websocket.WebSocketContainer;
+import jakarta.annotation.Nonnull;
+import jakarta.websocket.WebSocketContainer;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.sip.SipManager;
@@ -71,8 +71,6 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.ApplicationHelper;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
-import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OmVersion;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.openmeetings.web.admin.backup.BackupUploadResourceReference;
 import org.apache.openmeetings.web.common.PingResourceReference;
@@ -100,6 +98,8 @@ import org.apache.openmeetings.web.user.dashboard.admin.AdminWidgetDescriptor;
 import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
 import org.apache.openmeetings.web.user.record.PngRecordingResourceReference;
 import org.apache.openmeetings.web.util.GroupLogoResourceReference;
+import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OmVersion;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
 import org.apache.wicket.DefaultPageManagerProvider;

@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 
 import java.io.Serializable;
 import java.util.List;

@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.web.admin.configurations;
 
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFFICE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
-import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 import static org.apache.wicket.validation.validator.StringValidator.maximumLength;
 
 import java.nio.file.InvalidPathException;

@@ -18,16 +18,16 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_GROUP;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_MY;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 
 import java.util.ArrayList;
 import java.util.Date;

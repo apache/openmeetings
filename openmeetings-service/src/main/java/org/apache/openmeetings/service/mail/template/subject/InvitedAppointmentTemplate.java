@@ -28,7 +28,7 @@ public abstract class InvitedAppointmentTemplate extends AppointmentTemplate {
 	private static final long serialVersionUID = 1L;
 	protected final String invitorName;
 
-	InvitedAppointmentTemplate(Locale locale, Appointment a, TimeZone tz, String invitorName) {
+	public InvitedAppointmentTemplate(Locale locale, Appointment a, TimeZone tz, String invitorName) {
 		super(locale, a, tz);
 		this.invitorName = invitorName;
 	}

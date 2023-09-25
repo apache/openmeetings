@@ -27,7 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.AbstractOmServerTest;
+import org.apache.openmeetings.web.AbstractOmServerTest;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.util.mail.ByteArrayDataSource;
 import org.apache.openmeetings.util.mail.IcalHandler;

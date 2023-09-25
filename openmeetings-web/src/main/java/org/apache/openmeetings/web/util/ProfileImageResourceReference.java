@@ -20,8 +20,8 @@ package org.apache.openmeetings.web.util;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -35,13 +35,14 @@ import org.slf4j.LoggerFactory;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
+
+import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
-
-import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 
 public class ProfileImageResourceReference extends ResourceReference {
 	private static final long serialVersionUID = 1L;

@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.admin.users;
 
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;

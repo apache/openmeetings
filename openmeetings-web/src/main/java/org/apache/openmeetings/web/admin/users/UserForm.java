@@ -23,11 +23,11 @@ import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.entity.user.User.DISPLAY_NAME_NA;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendRegisterEmail;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendRegisterEmail;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.ArrayList;

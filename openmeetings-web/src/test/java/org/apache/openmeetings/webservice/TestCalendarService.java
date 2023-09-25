@@ -19,11 +19,11 @@
 package org.apache.openmeetings.webservice;
 
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.AbstractOmServerTest.ONE_HOUR;
-import static org.apache.openmeetings.AbstractOmServerTest.createPass;
-import static org.apache.openmeetings.AbstractOmServerTest.createUser;
-import static org.apache.openmeetings.AbstractOmServerTest.getAppointment;
-import static org.apache.openmeetings.AbstractOmServerTest.getUser;
+import static org.apache.openmeetings.web.AbstractOmServerTest.ONE_HOUR;
+import static org.apache.openmeetings.web.AbstractOmServerTest.createPass;
+import static org.apache.openmeetings.web.AbstractOmServerTest.createUser;
+import static org.apache.openmeetings.web.AbstractOmServerTest.getAppointment;
+import static org.apache.openmeetings.web.AbstractOmServerTest.getUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -37,7 +37,7 @@ import java.util.List;
 import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.core.Response;
 
-import org.apache.openmeetings.AbstractOmServerTest;
+import org.apache.openmeetings.web.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;

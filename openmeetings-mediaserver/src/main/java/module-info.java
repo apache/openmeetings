@@ -20,12 +20,27 @@
 module org.apache.openmeetings.mediaserver {
 	exports org.apache.openmeetings.mediaserver;
 
-	requires transitive org.apache.openmeetings.core;
-	requires transitive org.apache.wicket.ioc;
+	requires com.github.openjson;
+
+	requires org.apache.commons.lang3;
+
+	requires org.apache.openmeetings.core;
+	requires org.apache.openmeetings.db;
+	requires org.apache.openmeetings.util;
+
+	requires org.apache.wicket.ioc;
+	requires org.apache.wicket.util;
+
+	requires jakarta.annotation;
+	requires jakarta.inject;
+
+	requires spring.beans;
+	requires spring.context;
 
 	requires kurento.client;
 	requires kurento.jsonrpc.client;
 	requires kurento.commons;
-	requires javax.inject;
 	requires com.google.gson;
+
+	requires org.slf4j;
 }

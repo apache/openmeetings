@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.util;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.util.OmFileHelper.getUserDashboard;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.util.OmFileHelper.getUserDashboard;
 
 import java.io.File;
 import java.io.FileInputStream;

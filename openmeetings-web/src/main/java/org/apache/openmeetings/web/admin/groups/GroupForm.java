@@ -19,12 +19,12 @@
 package org.apache.openmeetings.web.admin.groups;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
-import static org.apache.openmeetings.util.OmFileHelper.getGroupLogoDir;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
+import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
+import static org.apache.openmeetings.util.OmFileHelper.getGroupLogoDir;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -36,10 +36,10 @@ import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.common.UploadableImagePanel;
+import org.apache.openmeetings.util.StoredFile;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;

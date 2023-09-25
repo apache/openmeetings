@@ -20,13 +20,12 @@
 package org.apache.openmeetings.web.app;
 
 import static dev.samstevens.totp.util.Utils.getDataUriForImage;
+import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 
 import java.net.UnknownHostException;
 
 import jakarta.annotation.PostConstruct;
-
-import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;

@@ -19,10 +19,10 @@
 package org.apache.openmeetings.webservice;
 
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.AbstractOmServerTest.createPass;
-import static org.apache.openmeetings.AbstractOmServerTest.ensureSchema;
-import static org.apache.openmeetings.AbstractOmServerTest.soapUsername;
-import static org.apache.openmeetings.AbstractOmServerTest.userpass;
+import static org.apache.openmeetings.web.AbstractOmServerTest.createPass;
+import static org.apache.openmeetings.web.AbstractOmServerTest.ensureSchema;
+import static org.apache.openmeetings.web.AbstractOmServerTest.soapUsername;
+import static org.apache.openmeetings.web.AbstractOmServerTest.userpass;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

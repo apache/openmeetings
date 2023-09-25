@@ -82,7 +82,6 @@
 		<plexus-utils.version>3.5.1</plexus-utils.version>
 
 		<!-- dependency versions -->
-<<<<<<< HEAD
 		<junit.version>5.10.1</junit.version>
 		<wicket.version>10.0.0-M2</wicket.version>
 		<wicket-jquery-ui.version>10.0.0-M1</wicket-jquery-ui.version>
@@ -92,17 +91,6 @@
 		<tomcat.version>10.1.17</tomcat.version>
 		<ical4j.version>4.0.0-rc1</ical4j.version>
 		<cxf.version>4.0.3</cxf.version>
-=======
-		<junit.version>5.10.0</junit.version>
-		<wicket.version>10.0.0-M2-SNAPSHOT</wicket.version>
-		<wicket-jquery-ui.version>10.0.0-M1</wicket-jquery-ui.version>
-		<wicketstuff.version>10.0.0-M1</wicketstuff.version>
-		<wicket-bootstrap.version>7.0.0-SNAPSHOT</wicket-bootstrap.version>
-		<spring.version>6.0.11</spring.version>
-		<tomcat.version>10.1.11</tomcat.version>
-		<ical4j.version>4.0.0-beta9</ical4j.version>
-		<cxf.version>4.0.2</cxf.version>
->>>>>>> 6626e0888 ([OPENMEETINGS-2756] build is fixed; code clean-up some dependencies are updated)
 		<io.prometheus.version>0.16.0</io.prometheus.version>
 		<aspectjtools.version>1.9.21</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
@@ -115,6 +103,7 @@
 		<jakarta.persistence.version>3.1.0</jakarta.persistence.version>
 		<jakarta.transaction.version>2.0.1</jakarta.transaction.version>
 		<jakarta.annotation.version>2.1.1</jakarta.annotation.version>
+		<jakarta.websocket-api.version>2.1.1</jakarta.websocket-api.version>
 		<asterisk-java.version>3.39.0</asterisk-java.version>
 		<commons-lang3.version>3.14.0</commons-lang3.version>
 		<commons-dbcp.version>2.11.0</commons-dbcp.version>
@@ -668,6 +657,7 @@
 				<artifactId>wicketstuff-datastore-hazelcast</artifactId>
 				<version>${wicketstuff.version}</version>
 			</dependency>
+			<dependency>
 				<groupId>jakarta.servlet</groupId>
 				<artifactId>jakarta.servlet-api</artifactId>
 				<version>${jakarta.servlet-api.version}</version>
@@ -736,9 +726,9 @@
 				<version>${tika-parsers.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>javax.websocket</groupId>
-				<artifactId>javax.websocket-api</artifactId>
-				<version>1.1</version>
+				<groupId>jakarta.websocket</groupId>
+				<artifactId>jakarta.websocket-client-api</artifactId>
+				<version>${jakarta.websocket-api.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>

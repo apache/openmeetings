@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_GROUP;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_MY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.web.app.Application;

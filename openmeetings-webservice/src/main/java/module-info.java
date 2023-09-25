@@ -18,15 +18,36 @@
  */
 
 module org.apache.openmeetings.webservice {
-	requires transitive org.apache.openmeetings.service;
+	exports org.apache.openmeetings.webservice.util;
 
-	requires transitive java.ws.rs;
+	requires org.apache.openmeetings.core;
+	requires org.apache.openmeetings.db;
+	requires org.apache.openmeetings.service;
+	requires org.apache.openmeetings.util;
 
-	requires java.jws;
+	requires org.apache.commons.lang3;
+
+	requires jakarta.annotation;
+	requires jakarta.inject;
+	requires jakarta.jws;
+	requires jakarta.servlet;
+	requires jakarta.xml.ws;
+	requires jakarta.ws.rs;
+
 	requires org.apache.cxf.core;
-	requires io.swagger.v3.oas.annotations;
 	requires org.apache.cxf.frontend.jaxrs;
+
 	requires org.apache.pdfbox;
+
+	requires org.apache.wicket.core;
+	requires org.apache.wicket.extensions;
+	requires org.apache.wicket.util;
+
+	requires io.swagger.v3.oas.annotations;
 	requires java.desktop;
-	requires java.xml.ws;
+
+	requires spring.beans;
+	requires spring.context;
+
+	requires org.slf4j;
 }

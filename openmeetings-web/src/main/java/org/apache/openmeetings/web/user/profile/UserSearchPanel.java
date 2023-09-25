@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 
 import java.util.Collections;
 import java.util.Iterator;

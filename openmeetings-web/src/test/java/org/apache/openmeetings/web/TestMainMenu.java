@@ -20,8 +20,7 @@ package org.apache.openmeetings.web;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.openmeetings.AbstractWicketTesterTest;
-import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.web.AbstractWicketTesterTest;
 import org.apache.openmeetings.web.admin.backup.BackupPanel;
 import org.apache.openmeetings.web.admin.configurations.ConfigsPanel;
 import org.apache.openmeetings.web.admin.connection.ConnectionsPanel;
@@ -42,6 +41,7 @@ import org.apache.openmeetings.web.user.profile.UserSearchPanel;
 import org.apache.openmeetings.web.user.profile.WidgetsPanel;
 import org.apache.openmeetings.web.user.record.RecordingsPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
+import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.junit.jupiter.api.Test;
 

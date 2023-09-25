@@ -19,11 +19,11 @@
 package org.apache.openmeetings.web.common;
 
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.util.CalendarHelper.getDate;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
+import static org.apache.openmeetings.util.CalendarHelper.getDate;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
 
 import java.time.LocalDateTime;

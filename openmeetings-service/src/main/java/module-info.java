@@ -18,17 +18,37 @@
  */
 
 module org.apache.openmeetings.service {
+	exports org.apache.openmeetings.service.calendar;
 	exports org.apache.openmeetings.service.calendar.caldav;
 	exports org.apache.openmeetings.service.mail;
 	exports org.apache.openmeetings.service.mail.template;
+	exports org.apache.openmeetings.service.mail.template.subject;
 	exports org.apache.openmeetings.service.room;
+	exports org.apache.openmeetings.service.scheduler;
 
-	requires transitive org.apache.openmeetings.core;
+	requires org.apache.commons.lang3;
 
-	requires transitive org.apache.wicket.spring;
+	requires org.apache.openmeetings.db;
+	requires org.apache.openmeetings.core;
+	requires org.apache.openmeetings.util;
+
+	requires jakarta.annotation;
+	requires jakarta.inject;
+	requires jakarta.servlet;
+
+	requires spring.context;
+
+	requires org.apache.wicket.core;
+	requires org.apache.wicket.request;
+	requires org.apache.wicket.spring;
+	requires org.apache.wicket.util;
 
 	requires org.apache.httpcomponents.httpcore;
 	requires org.apache.httpcomponents.httpclient;
-	requires jackrabbit.webdav;
+	requires jackrabbit.webdav.jakarta;
 	requires caldav4j;
+	requires java.xml;
+	requires org.mnode.ical4j.core;
+
+	requires org.slf4j;
 }

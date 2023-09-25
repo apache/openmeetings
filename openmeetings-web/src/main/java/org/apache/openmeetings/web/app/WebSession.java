@@ -20,15 +20,15 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
+import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
+import static org.apache.openmeetings.web.app.Application.getDashboardContext;
+import static org.apache.openmeetings.web.app.Application.isInvaldSession;
+import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
 import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT_STRING;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
-import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
-import static org.apache.openmeetings.web.app.Application.getDashboardContext;
-import static org.apache.openmeetings.web.app.Application.isInvaldSession;
-import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
 
 import java.util.Calendar;
 import java.util.Collections;

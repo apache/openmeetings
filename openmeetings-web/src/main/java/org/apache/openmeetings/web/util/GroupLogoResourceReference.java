@@ -19,10 +19,10 @@
 package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
-import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
 
 import java.io.File;
 import java.io.IOException;

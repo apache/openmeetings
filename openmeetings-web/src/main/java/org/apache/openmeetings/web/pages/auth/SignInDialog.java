@@ -18,12 +18,12 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.UserManager.showAuth;
 import static org.apache.openmeetings.web.pages.HashPage.APP;
 import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
 
 import java.util.List;
 
@@ -35,14 +35,14 @@ import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.util.OmException;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
 import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.pages.PrivacyPage;
+import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;

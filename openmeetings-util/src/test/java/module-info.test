@@ -25,19 +25,24 @@ open module org.apache.openmeetings.util {
 	exports org.apache.openmeetings.util.ws;
 	exports org.apache.openmeetings.util.logging;
 
-	requires transitive org.apache.wicket.util;
-	requires transitive org.apache.wicket.core;
-	requires transitive org.apache.wicket.extensions;
-	requires transitive org.apache.commons.lang3;
-	requires transitive com.github.openjson;
-	requires transitive org.slf4j;
-	requires transitive javax.servlet.api;
-	requires transitive org.apache.tika.core;
-	requires transitive spring.context;
-	requires transitive org.apache.commons.codec;
+	requires jakarta.activation;
+	requires jakarta.servlet;
+
+	requires com.github.openjson;
+
+	requires org.apache.commons.codec;
+	requires org.apache.commons.lang3;
+
+	requires org.apache.tika.core;
+
+	requires org.apache.wicket.util;
+	requires org.apache.wicket.core;
+	requires org.apache.wicket.extensions;
+
+	requires org.slf4j;
+	requires spring.context;
 
 	requires org.bouncycastle.provider;
-	requires jakarta.activation;
 	requires org.mnode.ical4j.core;
 	requires org.aspectj.tools;
 	requires org.dom4j;

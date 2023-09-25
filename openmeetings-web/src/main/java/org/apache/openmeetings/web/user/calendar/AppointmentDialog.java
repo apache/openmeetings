@@ -18,13 +18,13 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CHANGE;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

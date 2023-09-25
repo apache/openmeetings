@@ -59,7 +59,7 @@ public abstract class AppointmentTemplate extends SubjectEmailTemplate {
 		add(new Label("end", format(a.getEnd())));
 	}
 
-	abstract String getPrefix();
+	public abstract String getPrefix();
 
 	@Override
 	Fragment getSubjectFragment() {

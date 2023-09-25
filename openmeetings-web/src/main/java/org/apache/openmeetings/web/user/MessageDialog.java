@@ -20,12 +20,12 @@ package org.apache.openmeetings.web.user;
 
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.Application.getContactsLink;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -49,12 +49,12 @@ import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.manager.IInvitationManager;
-import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.common.datetime.OmDateTimePicker;
 import org.apache.openmeetings.web.user.calendar.AppointmentDialog;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.util.CalendarWebHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;

@@ -19,11 +19,11 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import static org.apache.openmeetings.web.app.WebSession.getDashboard;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
 
 import java.util.ArrayList;
 import java.util.Iterator;
