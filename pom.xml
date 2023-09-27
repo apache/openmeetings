@@ -26,13 +26,13 @@
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
-	<version>7.2.0-SNAPSHOT</version>
+	<version>8.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Openmeetings</name>
 	<description>Parent project for all OpenMeetings Maven modules. Required to hold general settings</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.outputTimestamp>2023-05-10T02:44:22Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2023-09-27T11:15:33Z</project.build.outputTimestamp>
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
 		<om.notquick.build>true</om.notquick.build>

@@ -36,6 +36,7 @@ module org.apache.openmeetings.mediaserver {
 
 	requires spring.beans;
 	requires spring.context;
+	requires spring.core;
 
 	requires kurento.client;
 	requires kurento.jsonrpc.client;

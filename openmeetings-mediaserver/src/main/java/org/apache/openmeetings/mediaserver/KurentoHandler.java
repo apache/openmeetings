@@ -57,6 +57,7 @@ import org.kurento.client.Continuation;
 import org.kurento.client.Endpoint;
 import org.kurento.client.EventListener;
 import org.kurento.client.KurentoClient;
+import org.kurento.client.ListenerSubscription;
 import org.kurento.client.MediaObject;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.ObjectCreatedEvent;
@@ -69,16 +70,17 @@ import org.kurento.client.WebRtcEndpoint;
 import org.kurento.jsonrpc.client.JsonRpcClientNettyWebSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 
-@Component
+@Singleton
+@Named
 public class KurentoHandler {
 	private static final Logger log = LoggerFactory.getLogger(KurentoHandler.class);
 	public static final String PARAM_ICE = "iceServers";
@@ -115,6 +117,8 @@ public class KurentoHandler {
 	private String kuid;
 	private CertificateKeyType certificateType;
 	private KurentoClient client;
+	private ListenerSubscription objectCreatedListener;
+	private ListenerSubscription objectDestroyedListener;
 	private final AtomicBoolean connected = new AtomicBoolean(false);
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
 	private final Set<String> ignoredKuids = new HashSet<>();
@@ -138,6 +142,7 @@ public class KurentoHandler {
 
 	@PostConstruct
 	public void init() {
+		log.trace("KurentoHandler::PostConstruct");
 		Runnable check = () -> {
 			try {
 				if (client != null) {
@@ -178,8 +183,8 @@ public class KurentoHandler {
 							notifyRooms(true);
 						}
 					});
-				client.getServerManager().addObjectCreatedListener(new KWatchDogCreate());
-				client.getServerManager().addObjectDestroyedListener(event ->
+				objectCreatedListener = client.getServerManager().addObjectCreatedListener(new KWatchDogCreate());
+				objectDestroyedListener = client.getServerManager().addObjectDestroyedListener(event ->
 					log.debug("Kurento::ObjectDestroyedEvent objectId {}, tags {}, source {}", event.getObjectId(), event.getTags(), event.getSource())
 				);
 			} catch (Exception e) {
@@ -204,6 +209,14 @@ public class KurentoHandler {
 				client = null;
 				if (!copy.isClosed()) {
 					log.debug("Client will be destroyed ...");
+					if (objectCreatedListener != null) {
+						copy.getServerManager().removeObjectCreatedListener(objectCreatedListener);
+						objectCreatedListener = null;
+					}
+					if (objectDestroyedListener != null) {
+						copy.getServerManager().removeObjectDestroyedListener(objectDestroyedListener);
+						objectDestroyedListener = null;
+					}
 					copy.destroy();
 					log.debug(".... Client is destroyed");
 				}
@@ -304,7 +317,8 @@ public class KurentoHandler {
 		return rooms.computeIfAbsent(roomId, k -> {
 			log.debug("Room {} does not exist. Will create now!", roomId);
 			Room r = roomDao.get(roomId);
-			return new KRoom(r);
+			KRoom kRoom = new KRoom(r);
+			return kRoom;
 		});
 	}
 
@@ -382,7 +396,7 @@ public class KurentoHandler {
 		this.certificateType = CertificateKeyType.valueOf(certificateType);
 	}
 
-	public CertificateKeyType getCertificateType() {
+	CertificateKeyType getCertificateType() {
 		return certificateType;
 	}
 
@@ -412,6 +426,7 @@ public class KurentoHandler {
 		private void checkPipeline(String roomOid) {
 			scheduler.schedule(() -> {
 				if (client == null) {
+					log.trace("KWatchDog::checkPipeline Client is NULL");
 					return;
 				}
 				// still alive
@@ -420,17 +435,24 @@ public class KurentoHandler {
 				try {
 					final String inKuid = tags.get(TAG_KUID);
 					if (inKuid != null && ignoredKuids.contains(inKuid)) {
+						log.trace("KWatchDog::checkPipeline KUID in ignore list");
 						return;
 					}
 					if (validTestPipeline(tags)) {
+						log.trace("KWatchDog::checkPipeline test pipeline detected");
 						return;
 					}
 					if (kuid.equals(inKuid)) {
-						KStream stream = streamProcessor.getByUid(tags.get(TAG_STREAM_UID));
+						String streamUId = tags.get(TAG_STREAM_UID);
+						log.trace("KWatchDog::checkPipeline kuid matched, streamId: {}", streamUId);
+						KStream stream = streamProcessor.getByUid(streamUId);
 						if (stream != null) {
-							if (stream.getRoomId().equals(Long.valueOf(tags.get(TAG_ROOM)))
-									&& stream.getPipeline().getId().equals(pipe.getId()))
-							{
+							Long sRoomId = stream.getRoomId();
+							Long tRoomId = Long.valueOf(tags.get(TAG_ROOM));
+							String pipeId = stream.getPipeline().getId();
+							log.trace("KWatchDog::checkPipeline stream found! Room match ? {}, Pipe match ? {}"
+									, sRoomId.equals(tRoomId), pipeId.equals(pipe.getId()));
+							if (sRoomId.equals(tRoomId) && pipeId.equals(pipe.getId())) {
 								return;
 							} else {
 								stream.release();

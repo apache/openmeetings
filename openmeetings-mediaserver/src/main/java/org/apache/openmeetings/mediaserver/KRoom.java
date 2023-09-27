@@ -76,7 +76,7 @@ public class KRoom {
 	private JSONObject recordingUser = new JSONObject();
 	private JSONObject sharingUser = new JSONObject();
 
-	public KRoom(Room r) {
+	KRoom(Room r) {
 		this.room = r;
 		Injector.get().inject(this);
 		log.info("ROOM {} has been created", room.getId());

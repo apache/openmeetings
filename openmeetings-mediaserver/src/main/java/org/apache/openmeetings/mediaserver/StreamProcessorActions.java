@@ -35,13 +35,14 @@ import org.kurento.client.internal.server.KurentoServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.stereotype.Component;
-
 import com.github.openjson.JSONObject;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 
-@Component
+@Singleton
+@Named
 public class StreamProcessorActions {
 	private static final Logger log = LoggerFactory.getLogger(StreamProcessorActions.class);
 
