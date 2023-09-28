@@ -51,6 +51,6 @@ open module org.apache.openmeetings.util {
 	requires ch.qos.logback.core;
 
 	//tests
-	requires org.junit.jupiter.engine;
-	requires org.junit.jupiter.api;
+	requires transitive org.junit.jupiter.engine;
+	requires transitive org.junit.jupiter.api;
 }

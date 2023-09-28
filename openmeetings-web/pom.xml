@@ -494,6 +494,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>jakarta.websocket</groupId>
 			<artifactId>jakarta.websocket-client-api</artifactId>
 		</dependency>

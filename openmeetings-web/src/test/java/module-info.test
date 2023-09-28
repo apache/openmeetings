@@ -17,7 +17,7 @@
  * under the License.
  */
 
-module org.apache.openmeetings.web {
+open module org.apache.openmeetings.web {
 	// This one should be in-sync with module-info.java
 	requires org.apache.openmeetings.core;
 	requires org.apache.openmeetings.db;
@@ -88,6 +88,5 @@ module org.apache.openmeetings.web {
 	requires org.slf4j;
 
 	//tests
-	requires org.junit.jupiter.engine;
 	requires org.junit.jupiter.api;
 }

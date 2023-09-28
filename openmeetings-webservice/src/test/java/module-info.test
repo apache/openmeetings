@@ -17,7 +17,7 @@
  * under the License.
  */
 
-module org.apache.openmeetings.webservice {
+open module org.apache.openmeetings.webservice {
 	// This one should be in-sync with module-info.java
 	exports org.apache.openmeetings.webservice.util;
 
@@ -26,6 +26,7 @@ module org.apache.openmeetings.webservice {
 	requires org.apache.openmeetings.service;
 	requires org.apache.openmeetings.util;
 
+	requires com.github.openjson;
 	requires org.apache.commons.lang3;
 
 	requires jakarta.annotation;
@@ -53,6 +54,5 @@ module org.apache.openmeetings.webservice {
 	requires org.slf4j;
 
 	//tests
-	requires org.junit.jupiter.engine;
 	requires org.junit.jupiter.api;
 }

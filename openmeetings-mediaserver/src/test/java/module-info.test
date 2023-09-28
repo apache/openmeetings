@@ -17,7 +17,7 @@
  * under the License.
  */
 
-module org.apache.openmeetings.mediaserver {
+open module org.apache.openmeetings.mediaserver {
 	// This one should be in-sync with module-info.java
 	exports org.apache.openmeetings.mediaserver;
 
@@ -47,6 +47,5 @@ module org.apache.openmeetings.mediaserver {
 	requires org.slf4j;
 
 	//tests
-	requires org.junit.jupiter.engine;
 	requires org.junit.jupiter.api;
 }

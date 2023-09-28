@@ -598,7 +598,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	/**
 	 * login logic
 	 *
-	 * @param userOrEmail - login or email of the user being tested
+	 * @param _userOrEmail - login or email of the user being tested
 	 * @param userpass - password of the user being tested
 	 * @return User object in case of successful login
 	 * @throws OmException in case of any issue

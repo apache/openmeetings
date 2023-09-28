@@ -78,5 +78,6 @@ module org.apache.openmeetings.db {
 	requires jakarta.servlet;
 	requires jakarta.xml.bind;
 
+	requires org.dom4j;
 	requires org.slf4j;
 }

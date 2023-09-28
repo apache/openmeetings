@@ -463,8 +463,8 @@
 				<version>${spring.version}</version>
 				<exclusions>
 					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-jcl</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -472,45 +472,21 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
 				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context-support</artifactId>
 				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
 				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-aop</artifactId>
 				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -531,6 +507,12 @@
 				<groupId>org.mnode.ical4j</groupId>
 				<artifactId>ical4j</artifactId>
 				<version>${ical4j.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
@@ -1285,7 +1267,6 @@
 					<configuration>
 						<forkCount>1</forkCount>
 						<reuseForks>true</reuseForks>
-						<useModulePath>false</useModulePath>
 						<excludedGroups>${excluded.test.groups}</excludedGroups>
 						<includes>
 							<include>**/Test*.java</include>
@@ -1293,6 +1274,8 @@
 						<excludes>
 							<exclude/>
 						</excludes>
+						<useModulePath>false</useModulePath>
+						<!--argLine>-Xint ${argLine}</argLine-->
 						<argLine>@{argLine} --add-modules java.se --add-exports java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens=java.base/sun.security.util=ALL-UNNAMED --add-opens=java.base/sun.security.x509=ALL-UNNAMED</argLine>
 					</configuration>
 				</plugin>

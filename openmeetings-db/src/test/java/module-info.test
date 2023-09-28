@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-module org.apache.openmeetings.db {
+open module org.apache.openmeetings.db {
 	// This one should be in-sync with module-info.java
 	exports org.apache.openmeetings;
 	exports org.apache.openmeetings.db.bind;
@@ -79,9 +79,9 @@ module org.apache.openmeetings.db {
 	requires jakarta.servlet;
 	requires jakarta.xml.bind;
 
+	requires org.dom4j;
 	requires org.slf4j;
 
 	//tests
-	requires org.junit.jupiter.engine;
 	requires org.junit.jupiter.api;
 }

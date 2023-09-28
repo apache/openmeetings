@@ -17,7 +17,7 @@
  * under the License.
  */
 
-module org.apache.openmeetings.core {
+open module org.apache.openmeetings.core {
 	// This one should be in-sync with module-info.java
 	exports org.apache.openmeetings.core.converter;
 	exports org.apache.openmeetings.core.data.file;
@@ -62,6 +62,5 @@ module org.apache.openmeetings.core {
 	requires org.slf4j;
 
 	//tests
-	requires org.junit.jupiter.engine;
 	requires org.junit.jupiter.api;
 }

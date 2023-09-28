@@ -17,7 +17,7 @@
  * under the License.
  */
 
-module org.apache.openmeetings.install {
+open module org.apache.openmeetings.install {
 	// This one should be in-sync with module-info.java
 	exports org.apache.openmeetings.backup;
 	exports org.apache.openmeetings.cli;
@@ -53,6 +53,5 @@ module org.apache.openmeetings.install {
 	requires org.slf4j;
 
 	//tests
-	requires org.junit.jupiter.engine;
 	requires org.junit.jupiter.api;
 }

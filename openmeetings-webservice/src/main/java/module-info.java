@@ -25,6 +25,7 @@ module org.apache.openmeetings.webservice {
 	requires org.apache.openmeetings.service;
 	requires org.apache.openmeetings.util;
 
+	requires com.github.openjson;
 	requires org.apache.commons.lang3;
 
 	requires jakarta.annotation;
