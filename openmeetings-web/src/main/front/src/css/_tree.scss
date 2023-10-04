@@ -38,11 +38,49 @@
 			{
 				width: 100%;
 			}
+			.tree-node {
+				.file.item {
+					position: relative;
+					display: inline-block;
+					vertical-align: top;
+
+					.name, .name span {
+						color: black;
+						display: block;
+						/* Required for text-overflow to do anything */
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						overflow: hidden;
+					}
+					.name {
+						padding-top: 10px;
+						padding-inline-start: 37px;
+					}
+					.errors {
+						position: absolute;
+						top: 0px;
+						right: 1px;
+						width: 32px;
+						height: 32px;
+						margin: 0px;
+						padding: 0px;
+					}
+					.errors::before {
+						color: var(--bs-warning);
+						content: '\f071';
+					}
+				}
+				.folder .file.item, .folder-open .file.item {
+					.name {
+						padding-inline-start: 2px;
+					}
+				}
+				.om-icon.broken .file.item .name {
+					width: calc(100% - 32px);
+				}
+			}
 			div.tree-subtree, .tree-node .om-icon {
 				width: calc(100% - 20px);
-			}
-			.tree-node .om-icon.broken .file.item .name {
-				width: calc(100% - 32px);
 			}
 			span.tree-content {
 				display: flex !important;
@@ -184,37 +222,6 @@
 }
 .selected .file.item {
 	background-color: #0099FF;
-}
-.file.item {
-	position: relative;
-	display: inline-block;
-	vertical-align: top;
-
-	.name, .name span {
-		color: black;
-		display: block;
-		/* Required for text-overflow to do anything */
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		overflow: hidden;
-	}
-	.name {
-		padding-top: 10px;
-		padding-inline-start: 5px;
-	}
-	.errors::before {
-		color: var(--bs-warning);
-		content: '\f071';
-	}
-}
-.tree-node .file.item .errors {
-	position: absolute;
-	top: 0px;
-	right: 1px;
-	width: 32px;
-	height: 32px;
-	margin: 0px;
-	padding: 0px;
 }
 .dialog.errors {
 	height: 500px;
