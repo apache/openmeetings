@@ -1,5 +1,4 @@
 /*
-
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -17,21 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.util.logging;
+module org.apache.openmeetings.tests {
+	exports org.apache.openmeetings.test;
 
-import io.prometheus.client.Histogram;
-
-public class PrometheusUtil {
-	private static final Histogram histogram = Histogram.build()
-			.help("OpenMeetings Application Metrics")
-			.name("org_openmeetings_metrics")
-			.labelNames("class", "method", "type", "message")
-			.register();
-
-	private PrometheusUtil() {
-	}
-
-	public static Histogram getHistogram() {
-		return histogram;
-	}
+	requires org.junit.jupiter.api;
 }

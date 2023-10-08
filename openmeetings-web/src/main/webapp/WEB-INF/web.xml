@@ -57,34 +57,6 @@
 		</init-param>
 	</filter>
 
-	<!-- Start Prometheus Filter HTTP Servlet metrics
-	<filter>
-		<filter-name>prometheusFilter</filter-name>
-		<filter-class>io.prometheus.client.servlet.jakarta.filter.MetricsFilter</filter-class>
-		<init-param>
-			<param-name>metric-name</param-name>
-			<param-value>webapp_metrics_filter</param-value>
-		</init-param>
-		<init-param>
-			<param-name>help</param-name>
-			<param-value>This is the help for your metrics filter</param-value>
-		</init-param>
-		<init-param>
-			<param-name>buckets</param-name>
-			<param-value>0.005,0.01,0.025,0.05,0.075,0.1,0.25,0.5,0.75,1,2.5,5,7.5,10</param-value>
-		</init-param>
-		<init-param>
-			<param-name>path-components</param-name>
-			<param-value>0</param-value>
-		</init-param>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>prometheusFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	End Prometheus -->
-
 	<filter-mapping>
 		<filter-name>OpenmeetingsApplication</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -93,6 +65,17 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+
+	<!-- Start Prometheus export metrics HTTP
+	<servlet>
+		<servlet-name>metrics</servlet-name>
+		<servlet-class>org.apache.openmeetings.web.util.logging.OpenMeetingsMetricsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>metrics</servlet-name>
+		<url-pattern>/services/metrics/</url-pattern>
+	</servlet-mapping>
+		End Prometheus -->
 
 	<servlet>
 		<servlet-name>CXFServlet</servlet-name>
@@ -108,17 +91,6 @@
 		<servlet-name>CXFServlet</servlet-name>
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
-
-	<!-- Start Prometheus export metrics HTTP
-	<servlet>
-		<servlet-name>metrics</servlet-name>
-		<servlet-class>org.apache.openmeetings.web.util.logging.OpenMeetingsMetricsServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>metrics</servlet-name>
-		<url-pattern>/services/metrics/</url-pattern>
-	</servlet-mapping>
-	End Prometheus -->
 
 	<mime-mapping>
 		<extension>inc</extension>

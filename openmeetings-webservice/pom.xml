@@ -34,7 +34,7 @@
 	</properties>
 	<build>
 		<plugins>
-			<!--plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<executions>
@@ -51,10 +51,9 @@
 						<goals>
 							<goal>javadoc-no-fork</goal>
 						</goals>
-						<phase>generate-resources</phase>
 					</execution>
 				</executions>
-			</plugin-->
+			</plugin>
 			<plugin>
 				<groupId>io.openapitools.swagger</groupId>
 				<artifactId>swagger-maven-plugin</artifactId>
@@ -195,13 +194,6 @@
 		<dependency>
 			<groupId>io.swagger.core.v3</groupId>
 			<artifactId>swagger-annotations</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-util</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

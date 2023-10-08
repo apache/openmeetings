@@ -18,14 +18,27 @@
  */
 package org.apache.openmeetings.web.util.logging;
 
-import io.prometheus.client.servlet.jakarta.exporter.MetricsServlet;
+import java.io.IOException;
 
-public class OpenMeetingsMetricsServlet extends MetricsServlet {
+import org.springframework.stereotype.Service;
+
+import io.prometheus.metrics.exporter.servlet.jakarta.PrometheusMetricsServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@Service
+public class OpenMeetingsMetricsServlet extends PrometheusMetricsServlet {
 	private static final long serialVersionUID = 1L;
+	private final TomcatStats stats;
 
 	public OpenMeetingsMetricsServlet() {
 		super();
-		new TomcatGenericExports(false).register();
+		stats = new TomcatStats(false);
 	}
 
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		stats.refresh();
+		super.doGet(request, response);
+	}
 }

@@ -74,7 +74,6 @@ module org.apache.openmeetings.web {
 
 	requires com.hazelcast.core;
 	requires org.danekja.jdk.serializable.functional;
-	requires simpleclient.servlet.jakarta;
 	requires xstream;
 
 	requires spring.beans;
@@ -83,4 +82,8 @@ module org.apache.openmeetings.web {
 	requires spring.web;
 
 	requires org.slf4j;
+
+	requires prometheus.metrics.core;
+	requires prometheus.metrics.model;
+	requires prometheus.metrics.exporter.servlet.jakarta;
 }

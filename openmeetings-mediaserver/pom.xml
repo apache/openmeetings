@@ -49,17 +49,10 @@
 			<groupId>org.kurento</groupId>
 			<artifactId>kurento-client</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-util</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
-			<!--plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<executions>
@@ -76,10 +69,9 @@
 						<goals>
 							<goal>javadoc-no-fork</goal>
 						</goals>
-						<phase>generate-resources</phase>
 					</execution>
 				</executions>
-			</plugin-->
+			</plugin>
 		</plugins>
 	</build>
 </project>

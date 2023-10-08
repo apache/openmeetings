@@ -45,7 +45,9 @@ module org.apache.openmeetings.util {
 	requires org.mnode.ical4j.core;
 	requires org.aspectj.tools;
 	requires org.dom4j;
-	requires simpleclient;
 	requires ch.qos.logback.classic;
 	requires ch.qos.logback.core;
+
+	requires prometheus.metrics.core;
+	requires prometheus.metrics.model;
 }

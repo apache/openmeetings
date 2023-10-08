@@ -41,7 +41,7 @@
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	<!-- Start annotation Prometheus metrics
 	<aop:aspectj-autoproxy/>
-	End annotation -->
+		End annotation -->
 	<context:annotation-config />
 	<context:component-scan base-package="org.apache.openmeetings" />
 

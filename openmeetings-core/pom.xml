@@ -34,7 +34,7 @@
 	</properties>
 	<build>
 		<plugins>
-			<!--plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<executions>
@@ -50,18 +50,6 @@
 						</configuration>
 						<goals>
 							<goal>javadoc-no-fork</goal>
-						</goals>
-						<phase>generate-resources</phase>
-					</execution>
-				</executions>
-			</plugin-->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test-jar</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -117,13 +105,6 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-params</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-util</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
