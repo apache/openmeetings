@@ -238,16 +238,18 @@
 						<id>get-tomcat</id>
 						<phase>process-resources</phase>
 						<goals>
-							<goal>copy</goal>
+							<goal>unpack</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${server-file.dir}</outputDirectory>
+							<outputDirectory>${project.build.directory}</outputDirectory>
 							<artifactItems>
 								<artifactItem>
 									<groupId>org.apache.tomcat</groupId>
 									<artifactId>tomcat</artifactId>
 									<version>${tomcat.version}</version>
 									<type>tar.gz</type>
+									<overWrite>true</overWrite>
+									<includes>**/*</includes>
 								</artifactItem>
 							</artifactItems>
 						</configuration>
@@ -352,20 +354,6 @@
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
-					<execution>
-						<id>unpack-web-server</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<untar src="${server-file.dir}/tomcat-${tomcat.version}.tar.gz" dest="${project.build.directory}"
-									compression="gzip" overwrite="true"/>
-							</target>
-							<skip>${om.quick.build}</skip>
-						</configuration>
-					</execution>
 					<execution>
 						<id>copy-site-site</id>
 						<phase>site</phase>

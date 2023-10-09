@@ -73,7 +73,10 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	private boolean error = true;
 	private MainPanel mainPanel = null;
 	private RoomPanel roomPanel = null;
-	private final PageParameters p;
+	private final StringValue secure;
+	private final StringValue invitation;
+	private final StringValue swf;
+	private final StringValue app;
 
 	@SpringBean
 	private RoomDao roomDao;
@@ -81,7 +84,18 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	private RecordingDao recDao;
 
 	public HashPage(PageParameters p) {
-		this.p = p;
+		secure = p.get(HASH);
+		invitation = p.get(INVITATION_HASH);
+		swf = p.get(SWF);
+		app = swf.isEmpty() ? p.get(APP) : swf;
+
+		WebSession ws = WebSession.get();
+		ws.checkHashes(secure, invitation);
+		long lang = p.get(LANG).toLong(-1L);
+		if (lang > -1) {
+			ws.setLanguage(lang);
+			ws.setLocale(LocaleHelper.getLocale(lang));
+		}
 	}
 
 	private void createRoom(Long roomId) {
@@ -100,17 +114,8 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		StringValue secure = p.get(HASH);
-		StringValue invitation = p.get(INVITATION_HASH);
 
 		WebSession ws = WebSession.get();
-		ws.checkHashes(secure, invitation);
-		long lang = p.get(LANG).toLong(-1L);
-		if (lang > -1) {
-			ws.setLanguage(lang);
-			ws.setLocale(LocaleHelper.getLocale(lang));
-		}
-
 		String errorMsg = getString("invalid.hash");
 		recContainer.setVisible(false);
 		add(new EmptyPanel(PANEL_MAIN).setVisible(false));
@@ -161,8 +166,6 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 			}
 		}
 
-		StringValue swf = p.get(SWF);
-		StringValue app = swf.isEmpty() ? p.get(APP) : swf;
 		if (!app.isEmpty()) {
 			if (APP_TYPE_NETWORK.equals(app.toString())) {
 				replace(new NetTestPanel(PANEL_MAIN).add(AttributeModifier.append("class", "app")));
