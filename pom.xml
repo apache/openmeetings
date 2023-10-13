@@ -87,7 +87,7 @@
 		<wicket.version>9.15.0</wicket.version>
 		<wicket-jquery-ui.version>9.12.0</wicket-jquery-ui.version>
 		<wicketstuff.version>9.15.0</wicketstuff.version>
-		<wicket-bootstrap.version>6.0.5-SNAPSHOT</wicket-bootstrap.version>
+		<wicket-bootstrap.version>6.0.5</wicket-bootstrap.version>
 		<spring.version>5.3.30</spring.version>
 		<tomcat.version>9.0.80</tomcat.version>
 		<ical4j.version>4.0.0-beta9</ical4j.version>
@@ -117,12 +117,12 @@
 		<mssql.version>12.4.1.jre11</mssql.version>
 		<ojdbc.version>19.20.0.0</ojdbc.version>
 		<xstream.version>1.4.20</xstream.version>
-		<api-all.version>2.1.4</api-all.version>
+		<api-all.version>2.1.5</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
 		<tika-parsers.version>2.9.0</tika-parsers.version>
 		<slf4j.version>2.0.9</slf4j.version>
 		<logback.version>1.4.11</logback.version>
-		<jetty.version>9.4.52.v20230823</jetty.version>
+		<jetty.version>9.4.53.v20231009</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.76</bcprov.version>
 		<mockito.version>5.2.0</mockito.version>
@@ -136,7 +136,7 @@
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM26</apacheds-test-framework.version>
 		<swagger.version>2.2.16</swagger.version>
-		<bytebuddy.version>1.14.8</bytebuddy.version>
+		<bytebuddy.version>1.14.9</bytebuddy.version>
 		<annotation-api.version>1.3.2</annotation-api.version>
 		<jsr305.version>3.0.2</jsr305.version>
 		<totp.version>1.7.1</totp.version>
