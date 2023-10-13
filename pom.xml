@@ -89,6 +89,7 @@
 		<wicket-bootstrap.version>7.0.1</wicket-bootstrap.version>
 		<spring.version>6.1.2</spring.version>
 		<tomcat.version>10.1.17</tomcat.version>
+		<jetty.version>12.0.4</jetty.version>
 		<ical4j.version>4.0.0-rc1</ical4j.version>
 		<cxf.version>4.0.3</cxf.version>
 		<io.prometheus.version>1.0.0</io.prometheus.version>
@@ -126,7 +127,6 @@
 		<tika-parsers.version>3.0.0-BETA</tika-parsers.version>
 		<slf4j.version>2.0.9</slf4j.version>
 		<logback.version>1.4.14</logback.version>
-		<jetty.version>12.0.4</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.77</bcprov.version>
 		<mockito.version>5.2.0</mockito.version>
@@ -607,8 +607,20 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-tester</artifactId>
+				<version>${wicket.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-native-websocket-core</artifactId>
 				<version>${wicket.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-native-websocket-tester</artifactId>
+				<version>${wicket.version}</version>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>

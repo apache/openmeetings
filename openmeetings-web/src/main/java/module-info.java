@@ -47,12 +47,12 @@ module org.apache.openmeetings.web {
 	requires org.apache.wicket.util;
 	requires org.apache.wicket.websocket.core;
 
-	requires wicketstuff.dashboard.core;
-	requires wicketstuff.datastore.hazelcast;
-	requires wicketstuff.select2;
-	requires wicketstuff.urlfragment;
-	requires jqplot;
-	requires jqplot4java;
+	requires org.wicketstuff.dashboard;
+	requires org.wicketstuff.datastore.hazelcast;
+	requires org.wicketstuff.select2;
+	requires org.wicketstuff.urlfragment;
+	requires org.wicketstuff.jqplot;
+	requires org.wicketstuff.jqplot4j;
 	requires wicket.bootstrap.extensions;
 	requires wicket.bootstrap.core;
 	requires wicket.bootstrap.themes;

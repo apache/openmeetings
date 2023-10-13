@@ -27,7 +27,7 @@ module org.apache.openmeetings.core {
 	exports org.apache.openmeetings.core.sip;
 	exports org.apache.openmeetings.core.util;
 
-	requires com.github.openjson;
+	requires transitive com.github.openjson;
 
 	requires jakarta.annotation;
 	requires jakarta.inject;
@@ -39,8 +39,8 @@ module org.apache.openmeetings.core {
 	requires org.apache.tika.core;
 	requires org.apache.tika.parser.image;
 
-	requires org.apache.openmeetings.db;
-	requires org.apache.openmeetings.util;
+	requires transitive org.apache.openmeetings.db;
+	requires transitive org.apache.openmeetings.util;
 
 	requires org.apache.wicket.core;
 	requires org.apache.wicket.websocket.core;

@@ -40,7 +40,7 @@ import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.feedback.ExactLevelFeedbackMessageFilter;
 import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.protocol.ws.util.tester.WebSocketTester;
+import org.apache.wicket.protocol.ws.tester.WebSocketTester;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.BeforeEach;

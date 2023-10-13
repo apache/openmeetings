@@ -20,7 +20,6 @@ package org.apache.openmeetings.web;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.openmeetings.web.AbstractWicketTesterTest;
 import org.apache.openmeetings.web.admin.backup.BackupPanel;
 import org.apache.openmeetings.web.admin.configurations.ConfigsPanel;
 import org.apache.openmeetings.web.admin.connection.ConnectionsPanel;

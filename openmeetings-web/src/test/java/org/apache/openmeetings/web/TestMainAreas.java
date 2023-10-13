@@ -40,7 +40,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.function.Consumer;
 
-import org.apache.openmeetings.web.AbstractWicketTesterTest;
 import org.apache.openmeetings.web.admin.backup.BackupPanel;
 import org.apache.openmeetings.web.admin.configurations.ConfigsPanel;
 import org.apache.openmeetings.web.admin.connection.ConnectionsPanel;

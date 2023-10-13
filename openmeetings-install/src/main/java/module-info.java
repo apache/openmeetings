@@ -30,7 +30,7 @@ module org.apache.openmeetings.install {
 	requires org.apache.openjpa;
 
 	requires org.apache.openmeetings.core;
-	requires org.apache.openmeetings.db;
+	requires transitive org.apache.openmeetings.db;
 	requires org.apache.openmeetings.util;
 
 	requires org.apache.wicket.core;

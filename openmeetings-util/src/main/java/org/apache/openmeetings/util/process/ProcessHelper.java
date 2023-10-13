@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ProcessHelper {
-	public static final Logger log = LoggerFactory.getLogger(ProcessHelper.class);
+	private static final Logger log = LoggerFactory.getLogger(ProcessHelper.class);
 
 	// This is necessary to prevent 'buffer overflow'
 	// https://stackoverflow.com/questions/9885643/ffmpeg-executed-from-javas-processbuilder-does-not-return-under-windows-7

@@ -475,6 +475,14 @@
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-tester</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-native-websocket-tester</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-tests</artifactId>
 		</dependency>

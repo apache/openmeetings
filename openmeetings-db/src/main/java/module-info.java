@@ -51,14 +51,14 @@ module org.apache.openmeetings.db {
 	exports org.apache.openmeetings.db.util;
 	exports org.apache.openmeetings.db.util.ws;
 
-	requires com.github.openjson;
+	requires transitive com.github.openjson;
 
 	requires org.apache.commons.lang3;
 	requires org.apache.commons.text;
 
 	requires org.apache.openjpa;
 
-	requires org.apache.openmeetings.util;
+	requires transitive org.apache.openmeetings.util;
 
 	requires org.apache.wicket.core;
 	requires org.apache.wicket.extensions;
@@ -74,7 +74,7 @@ module org.apache.openmeetings.db {
 
 	requires jakarta.annotation;
 	requires jakarta.inject;
-	requires jakarta.persistence;
+	requires transitive jakarta.persistence;
 	requires jakarta.servlet;
 	requires jakarta.xml.bind;
 

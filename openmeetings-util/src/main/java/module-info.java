@@ -30,7 +30,7 @@ module org.apache.openmeetings.util {
 	requires com.github.openjson;
 
 	requires org.apache.commons.codec;
-	requires org.apache.commons.lang3;
+	requires transitive org.apache.commons.lang3;
 
 	requires org.apache.tika.core;
 

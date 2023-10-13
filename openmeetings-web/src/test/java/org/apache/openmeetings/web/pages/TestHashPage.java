@@ -44,7 +44,7 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.user.record.VideoInfo;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.protocol.ws.util.tester.WebSocketTester;
+import org.apache.wicket.protocol.ws.tester.WebSocketTester;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.junit.jupiter.api.Test;

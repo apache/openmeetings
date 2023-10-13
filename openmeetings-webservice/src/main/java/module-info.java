@@ -21,7 +21,7 @@ module org.apache.openmeetings.webservice {
 	exports org.apache.openmeetings.webservice.util;
 
 	requires org.apache.openmeetings.core;
-	requires org.apache.openmeetings.db;
+	requires transitive org.apache.openmeetings.db;
 	requires org.apache.openmeetings.service;
 	requires org.apache.openmeetings.util;
 
