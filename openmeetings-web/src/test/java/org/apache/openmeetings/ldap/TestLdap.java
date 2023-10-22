@@ -51,6 +51,9 @@ import org.apache.directory.server.annotations.CreateTransport;
 import org.apache.directory.server.core.annotations.ApplyLdifFiles;
 import org.apache.directory.server.core.annotations.CreateDS;
 import org.apache.directory.server.core.annotations.CreatePartition;
+import org.apache.directory.server.core.api.DirectoryService;
+import org.apache.directory.server.core.integ.ApacheDSTestExtension;
+import org.apache.directory.server.ldap.LdapServer;
 import org.apache.directory.server.protocol.shared.transport.Transport;
 import org.apache.openmeetings.AbstractWicketTesterTest;
 import org.apache.openmeetings.core.ldap.LdapLoginManager;
@@ -62,16 +65,17 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@ExtendWith(ApacheDSTestExtension.class)
 @CreateDS(name = "omDS",
 	partitions = {
 		@CreatePartition(name = "test", suffix = "dc=test,dc=openmeetings,dc=apache,dc=org")
 	})
 @CreateLdapServer(transports = { @CreateTransport(protocol = "LDAP", address = "localhost")})
 @ApplyLdifFiles({"schema/users.ldif"})
-class TestLdap extends AbstractWicketTesterTest {
+public class TestLdap extends AbstractWicketTesterTest {
 	private static final String CFG_SEARCH_BIND = UUID.randomUUID().toString();
 	private static final String BAD_PASSWORD = "bad password";
 	private static final String USER1 = "ldaptest1";
@@ -79,16 +83,28 @@ class TestLdap extends AbstractWicketTesterTest {
 	private static final String USER3 = "ldaptest3";
 	private static final Map<String, LdapConfig> CFG_MAP = new HashMap<>();
 	private static final Properties PROPS = new Properties();
+	/** The class DirectoryService instance */
+	public static DirectoryService classDirectoryService;
+	/** The test DirectoryService instance */
+	public static DirectoryService methodDirectoryService;
+	/** The current DirectoryService instance */
+	public static DirectoryService directoryService;
+	/** The class LdapServer instance */
+	public static LdapServer classLdapServer;
+	/** The test LdapServer instance */
+	public static LdapServer methodLdapServer;
+	/** The current LdapServer instance */
+	public static LdapServer ldapServer;
+	/** The current revision */
+	public static long revision = 0L;
+
 	@Autowired
 	private LdapConfigDao ldapDao;
-
-	@RegisterExtension
-	public static CreateLdapServerExtension serverExtension = new CreateLdapServerExtension();
 
 	@BeforeAll
 	public static void prepare() {
 		loadLdapConf("om_ldap.cfg", PROPS);
-		Transport t = serverExtension.getLdapServer().getTransports()[0];
+		Transport t = classLdapServer.getTransports()[0];
 		PROPS.put(CONFIGKEY_LDAP_HOST, t.getAddress());
 		PROPS.put(CONFIGKEY_LDAP_PORT, String.valueOf(t.getPort()));
 		PROPS.put(CONFIGKEY_LDAP_ADMIN_DN, ADMIN_SYSTEM_DN);

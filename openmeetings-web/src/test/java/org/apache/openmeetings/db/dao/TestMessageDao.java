@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.db.dao;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class TestMessageDao extends AbstractOmServerTest {
 
 		User u2 = createUser();
 		List<PrivateMessageFolder> folders = msgFolderDao.getByUser(u2.getId());
-		assertFalse("Folders of first user shouldn't be visible to second one"
-				, folders.stream().anyMatch(fld -> fldId.equals(fld.getId())));
+		assertFalse(folders.stream().anyMatch(fld -> fldId.equals(fld.getId()))
+				, "Folders of first user shouldn't be visible to second one");
 	}
 }

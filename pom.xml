@@ -76,7 +76,7 @@
 		<keytool-maven-plugin.version>1.7</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
-		<jacoco-maven-plugin.versoin>0.8.10</jacoco-maven-plugin.versoin>
+		<jacoco-maven-plugin.versoin>0.8.11</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>3.6</forbiddenapis.version>
 		<frontend-maven-plugin.version>1.14.0</frontend-maven-plugin.version>
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
@@ -89,7 +89,7 @@
 		<wicketstuff.version>9.15.0</wicketstuff.version>
 		<wicket-bootstrap.version>6.0.5</wicket-bootstrap.version>
 		<spring.version>5.3.30</spring.version>
-		<tomcat.version>9.0.80</tomcat.version>
+		<tomcat.version>9.0.82</tomcat.version>
 		<ical4j.version>4.0.0-beta9</ical4j.version>
 		<cxf.version>3.6.2</cxf.version>
 		<io.prometheus.version>0.16.0</io.prometheus.version>
@@ -119,7 +119,7 @@
 		<xstream.version>1.4.20</xstream.version>
 		<api-all.version>2.1.5</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
-		<tika-parsers.version>2.9.0</tika-parsers.version>
+		<tika-parsers.version>2.9.1</tika-parsers.version>
 		<slf4j.version>2.0.9</slf4j.version>
 		<logback.version>1.4.11</logback.version>
 		<jetty.version>9.4.53.v20231009</jetty.version>
@@ -131,11 +131,11 @@
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
 		<jasny-bootstrap.version>3.1.3-2</jasny-bootstrap.version>
 		<jodconverter.version>4.4.6</jodconverter.version>
-		<jaxb-runtime.version>2.3.8</jaxb-runtime.version>
+		<jaxb-runtime.version>2.3.9</jaxb-runtime.version>
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
-		<apacheds-test-framework.version>2.0.0.AM26</apacheds-test-framework.version>
-		<swagger.version>2.2.16</swagger.version>
+		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
+		<swagger.version>2.2.17</swagger.version>
 		<bytebuddy.version>1.14.9</bytebuddy.version>
 		<annotation-api.version>1.3.2</annotation-api.version>
 		<jsr305.version>3.0.2</jsr305.version>
