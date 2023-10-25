@@ -45,7 +45,7 @@
 
 		<!-- plugin versions -->
 		<version.maven-javadoc-plugin>3.6.0</version.maven-javadoc-plugin>
-		<version.maven-surefire>3.1.2</version.maven-surefire>
+		<version.maven-surefire>3.2.1</version.maven-surefire>
 		<version.maven-site-plugin>4.0.0-M9</version.maven-site-plugin>
 		<version.maven-enforcer-plugin>3.4.1</version.maven-enforcer-plugin>
 		<version.maven-source-plugin>3.3.0</version.maven-source-plugin>
@@ -53,7 +53,7 @@
 		<version.maven-project-info-reports-plugin>3.4.5</version.maven-project-info-reports-plugin>
 		<version.maven-jar-plugin>3.3.0</version.maven-jar-plugin>
 		<version.maven-assembly-plugin>3.6.0</version.maven-assembly-plugin>
-		<version.maven-dependency-plugin>3.6.0</version.maven-dependency-plugin>
+		<version.maven-dependency-plugin>3.6.1</version.maven-dependency-plugin>
 		<version.maven-war-plugin>3.4.0</version.maven-war-plugin>
 		<version.maven-clean-plugin>3.3.1</version.maven-clean-plugin>
 		<version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
@@ -63,10 +63,10 @@
 		<version.checksum-maven-plugin>1.11</version.checksum-maven-plugin>
 
 		<maven-bundle-plugin.version>5.1.9</maven-bundle-plugin.version>
-		<maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
+		<maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
 		<exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
-		<license-maven-plugin.version>2.2.0</license-maven-plugin.version>
+		<license-maven-plugin.version>2.3.0</license-maven-plugin.version>
 		<reflow-maven-skin.version>2.3.4</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<replacer.version>1.5.3</replacer.version>
@@ -78,7 +78,7 @@
 		<sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.versoin>0.8.11</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>3.6</forbiddenapis.version>
-		<frontend-maven-plugin.version>1.14.0</frontend-maven-plugin.version>
+		<frontend-maven-plugin.version>1.14.1</frontend-maven-plugin.version>
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
 		<plexus-utils.version>3.5.1</plexus-utils.version>
 
@@ -1237,7 +1237,7 @@
 						<dependency>
 							<groupId>com.puppycrawl.tools</groupId>
 							<artifactId>checkstyle</artifactId>
-							<version>10.10.0</version> <!-- FIXME TODO: should be removed after checkstyle plugin will be updated -->
+							<version>10.12.4</version> <!-- FIXME TODO: should be removed after checkstyle plugin will be updated -->
 						</dependency>
 					</dependencies>
 				</plugin>
