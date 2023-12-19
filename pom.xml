@@ -1159,7 +1159,7 @@
 						<doclint>none</doclint>
 						<additionalOptions>-html5</additionalOptions>
 						<source>${jdk.version}</source>
-						<javadocVersion>${jdk.version}</javadocVersion>
+						<legacyMode>true</legacyMode>
 						<notimestamp>true</notimestamp>
 						<links>
 							<link>https://openmeetings.apache.org/openmeetings-db/apidocs/</link>
