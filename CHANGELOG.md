@@ -6,6 +6,26 @@ See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number 
 See https://www.cve.org/CVERecord?id=CVE-* (where * is the number of CVE below)
 
 
+Release Notes - Openmeetings - Version 7.2.0
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-2773] - Login/email should be case insensitive
+    * [OPENMEETINGS-2775] - OM source artifact is not buildable
+    * [OPENMEETINGS-2776] - Profile picture always being loaded in full size
+    * [OPENMEETINGS-2777] - Message folders are being shared between users
+    * [OPENMEETINGS-2778] - room does not show corretly
+
+* Improvement
+    * [OPENMEETINGS-2232] - CSS clean-up and move to SASS
+    * [OPENMEETINGS-2774] - The look of email can be improved
+
+* Task
+    * [OPENMEETINGS-2770] - (7.2.0) Libraries should be updated
+    * [OPENMEETINGS-2771] - (7.2.0) Sonar issues need to be addressed
+    * [OPENMEETINGS-2772] - (7.2.0) All translations from PoEditor should be synced
+
+
 Release Notes - Openmeetings - Version 7.1.0
 ================================================================================================================
 

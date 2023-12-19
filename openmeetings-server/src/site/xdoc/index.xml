@@ -69,8 +69,8 @@
 		</section>
 		<section name="News">
 			<div class="bd-callout bd-callout-danger">
-				<div class="h4">Version 7.1.0 released!</div>
-				<div>Release 7.1.0, provides following improvements:<br/>
+				<div class="h4">Version 7.2.0 released!</div>
+				<div>Release 7.2.0, provides following improvements:<br/>
 					<div class="bd-callout bd-callout-info">
 						<br/>
 						IMPORTANT: Java 17 and KMS 6.18.0+ are required
@@ -78,30 +78,30 @@
 
 					Security:
 					<ul>
-						<li>Invitation hash check made strict</li>
-						<li>Set of user permissions is fixed</li>
-						<li>Paths entered in Admin-&gt;Config are being verified</li>
+						<li>Login/email are now processed in case insensitive mode</li>
+						<li>Messages and contacts: message folders are not shared between users</li>
 						<li>All dependencies are updated with most recent versions</li>
 					</ul>
 
-					Stability:
+					UI:
 					<ul>
-						<li>TURN server config is passed to the client</li>
+						<li>Too big profile pictures are now resized</li>
+						<li>Room looks better in RTL mode</li>
+						<li>Email messages looks better</li>
 					</ul>
 					<br/>
-					<div class="bd-callout bd-callout-danger">3 security vulnerabilities were addressed</div>
 					<br/>
 					Other fixes and improvements
 				</div>
 				<br/>
 
 				<span>
-					12 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/7.1.0/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12352896">Detailed list</a>
+					10 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/7.2.0/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12353202">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2023-05-09)</span>
+				<span class="date">(2023-12-23)</span>
 			</div>
 			<div class="bd-callout bd-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>

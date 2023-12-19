@@ -57,9 +57,28 @@ Release Notes
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
 
+7.2.0
+-----
+[Release 7.2.0](https://www.apache.org/dyn/closer.lua/openmeetings/7.2.0), provides following improvements:
+
+IMPORTANT: Java 17 and KMS 6.18.0+ are required
+
+Security:
+* Login/email are now processed in case insensitive mode
+* Messages and contacts: message folders are not shared between users
+* All dependencies are updated with most recent versions
+
+UI:
+* Too big profile pictures are now resized
+* Room looks better in RTL mode
+* Email messages looks better
+
+Some other fixes and improvements, 10 issues were addressed
+
+
 7.1.0
 -----
-[Release 7.1.0](https://www.apache.org/dyn/closer.lua/openmeetings/7.1.0), provides following improvements:
+[Release 7.1.0](https://archive.apache.org/dist/openmeetings/7.1.0), provides following improvements:
 
 IMPORTANT: Java 17 and KMS 6.18.0+ are required
 
