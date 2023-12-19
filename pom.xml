@@ -49,7 +49,7 @@
 		<version.maven-site-plugin>4.0.0-M9</version.maven-site-plugin>
 		<version.maven-enforcer-plugin>3.4.1</version.maven-enforcer-plugin>
 		<version.maven-source-plugin>3.3.0</version.maven-source-plugin>
-		<version.maven-compiler-plugin>3.11.0</version.maven-compiler-plugin>
+		<version.maven-compiler-plugin>3.12.0</version.maven-compiler-plugin>
 		<version.maven-project-info-reports-plugin>3.5.0</version.maven-project-info-reports-plugin>
 		<version.maven-jar-plugin>3.3.0</version.maven-jar-plugin>
 		<version.maven-assembly-plugin>3.6.0</version.maven-assembly-plugin>
