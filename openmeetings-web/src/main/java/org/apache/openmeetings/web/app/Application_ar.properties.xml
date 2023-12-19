@@ -820,7 +820,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<br />
 	]]></entry>
 	<entry key="internal.error"><![CDATA[للأسف حدث شيء سيء :( ، <br/>
-يرجى مراجعة <tt> openmeetings.log </tt> والاتصال بمطوري OpenMeetings]]></entry>
+يرجى مراجعة <code> openmeetings.log </code> والاتصال بمطوري OpenMeetings]]></entry>
 	<entry key="invalid.hash"><![CDATA[خطأ في مفتاح الترميز Invalid Hash]]></entry>
 	<entry key="label.dock.panel"><![CDATA[انقر لإرساء اللوحة]]></entry>
 	<entry key="label.end"><![CDATA[نهاية]]></entry>

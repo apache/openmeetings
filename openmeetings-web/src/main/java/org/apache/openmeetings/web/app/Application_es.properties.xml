@@ -822,7 +822,7 @@ Las salas creadas via Calendario están listadas solamente en esta sección, dur
 	<br />
 	]]></entry>
 	<entry key="internal.error"><![CDATA[Desafortunadamente, algo malo acaba de suceder :(, <br/>
-por favor revise <tt> openmeetings.log </tt> y contacte a los desarrolladores de OpenMeetings]]></entry>
+por favor revise <code> openmeetings.log </code> y contacte a los desarrolladores de OpenMeetings]]></entry>
 	<entry key="invalid.hash"><![CDATA[Hash inválido]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Haga clic para acoplar el panel]]></entry>
 	<entry key="label.end"><![CDATA[Final]]></entry>

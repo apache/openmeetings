@@ -821,7 +821,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 
 	]]></entry>
 	<entry key="internal.error"><![CDATA[Unfortunately something bad just happen :(, <br/>
-please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></entry>
+please check <code>openmeetings.log</code> and contact OpenMeetings developers]]></entry>
 	<entry key="invalid.hash"><![CDATA[不正なハッシュ]]></entry>
 	<entry key="label.dock.panel"><![CDATA[クリックしてパネルを連結する]]></entry>
 	<entry key="label.end"><![CDATA[終了]]></entry>

@@ -817,7 +817,7 @@ target="_blank">Custom Crypt Mechanism</a>
 	<br />
 	]]></entry>
 	<entry key="internal.error"><![CDATA[Unfortunately something bad just happen :(, <br/>
-please check <tt>openmeetings.log</tt> and contact OpenMeetings developers]]></entry>
+please check <code>openmeetings.log</code> and contact OpenMeetings developers]]></entry>
 	<entry key="invalid.hash"><![CDATA[هش نا معتبر]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
 	<entry key="label.end"><![CDATA[پایان]]></entry>

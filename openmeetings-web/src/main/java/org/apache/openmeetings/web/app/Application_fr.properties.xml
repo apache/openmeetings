@@ -822,7 +822,7 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 
 	]]></entry>
 	<entry key="internal.error"><![CDATA[Malheureusement quelque chose de mal s'est produit :(, <br/>
-allez sur <tt>openmeetings.log</tt> et contactez les développeurs d'OpenMeetings ]]></entry>
+allez sur <code>openmeetings.log</code> et contactez les développeurs d'OpenMeetings]]></entry>
 	<entry key="invalid.hash"><![CDATA[Hachage invalide.]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Cliquer sur le panneau]]></entry>
 	<entry key="label.end"><![CDATA[Fin]]></entry>
