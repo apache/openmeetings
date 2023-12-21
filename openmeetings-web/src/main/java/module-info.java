@@ -34,6 +34,7 @@ module org.apache.openmeetings.web {
 	requires org.apache.commons.fileupload2.core;
 	requires org.apache.commons.fileupload2.jakarta;
 	requires org.apache.commons.lang3;
+	requires org.apache.commons.text;
 
 	requires org.apache.httpcomponents.httpclient;
 
@@ -56,7 +57,7 @@ module org.apache.openmeetings.web {
 	requires wicket.bootstrap.extensions;
 	requires wicket.bootstrap.core;
 	requires wicket.bootstrap.themes;
-	requires wicket.webjars;
+	requires de.agilecoders.wicket.webjars;
 	requires wicket.jquery.ui;
 	requires wicket.jquery.ui.calendar;
 	requires wicket.jquery.ui.core;
@@ -83,7 +84,7 @@ module org.apache.openmeetings.web {
 
 	requires org.slf4j;
 
-	requires prometheus.metrics.core;
-	requires prometheus.metrics.model;
-	requires prometheus.metrics.exporter.servlet.jakarta;
+	requires io.prometheus.metrics.core;
+	requires io.prometheus.metrics.model;
+	requires io.prometheus.metrics.exporter.servlet.jakarta;
 }

@@ -24,8 +24,10 @@ module org.apache.openmeetings.install {
 
 	requires com.github.openjson;
 
+	requires org.apache.commons.cli;
 	requires org.apache.commons.io;
 	requires org.apache.commons.lang3;
+	requires org.apache.commons.text;
 
 	requires org.apache.openjpa;
 
@@ -45,7 +47,6 @@ module org.apache.openmeetings.install {
 	requires spring.web;
 
 	requires java.desktop;
-	requires commons.cli;
 	requires quartz;
 	requires xstream;
 

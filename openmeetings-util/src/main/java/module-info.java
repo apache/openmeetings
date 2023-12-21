@@ -48,6 +48,6 @@ module org.apache.openmeetings.util {
 	requires ch.qos.logback.classic;
 	requires ch.qos.logback.core;
 
-	requires prometheus.metrics.core;
-	requires prometheus.metrics.model;
+	requires io.prometheus.metrics.core;
+	requires io.prometheus.metrics.model;
 }

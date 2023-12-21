@@ -26,7 +26,14 @@ module org.apache.openmeetings.service {
 	exports org.apache.openmeetings.service.room;
 	exports org.apache.openmeetings.service.scheduler;
 
+	//FIXME TODO temporary
+	exports org.apache.jackrabbit.webdav;
+	exports org.apache.jackrabbit.webdav.xml;
+	exports org.apache.jackrabbit.webdav.property;
+	exports org.apache.jackrabbit.webdav.client.methods;
+
 	requires org.apache.commons.lang3;
+	requires org.apache.commons.text;
 
 	requires transitive org.apache.openmeetings.db;
 	requires org.apache.openmeetings.core;
@@ -45,7 +52,7 @@ module org.apache.openmeetings.service {
 
 	requires org.apache.httpcomponents.httpcore;
 	requires org.apache.httpcomponents.httpclient;
-	requires jackrabbit.webdav.jakarta;
+	//requires jackrabbit.webdav; FIXME TODO have to be placed back as soon as `jackrabbit.webdav` will be jackarta compatible
 	requires caldav4j;
 	requires java.xml;
 	requires org.mnode.ical4j.core;
