@@ -24,14 +24,17 @@ import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.openmeetings.mediaserver.StreamProcessor;
 
 import com.github.openjson.JSONObject;
 
+import jakarta.inject.Inject;
+
 public class InterviewWbPanel extends AbstractWbPanel {
 	private static final long serialVersionUID = 1L;
-	@SpringBean
+
+	@Inject
 	private StreamProcessor streamProcessor;
 
 	public InterviewWbPanel(String id, RoomPanel rp) {

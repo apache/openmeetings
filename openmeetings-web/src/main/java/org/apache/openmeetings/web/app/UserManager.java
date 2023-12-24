@@ -22,6 +22,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
+import static org.apache.openmeetings.web.app.Application.urlForPage;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
@@ -30,7 +31,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterFrontend;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendVerificationEmail;
-import static org.apache.openmeetings.web.app.Application.urlForPage;
 
 import java.io.IOException;
 import java.net.URI;
@@ -69,10 +69,10 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.service.mail.EmailManager;
-import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.crypt.ICrypt;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
+import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.core.util.lang.PropertyResolver;
 import org.apache.wicket.core.util.lang.PropertyResolverConverter;
@@ -81,10 +81,12 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONObject;
+
+import jakarta.inject.Inject;
 
 /**
  *
@@ -95,15 +97,15 @@ import com.github.openjson.JSONObject;
 public class UserManager implements IUserManager {
 	private static final Logger log = LoggerFactory.getLogger(UserManager.class);
 
-	@Autowired
+	@Inject
 	private ConfigurationDao cfgDao;
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private EmailManager emailManager;
-	@Autowired
+	@Inject
 	private IClientManager cm;
 	private HttpClient httpClient;
 

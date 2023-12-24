@@ -20,14 +20,14 @@ package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelConfirm;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.io.IOException;
@@ -43,7 +43,6 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
@@ -60,6 +59,7 @@ import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.openmeetings.web.util.OmUrlFragment;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.wicket.AttributeModifier;
@@ -81,7 +81,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.protocol.ws.api.message.AbstractClientMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.urlfragment.UrlFragment;
@@ -90,6 +89,7 @@ import com.github.openjson.JSONObject;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
+import jakarta.inject.Inject;
 
 public class MainPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -106,11 +106,11 @@ public class MainPanel extends Panel {
 	private BasePanel curPanel;
 	private InviteUserToRoomDialog inviteUser;
 
-	@SpringBean
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private RoomDao roomDao;
 
 	public MainPanel(String id) {

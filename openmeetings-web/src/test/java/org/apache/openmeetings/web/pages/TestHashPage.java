@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Date;
 import java.util.UUID;
 
-import org.apache.openmeetings.AbstractWicketTesterTest;
+import org.apache.openmeetings.web.AbstractWicketTesterTest;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -44,24 +44,25 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.user.record.VideoInfo;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.protocol.ws.util.tester.WebSocketTester;
+import org.apache.wicket.protocol.ws.tester.WebSocketTester;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 class TestHashPage extends AbstractWicketTesterTest {
 	private static final Logger log = LoggerFactory.getLogger(TestHashPage.class);
 
-	@Autowired
+	@Inject
 	protected RoomDao roomDao;
-	@Autowired
+	@Inject
 	protected RecordingDao recDao;
-	@Autowired
+	@Inject
 	protected InvitationDao inviteDao;
 
 	private void checkAccessDenied(boolean visible) {

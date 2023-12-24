@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.AbstractOmServerTest;
+import org.apache.openmeetings.web.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.util.CalendarHelper;
 import org.junit.jupiter.api.Test;

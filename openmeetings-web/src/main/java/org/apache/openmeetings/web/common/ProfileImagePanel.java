@@ -21,12 +21,14 @@ package org.apache.openmeetings.web.common;
 import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
 
 public class ProfileImagePanel extends ImagePanel {
 	private static final long serialVersionUID = 1L;
 	private final long userId;
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
 
 	public ProfileImagePanel(String id, final long userId) {

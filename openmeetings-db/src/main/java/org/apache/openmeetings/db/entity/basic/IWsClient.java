@@ -20,7 +20,7 @@ package org.apache.openmeetings.db.entity.basic;
 
 import java.io.Serializable;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Necessary for temp clients being created on HashPage

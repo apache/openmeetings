@@ -30,20 +30,22 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 public class InviteUserMessageDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
 	private final Form<Void> form = new Form<>("form");
 	private final TextArea<String> message = new TextArea<>("message", Model.of(""));
 	private final CheckBox enterRoom = new CheckBox("enterRoom", Model.of(false));
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private RoomDao roomDao;
 
 	public InviteUserMessageDialog(String id) {

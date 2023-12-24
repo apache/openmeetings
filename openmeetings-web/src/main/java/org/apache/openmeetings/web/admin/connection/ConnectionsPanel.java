@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.admin.connection;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelConfirm;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -44,18 +44,19 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.openmeetings.mediaserver.StreamProcessor;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import jakarta.inject.Inject;
 
 @AuthorizeInstantiation({"ADMIN", "ADMIN_CONNECTIONS"})
 public class ConnectionsPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
-	@SpringBean
+
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private StreamProcessor streamProcessor;
 
 	public ConnectionsPanel(String id) {

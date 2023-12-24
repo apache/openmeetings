@@ -18,12 +18,12 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.UserManager.showAuth;
 import static org.apache.openmeetings.web.pages.HashPage.APP;
 import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
 
 import java.util.List;
 
@@ -35,14 +35,14 @@ import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.util.OmException;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
 import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.pages.PrivacyPage;
+import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
@@ -67,7 +67,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +78,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
+import jakarta.inject.Inject;
 
 public class SignInDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -87,13 +88,14 @@ public class SignInDialog extends Modal<String> {
 	private boolean rememberMe = false;
 	private LdapConfig domain;
 	private NotificationPanel feedback = new NotificationPanel("feedback");
-	@SpringBean
+
+	@Inject
 	private ConfigurationDao cfgDao;
-	@SpringBean
+	@Inject
 	private LdapConfigDao ldapDao;
-	@SpringBean
+	@Inject
 	private OAuth2Dao oauthDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public SignInDialog(String id) {

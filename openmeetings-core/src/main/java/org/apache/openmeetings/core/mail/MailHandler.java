@@ -47,11 +47,12 @@ import org.apache.openmeetings.util.mail.MailUtil;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
 import jakarta.activation.DataHandler;
+import jakarta.inject.Inject;
 import jakarta.mail.Authenticator;
 import jakarta.mail.BodyPart;
 import jakarta.mail.Message;
@@ -79,9 +80,9 @@ public class MailHandler {
 	private static final int MAIL_SEND_TIMEOUT = 60 * 60 * 1000; // 1 hour
 	private static final int MAXIMUM_ERROR_COUNT = 5;
 
-	@Autowired
+	@Inject
 	private TaskExecutor taskExecutor;
-	@Autowired
+	@Inject
 	private MailMessageDao mailMessageDao;
 
 	protected MimeMessage appendIcsBody(MimeMessage msg, MailMessage m) throws Exception {

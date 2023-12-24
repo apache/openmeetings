@@ -41,20 +41,22 @@ import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 @Component
 public class RoomMapper {
 	private static final Logger log = LoggerFactory.getLogger(RoomMapper.class);
 	private static final FastDateFormat SDF = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
-	@Autowired
+	@Inject
 	private RoomDao roomDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
-	@Autowired
+	@Inject
 	private FileItemDao fileDao;
 
 	public Room get(RoomDTO dto) {

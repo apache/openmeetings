@@ -25,17 +25,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebService;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
+import jakarta.inject.Inject;
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebParam;
+import jakarta.jws.WebService;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.user.GroupDao;
@@ -57,7 +58,7 @@ import org.apache.openmeetings.webservice.schema.UserSearchResultWrapper;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -84,9 +85,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class GroupWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(GroupWebService.class);
 
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
-	@Autowired
+	@Inject
 	private GroupUserDao groupUserDao;
 
 	/**

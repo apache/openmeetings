@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.web.user;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OmVersion.getBuildDate;
 import static org.apache.openmeetings.util.OmVersion.getRevision;
 import static org.apache.openmeetings.util.OmVersion.getVersion;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;

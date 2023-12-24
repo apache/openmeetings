@@ -25,14 +25,16 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
+
+import jakarta.inject.Inject;
 
 public abstract class AdminUserChoiceProvider extends ChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
 	public static final long PAGE_SIZE = 20;
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
 
 	protected AdminUserChoiceProvider() {

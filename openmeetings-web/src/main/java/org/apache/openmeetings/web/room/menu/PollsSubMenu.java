@@ -42,9 +42,11 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.inject.Inject;
 
 public class PollsSubMenu implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -88,9 +90,10 @@ public class PollsSubMenu implements Serializable {
 		}
 	};
 	private final boolean visible;
-	@SpringBean
+
+	@Inject
 	private QuickPollManager qpollManager;
-	@SpringBean
+	@Inject
 	private PollDao pollDao;
 
 	public PollsSubMenu(final RoomPanel room, final RoomMenuPanel mp) {

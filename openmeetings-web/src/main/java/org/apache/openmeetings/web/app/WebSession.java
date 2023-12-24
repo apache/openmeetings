@@ -20,15 +20,15 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
+import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
+import static org.apache.openmeetings.web.app.Application.getDashboardContext;
+import static org.apache.openmeetings.web.app.Application.isInvaldSession;
+import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
 import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT_STRING;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
-import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
-import static org.apache.openmeetings.web.app.Application.getDashboardContext;
-import static org.apache.openmeetings.web.app.Application.isInvaldSession;
-import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
 
 import java.util.Calendar;
 import java.util.Collections;
@@ -86,7 +86,6 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -95,6 +94,8 @@ import org.wicketstuff.dashboard.Dashboard;
 import org.wicketstuff.dashboard.Widget;
 import org.wicketstuff.dashboard.WidgetFactory;
 import org.wicketstuff.dashboard.web.DashboardContext;
+
+import jakarta.inject.Inject;
 
 public class WebSession extends AbstractAuthenticatedWebSession implements IWebSession {
 	private static final long serialVersionUID = 1L;
@@ -118,23 +119,23 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private Long recordingId = null;
 	private boolean kickedByAdmin = false;
 	private ExtendedClientProperties extProps = new ExtendedClientProperties();
-	@SpringBean
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private InvitationDao inviteDao;
-	@SpringBean
+	@Inject
 	private SOAPLoginDao soapDao;
-	@SpringBean
+	@Inject
 	private SessiondataDao sessionDao;
-	@SpringBean
+	@Inject
 	private GroupDao groupDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private LdapLoginManager ldapManager;
-	@SpringBean
+	@Inject
 	private ConfigurationDao cfgDao;
-	@SpringBean
+	@Inject
 	private RoomDao roomDao;
 
 	public WebSession(Request request) {

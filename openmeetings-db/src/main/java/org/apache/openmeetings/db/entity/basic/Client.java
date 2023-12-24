@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;

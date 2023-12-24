@@ -35,7 +35,8 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
 
 /**
  * add/update/delete {@link Configuration}
@@ -49,7 +50,7 @@ public class ConfigsPanel extends AdminBasePanel {
 	private ConfigForm form;
 	private final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 
-	@SpringBean
+	@Inject
 	private ConfigurationDao cfgDao;
 
 	public ConfigsPanel(String id) {

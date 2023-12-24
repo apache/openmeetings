@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.List;
 
-import org.apache.openmeetings.AbstractOmServerTest;
+import org.apache.openmeetings.web.AbstractOmServerTest;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

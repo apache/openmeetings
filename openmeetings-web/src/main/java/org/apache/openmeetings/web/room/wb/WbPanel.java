@@ -28,10 +28,10 @@ import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_WIDTH;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_ZOOM;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ITEMS_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getObjWbJson;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getWbJson;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
 import static org.apache.wicket.AttributeModifier.append;
 
 import java.io.BufferedReader;
@@ -58,18 +58,18 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
-import org.apache.openmeetings.util.NullStringer;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.WhiteboardManager;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.util.NullStringer;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 import org.danekja.java.util.function.serializable.SerializableBiConsumer;
 import org.slf4j.Logger;
@@ -78,6 +78,8 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.github.openjson.JSONTokener;
+
+import jakarta.inject.Inject;
 
 public class WbPanel extends AbstractWbPanel {
 	private static final long serialVersionUID = 1L;
@@ -132,9 +134,10 @@ public class WbPanel extends AbstractWbPanel {
 					, UndoObject.Type.REMOVE, arr));
 		}
 	};
-	@SpringBean
+
+	@Inject
 	private WhiteboardManager wbm;
-	@SpringBean
+	@Inject
 	private FileItemDao fileDao;
 
 	public WbPanel(String id, RoomPanel rp) {

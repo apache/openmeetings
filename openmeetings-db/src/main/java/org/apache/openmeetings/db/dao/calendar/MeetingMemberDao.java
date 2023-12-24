@@ -24,8 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.slf4j.Logger;

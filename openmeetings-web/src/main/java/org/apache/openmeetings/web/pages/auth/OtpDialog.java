@@ -41,13 +41,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
+import jakarta.inject.Inject;
 
 public class OtpDialog extends Modal<User> {
 	private static final long serialVersionUID = 1L;
@@ -56,9 +57,10 @@ public class OtpDialog extends Modal<User> {
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final OtpForm form = new OtpForm("form");
 	private final RadioGroup<String> radioGroup = new RadioGroup<>("type", Model.of(TYPE_OTP));
-	@SpringBean
+
+	@Inject
 	private OtpManager otpManager;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public OtpDialog(String id, IModel<User> model) {

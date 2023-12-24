@@ -20,7 +20,7 @@ package org.apache.openmeetings.db.bind.adapter;
 
 import static org.apache.commons.lang3.math.NumberUtils.toLong;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class LongAdapter extends XmlAdapter<String, Long> {
 

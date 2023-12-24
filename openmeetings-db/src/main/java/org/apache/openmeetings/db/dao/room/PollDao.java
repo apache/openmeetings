@@ -24,9 +24,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;

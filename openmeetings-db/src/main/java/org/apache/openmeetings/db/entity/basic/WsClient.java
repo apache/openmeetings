@@ -20,7 +20,7 @@ package org.apache.openmeetings.db.entity.basic;
 
 import static java.util.UUID.randomUUID;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Temporary class for test recording, will be unified

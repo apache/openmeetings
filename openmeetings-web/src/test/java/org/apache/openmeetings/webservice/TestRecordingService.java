@@ -19,7 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.AbstractOmServerTest.getUser;
+import static org.apache.openmeetings.web.AbstractOmServerTest.getUser;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;

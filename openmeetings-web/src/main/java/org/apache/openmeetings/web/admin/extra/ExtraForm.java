@@ -38,8 +38,9 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.CollectionModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.select2.Select2MultiChoice;
+
+import jakarta.inject.Inject;
 
 public class ExtraForm extends AdminBaseForm<ExtraMenu> {
 	private static final long serialVersionUID = 1L;
@@ -48,9 +49,9 @@ public class ExtraForm extends AdminBaseForm<ExtraMenu> {
 			, new CollectionModel<>(new ArrayList<>())
 			, new GroupChoiceProvider());
 
-	@SpringBean
+	@Inject
 	private ExtraMenuDao menuDao;
-	@SpringBean
+	@Inject
 	private GroupDao groupDao;
 
 	public ExtraForm(String id, final WebMarkupContainer list, ExtraMenu m) {

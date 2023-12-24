@@ -19,9 +19,9 @@
 package org.apache.openmeetings.web.pages.install;
 
 import static org.apache.openmeetings.core.converter.BaseConverter.EXEC_EXT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONE_SET;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.wicket.validation.validator.RangeValidator.range;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
@@ -45,15 +45,15 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
-import org.apache.openmeetings.util.ConnectionProperties;
-import org.apache.openmeetings.util.ConnectionProperties.DbType;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ErrorMessagePanel;
 import org.apache.openmeetings.web.common.OmLabel;
+import org.apache.openmeetings.util.ConnectionProperties;
+import org.apache.openmeetings.util.ConnectionProperties.DbType;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.util.OmTooltipBehavior;
 import org.apache.openmeetings.web.util.ThreadHelper;
 import org.apache.wicket.Component;
@@ -87,7 +87,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,6 +103,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.components.progress.Upda
 import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
 import de.agilecoders.wicket.extensions.wizard.BootstrapWizard;
+import jakarta.inject.Inject;
 
 public class InstallWizard extends BootstrapWizard {
 	private static final long serialVersionUID = 1L;
@@ -123,7 +124,7 @@ public class InstallWizard extends BootstrapWizard {
 	private final List<Button> buttons = new ArrayList<>(4);
 	private WizardButtonBar btnBar;
 
-	@SpringBean
+	@Inject
 	private ImportInitvalues initvalues;
 
 	//onInit, applyState

@@ -42,19 +42,21 @@ import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.protocol.ws.api.message.ErrorMessage;
 import org.apache.wicket.protocol.ws.api.message.TextMessage;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.openmeetings.mediaserver.KurentoHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
+import jakarta.inject.Inject;
+
 public abstract class OmWebSocketPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(OmWebSocketPanel.class);
 	public static final String CONNECTED_MSG = "socketConnected";
 	private final AtomicBoolean connected = new AtomicBoolean();
-	@SpringBean
+
+	@Inject
 	private KurentoHandler kHandler;
 	private boolean pingable = false;
 

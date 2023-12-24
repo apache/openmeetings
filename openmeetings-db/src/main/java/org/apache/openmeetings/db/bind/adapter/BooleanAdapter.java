@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.db.bind.adapter;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class BooleanAdapter extends XmlAdapter<String, Boolean> {
 

@@ -26,14 +26,16 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.wicket.util.string.Strings;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 @Component
 public class UserMapper {
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
 
 	public User get(UserDTO dto) {

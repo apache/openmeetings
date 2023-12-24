@@ -22,7 +22,7 @@ import static org.apache.commons.lang3.math.NumberUtils.toLong;
 
 import java.util.Map;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;

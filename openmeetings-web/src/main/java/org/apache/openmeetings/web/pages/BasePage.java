@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.web.pages;
 
+import static org.apache.openmeetings.web.app.Application.isInstalled;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getGaCode;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
-import static org.apache.openmeetings.web.app.Application.isInstalled;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.util.HashMap;

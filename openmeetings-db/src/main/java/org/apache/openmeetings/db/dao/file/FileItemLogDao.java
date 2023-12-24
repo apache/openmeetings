@@ -21,8 +21,8 @@ package org.apache.openmeetings.db.dao.file;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItemLog;

@@ -31,10 +31,10 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import jakarta.inject.Inject;
 
 public class EmailForm extends Form<MailMessage> {
 	private static final long serialVersionUID = 1L;
@@ -42,7 +42,8 @@ public class EmailForm extends Form<MailMessage> {
 	private BootstrapAjaxButton reset;
 	private AjaxLink<Void> delBtn;
 	private final WebMarkupContainer list;
-	@SpringBean
+
+	@Inject
 	private MailMessageDao emailDao;
 
 	public EmailForm(String id, final WebMarkupContainer list, MailMessage m) {

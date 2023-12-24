@@ -23,10 +23,10 @@ import static org.apache.openmeetings.cli.CleanupHelper.getFileUnit;
 import static org.apache.openmeetings.cli.CleanupHelper.getImportUnit;
 import static org.apache.openmeetings.cli.CleanupHelper.getProfileUnit;
 import static org.apache.openmeetings.cli.CleanupHelper.getRecUnit;
+import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
 import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
-import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
 
 import org.apache.openmeetings.cli.CleanupEntityUnit;
 import org.apache.openmeetings.cli.CleanupUnit;
@@ -40,12 +40,13 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
+import jakarta.inject.Inject;
 
 public class AdminCleanupInfoDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -58,11 +59,12 @@ public class AdminCleanupInfoDialog extends Modal<String> {
 	private CleanupEntityUnitPanel fin;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private FileItemDao fileDao;
-	@SpringBean
+	@Inject
 	private RecordingDao recDao;
 
 	public AdminCleanupInfoDialog(String id) {

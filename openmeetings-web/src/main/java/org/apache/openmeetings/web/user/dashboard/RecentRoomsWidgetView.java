@@ -23,13 +23,16 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.web.user.rooms.RoomsPanel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.wicketstuff.dashboard.Widget;
 import org.wicketstuff.dashboard.web.WidgetView;
 
+import jakarta.inject.Inject;
+
 public class RecentRoomsWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;
-	@SpringBean
+
+	@Inject
 	private RoomDao roomDao;
 
 	public RecentRoomsWidgetView(String id, Model<Widget> model) {

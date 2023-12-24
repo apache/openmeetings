@@ -19,9 +19,9 @@
 package org.apache.openmeetings.web.pages.auth;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.web.app.Application.urlForPage;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
-import static org.apache.openmeetings.web.app.Application.urlForPage;
 
 import java.util.Date;
 
@@ -49,7 +49,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -61,6 +61,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButt
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 public class ForgetPasswordDialog extends Modal<String> {
 	private static final Logger log = LoggerFactory.getLogger(ForgetPasswordDialog.class);
@@ -74,9 +75,9 @@ public class ForgetPasswordDialog extends Modal<String> {
 	private ForgetPasswordForm form = new ForgetPasswordForm("form");
 	private boolean wasReset = false;
 
-	@SpringBean
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private MailHandler mailHandler;
 
 	enum Type {

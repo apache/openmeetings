@@ -53,8 +53,8 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import jakarta.inject.Inject;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.ComponentList;
@@ -89,7 +89,7 @@ public class IcalUtils {
 	private static final List<String> acceptedFormats = List.of("yyyyMMdd'T'HHmmss", "yyyyMMdd'T'HHmmss'Z'", "yyyyMMdd");
 	public static final String PROD_ID = "-//Events Calendar//Apache Openmeetings//EN";
 
-	@Autowired
+	@Inject
 	private UserDao userDao;
 
 	/**

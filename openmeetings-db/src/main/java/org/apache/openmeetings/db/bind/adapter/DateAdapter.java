@@ -20,7 +20,7 @@ package org.apache.openmeetings.db.bind.adapter;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class DateAdapter extends XmlAdapter<String, Date> {
 

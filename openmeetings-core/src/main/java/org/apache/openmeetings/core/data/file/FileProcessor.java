@@ -41,21 +41,23 @@ import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.tika.exception.UnsupportedFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 @Component
 public class FileProcessor {
 	private static final Logger log = LoggerFactory.getLogger(FileProcessor.class);
 
 	//Spring loaded Beans
-	@Autowired
+	@Inject
 	private VideoConverter videoConverter;
-	@Autowired
+	@Inject
 	private FileItemDao fileDao;
-	@Autowired
+	@Inject
 	private ImageConverter imageConverter;
-	@Autowired
+	@Inject
 	private DocumentConverter docConverter;
 
 	public ProcessResultList processFile(FileItem f, InputStream is, Optional<DoubleConsumer> progress) throws Exception {

@@ -20,7 +20,7 @@ package org.apache.openmeetings.db.bind.adapter;
 
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 

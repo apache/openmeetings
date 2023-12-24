@@ -24,7 +24,7 @@ import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT;
 
 import java.util.Date;
 
-import javax.ws.rs.ext.ParamConverter;
+import jakarta.ws.rs.ext.ParamConverter;
 
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.dto.calendar.MeetingMemberDTO;

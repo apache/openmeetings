@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
+import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
+import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
@@ -28,9 +31,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
-import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
-import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
-import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.wicketstuff.dashboard.DashboardContextInitializer.DASHBOARD_CONTEXT_KEY;
 
 import java.io.File;
@@ -44,8 +44,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
-import javax.websocket.WebSocketContainer;
+import jakarta.annotation.Nonnull;
+import jakarta.websocket.WebSocketContainer;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.sip.SipManager;
@@ -71,8 +71,6 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.ApplicationHelper;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
-import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OmVersion;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.openmeetings.web.admin.backup.BackupUploadResourceReference;
 import org.apache.openmeetings.web.common.PingResourceReference;
@@ -100,6 +98,8 @@ import org.apache.openmeetings.web.user.dashboard.admin.AdminWidgetDescriptor;
 import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
 import org.apache.openmeetings.web.user.record.PngRecordingResourceReference;
 import org.apache.openmeetings.web.util.GroupLogoResourceReference;
+import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OmVersion;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
 import org.apache.wicket.DefaultPageManagerProvider;
@@ -136,7 +136,6 @@ import org.apache.wicket.validation.validator.UrlValidator;
 import org.apache.openmeetings.mediaserver.KStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -161,13 +160,14 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.NoopThemeProvider;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
+import jakarta.inject.Inject;
 
 @Component
 public class Application extends AuthenticatedWebApplication implements IApplication {
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
 	private static boolean isInstalled;
 	private static final String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
-	private static final String SERVER_CONTAINER_SERVLET_CONTEXT_ATTRIBUTE = "javax.websocket.server.ServerContainer";
+	private static final String SERVER_CONTAINER_SERVLET_CONTEXT_ATTRIBUTE = "jakarta.websocket.server.ServerContainer";
 	public static final String NAME_ATTR_KEY = "name";
 	public static final String SERVER_URL_ATTR_KEY = "server.url";
 	//additional maps for faster searching should be created
@@ -182,23 +182,23 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private String serverId;
 	private final Set<String> wsUrls = new HashSet<>();
 
-	@Autowired
+	@Inject
 	private ApplicationContext ctx;
-	@Autowired
+	@Inject
 	private ConfigurationDao cfgDao;
-	@Autowired
+	@Inject
 	private RecordingDao recordingDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private UserManager userManager;
-	@Autowired
+	@Inject
 	private ClientManager cm;
-	@Autowired
+	@Inject
 	private WhiteboardManager wbManager;
-	@Autowired
+	@Inject
 	private AppointmentDao appointmentDao;
-	@Autowired
+	@Inject
 	private SipManager sipManager;
 	@Value("${remember.me.encryption.key}")
 	private String rememberMeKey;

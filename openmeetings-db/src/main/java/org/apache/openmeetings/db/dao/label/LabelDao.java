@@ -47,7 +47,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.label.OmLanguage;
 import org.apache.openmeetings.db.entity.label.StringLabel;
@@ -194,7 +193,8 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		List<StringLabel> result = new ArrayList<>(labelCache.containsKey(l) ? labelCache.get(l) : new ArrayList<StringLabel>());
 		if (!Strings.isEmpty(search)) {
-			CollectionUtils.filter(result, o -> o != null && (o.getKey().contains(search) || o.getValue().contains(search)));
+			result = result.stream().filter(o -> o != null && (o.getKey().contains(search) || o.getValue().contains(search)))
+					.collect(Collectors.toList());
 		}
 		return result;
 	}

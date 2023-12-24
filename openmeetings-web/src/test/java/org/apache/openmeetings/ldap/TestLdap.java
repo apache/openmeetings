@@ -55,18 +55,19 @@ import org.apache.directory.server.core.api.DirectoryService;
 import org.apache.directory.server.core.integ.ApacheDSTestExtension;
 import org.apache.directory.server.ldap.LdapServer;
 import org.apache.directory.server.protocol.shared.transport.Transport;
-import org.apache.openmeetings.AbstractWicketTesterTest;
+import org.apache.openmeetings.web.AbstractWicketTesterTest;
 import org.apache.openmeetings.core.ldap.LdapLoginManager;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.util.OmException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
 
 @ExtendWith(ApacheDSTestExtension.class)
 @CreateDS(name = "omDS",
@@ -98,7 +99,7 @@ public class TestLdap extends AbstractWicketTesterTest {
 	/** The current revision */
 	public static long revision = 0L;
 
-	@Autowired
+	@Inject
 	private LdapConfigDao ldapDao;
 
 	@BeforeAll

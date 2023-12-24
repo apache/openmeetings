@@ -20,8 +20,8 @@ package org.apache.openmeetings.db.dao.log;
 
 import java.util.Date;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.log.ConferenceLog.Type;

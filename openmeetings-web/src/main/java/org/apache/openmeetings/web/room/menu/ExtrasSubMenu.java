@@ -30,16 +30,18 @@ import org.apache.openmeetings.web.common.menu.OmMenuItem;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
+
 
 public class ExtrasSubMenu implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final RoomPanel room;
 	private OmMenuItem extraMenu;
 
-	@SpringBean
+	@Inject
 	private RoomDao roomDao;
-	@SpringBean
+	@Inject
 	private ExtraMenuDao menuDao;
 
 	public ExtrasSubMenu(final RoomPanel room) {

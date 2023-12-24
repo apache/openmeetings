@@ -21,12 +21,13 @@ package org.apache.openmeetings.web.room.sidebar;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.ThreadHelper.startRunnable;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.DoubleConsumer;
 
-import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload2.core.FileItem;
 import org.apache.openmeetings.core.data.file.FileProcessor;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
@@ -44,11 +45,13 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.upload.UploadResourceReference;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.protocol.http.servlet.MultipartServletWebRequest;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
+
+import jakarta.inject.Inject;
 
 public class RoomFileUploadResourceReference extends UploadResourceReference {
 	private static final long serialVersionUID = 1L;
@@ -60,11 +63,11 @@ public class RoomFileUploadResourceReference extends UploadResourceReference {
 	public static final String PARAM_LAST_SELECTED_OWNER = "room-upload-last-selected-owner";
 	public static final String PARAM_LAST_SELECTED_GROUP = "room-upload-last-selected-group";
 
-	@SpringBean
+	@Inject
 	private FileProcessor processor;
-	@SpringBean
+	@Inject
 	private FileItemLogDao fileLogDao;
-	@SpringBean
+	@Inject
 	private FileItemDao fileDao;
 
 	public RoomFileUploadResourceReference() {
@@ -147,7 +150,11 @@ public class RoomFileUploadResourceReference extends UploadResourceReference {
 				log.error("Unexpected error while processing uploaded file", e);
 				sendError(c, uuid, e.getMessage() == null ? "Unexpected error" : e.getMessage());
 			} finally {
-				curItem.delete();
+				try {
+					curItem.delete();
+				} catch (IOException e) {
+					log.error("IOException while deleting FileItem ", e);
+				}
 			}
 			currentSize += size;
 			sendProgress(c, uuid, progress, (int)(100 * currentSize / totalSize));

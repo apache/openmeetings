@@ -24,8 +24,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;

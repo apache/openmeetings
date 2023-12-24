@@ -26,19 +26,18 @@
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
-	<version>7.2.0-SNAPSHOT</version>
+	<version>8.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Openmeetings</name>
 	<description>Parent project for all OpenMeetings Maven modules. Required to hold general settings</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.outputTimestamp>2023-05-10T02:44:22Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2023-09-27T11:15:33Z</project.build.outputTimestamp>
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
 		<om.notquick.build>true</om.notquick.build>
 		<logback.console></logback.console>
 		<db>h2</db>
-		<autoModuleName>apache.openmeetings.parent</autoModuleName>
 		<jdk.version>17</jdk.version>
 		<minimalMavenBuildVersion>3.8.7</minimalMavenBuildVersion>
 		<minimalJavaBuildVersion>${jdk.version}</minimalJavaBuildVersion>
@@ -84,15 +83,16 @@
 
 		<!-- dependency versions -->
 		<junit.version>5.10.1</junit.version>
-		<wicket.version>9.16.0</wicket.version>
-		<wicket-jquery-ui.version>9.12.0</wicket-jquery-ui.version>
-		<wicketstuff.version>9.16.0</wicketstuff.version>
-		<wicket-bootstrap.version>6.0.5</wicket-bootstrap.version>
-		<spring.version>5.3.31</spring.version>
-		<tomcat.version>9.0.84</tomcat.version>
+		<wicket.version>10.0.0-M2</wicket.version>
+		<wicket-jquery-ui.version>10.0.0-M1</wicket-jquery-ui.version>
+		<wicketstuff.version>10.0.0-M2</wicketstuff.version>
+		<wicket-bootstrap.version>7.0.1</wicket-bootstrap.version>
+		<spring.version>6.1.2</spring.version>
+		<tomcat.version>10.1.17</tomcat.version>
+		<jetty.version>11.0.18</jetty.version>
 		<ical4j.version>4.0.0-rc1</ical4j.version>
-		<cxf.version>3.6.2</cxf.version>
-		<io.prometheus.version>0.16.0</io.prometheus.version>
+		<cxf.version>4.0.3</cxf.version>
+		<io.prometheus.version>1.1.0</io.prometheus.version>
 		<aspectjtools.version>1.9.21</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.5.4</jettison.version>
@@ -101,6 +101,10 @@
 		<h2.version>2.2.224</h2.version>
 		<jakarta.mail.version>2.0.1</jakarta.mail.version>
 		<openjpa.version>3.2.2</openjpa.version>
+		<jakarta.persistence.version>3.1.0</jakarta.persistence.version>
+		<jakarta.transaction.version>2.0.1</jakarta.transaction.version>
+		<jakarta.annotation.version>2.1.1</jakarta.annotation.version>
+		<jakarta.websocket-api.version>2.1.1</jakarta.websocket-api.version>
 		<asterisk-java.version>3.39.0</asterisk-java.version>
 		<commons-lang3.version>3.14.0</commons-lang3.version>
 		<commons-dbcp.version>2.11.0</commons-dbcp.version>
@@ -119,10 +123,10 @@
 		<xstream.version>1.4.20</xstream.version>
 		<api-all.version>2.1.5</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
-		<tika-parsers.version>2.9.1</tika-parsers.version>
+		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
+		<tika-parsers.version>3.0.0-BETA</tika-parsers.version>
 		<slf4j.version>2.0.9</slf4j.version>
 		<logback.version>1.4.14</logback.version>
-		<jetty.version>9.4.53.v20231009</jetty.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.77</bcprov.version>
 		<mockito.version>5.2.0</mockito.version>
@@ -131,13 +135,11 @@
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
 		<jasny-bootstrap.version>3.1.3-2</jasny-bootstrap.version>
 		<jodconverter.version>4.4.7</jodconverter.version>
-		<jaxb-runtime.version>2.3.9</jaxb-runtime.version>
-		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+		<jaxb-runtime.version>4.0.4</jaxb-runtime.version>
+		<jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
-		<swagger.version>2.2.19</swagger.version>
-		<bytebuddy.version>1.14.10</bytebuddy.version>
-		<annotation-api.version>1.3.2</annotation-api.version>
+		<swagger.version>2.2.20</swagger.version>
 		<jsr305.version>3.0.2</jsr305.version>
 		<totp.version>1.7.1</totp.version>
 		<!--  Exclude all generated code  -->
@@ -452,6 +454,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.openmeetings</groupId>
+				<artifactId>openmeetings-tests</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.openmeetings</groupId>
 				<artifactId>openmeetings-util</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -461,8 +469,8 @@
 				<version>${spring.version}</version>
 				<exclusions>
 					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-jcl</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -470,45 +478,21 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
 				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context-support</artifactId>
 				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
 				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-aop</artifactId>
 				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -529,6 +513,12 @@
 				<groupId>org.mnode.ical4j</groupId>
 				<artifactId>ical4j</artifactId>
 				<version>${ical4j.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
@@ -540,7 +530,7 @@
 						<artifactId>*</artifactId>
 					</exclusion>
 					<exclusion>
-						<groupId>javax.servlet</groupId>
+						<groupId>jakarta.servlet</groupId>
 						<artifactId>*</artifactId>
 					</exclusion>
 				</exclusions>
@@ -555,7 +545,7 @@
 						<artifactId>*</artifactId>
 					</exclusion>
 					<exclusion>
-						<groupId>javax.servlet</groupId>
+						<groupId>jakarta.servlet</groupId>
 						<artifactId>*</artifactId>
 					</exclusion>
 					<exclusion>
@@ -586,7 +576,12 @@
 			</dependency>
 			<dependency>
 				<groupId>io.prometheus</groupId>
-				<artifactId>simpleclient_servlet</artifactId>
+				<artifactId>prometheus-metrics-core</artifactId>
+				<version>${io.prometheus.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.prometheus</groupId>
+				<artifactId>prometheus-metrics-exporter-servlet-jakarta</artifactId>
 				<version>${io.prometheus.version}</version>
 			</dependency>
 			<dependency>
@@ -612,8 +607,20 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-tester</artifactId>
+				<version>${wicket.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-native-websocket-core</artifactId>
 				<version>${wicket.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-native-websocket-tester</artifactId>
+				<version>${wicket.version}</version>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
@@ -651,9 +658,14 @@
 				<version>${wicket.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>javax.servlet-api</artifactId>
-				<version>${javax.servlet-api.version}</version>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-datastore-hazelcast</artifactId>
+				<version>${wicketstuff.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>jakarta.servlet</groupId>
+				<artifactId>jakarta.servlet-api</artifactId>
+				<version>${jakarta.servlet-api.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -719,9 +731,9 @@
 				<version>${tika-parsers.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>javax.websocket</groupId>
-				<artifactId>javax.websocket-api</artifactId>
-				<version>1.1</version>
+				<groupId>jakarta.websocket</groupId>
+				<artifactId>jakarta.websocket-client-api</artifactId>
+				<version>${jakarta.websocket-api.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -803,14 +815,39 @@
 				<version>${commons-io.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>wicketstuff-datastore-hazelcast</artifactId>
-				<version>${wicketstuff.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>org.apache.openjpa</groupId>
 				<artifactId>openjpa</artifactId>
 				<version>${openjpa.version}</version>
+				<classifier>jakarta</classifier>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.geronimo.specs</groupId>
+						<artifactId>geronimo-jpa_2.2_spec</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.geronimo.specs</groupId>
+						<artifactId>geronimo-jta_1.1_spec</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.geronimo.specs</groupId>
+						<artifactId>geronimo-jms_1.1_spec</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>jakarta.persistence</groupId>
+				<artifactId>jakarta.persistence-api</artifactId>
+				<version>${jakarta.persistence.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>jakarta.transaction</groupId>
+				<artifactId>jakarta.transaction-api</artifactId>
+				<version>${jakarta.transaction.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>jakarta.annotation</groupId>
+				<artifactId>jakarta.annotation-api</artifactId>
+				<version>${jakarta.annotation.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -863,17 +900,22 @@
 						<groupId>net.sf.ehcache</groupId>
 						<artifactId>ehcache</artifactId>
 					</exclusion>
+					<exclusion>
+						<!-- will be replaced with Jakarta version below -->
+						<groupId>org.apache.jackrabbit</groupId>
+						<artifactId>jackrabbit-webdav</artifactId>
+					</exclusion>
 				</exclusions>
 			</dependency>
+			<!--dependency> FIXME TODO have to be placed back as soon as `jackrabbit.webdav` will be jackarta compatible
+				<groupId>org.apache.jackrabbit</groupId>
+				<artifactId>jackrabbit-webdav</artifactId>
+				<version>${jackrabbit-webdav.version}</version>
+			</dependency-->
 			<dependency>
 				<groupId>com.mysql</groupId>
 				<artifactId>mysql-connector-j</artifactId>
 				<version>${mysql.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>net.bytebuddy</groupId>
-				<artifactId>byte-buddy</artifactId>
-				<version>${bytebuddy.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.webjars</groupId>
@@ -945,11 +987,6 @@
 				<groupId>io.swagger.core.v3</groupId>
 				<artifactId>swagger-annotations</artifactId>
 				<version>${swagger.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>javax.annotation</groupId>
-				<artifactId>javax.annotation-api</artifactId>
-				<version>${annotation-api.version}</version>
 			</dependency>
 			<dependency>
 				<!-- required for @NonNull, temporary -->
@@ -1044,8 +1081,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
@@ -1149,6 +1186,36 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<configuration>
+					<skipSource>${om.quick.build}</skipSource>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<skip>${om.quick.build}</skip>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -1159,7 +1226,6 @@
 						<doclint>none</doclint>
 						<additionalOptions>-html5</additionalOptions>
 						<source>${jdk.version}</source>
-						<javadocVersion>${jdk.version}</javadocVersion>
 						<notimestamp>true</notimestamp>
 						<links>
 							<link>https://openmeetings.apache.org/openmeetings-db/apidocs/</link>
@@ -1192,7 +1258,6 @@
 								<Built-On>${maven.build.timestamp}</Built-On>
 								<Git-Revision>${buildNumber}</Git-Revision>
 								<Product-Version>${project.version}</Product-Version>
-								<Automatic-Module-Name>${autoModuleName}</Automatic-Module-Name>
 							</manifestEntries>
 						</archive>
 					</configuration>
@@ -1231,7 +1296,7 @@
 						<includeTestSourceDirectory>true</includeTestSourceDirectory>
 						<consoleOutput>true</consoleOutput>
 						<failsOnError>true</failsOnError>
-						<excludes>**/module-info.java</excludes>
+						<excludes>**/module-info.java, **/org/apache/jackrabbit/**</excludes>
 					</configuration>
 					<dependencies>
 						<dependency>
@@ -1258,7 +1323,6 @@
 					<configuration>
 						<forkCount>1</forkCount>
 						<reuseForks>true</reuseForks>
-						<useModulePath>false</useModulePath>
 						<excludedGroups>${excluded.test.groups}</excludedGroups>
 						<includes>
 							<include>**/Test*.java</include>
@@ -1266,7 +1330,13 @@
 						<excludes>
 							<exclude/>
 						</excludes>
-						<argLine>@{argLine} --add-modules java.se --add-exports java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens=java.base/sun.security.util=ALL-UNNAMED --add-opens=java.base/sun.security.x509=ALL-UNNAMED</argLine>
+						<argLine>@{argLine} --add-modules java.se --add-exports java.base/jdk.internal.ref=ALL-UNNAMED
+								--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED
+								--add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED
+								--add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED
+								--add-opens java.base/java.util=ALL-UNNAMED --add-opens=java.base/sun.security.util=ALL-UNNAMED
+								--add-opens=java.base/sun.security.x509=ALL-UNNAMED</argLine>
+						<useModulePath>false</useModulePath>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -1459,12 +1529,33 @@
 					<groupId>org.apache.openjpa</groupId>
 					<artifactId>openjpa-maven-plugin</artifactId>
 					<version>${openjpa.version}</version>
+					<!-- set the version to be the same as the level in your runtime -->
 					<dependencies>
 						<dependency>
 							<groupId>org.apache.openjpa</groupId>
 							<artifactId>openjpa</artifactId>
-							<!-- set the version to be the same as the level in your runtime -->
 							<version>${openjpa.version}</version>
+							<classifier>jakarta</classifier>
+							<exclusions>
+								<exclusion>
+									<groupId>org.apache.geronimo.specs</groupId>
+									<artifactId>geronimo-jpa_2.2_spec</artifactId>
+								</exclusion>
+								<exclusion>
+									<groupId>org.apache.geronimo.specs</groupId>
+									<artifactId>geronimo-jta_1.1_spec</artifactId>
+								</exclusion>
+							</exclusions>
+						</dependency>
+						<dependency>
+							<groupId>jakarta.persistence</groupId>
+							<artifactId>jakarta.persistence-api</artifactId>
+							<version>${jakarta.persistence.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>jakarta.transaction</groupId>
+							<artifactId>jakarta.transaction-api</artifactId>
+							<version>${jakarta.transaction.version}</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -1678,6 +1769,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<modules>
+				<module>openmeetings-tests</module>
 				<module>openmeetings-util</module>
 				<module>openmeetings-db</module>
 				<module>openmeetings-core</module>
@@ -1709,33 +1801,6 @@
 			</properties>
 			<build>
 				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<configuration>
-							<skip>false</skip>
-						</configuration>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
 					<plugin>
 						<groupId>net.nicoulaj.maven.plugins</groupId>
 						<artifactId>checksum-maven-plugin</artifactId>

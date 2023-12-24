@@ -29,21 +29,23 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 public class UserInfoDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
 	private WebMarkupContainer container = new WebMarkupContainer("container");
 	private MessageDialog newMessage;
 	private long userId;
-	@SpringBean
-	private UserContactDao contactDao;
 	private BootstrapAjaxLink<String> message;
 	private BootstrapAjaxLink<String> contacts;
+
+	@Inject
+	private UserContactDao contactDao;
 
 	public UserInfoDialog(String id, MessageDialog newMessage) {
 		super(id);

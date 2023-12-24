@@ -27,9 +27,9 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -38,8 +38,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.ByteArrayResource;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.io.IOUtils;
+
+import jakarta.inject.Inject;
 
 public class RoomsPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
@@ -52,11 +54,12 @@ public class RoomsPanel extends UserPanel {
 	private List<Client> clientsInRoom = null;
 	private final List<Room> rooms;
 	private Long roomId = 0L;
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private RoomDao roomDao;
 
 	public RoomsPanel(String id, List<Room> rooms) {

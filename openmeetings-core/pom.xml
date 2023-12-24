@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.openmeetings</groupId>
 		<artifactId>openmeetings-parent</artifactId>
-		<version>7.2.0-SNAPSHOT</version>
+		<version>8.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>openmeetings-core</artifactId>
@@ -31,7 +31,6 @@
 	<description>Module for OpenMeetings core classes and services</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<autoModuleName>apache.openmeetings.core</autoModuleName>
 	</properties>
 	<build>
 		<plugins>
@@ -52,24 +51,16 @@
 						<goals>
 							<goal>javadoc-no-fork</goal>
 						</goals>
-						<phase>generate-resources</phase>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test-jar</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-db</artifactId>
@@ -91,10 +82,6 @@
 			<artifactId>wicket-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-ioc</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.directory.api</groupId>
 			<artifactId>api-all</artifactId>
 		</dependency>
@@ -114,27 +101,10 @@
 			<groupId>javax.sip</groupId>
 			<artifactId>jain-sip-ri</artifactId>
 		</dependency>
-		<!-- FIXME TODO -->
-		<dependency>
-			<groupId>com.sun.activation</groupId>
-			<artifactId>jakarta.activation</artifactId> <!-- required for jakarta.mail -->
-			<version>2.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>javax.annotation-api</artifactId>
-		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-params</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-util</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

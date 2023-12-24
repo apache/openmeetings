@@ -32,17 +32,19 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
+import jakarta.inject.Inject;
+
 public class GroupChoiceProvider extends ChoiceProvider<Group> {
 	private static final long serialVersionUID = 1L;
 	public static final long PAGE_SIZE = 5;
-	@SpringBean
+
+	@Inject
 	private GroupDao groupDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public GroupChoiceProvider() {

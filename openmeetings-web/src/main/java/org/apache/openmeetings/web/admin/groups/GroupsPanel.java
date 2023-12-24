@@ -19,9 +19,9 @@
 package org.apache.openmeetings.web.admin.groups;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
-import static org.apache.openmeetings.web.app.WebSession.getRights;
 
 import java.util.Iterator;
 

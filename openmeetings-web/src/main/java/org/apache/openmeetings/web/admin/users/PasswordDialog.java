@@ -28,13 +28,13 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 public class PasswordDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -42,7 +42,8 @@ public class PasswordDialog extends Modal<String> {
 	private final Form<String> form = new Form<>("form");
 	private final PasswordTextField pass = new PasswordTextField("password", Model.of(""));
 	private SerializableConsumer<AjaxRequestTarget> action = null;
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
 
 	public PasswordDialog(String id) {

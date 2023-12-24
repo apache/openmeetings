@@ -30,13 +30,14 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
+import jakarta.inject.Inject;
 
 public class ChangePasswordDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -61,7 +62,8 @@ public class ChangePasswordDialog extends Modal<String> {
 		}
 	};
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
 
 	public ChangePasswordDialog(String id) {

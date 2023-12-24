@@ -23,8 +23,9 @@ import static org.apache.openmeetings.db.util.DaoHelper.single;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -38,7 +39,7 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,11 +49,12 @@ public class BaseFileItemDao implements IDataProviderDao<BaseFileItem> {
 	private static final Logger log = LoggerFactory.getLogger(BaseFileItemDao.class);
 	@PersistenceContext
 	protected EntityManager em;
-	@Autowired
+
+	@Inject
 	private RoomDao roomDao;
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
 
 	public <T extends BaseFileItem> T get(String hash, Class<T> clazz) {

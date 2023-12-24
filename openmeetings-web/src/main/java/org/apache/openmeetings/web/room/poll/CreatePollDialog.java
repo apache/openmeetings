@@ -40,23 +40,25 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 public class CreatePollDialog extends Modal<RoomPoll> {
 	private static final long serialVersionUID = 1L;
 	private final Long roomId;
 	private PollForm form;
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
-	@SpringBean
+
+	@Inject
 	private RoomDao roomDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private PollDao pollDao;
 
 	public CreatePollDialog(String id, Long roomId) {

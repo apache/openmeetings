@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.IApplication;
@@ -76,7 +76,7 @@ public class KRoom {
 	private JSONObject recordingUser = new JSONObject();
 	private JSONObject sharingUser = new JSONObject();
 
-	public KRoom(Room r) {
+	KRoom(Room r) {
 		this.room = r;
 		Injector.get().inject(this);
 		log.info("ROOM {} has been created", room.getId());

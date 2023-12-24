@@ -24,21 +24,27 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
-import io.prometheus.client.Histogram;
+import io.prometheus.metrics.core.metrics.Histogram;
+import io.prometheus.metrics.model.snapshots.Unit;
 
 @Aspect
 @Component
 public class PrometheusAspect {
+	private static final Histogram histogram = Histogram.builder()
+			.help("OpenMeetings Application Metrics")
+			.name("org_openmeetings_metrics")
+			.labelNames("class", "method", "type", "message")
+			.register();
 
 	private Object logExecutionTime(ProceedingJoinPoint joinPoint, String logType) throws Throwable {
 		String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
 		String methodName = joinPoint.getSignature().getName();
-		Histogram.Timer timer = PrometheusUtil.getHistogram() //
-				.labels(className, methodName, logType, "default").startTimer();
+		long start = System.nanoTime();
 		try {
 			return joinPoint.proceed();
 		} finally {
-			timer.observeDuration();
+			histogram.labelValues(className, methodName, logType, "default")
+					.observe(Unit.nanosToSeconds(System.nanoTime() - start));
 		}
 	}
 

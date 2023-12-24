@@ -21,11 +21,11 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_VALUE;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_VALUE;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -76,11 +76,12 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import jakarta.inject.Inject;
 
 public class MessagesContactsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
@@ -125,13 +126,14 @@ public class MessagesContactsPanel extends UserBasePanel {
 		, List.of(notMoveFolder)
 		, new LambdaChoiceRenderer<>(PrivateMessageFolder::getFolderName, f -> "" + f.getId()));
 	private WebMarkupContainer selectedFolder;
-	@SpringBean
+
+	@Inject
 	private PrivateMessageDao msgDao;
-	@SpringBean
+	@Inject
 	private PrivateMessageFolderDao folderDao;
-	@SpringBean
+	@Inject
 	private UserContactDao contactDao;
-	@SpringBean
+	@Inject
 	private AppointmentDao apptDao;
 
 	public MessagesContactsPanel(String id) {

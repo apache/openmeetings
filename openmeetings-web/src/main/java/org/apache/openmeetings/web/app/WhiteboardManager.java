@@ -20,8 +20,8 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.sendWbAll;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 
 import java.util.List;
 import java.util.Map;
@@ -45,7 +45,7 @@ import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.web.room.wb.WbAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONArray;
@@ -55,6 +55,8 @@ import com.hazelcast.map.IMap;
 import com.hazelcast.map.listener.EntryAddedListener;
 import com.hazelcast.map.listener.EntryRemovedListener;
 import com.hazelcast.map.listener.EntryUpdatedListener;
+
+import jakarta.inject.Inject;
 
 /**
  * Hazelcast based Whiteboard manager
@@ -68,7 +70,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 	private final Map<Long, Whiteboards> onlineWbs = new ConcurrentHashMap<>();
 	private static final String WBS_KEY = "WBS_KEY";
 
-	@Autowired
+	@Inject
 	private Application app;
 
 	private IMap<Long, Whiteboards> map() {

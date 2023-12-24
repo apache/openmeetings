@@ -63,10 +63,10 @@
 		<section name="Tips and Gotchas">
 			<p>Eclipse ANSI colors plugin for colors in console</p>
 			<source><![CDATA[
-MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded -Dwicket.configuration=DEVELOPMENT -Dwicket.ioc.useByteBuddy=true
+MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded -Dwicket.configuration=DEVELOPMENT
 
 #Quick rebuild and run
-cd ..; mvn clean install -PallModules,quick,mysql -pl openmeetings-util,openmeetings-core; cd openmeetings-web; MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded -Dwicket.configuration=DEVELOPMENT -Dwicket.ioc.useByteBuddy=true
+cd ..; mvn clean install -PallModules,quick,mysql -pl openmeetings-util,openmeetings-core; cd openmeetings-web; MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded -Dwicket.configuration=DEVELOPMENT
 
 			]]></source>
 			<p>Run OpenMeetings with Embedded Jetty for Development purpose in JDK17</p>
@@ -77,7 +77,7 @@ export MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,s
 
 # Just run Webapp, requires other modules to be compiled separated if changed
 cd openmeetings-webapp
-mvn install -P allModules,quick,mysql jetty:run-exploded -Dwicket.configuration=DEVELOPMENT -Dwicket.ioc.useByteBuddy=true
+mvn install -P allModules,quick,mysql jetty:run-exploded -Dwicket.configuration=DEVELOPMENT
 
 # OpenMeetings logs for embedded jetty are in
 cd openmeetings-webapp

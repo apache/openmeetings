@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-import org.apache.openmeetings.AbstractWicketTesterTest;
+import org.apache.openmeetings.web.AbstractWicketTesterTest;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -36,14 +36,16 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 class TestInvitation extends AbstractWicketTesterTest {
-	@Autowired
+	@Inject
 	private InvitationDao inviteDao;
-	@Autowired
+	@Inject
 	private InvitationManager invitationManager;
-	@Autowired
+	@Inject
 	private RoomDao roomDao;
 
 	private Invitation create(Valid valid) {

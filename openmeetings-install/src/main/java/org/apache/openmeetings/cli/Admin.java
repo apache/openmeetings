@@ -105,7 +105,7 @@ public class Admin {
 	private File home;
 	private String step;
 
-	Admin() {
+	public Admin() {
 		cfg = new InstallationConfig();
 		opts = buildOptions();
 		step = "Initialization";
@@ -229,8 +229,7 @@ public class Admin {
 		return context;
 	}
 
-	//package private wrapper for testing
-	void process(String... args) throws Exception {
+	public void process(String... args) throws Exception {
 		CommandLineParser parser = new DefaultParser();
 		try {
 			cmdl = parser.parse(opts, args);

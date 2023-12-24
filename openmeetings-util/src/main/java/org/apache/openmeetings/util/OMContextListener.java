@@ -21,8 +21,8 @@ package org.apache.openmeetings.util;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.LoggerFactory;

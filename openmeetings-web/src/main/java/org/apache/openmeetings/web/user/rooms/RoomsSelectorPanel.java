@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_GROUP;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_MY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.web.app.Application;
@@ -31,13 +31,16 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
+
 
 public class RoomsSelectorPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final String PANEL_ID = "rooms";
 	private final String type;
-	@SpringBean
+
+	@Inject
 	private RoomDao roomDao;
 
 	public RoomsSelectorPanel(String id, String type) {

@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_VALUE;
 import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_GROUP;
 import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_ID;
 import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_OWNER;
 import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_ROOM;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_VALUE;
 
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.web.common.upload.UploadForm;

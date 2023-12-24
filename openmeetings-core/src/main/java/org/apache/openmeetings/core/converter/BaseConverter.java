@@ -56,7 +56,9 @@ import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.inject.Inject;
+
 
 public abstract class BaseConverter {
 	private static final Logger log = LoggerFactory.getLogger(BaseConverter.class);
@@ -66,13 +68,13 @@ public abstract class BaseConverter {
 	public static final int TIME_TO_WAIT_FOR_FRAME = 5 * MINUTE_MULTIPLIER;
 	public static final double HALF_STEP = 1. / 2;
 
-	@Autowired
+	@Inject
 	protected ConfigurationDao cfgDao;
-	@Autowired
+	@Inject
 	protected RecordingChunkDao chunkDao;
-	@Autowired
+	@Inject
 	protected FileItemLogDao logDao;
-	@Autowired
+	@Inject
 	protected RecordingDao recordingDao;
 
 	protected record Dimension(int width, int height) {}

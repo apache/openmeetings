@@ -30,18 +30,20 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.util.string.Strings;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 @Component
 public class CalendarMapper {
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private AppointmentDao appointmentDao;
-	@Autowired
+	@Inject
 	private UserMapper uMapper;
-	@Autowired
+	@Inject
 	private RoomMapper rMapper;
 
 	public Appointment get(AppointmentDTO dto, User u) {

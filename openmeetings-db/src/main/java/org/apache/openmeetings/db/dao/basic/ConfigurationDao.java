@@ -32,8 +32,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.apache.openjpa.conf.OpenJPAConfiguration;
 import org.apache.openjpa.event.RemoteCommitProvider;
@@ -55,7 +56,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,11 +85,11 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	@PersistenceContext
 	private EntityManager em;
 
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private OAuth2Dao oauthDao;
-	@Autowired
+	@Inject
 	private IApplication app;
 
 	public void updateClusterAddresses(String addresses) throws UnknownHostException {

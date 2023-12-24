@@ -28,7 +28,7 @@ import java.nio.file.Files;
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
-import org.apache.openmeetings.AbstractOmServerTest;
+import org.apache.openmeetings.web.AbstractOmServerTest;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 

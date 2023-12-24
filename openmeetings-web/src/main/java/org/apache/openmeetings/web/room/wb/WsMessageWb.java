@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
-import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
+import org.apache.openmeetings.util.NullStringer;
 
 import com.github.openjson.JSONObject;
 

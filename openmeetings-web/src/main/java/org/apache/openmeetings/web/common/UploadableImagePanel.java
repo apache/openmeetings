@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelConfirm;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
 
 import java.io.File;
 import java.nio.file.Files;

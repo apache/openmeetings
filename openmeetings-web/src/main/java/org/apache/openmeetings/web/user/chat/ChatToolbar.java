@@ -31,7 +31,8 @@ import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
@@ -48,7 +49,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.ResourceStreamResource;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 
@@ -141,9 +142,9 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 		}
 	});
 
-	@SpringBean
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private ChatDao chatDao;
 
 	/**

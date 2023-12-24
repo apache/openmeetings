@@ -43,7 +43,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONObject;
@@ -54,6 +53,8 @@ import com.googlecode.wicket.jquery.ui.interaction.draggable.IDraggableListener;
 import com.googlecode.wicket.jquery.ui.interaction.droppable.DroppableBehavior;
 import com.googlecode.wicket.jquery.ui.interaction.droppable.IDroppableListener;
 
+import jakarta.inject.Inject;
+
 public class FolderPanel extends Panel implements IDraggableListener, IDroppableListener {
 	private static final long serialVersionUID = 1L;
 	private static final String CSS_CLASS_FILE = "file ps-5 ";
@@ -62,9 +63,10 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 	private static final String PARAM_CTRL = "c";
 	private final StyleBehavior styleClass;
 	private final FileTreePanel treePanel;
-	@SpringBean
+
+	@Inject
 	private RecordingDao recDao;
-	@SpringBean
+	@Inject
 	private FileItemDao fileDao;
 
 	public FolderPanel(String id, final IModel<BaseFileItem> model, final FileTreePanel treePanel) {

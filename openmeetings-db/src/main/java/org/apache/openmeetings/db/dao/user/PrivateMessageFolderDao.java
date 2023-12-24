@@ -25,8 +25,8 @@ import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;

@@ -26,10 +26,10 @@ import org.apache.openmeetings.web.pages.auth.ResetPasswordDialog;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.TextContentModal;
+import jakarta.inject.Inject;
 
 public class ResetPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 1L;
@@ -42,7 +42,8 @@ public class ResetPage extends BaseNotInitedPage {
 			setResponsePage(Application.get().getSignInPageClass());
 		}
 	};
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
 
 	public ResetPage(PageParameters pp) {

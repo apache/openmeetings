@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.openmeetings.AbstractWicketTesterTest;
+import org.apache.openmeetings.web.AbstractWicketTesterTest;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;

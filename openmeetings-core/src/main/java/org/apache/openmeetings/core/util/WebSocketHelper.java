@@ -28,7 +28,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.ws.WsMessageAll;

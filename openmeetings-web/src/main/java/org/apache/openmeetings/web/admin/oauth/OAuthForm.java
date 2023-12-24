@@ -49,13 +49,13 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.ListModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import jakarta.inject.Inject;
 
 public class OAuthForm extends AdminBaseForm<OAuthServer> {
 	private static final long serialVersionUID = 1L;
@@ -87,7 +87,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		}
 	};
 
-	@SpringBean
+	@Inject
 	private OAuth2Dao oauthDao;
 
 	public OAuthForm(String id, WebMarkupContainer listContainer, OAuthServer server) {

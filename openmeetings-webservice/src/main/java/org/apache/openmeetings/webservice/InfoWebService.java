@@ -24,12 +24,12 @@ import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.net.URI;
 
-import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebService;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dto.basic.Health;

@@ -20,12 +20,12 @@ package org.apache.openmeetings.web.user;
 
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 import static org.apache.openmeetings.web.app.Application.getContactsLink;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isMyRoomsEnabled;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -49,12 +49,12 @@ import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.manager.IInvitationManager;
-import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmModalCloseButton;
 import org.apache.openmeetings.web.common.datetime.OmDateTimePicker;
 import org.apache.openmeetings.web.user.calendar.AppointmentDialog;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.util.CalendarWebHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
@@ -70,7 +70,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.CollectionModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
@@ -78,6 +78,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButt
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 public class MessageDialog extends Modal<PrivateMessage> {
 	private static final long serialVersionUID = 1L;
@@ -89,17 +90,18 @@ public class MessageDialog extends Modal<PrivateMessage> {
 	private final OmDateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 	private boolean isPrivate = false;
 	private final IModel<Collection<User>> modelTo = new CollectionModel<>(new ArrayList<>());
-	@SpringBean
+
+	@Inject
 	private RoomDao roomDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private AppointmentDao apptDao;
-	@SpringBean
+	@Inject
 	private PrivateMessageDao msgDao;
-	@SpringBean
+	@Inject
 	private IInvitationManager inviteManager;
-	@SpringBean
+	@Inject
 	private MailHandler handler;
 
 	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {

@@ -71,8 +71,8 @@
 					, TestOnBorrow=true
 					, Username=
 					, Password=" />
-			<property name="javax.persistence.schema-generation.database.action" value="create" />
-			<property name="javax.persistence.schema-generation.create-database-schemas" value="true" />
+			<property name="jakarta.persistence.schema-generation.database.action" value="create" />
+			<property name="jakarta.persistence.schema-generation.create-database-schemas" value="true" />
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			<property name="openjpa.DataCache" value="true" />

@@ -45,12 +45,13 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 public class VoteDialog extends Modal<RoomPollAnswer> {
 	private static final long serialVersionUID = 1L;
@@ -58,9 +59,10 @@ public class VoteDialog extends Modal<RoomPollAnswer> {
 	private PollAnswerForm form;
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final Label userLbl = new Label("user", Model.of(""));
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private PollDao pollDao;
 
 	public VoteDialog(String id) {

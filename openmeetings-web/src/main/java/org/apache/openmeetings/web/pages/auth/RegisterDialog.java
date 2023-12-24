@@ -47,7 +47,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidatable;
 import org.slf4j.Logger;
@@ -57,6 +57,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.spinner.SpinnerAjaxButton;
+import jakarta.inject.Inject;
 
 public class RegisterDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -75,9 +76,9 @@ public class RegisterDialog extends Modal<String> {
 	private Long lang;
 	private boolean wasRegistered = false;
 
-	@SpringBean
+	@Inject
 	private IUserManager userManager;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public RegisterDialog(String id) {

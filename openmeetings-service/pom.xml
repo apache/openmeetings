@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.openmeetings</groupId>
 		<artifactId>openmeetings-parent</artifactId>
-		<version>7.2.0-SNAPSHOT</version>
+		<version>8.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>openmeetings-service</artifactId>
@@ -31,7 +31,6 @@
 	<description>Module for OpenMeetings schedulers, mail templates and managers.</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<autoModuleName>apache.openmeetings.service</autoModuleName>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -54,5 +53,9 @@
 			<groupId>com.github.caldav4j</groupId>
 			<artifactId>caldav4j</artifactId>
 		</dependency>
+		<!--dependency> FIXME TODO have to be placed back as soon as `jackrabbit.webdav` will be jackarta compatible
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-webdav</artifactId>
+		</dependency-->
 	</dependencies>
 </project>

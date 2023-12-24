@@ -35,9 +35,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import jakarta.inject.Inject;
 
 public class ConvertingErrorsDialog extends Modal<BaseFileItem> {
 	private static final long serialVersionUID = 1L;
@@ -61,7 +61,7 @@ public class ConvertingErrorsDialog extends Modal<BaseFileItem> {
 	};
 	private Component headerLabel;
 
-	@SpringBean
+	@Inject
 	private FileItemLogDao fileLogDao;
 
 	public ConvertingErrorsDialog(String id, IModel<BaseFileItem> model) {

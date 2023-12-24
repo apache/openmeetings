@@ -25,7 +25,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.TypedQuery;
+import jakarta.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;

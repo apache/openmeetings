@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.openmeetings</groupId>
 		<artifactId>openmeetings-parent</artifactId>
-		<version>7.2.0-SNAPSHOT</version>
+		<version>8.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>openmeetings-web</artifactId>
@@ -32,7 +32,6 @@
 	<properties>
 		<old-backups.dir>${project.build.directory}/test-data</old-backups.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<autoModuleName>apache.openmeetings.web</autoModuleName>
 	</properties>
 	<profiles>
 		<profile>
@@ -46,10 +45,6 @@
 				<dependency>
 					<groupId>com.mysql</groupId>
 					<artifactId>mysql-connector-j</artifactId>
-				</dependency>
-				<dependency>
-					<groupId>net.bytebuddy</groupId>
-					<artifactId>byte-buddy</artifactId>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -480,18 +475,16 @@
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-util</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-tester</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-native-websocket-tester</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-core</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
+			<artifactId>openmeetings-tests</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
@@ -499,8 +492,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.websocket</groupId>
-			<artifactId>javax.websocket-api</artifactId>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.websocket</groupId>
+			<artifactId>jakarta.websocket-client-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
@@ -521,6 +518,10 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-params</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.prometheus</groupId>
+			<artifactId>prometheus-metrics-exporter-servlet-jakarta</artifactId>
 		</dependency>
 	</dependencies>
 </project>

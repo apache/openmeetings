@@ -23,8 +23,8 @@ import static java.util.UUID.randomUUID;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.slf4j.Logger;

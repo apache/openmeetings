@@ -20,11 +20,11 @@ package org.apache.openmeetings.web.user.chat;
 
 import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.core.util.ChatWebSocketHelper.ID_ROOM_PREFIX;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isChatSendOnEnter;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isChatSendOnEnter;
 import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
@@ -55,12 +55,14 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.ui.settings.JQueryUILibrarySettings;
+
+import jakarta.inject.Inject;
 
 public class Chat extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -103,13 +105,13 @@ public class Chat extends Panel {
 		}
 	};
 
-	@SpringBean
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private ConfigurationDao cfgDao;
-	@SpringBean
+	@Inject
 	private ChatDao chatDao;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public Chat(String id) {

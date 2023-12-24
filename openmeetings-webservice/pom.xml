@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.openmeetings</groupId>
 		<artifactId>openmeetings-parent</artifactId>
-		<version>7.2.0-SNAPSHOT</version>
+		<version>8.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>openmeetings-webservice</artifactId>
@@ -31,7 +31,6 @@
 	<description>Module for OpenMeetings CXF based web services.</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<autoModuleName>apache.openmeetings.webservice</autoModuleName>
 	</properties>
 	<build>
 		<plugins>
@@ -52,7 +51,6 @@
 						<goals>
 							<goal>javadoc-no-fork</goal>
 						</goals>
-						<phase>generate-resources</phase>
 					</execution>
 				</executions>
 			</plugin>
@@ -139,7 +137,7 @@
 						<servers>
 							<server>
 								<description>Your local OpenMeetings Server</description>
-								<url>http://localhost:5080/openmeetings/services</url>
+								<url>https://localhost:5443/openmeetings/services</url>
 							</server>
 							<server>
 								<description>Om Demo Server</description>
@@ -147,7 +145,8 @@
 							</server>
 						</servers>
 					</swaggerConfig>
-					<skip>${site.skip}</skip>
+					<!--skip>${site.skip}</skip-->
+					<skip>true</skip> <!-- Getting weird "Cannot invoke "java.util.Map.size()" because "map" is null" Error !!!!!! -->
 				</configuration>
 				<executions>
 					<execution>
@@ -195,13 +194,6 @@
 		<dependency>
 			<groupId>io.swagger.core.v3</groupId>
 			<artifactId>swagger-annotations</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-util</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

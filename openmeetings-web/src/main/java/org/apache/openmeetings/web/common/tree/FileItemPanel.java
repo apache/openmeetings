@@ -28,12 +28,14 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
 
 public class FileItemPanel extends FolderPanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer errors = new WebMarkupContainer("errors");
-	@SpringBean
+
+	@Inject
 	private FileItemLogDao fileLogDao;
 
 	public FileItemPanel(String id, final IModel<BaseFileItem> model, final FileTreePanel fileTreePanel) {

@@ -35,11 +35,11 @@ import org.apache.openmeetings.core.converter.RecordingConverter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.ScreenStreamDesc;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
+import org.apache.openmeetings.db.entity.basic.Client.StreamType;
+import org.apache.openmeetings.db.entity.basic.ScreenStreamDesc;
 import org.apache.openmeetings.db.entity.basic.StreamDesc;
 import org.apache.openmeetings.db.entity.basic.WebcamStreamDesc;
-import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -50,33 +50,37 @@ import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.logging.TimedApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONObject;
 
-@Component
-public class StreamProcessor implements IStreamProcessor {
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
+
+@Singleton
+@Named
+public class StreamProcessor {
 	private static final Logger log = LoggerFactory.getLogger(StreamProcessor.class);
 	/**
-	 * Holds a reference to the current streams available on the server instance
+	 * Holds references to the current streams available on the server instance
 	 */
 	private final Map<String, KStream> streamByUid = new ConcurrentHashMap<>();
 
-	@Autowired
+	@Inject
 	private IClientManager cm;
-	@Autowired
+	@Inject
 	private RecordingDao recDao;
-	@Autowired
+	@Inject
 	private KurentoHandler kHandler;
-	@Autowired
+	@Inject
 	private TaskExecutor taskExecutor;
-	@Autowired
+	@Inject
 	private RecordingConverter recordingConverter;
-	@Autowired
+	@Inject
 	private InterviewConverter interviewConverter;
-	@Autowired
+	@Inject
 	private StreamProcessorActions streamProcessorActions;
 
 	@TimedApplication
@@ -463,7 +467,6 @@ public class StreamProcessor implements IStreamProcessor {
 		return recDao;
 	}
 
-	@Override
 	public void release(AbstractStream stream, boolean releaseStream) {
 		final String uid = stream.getUid();
 		if (releaseStream) {
@@ -478,11 +481,12 @@ public class StreamProcessor implements IStreamProcessor {
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.RIGHT_UPDATED, c.getUid()));
 			}
 		}
+		log.trace("StreamProcessor::release uid: {}", uid);
 		streamByUid.remove(uid);
 	}
 
-	@Override
 	public void destroy() {
+		log.trace("StreamProcessor::destroy !!!!");
 		for (Map.Entry<String, KStream> e : streamByUid.entrySet()) {
 			release(e.getValue(), true);
 		}

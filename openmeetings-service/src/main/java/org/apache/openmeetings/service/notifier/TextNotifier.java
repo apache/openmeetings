@@ -20,7 +20,7 @@ package org.apache.openmeetings.service.notifier;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REMINDER_MESSAGE;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.apache.openmeetings.core.notifier.INotifier;
 import org.apache.openmeetings.core.notifier.NotifierService;
@@ -32,18 +32,20 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 @Component
 public class TextNotifier implements INotifier {
 	private static final Logger log = LoggerFactory.getLogger(TextNotifier.class);
-	@Autowired
+	@Inject
 	private NotifierService notifier;
-	@Autowired
+	@Inject
 	protected TaskExecutor taskExecutor;
-	@Autowired
+	@Inject
 	protected ConfigurationDao cfgDao;
 
 	@PostConstruct

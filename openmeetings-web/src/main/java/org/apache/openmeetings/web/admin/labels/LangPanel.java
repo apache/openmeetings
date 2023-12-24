@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.admin.labels;
 
 import static java.time.Duration.ZERO;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.common.confirmation.ConfirmationHelper.newOkCancelDangerConfirm;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.wicket.request.resource.ContentDisposition.ATTACHMENT;
 
 import java.io.IOException;

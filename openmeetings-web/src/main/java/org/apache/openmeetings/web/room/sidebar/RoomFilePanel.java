@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
+import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -32,14 +32,17 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
+
 
 public class RoomFilePanel extends FileTreePanel {
 	private static final long serialVersionUID = 1L;
 	private final RoomPanel room;
-	@SpringBean
+
+	@Inject
 	private FileItemDao fileDao;
-	@SpringBean
+	@Inject
 	private RecordingDao recDao;
 
 	public RoomFilePanel(String id, RoomPanel room, NameDialog addFolder) {

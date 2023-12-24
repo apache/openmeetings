@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.app;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.apache.openmeetings.RegularTest;
+import org.apache.openmeetings.web.RegularTest;
 import org.apache.wicket.request.Url;
 import org.junit.jupiter.api.Test;
 

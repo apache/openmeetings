@@ -148,8 +148,10 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 @Component
 public class ImportInitvalues {
@@ -168,17 +170,17 @@ public class ImportInitvalues {
 	private static final String FNAME_PARAM = "first_name";
 	private static final String LNAME_PARAM = "last_name";
 
-	@Autowired
+	@Inject
 	private ConfigurationDao cfgDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private SipManager sipDao;
-	@Autowired
+	@Inject
 	private OAuth2Dao oauthDao;
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
-	@Autowired
+	@Inject
 	private RoomDao roomDao;
 
 	private int progress = 0;

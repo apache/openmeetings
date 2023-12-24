@@ -31,14 +31,16 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.StoredFile;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
 
 public class UploadableProfileImagePanel extends UploadableImagePanel {
 	private static final long serialVersionUID = 1L;
 	private Long userId;
-	@SpringBean
+
+	@Inject
 	private ImageConverter converter;
-	@SpringBean
+	@Inject
 	private UserDao userDao;
 
 	public UploadableProfileImagePanel(String id, final Long userId) {

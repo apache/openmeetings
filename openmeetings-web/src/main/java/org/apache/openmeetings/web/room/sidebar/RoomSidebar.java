@@ -37,12 +37,14 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
+
+import jakarta.inject.Inject;
 
 public class RoomSidebar extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -60,7 +62,7 @@ public class RoomSidebar extends Panel {
 	private VideoSettings settings = new VideoSettings("settings");
 	private ActivitiesPanel activities;
 
-	@SpringBean
+	@Inject
 	private ClientManager cm;
 
 	public RoomSidebar(String id, final RoomPanel room) {

@@ -23,9 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.Cookie;
 
-import org.apache.openmeetings.AbstractWicketTesterTest;
+import org.apache.openmeetings.web.AbstractWicketTesterTest;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.jupiter.api.Test;
 

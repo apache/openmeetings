@@ -167,8 +167,9 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
@@ -236,7 +237,7 @@ import org.apache.openmeetings.util.crypt.SCryptImplementation;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -322,41 +323,41 @@ public class BackupImport {
 			);
 	private static final Pattern UUID_PATTERN = Pattern.compile("^[\\da-f]{8}(?:-[\\da-f]{4}){3}-[\\da-f]{12}$");
 
-	@Autowired
+	@Inject
 	private AppointmentDao appointmentDao;
-	@Autowired
+	@Inject
 	private OmCalendarDao calendarDao;
-	@Autowired
+	@Inject
 	private RoomDao roomDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private RecordingDao recordingDao;
-	@Autowired
+	@Inject
 	private PrivateMessageFolderDao privateMessageFolderDao;
-	@Autowired
+	@Inject
 	private PrivateMessageDao privateMessageDao;
-	@Autowired
+	@Inject
 	private MeetingMemberDao meetingMemberDao;
-	@Autowired
+	@Inject
 	private LdapConfigDao ldapConfigDao;
-	@Autowired
+	@Inject
 	private FileItemDao fileItemDao;
-	@Autowired
+	@Inject
 	private UserContactDao userContactDao;
-	@Autowired
+	@Inject
 	private PollDao pollDao;
-	@Autowired
+	@Inject
 	private ConfigurationDao cfgDao;
-	@Autowired
+	@Inject
 	private ChatDao chatDao;
-	@Autowired
+	@Inject
 	private OAuth2Dao auth2Dao;
-	@Autowired
+	@Inject
 	private GroupDao groupDao;
-	@Autowired
+	@Inject
 	private ExtraMenuDao menuDao;
-	@Autowired
+	@Inject
 	private DocumentConverter docConverter;
 
 	private final Map<Long, Long> ldapMap = new HashMap<>();
@@ -506,7 +507,7 @@ public class BackupImport {
 		}
 	}
 
-	void cleanup() {
+	public void cleanup() {
 		ldapMap.clear();
 		oauthMap.clear();
 		userMap.clear();
@@ -523,7 +524,8 @@ public class BackupImport {
 		messageFolderMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
 	}
 
-	static BackupVersion getVersion(File base) {
+	// public for testing
+	public static BackupVersion getVersion(File base) {
 		List<BackupVersion> list = new ArrayList<>(1);
 		readList(base, "version.xml", VERSION_LIST_NODE, VERSION_NODE, BackupVersion.class, list::add, true);
 		return list.isEmpty() ? new BackupVersion() : list.get(0);
@@ -532,7 +534,8 @@ public class BackupImport {
 	/*
 	 * ##################### Import Configs
 	 */
-	void importConfigs(File base) throws Exception {
+	// public for testing
+	public void importConfigs(File base) throws Exception {
 		final Map<Integer, String> keyMap = new HashMap<>();
 		Arrays.stream(KeyEvent.class.getDeclaredFields())
 				.filter(fld -> fld.getName().startsWith("VK_"))
@@ -595,7 +598,8 @@ public class BackupImport {
 	/*
 	 * ##################### Import Groups
 	 */
-	void importGroups(File base) {
+	// public for testing
+	public void importGroups(File base) {
 		log.info("Configs import complete, starting group import");
 		readList(base, "organizations.xml", GROUP_LIST_NODE, GROUP_NODE, Group.class, g -> {
 			Long oldId = g.getId();
@@ -608,7 +612,8 @@ public class BackupImport {
 	/*
 	 * ##################### Import LDAP Configs
 	 */
-	Long importLdap(File base) {
+	// public for testing
+	public Long importLdap(File base) {
 		log.info("Groups import complete, starting LDAP config import");
 		Long[] defaultLdapId = {cfgDao.getLong(CONFIG_DEFAULT_LDAP_ID, null)};
 		readList(base, "ldapconfigs.xml", "ldapconfigs", "ldapconfig", LdapConfig.class, c -> {
@@ -631,7 +636,8 @@ public class BackupImport {
 	/*
 	 * ##################### OAuth2 servers
 	 */
-	void importOauth(File base) {
+	// public for testing
+	public void importOauth(File base) {
 		log.info("Ldap config import complete, starting OAuth2 server import");
 		readList(base, "oauth2servers.xml", OAUTH_LIST_NODE, OAUTH_NODE, OAuthServer.class
 				, s -> {
@@ -676,7 +682,8 @@ public class BackupImport {
 	/*
 	 * ##################### Import Users
 	 */
-	void importUsers(File base) throws Exception {
+	// public for testing
+	public void importUsers(File base) throws Exception {
 		log.info("OAuth2 servers import complete, starting user import");
 		String jNameTimeZone = getDefaultTimezone();
 		//add existent emails from database
@@ -740,7 +747,8 @@ public class BackupImport {
 	/*
 	 * ##################### Import Rooms
 	 */
-	void importRooms(File base) throws Exception {
+	// public for testing
+	public void importRooms(File base) throws Exception {
 		log.info("Users import complete, starting room import");
 		Class<Room> eClazz = Room.class;
 		JAXBContext jc = JAXBContext.newInstance(eClazz);
@@ -775,7 +783,8 @@ public class BackupImport {
 	/*
 	 * ##################### Import Room Groups
 	 */
-	void importRoomGroups(File base) throws Exception {
+	// public for testing
+	public void importRoomGroups(File base) throws Exception {
 		log.info("Room import complete, starting room groups import");
 		Class<RoomGroup> eClazz = RoomGroup.class;
 		JAXBContext jc = JAXBContext.newInstance(eClazz);
@@ -804,7 +813,8 @@ public class BackupImport {
 	/*
 	 * ##################### Import Chat messages
 	 */
-	void importChat(File base) throws Exception {
+	// public for testing
+	public void importChat(File base) throws Exception {
 		log.info("Room groups import complete, starting chat messages import");
 		Class<ChatMessage> eClazz = ChatMessage.class;
 		JAXBContext jc = JAXBContext.newInstance(eClazz);
@@ -827,7 +837,8 @@ public class BackupImport {
 	/*
 	 * ##################### Import Calendars
 	 */
-	void importCalendars(File base) throws Exception {
+	// public for testing
+	public void importCalendars(File base) throws Exception {
 		log.info("Chat messages import complete, starting calendar import");
 		Class<OmCalendar> eClazz = OmCalendar.class;
 		JAXBContext jc = JAXBContext.newInstance(eClazz);
@@ -845,7 +856,8 @@ public class BackupImport {
 	/*
 	 * ##################### Import Appointments
 	 */
-	void importAppointments(File base) throws Exception {
+	// public for testing
+	public void importAppointments(File base) throws Exception {
 		log.info("Calendar import complete, starting appointement import");
 		Class<Appointment> eClazz = Appointment.class;
 		JAXBContext jc = JAXBContext.newInstance(eClazz);
@@ -880,7 +892,8 @@ public class BackupImport {
 	 *
 	 * Reminder Invitations will be NOT send!
 	 */
-	void importMeetingMembers(File base) throws Exception {
+	// public for testing
+	public void importMeetingMembers(File base) throws Exception {
 		log.info("Appointement import complete, starting meeting members import");
 		Class<MeetingMember> eClazz = MeetingMember.class;
 		JAXBContext jc = JAXBContext.newInstance(eClazz);
@@ -970,10 +983,12 @@ public class BackupImport {
 		remain.entrySet().forEach(e -> log.warn("Doungling file/recording: {}", e.getValue()));
 		tree.process(f -> isInvalidFile(f, folders), save);
 	}
+
 	/*
 	 * ##################### Import Recordings
 	 */
-	void importRecordings(File base) {
+	// public for testing
+	public void importRecordings(File base) {
 		log.info("Meeting members import complete, starting recordings server import");
 		final Map<Long, Long> folders = new HashMap<>();
 		saveTree(base, "flvRecordings.xml", RECORDING_LIST_NODE, RECORDING_NODE, Recording.class, folders, r -> {
@@ -1016,7 +1031,8 @@ public class BackupImport {
 	/*
 	 * ##################### Import Private Message Folders
 	 */
-	void importPrivateMsgFolders(File base) {
+	// public for testing
+	public void importPrivateMsgFolders(File base) {
 		log.info("Recording import complete, starting private message folder import");
 		readList(base, "privateMessageFolder.xml", MSG_FOLDER_LIST_NODE, MSG_FOLDER_NODE, PrivateMessageFolder.class, p -> {
 			Long folderId = p.getId();
@@ -1161,7 +1177,8 @@ public class BackupImport {
 		}, true);
 	}
 
-	void importExtraMenus(File base) throws Exception {
+	// public for testing
+	public void importExtraMenus(File base) throws Exception {
 		log.info("Room files complete, starting extra menus import");
 		Class<ExtraMenu> eClazz = ExtraMenu.class;
 		JAXBContext jc = JAXBContext.newInstance(eClazz);

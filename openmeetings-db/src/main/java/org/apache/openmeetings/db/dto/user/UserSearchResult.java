@@ -21,7 +21,7 @@ package org.apache.openmeetings.db.dto.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.user.User;

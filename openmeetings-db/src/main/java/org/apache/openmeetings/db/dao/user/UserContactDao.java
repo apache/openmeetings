@@ -25,14 +25,15 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +44,8 @@ public class UserContactDao {
 	private static final String PARAM_OWNERID = "ownerId";
 	@PersistenceContext
 	private EntityManager em;
-	@Autowired
+
+	@Inject
 	private UserDao userDao;
 
 	public UserContact add(Long userId, Long ownerId, boolean pending) {

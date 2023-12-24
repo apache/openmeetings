@@ -19,11 +19,11 @@
 package org.apache.openmeetings.webservice;
 
 import static java.util.UUID.randomUUID;
-import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
-import static org.apache.openmeetings.AbstractOmServerTest.adminUsername;
-import static org.apache.openmeetings.AbstractOmServerTest.createPass;
-import static org.apache.openmeetings.AbstractOmServerTest.rnd;
-import static org.apache.openmeetings.AbstractOmServerTest.userpass;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
+import static org.apache.openmeetings.web.AbstractOmServerTest.adminUsername;
+import static org.apache.openmeetings.web.AbstractOmServerTest.createPass;
+import static org.apache.openmeetings.web.AbstractOmServerTest.rnd;
+import static org.apache.openmeetings.web.AbstractOmServerTest.userpass;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -35,8 +35,8 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Form;
+import jakarta.ws.rs.core.Response;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
@@ -46,8 +46,8 @@ import org.apache.openmeetings.db.dto.user.ExternalUserDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.junit.jupiter.api.Test;

@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 
-import org.apache.openmeetings.AbstractOmServerTest;
+import org.apache.openmeetings.web.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.junit.jupiter.api.Test;
 

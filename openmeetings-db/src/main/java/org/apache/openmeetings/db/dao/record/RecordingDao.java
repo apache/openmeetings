@@ -28,7 +28,8 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.TypedQuery;
+import jakarta.inject.Inject;
+import jakarta.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.file.BaseFileItemDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -39,7 +40,7 @@ import org.apache.openmeetings.db.entity.record.Recording.Status;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +53,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecordingDao extends BaseFileItemDao {
 	private static final Logger log = LoggerFactory.getLogger(RecordingDao.class);
 
-	@Autowired
+	@Inject
 	private UserDao userDao;
 
 	@Override

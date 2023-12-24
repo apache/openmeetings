@@ -44,14 +44,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
@@ -598,7 +598,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	/**
 	 * login logic
 	 *
-	 * @param userOrEmail - login or email of the user being tested
+	 * @param _userOrEmail - login or email of the user being tested
 	 * @param userpass - password of the user being tested
 	 * @return User object in case of successful login
 	 * @throws OmException in case of any issue

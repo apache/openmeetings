@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.service.calendar.caldav;
 
-import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
-import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static jakarta.servlet.http.HttpServletResponse.SC_NO_CONTENT;
+import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 
 import java.io.IOException;
 import java.net.URI;
@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PreDestroy;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -57,11 +57,13 @@ import org.apache.openmeetings.service.calendar.caldav.handler.WebDAVSyncHandler
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
 
 import com.github.caldav4j.CalDAVConstants;
+
+import jakarta.inject.Inject;
 
 /**
  * Class which does syncing and provides respective API's required for performing CalDAV Operations.
@@ -78,11 +80,11 @@ public class AppointmentManager {
 
 	private PoolingHttpClientConnectionManager connmanager = null;
 
-	@Autowired
+	@Inject
 	private OmCalendarDao calendarDao;
-	@Autowired
+	@Inject
 	private AppointmentDao appointmentDao;
-	@Autowired
+	@Inject
 	private IcalUtils utils;
 
 	/**

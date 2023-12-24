@@ -30,16 +30,19 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import jakarta.inject.Inject;
+
 
 public class UserProfilePanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer address = new WebMarkupContainer("address");
 	private final Label addressDenied = new Label("addressDenied", "");
 	private final WebMarkupContainer infoPanel = new WebMarkupContainer("info-panel");
-	@SpringBean
+
+	@Inject
 	private UserDao userDao;
-	@SpringBean
+	@Inject
 	private UserContactDao contactDao;
 
 	public UserProfilePanel(String id, long userId) {

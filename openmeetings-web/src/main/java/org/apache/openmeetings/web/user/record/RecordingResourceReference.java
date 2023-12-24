@@ -32,16 +32,19 @@ import org.apache.openmeetings.web.util.FileItemResourceReference;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.apache.wicket.util.string.StringValue;
+
+import jakarta.inject.Inject;
 
 public abstract class RecordingResourceReference extends FileItemResourceReference<Recording> {
 	private static final long serialVersionUID = 1L;
-	@SpringBean
+
+	@Inject
 	private RecordingDao recDao;
-	@SpringBean
+	@Inject
 	private ClientManager cm;
-	@SpringBean
+	@Inject
 	private GroupUserDao groupUserDao;
 
 	protected RecordingResourceReference(String name) {
