@@ -32,7 +32,7 @@
 	<description>Parent project for all OpenMeetings Maven modules. Required to hold general settings</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.outputTimestamp>2023-09-27T11:15:33Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2023-12-23T00:00:00Z</project.build.outputTimestamp>
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
 		<om.notquick.build>true</om.notquick.build>
@@ -1796,9 +1796,6 @@
 		</profile>
 		<profile>
 			<id>rc</id>
-			<properties>
-				<site.skip>true</site.skip>
-			</properties>
 			<build>
 				<plugins>
 					<plugin>
