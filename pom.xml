@@ -48,7 +48,7 @@
 		<version.maven-site-plugin>4.0.0-M9</version.maven-site-plugin>
 		<version.maven-enforcer-plugin>3.4.1</version.maven-enforcer-plugin>
 		<version.maven-source-plugin>3.3.0</version.maven-source-plugin>
-		<version.maven-compiler-plugin>3.12.0</version.maven-compiler-plugin>
+		<version.maven-compiler-plugin>3.12.1</version.maven-compiler-plugin>
 		<version.maven-project-info-reports-plugin>3.5.0</version.maven-project-info-reports-plugin>
 		<version.maven-jar-plugin>3.3.0</version.maven-jar-plugin>
 		<version.maven-assembly-plugin>3.6.0</version.maven-assembly-plugin>
@@ -58,7 +58,7 @@
 		<version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
 		<version.maven-resources-plugin>3.3.1</version.maven-resources-plugin>
 		<version.maven-gpg-plugin>3.1.0</version.maven-gpg-plugin>
-		<version.apache-rat-plugin>0.15</version.apache-rat-plugin>
+		<version.apache-rat-plugin>0.16</version.apache-rat-plugin>
 		<version.checksum-maven-plugin>1.11</version.checksum-maven-plugin>
 
 		<maven-bundle-plugin.version>5.1.9</maven-bundle-plugin.version>
@@ -89,8 +89,8 @@
 		<wicket-bootstrap.version>7.0.1</wicket-bootstrap.version>
 		<spring.version>6.1.2</spring.version>
 		<tomcat.version>10.1.17</tomcat.version>
-		<jetty.version>11.0.18</jetty.version>
-		<ical4j.version>4.0.0-rc1</ical4j.version>
+		<jetty.version>11.0.19</jetty.version>
+		<ical4j.version>4.0.0-rc3</ical4j.version>
 		<cxf.version>4.0.3</cxf.version>
 		<io.prometheus.version>1.1.0</io.prometheus.version>
 		<aspectjtools.version>1.9.21</aspectjtools.version>
