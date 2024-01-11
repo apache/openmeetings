@@ -33,17 +33,17 @@
 			<p>Lets start by creating your custom room type class.</p>
 			<ol>
 				<li>
-					Additional room type need to be added to <tt>https://github.com/apache/openmeetings/blob/master/openmeetings-db/src/main/java/org/apache/openmeetings/db/entity/room/Room.java</tt>
-					class <tt>Type</tt> enum
+					Additional room type need to be added to <code>https://github.com/apache/openmeetings/blob/master/openmeetings-db/src/main/java/org/apache/openmeetings/db/entity/room/Room.java</code>
+					class <code>Type</code> enum
 				</li>
 				<li>
 					<strong>(Optional)</strong>
-					<tt>https://github.com/apache/openmeetings/blob/master/openmeetings-web/src/main/java/org/apache/openmeetings/web/room/RoomPanel.java</tt>
+					<code>https://github.com/apache/openmeetings/blob/master/openmeetings-web/src/main/java/org/apache/openmeetings/web/room/RoomPanel.java</code>
 					java class need to be extended and customized
 				</li>
 				<li>
 					<strong>(Alternatively)</strong> room sub-components can be extended and customized as it currently done for
-					<tt>https://github.com/apache/openmeetings/blob/master/openmeetings-web/src/main/java/org/apache/openmeetings/web/room/wb/InterviewWbPanel.java</tt>
+					<code>https://github.com/apache/openmeetings/blob/master/openmeetings-web/src/main/java/org/apache/openmeetings/web/room/wb/InterviewWbPanel.java</code>
 				</li>
 			</ol>
 			<p>
@@ -51,7 +51,7 @@
 				i.e. each room type can be customized by specifying CSS rules for this room type only. to do it:
 				<ul>
 					<li>
-						create CSS rule starting <tt>.room-block .container.custom</tt> where <tt>custom</tt> is the room type<br/>
+						create CSS rule starting <code>.room-block .container.custom</code> where <code>custom</code> is the room type<br/>
 						for ex.
 						<source>
 <![CDATA[
@@ -60,7 +60,7 @@
 }
 ]]>
 						</source>
-						Will set <tt>background-color</tt> for room menu in all rooms of type <tt>presentation</tt>
+						Will set <code>background-color</code> for room menu in all rooms of type <code>presentation</code>
 					</li>
 					<li>continue styling :)))</li>
 				</ul>

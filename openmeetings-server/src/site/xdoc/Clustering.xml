@@ -47,17 +47,17 @@
 				<ol>
 					<li>Check your network interface supports multicast by running the following
 						command in a terminal window: <source>ifconfig -a</source>
-						When you see <tt>MULTICAST</tt> against your network interface, it means your
+						When you see <code>MULTICAST</code> against your network interface, it means your
 						kernel is compiled with Multicast option and your network interface supports it.
 					</li>
 					<li>Check if multicast routing is configured:
 						<source>netstat -nr</source>
-						If you don’t see an IP in the range of <tt>224.0.0.0 – 239.255.255.255</tt> in the first table,
+						If you don’t see an IP in the range of <code>224.0.0.0 – 239.255.255.255</code> in the first table,
 						it means you need to add your desired mutlicast address to your routes table.
 					</li>
 					<li>To add the multicast address:
 						<source>sudo route add -net 224.0.0.0 netmask 240.0.0.0 dev eth0</source>
-						NOTE: ensure <tt>eth0</tt> corresponds to your network interface name<br/>
+						NOTE: ensure <code>eth0</code> corresponds to your network interface name<br/>
 						Make sure you run this command on all servers you want to be multicast enabled.
 					</li>
 					<li>Using netstat check if the multicast IP is visible in your route table (see step 2.)</li>
@@ -79,7 +79,7 @@
 				</div>
 				<ul>
 					<li>Add users who can connect to the database remotely</li>
-					<li>Update <tt>/opt/om/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</tt>
+					<li>Update <code>/opt/om/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</code>
 						set correct server address, login and password. Also uncomment following line:
 						<source><![CDATA[<property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=127.0.0.1)" />]]></source>
 					</li>
@@ -92,7 +92,7 @@
 					<li>
 						To ease upgrade process set OM data dir to some external folder: for ex. /opt/omdata
 					</li>
-					<li>Install NFS to the data server. In the file <tt>/etc/exports</tt> add the following lines:
+					<li>Install NFS to the data server. In the file <code>/etc/exports</code> add the following lines:
 						<source>
 /opt/omdata 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
 						</source>
@@ -100,7 +100,7 @@
 						folders.
 					</li>
 					<li>
-						Install NFS common tools to other nodes. In the file <tt>/etc/fstab</tt> do the following:
+						Install NFS common tools to other nodes. In the file <code>/etc/fstab</code> do the following:
 						<source>
 10.1.1.1:/opt/omdata /opt/omdata nfs timeo=50,hard,intr
 						</source>
@@ -112,10 +112,10 @@
 			<subsection name="OM nodes configuration">
 				<ol>
 					<li>
-						<p>In the file <tt>/opt/om/webapps/openmeetings/WEB-INF/classes/hazelcast.xml</tt>:</p>
+						<p>In the file <code>/opt/om/webapps/openmeetings/WEB-INF/classes/hazelcast.xml</code>:</p>
 						<ul>
-							<li>Set <tt>instance-name</tt> for each server to unique value</li>
-							<li>Set <tt>server.url</tt> for each server to full <strong>public</strong> URL of this server (please NOTE using of numeric IP address might broke HTTPS))</li>
+							<li>Set <code>instance-name</code> for each server to unique value</li>
+							<li>Set <code>server.url</code> for each server to full <strong>public</strong> URL of this server (please NOTE using of numeric IP address might broke HTTPS))</li>
 							<li>
 								Comment out/delete following blocks:
 								<source><![CDATA[
@@ -168,7 +168,7 @@
 					<li>Do the same with only two users but go to _different_ rooms. The calculation should send
 						both users to different servers, cause based on the calculation two different rooms on a cluster
 						with two nodes should go exactly one room for each node. You can now login really to node1
-						and node2 of your cluster while those users are loggedin and go to <tt>Administration &gt; Connections</tt>
+						and node2 of your cluster while those users are loggedin and go to <code>Administration &gt; Connections</code>
 						and check in the column "Server Name" where they are located. They should be on different server.
 					</li>
 				</ul>

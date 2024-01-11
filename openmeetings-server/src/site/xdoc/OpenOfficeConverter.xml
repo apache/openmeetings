@@ -40,13 +40,13 @@
 			</div>
 			<p>You should use an OpenOffice version greater 3</p>
 			<div>
-				<tt>officeHome</tt> configuration need to remain blank<br/>
+				<code>officeHome</code> configuration need to remain blank<br/>
 				In case document conversion will NOT work you need to
 				<ol>
-					<li>locate <tt>soffice.bin</tt> on your system</li>
+					<li>locate <code>soffice.bin</code> on your system</li>
 					<li>
-						set <tt>officeHome</tt> to <tt>/usr/lib/libreoffice</tt>
-						(in case soffice.bin is located in <tt>/usr/lib/libreoffice/program</tt>)
+						set <code>officeHome</code> to <code>/usr/lib/libreoffice</code>
+						(in case soffice.bin is located in <code>/usr/lib/libreoffice/program</code>)
 					</li>
 				</ol>
 			</div>

@@ -51,7 +51,7 @@
 				OpenMeetings-Webapp (make it available to the webapp-classpath) and
 				use your custom-class-name instead of
 				org.apache.openmeetings.util.crypt.SCryptImplementation during the Installation or
-				at runtime by editing the config-key <tt>crypt.class.name</tt></p>
+				at runtime by editing the config-key <code>crypt.class.name</code></p>
 		</section>
 		<section name="Configuration of Custom Crypt-Style">
 			<p>credits goto Mika for sharing his Implementation of the MD5Crypt-Style</p>

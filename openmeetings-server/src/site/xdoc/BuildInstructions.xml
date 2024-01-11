@@ -133,10 +133,10 @@ rsync -a $CURRENT_DIR/target/generated-sources/js/ $CURRENT_DIR/target/openmeeti
 				<br />
 				<source>git config --global http.proxy http://proxyuser:proxypwd@proxy.server.com:8080</source>
 				<ul>
-					<li>change <tt>proxyuser</tt> to your proxy user</li>
-					<li>change <tt>proxypwd</tt> to your proxy password</li>
-					<li>change <tt>proxy.server.com</tt> to the URL of your proxy server</li>
-					<li>change <tt>8080</tt> to the proxy port configured on your proxy server</li>
+					<li>change <code>proxyuser</code> to your proxy user</li>
+					<li>change <code>proxypwd</code> to your proxy password</li>
+					<li>change <code>proxy.server.com</code> to the URL of your proxy server</li>
+					<li>change <code>8080</code> to the proxy port configured on your proxy server</li>
 				</ul>
 			</div>
 		</section>

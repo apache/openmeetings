@@ -24,7 +24,7 @@
 			<p>When you choose the webcam you have different resolutions
 				available the user can choose from. </p>
 			<p>You can add/remove resolutions and also change the default
-				selection. In the <tt>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/room/VideoSettings.html</tt> there is a section:</p>
+				selection. In the <code>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/room/VideoSettings.html</code> there is a section:</p>
 			<source>
 <![CDATA[
 <select class="cam-resolution">

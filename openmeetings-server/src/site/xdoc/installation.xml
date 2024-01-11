@@ -247,7 +247,7 @@
 		<section name="Tips and Tricks">
 			<ul>
 				<li>
-					Use the Debug-Application: open <tt>$OM_HOME/webapps/openmeetings/WEB-INF/web.xml</tt> change
+					Use the Debug-Application: open <code>$OM_HOME/webapps/openmeetings/WEB-INF/web.xml</code> change
 					<source><![CDATA[
 <init-param>
 	<param-name>configuration</param-name>
@@ -263,7 +263,7 @@
 					then access your OM installation
 				</li>
 				<li>If you have Problems with conversion-jobs check your openmeetings log
-					output (available at <tt>$OM_HOME/logs/openmeetings.log</tt>). There will be error Messages which help you. You must
+					output (available at <code>$OM_HOME/logs/openmeetings.log</code>). There will be error Messages which help you. You must
 					install OpenOffice, ImageMagick and GhostScript to run
 					all conversion-Jobs correctly.
 				</li>

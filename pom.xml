@@ -58,7 +58,7 @@
 		<version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
 		<version.maven-resources-plugin>3.3.1</version.maven-resources-plugin>
 		<version.maven-gpg-plugin>3.1.0</version.maven-gpg-plugin>
-		<version.apache-rat-plugin>0.16</version.apache-rat-plugin>
+		<version.apache-rat-plugin>0.15</version.apache-rat-plugin>
 		<version.checksum-maven-plugin>1.11</version.checksum-maven-plugin>
 
 		<maven-bundle-plugin.version>5.1.9</maven-bundle-plugin.version>
@@ -88,7 +88,7 @@
 		<wicketstuff.version>10.0.0-M2</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.1</wicket-bootstrap.version>
 		<spring.version>6.1.2</spring.version>
-		<tomcat.version>10.1.17</tomcat.version>
+		<tomcat.version>10.1.18</tomcat.version>
 		<jetty.version>11.0.19</jetty.version>
 		<ical4j.version>4.0.0-rc3</ical4j.version>
 		<cxf.version>4.0.3</cxf.version>
@@ -1611,63 +1611,61 @@
 						<outputDirectory>${project.build.directory}</outputDirectory>
 						<excludedScopes>test,provided</excludedScopes>
 						<useMissingFile>true</useMissingFile>
+						<force>true</force>
 						<fileTemplate>${project.basedir}/src/license/license-template.ftl</fileTemplate>
 						<licenseMerges>
 							<licenseMerge>
-								Apache License Version 2.0|
 								The Apache Software License, Version 2.0|
-								Apache 2.0|
-								ASF 2.0|
-								Apache License 2.0|
-								Apache License v2.0|
-								Apache 2.0 License|
-								Apache License v2|
-								The Apache License, Version 2.0|
+								The Apache Software License, version 2.0|
+								Apache License Version 2.0|
 								Apache License, Version 2.0|
+								The Apache License, Version 2.0|
+								Apache 2.0|
+								Apache-2.0|
+								Apache 2.0 License|
+								Apache License 2.0|
+								Apache License v2|
+								Apache License v2.0|
 								Apache Software Licenses|
-								Apache License, Version 2.0 and
-    Common Development And Distribution License (CDDL) Version 1.0|
-								http://www.apache.org/licenses/LICENSE-2.0.txt
+								http://www.apache.org/licenses/LICENSE-2.0.txt|
+								Similar to Apache License but with the acknowledgment clause removed
 							</licenseMerge>
 							<licenseMerge>
-								Eclipse Public License - v 1.0|
-								MPL 2.0 or EPL 1.0
+								The BSD License|
+								BSD License|
+								BSD
 							</licenseMerge>
 							<licenseMerge>
-								Eclipse Public License - v 2.0|
-								EPL 2.0
+								The BSD 3-Clause License (BSD3)|
+								BSD 3-clause|
+								BSD-3-Clause|
+								BSD 3-Clause License|
+								BSD 3-clause License w/nuclear disclaimer
 							</licenseMerge>
 							<licenseMerge>
 								Eclipse Distribution License - v 1.0|
 								EDL 1.0
 							</licenseMerge>
 							<licenseMerge>
+								Eclipse Public License, Version 1.0|
+								Eclipse Public License - v 1.0|
+								EPL 1.0
+							</licenseMerge>
+							<licenseMerge>
+								Eclipse Public License v2.0|
+								Eclipse Public License v. 2.0|
+								Eclipse Public License - v 2.0|
+								EPL-2.0|
+								EPL 2.0
+							</licenseMerge>
+							<licenseMerge>
 								MIT License|
-								The MIT License|
-								MIT
-							</licenseMerge>
-							<licenseMerge>
-								Common Development and Distribution License (CDDL) v1.0|
-								CDDL/GPLv2+CE|
-								CDDL + GPLv2 with classpath exception|
-								CDDL, v1.0
-							</licenseMerge>
-							<licenseMerge>
-								BSD License|
-								BSD license|
-								BSD|
-								The BSD License
-							</licenseMerge>
-							<licenseMerge>
-								BSD 3-Clause|
-								BSD-3-Clause|
-								iCal4j - License|
-								The BSD 3-Clause License (BSD3)|
-								BSD 3-clause License w/nuclear disclaimer|
-								BSD 3-clause New License
+								MIT|
+								Bouncy Castle Licence|
+								The MIT License
 							</licenseMerge>
 						</licenseMerges>
-						<verbose>false</verbose>
+						<verbose>true</verbose>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -1837,76 +1835,6 @@
 				<module>openmeetings-util</module>
 				<module>openmeetings-db</module>
 			</modules>
-		</profile>
-		<profile>
-			<id>generate-third-party</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>license-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>download-licenses</id>
-								<goals>
-									<goal>aggregate-add-third-party</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.build.directory}</outputDirectory>
-									<useMissingFile>true</useMissingFile>
-									<licenseMerges>
-										<licenseMerge>
-											The Apache Software License, Version 2.0|
-											Apache Software License 2.0|
-											Apache License, Version 2.0|
-											Apache License|
-											Apache License 2.0|
-											Apache 2|
-											Apache 2.0|
-											Apache 2.0 License|
-											The Apache License, Version 2.0|
-											Apache Software License - Version 2.0|
-											Apache Software Licenses|
-											Apache License, Version 2.0 and|
-											ASL, version 2|
-											ASF 2.0|
-											Apache License, Version 2.0 and
-        Common Development And Distribution License (CDDL) Version 1.0|
-											The SAX License
-										</licenseMerge>
-										<licenseMerge>
-											Eclipse Public License 1.0|
-											Eclipse Public License - v 1.0|
-											Eclipse Public License - Version 1.0
-										</licenseMerge>
-										<licenseMerge>
-											BSD license|
-											BSD|
-											The BSD License
-										</licenseMerge>
-										<licenseMerge>
-											FreeBSD License|
-											The BSD 2-Clause License|
-											BSD-2-Clause|
-											BSD style
-										</licenseMerge>
-										<licenseMerge>
-											BSD License 2.0|
-											BSD 3-clause New License|
-											New BSD License
-										</licenseMerge>
-										<licenseMerge>
-											The W3C License|
-											The W3C Software License
-										</licenseMerge>
-									</licenseMerges>
-									<fileTemplate>/org/codehaus/mojo/license/third-party-file-groupByLicense.ftl</fileTemplate>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
 		</profile>
 		<profile>
 			<id>Jenkins</id>

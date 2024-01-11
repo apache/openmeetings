@@ -23,27 +23,27 @@
 		<section name="Renaming /openmeetings context">
 			<p>
 				If you want to have
-				<tt>https://yourcorp.com:5443/yourmeetings</tt>
+				<code>https://yourcorp.com:5443/yourmeetings</code>
 				instead of
-				<tt>https://yourcorp.com:5443/openmeetings</tt>
+				<code>https://yourcorp.com:5443/openmeetings</code>
 				you need to do the following
 			</p>
 			<ol>
 				<li>stop openmmetings if it is running </li>
 				<li>
-					go to openmeetings install dir (for ex. <tt>/opt/om</tt>)
+					go to openmeetings install dir (for ex. <code>/opt/om</code>)
 				</li>
 				<li>
-					rename <tt>/opt/om/webapps/openmeetings</tt> to <tt>/opt/om/webapps/yourmeetings</tt>
-					(for ex. <tt>mv /opt/om/webapps/openmeetings /opt/om/webapps/yourmeetings</tt>)
+					rename <code>/opt/om/webapps/openmeetings</code> to <code>/opt/om/webapps/yourmeetings</code>
+					(for ex. <code>mv /opt/om/webapps/openmeetings /opt/om/webapps/yourmeetings</code>)
 				</li>
 				<li>
-					open <tt>/opt/om/webapps/root/index.html</tt>
-					using your favorite text editor (for ex. <tt>vim /opt/om/webapps/root/index.html</tt>)
+					open <code>/opt/om/webapps/root/index.html</code>
+					using your favorite text editor (for ex. <code>vim /opt/om/webapps/root/index.html</code>)
 					<ul>
 						<li>
-							find and modify <tt>&lt;meta http-equiv="REFRESH" content="0;url=openmeetings/"&gt;</tt>
-							to be <tt>&lt;meta http-equiv="REFRESH" content="0;url=<strong>yourmeetings/</strong>"&gt;</tt>
+							find and modify <code>&lt;meta http-equiv="REFRESH" content="0;url=openmeetings/"&gt;</code>
+							to be <code>&lt;meta http-equiv="REFRESH" content="0;url=<strong>yourmeetings/</strong>"&gt;</code>
 						</li>
 					</ul>
 				</li>
@@ -64,7 +64,7 @@
 				<li>
 					ensure
 					<strong>
-						<tt>{0}</tt>
+						<code>{0}</code>
 					</strong>
 					placeholder is used in
 					<i>all</i>
@@ -74,41 +74,41 @@
 				<li>login to Openmeetings as user with administrator privileges </li>
 				<li>
 					go to
-					<tt>Administration -&gt; Configuration</tt>
+					<code>Administration -&gt; Configuration</code>
 				</li>
 				<li>
 					find and edit configuration with name
 					<strong>
-						<tt>application.name</tt>
+						<code>application.name</code>
 					</strong>
 				</li>
 				<li>
 					Set its value to be
 					<i>
-						<tt>Your Application Name</tt>
+						<code>Your Application Name</code>
 					</i>
 				</li>
 				<li>
-					<tt>Save</tt>
+					<code>Save</code>
 				</li>
 				<li>reload page or relogin </li>
 			</ol>
 			<p>
 			All string will display
 			<i>
-				<tt>Your Application Name</tt>
+				<code>Your Application Name</code>
 			</i>
 			in place of
 			<i>
-				<tt>Openmeetings</tt>
+				<code>Openmeetings</code>
 			</i>
 			</p>
 		</section>
 		<section name="Running multiple Openmeetings instances on the same server">
 			<p>
 				If you want to run multiple Openmeetings instances on the same server i.e. to have<br/>
-				<tt>https://yourcorp.com:5443/openmeetings1</tt><br/>
-				<tt>https://yourcorp.com:5443/openmeetings2</tt><br/> etc.<br/> you need to do the following:
+				<code>https://yourcorp.com:5443/openmeetings1</code><br/>
+				<code>https://yourcorp.com:5443/openmeetings2</code><br/> etc.<br/> you need to do the following:
 			</p>
 		</section>
 	</body>

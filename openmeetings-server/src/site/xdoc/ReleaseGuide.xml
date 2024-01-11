@@ -97,11 +97,20 @@
 				<ul>
 					<li>
 						Check that all files:<br />
-						LICENSE, NOTICE.md, CHANGELOG.md, README.md<br />
+						NOTICE.md, CHANGELOG.md, README.md<br />
 						are up to date and refer to the right version.
 					</li>
 					<li>
-						Check site is <tt>green</tt> here <a href="https://whimsy.apache.org/site/project/openmeetings">https://whimsy.apache.org/site/project/openmeetings</a>
+						Ensure LICENSE file is up-to-date:
+						<div>
+							<ul>
+								<li>Run: <source>mvn clean license:aggregate-add-third-party</source></li>
+								<li>Merge the contents of <code>target/THIRD-PARTY.txt</code> to <code>LICENSE</code> file</li>
+							</ul>
+						</div>
+					</li>
+					<li>
+						Check site is <code>green</code> here <a href="https://whimsy.apache.org/site/project/openmeetings">https://whimsy.apache.org/site/project/openmeetings</a>
 					</li>
 					<li>
 						Ensure All contributed translations are imported to our codebase<br/>
@@ -109,9 +118,9 @@
 					</li>
 					<li>
 						Update following files in OM documentation:<br/>
-						<tt>openmeetings-server/src/site/xdoc/index.xml</tt><br/>
-						<tt>openmeetings-server/src/site/xdoc/NewsArchive.xml</tt><br/>
-						<tt>openmeetings-server/src/site/xdoc/downloads.xml</tt><br/>
+						<code>openmeetings-server/src/site/xdoc/index.xml</code><br/>
+						<code>openmeetings-server/src/site/xdoc/NewsArchive.xml</code><br/>
+						<code>openmeetings-server/src/site/xdoc/downloads.xml</code><br/>
 						<div class="bd-callout bd-callout-danger">
 							<div class="h4">Download links in NewsArchive.xml and README.md should be updated</div>
 						</div>
@@ -125,7 +134,7 @@
 					<li>Update versions of all modules
 						<source>mvn versions:set -DgenerateBackupPoms=false -DnewVersion=5.0.1</source>
 					</li>
-					<li>Update final SCM URL located at <tt>pom.xml</tt> and <tt>openmeetings-server/pom.xml</tt>
+					<li>Update final SCM URL located at <code>pom.xml</code> and <code>openmeetings-server/pom.xml</code>
 						<source><![CDATA[
 <scm>
     <url>https://github.com/apache/openmeetings.git</url>
@@ -161,7 +170,7 @@ git push origin 5.0.1-RC1
 					<li>
 						<p>
 							Commit artifacts you have created with KEYS file to the
-							<tt>https://dist.apache.org/repos/dist/dev/openmeetings/</tt>
+							<code>https://dist.apache.org/repos/dist/dev/openmeetings/</code>
 							Proposed file structure for "Release Candidate 1" of 5.0.1 will be:
 						</p>
 						<source>
@@ -230,13 +239,13 @@ mvn clean install -Prc,release
 					<li>Enter "Signing set name" (must include "Apache OpenMeetings" and version) for ex. "Apache OpenMeetings 5.0.1-RELEASE"</li>
 					<li>Enter "Version" for ex. "5.0.1-RELEASE"</li>
 					<li>Select "Java Signing Sha256" as "Signing service"</li>
-					<li>Select "Upload files" and add all <b>jar</b> files from <tt>target/jnlp</tt></li>
+					<li>Select "Upload files" and add all <b>jar</b> files from <code>target/jnlp</code></li>
 					<li>Select "Sign now"</li>
 					<li>Select "Type of signing" -> "Production"</li>
 					<li>Select "Sign"</li>
 					<li>Select "Download set"</li>
 					<li>Open binary artifacts of OM created on previous step (both <b>tar.gz</b> and <b>zip</b>)</li>
-					<li>Replace jar files inside artifacts <tt>webapps/openmeetings/screenshare</tt> with the signed ones</li>
+					<li>Replace jar files inside artifacts <code>webapps/openmeetings/screenshare</code> with the signed ones</li>
 					<li>
 						Re-create artifact signatures
 						<p>Create sha512sum checksums</p>
@@ -309,7 +318,7 @@ git push origin 5.0.0-M1
 						[ANNOUNCE] Apache OpenMeetings x.xx released
 					</li>
 					<li>
-						Update release section of DOAP file <tt>openmeetings-site/doap.rdf (https://github.com/apache/openmeetings-site/blob/asf-site/doap.rdf)</tt>
+						Update release section of DOAP file <code>openmeetings-site/doap.rdf (https://github.com/apache/openmeetings-site/blob/asf-site/doap.rdf)</code>
 					</li>
 					<li>
 						Add a section to <a href="downloads.html">downloads</a> website.<br />
@@ -319,8 +328,8 @@ git push origin 5.0.0-M1
 						<a href="http://www.apache.org/dyn/closer.lua/openmeetings/">http://www.apache.org/dyn/closer.lua/openmeetings/</a>
 					</li>
 					<li>
-						Release candidates should be deleted from <tt>https://dist.apache.org/repos/dist/dev/openmeetings/</tt><br/>
-						Old releases should be deleted from <tt>https://dist.apache.org/repos/dist/release/openmeetings/</tt>
+						Release candidates should be deleted from <code>https://dist.apache.org/repos/dist/dev/openmeetings/</code><br/>
+						Old releases should be deleted from <code>https://dist.apache.org/repos/dist/release/openmeetings/</code>
 					</li>
 				</ul>
 			</subsection>

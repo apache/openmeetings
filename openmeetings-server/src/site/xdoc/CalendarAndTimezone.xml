@@ -40,7 +40,7 @@
 			name="Changing servers default timzeone for Emails and Invitations (display)">
 			<p>
 				Goto Administration &gt; Configuration and change the config-key:
-				<tt>default.timezone</tt>
+				<code>default.timezone</code>
 			</p>
 			<p>Valid timezone have to meet standards! </p>
 		</section>
@@ -49,7 +49,7 @@
 			name="Changing first day in week for calendar from Sunday to Monday">
 			<p>
 				Goto Administration &gt; Configuration and change the config-key:
-				<tt>calendar.firstday</tt>
+				<code>calendar.firstday</code>
 			</p>
 			<p>The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc.</p>
 		</section>
@@ -59,7 +59,7 @@
 
 			<p>Goto
 				Administration &gt; Configuration and change the config-key:
-				<tt>calendar.conference.rooms.default.size</tt>
+				<code>calendar.conference.rooms.default.size</code>
 			</p>
 		</section>
 

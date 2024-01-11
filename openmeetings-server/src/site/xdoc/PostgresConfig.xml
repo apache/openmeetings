@@ -39,8 +39,8 @@
 					</li>
 					<li><span style="font-size: larger; color: blue;">IMPORTANT</span> According to
 						<a href="http://markmail.org/message/opymlab2e6wygb7p">this</a> thread you need to ensure:<br/>
-						<tt>standard_conforming_strings</tt> is set to <tt><b>on</b></tt> and <br/>
-						<tt>escape_string_warning</tt> is set to <tt><b>off</b></tt>
+						<code>standard_conforming_strings</code> is set to <code><b>on</b></code> and <br/>
+						<code>escape_string_warning</code> is set to <code><b>off</b></code>
 					</li>
 				</ul>
 			</subsection>

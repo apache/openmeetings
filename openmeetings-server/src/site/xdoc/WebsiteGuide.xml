@@ -55,10 +55,10 @@
 git clone https://github.com/apache/openmeetings-site.git site
 git checkout master
 						]]></source>
-						edit the files in the folder <tt>openmeetings-server/src/site</tt><br/>
+						edit the files in the folder <code>openmeetings-server/src/site</code><br/>
 						then you run the command:
 						<source><![CDATA[mvn site]]></source>
-						control the output locally in the folder <tt>target/site</tt><br/>
+						control the output locally in the folder <code>target/site</code><br/>
 						copy site contents into target folder: <source><![CDATA[cp -r target/site/* <location of site>]]></source>
 						And then commit your changes into the Git <i>both</i> the edited xml(s) and generated html files.
 					</div>
@@ -72,7 +72,7 @@ git checkout master
 				<div>
 					To add a new menu entry in the left side panel you need to modify the file:
 					<br/>
-					<tt>openmeetings-server/src/site/site.xml</tt>
+					<code>openmeetings-server/src/site/site.xml</code>
 				</div>
 			</subsection>
 		</section>

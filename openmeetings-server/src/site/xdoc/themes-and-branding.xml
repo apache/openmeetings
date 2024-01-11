@@ -32,7 +32,7 @@
 						target="_blank" rel="nofollow">https://github.com/apache/openmeetings/blob/master/openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css
 					</a><br/>
 					Or if you already installed OpenMeetings on your machine at:<br />
-					<tt>/webapps/openmeetings/css/theme_om/jquery-ui.css</tt>
+					<code>/webapps/openmeetings/css/theme_om/jquery-ui.css</code>
 				</li>
 				<li>follow the link next to "To view and modify this theme, visit" text in css comments</li>
 			</ul>
@@ -44,11 +44,11 @@
 				(eventually clear the browser cache) to see updates based on
 				modification in your theme.
 			</p>
-			<p>All other elements might be styled by modifying CSS files in <tt>/webapps/openmeetings/css</tt> folder</p>
+			<p>All other elements might be styled by modifying CSS files in <code>/webapps/openmeetings/css</code> folder</p>
 		</section>
 		<section name="Creating custom CSS rules">
 			<ol>
-				<li>open <tt>webapps/openmeetings/css/custom.css</tt> file</li>
+				<li>open <code>webapps/openmeetings/css/custom.css</code> file</li>
 				<li>add you custom rules</li>
 				<li>restart OM (force reload might be required)</li>
 			</ol>

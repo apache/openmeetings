@@ -24,7 +24,7 @@
 			<div>
 				To modify privacy statement do the following:
 				<ul>
-					<li>Open <tt>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/pages/PrivacyPage.html</tt></li>
+					<li>Open <code>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/pages/PrivacyPage.html</code></li>
 					<li>Perform necessary changes</li>
 					<li>restart OM</li>
 				</ul>
@@ -35,11 +35,11 @@
 				To create privacy statement in your language do the following:
 				<ul>
 					<li>
-						Create new file <tt>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/pages/PrivacyPage_<b>LANG_CODE</b>.html</tt> <br/>
-						<tt>LANG_CODE</tt> should be in format [language code]_[country ISO code], <tt>_[country ISO code]</tt> block is optional<br/>
-						for ex. <tt>de</tt> can be suffix for German, file name will be <tt>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/pages/PrivacyPage_de.html</tt><br/>
-						<tt>pt</tt> can be suffix for Portuguese, file name will be <tt>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/pages/PrivacyPage_pt.html</tt><br/>
-						<tt>pt_BR</tt> can be suffix for Brazilian version of Portuguese, file name will be <tt>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/pages/PrivacyPage_pt_BR.html</tt><br/>
+						Create new file <code>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/pages/PrivacyPage_<b>LANG_CODE</b>.html</code> <br/>
+						<code>LANG_CODE</code> should be in format [language code]_[country ISO code], <code>_[country ISO code]</code> block is optional<br/>
+						for ex. <code>de</code> can be suffix for German, file name will be <code>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/pages/PrivacyPage_de.html</code><br/>
+						<code>pt</code> can be suffix for Portuguese, file name will be <code>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/pages/PrivacyPage_pt.html</code><br/>
+						<code>pt_BR</code> can be suffix for Brazilian version of Portuguese, file name will be <code>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/pages/PrivacyPage_pt_BR.html</code><br/>
 					</li>
 					<li>Perform translation</li>
 					<li>restart OM</li>

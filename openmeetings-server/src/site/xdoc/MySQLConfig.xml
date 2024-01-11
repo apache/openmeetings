@@ -46,15 +46,15 @@
 						<a href="https://mvnrepository.com/artifact/mysql/mysql-connector-java" target="_blank"
 							rel="nofollow">https://mvnrepository.com/artifact/mysql/mysql-connector-java</a>
 						and place it into:
-						<tt>$OM_HOME/webapps/openmeetings/WEB-INF/lib/</tt>
+						<code>$OM_HOME/webapps/openmeetings/WEB-INF/lib/</code>
 					</li>
 					<li>
 						Run OpenMeetings and goto the web-based installer:
-						<tt>https://localhost:5443/openmeetings/install</tt><br/>
+						<code>https://localhost:5443/openmeetings/install</code><br/>
 						Or <a href="./CommandLineAdmin.html" target="_blank"
 							rel="nofollow">Command line installer</a>
 					</li>
-					<li>After installation is complete please make sure additional parameter <tt>serverTimezone=</tt> was added
+					<li>After installation is complete please make sure additional parameter <code>serverTimezone=</code> was added
 						to the connection string.
 					</li>
 				</ul>
@@ -63,7 +63,7 @@
 				<p>
 					There is a sample configuration for MySQL that ships with every release in:
 					<br />
-					<tt>/webapps/openmeetings/WEB-INF/classes/META-INF/mysql_persistence.xml</tt>
+					<code>/webapps/openmeetings/WEB-INF/classes/META-INF/mysql_persistence.xml</code>
 				</p>
 			</subsection>
 		</section>
