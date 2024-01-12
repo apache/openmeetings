@@ -44,7 +44,7 @@
 
 		<!-- plugin versions -->
 		<version.maven-javadoc-plugin>3.6.3</version.maven-javadoc-plugin>
-		<version.maven-surefire>3.2.3</version.maven-surefire>
+		<version.maven-surefire>3.2.5</version.maven-surefire>
 		<version.maven-site-plugin>4.0.0-M9</version.maven-site-plugin>
 		<version.maven-enforcer-plugin>3.4.1</version.maven-enforcer-plugin>
 		<version.maven-source-plugin>3.3.0</version.maven-source-plugin>
@@ -1390,6 +1390,33 @@
 					<artifactId>apache-rat-plugin</artifactId>
 					<configuration>
 						<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
+						<!-- Non-deprecated config -->
+						<!--licenses>
+							<license>
+								<family>OM_MIT</family>
+								<any>
+									<text>licensed under the MIT</text>
+									<text>Licensed MIT</text>
+								</any>
+							</license>
+							<license>
+								<family>OM_CC_BY_4</family>
+								<any>
+									<text>CC BY 4.0 License</text>
+								</any>
+							</license>
+						</licenses>
+						<families>
+							<family>
+								<id>OM_MIT</id>
+								<name>MIT</name>
+							</family>
+							<family>
+								<id>OM_CC_BY_4</id>
+								<name>CC BY 4.0</name>
+							</family>
+						</families-->
+						<!-- Deprecated config -->
 						<licenses>
 							<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
 								<licenseFamilyCategory>MIT</licenseFamilyCategory>
@@ -1397,19 +1424,7 @@
 								<notes></notes>
 								<patterns>
 									<pattern>Licensed MIT</pattern>
-									<pattern>Licensed under MIT</pattern>
-									<pattern>Licensed under the MIT license</pattern>
-									<pattern>MIT/GPL2 Licensed</pattern>
 									<pattern>licensed under the MIT and GPL</pattern>
-									<pattern>MIT license</pattern>
-								</patterns>
-							</license>
-							<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-								<licenseFamilyCategory>BSD</licenseFamilyCategory>
-								<licenseFamilyName>BSD</licenseFamilyName>
-								<notes></notes>
-								<patterns>
-									<pattern>BSD-style license</pattern>
 								</patterns>
 							</license>
 							<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
@@ -1424,9 +1439,6 @@
 						<licenseFamilies>
 							<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
 								<familyName>MIT</familyName>
-							</licenseFamily>
-							<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-								<familyName>BSD</familyName>
 							</licenseFamily>
 							<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
 								<familyName>CC BY</familyName>
