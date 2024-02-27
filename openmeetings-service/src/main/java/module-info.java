@@ -55,7 +55,7 @@ module org.apache.openmeetings.service {
 	//requires jackrabbit.webdav; FIXME TODO have to be placed back as soon as `jackrabbit.webdav` will be jackarta compatible
 	requires caldav4j;
 	requires java.xml;
-	requires org.mnode.ical4j.core;
+	requires ical4j.core;
 
 	requires org.slf4j;
 }

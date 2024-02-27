@@ -42,7 +42,7 @@ module org.apache.openmeetings.util {
 	requires spring.context;
 
 	requires org.bouncycastle.provider;
-	requires org.mnode.ical4j.core;
+	requires ical4j.core;
 	requires org.aspectj.tools;
 	requires org.dom4j;
 	requires ch.qos.logback.classic;

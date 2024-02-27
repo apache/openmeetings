@@ -53,6 +53,7 @@ module org.apache.openmeetings.db {
 
 	requires transitive com.github.openjson;
 
+	requires org.apache.commons.codec;
 	requires org.apache.commons.lang3;
 	requires org.apache.commons.text;
 
@@ -80,4 +81,5 @@ module org.apache.openmeetings.db {
 
 	requires org.dom4j;
 	requires org.slf4j;
+	requires ical4j.core;
 }
