@@ -90,7 +90,7 @@
 		<spring.version>6.1.4</spring.version>
 		<tomcat.version>10.1.19</tomcat.version>
 		<jetty.version>11.0.20</jetty.version>
-		<ical4j.version>4.0.0-rc4</ical4j.version>
+		<ical4j.version>4.0.0-rc5</ical4j.version>
 		<cxf.version>4.0.3</cxf.version>
 		<io.prometheus.version>1.1.0</io.prometheus.version>
 		<aspectjtools.version>1.9.21.1</aspectjtools.version>
@@ -126,7 +126,7 @@
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
 		<tika-parsers.version>3.0.0-BETA</tika-parsers.version>
 		<slf4j.version>2.0.9</slf4j.version>
-		<logback.version>1.5.0</logback.version>
+		<logback.version>1.5.1</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.77</bcprov.version>
 		<mockito.version>5.2.0</mockito.version>
@@ -143,7 +143,7 @@
 		<jsr305.version>3.0.2</jsr305.version>
 		<totp.version>1.7.1</totp.version>
 		<!--  Exclude all generated code  -->
-		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js</sonar.exclusions>
+		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js, file:openmeetings-service/src/main/java/org/apache/jackrabbit/**</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
