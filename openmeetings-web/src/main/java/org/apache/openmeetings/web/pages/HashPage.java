@@ -59,10 +59,10 @@ import jakarta.inject.Inject;
 
 public class HashPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
-	public static final String APP = "app";
+	public static final String APP_KEY = "app";
 	public static final String APP_TYPE_NETWORK = "network";
 	public static final String APP_TYPE_SETTINGS = "settings";
-	public static final String SWF = "swf";
+	public static final String SWF_KEY = "swf";
 	public static final String PANEL_MAIN = "panel-main";
 	public static final String PANEL_RECORDING = "panel-recording";
 	public static final String INVITATION_HASH = "invitation";
@@ -87,8 +87,8 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	public HashPage(PageParameters p) {
 		secure = p.get(HASH);
 		invitation = p.get(INVITATION_HASH);
-		swf = p.get(SWF);
-		app = swf.isEmpty() ? p.get(APP) : swf;
+		swf = p.get(SWF_KEY);
+		app = swf.isEmpty() ? p.get(APP_KEY) : swf;
 
 		WebSession ws = WebSession.get();
 		ws.checkHashes(secure, invitation);

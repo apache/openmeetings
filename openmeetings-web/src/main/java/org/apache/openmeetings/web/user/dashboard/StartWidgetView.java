@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.user.dashboard;
 
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
-import static org.apache.openmeetings.web.pages.HashPage.APP;
+import static org.apache.openmeetings.web.pages.HashPage.APP_KEY;
 import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_SETTINGS;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CALENDAR;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
@@ -54,7 +54,7 @@ public class StartWidgetView extends WidgetView {
 		add(new WebMarkupContainer("step1").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step2").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step3").add(new WebMarkupContainer("avTest").add(AttributeModifier.append("href"
-				, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP, APP_TYPE_SETTINGS)).toString()))));
+				, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP_KEY, APP_TYPE_SETTINGS)).toString()))));
 
 		add(new WebMarkupContainer("step4").add(new PublicRoomsEventBehavior()));
 		add(new Label("123msg", Application.getString("widget.start.desc")) //Application here is used to substitute {0}

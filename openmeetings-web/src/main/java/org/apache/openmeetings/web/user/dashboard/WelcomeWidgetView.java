@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.user.dashboard;
 
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.pages.HashPage.APP;
+import static org.apache.openmeetings.web.pages.HashPage.APP_KEY;
 import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
 import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_SETTINGS;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
@@ -79,8 +79,8 @@ public class WelcomeWidgetView extends WidgetView {
 			}
 		});
 		add(new WebMarkupContainer("netTest").add(AttributeModifier.append("href"
-				, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP, APP_TYPE_NETWORK)).toString())));
+				, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP_KEY, APP_TYPE_NETWORK)).toString())));
 		add(new WebMarkupContainer("avTest").add(AttributeModifier.append("href"
-				, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP, APP_TYPE_SETTINGS)).toString())));
+				, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP_KEY, APP_TYPE_SETTINGS)).toString())));
 	}
 }

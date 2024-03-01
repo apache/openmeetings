@@ -120,7 +120,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 	private final DropDownChoice<String> selectDropDown = new DropDownChoice<>(
 		"msgSelect", Model.of(SELECT_CHOOSE)
 		, List.of(SELECT_CHOOSE, SELECT_ALL, SELECT_NONE, SELECT_UNREAD, SELECT_READ)
-		, new LambdaChoiceRenderer<>(str -> Application.getString(str), str -> str));
+		, new LambdaChoiceRenderer<>(Application::getString, str -> str));
 	private final PrivateMessageFolder notMoveFolder = new PrivateMessageFolder();
 	private final DropDownChoice<PrivateMessageFolder> moveDropDown = new DropDownChoice<>("msgMove", Model.of(notMoveFolder)
 		, List.of(notMoveFolder)

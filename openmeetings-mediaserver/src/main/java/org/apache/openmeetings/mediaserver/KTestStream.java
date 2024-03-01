@@ -259,7 +259,7 @@ public class KTestStream extends AbstractStream {
 		releasePlayer();
 		releaseRecorder();
 		if (remove) {
-			processor.release(this, true);
+			processor.release(this);
 		}
 	}
 }

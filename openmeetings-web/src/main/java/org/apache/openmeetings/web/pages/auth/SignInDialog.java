@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.UserManager.showAuth;
-import static org.apache.openmeetings.web.pages.HashPage.APP;
+import static org.apache.openmeetings.web.pages.HashPage.APP_KEY;
 import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
@@ -178,7 +178,7 @@ public class SignInDialog extends Modal<String> {
 				}
 			});
 			add(new WebMarkupContainer("netTest").add(AttributeModifier.append("href"
-					, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP, APP_TYPE_NETWORK)).toString())));
+					, RequestCycle.get().urlFor(HashPage.class, new PageParameters().add(APP_KEY, APP_TYPE_NETWORK)).toString())));
 			add(new BookmarkablePageLink<>("privacy", PrivacyPage.class));
 			final boolean showOauth = ((SignInPage)getPage()).allowOAuthLogin();
 			add(new WebMarkupContainer("oauth").add(

@@ -102,7 +102,7 @@ class TestStreamProcessor {
 		}
 	}
 
-	public void release(AbstractStream stream, boolean releaseStream) {
+	public void release(AbstractStream stream) {
 		streamByUid.remove(stream.getUid());
 	}
 

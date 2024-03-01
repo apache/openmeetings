@@ -339,7 +339,7 @@ public class UserForm extends AdminBaseForm<User> {
 			}
 		}
 		domainId.setChoices(ids);
-		domainId.setChoiceRenderer(new LambdaChoiceRenderer<>(id -> values.get(id), String::valueOf));
+		domainId.setChoiceRenderer(new LambdaChoiceRenderer<>(values::get, String::valueOf));
 		domain.setVisible(u.getType() == Type.LDAP || u.getType() == Type.OAUTH);
 		if (target != null) {
 			target.add(domain);

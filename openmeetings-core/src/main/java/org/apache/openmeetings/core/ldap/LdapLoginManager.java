@@ -352,7 +352,7 @@ public class LdapLoginManager {
 			conn = new LdapNetworkConnection(options.host, options.port, options.secure);
 		}
 
-		private User updatePic(User inUser, InputStream is, StoredFile sf) {
+		private User updatePic(User inUser, InputStream is) {
 			User u = inUser;
 			Path tempImage = null;
 			try {
@@ -383,7 +383,7 @@ public class LdapLoginManager {
 						InputStream is = new ByteArrayInputStream(val.getBytes());
 						StoredFile sf = new StoredFile("picture", is);
 						if (sf.isImage()) {
-							u = updatePic(inUser, is, sf);
+							u = updatePic(inUser, is);
 						} else {
 							u.setPictureUri(val.getString());
 						}
