@@ -434,8 +434,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return !Strings.isEmpty(login) && login.length() >= getMinLoginLength();
 	}
 
-	public User getByLogin(String _login, Type type, Long domainId) {
-		String login = _login == null ? null : _login.trim().toLowerCase(Locale.ROOT);
+	public User getByLogin(String inLogin, Type type, Long domainId) {
+		String login = inLogin == null ? null : inLogin.trim().toLowerCase(Locale.ROOT);
 		return single(fillLazy(em
 				, oem -> oem.createNamedQuery("getUserByLogin", User.class)
 					.setParameter("login", login)
@@ -448,8 +448,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return getByEmail(email, User.Type.USER, null);
 	}
 
-	public User getByEmail(String _email, User.Type type, Long domainId) {
-		String email = _email == null ? null : _email.trim().toLowerCase(Locale.ROOT);
+	public User getByEmail(String inEmail, User.Type type, Long domainId) {
+		String email = inEmail == null ? null : inEmail.trim().toLowerCase(Locale.ROOT);
 		return single(fillLazy(em
 				, oem -> oem.createNamedQuery("getUserByEmail", User.class)
 					.setParameter(PARAM_EMAIL, email)
@@ -598,13 +598,13 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	/**
 	 * login logic
 	 *
-	 * @param _userOrEmail - login or email of the user being tested
+	 * @param inUserOrEmail - login or email of the user being tested
 	 * @param userpass - password of the user being tested
 	 * @return User object in case of successful login
 	 * @throws OmException in case of any issue
 	 */
-	public User login(String _userOrEmail, String userpass) throws OmException {
-		String userOrEmail = _userOrEmail == null ? null : _userOrEmail.trim().toLowerCase(Locale.ROOT);
+	public User login(String inUserOrEmail, String userpass) throws OmException {
+		String userOrEmail = inUserOrEmail == null ? null : inUserOrEmail.trim().toLowerCase(Locale.ROOT);
 		List<User> users = em.createNamedQuery("getUserByLoginOrEmail", User.class)
 				.setParameter("userOrEmail", userOrEmail)
 				.setParameter("type", Type.USER)

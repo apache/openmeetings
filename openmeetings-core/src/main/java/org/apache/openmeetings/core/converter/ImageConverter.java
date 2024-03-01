@@ -33,7 +33,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.DoubleConsumer;
@@ -93,10 +95,12 @@ public class ImageConverter extends BaseConverter {
 		ProcessResultList returnMap = new ProcessResultList();
 
 		// User Profile Update
-		Files.newDirectoryStream(
+		try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(
 				getUploadProfilesUserDir(userId).toPath()
-				, fi -> fi.toString().endsWith(EXTENSION_PNG))
-					.forEach(path -> FileUtils.deleteQuietly(path.toFile()));
+				, fi -> fi.toString().endsWith(EXTENSION_PNG)))
+		{
+			dirStream.forEach(path -> FileUtils.deleteQuietly(path.toFile()));
+		}
 
 		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(userId), PROFILE_FILE_NAME, EXTENSION_PNG);
 		returnMap.add(resize(file, destinationFile, 250, 250, true));

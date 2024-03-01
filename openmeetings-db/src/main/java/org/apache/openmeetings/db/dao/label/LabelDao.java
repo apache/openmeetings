@@ -193,8 +193,9 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		List<StringLabel> result = new ArrayList<>(labelCache.containsKey(l) ? labelCache.get(l) : new ArrayList<StringLabel>());
 		if (!Strings.isEmpty(search)) {
-			result = result.stream().filter(o -> o != null && (o.getKey().contains(search) || o.getValue().contains(search)))
-					.collect(Collectors.toList());
+			result = result.stream()
+					.filter(o -> o != null && (o.getKey().contains(search) || o.getValue().contains(search)))
+					.toList();
 		}
 		return result;
 	}

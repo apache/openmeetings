@@ -278,7 +278,7 @@ public class InstallWizard extends BootstrapWizard {
 		private final Form<ConnectionProperties> form = new Form<>("form", new CompoundPropertyModel<>(getProps(null))) {
 			private static final long serialVersionUID = 1L;
 			private final DropDownChoice<DbType> db = new DropDownChoice<>("dbType", List.of(DbType.values())
-					, new LambdaChoiceRenderer<>(db -> getString("install.wizard.db.step." + db.dbName() + ".name"), DbType::name));
+					, new LambdaChoiceRenderer<>(dtb -> getString("install.wizard.db.step." + dtb.dbName() + ".name"), DbType::name));
 
 			@Override
 			protected void onInitialize() {

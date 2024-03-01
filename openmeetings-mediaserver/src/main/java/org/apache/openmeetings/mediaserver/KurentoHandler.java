@@ -317,8 +317,7 @@ public class KurentoHandler {
 		return rooms.computeIfAbsent(roomId, k -> {
 			log.debug("Room {} does not exist. Will create now!", roomId);
 			Room r = roomDao.get(roomId);
-			KRoom kRoom = new KRoom(r);
-			return kRoom;
+			return new KRoom(r);
 		});
 	}
 

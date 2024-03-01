@@ -26,6 +26,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
 
 import java.util.List;
+import java.util.Random;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
@@ -83,6 +84,7 @@ import jakarta.inject.Inject;
 public class SignInDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(SignInDialog.class);
+	private static final Random rnd = new Random();
 	private final PasswordTextField passField = new PasswordTextField("pass", Model.of(""));
 	private final RequiredTextField<String> loginField = new RequiredTextField<>("login", Model.of(""));
 	private boolean rememberMe = false;
@@ -319,7 +321,7 @@ public class SignInDialog extends Modal<String> {
 	public static void penalty() {
 		// add random timeout
 		try {
-			Thread.sleep(6 + (long)(10 * Math.random() * 1000));
+			Thread.sleep(6 + rnd.nextLong(10 * 1000));
 		} catch (InterruptedException e) {
 			log.error("Unexpected exception while sleeping", e);
 			Thread.currentThread().interrupt();
