@@ -32,7 +32,7 @@ module org.apache.openmeetings.web {
 
 	requires org.apache.commons.io;
 	requires org.apache.commons.fileupload2.core;
-	requires org.apache.commons.fileupload2.jakarta;
+	requires org.apache.commons.fileupload2.jakarta.servlet5;
 	requires org.apache.commons.lang3;
 	requires org.apache.commons.text;
 
