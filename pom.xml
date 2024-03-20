@@ -48,10 +48,10 @@
 		<version.maven-site-plugin>4.0.0-M9</version.maven-site-plugin>
 		<version.maven-enforcer-plugin>3.4.1</version.maven-enforcer-plugin>
 		<version.maven-source-plugin>3.3.0</version.maven-source-plugin>
-		<version.maven-compiler-plugin>3.12.1</version.maven-compiler-plugin>
+		<version.maven-compiler-plugin>3.13.0</version.maven-compiler-plugin>
 		<version.maven-project-info-reports-plugin>3.5.0</version.maven-project-info-reports-plugin>
 		<version.maven-jar-plugin>3.3.0</version.maven-jar-plugin>
-		<version.maven-assembly-plugin>3.7.0</version.maven-assembly-plugin>
+		<version.maven-assembly-plugin>3.7.1</version.maven-assembly-plugin>
 		<version.maven-dependency-plugin>3.6.1</version.maven-dependency-plugin>
 		<version.maven-war-plugin>3.4.0</version.maven-war-plugin>
 		<version.maven-clean-plugin>3.3.2</version.maven-clean-plugin>
@@ -139,7 +139,7 @@
 		<jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
-		<swagger.version>2.2.20</swagger.version>
+		<swagger.version>2.2.21</swagger.version>
 		<jsr305.version>3.0.2</jsr305.version>
 		<totp.version>1.7.1</totp.version>
 		<!--  Exclude all generated code  -->
