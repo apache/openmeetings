@@ -324,10 +324,10 @@ public class Admin {
 			String dbType = cmdl.getOptionValue(OPTION_DB_TYPE);
 			connectionProperties = ConnectionPropertiesPatcher.patch(DbType.of(dbType)
 					, cmdl.getOptionValue(OPTION_DB_HOST, "localhost")
-					, cmdl.getOptionValue(OPTION_DB_PORT, null)
-					, cmdl.getOptionValue(OPTION_DB_NAME, null)
-					, cmdl.getOptionValue(OPTION_DB_USER, null)
-					, cmdl.getOptionValue(OPTION_DB_PASS, null)
+					, cmdl.getOptionValue(OPTION_DB_PORT, (String)null)
+					, cmdl.getOptionValue(OPTION_DB_NAME, (String)null)
+					, cmdl.getOptionValue(OPTION_DB_USER, (String)null)
+					, cmdl.getOptionValue(OPTION_DB_PASS, (String)null)
 					);
 		} else {
 			//get properties from existent persistence.xml
