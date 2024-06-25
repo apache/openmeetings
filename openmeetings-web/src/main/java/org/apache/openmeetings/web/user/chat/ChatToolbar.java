@@ -54,13 +54,13 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 
 import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.core.IJQueryWidget.JQueryWidget;
-import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.IWysiwygToolbar;
+import org.wicketstuff.jquery.core.IJQueryWidget.JQueryWidget;
+import org.wicketstuff.jquery.ui.plugins.wysiwyg.toolbar.IWysiwygToolbar;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
 /**
- * Provides a custom implementation for com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.IWysiwygToolbar suitable
+ * Provides a custom implementation for org.wicketstuff.jquery.ui.plugins.wysiwyg.toolbar.IWysiwygToolbar suitable
  * for chat}
  */
 public class ChatToolbar extends Panel implements IWysiwygToolbar {

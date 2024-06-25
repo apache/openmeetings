@@ -46,12 +46,12 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.core.IJQueryWidget.JQueryWidget;
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.interaction.draggable.DraggableBehavior;
-import com.googlecode.wicket.jquery.ui.interaction.draggable.IDraggableListener;
-import com.googlecode.wicket.jquery.ui.interaction.droppable.DroppableBehavior;
-import com.googlecode.wicket.jquery.ui.interaction.droppable.IDroppableListener;
+import org.wicketstuff.jquery.core.IJQueryWidget.JQueryWidget;
+import org.wicketstuff.jquery.core.Options;
+import org.wicketstuff.jquery.ui.interaction.draggable.DraggableBehavior;
+import org.wicketstuff.jquery.ui.interaction.draggable.IDraggableListener;
+import org.wicketstuff.jquery.ui.interaction.droppable.DroppableBehavior;
+import org.wicketstuff.jquery.ui.interaction.droppable.IDroppableListener;
 
 import jakarta.inject.Inject;
 

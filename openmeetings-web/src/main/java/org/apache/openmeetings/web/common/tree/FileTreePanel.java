@@ -70,12 +70,12 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.resource.FileSystemResource;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.core.ajax.IJQueryAjaxAware;
-import com.googlecode.wicket.jquery.core.ajax.JQueryAjaxBehavior;
-import com.googlecode.wicket.jquery.ui.interaction.droppable.Droppable;
-import com.googlecode.wicket.jquery.ui.interaction.droppable.DroppableBehavior;
+import org.wicketstuff.jquery.core.JQueryBehavior;
+import org.wicketstuff.jquery.core.Options;
+import org.wicketstuff.jquery.core.ajax.IJQueryAjaxAware;
+import org.wicketstuff.jquery.core.ajax.JQueryAjaxBehavior;
+import org.wicketstuff.jquery.ui.interaction.droppable.Droppable;
+import org.wicketstuff.jquery.ui.interaction.droppable.DroppableBehavior;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;

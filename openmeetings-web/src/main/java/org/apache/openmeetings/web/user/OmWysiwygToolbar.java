@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.user;
 
-import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
+import org.wicketstuff.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
 
 public class OmWysiwygToolbar extends DefaultWysiwygToolbar {
 	private static final long serialVersionUID = 1L;

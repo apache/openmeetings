@@ -72,7 +72,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.CollectionModel;
 
 
-import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
+import org.wicketstuff.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;

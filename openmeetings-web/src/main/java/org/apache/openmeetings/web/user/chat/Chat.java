@@ -60,7 +60,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.ui.settings.JQueryUILibrarySettings;
+import org.wicketstuff.jquery.ui.settings.JQueryUILibrarySettings;
 
 import jakarta.inject.Inject;
 

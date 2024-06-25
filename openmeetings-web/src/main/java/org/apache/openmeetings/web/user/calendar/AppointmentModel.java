@@ -28,9 +28,9 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 
-import com.googlecode.wicket.jquery.ui.calendar.CalendarEvent;
-import com.googlecode.wicket.jquery.ui.calendar.CalendarModel;
-import com.googlecode.wicket.jquery.ui.calendar.ICalendarVisitor;
+import org.wicketstuff.jquery.ui.calendar.CalendarEvent;
+import org.wicketstuff.jquery.ui.calendar.CalendarModel;
+import org.wicketstuff.jquery.ui.calendar.ICalendarVisitor;
 
 public class AppointmentModel extends CalendarModel implements ICalendarVisitor {
 	private static final long serialVersionUID = 1L;

@@ -389,4 +389,9 @@ public class WebdavResponseImpl implements WebdavResponse {
             throw new UnsupportedOperationException("no servlet 4.0 support on: " + httpResponse.getClass(), ex);
         }
     }
+
+	@Override
+	public void sendRedirect(String arg0, int arg1, boolean arg2) throws IOException {
+        httpResponse.sendRedirect(arg0, arg1, arg2);
+	}
 }

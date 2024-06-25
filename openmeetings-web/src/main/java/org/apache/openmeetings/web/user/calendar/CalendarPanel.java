@@ -64,10 +64,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.calendar.Calendar;
-import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
-import com.googlecode.wicket.jquery.ui.calendar.EventSource.GoogleCalendar;
+import org.wicketstuff.jquery.core.Options;
+import org.wicketstuff.jquery.ui.calendar.Calendar;
+import org.wicketstuff.jquery.ui.calendar.CalendarView;
+import org.wicketstuff.jquery.ui.calendar.EventSource.GoogleCalendar;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
