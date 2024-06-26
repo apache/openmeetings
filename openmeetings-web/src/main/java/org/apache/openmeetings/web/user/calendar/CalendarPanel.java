@@ -65,18 +65,21 @@ import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 import org.wicketstuff.jquery.core.Options;
-import org.wicketstuff.jquery.ui.calendar.Calendar;
-import org.wicketstuff.jquery.ui.calendar.CalendarView;
-import org.wicketstuff.jquery.ui.calendar.EventSource.GoogleCalendar;
+import org.wicketstuff.jquery.ui.calendar6.Calendar;
+import org.wicketstuff.jquery.ui.calendar6.CalendarView;
+import org.wicketstuff.jquery.ui.calendar6.DateTimeDelta;
+import org.wicketstuff.jquery.ui.calendar6.EventSource.GoogleCalendar;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import jakarta.inject.Inject;
 
 public class CalendarPanel extends UserBasePanel {
 	private static final Logger log = LoggerFactory.getLogger(CalendarPanel.class);
 	private static final long serialVersionUID = 1L;
 	private static final ResourceReference CALJS = new JavaScriptResourceReference(CalendarPanel.class, "calendar-functions.js");
+	private static final ResourceReference BS5_THEME = new WebjarsJavaScriptResourceReference("fullcalendar__bootstrap5/current/index.global.js");
 	private final AbstractAjaxTimerBehavior refreshTimer = new AbstractAjaxTimerBehavior(Duration.ofSeconds(10)) {
 		private static final long serialVersionUID = 1L;
 
@@ -125,25 +128,34 @@ public class CalendarPanel extends UserBasePanel {
 		add(dialog);
 
 		boolean isRtl = isRtl();
-		Options options = new Options();
-		options.set("isRTL", isRtl);
-		options.set("height", Options.asString("parent"));
-		options.set("customButtons", "{gotoBtn: {text: ' ', click: onOmGotoClick}}");
-		options.set("header", isRtl ? "{left: 'agendaDay,agendaWeek,month', center: 'title', right: 'gotoBtn,today nextYear,next,prev,prevYear'}"
-				: "{left: 'prevYear,prev,next,nextYear today,gotoBtn', center: 'title', right: 'month,agendaWeek,agendaDay'}");
-		options.set("allDaySlot", false);
-		options.set("axisFormat", Options.asString("H(:mm)"));
-		options.set("defaultEventMinutes", 60);
-		options.set("timeFormat", Options.asString("H(:mm)"));
-		options.set("themeSystem", Options.asString("bootstrap4"));
+		Options options = new Options()
+				.set("direction", Options.asString(isRtl ? "rtl" : "ltr"))
+				.set("height", Options.asString("100%"))
+				.set("customButtons", "{gotoBtn: {text: ' ', click: onOmGotoClick}}")
+				.set("headerToolbar", isRtl
+						? "{left: 'timeGridDay,timeGridWeek,dayGridMonth', center: 'title', right: 'gotoBtn,today nextYear,next,prev,prevYear'}"
+						: "{left: 'prevYear,prev,next,nextYear today,gotoBtn', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay'}")
+				.set("allDaySlot", false)
+				.set("axisFormat", Options.asString("H(:mm)"))
+				.set("defaultEventMinutes", 60)
+				.set("timeFormat", Options.asString("H(:mm)"))
 
-		options.set("buttonText", new JSONObject()
-				.put("month", getString("801"))
-				.put("week", getString("800"))
-				.put("day", getString("799"))
-				.put("today", getString("1555")).toString());
+				.set("themeSystem", Options.asString("bootstrap5"))
+				.set("buttonIcons", new JSONObject()
+						.put("close", "bi fa-solid fa-times")
+						.put("prev", "bi fa-solid fa-chevron-left")
+						.put("next", "bi fa-solid fa-chevron-right")
+						.put("prevYear", "bi fa-solid fa-angles-left")
+						.put("nextYear", "bi fa-solid fa-angles-right")
+						.toString())
+				.set("buttonText", new JSONObject()
+						.put("month", getString("801"))
+						.put("week", getString("800"))
+						.put("day", getString("799"))
+						.put("today", getString("1555"))
+						.toString())
 
-		options.set("locale", Options.asString(WebSession.get().getLocale().toLanguageTag()));
+				.set("locale", Options.asString(WebSession.get().getLocale().toLanguageTag()));
 
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
 			private static final long serialVersionUID = 1L;
@@ -154,7 +166,7 @@ public class CalendarPanel extends UserBasePanel {
 			}
 
 			@Override
-			public boolean isDayClickEnabled() {
+			public boolean isDateClickEnabled() {
 				return true;
 			}
 
@@ -178,7 +190,7 @@ public class CalendarPanel extends UserBasePanel {
 			public void onSelect(AjaxRequestTarget target, CalendarView view, LocalDateTime start, LocalDateTime end, boolean allDay) {
 				Appointment a = getDefault();
 				LocalDateTime s = start, e = end;
-				if (CalendarView.month == view) {
+				if (CalendarView.dayGridMonth == view) {
 					LocalDateTime now = ZonedDateTime.now(getZoneId()).toLocalDateTime();
 					s = start.withHour(now.getHour()).withMinute(now.getMinute());
 					e = s.plus(1, ChronoUnit.HOURS);
@@ -202,7 +214,7 @@ public class CalendarPanel extends UserBasePanel {
 			}
 
 			@Override
-			public void onEventDrop(AjaxRequestTarget target, String eventId, long delta, boolean allDay) {
+			public void onEventDrop(AjaxRequestTarget target, String eventId, DateTimeDelta delta, boolean allDay) {
 				if (!StringUtils.isNumeric(eventId)) {
 					refresh(target);
 					return;
@@ -213,11 +225,17 @@ public class CalendarPanel extends UserBasePanel {
 				}
 				java.util.Calendar cal = WebSession.getCalendar();
 				cal.setTime(a.getStart());
-				cal.add(java.util.Calendar.MILLISECOND, (int)delta);
+				cal.add(java.util.Calendar.YEAR, delta.years());
+				cal.add(java.util.Calendar.MONTH, delta.months());
+				cal.add(java.util.Calendar.DAY_OF_MONTH, delta.days());
+				cal.add(java.util.Calendar.MILLISECOND, delta.millis());
 				a.setStart(cal.getTime());
 
 				cal.setTime(a.getEnd());
-				cal.add(java.util.Calendar.MILLISECOND, (int)delta);
+				cal.add(java.util.Calendar.YEAR, delta.years());
+				cal.add(java.util.Calendar.MONTH, delta.months());
+				cal.add(java.util.Calendar.DAY_OF_MONTH, delta.days());
+				cal.add(java.util.Calendar.MILLISECOND, delta.millis());
 				a.setEnd(cal.getTime());
 
 				apptDao.update(a, getUserId());
@@ -228,7 +246,7 @@ public class CalendarPanel extends UserBasePanel {
 			}
 
 			@Override
-			public void onEventResize(AjaxRequestTarget target, String eventId, long delta) {
+			public void onEventResize(AjaxRequestTarget target, String eventId, DateTimeDelta delta) {
 				if (!StringUtils.isNumeric(eventId)) {
 					refresh(target);
 					return;
@@ -239,7 +257,10 @@ public class CalendarPanel extends UserBasePanel {
 				}
 				java.util.Calendar cal = WebSession.getCalendar();
 				cal.setTime(a.getEnd());
-				cal.add(java.util.Calendar.MILLISECOND, (int)delta);
+				cal.add(java.util.Calendar.YEAR, delta.years());
+				cal.add(java.util.Calendar.MONTH, delta.months());
+				cal.add(java.util.Calendar.DAY_OF_MONTH, delta.days());
+				cal.add(java.util.Calendar.MILLISECOND, delta.millis());
 				a.setEnd(cal.getTime());
 
 				apptDao.update(a, getUserId());
@@ -341,6 +362,7 @@ public class CalendarPanel extends UserBasePanel {
 		super.renderHead(response);
 		response.render(JavaScriptHeaderItem.forReference(CALJS));
 		response.render(JavaScriptHeaderItem.forReference(TouchPunchResourceReference.instance()));
+		response.render(JavaScriptHeaderItem.forReference(BS5_THEME));
 	}
 
 	// Client creation here, because the client is not created until necessary
