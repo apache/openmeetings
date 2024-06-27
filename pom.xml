@@ -84,7 +84,7 @@
 		<!-- dependency versions -->
 		<junit.version>5.10.2</junit.version>
 		<wicket.version>10.1.0</wicket.version>
-		<wicketstuff.version>10.1.1</wicketstuff.version>
+		<wicketstuff.version>10.2.0-SNAPSHOT</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.5</wicket-bootstrap.version>
 		<spring.version>6.1.10</spring.version>
 		<tomcat.version>10.1.25</tomcat.version>
