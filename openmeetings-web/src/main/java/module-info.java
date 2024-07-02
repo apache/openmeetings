@@ -54,10 +54,10 @@ module org.apache.openmeetings.web {
 	requires org.wicketstuff.urlfragment;
 	requires org.wicketstuff.jqplot;
 	requires org.wicketstuff.jqplot4j;
-	requires wicketstuff.jquery.ui;
-	requires wicketstuff.jquery.ui.calendar;
-	requires wicketstuff.jquery.ui.core;
-	requires wicketstuff.jquery.ui.plugins;
+	requires org.wicketstuff.jquery.ui;
+	requires org.wicketstuff.jquery.ui.calendar;
+	requires org.wicketstuff.jquery.ui.core;
+	requires org.wicketstuff.jquery.ui.plugins;
 	requires wicket.bootstrap.extensions;
 	requires wicket.bootstrap.core;
 	requires wicket.bootstrap.themes;

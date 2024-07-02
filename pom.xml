@@ -49,7 +49,7 @@
 		<version.maven-enforcer-plugin>3.5.0</version.maven-enforcer-plugin>
 		<version.maven-source-plugin>3.3.1</version.maven-source-plugin>
 		<version.maven-compiler-plugin>3.13.0</version.maven-compiler-plugin>
-		<version.maven-project-info-reports-plugin>3.6.0</version.maven-project-info-reports-plugin>
+		<version.maven-project-info-reports-plugin>3.6.1</version.maven-project-info-reports-plugin>
 		<version.maven-jar-plugin>3.4.2</version.maven-jar-plugin>
 		<version.maven-assembly-plugin>3.7.1</version.maven-assembly-plugin>
 		<version.maven-dependency-plugin>3.7.1</version.maven-dependency-plugin>
@@ -82,14 +82,14 @@
 		<plexus-utils.version>3.5.1</plexus-utils.version>
 
 		<!-- dependency versions -->
-		<junit.version>5.10.2</junit.version>
+		<junit.version>5.10.3</junit.version>
 		<wicket.version>10.1.0</wicket.version>
 		<wicketstuff.version>10.2.0-SNAPSHOT</wicketstuff.version>
-		<wicket-bootstrap.version>7.0.5</wicket-bootstrap.version>
+		<wicket-bootstrap.version>7.0.7-SNAPSHOT</wicket-bootstrap.version>
 		<spring.version>6.1.10</spring.version>
 		<tomcat.version>10.1.25</tomcat.version>
 		<jetty.version>11.0.21</jetty.version>
-		<ical4j.version>4.0.0</ical4j.version>
+		<ical4j.version>4.0.1</ical4j.version>
 		<cxf.version>4.0.4</cxf.version>
 		<io.prometheus.version>1.3.1</io.prometheus.version>
 		<aspectjtools.version>1.9.22.1</aspectjtools.version>
@@ -1540,7 +1540,7 @@
 							<contextPath>/openmeetings</contextPath>
 							<descriptor>${project.basedir}/src/test/jetty/web.xml</descriptor>
 						</webApp>
-						<jettyXml>${project.basedir}/src/test/jetty/jetty.xml,${project.basedir}/src/test/jetty/jetty-ssl.xml,${project.basedir}/src/test/jetty/jetty-http.xml,${project.basedir}/src/test/jetty/jetty-https.xml</jettyXml>
+						<jettyXmls>${project.basedir}/src/test/jetty/jetty.xml,${project.basedir}/src/test/jetty/jetty-ssl.xml,${project.basedir}/src/test/jetty/jetty-http.xml,${project.basedir}/src/test/jetty/jetty-https.xml</jettyXmls>
 					</configuration>
 				</plugin>
 				<plugin>

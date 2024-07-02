@@ -22,20 +22,25 @@
 <!-- and either jetty-https.xml or jetty-spdy.xml (but not both)   -->
 <!-- ============================================================= -->
 <Configure id="sslContextFactory" class="org.eclipse.jetty.util.ssl.SslContextFactory">
-  <Set name="KeyStorePath"><Property name="maven.project.build.directory.test-classes" default="." />/<Property name="jetty.keystore" default="localhost.jks"/></Set>
-  <Set name="KeyStorePassword"><Property name="jetty.keystore.password" default="openmeetings"/></Set>
-  <Set name="KeyManagerPassword"><Property name="jetty.keymanager.password" default="openmeetings"/></Set>
-  <Set name="EndpointIdentificationAlgorithm"></Set>
-  <!-- =========================================================== -->
-  <!-- Create a TLS specific HttpConfiguration based on the        -->
-  <!-- common HttpConfiguration defined in jetty.xml               -->
-  <!-- Add a SecureRequestCustomizer to extract certificate and    -->
-  <!-- session information                                         -->
-  <!-- =========================================================== -->
-  <New id="sslHttpConfig" class="org.eclipse.jetty.server.HttpConfiguration">
-    <Arg><Ref refid="httpConfig"/></Arg>
-    <Call name="addCustomizer">
-      <Arg><New class="org.eclipse.jetty.server.SecureRequestCustomizer"/></Arg>
-    </Call>
-  </New>
+	<Set name="KeyStorePath"><Property name="maven.project.build.directory.test-classes" default="." />
+		/<Property name="jetty.keystore" default="localhost.jks" /></Set>
+	<Set name="KeyStorePassword"><Property name="jetty.keystore.password" default="openmeetings" /></Set>
+	<Set name="KeyManagerPassword"><Property name="jetty.keymanager.password" default="openmeetings" /></Set>
+	<Set name="EndpointIdentificationAlgorithm"></Set>
+	<!-- =========================================================== -->
+	<!-- Create a TLS specific HttpConfiguration based on the        -->
+	<!-- common HttpConfiguration defined in jetty.xml               -->
+	<!-- Add a SecureRequestCustomizer to extract certificate and    -->
+	<!-- session information                                         -->
+	<!-- =========================================================== -->
+	<New id="sslHttpConfig" class="org.eclipse.jetty.server.HttpConfiguration">
+		<Arg><Ref refid="httpConfig" /></Arg>
+		<Call name="addCustomizer">
+			<Arg>
+				<New class="org.eclipse.jetty.server.SecureRequestCustomizer">
+					<Set name="SniHostCheck"><Property name="jetty.ssl.sniHostCheck" default="false" /></Set>
+				</New>
+			</Arg>
+		</Call>
+	</New>
 </Configure>
