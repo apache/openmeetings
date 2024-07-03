@@ -33,7 +33,7 @@ import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.util.tester.FormTester;
 import org.junit.jupiter.api.Test;
 
-import org.wicketstuff.jquery.ui.calendar.CalendarView;
+import org.wicketstuff.jquery.ui.calendar6.CalendarView;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 
@@ -57,7 +57,7 @@ class TestCalendar extends AbstractWicketTesterTest {
 			tester.getRequest().setParameter("allDay", String.valueOf(false));
 			tester.getRequest().setParameter("startDate", LocalDateTime.of(2017, 11, 13, 13, 13).toString());
 			tester.getRequest().setParameter("endDate", LocalDateTime.of(2017, 11, 13, 13, 13).toString());
-			tester.getRequest().setParameter("viewName", CalendarView.month.name());
+			tester.getRequest().setParameter("viewName", CalendarView.dayGridMonth.name());
 			tester.executeBehavior((AbstractAjaxBehavior)cal.get("form:calendar").getBehaviorById(0)); //select-event
 			FormTester appTester = tester.newFormTester(PATH_APPOINTMENT_DLG_FRM);
 			//check inviteeType:groupContainer:groups is invisible for regular user

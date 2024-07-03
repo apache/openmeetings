@@ -22,7 +22,7 @@ import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
 
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 
-import org.wicketstuff.jquery.ui.calendar.CalendarEvent;
+import org.wicketstuff.jquery.ui.calendar6.CalendarEvent;
 
 public class OmCalendarEvent extends CalendarEvent {
 	private static final long serialVersionUID = 1L;

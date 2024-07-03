@@ -7,7 +7,7 @@ function onOmGotoClick() {
 	}
 	gotoSpan = gotoBtn.parent().find('.goto-span');
 	gotoSpan.datetimepicker({
-		locale: $('#calendar').fullCalendar('option', 'locale')
+		locale: document.querySelector('#calendar').calendar.getOption('locale')
 		, format: 'L'
 		, icons: {
 			time: 'fas fa-clock'
@@ -29,7 +29,7 @@ function onOmGotoClick() {
 	gotoSpan
 		.off()
 		.on('hide.datetimepicker', function(e){
-			$('#calendar').fullCalendar('gotoDate', e.date.startOf('day'));
+			document.querySelector('#calendar').calendar.gotoDate(e.date.startOf('day').toDate());
 		})
 		.datetimepicker('show');
 }
