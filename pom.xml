@@ -1488,7 +1488,7 @@
 					<artifactId>frontend-maven-plugin</artifactId>
 					<version>${frontend-maven-plugin.version}</version>
 					<configuration>
-						<nodeVersion>v16.18.1</nodeVersion>
+						<nodeVersion>v20.15.0</nodeVersion>
 						<installDirectory>${project.build.directory}</installDirectory>
 					</configuration>
 				</plugin>

@@ -19,6 +19,8 @@
 package org.apache.openmeetings.web;
 
 import static java.util.UUID.randomUUID;
+import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+import static java.time.ZoneOffset.UTC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -55,8 +57,8 @@ class TestCalendar extends AbstractWicketTesterTest {
 			User u = userDao.getByLogin(regularUsername, User.Type.USER, null);
 			//test create month
 			tester.getRequest().setParameter("allDay", String.valueOf(false));
-			tester.getRequest().setParameter("startDate", LocalDateTime.of(2017, 11, 13, 13, 13).toString());
-			tester.getRequest().setParameter("endDate", LocalDateTime.of(2017, 11, 13, 13, 13).toString());
+			tester.getRequest().setParameter("startDate", LocalDateTime.of(2017, 11, 13, 13, 13).atOffset(UTC).format(ISO_OFFSET_DATE_TIME));
+			tester.getRequest().setParameter("endDate", LocalDateTime.of(2017, 11, 13, 13, 13).atOffset(UTC).format(ISO_OFFSET_DATE_TIME));
 			tester.getRequest().setParameter("viewName", CalendarView.dayGridMonth.name());
 			tester.executeBehavior((AbstractAjaxBehavior)cal.get("form:calendar").getBehaviorById(0)); //select-event
 			FormTester appTester = tester.newFormTester(PATH_APPOINTMENT_DLG_FRM);
