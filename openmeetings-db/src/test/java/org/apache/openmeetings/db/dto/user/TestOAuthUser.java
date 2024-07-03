@@ -97,44 +97,45 @@ class TestOAuthUser {
 				.addMapping(PARAM_LOGIN, "id")
 				.addMapping(PARAM_EMAIL, "email")
 				.addMapping(PARAM_FNAME, "display-name");
-		OAuthUser user = new OAuthUser("{\n" +
-				"    \"ocs\": {\n" +
-				"        \"meta\": {\n" +
-				"            \"status\": \"ok\",\n" +
-				"            \"statuscode\": 200,\n" +
-				"            \"message\": \"OK\"\n" +
-				"        },\n" +
-				"        \"data\": {\n" +
-				"            \"storageLocation\": \"xxxxx\",\n" +
-				"            \"id\": \"xxxxx\",\n" +
-				"            \"lastLogin\": 1584799957000,\n" +
-				"            \"backend\": \"Database\",\n" +
-				"            \"subadmin\": [],\n" +
-				"            \"quota\": {\n" +
-				"                \"free\": 183035547648,\n" +
-				"                \"used\": 10244,\n" +
-				"                \"total\": 183035557892,\n" +
-				"                \"relative\": 0,\n" +
-				"                \"quota\": -3\n" +
-				"            },\n" +
-				"            \"email\": \"xxxxxx@xxx.x\",\n" +
-				"            \"phone\": \"\",\n" +
-				"            \"address\": \"\",\n" +
-				"            \"website\": \"\",\n" +
-				"            \"twitter\": \"\",\n" +
-				"            \"groups\": [\n" +
-				"                \"xxxxxx\"\n" +
-				"            ],\n" +
-				"            \"language\": \"en\",\n" +
-				"            \"locale\": \"\",\n" +
-				"            \"backendCapabilities\": {\n" +
-				"                \"setDisplayName\": true,\n" +
-				"                \"setPassword\": true\n" +
-				"            },\n" +
-				"            \"display-name\": \"xxxxx\"\n" +
-				"        }\n" +
-				"    }\n" +
-				"}", server);
+		OAuthUser user = new OAuthUser("""
+			{
+				"ocs": {
+					"meta": {
+						"status": "ok",
+						"statuscode": 200,
+						"message": "OK"
+					},
+					"data": {
+						"storageLocation": "xxxxx",
+						"id": "xxxxx",
+						"lastLogin": 1584799957000,
+						"backend": "Database",
+						"subadmin": [],
+						"quota": {
+							"free": 183035547648,
+							"used": 10244,
+							"total": 183035557892,
+							"relative": 0,
+							"quota": -3
+						},
+						"email": "xxxxxx@xxx.x",
+						"phone": "",
+						"address": "",
+						"website": "",
+						"twitter": "",
+						"groups": [
+							"xxxxxx"
+						],
+						"language": "en",
+						"locale": "",
+						"backendCapabilities": {
+							"setDisplayName": true,
+							"setPassword": true
+						},
+						"display-name": "xxxxx"
+					}
+				}
+			}""", server);
 		assertEquals("xxxxx", user.getLogin(), "Login should be correct");
 	}
 

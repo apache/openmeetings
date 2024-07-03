@@ -50,10 +50,10 @@ class TestConfig extends AbstractOmServerTest {
 			List<Configuration> list = cfgDao.get(4, 6);
 
 			for (Configuration conf : list) {
-				log.error("conf.getKey() " + conf.getKey());
-				log.error("conf.getUser() " + conf.getUser());
+				log.error("conf.getKey() = {}", conf.getKey());
+				log.error("conf.getUser() = {}", conf.getUser());
 				if (conf.getUser() != null) {
-					log.error("conf.getUsers() " + conf.getUser().getLogin());
+					log.error("conf.getUser().getLogin() = {}", conf.getUser().getLogin());
 				}
 			}
 

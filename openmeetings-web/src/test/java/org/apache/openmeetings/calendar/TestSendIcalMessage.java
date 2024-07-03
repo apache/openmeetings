@@ -78,7 +78,7 @@ class TestSendIcalMessage extends AbstractOmServerTest {
 				.addAttendee(email, username, invitor)
 				.build();
 
-		log.debug("ICS: {}", handler.toString());
+		log.debug("ICS: {}", handler);
 		assertNotNull(handler.toString(), "Valid ICS should be created");
 
 		sendIcalMessage(handler.toByteArray());

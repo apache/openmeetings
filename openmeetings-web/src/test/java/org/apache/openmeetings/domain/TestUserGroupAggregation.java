@@ -39,7 +39,7 @@ class TestUserGroupAggregation extends AbstractOmServerTest {
 		assertTrue(u.getGroupUsers().size() > 0, "Default user must belong to at least one group");
 
 		for (GroupUser orgUserObj : u.getGroupUsers()) {
-			log.error("testitNow: group Id: '" + orgUserObj.getGroup().getId() + "'; name: '" + orgUserObj.getGroup().getName() + "'");
+			log.error("testitNow: group Id: '{}'; name: '{}'", orgUserObj.getGroup().getId(), orgUserObj.getGroup().getName());
 		}
 	}
 }

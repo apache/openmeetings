@@ -48,7 +48,7 @@ import org.apache.wicket.util.tester.FormTester;
 import org.junit.jupiter.api.Test;
 
 class TestLoginUI extends AbstractWicketTesterTest {
-	private final static String PATH_REGISTER = "register:form";
+	private static final String PATH_REGISTER = "register:form";
 
 	private void checkLogin(String login, String pass) {
 		FormTester formTester = tester.newFormTester("signin:signin");

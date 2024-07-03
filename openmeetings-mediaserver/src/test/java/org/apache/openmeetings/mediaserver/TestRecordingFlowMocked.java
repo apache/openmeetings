@@ -76,7 +76,7 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 		u.setLastname("lastname");
 		doReturn(u).when(userDao).get(USER_ID);
 		doReturn(true).when(handler).isConnected();
-		when(recDao.update(any(Recording.class))).thenAnswer((invocation) ->  {
+		when(recDao.update(any(Recording.class))).thenAnswer(invocation ->  {
 			Object[] args = invocation.getArguments();
 			Recording r = (Recording) args[0];
 			r.setId(1L);
