@@ -136,9 +136,9 @@ public class CalendarPanel extends UserBasePanel {
 						? "{left: 'timeGridDay,timeGridWeek,dayGridMonth', center: 'title', right: 'gotoBtn,today nextYear,next,prev,prevYear'}"
 						: "{left: 'prevYear,prev,next,nextYear today,gotoBtn', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay'}")
 				.set("allDaySlot", false)
-				.set("axisFormat", Options.asString("H(:mm)"))
-				.set("defaultEventMinutes", 60)
-				.set("timeFormat", Options.asString("H(:mm)"))
+				.set("nowIndicator", true)
+				.set("defaultTimedEventDuration", Options.asString("01:00"))
+				.set("selectMirror", true)
 
 				.set("themeSystem", Options.asString("bootstrap5"))
 				.set("buttonIcons", new JSONObject()
