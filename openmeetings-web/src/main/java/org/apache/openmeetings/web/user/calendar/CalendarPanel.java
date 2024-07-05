@@ -133,7 +133,7 @@ public class CalendarPanel extends UserBasePanel {
 				.set("height", Options.asString("100%"))
 				.set("customButtons", "{gotoBtn: {text: ' ', click: onOmGotoClick}}")
 				.set("headerToolbar", isRtl
-						? "{left: 'timeGridDay,timeGridWeek,dayGridMonth', center: 'title', right: 'gotoBtn,today nextYear,next,prev,prevYear'}"
+						? "{right: 'prevYear,prev,next,nextYear today,gotoBtn', center: 'title', left: 'dayGridMonth,timeGridWeek,timeGridDay'}"
 						: "{left: 'prevYear,prev,next,nextYear today,gotoBtn', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay'}")
 				.set("allDaySlot", false)
 				.set("nowIndicator", true)
@@ -143,10 +143,10 @@ public class CalendarPanel extends UserBasePanel {
 				.set("themeSystem", Options.asString("bootstrap5"))
 				.set("buttonIcons", new JSONObject()
 						.put("close", "bi fa-solid fa-times")
-						.put("prev", "bi fa-solid fa-chevron-left")
-						.put("next", "bi fa-solid fa-chevron-right")
-						.put("prevYear", "bi fa-solid fa-angles-left")
-						.put("nextYear", "bi fa-solid fa-angles-right")
+						.put("prev", isRtl ? "bi fa-solid fa-chevron-right" : "bi fa-solid fa-chevron-left")
+						.put("next", isRtl ? "bi fa-solid fa-chevron-left" : "bi fa-solid fa-chevron-right")
+						.put("prevYear", isRtl ? "bi fa-solid fa-angles-right" : "bi fa-solid fa-angles-left")
+						.put("nextYear", isRtl ? "bi fa-solid fa-angles-left" : "bi fa-solid fa-angles-right")
 						.toString())
 				.set("buttonText", new JSONObject()
 						.put("month", getString("801"))
@@ -363,6 +363,7 @@ public class CalendarPanel extends UserBasePanel {
 		response.render(JavaScriptHeaderItem.forReference(CALJS));
 		response.render(JavaScriptHeaderItem.forReference(TouchPunchResourceReference.instance()));
 		response.render(JavaScriptHeaderItem.forReference(BS5_THEME));
+		response.render(JavaScriptHeaderItem.forScript("FullCalendar.Bootstrap5.Internal.BootstrapTheme.prototype.rtlIconClasses = null", "fullcalendar-bootstrap-reset-rtl"));
 	}
 
 	// Client creation here, because the client is not created until necessary
