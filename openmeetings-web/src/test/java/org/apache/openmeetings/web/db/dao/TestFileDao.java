@@ -55,7 +55,8 @@ class TestFileDao extends AbstractOmServerTest {
 		f.setName("Arab external test");
 		f.setType(BaseFileItem.Type.IMAGE);
 		f.setInsertedBy(u.getId());
-		f = fileDao.update(f);
+		fileDao.update(f);
+
 		List<FileItem> list1 = fileDao.getExternal(UNIT_TEST_ARAB_EXT_TYPE);
 		assertNotNull(list1);
 		assertFalse(list1.isEmpty());

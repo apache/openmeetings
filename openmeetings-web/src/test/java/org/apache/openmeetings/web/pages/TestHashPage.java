@@ -123,8 +123,7 @@ class TestHashPage extends AbstractWicketTesterTest {
 				i.setValidFrom(new Date(from.getTime() - (5 * 60 * 1000)));
 				i.setValidTo(to);
 				break;
-			case ENDLESS:
-			case ONE_TIME:
+			case ENDLESS, ONE_TIME:
 			default:
 				break;
 		}

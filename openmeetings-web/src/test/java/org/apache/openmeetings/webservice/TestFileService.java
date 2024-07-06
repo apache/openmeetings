@@ -98,7 +98,8 @@ class TestFileService extends AbstractWebServiceTest {
 		f.setName("Arab external test");
 		f.setType(BaseFileItem.Type.IMAGE);
 		f.setInsertedBy(u.getId());
-		f = getBean(FileItemDao.class).update(f);
+		getBean(FileItemDao.class).update(f);
+
 		ServiceResult r = login();
 		Collection<? extends FileItemDTO> list = getClient(getFileUrl())
 				.path("/" + UrlEncoder.PATH_INSTANCE.encode(UNIT_TEST_ARAB_EXT_TYPE, UTF_8))
