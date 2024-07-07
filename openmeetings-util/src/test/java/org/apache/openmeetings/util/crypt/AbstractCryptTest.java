@@ -55,7 +55,7 @@ abstract class AbstractCryptTest {
 		RandomStringGenerator generator = new RandomStringGenerator.Builder()
 				.withinRange('!', '}')
 				.usingRandom(rnd::nextInt)
-				.build();
+				.get();
 		for (int i = 0; i < count; ++i) {
 			l.add(generator.generate(rnd.nextInt(256)));
 		}

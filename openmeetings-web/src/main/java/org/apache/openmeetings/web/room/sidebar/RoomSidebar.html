@@ -22,15 +22,15 @@
 <wicket:panel>
 	<div id="busy-indicator"><i class="fas fa-spinner fa-spin"></i></div>
 	<div class="tabs" id="room-sidebar-tabs">
-		<ul class="nav nav-tabs" role="tablist">
+		<ul class="nav nav-tabs">
 			<li class="nav-item">
-				<a href="#room-sidebar-tab-users" class="nav-link active om-icon big tab user" id="room-sidebar-users-tab" data-bs-toggle="tab" role="tab" aria-controls="room-sidebar-tab-users" wicket:message="title:398">
+				<a href="#room-sidebar-tab-users" class="nav-link active om-icon big tab user" id="room-sidebar-users-tab" data-bs-toggle="tab" aria-controls="room-sidebar-tab-users" wicket:message="title:398">
 					<i class="fas fa-users"></i>
 					<span class="label"><wicket:message key="398"/>&nbsp;</span><span class="badge bg-info user-count end-0"></span>
 				</a>
 			</li>
 			<li class="nav-item" wicket:enclosure="file-tab">
-				<a href="#room-sidebar-tab-files" class="nav-link om-icon big tab file" id="room-sidebar-files-tab" data-bs-toggle="tab" role="tab" aria-controls="room-sidebar-tab-files" wicket:message="title:245" wicket:id="file-tab">
+				<a href="#room-sidebar-tab-files" class="nav-link om-icon big tab file" id="room-sidebar-files-tab" data-bs-toggle="tab" aria-controls="room-sidebar-tab-files" wicket:message="title:245" wicket:id="file-tab">
 					<i class="fas fa-folder"></i>
 					<span class="label"><wicket:message key="245"/></span>
 				</a>
@@ -41,7 +41,7 @@
 			</li>
 		</ul>
 		<div class="tab-content">
-			<div id="room-sidebar-tab-users" class="tab-pane fade show active" role="tabpanel" aria-labelledby="room-sidebar-users-tab">
+			<div id="room-sidebar-tab-users" class="tab-pane fade show active" aria-labelledby="room-sidebar-users-tab">
 				<div class="header">
 					<span class="om-icon float-start settings clickable" wicket:message="title:306"></span>
 					<span class="om-icon float-start activity cam clickable" wicket:message="data-on:camera.on,data-off:camera.off"></span>
@@ -52,7 +52,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="room-sidebar-tab-files" class="tab-pane fade" role="tabpanel" aria-labelledby="room-sidebar-files-tab" wicket:enclosure="tree">
+			<div id="room-sidebar-tab-files" class="tab-pane fade" aria-labelledby="room-sidebar-files-tab" wicket:enclosure="tree">
 				<div class="file-list h-100" wicket:id="tree"></div>
 			</div>
 		</div>
