@@ -103,17 +103,17 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 	}
 
 	private Client getClientWithRoom() {
-		Client c = getClient();
-		c.setRoom(new Room());
-		c.getRoom().setId(ROOM_ID);
-		return c;
+		Client client = getClient();
+		client.setRoom(new Room());
+		client.getRoom().setId(ROOM_ID);
+		return client;
 	}
 
 	private Client getClientFull() {
-		Client c = getClientWithRoom();
-		c.getRoom().setAllowRecording(true);
-		c.allow(Room.Right.MODERATOR);
-		return c;
+		Client client = getClientWithRoom();
+		client.getRoom().setAllowRecording(true);
+		client.allow(Room.Right.MODERATOR);
+		return client;
 	}
 
 	@Test

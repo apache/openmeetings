@@ -35,13 +35,11 @@ class TestConfig extends AbstractOmServerTest {
 
 	@Test
 	void getConfigKey() {
-		System.err.println("THIS");
+		Configuration smtpServer = cfgDao.get(CONFIG_SMTP_SERVER);
 
-		Configuration smtp_server = cfgDao.get(CONFIG_SMTP_SERVER);
+		log.error("smtpServer.getUser(): {}", smtpServer.getUser());
 
-		System.err.println("smtp_server " + smtp_server.getUser());
-
-		assertNull(smtp_server.getUser());
+		assertNull(smtpServer.getUser());
 	}
 
 	@Test
