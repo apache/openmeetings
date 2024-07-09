@@ -29,15 +29,25 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.LocalDateTimeConverter;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.tempusdominus.TempusDominusConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.tempusdominus.TempusDominusLocalizationConfig.DateFormatType;
+
 public class OmDateTimePicker extends AbstractOmDateTimePicker<LocalDateTime> {
 	private static final long serialVersionUID = 1L;
 
 	public OmDateTimePicker(String id, IModel<LocalDateTime> model) {
-		super(id, model, false);
+		super(id, model);
 	}
 
 	@Override
-	protected HiddenField<LocalDateTime> newHidden(String wicketId, IModel<LocalDateTime> model) {
+	protected TempusDominusConfig patch(TempusDominusConfig config) {
+		return config
+				.withClass(LocalDateTime.class)
+				.withLocalization(cfg -> cfg.withFormat(DateFormatType.LLL.name()));
+	}
+
+	@Override
+	protected HiddenField<LocalDateTime> newHidden(String wicketId) {
 		final IConverter<?> converter = new LocalDateTimeConverter() {
 			private static final long serialVersionUID = 1L;
 
@@ -46,7 +56,7 @@ public class OmDateTimePicker extends AbstractOmDateTimePicker<LocalDateTime> {
 				return DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 			}
 		};
-		return new HiddenField<>(wicketId, model, LocalDateTime.class) {
+		return new HiddenField<>(wicketId, LocalDateTime.class) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

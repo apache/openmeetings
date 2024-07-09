@@ -27,19 +27,31 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.markup.html.form.datetime.LocalDateTextField;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.HiddenField;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.LocalDateConverter;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.tempusdominus.TempusDominusConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.tempusdominus.TempusDominusDisplayConfig.ViewModeType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.tempusdominus.TempusDominusLocalizationConfig.DateFormatType;
 
 public class AjaxOmDatePicker extends AbstractOmDateTimePicker<LocalDate> {
 	private static final long serialVersionUID = 1L;
 
 	public AjaxOmDatePicker(String id) {
-		super(id, null, true);
+		super(id, null);
 	}
 
 	@Override
-	protected HiddenField<LocalDate> newHidden(String wicketId, IModel<LocalDate> model) {
+	protected TempusDominusConfig patch(TempusDominusConfig config) {
+		return config
+				.withClass(LocalDate.class)
+				.withLocalization(cfg -> cfg.withFormat(DateFormatType.L.name()))
+				.withDisplay(cfg -> cfg.withViewMode(ViewModeType.YEARS))
+				.withRestrictions(cfg -> cfg.withMaxDate(LocalDate.now().minusYears(1)));
+		}
+
+	@Override
+	protected HiddenField<LocalDate> newHidden(String wicketId) {
 		final IConverter<?> converter = new LocalDateConverter() {
 			private static final long serialVersionUID = 1L;
 
@@ -48,7 +60,7 @@ public class AjaxOmDatePicker extends AbstractOmDateTimePicker<LocalDate> {
 				return DateTimeFormatter.ISO_LOCAL_DATE;
 			}
 		};
-		HiddenField<LocalDate> date = new HiddenField<>(wicketId, model, LocalDate.class) {
+		HiddenField<LocalDate> date = new HiddenField<>(wicketId, LocalDate.class) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

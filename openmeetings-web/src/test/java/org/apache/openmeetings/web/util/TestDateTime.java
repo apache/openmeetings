@@ -30,7 +30,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.apache.openmeetings.web.RegularTest;
-import org.apache.openmeetings.web.common.datetime.AbstractOmDateTimePicker;
 import org.junit.jupiter.api.Test;
 
 @RegularTest
@@ -75,30 +74,5 @@ class TestDateTime {
 				.appendPattern(pattern)
 				.toFormatter(Locale.ENGLISH);
 		assertNotNull(formatter1.parse(jsDateStr));
-	}
-
-	@Test
-	void test3() throws Exception {
-		final Locale loc = new Locale.Builder()
-				.setLanguage("fr")
-				.setRegion("CA")
-				.build();
-		final String result = Runtime.version().feature() < 17
-				? "yy-MM-dd HH [h] mm" // java 11
-				: "y-MM-dd HH [h] mm"; // java 17
-		String format = AbstractOmDateTimePicker.getDateTimeFormat(loc);
-		assertEquals(result, AbstractOmDateTimePicker.patch(format));
-		format = AbstractOmDateTimePicker.getDateTimeFormat(Locale.ENGLISH);
-		assertEquals(format, AbstractOmDateTimePicker.patch(format));
-	}
-
-	@Test
-	void test4() throws Exception {
-		final Locale loc = new Locale.Builder()
-				.setLanguage("bg")
-				.setRegion("BG")
-				.build();
-		String format = AbstractOmDateTimePicker.getDateTimeFormat(loc);
-		assertEquals("d.MM.yy [г]., H:mm [ч].", AbstractOmDateTimePicker.patch(format));
 	}
 }

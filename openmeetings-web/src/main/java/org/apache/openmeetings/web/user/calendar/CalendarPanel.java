@@ -132,9 +132,7 @@ public class CalendarPanel extends UserBasePanel {
 				.set("direction", Options.asString(isRtl ? "rtl" : "ltr"))
 				.set("height", Options.asString("100%"))
 				.set("customButtons", "{gotoBtn: {text: ' ', click: onOmGotoClick}}")
-				.set("headerToolbar", isRtl
-						? "{right: 'prevYear,prev,next,nextYear today,gotoBtn', center: 'title', left: 'dayGridMonth,timeGridWeek,timeGridDay'}"
-						: "{left: 'prevYear,prev,next,nextYear today,gotoBtn', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay'}")
+				.set("headerToolbar", "{start: 'prevYear,prev,next,nextYear today,gotoBtn', center: 'title', end: 'dayGridMonth,timeGridWeek,timeGridDay'}")
 				.set("allDaySlot", false)
 				.set("nowIndicator", true)
 				.set("defaultTimedEventDuration", Options.asString("01:00"))

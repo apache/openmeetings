@@ -19,12 +19,8 @@
 package org.apache.openmeetings.web.common.datetime;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
-import org.apache.openmeetings.web.app.WebSession;
-import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -34,57 +30,68 @@ import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.AbstractDateTimePickerWithIcon;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerIconConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.tempusdominus.TempusDominusConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.tempusdominus.AbstractTempusDominusWithIcon;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
 
 public abstract class AbstractOmDateTimePicker<T extends Serializable> extends FormComponentPanel<T> {
 	private static final long serialVersionUID = 1L;
-	private static final String DEFAULT_DATE_FORMAT = "yyyy/MM/dd";
-	private static final String DEFAULT_DATE_TIME_FORMAT = DEFAULT_DATE_FORMAT + " HH:mm:ss";
 	private static final ResourceReference FUNCJS = new JavaScriptResourceReference(AbstractOmDateTimePicker.class, "datepicker-functions.js");
-	private final boolean dateOnly;
 	private final HiddenField<T> date;
-	private AbstractDateTimePickerWithIcon<T> picker;
+	private AbstractTempusDominusWithIcon<T> picker;
 	private String markupId;
 
-	AbstractOmDateTimePicker(String id, IModel<T> model, boolean dateOnly) {
+	AbstractOmDateTimePicker(String id, IModel<T> model) {
 		super(id, model);
-		this.dateOnly = dateOnly;
-		date = newHidden("date", new ChainingModel<>(model));
+		date = newHidden("date");
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		final String format = dateOnly ? getDateFormat() : getDateTimeFormat();
-		DatetimePickerConfig config = new DatetimePickerConfig()
-				.useLocale(WebSession.get().getLocale().toLanguageTag())
-				.withFormat(patch(format))
-				.withKeepInvalid(true)
-				.with(new DatetimePickerIconConfig().useDateIcon(FontAwesome6IconType.calendar_s)
-						.useTimeIcon(FontAwesome6IconType.clock_s).useUpIcon(FontAwesome6IconType.arrow_up_s)
-						.useDownIcon(FontAwesome6IconType.arrow_down_s)
-						.usePreviousIcon(FontAwesome6IconType.arrow_left_s)
-						.useNextIcon(FontAwesome6IconType.arrow_right_s)
-						.useTodayIcon(FontAwesome6IconType.calendar_check_s).useClearIcon(FontAwesome6IconType.eraser_s)
-						.useCloseIcon(FontAwesome6IconType.xmark_s));
-		picker = new AbstractDateTimePickerWithIcon<>("picker", new Model<>(getModelObject()), config) {
+		TempusDominusConfig config = new TempusDominusConfig()
+				.withLocalization(cfg -> cfg
+						.withDateFormats(null)
+				)
+				.withIcons(cfg -> cfg
+						.withDateIcon(FontAwesome6IconType.calendar_s)
+						.withTimeIcon(FontAwesome6IconType.clock_s)
+						.withUpIcon(FontAwesome6IconType.arrow_up_s)
+						.withDownIcon(FontAwesome6IconType.arrow_down_s)
+						.withPreviousIcon(FontAwesome6IconType.arrow_left_s)
+						.withNextIcon(FontAwesome6IconType.arrow_right_s)
+						.withTodayIcon(FontAwesome6IconType.calendar_check_s)
+						.withClearIcon(FontAwesome6IconType.eraser_s)
+						.withCloseIcon(FontAwesome6IconType.xmark_s));
+		picker = new AbstractTempusDominusWithIcon<>("picker", new Model<T>(), patch(config)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected FormComponent<T> newInput(String wicketId, String dateFormat) {
-				FormComponent<T> input = AbstractOmDateTimePicker.this.newInput(wicketId, dateFormat);
-				markupId = input.getMarkupId();
-				return input;
+				return AbstractOmDateTimePicker.this.newInput(wicketId, dateFormat);
 			}
 		};
+		picker.setOutputMarkupId(true);
+		markupId = picker.getMarkupId();
 		date.setOutputMarkupId(true);
+		date.setModel(new ChainingModel<>(getModel()));
 		add(date, picker.setRenderBodyOnly(false));
+	}
+
+	protected abstract FormComponent<T> newInput(String wicketId, String dateFormat);
+
+	protected abstract HiddenField<T> newHidden(String wicketId);
+
+	protected TempusDominusConfig patch(TempusDominusConfig cfg) {
+		return cfg;
+	}
+
+	private CharSequence initScript() {
+		return "omDateTimeInit('" + markupId + "', '" + date.getMarkupId() + "');";
 	}
 
 	@Override
@@ -98,30 +105,16 @@ public abstract class AbstractOmDateTimePicker<T extends Serializable> extends F
 		}
 	}
 
-	protected abstract FormComponent<T> newInput(String wicketId, String dateFormat);
-
-	protected abstract HiddenField<T> newHidden(String wicketId, IModel<T> model);
-
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(JavaScriptHeaderItem.forReference(FUNCJS));
-		response.render(new OnDomReadyHeaderItem("$('#" + markupId + "').on('change.datetimepicker', function (e) {omDateTimeInputHasChanged(e, '" + date.getMarkupId() + "', " + dateOnly + ");});"));
+		response.render(new OnDomReadyHeaderItem(initScript()));
 	}
 
 	@Override
 	public boolean processChildren() {
 		return false;
-	}
-
-	public static String patch(String format) {
-		// in Java free text is escaped with single-quotes
-		// moment.js uses []
-		return format.replaceAll("'([^']*)'", "\\[$1\\]");
-	}
-
-	public static String getDateTimeFormat() {
-		return getDateTimeFormat(WebSession.get().getLocale());
 	}
 
 	@Override
@@ -132,22 +125,9 @@ public abstract class AbstractOmDateTimePicker<T extends Serializable> extends F
 
 	@Override
 	protected void onModelChanged() {
-		picker.setModelObject(getModelObject());
-	}
-
-	public static String getDateTimeFormat(Locale loc) {
-		DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, loc);
-		if (fmt instanceof SimpleDateFormat sfmt) {
-			return sfmt.toPattern();
-		}
-		return DEFAULT_DATE_TIME_FORMAT;
-	}
-
-	public static String getDateFormat() {
-		DateFormat fmt = DateFormat.getDateInstance(DateFormat.SHORT, Session.get().getLocale());
-		if (fmt instanceof SimpleDateFormat sfmt) {
-			return sfmt.toPattern();
-		}
-		return DEFAULT_DATE_FORMAT;
+		RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(target -> {
+			target.add(date);
+			target.appendJavaScript(initScript());
+		});
 	}
 }
