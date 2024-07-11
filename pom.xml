@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache</groupId>
 		<artifactId>apache</artifactId>
-		<version>31</version>
+		<version>33</version>
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
@@ -41,6 +41,9 @@
 		<jdk.version>17</jdk.version>
 		<minimalMavenBuildVersion>3.8.7</minimalMavenBuildVersion>
 		<minimalJavaBuildVersion>${jdk.version}</minimalJavaBuildVersion>
+		<maven.compiler.source>${jdk.version}</maven.compiler.source>
+		<maven.compiler.target>${jdk.version}</maven.compiler.target><!-- use version numbers without the "1." prefix (supported since javac 5) -->
+		<maven.compiler.release>${jdk.version}</maven.compiler.release>
 
 		<!-- plugin versions -->
 		<version.maven-javadoc-plugin>3.7.0</version.maven-javadoc-plugin>
@@ -89,7 +92,7 @@
 		<fullcalendar.version>6.1.14</fullcalendar.version>
 		<spring.version>6.1.10</spring.version>
 		<tomcat.version>10.1.25</tomcat.version>
-		<jetty.version>11.0.21</jetty.version>
+		<jetty.version>11.0.22</jetty.version>
 		<ical4j.version>4.0.1</ical4j.version>
 		<cxf.version>4.0.4</cxf.version>
 		<io.prometheus.version>1.3.1</io.prometheus.version>
@@ -100,7 +103,7 @@
 		<src.pack.skip>false</src.pack.skip>
 		<h2.version>2.2.224</h2.version>
 		<jakarta.mail.version>2.0.1</jakarta.mail.version>
-		<openjpa.version>4.0.0</openjpa.version>
+		<openjpa.version>4.0.1-SNAPSHOT</openjpa.version>
 		<jakarta.persistence.version>3.2.0</jakarta.persistence.version>
 		<jakarta.transaction.version>2.0.1</jakarta.transaction.version>
 		<jakarta.annotation.version>3.0.0</jakarta.annotation.version>
@@ -117,7 +120,7 @@
 		<commons-net.version>3.11.1</commons-net.version>
 		<dom4j.version>2.1.4</dom4j.version>
 		<postgresql.version>42.7.3</postgresql.version>
-		<mysql.version>8.4.0</mysql.version>
+		<mysql.version>9.0.0</mysql.version>
 		<mssql.version>12.6.1.jre11</mssql.version>
 		<ojdbc.version>19.23.0.0</ojdbc.version>
 		<xstream.version>1.4.20</xstream.version>
@@ -1221,8 +1224,7 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
-						<source>${jdk.version}</source>
-						<target>${jdk.version}</target>
+						<release>${jdk.version}</release>
 						<debug>true</debug>
 						<showDeprecation>true</showDeprecation>
 						<encoding>UTF-8</encoding>
@@ -1496,14 +1498,6 @@
 					<groupId>org.apache.openjpa</groupId>
 					<artifactId>openjpa-maven-plugin</artifactId>
 					<version>${openjpa.version}</version>
-					<!-- set the version to be the same as the level in your runtime -->
-					<dependencies>
-						<dependency>
-							<groupId>org.apache.openjpa</groupId>
-							<artifactId>openjpa</artifactId>
-							<version>${openjpa.version}</version>
-						</dependency>
-					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
