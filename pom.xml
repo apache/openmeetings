@@ -117,7 +117,7 @@
 		<commons-net.version>3.11.1</commons-net.version>
 		<dom4j.version>2.1.4</dom4j.version>
 		<postgresql.version>42.7.3</postgresql.version>
-		<mysql.version>8.4.0</mysql.version>
+		<mysql.version>9.0.0</mysql.version>
 		<mssql.version>12.6.1.jre11</mssql.version>
 		<ojdbc.version>19.23.0.0</ojdbc.version>
 		<xstream.version>1.4.20</xstream.version>
@@ -1496,14 +1496,6 @@
 					<groupId>org.apache.openjpa</groupId>
 					<artifactId>openjpa-maven-plugin</artifactId>
 					<version>${openjpa.version}</version>
-					<!-- set the version to be the same as the level in your runtime -->
-					<dependencies>
-						<dependency>
-							<groupId>org.apache.openjpa</groupId>
-							<artifactId>openjpa</artifactId>
-							<version>${openjpa.version}</version>
-						</dependency>
-					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
