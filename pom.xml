@@ -57,13 +57,13 @@
 		<version.maven-clean-plugin>3.4.0</version.maven-clean-plugin>
 		<version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
 		<version.maven-resources-plugin>3.3.1</version.maven-resources-plugin>
-		<version.maven-gpg-plugin>3.2.4</version.maven-gpg-plugin>
+		<version.maven-gpg-plugin>3.2.5</version.maven-gpg-plugin>
 		<version.apache-rat-plugin>0.16.1</version.apache-rat-plugin>
 		<version.checksum-maven-plugin>1.11</version.checksum-maven-plugin>
 		<version.maven-checkstyle-plugin>3.4.0</version.maven-checkstyle-plugin>
 
 		<maven-bundle-plugin.version>5.1.9</maven-bundle-plugin.version>
-		<exec-maven-plugin.version>3.4.0</exec-maven-plugin.version>
+		<exec-maven-plugin.version>3.4.1</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
 		<license-maven-plugin.version>2.4.0</license-maven-plugin.version>
 		<reflow-maven-skin.version>2.3.4</reflow-maven-skin.version>
@@ -82,12 +82,12 @@
 		<plexus-utils.version>3.5.1</plexus-utils.version>
 
 		<!-- dependency versions -->
-		<junit.version>5.10.3</junit.version>
+		<junit.version>5.11.0</junit.version>
 		<wicket.version>10.1.0</wicket.version>
 		<wicketstuff.version>10.2.0-SNAPSHOT</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.7-SNAPSHOT</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.14</fullcalendar.version>
-		<spring.version>6.1.11</spring.version>
+		<spring.version>6.1.12</spring.version>
 		<tomcat.version>10.1.28</tomcat.version>
 		<jetty.version>11.0.22</jetty.version>
 		<ical4j.version>4.0.2</ical4j.version>
@@ -98,7 +98,7 @@
 		<jettison.version>1.5.4</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
-		<h2.version>2.3.230</h2.version>
+		<h2.version>2.3.232</h2.version>
 		<jakarta.mail.version>2.0.1</jakarta.mail.version>
 		<openjpa.version>4.0.0</openjpa.version>
 		<jakarta.persistence.version>3.2.0</jakarta.persistence.version>
@@ -110,7 +110,7 @@
 		<commons-lang3.version>3.16.0</commons-lang3.version>
 		<commons-dbcp.version>2.12.0</commons-dbcp.version>
 		<commons-pool2.version>2.12.0</commons-pool2.version>
-		<commons-cli.version>1.8.0</commons-cli.version>
+		<commons-cli.version>1.9.0</commons-cli.version>
 		<commons-codec.version>1.17.1</commons-codec.version>
 		<commons-io.version>2.16.1</commons-io.version>
 		<commons-text.version>1.12.0</commons-text.version>
@@ -124,8 +124,8 @@
 		<api-all.version>2.1.7</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
-		<tika-parsers.version>3.0.0-BETA</tika-parsers.version>
-		<slf4j.version>2.0.13</slf4j.version>
+		<tika-parsers.version>3.0.0-BETA2</tika-parsers.version>
+		<slf4j.version>2.0.16</slf4j.version>
 		<logback.version>1.5.6</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.78.1</bcprov.version>
