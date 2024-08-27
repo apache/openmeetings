@@ -321,7 +321,7 @@ public class SignInDialog extends Modal<String> {
 	public static void penalty() {
 		// add random timeout
 		try {
-			Thread.sleep(6 + rnd.nextLong(10 * 1000));
+			Thread.sleep(6 + rnd.nextLong(10 * 1000L));
 		} catch (InterruptedException e) {
 			log.error("Unexpected exception while sleeping", e);
 			Thread.currentThread().interrupt();
