@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 /**
@@ -68,10 +69,10 @@ public class ReportType implements DeltaVConstants, XmlSerializable {
      */
     public Report createReport(DeltaVResource resource, ReportInfo info) throws DavException {
         try {
-            Report report = reportClass.newInstance();
+            Report report = reportClass.getConstructor().newInstance();
             report.init(resource, info);
             return report;
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException|NoSuchMethodException|InvocationTargetException e) {
             // should never occur
             throw new DavException(DavServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create new report (" + reportClass.getName() + ") from class: " + e.getMessage());
         } catch (InstantiationException e) {
@@ -152,11 +153,11 @@ public class ReportType implements DeltaVConstants, XmlSerializable {
             return types.get(key);
         } else {
             try {
-                Object report =  reportClass.newInstance();
+                Object report =  reportClass.getConstructor().newInstance();
                 if (!(report instanceof Report)) {
                     throw new IllegalArgumentException("Unable to register Report class: " + reportClass + " does not implement the Report interface.");
                 }
-            } catch (IllegalAccessException e) {
+            } catch (IllegalAccessException|NoSuchMethodException|InvocationTargetException e) {
                 throw new IllegalArgumentException("Error while validating Report class: " + e.getMessage());
             } catch (InstantiationException e) {
                 throw new IllegalArgumentException("Error while validating Report class.: " + e.getMessage());
