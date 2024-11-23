@@ -12,23 +12,23 @@
 	"license": "Apache-2.0",
 	"rat-license": "Licensed under the Apache License, Version 2.0 (the \"License\") http://www.apache.org/licenses/LICENSE-2.0",
 	"devDependencies": {
-		"sass-loader": "^13.3.2",
-		"style-loader": "^3.3.3",
-		"css-loader": "^6.8.1",
+		"sass-loader": "^16.0.3",
+		"style-loader": "^4.0.0",
+		"css-loader": "^7.1.2",
 		"ignore-loader": "^0.1.2",
-		"mini-css-extract-plugin": "^2.7.6",
+		"mini-css-extract-plugin": "^2.9.2",
 		"node-sass": "^9.0.0",
 		"circular-dependency-plugin": "^5.2.2",
-		"webpack": "^5.88.2",
+		"webpack": "^5.96.1",
 		"webpack-cli": "^5.1.4",
-		"webpack-merge": "^5.9.0"
+		"webpack-merge": "^6.0.1"
 	},
 	"dependencies": {
-		"fabric": "^5.3.0",
+		"fabric": "^5.4.2",
 		"freeice": "2.2.2",
 		"mathjax-full": "^3.2.2",
 		"nosleep.js": "^0.12.0",
-		"ua-parser-js": "^1.0.35",
-		"webrtc-adapter": "^8.2.2"
+		"ua-parser-js": "^2.0.0",
+		"webrtc-adapter": "^9.0.1"
 	}
 }

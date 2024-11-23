@@ -47,7 +47,7 @@ module org.apache.openmeetings.install {
 	requires spring.web;
 
 	requires java.desktop;
-	requires quartz;
+	requires org.quartz;
 	requires xstream;
 
 	requires org.slf4j;
