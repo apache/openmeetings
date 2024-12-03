@@ -81,6 +81,7 @@
 		<frontend-maven-plugin.version>1.15.1</frontend-maven-plugin.version>
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
 		<plexus-utils.version>3.5.1</plexus-utils.version>
+		<cyclonedx.version>2.9.1</cyclonedx.version>
 
 		<!-- dependency versions -->
 		<junit.version>5.11.3</junit.version>
@@ -1213,6 +1214,10 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.cyclonedx</groupId>
+				<artifactId>cyclonedx-maven-plugin</artifactId>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -1631,6 +1636,23 @@
 					<groupId>io.openapitools.swagger</groupId>
 					<artifactId>swagger-maven-plugin</artifactId>
 					<version>${swagger-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.cyclonedx</groupId>
+					<artifactId>cyclonedx-maven-plugin</artifactId>
+					<version>${cyclonedx.version}</version>
+					<executions>
+						<execution>
+							<id>build-sbom-cyclonedx</id>
+							<phase>package</phase>
+							<goals>
+								<goal>makeAggregateBom</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<outputName>${project.artifactId}-${project.version}-bom</outputName>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
