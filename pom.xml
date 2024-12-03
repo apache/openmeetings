@@ -82,6 +82,7 @@
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
 		<plexus-utils.version>3.5.1</plexus-utils.version>
 		<cyclonedx.version>2.9.1</cyclonedx.version>
+		<spdx.version>0.7.4</spdx.version>
 
 		<!-- dependency versions -->
 		<junit.version>5.11.3</junit.version>
@@ -1218,6 +1219,10 @@
 				<groupId>org.cyclonedx</groupId>
 				<artifactId>cyclonedx-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.spdx</groupId>
+				<artifactId>spdx-maven-plugin</artifactId>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -1653,6 +1658,20 @@
 					<configuration>
 						<outputName>${project.artifactId}-${project.version}-bom</outputName>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.spdx</groupId>
+					<artifactId>spdx-maven-plugin</artifactId>
+					<version>${spdx.version}</version>
+					<executions>
+						<execution>
+							<id>build-sbom-spdx</id>
+							<phase>package</phase>
+							<goals>
+								<goal>createSPDX</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
