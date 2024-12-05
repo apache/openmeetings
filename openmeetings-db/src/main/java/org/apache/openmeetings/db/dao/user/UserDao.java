@@ -358,7 +358,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			u.setAddress(new Address());
 			u.setAge(LocalDate.now());
 			u.setExternalId(null);
-			final String purged = String.format("Purged %s", randomUUID());
+			final String purged = "Purged " + randomUUID();
 			u.setFirstname(purged);
 			u.setLastname(purged);
 			u.setLogin(purged);

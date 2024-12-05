@@ -63,7 +63,7 @@ class TestCalendar extends AbstractWicketTesterTest {
 			tester.executeBehavior((AbstractAjaxBehavior)cal.get("form:calendar").getBehaviorById(0)); //select-event
 			FormTester appTester = tester.newFormTester(PATH_APPOINTMENT_DLG_FRM);
 			//check inviteeType:groupContainer:groups is invisible for regular user
-			String title = String.format("title%s", randomUUID());
+			String title = "title" + randomUUID();
 			appTester.setValue("title", title);
 			AbstractAjaxBehavior save = getButtonBehavior(PATH_APPOINTMENT_DLG, 0);
 			tester.executeBehavior(save);

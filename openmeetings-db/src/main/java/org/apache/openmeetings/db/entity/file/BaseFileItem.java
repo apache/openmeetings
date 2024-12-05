@@ -25,7 +25,7 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
-import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
+import static org.apache.openmeetings.util.OmFileHelper.getFileSafe;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadWmlDir;
@@ -259,7 +259,7 @@ public abstract class BaseFileItem extends HistoricalEntity {
 	}
 
 	public String getFileName(String ext) {
-		return ext == null ? name : String.format(FILE_NAME_FMT, name, ext);
+		return ext == null ? name : OmFileHelper.getName(name, ext);
 	}
 
 	public File getFile() {
@@ -304,35 +304,30 @@ public abstract class BaseFileItem extends HistoricalEntity {
 			File d = new File(getUploadFilesDir(), getHash());
 			switch (getType()) {
 				case WML_FILE:
-					f = new File(getUploadWmlDir(), String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_WML : ext));
+					f = getFileSafe(getUploadWmlDir(), getHash(), ext, EXTENSION_WML);
 					break;
 				case IMAGE:
 					if (ext == null) {
-						f = new File(d, String.format(FILE_NAME_FMT, getHash(), EXTENSION_PNG));
+						f = getFileSafe(d, getHash(), EXTENSION_PNG);
 						if (!f.exists()) {
-							f = new File(d, String.format(FILE_NAME_FMT, getHash(), EXTENSION_JPG)); // backward compatibility
+							f = getFileSafe(d, getHash(), EXTENSION_JPG); // backward compatibility
 						}
 					} else {
-						f = new File(d, String.format(FILE_NAME_FMT, getHash(), ext));
+						f = getFileSafe(d, getHash(), ext);
 					}
 					break;
 				case RECORDING:
-					f = new File(getStreamsHibernateDir(), String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_MP4 : ext));
+					f = getFileSafe(getStreamsHibernateDir(), getHash(), ext, EXTENSION_MP4);
 					break;
 				case VIDEO:
-					f = new File(d, String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_MP4 : ext));
+					f = getFileSafe(d, getHash(), ext, EXTENSION_MP4);
 					break;
 				case PRESENTATION:
-					int slide;
-					if (ext == null) {
-						slide = 0;
-					} else {
-						slide = toInt(ext, -1);
-					}
+					int slide = ext == null ? 0 : toInt(ext, -1);
 					if (slide > -1) {
 						f = new File(d, String.format("%1$s-%2$04d.%3$s", DOC_PAGE_PREFIX, slide, EXTENSION_PNG));
 					} else {
-						f = new File(d, String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_PDF : ext));
+						f = getFileSafe(d, getHash(), ext, EXTENSION_PDF);
 					}
 					break;
 				case POLL_CHART, FOLDER:

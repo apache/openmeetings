@@ -280,7 +280,7 @@ class TestCalendarService extends AbstractWebServiceTest {
 		String sid = createApp(title);
 		@SuppressWarnings("unchecked")
 		List<AppointmentDTO> list = (List<AppointmentDTO>)getClient(getCalendarUrl())
-			.path(String.format("/title/%s", title))
+			.path("/title/" + title)
 			.query("sid", sid)
 			.getCollection(AppointmentDTO.class);
 
@@ -290,7 +290,7 @@ class TestCalendarService extends AbstractWebServiceTest {
 		title = randomUUID().toString();
 		@SuppressWarnings("unchecked")
 		List<AppointmentDTO> list1 = (List<AppointmentDTO>)getClient(getCalendarUrl())
-			.path(String.format("/title/%s", title))
+			.path("/title/" + title)
 			.query("sid", sid)
 			.getCollection(AppointmentDTO.class);
 		assertEquals(0, list1.size(), "None items should be returned");

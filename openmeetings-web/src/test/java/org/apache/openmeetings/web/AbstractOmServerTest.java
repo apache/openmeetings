@@ -188,7 +188,7 @@ public abstract class AbstractOmServerTest {
 	}
 
 	protected static String getLogin(String uid) {
-		return String.format("login%s", uid);
+		return "login" + uid;
 	}
 
 	protected static String getEmail(String uid) {

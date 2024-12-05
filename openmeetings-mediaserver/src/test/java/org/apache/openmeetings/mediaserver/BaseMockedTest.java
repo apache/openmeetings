@@ -136,7 +136,7 @@ public class BaseMockedTest {
 					return null;
 				}
 			}).when(injector).inject(any());
-			injectMock.when(() -> Injector.get()).thenReturn(injector);
+			injectMock.when(Injector::get).thenReturn(injector);
 			task.run();
 		}
 	}

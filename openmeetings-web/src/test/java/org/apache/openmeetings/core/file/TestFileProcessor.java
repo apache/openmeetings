@@ -19,7 +19,7 @@
 package org.apache.openmeetings.core.file;
 
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
+import static org.apache.openmeetings.util.OmFileHelper.getName;
 import static org.apache.openmeetings.util.OmFileHelper.getDefaultProfilePicture;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -49,7 +49,7 @@ class TestFileProcessor extends AbstractOmServerTest {
 	void testProcessPng() throws Exception {
 		for (String ext : new String[] {null, "txt", "jpg"}) {
 			FileItem f = new FileItemDTO()
-					.setName(String.format(FILE_NAME_FMT, FILE_NAME, ext))
+					.setName(getName(FILE_NAME, ext))
 					.setHash(randomUUID().toString())
 					.setType(BaseFileItem.Type.RECORDING).get();
 			try (InputStream is = new FileInputStream(getDefaultProfilePicture())) {

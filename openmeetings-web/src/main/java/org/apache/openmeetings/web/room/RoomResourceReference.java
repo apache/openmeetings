@@ -119,7 +119,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 	protected File getFile(FileItem f, String ext) {
 		File file = f.getFile(ext);
 		if (file == null || !file.exists()) {
-			file = new File(getImagesDir(), String.format("deleted.%s", EXTENSION_PNG));
+			file = new File(getImagesDir(), "deleted." + EXTENSION_PNG);
 		}
 		return file;
 	}

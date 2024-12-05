@@ -192,8 +192,7 @@ public class IcalHandler {
 	 *             - in case of error during writing to the file
 	 */
 	public void toFile(String inFilerPath) throws Exception {
-		String filerPath = inFilerPath.endsWith(".ics") ? inFilerPath
-				: String.format("%s.ics", inFilerPath);
+		String filerPath = inFilerPath.endsWith(".ics") ? inFilerPath : inFilerPath + ".ics";
 
 		try (FileOutputStream fout = new FileOutputStream(filerPath)) {
 			CalendarOutputter outputter = new CalendarOutputter();

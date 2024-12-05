@@ -158,8 +158,8 @@ class TestLoginUI extends AbstractWicketTesterTest {
 		FormTester formTester = tester.newFormTester(PATH_REGISTER);
 		formTester.setValue("login", getLogin(uid));
 		formTester.setValue("email", getEmail(uid));
-		formTester.setValue("firstName", String.format("first%s", uid));
-		formTester.setValue("lastName", String.format("last%s", uid));
+		formTester.setValue("firstName", "first" + uid);
+		formTester.setValue("lastName", "last" + uid);
 		formTester.setValue("password", userpass);
 		formTester.setValue("confirmPassword", userpass);
 		formTester.setValue("captcha:captchaText", getCaptcha("register:form:captcha:captcha"));

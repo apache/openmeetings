@@ -197,7 +197,7 @@ public class WbConverter {
 		String src = (String)props.get(2);
 		int idx = src.indexOf("cliparts");
 		if (idx > -1) {
-			src = String.format("./public/%s", src.substring(idx));
+			src = "./public/" + src.substring(idx);
 		}
 		add(wb, init(wb, props)
 				.put(ATTR_TYPE, TYPE_IMAGE)

@@ -156,7 +156,7 @@ public class WbPanel extends AbstractWbPanel {
 
 				@Override
 				protected void populateItem(ListItem<String> item) {
-					String cls = String.format("clipart-%s", item.getIndex());
+					String cls = "clipart-" + item.getIndex();
 					item.add(append(ATTR_CLASS, cls), append("data-mode", cls)
 							, append("data-image", item.getModelObject()).setSeparator(""));
 				}

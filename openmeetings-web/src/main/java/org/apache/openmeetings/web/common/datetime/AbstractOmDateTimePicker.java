@@ -67,7 +67,7 @@ public abstract class AbstractOmDateTimePicker<T extends Serializable> extends F
 						.withTodayIcon(FontAwesome6IconType.calendar_check_s)
 						.withClearIcon(FontAwesome6IconType.eraser_s)
 						.withCloseIcon(FontAwesome6IconType.xmark_s));
-		picker = new AbstractTempusDominusWithIcon<>("picker", new Model<T>(), patch(config)) {
+		picker = new AbstractTempusDominusWithIcon<>("picker", new Model<>(), patch(config)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

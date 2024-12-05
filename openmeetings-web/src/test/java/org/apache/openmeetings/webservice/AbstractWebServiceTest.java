@@ -127,7 +127,7 @@ public abstract class AbstractWebServiceTest {
 		assertNotNull(room, "Valid room should be returned");
 		assertNotNull(room.getId(), "Room ID should be not empty");
 
-		RoomDTO room1 = getClient(getRoomUrl()).path(String.format("/%s", room.getId()))
+		RoomDTO room1 = getClient(getRoomUrl()).path("/" + room.getId())
 				.query("sid", sid)
 				.get(RoomDTO.class);
 		assertNotNull(room1, "Valid room should be returned");

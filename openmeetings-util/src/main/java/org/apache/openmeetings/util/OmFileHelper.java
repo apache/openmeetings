@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.Properties;
@@ -232,7 +233,7 @@ public class OmFileHelper {
 		} catch (IOException e) {
 			log.error("Unexpected error while getting canonical path", e);
 		}
-		String uri = String.format("file://%s", furi);
+		String uri = "file://" + furi;
 		log.info("Configured to record to {}", uri);
 		return uri;
 	}
@@ -321,6 +322,17 @@ public class OmFileHelper {
 			ext = name.substring(idx);
 		}
 		return new File(parent, name + suffix + ext);
+	}
+
+	public static File getFileSafe(File inDir, String inName, String inExt, String defaultExt) {
+		return getFileSafe(inDir, inName, inExt == null ? defaultExt : inExt);
+	}
+
+	public static File getFileSafe(File inDir, String inName, String ext) {
+		final String name = getName(inName, ext);
+		Path base = inDir.toPath();
+		Path file  = base.resolve(name);
+		return file.startsWith(base) ? file.toFile() : new File(inDir, inName);
 	}
 
 	public static File getNewFile(File dir, String name, String ext) throws IOException {
