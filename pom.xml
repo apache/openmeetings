@@ -1656,6 +1656,7 @@
 						</execution>
 					</executions>
 					<configuration>
+						<skip>${om.quick.build}</skip>
 						<outputName>${project.artifactId}-${project.version}-bom</outputName>
 					</configuration>
 				</plugin>
@@ -1672,6 +1673,9 @@
 							</goals>
 						</execution>
 					</executions>
+					<configuration>
+						<skip>${om.quick.build}</skip>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
