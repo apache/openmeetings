@@ -31,7 +31,7 @@ Environment=CATALINA_HOME=/opt/openmeetings
 Environment=CATALINA_BASE=/opt/openmeetings
 Environment='JDK_JAVA_OPTIONS=--add-modules java.se --add-exports java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED -XX:+DisableAttachMechanism'
 Environment='CATALINA_OPTS=-Xms1G -Xmx4G -server -XX:+UseParallelGC'
-Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dopenjpa.serialization.class.blacklist=* -Dopenjpa.serialization.class.whitelist=[B,java.util,org.apache.openjpa,org.apache.openmeetings.db.entity'
 
 ExecStart=/opt/openmeetings/bin/startup.sh
 ExecStop=/opt/openmeetings/bin/shutdown.sh

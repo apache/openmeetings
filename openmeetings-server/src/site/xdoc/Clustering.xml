@@ -83,6 +83,13 @@
 						set correct server address, login and password. Also uncomment following line:
 						<source><![CDATA[<property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=127.0.0.1)" />]]></source>
 					</li>
+					<li>
+						<div class="bd-callout bd-callout-danger">
+							IMPORTANT: Please ensure your startup scripts has OpenJPA black/white list definition
+						</div>
+						<p>Here is an example:</p>
+						<code>JAVA_OPTS="-Dopenjpa.serialization.class.blacklist=* -Dopenjpa.serialization.class.whitelist=[B,java.util,org.apache.openjpa,org.apache.openmeetings.db.entity"</code>
+					</li>
 				</ul>
 			</subsection>
 			<subsection name="File systems">
