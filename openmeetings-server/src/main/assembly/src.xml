@@ -52,6 +52,7 @@
 				<exclude>**/package-lock.json</exclude>
 				<exclude>**/.apt_generated/**</exclude>
 				<exclude>**/.apt_generated_tests/**</exclude>
+				<exclude>**/*.bak</exclude>
 			</excludes>
 		</fileSet>
 	</fileSets>

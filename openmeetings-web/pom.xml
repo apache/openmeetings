@@ -126,10 +126,12 @@
 						**/*.class,
 						**/raw-*.css,
 						**/raw-*.js,
+						**/*.bak,
 					</packagingExcludes>
 					<warSourceExcludes>
 						**/raw-*.css,
 						**/raw-*.js,
+						**/*.bak,
 					</warSourceExcludes>
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
 					<webResources>
@@ -145,6 +147,7 @@
 							</includes>
 							<excludes>
 								<exclude>**/raw-*.js</exclude>
+								<exclude>**/*.bak</exclude>
 							</excludes>
 						</webResource>
 						<webResource>
