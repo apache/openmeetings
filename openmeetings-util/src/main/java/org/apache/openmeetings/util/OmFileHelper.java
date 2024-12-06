@@ -331,7 +331,7 @@ public class OmFileHelper {
 	public static File getFileSafe(File inDir, String inName, String ext) {
 		final String name = getName(inName, ext);
 		Path base = inDir.toPath();
-		Path file  = base.resolve(name);
+		Path file  = base.resolve(name).normalize();
 		return file.startsWith(base) ? file.toFile() : new File(inDir, inName);
 	}
 
