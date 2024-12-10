@@ -1,3 +1,5 @@
+## Apache OpenMeetings
+
 ![About Openmeetings Logo](/openmeetings-server/src/site/resources/images/logo.png)
 
 [Apache OpenMeetings](https://openmeetings.apache.org) provides:
@@ -9,54 +11,53 @@
 
 It uses API functions of Media Server for Remoting and Streaming [Kurento](https://www.kurento.org)).
 
-Getting Started
-===============
-Please visit the project website for the latest information:
-  - https://openmeetings.apache.org/
+### Getting Started
+For the latest information, please visit the project website:
+  - [OpenMeetings Website](https://openmeetings.apache.org/)
 
-Documentation for Installation and Upgrade:
-  - https://openmeetings.apache.org/installation.html
-  - https://openmeetings.apache.org/Upgrade.html
+Documentation for installation and upgrade can be found at:
+  - [Installation Guide](https://openmeetings.apache.org/installation.html)
+  - [Upgrade Instructions](https://openmeetings.apache.org/Upgrade.html)
 
-Along with the developer mailing list archive:
-  - https://openmeetings.apache.org/mailing-lists.html
+All available mailing lists are listed here:
+  - [Mailing Lists](https://openmeetings.apache.org/mailing-lists.html)
 
+### Prerequisites
+Apache OpenMeeting requires the following software to build:
+- [Apache Maven 3.8.7 or later](https://maven.apache.org/)
 
-System Requirements
-===================
-You need a platform that supports [Java SE 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html).
+Apache OpenMeetings requires the following software to run:
+- [Java SE 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 
+### Building and running
+To build and run the project from source:
+1. Ensure the prerequisites are installed.
+2. Build the project using Maven in the root directory:
+   ```
+   mvn clean install -PallModules
+   ```
+3. To run OpenMeetings:
+   - Navigate to `openmeetings-server/target` directory.
+   - Extract `apache-openmeetings-x.x.x.tar.gz` (or `apache-openmeetings-x.x.x.zip` for Windows).
+   - Enter the `apache-openmeetings-x.x.x` directory and execute the startup script:
+     ```
+     ./bin/startup.sh
+     ```
+     (Use `./bin/startup.bat` for Windows.)
+4. Detailed build documentation: [Build Instructions](https://openmeetings.apache.org/BuildInstructions.html)
 
-Building and running
-====================
-To build from source code:
-
-  - Requirements:
-    Sources compilation require `Java SE 17`, [Apache Maven 3.8.7 or later](https://maven.apache.org/).
-  - To build the OpenMeetings project run mvn in the root directory:
-     `mvn clean install -PallModules`
-  - To run the OpenMeetings project:
-    - go to `openmeetings-server/target` directory
-    - extract `apache-openmeetings-x.x.x.tar.gz` (or `apache-openmeetings-x.x.x.zip` for windows)
-    - enter `apache-openmeetings-x.x.x` directory and execute `./bin/startup.sh` (`./bin/startup.bat` for Windows)
-
-For a detailed documentation on how to build from source and options see:
-    https://openmeetings.apache.org/BuildInstructions.html
-
-Builds and CI
-====================
-
-| Description | Jenkins CI |
-| :--- | :---: |
-| Master nightly | [![Build Status](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings/badge/icon)](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings/) |
+### Builds and CI
+| Description         | Jenkins CI                                                                                                                                                         |
+|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Master nightly      | [![Build Status](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings/badge/icon)](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings/)       |
 | Master Pull Request | [![Build Status](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings-pr-build/badge/icon)](https://ci-builds.apache.org/job/OpenMeetings/job/openmeetings-pr-build/) |
 
-Release Notes
-=============
+### Release Notes
+See the [CHANGELOG.md](/CHANGELOG.md) file for a detailed log.
 
-see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
-
-
+<details>
+ <summary>Recent Releases Details:</summary>
+ 
 7.2.0
 -----
 [Release 7.2.0](https://www.apache.org/dyn/closer.lua/openmeetings/7.2.0), provides following improvements:
@@ -631,10 +632,12 @@ Calendar
 * whole group can be invited by admin to event
 
 Other fixes and improvements, 49 issues were fixed
+ 
+</details>
 
-License
-=======
-Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 
-Also this product includes 3rd party software. See more at [NOTICE.md](/NOTICE.md)
 
+### License
+Apache OpenMeetings is licensed under the Apache License 2.0. For more details, see [LICENSE](http://www.apache.org/licenses/LICENSE-2.0).
+
+This product also includes third-party software. See more at [NOTICE.md](/NOTICE.md).
