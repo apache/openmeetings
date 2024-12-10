@@ -20,7 +20,7 @@ Documentation for installation and upgrade can be found at:
   - [Upgrade Instructions](https://openmeetings.apache.org/Upgrade.html)
 
 All available mailing lists are listed here:
-  - [Mailing List](https://openmeetings.apache.org/mailing-lists.html)
+  - [Mailing Lists](https://openmeetings.apache.org/mailing-lists.html)
 
 ### Prerequisites
 Apache OpenMeetings requires the following software to run:
