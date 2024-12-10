@@ -30,7 +30,7 @@ Apache OpenMeetings requires the following software to run:
 ### System Requirements
 You need a platform that supports Java SE 17.
 
-### Installation Steps
+### Building and running
 To build and run the project from source:
 1. Ensure the prerequisites are installed.
 2. Build the project using Maven in the root directory:
