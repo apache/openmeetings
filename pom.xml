@@ -91,10 +91,10 @@
 		<wicket-bootstrap.version>7.0.8</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.14</fullcalendar.version>
 		<spring.version>6.2.0</spring.version>
-		<tomcat.version>11.0.1</tomcat.version>
+		<tomcat.version>11.0.2</tomcat.version>
 		<jetty.version>11.0.24</jetty.version>
 		<ical4j.version>4.0.6</ical4j.version>
-		<cxf.version>4.0.5</cxf.version>
+		<cxf.version>4.0.6</cxf.version>
 		<io.prometheus.version>1.3.4</io.prometheus.version>
 		<aspectjtools.version>1.9.22.1</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
