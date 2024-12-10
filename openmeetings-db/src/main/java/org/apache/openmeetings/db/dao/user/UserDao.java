@@ -613,7 +613,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		log.debug("login:: {} users were found", users.size());
 
 		if (users.isEmpty()) {
-			log.debug("No users were found: {}", userOrEmail);
+			log.debug("No users were found: {}", userOrEmail == null ? null : userOrEmail.replaceAll("\\p{C}", "?"));
 			return null;
 		}
 		User u = users.get(0);
