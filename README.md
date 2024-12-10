@@ -55,9 +55,11 @@ To build and run the project from source:
 ### Release Notes
 See the [CHANGELOG.md](/CHANGELOG.md) file for a detailed log.
 
+### Recent Releases
+
 <details>
- <summary>Recent Releases Details:</summary>
- 
+	<summary>Release 7.2.0 - Java 17 and KMS 6.18.0+ required. Includes security, UI, and other improvements.</summary>
+
 7.2.0
 -----
 [Release 7.2.0](https://www.apache.org/dyn/closer.lua/openmeetings/7.2.0), provides following improvements:
@@ -75,7 +77,9 @@ UI:
 * Email messages looks better
 
 Some other fixes and improvements, 10 issues were addressed
-
+</details>
+<details>
+	<summary>Release 7.1.0 - Various security updates and stability fixes.</summary>
 
 7.1.0
 -----
@@ -95,7 +99,9 @@ Stability:
 ***3 security vulnerabilities were addressed***
 
 Some other fixes and improvements, 12 issues were addressed
-
+</details>
+<details>
+	<summary>Release 7.0.0 - Improved UI, 2-factor authentication, and more.</summary>
 
 7.0.0
 -----
@@ -112,7 +118,9 @@ UI and Security:
 * Libraries are updated with most recent versions
 
 Some other fixes and improvements, 28 issues were addressed
-
+</details>
+<details>
+	<summary>Older Releases Details:</summary>
 
 6.3.0
 -----
@@ -632,7 +640,7 @@ Calendar
 * whole group can be invited by admin to event
 
 Other fixes and improvements, 49 issues were fixed
- 
+
 </details>
 
 
