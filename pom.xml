@@ -43,7 +43,7 @@
 		<minimalJavaBuildVersion>${jdk.version}</minimalJavaBuildVersion>
 
 		<!-- plugin versions -->
-		<version.maven-javadoc-plugin>3.11.1</version.maven-javadoc-plugin>
+		<version.maven-javadoc-plugin>3.11.2</version.maven-javadoc-plugin>
 		<version.maven-surefire>3.5.2</version.maven-surefire>
 		<version.maven-site-plugin>4.0.0-M9</version.maven-site-plugin>
 		<version.maven-enforcer-plugin>3.5.0</version.maven-enforcer-plugin>
@@ -89,7 +89,7 @@
 		<wicket.version>10.2.0</wicket.version>
 		<wicketstuff.version>10.2.0</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.8</wicket-bootstrap.version>
-		<fullcalendar.version>6.1.14</fullcalendar.version>
+		<fullcalendar.version>6.1.15</fullcalendar.version>
 		<spring.version>6.2.0</spring.version>
 		<tomcat.version>11.0.2</tomcat.version>
 		<jetty.version>11.0.24</jetty.version>
@@ -102,8 +102,8 @@
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
 		<h2.version>2.3.232</h2.version>
-		<jakarta.mail.version>2.0.1</jakarta.mail.version>
 		<openjpa.version>4.0.1</openjpa.version>
+		<jakarta.mail.version>2.0.3</jakarta.mail.version>
 		<jakarta.persistence.version>3.2.0</jakarta.persistence.version>
 		<jakarta.transaction.version>2.0.1</jakarta.transaction.version>
 		<jakarta.annotation.version>3.0.0</jakarta.annotation.version>
@@ -141,7 +141,7 @@
 		<jaxb-runtime.version>4.0.5</jaxb-runtime.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
-		<swagger.version>2.2.26</swagger.version>
+		<swagger.version>2.2.27</swagger.version>
 		<jsr305.version>3.0.2</jsr305.version>
 		<totp.version>1.7.1</totp.version>
 		<!--  Exclude all generated code  -->
@@ -797,8 +797,8 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>com.sun.mail</groupId>
-				<artifactId>jakarta.mail</artifactId>
+				<groupId>org.eclipse.angus</groupId>
+				<artifactId>angus-mail</artifactId>
 				<version>${jakarta.mail.version}</version>
 			</dependency>
 			<dependency>
@@ -1612,6 +1612,7 @@
 							</licenseMerge>
 							<licenseMerge>
 								Eclipse Public License v2.0|
+								Eclipse Public License 2.0|
 								Eclipse Public License v. 2.0|
 								Eclipse Public License - v 2.0|
 								EPL-2.0|
