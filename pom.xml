@@ -86,8 +86,8 @@
 
 		<!-- dependency versions -->
 		<junit.version>5.11.4</junit.version>
-		<wicket.version>10.2.0</wicket.version>
-		<wicketstuff.version>10.2.0</wicketstuff.version>
+		<wicket.version>10.3.0-SNAPSHOT</wicket.version>
+		<wicketstuff.version>10.3.0-SNAPSHOT</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.8</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.15</fullcalendar.version>
 		<spring.version>6.2.1</spring.version>
@@ -554,6 +554,11 @@
 					<exclusion>
 						<groupId>jakarta.servlet</groupId>
 						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<!-- this one removed to avoid conflict with jakarta.xml.ws:jakarta.xml.ws-api -->
+						<groupId>jakarta.jws</groupId>
+						<artifactId>jakarta.jws-api</artifactId>
 					</exclusion>
 					<exclusion>
 						<groupId>org.ow2.asm</groupId>

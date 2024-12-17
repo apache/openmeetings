@@ -32,7 +32,6 @@ module org.apache.openmeetings.webservice {
 
 	requires jakarta.annotation;
 	requires jakarta.inject;
-	requires jakarta.jws;
 	requires jakarta.servlet;
 	requires jakarta.xml.ws;
 	requires jakarta.ws.rs;
