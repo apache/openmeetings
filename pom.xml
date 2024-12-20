@@ -86,8 +86,8 @@
 
 		<!-- dependency versions -->
 		<junit.version>5.11.4</junit.version>
-		<wicket.version>10.3.0-SNAPSHOT</wicket.version>
-		<wicketstuff.version>10.3.0-SNAPSHOT</wicketstuff.version>
+		<wicket.version>10.3.0</wicket.version>
+		<wicketstuff.version>10.3.0</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.8</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.15</fullcalendar.version>
 		<spring.version>6.2.1</spring.version>
@@ -129,7 +129,7 @@
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
 		<tika-parsers.version>3.0.0</tika-parsers.version>
 		<slf4j.version>2.0.16</slf4j.version>
-		<logback.version>1.5.12</logback.version>
+		<logback.version>1.5.14</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.79</bcprov.version>
 		<mockito.version>5.2.0</mockito.version>
@@ -970,6 +970,12 @@
 				<groupId>de.agilecoders.wicket</groupId>
 				<artifactId>wicket-bootstrap-extensions</artifactId>
 				<version>${wicket-bootstrap.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.webjars</groupId>
+						<artifactId>jquery</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>de.agilecoders.wicket</groupId>
