@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.util.logging;
 
-import java.io.IOException;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import io.prometheus.metrics.exporter.servlet.jakarta.PrometheusMetricsServlet;
@@ -29,6 +29,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Service
 public class OpenMeetingsMetricsServlet extends PrometheusMetricsServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(OpenMeetingsMetricsServlet.class);
 	private final TomcatStats stats;
 
 	public OpenMeetingsMetricsServlet() {
@@ -37,8 +38,12 @@ public class OpenMeetingsMetricsServlet extends PrometheusMetricsServlet {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		stats.refresh();
-		super.doGet(request, response);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			stats.refresh();
+			super.doGet(request, response);
+		} catch (Exception e) {
+			log.error("Unexpected exception", e);
+		}
 	}
 }
