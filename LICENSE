@@ -291,8 +291,8 @@ conditions of the following licenses.
     Eclipse Public License, Version 1.0
 
         * H2 Database Engine (com.h2database:h2:2.3.232 - https://h2database.com)
-        * Logback Classic Module (ch.qos.logback:logback-classic:1.5.14 - http://logback.qos.ch/logback-classic)
-        * Logback Core Module (ch.qos.logback:logback-core:1.5.14 - http://logback.qos.ch/logback-core)
+        * Logback Classic Module (ch.qos.logback:logback-classic:1.5.15 - http://logback.qos.ch/logback-classic)
+        * Logback Core Module (ch.qos.logback:logback-core:1.5.15 - http://logback.qos.ch/logback-core)
 
     Eclipse Public License v2.0
 
@@ -617,7 +617,7 @@ conditions of the following licenses.
         * Adobe XMPCore (com.adobe.xmp:xmpcore:6.1.11 - https://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html)
         * asm (org.ow2.asm:asm:9.7.1 - http://asm.ow2.io/)
         * bootstrap-italia (org.webjars.npm:bootstrap-italia:2.8.7 - https://www.webjars.org)
-        * ical4j (org.mnode.ical4j:ical4j:4.0.7 - http://ical4j.github.io)
+        * ical4j (org.mnode.ical4j:ical4j:4.0.8 - http://ical4j.github.io)
         * Java Advanced Imaging Image I/O Tools API core (standalone) (com.github.jai-imageio:jai-imageio-core:1.4.0 - https://github.com/jai-imageio/jai-imageio-core)
         * ThreeTen-Extra (org.threeten:threeten-extra:1.8.0 - https://www.threeten.org/threeten-extra)
         * XStream Core (com.thoughtworks.xstream:xstream:1.4.21 - http://x-stream.github.io/xstream)
