@@ -360,7 +360,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/apache/openmeetings.git</connection>
 		<developerConnection>scm:git:https://github.com/apache/openmeetings.git</developerConnection>
-		<url>https://github.com/apache/openmeetings/openmeetings</url>
+		<url>https://github.com/apache/openmeetings</url>
 		<tag>HEAD</tag>
 	</scm>
 	<mailingLists>
@@ -1838,6 +1838,7 @@
 		<profile>
 			<id>deploy</id>
 			<modules>
+				<module>openmeetings-tests</module>
 				<module>openmeetings-util</module>
 				<module>openmeetings-db</module>
 			</modules>
