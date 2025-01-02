@@ -58,11 +58,29 @@ See the [CHANGELOG.md](/CHANGELOG.md) file for a detailed log.
 ### Recent Releases
 
 <details>
+	<summary>Release 8.0.0 - Security updates, switching to Tomcat 11 and Jakarta stack.</summary>
+
+8.0.0
+-----
+[Release 8.0.0](https://www.apache.org/dyn/closer.lua/openmeetings/8.0.0), provides following improvements:
+
+Security:
+* OM is moved to Jakarta stack
+* All libraries are updated to most recent versions
+
+UI:
+* Fullcalendar v6 is used
+
+***1 security vulnerability was addressed***
+
+Some other fixes and improvements, 8 issues were addressed
+</details>
+<details>
 	<summary>Release 7.2.0 - Java 17 and KMS 6.18.0+ required. Includes security, UI, and other improvements.</summary>
 
 7.2.0
 -----
-[Release 7.2.0](https://www.apache.org/dyn/closer.lua/openmeetings/7.2.0), provides following improvements:
+[Release 7.2.0](https://www.apache.org/dist/openmeetings/7.2.0), provides following improvements:
 
 IMPORTANT: Java 17 and KMS 6.18.0+ are required
 
@@ -101,7 +119,7 @@ Stability:
 Some other fixes and improvements, 12 issues were addressed
 </details>
 <details>
-	<summary>Release 7.0.0 - Improved UI, 2-factor authentication, and more.</summary>
+	<summary>Older Releases Details:</summary>
 
 7.0.0
 -----
@@ -118,9 +136,7 @@ UI and Security:
 * Libraries are updated with most recent versions
 
 Some other fixes and improvements, 28 issues were addressed
-</details>
-<details>
-	<summary>Older Releases Details:</summary>
+
 
 6.3.0
 -----

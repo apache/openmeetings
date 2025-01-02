@@ -45,6 +45,25 @@
 				Please NOTE: only security issues should be reported to this list.
 			</p>
 		</section>
+		<section name="CVE-2024-54676: Apache OpenMeetings: Deserialisation of untrusted data in cluster mode">
+			<p>Severity: important</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings from 2.1.0 before 8.0.0</p>
+			<p>Description: Default clustering instructions at
+				<a href="https://openmeetings.apache.org/Clustering.html">Clustering instructions</a> doesn't specify
+				white/black lists for OpenJPA this leads to possible deserialisation
+				of untrusted data.<br/>
+				Users are recommended to upgrade to version 8.0.0 and update their
+				startup scripts to include the relevant
+				<code>'openjpa.serialization.class.blacklist'</code> and
+				<code>'openjpa.serialization.class.whitelist'</code> configurations as shown in the
+				documentation.<br/>
+				<a href="https://www.cve.org/CVERecord?id=CVE-2024-54676">CVE-2024-54676</a>
+			</p>
+			<p>The issue was fixed in 8.0.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 8.0.0</p>
+			<p>Credit: This issue was identified by m0d9 from Tencent Yunding Lab</p>
+		</section>
 		<section name="CVE-2023-28936: Apache OpenMeetings: insufficient check of invitation hash">
 			<p>Severity: Critical</p>
 			<p>Vendor: The Apache Software Foundation</p>

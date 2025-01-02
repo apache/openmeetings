@@ -6,6 +6,23 @@ See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number 
 See https://www.cve.org/CVERecord?id=CVE-* (where * is the number of CVE below)
 
 
+Release Notes - Openmeetings - Version 8.0.0
+================================================================================================================
+
+* Vulnerability
+    * CVE-2024-54676: Apache OpenMeetings: Deserialisation of untrusted data in cluster mode
+
+* Task
+    * [OPENMEETINGS-2756] - Migration to Jakarta
+    * [OPENMEETINGS-2780] - (8.0.0) Libraries should be updated
+    * [OPENMEETINGS-2781] - Third-party licenses must be correctly listed in LICENSE file
+    * [OPENMEETINGS-2783] - (8.0.0) Sonar issues need to be addressed
+    * [OPENMEETINGS-2784] - Migrate to FullCalendar v6
+    * [OPENMEETINGS-2785] - (8.0.0) All translations from PoEditor should be synced
+    * [OPENMEETINGS-2786] - SBOM generation should be added to the build
+    * [OPENMEETINGS-2787] - Startup script and clustering instructions need to be updated
+
+
 Release Notes - Openmeetings - Version 7.2.0
 ================================================================================================================
 
