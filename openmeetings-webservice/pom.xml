@@ -146,7 +146,9 @@
 						</servers>
 					</swaggerConfig>
 					<!--skip>${site.skip}</skip-->
-					<skip>true</skip> <!-- Getting weird "Cannot invoke "java.util.Map.size()" because "map" is null" Error !!!!!! -->
+					<!-- io.openapitools.swagger is broken, please see https://github.com/openapi-tools/swagger-maven-plugin/issues/109
+					Getting weird "Cannot invoke "java.util.Map.size()" because "map" is null" Error !!!!!! -->
+					<skip>true</skip>
 				</configuration>
 				<executions>
 					<execution>
