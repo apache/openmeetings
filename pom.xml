@@ -1234,6 +1234,46 @@
 				<groupId>org.spdx</groupId>
 				<artifactId>spdx-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>build-licenses</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>aggregate-add-third-party</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>update-license</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<concat destfile="${project.basedir}/LICENSE" force="yes">
+									<fileset dir="${project.basedir}/src/license">
+										<include name="asf-license.txt"></include>
+									</fileset>
+									<fileset dir="${project.build.directory}">
+										<include name="THIRD-PARTY.txt"></include>
+									</fileset>
+								</concat>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -1440,6 +1480,7 @@
 							<exclude>**/.project</exclude>
 							<exclude>**/.classpath</exclude>
 							<exclude>**/.settings/**</exclude>
+							<exclude>src/license/asf-license.txt</exclude>
 							<exclude>.gitattributes</exclude>
 						</excludes>
 					</configuration>
@@ -1584,6 +1625,7 @@
 						<force>true</force>
 						<fileTemplate>${project.basedir}/src/license/license-template.ftl</fileTemplate>
 						<licenseMerges>
+							<acceptPomPackaging>true</acceptPomPackaging>
 							<licenseMerge>
 								The Apache Software License, Version 2.0|
 								The Apache Software License, version 2.0|
@@ -1636,7 +1678,8 @@
 								The MIT License
 							</licenseMerge>
 						</licenseMerges>
-						<verbose>true</verbose>
+						<verbose>false</verbose>
+						<skipAggregateAddThirdParty>${om.quick.build}</skipAggregateAddThirdParty>
 					</configuration>
 				</plugin>
 				<plugin>
