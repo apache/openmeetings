@@ -19,9 +19,10 @@
 
 -->
 <!-- persistence.xml schema -->
-<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-		version="2.0">
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+		https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
 	<persistence-unit name="openmeetings" transaction-type="RESOURCE_LOCAL">
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 		<class>org.apache.openmeetings.db.entity.HistoricalEntity</class>
