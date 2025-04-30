@@ -131,7 +131,7 @@ public class RecordingWebService extends BaseWebService {
 			, @Parameter(required = true, description = "the externalUserType") @PathParam("externalid") @WebParam(name="externalid") String externalId
 			) throws ServiceException
 	{
-		log.debug("getExternal:: type {}, id {}", externalType, externalId);
+		log.trace("getExternal:: type {}, id {}", externalType, externalId);
 		return performCall(sid, User.Right.SOAP, sd -> RecordingDTO.list(recordingDao.getByExternalUser(externalId, externalType)));
 	}
 

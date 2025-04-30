@@ -236,7 +236,7 @@ public class UserWebService extends BaseWebService {
 				for (IValidationError err : passVal.getErrors()) {
 					sb.append(((ValidationError)err).getMessage()).append(System.lineSeparator());
 				}
-				log.debug("addNewUser::weak password '{}', msg: {}", user.getPassword(), sb);
+				log.trace("addNewUser::weak password '{}', msg: {}", user.getPassword(), sb);
 				throw new InternalServiceException(sb.toString());
 			}
 			Object ouser;
@@ -388,7 +388,7 @@ public class UserWebService extends BaseWebService {
 
 			String xmlString = remoteSessionObject.toString();
 
-			log.debug("jsonString {}", xmlString);
+			log.trace("jsonString {}", xmlString);
 
 			String hash = soapDao.addSOAPLogin(sid, options);
 

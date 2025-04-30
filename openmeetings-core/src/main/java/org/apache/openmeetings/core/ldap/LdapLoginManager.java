@@ -192,7 +192,7 @@ public class LdapLoginManager {
 				break;
 		}
 		u = authenticated ? userDao.getByLogin(login, Type.LDAP, domainId) : userDao.login(login, passwd);
-		log.debug("getByLogin:: authenticated ? {}, login = '{}', domain = {}, user = {}", authenticated, login, domainId, u);
+		log.trace("getByLogin:: authenticated ? {}, login = '{}', domain = {}, user = {}", authenticated, login, domainId, u);
 		if (u == null && Provisionning.AUTOCREATE != w.options.prov) {
 			log.error("User not found in OM DB and Provisionning.AUTOCREATE was not set");
 			throw BAD_CREDENTIALS;
@@ -328,7 +328,7 @@ public class LdapLoginManager {
 					log.info("Going to import user: {}", u);
 				} else {
 					userDao.update(u, null);
-					log.info("User {}, was imported", u);
+					log.trace("User {}, was imported", u);
 				}
 			} catch (CursorLdapReferralException cle) {
 				log.warn(WARN_REFERRAL);
