@@ -236,7 +236,7 @@ public class UserWebService extends BaseWebService {
 				for (IValidationError err : passVal.getErrors()) {
 					sb.append(((ValidationError)err).getMessage()).append(System.lineSeparator());
 				}
-				log.trace("addNewUser::weak password '{}', msg: {}", user.getPassword(), sb);
+				log.trace("addNewUser::weak password '*****', msg: {}", sb);
 				throw new InternalServiceException(sb.toString());
 			}
 			Object ouser;
