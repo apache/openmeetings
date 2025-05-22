@@ -157,8 +157,8 @@ module.exports = class Player {
 			cProgress.on({
 				'mousedown': function (evt) {
 					const _ptr = canvas.getPointer(evt.e, true)
-						, ptr = canvas._normalizePointer(group, _ptr)
-						, l = ptr.x - cProgress.aCoords.bl.x + group.width / 2;
+						, ptr = canvas._normalizePointer(cProgress, _ptr)
+						, l = ptr.x + cProgress.width / 2;
 					_sendStatus(group, group.status.paused, l * video.getElement().duration / cProgress.width)
 				}
 			});
