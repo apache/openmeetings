@@ -65,7 +65,7 @@
 		<maven.compiler.target>${jdk.version}</maven.compiler.target>
 
 		<maven-bundle-plugin.version>6.0.0</maven-bundle-plugin.version>
-		<exec-maven-plugin.version>3.5.0</exec-maven-plugin.version>
+		<exec-maven-plugin.version>3.5.1</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
 		<license-maven-plugin.version>2.5.0</license-maven-plugin.version>
 		<reflow-maven-skin.version>2.3.4</reflow-maven-skin.version>
@@ -86,7 +86,7 @@
 		<spdx.version>1.0.2</spdx.version>
 
 		<!-- dependency versions -->
-		<junit.version>5.12.0</junit.version>
+		<junit.version>5.13.0</junit.version>
 		<wicket.version>10.5.0</wicket.version>
 		<wicketstuff.version>10.5.0</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.10</wicket-bootstrap.version>
@@ -95,8 +95,8 @@
 		<tomcat.version>11.0.7</tomcat.version>
 		<jetty.version>11.0.25</jetty.version>
 		<ical4j.version>4.1.1</ical4j.version>
-		<cxf.version>4.1.1</cxf.version>
-		<io.prometheus.version>1.3.7</io.prometheus.version>
+		<cxf.version>4.1.2</cxf.version>
+		<io.prometheus.version>1.3.8</io.prometheus.version>
 		<aspectjtools.version>1.9.24</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.5.4</jettison.version>
@@ -120,7 +120,7 @@
 		<commons-text.version>1.13.1</commons-text.version>
 		<commons-net.version>3.11.1</commons-net.version>
 		<dom4j.version>2.1.4</dom4j.version>
-		<postgresql.version>42.7.5</postgresql.version>
+		<postgresql.version>42.7.6</postgresql.version>
 		<mysql.version>9.3.0</mysql.version>
 		<mssql.version>12.10.0.jre11</mssql.version>
 		<ojdbc.version>19.27.0.0</ojdbc.version>
@@ -128,11 +128,11 @@
 		<api-all.version>2.1.7</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
-		<tika-parsers.version>3.1.0</tika-parsers.version>
+		<tika-parsers.version>3.2.0</tika-parsers.version>
 		<slf4j.version>2.0.17</slf4j.version>
 		<logback.version>1.5.18</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
-		<bcprov.version>1.80</bcprov.version>
+		<bcprov.version>1.81</bcprov.version>
 		<mockito.version>5.2.0</mockito.version>
 		<quartz.version>2.5.0</quartz.version>
 		<kurento.version>7.2.0</kurento.version>
