@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.webservice;
+package org.apache.openmeetings.ws;
 
 import static org.apache.openmeetings.web.AbstractOmServerTest.adminUsername;
 import static org.apache.openmeetings.web.AbstractOmServerTest.userpass;

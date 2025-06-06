@@ -18,6 +18,8 @@
  */
 
 module org.apache.openmeetings.webservice {
+	exports org.apache.openmeetings.webservice;
+	exports org.apache.openmeetings.webservice.error;
 	exports org.apache.openmeetings.webservice.util;
 
 	requires org.apache.openmeetings.core;

@@ -25,51 +25,7 @@
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<fileSets>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-core/target/site</directory>
-			<outputDirectory>openmeetings-core</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-db/target/site</directory>
-			<outputDirectory>openmeetings-db</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-install/target/site</directory>
-			<outputDirectory>openmeetings-install</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-screenshare/target/site</directory>
-			<outputDirectory>openmeetings-screenshare</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-service/target/site</directory>
-			<outputDirectory>openmeetings-service</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
+		<!-- util -->
 		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-util/target/site</directory>
 			<outputDirectory>openmeetings-util</outputDirectory>
@@ -80,6 +36,77 @@
 			</excludes>
 		</fileSet>
 		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-util/target/reports/apidocs</directory>
+			<outputDirectory>openmeetings-util/apidocs</outputDirectory>
+		</fileSet>
+		<!-- db -->
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-db/target/site</directory>
+			<outputDirectory>openmeetings-db</outputDirectory>
+			<excludes>
+				<exclude>javadoc.sh</exclude>
+				<exclude>options</exclude>
+				<exclude>packages</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-db/target/reports/apidocs</directory>
+			<outputDirectory>openmeetings-db/apidocs</outputDirectory>
+		</fileSet>
+		<!-- core -->
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-core/target/site</directory>
+			<outputDirectory>openmeetings-core</outputDirectory>
+			<excludes>
+				<exclude>javadoc.sh</exclude>
+				<exclude>options</exclude>
+				<exclude>packages</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-core/target/reports/apidocs</directory>
+			<outputDirectory>openmeetings-core/apidocs</outputDirectory>
+		</fileSet>
+		<!-- install -->
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-install/target/site</directory>
+			<outputDirectory>openmeetings-install</outputDirectory>
+			<excludes>
+				<exclude>javadoc.sh</exclude>
+				<exclude>options</exclude>
+				<exclude>packages</exclude>
+			</excludes>
+		</fileSet>
+		<!-- service -->
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-service/target/site</directory>
+			<outputDirectory>openmeetings-service</outputDirectory>
+			<excludes>
+				<exclude>javadoc.sh</exclude>
+				<exclude>options</exclude>
+				<exclude>packages</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-db/target/reports/apidocs</directory>
+			<outputDirectory>openmeetings-db/apidocs</outputDirectory>
+		</fileSet>
+		<!-- webservice -->
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-service/target/site</directory>
+			<outputDirectory>openmeetings-service</outputDirectory>
+			<excludes>
+				<exclude>javadoc.sh</exclude>
+				<exclude>options</exclude>
+				<exclude>packages</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-webservice/target/reports/apidocs</directory>
+			<outputDirectory>openmeetings-webservice/apidocs</outputDirectory>
+		</fileSet>
+		<!-- web -->
+		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-web/target/site</directory>
 			<outputDirectory>openmeetings-web</outputDirectory>
 			<excludes>
@@ -88,9 +115,10 @@
 				<exclude>packages</exclude>
 			</excludes>
 		</fileSet>
+		<!-- screenshare -->
 		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-webservice/target/site</directory>
-			<outputDirectory>openmeetings-webservice</outputDirectory>
+			<directory>${project.parent.basedir}/openmeetings-screenshare/target/site</directory>
+			<outputDirectory>openmeetings-screenshare</outputDirectory>
 			<excludes>
 				<exclude>javadoc.sh</exclude>
 				<exclude>options</exclude>

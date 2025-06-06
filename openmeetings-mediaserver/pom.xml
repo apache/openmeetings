@@ -50,28 +50,4 @@
 			<artifactId>kurento-client</artifactId>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<executions>
-					<execution>
-						<configuration>
-							<groups>
-								<group>
-									<title>OM media components</title>
-									<packages>org.apache.openmeetings.mediaserver</packages>
-								</group>
-							</groups>
-							<skip>${site.skip}</skip>
-						</configuration>
-						<goals>
-							<goal>javadoc-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 </project>

@@ -32,30 +32,6 @@
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 	</properties>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<executions>
-					<execution>
-						<configuration>
-							<groups>
-								<group>
-									<title>OM core components</title>
-									<packages>org.apache.openmeetings.core</packages>
-								</group>
-							</groups>
-							<skip>${site.skip}</skip>
-						</configuration>
-						<goals>
-							<goal>javadoc-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 	<dependencies>
 		<dependency>
 			<groupId>jakarta.annotation</groupId>

@@ -35,26 +35,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<executions>
-					<execution>
-						<configuration>
-							<groups>
-								<group>
-									<title>Available WebServices</title>
-									<packages>org.apache.openmeetings.webservice</packages>
-								</group>
-							</groups>
-							<skip>${site.skip}</skip>
-						</configuration>
-						<goals>
-							<goal>javadoc-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>io.openapitools.swagger</groupId>
 				<artifactId>swagger-maven-plugin</artifactId>
 				<configuration>

@@ -115,26 +115,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<executions>
-					<execution>
-						<configuration>
-							<groups>
-								<group>
-									<title>DB DAO, DTO and Entity objects</title>
-									<packages>org.apache.openmeetings.db</packages>
-								</group>
-							</groups>
-							<skip>${site.skip}</skip>
-						</configuration>
-						<goals>
-							<goal>javadoc-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.openjpa</groupId>
 				<artifactId>openjpa-maven-plugin</artifactId>
 				<configuration>

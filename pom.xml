@@ -36,6 +36,7 @@
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
 		<om.notquick.build>true</om.notquick.build>
+		<site.skip>false</site.skip>
 		<logback.console></logback.console>
 		<db>h2</db>
 		<jdk.version>17</jdk.version>
@@ -1298,6 +1299,9 @@
 						<notimestamp>true</notimestamp>
 						<links>
 							<link>https://openmeetings.apache.org/openmeetings-db/apidocs/</link>
+							<link>https://docs.spring.io/spring-framework/docs/current/javadoc-api/</link>
+							<link>https://jakartaee.github.io/rest/apidocs/3.0.0/</link>
+							<link>https://cxf.apache.org/javadoc/latest-4.0.x/</link>
 						</links>
 					</configuration>
 				</plugin>
