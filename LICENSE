@@ -230,7 +230,7 @@ conditions of the following licenses.
 
     BSD-2-Clause
 
-        * PostgreSQL JDBC Driver (org.postgresql:postgresql:42.7.6 - https://jdbc.postgresql.org)
+        * PostgreSQL JDBC Driver (org.postgresql:postgresql:42.7.7 - https://jdbc.postgresql.org)
 
     CC BY 3.0
 
@@ -281,9 +281,9 @@ conditions of the following licenses.
         * Jakarta Persistence API (jakarta.persistence:jakarta.persistence-api:3.2.0 - https://github.com/jakartaee/persistence)
         * Jakarta RESTful WS API (jakarta.ws.rs:jakarta.ws.rs-api:3.1.0 - https://github.com/eclipse-ee4j/jaxrs-api)
         * JUnit Jupiter (Aggregator) (org.junit.jupiter:junit-jupiter:5.12.2 - https://junit.org/junit5/)
-        * JUnit Jupiter API (org.junit.jupiter:junit-jupiter-api:5.13.0 - https://junit.org/junit5/)
-        * JUnit Platform Commons (org.junit.platform:junit-platform-commons:1.13.0 - https://junit.org/junit5/)
-        * JUnit Platform Engine API (org.junit.platform:junit-platform-engine:1.13.0 - https://junit.org/junit5/)
+        * JUnit Jupiter API (org.junit.jupiter:junit-jupiter-api:5.13.1 - https://junit.org/junit5/)
+        * JUnit Platform Commons (org.junit.platform:junit-platform-commons:1.13.1 - https://junit.org/junit5/)
+        * JUnit Platform Engine API (org.junit.platform:junit-platform-engine:1.13.1 - https://junit.org/junit5/)
         * JUnit Vintage Engine (org.junit.vintage:junit-vintage-engine:5.12.2 - https://junit.org/junit5/)
 
     GENERAL PUBLIC LICENSE, version 3 (GPL-3.0), GNU LESSER GENERAL PUBLIC LICENSE, version 3 (LGPL-3.0), Mozilla Public License Version 1.1
@@ -558,7 +558,7 @@ conditions of the following licenses.
         * Spring Transaction (org.springframework:spring-tx:6.2.7 - https://github.com/spring-projects/spring-framework)
         * Spring Web (org.springframework:spring-web:6.2.7 - https://github.com/spring-projects/spring-framework)
         * Spring Web MVC (org.springframework:spring-webmvc:6.2.7 - https://github.com/spring-projects/spring-framework)
-        * swagger-annotations (io.swagger.core.v3:swagger-annotations:2.2.32 - https://github.com/swagger-api/swagger-core/modules/swagger-annotations)
+        * swagger-annotations (io.swagger.core.v3:swagger-annotations:2.2.33 - https://github.com/swagger-api/swagger-core/modules/swagger-annotations)
         * UNO interface library (org.openoffice:unoil:4.1.2 - https://wiki.openoffice.org/wiki/Uno)
         * Wicket Auth Roles (org.apache.wicket:wicket-auth-roles:10.5.0 - http://wicket.apache.org/wicket-auth-roles)
         * Wicket Core (org.apache.wicket:wicket-core:10.5.0 - http://wicket.apache.org/wicket-core)
@@ -594,7 +594,7 @@ conditions of the following licenses.
         * bootstrap-italia (org.webjars.npm:bootstrap-italia:2.14.0 - https://www.webjars.org)
         * ical4j (org.mnode.ical4j:ical4j:4.1.1 - http://ical4j.github.io)
         * Java Advanced Imaging Image I/O Tools API core (standalone) (com.github.jai-imageio:jai-imageio-core:1.4.0 - https://github.com/jai-imageio/jai-imageio-core)
-        * Protocol Buffers [Core] (com.google.protobuf:protobuf-java:4.31.0 - https://developers.google.com/protocol-buffers/protobuf-java/)
+        * Protocol Buffers [Core] (com.google.protobuf:protobuf-java:4.29.0 - https://developers.google.com/protocol-buffers/protobuf-java/)
         * ThreeTen-Extra (org.threeten:threeten-extra:1.8.0 - https://www.threeten.org/threeten-extra)
         * XStream Core (com.thoughtworks.xstream:xstream:1.4.21 - http://x-stream.github.io/xstream)
 
@@ -603,6 +603,10 @@ conditions of the following licenses.
         * curvesapi (com.github.virtuald:curvesapi:1.08 - https://github.com/virtuald/curvesapi)
         * JMatIO (org.tallison:jmatio:1.5 - https://github.com/tballison/jmatio)
         * ParaNamer Core (com.thoughtworks.paranamer:paranamer:2.8 - https://github.com/paul-hammant/paranamer/paranamer)
+
+    The GNU General Public License, v2 with Universal FOSS Exception, v1.0
+
+        * MySQL Connector/J (com.mysql:mysql-connector-j:9.3.0 - http://dev.mysql.com/doc/connector-j/en/)
 
     UnRar License
 

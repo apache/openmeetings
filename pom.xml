@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache</groupId>
 		<artifactId>apache</artifactId>
-		<version>34</version>
+		<version>35</version>
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
@@ -86,13 +86,13 @@
 		<spdx.version>1.0.2</spdx.version>
 
 		<!-- dependency versions -->
-		<junit.version>5.13.0</junit.version>
+		<junit.version>5.13.1</junit.version>
 		<wicket.version>10.5.0</wicket.version>
 		<wicketstuff.version>10.5.0</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.10</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.15</fullcalendar.version>
 		<spring.version>6.2.7</spring.version>
-		<tomcat.version>11.0.7</tomcat.version>
+		<tomcat.version>11.0.8</tomcat.version>
 		<jetty.version>11.0.25</jetty.version>
 		<ical4j.version>4.1.1</ical4j.version>
 		<cxf.version>4.1.2</cxf.version>
@@ -120,7 +120,7 @@
 		<commons-text.version>1.13.1</commons-text.version>
 		<commons-net.version>3.11.1</commons-net.version>
 		<dom4j.version>2.1.4</dom4j.version>
-		<postgresql.version>42.7.6</postgresql.version>
+		<postgresql.version>42.7.7</postgresql.version>
 		<mysql.version>9.3.0</mysql.version>
 		<mssql.version>12.10.0.jre11</mssql.version>
 		<ojdbc.version>19.27.0.0</ojdbc.version>
@@ -143,7 +143,7 @@
 		<jaxb-runtime.version>4.0.5</jaxb-runtime.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
-		<swagger.version>2.2.32</swagger.version>
+		<swagger.version>2.2.33</swagger.version>
 		<jsr305.version>3.0.2</jsr305.version>
 		<totp.version>1.7.1</totp.version>
 		<!--  Exclude all generated code  -->
