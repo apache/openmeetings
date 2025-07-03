@@ -47,7 +47,7 @@
 		<version.maven-javadoc-plugin>3.11.2</version.maven-javadoc-plugin>
 		<version.maven-surefire>3.5.3</version.maven-surefire>
 		<version.maven-site-plugin>4.0.0-M9</version.maven-site-plugin>
-		<version.maven-enforcer-plugin>3.5.0</version.maven-enforcer-plugin>
+		<version.maven-enforcer-plugin>3.6.0</version.maven-enforcer-plugin>
 		<version.maven-source-plugin>3.3.1</version.maven-source-plugin>
 		<version.maven-compiler-plugin>3.14.0</version.maven-compiler-plugin>
 		<version.maven-project-info-reports-plugin>3.9.0</version.maven-project-info-reports-plugin>
@@ -58,7 +58,7 @@
 		<version.maven-clean-plugin>3.4.1</version.maven-clean-plugin>
 		<version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
 		<version.maven-resources-plugin>3.3.1</version.maven-resources-plugin>
-		<version.maven-gpg-plugin>3.2.7</version.maven-gpg-plugin>
+		<version.maven-gpg-plugin>3.2.8</version.maven-gpg-plugin>
 		<version.apache-rat-plugin>0.16.1</version.apache-rat-plugin>
 		<version.checksum-maven-plugin>1.11</version.checksum-maven-plugin>
 		<version.maven-checkstyle-plugin>3.6.0</version.maven-checkstyle-plugin>
@@ -67,7 +67,7 @@
 		<maven-bundle-plugin.version>6.0.0</maven-bundle-plugin.version>
 		<exec-maven-plugin.version>3.5.1</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
-		<license-maven-plugin.version>2.5.0</license-maven-plugin.version>
+		<license-maven-plugin.version>2.6.0</license-maven-plugin.version>
 		<reflow-maven-skin.version>2.3.4</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<replacer.version>1.5.3</replacer.version>
@@ -86,12 +86,12 @@
 		<spdx.version>1.0.2</spdx.version>
 
 		<!-- dependency versions -->
-		<junit.version>5.13.1</junit.version>
+		<junit.version>5.13.2</junit.version>
 		<wicket.version>10.5.0</wicket.version>
 		<wicketstuff.version>10.5.0</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.10</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.15</fullcalendar.version>
-		<spring.version>6.2.7</spring.version>
+		<spring.version>6.2.8</spring.version>
 		<tomcat.version>11.0.8</tomcat.version>
 		<jetty.version>11.0.25</jetty.version>
 		<ical4j.version>4.1.1</ical4j.version>
@@ -119,7 +119,7 @@
 		<commons-io.version>2.19.0</commons-io.version>
 		<commons-text.version>1.13.1</commons-text.version>
 		<commons-net.version>3.11.1</commons-net.version>
-		<dom4j.version>2.1.4</dom4j.version>
+		<dom4j.version>2.2.0</dom4j.version>
 		<postgresql.version>42.7.7</postgresql.version>
 		<mysql.version>9.3.0</mysql.version>
 		<mssql.version>12.10.0.jre11</mssql.version>
@@ -143,7 +143,7 @@
 		<jaxb-runtime.version>4.0.5</jaxb-runtime.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
-		<swagger.version>2.2.33</swagger.version>
+		<swagger.version>2.2.34</swagger.version>
 		<jsr305.version>3.0.2</jsr305.version>
 		<totp.version>1.7.1</totp.version>
 		<!--  Exclude all generated code  -->
@@ -1667,6 +1667,7 @@
 								BSD 3-clause|
 								BSD-3-Clause|
 								BSD 3-Clause License|
+								BSD 3-clause New License|
 								BSD 3-clause License w/nuclear disclaimer
 							</licenseMerge>
 							<licenseMerge>
