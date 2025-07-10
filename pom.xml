@@ -86,17 +86,17 @@
 		<spdx.version>1.0.2</spdx.version>
 
 		<!-- dependency versions -->
-		<junit.version>5.13.2</junit.version>
+		<junit.version>5.13.3</junit.version>
 		<wicket.version>10.5.0</wicket.version>
 		<wicketstuff.version>10.5.0</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.10</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.15</fullcalendar.version>
 		<spring.version>6.2.8</spring.version>
-		<tomcat.version>11.0.8</tomcat.version>
+		<tomcat.version>11.0.9</tomcat.version>
 		<jetty.version>11.0.25</jetty.version>
 		<ical4j.version>4.1.1</ical4j.version>
 		<cxf.version>4.1.2</cxf.version>
-		<io.prometheus.version>1.3.8</io.prometheus.version>
+		<io.prometheus.version>1.3.10</io.prometheus.version>
 		<aspectjtools.version>1.9.24</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.5.4</jettison.version>
@@ -111,7 +111,7 @@
 		<jakarta.websocket-api.version>2.2.0</jakarta.websocket-api.version>
 		<jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
 		<asterisk-java.version>3.41.0</asterisk-java.version>
-		<commons-lang3.version>3.17.0</commons-lang3.version>
+		<commons-lang3.version>3.18.0</commons-lang3.version>
 		<commons-dbcp.version>2.13.0</commons-dbcp.version>
 		<commons-pool2.version>2.12.1</commons-pool2.version>
 		<commons-cli.version>1.9.0</commons-cli.version>
@@ -122,13 +122,13 @@
 		<dom4j.version>2.2.0</dom4j.version>
 		<postgresql.version>42.7.7</postgresql.version>
 		<mysql.version>9.3.0</mysql.version>
-		<mssql.version>12.10.0.jre11</mssql.version>
+		<mssql.version>12.10.1.jre11</mssql.version>
 		<ojdbc.version>19.27.0.0</ojdbc.version>
 		<xstream.version>1.4.21</xstream.version>
 		<api-all.version>2.1.7</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
-		<tika-parsers.version>3.2.0</tika-parsers.version>
+		<tika-parsers.version>3.2.1</tika-parsers.version>
 		<slf4j.version>2.0.17</slf4j.version>
 		<logback.version>1.5.18</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
