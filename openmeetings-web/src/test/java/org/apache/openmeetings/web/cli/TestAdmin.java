@@ -19,11 +19,11 @@
 package org.apache.openmeetings.web.cli;
 
 import static org.apache.commons.io.FileUtils.deleteQuietly;
-import static org.apache.openmeetings.web.AbstractOmServerTest.adminUsername;
-import static org.apache.openmeetings.web.AbstractOmServerTest.email;
-import static org.apache.openmeetings.web.AbstractOmServerTest.group;
+import static org.apache.openmeetings.web.AbstractOmServerTest.ADMIN_USERNAME;
+import static org.apache.openmeetings.web.AbstractOmServerTest.EMAIL;
+import static org.apache.openmeetings.web.AbstractOmServerTest.GROUP;
 import static org.apache.openmeetings.web.AbstractOmServerTest.setOmHome;
-import static org.apache.openmeetings.web.AbstractOmServerTest.userpass;
+import static org.apache.openmeetings.web.AbstractOmServerTest.USER_PASS;
 import static org.apache.openmeetings.cli.Admin.OM_HOME;
 import static org.apache.openmeetings.db.util.ApplicationHelper.destroyApplication;
 import static org.apache.openmeetings.web.pages.install.TestInstall.resetH2Home;
@@ -56,7 +56,7 @@ class TestAdmin {
 	private File tempFolder;
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	void setUp() throws Exception {
 		setOmHome();
 		tempFolder = Files.createTempDirectory("omtempdb").toFile();
 		System.setProperty("user.dir", tempFolder.getCanonicalPath());
@@ -66,7 +66,7 @@ class TestAdmin {
 	}
 
 	@AfterEach
-	public void tearDown() throws Exception {
+	void tearDown() throws Exception {
 		resetH2Home();
 		System.getProperties().remove(OM_HOME);
 		WebApplication app = (WebApplication)Application.get(getWicketApplicationName());
@@ -115,10 +115,10 @@ class TestAdmin {
 	private static void performInstall(Admin admin, String... args) throws Exception {
 		List<String> params = new ArrayList<>(List.of("-i"
 				, "-tz", "Europe/Berlin"
-				, "-email", email
-				, "-group", group
-				, "-user", adminUsername
-				, "--password", userpass));
+				, "-email", EMAIL
+				, "-group", GROUP
+				, "-user", ADMIN_USERNAME
+				, "--password", USER_PASS));
 		for (String a : args) {
 			params.add(a);
 		}

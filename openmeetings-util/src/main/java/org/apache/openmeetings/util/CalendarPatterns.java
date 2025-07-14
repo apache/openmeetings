@@ -153,8 +153,7 @@ public class CalendarPatterns {
 
 	public static Date parseDateWithHour(String dateString) {
 		try {
-			if (dateString == null || dateString.length() == 0
-					|| "null".equals(dateString)) {
+			if (dateString == null || dateString.isEmpty() || "null".equals(dateString)) {
 				return null;
 			}
 			return dateFormat__ddMMyyyyHHmmss.parse(dateString);

@@ -103,7 +103,7 @@ public class TestLdap extends AbstractWicketTesterTest {
 	private LdapConfigDao ldapDao;
 
 	@BeforeAll
-	public static void prepare() {
+	static void prepare() {
 		loadLdapConf("om_ldap.cfg", PROPS);
 		Transport t = classLdapServer.getTransports()[0];
 		PROPS.put(CONFIGKEY_LDAP_HOST, t.getAddress());
@@ -132,7 +132,7 @@ public class TestLdap extends AbstractWicketTesterTest {
 	}
 
 	@BeforeEach
-	public void clean() throws FileNotFoundException, IOException {
+	void clean() throws FileNotFoundException, IOException {
 		if (CFG_MAP.isEmpty()) {
 			createSbnd();
 		}
@@ -149,10 +149,10 @@ public class TestLdap extends AbstractWicketTesterTest {
 	@Test
 	void testSbndSessionLogin() throws OmException {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
-		assertTrue(WebSession.get().signIn(USER1, userpass, User.Type.LDAP, cfg.getId()), "Login should be successful");
+		assertTrue(WebSession.get().signIn(USER1, USER_PASS, User.Type.LDAP, cfg.getId()), "Login should be successful");
 		//do login second time
 		WebSession.get().invalidateNow();
-		assertTrue(WebSession.get().signIn(USER1, userpass, User.Type.LDAP, cfg.getId()), "Login should be successful");
+		assertTrue(WebSession.get().signIn(USER1, USER_PASS, User.Type.LDAP, cfg.getId()), "Login should be successful");
 		//check DB
 		assertEquals(1, userDao.count(USER1), "There should be exactly one user after multiple logins");
 	}
@@ -160,7 +160,7 @@ public class TestLdap extends AbstractWicketTesterTest {
 	@Test
 	void testPhoto1() throws OmException {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
-		assertTrue(WebSession.get().signIn(USER2, userpass, User.Type.LDAP, cfg.getId()), "Login should be successful");
+		assertTrue(WebSession.get().signIn(USER2, USER_PASS, User.Type.LDAP, cfg.getId()), "Login should be successful");
 		User u = userDao.getByLogin(USER2, User.Type.LDAP, cfg.getId());
 		assertNotNull(u);
 		assertEquals("profile.png", u.getPictureUri());
@@ -169,7 +169,7 @@ public class TestLdap extends AbstractWicketTesterTest {
 	@Test
 	void testPhoto2() throws OmException {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
-		assertTrue(WebSession.get().signIn(USER3, userpass, User.Type.LDAP, cfg.getId()), "Login should be successful");
+		assertTrue(WebSession.get().signIn(USER3, USER_PASS, User.Type.LDAP, cfg.getId()), "Login should be successful");
 		User u = userDao.getByLogin(USER3, User.Type.LDAP, cfg.getId());
 		assertNotNull(u);
 		assertEquals("user.jpg", u.getPictureUri());

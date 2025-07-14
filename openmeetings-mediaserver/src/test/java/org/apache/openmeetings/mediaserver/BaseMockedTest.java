@@ -69,7 +69,7 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONObject;
 
 @ExtendWith(MockitoExtension.class)
-public class BaseMockedTest {
+class BaseMockedTest {
 	private static final Logger log = LoggerFactory.getLogger(BaseMockedTest.class);
 	@Mock
 	protected RomManager romManager;
@@ -91,7 +91,7 @@ public class BaseMockedTest {
 	protected KurentoHandler handler;
 
 	@BeforeEach
-	public void baseSetup() {
+	void baseSetup() {
 		Mockito.reset();
 		lenient().doReturn(kServerManager).when(client).getServerManager();
 		lenient().doReturn(new TransactionImpl(romManager)).when(client).beginTransaction();

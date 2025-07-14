@@ -57,17 +57,17 @@ import jakarta.inject.Inject;
 @RegularTest
 public abstract class AbstractOmServerTest {
 	private static final Logger log = LoggerFactory.getLogger(AbstractOmServerTest.class);
-	private static final String timeZone = "Europe/Berlin";
+	private static final String TIME_ZONE = "Europe/Berlin";
 	public static final int ONE_HOUR = 60 * 60 * 1000;
-	public static final String adminUsername = "admin";
-	public static final String regularUsername = "user";
-	public static final String soapUsername = "soap";
-	protected static final String groupAdminUsername = "groupAdmin";
-	public static final String userpass = "Q!w2e3r4t5";
-	public static final String group = "smoketest";
-	public static final String email = "junit@openmeetings.apache.org";
+	public static final String ADMIN_USERNAME = "admin";
+	public static final String REGULAR_USERNAME = "user";
+	public static final String SOAP_USERNAME = "soap";
+	protected static final String GROUP_ADMIN_USERNAME = "groupAdmin";
+	public static final String USER_PASS = "Q!w2e3r4t5";
+	public static final String GROUP = "smoketest";
+	public static final String EMAIL = "junit@openmeetings.apache.org";
 	public static final String UNIT_TEST_ARAB_EXT_TYPE = "النُّجُومُ الخَمْسَةِ";
-	public static final Random rnd = new Random();
+	public static final Random RND = new Random();
 
 	@Inject
 	protected AppointmentDao appointmentDao;
@@ -234,24 +234,24 @@ public abstract class AbstractOmServerTest {
 
 	private static void makeDefaultScheme(ImportInitvalues importInitvalues) throws Exception {
 		InstallationConfig cfg = new InstallationConfig();
-		cfg.setUsername(adminUsername);
-		cfg.setPassword(userpass);
-		cfg.setEmail(email);
-		cfg.setGroup(group);
-		cfg.setTimeZone(timeZone);
+		cfg.setUsername(ADMIN_USERNAME);
+		cfg.setPassword(USER_PASS);
+		cfg.setEmail(EMAIL);
+		cfg.setGroup(GROUP);
+		cfg.setTimeZone(TIME_ZONE);
 		importInitvalues.loadAll(cfg, false);
 		// regular user
-		importInitvalues.createSystemUser(getUser(randomUUID().toString()), group, regularUsername, userpass, false, null);
+		importInitvalues.createSystemUser(getUser(randomUUID().toString()), GROUP, REGULAR_USERNAME, USER_PASS, false, null);
 
 		// soap user
-		importInitvalues.createSystemUser(getUser(randomUUID().toString()), group, soapUsername, userpass, false, u -> {
+		importInitvalues.createSystemUser(getUser(randomUUID().toString()), GROUP, SOAP_USERNAME, USER_PASS, false, u -> {
 			u.getRights().remove(User.Right.ROOM);
 			u.getRights().remove(User.Right.DASHBOARD);
 			u.getRights().add(User.Right.SOAP);
 		});
 
 		// group admin
-		importInitvalues.createSystemUser(getUser(randomUUID().toString()), group, groupAdminUsername, userpass, true, null);
+		importInitvalues.createSystemUser(getUser(randomUUID().toString()), GROUP, GROUP_ADMIN_USERNAME, USER_PASS, true, null);
 	}
 
 	public User getContact(String uuid, Long ownerId) {

@@ -30,7 +30,7 @@ class TestSCrypt extends AbstractCryptTest {
 	private static final String SHA_HASH = "1000:3C2Sm1yw8NoyEBg8KaJfJMye9GaM8uKDNfUNyPWSbwNI2amKAK10KIrPOQeOV7uLkGCT1Fl5gabBRGjLRSBzi7S8LgaVetiEuCL0d8oVPYT1xtgrmEzx/dIyd7hVaGbol388FVW2Ei7ZxIce8DIOtKmMfrxqoNEZa+ERRAzBGLE=:lbveBdEopW7QuU2jcgv4UeuA1m0eDwfIz+KjWgciF/8TWdLi7utCiy+wm3X2pp0WRffqKEs+wwBh6iJbF2WNPIH06YaB68Q1h34wpxjBdziqAbUiGt2nZiPdKghNNX5j4L0Jp1gGRWpXOrg7V1NqYV6pLmwa+SipQs7MJGCCf+HAcwYW3HNIcp2Rbu9IzH7/t7oJo+FCgL4i1rYVHxrbHhAZCA9hr+dKM6u3S/Ef+EsZfSxCOX2BIRkoqHF4ZlLpwCIf6gmq3m7jenAjz0h2AuO/pM3Mf5d8Oy0LAqgiznU9/S7eEP6QYifF3V/P2ZL6/nX9RprVTTiSf0+GsAygOg==";
 
 	@BeforeAll
-	public static void setup() {
+	static void setup() {
 		crypt = new SCryptImplementation();
 	}
 

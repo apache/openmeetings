@@ -67,7 +67,7 @@ class TestLoginUI extends AbstractWicketTesterTest {
 		tester.startPage(MainPage.class);
 		tester.assertRenderedPage(SignInPage.class);
 
-		checkLogin(adminUsername, userpass);
+		checkLogin(ADMIN_USERNAME, USER_PASS);
 	}
 
 	@Test
@@ -160,8 +160,8 @@ class TestLoginUI extends AbstractWicketTesterTest {
 		formTester.setValue("email", getEmail(uid));
 		formTester.setValue("firstName", "first" + uid);
 		formTester.setValue("lastName", "last" + uid);
-		formTester.setValue("password", userpass);
-		formTester.setValue("confirmPassword", userpass);
+		formTester.setValue("password", USER_PASS);
+		formTester.setValue("confirmPassword", USER_PASS);
 		formTester.setValue("captcha:captchaText", getCaptcha("register:form:captcha:captcha"));
 		formTester.submit("submit");
 		checkErrors(0);
@@ -171,7 +171,7 @@ class TestLoginUI extends AbstractWicketTesterTest {
 	}
 
 	private void performForget(String uid) throws ReflectiveOperationException, SecurityException {
-		int type = rnd.nextInt(2);
+		int type = RND.nextInt(2);
 		FormTester forgetTester = showForget();
 		forgetTester.select("type", type);
 		forgetTester.setValue("name", type == 0 ? getEmail(uid) : getLogin(uid));
@@ -194,7 +194,7 @@ class TestLoginUI extends AbstractWicketTesterTest {
 			tester.startPage(SignInPage.class);
 			tester.assertRenderedPage(SignInPage.class);
 
-			String uid = String.valueOf(Math.abs(rnd.nextLong())); // number uid is used to prevent password validation errors
+			String uid = String.valueOf(Math.abs(RND.nextLong())); // number uid is used to prevent password validation errors
 			performRegister(uid, "warn.notverified");
 
 			// activate
@@ -209,7 +209,7 @@ class TestLoginUI extends AbstractWicketTesterTest {
 			assertNotNull(u);
 			assertNull(u.getActivatehash());
 			assertTrue(u.getRights().contains(User.Right.LOGIN));
-			checkLogin(getEmail(uid), userpass);
+			checkLogin(getEmail(uid), USER_PASS);
 
 			// logout
 			Locale loc = tester.getSession().getLocale();

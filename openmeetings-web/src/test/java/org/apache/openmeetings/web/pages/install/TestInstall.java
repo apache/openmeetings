@@ -19,11 +19,11 @@
 package org.apache.openmeetings.web.pages.install;
 
 import static org.apache.commons.io.FileUtils.deleteQuietly;
-import static org.apache.openmeetings.web.AbstractOmServerTest.adminUsername;
-import static org.apache.openmeetings.web.AbstractOmServerTest.email;
-import static org.apache.openmeetings.web.AbstractOmServerTest.group;
+import static org.apache.openmeetings.web.AbstractOmServerTest.ADMIN_USERNAME;
+import static org.apache.openmeetings.web.AbstractOmServerTest.EMAIL;
+import static org.apache.openmeetings.web.AbstractOmServerTest.GROUP;
 import static org.apache.openmeetings.web.AbstractOmServerTest.setOmHome;
-import static org.apache.openmeetings.web.AbstractOmServerTest.userpass;
+import static org.apache.openmeetings.web.AbstractOmServerTest.USER_PASS;
 import static org.apache.openmeetings.web.AbstractWicketTesterTest.checkErrors;
 import static org.apache.openmeetings.web.AbstractWicketTesterTest.countErrors;
 import static org.apache.openmeetings.web.AbstractWicketTesterTest.getWicketTester;
@@ -91,7 +91,7 @@ public class TestInstall {
 	}
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	void setUp() throws Exception {
 		log.info("Going to perform setup for TestInstall");
 		setOmHome();
 		setWicketApplicationName(DEFAULT_APP_NAME);
@@ -113,7 +113,7 @@ public class TestInstall {
 	}
 
 	@AfterEach
-	public void tearDown() throws Exception {
+	void tearDown() throws Exception {
 		log.info("Going to perform clean-up for TestInstall");
 		AbstractWicketTesterTest.destroy(tester);
 		log.info("WicketTester is destroyed");
@@ -146,12 +146,12 @@ public class TestInstall {
 		wizardTester.submit(next); //user step
 		checkErrors(tester, 0);
 		wizardTester = tester.newFormTester(FORM_PATH);
-		wizardTester.setValue("view:username", adminUsername);
-		wizardTester.setValue("view:password", userpass);
-		wizardTester.setValue("view:email", email);
+		wizardTester.setValue("view:username", ADMIN_USERNAME);
+		wizardTester.setValue("view:password", USER_PASS);
+		wizardTester.setValue("view:email", EMAIL);
 		String[] tzIds = TimeZone.getAvailableIDs();
 		wizardTester.select("view:timeZone", rnd.nextInt(tzIds.length));
-		wizardTester.setValue("view:group", group);
+		wizardTester.setValue("view:group", GROUP);
 		wizardTester.submit(next); //cfg+smtp step
 		checkErrors(tester, 0);
 		wizardTester = tester.newFormTester(FORM_PATH);

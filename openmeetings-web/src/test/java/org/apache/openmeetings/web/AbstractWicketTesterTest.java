@@ -82,7 +82,7 @@ public abstract class AbstractWicketTesterTest extends AbstractOmServerTest {
 		tester = getWicketTester(app);
 		assertNotNull(WebSession.get(), "Web session should not be null");
 		Locale[] locales = Locale.getAvailableLocales();
-		Locale l = locales[rnd.nextInt(locales.length)];
+		Locale l = locales[RND.nextInt(locales.length)];
 		log.info("{} Locale is selected", l);
 		tester.getSession().setLocale(l);
 	}
@@ -93,12 +93,12 @@ public abstract class AbstractWicketTesterTest extends AbstractOmServerTest {
 			if (login != null && password != null) {
 				s.signIn(login, password, Type.USER, null);
 			} else {
-				s.signIn(adminUsername, userpass, Type.USER, null);
+				s.signIn(ADMIN_USERNAME, USER_PASS, Type.USER, null);
 			}
 		} catch (OmException e) {
 			fail(e.getMessage());
 		}
-		assertTrue(s.isSignedIn(), "Web session is not signed in for user: " + (login != null ? login : adminUsername));
+		assertTrue(s.isSignedIn(), "Web session is not signed in for user: " + (login != null ? login : ADMIN_USERNAME));
 	}
 
 	public AbstractAjaxBehavior getButtonBehavior(String path, int idx) {
@@ -111,7 +111,7 @@ public abstract class AbstractWicketTesterTest extends AbstractOmServerTest {
 	}
 
 	protected void testArea(String user, Consumer<MainPage> consumer) throws OmException {
-		assertTrue(((WebSession)tester.getSession()).signIn(user, userpass, User.Type.USER, null));
+		assertTrue(((WebSession)tester.getSession()).signIn(user, USER_PASS, User.Type.USER, null));
 		MainPage page = tester.startPage(MainPage.class);
 		tester.assertRenderedPage(MainPage.class);
 		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(1));

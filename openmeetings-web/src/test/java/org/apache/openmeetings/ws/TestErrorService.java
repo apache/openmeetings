@@ -19,7 +19,7 @@
 package org.apache.openmeetings.ws;
 
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.web.AbstractOmServerTest.rnd;
+import static org.apache.openmeetings.web.AbstractOmServerTest.RND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -38,7 +38,7 @@ class TestErrorService extends AbstractWebServiceTest {
 	void getTestBadKey() {
 		Locale[] locales = Locale.getAvailableLocales();
 		ServiceResult sr = getClient(getErrorUrl())
-				.path(String.format("/%s/%s", randomUUID().toString(), LabelDao.getLanguage(locales[rnd.nextInt(locales.length)], 1L)))
+				.path(String.format("/%s/%s", randomUUID().toString(), LabelDao.getLanguage(locales[RND.nextInt(locales.length)], 1L)))
 				.get(ServiceResult.class);
 		assertNotNull(sr, "Valid Result should be returned");
 		assertEquals(ServiceResult.Type.SUCCESS.name(), sr.getType(), "SUCCESS result should be returned");
@@ -48,7 +48,7 @@ class TestErrorService extends AbstractWebServiceTest {
 	void getTest() {
 		Locale[] locales = Locale.getAvailableLocales();
 		ServiceResult sr = getClient(getErrorUrl())
-				.path(String.format("/%s/%s", "error.unknown", LabelDao.getLanguage(locales[rnd.nextInt(locales.length)], 1L)))
+				.path(String.format("/%s/%s", "error.unknown", LabelDao.getLanguage(locales[RND.nextInt(locales.length)], 1L)))
 				.get(ServiceResult.class);
 		assertNotNull(sr, "Valid Result should be returned");
 		assertEquals(ServiceResult.Type.SUCCESS.name(), sr.getType(), "SUCCESS result should be returned");

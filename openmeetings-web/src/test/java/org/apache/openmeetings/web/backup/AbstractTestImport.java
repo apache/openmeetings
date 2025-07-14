@@ -35,19 +35,19 @@ import org.junit.jupiter.api.BeforeEach;
 import jakarta.inject.Inject;
 
 
-public class AbstractTestImport extends AbstractOmServerTest {
+class AbstractTestImport extends AbstractOmServerTest {
 	private String cryptClass = null;
 	@Inject
 	protected BackupImport backupImport;
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	void setUp() throws Exception {
 		// Crypt class need to be preserved here to avoid overriding by backup import
 		cryptClass = getCryptClassName();
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		Configuration cfg = cfgDao.get(CONFIG_CRYPT);
 		assertNotNull(cfg, "Not null config should be returned");
 		cfg.setValue(cryptClass);

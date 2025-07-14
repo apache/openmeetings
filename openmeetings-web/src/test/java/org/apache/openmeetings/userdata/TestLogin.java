@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 class TestLogin extends AbstractOmServerTest {
 	@Test
 	void testTestLogin() throws OmException {
-		User us = userDao.login(adminUsername, userpass);
+		User us = userDao.login(ADMIN_USERNAME, USER_PASS);
 		assertNotNull(us, "User is unable to login");
 	}
 
@@ -39,8 +39,8 @@ class TestLogin extends AbstractOmServerTest {
 		User u = getUser(randomUUID().toString());
 		u.setLogin(" AB" + u.getLogin() + " ");
 		u.getAddress().setEmail(" CD_" + u.getAddress().getEmail() + " ");
-		u.updatePassword(userpass);
-		u.addGroup(groupDao.get(group));
+		u.updatePassword(USER_PASS);
+		u.addGroup(groupDao.get(GROUP));
 		return userDao.update(u, null);
 	}
 
@@ -48,7 +48,7 @@ class TestLogin extends AbstractOmServerTest {
 	void testMixedCaseLogin() throws Exception {
 		final String login = prepareUser().getLogin();
 
-		User us = userDao.login(login.toUpperCase(Locale.ROOT), userpass);
+		User us = userDao.login(login.toUpperCase(Locale.ROOT), USER_PASS);
 		assertNotNull(us, "Uppercase User is unable to login");
 	}
 
@@ -56,7 +56,7 @@ class TestLogin extends AbstractOmServerTest {
 	void testMixedCaseEmail() throws Exception {
 		final String email = prepareUser().getAddress().getEmail();
 
-		User us = userDao.login(email.toUpperCase(Locale.ROOT), userpass);
+		User us = userDao.login(email.toUpperCase(Locale.ROOT), USER_PASS);
 		assertNotNull(us, "Uppercase Email is unable to login");
 	}
 }

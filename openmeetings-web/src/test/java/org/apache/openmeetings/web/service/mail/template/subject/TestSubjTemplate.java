@@ -68,7 +68,7 @@ class TestSubjTemplate extends AbstractWicketTesterTest {
 		Group g = new Group();
 		g.setName("Template test");
 		for (User u : users) {
-			TimeZone tz = TimeZone.getTimeZone(ids[rnd.nextInt(ids.length)]);
+			TimeZone tz = TimeZone.getTimeZone(ids[RND.nextInt(ids.length)]);
 			checkTemplate(CreatedAppointmentTemplate.get(u, a, tz, u.getLogin()));
 			checkTemplate(CanceledAppointmentTemplate.get(u, a, tz, u.getLogin()));
 			checkTemplate(UpdatedAppointmentTemplate.get(u, a, tz, u.getLogin()));

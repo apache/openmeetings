@@ -60,7 +60,7 @@ class TestRoomFlowMocked extends BaseMockedTest {
 	private IApplication app;
 
 	@BeforeEach
-	public void setup() {
+	void setup() {
 		lenient().doReturn(mock(MediaPipeline.class)).when(client).createMediaPipeline(any(Transaction.class));
 		User u = new User();
 		u.setId(USER_ID);

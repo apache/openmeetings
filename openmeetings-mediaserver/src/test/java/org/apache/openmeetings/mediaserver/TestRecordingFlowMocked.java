@@ -69,7 +69,7 @@ class TestRecordingFlowMocked extends BaseMockedTest {
 	private String streamDescUID;
 
 	@BeforeEach
-	public void setup() {
+	void setup() {
 		User u = new User();
 		u.setId(USER_ID);
 		u.setFirstname("firstname");

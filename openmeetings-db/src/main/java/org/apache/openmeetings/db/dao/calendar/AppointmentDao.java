@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.calendar;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.commons.lang3.Strings.CS;
 import static org.apache.openmeetings.db.util.DaoHelper.only;
 import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
@@ -36,7 +37,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -123,9 +123,9 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 		if (sendmails) {
 			// update meeting members
 			boolean sendMail = a0 == null
-					|| !StringUtils.equals(a0.getTitle(), a.getTitle())
-					|| !StringUtils.equals(a0.getDescription(), a.getDescription())
-					|| !StringUtils.equals(a0.getLocation(), a.getLocation())
+					|| !CS.equals(a0.getTitle(), a.getTitle())
+					|| !CS.equals(a0.getDescription(), a.getDescription())
+					|| !CS.equals(a0.getLocation(), a.getLocation())
 					|| !a0.getStart().getTime().equals(a.getStart())
 					|| !a0.getEnd().getTime().equals(a.getEnd());
 			List<MeetingMember> mmList = a.getMeetingMembers();

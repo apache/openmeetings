@@ -386,7 +386,7 @@ public class IcalUtils {
 
 		String uid = appointment.getIcalId();
 		Uid ui;
-		if (uid == null || uid.length() < 1) {
+		if (uid == null || uid.isEmpty()) {
 			UUID uuid = randomUUID();
 			appointment.setIcalId(uuid.toString());
 			ui = new Uid(uuid.toString());

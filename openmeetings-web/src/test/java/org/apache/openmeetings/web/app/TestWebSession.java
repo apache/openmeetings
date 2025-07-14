@@ -34,15 +34,15 @@ class TestWebSession extends AbstractWicketTesterTest {
 		assertFalse(ws.isSignedIn(), "Should not be signed in");
 
 		try {
-			ws.signIn(adminUsername, "", User.Type.CONTACT, null);
+			ws.signIn(ADMIN_USERNAME, "", User.Type.CONTACT, null);
 			fail("Exception should be thrown");
 		} catch(OmException exc) {
 			assertTrue(true, "Expected exception");
 		}
-		assertFalse(ws.signIn(adminUsername, "", User.Type.USER, null));
-		assertTrue(ws.signIn(adminUsername, userpass, User.Type.USER, null));
+		assertFalse(ws.signIn(ADMIN_USERNAME, "", User.Type.USER, null));
+		assertTrue(ws.signIn(ADMIN_USERNAME, USER_PASS, User.Type.USER, null));
 		try {
-			ws.signIn(adminUsername, userpass, User.Type.LDAP, null);
+			ws.signIn(ADMIN_USERNAME, USER_PASS, User.Type.LDAP, null);
 			fail("Exception should be thrown");
 		} catch(OmException exc) {
 			assertTrue(true, "Expected exception");

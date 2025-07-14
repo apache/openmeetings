@@ -75,7 +75,7 @@ public class AppointmentLogic {
 	// ----------------------------------------------------------------------------------------------
 	public void doScheduledMeetingReminder() {
 		String baseUrl = getBaseUrl();
-		if (baseUrl == null || baseUrl.length() < 1) {
+		if (baseUrl == null || baseUrl.isEmpty()) {
 			log.error("Error retrieving baseUrl for application");
 			return;
 		}

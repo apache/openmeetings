@@ -48,7 +48,7 @@ class TestEmailTemplate extends AbstractWicketTesterTest {
 
 	private static User templateUser() {
 		User u = new User();
-		u.setLanguageId(rnd.nextInt(40));
+		u.setLanguageId(RND.nextInt(40));
 		return u;
 	}
 

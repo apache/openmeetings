@@ -20,10 +20,10 @@ package org.apache.openmeetings.ws;
 
 import static java.util.UUID.randomUUID;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
-import static org.apache.openmeetings.web.AbstractOmServerTest.adminUsername;
+import static org.apache.openmeetings.web.AbstractOmServerTest.ADMIN_USERNAME;
 import static org.apache.openmeetings.web.AbstractOmServerTest.createPass;
-import static org.apache.openmeetings.web.AbstractOmServerTest.rnd;
-import static org.apache.openmeetings.web.AbstractOmServerTest.userpass;
+import static org.apache.openmeetings.web.AbstractOmServerTest.RND;
+import static org.apache.openmeetings.web.AbstractOmServerTest.USER_PASS;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -121,7 +121,7 @@ class TestUserService extends AbstractWebServiceTest {
 	void hashTest() throws OmException {
 		ensureApplication(-1L); // to ensure WebSession is attached
 		WebSession ws = WebSession.get();
-		assertTrue(ws.signIn(adminUsername, userpass, User.Type.USER, null));
+		assertTrue(ws.signIn(ADMIN_USERNAME, USER_PASS, User.Type.USER, null));
 		Long userId0 = WebSession.getUserId();
 		Long userId1 = getAndcheckHash(userId0);
 		Long userId2 = getAndcheckHash(userId0);
@@ -130,7 +130,7 @@ class TestUserService extends AbstractWebServiceTest {
 
 	private UserDTO doAddUser(String uuid, String extId) {
 		String[] tzList = TimeZone.getAvailableIDs();
-		String tz = TimeZone.getTimeZone(tzList[rnd.nextInt(tzList.length)]).getID();
+		String tz = TimeZone.getTimeZone(tzList[RND.nextInt(tzList.length)]).getID();
 		ServiceResult r = login();
 		UserDTO u = new UserDTO();
 		u.setType(null); // check auto-set

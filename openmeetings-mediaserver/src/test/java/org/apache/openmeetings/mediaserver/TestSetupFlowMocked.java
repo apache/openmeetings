@@ -43,7 +43,7 @@ class TestSetupFlowMocked extends BaseMockedTest {
 	}
 
 	@BeforeEach
-	public void setup() {
+	void setup() {
 		doReturn(true).when(handler).isConnected();
 	}
 

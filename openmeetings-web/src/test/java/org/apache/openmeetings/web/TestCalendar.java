@@ -45,7 +45,7 @@ class TestCalendar extends AbstractWicketTesterTest {
 
 	@Test
 	void testEventCreate() throws OmException {
-		testArea(regularUsername, p -> {
+		testArea(REGULAR_USERNAME, p -> {
 			Navbar menu = (Navbar)p.get(PATH_MENU);
 			assertNotNull(menu);
 			tester.executeBehavior((AbstractAjaxBehavior)menu.get("container:collapse:navLeftListEnclosure:navLeftList:0:component:dropdown-menu:buttons:1:button").getBehaviorById(0));
@@ -54,7 +54,7 @@ class TestCalendar extends AbstractWicketTesterTest {
 			CalendarPanel cal = (CalendarPanel)p.get(PATH_CHILD);
 			tester.executeAllTimerBehaviors(cal);
 
-			User u = userDao.getByLogin(regularUsername, User.Type.USER, null);
+			User u = userDao.getByLogin(REGULAR_USERNAME, User.Type.USER, null);
 			//test create month
 			tester.getRequest().setParameter("allDay", String.valueOf(false));
 			tester.getRequest().setParameter("startDate", LocalDateTime.of(2017, 11, 13, 13, 13).atOffset(UTC).format(ISO_OFFSET_DATE_TIME));

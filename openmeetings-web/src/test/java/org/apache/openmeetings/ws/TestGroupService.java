@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.ws;
 
-import static org.apache.openmeetings.web.AbstractOmServerTest.adminUsername;
-import static org.apache.openmeetings.web.AbstractOmServerTest.userpass;
+import static org.apache.openmeetings.web.AbstractOmServerTest.ADMIN_USERNAME;
+import static org.apache.openmeetings.web.AbstractOmServerTest.USER_PASS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -72,7 +72,7 @@ class TestGroupService extends AbstractWebServiceTest {
 
 	@Test
 	void addRemoveTest() {
-		ServiceResult r = login(adminUsername, userpass);
+		ServiceResult r = login(ADMIN_USERNAME, USER_PASS);
 		Long groupId = createGroup(r.getMessage(), "Test Group");
 		//delete group created
 		{

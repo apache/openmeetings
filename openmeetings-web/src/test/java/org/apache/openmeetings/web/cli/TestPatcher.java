@@ -47,7 +47,7 @@ class TestPatcher {
 	private static final String PASS = "mypass";
 
 	@BeforeAll
-	public static void setUp() {
+	static void setUp() {
 		setOmHome();
 	}
 
@@ -66,7 +66,7 @@ class TestPatcher {
 	}
 
 	@AfterAll
-	public static void cleanup() throws IOException {
+	static void cleanup() throws IOException {
 		Files.copy(OmFileHelper.getPersistence(DbType.H2), OmFileHelper.getPersistence());
 	}
 }

@@ -21,8 +21,8 @@ package org.apache.openmeetings.ws;
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.web.AbstractOmServerTest.createPass;
 import static org.apache.openmeetings.web.AbstractOmServerTest.ensureSchema;
-import static org.apache.openmeetings.web.AbstractOmServerTest.soapUsername;
-import static org.apache.openmeetings.web.AbstractOmServerTest.userpass;
+import static org.apache.openmeetings.web.AbstractOmServerTest.SOAP_USERNAME;
+import static org.apache.openmeetings.web.AbstractOmServerTest.USER_PASS;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -83,7 +83,7 @@ public abstract class AbstractWebServiceTest {
 	}
 
 	public static ServiceResult login() {
-		return login(soapUsername, userpass);
+		return login(SOAP_USERNAME, USER_PASS);
 	}
 
 	public static ServiceResult loginNoCheck(String user, String pass) {

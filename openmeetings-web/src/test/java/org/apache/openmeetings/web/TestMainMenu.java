@@ -48,7 +48,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 
 class TestMainMenu extends AbstractWicketTesterTest {
 	private void checkMenuItem(int menuIdx, Integer subMenuIdx, Class<? extends BasePanel> clazz) throws OmException {
-		testArea(adminUsername, p -> {
+		testArea(ADMIN_USERNAME, p -> {
 			Navbar menu = (Navbar)p.get(PATH_MENU);
 			assertNotNull(menu);
 			String path = "container:collapse:navLeftListEnclosure:navLeftList:" + menuIdx;

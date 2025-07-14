@@ -83,7 +83,7 @@ public class OmHelpFormatter extends HelpFormatter {
 
 			if (o.hasArg()) {
 				String argName = o.getArgName();
-				if (argName != null && argName.length() == 0) {
+				if (argName != null && argName.isEmpty()) {
 					// if the option has a blank argname
 					optBuf.append(' ');
 				} else {
@@ -179,19 +179,19 @@ public class OmHelpFormatter extends HelpFormatter {
 	public void printHelp(PrintWriter pw, int width, String cmdLineSyntax,
 			String header, Options options, int leftPad, int descPad,
 			String footer, boolean autoUsage) {
-		if ((cmdLineSyntax == null) || (cmdLineSyntax.length() == 0)) {
+		if ((cmdLineSyntax == null) || (cmdLineSyntax.isEmpty())) {
 			throw new IllegalArgumentException("cmdLineSyntax not provided");
 		}
 
 		printUsage(pw, width, cmdLineSyntax, options);
 
-		if ((header != null) && (header.trim().length() > 0)) {
+		if ((header != null) && !header.trim().isEmpty()) {
 			printWrapped(pw, width, header);
 		}
 
 		printOptions(pw, width, options, leftPad, descPad);
 
-		if ((footer != null) && (footer.trim().length() > 0)) {
+		if ((footer != null) && !footer.trim().isEmpty()) {
 			printWrapped(pw, width, footer);
 		}
 	}

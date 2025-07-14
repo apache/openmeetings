@@ -54,7 +54,7 @@ class TestInvitation extends AbstractWicketTesterTest {
 
 	private Invitation create(Valid valid, boolean createApp) {
 		LocalDateTime base = LocalDateTime.now().plusDays(1).withHour(12).withMinute(0).withSecond(0);
-		User us = userDao.getByLogin(adminUsername, User.Type.USER, null);
+		User us = userDao.getByLogin(ADMIN_USERNAME, User.Type.USER, null);
 
 		Date from = getDate(base, "GMT");
 		Date to = getDate(base.plusHours(2), "GMT");
