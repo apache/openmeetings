@@ -266,10 +266,6 @@ conditions of the following licenses.
         * Logback Classic Module (ch.qos.logback:logback-classic:1.5.18 - http://logback.qos.ch/logback-classic)
         * Logback Core Module (ch.qos.logback:logback-core:1.5.18 - http://logback.qos.ch/logback-core)
 
-    Eclipse Public License 1.0
-
-        * JUnit (junit:junit:4.13.2 - http://junit.org)
-
     Eclipse Public License v2.0
 
         * Angus Mail Provider (org.eclipse.angus:angus-mail:2.0.3 - http://eclipse-ee4j.github.io/angus-mail/angus-mail)
@@ -280,11 +276,8 @@ conditions of the following licenses.
         * Jakarta Messaging API (jakarta.jms:jakarta.jms-api:3.1.0 - https://projects.eclipse.org/projects/ee4j.jms)
         * Jakarta Persistence API (jakarta.persistence:jakarta.persistence-api:3.2.0 - https://github.com/jakartaee/persistence)
         * Jakarta RESTful WS API (jakarta.ws.rs:jakarta.ws.rs-api:3.1.0 - https://github.com/eclipse-ee4j/jaxrs-api)
-        * JUnit Jupiter (Aggregator) (org.junit.jupiter:junit-jupiter:5.12.2 - https://junit.org/junit5/)
         * JUnit Jupiter API (org.junit.jupiter:junit-jupiter-api:5.13.3 - https://junit.org/)
         * JUnit Platform Commons (org.junit.platform:junit-platform-commons:1.13.3 - https://junit.org/)
-        * JUnit Platform Engine API (org.junit.platform:junit-platform-engine:1.13.3 - https://junit.org/)
-        * JUnit Vintage Engine (org.junit.vintage:junit-vintage-engine:5.12.2 - https://junit.org/junit5/)
 
     GENERAL PUBLIC LICENSE, version 3 (GPL-3.0), GNU LESSER GENERAL PUBLIC LICENSE, version 3 (LGPL-3.0), Mozilla Public License Version 1.1
 
@@ -296,7 +289,7 @@ conditions of the following licenses.
 
     MIT License
 
-        * @eonasdan/tempus-dominus (org.webjars.npm:eonasdan__tempus-dominus:6.10.3 - https://www.webjars.org)
+        * @eonasdan/tempus-dominus (org.webjars.npm:eonasdan__tempus-dominus:6.10.4 - https://www.webjars.org)
         * @fullcalendar/bootstrap5 (org.webjars.npm:fullcalendar__bootstrap5:6.1.15 - https://www.webjars.org)
         * @fullcalendar/core (org.webjars.npm:fullcalendar__core:6.1.15 - https://www.webjars.org)
         * @fullcalendar/daygrid (org.webjars.npm:fullcalendar__daygrid:6.1.15 - https://www.webjars.org)
@@ -343,10 +336,6 @@ conditions of the following licenses.
         * typeahead.js (org.webjars:typeaheadjs:0.10.5-1 - http://webjars.org)
         * uuid (org.webjars.npm:uuid:9.0.0-beta.0 - https://www.webjars.org)
         * wicketstuff-urlfragment (org.wicketstuff:wicketstuff-urlfragment:10.6.0 - https://github.com/Horsed/WicketUrlFragment/wicketstuff-urlfragment)
-
-    New BSD License
-
-        * Hamcrest Core (org.hamcrest:hamcrest-core:1.3 - https://github.com/hamcrest/JavaHamcrest/hamcrest-core)
 
     Oracle Free Use Terms and Conditions (FUTC)
 
@@ -443,10 +432,10 @@ conditions of the following licenses.
         * Apache XBean :: ASM shaded (repackaged) (org.apache.xbean:xbean-asm9-shaded:4.26 - http://geronimo.apache.org/maven/xbean/4.26/xbean-asm9-shaded)
         * Apache XmpBox (org.apache.pdfbox:xmpbox:3.0.5 - https://www.apache.org/pdfbox-parent/xmpbox/)
         * Asterisk-Java (org.asteriskjava:asterisk-java:3.41.0 - https://github.com/asterisk-java/asterisk-java)
-        * Bootstrap (org.webjars:bootstrap:5.3.5 - http://webjars.org)
-        * bootstrap-core (de.agilecoders.wicket:wicket-bootstrap-core:7.0.10 - https://github.com/l0rdn1kk0n/wicket-bootstrap/wicket-bootstrap-core)
-        * bootstrap-extensions (de.agilecoders.wicket:wicket-bootstrap-extensions:7.0.10 - https://github.com/l0rdn1kk0n/wicket-bootstrap/wicket-bootstrap-extensions)
-        * bootstrap-themes (de.agilecoders.wicket:wicket-bootstrap-themes:7.0.10 - https://github.com/l0rdn1kk0n/wicket-bootstrap/wicket-bootstrap-themes)
+        * Bootstrap (org.webjars:bootstrap:5.3.7 - http://webjars.org)
+        * bootstrap-core (de.agilecoders.wicket:wicket-bootstrap-core:7.0.11 - https://github.com/l0rdn1kk0n/wicket-bootstrap/wicket-bootstrap-core)
+        * bootstrap-extensions (de.agilecoders.wicket:wicket-bootstrap-extensions:7.0.11 - https://github.com/l0rdn1kk0n/wicket-bootstrap/wicket-bootstrap-extensions)
+        * bootstrap-themes (de.agilecoders.wicket:wicket-bootstrap-themes:7.0.11 - https://github.com/l0rdn1kk0n/wicket-bootstrap/wicket-bootstrap-themes)
         * Byte Buddy (without dependencies) (net.bytebuddy:byte-buddy:1.14.1 - https://bytebuddy.net/byte-buddy)
         * Byte Buddy (without dependencies) (net.bytebuddy:byte-buddy:1.15.11 - https://bytebuddy.net/byte-buddy)
         * Byte Buddy (without dependencies) (net.bytebuddy:byte-buddy:1.17.6 - https://bytebuddy.net/byte-buddy)
@@ -490,7 +479,6 @@ conditions of the following licenses.
         * JODConverter Local (org.jodconverter:jodconverter-local:4.4.9 - https://github.com/jodconverter/jodconverter)
         * jqplot4java (org.wicketstuff:jqplot4java:10.6.0 - http://maven.apache.org)
         * JqPlot Plugin Integration (org.wicketstuff:jqplot:10.6.0 - http://wicketstuff.org/jqplot-parent/jqplot)
-        * jquery-selectors (de.agilecoders.wicket:jquery-selectors:4.0.9 - http://nexus.sonatype.org/oss-repository-hosting.html/jquery-selectors)
         * jwarc (org.netpreserve:jwarc:0.31.1 - https://github.com/iipc/jwarc)
         * Kurento Client (org.kurento:kurento-client:7.2.0 - https://kurento.openvidu.io/kurento-client/)
         * Kurento Common utils (org.kurento:kurento-commons:7.2.0 - https://kurento.openvidu.io/kurento-commons/)
@@ -561,6 +549,7 @@ conditions of the following licenses.
         * Wicket Development Utilities (org.apache.wicket:wicket-devutils:10.6.0 - http://wicket.apache.org/wicket-devutils)
         * Wicket Extensions (org.apache.wicket:wicket-extensions:10.6.0 - http://wicket.apache.org/wicket-extensions)
         * Wicket IoC common code (org.apache.wicket:wicket-ioc:10.6.0 - http://wicket.apache.org/wicket-ioc)
+        * Wicket JQuery Selectors (de.agilecoders.wicket:jquery-selectors:4.0.11 - http://nexus.sonatype.org/oss-repository-hosting.html/jquery-selectors)
         * wicket-jquery-ui-calendar (org.wicketstuff:wicketstuff-jquery-ui-calendar:10.6.0 - https://github.com/sebfz1/wicket-jquery-ui/wicketstuff-jquery-ui-calendar)
         * wicket-jquery-ui-core (org.wicketstuff:wicketstuff-jquery-ui-core:10.6.0 - https://github.com/sebfz1/wicket-jquery-ui/wicketstuff-jquery-ui-core)
         * wicket-jquery-ui-plugins (org.wicketstuff:wicketstuff-jquery-ui-plugins:10.6.0 - https://github.com/sebfz1/wicket-jquery-ui/wicketstuff-jquery-ui-plugins)
@@ -587,10 +576,11 @@ conditions of the following licenses.
 
         * Adobe XMPCore (com.adobe.xmp:xmpcore:6.1.11 - https://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html)
         * asm (org.ow2.asm:asm:9.8 - http://asm.ow2.io/)
-        * bootstrap-italia (org.webjars.npm:bootstrap-italia:2.14.0 - https://www.webjars.org)
+        * bootstrap-italia (org.webjars.npm:bootstrap-italia:2.16.0 - https://www.webjars.org)
         * dom4j (org.dom4j:dom4j:2.2.0 - http://dom4j.github.io/)
         * ical4j (org.mnode.ical4j:ical4j:4.1.1 - http://ical4j.github.io)
         * Java Advanced Imaging Image I/O Tools API core (standalone) (com.github.jai-imageio:jai-imageio-core:1.4.0 - https://github.com/jai-imageio/jai-imageio-core)
+        * Protocol Buffers [Core] (com.google.protobuf:protobuf-java:4.29.0 - https://developers.google.com/protocol-buffers/protobuf-java/)
         * ThreeTen-Extra (org.threeten:threeten-extra:1.8.0 - https://www.threeten.org/threeten-extra)
         * XStream Core (com.thoughtworks.xstream:xstream:1.4.21 - http://x-stream.github.io/xstream)
 
@@ -599,6 +589,10 @@ conditions of the following licenses.
         * curvesapi (com.github.virtuald:curvesapi:1.08 - https://github.com/virtuald/curvesapi)
         * JMatIO (org.tallison:jmatio:1.5 - https://github.com/tballison/jmatio)
         * ParaNamer Core (com.thoughtworks.paranamer:paranamer:2.8 - https://github.com/paul-hammant/paranamer/paranamer)
+
+    The GNU General Public License, v2 with Universal FOSS Exception, v1.0
+
+        * MySQL Connector/J (com.mysql:mysql-connector-j:9.3.0 - http://dev.mysql.com/doc/connector-j/en/)
 
     UnRar License
 
