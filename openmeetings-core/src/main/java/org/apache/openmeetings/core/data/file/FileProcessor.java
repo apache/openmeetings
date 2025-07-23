@@ -68,7 +68,7 @@ public class FileProcessor {
 
 		File temp = null;
 		try {
-			temp = File.createTempFile("upload_" + hash, ".tmp");
+			temp = Files.createTempFile("upload_" + hash, ".tmp").toFile();
 			copyInputStreamToFile(is, temp);
 
 			String ext = getFileExt(f.getName());

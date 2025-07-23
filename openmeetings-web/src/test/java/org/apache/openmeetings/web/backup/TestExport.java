@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.StringWriter;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 
@@ -50,7 +51,7 @@ class TestExport extends AbstractOmServerTest {
 
 	@Test
 	void exportMain() throws Exception {
-		String backupPath = File.createTempFile("gereral", "cfg").getCanonicalPath();
+		String backupPath = Files.createTempFile("gereral", "cfg").toFile().getCanonicalPath();
 		BackupExport.main(new String[] {backupPath});
 		assertTrue(Paths.get(backupPath).toFile().exists(), "Backup should be created");
 	}

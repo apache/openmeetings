@@ -56,7 +56,7 @@ class TestFileService extends AbstractWebServiceTest {
 	void addFileTest() throws IOException {
 		File img = null;
 		try {
-			img = File.createTempFile("omtest", ".jpg");
+			img = Files.createTempFile("omtest", ".jpg").toFile();
 			final Integer width = 150;
 			final Integer height = 100;
 			BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
