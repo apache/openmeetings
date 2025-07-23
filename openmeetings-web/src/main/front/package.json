@@ -19,7 +19,7 @@
 		"mini-css-extract-plugin": "^2.9.2",
 		"node-sass": "^9.0.0",
 		"circular-dependency-plugin": "^5.2.2",
-		"webpack": "^5.99.7",
+		"webpack": "^5.100.2",
 		"webpack-cli": "^6.0.1",
 		"webpack-merge": "^6.0.1"
 	},
@@ -28,7 +28,7 @@
 		"freeice": "2.2.2",
 		"mathjax-full": "^3.2.2",
 		"nosleep.js": "^0.12.0",
-		"ua-parser-js": "^2.0.3",
+		"ua-parser-js": "^2.0.4",
 		"webrtc-adapter": "^9.0.3"
 	}
 }

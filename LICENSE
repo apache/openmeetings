@@ -349,7 +349,7 @@ conditions of the following licenses.
     The Apache Software License, Version 2.0
 
         * Apache Commons CLI (commons-cli:commons-cli:1.9.0 - https://commons.apache.org/proper/commons-cli/)
-        * Apache Commons Codec (commons-codec:commons-codec:1.18.0 - https://commons.apache.org/proper/commons-codec/)
+        * Apache Commons Codec (commons-codec:commons-codec:1.19.0 - https://commons.apache.org/proper/commons-codec/)
         * Apache Commons Collections (org.apache.commons:commons-collections4:4.4 - https://commons.apache.org/proper/commons-collections/)
         * Apache Commons Collections (org.apache.commons:commons-collections4:4.5.0 - https://commons.apache.org/proper/commons-collections/)
         * Apache Commons Compress (org.apache.commons:commons-compress:1.27.1 - https://commons.apache.org/proper/commons-compress/)
@@ -358,7 +358,7 @@ conditions of the following licenses.
         * Apache Commons Exec (org.apache.commons:commons-exec:1.5.0 - https://commons.apache.org/proper/commons-exec/)
         * Apache Commons FileUpload Core (org.apache.commons:commons-fileupload2-core:2.0.0-M4 - https://commons.apache.org/proper/commons-fileupload/commons-fileupload2-core/)
         * Apache Commons FileUpload Jakarta Servlet 5 (org.apache.commons:commons-fileupload2-jakarta-servlet5:2.0.0-M4 - https://commons.apache.org/proper/commons-fileupload/commons-fileupload2-jakarta-servlet5/)
-        * Apache Commons IO (commons-io:commons-io:2.19.0 - https://commons.apache.org/proper/commons-io/)
+        * Apache Commons IO (commons-io:commons-io:2.20.0 - https://commons.apache.org/proper/commons-io/)
         * Apache Commons Lang (org.apache.commons:commons-lang3:3.18.0 - https://commons.apache.org/proper/commons-lang/)
         * Apache Commons Math (org.apache.commons:commons-math3:3.6.1 - http://commons.apache.org/proper/commons-math/)
         * Apache Commons Net (commons-net:commons-net:3.11.1 - https://commons.apache.org/proper/commons-net/)
@@ -475,8 +475,8 @@ conditions of the following licenses.
         * jcommander (com.beust:jcommander:1.72 - http://jcommander.org)
         * JDOM (org.jdom:jdom2:2.0.6.1 - http://www.jdom.org)
         * Jettison (org.codehaus.jettison:jettison:1.5.4 - https://github.com/jettison-json/jettison)
-        * JODConverter Core (org.jodconverter:jodconverter-core:4.4.9 - https://github.com/jodconverter/jodconverter)
-        * JODConverter Local (org.jodconverter:jodconverter-local:4.4.9 - https://github.com/jodconverter/jodconverter)
+        * JODConverter Core (org.jodconverter:jodconverter-core:4.4.10 - https://github.com/jodconverter/jodconverter/)
+        * JODConverter Local (org.jodconverter:jodconverter-local:4.4.10 - https://github.com/jodconverter/jodconverter/)
         * jqplot4java (org.wicketstuff:jqplot4java:10.6.0 - http://maven.apache.org)
         * JqPlot Plugin Integration (org.wicketstuff:jqplot:10.6.0 - http://wicketstuff.org/jqplot-parent/jqplot)
         * jwarc (org.netpreserve:jwarc:0.31.1 - https://github.com/iipc/jwarc)
@@ -580,7 +580,6 @@ conditions of the following licenses.
         * dom4j (org.dom4j:dom4j:2.2.0 - http://dom4j.github.io/)
         * ical4j (org.mnode.ical4j:ical4j:4.1.1 - http://ical4j.github.io)
         * Java Advanced Imaging Image I/O Tools API core (standalone) (com.github.jai-imageio:jai-imageio-core:1.4.0 - https://github.com/jai-imageio/jai-imageio-core)
-        * Protocol Buffers [Core] (com.google.protobuf:protobuf-java:4.29.0 - https://developers.google.com/protocol-buffers/protobuf-java/)
         * ThreeTen-Extra (org.threeten:threeten-extra:1.8.0 - https://www.threeten.org/threeten-extra)
         * XStream Core (com.thoughtworks.xstream:xstream:1.4.21 - http://x-stream.github.io/xstream)
 
@@ -589,10 +588,6 @@ conditions of the following licenses.
         * curvesapi (com.github.virtuald:curvesapi:1.08 - https://github.com/virtuald/curvesapi)
         * JMatIO (org.tallison:jmatio:1.5 - https://github.com/tballison/jmatio)
         * ParaNamer Core (com.thoughtworks.paranamer:paranamer:2.8 - https://github.com/paul-hammant/paranamer/paranamer)
-
-    The GNU General Public License, v2 with Universal FOSS Exception, v1.0
-
-        * MySQL Connector/J (com.mysql:mysql-connector-j:9.3.0 - http://dev.mysql.com/doc/connector-j/en/)
 
     UnRar License
 
