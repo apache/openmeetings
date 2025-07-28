@@ -48,6 +48,22 @@
 				To develop Openmeetings you need to import maven project into Eclipse
 				<img src="images/eclipse-import-maven-project.png" alt="Import OM into Eclipse" width="526" height="394" />
 			</p>
+			<div>
+				<p>To develop Openmeetings you need to import maven project into IntelliJ IDEA: </p>
+				<ul>
+					<li>Build the repository using mvn clean install -P allModules</li>
+					<li>Open IntelliJ IDEA</li>
+					<li>Click on "Open" and select the root folder of the OpenMeetings repository</li>
+					<li>IntelliJ IDEA will detect the Maven project and ask you to import it</li>
+					<li>Click on "Import" to import the Maven project</li>
+					<li>Wait for the import to finish, IntelliJ IDEA will download all the necessary dependencies</li>
+					<li>Once the import is complete, you can start developing OpenMeetings</li>
+				</ul>
+				<p>Make sure to configure the JDK in IntelliJ IDEA to match the version used in the project (JDK17).</p>
+				<p>For more information on how to set up IntelliJ IDEA for OpenMeetings development, refer to the <a href="https://www.jetbrains.com/help/idea/maven-support.html" target="_blank">IntelliJ IDEA Maven support documentation</a>.</p>
+				<p>For running OpenMeetings from IntelliJ see <a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/OpenMeetings+in+IntelliJ">Wiki instructions</a>
+				</p>
+			</div>
 		</section>
 		<section name="Check for known vulnerabilities">
 			<source>mvn org.sonatype.ossindex.maven:ossindex-maven-plugin:audit -f pom.xml</source>
