@@ -51,7 +51,7 @@
 			<div>
 				<p>To develop Openmeetings you need to import maven project into IntelliJ IDEA: </p>
 				<ul>
-					<li>Build the repository using mvn clean install -P allModules</li>
+					<li>Build the repository using <code>mvn clean install -P allModules</code></li>
 					<li>Open IntelliJ IDEA</li>
 					<li>Click on "Open" and select the root folder of the OpenMeetings repository</li>
 					<li>IntelliJ IDEA will detect the Maven project and ask you to import it</li>
