@@ -268,7 +268,7 @@ conditions of the following licenses.
 
     Eclipse Public License v2.0
 
-        * Angus Mail Provider (org.eclipse.angus:angus-mail:2.0.3 - http://eclipse-ee4j.github.io/angus-mail/angus-mail)
+        * Angus Mail Provider (org.eclipse.angus:angus-mail:2.0.4 - http://eclipse-ee4j.github.io/angus-mail/angus-mail)
         * AspectJ Tools (Compiler) (org.aspectj:aspectjtools:1.9.24 - https://www.eclipse.org/aspectj/)
         * jakarta.transaction API (jakarta.transaction:jakarta.transaction-api:2.0.1 - https://projects.eclipse.org/projects/ee4j.jta)
         * Jakarta Annotations API (jakarta.annotation:jakarta.annotation-api:3.0.0 - https://projects.eclipse.org/projects/ee4j.ca)
@@ -276,8 +276,8 @@ conditions of the following licenses.
         * Jakarta Messaging API (jakarta.jms:jakarta.jms-api:3.1.0 - https://projects.eclipse.org/projects/ee4j.jms)
         * Jakarta Persistence API (jakarta.persistence:jakarta.persistence-api:3.2.0 - https://github.com/jakartaee/persistence)
         * Jakarta RESTful WS API (jakarta.ws.rs:jakarta.ws.rs-api:3.1.0 - https://github.com/eclipse-ee4j/jaxrs-api)
-        * JUnit Jupiter API (org.junit.jupiter:junit-jupiter-api:5.13.3 - https://junit.org/)
-        * JUnit Platform Commons (org.junit.platform:junit-platform-commons:1.13.3 - https://junit.org/)
+        * JUnit Jupiter API (org.junit.jupiter:junit-jupiter-api:5.13.4 - https://junit.org/)
+        * JUnit Platform Commons (org.junit.platform:junit-platform-commons:1.13.4 - https://junit.org/)
 
     GENERAL PUBLIC LICENSE, version 3 (GPL-3.0), GNU LESSER GENERAL PUBLIC LICENSE, version 3 (LGPL-3.0), Mozilla Public License Version 1.1
 
@@ -339,7 +339,7 @@ conditions of the following licenses.
 
     Oracle Free Use Terms and Conditions (FUTC)
 
-        * ojdbc10 (com.oracle.database.jdbc:ojdbc10:19.27.0.0 - https://www.oracle.com/database/technologies/maven-central-guide.html)
+        * ojdbc10 (com.oracle.database.jdbc:ojdbc10:19.28.0.0 - https://www.oracle.com/database/technologies/maven-central-guide.html)
 
     Public Domain
 
@@ -348,7 +348,7 @@ conditions of the following licenses.
 
     The Apache Software License, Version 2.0
 
-        * Apache Commons CLI (commons-cli:commons-cli:1.9.0 - https://commons.apache.org/proper/commons-cli/)
+        * Apache Commons CLI (commons-cli:commons-cli:1.10.0 - https://commons.apache.org/proper/commons-cli/)
         * Apache Commons Codec (commons-codec:commons-codec:1.19.0 - https://commons.apache.org/proper/commons-codec/)
         * Apache Commons Collections (org.apache.commons:commons-collections4:4.4 - https://commons.apache.org/proper/commons-collections/)
         * Apache Commons Collections (org.apache.commons:commons-collections4:4.5.0 - https://commons.apache.org/proper/commons-collections/)
@@ -361,9 +361,9 @@ conditions of the following licenses.
         * Apache Commons IO (commons-io:commons-io:2.20.0 - https://commons.apache.org/proper/commons-io/)
         * Apache Commons Lang (org.apache.commons:commons-lang3:3.18.0 - https://commons.apache.org/proper/commons-lang/)
         * Apache Commons Math (org.apache.commons:commons-math3:3.6.1 - http://commons.apache.org/proper/commons-math/)
-        * Apache Commons Net (commons-net:commons-net:3.11.1 - https://commons.apache.org/proper/commons-net/)
+        * Apache Commons Net (commons-net:commons-net:3.12.0 - https://commons.apache.org/proper/commons-net/)
         * Apache Commons Pool (org.apache.commons:commons-pool2:2.12.1 - https://commons.apache.org/proper/commons-pool/)
-        * Apache Commons Text (org.apache.commons:commons-text:1.13.1 - https://commons.apache.org/proper/commons-text)
+        * Apache Commons Text (org.apache.commons:commons-text:1.14.0 - https://commons.apache.org/proper/commons-text)
         * Apache CXF Advanced Logging Feature (org.apache.cxf:cxf-rt-features-logging:4.1.2 - https://cxf.apache.org/cxf-rt-features-logging)
         * Apache CXF Core (org.apache.cxf:cxf-core:4.1.2 - https://cxf.apache.org)
         * Apache CXF JAX-RS Extensions: Providers (org.apache.cxf:cxf-rt-rs-extension-providers:4.1.2 - https://cxf.apache.org)
@@ -485,8 +485,8 @@ conditions of the following licenses.
         * Kurento JSON-RPC Client (org.kurento:kurento-jsonrpc-client:7.2.0 - https://kurento.openvidu.io/kurento-jsonrpc/kurento-jsonrpc-client/)
         * library (de.agilecoders.wicket.webjars:wicket-webjars:4.0.8 - https://github.com/l0rdn1kk0n/wicket-webjars/wicket-webjars)
         * Log4j Implemented Over SLF4J (org.slf4j:log4j-over-slf4j:2.0.17 - http://www.slf4j.org)
-        * micrometer-commons (io.micrometer:micrometer-commons:1.14.8 - https://github.com/micrometer-metrics/micrometer)
-        * micrometer-observation (io.micrometer:micrometer-observation:1.14.8 - https://github.com/micrometer-metrics/micrometer)
+        * micrometer-commons (io.micrometer:micrometer-commons:1.14.9 - https://github.com/micrometer-metrics/micrometer)
+        * micrometer-observation (io.micrometer:micrometer-observation:1.14.9 - https://github.com/micrometer-metrics/micrometer)
         * Netty/Buffer (io.netty:netty-buffer:4.1.85.Final - https://netty.io/netty-buffer/)
         * Netty/Codec/HTTP (io.netty:netty-codec-http:4.1.85.Final - https://netty.io/netty-codec-http/)
         * Netty/Codec/Socks (io.netty:netty-codec-socks:4.1.85.Final - https://netty.io/netty-codec-socks/)
@@ -531,18 +531,18 @@ conditions of the following licenses.
         * rome (com.rometools:rome:2.1.0 - http://rometools.com/rome)
         * rome-utils (com.rometools:rome-utils:2.1.0 - http://rometools.com/rome-utils)
         * SparseBitSet (com.zaxxer:SparseBitSet:1.3 - https://github.com/brettwooldridge/SparseBitSet)
-        * Spring AOP (org.springframework:spring-aop:6.2.8 - https://github.com/spring-projects/spring-framework)
-        * Spring Beans (org.springframework:spring-beans:6.2.8 - https://github.com/spring-projects/spring-framework)
-        * Spring Context (org.springframework:spring-context:6.2.8 - https://github.com/spring-projects/spring-framework)
-        * Spring Context Support (org.springframework:spring-context-support:6.2.8 - https://github.com/spring-projects/spring-framework)
-        * Spring Core (org.springframework:spring-core:6.2.8 - https://github.com/spring-projects/spring-framework)
-        * Spring Expression Language (SpEL) (org.springframework:spring-expression:6.2.8 - https://github.com/spring-projects/spring-framework)
-        * Spring JDBC (org.springframework:spring-jdbc:6.2.8 - https://github.com/spring-projects/spring-framework)
-        * Spring Object/Relational Mapping (org.springframework:spring-orm:6.2.8 - https://github.com/spring-projects/spring-framework)
-        * Spring Transaction (org.springframework:spring-tx:6.2.8 - https://github.com/spring-projects/spring-framework)
-        * Spring Web (org.springframework:spring-web:6.2.8 - https://github.com/spring-projects/spring-framework)
-        * Spring Web MVC (org.springframework:spring-webmvc:6.2.8 - https://github.com/spring-projects/spring-framework)
-        * swagger-annotations (io.swagger.core.v3:swagger-annotations:2.2.34 - https://github.com/swagger-api/swagger-core/modules/swagger-annotations)
+        * Spring AOP (org.springframework:spring-aop:6.2.9 - https://github.com/spring-projects/spring-framework)
+        * Spring Beans (org.springframework:spring-beans:6.2.9 - https://github.com/spring-projects/spring-framework)
+        * Spring Context (org.springframework:spring-context:6.2.9 - https://github.com/spring-projects/spring-framework)
+        * Spring Context Support (org.springframework:spring-context-support:6.2.9 - https://github.com/spring-projects/spring-framework)
+        * Spring Core (org.springframework:spring-core:6.2.9 - https://github.com/spring-projects/spring-framework)
+        * Spring Expression Language (SpEL) (org.springframework:spring-expression:6.2.9 - https://github.com/spring-projects/spring-framework)
+        * Spring JDBC (org.springframework:spring-jdbc:6.2.9 - https://github.com/spring-projects/spring-framework)
+        * Spring Object/Relational Mapping (org.springframework:spring-orm:6.2.9 - https://github.com/spring-projects/spring-framework)
+        * Spring Transaction (org.springframework:spring-tx:6.2.9 - https://github.com/spring-projects/spring-framework)
+        * Spring Web (org.springframework:spring-web:6.2.9 - https://github.com/spring-projects/spring-framework)
+        * Spring Web MVC (org.springframework:spring-webmvc:6.2.9 - https://github.com/spring-projects/spring-framework)
+        * swagger-annotations (io.swagger.core.v3:swagger-annotations:2.2.35 - https://github.com/swagger-api/swagger-core/modules/swagger-annotations)
         * UNO interface library (org.openoffice:unoil:4.1.2 - https://wiki.openoffice.org/wiki/Uno)
         * Wicket Auth Roles (org.apache.wicket:wicket-auth-roles:10.6.0 - http://wicket.apache.org/wicket-auth-roles)
         * Wicket Core (org.apache.wicket:wicket-core:10.6.0 - http://wicket.apache.org/wicket-core)

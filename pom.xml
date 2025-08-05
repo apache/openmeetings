@@ -47,7 +47,7 @@
 		<version.maven-javadoc-plugin>3.11.2</version.maven-javadoc-plugin>
 		<version.maven-surefire>3.5.3</version.maven-surefire>
 		<version.maven-site-plugin>4.0.0-M9</version.maven-site-plugin>
-		<version.maven-enforcer-plugin>3.6.0</version.maven-enforcer-plugin>
+		<version.maven-enforcer-plugin>3.6.1</version.maven-enforcer-plugin>
 		<version.maven-source-plugin>3.3.1</version.maven-source-plugin>
 		<version.maven-compiler-plugin>3.14.0</version.maven-compiler-plugin>
 		<version.maven-project-info-reports-plugin>3.9.0</version.maven-project-info-reports-plugin>
@@ -55,7 +55,7 @@
 		<version.maven-assembly-plugin>3.7.1</version.maven-assembly-plugin>
 		<version.maven-dependency-plugin>3.8.1</version.maven-dependency-plugin>
 		<version.maven-war-plugin>3.4.0</version.maven-war-plugin>
-		<version.maven-clean-plugin>3.4.1</version.maven-clean-plugin>
+		<version.maven-clean-plugin>3.5.0</version.maven-clean-plugin>
 		<version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
 		<version.maven-resources-plugin>3.3.1</version.maven-resources-plugin>
 		<version.maven-gpg-plugin>3.2.8</version.maven-gpg-plugin>
@@ -83,15 +83,15 @@
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
 		<plexus-utils.version>3.5.1</plexus-utils.version>
 		<cyclonedx.version>2.9.1</cyclonedx.version>
-		<spdx.version>1.0.2</spdx.version>
+		<spdx.version>1.0.3</spdx.version>
 
 		<!-- dependency versions -->
-		<junit.version>5.13.3</junit.version>
+		<junit.version>5.13.4</junit.version>
 		<wicket.version>10.6.0</wicket.version>
 		<wicketstuff.version>10.6.0</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.11</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.15</fullcalendar.version>
-		<spring.version>6.2.8</spring.version>
+		<spring.version>6.2.9</spring.version>
 		<tomcat.version>11.0.9</tomcat.version>
 		<jetty.version>11.0.25</jetty.version>
 		<ical4j.version>4.1.1</ical4j.version>
@@ -104,7 +104,7 @@
 		<src.pack.skip>false</src.pack.skip>
 		<h2.version>2.3.232</h2.version>
 		<openjpa.version>4.1.1</openjpa.version>
-		<jakarta.mail.version>2.0.3</jakarta.mail.version>
+		<jakarta.mail.version>2.0.4</jakarta.mail.version>
 		<jakarta.persistence.version>3.2.0</jakarta.persistence.version>
 		<jakarta.transaction.version>2.0.1</jakarta.transaction.version>
 		<jakarta.annotation.version>3.0.0</jakarta.annotation.version>
@@ -114,16 +114,16 @@
 		<commons-lang3.version>3.18.0</commons-lang3.version>
 		<commons-dbcp.version>2.13.0</commons-dbcp.version>
 		<commons-pool2.version>2.12.1</commons-pool2.version>
-		<commons-cli.version>1.9.0</commons-cli.version>
+		<commons-cli.version>1.10.0</commons-cli.version>
 		<commons-codec.version>1.19.0</commons-codec.version>
 		<commons-io.version>2.20.0</commons-io.version>
-		<commons-text.version>1.13.1</commons-text.version>
-		<commons-net.version>3.11.1</commons-net.version>
+		<commons-text.version>1.14.0</commons-text.version>
+		<commons-net.version>3.12.0</commons-net.version>
 		<dom4j.version>2.2.0</dom4j.version>
 		<postgresql.version>42.7.7</postgresql.version>
-		<mysql.version>9.3.0</mysql.version>
+		<mysql.version>9.4.0</mysql.version>
 		<mssql.version>12.10.1.jre11</mssql.version>
-		<ojdbc.version>19.27.0.0</ojdbc.version>
+		<ojdbc.version>19.28.0.0</ojdbc.version>
 		<xstream.version>1.4.21</xstream.version>
 		<api-all.version>2.1.7</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
@@ -143,7 +143,7 @@
 		<jaxb-runtime.version>4.0.5</jaxb-runtime.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
-		<swagger.version>2.2.34</swagger.version>
+		<swagger.version>2.2.35</swagger.version>
 		<jsr305.version>3.0.2</jsr305.version>
 		<totp.version>1.7.1</totp.version>
 		<!--  Exclude all generated code  -->
