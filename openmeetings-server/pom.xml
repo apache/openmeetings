@@ -411,5 +411,12 @@
 			<version>${project.version}</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<!-- This is added for license-plugin -->
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat</artifactId>
+			<version>${tomcat.version}</version>
+			<type>tar.gz</type>
+		</dependency>
 	</dependencies>
 </project>
