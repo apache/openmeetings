@@ -51,6 +51,8 @@ import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class TestUserService extends AbstractWebServiceTest {
 	private static final String DUMMY_PICTURE_URL = "https://openmeetings.apache.org/images/logo.png";
@@ -128,7 +130,9 @@ class TestUserService extends AbstractWebServiceTest {
 		assertEquals(userId1, userId2, "User should be the same");
 	}
 
-	private UserDTO doAddUser(String uuid, String extId) {
+	private static record AddUserResult<T>(UserDTO initial, T created) {}
+
+	private <T> AddUserResult<T> sendAddUser(String uuid, String email, String extId, int expCode, Class<T> expected) {
 		String[] tzList = TimeZone.getAvailableIDs();
 		String tz = TimeZone.getTimeZone(tzList[RND.nextInt(tzList.length)]).getID();
 		ServiceResult r = login();
@@ -139,23 +143,39 @@ class TestUserService extends AbstractWebServiceTest {
 		u.setFirstname("testF" + uuid);
 		u.setLastname("testL" + uuid);
 		u.setAddress(new Address());
-		u.getAddress().setEmail(uuid + "@local");
+		u.getAddress().setEmail(email);
 		u.getAddress().setCountry(Locale.getDefault().getCountry());
 		u.setTimeZoneId(tz);
 		if (!Strings.isEmpty(extId)) {
 			u.setExternalId(extId);
 			u.setExternalType(UNIT_TEST_EXT_TYPE);
 		}
-		UserDTO user = getClient(getUserUrl())
+		Response resp = getClient(getUserUrl())
 				.path("/")
 				.query("sid", r.getMessage())
 				.type(APPLICATION_FORM_URLENCODED)
-				.post(new Form().param("user", u.toString()).param("confirm", "" + false), UserDTO.class);
-		assertNotNull(user, "Valid UserDTO should be returned");
-		assertNotNull(user.getId(), "Id should not be NULL");
-		assertEquals(u.getLogin(), user.getLogin(), "Login should match");
-		assertEquals(tz, user.getTimeZoneId(), "Timezone should match");
-		return user;
+				.post(new Form().param("user", u.toString()).param("confirm", "" + false));
+
+		assertEquals(expCode, resp.getStatus(), "Not allowed error");
+		assertTrue(resp.hasEntity());
+		return new AddUserResult<T>(u, resp.readEntity(expected));
+	}
+
+	private UserDTO doAddUser(String uuid, String extId) {
+		AddUserResult<UserDTO> result = sendAddUser(uuid, uuid + "@local", extId, 200, UserDTO.class);
+		assertNotNull(result.created, "Valid UserDTO should be returned");
+		assertNotNull(result.created.getId(), "Id should not be NULL");
+		assertEquals(result.initial.getLogin(), result.created.getLogin(), "Login should match");
+		assertEquals(result.initial.getTimeZoneId(), result.created.getTimeZoneId(), "Timezone should match");
+		return result.created;
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"", "  ", "aaaaa", "aaa\rbbb@eeeee", "gggg\n@hhhh"})
+	void addUserBadEmailTest(String email) {
+		String uuid = randomUUID().toString();
+		AddUserResult<ServiceResult> result = sendAddUser(uuid, email, uuid, 500, ServiceResult.class);
+		assertEquals(ServiceResult.Type.ERROR.name(), result.created.getType());
 	}
 
 	@Test

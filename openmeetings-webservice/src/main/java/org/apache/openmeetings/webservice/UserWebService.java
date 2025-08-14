@@ -46,6 +46,7 @@ import jakarta.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
@@ -66,9 +67,9 @@ import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.openmeetings.webservice.schema.ServiceResultWrapper;
 import org.apache.openmeetings.webservice.schema.UserDTOListWrapper;
 import org.apache.openmeetings.webservice.schema.UserDTOWrapper;
+import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidationError;
-import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.Validatable;
 import org.apache.wicket.validation.ValidationError;
 import org.slf4j.Logger;
@@ -228,9 +229,8 @@ public class UserWebService extends BaseWebService {
 				user.setLanguageId(1L);
 			}
 			User jsonUser = uMapper.get(user);
-			IValidator<String> passValidator = new StrongPasswordValidator(false, jsonUser);
 			Validatable<String> passVal = new Validatable<>(user.getPassword());
-			passValidator.validate(passVal);
+			new StrongPasswordValidator(false, jsonUser).validate(passVal);
 			if (!passVal.isValid()) {
 				StringBuilder sb = new StringBuilder();
 				for (IValidationError err : passVal.getErrors()) {
@@ -239,6 +239,7 @@ public class UserWebService extends BaseWebService {
 				log.trace("addNewUser::weak password '*****', msg: {}", sb);
 				throw new InternalServiceException(sb.toString());
 			}
+			checkEmail(user.getAddress().getEmail());
 			Object ouser;
 			try {
 				jsonUser.addGroup(groupDao.get(getDefaultGroup()));
@@ -266,6 +267,14 @@ public class UserWebService extends BaseWebService {
 
 			return new UserDTO(u);
 		});
+	}
+
+	private void checkEmail(String email) {
+		Validatable<String> emailVal = new Validatable<>(email);
+		RfcCompliantEmailAddressValidator.getInstance().validate(emailVal);
+		if (!emailVal.isValid()) {
+			throw new InternalServiceException(LabelDao.getString("234", 1L));
+		}
 	}
 
 	/**

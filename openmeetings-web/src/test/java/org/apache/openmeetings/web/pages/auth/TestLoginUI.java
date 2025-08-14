@@ -46,6 +46,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.tester.FormTester;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class TestLoginUI extends AbstractWicketTesterTest {
 	private static final String PATH_REGISTER = "register:form";
@@ -97,11 +99,18 @@ class TestLoginUI extends AbstractWicketTesterTest {
 		assertTrue(countErrors(tester) > 7, "There should be at least 8 errors");
 	}
 
+	@ParameterizedTest
+	@ValueSource(strings = {"", "  ", "aaaaa", "aaa\rbbb@eeeee", "gggg\n@hhhh"})
+	void testBadEmailRegister(String email) throws ReflectiveOperationException, SecurityException {
+		String uid = randomUUID().toString();
+		performRegister(uid, email, 1, "account.created");
+		FormTester formTester = showRegister();
+		formTester.submit("submit");
+		assertTrue(countErrors(tester) > 7, "There should be at least 8 errors");
+	}
+
 	@Test
 	void testRegister() throws ReflectiveOperationException, SecurityException {
-		tester.startPage(SignInPage.class);
-		tester.assertRenderedPage(SignInPage.class);
-
 		String uid = randomUUID().toString();
 		boolean verify = isSendVerificationEmail();
 		try {
@@ -153,21 +162,25 @@ class TestLoginUI extends AbstractWicketTesterTest {
 	}
 
 	private void performRegister(String uid, String lbl) throws ReflectiveOperationException, SecurityException {
-		AbstractAjaxBehavior b1 = getButtonBehavior("signin", 1);
-		tester.executeBehavior(b1);
-		FormTester formTester = tester.newFormTester(PATH_REGISTER);
+		performRegister(uid, getEmail(uid), 0, lbl);
+	}
+
+	private void performRegister(String uid, String emailToTest, int errorsExpected, String lbl) throws ReflectiveOperationException, SecurityException {
+		FormTester formTester = showRegister();
 		formTester.setValue("login", getLogin(uid));
-		formTester.setValue("email", getEmail(uid));
+		formTester.setValue("email", emailToTest);
 		formTester.setValue("firstName", "first" + uid);
 		formTester.setValue("lastName", "last" + uid);
 		formTester.setValue("password", USER_PASS);
 		formTester.setValue("confirmPassword", USER_PASS);
 		formTester.setValue("captcha:captchaText", getCaptcha("register:form:captcha:captcha"));
 		formTester.submit("submit");
-		checkErrors(0);
-		tester.assertLabel("registerInfo:content", getEscapedString(lbl));
-		AbstractAjaxBehavior b2 = getButtonBehavior("registerInfo", 0);
-		tester.executeBehavior(b2);
+		checkErrors(errorsExpected);
+		if (errorsExpected == 0) {
+			tester.assertLabel("registerInfo:content", getEscapedString(lbl));
+			AbstractAjaxBehavior b2 = getButtonBehavior("registerInfo", 0);
+			tester.executeBehavior(b2);
+		}
 	}
 
 	private void performForget(String uid) throws ReflectiveOperationException, SecurityException {
@@ -191,9 +204,6 @@ class TestLoginUI extends AbstractWicketTesterTest {
 			cfgDao.update(c, null);
 		}
 		try {
-			tester.startPage(SignInPage.class);
-			tester.assertRenderedPage(SignInPage.class);
-
 			String uid = String.valueOf(Math.abs(RND.nextLong())); // number uid is used to prevent password validation errors
 			performRegister(uid, "warn.notverified");
 
