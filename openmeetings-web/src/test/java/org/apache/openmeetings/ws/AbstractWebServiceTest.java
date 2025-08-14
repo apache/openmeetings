@@ -21,6 +21,7 @@ package org.apache.openmeetings.ws;
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.web.AbstractOmServerTest.createPass;
 import static org.apache.openmeetings.web.AbstractOmServerTest.ensureSchema;
+import static org.apache.openmeetings.web.AbstractOmServerTest.getTestCoordinates;
 import static org.apache.openmeetings.web.AbstractOmServerTest.SOAP_USERNAME;
 import static org.apache.openmeetings.web.AbstractOmServerTest.USER_PASS;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
@@ -47,16 +48,21 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.webservice.util.AppointmentMessageBodyReader;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.core.MediaType;
 
 @Tag("webservice")
 public abstract class AbstractWebServiceTest {
+	private static final Logger log = LoggerFactory.getLogger(AbstractWebServiceTest.class);
 	private static final String HOST = "localhost";
 	private static final String CONTEXT = "/openmeetings";
 	private static int port = 8080;
@@ -103,8 +109,14 @@ public abstract class AbstractWebServiceTest {
 	}
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	public void setUp(TestInfo testInfo) throws Exception {
 		ensureSchema(getBean(UserDao.class), getBean(ImportInitvalues.class));
+		log.info("Test started: {} ---", getTestCoordinates(testInfo));
+	}
+
+	@AfterEach
+	void tearDown(TestInfo testInfo) {
+		log.info(" --- test finished: {}", getTestCoordinates(testInfo));
 	}
 
 	protected static CallResult<RoomDTO> createAndValidate(RoomDTO r) {

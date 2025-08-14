@@ -44,8 +44,10 @@ import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.tomcat.util.scan.Constants;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,8 +94,19 @@ public abstract class AbstractOmServerTest {
 		}
 	}
 
+	public static String getTestCoordinates(TestInfo testInfo) {
+		String meth = testInfo.getTestMethod().map(m -> m.getName()).orElse("method n/a");
+		String res = testInfo.getTestClass().map(c -> c.getSimpleName()).orElse("class n/a") + ".";
+		if (testInfo.getDisplayName().contains(meth)) {
+			res += testInfo.getDisplayName();
+		} else {
+			res += meth + testInfo.getDisplayName();
+		}
+		return res;
+	}
+
 	@BeforeEach
-	public void serverSetup() throws Exception {
+	public void serverSetup(TestInfo testInfo) throws Exception {
 		if (app.getName() == null) {
 			app.setName(DEFAULT_CONTEXT_NAME);
 		}
@@ -102,6 +115,12 @@ public abstract class AbstractOmServerTest {
 		}
 		ensureApplication();
 		ensureSchema(userDao, importInitvalues);
+		log.info("Test started: {} ---", getTestCoordinates(testInfo));
+	}
+
+	@AfterEach
+	void tearDown(TestInfo testInfo) {
+		log.info(" --- test finished: {}", getTestCoordinates(testInfo));
 	}
 
 	public static void setOmHome() {
