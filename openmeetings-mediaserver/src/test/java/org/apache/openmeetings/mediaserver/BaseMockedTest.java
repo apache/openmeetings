@@ -19,6 +19,7 @@
  */
 package org.apache.openmeetings.mediaserver;
 
+import static org.apache.openmeetings.test.Utils.getTestCoordinates;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -42,7 +43,9 @@ import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.db.entity.label.OmLanguage;
 import org.apache.openmeetings.db.util.ApplicationHelper;
 import org.apache.wicket.injection.Injector;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kurento.client.KurentoClient;
 import org.kurento.client.MediaPipeline;
@@ -57,7 +60,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.mockito.Spy;
+import org.mockito.MockitoAnnotations;
 import org.mockito.internal.configuration.injection.scanner.MockScanner;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -75,27 +78,35 @@ class BaseMockedTest {
 	protected RomManager romManager;
 	@Mock
 	protected ServerManager kServerManager;
-	@Spy
 	@InjectMocks
 	protected StreamProcessorActions streamProcessorActions;
 	@Mock
 	protected KurentoClient client;
-	@Spy
 	@InjectMocks
 	protected StreamProcessor streamProcessor;
-	@Spy
 	@InjectMocks
 	protected TestStreamProcessor testProcessor;
-	@Spy
 	@InjectMocks
 	protected KurentoHandler handler;
 
 	@BeforeEach
-	void baseSetup() {
+	void baseSetup(TestInfo testInfo) {
+		log.info("Test started: {} ---", getTestCoordinates(testInfo));
+		// @Spy + @InjectMocks are NOT supported
+		streamProcessorActions = Mockito.spy(new StreamProcessorActions());
+		streamProcessor = Mockito.spy(new StreamProcessor());
+		testProcessor = Mockito.spy(new TestStreamProcessor());
+		handler = Mockito.spy(new KurentoHandler());
+		MockitoAnnotations.openMocks(this);
 		Mockito.reset();
 		lenient().doReturn(kServerManager).when(client).getServerManager();
 		lenient().doReturn(new TransactionImpl(romManager)).when(client).beginTransaction();
 		handler.init();
+	}
+
+	@AfterEach
+	void tearDown(TestInfo testInfo) {
+		log.info(" --- test finished: {}", getTestCoordinates(testInfo));
 	}
 
 	void mockWs(MockedStatic<WebSocketHelper> wsHelperMock) {

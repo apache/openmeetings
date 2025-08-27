@@ -20,6 +20,7 @@ package org.apache.openmeetings.web;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+import static org.apache.openmeetings.test.Utils.getTestCoordinates;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CONTEXT_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
@@ -92,17 +93,6 @@ public abstract class AbstractOmServerTest {
 		if (LabelDao.getLanguages().isEmpty()) {
 			fail("Failed to set languages");
 		}
-	}
-
-	public static String getTestCoordinates(TestInfo testInfo) {
-		String meth = testInfo.getTestMethod().map(m -> m.getName()).orElse("method n/a");
-		String res = testInfo.getTestClass().map(c -> c.getSimpleName()).orElse("class n/a") + ".";
-		if (testInfo.getDisplayName().contains(meth)) {
-			res += testInfo.getDisplayName();
-		} else {
-			res += meth + testInfo.getDisplayName();
-		}
-		return res;
 	}
 
 	@BeforeEach
