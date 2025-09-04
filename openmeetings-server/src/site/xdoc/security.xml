@@ -30,13 +30,20 @@
 				<a href="https://www.apache.org/security/">Apache Security Team</a> page.<br/>
 				<br/>
 				<a href="https://www.apache.org/security/committers.html#vulnerability-handling">Vulnerability handling guide</a>
+				<br/>
 			</p>
 			<p>
-				REFERENCES -> permalink to the announce email in archives<br/>
+				REFERENCES -&gt; permalink to the announce email in archives<br/>
 				Going forward, please include the <b>product and version information</b> in the <b>description</b> itself
 				as well as in the "[PRODUCT]" and "[VERSION]" lines in your submissions.
 				While this may seem redundant, including the information in both places satisfies different use cases and supports automation.
 			</p>
+			<div class="bd-callout bd-callout-info">
+				IMPORTANT: We do our best to provide logging config with enough details so you can audit your OpenMeetings instance.
+				But depending on your current config logs might contain sensitive info.<br/>
+				Please contact <code>security (at) openmeetings (dot) apache (dot) org</code> so we can fix the defaults.<br/>
+				Please contact <code>user (at) openmeetings (dot) apache (dot) org</code> if you have any questions regarding logging config
+			</div>
 		</section>
 		<section name="Reporting New Security Problems">
 			<p>
