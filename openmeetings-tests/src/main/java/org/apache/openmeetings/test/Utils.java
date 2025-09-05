@@ -18,14 +18,16 @@
  */
 package org.apache.openmeetings.test;
 
+import java.lang.reflect.Member;
+
 import org.junit.jupiter.api.TestInfo;
 
 public class Utils {
 	private Utils() {}
 
 	public static String getTestCoordinates(TestInfo testInfo) {
-		String meth = testInfo.getTestMethod().map(m -> m.getName()).orElse("method n/a");
-		String res = testInfo.getTestClass().map(c -> c.getSimpleName()).orElse("class n/a") + ".";
+		String meth = testInfo.getTestMethod().map(Member::getName).orElse("method n/a");
+		String res = testInfo.getTestClass().map(Class::getSimpleName).orElse("class n/a") + ".";
 		if (testInfo.getDisplayName().contains(meth)) {
 			res += testInfo.getDisplayName();
 		} else {
