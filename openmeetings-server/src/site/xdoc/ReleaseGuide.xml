@@ -101,15 +101,6 @@
 						are up to date and refer to the right version.
 					</li>
 					<li>
-						Ensure LICENSE file is up-to-date:
-						<div>
-							<ul>
-								<li>Run: <source>mvn clean license:aggregate-add-third-party</source></li>
-								<li>Merge the contents of <code>target/THIRD-PARTY.txt</code> to <code>LICENSE</code> file</li>
-							</ul>
-						</div>
-					</li>
-					<li>
 						Check site is <code>green</code> here <a href="https://whimsy.apache.org/site/project/openmeetings">https://whimsy.apache.org/site/project/openmeetings</a>
 					</li>
 					<li>
