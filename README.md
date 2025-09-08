@@ -57,12 +57,28 @@ See the [CHANGELOG.md](/CHANGELOG.md) file for a detailed log.
 
 ### Recent Releases
 
+
+<details>
+	<summary>Release 8.1.0 - Security updates.</summary>
+
+8.1.0
+-----
+[Release 8.1.0](https://www.apache.org/dyn/closer.lua/openmeetings/8.1.0), provides following improvements:
+
+Security:
+* All libraries are updated to most recent versions
+
+WB:
+* Whiteboard video player controls are fixed
+
+Some other fixes and improvements, 9 issues were addressed
+</details>
 <details>
 	<summary>Release 8.0.0 - Security updates, switching to Tomcat 11 and Jakarta stack.</summary>
 
 8.0.0
 -----
-[Release 8.0.0](https://www.apache.org/dyn/closer.lua/openmeetings/8.0.0), provides following improvements:
+[Release 8.0.0](https://www.apache.org/dist/openmeetings/8.0.0), provides following improvements:
 
 Security:
 * OM is moved to Jakarta stack

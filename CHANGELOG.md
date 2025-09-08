@@ -6,6 +6,25 @@ See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number 
 See https://www.cve.org/CVERecord?id=CVE-* (where * is the number of CVE below)
 
 
+Release Notes - Openmeetings - Version 8.1.0
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-2794] - Seek function in WB video player seems to be broken
+    * [OPENMEETINGS-2795] - OM build doesn't generate javadocs for site
+    * [OPENMEETINGS-2799] - Email address is not being validated
+
+* Improvement
+    * [OPENMEETINGS-2791] - LICENSE file should be updated automatically
+
+* Task
+    * [OPENMEETINGS-2790] - (8.1.0) Libraries should be updated
+    * [OPENMEETINGS-2792] - User related data should not be logged
+    * [OPENMEETINGS-2796] - (8.1.0) All translations from PoEditor should be synced
+    * [OPENMEETINGS-2797] - (8.1.0) Sonar issues need to be addressed
+    * [OPENMEETINGS-2798] - Add IntelliJ instructions and link to BuildInstructions
+
+
 Release Notes - Openmeetings - Version 8.0.0
 ================================================================================================================
 
