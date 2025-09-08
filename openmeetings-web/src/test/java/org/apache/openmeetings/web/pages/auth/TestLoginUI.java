@@ -48,8 +48,11 @@ import org.apache.wicket.util.tester.FormTester;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class TestLoginUI extends AbstractWicketTesterTest {
+	private static final Logger log = LoggerFactory.getLogger(TestLoginUI.class);
 	private static final String PATH_REGISTER = "register:form";
 
 	private void checkLogin(String login, String pass) {
@@ -103,6 +106,19 @@ class TestLoginUI extends AbstractWicketTesterTest {
 	@ValueSource(strings = {"", "  ", "aaaaa", "aaa\rbbb@eeeee", "gggg\n@hhhh"})
 	void testBadEmailRegister(String email) throws ReflectiveOperationException, SecurityException {
 		String uid = randomUUID().toString();
+		performRegister(uid, email, 1, "account.created");
+		FormTester formTester = showRegister();
+		formTester.submit("submit");
+		assertTrue(countErrors(tester) > 7, "There should be at least 8 errors");
+	}
+
+	@Test
+	void testBadEmailRegister2Err() throws ReflectiveOperationException, SecurityException {
+		final Locale l = Locale.forLanguageTag("pt-TL");
+		log.info("Owerriding locale to: {}", l);
+		tester.getSession().setLocale(l);
+		String email = "gggg\n@hhhh";
+		String uid = "1ca45f9c-7761-403a-a9da-c38bcaaeb0e2";
 		performRegister(uid, email, 1, "account.created");
 		FormTester formTester = showRegister();
 		formTester.submit("submit");
@@ -167,7 +183,9 @@ class TestLoginUI extends AbstractWicketTesterTest {
 
 	private void performRegister(String uid, String emailToTest, int errorsExpected, String lbl) throws ReflectiveOperationException, SecurityException {
 		FormTester formTester = showRegister();
-		formTester.setValue("login", getLogin(uid));
+		final String login = getLogin(uid);
+		log.info("Performing register: login = '{}', email = '{}', pwd = '{}'", login, emailToTest, USER_PASS);
+		formTester.setValue("login", login);
 		formTester.setValue("email", emailToTest);
 		formTester.setValue("firstName", "first" + uid);
 		formTester.setValue("lastName", "last" + uid);

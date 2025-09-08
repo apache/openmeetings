@@ -48,6 +48,7 @@
 	<logger name="org.apache.openmeetings" level="DEBUG" />
 	<logger name="org.apache.cxf.services" level="DEBUG" /> <!-- for payload -->
 	<logger name="org.apache.openmeetings.core.remote.KurentoHandler" level="ERROR" /> <!-- no warn -->
+	<logger name="org.apache.openmeetings.core.util" level="TRACE" />
 	<root level="INFO">
 		<appender-ref ref="FILE" />
 		<appender-ref ref="CONSOLE" />

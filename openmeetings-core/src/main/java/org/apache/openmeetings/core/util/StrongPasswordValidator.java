@@ -74,9 +74,12 @@ public class StrongPasswordValidator implements IValidator<String> {
 		if (Strings.isEmpty(password) || Strings.isEmpty(word) || word.length() < 3) {
 			return false;
 		}
-		for (int i = 0; i < word.length() - 3; ++i) {
-			String substr = word.toLowerCase(Locale.ROOT).substring(i, i + 3);
-			if (password.toLowerCase(Locale.ROOT).indexOf(substr) > -1) {
+		final String lword = word.toLowerCase(Locale.ROOT);
+		final String lpwd = password.toLowerCase(Locale.ROOT);
+		for (int i = 0; i < lword.length() - 3; ++i) {
+			String substr = lword.substring(i, i + 3);
+			if (lpwd.indexOf(substr) > -1) {
+				log.trace("Part '{}' of '{}' [{}] found in pwd '{}' []", substr, lword, word, lpwd, password);
 				return true;
 			}
 		}
