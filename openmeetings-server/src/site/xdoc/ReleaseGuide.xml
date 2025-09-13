@@ -120,17 +120,17 @@
 						<source>git checkout master</source>
 					</li>
 					<li>Create temporary local branch
-						<source>git checkout -b release-5.0.1</source>
+						<source>git checkout -b rel-8.2.0</source>
 					</li>
 					<li>Update versions of all modules
-						<source>mvn versions:set -DgenerateBackupPoms=false -DnewVersion=5.0.1</source>
+						<source>mvn versions:set -DgenerateBackupPoms=false -DnewVersion=8.2.0</source>
 					</li>
 					<li>Update final SCM URL located at <code>pom.xml</code> and <code>openmeetings-server/pom.xml</code>
 						<source><![CDATA[
 <scm>
     <url>https://github.com/apache/openmeetings.git</url>
 
-    SET https://github.com/apache/openmeetings/tree/5.0.1
+    SET https://github.com/apache/openmeetings/tree/8.2.0
 						]]></source>
 					</li>
 					<li>Add timestamp to parent pom (properties section)
@@ -141,14 +141,18 @@
 					<li>
 						Create a TAG and commit it to the Git<br/>
 						<source>
-git commit -a -m "5.0.1 Release Candidate 1"
-git tag -s 5.0.1-RC1 -m "5.0.1 Release Candidate 1 tag"
-git push origin 5.0.1-RC1
+git commit -a -m "8.2.0 Release Candidate 1"
+git tag -s 8.2.0-RC1 -m "8.2.0 Release Candidate 1 tag"
+git push origin 8.2.0-RC1
 						</source>
 					</li>
 					<li>
 						<p>Deploy release artifacts to Maven</p>
 						<source>mvn clean &amp;&amp; mvn deploy -Pdeploy,rc</source>
+					</li>
+					<li>Go to: <a href="https://repository.apache.org/#stagingRepositories">Staging Repositories</a></li>
+					<li>Select openmeetings staging repo and Close it with valid message:<br/>
+						for ex. "8.2.0 build was successful"
 					</li>
 					<li>
 						<p>Run the command: </p>
@@ -162,26 +166,26 @@ git push origin 5.0.1-RC1
 						<p>
 							Commit artifacts you have created with KEYS file to the
 							<code>https://dist.apache.org/repos/dist/dev/openmeetings/</code>
-							Proposed file structure for "Release Candidate 1" of 5.0.1 will be:
+							Proposed file structure for "Release Candidate 1" of 8.2.0 will be:
 						</p>
 						<source>
-5.0.1
-5.0.1/rc1
-5.0.1/rc1/src
-5.0.1/rc1/src/apache-openmeetings-5.0.1-src.zip
-5.0.1/rc1/src/apache-openmeetings-5.0.1-src.tar.gz
-5.0.1/rc1/src/apache-openmeetings-5.0.1-src.zip.sha
-5.0.1/rc1/src/apache-openmeetings-5.0.1-src.zip.asc
-5.0.1/rc1/src/apache-openmeetings-5.0.1-src.tar.gz.sha
-5.0.1/rc1/src/apache-openmeetings-5.0.1-src.tar.gz.asc
-5.0.1/rc1/bin
-5.0.1/rc1/bin/apache-openmeetings-5.0.1.zip
-5.0.1/rc1/bin/apache-openmeetings-5.0.1.tar.gz
-5.0.1/rc1/bin/apache-openmeetings-5.0.1.zip.sha
-5.0.1/rc1/bin/apache-openmeetings-5.0.1.zip.asc
-5.0.1/rc1/bin/apache-openmeetings-5.0.1.tar.gz.sha
-5.0.1/rc1/bin/apache-openmeetings-5.0.1.tar.gz.asc
-5.0.1/rc1/CHANGELOG
+8.2.0
+8.2.0/rc1
+8.2.0/rc1/src
+8.2.0/rc1/src/apache-openmeetings-8.2.0-src.zip
+8.2.0/rc1/src/apache-openmeetings-8.2.0-src.tar.gz
+8.2.0/rc1/src/apache-openmeetings-8.2.0-src.zip.sha
+8.2.0/rc1/src/apache-openmeetings-8.2.0-src.zip.asc
+8.2.0/rc1/src/apache-openmeetings-8.2.0-src.tar.gz.sha
+8.2.0/rc1/src/apache-openmeetings-8.2.0-src.tar.gz.asc
+8.2.0/rc1/bin
+8.2.0/rc1/bin/apache-openmeetings-8.2.0.zip
+8.2.0/rc1/bin/apache-openmeetings-8.2.0.tar.gz
+8.2.0/rc1/bin/apache-openmeetings-8.2.0.zip.sha
+8.2.0/rc1/bin/apache-openmeetings-8.2.0.zip.asc
+8.2.0/rc1/bin/apache-openmeetings-8.2.0.tar.gz.sha
+8.2.0/rc1/bin/apache-openmeetings-8.2.0.tar.gz.asc
+8.2.0/rc1/CHANGELOG
 						</source>
 						<p><b>NOTE</b> KEYS file is located at https://www.apache.org/dist/openmeetings/KEYS and should be just updated</p>
 					</li>
@@ -195,14 +199,14 @@ git push origin 5.0.1-RC1
 					Send an email to the developer mailing list with the subject line:<br />
 					[VOTE] Apache OpenMeetings x.xx release<br />
 					An example for such an email:
-					<a href="https://mail-archives.apache.org/mod_mbox/openmeetings-dev/201701.mbox/%3CCAJmbs8jZ7EiXoeBbG4ynvg30FPx2nAOJMypE2Qp-v-c63ayO9A%40mail.gmail.com%3E">example Vote email</a>
+					<a href="https://lists.apache.org/thread/cttvmf8jh02w3b7ox6hshrvs9pws7wbq">example Vote email</a>
 					<a href="https://s.apache.org/vote-2.0.0RC4">example Vote email (Incubator)</a>
 					<br />
 					After the vote is over, send a "RESULT" email to the list with the subject line:<br />
 					[RESULT][VOTE] Apache OpenMeetings x.xx release<br />
 					An example for such an email:
 					<a
-						href="https://mail-archives.apache.org/mod_mbox/openmeetings-dev/201701.mbox/%3CCAJmbs8gyvHuarzdVma%2BF6ap7RHBhhVciZp5Oi5JogQdLR6o0NA%40mail.gmail.com%3E">example Result email</a>
+						href="https://lists.apache.org/thread/3ov6gb3cz6dcjm8spzmcs96gmhnzrq4y">example Result email</a>
 					<br />
 					Votes on whether a package is ready to be released use majority approval -- i.e., at
 					least three PMC members must vote affirmatively for release, and there must be more
@@ -227,8 +231,8 @@ mvn clean install -Prc,release
 					<li>Go to <a href="https://securesigning.pki.digicert.com/csportal">https://securesigning.pki.digicert.com/csportal</a></li>
 					<li>Select "Signing Sets"</li>
 					<li>Select "Add signing set"</li>
-					<li>Enter "Signing set name" (must include "Apache OpenMeetings" and version) for ex. "Apache OpenMeetings 5.0.1-RELEASE"</li>
-					<li>Enter "Version" for ex. "5.0.1-RELEASE"</li>
+					<li>Enter "Signing set name" (must include "Apache OpenMeetings" and version) for ex. "Apache OpenMeetings 8.2.0-RELEASE"</li>
+					<li>Enter "Version" for ex. "8.2.0-RELEASE"</li>
 					<li>Select "Java Signing Sha256" as "Signing service"</li>
 					<li>Select "Upload files" and add all <b>jar</b> files from <code>target/jnlp</code></li>
 					<li>Select "Sign now"</li>
@@ -276,9 +280,9 @@ for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
 				<p>Release tag based on RCXX should finally be created</p>
 				<source>
 <![CDATA[
-git checkout 5.0.0-M1-RC1
-git tag 5.0.0-M1
-git push origin 5.0.0-M1
+git checkout 8.2.0-RC1
+git tag -s 8.2.0 -m "8.2.0 Release tag"
+git push origin 8.2.0
 ]]>
 				</source>
 			</subsection>
@@ -288,14 +292,11 @@ git push origin 5.0.0-M1
 					<li>Upload Artifacts with signatures created on the previous steps to
 						https://dist.apache.org/repos/dist/release/openmeetings/CURRENT_VERSION
 					</li>
-					<li>Close staging repo:
+					<li>Release staging repo:
 						<ul>
 							<li>Go to: <a href="https://repository.apache.org/#stagingRepositories">Staging Repositories</a></li>
-							<li>Select openmeetings staging repo and Close it with valid message:<br/>
-								for ex. "The VOTE about 3.1.2 release was successful"
-							</li>
 							<li>Select openmeetings staging repo and Release it with valid message:<br/>
-								for ex. "The VOTE about 3.1.2 release was successful"
+								for ex. "The VOTE about 8.2.0 release was successful"
 							</li>
 						</ul>
 					</li>
