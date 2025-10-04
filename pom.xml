@@ -86,10 +86,10 @@
 		<spdx.version>1.0.3</spdx.version>
 
 		<!-- dependency versions -->
-		<junit.version>5.13.4</junit.version>
-		<wicket.version>10.6.0</wicket.version>
-		<wicketstuff.version>10.6.0</wicketstuff.version>
-		<wicket-bootstrap.version>7.0.11</wicket-bootstrap.version>
+		<junit.version>6.0.0</junit.version>
+		<wicket.version>10.7.0</wicket.version>
+		<wicketstuff.version>10.7.0</wicketstuff.version>
+		<wicket-bootstrap.version>7.0.12</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.15</fullcalendar.version>
 		<spring.version>6.2.11</spring.version>
 		<tomcat.version>11.0.11</tomcat.version>
@@ -130,7 +130,7 @@
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
 		<tika-parsers.version>3.2.3</tika-parsers.version>
 		<slf4j.version>2.0.17</slf4j.version>
-		<logback.version>1.5.18</logback.version>
+		<logback.version>1.5.19</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.82</bcprov.version>
 		<mockito.version>5.20.0</mockito.version>
@@ -140,7 +140,7 @@
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
 		<jasny-bootstrap.version>3.1.3-2</jasny-bootstrap.version>
 		<jodconverter.version>4.4.11</jodconverter.version>
-		<jaxb-runtime.version>4.0.5</jaxb-runtime.version>
+		<jaxb-runtime.version>4.0.6</jaxb-runtime.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
 		<swagger.version>2.2.38</swagger.version>
