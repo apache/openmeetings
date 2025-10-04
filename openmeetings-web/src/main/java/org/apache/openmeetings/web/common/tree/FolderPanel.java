@@ -57,7 +57,8 @@ import jakarta.inject.Inject;
 
 public class FolderPanel extends Panel implements IDraggableListener, IDroppableListener {
 	private static final long serialVersionUID = 1L;
-	private static final String CSS_CLASS_FILE = "file ps-5 ";
+	private static final String CSS_CLASS_PS5 = "ps-5 ";
+	private static final String CSS_CLASS_FILE = "file " + CSS_CLASS_PS5;
 	private static final String PARAM_MOD = "mod";
 	private static final String PARAM_SHIFT = "s";
 	private static final String PARAM_CTRL = "c";
@@ -234,7 +235,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 		private static final long serialVersionUID = 1L;
 
 		private void setVideoStyle(final BaseFileItem f, StringBuilder style) {
-			style.append("recording ");
+			style.append("recording " + CSS_CLASS_PS5);
 			if (f instanceof Recording rec) {
 				Status st = rec.getStatus();
 				if (Status.RECORDING == st || Status.CONVERTING == st) {

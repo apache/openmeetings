@@ -91,7 +91,7 @@ public class RoomListPanel extends Panel {
 
 				@Override
 				protected <L extends Serializable> Component newLabel(String markupId, IModel<L> model) {
-					return super.newLabel(markupId, model).setRenderBodyOnly(false).add(new CssClassNameAppender("sr-only"));
+					return super.newLabel(markupId, model).setRenderBodyOnly(false).add(new CssClassNameAppender("visually-hidden"));
 				}
 
 				@Override

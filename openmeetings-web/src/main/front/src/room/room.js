@@ -52,12 +52,12 @@ function __dockSetMode(mode) {
 	if (mode) {
 		icon.addClass('icon-undock');
 		dock.attr('title', dock.data('ttl-undock'))
-			.find('.sr-only').text(dock.data('ttl-undock'));
+			.find('.visually-hidden').text(dock.data('ttl-undock'));
 		_sbAddResizable();
 	} else {
 		icon.addClass('icon-dock');
 		dock.attr('title', dock.data('ttl-dock'))
-			.find('.sr-only').text(dock.data('ttl-dock'));
+			.find('.visually-hidden').text(dock.data('ttl-dock'));
 		sb.addClass('closed').resizable('destroy');
 	}
 }
