@@ -162,7 +162,6 @@ public abstract class FileTreePanel extends Panel {
 			@Override
 			public void onConfigure(JQueryBehavior behavior) {
 				super.onConfigure(behavior);
-				behavior.setOption("hoverClass", Options.asString("trash-toolbar-hover"));
 				behavior.setOption("accept", Options.asString(".recorditem, .fileitem"));
 			}
 
@@ -211,14 +210,6 @@ public abstract class FileTreePanel extends Panel {
 			}
 		}));
 		trashToolbar.add(trash.setOutputMarkupId(true));
-		trash.add(new AjaxEventBehavior("confirmed.bs.confirmation") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				deleteAll(target);
-			}
-		});
 
 		ConfirmationBehavior trashConfirm = new ConfirmationBehavior(newOkCancelDangerConfirmCfg(trashToolbar, getString("80")).withContent(getString("713"))) {
 			private static final long serialVersionUID = 1L;
@@ -228,7 +219,14 @@ public abstract class FileTreePanel extends Panel {
 				return !readOnly && !selected.isEmpty();
 			}
 		};
-		trash.add(trashConfirm);
+		trash.add(trashConfirm, new AjaxEventBehavior("confirmed.bs.confirmation") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				deleteAll(target);
+			}
+		});
 
 		form.add(trees.add(tree).setOutputMarkupId(true));
 		updateSizes();
