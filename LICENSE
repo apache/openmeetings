@@ -234,7 +234,7 @@ conditions of the following licenses.
 
     CC BY 3.0
 
-        * Font Awesome (org.webjars:font-awesome:6.7.2 - http://webjars.org)
+        * Font Awesome (org.webjars:font-awesome:7.0.1 - http://webjars.org)
 
     CDDL, v1.0, LGPL, v2.1 or later
 
@@ -434,9 +434,9 @@ conditions of the following licenses.
         * Apache XmpBox (org.apache.pdfbox:xmpbox:3.0.5 - https://www.apache.org/pdfbox-parent/xmpbox/)
         * Asterisk-Java (org.asteriskjava:asterisk-java:3.41.0 - https://github.com/asterisk-java/asterisk-java)
         * Bootstrap (org.webjars:bootstrap:5.3.8 - http://webjars.org)
-        * bootstrap-core (de.agilecoders.wicket:wicket-bootstrap-core:7.0.12 - https://github.com/l0rdn1kk0n/wicket-bootstrap/wicket-bootstrap-core)
-        * bootstrap-extensions (de.agilecoders.wicket:wicket-bootstrap-extensions:7.0.12 - https://github.com/l0rdn1kk0n/wicket-bootstrap/wicket-bootstrap-extensions)
-        * bootstrap-themes (de.agilecoders.wicket:wicket-bootstrap-themes:7.0.12 - https://github.com/l0rdn1kk0n/wicket-bootstrap/wicket-bootstrap-themes)
+        * bootstrap-core (de.agilecoders.wicket:wicket-bootstrap-core:7.0.13 - https://github.com/l0rdn1kk0n/wicket-bootstrap/wicket-bootstrap-core)
+        * bootstrap-extensions (de.agilecoders.wicket:wicket-bootstrap-extensions:7.0.13 - https://github.com/l0rdn1kk0n/wicket-bootstrap/wicket-bootstrap-extensions)
+        * bootstrap-themes (de.agilecoders.wicket:wicket-bootstrap-themes:7.0.13 - https://github.com/l0rdn1kk0n/wicket-bootstrap/wicket-bootstrap-themes)
         * Byte Buddy (without dependencies) (net.bytebuddy:byte-buddy:1.17.7 - https://bytebuddy.net/byte-buddy)
         * Caffeine cache (com.github.ben-manes.caffeine:caffeine:2.9.3 - https://github.com/ben-manes/caffeine)
         * CalDav4j (com.github.caldav4j:caldav4j:1.0.5 - https://github.com/caldav4j/caldav4j.git)

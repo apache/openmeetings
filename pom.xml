@@ -78,7 +78,7 @@
 		<maven-jarsigner-plugin.version>3.1.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>5.2.0.4988</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.versoin>0.8.13</jacoco-maven-plugin.versoin>
-		<forbiddenapis.version>3.9</forbiddenapis.version>
+		<forbiddenapis.version>3.10</forbiddenapis.version>
 		<frontend-maven-plugin.version>1.15.4</frontend-maven-plugin.version>
 		<swagger-plugin.version>2.1.6</swagger-plugin.version>
 		<plexus-utils.version>3.5.1</plexus-utils.version>
@@ -89,7 +89,7 @@
 		<junit.version>6.0.0</junit.version>
 		<wicket.version>10.7.0</wicket.version>
 		<wicketstuff.version>10.7.0</wicketstuff.version>
-		<wicket-bootstrap.version>7.0.12</wicket-bootstrap.version>
+		<wicket-bootstrap.version>7.0.13</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.15</fullcalendar.version>
 		<spring.version>6.2.11</spring.version>
 		<tomcat.version>11.0.11</tomcat.version>
