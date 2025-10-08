@@ -1488,6 +1488,7 @@
 						</families>
 						<excludes>
 							<exclude>**/*.mp3</exclude>
+							<exclude>**/*.pdf</exclude>
 							<exclude>**/localhost.jks</exclude>
 							<exclude>**/node_modules/**</exclude>
 							<exclude>**/package-lock.json</exclude>
@@ -1495,7 +1496,6 @@
 							<exclude>**/.project</exclude>
 							<exclude>**/.classpath</exclude>
 							<exclude>**/.settings/**</exclude>
-							<exclude>src/license/asf-license.txt</exclude>
 							<exclude>.gitattributes</exclude>
 						</excludes>
 					</configuration>
