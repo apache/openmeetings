@@ -21,11 +21,11 @@
    viewBox="0 0 2000 400"
    id="svg32977"
    version="1.1"
-   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
    inkscape:export-filename="logo.png"
    inkscape:export-xdpi="18"
    inkscape:export-ydpi="18"
-   sodipodi:docname="logo4_serif.svg"
+   sodipodi:docname="504590348-cc7d6b4f-0830-4187-ba30-146013256f89.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -619,22 +619,22 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     pagecolor="#ffffff"
+     pagecolor="#000000"
      bordercolor="#666666"
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.38992815"
-     inkscape:cx="970.69164"
-     inkscape:cy="323.13645"
+     inkscape:zoom="0.7798563"
+     inkscape:cx="1060.4518"
+     inkscape:cy="323.7776"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
-     inkscape:window-width="1280"
-     inkscape:window-height="673"
-     inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-width="2560"
+     inkscape:window-height="1351"
+     inkscape:window-x="2391"
+     inkscape:window-y="-9"
      inkscape:window-maximized="1"
      inkscape:showpageshadow="2"
      inkscape:pagecheckerboard="0"
@@ -942,19 +942,19 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:192px;line-height:0%;font-family:'Arial Black';-inkscape-font-specification:'Arial Black, ';letter-spacing:15px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-       x="460.53491"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Arial Black';-inkscape-font-specification:'Arial Black, ';letter-spacing:0px;word-spacing:0px;fill:#cccccc;fill-opacity:1;stroke:none"
+       x="439.93005"
        y="885.47345"
        id="text35843"
        transform="scale(0.97064611,1.0302416)"><tspan
          sodipodi:role="line"
          id="tspan35845"
-         x="460.53491"
+         x="439.93005"
          y="885.47345"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:192px;line-height:0%;font-family:Serif;-inkscape-font-specification:'Serif Bold';letter-spacing:15px;fill:#000000;fill-opacity:1">penMeetings</tspan></text>
+         style="font-size:185.473px;line-height:1.25;fill:#cccccc;fill-opacity:1">penMeetings</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'Sans Italic';letter-spacing:5px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'Sans Italic';letter-spacing:0px;word-spacing:0px;fill:#cccccc;fill-opacity:1;stroke:none"
        x="580.33032"
        y="987.25708"
        id="text35847"
@@ -965,7 +965,7 @@
          id="tspan35849"
          x="580.33032"
          y="987.25708"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:61.8243px;line-height:1.25;font-family:Serif;-inkscape-font-specification:'Serif Italic';letter-spacing:5px;fill:#000000;fill-opacity:1">Open-Source Web-Conferencing</tspan></text>
+         style="font-size:61.8243px;line-height:1.25;font-family:sans-serif;fill:#cccccc;fill-opacity:1">Open-Source Web-Conferencing</tspan></text>
     <g
        id="g98"
        inkscape:label="O-logo">
@@ -973,12 +973,12 @@
          id="dp_path004"
          d="m 287.98724,892.40361 c -8.55136,-15.84849 -25.64408,-29.59029 -46.81745,-35.7944 11.82188,-7.88559 19.61312,-21.29883 19.61312,-36.51918 0,-24.27525 -19.77315,-43.94091 -44.17703,-43.94091 -24.38388,0 -44.16703,19.66566 -44.16703,43.94091 0,15.22035 7.79124,28.64325 19.61312,36.51918 -6.08097,1.78779 -11.83188,4.19405 -17.13273,7.09317"
          inkscape:connector-curvature="0"
-         style="fill:none;stroke:#000000;stroke-width:11.79744244;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+         style="fill:none;stroke:#b2b2b2;stroke-width:11.79744244;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
       <path
          id="dp_path005"
          d="m 381.82217,845.78585 c -7.75123,-5.79823 -16.91269,-10.4658 -27.0043,-13.4229 11.82189,-7.88559 19.62313,-21.29883 19.62313,-36.51918 0,-24.26559 -19.78315,-43.93125 -44.17703,-43.93125 -24.39389,0 -44.16703,19.66566 -44.16703,43.93125 0,15.23001 7.78124,28.64325 19.61312,36.52884 -13.01207,3.80751 -24.4739,10.46581 -33.36531,18.70896"
          inkscape:connector-curvature="0"
-         style="fill:none;stroke:#000000;stroke-width:11.79744244;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+         style="fill:none;stroke:#b2b2b2;stroke-width:11.79744244;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
       <path
          style="fill:#e97826;fill-opacity:1;stroke:none"
          id="path36213"
@@ -993,7 +993,7 @@
          id="dp_path002"
          d="m 413.77392,805.11838 c 0,74.26509 -62.2414,134.46647 -139.01659,134.46647 -76.78601,0 -139.02741,-60.20138 -139.02741,-134.46647 0,-74.2651 62.2414,-134.45604 139.02741,-134.45604 76.77519,0 139.01659,60.19094 139.01659,134.45604 z"
          inkscape:connector-curvature="0"
-         style="fill:none;stroke:#000000;stroke-width:31.4598484;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="fill:none;stroke:#cccccc;stroke-width:31.4598484;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
   </g>
 </svg>
