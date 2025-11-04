@@ -30,6 +30,7 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -86,7 +87,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 			add(new DroppableBehavior(
 					selector
 					, new Options()
-						.set("hoverClass", Options.asString("bg-light"))
+						.set("hoverClass", Options.asString("bg-body"))
 						.set("accept", Options.asString(getDefaultModelObject() instanceof Recording ? ".recorditem" : ".fileitem"))
 					, this));
 		}
@@ -97,7 +98,7 @@ public class FolderPanel extends Panel implements IDraggableListener, IDroppable
 						.set("revert", "OmFileTree.treeRevert")
 						.set("cursor", Options.asString("move"))
 						.set("helper", "OmFileTree.dragHelper")
-						.set("cursorAt", "{left: 40, top: 18}")
+						.set("cursorAt", "{" + (WebSession.get().isRtlLocale() ? "right" : "left") + ": 40, top: 18}")
 						.set("containment", Options.asString(treePanel.getContainment()))
 					, this));
 		}

@@ -12,7 +12,7 @@ const NetTest = (function() {
 		$('.nettest button')
 			.click(function() {
 				const btn = $(this);
-				btn.removeClass('complete').removeClass('not-started').addClass('started');
+				btn[0].className = 'test-btn btn btn-outline-secondary started'
 				testLabel = btn.data('lbl');
 				testName = btn.data('measure');
 				tests[testName].start();
@@ -219,7 +219,7 @@ const NetTest = (function() {
 	}
 	function _setResult(val) {
 		const btn = _btn();
-		btn.addClass('complete').removeClass('started');
+		btn[0].className = 'test-btn btn btn-outline-success complete'
 		btn.parent().parent().find('.value').html(val);
 		testNext = btn.data('next');
 		if (!testNext) {

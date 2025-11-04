@@ -7,7 +7,7 @@ Licensed under the Apache License, Version 2.0 (the "License") http://www.apache
 If you want to set up your logo in Openmeetings header you can do the following:
 
 1. Create your logo image as PNG 40px height
-2. Replace `/opt/om/webapps/openmeetings/css/images/logo.png` with your logo file
+2. Replace `/opt/om/webapps/openmeetings/css/images/logo.svg` with your logo file
 
 # Customize OpenMeetings mobile icons
 

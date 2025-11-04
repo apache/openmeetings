@@ -13,6 +13,8 @@ $(window).on('resize', _updateResize);
 //initial resize
 _updateResize();
 
+document.documentElement.setAttribute('data-bs-theme', (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'))
+
 Object.assign(window, {
 	Settings: require('./settings')
 	, OmUtil: require('./omutils')

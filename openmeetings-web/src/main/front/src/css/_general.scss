@@ -29,10 +29,15 @@ html, body {
 
 	.logo {
 		display: inline-block;
-		background-image: url(images/logo.png);
+		content: url(images/logo.svg);
 		background-repeat: no-repeat;
 		height: var(--header-height);
 		width: 80px;
+	}
+}
+@media (prefers-color-scheme: dark) {
+	#header .logo {
+		content: url(images/logo-dark.svg);
 	}
 }
 #topLinks {
@@ -40,8 +45,8 @@ html, body {
 	--bs-border-style: solid;
 	--bs-border-color: black;
 	span {
-		padding-right: 5px;
-		padding-left: 5px;
+		padding-inline-end: 5px;
+		padding-inline-start: 5px;
 		white-space: nowrap;
 	}
 }
@@ -52,6 +57,9 @@ html, body {
 	margin: 2px;
 	font-size: 2em;
 	line-height: 1.2em;
+}
+#menu .navbar {
+	background-color: var(--bs-secondary-bg-subtle) !important;
 }
 .clickable {
 	cursor: pointer;
@@ -245,7 +253,7 @@ table.messages {
 			i {
 				position: absolute;
 				top: 1px;
-				left: 3px;
+				inset-inline-start: 3px;
 			}
 		}
 	}
@@ -261,8 +269,8 @@ table.messages {
 	display: block;
 
 	&.selected {
-		border: 1px solid #cccccc;
-		background-color:var(--bs-light);
+		border: 1px solid var(--bs-highlight-color);
+		background-color: var(--bs-highlight-bg);
 	}
 	&.folder {
 		font-weight: normal;
@@ -280,7 +288,7 @@ table.messages {
 			i {
 				top: 2px;
 				position: absolute;
-				left: 4px;
+				inset-inline-start: 4px;
 			}
 		}
 	}
@@ -423,7 +431,6 @@ table.messages {
 	}
 }
 .main-container #wicketDebugBar {
-	right: initial;
 	top: initial;
 	z-index: 2;
 	position: fixed;
@@ -483,7 +490,7 @@ table.messages {
 		display: block;
 		overflow-y: scroll;
 		overflow-x: hidden;
-		background-color: white;
+		background-color: var(--bs-table-bg);
 
 		tr {
 			width: 100%;
@@ -514,8 +521,8 @@ table.messages {
 	opacity: .8;
 }
 .tableWrapper {
-	background-color: #FFFFFF;
-	border: solid 1px #aacfe4;
+	background-color: var(--bs-body-bg);
+	border: solid 1px var(--bs-border-color);
 	width: 536px;
 	height: 100px;
 }
@@ -523,7 +530,9 @@ table.messages {
 	overflow-y: auto;
 	height: 100%;
 }
-.dragbox .dragbox-header .dragbox-toggle, .dragbox .dragbox-header .dragbox-actions .icon, .sort-icon a {
+.dragbox .dragbox-header .dragbox-toggle,
+.dragbox .dragbox-header .dragbox-actions .icon,
+.sort-icon a {
 	font-family: "Font Awesome 7 Free";
 	font-weight: 900;
 	display: inline-block;
@@ -535,40 +544,55 @@ table.messages {
 	vertical-align: super;
 	margin: 0;
 }
-.dragbox .dragbox-header {
-	.dragbox-actions .icon {
-		vertical-align: middle;
+.dashboard .dragbox {
+	background-color: var(--bs-body-bg);
+	border-color: var(--bs-border-color);
 
-		&.refresh::before {
-			content: "\f2f1";
+	.dragbox-header {
+		background-color: var(--bs-secondary-bg-subtle);
+		border-color: var(--bs-secondary-border-subtle);
+		color: var(--bs-body-color);
+
+		.dragbox-actions .icon {
+			vertical-align: middle;
+
+			&.refresh::before {
+				content: "\f2f1";
+			}
+			&.delete::before {
+				content: "\f00d";
+				color: var(--bs-danger);
+			}
 		}
-		&.delete::before {
-			content: "\f00d";
-			color: var(--bs-danger);
+		.dragbox-toggle {
+			&.expanded::before {
+				content: "\f0d7";
+			}
+			&.collapsed::before {
+				content: "\f0d8";
+			}
 		}
 	}
-	.dragbox-toggle {
-		&.expanded::before {
-			content: "\f0d7";
+	.dragbox-content {
+		background-color: var(--bs-body-bg);
+
+		.tableWrapper {
+			/* room users on dashboard */
+			width: auto;
+			height: 100px;
+
+			.list-table {
+				min-width: auto;
+			}
 		}
-		&.collapsed::before {
-			content: "\f0d8";
+		.rooms-widget {
+			display: flex;
 		}
 	}
 }
-.dragbox-content {
-	.tableWrapper {
-		/* room users on dashboard */
-		width: auto;
-		height: 100px;
-
-		.list-table {
-			min-width: auto;
-		}
-	}
-	.rooms-widget {
-		display: flex;
-	}
+.main-container .wysiwyg-editor {
+	background-color: var(--bs-body-bg);
+	border-color: var(--bs-border-color);
 }
 .sort-icon {
 	a {
@@ -674,4 +698,27 @@ table.messages {
 }
 .overflow-break-word {
 	overflow-wrap: break-word;
+}
+.om-body {
+	.select2-container--default.select2-container--focus .select2-selection--multiple {
+		border-color: var(--bs-border-color);
+	}
+	.select2-container--default .select2-selection--multiple {
+		background-color: var(--bs-body-bg);
+	}
+	.select2-container--default .select2-selection--multiple .select2-selection__choice {
+		background-color: var(--bs-secondary-bg);
+		border-color: var(--bs-secondary-border-subtle);
+	}
+	.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+		background-color: var(--bs-highlight-bg);
+		color: var(--bs-highlight-color);
+	}
+	.select2-container--default.select2-container--disabled .select2-selection--multiple {
+		background-color: var(--bs-secondary-bg);
+	}
+	.select2-dropdown {
+		border-color: var(--bs-border-color);
+		background-color: var(--bs-body-bg);
+	}
 }

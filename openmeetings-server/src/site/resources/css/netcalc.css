@@ -39,7 +39,7 @@
 .result-area {
 	text-align: left;
 	font-size: 14pt;
-	padding-left: 30px;
+	padding-inline-start: 30px;
 }
 .result-area #bandwidth {
 	padding-top: 0px;
@@ -78,14 +78,7 @@ input#submitbtn {
 	background: #47b2e8;
 	color: #000;
 	font-size: 14pt;
-	-moz-border-radius-topleft: 3px;
-	-moz-border-radius-topright: 3px;
-	-moz-border-radius-bottomleft: 3px;
-	-moz-border-radius-bottomright: 3px;
-	-webkit-border-top-left-radius: 3px;
-	-webkit-border-top-right-radius: 3px;
-	-webkit-border-bottom-right-radius: 3px;
-	-webkit-border-bottom-left-radius: 3px;
+	border-radius: 3px;
 }
 p {
 	font-size: 9pt;

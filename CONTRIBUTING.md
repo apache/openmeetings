@@ -1,7 +1,7 @@
 <!--
 # Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 -->
 
-![About Openmeetings Logo](/openmeetings-server/src/site/resources/images/logo.png)
+![About Openmeetings Logo](/openmeetings-server/src/site/resources/images/logo.svg)
 
 How to get involved
 ===============

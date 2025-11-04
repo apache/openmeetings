@@ -4,7 +4,7 @@
 	height: 100%;
 	width: calc(100% - var(--sidebar-width) - var(--buffer-size));
 	top: 0;
-	left: calc(var(--sidebar-width) + var(--buffer-size));
+	inset-inline-start: calc(var(--sidebar-width) + var(--buffer-size));
 
 	&.droppable-hover {
 		border: 0;
@@ -179,7 +179,7 @@
 			height: 28px;
 
 			.caret {
-				left: -1px;
+				inset-inline-start: -1px;
 				bottom: -7px;
 			}
 		}
@@ -188,7 +188,7 @@
 			height: 23px;
 
 			.caret {
-				left: -1px;
+				inset-inline-start: -1px;
 				bottom: -12px;
 			}
 		}
@@ -199,8 +199,8 @@
 			.caret {
 				position: absolute;
 				border-top: 8px solid transparent;
-				border-left: 8px solid blue;
-				border-right: 8px solid transparent;
+				border-inline-start: 8px solid blue;
+				border-inline-end: 8px solid transparent;
 			}
 		}
 	}
@@ -232,6 +232,10 @@
 	position: absolute;
 	z-index: 95;
 
+	&.ui-widget-content {
+		border-color: var(--bs-border-color);
+		background-color: var(--bs-body-bg);
+	}
 	.ui-dialog-titlebar-close {
 		position: absolute;
 		margin-inline-end: .3em;
@@ -299,6 +303,10 @@
 	}
 }
 .wb-formula {
+	&.ui-widget-content {
+		border-color: var(--bs-border-color);
+		background-color: var(--bs-body-bg);
+	}
 	.text-container {
 		margin: 0 5px 5px 0;
 		padding: 5px;
@@ -317,8 +325,8 @@
 	}
 }
 .dropdown-menu.om-left {
-	right: 0;
-	left: auto !important;
+	inset-inline-end: 0;
+	inset-inline-start: auto !important;
 }
 .wb-tabbar {
 	padding-inline-start: 70px !important;
@@ -378,10 +386,4 @@
 }
 #wb-rename-menu {
 	display: none;
-}
-
-
-html[dir="rtl"] .room-block .sb-wb .wb-block {
-	left: initial;
-	right: calc(var(--sidebar-width) + var(--buffer-size));
 }

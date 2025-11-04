@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.INavbarComponent;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
+import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
 
 /**
  * Loads the menu items into the main area
@@ -40,6 +41,7 @@ public class MenuPanel extends Panel {
 		super(id);
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
+		navbar.setBackgroundColor(BackgroundColorBehavior.Color.Body);
 		navbar.addComponents(menus);
 	}
 

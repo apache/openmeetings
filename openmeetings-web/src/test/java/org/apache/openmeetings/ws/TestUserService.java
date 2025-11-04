@@ -55,7 +55,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class TestUserService extends AbstractWebServiceTest {
-	private static final String DUMMY_PICTURE_URL = "https://openmeetings.apache.org/images/logo.png";
+	private static final String DUMMY_PICTURE_URL = "https://openmeetings.apache.org/images/logo.svg";
 
 	@Test
 	void invalidLoginTest() {

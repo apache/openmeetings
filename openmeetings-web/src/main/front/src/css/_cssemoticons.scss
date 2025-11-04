@@ -36,12 +36,12 @@ span.css-emoticon {
 
 	/* Styles for two-character emoticons that need more letter-spacing for proportionality */
 	&.spaced-emoticon {
-		padding-left: 0.2em;
+		padding-inline-start: 0.2em;
 		width: 1.34em;
 		letter-spacing: 0.2em;
 
 		&.small-emoticon {
-			padding-left: 0;
+			padding-inline-start: 0;
 			width: 1.82em;
 			letter-spacing: 0.1em;
 		}

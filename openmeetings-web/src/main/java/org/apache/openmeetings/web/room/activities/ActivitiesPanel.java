@@ -275,7 +275,7 @@ public class ActivitiesPanel extends Panel {
 				cls.append("bg-warning");
 				break;
 			case ROOM_ENTER, ROOM_EXIT:
-				cls.append("bg-white auto-clean");
+				cls.append("bg-body auto-clean");
 				break;
 			default:
 				break;

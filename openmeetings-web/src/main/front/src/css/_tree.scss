@@ -23,7 +23,7 @@
 			display: none;
 			position: absolute;
 			bottom: 1px;
-			left: 5px;
+			inset-inline-start: 5px;
 			font-size: .8em;
 		}
 		.tree-theme-windows {
@@ -46,7 +46,7 @@
 					vertical-align: top;
 
 					.name, .name span {
-						color: black;
+						color: var(--bs-body-text);
 						display: block;
 						/* Required for text-overflow to do anything */
 						text-overflow: ellipsis;
@@ -59,7 +59,7 @@
 					.errors {
 						position: absolute;
 						top: 0px;
-						right: 1px;
+						inset-inline-end: 1px;
 						width: 32px;
 						height: 32px;
 						margin: 0px;
@@ -95,7 +95,7 @@
 
 				&::before {
 					position: absolute;
-					left: 3px;
+					inset-inline-start: 3px;
 				}
 			}
 			.processing i {
@@ -244,10 +244,4 @@
 		white-space: pre;
 		margin: 0;
 	}
-}
-
-
-html[dir="rtl"] .trees .om-icon.big::before {
-	left: initial;
-	right: 3px;
 }

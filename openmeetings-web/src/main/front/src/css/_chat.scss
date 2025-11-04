@@ -93,8 +93,8 @@
 			}
 		}
 		.from {
-			margin-left: 5px;
-			margin-right: 5px;
+			margin-inline-start: 5px;
+			margin-inline-end: 5px;
 			font-weight: bold;
 		}
 		.date-row {
@@ -133,10 +133,10 @@
 	}
 	.send {
 		width: 16px;
-		padding-left: 0;
-		padding-right: 0;
-		margin-right: 0;
-		margin-left: 0;
+		padding-inline-start: 0;
+		padding-inline-end: 0;
+		margin-inline-end: 0;
+		margin-inline-start: 0;
 	}
 	.tool-container {
 		min-height: var(--chat-tools-height);
@@ -186,7 +186,7 @@
 /* room mode */
 .main.room #chatPanel {
 	margin: 0 !important;
-	right: 0px;
+	inset-inline-end: 0px;
 	top: var(--room-menu-height);
 
 	#chat form {
@@ -213,7 +213,7 @@
 				transform-origin: -15% 68% 0;
 				position: absolute;
 				top: 0;
-				right: -67px;
+				inset-inline-end: -67px;
 			}
 		}
 	}

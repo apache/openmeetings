@@ -41,7 +41,7 @@ iframe {
 	height: 130px;
 	width: 130px;
 	top: 37px;
-	left: 37px;
+	inset-inline-start: 37px;
 }
 .example-image-link {
 	display: block;
@@ -62,7 +62,7 @@ iframe {
 }
 .install-steps .step {
 	background-repeat: no-repeat;
-	padding-left: 40px;
+	padding-inline-start: 40px;
 }
 .install-steps .step.unpack {
 	background-image: url(../images/box_open.png);
@@ -112,10 +112,19 @@ iframe {
 	display: inline-block;
 	position: absolute;
 	top: 10px;
-	right: 20px;
+	inset-inline-end: 20px;
 	font-weight: bold;
 	color: var(--info);
 }
 .grid-striped .row:nth-of-type(odd) {
 	background-color: rgba(0,0,0,.05);
 }
+/**
+ * commented for now
+ **
+@media (prefers-color-scheme: dark) {
+	.bannerLeft img {
+		content:url("../images/logo-dark.svg");
+	}
+}
+*/

@@ -1,6 +1,6 @@
 ## Apache OpenMeetings
 
-![About Openmeetings Logo](/openmeetings-server/src/site/resources/images/logo.png)
+![About Openmeetings Logo](/openmeetings-server/src/site/resources/images/logo.svg)
 
 [Apache OpenMeetings](https://openmeetings.apache.org) provides:
  - [x] **video conferencing**

@@ -16,7 +16,7 @@
 				display: inline-block;
 				width: 16px;
 				height: 16px;
-				right: 0px;
+				inset-inline-end: 0px;
 				bottom: 0px;
 				overflow: hidden;
 				background: none;
@@ -28,8 +28,7 @@
 					transform: rotate(-45deg);
 					position: absolute;
 					top: 0;
-					right: 0;
-					right: -21px;
+					inset-inline-end: -21px;
 					bottom: -16px;
 					background: repeating-linear-gradient(
 						var(--bs-dark), var(--bs-dark) 3px, transparent 3px, transparent 5px
@@ -141,7 +140,7 @@
 	.wait-moder {
 		position: fixed;
 		bottom: 30px;
-		right: 30px;
+		inset-inline-end: 30px;
 
 		strong {
 			display: block;
@@ -219,6 +218,7 @@
 }
 .user-list {
 	overflow-y: auto;
+	overflow-x: hidden;
 	height: calc(100% - var(--room-sidebar-header-height) - var(--buffer-size));
 
 	.user.name {
@@ -258,7 +258,7 @@
 			.video-container {
 				position: absolute;
 				top: 0;
-				left: 0;
+				inset-inline-start: 0;
 
 				&, .video.audio-only {
 					width: 50px;
@@ -274,7 +274,7 @@
 		}
 		&.current {
 			font-weight: bold;
-			background-color: var(--bs-light);
+			background-color: var(--bs-secondary-bg);
 		}
 		.om-icon {
 			&.user-status {
@@ -293,7 +293,7 @@
 			&.audio-activity {
 				position: absolute;
 				bottom: 2px;
-				right: 2px;
+				inset-inline-end: 2px;
 			}
 		}
 	}
@@ -305,7 +305,7 @@
 
 	i {
 		position: absolute;
-		left: 0;
+		inset-inline-start: 0;
 		animation: typing-ani 2s infinite;
 		color: var(--bs-primary);
 	}
@@ -315,13 +315,13 @@
 }
 @keyframes typing-ani {
 	0% {
-		left: 0;
+		inset-inline-start: 0;
 	}
 	50% {
-		left: 10px;
+		inset-inline-start: 10px;
 	}
 	100% {
-		left: 0;
+		inset-inline-start: 0;
 	}
 }
 .om-icon {
@@ -335,7 +335,7 @@
 		height: 14px;
 		min-height: 14px;
 		margin-inline-end: 2px;
-		margin-left: unset;
+		margin-inline-start: unset;
 	}
 	&.audio-activity {
 		opacity: 0.2;
@@ -393,7 +393,7 @@
 		i {
 			position: absolute;
 			bottom: 1px;
-			right: 1px;
+			inset-inline-end: 1px;
 			font-size: .6em;
 
 			&::before {
@@ -465,8 +465,9 @@
 .user-video .ui-dialog-titlebar
 , .sharer .ui-dialog-titlebar
 , .wb-tool-settings .ui-dialog-titlebar
+, .wb-formula .ui-dialog-titlebar
 {
-	background-color: var(--bs-white);
+	background-color: var(--bs-secondary-bg-subtle);
 }
 .user-video {
 	.om-icon.volume-control, .btn.btn-refresh, .btn.btn-toggle, .btn.btn-wclose {
@@ -491,7 +492,7 @@
 		}
 	}
 	.buttonpane {
-		background-color: var(--bs-white);
+		background-color: var(--bs-secondary-bg);
 	}
 	&.ui-dialog {
 		&.video.user-speaks {
@@ -526,7 +527,7 @@
 		border-radius: 0;
 		border: 0;
 		box-shadow: initial;
-		left: 70px;
+		inset-inline-start: 70px;
 		top: -50px;
 		background-color: transparent;
 	}
@@ -559,21 +560,32 @@
 			overflow: hidden;
 		}
 		.ui-dialog-titlebar {
+			background-color: var(--bs-secondary-bg);
+			color: var(--bs-body-color);
 			padding-inline-start: 10px;
 			border: none;
 		}
 	}
+	&.ui-widget.ui-widget-content {
+		border-color: var(--bs-border-color);
+		background-color: var(--bs-body-bg);
+	}
 }
-.sharer .ui-dialog-titlebar-close {
-	position: absolute;
-	top: 20px
+.ui-dialog .ui-dialog-titlebar-close,
+.ui-widget-content .ui-dialog-titlebar-close {
+	right: unset;
+	inset-inline-end: .3em;
+	top: 20px;
+}
+.ui-dialog-titlebar.ui-widget-header .ui-dialog-title {
+	float: inline-start;
 }
 .video-container {
 	.level-meter {
 		display: inline-block;
 		position: absolute;
 		bottom: 5px;
-		left: 5px;
+		inset-inline-start: 5px;
 		width: 10px;
 	}
 	.video .level-meter {
@@ -598,7 +610,7 @@
 			display: inline-block;
 			position: absolute;
 			top: 0;
-			left: 0;
+			inset-inline-start: 0;
 		}
 		.vid-block {
 			min-width: 300px;
@@ -634,7 +646,7 @@
 	.mute-others {
 		position: absolute;
 		top: calc(50% - 32px);
-		left: calc(50% - 32px);
+		inset-inline-start: calc(50% - 32px);
 		width: 64px;
 		height: 64px;
 		background-size: 64px;
@@ -650,7 +662,7 @@
 	}
 	&.audio-only .mute-others {
 		top: calc(50% - 16px);
-		left: calc(50% - 10px);
+		inset-inline-start: calc(50% - 10px);
 		width: 32px;
 		height: 32px;
 	}
@@ -682,9 +694,4 @@
 	.room-block.big .sb-wb .sidebar .user-list .user.name {
 		display: block;
 	}
-}
-
-html[dir="rtl"] .main.room #chatPanel {
-	right: initial;
-	left: 0px;
 }

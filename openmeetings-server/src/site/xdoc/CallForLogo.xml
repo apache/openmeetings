@@ -50,7 +50,7 @@
 				<li>
 					<table>
 						<tr>
-							<td><img class="logo-big" src="images/logo.png" alt="Apache OpenMeetings"/></td>
+							<td><img class="logo-big" src="images/logo.svg" alt="Apache OpenMeetings"/></td>
 							<td><span class="btn btn-primary btn-logo-big">Apply</span></td>
 						</tr>
 						<tr>
