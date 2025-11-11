@@ -16,11 +16,11 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd"
 		name="Apache OpenMeetings Project">
-	<bannerLeft name="Apache OpenMeetings" href="https://openmeetings.apache.org/index.html">
-		<image src="#" style="logo-class"/>
+	<bannerLeft href="https://openmeetings.apache.org/index.html">
+		<image src="images/logo.svg" style="logo-class" alt="Apache OpenMeetings"/>
 	</bannerLeft>
-	<bannerRight name="Apache" href="https://www.apache.org">
-		<image src="https://www.apache.org/img/asf_logo.png"/>
+	<bannerRight href="https://www.apache.org">
+		<image src="https://www.apache.org/img/asf_logo.png" alt="Apache"/>
 	</bannerRight>
 
 	<skin>

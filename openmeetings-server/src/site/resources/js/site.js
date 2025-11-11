@@ -17,18 +17,18 @@
   under the License.
 
 */
-$(document).ready(function() {
+window.addEventListener("load", (event) => {
 	// "New" markers
 	["Call For Logo", "REST API Swagger"].forEach(
-		topic => $('ul.nav li a[title="' + topic + '"').append('&nbsp;&nbsp;<span class="badge badge-success">New</span>')
+		topic => document.querySelector(`ul.nav li a[title="${topic}"`)
+					.insertAdjacentHTML('beforeend', '&nbsp;&nbsp;<span class="badge badge-success">New</span>')
 	);
 	// "ApacheCon" banner on the right
-	$('.header .bannerRight').parent()
-		.append($('<div class="float-right">')
-			.append($('<a class="apachecon-banner bannerRight acevent" data-format="wide" data-width="250"></a>')));
-	const banners = $('.acevent>img');
-	if (banners.length > 0 && banners.length !== 2) {
-		banners.remove();
-		render_snippet();
-	}
-})
+	document.querySelector('.header--banner .header--banner--right.bannerRight')
+		.insertAdjacentHTML('beforeend',
+			`<div class="bannerRight">
+				<a class="apachecon-banner bannerRight acevent" data-format="wide" data-width="250"></a>
+			</div>`)
+	const banners = document.getElementsByClassName('acevent');
+	render_snippet();
+});
