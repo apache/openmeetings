@@ -12,21 +12,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/DECORATION/1.8.0"
+<site xmlns="http://maven.apache.org/SITE/2.0.0"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd"
+		xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd"
 		name="Apache OpenMeetings Project">
-	<bannerLeft>
-		<title>Apache OpenMeetings</title>
-		<alt>Apache OpenMeetings</alt>
-		<src>https://openmeetings.apache.org/images/logo.svg</src>
-		<href>https://openmeetings.apache.org/index.html</href>
+	<bannerLeft name="Apache OpenMeetings" href="https://openmeetings.apache.org/index.html">
+		<image src="#" style="logo-class"/>
 	</bannerLeft>
-	<bannerRight>
-		<title>Apache</title>
-		<alt>Apache</alt>
-		<src>https://www.apache.org/img/asf_logo.png</src>
-		<href>https://www.apache.org</href>
+	<bannerRight name="Apache" href="https://www.apache.org">
+		<image src="https://www.apache.org/img/asf_logo.png"/>
 	</bannerRight>
 
 	<skin>
@@ -90,4 +84,4 @@
 			</endContent>
 		</reflowSkin>
 	</custom>
-</project>
+</site>

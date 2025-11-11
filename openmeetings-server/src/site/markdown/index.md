@@ -4,17 +4,63 @@ Licensed under the Apache License, Version 2.0 (the "License") http://www.apache
 
 {{% carousel id="carousel" withControls="true" withIndicators="true" crossfade="true" %}}
 
-# Audio/Video Conferencing
-<img src="images/screenshots/screenshot_OM6-2.jpg" class="d-block w-100" alt="Conference Room"/>
-
-HTML5 Audio/Video conferencing with OpenMeetings in web and mobile.
-
-# Calendar
-<img src="images/screenshots/calendar-screenshot.png" class="d-block w-100" alt="Calendar"/>
-
-You can create meetings with the integrated calendar, conference rooms and invitations are
-automatically send to everybody
-
+<!--
+<slide>
+	<slide-image src="images/screenshots/screenshot_OM6-2.jpg" class="d-block w-100" alt="Conference Room"/>
+	<slide-caption class="d-none d-md-block" >
+		<h5>Audio/Video Conferencing</h5>
+		<p>HTML5 Audio/Video conferencing with OpenMeetings in web and mobile.</p>
+	</slide-caption>
+</slide>
+<slide>
+	<slide-image src="images/screenshots/calendar-screenshot.png" class="d-block w-100" alt="Calendar"/>
+	<slide-caption class="d-none d-md-block" >
+		<h5>Calendar</h5>
+		<p>You can create meetings with the integrated calendar, conference rooms and invitations are
+				automatically send to everybody</p>
+	</slide-caption>
+</slide>
+<slide>
+	<slide-image src="images/screenshots/file-explorer.png" class="d-block w-100" alt="File Explorer"/>
+	<slide-caption class="d-none d-md-block" >
+		<h5>File Explorer</h5>
+		<p>Each room has its own File-Explorer. Each user has his own private drive and additionally there
+				is a public drive to share files with other participants</p>
+	</slide-caption>
+</slide>
+<slide>
+	<slide-image src="images/screenshots/integration-api.png" class="d-block w-100" alt="Integration API"/>
+	<slide-caption class="d-none d-md-block" >
+		<h5>Integration API</h5>
+		<p>There is a REST (and SOAP) API to integrate into your website or intranet, as well
+				as LDAP/ADS connectors and VoIP/Asterisk integration modules</p>
+	</slide-caption>
+</slide>
+<slide>
+	<slide-image src="images/screenshots/private-messages.png" class="d-block w-100" alt="Private messages and contacts"/>
+	<slide-caption class="d-none d-md-block" >
+		<h5>Private messages and contacts</h5>
+		<p>From the private message center you can send invitations by email
+				and attach meeting invitations to every email</p>
+	</slide-caption>
+</slide>
+<slide>
+	<slide-image src="images/screenshots/private-messages.png" class="d-block w-100" alt="Administration"/>
+	<slide-caption class="d-none d-md-block" >
+		<h5>Administration and Configuration</h5>
+		<p>You can do screen sharing as well as recording of whole sessions including audio/video.
+				Recordings can be downloaded as MP4 or watched online in the integrated player.</p>
+	</slide-caption>
+</slide>
+<slide>
+	<slide-image src="images/screenshots/recordings-playback.png" class="d-block w-100" alt="Share and Record"/>
+	<slide-caption class="d-none d-md-block" >
+		<h5>Screen sharing and Recording</h5>
+		<p>>You can do screen sharing as well as recording of whole sessions including audio/video.
+				Recordings can be downloaded as MP4 or watched online in the integrated player.</p>
+	</slide-caption>
+</slide>
+-->
 
 {{% /carousel %}}
 
@@ -34,40 +80,6 @@ website at <a href="http://code.google.com/p/openmeetings/" target="_blank">Goog
 will receive no updates anymore. The website at Apache is the only place that receives updates.
 
 <!--
-		<section name="Audio/Video Conferencing">
-			<img src="images/screenshots/screenshot_OM6-2.jpg" alt="Conference Room" />
-			<p>HTML5 Audio/Video conferencing with OpenMeetings in web and mobile.</p>
-		</section>
-		<section name="Calendar">
-			<img src="images/screenshots/calendar-screenshot.png" alt="Calendar" />
-			<p>You can create meetings with the integrated calendar, conference rooms and invitations are
-					automatically send to everybody</p>
-		</section>
-		<section name="File Explorer">
-			<img src="images/screenshots/file-explorer.png" alt="File Explorer" />
-			<p>Each room has its own File-Explorer. Each user has his own private drive and additionally there
-					is a public drive to share files with other participants</p>
-		</section>
-		<section name="Integration API">
-			<img src="images/screenshots/integration-api.png" alt="Integration API" />
-			<p>There is a REST (and SOAP) API to integrate into your website or intranet, as well
-					as LDAP/ADS connectors and VoIP/Asterisk integration modules</p>
-		</section>
-		<section name="Private messages and contacts">
-			<img src="images/screenshots/private-messages.png" alt="Private messages" />
-			<p>From the private message center you can send invitations by email
-					and attach meeting invitations to every email</p>
-		</section>
-		<section name="Administration and Configuration">
-			<img src="images/screenshots/administration-configuration.png" alt="Administration" />
-			<p>You can configure users, rooms, usergroups, config settings or
-					edit labels with a Web-Frontend integrated in the application</p>
-		</section>
-		<section name="Screen sharing and Recording">
-			<img src="images/screenshots/recordings-playback.png" alt="Share and Record" />
-			<p>You can do screen sharing as well as recording of whole sessions including audio/video.
-					Recordings can be downloaded as MP4 or watched online in the integrated player.</p>
-		</section>
 		<hr/>
 		<section name="Apache OpenMeetings - Features and overview">
 			<p>Openmeetings provides video conferencing, instant messaging,

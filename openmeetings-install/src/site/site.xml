@@ -12,9 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<project xmlns="http://maven.apache.org/DECORATION/1.8.0"
+<site xmlns="http://maven.apache.org/SITE/2.0.0"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd"
+		xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd"
 		name="Apache OpenMeetings Project">
 	<body>
 		<menu ref="parent"/>
@@ -36,4 +36,4 @@
 			</bottomNav>
 		</reflowSkin>
 	</custom>
-</project>
+</site>
