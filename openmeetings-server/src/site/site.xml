@@ -18,6 +18,9 @@
 	<body>
 		<menu name="General">
 			<item name="Home" href="/index.html"/>
+			<item name="Home 1" href="/index1.html"/>
+			<item name="Home 2" href="/index2.html"/>
+			<item name="Home 3" href="/index3.html"/>
 			<item name="License" href="https://www.apache.org/licenses/"/>
 			<item name="ASF" href="https://www.apache.org/"/>
 			<item name="Sponsorship" href="https://www.apache.org/foundation/sponsorship" />

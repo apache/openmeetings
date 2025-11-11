@@ -265,13 +265,13 @@ conditions of the following licenses.
     Eclipse Public License, Version 1.0
 
         * H2 Database Engine (com.h2database:h2:2.4.240 - https://h2database.com)
-        * Logback Classic Module (ch.qos.logback:logback-classic:1.5.20 - http://logback.qos.ch/logback-classic)
-        * Logback Core Module (ch.qos.logback:logback-core:1.5.20 - http://logback.qos.ch/logback-core)
+        * Logback Classic Module (ch.qos.logback:logback-classic:1.5.21 - http://logback.qos.ch/logback-classic)
+        * Logback Core Module (ch.qos.logback:logback-core:1.5.21 - http://logback.qos.ch/logback-core)
 
     Eclipse Public License v2.0
 
         * Angus Mail Provider (org.eclipse.angus:angus-mail:2.0.4 - http://eclipse-ee4j.github.io/angus-mail/angus-mail)
-        * AspectJ Tools (Compiler) (org.aspectj:aspectjtools:1.9.24 - https://www.eclipse.org/aspectj/)
+        * AspectJ Tools (Compiler) (org.aspectj:aspectjtools:1.9.25 - https://www.eclipse.org/aspectj/)
         * jakarta.transaction API (jakarta.transaction:jakarta.transaction-api:2.0.1 - https://projects.eclipse.org/projects/ee4j.jta)
         * Jakarta Annotations API (jakarta.annotation:jakarta.annotation-api:3.0.0 - https://projects.eclipse.org/projects/ee4j.ca)
         * Jakarta Mail API (jakarta.mail:jakarta.mail-api:2.1.3 - https://projects.eclipse.org/projects/ee4j/jakarta.mail-api)
@@ -341,7 +341,7 @@ conditions of the following licenses.
 
     Oracle Free Use Terms and Conditions (FUTC)
 
-        * ojdbc10 (com.oracle.database.jdbc:ojdbc10:19.28.0.0 - https://www.oracle.com/database/technologies/maven-central-guide.html)
+        * ojdbc10 (com.oracle.database.jdbc:ojdbc10:19.29.0.0 - https://www.oracle.com/database/technologies/maven-central-guide.html)
 
     Public Domain
 
@@ -351,7 +351,7 @@ conditions of the following licenses.
     The Apache Software License, Version 2.0
 
         * Apache Commons CLI (commons-cli:commons-cli:1.10.0 - https://commons.apache.org/proper/commons-cli/)
-        * Apache Commons Codec (commons-codec:commons-codec:1.19.0 - https://commons.apache.org/proper/commons-codec/)
+        * Apache Commons Codec (commons-codec:commons-codec:1.20.0 - https://commons.apache.org/proper/commons-codec/)
         * Apache Commons Collections (org.apache.commons:commons-collections4:4.4 - https://commons.apache.org/proper/commons-collections/)
         * Apache Commons Collections (org.apache.commons:commons-collections4:4.5.0 - https://commons.apache.org/proper/commons-collections/)
         * Apache Commons Compress (org.apache.commons:commons-compress:1.28.0 - https://commons.apache.org/proper/commons-compress/)
@@ -360,7 +360,7 @@ conditions of the following licenses.
         * Apache Commons Exec (org.apache.commons:commons-exec:1.5.0 - https://commons.apache.org/proper/commons-exec/)
         * Apache Commons FileUpload Core (org.apache.commons:commons-fileupload2-core:2.0.0-M4 - https://commons.apache.org/proper/commons-fileupload/commons-fileupload2-core/)
         * Apache Commons FileUpload Jakarta Servlet 5 (org.apache.commons:commons-fileupload2-jakarta-servlet5:2.0.0-M4 - https://commons.apache.org/proper/commons-fileupload/commons-fileupload2-jakarta-servlet5/)
-        * Apache Commons IO (commons-io:commons-io:2.20.0 - https://commons.apache.org/proper/commons-io/)
+        * Apache Commons IO (commons-io:commons-io:2.21.0 - https://commons.apache.org/proper/commons-io/)
         * Apache Commons Lang (org.apache.commons:commons-lang3:3.19.0 - https://commons.apache.org/proper/commons-lang/)
         * Apache Commons Math (org.apache.commons:commons-math3:3.6.1 - http://commons.apache.org/proper/commons-math/)
         * Apache Commons Net (commons-net:commons-net:3.12.0 - https://commons.apache.org/proper/commons-net/)
@@ -516,17 +516,17 @@ conditions of the following licenses.
         * parso (com.epam:parso:2.0.14 - https://github.com/epam/parso)
         * PDFBox JBIG2 ImageIO plugin (org.apache.pdfbox:jbig2-imageio:3.0.4 - https://www.apache.org/jbig2-imageio/)
         * picocli (info.picocli:picocli:4.7.6 - https://picocli.info)
-        * Prometheus Metrics Config (io.prometheus:prometheus-metrics-config:1.4.2 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-config)
-        * Prometheus Metrics Core (io.prometheus:prometheus-metrics-core:1.4.2 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-core)
-        * Prometheus Metrics Exporter - Common (io.prometheus:prometheus-metrics-exporter-common:1.4.2 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-exporter-common)
-        * Prometheus Metrics Exporter - Servlet Jakarta (io.prometheus:prometheus-metrics-exporter-servlet-jakarta:1.4.2 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-exporter-servlet-jakarta)
-        * Prometheus Metrics Exposition Formats (io.prometheus:prometheus-metrics-exposition-formats:1.4.2 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-exposition-formats)
-        * Prometheus Metrics Exposition Text Formats (io.prometheus:prometheus-metrics-exposition-textformats:1.4.2 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-exposition-textformats)
-        * Prometheus Metrics Model (io.prometheus:prometheus-metrics-model:1.4.2 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-model)
-        * Prometheus Metrics Tracer Common (io.prometheus:prometheus-metrics-tracer-common:1.4.2 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-tracer/prometheus-metrics-tracer-common)
-        * Prometheus Metrics Tracer Initializer (io.prometheus:prometheus-metrics-tracer-initializer:1.4.2 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-tracer/prometheus-metrics-tracer-initializer)
-        * Prometheus Metrics Tracer OpenTelemetry (io.prometheus:prometheus-metrics-tracer-otel:1.4.2 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-tracer/prometheus-metrics-tracer-otel)
-        * Prometheus Metrics Tracer OpenTelemetry Agent (io.prometheus:prometheus-metrics-tracer-otel-agent:1.4.2 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-tracer/prometheus-metrics-tracer-otel-agent)
+        * Prometheus Metrics Config (io.prometheus:prometheus-metrics-config:1.4.3 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-config)
+        * Prometheus Metrics Core (io.prometheus:prometheus-metrics-core:1.4.3 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-core)
+        * Prometheus Metrics Exporter - Common (io.prometheus:prometheus-metrics-exporter-common:1.4.3 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-exporter-common)
+        * Prometheus Metrics Exporter - Servlet Jakarta (io.prometheus:prometheus-metrics-exporter-servlet-jakarta:1.4.3 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-exporter-servlet-jakarta)
+        * Prometheus Metrics Exposition Formats (io.prometheus:prometheus-metrics-exposition-formats:1.4.3 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-exposition-formats)
+        * Prometheus Metrics Exposition Text Formats (io.prometheus:prometheus-metrics-exposition-textformats:1.4.3 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-exposition-textformats)
+        * Prometheus Metrics Model (io.prometheus:prometheus-metrics-model:1.4.3 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-model)
+        * Prometheus Metrics Tracer Common (io.prometheus:prometheus-metrics-tracer-common:1.4.3 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-tracer/prometheus-metrics-tracer-common)
+        * Prometheus Metrics Tracer Initializer (io.prometheus:prometheus-metrics-tracer-initializer:1.4.3 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-tracer/prometheus-metrics-tracer-initializer)
+        * Prometheus Metrics Tracer OpenTelemetry (io.prometheus:prometheus-metrics-tracer-otel:1.4.3 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-tracer/prometheus-metrics-tracer-otel)
+        * Prometheus Metrics Tracer OpenTelemetry Agent (io.prometheus:prometheus-metrics-tracer-otel-agent:1.4.3 - http://github.com/prometheus/client_java/client_java/prometheus-metrics-tracer/prometheus-metrics-tracer-otel-agent)
         * quartz (org.quartz-scheduler:quartz:2.5.1 - https://www.quartz-scheduler.org/)
         * Reflections (org.reflections:reflections:0.10.2 - http://github.com/ronmamo/reflections)
         * rome (com.rometools:rome:2.1.0 - http://rometools.com/rome)
@@ -544,7 +544,7 @@ conditions of the following licenses.
         * Spring Web (org.springframework:spring-web:6.2.12 - https://github.com/spring-projects/spring-framework)
         * Spring Web MVC (org.springframework:spring-webmvc:6.2.12 - https://github.com/spring-projects/spring-framework)
         * swagger-annotations (io.swagger.core.v3:swagger-annotations:2.2.40 - https://github.com/swagger-api/swagger-core/modules/swagger-annotations)
-        * tomcat (org.apache.tomcat:tomcat:11.0.13 - https://tomcat.apache.org/)
+        * tomcat (org.apache.tomcat:tomcat:11.0.14 - https://tomcat.apache.org/)
         * UNO interface library (org.openoffice:unoil:4.1.2 - https://wiki.openoffice.org/wiki/Uno)
         * Wicket Auth Roles (org.apache.wicket:wicket-auth-roles:10.7.0 - http://wicket.apache.org/wicket-auth-roles)
         * Wicket Core (org.apache.wicket:wicket-core:10.7.0 - http://wicket.apache.org/wicket-core)

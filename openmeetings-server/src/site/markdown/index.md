@@ -1,25 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
-<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
-	<properties>
-		<title>Home</title>
-		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
-	</properties>
 
-	<body>
+{{% carousel id="carousel" withControls="true" withIndicators="true" crossfade="true" %}}
+
+# Audio/Video Conferencing
+<img src="images/screenshots/screenshot_OM6-2.jpg" class="d-block w-100" alt="Conference Room"/>
+
+HTML5 Audio/Video conferencing with OpenMeetings in web and mobile.
+
+# Calendar
+<img src="images/screenshots/calendar-screenshot.png" class="d-block w-100" alt="Calendar"/>
+
+You can create meetings with the integrated calendar, conference rooms and invitations are
+automatically send to everybody
+
+
+{{% /carousel %}}
+
+---
+
+<br/>
+
+# Apache OpenMeetings - Features and overview
+
+Openmeetings provides video conferencing, instant messaging,
+white board, collaborative document editing and other groupware
+tools. It uses API functions of Media Server for Remoting
+and Streaming Kurento.
+
+OpenMeetings is a project of The Apache Software Foundation, the old project
+website at <a href="http://code.google.com/p/openmeetings/" target="_blank">GoogleCode</a>
+will receive no updates anymore. The website at Apache is the only place that receives updates.
+
+<!--
 		<section name="Audio/Video Conferencing">
 			<img src="images/screenshots/screenshot_OM6-2.jpg" alt="Conference Room" />
 			<p>HTML5 Audio/Video conferencing with OpenMeetings in web and mobile.</p>
@@ -106,9 +120,9 @@
 				<div class="row">
 					<div class="col-md-1"></div>
 					<div class="col-md-8">
-						<a href="#" class="acevent" data-format="wide" data-width="250"></a>
+						<a href="#" class="acevent"></a>
 						<div class="d-none">
-							<!-- Link to make Whimsy happy https://whimsy.apache.org/site/project/openmeetings -->
+							<- Link to make Whimsy happy https://whimsy.apache.org/site/project/openmeetings ->
 							<a href="https://www.apache.org/events/current-event">Apache Event</a>
 						</div>
 					</div>
@@ -415,7 +429,8 @@
 					</div>
 				</div>
 			</subsection>
-			<!-- HACK to make whimsy sutisfied: https://www.apache.org/events/current-event-234x60.png -->
+			<- HACK to make whimsy sutisfied: https://www.apache.org/events/current-event-234x60.png ->
 		</section>
 	</body>
 </document>
+-->
