@@ -6,14 +6,14 @@ Licensed under the Apache License, Version 2.0 (the "License") http://www.apache
 
 <!--
 <slide>
-	<slide-image src="images/screenshots/screenshot_OM6-2.jpg" class="d-block w-100" alt="Conference Room"/>
+	<slide-image src="images/screenshots/screenshot_OM6-2.jpg" class="d-block w-100" alt="Conference Room" />
 	<slide-caption class="d-none d-md-block" >
 		<h5>Audio/Video Conferencing</h5>
 		<p>HTML5 Audio/Video conferencing with OpenMeetings in web and mobile.</p>
 	</slide-caption>
 </slide>
 <slide>
-	<slide-image src="images/screenshots/calendar-screenshot.png" class="d-block w-100" alt="Calendar"/>
+	<slide-image src="images/screenshots/calendar-screenshot.png" class="d-block w-100" alt="Calendar" />
 	<slide-caption class="d-none d-md-block" >
 		<h5>Calendar</h5>
 		<p>You can create meetings with the integrated calendar, conference rooms and invitations are
@@ -21,7 +21,7 @@ Licensed under the Apache License, Version 2.0 (the "License") http://www.apache
 	</slide-caption>
 </slide>
 <slide>
-	<slide-image src="images/screenshots/file-explorer.png" class="d-block w-100" alt="File Explorer"/>
+	<slide-image src="images/screenshots/file-explorer.png" class="d-block w-100" alt="File Explorer" />
 	<slide-caption class="d-none d-md-block" >
 		<h5>File Explorer</h5>
 		<p>Each room has its own File-Explorer. Each user has his own private drive and additionally there
@@ -29,7 +29,7 @@ Licensed under the Apache License, Version 2.0 (the "License") http://www.apache
 	</slide-caption>
 </slide>
 <slide>
-	<slide-image src="images/screenshots/integration-api.png" class="d-block w-100" alt="Integration API"/>
+	<slide-image src="images/screenshots/integration-api.png" class="d-block w-100" alt="Integration API" />
 	<slide-caption class="d-none d-md-block" >
 		<h5>Integration API</h5>
 		<p>There is a REST (and SOAP) API to integrate into your website or intranet, as well
@@ -37,7 +37,7 @@ Licensed under the Apache License, Version 2.0 (the "License") http://www.apache
 	</slide-caption>
 </slide>
 <slide>
-	<slide-image src="images/screenshots/private-messages.png" class="d-block w-100" alt="Private messages and contacts"/>
+	<slide-image src="images/screenshots/private-messages.png" class="d-block w-100" alt="Private messages and contacts" />
 	<slide-caption class="d-none d-md-block" >
 		<h5>Private messages and contacts</h5>
 		<p>From the private message center you can send invitations by email
@@ -45,7 +45,7 @@ Licensed under the Apache License, Version 2.0 (the "License") http://www.apache
 	</slide-caption>
 </slide>
 <slide>
-	<slide-image src="images/screenshots/private-messages.png" class="d-block w-100" alt="Administration"/>
+	<slide-image src="images/screenshots/private-messages.png" class="d-block w-100" alt="Administration" />
 	<slide-caption class="d-none d-md-block" >
 		<h5>Administration and Configuration</h5>
 		<p>You can do screen sharing as well as recording of whole sessions including audio/video.
@@ -53,7 +53,7 @@ Licensed under the Apache License, Version 2.0 (the "License") http://www.apache
 	</slide-caption>
 </slide>
 <slide>
-	<slide-image src="images/screenshots/recordings-playback.png" class="d-block w-100" alt="Share and Record"/>
+	<slide-image src="images/screenshots/recordings-playback.png" class="d-block w-100" alt="Share and Record" />
 	<slide-caption class="d-none d-md-block" >
 		<h5>Screen sharing and Recording</h5>
 		<p>>You can do screen sharing as well as recording of whole sessions including audio/video.

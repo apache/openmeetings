@@ -277,7 +277,7 @@
 							<version>${reflow-maven-skin.version}</version>
 							<type>jar</type>
 							<overWrite>false</overWrite>
-							<includes>**/css/*.css,**/css/themes/${reflow-theme}/*.css,**/css/fontawesome/**,**/js/*.js,**/js/styles/github*.css</includes>
+							<includes>**/css/*.css,**/css/themes/${reflow-theme}/*.css,**/js/languages/*,**/css/fontawesome/**,**/js/*.js,**/js/styles/github*.css</includes>
 						</artifactItem>
 					</artifactItems>
 					<outputDirectory>${project.build.directory}/site</outputDirectory>

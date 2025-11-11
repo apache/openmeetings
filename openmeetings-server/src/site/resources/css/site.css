@@ -13,6 +13,9 @@ iframe {
 .bannerRight img, .bannerLeft img {
 	height: 80px !important;
 }
+.carousel-caption {
+	background-color: color-mix(in srgb, var(--gray-dark) 60%, transparent);
+}
 .header {
   padding-top: .5rem;
 }
