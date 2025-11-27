@@ -76,48 +76,9 @@ iframe {
 .copyright {
 	text-align: center;
 }
-/*
-// Callouts
-// https://github.com/twbs/bootstrap/blob/6589408a4b91c0f58fa4ac1508d69e3e9e4345e1/site/docs/4.1/assets/scss/_callouts.scss
-*/
-.bd-callout {
-	position: relative;
-	padding: 1.25rem;
-	margin-top: 1.25rem;
-	margin-bottom: 1.25rem;
-	border: 1px solid #eee;
+.card.callout {
 	border-left-width: .25rem;
 	border-radius: .25rem;
-}
-.bd-callout h4, .bd-callout .h4 {
-	margin-top: 0;
-	margin-bottom: .25rem;
-}
-.bd-callout p:last-child {
-	margin-bottom: 0;
-}
-.bd-callout code {
-	border-radius: .25rem;
-}
-.bd-callout + .bd-callout {
-	margin-top: -.25rem;
-}
-.bd-callout-info { border-left-color: var(--info); }
-.bd-callout-info h4 { color: var(--info); }
-.bd-callout-warning { border-left-color: var(--warning); }
-.bd-callout-warning h4 { color: var(--warning); }
-.bd-callout-danger { border-left-color: var(--danger); }
-.bd-callout-danger h4 { color: var(--danger); }
-
-/*DATE*/
-.bd-callout .date {
-	font-size: smaller;
-	display: inline-block;
-	position: absolute;
-	top: 10px;
-	inset-inline-end: 20px;
-	font-weight: bold;
-	color: var(--info);
 }
 .grid-striped .row:nth-of-type(odd) {
 	background-color: rgba(0,0,0,.05);

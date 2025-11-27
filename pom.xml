@@ -68,7 +68,7 @@
 		<exec-maven-plugin.version>3.6.2</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
 		<license-maven-plugin.version>2.7.0</license-maven-plugin.version>
-		<reflow-maven-skin.version>2.4.0-beta3</reflow-maven-skin.version>
+		<reflow-maven-skin.version>2.4.0-beta4-SNAPSHOT</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<replacer.version>1.5.3</replacer.version>
 		<xml-maven-plugin.version>1.2.0</xml-maven-plugin.version>
@@ -413,7 +413,19 @@
 			<releases><enabled>false</enabled></releases>
 			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
+		<repository>
+			<id>central-portal-snapshots</id>
+			<name>Central Portal Snapshots</name>
+			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
+		</repository>
 	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>central-portal-snapshots</id>
+			<name>Central Portal Snapshots</name>
+			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
