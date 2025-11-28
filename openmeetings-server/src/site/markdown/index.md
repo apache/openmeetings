@@ -135,16 +135,17 @@ will receive no updates anymore. The website at Apache is the only place that re
 
 {{< row >}}
 
+{{< column class="col-8 offset-1" >}}
+
 <!--
-<div class="col-1></div>
-<div class="col-8>
 	<a href="#" class="acevent"></a>
 	<div class="d-none">
 		HACK to make whimsy sutisfied
 		(can be checked here: https://whimsy.apache.org/site/project/openmeetings)
 		<a href="https://www.apache.org/events/current-event">Apache Event</a>
 	</div>
-</div>
 -->
+
+{{< /column >}}
 
 {{< /row >}}
