@@ -24,9 +24,9 @@ window.addEventListener("load", (event) => {
 					.insertAdjacentHTML('beforeend', '&nbsp;&nbsp;<span class="badge badge-success">New</span>')
 	);
 	// "ApacheCon" banner on the right
-	document.querySelector('.header--banner .header--banner--right.bannerRight')
+	document.querySelector('.header--banner .header--banner-right.banner-right')
 		.insertAdjacentHTML('beforeend',
-			`<div class="bannerRight">
+			`<div class="header--banner-content">
 				<a class="apachecon-banner bannerRight acevent" data-format="wide" data-width="250"></a>
 			</div>`)
 	const banners = document.getElementsByClassName('acevent');

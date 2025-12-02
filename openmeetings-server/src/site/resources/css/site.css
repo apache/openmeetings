@@ -10,7 +10,7 @@ iframe {
 .apachecon-banner {
 	margin: 5px;
 }
-.bannerRight img, .bannerLeft img {
+.header--banner-left.banner-left img, .header--banner-right.banner-right img {
 	height: 80px !important;
 }
 .carousel-caption {
