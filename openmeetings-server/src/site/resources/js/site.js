@@ -24,11 +24,21 @@ window.addEventListener("load", (event) => {
 					.insertAdjacentHTML('beforeend', '&nbsp;&nbsp;<span class="badge badge-success">New</span>')
 	);
 	// "ApacheCon" banner on the right
-	document.querySelector('.header--banner .header--banner-right.banner-right')
+	const banLeftCls = document.querySelector('.header--banner .header--banner-left.banner-left').classList;
+	banLeftCls.remove('col');
+	banLeftCls.add('col-6');
+	const banRight = document.querySelector('.header--banner .header--banner-right.banner-right');
+	const banRightCls = banRight.classList;
+	banRightCls.remove('col');
+	banRightCls.add('offset-1');
+	banRightCls.add('col-2');
+	banRight.parentNode
 		.insertAdjacentHTML('beforeend',
-			`<div class="header--banner-content">
-				<a class="apachecon-banner bannerRight acevent" data-format="wide" data-width="250"></a>
+			`<div class="col-2 header--banner-right banner-right">
+				<div class="header--banner-content">
+					<a class="apachecon-banner bannerRight acevent" data-format="wide" data-width="250"></a>
+				</div>
 			</div>`)
-	const banners = document.getElementsByClassName('acevent');
+	document.querySelectorAll('.acevent img').forEach(img => img.remove());
 	render_snippet();
 });

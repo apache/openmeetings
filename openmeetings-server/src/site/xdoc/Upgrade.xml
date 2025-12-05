@@ -77,7 +77,7 @@
 				<code>./admin.sh -i -file backup_yesterday.zip</code><br/>
 				please see <a href="CommandLineAdmin.html" target="_blank" rel="nofollow">Command Line Admin</a> for more options
 			</p>
-			<h4>Detailed steps</h4>
+			<h2>Detailed steps</h2>
 			<ol>
 				<li>Stop Openmeetings</li>
 				<li>(*) Backup folder with existing installation</li>

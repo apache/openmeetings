@@ -109,10 +109,10 @@
 					</li>
 					<li>
 						Update following files in OM documentation:<br/>
-						<code>openmeetings-server/src/site/xdoc/index.xml</code><br/>
-						<code>openmeetings-server/src/site/xdoc/NewsArchive.xml</code><br/>
+						<code>openmeetings-server/src/site/markdown/index.md</code><br/>
+						<code>openmeetings-server/src/site/markdown/NewsArchive.md</code><br/>
 						<code>openmeetings-server/src/site/xdoc/downloads.xml</code><br/>
-						<div class="bd-callout bd-callout-danger">
+						<div class="om-callout border-danger">
 							<div class="h4">Download links in NewsArchive.xml and README.md should be updated</div>
 						</div>
 					</li>

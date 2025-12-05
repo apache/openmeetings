@@ -1,0 +1,2056 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
+-->
+
+# Release 8.0.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 8.0.0 released!</h4>
+	<p class="card-text">
+		Release 8.0.0, provides following improvements:<br/>
+		<div class="om-callout border-danger">
+			Security vulnerability <b>CVE-2024-54676 - Apache OpenMeetings: Deserialisation of untrusted data in cluster mode</b> was fixed,
+			please check <a href="security.html">Security Page</a><br/>
+		</div>
+		<br/>
+		Other fixes<br/>
+		<br/>
+
+		Security:
+		<ul>
+			<li>OM is moved to Jakarta stack</li>
+			<li>All libraries are updated to most recent versions</li>
+		</ul>
+
+		UI:
+		<ul>
+			<li>Fullcalendar v6 is used</li>
+		</ul>
+		<br/>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			8 issues are fixed please check <br/>
+			<a href="https://www.apache.org/dist/openmeetings/8.0.0/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12354067">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/8.0.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2025-01-03)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 7.2.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 7.2.0 released!</h4>
+	<p class="card-text">
+		Release 7.2.0, provides following improvements:<br/>
+		<div class="om-callout border-info">
+			IMPORTANT: Java 17 and KMS 6.18.0+ are required
+		</div>
+
+		Security:
+		<ul>
+			<li>Login/email are now processed in case insensitive mode</li>
+			<li>Messages and contacts: message folders are not shared between users</li>
+			<li>All dependencies are updated with most recent versions</li>
+		</ul>
+
+		UI:
+		<ul>
+			<li>Too big profile pictures are now resized</li>
+			<li>Room looks better in RTL mode</li>
+			<li>Email messages looks better</li>
+		</ul>
+		<br/>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			10 issues are fixed please check <br/>
+			<a href="https://www.apache.org/dist/openmeetings/7.2.0/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12353202">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/7.2.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2023-12-23)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 7.1.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 7.1.0 released!</h4>
+	<p class="card-text">
+		Release 7.1.0, provides following improvements:<br/>
+		<div class="om-callout border-info">
+			IMPORTANT: Java 17 and KMS 6.18.0+ are required
+		</div>
+
+		Security:
+		<ul>
+			<li>Invitation hash check made strict</li>
+			<li>Set of user permissions is fixed</li>
+			<li>Paths entered in Admin-&gt;Config are being verified</li>
+			<li>All dependencies are updated with most recent versions</li>
+		</ul>
+
+		Stability:
+		<ul>
+			<li>TURN server config is passed to the client</li>
+		</ul>
+		<br/>
+		<div class="om-callout border-danger">3 security vulnerabilities were addressed</div>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			12 issues are fixed please check <br/>
+			<a href="https://www.apache.org/dist/openmeetings/7.1.0/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12352896">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/7.1.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2023-05-09)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 7.0.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 7.0.0 released!</h4>
+	<p class="card-text">
+		Release 7.0.0, provides following improvements:<br/>
+		<div class="om-callout border-info">
+			IMPORTANT: Java 17 is required
+		</div>
+
+		UI and Security:
+		<ul>
+			<li>Microphone on/off doesn't interrupt the streaming</li>
+			<li>Stability fix at Safari</li>
+			<li>Full screen mode for WB</li>
+			<li>Redo tool for WB</li>
+			<li>2-factor authentication</li>
+			<li>Libraries are updated with most recent versions</li>
+		</ul>
+		<br/>
+		<div class="om-callout border-danger">1 security vulnerability was addressed</div>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			28 issues are fixed please check <br/>
+			<a href="https://www.apache.org/dist/openmeetings/7.0.0/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12350648">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/7.0.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2023-02-11)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 6.3.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 6.3.0 released!</h4>
+	<p class="card-text">
+		Release 6.3.0, provides following improvements:<br/>
+
+		Stability and UI:
+		<ul>
+			<li>Multiple WB fixes</li>
+			<li>Confirm popups are unified</li>
+			<li>Multiple fixes for latest Safari</li>
+			<li>Libraries are updated with most recent versions</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			26 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/6.3.0/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12351702">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/6.3.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2022-05-17)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 6.2.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 6.2.0 released!</h4>
+	<p class="card-text">
+		Release 6.2.0, provides following improvements:<br/>
+		UI improvements, stability fixes, mobile version and adds OpenAPI spec in 3.0.x format<br/>
+
+		Stability and UI:
+		<ul>
+			<li>UI fixes</li>
+			<li>Modal PopUpFix</li>
+			<li>Upgrade to Bootstrap5</li>
+			<li>Fixes for Mobile Version and landscape mode</li>
+			<li>Improve ability for starting from Home Screen on Mobile device</li>
+		</ul>
+		Integration:
+		<ul>
+			<li>OpenAPI Spec in 3.0.x format see <a href="https://openmeetings.apache.org/swagger">Swagger</a></li>
+			<li>Improved Integration examples for Node and PHP</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			28 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/6.2.0/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12349964&amp;styleName=Html&amp;projectId=12312720">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/6.2.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2025-09-12)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">PHP integration using composer module</h4>
+	<p class="card-text">
+		You can now use a community contributed PHP composer module to make integration to OpenMeetings easier<br/><br/>
+		More information:
+		<ul>
+			<li><a href="https://github.com/om-hosting/openmeetings-php-client" target="_blank">OpenMeetings PHP Client</a></li>
+			<li>OpenMeetings <a href="RestAPISample.html#how-to-integrate-using-php-and-composer">PHP Rest API sample</a></li>
+		</ul>
+		The PHP module makes use of the OpenMeetings Rest API which is now also available in OpenAPI 3.0 format: <a href="https://openmeetings.apache.org/swagger/" target="_blank">https://openmeetings.apache.org/swagger/</a>
+		<br/>
+		You can find details about all API endpoints and examples at <a href="https://github.com/om-hosting/openmeetings-php-client#documentation-for-api-endpoints" target="_blank">https://github.com/om-hosting/openmeetings-php-client#documentation-for-api-endpoints</a>
+	</p>
+	<footer>
+		<span class="text-info float-right">(2021-09-26)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">OpenAPI, Swagger and Node.js integration</h4>
+	<p class="card-text">
+		You can now use a community contributed Node.js module as well as use the OpenAPI Swagger Spec to make integration to OpenMeetings easier<br/><br/>
+		More information:
+		<ul>
+			<li>NPM module <a href="https://www.npmjs.com/package/openmeetings-node-client" target="_blank">OpenMeetings-Node-Client</a></li>
+			<li>OpenMeetings <a href="RestAPISample.html#how-to-integrate-using-nodejs">Rest API sample and Integration Docs</a></li>
+		</ul>
+		The Node.js module makes use of the OpenMeetings Rest API which is now also available in OpenAPI 3.0 format: <a href="https://openmeetings.apache.org/swagger/" target="_blank">https://openmeetings.apache.org/swagger/</a>
+		<br/>
+		There are examples for using the node module with JavaScript/ES6 as well as TypeScript available.
+	</p>
+	<footer>
+		<span class="text-info float-right">(2021-09-13)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 6.1.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 6.1.0 released!</h4>
+	<p class="card-text">
+		Release 6.1.0, provides following improvements:<br/>
+		This release provides WebRTC audio/video/screen-sharing in the Room<br/>
+
+		Stability:
+		<ul>
+			<li>Room is more stable</li>
+			<li>Screen sharing on Safari is fixed</li>
+			<li>Recording in interview room is fixed</li>
+		</ul>
+		UI:
+		<ul>
+			<li>OM theme can selected in Admin -&gt; Config</li>
+			<li>Configurable Extra menu is added to the rooms</li>
+			<li>Date/time picker is better localized</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			27 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/6.1.0/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12349533">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/6.1.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2021-07-20)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 6.0.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 6.0.0 released!</h4>
+	<p class="card-text">
+		Release 6.0.0, provides following improvements:<br/>
+		This release provides WebRTC audio/video/screen-sharing in the Room<br/>
+
+		Security:
+		<ul>
+			<li>TLS1.2. is used for OAuth</li>
+			<li>NetTest client count can be limited</li>
+			<li>Captcha is now configurable</li>
+			<li>Recordings can be globally disabled</li>
+		</ul>
+		Stability:
+		<ul>
+			<li>Audio/video in room is more stable</li>
+		</ul>
+		UI:
+		<ul>
+			<li>Translations are improved</li>
+			<li>Invitation form displayes time in client time zone</li>
+			<li>Notifications are displayed using JS Notification API</li>
+			<li>Video pods size can be fixed and configurable per-user</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			40 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/6.0.0/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12348297">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/6.0.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2021-03-09)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 5.1.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 5.1.0 released!</h4>
+	<p class="card-text">
+		Release 5.1.0, provides following improvements:<br/>
+		This release provides WebRTC audio/video/screen-sharing in the Room
+		Stability:
+		<ul>
+			<li>Room Audio/Video should be more stable</li>
+			<li>OM should work as expected after KMS server restart</li>
+			<li>Backup is further improved</li>
+			<li>Audio/Video connection established faster</li>
+			<li>Most recent versions of dependencies are used</li>
+		</ul>
+		UI:
+		<ul>
+			<li>User display name is used almost everywhere</li>
+			<li>Browser notifications are used to notify about new chat messages and moderator actions</li>
+			<li>Interview room was broken</li>
+			<li>Mute and "Mic status" were broken</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			52 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/5.1.0/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12349414">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/5.1.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2020-12-05)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 5.0.1
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 5.0.1 released!</h4>
+	<p class="card-text">
+		Release 5.0.1, provides following improvements:<br/>
+		This release provides WebRTC audio/video/screen-sharing in the Room
+		Security:
+		<ul>
+			<li>Rate limit is checked for network test web service</li>
+			<li>Libraries are updated to latest versions</li>
+			<li>Password complexity can be fine-tuned</li>
+		</ul>
+		Backup/Restore:
+		<ul>
+			<li>Group files/recordings might be restored to wrong group</li>
+		</ul>
+		UI:
+		<ul>
+			<li>Translations and support of RTL languages are improved</li>
+			<li>Dashboard widgets and personal room are always displayed in current user language</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			21 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/5.0.1/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12348725">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/5.0.1">Archived download</a>.</span>
+		<span class="text-info float-right">(2020-09-23)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 4.0.11
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 4.0.11 released!</h4>
+	<p class="card-text">
+		Release 4.0.11, provides following improvements:<br/>
+		Security:
+		<ul>
+			<li>3rd-party libraries are updated to latest versions</li>
+			<li>Email sending via SSL is added</li>
+			<li>User email addresses are hidden</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			11 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/4.0.11/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12346607">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.11">Archived download</a>.</span>
+		<span class="text-info float-right">(2020-09-02)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 5.0.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 5.0.0 released!</h4>
+	<p class="card-text">
+		Release 5.0.0, provides following improvements:<br/>
+		This release provides WebRTC audio/video/screen-sharing in the Room
+		<div class="om-callout border-info">Flash plugin is no longer required in the browser<br/>
+			<br/>
+			IMPORTANT: Java 11 is required
+		</div>
+		Security:
+		<ul>
+			<li>Libraries are updated to latest versions</li>
+			<li>More strict CSP is implemented</li>
+			<li>User accounts are hidden for regular users</li>
+			<li>User email addresses are hidden</li>
+		</ul>
+		UI:
+		<ul>
+			<li>Support for touch events is added (mobiles, tablets)</li>
+			<li>Better support for new MS Edge browser</li>
+			<li>Direct link for entering the room with room name (not ID)</li>
+			<li>Front camera is used by default</li>
+			<li>User avatar is editable at Admin-&gt;Users</li>
+		</ul>
+		Audio/Video:
+		<ul>
+			<li>Stability is improved</li>
+			<li>Connection to KMS is auto-recovering</li>
+			<li>Camera resolution changes take effect immediately</li>
+			<li>Multiple client-side JS errors are fixed</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			74 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/5.0.0/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12348040">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/5.0.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2020-08-21)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 5.0.0-M4
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 5.0.0-M4 released!</h4>
+	<p class="card-text">
+		Release 5.0.0-M4, provides following improvements:<br/>
+		This release provides WebRTC audio/video/screen-sharing in the Room
+		<div class="om-callout border-info">Flash plugin is no more required in the browser<br/>
+			<br/>
+			Please NOTE: this version might be not production ready<br/>
+			<br/>
+			IMPORTANT: Java 11 is required
+		</div>
+		UI:
+		<ul>
+			<li>Main UI library has been changed Jquery-UI -> Bootstrap</li>
+			<li>Hotkey to resize&amp;arrage "video" windows is added</li>
+			<li>Camera/Microphone on/off icons are less confusing</li>
+			<li>The room can be blocked until moderator will enter</li>
+			<li>Room sidebar dock button works as expected</li>
+			<li>Right-click menu for WB tab is fixed</li>
+			<li>Link to privacy statement is added to sign-in dialog</li>
+		</ul>
+		Audio/Video:
+		<ul>
+			<li>Audio-only clients doesn't create "video" windows</li>
+			<li>Audio/Video stream tries to re-connect in case of any issue</li>
+		</ul>
+		Backup/Restore:
+		<ul>
+			<li>Backup/restore was re-worked and better covered with tests</li>
+			<li>Multiple other issues are addressed</li>
+		</ul>
+		Integration:
+		<ul>
+			<li>OAuth: user attributes retrieval is improved</li>
+			<li>LDAP documentation is improved</li>
+			<li>User picture can be retrieved from LDAP</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			56 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/5.0.0-M4/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12346603">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/5.0.0-M4">Archived download</a>.</span>
+		<span class="text-info float-right">(2020-04-23)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 4.0.10
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 4.0.10 released!</h4>
+	<p class="card-text">
+		Release 4.0.10, provides following improvements:<br/>
+		Backup/Restore:
+		<ul>
+			<li>Multiple issues with restore were fixed</li>
+			<li>Confirmation of backup import was added</li>
+			<li>File/recording hashes are preserved when possible</li>
+		</ul>
+		White board:
+		<ul>
+			<li>Document upload/conversion is improved</li>
+			<li>Whiteboards are not auto-created on room enter</li>
+			<li>Keyboard shortcut for quick poll is added</li>
+		</ul>
+		Room:
+		<ul>
+			<li>User list is now sorted</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			11 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/4.0.10/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12345740">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.10">Archived download</a>.</span>
+		<span class="text-info float-right">(2019-12-16)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 5.0.0-M3
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 5.0.0-M3 released!</h4>
+	<p class="card-text">
+		Release 5.0.0-M3, provides following improvements:<br/>
+		This release provides WebRTC audio/video/screen-sharing in the Room
+		<div class="om-callout border-info">Flash plugin is no more required in the browser<br/>
+			<br/>
+			Please NOTE: this version might be not production ready<br/>
+			<br/>
+			IMPORTANT: Java 11 is required
+		</div>
+		Backup/Restore:
+		<ul>
+			<li>Multiple issues with restore were fixed</li>
+			<li>Confirmation of backup import was added</li>
+			<li>File/recording hashes are preserved when possible</li>
+		</ul>
+		White board:
+		<ul>
+			<li>Document upload/conversion is improved</li>
+			<li>Whiteboards are not auto-created on room enter</li>
+			<li>Keyboard shortcut for quick poll is added</li>
+		</ul>
+		Room:
+		<ul>
+			<li>User list is now sorted</li>
+		</ul>
+		Audio/Video:
+		<ul>
+			<li>Multiple issues with audio/video/screen sharing are fixed</li>
+		</ul>
+
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			36 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/5.0.0-M3/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12345741">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/5.0.0-M3">Archived download</a>.</span>
+		<span class="text-info float-right">(2019-12-15)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 5.0.0-M2
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 5.0.0-M2 released!</h4>
+	<p class="card-text">
+		Release 5.0.0-M2, provides following improvements:<br/>
+		This release provides WebRTC audio/video/screen-sharing in the Room
+		<div class="om-callout border-info">Flash plugin is no more required in the browser<br/>
+			<br/>
+			Please NOTE: this version might be not production ready<br/>
+			<br/>
+			IMPORTANT: Java 11 is required
+		</div>
+		Backup/Restore:
+		<ul>
+			<li>OAuth configs were not properly backup</li>
+		</ul>
+		White board:
+		<ul>
+			<li>Math formula is improved</li>
+			<li>Room files are improved</li>
+			<li>Clean WB REST method perform real-time clean</li>
+		</ul>
+		Room:
+		<ul>
+			<li>Rooms can be customized on group basis</li>
+			<li>"Ghost" users are not displayed in the room</li>
+			<li>External user name is displayed as expected</li>
+		</ul>
+
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			18 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/5.0.0-M2/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12345199">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/5.0.0-M2">Archived download</a>.</span>
+		<span class="text-info float-right">(2019-07-15)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 4.0.9
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 4.0.9 released!</h4>
+	<p class="card-text">
+		Release 4.0.9, provides following improvements:<br/>
+		Backup/Restore:
+		<ul>
+			<li>Recordings of deleted users were restored as public</li>
+			<li>OAuth configs were not properly backup</li>
+		</ul>
+		White board:
+		<ul>
+			<li>Math formula is improved</li>
+			<li>Room files are improved</li>
+			<li>Clean WB REST method perform real-time clean</li>
+		</ul>
+		Room:
+		<ul>
+			<li>"Ghost" users are not displayed in the room</li>
+			<li>External user name is displayed as expected</li>
+		</ul>
+
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			19 issues are fixed please check<br/>
+			<a href="https://archive.apache.org/dist/openmeetings/4.0.9/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344942">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.9">Archived download</a>.</span>
+		<span class="text-info float-right">(2019-07-15)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 5.0.0-M1
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 5.0.0-M1 released!</h4>
+	<p class="card-text">
+		Release 5.0.0-M1, provides following improvements:<br/>
+		This release provides WebRTC audio/video/screen-sharing in the Room
+		<div class="om-callout border-info">Flash plugin is no more required in the browser<br/>
+			<br/>
+			Please NOTE: this version might be not production ready
+		</div>
+
+		<br/>
+		Other fixes and improvements
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			30 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/5.0.0-M1/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342043">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/5.0.0-M1">Archived download</a>.</span>
+		<span class="text-info float-right">(2019-04-02)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 4.0.8
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 4.0.8 released!</h4>
+	<p class="card-text">
+		Release 4.0.8, provides following improvements:<br/>
+		Mobile client:
+		<ul>
+			<li>Mobile clients are displayed in user list</li>
+			<li>Audio/Video switching is more stable</li>
+		</ul>
+		OAuth:
+		<ul>
+			<li>VK based OAuth login is fixed</li>
+			<li>Integrate Wso2 Identity Server</li>
+		</ul>
+		Activities&amp;Actions:
+		<ul>
+			<li>Less actions for non-moderators</li>
+			<li>No duplicated actions are displayed</li>
+		</ul>
+		White board:
+		<ul>
+			<li>Video on WB works in latest Safari</li>
+			<li>White Out tool is added</li>
+			<li>Whiteboard size can be tuned</li>
+			<li>Link to LaTeX guide is added</li>
+		</ul>
+		Room User list:
+		<ul>
+			<li>Issue with user's display name is fixed</li>
+			<li>"Ghost" users are not displayed in the room</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			30 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/4.0.8/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344753">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.8">Archived download</a>.</span>
+		<span class="text-info float-right">(2019-03-08)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 4.0.7
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 4.0.7 released!</h4>
+	<p class="card-text">
+		Release 4.0.7, provides following improvements:<br/>
+		<ul>
+			<li>kick function in RoomWebService is fixed</li>
+			<li>Reply button is added to Private Message</li>
+			<li>Multiple issues are fixed in Room</li>
+			<li>Save white board as JPG is removed</li>
+			<li>HttpClient in AppointmentManager is updated 3.x to 4.x</li>
+			<li>"endless" invitations can now be invalidated</li>
+			<li>Ability to chose user display name is added</li>
+			<li>Delete white board object using mouse is now possible</li>
+			<li>Ability to duplicate room poll is added</li>
+			<li>Health check web service API is added</li>
+			<li>OAuth2 authorization can be done via HTTP header</li>
+			<li>cliparts can be in SVG format</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			18 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/4.0.7/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12344283">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.7">Archived download</a>.</span>
+		<span class="text-info float-right">(2019-01-01)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 4.0.6
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 4.0.6 released!</h4>
+	<p class="card-text">
+		Release 4.0.6, provides following improvements:<br/>
+		<ul>
+			<li>Multiple issues with device list retrieval in Settings dialog</li>
+			<li>Web services were improved</li>
+			<li>Multiple issues with room recording</li>
+			<li>Frontend self registering</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			16 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/4.0.6/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343986">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.6">Archived download</a>.</span>
+		<span class="text-info float-right">(2018-10-18)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 4.0.5
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 4.0.5 released!</h4>
+	<p class="card-text">
+		Release 4.0.5, provides following improvements:<br/>
+		Room:<br/>
+		<ul>
+			<li>Interview room is improved: re-designed, multiple video windows are supported</li>
+			<li>Multiple improvements in Admin</li>
+			<li>File tree is improved</li>
+			<li>Multiple improvements in white boards</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			24 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/4.0.5/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343344">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.5">Archived download</a>.</span>
+		<span class="text-info float-right">(2018-09-04)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 4.0.4
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 4.0.4 released!</h4>
+	<p class="card-text">
+		Release 4.0.4, provides following improvements:<br/>
+		<div class="om-callout border-danger">The purpose of this release is to provide GDPR compatible version of OpenMeetings</div>
+		<br/>
+		Room:<br/>
+		<ul>
+			<li>Performance is improved</li>
+			<li>Audio/Video streams were not closed in IE</li>
+			<li>File conversion on Windows is improved</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			9 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/4.0.4/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343045">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.4">Archived download</a>.</span>
+		<span class="text-info float-right">(2018-05-25)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 4.0.3
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 4.0.3 released!</h4>
+	<p class="card-text">
+		Release 4.0.3, provides following improvements:<br/>
+		<div class="om-callout border-danger">Security fix in Calendar</div>
+		<br/>
+		Room:<br/>
+		<ul>
+			<li>Performance was improved</li>
+			<li>Issues with audio/video were fixed</li>
+			<li>Quick poll was added</li>
+		</ul>
+		<br/>
+		Multiple improvements in web services
+		<br/>
+		Other fixes and improvements
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			13 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/4.0.3/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342829">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.3">Archived download</a>.</span>
+		<span class="text-info float-right">(2018-04-13)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 4.0.2
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 4.0.2 released!</h4>
+	<p class="card-text">
+		Release 4.0.2, provides following improvements:<br/>
+		<div class="om-callout border-danger">Security fixes in Chat</div>
+		<br/>
+		Chat:<br/>
+		<ul>
+			<li>Send on Enter/Ctrl+Enter</li>
+			<li>Invited guest's name displayed as expected</li>
+			<li>Turned OFF global chat is not displayed</li>
+			<li>Link works as expected</li>
+			<li>Smiles works as expected</li>
+			<li>Hover removed from chat</li>
+		</ul>
+		<br/>
+		Room:<br/>
+		<ul>
+			<li>Download as PDF</li>
+			<li>Download/screen-sharing application in IE</li>
+			<li>No duplicated users</li>
+			<li>Activities&amp;Actions improved</li>
+			<li>Number of users is displayed in the room</li>
+			<li>Mathematical formulas on WB</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			32 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/4.0.2/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342276">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.2">Archived download</a>.</span>
+		<span class="text-info float-right">(2018-02-24)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 4.0.1
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 4.0.1 released!</h4>
+	<p class="card-text">
+		Release 4.0.1, provides following improvements:<br/>
+		<ul>
+			<li>Openlaszlo code is removed</li>
+			<li>Login via OAuth is improved</li>
+			<li>External video source is room is fixed</li>
+			<li>Multiple improvements of White-board</li>
+			<li>Multiple improvements of Chat</li>
+			<li>JS/CSS files are minified and merged to reduce load time</li>
+			<li>Overall stability is improved</li>
+		</ul>
+		Other fixes and improvements
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			43 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/4.0.1/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342042">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.1">Archived download</a>.</span>
+		<span class="text-info float-right">(2017-12-09)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 4.0.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 4.0.0 released!</h4>
+	<p class="card-text">
+		Release 4.0.0, provides following improvements:<br/>
+		<ul>
+			<li>Room White board is rewritten to use HTML5 instead of Flash</li>
+			<li>All Audio/Video components were rewritten using Apache Flex</li>
+			<li>Bunch of automatic tests were written, code was cleaned-up and simplified</li>
+			<li>outdated SMSlib was removed from the dependencies</li>
+			<li>RTL in room is improved</li>
+			<li>swftool 3rd party tool is not required any more</li>
+			<li>OAuth authorization is fixed additional VK provider is added</li>
+			<li>language resources are minimized</li>
+			<li>performance is improved</li>
+		</ul>
+		<br/>
+		Admin->Config<br/>
+		<br/>
+		<ul>
+			<li>config keys are generalized</li>
+			<li>config types are introduced</li>
+		</ul>
+		Other fixes and improvements
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			515 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/4.0.0/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12324572">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/4.0.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2017-11-04)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.3.2
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.3.2 released!</h4>
+	<p class="card-text">
+		Release 3.3.2, provides following improvements:<br/>
+		<ul>
+			<li>Audio/Video in conference room is fixed</li>
+			<li>Strong password is enforced during self registration</li>
+			<li>'dashboard.show.chat' should work as expected</li>
+			<li>New Setting is added 'user can create rooms'</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<br/>
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			8 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/3.3.2/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12341445">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.3.2">Archived download</a>.</span>
+		<span class="text-info float-right">(2017-09-18)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.3.1
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.3.1 released!</h4>
+	<p class="card-text">
+		Release 3.3.1, provides following improvements:<br/>
+		<ul>
+			<li>Clustering works as expected</li>
+			<li>SIP works as expected</li>
+			<li>Multiple issues in web services were fixed</li>
+			<li>RTMPT mode is fixed</li>
+			<li>Multiple UI improvements</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<br/>
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			19 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/3.3.1/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12340997">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.3.1">Archived download</a>.</span>
+		<span class="text-info float-right">(2017-09-07)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.3.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.3.0 released!</h4>
+	<p class="card-text">
+		Release 3.3.0, provides following improvements:<br/>
+		Security fixes in<br/>
+		<ul>
+			<li>Chat</li>
+			<li>All requests via security headers</li>
+			<li>More secure password processing rules and storage</li>
+			<li>More strict rules for uploaded files</li>
+			<li>SQL injection in web services</li>
+		</ul>
+		<br/>
+		11 security vulnerabilities were addressed<br/>
+		<br/>
+		Whiteboard<br/>
+		<ul>
+			<li>Room is displayed without overlap in IE</li>
+			<li>Multiple display issues</li>
+			<li>Wb room element can now be hidden</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<br/>
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			21 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/3.3.0/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12339849">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.3.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2017-06-27)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.2.1
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.2.1 released!</h4>
+	<p class="card-text">
+		Service release 1 for 3.2.0, provides following improvements:<br/>
+		Room<br/>
+		<ul>
+			<li>Video is more stable</li>
+			<li>Office files download is fixed</li>
+			<li>Multi-upload is added</li>
+			<li>External video works as expected</li>
+			<li>WB drawing on slides works as expected</li>
+		</ul>
+		<br/>
+		Chat<br/>
+		<ul>
+			<li>chat is made resizable</li>
+			<li>multiple issues in chat are fixed</li>
+			<li>typing indicator is added</li>
+		</ul>
+		<br/>
+		Calendar<br/>
+		<ul>
+			<li>date/time validator is improved</li>
+			<li>whole group can be invited by admin to event</li>
+		</ul>
+		<br/>
+		Other fixes and improvements
+		<br/>
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			49 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/3.2.1/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12339215">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.2.1">Archived download</a>.</span>
+		<span class="text-info float-right">(2017-03-21)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.2.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.2.0 released!</h4>
+	<p class="card-text">
+		Release 3.2.0, provides Partial HTML5 room:<br/>
+		Room is partially moved to HTML5<br/>
+		<ul>
+			<li>Room menu</li>
+			<li>User list</li>
+			<li>File tree</li>
+			<li>Activities and actions</li>
+			<li>Room chat</li>
+		</ul>
+		<br/>
+		Other fixes and improvements in all components
+		<br/>
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			128 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/3.2.0/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12335565">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.2.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2017-02-12)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.1.5
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.1.5 released!</h4>
+	<p class="card-text">
+		Service release 5 for 3.1.0, provides following improvements:<br/>
+		REST/SOAP<br/>
+		<ul>
+			<li>Room security hash is fixed</li>
+			<li>Calendar web service is fixed</li>
+		</ul>
+		<br/>
+		Other fixes in Import/Export and email templates
+		<br/>
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			11 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/3.1.5/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12338819">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.5">Archived download</a>.</span>
+		<span class="text-info float-right">(2017-01-30)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.1.4
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.1.4 released!</h4>
+	<p class="card-text">
+		Service release 4 for 3.1.0, provides following improvements:<br/>
+		Room<br/>
+		<ul>
+			<li>Performance improvements</li>
+			<li>WB drawing is more smooth</li>
+			<li>WB tabs are now can be renamed</li>
+			<li>Multiple files can be selected in File tree, some issues are fixed</li>
+			<li>Poll results contains poll description</li>
+			<li>User list is fixed in restricted room</li>
+		</ul>
+		<br/>
+		Admin<br/>
+		<ul>
+			<li>Backup/Restore is fixed</li>
+			<li>Admin->Connections and Admin->Labels are fixed</li>
+		</ul>
+		<br/>
+		Other fixes in LDAP, groups, recordings, screen-sharing, calendar and installer<br/>
+		Italian and Ukrainian translations are improved
+		<br/>
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			47 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/3.1.4/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12338183">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.4">Archived download</a>.</span>
+		<span class="text-info float-right">(2017-01-11)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.1.3
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.1.3 released!</h4>
+	<p class="card-text">
+		Service release 3 for 3.1.0, provides security improvements:<br/>
+		Other fixes<br/>
+		<ul>
+			<li>Both native and tunneled RTMPS works as expected</li>
+			<li>Other fixes in localization, backup/restore, screen-sharing, invitations etc.</li>
+		</ul>
+		<br/>
+		<div class="om-callout border-danger">
+			NOTE java8 is required starting from this version<br/>
+		</div>
+		<div class="om-callout border-info">Please update to this release from any previous OpenMeetings release</div>
+		<br/>
+
+		<span>
+			21 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/3.1.3/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12337950">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.3">Archived download</a>.</span>
+		<span class="text-info float-right">(2016-09-27)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.1.2
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.1.2 released!</h4>
+	<p class="card-text">
+		Service release 2 for 3.1.0 contains following improvements and bug fixes:<br/>
+		<br/>
+		<div class="om-callout border-danger">
+			Security vulnerability <b>CVE-2016-3089 - Apache OpenMeetings XSS in SWF panel</b> was fixed,
+			please check <a href="security.html">Security Page</a><br/>
+		</div>
+		<br/>
+		Other fixes<br/>
+		<ul>
+			<li>XSS in Chat window leading to DOS</li>
+			<li>MD5 should not be used for password encryption</li>
+			<li>OpenMeetings is vulnerable to session fixation</li>
+			<li>Private recording files were available to all users</li>
+			<li>Other fixes in admin, localization, installer, invitations, room etc.</li>
+		</ul>
+		<div class="om-callout border-info">Additionally signed Screen-Sharing application is available since this release</div>
+		<br/>
+
+		<span>
+			55 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/3.1.2/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12335347">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.2">Archived download</a>.</span>
+		<span class="text-info float-right">(2016-08-12)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.1.1
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.1.1 released!</h4>
+	<p class="card-text">
+		Service release 1 for 3.1.0 contains following improvements and bug fixes:<br/>
+		<br/>
+		<div class="om-callout border-danger">
+			Multiple security vulnerabilities (CVE-2016-0783, CVE-2016-0784, CVE-2016-2163, CVE-2016-2164) were fixed,
+			please check <a href="security.html">Security Page</a><br/>
+		</div>
+		<br/>
+		Other fixes
+		<br/>
+
+		<span>
+			8 issues are fixed please check <br/>
+			<a href="https://archive.apache.org/dist/openmeetings/3.1.1/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12334656">Detailed list</a>
+		</span>
+		<div class="om-callout border-danger">please NOTE this release contains screen-sharing application signed be self-signed certificate due to <a href="https://issues.apache.org/jira/browse/INFRA-11384">INFRA-11384</a>.
+				to use screen-sharing application with modern Java, please add OM site to the list of java security exceptions by running $JAVA_HOME/bin/ControlPanel.
+		</div>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.1">Archived download</a>.</span>
+		<span class="text-info float-right">(2016-03-24)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.1.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.1.0 released!</h4>
+	<p class="card-text">
+		SOAP/REST API was implemented using CXF (Axis2 was removed from the stack)<br/>
+		Build system is now maven (not ant), SWF client is improved
+		<br/>
+		SOAP/REST:<br/>
+		<ul>
+			<li>CXF is now used instead of Axis2</li>
+			<li>API was improved: methods are simplified, API is more powerful now</li>
+			<li>junit tests are added</li>
+		</ul><br/>
+		<br/>
+		Room client:<br/>
+		<ul>
+			<li>swf8 client is removed</li>
+			<li>calls via LocalConnection are removed</li>
+			<li>room dialogs are based on wicket-jquery-ui dialogs</li>
+		</ul><br/>
+		<br/>
+		Other fixes in admin, localization, installer, invitations, room etc.
+		<br/>
+
+		<span>
+			77 issues are fixed please check
+			<a href="https://archive.apache.org/dist/openmeetings/3.1.0/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12333397">Detailed list</a>
+		</span>
+		<div class="om-callout border-danger">please NOTE this release contains screen-sharing application signed be self-signed certificate due to <a href="https://issues.apache.org/jira/browse/INFRA-11384">INFRA-11384</a>.
+				to use screen-sharing application with modern Java, please add OM site to the list of java security exceptions by running $JAVA_HOME/bin/ControlPanel.
+		</div>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2016-03-06)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.0.7
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.0.7 released!</h4>
+	<p class="card-text">
+		Service release 7 for 3.0.0 contains following improvements and bug fixes:<br/>
+		<br/>
+		<ul>
+			<li>Clustering was tested and fixed, now it works as expected both in OM and plugins</li>
+			<li>Moderator able to restrict video in restricted room from now on</li>
+			<li>Private messages with room booking are now works as expected</li>
+			<li>Crashes in admin are fixed</li>
+			<li>LDAP: group import</li>
+		</ul><br/>
+		<br/>
+		Other fixes
+		<br/>
+
+		<span>
+			20 issues are fixed please check
+			<a href="https://archive.apache.org/dist/openmeetings/3.0.7/CHANGELOG">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12332443">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.7">Archived download</a>.</span>
+		<span class="text-info float-right">(2015-09-29)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.0.6
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.0.6 released!</h4>
+	<p class="card-text">
+		Service release 6 for 3.0.0 contains following improvements and bug fixes:<br/>
+		<br/>
+		Invitation:<br/>
+		<ul>
+			<li>Invitation hash sending from the room is fixed</li>
+			<li>Invitation hash is now enable for plugin users</li>
+			<li>First and last name can be passed to SOAP function for hash generation</li>
+		</ul><br/>
+		<br/>
+		Other fixes
+		<br/>
+
+		<span>7 issues are fixed please check <a href="https://archive.apache.org/dist/openmeetings/3.0.6/CHANGELOG">CHANGELOG</a> for details
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.6">Archived download</a>.</span>
+		<span class="text-info float-right">(2015-05-25)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.0.5
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.0.5 released!</h4>
+	<p class="card-text">
+		Service release 5 for 3.0.0 contains following improvements and bug fixes:<br/>
+		<br/>
+		Installer:<br/>
+		<ul>
+			<li>Database configuration screen is added</li>
+		</ul><br/>
+		RTL:<br/>
+		<ul>
+			<li>Dashboard and Emails are more RTL friendly</li>
+		</ul>
+		<br/>
+		OAuth:<br/>
+		<ul>
+			<li>OAuth support is improved, crash is fixed</li>
+		</ul>
+		<br/>
+		Other fixes in SOAP, localizations, invitations etc.:
+		<br/>
+
+		<span>18 issues are fixed please check <a href="https://archive.apache.org/dist/openmeetings/3.0.5/CHANGELOG">CHANGELOG</a> for details
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.5">Archived download</a>.</span>
+		<span class="text-info float-right">(2015-04-26)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.0.4
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.0.4 released!</h4>
+	<p class="card-text">
+		Service release 4 for 3.0.0 contains following improvements and bug fixes:<br/>
+		<br/>
+		Screen-Sharing:<br/>
+		<ol>
+			<li>web application is now signed with trusted certificate (no warnings)</li>
+			<li>RTMPT/RTMPS works as expected</li>
+			<li>audio/video synchronization is improved</li>
+		</ol><br/>
+		Recordings:<br/>
+		<ol>
+			<li>It is now possible to rename the recording</li>
+			<li>Recordings stability is improved</li>
+		</ol>
+		<br/>
+		RTL:<br/>
+		<ol>
+			<li>Dashboard, Calendar, Settings and Admin are more RTL friendly</li>
+		</ol>
+		<br/>
+		Calendar:<br/>
+		<ol>
+			<li>Time zone support is greatly improved</li>
+		</ol>
+		<br/>
+
+		<span>67 issues are fixed please check <a href="https://archive.apache.org/dist/openmeetings/3.0.4/CHANGELOG">CHANGELOG</a> for details
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.4">Archived download</a>.</span>
+		<span class="text-info float-right">(2015-02-15)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.0.3
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.0.3 released!</h4>
+	<p class="card-text">
+		Service release 3 for 3.0.0, no new features were added, <br/>
+		More than 60 issues are fixed, recordings stability is improved, LDAP support is enhanced<br/>
+		please check <a href="https://archive.apache.org/dist/openmeetings/3.0.3/CHANGELOG">CHANGELOG</a> for details
+		<br/>
+
+		<div class="om-callout border-danger">please <b>NOTE</b> Java7 is required on both client and server from now on</div>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.3">Archived download</a>.</span>
+		<span class="text-info float-right">(2014-09-05)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.0.2
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.0.2 released!</h4>
+	<p class="card-text">
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.2">Archived download</a>.</span>
+		<span class="text-info float-right">(2014-06-04)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.0.1
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.0.1 released!</h4>
+	<p class="card-text">
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.1">Archived download</a>.</span>
+		<span class="text-info float-right">(2014-04-18)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 3.0.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 3.0.0 released!</h4>
+	<p class="card-text">
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2014-03-07)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 2.2.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 2.2.0 released!</h4>
+	<p class="card-text">
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/2.2.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2013-12-12)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 2.1.1
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 2.1.1 released!</h4>
+	<p class="card-text">
+		See <a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_1_11" target="_blank">Project Blog</a>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/2.1.1">Archived download</a>.</span>
+		<span class="text-info float-right">(2013-07-06)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 2.1.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 2.1.0 released!</h4>
+	<p class="card-text">
+		<div class="om-callout border-info">
+			<span>
+				OpenMeetings new URL, update your filters!
+				<a href="https://openmeetings.apache.org">openmeetings.apache.org</a> is the new home.
+			</span>
+			<span class="text-info float-right">(2013-01-28)</span>
+			<div class="clearfix"></div>
+		</div>
+		<div class="om-callout border-info">
+			<span>
+				OpenMeetings on the road to graduate from the Incubator
+				<a href="https://blogs.apache.org/openmeetings/entry/openmeetings_on_the_road_to" target="_blank" rel="nofollow">at our blog</a>
+			</span>
+			<span class="text-info float-right">(2012-12-07)</span>
+		</div>
+		<div class="om-callout border-info">
+			<span>
+				Some slides from our Fast Feather Track at the ApacheCon Europe 2012
+				<a href="https://blogs.apache.org/openmeetings/entry/openmeetings_apachecon_presentation_slide" target="_blank"
+					rel="nofollow">at our blog</a>
+			</span>
+			<span class="text-info float-right">(2012-11-18)</span>
+		</div>
+		<div class="om-callout border-info">
+			<span>
+				Update: Builds are available at
+				<a href="https://ci-builds.apache.org/job/OpenMeetings/" target="_blank" rel="nofollow">builds.apache.org</a>
+			</span>
+			<span class="text-info float-right">(2012-08-03)</span>
+		</div>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/2.1.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2013-04-01)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
+# Release 2.0.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 2.0.0 released!</h4>
+	<p class="card-text">
+		See <a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_0_incubating" target="_blank" rel="nofollow">Project Blog</a>
+
+		<div class="om-callout border-info">
+			<span>New committer: Timur Tleukenov</span>
+			<span class="text-info float-right">(2012-03-06)</span>
+		</div>
+		<div class="om-callout border-info">
+			<b>
+				<a href="https://demo-openmeetings.apache.org/openmeetings" target="_blank" rel="nofollow">Demo server</a>
+				updated to r1236172
+			</b>
+			<span class="text-info float-right">(2012-01-26)</span>
+		</div>
+		<div class="om-callout border-info">
+			<span>New committer: German Grekhov</span>
+			<span class="text-info float-right">(2011-12-26)</span>
+		</div>
+		<div class="om-callout border-info">
+			<span>OpenMeetings has been accepted into the Apache Incubator.</span>
+			<span class="text-info float-right">(2011-11-12)</span>
+		</div>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/2.0.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2012-07-26)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}

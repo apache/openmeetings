@@ -75,7 +75,7 @@
 			<subsection name="Database">
 				<div>All servers should be configured to use the same database. It can be on the server or on the one node
 					of the cluster.<br/>
-					<div class="bd-callout bd-callout-danger">NOTE: Db other than H2 should be used</div>
+					<div class="om-callout border-danger">NOTE: Db other than H2 should be used</div>
 				</div>
 				<ul>
 					<li>Add users who can connect to the database remotely</li>
@@ -84,7 +84,7 @@
 						<source><![CDATA[<property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=127.0.0.1)" />]]></source>
 					</li>
 					<li>
-						<div class="bd-callout bd-callout-danger">
+						<div class="om-callout border-danger">
 							IMPORTANT: Please ensure your startup scripts has OpenJPA black/white list definition
 						</div>
 						<p>Here is an example:</p>

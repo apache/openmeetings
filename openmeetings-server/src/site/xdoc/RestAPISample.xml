@@ -24,7 +24,7 @@
 			<p> For a detailed instruction which services, methods and params are available see the list in the <a href="/openmeetings-webservice/apidocs/index.html" target="_blank">SOAP/REST API</a> .
 				ALL methods that are implemented for the SOAP API are also available via REST.
 			</p>
-			<div class="bd-callout bd-callout-info">
+			<div class="om-callout border-info">
 				There is a <a href="https://openmeetings.apache.org/swagger/" target="_blank">OpenAPI spec</a> published in swagger format.
 			</div>
 			<div>
@@ -34,14 +34,14 @@
 					<li>REST: as xml <code>?_wadl</code> for example <code>https://localhost:5443/openmeetings/services/user?_wadl</code></li>
 					<li>REST: as json <code>?_wadl&amp;type=json</code> for example <code>https://localhost:5443/openmeetings/services/user?_wadl&amp;type=json</code></li>
 				</ul>
-				<div class="bd-callout bd-callout-info">
+				<div class="om-callout border-info">
 					The full list of services with All WSDLs/WADLs is available at following URL: <code>https://localhost:5443/openmeetings/services/services</code>
 				</div>
 			</div>
 		</section>
 		<section name="How to integrate using PHP and composer">
 			<p>You can integrate OpenMeetings via the Rest API into your PHP project.</p>
-			<div class="bd-callout bd-callout-info">
+			<div class="om-callout border-info">
 				There is a community sponsored free module for integrating with see: <a href="https://github.com/om-hosting/openmeetings-php-client" target="_blank">openmeetings-php-client</a>
 			</div>
 			<p>Install the module</p>
@@ -95,13 +95,13 @@ $url = $this->BASE_URL . "/hash?secure=".$hash;
 		<p>Full sample source code can be found at <a href="https://github.com/om-hosting/openmeetings-php-laravel-sample-project" target="_BLANK">https://github.com/om-hosting/openmeetings-php-laravel-sample-project</a>
 		</p>
 		<p>You can find details about all API endpoints and examples at <a href="https://github.com/om-hosting/openmeetings-php-client#documentation-for-api-endpoints" target="_blank">https://github.com/om-hosting/openmeetings-php-client#documentation-for-api-endpoints</a></p>
-		<div class="bd-callout bd-callout-info">
+		<div class="om-callout border-info">
 			A sample PHP use case for a website using Laravel can be found here: <a href="https://om-hosting.com/openmeetings-integration-php-composer/" target="_BLANK">https://om-hosting.com/openmeetings-integration-php-composer/</a>
 		</div>
 		</section>
 		<section name="How to integrate using Node.js">
 			<p>You can integrate OpenMeetings via the Rest API into your Node project.</p>
-			<div class="bd-callout bd-callout-info">
+			<div class="om-callout border-info">
 				There is a community sponsored free module for integrating with Node.JS see: <a href="https://www.npmjs.com/package/openmeetings-node-client" target="_blank">openmeetings-node-client</a>
 			</div>
 			<p>Install the module</p>
@@ -147,7 +147,7 @@ const loginUrl = `${BASE_URL}/hash?secure=${hashResult.message}`
 			</ol>
 		</p>
 		<p>More in depth examples and use cases can be found at the module page <a href="https://www.npmjs.com/package/openmeetings-node-client" target="_blank">https://www.npmjs.com/package/openmeetings-node-client</a></p>
-		<div class="bd-callout bd-callout-info">
+		<div class="om-callout border-info">
 			A sample Node.js use case for a website using Express.js can be found here: <a href="https://om-hosting.com/openmeetings-integration-nodejs/" target="_BLANK">https://om-hosting.com/openmeetings-integration-nodejs/</a>
 		</div>
 		</section>

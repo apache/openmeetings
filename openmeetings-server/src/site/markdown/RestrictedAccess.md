@@ -2,7 +2,7 @@
 Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
 
-#How to restrict access to your Openmeetings server
+# How to restrict access to your Openmeetings server
 
 ## Server Side
 You can protect your OpenMeetings instance from beeing accessed from 3th party by setting up `RemoteAddrValve`

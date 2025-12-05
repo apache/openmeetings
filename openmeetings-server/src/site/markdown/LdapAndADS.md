@@ -148,7 +148,7 @@ OpenMeetings:
 
 -   Open Administration->LDAP
 
-    <img src="../resources/images/ldap_screen.png"></img>
+    <img src="./images/ldap_screen.png"></img>
 
 -   In the right pane of the main window labeled "LDAP Config" set
     the Name of the LDAP DB which you want to appear in the popup

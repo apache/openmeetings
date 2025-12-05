@@ -53,7 +53,7 @@ iframe {
 	font-size: 20px;
 	background: linear-gradient(to right, lime, green);
 	color: white !important;
-	max-width: 385px;
+	max-width: 485px;
 	font-weight: bold;
 }
 .install-steps a {
@@ -76,7 +76,9 @@ iframe {
 .copyright {
 	text-align: center;
 }
-.card.callout {
+.om-callout {
+	border: 1px solid rgba(0, 0, 0, .125);
+	padding: .5rem !important;
 	border-left-width: .25rem;
 	border-radius: .25rem;
 }

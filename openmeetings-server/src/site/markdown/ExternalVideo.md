@@ -6,22 +6,22 @@ Licensed under the Apache License, Version 2.0 (the "License") http://www.apache
 
 ## Create and use Fake video camera
 
-#### Create fake video device
+### Create fake video device
 ```
 sudo modprobe v4l2loopback max_buffers=2 devices=1 video_nr=21 exclusive_caps=1 card_label="Virtual Webcam"
 ```
 
-#### Create stream from **Image**
+### Create stream from **Image**
 ```
 sudo ffmpeg -stream_loop -1 -re -i ~/Downloads/om/img/IMG_20210207_135607.jpg -pix_fmt yuv420p -vcodec rawvideo -f v4l2 /dev/video21
 ```
 
-#### Create stream from **Video**
+### Create stream from **Video**
 ```
 sudo ffmpeg -stream_loop -1 -re -i ~/Downloads/om/video/Avengers2.mp4 -pix_fmt yuv420p -vcodec rawvideo -f v4l2 /dev/video21
 ```
 
-#### Clean everything up
+### Clean everything up
 
  1. Stop ffmpeg process
  2. `sudo modprobe -r v4l2loopback`
@@ -29,7 +29,7 @@ sudo ffmpeg -stream_loop -1 -re -i ~/Downloads/om/video/Avengers2.mp4 -pix_fmt y
 
 ## Connecting external video source
 
-<div class="bd-callout bd-callout-danger">
+<div class="om-callout border-danger">
 	Please NOTE: this functionality is not yet implemented in 5.0.x
 </div>
 

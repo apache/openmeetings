@@ -39,7 +39,7 @@
 					<li>Build plugin from sources</li>
 					<li>Unpack it into bitrix/modules</li>
 					<li>Install via Admin</li>
-					<li>Add OPenmeetings component to any page.</li>
+					<li>Add OpenMeetings component to any page.</li>
 				</ol>
 			</div>
 		</section>

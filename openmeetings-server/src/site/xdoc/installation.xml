@@ -28,7 +28,7 @@
 			</p>
 			<div>
 				<div>
-					<h3><b>3 <i>steps</i> to install OpenMeetings</b></h3>
+					<h2><b>3 <i>steps</i> to install OpenMeetings</b></h2>
 					<ol class="install-steps">
 						<li class="step">
 							<div>
@@ -183,7 +183,7 @@
 			</ol>
 		</section>
 		<section name="Tutorials by Alvaro Bustos">
-			<h4>OpenMeetings Installation tutorials by Alvaro Bustos for:</h4>
+			<h2>OpenMeetings Installation tutorials by Alvaro Bustos for:</h2>
 			<div>
 				Arch Linux, CentOS, Debian, Devuan, Fedora, Gentoo, MacOS, Mageia, Manjaro, Mint
 				, MX Linux, OpenSuse, PCLinuxOS, Slackware, Ubuntu and Windows.

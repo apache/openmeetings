@@ -10,7 +10,7 @@ Each instance of OpenMeetings requires a running Kurento Media Server (KMS). The
 
 The default config of OpenMeetings and Kurento Media Server is a 1:1 mapping. Each OpenMeetings instance is mapped exactly to 1 KMS instance as well as OpenMeetings and KMS running on the same host.
 
-<div class="bd-callout bd-callout-danger">
+<div class="om-callout border-danger">
 	If running on the same host OpenMeetings and KMS should be run under same user.
 </div>
 
@@ -27,7 +27,7 @@ Assuming OpenMeetings runs on your machine locally above will work without any c
 
 ## Specify/Install Turn server
 
-<div class="bd-callout bd-callout-warning">Only local installation will work without TURN server - also you require a valid SSL certificate for doing webRTC Audio/Video for anything other then local installations</div>
+<div class="om-callout border-warning">Only local installation will work without TURN server - also you require a valid SSL certificate for doing webRTC Audio/Video for anything other then local installations</div>
 
 See the installation instructions at <a href="https://doc-kurento.readthedocs.io/en/stable/user/installation.html">Install Kurento Media server</a> for the relevant section on CoTurn.
 

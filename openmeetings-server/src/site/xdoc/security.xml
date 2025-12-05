@@ -38,7 +38,7 @@
 				as well as in the "[PRODUCT]" and "[VERSION]" lines in your submissions.
 				While this may seem redundant, including the information in both places satisfies different use cases and supports automation.
 			</p>
-			<div class="bd-callout bd-callout-info">
+			<div class="om-callout border-info">
 				IMPORTANT: We do our best to provide logging config with enough details so you can audit your OpenMeetings instance.
 				But depending on your current config logs might contain sensitive info.<br/>
 				Please contact <code>security (at) openmeetings (dot) apache (dot) org</code> if you find a place where we still log sensitive information, so we can improve the defaults.<br/>
