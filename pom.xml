@@ -1498,6 +1498,7 @@
 							<exclude>**/.settings/**</exclude>
 							<exclude>.gitattributes</exclude>
 						</excludes>
+						<verbose>true</verbose>
 					</configuration>
 				</plugin>
 				<plugin>
