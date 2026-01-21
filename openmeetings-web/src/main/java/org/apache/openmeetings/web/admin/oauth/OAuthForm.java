@@ -54,7 +54,7 @@ import org.apache.wicket.util.string.Strings;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7IconType;
 import jakarta.inject.Inject;
 
 public class OAuthForm extends AdminBaseForm<OAuthServer> {
@@ -79,7 +79,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 					target.add(attrsContainer);
 				}
 			};
-			del.setIconType(FontAwesome6IconType.xmark_s)
+			del.setIconType(FontAwesome7IconType.xmark_s)
 					.add(newOkCancelDangerConfirm(this, getString("833")));
 			item.add(new Label("key", Model.of(entry.getKey())))
 				.add(new Label("value", Model.of(entry.getValue())))

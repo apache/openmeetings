@@ -84,7 +84,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.SplitButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7IconType;
 import jakarta.inject.Inject;
 
 public abstract class FileTreePanel extends Panel {
@@ -264,7 +264,7 @@ public abstract class FileTreePanel extends Panel {
 					public void onClick(AjaxRequestTarget target) {
 						onDownlownClick(target, ext);
 					}
-				}.setIconType(FontAwesome6IconType.download_s);
+				}.setIconType(FontAwesome7IconType.download_s);
 			}
 
 			@Override

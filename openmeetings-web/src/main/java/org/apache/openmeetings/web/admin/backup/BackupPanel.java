@@ -55,7 +55,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.progress.UpdatableProgressBar;
 import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7IconType;
 import jakarta.inject.Inject;
 /**
  * Panel component to manage Backup Import/Export
@@ -183,7 +183,7 @@ public class BackupPanel extends AdminBasePanel {
 					target.add(feedback);
 				}
 			};
-			download.setIconType(FontAwesome6IconType.file_arrow_down_s);
+			download.setIconType(FontAwesome7IconType.file_arrow_down_s);
 			progressBar = new UpdatableProgressBar("progress", new Model<>(0), BackgroundColorBehavior.Color.Info, true) {
 				private static final long serialVersionUID = 1L;
 

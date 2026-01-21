@@ -37,7 +37,7 @@ class TestDatabaseStructureAppointment extends AbstractOmServerTest {
 	}
 
 	private static Date getDate(int hour, int minute) {
-		return CalendarHelper.getDate(LocalDateTime.of(2008, 8, 17, 12, 28), getTzId());
+		return CalendarHelper.getDate(LocalDateTime.of(2008, 8, 17, hour, minute), getTzId());
 	}
 
 	private void createAppointment(int startHour, int startMinute, int endHour, int endMinute) {

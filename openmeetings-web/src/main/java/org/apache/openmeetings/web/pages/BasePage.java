@@ -55,7 +55,7 @@ import org.wicketstuff.urlfragment.AsyncUrlFragmentAwarePage;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapResourcesBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6CssReference;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7CssReference;
 
 public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = 1L;
@@ -146,7 +146,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 					.append(getGaCode()).append("', ").append(isMainPage()).append(");");
 			response.render(OnDomReadyHeaderItem.forScript(script));
 		}
-		response.render(CssHeaderItem.forReference(FontAwesome6CssReference.instance()));
+		response.render(CssHeaderItem.forReference(FontAwesome7CssReference.instance()));
 		BootstrapResourcesBehavior.instance().renderHead(Bootstrap.getSettings(getApplication()), response);
 		response.render(new FilteredHeaderItem(CssHeaderItem.forUrl("css/custom.css"), CUSTOM_CSS_FILTER));
 	}

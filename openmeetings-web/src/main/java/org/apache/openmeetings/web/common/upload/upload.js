@@ -14,7 +14,7 @@ const Upload = (function() {
 				return; //ping
 			}
 			const m = JSON.parse(msg);
-			if (m && 'omws-upload' === m.type && curUid === m.uuid) {
+			if ('omws-upload' === m?.type && curUid === m.uuid) {
 				switch (m.status) {
 					case 'ERROR':
 						OmUtil.error(m.message);

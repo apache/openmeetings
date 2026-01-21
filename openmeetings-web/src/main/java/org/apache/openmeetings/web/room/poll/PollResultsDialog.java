@@ -64,7 +64,7 @@ import org.wicketstuff.jqplot.lib.elements.RendererOptions;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7IconType;
 import jakarta.inject.Inject;
 
 public class PollResultsDialog extends Modal<RoomPoll> {
@@ -120,7 +120,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 				close(target);
 			}
 		});
-		close.setIconType(FontAwesome6IconType.xmark_s).add(newOkCancelDangerConfirm(this, getString("1419")));
+		close.setIconType(FontAwesome7IconType.xmark_s).add(newOkCancelDangerConfirm(this, getString("1419")));
 		close.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		addButton(delete = new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, null, Buttons.Type.Outline_Danger, new ResourceModel("1420")) {
 			private static final long serialVersionUID = 1L;
@@ -134,7 +134,7 @@ public class PollResultsDialog extends Modal<RoomPoll> {
 				close(target);
 			}
 		});
-		delete.setIconType(FontAwesome6IconType.trash_s).add(newOkCancelDangerConfirm(this, getString("1421")));
+		delete.setIconType(FontAwesome7IconType.trash_s).add(newOkCancelDangerConfirm(this, getString("1421")));
 		delete.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 		addButton(clone = new BootstrapAjaxLink<>(BUTTON_MARKUP_ID, null, Buttons.Type.Outline_Danger, new ResourceModel("poll.clone")) {
 			private static final long serialVersionUID = 1L;

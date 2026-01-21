@@ -46,7 +46,7 @@ import org.apache.wicket.model.ResourceModel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7IconType;
 import jakarta.inject.Inject;
 
 public class RoomListPanel extends Panel {
@@ -86,7 +86,7 @@ public class RoomListPanel extends Panel {
 				private static final long serialVersionUID = 1L;
 
 				{
-					setIconType(FontAwesome6IconType.rotate_s);
+					setIconType(FontAwesome7IconType.rotate_s);
 				}
 
 				@Override

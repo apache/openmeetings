@@ -16,7 +16,7 @@ function addOmAdminConfigHandlers() {
 				val += 'Shift+';
 			}
 			const code = evt.code;
-			if (typeof(code) === 'undefined') {
+			if (code === undefined) {
 				return;
 			}
 			val += code;

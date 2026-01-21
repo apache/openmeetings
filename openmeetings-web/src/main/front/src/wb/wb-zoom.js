@@ -72,7 +72,7 @@ module.exports = class WbZoom {
 							, wbsw = wbs.find('.wbs-width').val(wbObj.width)
 							, wbsh = wbs.find('.wbs-height').val(wbObj.height);
 						function isNumeric(n) {
-							return !isNaN(parseInt(n)) && isFinite(n);
+							return !Number.isNaN(parseInt(n)) && isFinite(n);
 						}
 						wbs.modal('show');
 						wbs.find('.btn-ok').off().click(function() {
@@ -104,7 +104,7 @@ module.exports = class WbZoom {
 					zoomBar.find('.zoom').change(function() {
 						const zzz = $(this).val();
 						self.zoomMode = 'ZOOM';
-						if (isNaN(zzz)) {
+						if (Number.isNaN(zzz)) {
 							switch (zzz) {
 								case 'FULL_FIT':
 								case 'PAGE_WIDTH':

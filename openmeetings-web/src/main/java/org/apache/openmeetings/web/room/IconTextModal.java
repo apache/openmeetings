@@ -26,8 +26,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.Icon;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.ColorBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconTypeBuilder;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconTypeBuilder.FontAwesome6Solid;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7IconTypeBuilder;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7IconTypeBuilder.FontAwesome7Solid;
 
 public class IconTextModal extends Modal<String> {
 	private static final long serialVersionUID = 1L;
@@ -69,8 +69,8 @@ public class IconTextModal extends Modal<String> {
 
 	public IconTextModal withErrorIcon(ColorBehavior.Color color) {
 		add(new ColorBehavior(color));
-		return withIcon(FontAwesome6IconTypeBuilder.on(FontAwesome6Solid.triangle_exclamation)
-			.size(FontAwesome6IconTypeBuilder.Size.three)
+		return withIcon(FontAwesome7IconTypeBuilder.on(FontAwesome7Solid.triangle_exclamation)
+			.size(FontAwesome7IconTypeBuilder.Size.three)
 			.build());
 	}
 }

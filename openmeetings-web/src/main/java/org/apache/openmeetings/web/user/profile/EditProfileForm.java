@@ -53,7 +53,7 @@ import org.apache.wicket.util.string.Strings;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7IconType;
 import jakarta.inject.Inject;
 
 public class EditProfileForm extends Form<User> {
@@ -192,7 +192,7 @@ public class EditProfileForm extends Form<User> {
 			toggleOtp.getBehaviors(ConfirmationBehavior.class).stream().forEach(b -> toggleOtp.remove(b));
 		}
 		toggleOtp.setLabel(new ResourceModel(enabled ? "otp.disable" : "otp.enable"));
-		toggleOtp.setIconType(enabled ? FontAwesome6IconType.square_check_r : FontAwesome6IconType.square_r);
+		toggleOtp.setIconType(enabled ? FontAwesome7IconType.square_check_r : FontAwesome7IconType.square_r);
 		toggleOtp.setType(enabled ? Buttons.Type.Outline_Danger : Buttons.Type.Primary);
 		if (handler != null) {
 			handler.add(toggleOtp);

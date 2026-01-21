@@ -36,7 +36,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.tempusdominus.TempusDominusConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.tempusdominus.AbstractTempusDominusWithIcon;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7IconType;
 
 public abstract class AbstractOmDateTimePicker<T extends Serializable> extends FormComponentPanel<T> {
 	private static final long serialVersionUID = 1L;
@@ -58,15 +58,15 @@ public abstract class AbstractOmDateTimePicker<T extends Serializable> extends F
 						.withDateFormats(null)
 				)
 				.withIcons(cfg -> cfg
-						.withDateIcon(FontAwesome6IconType.calendar_s)
-						.withTimeIcon(FontAwesome6IconType.clock_s)
-						.withUpIcon(FontAwesome6IconType.arrow_up_s)
-						.withDownIcon(FontAwesome6IconType.arrow_down_s)
-						.withPreviousIcon(FontAwesome6IconType.arrow_left_s)
-						.withNextIcon(FontAwesome6IconType.arrow_right_s)
-						.withTodayIcon(FontAwesome6IconType.calendar_check_s)
-						.withClearIcon(FontAwesome6IconType.eraser_s)
-						.withCloseIcon(FontAwesome6IconType.xmark_s));
+						.withDateIcon(FontAwesome7IconType.calendar_s)
+						.withTimeIcon(FontAwesome7IconType.clock_s)
+						.withUpIcon(FontAwesome7IconType.arrow_up_s)
+						.withDownIcon(FontAwesome7IconType.arrow_down_s)
+						.withPreviousIcon(FontAwesome7IconType.arrow_left_s)
+						.withNextIcon(FontAwesome7IconType.arrow_right_s)
+						.withTodayIcon(FontAwesome7IconType.calendar_check_s)
+						.withClearIcon(FontAwesome7IconType.eraser_s)
+						.withCloseIcon(FontAwesome7IconType.xmark_s));
 		picker = new AbstractTempusDominusWithIcon<>("picker", new Model<>(), patch(config)) {
 			private static final long serialVersionUID = 1L;
 

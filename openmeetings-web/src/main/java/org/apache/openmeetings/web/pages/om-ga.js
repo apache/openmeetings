@@ -1,11 +1,11 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 function initGA(code, hash) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag() {
+	const dataLayer = globalThis.dataLayer || [];
+	const  gtag = () => {
 		dataLayer.push(arguments);
 	}
-	function newPage() {
-		const page = location.pathname + (location.search.indexOf('app=') > -1 ? location.search : location.hash);
+	const newPage = () => {
+		const page = location.pathname + (location.search.includes('app=') ? location.search : location.hash);
 		gtag('config', code, {'page_path': page});
 	}
 	gtag('js', new Date());
@@ -16,8 +16,8 @@ function initGA(code, hash) {
 	});
 	newPage();
 	if (hash) {
-		$(window).off('hashchange').on('hashchange', () => {
-			if (location.hash.indexOf('/') > -1) {
+		$(globalThis).off('hashchange').on('hashchange', () => {
+			if (location.hash.includes('/')) {
 				newPage();
 			}
 		});

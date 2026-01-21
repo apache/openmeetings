@@ -80,7 +80,7 @@ import org.apache.wicket.model.util.ListModel;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7IconType;
 import jakarta.inject.Inject;
 
 public class MessagesContactsPanel extends UserBasePanel {
@@ -205,7 +205,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 						target.add(folders, moveDropDown);
 					}
 				};
-				del.setIconType(FontAwesome6IconType.xmark_s)
+				del.setIconType(FontAwesome7IconType.xmark_s)
 						.add(newOkCancelDangerConfirm(this, getString("833")));
 				item.add(del);
 				item.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> selectFolder(item, item.getModelObject().getId(), target)));
@@ -449,7 +449,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 						updateContacts(target);
 					}
 				};
-				del.setIconType(FontAwesome6IconType.xmark_s)
+				del.setIconType(FontAwesome7IconType.xmark_s)
 						.add(newOkCancelDangerConfirm(this, getString("833")));
 				item.add(del.setVisible(!uc.isPending()));
 			}

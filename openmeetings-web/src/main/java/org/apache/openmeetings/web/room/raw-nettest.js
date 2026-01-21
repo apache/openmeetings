@@ -23,10 +23,10 @@ const NetTest = (function() {
 		$('.nettest button[data-start="true"]').click()
 	}
 	function __cleanOptions(options) {
-		if (isNaN(options.attempts)) {
+		if (Number.isNaN(options.attempts)) {
 			options.attempts = 0;
 		}
-		if (isNaN(options.step)) {
+		if (Number.isNaN(options.step)) {
 			options.step = options.measures;
 			options.astep = options.attempts;
 		}

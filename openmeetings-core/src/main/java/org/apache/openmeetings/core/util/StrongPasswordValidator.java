@@ -79,7 +79,7 @@ public class StrongPasswordValidator implements IValidator<String> {
 		for (int i = 0; i < lword.length() - 3; ++i) {
 			String substr = lword.substring(i, i + 3);
 			if (lpwd.indexOf(substr) > -1) {
-				log.trace("Part '{}' of '{}' [{}] found in pwd '{}' []", substr, lword, word, lpwd, password);
+				log.trace("Part '{}' of '{}' [{}] found in pwd '{}' []", substr, lword, word, lpwd);
 				return true;
 			}
 		}

@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7IconType;
 
 public abstract class UploadableImagePanel extends ImagePanel {
 	private static final long serialVersionUID = 1L;
@@ -91,7 +91,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 				}
 			};
 			add(remove
-					.setIconType(FontAwesome6IconType.xmark_s)
+					.setIconType(FontAwesome7IconType.xmark_s)
 					.add(newOkCancelConfirm(this, getString("833"))));
 			fileUploadField.add(new AjaxFormSubmitBehavior(form, "change") {
 				private static final long serialVersionUID = 1L;

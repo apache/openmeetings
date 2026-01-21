@@ -83,7 +83,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButt
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.utilities.BackgroundColorBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome7IconType;
 import jakarta.inject.Inject;
 
 public class RoomForm extends AdminBaseForm<Room> {
@@ -110,7 +110,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					updateClients(target);
 				}
 			};
-			del.setIconType(FontAwesome6IconType.xmark_s)
+			del.setIconType(FontAwesome7IconType.xmark_s)
 					.add(newOkCancelDangerConfirm(this, getString("833")));
 			item.add(new Label("clientId", "" + c.getUserId()))
 				.add(new Label("clientLogin", "" + c.getUser().getLogin()))
@@ -306,7 +306,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 						target.add(moderatorContainer);
 					}
 				};
-				del.setIconType(FontAwesome6IconType.xmark_s)
+				del.setIconType(FontAwesome7IconType.xmark_s)
 						.add(newOkCancelDangerConfirm(this, getString("833")));
 				item.add(new CheckBox("superModerator", new PropertyModel<>(moderator, "superModerator")))
 					.add(new Label("userId", String.valueOf(moderator.getUser().getId())))
@@ -392,7 +392,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 						target.add(filesContainer);
 					}
 				};
-				del.setIconType(FontAwesome6IconType.xmark_s)
+				del.setIconType(FontAwesome7IconType.xmark_s)
 						.add(newOkCancelDangerConfirm(this, getString("833")));
 				item.add(new Label("name", new PropertyModel<>(rf.getFile(), "name")))
 					.add(new Label("wbIdx", new PropertyModel<>(rf, "wbIdx")))
