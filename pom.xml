@@ -71,10 +71,10 @@
 		<reflow-maven-skin.version>2.4.0-beta4</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<replacer.version>1.5.3</replacer.version>
-		<xml-maven-plugin.version>1.2.0</xml-maven-plugin.version>
+		<xml-maven-plugin.version>1.2.1</xml-maven-plugin.version>
 		<saxon.version>8.7</saxon.version>
-		<buildnumber-maven-plugin.version>3.2.1</buildnumber-maven-plugin.version>
-		<keytool-maven-plugin.version>2.0.0</keytool-maven-plugin.version>
+		<buildnumber-maven-plugin.version>3.3.0</buildnumber-maven-plugin.version>
+		<keytool-maven-plugin.version>2.0.1</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.1.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.versoin>0.8.14</jacoco-maven-plugin.versoin>
@@ -90,8 +90,8 @@
 		<wicket.version>10.8.0</wicket.version>
 		<wicketstuff.version>10.8.0</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.14</wicket-bootstrap.version>
-		<fullcalendar.version>6.1.15</fullcalendar.version>
-		<spring.version>7.0.2</spring.version>
+		<fullcalendar.version>6.1.20</fullcalendar.version>
+		<spring.version>7.0.3</spring.version>
 		<tomcat.version>11.0.15</tomcat.version>
 		<jetty.version>11.0.26</jetty.version>
 		<ical4j.version>4.2.3</ical4j.version>
@@ -120,7 +120,7 @@
 		<commons-net.version>3.12.0</commons-net.version>
 		<dom4j.version>2.2.0</dom4j.version>
 		<h2.version>2.4.240</h2.version>
-		<postgresql.version>42.7.8</postgresql.version>
+		<postgresql.version>42.7.9</postgresql.version>
 		<mysql.version>9.5.0</mysql.version>
 		<mssql.version>13.2.1.jre11</mssql.version>
 		<ojdbc.version>19.29.0.0</ojdbc.version>
@@ -130,7 +130,7 @@
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
 		<tika-parsers.version>3.2.3</tika-parsers.version>
 		<slf4j.version>2.0.17</slf4j.version>
-		<logback.version>1.5.24</logback.version>
+		<logback.version>1.5.25</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.83</bcprov.version>
 		<mockito.version>5.21.0</mockito.version>
@@ -143,7 +143,7 @@
 		<jaxb-runtime.version>4.0.6</jaxb-runtime.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
-		<swagger.version>2.2.41</swagger.version>
+		<swagger.version>2.2.42</swagger.version>
 		<jsr305.version>3.0.2</jsr305.version>
 		<totp.version>1.7.1</totp.version>
 		<!--  Exclude all generated code  -->

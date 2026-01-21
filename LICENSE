@@ -230,7 +230,7 @@ conditions of the following licenses.
 
     BSD-2-Clause
 
-        * PostgreSQL JDBC Driver (org.postgresql:postgresql:42.7.8 - https://jdbc.postgresql.org)
+        * PostgreSQL JDBC Driver (org.postgresql:postgresql:42.7.9 - https://jdbc.postgresql.org)
 
     CC BY 3.0
 
@@ -259,8 +259,8 @@ conditions of the following licenses.
     Eclipse Public License, Version 1.0
 
         * H2 Database Engine (com.h2database:h2:2.4.240 - https://h2database.com)
-        * Logback Classic Module (ch.qos.logback:logback-classic:1.5.24 - http://logback.qos.ch/logback-classic)
-        * Logback Core Module (ch.qos.logback:logback-core:1.5.24 - http://logback.qos.ch/logback-core)
+        * Logback Classic Module (ch.qos.logback:logback-classic:1.5.25 - http://logback.qos.ch/logback-classic)
+        * Logback Core Module (ch.qos.logback:logback-core:1.5.25 - http://logback.qos.ch/logback-core)
 
     Eclipse Public License v2.0
 
@@ -286,7 +286,7 @@ conditions of the following licenses.
     MIT License
 
         * @eonasdan/tempus-dominus (org.webjars.npm:eonasdan__tempus-dominus:6.10.4 - https://www.webjars.org)
-        * @fullcalendar/bootstrap5 (org.webjars.npm:fullcalendar__bootstrap5:6.1.15 - https://www.webjars.org)
+        * @fullcalendar/bootstrap5 (org.webjars.npm:fullcalendar__bootstrap5:6.1.20 - https://www.webjars.org)
         * @fullcalendar/core (org.webjars.npm:fullcalendar__core:6.1.20 - https://www.webjars.org)
         * @fullcalendar/daygrid (org.webjars.npm:fullcalendar__daygrid:6.1.20 - https://www.webjars.org)
         * @fullcalendar/google-calendar (org.webjars.npm:fullcalendar__google-calendar:6.1.15 - https://www.webjars.org)
@@ -304,7 +304,7 @@ conditions of the following licenses.
         * Bouncy Castle JavaMail Jakarta S/MIME APIs (org.bouncycastle:bcjmail-jdk18on:1.81 - https://www.bouncycastle.org/download/bouncy-castle-java/)
         * Bouncy Castle PKIX, CMS, EAC, TSP, PKCS, OCSP, CMP, and CRMF APIs (org.bouncycastle:bcpkix-jdk18on:1.81 - https://www.bouncycastle.org/download/bouncy-castle-java/)
         * Bouncy Castle Provider (org.bouncycastle:bcprov-jdk18on:1.83 - https://www.bouncycastle.org/download/bouncy-castle-java/)
-        * Checker Qual (org.checkerframework:checker-qual:3.49.5 - https://checkerframework.org/)
+        * Checker Qual (org.checkerframework:checker-qual:3.52.0 - https://checkerframework.org/)
         * dd-plist (com.googlecode.plist:dd-plist:1.28 - http://www.github.com/3breadt/dd-plist)
         * dev.samstevens.totp:totp (dev.samstevens.totp:totp:1.7.1 - https://github.com/samdjstevens/java-totp/totp)
         * fullcalendar (org.webjars.npm:fullcalendar:6.1.15 - https://www.webjars.org)
@@ -483,8 +483,8 @@ conditions of the following licenses.
         * Kurento JSON-RPC Client (org.kurento:kurento-jsonrpc-client:7.3.0 - https://kurento.openvidu.io/kurento-jsonrpc/kurento-jsonrpc-client/)
         * library (de.agilecoders.wicket.webjars:wicket-webjars:4.0.14 - https://github.com/l0rdn1kk0n/wicket-webjars/wicket-webjars)
         * Log4j Implemented Over SLF4J (org.slf4j:log4j-over-slf4j:2.0.17 - http://www.slf4j.org)
-        * micrometer-commons (io.micrometer:micrometer-commons:1.16.1 - https://github.com/micrometer-metrics/micrometer)
-        * micrometer-observation (io.micrometer:micrometer-observation:1.16.1 - https://github.com/micrometer-metrics/micrometer)
+        * micrometer-commons (io.micrometer:micrometer-commons:1.16.2 - https://github.com/micrometer-metrics/micrometer)
+        * micrometer-observation (io.micrometer:micrometer-observation:1.16.2 - https://github.com/micrometer-metrics/micrometer)
         * Netty/Buffer (io.netty:netty-buffer:4.2.7.Final - https://netty.io/netty-buffer/)
         * Netty/Codec/Base (io.netty:netty-codec-base:4.2.7.Final - https://netty.io/netty-codec-base/)
         * Netty/Codec/Compression (io.netty:netty-codec-compression:4.2.7.Final - https://netty.io/netty-codec-compression/)
@@ -530,18 +530,18 @@ conditions of the following licenses.
         * rome (com.rometools:rome:2.1.0 - http://rometools.com/rome)
         * rome-utils (com.rometools:rome-utils:2.1.0 - http://rometools.com/rome-utils)
         * SparseBitSet (com.zaxxer:SparseBitSet:1.3 - https://github.com/brettwooldridge/SparseBitSet)
-        * Spring AOP (org.springframework:spring-aop:7.0.2 - https://github.com/spring-projects/spring-framework)
-        * Spring Beans (org.springframework:spring-beans:7.0.2 - https://github.com/spring-projects/spring-framework)
-        * Spring Context (org.springframework:spring-context:7.0.2 - https://github.com/spring-projects/spring-framework)
-        * Spring Context Support (org.springframework:spring-context-support:7.0.2 - https://github.com/spring-projects/spring-framework)
-        * Spring Core (org.springframework:spring-core:7.0.2 - https://github.com/spring-projects/spring-framework)
-        * Spring Expression Language (SpEL) (org.springframework:spring-expression:7.0.2 - https://github.com/spring-projects/spring-framework)
-        * Spring JDBC (org.springframework:spring-jdbc:7.0.2 - https://github.com/spring-projects/spring-framework)
-        * Spring Object/Relational Mapping (org.springframework:spring-orm:7.0.2 - https://github.com/spring-projects/spring-framework)
-        * Spring Transaction (org.springframework:spring-tx:7.0.2 - https://github.com/spring-projects/spring-framework)
-        * Spring Web (org.springframework:spring-web:7.0.2 - https://github.com/spring-projects/spring-framework)
-        * Spring Web MVC (org.springframework:spring-webmvc:7.0.2 - https://github.com/spring-projects/spring-framework)
-        * swagger-annotations (io.swagger.core.v3:swagger-annotations:2.2.41 - https://github.com/swagger-api/swagger-core/modules/swagger-annotations)
+        * Spring AOP (org.springframework:spring-aop:7.0.3 - https://github.com/spring-projects/spring-framework)
+        * Spring Beans (org.springframework:spring-beans:7.0.3 - https://github.com/spring-projects/spring-framework)
+        * Spring Context (org.springframework:spring-context:7.0.3 - https://github.com/spring-projects/spring-framework)
+        * Spring Context Support (org.springframework:spring-context-support:7.0.3 - https://github.com/spring-projects/spring-framework)
+        * Spring Core (org.springframework:spring-core:7.0.3 - https://github.com/spring-projects/spring-framework)
+        * Spring Expression Language (SpEL) (org.springframework:spring-expression:7.0.3 - https://github.com/spring-projects/spring-framework)
+        * Spring JDBC (org.springframework:spring-jdbc:7.0.3 - https://github.com/spring-projects/spring-framework)
+        * Spring Object/Relational Mapping (org.springframework:spring-orm:7.0.3 - https://github.com/spring-projects/spring-framework)
+        * Spring Transaction (org.springframework:spring-tx:7.0.3 - https://github.com/spring-projects/spring-framework)
+        * Spring Web (org.springframework:spring-web:7.0.3 - https://github.com/spring-projects/spring-framework)
+        * Spring Web MVC (org.springframework:spring-webmvc:7.0.3 - https://github.com/spring-projects/spring-framework)
+        * swagger-annotations (io.swagger.core.v3:swagger-annotations:2.2.42 - https://github.com/swagger-api/swagger-core/modules/swagger-annotations)
         * tomcat (org.apache.tomcat:tomcat:11.0.15 - https://tomcat.apache.org/)
         * UNO interface library (org.openoffice:unoil:4.1.2 - https://wiki.openoffice.org/wiki/Uno)
         * Wicket Auth Roles (org.apache.wicket:wicket-auth-roles:10.8.0 - http://wicket.apache.org/wicket-auth-roles)
