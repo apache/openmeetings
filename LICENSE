@@ -259,8 +259,8 @@ conditions of the following licenses.
     Eclipse Public License, Version 1.0
 
         * H2 Database Engine (com.h2database:h2:2.4.240 - https://h2database.com)
-        * Logback Classic Module (ch.qos.logback:logback-classic:1.5.25 - http://logback.qos.ch/logback-classic)
-        * Logback Core Module (ch.qos.logback:logback-core:1.5.25 - http://logback.qos.ch/logback-core)
+        * Logback Classic Module (ch.qos.logback:logback-classic:1.5.26 - http://logback.qos.ch/logback-classic)
+        * Logback Core Module (ch.qos.logback:logback-core:1.5.26 - http://logback.qos.ch/logback-core)
 
     Eclipse Public License v2.0
 
@@ -542,7 +542,7 @@ conditions of the following licenses.
         * Spring Web (org.springframework:spring-web:7.0.3 - https://github.com/spring-projects/spring-framework)
         * Spring Web MVC (org.springframework:spring-webmvc:7.0.3 - https://github.com/spring-projects/spring-framework)
         * swagger-annotations (io.swagger.core.v3:swagger-annotations:2.2.42 - https://github.com/swagger-api/swagger-core/modules/swagger-annotations)
-        * tomcat (org.apache.tomcat:tomcat:11.0.15 - https://tomcat.apache.org/)
+        * tomcat (org.apache.tomcat:tomcat:11.0.18 - https://tomcat.apache.org/)
         * UNO interface library (org.openoffice:unoil:4.1.2 - https://wiki.openoffice.org/wiki/Uno)
         * Wicket Auth Roles (org.apache.wicket:wicket-auth-roles:10.8.0 - http://wicket.apache.org/wicket-auth-roles)
         * Wicket Core (org.apache.wicket:wicket-core:10.8.0 - http://wicket.apache.org/wicket-core)

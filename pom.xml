@@ -92,7 +92,7 @@
 		<wicket-bootstrap.version>7.0.14</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.20</fullcalendar.version>
 		<spring.version>7.0.3</spring.version>
-		<tomcat.version>11.0.15</tomcat.version>
+		<tomcat.version>11.0.18</tomcat.version>
 		<jetty.version>11.0.26</jetty.version>
 		<ical4j.version>4.2.3</ical4j.version>
 		<cxf.version>4.1.4</cxf.version>
@@ -130,7 +130,7 @@
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
 		<tika-parsers.version>3.2.3</tika-parsers.version>
 		<slf4j.version>2.0.17</slf4j.version>
-		<logback.version>1.5.25</logback.version>
+		<logback.version>1.5.26</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.83</bcprov.version>
 		<mockito.version>5.21.0</mockito.version>
