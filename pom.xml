@@ -68,13 +68,13 @@
 		<exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
 		<license-maven-plugin.version>2.7.1</license-maven-plugin.version>
-		<reflow-maven-skin.version>2.4.0-beta4</reflow-maven-skin.version>
+		<reflow-maven-skin.version>2.4.0</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<replacer.version>1.5.3</replacer.version>
 		<xml-maven-plugin.version>1.2.1</xml-maven-plugin.version>
 		<saxon.version>8.7</saxon.version>
 		<buildnumber-maven-plugin.version>3.3.0</buildnumber-maven-plugin.version>
-		<keytool-maven-plugin.version>2.0.1</keytool-maven-plugin.version>
+		<keytool-maven-plugin.version>2.0.2</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.1.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.versoin>0.8.14</jacoco-maven-plugin.versoin>
@@ -114,14 +114,14 @@
 		<commons-dbcp.version>2.14.0</commons-dbcp.version>
 		<commons-pool2.version>2.13.1</commons-pool2.version>
 		<commons-cli.version>1.11.0</commons-cli.version>
-		<commons-codec.version>1.20.0</commons-codec.version>
+		<commons-codec.version>1.21.0</commons-codec.version>
 		<commons-io.version>2.21.0</commons-io.version>
 		<commons-text.version>1.15.0</commons-text.version>
 		<commons-net.version>3.12.0</commons-net.version>
 		<dom4j.version>2.2.0</dom4j.version>
 		<h2.version>2.4.240</h2.version>
 		<postgresql.version>42.7.9</postgresql.version>
-		<mysql.version>9.5.0</mysql.version>
+		<mysql.version>9.6.0</mysql.version>
 		<mssql.version>13.2.1.jre11</mssql.version>
 		<ojdbc.version>19.29.0.0</ojdbc.version>
 		<xstream.version>1.4.21</xstream.version>
@@ -130,7 +130,7 @@
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
 		<tika-parsers.version>3.2.3</tika-parsers.version>
 		<slf4j.version>2.0.17</slf4j.version>
-		<logback.version>1.5.26</logback.version>
+		<logback.version>1.5.27</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.83</bcprov.version>
 		<mockito.version>5.21.0</mockito.version>

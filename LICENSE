@@ -259,8 +259,8 @@ conditions of the following licenses.
     Eclipse Public License, Version 1.0
 
         * H2 Database Engine (com.h2database:h2:2.4.240 - https://h2database.com)
-        * Logback Classic Module (ch.qos.logback:logback-classic:1.5.26 - http://logback.qos.ch/logback-classic)
-        * Logback Core Module (ch.qos.logback:logback-core:1.5.26 - http://logback.qos.ch/logback-core)
+        * Logback Classic Module (ch.qos.logback:logback-classic:1.5.27 - http://logback.qos.ch/logback-classic)
+        * Logback Core Module (ch.qos.logback:logback-core:1.5.27 - http://logback.qos.ch/logback-core)
 
     Eclipse Public License v2.0
 
@@ -345,7 +345,7 @@ conditions of the following licenses.
     The Apache Software License, Version 2.0
 
         * Apache Commons CLI (commons-cli:commons-cli:1.11.0 - https://commons.apache.org/proper/commons-cli/)
-        * Apache Commons Codec (commons-codec:commons-codec:1.20.0 - https://commons.apache.org/proper/commons-codec/)
+        * Apache Commons Codec (commons-codec:commons-codec:1.21.0 - https://commons.apache.org/proper/commons-codec/)
         * Apache Commons Collections (org.apache.commons:commons-collections4:4.4 - https://commons.apache.org/proper/commons-collections/)
         * Apache Commons Collections (org.apache.commons:commons-collections4:4.5.0 - https://commons.apache.org/proper/commons-collections/)
         * Apache Commons Compress (org.apache.commons:commons-compress:1.28.0 - https://commons.apache.org/proper/commons-compress/)
