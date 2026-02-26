@@ -180,4 +180,10 @@ public class TestLdap extends AbstractWicketTesterTest {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
 		assertThrows(OmException.class, () -> WebSession.get().signIn(USER1, BAD_PASSWORD, User.Type.LDAP, cfg.getId()));
 	}
+
+	@Test
+	void testSbndSearchHijack() {
+		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
+		assertThrows(OmException.class, () -> WebSession.get().signIn("admin)(|(uid=*", BAD_PASSWORD, User.Type.LDAP, cfg.getId()));
+	}
 }

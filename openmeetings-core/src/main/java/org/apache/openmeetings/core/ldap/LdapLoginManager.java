@@ -50,6 +50,7 @@ import org.apache.directory.api.ldap.model.entry.Value;
 import org.apache.directory.api.ldap.model.exception.LdapAuthenticationException;
 import org.apache.directory.api.ldap.model.exception.LdapException;
 import org.apache.directory.api.ldap.model.exception.LdapInvalidAttributeValueException;
+import org.apache.directory.api.ldap.model.filter.FilterEncoder;
 import org.apache.directory.api.ldap.model.message.AliasDerefMode;
 import org.apache.directory.api.ldap.model.message.SearchRequestImpl;
 import org.apache.directory.api.ldap.model.message.SearchScope;
@@ -183,7 +184,7 @@ public class LdapLoginManager {
 				entry = search.getValue();
 				break;
 			case SIMPLEBIND:
-				userDn = new Dn(String.format(w.options.userDn, login));
+				userDn = new Dn(String.format(w.options.userDn, FilterEncoder.encodeFilterValue(login)));
 				w.conn.bind(userDn, passwd);
 				break;
 			case NONE:
@@ -258,7 +259,7 @@ public class LdapLoginManager {
 		Entry entry = null;
 		bindAdmin(w.conn, w.options);
 		Dn baseDn = new Dn(w.options.searchBase);
-		String searchQ = String.format(w.options.searchQuery, login);
+		String searchQ = String.format(w.options.searchQuery, FilterEncoder.encodeFilterValue(login));
 
 		try (EntryCursor cursor = new EntryCursorImpl(w.conn.search(
 				new SearchRequestImpl()
@@ -428,7 +429,7 @@ public class LdapLoginManager {
 				}
 			} else if (GroupMode.QUERY == options.groupMode) {
 				Dn baseDn = new Dn(options.searchBase);
-				String searchQ = String.format(options.groupQuery, u.getLogin());
+				String searchQ = String.format(options.groupQuery, FilterEncoder.encodeFilterValue(u.getLogin()));
 				fillGroups(baseDn, searchQ, groups);
 			}
 			return groups;
