@@ -335,7 +335,7 @@ conditions of the following licenses.
 
     Oracle Free Use Terms and Conditions (FUTC)
 
-        * ojdbc10 (com.oracle.database.jdbc:ojdbc10:19.29.0.0 - https://www.oracle.com/database/technologies/maven-central-guide.html)
+        * ojdbc10 (com.oracle.database.jdbc:ojdbc10:19.30.0.0 - https://www.oracle.com/database/technologies/maven-central-guide.html)
 
     Public Domain
 

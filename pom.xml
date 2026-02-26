@@ -44,7 +44,7 @@
 
 		<!-- plugin versions -->
 		<version.maven-javadoc-plugin>3.12.0</version.maven-javadoc-plugin>
-		<version.maven-surefire>3.5.4</version.maven-surefire>
+		<version.maven-surefire>3.5.5</version.maven-surefire>
 		<version.maven-site-plugin>4.0.0-M16</version.maven-site-plugin>
 		<version.maven-enforcer-plugin>3.6.2</version.maven-enforcer-plugin>
 		<version.maven-source-plugin>3.4.0</version.maven-source-plugin>
@@ -123,7 +123,7 @@
 		<postgresql.version>42.7.10</postgresql.version>
 		<mysql.version>9.6.0</mysql.version>
 		<mssql.version>13.2.1.jre11</mssql.version>
-		<ojdbc.version>19.29.0.0</ojdbc.version>
+		<ojdbc.version>19.30.0.0</ojdbc.version>
 		<xstream.version>1.4.21</xstream.version>
 		<api-all.version>2.1.7</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
