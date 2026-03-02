@@ -1,19 +1,20 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const OmUtil = require('../main/omutils');
-const Role = require('./wb-role');
-const WbTools = require('./wb-tools');
-const WbZoom = require('./wb-zoom');
-const APointer = require('./wb-tool-apointer');
-const Player = require('./wb-player');
-const TMath = require('./wb-tool-math');
-const StaticTMath = require('./wb-tool-stat-math');
-require('fabric'); // will produce `fabric` namespace
+import { Role } from './wb-role';
+import { WbTools} from './wb-tools';
+import { WbZoom } from './wb-zoom';
+import { APointer } from './wb-tool-apointer';
+import { Player } from './wb-player';
+import { TMath } from './wb-tool-math';
+import { StaticTMath } from './wb-tool-stat-math';
+
+import * as fabric from 'fabric';
 
 const BUMPER = 100
 	, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src', 'formula'];
 
 
-module.exports = class Wb {
+export class Wb {
 	constructor(wbo, tcid, _role) {
 		this.id = wbo.wbId;
 		this.title = wbo.name;
@@ -84,9 +85,12 @@ module.exports = class Wb {
 			}
 		}
 		function _createObject(arr, handler) {
-			fabric.util.enlivenObjects(arr, function(objects) {
-				for (let i = 0; i < objects.length; ++i) {
-					const _o = objects[i];
+			Promise.all([
+				fabric.util.enlivenObjects(arr),
+				fabric.util.enlivenObjectEnlivables({}),
+			]).then(([enlived, enlivedMap]) => {
+				for (let i = 0; i < enlived.length; ++i) {
+					const _o = enlived[i];
 					_o.loaded = true;
 					handler(_o);
 				}
@@ -94,6 +98,7 @@ module.exports = class Wb {
 				self.eachCanvas(function(canvas) {
 					canvas.requestRenderAll();
 				});
+				return this;
 			});
 		}
 
@@ -251,6 +256,7 @@ module.exports = class Wb {
 			const canvas = new fabric.Canvas(c.attr('id'), {
 				preserveObjectStacking: true
 			});
+			canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
 			canvas.wbId = self.id;
 			canvas.slide = sl;
 			canvases.push(canvas);
@@ -266,9 +272,11 @@ module.exports = class Wb {
 			setHandlers(canvas);
 		}
 		function __setSize(_cnv) {
-			_cnv.setWidth(zoomBar.getZoom() * self.width)
-				.setHeight(zoomBar.getZoom() * self.height)
-				.setZoom(zoomBar.getZoom());
+			_cnv.setDimensions({
+				width: zoomBar.getZoom() * self.width,
+				height: zoomBar.getZoom() * self.height
+			})
+			_cnv.setZoom(zoomBar.getZoom());
 		}
 		function _setSize(skipSendWsMsg) {
 			zoomBar.setSize();
@@ -287,7 +295,7 @@ module.exports = class Wb {
 		}
 
 		this._toOmJson = (o) => {
-			const r = o.toJSON(extraProps);
+			const r = o.toObject(extraProps);
 			switch (o.omType) {
 				case 'Video':
 					delete r.objects;

@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const VideoUtil = require('../settings/video-util');
 
-const WbShapeBase = require('./wb-tool-shape-base');
+import { WbShapeBase } from './wb-tool-shape-base';
 
-module.exports = class WbShape extends WbShapeBase {
+export class WbShape extends WbShapeBase {
 	constructor(wb, sBtn) {
 		super();
 		Object.assign(this, {
@@ -15,7 +15,7 @@ module.exports = class WbShape extends WbShapeBase {
 		const self = this;
 		function _mouseDown(o) {
 			const canvas = this
-				, pointer = canvas.getPointer(o.e);
+				, pointer = canvas.getScenePoint(o.e);
 			self.isDown = true;
 			self.orig = {x: pointer.x, y: pointer.y};
 			self.createShape.call(self, canvas);
@@ -26,7 +26,7 @@ module.exports = class WbShape extends WbShapeBase {
 			if (!self.isDown) {
 				return;
 			}
-			const pointer = canvas.getPointer(o.e);
+			const pointer = canvas.getScenePoint(o.e);
 			self.updateShape.call(self, pointer);
 			canvas.requestRenderAll();
 		};

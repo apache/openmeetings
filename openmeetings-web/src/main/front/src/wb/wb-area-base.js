@@ -1,5 +1,5 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-module.exports = class WbAreaBase {
+export class WbAreaBase {
 	constructor() {
 		function _wbWsHandler(_, msg) {
 			try {

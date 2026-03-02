@@ -1,8 +1,10 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-const Line = require('./wb-tool-line');
-const ToolUtil = require('./wb-tool-util');
+import { Line } from './wb-tool-line';
+import { ToolUtil } from './wb-tool-util';
 
-module.exports = class Arrow extends Line {
+import * as fabric from 'fabric';
+
+export class Arrow extends Line {
 	constructor(wb, settings, sBtn) {
 		super(wb, settings, sBtn)
 		this.stroke.width = 20;
@@ -34,8 +36,8 @@ module.exports = class Arrow extends Line {
 	}
 
 	updateShape(pointer) {
-		const dx = pointer.x - this.orig.x
-			, dy = pointer.y - this.orig.y
+		const dx = (pointer.x - this.orig.x) * 2
+			, dy = (pointer.y - this.orig.y) * 2
 			, d = Math.sqrt(dx * dx + dy * dy)
 			, sw = this.stroke.width
 			, hl = sw * 3

@@ -1,9 +1,10 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-const WbShape = require('./wb-tool-shape');
-const ToolUtil = require('./wb-tool-util');
-require('fabric');
+import { WbShape } from './wb-tool-shape';
+import { ToolUtil } from './wb-tool-util';
 
-module.exports = class Clipart extends WbShape {
+import * as fabric from 'fabric';
+
+export class Clipart extends WbShape {
 	constructor(wb, btn, settings, sBtn) {
 		super(wb, sBtn);
 
@@ -18,17 +19,19 @@ module.exports = class Clipart extends WbShape {
 					, omType: 'Clipart'
 					, _src: imgSrc
 					, opacity: self.opacity
+					, stroke: self.stroke.color
 				};
 			if (imgSrc.toLowerCase().endsWith('svg')) {
-				fabric.loadSVGFromURL(imgSrc, function(elements) {
+				fabric.loadSVGFromURL(imgSrc)
+				.then(({ objects }) => {
 					self.orig.width = 32;
 					self.orig.height = 32;
-					self.obj = fabric.util.groupSVGElements(elements, opts);
+					self.obj = fabric.util.groupSVGElements(objects, opts);
 					self.obj.set(opts);
 					canvas.add(self.obj);
 				});
 			} else {
-				fabric.Image.fromURL(imgSrc, function(img) {
+				fabric.FabricImage.fromURL(imgSrc).then((img) => {
 					self.orig.width = img.width;
 					self.orig.height = img.height;
 					self.obj = img.set(opts);
@@ -48,8 +51,8 @@ module.exports = class Clipart extends WbShape {
 		if (!this.obj) {
 			return; // not ready
 		}
-		const dx = pointer.x - this.orig.x
-			, dy = pointer.y - this.orig.y
+		const dx = (pointer.x - this.orig.x) * 2
+			, dy = (pointer.y - this.orig.y) * 2
 			, d = Math.sqrt(dx * dx + dy * dy)
 			, scale = d / this.obj.width;
 		this.obj.set({

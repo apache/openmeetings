@@ -2,22 +2,22 @@
 const OmUtil = require('../main/omutils');
 const Settings = require('../main/settings');
 
-const Role = require('./wb-role');
-const WbUtils = require('./wb-utils');
-const APointer = require('./wb-tool-apointer');
-const Pointer = require('./wb-tool-pointer');
-const Text = require('./wb-tool-text');
-const Textbox = require('./wb-tool-textbox');
-const Whiteout = require('./wb-tool-whiteout');
-const Paint = require('./wb-tool-paint');
-const Line = require('./wb-tool-line');
-const ULine = require('./wb-tool-uline');
-const Rect = require('./wb-tool-rect');
-const Ellipse = require('./wb-tool-ellipse');
-const Arrow = require('./wb-tool-arrow');
-const Clipart = require('./wb-tool-clipart');
-const StaticTMath = require('./wb-tool-stat-math');
-const TMath = require('./wb-tool-math');
+import { Role } from './wb-role';
+import { WbUtils } from './wb-utils';
+import { APointer } from './wb-tool-apointer';
+import { Pointer } from './wb-tool-pointer';
+import { OmWbText } from './wb-tool-text';
+import { Textbox } from './wb-tool-textbox';
+import { Whiteout } from './wb-tool-whiteout';
+import { Paint } from './wb-tool-paint';
+import { Line } from './wb-tool-line';
+import { ULine } from './wb-tool-uline';
+import { OmWbRect } from './wb-tool-rect';
+import { Ellipse } from './wb-tool-ellipse';
+import { Arrow } from './wb-tool-arrow';
+import { Clipart } from './wb-tool-clipart';
+import { StaticTMath } from './wb-tool-stat-math';
+import { TMath } from './wb-tool-math';
 
 const ACTIVE = 'active';
 
@@ -49,7 +49,7 @@ function __destroySettings() {
 	$('#wb-settings').modal('dispose');
 }
 
-module.exports = class WbTools {
+export class WbTools {
 	constructor(wbEl, wb) {
 		let mode, tools, settings, math;
 
@@ -113,7 +113,7 @@ module.exports = class WbTools {
 		}
 		function _initTexts(sBtn) {
 			const c = _initGroup('#wb-area-texts', _getBtn('apointer'));
-			_initToolBtn('text', false, new Text(wb, settings, sBtn));
+			_initToolBtn('text', false, new OmWbText(wb, settings, sBtn));
 			_initToolBtn('textbox', false, new Textbox(wb, settings, sBtn));
 			_initGroupHandle(c, tools);
 		}
@@ -123,7 +123,7 @@ module.exports = class WbTools {
 			_initToolBtn('paint', false, new Paint(wb, settings, sBtn));
 			_initToolBtn('line', false, new Line(wb, settings, sBtn));
 			_initToolBtn('uline', false, new ULine(wb, settings, sBtn));
-			_initToolBtn('rect', false, new Rect(wb, settings, sBtn));
+			_initToolBtn('rect', false, new OmWbRect(wb, settings, sBtn));
 			_initToolBtn('ellipse', false, new Ellipse(wb, settings, sBtn));
 			_initToolBtn('arrow', false, new Arrow(wb, settings, sBtn));
 			_initGroupHandle(c, tools);
@@ -133,10 +133,14 @@ module.exports = class WbTools {
 			tools.find('.drawings').after(c);
 			c.find('.om-icon.clipart').each(function() {
 				const cur = $(this);
-				cur.css('background-image', 'url(' + cur.data('image') + ')')
+				const imgUrl = cur.data('image');
+				cur.css('background-image', `url(${imgUrl})`)
 					.click(function() {
 						_setCurrent(c, cur);
 					});
+				if (imgUrl.endsWith('.svg')) {
+					cur.css('filter', 'invert(48%)');
+				}
 				_initToolBtn(cur.data('mode'), false, new Clipart(wb, cur, settings, sBtn));
 			});
 			_initGroupHandle(c, tools);

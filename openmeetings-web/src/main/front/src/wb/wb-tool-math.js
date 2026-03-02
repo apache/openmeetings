@@ -1,10 +1,10 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-const WbShapeBase = require('./wb-tool-shape-base');
-const ToolUtil = require('./wb-tool-util');
-const Role = require('./wb-role');
-const StaticTMath = require('./wb-tool-stat-math');
+import { WbShapeBase } from './wb-tool-shape-base';
+import { ToolUtil } from './wb-tool-util';
+import { Role } from './wb-role';
+import { StaticTMath } from './wb-tool-stat-math';
 
-module.exports = class TMath extends WbShapeBase {
+export class TMath extends WbShapeBase {
 	static get TYPE() {
 		return 'Math';
 	}
@@ -36,7 +36,7 @@ module.exports = class TMath extends WbShapeBase {
 		}
 		function _mouseDown(o) {
 			const canvas = this
-				, pointer = canvas.getPointer(o.e)
+				, pointer = canvas.getScenePoint(o.e)
 				, fml = wb.getFormula()
 				, ta = fml.find('textarea')
 				, upd = fml.find('.update-btn');

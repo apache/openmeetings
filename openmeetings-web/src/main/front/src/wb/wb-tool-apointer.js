@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-const WbToolBase = require('./wb-tool-base');
-const ToolUtil = require('./wb-tool-util');
-require('fabric');
+import { WbToolBase } from './wb-tool-base';
+import { ToolUtil } from './wb-tool-util';
+import * as fabric from 'fabric';
 
-module.exports = class APointer extends WbToolBase {
+export class APointer extends WbToolBase {
 	constructor(wb, settings, sBtn) {
 		super();
 		this.user = '';
@@ -12,7 +12,7 @@ module.exports = class APointer extends WbToolBase {
 		const self = this;
 		function _mouseUp(o) {
 			const canvas = this
-				, ptr = canvas.getPointer(o.e);
+				, ptr = canvas.getScenePoint(o.e);
 			if (self.user === '') {
 				self.user = $('.room-block .sidebar .user-list .current .name').text();
 			}
@@ -44,7 +44,8 @@ module.exports = class APointer extends WbToolBase {
 
 	create(canvas, o) {
 		const zoom = this.wb.getZoom();
-		fabric.Image.fromURL('./css/images/pointer.png', function(img) {
+		fabric.FabricImage.fromURL('./css/images/pointer.png')
+		.then(img => {
 			const scale = 1. / zoom;
 			img.set({
 				left:15
@@ -67,7 +68,7 @@ module.exports = class APointer extends WbToolBase {
 				, originX: 'center'
 				, originY: 'center'
 			});
-			const text = new fabric.Text(o.user, {
+			const text = new fabric.FabricText(o.user, {
 				fontSize: 12
 				, left: 10
 				, originX: 'left'
@@ -93,16 +94,22 @@ module.exports = class APointer extends WbToolBase {
 				circle1.set({radius: 3});
 				circle2.set({radius: 6});
 				circle1.animate(
-					'radius', '20'
+					{ radius: 20 }
 					, {
-						onChange: canvas.renderAll.bind(canvas)
+						onChange: () => {
+							circle1.set({radius: circle1.radius});
+							canvas.requestRenderAll();
+						}
 						, duration: 1000
-						, onComplete: function() {go(_cnt - 1);}
+						, onComplete: () => {go(_cnt - 1);}
 					});
 				circle2.animate(
-					'radius', '20'
+					{ radius: 20 }
 					, {
-						onChange: canvas.renderAll.bind(canvas)
+						onChange: () => {
+							circle2.set({radius: circle2.radius});
+							canvas.requestRenderAll();
+						}
 						, duration: 1000
 					});
 			}

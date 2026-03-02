@@ -1,10 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-require('fabric');
 
 // Based on this example: https://github.com/mathjax/MathJax-demos-node/blob/master/preload/tex2svg
 const packages = 'base, autoload, require, ams, newcommand, noundefined'.split(/\s*,\s*/);
 
-MathJax = {
+window.MathJax = {
 	options: {}
 	, tex: {
 		packages: packages
@@ -47,21 +46,18 @@ MathJax.loader.preLoad(
 
 MathJax.config.startup.ready();
 
-function _tex2svg(tex, callback, _errCallback) {
-	MathJax.tex2svgPromise(tex, {
-		display: false
-		, em: 16 // em-size in pixels
-		, ex: 8 // ex-size in pixels
-		, containerWidth: 80 * 16
-	}).then(function (node) {
-		callback(node.firstElementChild);
-	}).catch(function (err) {
-		_errCallback(err.message);
-	});
-}
-function create(o, canvas, callback, errCallback) {
-	_tex2svg(o.formula, function(svg) {
-		fabric.parseSVGDocument(svg, function(objects, options) {
+import * as fabric from 'fabric';
+
+export class StaticTMath {
+	static create(o, canvas, callback, errCallback) {
+		MathJax.tex2svgPromise(o.formula, {
+			display: false
+			, em: 16 // em-size in pixels
+			, ex: 8 // ex-size in pixels
+			, containerWidth: 80 * 16
+		}).then(node => node.firstChild.outerHTML) // this extrastep is required, fabric seems to break on MathJax nodes
+		.then(fabric.loadSVGFromString)
+		.then(({ objects, options }) => {
 			const opts = $.extend({}, o, options)
 				, obj = objects.length === 1
 					? new fabric.Group(objects, opts)
@@ -71,18 +67,18 @@ function create(o, canvas, callback, errCallback) {
 			if (typeof(callback) === 'function') {
 				callback(obj);
 			}
-			canvas.add(obj).requestRenderAll();
+			canvas.add(obj);
+			canvas.requestRenderAll();
+		})
+		.catch(function (err) {
+			errCallback(err.message);
 		});
-	}, errCallback);
-}
-function highlight(el) {
-	el.addClass('ui-state-highlight', 2000, function() {
-		el.focus();
-		el.removeClass('ui-state-highlight', 2000);
-	});
-}
+	}
 
-module.exports = {
-	create: create
-	, highlight: highlight
+	static highlight(el) {
+		el.addClass('ui-state-highlight', 2000, function() {
+			el.focus();
+			el.removeClass('ui-state-highlight', 2000);
+		});
+	}
 };

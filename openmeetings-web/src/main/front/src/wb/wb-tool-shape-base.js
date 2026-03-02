@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-const WbToolBase = require('./wb-tool-base');
+import { WbToolBase } from './wb-tool-base';
 
-module.exports = class ShapeBase extends WbToolBase {
+export class WbShapeBase extends WbToolBase {
 	constructor() {
 		super();
 		Object.assign(this, {

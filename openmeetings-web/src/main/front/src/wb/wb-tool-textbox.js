@@ -1,9 +1,10 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-const Text = require('./wb-tool-text');
-const ToolUtil = require('./wb-tool-util');
-require('fabric');
+import { OmWbText } from './wb-tool-text';
+import { ToolUtil } from './wb-tool-util';
 
-module.exports = class Textbox extends Text {
+import * as fabric from 'fabric';
+
+export class Textbox extends OmWbText {
 	constructor(wb, s, sBtn) {
 		super(wb, s, sBtn);
 		this.omType = 'textbox';

@@ -2,9 +2,9 @@
 const OmUtil = require('../main/omutils');
 const VideoUtil = require('../settings/video-util');
 
-const Role = require('./wb-role');
-const ToolUtil = require('./wb-tool-util');
-require('fabric');
+import { Role } from './wb-role';
+import { ToolUtil } from './wb-tool-util';
+import * as fabric from 'fabric';
 
 const mainColor = '#ff6600', rad = 20;
 
@@ -24,14 +24,14 @@ function _sendStatus(g, _paused, _pos) {
 	});
 }
 
-module.exports = class Player {
+export class Player {
 	static create(canvas, _o, wb) {
 		let trg, circle, rectPause1, rectPause2, play, cProgress, progress;
 
 		function _initControls(_o) {
 			trg = new fabric.Triangle({
-				left: 2.7 * rad
-				, top: _o.height - 2.5 * rad
+				left: 2.2 * rad
+				, top: _o.height - 2 * rad
 				, visible: _o.status.paused
 				, angle: 90
 				, width: rad
@@ -40,8 +40,8 @@ module.exports = class Player {
 				, fill: mainColor
 			});
 			rectPause1 = new fabric.Rect({
-				left: 1.6 * rad
-				, top: _o.height - 2.5 * rad
+				left: (1.6 + 1 / 6) * rad
+				, top: _o.height - 2 * rad
 				, visible: !_o.status.paused
 				, width: rad / 3
 				, height: rad
@@ -49,8 +49,8 @@ module.exports = class Player {
 				, fill: mainColor
 			});
 			rectPause2 = new fabric.Rect({
-				left: 2.1 * rad
-				, top: _o.height - 2.5 * rad
+				left: (2.1 + 1 / 6) * rad
+				, top: _o.height - 2 * rad
 				, visible: !_o.status.paused
 				, width: rad / 3
 				, height: rad
@@ -58,8 +58,8 @@ module.exports = class Player {
 				, fill: mainColor
 			});
 			circle = new fabric.Circle({
-				left: rad
-				, top: _o.height - 3 * rad
+				left: 2 * rad
+				, top: _o.height - 2 * rad
 				, radius: rad
 				, stroke: mainColor
 				, strokeWidth: 2
@@ -71,8 +71,8 @@ module.exports = class Player {
 					, visible: false
 				});
 			cProgress = new fabric.Rect({
-				left: 3.5 * rad
-				, top: _o.height - 1.5 * rad
+				left: _o.width / 2 + rad
+				, top: _o.height - 1.25 * rad
 				, visible: false
 				, width: _o.width - 5 * rad
 				, height: rad / 2
@@ -83,7 +83,7 @@ module.exports = class Player {
 			});
 			progress = new fabric.Rect({
 				left: 3.5 * rad
-				, top: _o.height - 1.5 * rad
+				, top: _o.height - 1.25 * rad
 				, visible: false
 				, width: 0
 				, height: rad / 2
@@ -104,9 +104,21 @@ module.exports = class Player {
 				.attr('type', 'video/mp4')
 				.attr('src', _o._src));
 		$('#wb-tab-' + canvas.wbId).append(vid);
-		fabric.Image.fromURL(_o._poster, function(poster) {
-			poster.scaleX = poster.scaleY = _o.width / poster.getOriginalSize().width;
-			const video = new fabric.Image(vid[0], {visible: false, objectCaching: false});
+		fabric.FabricImage.fromURL(_o._poster)
+		.then(poster => {
+			const posterScale = _o.width / poster.getOriginalSize().width;
+			poster.set({
+				left: _o.width / 2,
+				top: _o.height / 2,
+				scaleX: posterScale,
+				scaleY: posterScale,
+			});
+			const video = new fabric.FabricImage(vid[0], {
+				left: _o.width / 2,
+				top: _o.height / 2,
+				visible: false,
+				objectCaching: false
+			});
 			vid[0].onseeked = function() {
 				canvas.requestRenderAll();
 			};
@@ -119,7 +131,11 @@ module.exports = class Player {
 				return video.getElement().currentTime === video.getElement().duration;
 			};
 			const updateProgress = function() {
-				progress.set('width', (video.getElement().currentTime * cProgress.width) / video.getElement().duration);
+				const width = (video.getElement().currentTime * cProgress.width) / video.getElement().duration;
+				progress.set({
+					left: cProgress.getPositionByOrigin('left', 'top').x + width / 2,
+					width: width
+				});
 				canvas.requestRenderAll();
 			};
 			let request;
@@ -156,10 +172,12 @@ module.exports = class Player {
 			};
 			cProgress.on({
 				'mousedown': function (evt) {
-					const _ptr = canvas.getPointer(evt.e, true)
-						, ptr = canvas._normalizePointer(cProgress, _ptr)
-						, l = ptr.x + cProgress.width / 2;
-					_sendStatus(group, group.status.paused, l * video.getElement().duration / cProgress.width)
+					const m = cProgress.calcTransformMatrix(),
+						invertedM = fabric.util.invertTransform(m),
+						pp = canvas.getScenePoint(evt.e).transform(invertedM),
+						l = pp.x + cProgress.width / 2;
+
+					_sendStatus(group, group.status.paused, l * video.getElement().duration / cProgress.width);
 				}
 			});
 			play.on({

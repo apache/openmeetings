@@ -1,9 +1,10 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const OmUtil = require('../main/omutils');
-const WbAreaBase = require('./wb-area-base');
-const Role = require('./wb-role');
-const Wb = require('./wb');
-require('fabric'); // will produce `fabric` namespace
+import { WbAreaBase } from './wb-area-base';
+import { Role } from './wb-role';
+import { Wb } from './wb';
+
+import * as fabric from 'fabric';
 
 const arrowImg = new Image(), delImg = new Image();
 
@@ -62,7 +63,7 @@ function _actionActivateWb(_wbId) {
 }
 
 
-module.exports = class DrawWbArea extends WbAreaBase {
+export class DrawWbArea extends WbAreaBase {
 	constructor() {
 		super();
 		const self = this;
@@ -70,47 +71,54 @@ module.exports = class DrawWbArea extends WbAreaBase {
 
 		// Fabric overrides (should be kept up-to-date on fabric.js updates)
 		if ('function' !== typeof (window.originalTr)) {
-			window.originalTr = fabric.Object.prototype.controls.tr;
+			// deactivate constructor control assignment
+			fabric.InteractiveFabricObject.createControls = () => {
+				return {};
+			}
+			const controls = fabric.controlsUtils.createObjectDefaultControls();
+			window.originalTr = controls.tr;
+
+			controls.mtr.render = function(ctx, left, top, _, fabricObject) {
+				ctx.save();
+				ctx.translate(left, top);
+				ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle));
+				ctx.drawImage(arrowImg, -arrowImg.width / 2, -arrowImg.height / 2);
+				ctx.restore();
+			};
+			controls.tr = new fabric.Control({
+				x: 0.5
+				, y: -0.5
+				, cursorStyleHandler: function(eventData, control, fabricObject) {
+					if (role === Role.PRESENTER) {
+						return 'pointer';
+					}
+					return window.originalTr.cursorStyleHandler.call(this, eventData, control, fabricObject);
+				}
+				, getActionName: function(eventData, control, fabricObject) {
+					if (role === Role.PRESENTER) {
+						return 'click';
+					}
+					return window.originalTr.getActionName.call(this, eventData, control, fabricObject);
+				}
+				, mouseDownHandler: function(eventData, transformData, x, y) {
+					if (role === Role.PRESENTER) {
+						_performDelete();
+						return true;
+					}
+					return window.originalTr.mouseDownHandler.call(this, eventData, transformData, x, y);
+				}
+				, render: function(ctx, left, top, styleOverride, fabricObject) {
+					if (role === Role.PRESENTER) {
+						const x = left - delImg.width / 2
+							, y = top - delImg.height / 2;
+						ctx.drawImage(delImg, x, y);
+					} else {
+						window.originalTr.render.call(this, ctx, left, top, styleOverride, fabricObject);
+					}
+				}
+			});
+			fabric.InteractiveFabricObject.ownDefaults.controls = {...controls};
 		}
-		fabric.Object.prototype.controls.mtr.render = function(ctx, left, top, _, fabricObject) {
-			ctx.save();
-			ctx.translate(left, top);
-			ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle));
-			ctx.drawImage(arrowImg, -arrowImg.width / 2, -arrowImg.height / 2);
-			ctx.restore();
-		};
-		fabric.Object.prototype.controls.tr = new fabric.Control({
-			x: 0.5
-			, y: -0.5
-			, cursorStyleHandler: function(eventData, control, fabricObject) {
-				if (role === Role.PRESENTER) {
-					return 'pointer';
-				}
-				return window.originalTr.cursorStyleHandler.call(this, eventData, control, fabricObject);
-			}
-			, getActionName: function(eventData, control, fabricObject) {
-				if (role === Role.PRESENTER) {
-					return 'click';
-				}
-				return window.originalTr.getActionName.call(this, eventData, control, fabricObject);
-			}
-			, mouseDownHandler: function(eventData, transformData, x, y) {
-				if (role === Role.PRESENTER) {
-					_performDelete();
-					return true;
-				}
-				return window.originalTr.mouseDownHandler.call(this, eventData, transformData, x, y);
-			}
-			, render: function(ctx, left, top, styleOverride, fabricObject) {
-				if (role === Role.PRESENTER) {
-					const x = left - delImg.width / 2
-						, y = top - delImg.height / 2;
-					ctx.drawImage(delImg, x, y);
-				} else {
-					window.originalTr.render.call(this, ctx, left, top, styleOverride, fabricObject);
-				}
-			}
-		});
 		function _performDelete() {
 			const wb = _getActive().data()
 				, canvas = wb.getCanvas();

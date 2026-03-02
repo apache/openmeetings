@@ -1,8 +1,10 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-const WbShape = require('./wb-tool-shape');
-const ToolUtil = require('./wb-tool-util');
+import { WbShape } from './wb-tool-shape';
+import { ToolUtil } from './wb-tool-util';
 
-module.exports = class Rect extends WbShape {
+import * as fabric from 'fabric';
+
+export class OmWbRect extends WbShape {
 	constructor(wb, settings, sBtn) {
 		super(wb, sBtn);
 
@@ -26,15 +28,10 @@ module.exports = class Rect extends WbShape {
 	}
 
 	updateShape(pointer) {
-		if (this.orig.x > pointer.x) {
-			this.obj.set({ left: pointer.x });
-		}
-		if (this.orig.y > pointer.y) {
-			this.obj.set({ top: pointer.y });
-		}
 		this.obj.set({
-			width: Math.abs(this.orig.x - pointer.x)
-			, height: Math.abs(this.orig.y - pointer.y)
+			width: Math.abs(this.orig.x - pointer.x) * 2
+			, height: Math.abs(this.orig.y - pointer.y) * 2
 		});
+		this.obj.setCoords();
 	}
 };

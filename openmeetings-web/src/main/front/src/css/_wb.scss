@@ -118,6 +118,7 @@
 			}
 			&.active {
 				background-color: whitesmoke;
+				filter: none !important;
 			}
 			&::before {
 				padding-inline-start: 5px;

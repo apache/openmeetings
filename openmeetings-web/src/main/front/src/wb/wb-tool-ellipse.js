@@ -1,8 +1,10 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-const Rect = require('./wb-tool-rect');
-const ToolUtil = require('./wb-tool-util');
+import { OmWbRect } from './wb-tool-rect';
+import { ToolUtil } from './wb-tool-util';
 
-module.exports = class Ellipse extends Rect {
+import * as fabric from 'fabric';
+
+export class Ellipse extends OmWbRect {
 	constructor(wb, settings, sBtn) {
 		super(wb, settings, sBtn);
 	}

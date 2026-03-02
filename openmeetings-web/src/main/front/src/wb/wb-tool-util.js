@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-module.exports = {
-	enableLineProps: function(s, base) {
+export class ToolUtil {
+	static enableLineProps(s, base) {
 		const c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width'), o = this.enableOpacity(s, base);
 		s.find('.wb-prop-fill').prop('disabled', true);
 		s.find('.wb-prop-b, .wb-prop-i, .wb-prop-lock-color, .wb-prop-lock-fill').button("disable");
@@ -8,7 +8,8 @@ module.exports = {
 		w.val(base.stroke.width).prop('disabled', false);
 		return {c: c, w: w, o: o};
 	}
-	, enableAllProps: function(s, base) {
+
+	static enableAllProps(s, base) {
 		const c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width')
 			, f = s.find('.wb-prop-fill')
 			, lc = s.find('.wb-prop-lock-color'), lf = s.find('.wb-prop-lock-fill');
@@ -20,20 +21,24 @@ module.exports = {
 		w.val(base.stroke.width).prop('disabled', false);
 		f.val(base.fill.color).prop('disabled', !base.fill.enabled);
 	}
-	, enableOpacity: function(s, base) {
+
+	static enableOpacity(s, base) {
 		const o = s.find('.wb-prop-opacity')
 		o.val(100 * base.opacity).prop('disabled', false);
 		return o;
 	}
-	, disableAllProps: function(s) {
+
+	static disableAllProps(s) {
 		s.find('[class^="wb-prop"]').prop('disabled', true);
 		if (!!s.find('.wb-prop-b').button("instance")) {
 			s.find('.wb-prop-b, .wb-prop-i, .wb-prop-lock-color, .wb-prop-lock-fill').button("disable");
 		}
 	}
-	, addDeletedItem: function(canvas, o) {
+
+	static addDeletedItem(canvas, o) {
 		if ("Presentation" === o.fileType) {
-			fabric.Image.fromURL(o._src, function(img) {
+			fabric.FabricImage.fromURL(o._src)
+			.then(img => {
 				const sz = img.getOriginalSize();
 				img.width = sz.width;
 				img.height = sz.height;
@@ -41,7 +46,8 @@ module.exports = {
 				canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
 			});
 		} else {
-			fabric.Image.fromURL(o._src || o.src, function(img) {
+			fabric.FabricImage.fromURL(o._src || o.src)
+			.then(img => {
 				const sz = img.getOriginalSize();
 				img.width = sz.width;
 				img.height = sz.height;
@@ -53,11 +59,13 @@ module.exports = {
 			}, o);
 		}
 	}
-	, filter: function(_o, props) {
+
+	static filter(_o, props) {
 		return props.reduce(function(result, key) {
 			result[key] = _o[key];
 			return result;
 		}, {});
 	}
-	, noColor: 'rgba(0,0,0,0)'
+
+	static noColor = 'rgba(0,0,0,0)';
 };

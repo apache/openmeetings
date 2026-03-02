@@ -1,8 +1,8 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const OmUtil = require('../main/omutils');
-const Role = require('./wb-role');
+import { Role } from './wb-role';
 
-module.exports = class WbZoom {
+export class WbZoom {
 	constructor(wbEl, wbObj) {
 		this.zoom = 1.;
 		this.zoomMode = 'PAGE_WIDTH';

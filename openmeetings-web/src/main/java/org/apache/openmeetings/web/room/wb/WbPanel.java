@@ -557,15 +557,17 @@ public class WbPanel extends AbstractWbPanel {
 			default:
 			{
 				String wuid = randomUUID().toString();
+				int width = fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth();
+				int height = fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight();
 				JSONObject file = new JSONObject()
 						.put(ATTR_FILE_ID, fi.getId())
 						.put(ATTR_FILE_TYPE, fi.getType().name())
 						.put("count", fi.getCount())
 						.put(ATTR_TYPE, "image")
-						.put("left", UPLOAD_WB_LEFT)
-						.put("top", UPLOAD_WB_TOP)
-						.put(ATTR_WIDTH, fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
-						.put(ATTR_HEIGHT, fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight())
+						.put("left", UPLOAD_WB_LEFT + width / 2)
+						.put("top", UPLOAD_WB_TOP + height / 2)
+						.put(ATTR_WIDTH, width)
+						.put(ATTR_HEIGHT, height)
 						.put("uid", wuid)
 						.put(ATTR_SLIDE, wb.getSlide())
 						;

@@ -1,11 +1,12 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const VideoUtil = require('../settings/video-util');
 
-const ShapeBase = require('./wb-tool-shape-base');
-const ToolUtil = require('./wb-tool-util');
-require('fabric');
+import { WbShapeBase } from './wb-tool-shape-base';
+import { ToolUtil } from './wb-tool-util';
 
-module.exports = class Text extends ShapeBase {
+import * as fabric from 'fabric';
+
+export class OmWbText extends WbShapeBase {
 	constructor(wb, settings, sBtn) {
 		super();
 		Object.assign(this, {
@@ -26,7 +27,7 @@ module.exports = class Text extends ShapeBase {
 		const self = this;
 		function _mouseDown(o) {
 			const canvas = this
-				, pointer = canvas.getPointer(o.e)
+				, pointer = canvas.getScenePoint(o.e)
 				, ao = self.__getObj.call(self, canvas, o.target);
 			if (!!ao) {
 				self.obj = ao;
@@ -38,7 +39,8 @@ module.exports = class Text extends ShapeBase {
 				if (self.style.italic) {
 					self.obj.fontStyle = 'italic'
 				}
-				canvas.add(self.obj).setActiveObject(self.obj);
+				canvas.add(self.obj);
+				canvas.setActiveObject(self.obj);
 			}
 			self._onMouseDown.call(self);
 		};
