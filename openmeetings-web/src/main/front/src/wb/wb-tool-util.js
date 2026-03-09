@@ -39,16 +39,26 @@ export class ToolUtil {
 		if ("Presentation" === o.fileType) {
 			fabric.FabricImage.fromURL(o._src)
 			.then(img => {
-				const sz = img.getOriginalSize();
-				img.width = sz.width;
-				img.height = sz.height;
-				img.scaleX = img.scaleY = canvas.width / (canvas.getZoom() * sz.width);
-				canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+				const scale = canvas.width / (canvas.getZoom() * sz.width);
+				img.set({
+					scaleX: scale
+					, scaleY: scale
+					, _cacheCanvas: canvas
+				});
+				const pos = img.getPositionByOrigin('left', 'top');
+				img.set({
+					left: -pos.x
+					, top: -pos.y
+				});
+				canvas.backgroundImage = img;
+				canvas.requestRenderAll();
 			});
 		} else {
 			fabric.FabricImage.fromURL(o._src || o.src)
 			.then(img => {
 				const sz = img.getOriginalSize();
+				img.left = sz.width / 2;
+				img.top = sz.height / 2;
 				img.width = sz.width;
 				img.height = sz.height;
 				img.scaleX = img.scaleY = (o.scaleX || 1.) * o.width / sz.width;
@@ -56,7 +66,7 @@ export class ToolUtil {
 				img.videoStatus = function() {};
 				canvas.add(img);
 				canvas.requestRenderAll();
-			}, o);
+			});
 		}
 	}
 

@@ -61,8 +61,21 @@ export class Wb {
 						} else {
 							let scale = self.width / _o.width;
 							scale = scale < 1 ? 1 : scale;
-							canvas.setBackgroundImage(_o._src + '&slide=' + i, canvas.renderAll.bind(canvas)
-									, {scaleX: scale, scaleY: scale});
+							fabric.FabricImage.fromURL(_o._src + '&slide=' + i)
+							.then(img => {
+								img.set({
+									scaleX: scale
+									, scaleY: scale
+									, _cacheCanvas: canvas
+								});
+								const pos = img.getPositionByOrigin('left', 'top');
+								img.set({
+									left: -pos.x
+									, top: -pos.y
+								});
+								canvas.backgroundImage = img;
+								canvas.requestRenderAll();
+							});
 						}
 					}
 					zoomBar.update(role, canvases.length);
