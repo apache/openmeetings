@@ -39,7 +39,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -171,11 +170,10 @@ public class UserManager implements IUserManager {
 	 * @param password - user password
 	 * @param hash - activation hash
 	 * @return {@link User} of code of error as {@link String}
-	 * @throws NoSuchAlgorithmException in case password hashing algorithm is not found
 	 * @throws OmException in case of any issues with provided data
 	 */
 	@Override
-	public Object registerUser(User u, String password, String hash) throws OmException, NoSuchAlgorithmException {
+	public Object registerUser(User u, String password, String hash) throws OmException {
 		// Check for required data
 		String login = u.getLogin();
 		if (!Strings.isEmpty(login) && login.length() >= getMinLoginLength()) {
@@ -298,7 +296,7 @@ public class UserManager implements IUserManager {
 		httpClient = builder.build();
 	}
 
-	public User loginOAuth(String code, OAuthServer server) throws IOException, NoSuchAlgorithmException, InterruptedException {
+	public User loginOAuth(String code, OAuthServer server) throws IOException, InterruptedException {
 		if (code == null) {
 			showAuth(server);
 			return null;

@@ -25,7 +25,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getSipContext;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 import static org.apache.wicket.util.string.Strings.escapeMarkup;
 
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,7 +52,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -82,7 +80,6 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.label.OmLanguage;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.db.util.MD5;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.util.string.Strings;
 
@@ -358,7 +355,7 @@ public class User extends HistoricalEntity {
 	private List<GroupUser> groupUsers = new ArrayList<>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@PrimaryKeyJoinColumn(name="sip_user_id", referencedColumnName="id")
+	@JoinColumn(name = "sip_user_id", referencedColumnName = "sip_db_id")
 	@XmlElement(name = "sipUser", required = false)
 	private AsteriskSipUser sipUser;
 
@@ -506,18 +503,16 @@ public class User extends HistoricalEntity {
 		this.login = login;
 	}
 
-	public void updatePassword(String pass) throws NoSuchAlgorithmException {
+	public void updatePassword(String pass) {
 		if (isSipEnabled()) {
 			AsteriskSipUser u = getSipUser();
 			if (u == null) {
 				setSipUser(u = new AsteriskSipUser());
 			}
 			String defaultRoomContext = getSipContext();
-			u.setName(login);
-			u.setDefaultuser(login);
-			u.setMd5secret(MD5.checksum(login + ":asterisk:" + pass));
+			u.setUsername(login);
+			u.setPasswordDigest(login + ":asterisk:" + pass);
 			u.setContext(defaultRoomContext);
-			u.setHost("dynamic");
 		} else {
 			setSipUser(null);
 		}

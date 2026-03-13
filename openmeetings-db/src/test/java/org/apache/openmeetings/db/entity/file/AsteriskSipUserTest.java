@@ -16,22 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.db.util;
+package org.apache.openmeetings.db.entity.file;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.apache.openmeetings.util.ImportHelper.getPrivateValue;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import org.apache.openmeetings.db.entity.user.AsteriskSipUser;
+import org.junit.jupiter.api.Test;
 
-import org.apache.commons.codec.binary.Hex;
+class AsteriskSipUserTest {
+	@Test
+	void testGetFileShouldReturnFirstSlideWithPDF() throws Exception {
+		AsteriskSipUser u = new AsteriskSipUser();
+		u.setPasswordDigest("bond:asterisk:12345");
 
-public class MD5 {
-	private MD5() {}
+		String value = getPrivateValue(u, "passwordDigest", String.class);
 
-	public static String checksum(String data) throws NoSuchAlgorithmException {
-		MessageDigest md5 = MessageDigest.getInstance("MD5");
-		byte[] b = data == null ? new byte[0] : data.getBytes(UTF_8);
-		md5.update(b, 0, b.length);
-		return Hex.encodeHexString(md5.digest());
+		assertEquals(
+			"SHA-256:c77920ac5aa487108de1ff6c198dda60cec2bed48655ee209eb46de20ab1e111"
+			// leave it here for future upgrade "SHA-512-256:34ffbf14183bdbc03a595ab16ff53141f10475d1c810a8baff43bc1645df31e9"
+			, value);
 	}
 }

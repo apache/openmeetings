@@ -27,11 +27,11 @@ or for example somebody from the list of
 
 # Asterisk Integration
 
-You need Apache OpenMeetings <strong>version 6.0+</strong> to apply this guide!
+You need Apache OpenMeetings <strong>version 9.0+</strong> to apply this guide!
 
-You need Asterisk <strong>version 16+</strong> to apply this guide!
+You need Asterisk <strong>version 22+</strong> to apply this guide!
 
-Here is the instruction how-to set up integration between OpenMeetings and Asterisk on Ubuntu 18.04.
+Here is the instruction how-to set up integration between OpenMeetings and Asterisk on Ubuntu 24.04.
 
 ## Prerequisites
 
@@ -44,10 +44,10 @@ sudo apt update && sudo apt upgrade
 ```
 sudo apt install build-essential
 
-sudo mkdir /usr/src/asterisk && cd /usr/src/asterisk
-sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-18.12.1.tar.gz
-sudo tar -xvzf asterisk-18.12.1.tar.gz
-cd ./asterisk-18.12.1
+cd /usr/src
+sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-22.8.2.tar.gz
+sudo tar -xzf asterisk-22.8.2.tar.gz
+cd ./asterisk-22.8.2
 sudo make clean
 sudo contrib/scripts/install_prereq install
 sudo ./configure
@@ -81,12 +81,7 @@ Modify `[modules]` section of `/etc/asterisk/modules.conf`
 
 ```
 preload = res_config_mysql.so
-```
-
-**Remove/Comment following lines**
-
-```
-;noload = chan_sip.so
+noload = chan_sip.so
 ```
 
 ### Configure MySQL module:
@@ -96,7 +91,7 @@ Set valid data for MySQL in `/etc/asterisk/res_config_mysql.conf`:
 **Example**
 
 ```
-[general]
+[openmeetings]
 dbhost = 127.0.0.1
 dbname = openmeetings
 dbuser = om_db_admin
@@ -107,37 +102,18 @@ dbcharset = utf8
 requirements=warn
 ```
 
-### Configure SIP module:
+### Configure sorcery:
 
-Modify `/etc/asterisk/sip.conf`
-
-**Add/uncomment the following lines**
+Add next lines into the /etc/asterisk/sorcery.conf
 
 ```
-videosupport=yes
-rtcachefriends=yes
-```
-
-**Increase maxexpiry value to 43200**
-
-```
-maxexpiry=43200
-```
-
-**Add user for the "SIP Transport"**
-
-```
-[omsip_user]
-host=dynamic
-secret=12345
-context=rooms-omsip
-transport=ws,wss
-type=friend
-encryption=no
-avpf=yes
-icesupport=yes
-directmedia=no
-allow=!all,opus,h264
+[res_pjsip] ; Realtime PJSIP configuration wizard
+endpoint=realtime,ps_endpoints
+endpoint=config,pjsip.conf,criteria=type=endpoint
+auth=realtime,ps_auths
+auth=config,pjsip.conf,criteria=type=auth
+aor=realtime,ps_aors
+aor=config,pjsip.conf,criteria=type=aor
 ```
 
 ### Configure extensions:
@@ -146,7 +122,9 @@ Add next lines into the `/etc/asterisk/extconfig.conf`:
 
 ```
 [settings]
-sippeers => mysql,general,sipusers
+ps_endpoints => mysql,openmeetings,om_sipuser_endpoint
+ps_aors => mysql,openmeetings,om_sipuser_aor
+ps_auths => mysql,openmeetings,om_sipuser_auth
 ```
 
 Modify `/etc/asterisk/extensions.conf`
@@ -158,7 +136,7 @@ Modify `/etc/asterisk/extensions.conf`
 ; The first line DB_EXISTS(openmeetings/room/ does not belong to the openmeetings application
 ; but is the name of astDB containing the astDB family/key pair and values
 ; To Check if your astDB has been created do the following in a terminal window type the following:
-; asterisk –rx “database show”
+; asterisk -f -rx “database show”
 ; If you do not receive an output with that resembles openmeetings/rooms/400## where “##” will equal
 ; the extension assigned when you created your room
 ; If you do not receive the above output check your parameters in
@@ -169,18 +147,18 @@ Modify `/etc/asterisk/extensions.conf`
 
 [rooms]
 exten => _400X!,1,GotoIf($[${DB_EXISTS(openmeetings/rooms/${EXTEN})}]?ok:notavail)
-exten => _400X!,n(ok),SET(PIN=${DB(openmeetings/rooms/${EXTEN})})
-exten => _400X!,n,Set(CONFBRIDGE(user,template)=sip_user)
-exten => _400X!,n,Set(CONFBRIDGE(user,pin)=${PIN})
-exten => _400X!,n(ok),Confbridge(${EXTEN},default_bridge,)
-exten => _400X!,n,Hangup
-exten => _400X!,n(notavail),Answer()
-exten => _400X!,n,Playback(invalid)
-exten => _400X!,n,Hangup
+    same => n(ok),SET(PIN=${DB(openmeetings/rooms/${EXTEN})})
+    same => n,Set(CONFBRIDGE(user,template)=ombridge_inbound_user)
+    same => n,Set(CONFBRIDGE(user,pin)=${PIN})
+    same => n(ok),Confbridge(${EXTEN},default_bridge,)
+    same => n,Hangup
+    same => n(notavail),Answer()
+    same => n,Playback(invalid)
+    same => n,Hangup
 
 [rooms-originate]
-exten => _400X!,1,Confbridge(${EXTEN},default_bridge,sip_user)
-exten => _400X!,n,Hangup
+exten => _400X!,1,Confbridge(${EXTEN},default_bridge,ombridge_inbound_user)
+    same => n,Hangup
 
 [rooms-out]
 ; *****************************************************
@@ -189,8 +167,8 @@ exten => _400X!,n,Hangup
 
 [rooms-omsip]
 exten => _400X!,1,GotoIf($[${DB_EXISTS(openmeetings/rooms/${EXTEN})}]?ok:notavail)
-exten => _400X!,n(ok),Confbridge(${EXTEN},default_bridge,omsip_user)
-exten => _400X!,n(notavail),Hangup
+    same => n(ok),Confbridge(${EXTEN},default_bridge,ombridge_outbound_user)
+    same => n(notavail),Hangup
 ```
 
 ### Configure Confbridge
@@ -202,13 +180,13 @@ Modify `/etc/asterisk/confbridge.conf`
 ```
 [general]
 
-[omsip_user]
+[ombridge_outbound_user]
 type=user
 marked=yes
 dsp_drop_silence=yes
 denoise=true
 
-[sip_user]
+[ombridge_inbound_user]
 type=user
 end_marked=yes
 wait_marked=yes
@@ -274,6 +252,15 @@ If you're not already familiar with configuring Asterisk's chan_pjsip driver, vi
 Modify `/etc/asterisk/pjsip.conf` as follows:
 
 ```
+; So users can login via for ex. soft-phone
+;
+[transport-udp]
+type=transport
+protocol=udp    ;udp,tcp,tls,ws,wss,flow
+bind=0.0.0.0
+
+; This one for internal OM-to-SIP connections
+;
 [transport-wss]
 type=transport
 protocol=wss
@@ -281,8 +268,32 @@ bind=0.0.0.0
 ; All other transport parameters are ignored for wss transports.
 ```
 
+**Add user for the "SIP Transport"**
+
+```
+[omsip_user]
+type=aor
+max_contacts=1
+remove_existing=yes
+
+[omsip_user]
+type=endpoint
+context=rooms-omsip
+disallow=all
+allow=ulaw,opus,h264
+transport=transport-wss
+auth=omsip_user
+aors=omsip_user
+
+[omsip_user]
+type=auth
+auth_type=userpass
+password=12345
+username=omsip_user
+```
+
 ## Call from room to external number
-Modify `/etc/asterisk/sip.conf`
+Modify `/etc/asterisk/pjsip.conf`
 
 **Add your external provider**
 
@@ -317,6 +328,6 @@ Modify `/etc/asterisk/extensions.conf`
 ; Extensions for outgoing calls from Openmeetings room.
 ; *****************************************************
 exten => _00000,1,Answer
-exten => _00000,n,Dial(SIP/00000@SIPNET,30)
-exten => _00000s,n,HangUp
+    same => n,Dial(PJSIP/00000@SIPNET,30)
+    same => n,HangUp
 ```

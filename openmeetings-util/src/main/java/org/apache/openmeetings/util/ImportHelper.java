@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.util;
 
+import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -46,5 +47,26 @@ public class ImportHelper {
 		}
 
 		return result;
+	}
+
+	public static boolean setPrivateValue(Object obj, String fieldName, Object value) {
+		try {
+			Field field = obj.getClass().getDeclaredField(fieldName);
+			field.setAccessible(true);
+			field.set(obj, value);
+		} catch (IllegalAccessException | NoSuchFieldException e) {
+			return false;
+		}
+		return true;
+	}
+
+	public static <T> T getPrivateValue(Object obj, String fieldName, Class<T> clazz) {
+		try {
+			Field field = obj.getClass().getDeclaredField(fieldName);
+			field.setAccessible(true);
+			return clazz.cast(field.get(obj));
+		} catch (IllegalAccessException | NoSuchFieldException e) {
+			return null;
+		}
 	}
 }

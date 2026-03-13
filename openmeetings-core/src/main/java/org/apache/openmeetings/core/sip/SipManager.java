@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.ISipManager;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.util.string.Strings;
 import org.asteriskjava.manager.DefaultManagerConnection;
 import org.asteriskjava.manager.ManagerConnection;
@@ -93,7 +94,7 @@ public class SipManager implements ISipManager {
 	private BitSet ports;
 
 	@PostConstruct
-	public void init() {
+	private void init() {
 		if (!Strings.isEmpty(sipHostname)) {
 			factory = new ManagerConnectionFactory(
 					sipHostname
@@ -105,10 +106,20 @@ public class SipManager implements ISipManager {
 	}
 
 	@PreDestroy
-	public void destroy() {
+	private void destroy() {
 		if (con != null) {
 			con.logoff();
 		}
+	}
+
+	@Value("${sip.max.contacts:1}")
+	private void setSipMaxContacts(int max) {
+		OpenmeetingsVariables.setDefaultSipMaxContacts(max);
+	}
+
+	@Value("${sip.transport:transport-udp}")
+	private void setSipTransport(String transport) {
+		OpenmeetingsVariables.setDefaultSipTransport(transport);
 	}
 
 	private void connectManager() throws Exception {

@@ -61,6 +61,8 @@ import static org.apache.openmeetings.db.bind.Constants.VERSION_NODE;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
+import static org.apache.openmeetings.util.ImportHelper.getPrivateValue;
+import static org.apache.openmeetings.util.ImportHelper.setPrivateValue;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.CSS_DIR;
@@ -223,6 +225,7 @@ import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
+import org.apache.openmeetings.db.entity.user.AsteriskSipUser;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
@@ -733,8 +736,19 @@ public class BackupImport {
 
 			Long userId = u.getId();
 			u.setId(null);
-			if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
-				u.getSipUser().setId(0);
+			if (u.getSipUser() != null) {
+				AsteriskSipUser sip = u.getSipUser();
+				String digest = getPrivateValue(sip, "passwordDigest", String.class);
+				if (digest == null || !setPrivateValue(sip, "userId", 0)) {
+					u.setSipUser(null);
+				} else {
+					if (!digest.contains(":")) {
+						setPrivateValue(sip, "passwordDigest", "MD5:" + digest);
+						setPrivateValue(sip, "supportedAlgorithmsUac", "MD5");
+						setPrivateValue(sip, "supportedAlgorithmsUas", "MD5");
+					}
+					sip.setUsername(u.getLogin());
+				}
 			}
 			if (AuthLevelUtil.hasLoginLevel(u.getRights()) && !Strings.isEmpty(u.getActivatehash())) {
 				u.setActivatehash(null);

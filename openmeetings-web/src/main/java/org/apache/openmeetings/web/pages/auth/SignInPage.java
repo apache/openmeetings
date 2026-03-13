@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.pages.auth;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterFrontend;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
@@ -142,7 +141,7 @@ public class SignInPage extends BaseInitedPage {
 				} else {
 					log.error("Failed to login via OAuth2!");
 				}
-			} catch (IOException|NoSuchAlgorithmException|JSONException e) {
+			} catch (IOException|JSONException e) {
 				log.error("OAuth2 login error", e);
 			}
 		}

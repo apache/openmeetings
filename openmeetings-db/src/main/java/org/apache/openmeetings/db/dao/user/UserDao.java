@@ -34,7 +34,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLeng
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,7 +56,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.AsteriskSipUser;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
@@ -276,7 +274,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	//this method is required to be able to drop reset hash
-	public User resetPassword(User u, String password) throws NoSuchAlgorithmException {
+	public User resetPassword(User u, String password) {
 		if (u != null) {
 			u.setResethash(null);
 			u = update(u, password, u.getId());
@@ -284,7 +282,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return u;
 	}
 
-	private User updatePassword(Long id, String pwd, Long updatedBy) throws NoSuchAlgorithmException {
+	private User updatePassword(Long id, String pwd, Long updatedBy) {
 		//OpenJPA is not allowing to set fields not being fetched before
 		User u = get(id, true);
 		u.updatePassword(pwd);
@@ -292,7 +290,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	// Why the password field is not set via the Model is because its FetchType is Lazy
-	public User update(User user, String password, Long updatedBy) throws NoSuchAlgorithmException {
+	public User update(User user, String password, Long updatedBy) {
 		User u = update(user, updatedBy);
 		if (u != null && !Strings.isEmpty(password)) {
 			u = updatePassword(u.getId(), password, updatedBy);
@@ -354,7 +352,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			u.setActivatehash(null);
 			u.setResethash(null);
 			u.setDeleted(true);
-			u.setSipUser(new AsteriskSipUser());
+			u.setSipUser(null);
 			u.setAddress(new Address());
 			u.setAge(LocalDate.now());
 			u.setExternalId(null);
@@ -368,11 +366,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			File pic = OmFileHelper.getUserProfilePicture(u.getId(), u.getPictureUri(), null);
 			u.setPictureUri(null);
 			ICrypt crypt = CryptProvider.get();
-			try {
-				u.updatePassword(crypt.randomPassword(25));
-			} catch (NoSuchAlgorithmException e) {
-				log.error("Unexpected exception while updating password");
-			}
+			u.updatePassword(crypt.randomPassword(25));
 			update(u, userId);
 			// this should be last action, so file will be deleted in case there were no errors
 			if (pic != null) {
@@ -503,13 +497,9 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 		if (crypt.fallback(password, hash)) {
 			log.warn("Password for user with ID {} crypted with outdated Crypt, updating ...", userId);
-			try {
-				User u = updatePassword(userId, password, userId);
-				log.warn("Password for user {} updated successfully", u);
-				return true;
-			} catch (NoSuchAlgorithmException e) {
-				log.error("Unexpected exception while updating password");
-			}
+			User u = updatePassword(userId, password, userId);
+			log.warn("Password for user {} updated successfully", u);
+			return true;
 		}
 		return false;
 	}

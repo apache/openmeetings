@@ -26,7 +26,6 @@ import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAME;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Locale;
 
@@ -244,7 +243,7 @@ public class UserWebService extends BaseWebService {
 			try {
 				jsonUser.addGroup(groupDao.get(getDefaultGroup()));
 				ouser = userManager.registerUser(jsonUser, user.getPassword(), null);
-			} catch (NoSuchAlgorithmException | OmException e) {
+			} catch (OmException e) {
 				throw new InternalServiceException("Unexpected error while creating user");
 			}
 

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.backup;
 
+import static org.apache.openmeetings.util.ImportHelper.getPrivateValue;
 import static org.apache.openmeetings.web.backup.TestImport.BACKUP_ROOT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -55,9 +56,26 @@ class TestImportUser extends AbstractTestImport {
 				.getParentFile();
 		backupImport.importGroups(userRoot);
 		backupImport.importUsers(userRoot);
-		assertEquals(userCount + 8, userDao.count(), "Users should be added");
+		assertEquals(userCount + 8, userDao.count(), "Exactly 8 users should be added");
 		User ext = userDao.getExternalUser("234", "TheBestCms");
 		assertNotNull(ext, "External user should be imported");
+	}
+
+	@Test
+	void testImportSipUsers() throws Exception {
+		long userCount = userDao.count();
+		File userRoot = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "user/sip/users.xml").toURI())
+				.getParentFile();
+		backupImport.importGroups(userRoot);
+		backupImport.importUsers(userRoot);
+		assertEquals(userCount + 1, userDao.count(), "Exactly 1 user should be added");
+
+		User u = userDao.getByLogin("TestImportUser#importSip1", User.Type.USER, null);
+		assertNotNull(u, "User MUST be successfully imported");
+		assertNotNull(u.getSipUser(), "SipUser should be NOT null");
+		assertEquals("MD5:fee3d8da8c8ba37330ba1e3a9f613407", getPrivateValue(u.getSipUser(), "passwordDigest", String.class), "Password");
+		assertEquals("MD5", getPrivateValue(u.getSipUser(), "supportedAlgorithmsUac", String.class), "supportedAlgorithmsUac");
+		assertEquals(u.getLogin(), getPrivateValue(u.getSipUser(), "id", String.class), "id");
 	}
 
 	@Test
@@ -100,5 +118,4 @@ class TestImportUser extends AbstractTestImport {
 		u = userDao.getByLogin(login, User.Type.LDAP, ldap.getId());
 		assertNotNull(u, "User should be imported");
 	}
-
 }

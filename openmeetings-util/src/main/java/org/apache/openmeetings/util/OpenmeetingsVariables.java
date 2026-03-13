@@ -190,6 +190,8 @@ public class OpenmeetingsVariables {
 	private static boolean recordingsEnabled = true;
 	private static String theme = "Sandstone";
 	private static boolean otpEnabled = false;
+	public static int defaultSipMaxContacts = 1;
+	public static String defaultSipTransport = "transport-udp";
 
 	private OpenmeetingsVariables() {}
 
@@ -649,5 +651,21 @@ public class OpenmeetingsVariables {
 
 	public static void setOtpEnabled(boolean enabled) {
 		otpEnabled = enabled;
+	}
+
+	public static int getDefaultSipMaxContacts() {
+		return defaultSipMaxContacts;
+	}
+
+	public static void setDefaultSipMaxContacts(int max) {
+		defaultSipMaxContacts = max;
+	}
+
+	public static String getDefaultSipTransport() {
+		return defaultSipTransport;
+	}
+
+	public static void setDefaultSipTransport(String transport) {
+		defaultSipTransport = transport;
 	}
 }

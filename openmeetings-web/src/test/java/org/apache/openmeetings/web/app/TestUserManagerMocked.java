@@ -34,7 +34,6 @@ import static org.mockito.Mockito.doReturn;
 
 import java.io.IOException;
 import java.net.http.HttpRequest;
-import java.security.NoSuchAlgorithmException;
 
 import org.apache.openmeetings.web.RegularTest;
 import org.apache.openmeetings.db.dao.user.GroupDao;
@@ -71,7 +70,7 @@ class TestUserManagerMocked {
 	private UserManager userManager = Mockito.spy(new UserManager());
 
 	@Test
-	void oauthTest() throws NoSuchAlgorithmException, IOException, InterruptedException {
+	void oauthTest() throws IOException, InterruptedException {
 		OAuthServer server = new OAuthServer()
 				.setName("Google")
 				.setIconUrl("https://www.google.com/images/google_favicon_128.png")
