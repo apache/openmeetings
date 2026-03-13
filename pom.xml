@@ -133,7 +133,7 @@
 		<logback.version>1.5.32</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.83</bcprov.version>
-		<mockito.version>5.22.0</mockito.version>
+		<mockito.version>5.23.0</mockito.version>
 		<quartz.version>2.5.2</quartz.version>
 		<kurento.version>7.3.0</kurento.version>
 		<gson.version>2.10</gson.version><!-- !!!! this whole dependency should be dropped !!!! -->
@@ -143,7 +143,7 @@
 		<jaxb-runtime.version>4.0.6</jaxb-runtime.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
-		<swagger.version>2.2.44</swagger.version>
+		<swagger.version>2.2.45</swagger.version>
 		<jsr305.version>3.0.2</jsr305.version>
 		<totp.version>1.7.1</totp.version>
 		<!--  Exclude all generated code  -->
