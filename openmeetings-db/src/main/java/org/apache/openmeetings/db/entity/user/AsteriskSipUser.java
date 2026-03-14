@@ -39,6 +39,7 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "om_sipuser_auth")
@@ -60,19 +61,23 @@ public class AsteriskSipUser implements Serializable {
 
 	@Id
 	@Column(name = "id")
+	@XmlTransient
 	private String id;
 
 	@Column(name = "max_contacts", table = "om_sipuser_aor")
-	@XmlElement(name = "maxContacts", required = true, defaultValue = "1")
+	@XmlElement(name = "maxContacts", required = false)
 	private int maxContacts = OpenmeetingsVariables.getDefaultSipMaxContacts();
 
 	@Column(name = "remove_existing", table = "om_sipuser_aor", nullable = false)
+	@XmlTransient
 	private String removeExisting = "yes";
 
 	@Column(name = "auth_type")
+	@XmlTransient
 	private String authType = "digest";
 
 	@Column(name = "username")
+	@XmlTransient
 	private String username;
 
 	@Column(name = "password_digest")
@@ -86,9 +91,11 @@ public class AsteriskSipUser implements Serializable {
 	private String supportedAlgorithmsUas = HASH_ALG;
 
 	@Column(name = "aors", table = "om_sipuser_endpoint")
+	@XmlTransient
 	private String aors;
 
 	@Column(name = "auth", table = "om_sipuser_endpoint")
+	@XmlTransient
 	private String auth;
 
 	@Column(name = "context", table = "om_sipuser_endpoint")
@@ -96,7 +103,7 @@ public class AsteriskSipUser implements Serializable {
 	private String context; // Varchar 128
 
 	@Column(name = "transport", nullable = false, table = "om_sipuser_endpoint")
-	@XmlElement(name = "transport", required = true, defaultValue = "transport-udp")
+	@XmlElement(name = "transport", required = false)
 	private String transport = OpenmeetingsVariables.getDefaultSipTransport();
 
 	@Column(name = "allow", nullable = false, length = 100, table = "om_sipuser_endpoint")
@@ -104,6 +111,7 @@ public class AsteriskSipUser implements Serializable {
 	private String allow = "!all,ulaw,opus,vp8";
 
 	@Column(name = "mailboxes", table = "om_sipuser_endpoint")
+	@XmlTransient
 	private String mailboxes;
 
 	public void setUsername(String username) {

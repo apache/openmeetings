@@ -22,6 +22,10 @@ import static org.apache.openmeetings.util.ImportHelper.getPrivateValue;
 import static org.apache.openmeetings.web.backup.TestImport.BACKUP_ROOT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultSipMaxContacts;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultSipTransport;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultSipMaxContacts;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultSipTransport;
 
 import java.io.File;
 import java.util.List;
@@ -63,19 +67,30 @@ class TestImportUser extends AbstractTestImport {
 
 	@Test
 	void testImportSipUsers() throws Exception {
-		long userCount = userDao.count();
-		File userRoot = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "user/sip/users.xml").toURI())
-				.getParentFile();
-		backupImport.importGroups(userRoot);
-		backupImport.importUsers(userRoot);
-		assertEquals(userCount + 1, userDao.count(), "Exactly 1 user should be added");
+		int oldMax = getDefaultSipMaxContacts();
+		String oldTransport = getDefaultSipTransport();
+		setDefaultSipMaxContacts(5);
+		setDefaultSipTransport("transport-tcp");
+		try {
+			long userCount = userDao.count();
+			File userRoot = new File(getClass().getClassLoader().getResource(BACKUP_ROOT + "user/sip/users.xml").toURI())
+					.getParentFile();
+			backupImport.importGroups(userRoot);
+			backupImport.importUsers(userRoot);
+			assertEquals(userCount + 1, userDao.count(), "Exactly 1 user should be added");
 
-		User u = userDao.getByLogin("TestImportUser#importSip1", User.Type.USER, null);
-		assertNotNull(u, "User MUST be successfully imported");
-		assertNotNull(u.getSipUser(), "SipUser should be NOT null");
-		assertEquals("MD5:fee3d8da8c8ba37330ba1e3a9f613407", getPrivateValue(u.getSipUser(), "passwordDigest", String.class), "Password");
-		assertEquals("MD5", getPrivateValue(u.getSipUser(), "supportedAlgorithmsUac", String.class), "supportedAlgorithmsUac");
-		assertEquals(u.getLogin(), getPrivateValue(u.getSipUser(), "id", String.class), "id");
+			User u = userDao.getByLogin("TestImportUser#importSip1", User.Type.USER, null);
+			assertNotNull(u, "User MUST be successfully imported");
+			assertNotNull(u.getSipUser(), "SipUser should be NOT null");
+			assertEquals("MD5:fee3d8da8c8ba37330ba1e3a9f613407", getPrivateValue(u.getSipUser(), "passwordDigest", String.class), "Password");
+			assertEquals("MD5", getPrivateValue(u.getSipUser(), "supportedAlgorithmsUac", String.class), "supportedAlgorithmsUac");
+			assertEquals(u.getLogin(), getPrivateValue(u.getSipUser(), "id", String.class), "id");
+			assertEquals(getDefaultSipMaxContacts(), getPrivateValue(u.getSipUser(), "maxContacts", Integer.class), "maxContacts");
+			assertEquals(getDefaultSipTransport(), getPrivateValue(u.getSipUser(), "transport", String.class), "transport");
+		} finally {
+			setDefaultSipMaxContacts(oldMax);
+			setDefaultSipTransport(oldTransport);
+		}
 	}
 
 	@Test
