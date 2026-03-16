@@ -1460,7 +1460,6 @@
 					<groupId>org.apache.rat</groupId>
 					<artifactId>apache-rat-plugin</artifactId>
 					<configuration>
-						<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
 						<licenses>
 							<license>
 								<family>OM_MIT</family>
@@ -1496,18 +1495,18 @@
 								<name>Public Domain</name>
 							</family>
 						</families>
-						<excludes>
-							<exclude>**/*.mp3</exclude>
-							<exclude>**/*.pdf</exclude>
-							<exclude>**/localhost.jks</exclude>
-							<exclude>**/node_modules/**</exclude>
-							<exclude>**/package-lock.json</exclude>
-							<exclude>**/target/**</exclude>
-							<exclude>**/.project</exclude>
-							<exclude>**/.classpath</exclude>
-							<exclude>**/.settings/**</exclude>
-							<exclude>.gitattributes</exclude>
-						</excludes>
+						<inputExcludes>
+							<inputExclude>**/*.mp3</inputExclude>
+							<inputExclude>**/*.pdf</inputExclude>
+							<inputExclude>**/localhost.jks</inputExclude>
+							<inputExclude>**/node_modules/**</inputExclude>
+							<inputExclude>**/package-lock.json</inputExclude>
+							<inputExclude>**/target/**</inputExclude>
+							<inputExclude>**/.project</inputExclude>
+							<inputExclude>**/.classpath</inputExclude>
+							<inputExclude>**/.settings/**</inputExclude>
+							<inputExclude>.gitattributes</inputExclude>
+						</inputExcludes>
 						<verbose>true</verbose>
 					</configuration>
 				</plugin>

@@ -25,6 +25,7 @@ import java.io.File;
 import java.net.InetAddress;
 import java.nio.file.Files;
 
+import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
@@ -46,14 +47,19 @@ public class CreateTomcatExtension implements BeforeAllCallback {
 	@Override
 	public void beforeAll(ExtensionContext extContext) throws Exception {
 		if (tomcat == null) {
-			extContext.getRoot().getStore(ExtensionContext.Namespace.GLOBAL).put("my_report", new ExtensionContext.Store.CloseableResource() {
+			extContext.getRoot().getStore(ExtensionContext.Namespace.GLOBAL).put("my_report", new AutoCloseable() {
 				@Override
-				public void close() throws Throwable {
+				public void close() {
 					if (tomcat.getServer() != null && tomcat.getServer().getState() != LifecycleState.DESTROYED) {
-						if (tomcat.getServer().getState() != LifecycleState.STOPPED) {
-							tomcat.stop();
+						try {
+							if (tomcat.getServer().getState() != LifecycleState.STOPPED) {
+								tomcat.stop();
+							}
+							tomcat.destroy();
+						} catch (LifecycleException e) {
+							// something prevent clean stop/destroy
+							throw new RuntimeException(e);
 						}
-						tomcat.destroy();
 					}
 				}
 			});
@@ -69,6 +75,7 @@ public class CreateTomcatExtension implements BeforeAllCallback {
 			tomcat.getHost().setAppBase(wd.getCanonicalPath());
 			tomcat.getHost().setAutoDeploy(false);
 			tomcat.getHost().setDeployOnStartup(false);
+			tomcat.setAddDefaultWebXmlToWebapp(false);
 			tomcat.addWebapp(context, getOmHome().getAbsolutePath());
 			tomcat.getConnector(); // to init the connector
 			tomcat.start();
