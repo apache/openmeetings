@@ -13,5 +13,5 @@
 # #############################################
 github:
   dependabot_alerts:  true
-  dependabot_updates: false
+  dependabot_updates: true
 
