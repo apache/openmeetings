@@ -20,8 +20,11 @@ package org.apache.openmeetings.ws;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.web.AbstractOmServerTest.ADMIN_USERNAME;
 import static org.apache.openmeetings.web.AbstractOmServerTest.UNIT_TEST_ARAB_EXT_TYPE;
+import static org.apache.openmeetings.web.AbstractOmServerTest.USER_PASS;
 import static org.apache.openmeetings.web.AbstractOmServerTest.createUser;
+import static org.apache.openmeetings.web.AbstractOmServerTest.createPass;
 import static org.apache.openmeetings.web.AbstractOmServerTest.getUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -33,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
+import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
 
@@ -49,6 +53,8 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.NonJenkinsTest;
 import org.apache.wicket.util.encoding.UrlEncoder;
 import org.junit.jupiter.api.Test;
+
+import jakarta.ws.rs.core.Response;
 
 class TestFileService extends AbstractWebServiceTest {
 
@@ -107,5 +113,90 @@ class TestFileService extends AbstractWebServiceTest {
 				.getCollection(FileItemDTO.class);
 		assertNotNull(list);
 		assertFalse(list.isEmpty());
+	}
+
+	private static FileItem createFolder(String name, Consumer<FileItem> patcher, Long owner) {
+		FileItem folder = new FileItem();
+		folder.setName(name);
+		folder.setType(BaseFileItem.Type.FOLDER);
+		patcher.accept(folder);
+		folder.setInsertedBy(owner);
+		return folder;
+	}
+
+	private FileItem prepareGetParent(User admin, String prefix, Consumer<FileItem> patcher) {
+		FileItemDao fileDao = getBean(FileItemDao.class);
+		FileItem parent0 = createFolder(prefix + " Parent 0", patcher, admin.getId());
+		fileDao.update(parent0);
+
+		FileItem parent1 = createFolder(prefix + " Parent 1", patcher, admin.getId());
+		parent1.setParentId(parent0.getId());
+		fileDao.update(parent1);
+
+		FileItem parent2 = createFolder(prefix + " Parent 2", patcher, admin.getId());
+		parent2.setParentId(parent1.getId());
+		fileDao.update(parent2);
+
+		FileItem parent3 = createFolder(prefix + " Parent 3", patcher, admin.getId());
+		parent3.setParentId(parent2.getId());
+		fileDao.update(parent3);
+
+		FileItem adminFolder = createFolder(prefix + " Folder", patcher, admin.getId());
+		adminFolder.setParentId(parent3.getId());
+		fileDao.update(adminFolder);
+		//
+		FileItem adminFile = new FileItem();
+		adminFile.setName(prefix + " File");
+		adminFile.setType(BaseFileItem.Type.POLL_CHART);
+		patcher.accept(adminFile);
+		adminFile.setParentId(adminFolder.getId());
+		adminFile.setInsertedBy(admin.getId());
+		fileDao.update(adminFile);
+
+		return adminFolder;
+	}
+
+	private void accessRoomByParentDenied(Long fldId, long roomId, String user, String pass) {
+		ServiceResult r = login(user, pass);
+		Response resp = getClient(getFileUrl())
+				.path("/room/" + roomId + "/" + fldId)
+				.query("sid", r.getMessage())
+				.get();
+		assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), resp.getStatus(), "Call should NOT be successful");
+	}
+
+	private void accessRoomByParentGranted(Long fldId, long roomId, String user, String pass) {
+		ServiceResult r = login(user, pass);
+		Collection<? extends FileItemDTO> list = getClient(getFileUrl())
+				.path("/room/" + roomId + "/" + fldId)
+				.query("sid", r.getMessage())
+				.getCollection(FileItemDTO.class);
+		assertNotNull(list);
+		assertFalse(list.isEmpty());
+	}
+
+	@Test
+	void testGetRoomByParent() throws Exception{
+		UserDao userDao = getBean(UserDao.class);
+		User admin = userDao.getByLogin(ADMIN_USERNAME, User.Type.USER, null);
+		FileItem adminFolder = prepareGetParent(admin, "Admin", fi -> fi.setOwnerId(admin.getId()));
+
+		Group g = new Group();
+		g.setName("group_testGetRoomByParent");
+		getBean(GroupDao.class).update(g, null);
+		User u = getUser(randomUUID().toString());
+		u.addGroup(g);
+		u = createUser(userDao, u);
+
+		accessRoomByParentDenied(adminFolder.getId(), 5, u.getLogin(), createPass());
+		accessRoomByParentGranted(adminFolder.getId(), 5, ADMIN_USERNAME, USER_PASS);
+
+		FileItem groupFolder = prepareGetParent(admin, "Group", fi -> fi.setGroupId(g.getId()));
+		accessRoomByParentDenied(groupFolder.getId(), 5, ADMIN_USERNAME, USER_PASS);
+		accessRoomByParentGranted(groupFolder.getId(), 5, u.getLogin(), createPass());
+
+		FileItem roomFolder = prepareGetParent(admin, "Room5", fi -> fi.setRoomId(5L));
+		accessRoomByParentDenied(groupFolder.getId(), 4, ADMIN_USERNAME, USER_PASS);
+		accessRoomByParentGranted(groupFolder.getId(), 5, u.getLogin(), createPass());
 	}
 }

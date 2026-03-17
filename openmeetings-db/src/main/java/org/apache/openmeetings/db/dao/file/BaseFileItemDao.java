@@ -165,4 +165,12 @@ public class BaseFileItemDao implements IDataProviderDao<BaseFileItem> {
 	public void delete(BaseFileItem entity, Long userId) {
 		throw UNSUPPORTED;
 	}
+
+	public BaseFileItem getRoot(long id) {
+		BaseFileItem item = get(id);
+		while (item.getParentId() != null) {
+			item = get(item.getParentId());
+		}
+		return item;
+	}
 }

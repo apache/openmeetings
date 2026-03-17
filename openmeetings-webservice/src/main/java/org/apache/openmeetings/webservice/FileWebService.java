@@ -42,10 +42,12 @@ import jakarta.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.apache.openmeetings.core.data.file.FileProcessor;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.file.FileExplorerObject;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
@@ -88,6 +90,8 @@ public class FileWebService extends BaseWebService {
 
 	@Inject
 	private FileProcessor fileProcessor;
+	@Inject
+	private GroupUserDao groupUserDao;
 
 	/**
 	 * deletes files or folders based on it id
@@ -323,7 +327,37 @@ public class FileWebService extends BaseWebService {
 			) throws ServiceException
 	{
 		log.debug("getRoomByParent {}", parentId);
-		return performCall(sid, User.Right.ROOM, sd -> {
+		return performCall(sid
+			, sd -> {
+				Long userId = sd.getUserId();
+				Set<Right> rights = getRights(userId);
+				if (!AuthLevelUtil.check(rights, User.Right.ROOM)) {
+					// insufficient rights
+					return false;
+				}
+				if (parentId < 0) {
+					// will get files by room or owner
+					return true;
+				}
+				BaseFileItem root = fileDao.getRoot(parentId);
+				if (root == null) {
+					// non-existing file requested
+					return false;
+				}
+				if (userId.equals(root.getOwnerId())) {
+					// allowed for owner
+					return true;
+				}
+				if (Long.valueOf(roomId).equals(root.getRoomId())) {
+					// room public
+					return true;
+				}
+				if (root.getGroupId() != null && groupUserDao.isUserInGroup(root.getGroupId(), userId)) {
+					// Allowed for group
+					return true;
+				}
+				return false;
+			}, sd -> {
 			List<FileItem> list;
 			if (parentId < 0) {
 				if (parentId == -1) {
