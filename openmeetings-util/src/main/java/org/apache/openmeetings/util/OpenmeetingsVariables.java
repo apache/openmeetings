@@ -122,6 +122,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_RECORDING_ENABLED = "recording.enabled";
 	public static final String CONFIG_THEME = "ui.theme";
 	public static final String CONFIG_OTP_ENABLED = "otp.enabled";
+	public static final String CONFIG_REMEMBER_ME_KEY = "remember.me.key";
 
 	public static final int RECENT_ROOMS_COUNT = 5;
 	public static final int USER_LOGIN_MINIMUM_LENGTH = 4;

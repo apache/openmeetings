@@ -27,6 +27,9 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class CalendarHelper {
+	public static final long ONE_HOUR = 60 * 60 * 1000L; // 1 hour
+	public static final long ONE_DAY = 24 * ONE_HOUR; // 1 day
+
 	private CalendarHelper() {
 		// denied
 	}

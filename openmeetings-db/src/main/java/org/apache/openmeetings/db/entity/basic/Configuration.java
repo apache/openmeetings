@@ -109,6 +109,21 @@ public class Configuration extends HistoricalEntity {
 	@XmlJavaTypeAdapter(UserAdapter.class)
 	private User user;
 
+	public Configuration() {}
+
+	public Configuration(String key
+			, String value
+			, Configuration.Type type
+			, String comment
+			, String fromVersion)
+	{
+		this.type = type;
+		this.key = key;
+		this.value = value;
+		this.comment = comment;
+		this.fromVersion = fromVersion;
+	}
+
 	public String getComment() {
 		return comment;
 	}

@@ -18,10 +18,12 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.installation.ImportInitvalues.initialRememberMeKeyCfg;
 import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REMEMBER_ME_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
@@ -35,10 +37,13 @@ import static org.wicketstuff.dashboard.DashboardContextInitializer.DASHBOARD_CO
 
 import java.io.File;
 import java.net.UnknownHostException;
+import java.security.Security;
 import java.text.MessageFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -47,6 +52,7 @@ import java.util.stream.Stream;
 import jakarta.annotation.Nonnull;
 import jakarta.websocket.WebSocketContainer;
 
+import org.apache.commons.text.RandomStringGenerator;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.core.util.ChatWebSocketHelper;
@@ -58,6 +64,7 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
+import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -98,6 +105,7 @@ import org.apache.openmeetings.web.user.dashboard.admin.AdminWidgetDescriptor;
 import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
 import org.apache.openmeetings.web.user.record.PngRecordingResourceReference;
 import org.apache.openmeetings.web.util.GroupLogoResourceReference;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OmVersion;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
@@ -133,6 +141,7 @@ import org.apache.wicket.settings.ExceptionSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.validator.UrlValidator;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.apache.openmeetings.mediaserver.KStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -200,15 +209,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private AppointmentDao appointmentDao;
 	@Inject
 	private SipManager sipManager;
-	@Value("${remember.me.encryption.key}")
-	private String rememberMeKey;
-	@Value("${remember.me.encryption.salt}")
-	private String rememberMeSalt;
+	@Value("${remember.me.rotation.days:30}")
+	private int rememberRotationDays;
 
 	@Override
 	protected void init() {
 		setWicketApplicationName(super.getName());
-		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy(rememberMeKey, rememberMeSalt));
+		initRememberMe();
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 		getApplicationSettings().setInternalErrorPage(InternalErrorPage.class);
 		getExceptionSettings().setUnexpectedExceptionDisplay(ExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
@@ -374,6 +381,29 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			log.error("[appStart]", err);
 		}
 		warmup();
+	}
+
+	private void initRememberMe() {
+		Security.addProvider(new BouncyCastleProvider());
+		Configuration encKeyCfg = Optional.ofNullable(cfgDao.get(CONFIG_REMEMBER_ME_KEY)).orElse(initialRememberMeKeyCfg());
+
+		long lastUpdated = Optional.ofNullable(encKeyCfg.getUpdated()).orElse(new Date()).getTime()
+				+ rememberRotationDays * CalendarHelper.ONE_DAY;
+		if (Strings.isEmpty(encKeyCfg.getValue())
+				|| encKeyCfg.getValue().length() < 4
+				|| lastUpdated < new Date().getTime())
+		{
+			log.warn("'Remember me' key is missing/outdated, going to regenerate");
+
+			RandomStringGenerator generator = new RandomStringGenerator.Builder()
+				.withinRange('!', '~')
+				.usingRandom(max -> getSecuritySettings().getRandomSupplier().getRandom().nextInt(max))
+				.get();
+
+			encKeyCfg.setValue(generator.generate(20));
+			cfgDao.update(encKeyCfg, null);
+		}
+		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy(encKeyCfg.getValue()));
 	}
 
 	private void warmup() {

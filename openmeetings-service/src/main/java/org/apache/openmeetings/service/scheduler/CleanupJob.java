@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,11 +47,11 @@ public class CleanupJob extends AbstractJob {
 	@Value("${job.cleanup.session.timeout}")
 	private long sessionTimeout = 30 * 60 * 1000L;
 	@Value("${job.cleanup.test.setup.timeout}")
-	private long testSetupTimeout = 60 * 60 * 1000L; // 1 hour
+	private long testSetupTimeout = CalendarHelper.ONE_HOUR;
 	@Value("${job.cleanup.reset.hash.ttl}")
-	private long resetHashTtl = 24 * 60 * 60 * 1000L; // 1 day
+	private long resetHashTtl = CalendarHelper.ONE_DAY;
 	@Value("${job.cleanup.conf.log.ttl}")
-	private long confLogTtl = 7 * 24 * 60 * 60 * 1000L; // 7 days
+	private long confLogTtl = 7 * CalendarHelper.ONE_DAY;
 
 	@Inject
 	private SessiondataDao sessionDao;

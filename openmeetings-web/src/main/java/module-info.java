@@ -75,6 +75,7 @@ module org.apache.openmeetings.web {
 
 	requires com.hazelcast.core;
 	requires org.danekja.jdk.serializable.functional;
+	requires org.bouncycastle.provider;
 	requires xstream;
 
 	requires spring.beans;

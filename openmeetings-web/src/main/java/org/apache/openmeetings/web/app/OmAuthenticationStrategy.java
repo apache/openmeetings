@@ -18,25 +18,31 @@
  */
 package org.apache.openmeetings.web.app;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Arrays;
+import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
+import org.apache.wicket.util.crypt.AbstractCrypt;
 import org.apache.wicket.util.crypt.ICrypt;
-import org.apache.wicket.util.crypt.SunJceCrypt;
 import org.apache.wicket.util.string.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class OmAuthenticationStrategy extends DefaultAuthenticationStrategy {
-	private static final Logger log = LoggerFactory.getLogger(OmAuthenticationStrategy.class);
 	private static final String COOKIE_KEY = "LoggedIn";
+	private static final int SALT_LENGTH = 20;
+	private static final int IV_LENGTH = 12;
+	private static final int AUTH_TAG = 128;
 
-	public OmAuthenticationStrategy(String encryptionKey, String salt) {
-		super(COOKIE_KEY, defaultCrypt(encryptionKey, salt));
+	public OmAuthenticationStrategy(String encryptionKey) {
+		super(COOKIE_KEY, defaultCrypt(encryptionKey));
 	}
 
 	/**
@@ -76,19 +82,45 @@ public class OmAuthenticationStrategy extends DefaultAuthenticationStrategy {
 		}
 	}
 
-	private static ICrypt defaultCrypt(String encryptionKey, String saltStr) {
-		SunJceCrypt crypt = null;
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				PrintStream ps = new PrintStream(baos);)
-		{
-			ps.append(saltStr).append("om_secret");
-			byte[] salt = Arrays.copyOfRange(baos.toByteArray(), 0, 8);
+	private static ICrypt defaultCrypt(String encKey) {
+		return new AbstractCrypt() {
+			@Override
+			protected byte[] crypt(byte[] input, int mode) throws GeneralSecurityException {
+				final SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WITHHMACSHA256", "BC");
+				final SecureRandom rnd = Application.get().getSecuritySettings().getRandomSupplier().getRandom();
+				if (mode == Cipher.ENCRYPT_MODE) {
+					byte[] salt = new byte[SALT_LENGTH];
+					rnd.nextBytes(salt);
+					KeySpec spec = new PBEKeySpec(encKey.toCharArray(), salt, 65536, 256);
+					SecretKey secret = new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
+					byte[] iv = new byte[IV_LENGTH];
+					rnd.nextBytes(iv);
+					Cipher enc = Cipher.getInstance("AES/GCM/NoPadding", "BC");
+					enc.init(mode, secret, new GCMParameterSpec(AUTH_TAG, iv));
+					byte[] res = enc.doFinal(input);
+					byte[] result = new byte[SALT_LENGTH + IV_LENGTH + res.length];
+					System.arraycopy(salt, 0, result, 0, SALT_LENGTH);
+					System.arraycopy(iv, 0, result, SALT_LENGTH, IV_LENGTH);
+					System.arraycopy(res, 0, result, SALT_LENGTH + IV_LENGTH, res.length);
+					return result;
+				} else {
+					if (input.length < SALT_LENGTH + IV_LENGTH + 1) {
+						return new byte[0]; // input too short, nothing to decode
+					}
+					byte[] salt = new byte[SALT_LENGTH];
+					System.arraycopy(input, 0, salt, 0, SALT_LENGTH);
+					byte[] iv = new byte[IV_LENGTH];
+					System.arraycopy(input, SALT_LENGTH, iv, 0, IV_LENGTH);
+					byte[] data = new byte[input.length - SALT_LENGTH - IV_LENGTH];
+					System.arraycopy(input, SALT_LENGTH + IV_LENGTH, data, 0, data.length);
 
-			crypt = new SunJceCrypt(salt, 1000);
-			crypt.setKey(encryptionKey);
-		} catch (IOException e) {
-			log.error("Enxpected error while creating crypt", e);
-		}
-		return crypt;
+					KeySpec spec = new PBEKeySpec(encKey.toCharArray(), salt, 65536, 256);
+					SecretKey secret = new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
+					Cipher dec = Cipher.getInstance("AES/GCM/NoPadding", "BC");
+					dec.init(mode, secret, new GCMParameterSpec(AUTH_TAG, iv));
+					return dec.doFinal(data);
+				}
+			}
+		};
 	}
 }

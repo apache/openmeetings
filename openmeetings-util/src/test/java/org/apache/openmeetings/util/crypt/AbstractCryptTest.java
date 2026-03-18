@@ -53,7 +53,7 @@ abstract class AbstractCryptTest {
 		List<String> l = new ArrayList<>(count + 1);
 		l.add("");
 		RandomStringGenerator generator = new RandomStringGenerator.Builder()
-				.withinRange('!', '}')
+				.withinRange('!', '~')
 				.usingRandom(rnd::nextInt)
 				.get();
 		for (int i = 0; i < count; ++i) {

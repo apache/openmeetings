@@ -43,6 +43,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.tomcat.util.scan.Constants;
 import org.junit.jupiter.api.AfterEach;
@@ -61,7 +62,6 @@ import jakarta.inject.Inject;
 public abstract class AbstractOmServerTest {
 	private static final Logger log = LoggerFactory.getLogger(AbstractOmServerTest.class);
 	private static final String TIME_ZONE = "Europe/Berlin";
-	public static final int ONE_HOUR = 60 * 60 * 1000;
 	public static final String ADMIN_USERNAME = "admin";
 	public static final String REGULAR_USERNAME = "user";
 	public static final String SOAP_USERNAME = "soap";
@@ -134,7 +134,7 @@ public abstract class AbstractOmServerTest {
 	public Appointment getAppointment() {
 		Date start = new Date();
 		Date end = new Date();
-		end.setTime(start.getTime() + ONE_HOUR);
+		end.setTime(start.getTime() + CalendarHelper.ONE_HOUR);
 		return getAppointment(start, end);
 	}
 

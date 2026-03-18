@@ -19,7 +19,6 @@
 package org.apache.openmeetings.ws;
 
 import static java.util.UUID.randomUUID;
-import static org.apache.openmeetings.web.AbstractOmServerTest.ONE_HOUR;
 import static org.apache.openmeetings.web.AbstractOmServerTest.createPass;
 import static org.apache.openmeetings.web.AbstractOmServerTest.createUser;
 import static org.apache.openmeetings.web.AbstractOmServerTest.getAppointment;
@@ -51,6 +50,7 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.webservice.util.AppointmentParamConverter;
 import org.junit.jupiter.api.Test;
 
@@ -69,7 +69,9 @@ class TestCalendarService extends AbstractWebServiceTest {
 		u = getBean(UserDao.class).get(u.getId());
 
 		Date start = new Date();
-		Appointment a = AbstractOmServerTest.createAppointment(getBean(AppointmentDao.class), getAppointment(u, r, start, new Date(start.getTime() + ONE_HOUR)));
+		Appointment a = AbstractOmServerTest.createAppointment(
+				getBean(AppointmentDao.class)
+				, getAppointment(u, r, start, new Date(start.getTime() + CalendarHelper.ONE_HOUR)));
 
 		AppointmentDTO app = getClient(getCalendarUrl()).path("/room/" + a.getRoom().getId()).query("sid", sr.getMessage())
 				.get(AppointmentDTO.class);

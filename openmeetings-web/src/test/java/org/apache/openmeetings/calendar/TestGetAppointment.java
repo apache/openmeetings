@@ -27,6 +27,7 @@ import java.util.Date;
 import org.apache.openmeetings.web.AbstractOmServerTest;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +63,11 @@ class TestGetAppointment extends AbstractOmServerTest {
 	@Test
 	void testGetByRoom() {
 		Date start = new Date();
-		Appointment a = createAppointment(getAppointment(userDao.get(1L), roomDao.get(5L), start, new Date(start.getTime() + ONE_HOUR)));
+		Appointment a = createAppointment(
+				getAppointment(userDao.get(1L)
+				, roomDao.get(5L)
+				, start
+				, new Date(start.getTime() + CalendarHelper.ONE_HOUR)));
 		Appointment a1 = appointmentDao.getByRoom(1L, 5L);
 		assertNotNull(a1, "Created appointment should be found");
 		assertEquals(a.getId(), a1.getId());

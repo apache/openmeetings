@@ -27,6 +27,7 @@ import static org.apache.wicket.csp.CSPDirectiveSrcValue.STRICT_DYNAMIC;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -71,7 +72,7 @@ import com.github.openjson.JSONObject;
  * {@link #getInt(String, int)}
  * {@link #getString(String, String)}
  *
- * <b> {@link #get(String)} is deprecated!</b>
+ * <b> {@link #get(String)} can be used in case Entity is needed!</b>
  *
  * @author swagner
  *
@@ -227,10 +228,12 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		String value = entity.getValue();
 		if (entity.getId() == null || entity.getId().longValue() <= 0) {
 			entity.setDeleted(deleted);
+			entity.setInserted(new Date());
 			em.persist(entity);
 		} else {
 			entity.setUser(userDao.get(userId));
 			entity.setDeleted(deleted);
+			entity.setUpdated(new Date());
 			entity = em.merge(entity);
 		}
 		switch (key) {
@@ -512,6 +515,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadRecordingEnabled();
 		reloadTheme();
 		reloadOtpEnabled();
+		// NOTE 'remember me' settings are not being cached (only required at app start)
 
 		updateCsp();
 	}
