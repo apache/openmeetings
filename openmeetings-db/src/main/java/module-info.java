@@ -83,4 +83,5 @@ module org.apache.openmeetings.db {
 	requires org.dom4j;
 	requires org.slf4j;
 	requires ical4j.core;
+	requires owasp.java.html.sanitizer;
 }

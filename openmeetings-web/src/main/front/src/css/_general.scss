@@ -282,13 +282,13 @@ table.messages {
 			font-weight: normal;
 			padding: 0;
 			display: inline-block;
-			width: 18px;
-			height: 18px;
+			width: 20px;
+			height: 20px;
 
 			i {
 				top: 2px;
 				position: absolute;
-				inset-inline-start: 4px;
+				inset-inline-start: 0;
 			}
 		}
 	}

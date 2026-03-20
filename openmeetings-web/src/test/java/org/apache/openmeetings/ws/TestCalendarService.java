@@ -19,6 +19,7 @@
 package org.apache.openmeetings.ws;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.util.CalendarHelper.getDate;
 import static org.apache.openmeetings.web.AbstractOmServerTest.createPass;
 import static org.apache.openmeetings.web.AbstractOmServerTest.createUser;
 import static org.apache.openmeetings.web.AbstractOmServerTest.getAppointment;
@@ -29,9 +30,11 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.core.Response;
@@ -50,9 +53,13 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.mapper.CalendarMapper;
 import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.webservice.util.AppointmentParamConverter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
@@ -144,6 +151,38 @@ class TestCalendarService extends AbstractWebServiceTest {
 		assertNotNull(dto.getId(), "DTO id should be valid");
 
 		return sid;
+	}
+
+	// taken from here https://github.com/devspidr/XSS_payloads_list
+	private static Stream<Arguments> providePayloads() {
+		return Stream.of(
+			Arguments.of("<img src/onerror=prompt(8)>", "")
+			, Arguments.of("</scrip</script>t><img src =q onerror=prompt(8)>", "t&gt;")
+			, Arguments.of("<script\\x20type=\"text/javascript\">javascript:alert(1);</script>", "javascript:alert(1);")
+			, Arguments.of("'`\"><\\x3Cscript>javascript:alert(1)</script>", "&#39;&#96;&#34;&gt;&lt;\\x3Cscript&gt;javascript:alert(1)")
+			, Arguments.of("<svg onResize svg onResize=\"javascript:javascript:alert(1)\"></svg onResize>", "")
+			, Arguments.of("<script>javascript:alert(1)</script\\x0D", "")
+			, Arguments.of("<a href=\"javas\\x0Bcript:javascript:alert(1)\" id=\"fuzzelement1\">test</a>", "test")
+			, Arguments.of("ABC<div style=\"x:\\xE2\\x80\\x81expression(javascript:alert(1)\">DEF", "ABC<div>DEF</div>")
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource("providePayloads")
+	void testSanitize(String payload, String filtered) {
+		String baseDesc = "Русский Тест";
+		LocalDateTime base = LocalDateTime.now()
+				.plusDays(1)
+				.withHour(12)
+				.withMinute(0)
+				.withSecond(0);
+		Date from = getDate(base, "GMT");
+		Date to = getDate(base.plusHours(2), "GMT");
+		User u = new User();
+		AppointmentDTO dto = new AppointmentDTO(AbstractOmServerTest.getAppointment(u, null, from, to));
+		dto.setDescription(baseDesc + payload);
+		Appointment appt = getBean(CalendarMapper.class).get(dto, u);
+		assertEquals(baseDesc + filtered, appt.getDescription(), "desc should be sanitized: " + payload);
 	}
 
 	@Test

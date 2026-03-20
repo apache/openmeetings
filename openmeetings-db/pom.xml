@@ -107,9 +107,8 @@
 			<artifactId>ojdbc10</artifactId>
 		</dependency>
 		<dependency>
-			<!-- required for @NonNull, temporary -->
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>jsr305</artifactId>
+			<groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+			<artifactId>owasp-java-html-sanitizer</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

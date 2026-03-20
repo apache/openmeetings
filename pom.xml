@@ -144,8 +144,8 @@
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
 		<swagger.version>2.2.45</swagger.version>
-		<jsr305.version>3.0.2</jsr305.version>
 		<totp.version>1.7.1</totp.version>
+		<owasp-sanitizer.version>20260102.1</owasp-sanitizer.version>
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js, file:**/org/apache/jackrabbit/**</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -1011,10 +1011,9 @@
 				<version>${swagger.version}</version>
 			</dependency>
 			<dependency>
-				<!-- required for @NonNull, temporary -->
-				<groupId>com.google.code.findbugs</groupId>
-				<artifactId>jsr305</artifactId>
-				<version>${jsr305.version}</version>
+				<groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+				<artifactId>owasp-java-html-sanitizer</artifactId>
+				<version>${owasp-sanitizer.version}</version>
 			</dependency>
 
 			<!-- TESTS -->
