@@ -136,7 +136,7 @@
 		<mockito.version>5.23.0</mockito.version>
 		<quartz.version>2.5.2</quartz.version>
 		<kurento.version>7.3.0</kurento.version>
-		<gson.version>2.10</gson.version><!-- !!!! this whole dependency should be dropped !!!! -->
+		<gson.version>2.13.2</gson.version><!-- !!!! this whole dependency should be dropped !!!! -->
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
 		<jasny-bootstrap.version>3.1.3-2</jasny-bootstrap.version>
 		<jodconverter.version>4.4.11</jodconverter.version>
