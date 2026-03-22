@@ -96,7 +96,7 @@
 		<jetty.version>11.0.26</jetty.version>
 		<ical4j.version>4.2.4</ical4j.version>
 		<cxf.version>4.2.0</cxf.version>
-		<io.prometheus.version>1.5.0</io.prometheus.version>
+		<io.prometheus.version>1.5.1</io.prometheus.version>
 		<aspectjtools.version>1.9.25.1</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.5.5</jettison.version>
