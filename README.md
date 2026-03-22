@@ -27,7 +27,7 @@ Apache OpenMeeting requires the following software to build:
 - [Apache Maven 3.8.7 or later](https://maven.apache.org/)
 
 Apache OpenMeetings requires the following software to run:
-- [Java SE 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+- [Java SE 21](https://www.oracle.com/java/technologies/downloads/#java21)
 
 ### Building and running
 To build and run the project from source:

@@ -32,8 +32,8 @@
 			<div>
 				<p>To build a binary release of OpenMeetings you need: </p>
 				<ul>
-					<li>Oracle JDK17</li>
-					<li>Apache Maven (minimum) 3.6.0</li>
+					<li>Oracle JDK21</li>
+					<li>Apache Maven (minimum) 3.9.8</li>
 					<li>Git</li>
 				</ul>
 			</div>
@@ -59,7 +59,7 @@
 					<li>Wait for the import to finish, IntelliJ IDEA will download all the necessary dependencies</li>
 					<li>Once the import is complete, you can start developing OpenMeetings</li>
 				</ul>
-				<p>Make sure to configure the JDK in IntelliJ IDEA to match the version used in the project (JDK17).</p>
+				<p>Make sure to configure the JDK in IntelliJ IDEA to match the version used in the project (JDK21).</p>
 				<p>For more information on how to set up IntelliJ IDEA for OpenMeetings development, refer to the <a href="https://www.jetbrains.com/help/idea/maven-support.html" target="_blank">IntelliJ IDEA Maven support documentation</a>.</p>
 				<p>For running OpenMeetings from IntelliJ see <a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/OpenMeetings+in+IntelliJ">Wiki instructions</a></p>
 			</div>
@@ -84,7 +84,7 @@ MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=
 cd ..; mvn clean install -PallModules,quick,mysql -pl openmeetings-util,openmeetings-core; cd openmeetings-web; MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded -Dwicket.configuration=DEVELOPMENT
 
 			]]></source>
-			<p>Run OpenMeetings with Embedded Jetty for Development purpose in JDK17</p>
+			<p>Run OpenMeetings with Embedded Jetty for Development purpose in JDK21</p>
 			<source>
 <![CDATA[
 # ANSI console colors and fix Hazelcast warnings for access

@@ -39,7 +39,7 @@
 		<site.skip>false</site.skip>
 		<logback.console></logback.console>
 		<db>h2</db>
-		<javaVersion>17</javaVersion>
+		<javaVersion>21</javaVersion>
 		<minimalMavenBuildVersion>3.8.7</minimalMavenBuildVersion>
 
 		<!-- plugin versions -->
