@@ -94,7 +94,7 @@
 		<spring.version>7.0.6</spring.version>
 		<tomcat.version>11.0.18</tomcat.version>
 		<jetty.version>11.0.26</jetty.version>
-		<ical4j.version>4.2.3</ical4j.version>
+		<ical4j.version>4.2.4</ical4j.version>
 		<cxf.version>4.2.0</cxf.version>
 		<io.prometheus.version>1.5.0</io.prometheus.version>
 		<aspectjtools.version>1.9.25.1</aspectjtools.version>
