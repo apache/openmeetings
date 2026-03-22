@@ -20,7 +20,8 @@ package org.apache.openmeetings.db.dto.user;
 
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,10 +59,10 @@ public class OAuthUser implements Serializable {
 		}
 		String login = data.get(PARAM_LOGIN);
 		String email = data.get(PARAM_EMAIL);
-		if (Strings.isEmpty(email)) {
+		if (Strings.isEmpty(email) && !Strings.isEmpty(server.getIconUrl())) {
 			try {
-				data.put(PARAM_EMAIL, String.format("%s@%s", login, new URL(server.getIconUrl()).getHost()));
-			} catch (MalformedURLException e) {
+				data.put(PARAM_EMAIL, String.format("%s@%s", login, new URI(server.getIconUrl()).toURL().getHost()));
+			} catch (URISyntaxException|MalformedURLException e) {
 				log.error("Failed to get user email from JSON: {}", json);
 			}
 		}

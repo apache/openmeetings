@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.core.rss;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 
 import org.slf4j.Logger;
@@ -33,10 +33,10 @@ public class LoadAtomRssFeed {
 
 	private LoadAtomRssFeed() {}
 
-	public static HttpURLConnection getFeedConnection(String urlStr) throws IOException {
+	public static HttpURLConnection getFeedConnection(String urlStr) throws Exception {
 		log.trace("getFeedConnection:: {}", urlStr);
 
-		URL url = new URL(urlStr);
+		URL url = new URI(urlStr).toURL();
 
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 

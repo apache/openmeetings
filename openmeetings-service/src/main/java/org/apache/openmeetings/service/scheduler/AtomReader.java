@@ -21,7 +21,6 @@ package org.apache.openmeetings.service.scheduler;
 import static org.apache.commons.text.StringEscapeUtils.escapeXml11;
 import static org.apache.openmeetings.core.rss.LoadAtomRssFeed.getFeedConnection;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
@@ -31,7 +30,6 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
@@ -130,7 +128,7 @@ public class AtomReader {
 					}
 				}
 			}
-		} catch (IOException|XMLStreamException e) {
+		} catch (Exception e) {
 			log.error("Unexpected error while getting RSS", e);
 		} finally {
 			if (con != null) {
