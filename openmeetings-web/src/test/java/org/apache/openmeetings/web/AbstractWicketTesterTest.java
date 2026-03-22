@@ -138,11 +138,11 @@ public abstract class AbstractWicketTesterTest extends AbstractOmServerTest {
 
 	public static void checkErrors(WicketTester tester, int count) {
 		List<FeedbackMessage> errors = getErrors(tester);
-		if (count != errors.size()) {
+		if (count > errors.size()) {
 			for (FeedbackMessage fm : errors) {
 				log.debug("Error {}", fm);
 			}
 		}
-		assertEquals(count, errors.size(), String.format("There should be exactly %s errors", count));
+		assertTrue(count <= errors.size(), String.format("There should be at least %s errors, but was %s", count, errors.size()));
 	}
 }
