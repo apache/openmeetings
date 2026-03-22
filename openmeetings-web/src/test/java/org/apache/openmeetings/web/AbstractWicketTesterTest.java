@@ -21,7 +21,6 @@ package org.apache.openmeetings.web;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.web.common.OmWebSocketPanel.CONNECTED_MSG;
 import static org.apache.wicket.util.string.Strings.escapeMarkup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
