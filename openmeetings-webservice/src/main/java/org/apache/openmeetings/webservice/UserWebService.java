@@ -116,7 +116,7 @@ public class UserWebService extends BaseWebService {
 	 * @return - {@link ServiceResult} with error code or SID and userId
 	 */
 	@WebMethod
-	@GET
+	@POST
 	@Path("/login")
 	@Operation(
 			description = "Login and create sessionId required for sub-sequent calls",
@@ -127,8 +127,8 @@ public class UserWebService extends BaseWebService {
 			}
 		)
 	public ServiceResult login(
-			@Parameter(required = true, description = "login or email of Openmeetings user with admin or SOAP-rights") @WebParam(name="user") @QueryParam("user") String user
-			, @Parameter(required = true, description = "password") @WebParam(name="pass") @QueryParam("pass") String pass) {
+			@Parameter(required = true, description = "login or email of Openmeetings user with admin or SOAP-rights") @WebParam(name="user") @FormParam("user") String user
+			, @Parameter(required = true, description = "password") @WebParam(name="pass") @FormParam("pass") String pass) {
 		try {
 			log.debug("Login user");
 			User u = userDao.login(user, pass);

@@ -93,8 +93,9 @@ public abstract class AbstractWebServiceTest {
 	}
 
 	public static ServiceResult loginNoCheck(String user, String pass) {
-		return getClient(getUserUrl()).path("/login").query("user", user).query("pass", pass)
-				.get(ServiceResult.class);
+		return getClient(getUserUrl()).path("/login")
+				.type(MediaType.APPLICATION_FORM_URLENCODED)
+				.post(new Form().param("user", user).param("pass", pass), ServiceResult.class);
 	}
 
 	public static ServiceResult login(String user, String pass) {
