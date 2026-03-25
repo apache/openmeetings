@@ -41,7 +41,6 @@ module org.apache.openmeetings.mediaserver {
 	requires transitive kurento.client;
 	requires kurento.jsonrpc.client;
 	requires kurento.commons;
-	requires com.google.gson;
 
 	requires org.slf4j;
 }

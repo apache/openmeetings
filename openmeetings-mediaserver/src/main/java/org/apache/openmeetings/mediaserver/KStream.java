@@ -71,7 +71,6 @@ import org.kurento.client.MediaType;
 import org.kurento.client.RecorderEndpoint;
 import org.kurento.client.RtpEndpoint;
 import org.kurento.client.WebRtcEndpoint;
-import org.kurento.jsonrpc.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -324,7 +323,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 				, newKurentoMsg()
 					.put("id", "iceCandidate")
 					.put("uid", KStream.this.uid)
-					.put(PARAM_CANDIDATE, convert(JsonUtils.toJsonObject(evt.getCandidate()))))
+					.put(PARAM_CANDIDATE, new JSONObject(evt.getCandidate())))
 				);
 		return endpoint;
 	}
@@ -563,10 +562,6 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 				log.warn("addIceCandidate iceCandidate could not find endpoint, uid: {}, candidate: {}", uid, candidate.getCandidate());
 			}
 		}
-	}
-
-	private static JSONObject convert(com.google.gson.JsonObject o) {
-		return new JSONObject(o.toString());
 	}
 
 	public Date getConnectedSince() {
