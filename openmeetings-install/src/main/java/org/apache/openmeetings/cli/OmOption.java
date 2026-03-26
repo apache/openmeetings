@@ -27,41 +27,30 @@ import org.apache.commons.cli.Option;
 
 public class OmOption extends Option {
 	private static final long serialVersionUID = 1L;
-	private String group = null;
+
+	private final String group;
 	private Map<String, Boolean> optional = null;
-	private int order = 0;
-	private String helpPrefix = "";
 
 	public OmOption(String group, String opt, String longOpt, boolean hasArg,
 			String description, boolean optional) {
-		this(group, 0, opt, longOpt, hasArg, description);
+		this(group, opt, longOpt, hasArg, description);
 		setOptional(optional);
 	}
 
 	public OmOption(String group, String opt, String longOpt, boolean hasArg,
 			String description, String optional) {
-		this(group, 0, opt, longOpt, hasArg, description);
+		this(group, opt, longOpt, hasArg, description);
 		setOptional(optional, true);
-	}
-
-	public OmOption(String group, int order, String opt, String longOpt, boolean hasArg,
-			String description) {
-		super(opt, longOpt, hasArg, description);
-		this.group = group;
-		this.setOrder(order);
 	}
 
 	public OmOption(String group, String opt, String longOpt, boolean hasArg,
 			String description) {
-		this(group, 0, opt, longOpt, hasArg, description);
+		super(opt, longOpt, hasArg, description);
+		this.group = group;
 	}
 
 	public String getGroup() {
 		return group;
-	}
-
-	public void setGroup(String group) {
-		this.group = group;
 	}
 
 	public boolean isOptional(String group) {
@@ -82,25 +71,5 @@ public class OmOption extends Option {
 	public void setOptional(String group, boolean val) {
 		optional = Stream.of(group.split(","))
 				.collect(Collectors.toMap(Function.identity(), s -> val));
-	}
-
-	public int getOrder() {
-		return order;
-	}
-
-	public void setOrder(int order) {
-		this.order = order;
-	}
-
-	public String getHelpPrefix() {
-		return helpPrefix;
-	}
-
-	public void setHelpPrefix(StringBuilder helpPrefix) {
-		this.helpPrefix = helpPrefix.toString();
-	}
-
-	public void setHelpPrefix(String helpPrefix) {
-		this.helpPrefix = helpPrefix;
 	}
 }

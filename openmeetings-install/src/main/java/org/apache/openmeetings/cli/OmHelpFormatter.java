@@ -18,186 +18,122 @@
  */
 package org.apache.openmeetings.cli;
 
-import java.io.PrintWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.help.HelpFormatter;
+import org.apache.commons.cli.help.OptionFormatter;
+import org.apache.commons.cli.help.TableDefinition;
+import org.apache.commons.cli.help.TextStyle;
+import org.apache.wicket.util.lang.Args;
+import org.apache.wicket.util.string.Strings;
 
 public class OmHelpFormatter extends HelpFormatter {
-	private static final String GENERAL_OPTION_GROUP = "";
-	private int maxPrefixLength = 0;
+	final static String DELIMITER = "---------";
+	private final OmTextHelpAppendable omAppendable;
+	private final String shift;
 
-	@SuppressWarnings("unchecked")
-	private static List<OmOption> getReqOptions(Options opts) {
+	public OmHelpFormatter(int maxWidth) {
+		super(HelpFormatter.builder()
+				.setShowSince(false)
+				.setOptionFormatBuilder(OptionFormatter.builder().setOptSeparator(","))
+				.setHelpAppendable(new OmTextHelpAppendable(maxWidth)));
+		omAppendable = (OmTextHelpAppendable)getHelpAppendable();
+		shift = " ".repeat(omAppendable.getIndent());
+	}
+
+	// copy-pasted from HelpFormatter with customization
+	@Override
+	public void printHelp(String cmdLineSyntax, String header, Options options, String footer, boolean autoUsage)
+			throws IOException
+	{
+		Args.notEmpty(cmdLineSyntax, "cmdLineSyntax");
+		if (autoUsage) {
+			omAppendable.appendParagraphFormat("%s %s %s", getSyntaxPrefix(), cmdLineSyntax, toSyntaxOptions(options));
+		} else {
+			omAppendable.appendParagraphFormat("%s %s", getSyntaxPrefix(), cmdLineSyntax);
+		}
+		if (!Strings.isEmpty(header)) {
+			omAppendable.appendParagraph(header);
+		}
+		omAppendable.appendTable(getTableDefinition(options));
+		if (!Strings.isEmpty(footer)) {
+			omAppendable.appendParagraph(footer);
+		}
+	}
+
+	@Override
+	public String toSyntaxOptions(Options options) {
+		return "["
+				+ getReqOptions(options).map(o -> "-" + o.getOpt()).collect(Collectors.joining("|"))
+				+ "] [options]";
+	}
+
+	private List<String> optionRow(OmOption grp, OmOption o) {
+		final OptionFormatter fmt = getOptionFormatBuilder().build(o);
+		String val = "";
+		String opt = "";
+		if (grp != null) {
+			val += shift;
+			opt = o.isOptional(grp.getOpt()) ? "(optional) " : "";
+		}
+		if (o.getOpt() == null) {
+			val += shift;
+		}
+		return List.of(
+				val + fmt.getBothOpt() + (o.hasArg() ? " " + fmt.getArgName() : "")
+				, opt + fmt.getDescription());
+	}
+
+	private void addRows(List<List<String>> rows, OmOption grp, Options opts) {
+		// add group first, assuming it has no arg by default
+		if (grp != null) {
+			final OptionFormatter grpFmt = getOptionFormatBuilder().build(grp);
+			rows.add(List.of(grpFmt.getBothOpt(), grpFmt.getDescription()));
+		}
+		opts.getOptions().stream()
+				.map(OmOption.class::cast)
+				.filter(o -> !o.equals(grp))
+				.filter(o -> grp == null ? o.getGroup() == null : o.getGroup() != null && o.getGroup().contains(grp.getOpt()))
+				.forEach(o -> rows.add(optionRow(grp, o)));
+		// delimiter
+		rows.add(List.of(DELIMITER, DELIMITER));
+	}
+
+	// copy-pasted from HelpFormatter with `showSince` dropped (due to private)
+	// + customization
+	private TableDefinition getTableDefinition(Options opts) {
+		// setup the rows for the table.
+		final List<List<String>> rows = new ArrayList<>();
+		// default group
+		addRows(rows, null, opts);
+		// other groups
+		getReqOptions(opts).forEach(g -> addRows(rows, g, opts));
+
+		// set up the base TextStyle for the columns configured for the Option opt and arg values.
+		final TextStyle.Builder builder = TextStyle.builder()
+				.setAlignment(TextStyle.Alignment.LEFT)
+				.setIndent(DEFAULT_LEFT_PAD)
+				.setScalable(false);
+		// return the TableDefinition with the proper column headers.
+		return TableDefinition.from(null
+				, List.of(builder.get(), builder.setAlignment(TextStyle.Alignment.LEFT).get())
+				, List.of("Option", "Description")
+				, rows);
+	}
+
+	private static Stream<OmOption> getReqOptions(Options opts) {
 		//suppose we have only 1 group (for now)
-		OptionGroup g = ((List<OptionGroup>)opts.getRequiredOptions()).get(0);
-		List<OmOption> result = new ArrayList<>();
-		for (Option o : g.getOptions()) {
-			result.add((OmOption)o);
+		var groups = opts.getRequiredOptions();
+		if (!groups.isEmpty() && groups.get(0) instanceof OptionGroup g) {
+			return g.getOptions().stream()
+					.map(OmOption.class::cast);
 		}
-		Collections.sort(result, (o1, o2) -> o1.getOrder() - o2.getOrder());
-		return result;
-	}
-
-	private Map<String, List<OmOption>> getOptions(Options opts, int leftPad) {
-		final String longOptSeparator = " ";
-		final String lpad = createPadding(leftPad);
-		final String lpadParam = createPadding(leftPad + 2);
-		List<OmOption> reqOptions = getReqOptions(opts);
-		Map<String, List<OmOption>> map = new LinkedHashMap<>(reqOptions.size());
-		map.put(GENERAL_OPTION_GROUP, new ArrayList<>());
-		for (OmOption o : reqOptions) {
-			map.put(o.getOpt(), new ArrayList<>());
-		}
-		for (Option option : opts.getOptions()) {
-			OmOption o = (OmOption)option;
-			boolean skipOption = map.containsKey(o.getOpt());
-			boolean mainOption = skipOption || o.getGroup() == null;
-
-			// first create list containing only <lpad>-a,--aaa where
-			// -a is opt and --aaa is long opt; in parallel look for
-			// the longest opt string this list will be then used to
-			// sort options ascending
-			StringBuilder optBuf = new StringBuilder();
-			if (o.getOpt() == null) {
-				optBuf.append(mainOption ? lpad : lpadParam).append("   ").append(getLongOptPrefix())
-						.append(o.getLongOpt());
-			} else {
-				optBuf.append(mainOption ? lpad : lpadParam).append(getOptPrefix())
-						.append(o.getOpt());
-
-				if (o.hasLongOpt()) {
-					optBuf.append(',').append(getLongOptPrefix())
-							.append(o.getLongOpt());
-				}
-			}
-
-			if (o.hasArg()) {
-				String argName = o.getArgName();
-				if (argName != null && argName.isEmpty()) {
-					// if the option has a blank argname
-					optBuf.append(' ');
-				} else {
-					optBuf.append(o.hasLongOpt() ? longOptSeparator : " ");
-					optBuf.append("<")
-							.append(argName != null ? o.getArgName()
-									: getArgName()).append(">");
-				}
-			}
-
-			o.setHelpPrefix(optBuf);
-			maxPrefixLength = Math.max(optBuf.length(), maxPrefixLength);
-
-			if (skipOption) {
-				continue;
-			}
-			String grp = o.getGroup();
-			grp = grp == null ? GENERAL_OPTION_GROUP : grp;
-			String[] grps = grp.split(",");
-			for(String g : grps) {
-				map.get(g).add(o);
-			}
-		}
-		for (Map.Entry<String, List<OmOption>> me : map.entrySet()) {
-			final String key = me.getKey();
-			List<OmOption> options = me.getValue();
-			Collections.sort(options, (o1, o2) -> {
-					boolean o1mandatory = !o1.isOptional(key);
-					boolean o2mandatory = !o2.isOptional(key);
-					int shortNameVal = o1.getOpt() == null ? 1 : -1;
-					int mandatoryVal = o1mandatory ? -1 : 1;
-					return (o1mandatory && o2mandatory || !o1mandatory && !o2mandatory) ? shortNameVal : mandatoryVal;
-				});
-			if (opts.hasOption(key)) {
-				options.add(0, (OmOption)opts.getOption(key));
-			}
-		}
-		return map;
-	}
-
-	private static StringBuilder getReqOptionsString(Options opts) {
-		String delim = "";
-		StringBuilder result = new StringBuilder();
-		for (Option o : getReqOptions(opts)) {
-			result.append(delim).append("-").append(o.getOpt());
-			delim = "|";
-		}
-		return result;
-	}
-
-	@Override
-	protected StringBuffer renderOptions(StringBuffer sb, int width, Options options, int leftPad, int descPad) {
-		final String dpad = createPadding(descPad);
-		final String optional = "(optional) ";
-
-		Map<String, List<OmOption>> optList = getOptions(options, leftPad);
-
-		char[] delimiter = new char[width - 2];
-		Arrays.fill(delimiter, '-');
-
-		for (Entry<String, List<OmOption>> me : optList.entrySet()) {
-			if (GENERAL_OPTION_GROUP.equals(me.getKey())) {
-				sb.append("General options:").append(getNewLine());
-			}
-			for (OmOption option : me.getValue()) {
-				StringBuilder optBuf = new StringBuilder(option.getHelpPrefix());
-
-				if (optBuf.length() < maxPrefixLength) {
-					optBuf.append(createPadding(maxPrefixLength - optBuf.length()));
-				}
-
-				optBuf.append(dpad);
-
-				int nextLineTabStop = maxPrefixLength + descPad;
-
-				if (option.isOptional(me.getKey())) {
-					optBuf.append(optional);
-				}
-				if (option.getDescription() != null) {
-					optBuf.append(option.getDescription());
-				}
-
-				renderWrappedText(sb, width, nextLineTabStop, optBuf.toString());
-
-				sb.append(getNewLine());
-			}
-			sb.append(delimiter).append(getNewLine());
-		}
-		return sb;
-	}
-
-	@Override
-	public void printHelp(PrintWriter pw, int width, String cmdLineSyntax,
-			String header, Options options, int leftPad, int descPad,
-			String footer, boolean autoUsage) {
-		if ((cmdLineSyntax == null) || (cmdLineSyntax.isEmpty())) {
-			throw new IllegalArgumentException("cmdLineSyntax not provided");
-		}
-
-		printUsage(pw, width, cmdLineSyntax, options);
-
-		if ((header != null) && !header.trim().isEmpty()) {
-			printWrapped(pw, width, header);
-		}
-
-		printOptions(pw, width, options, leftPad, descPad);
-
-		if ((footer != null) && !footer.trim().isEmpty()) {
-			printWrapped(pw, width, footer);
-		}
-	}
-
-	@Override
-	public void printUsage(PrintWriter pw, int width, String app, Options opts) {
-		pw.println(String.format("usage: %1$s [%2$s] [options]", app, getReqOptionsString(opts)));
+		return Stream.of();
 	}
 }

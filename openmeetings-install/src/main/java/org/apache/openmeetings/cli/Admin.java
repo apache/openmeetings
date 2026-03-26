@@ -128,19 +128,19 @@ public class Admin {
 	private Options buildOptions() {
 		Options options = new Options();
 		OptionGroup group = new OptionGroup()
-			.addOption(new OmOption("h", 0, "h", "help", false, "prints this message"))
-			.addOption(new OmOption("b", 1, "b", "backup", false, "Backups OM"))
-			.addOption(new OmOption("r", 2, "r", "restore", false, "Restores OM"))
-			.addOption(new OmOption("i", 3, "i", "install", false, "Fill DB table, and make OM usable"))
-			.addOption(new OmOption("l", 3, "l", "ldap", false, "Import LDAP users into DB"))
-			.addOption(new OmOption("f", 4, "f", "files", false, "File operations - statictics/cleanup"));
+			.addOption(new OmOption("h", "h", "help", false, "prints this message"))
+			.addOption(new OmOption("b", "b", "backup", false, "Backups OM"))
+			.addOption(new OmOption("r", "r", "restore", false, "Restores OM"))
+			.addOption(new OmOption("l", "l", "ldap", false, "Import LDAP users into DB"))
+			.addOption(new OmOption("i", "i", "install", false, "Fill DB table, and make OM usable"))
+			.addOption(new OmOption("f", "f", "files", false, "File operations - statictics/cleanup"));
 		group.setRequired(true);
 		options.addOptionGroup(group);
 		//general
 		options.addOption(new OmOption(null, "v", "verbose", false, "verbose error messages"));
 		//backup/restore
-		options.addOption(new OmOption("b", null, "exclude-files", false, "should backup exclude files [default: include]", true));
 		options.addOption(new OmOption("b,r,i", "file", null, true, "file used for backup/restore/install", "b"));
+		options.addOption(new OmOption("b", null, "exclude-files", false, "should backup exclude files [default: include]", true));
 		//install
 		options.addOption(new OmOption("i", "user", null, true, "Login name of the default user, minimum " + USER_LOGIN_MINIMUM_LENGTH + " characters (mutually exclusive with 'file')"));
 		options.addOption(new OmOption("i", OPTION_EMAIL, null, true, "Email of the default user (mutually exclusive with 'file')"));
@@ -182,22 +182,22 @@ public class Admin {
 		, USAGE
 	}
 
-	private void usage() {
-		OmHelpFormatter formatter = new OmHelpFormatter();
-		formatter.setWidth(100);
+	private void usage() throws IOException {
+		OmHelpFormatter formatter = new OmHelpFormatter(100);
 		formatter.printHelp("admin", "Please specify one of the required parameters.", opts
-		, """
+			, """
 			Examples:
 			./admin.sh -b
 			./admin.sh -i -v -file backup_31_07_2012_12_07_51.zip --drop
-			./admin.sh -i -v -user admin -email someemail@gmail.com -tz "Asia/Tehran" -group "yourgroup" --db-type mysql --db-host localhost""");
+			./admin.sh -i -v -user admin -email someemail@gmail.com -tz "Asia/Tehran" -group "yourgroup" --db-type mysql --db-host localhost"""
+			, true);
 	}
 
-	private void handleError(Exception e) {
+	private void handleError(Exception e) throws IOException {
 		handleError(e, false, true);
 	}
 
-	private void handleError(Exception e, boolean printUsage, boolean willThrow) {
+	private void handleError(Exception e, boolean printUsage, boolean willThrow) throws IOException {
 		if (printUsage) {
 			usage();
 		}
@@ -212,7 +212,7 @@ public class Admin {
 		}
 	}
 
-	private WebApplicationContext getApplicationContext() {
+	private WebApplicationContext getApplicationContext() throws IOException {
 		if (context == null) {
 			String curStep = step; //preserve step
 			step = "Shutdown schedulers";
@@ -378,7 +378,7 @@ public class Admin {
 		doLog(report);
 	}
 
-	private void processLdap() throws OmException {
+	private void processLdap() throws IOException, OmException {
 		if (!cmdl.hasOption("d")) {
 			doLog("Please specify LDAP domain Id.");
 			throw new ExitException();
@@ -540,7 +540,7 @@ public class Admin {
 		}
 	}
 
-	private File checkRestoreFile(String file) {
+	private File checkRestoreFile(String file) throws IOException {
 		File backup = new File(file);
 		if (!cmdl.hasOption("file") || !backup.exists() || !backup.isFile()) {
 			doLog("File should be specified, and point the existent zip file");
@@ -557,7 +557,7 @@ public class Admin {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		Admin a = new Admin();
 		try {
 			a.process(args);
