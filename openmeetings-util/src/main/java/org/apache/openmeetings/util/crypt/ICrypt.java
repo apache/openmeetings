@@ -18,6 +18,12 @@
  */
 package org.apache.openmeetings.util.crypt;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Interface for Encryption-Class see:
  * https://openmeetings.apache.org/CustomCryptMechanism.html see:
@@ -28,6 +34,19 @@ package org.apache.openmeetings.util.crypt;
  */
 
 public interface ICrypt {
+	public static final Logger log = LoggerFactory.getLogger(SCryptImplementation.class);
+	public static final String SECURE_RND_ALG = "SHA1PRNG";
+	public static final ThreadLocal<SecureRandom> rnd
+			= ThreadLocal.withInitial(() -> {
+				SecureRandom sr;
+				try {
+					sr = SecureRandom.getInstance(SECURE_RND_ALG);
+				} catch (NoSuchAlgorithmException e) {
+					log.error("Failed to get instance of SecureRandom {}", SECURE_RND_ALG);
+					sr = new SecureRandom();
+				}
+				return sr;
+			});
 	/**
 	 * Creates hash of given string
 	 *
@@ -57,7 +76,9 @@ public interface ICrypt {
 	 *            - hash to compare
 	 * @return <code>true</code> in case string matches hash, <code>false</code> otherwise
 	 */
-	boolean fallback(String str, String hash);
+	default boolean fallback(String str, String hash) {
+		return false;
+	}
 
 	String randomPassword(int length);
 }

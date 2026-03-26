@@ -24,7 +24,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.OtpManager;
 import org.apache.openmeetings.web.common.OmModalCloseButton;
-import org.apache.openmeetings.web.pages.auth.SignInDialog;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -74,7 +73,7 @@ public class ToggleOtpDialog extends Modal<User> {
 				String p = current.getConvertedInput();
 				if (!Strings.isEmpty(p) && !userDao.verifyPassword(u.getId(), p)) {
 					error(getString("231"));
-					SignInDialog.penalty();
+					UserDao.badPwdPenalty();
 				}
 				super.onValidate();
 			}

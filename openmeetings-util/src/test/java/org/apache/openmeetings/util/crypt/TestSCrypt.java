@@ -28,6 +28,7 @@ class TestSCrypt extends AbstractCryptTest {
 	private static final String TEST_PASS = "12345";
 	private static final String MD5_HASH = "827ccb0eea8a706c4c34a16891f84e7b";
 	private static final String SHA_HASH = "1000:3C2Sm1yw8NoyEBg8KaJfJMye9GaM8uKDNfUNyPWSbwNI2amKAK10KIrPOQeOV7uLkGCT1Fl5gabBRGjLRSBzi7S8LgaVetiEuCL0d8oVPYT1xtgrmEzx/dIyd7hVaGbol388FVW2Ei7ZxIce8DIOtKmMfrxqoNEZa+ERRAzBGLE=:lbveBdEopW7QuU2jcgv4UeuA1m0eDwfIz+KjWgciF/8TWdLi7utCiy+wm3X2pp0WRffqKEs+wwBh6iJbF2WNPIH06YaB68Q1h34wpxjBdziqAbUiGt2nZiPdKghNNX5j4L0Jp1gGRWpXOrg7V1NqYV6pLmwa+SipQs7MJGCCf+HAcwYW3HNIcp2Rbu9IzH7/t7oJo+FCgL4i1rYVHxrbHhAZCA9hr+dKM6u3S/Ef+EsZfSxCOX2BIRkoqHF4ZlLpwCIf6gmq3m7jenAjz0h2AuO/pM3Mf5d8Oy0LAqgiznU9/S7eEP6QYifF3V/P2ZL6/nX9RprVTTiSf0+GsAygOg==";
+	private static final String SCRYPT_HASH = "q5Rtr+mIbwXsKtrjwDvzS5v3jgkE9Oa3B6qonUHGUSEZUeTbYhB2e4kUay5t/JuRt7nN/E8c4mmAIrMMg60bh3RBy6YI4P/tra9wT8wnW751mP/W2YhC7CUrt3LpUAig9fpTMo7Z+sP56Yi37ZzWUFapf8G0EnBnQ3yoZAbLuMBYkzRXpbYASgD3lrWtbsEnhLTLjzr2M8cpLYKCgU2fTX7X0GlShKeIKgi0IY71X71BUiagEMn50m9psiN8ekMg25jdCEVvy318SWfaaT4c0IXVJHeQ5j8QCcu9FphGY8QCt9X35ThW5eZhrycLb1hYlTXG520wEZ1Vi0VS7RiRTpg3roTTsh/OW+8z7cnhboOJ4RjaksCinll9kikFRSjkBj+Pb+LeYgd4Oa1NRBZpqQyPnFFdiv8FWGbulWoA+GNq4gqUkBZjCRDFo6qP2zjEJ79yVVRKZ3BhsErJs6PSE9zj9l/I5xtHkUSKdtXBVaAZYnQJC80rdTWA+Z+o8TG49om6pDpUHCIzsHOxKJlxF+CHyoLaZs0aFUGxsMAqUk5JR7GoV+31OZTe84rnMmf2Ke8Wx68lTRPH6FbvEksEwkAcCd2GJ2QbOqFrcOfhQl9YoMlgCjgNIuhap1aaqMjtcGAEu4KbURv61XSA4AEWgA/hjVRzAEQLTS7xjp4ol4g=:bG954Ev3VIecHOJHaV9fiXQmD5ZT02DXIBs/S/VbIV9bpT4d724SlYGS+8Xl1XPDPZblA0bUO38mPloxOC4u/eIsrUxLctbY/iDZTbQRYPNC92yPuBYUTROIAZhHehJuDzAL6NqMEmEoEYEWwm3Pzqw//MleFK62QdKBprEIVKDw784EY+NGZWtbInEByLgN0k/8CPiOcoGUt7e+PcCp63DHFh8TZxnUcdoe3SQHzv2kpRGhXxBL2Ovl7PQtCQXmKqSSMeKCavo=";
 
 	@BeforeAll
 	static void setup() {
@@ -36,10 +37,11 @@ class TestSCrypt extends AbstractCryptTest {
 
 	@Test
 	void fallbackTest() {
+		assertTrue(crypt.verify(TEST_PASS, SCRYPT_HASH), "Scrypt is valid hash");
 		assertFalse(crypt.verify(TEST_PASS, MD5_HASH), "MD5 is not valid hash");
 		assertFalse(crypt.verify(TEST_PASS, SHA_HASH), "SHA256 is not valid hash");
 		assertFalse(crypt.fallback(TEST_PASS, MD5_HASH), "MD5 is valid fallback");
-		assertTrue(crypt.fallback(TEST_PASS, SHA_HASH), "SHA256 is valid fallback");
+		assertFalse(crypt.fallback(TEST_PASS, SHA_HASH), "SHA256 is valid fallback");
 		assertFalse(crypt.fallback(TEST_PASS, "abc"), "Fallback can return false");
 	}
 }

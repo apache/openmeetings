@@ -49,6 +49,7 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.RoomOptionsDTO;
@@ -133,6 +134,7 @@ public class UserWebService extends BaseWebService {
 			log.debug("Login user");
 			User u = userDao.login(user, pass);
 			if (u == null) {
+				UserDao.badPwdPenalty();
 				return new ServiceResult("error.bad.credentials", Type.ERROR);
 			}
 

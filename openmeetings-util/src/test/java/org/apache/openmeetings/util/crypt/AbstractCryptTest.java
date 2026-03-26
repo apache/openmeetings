@@ -43,7 +43,7 @@ abstract class AbstractCryptTest {
 		assertFalse(crypt.verify(null, "abc"), "Hash for null should be null");
 		assertFalse(crypt.verify("abc", null), "Hash for null should NOT be null");
 
-		assertTrue(crypt.fallback(null, null), "Hash for null should be null");
+		assertFalse(crypt.fallback(null, null), "Hash for null should be null");
 		assertFalse(crypt.fallback(null, "abc"), "Hash for null should be null");
 		assertFalse(crypt.fallback("abc", null), "Hash for null should NOT be null");
 	}

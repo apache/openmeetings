@@ -220,7 +220,7 @@ public class RegisterDialog extends Modal<String> {
 				error(getString("error.login.inuse"));
 			}
 			if (hasErrorMessage()) {
-				SignInDialog.penalty();
+				UserDao.badPwdPenalty();
 			}
 		}
 

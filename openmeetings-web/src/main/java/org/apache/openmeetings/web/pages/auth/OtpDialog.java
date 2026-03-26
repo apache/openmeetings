@@ -152,7 +152,7 @@ public class OtpDialog extends Modal<User> {
 		}
 
 		private void onError(AjaxRequestTarget target) {
-			SignInDialog.penalty();
+			UserDao.badPwdPenalty();
 			target.add(feedback);
 		}
 

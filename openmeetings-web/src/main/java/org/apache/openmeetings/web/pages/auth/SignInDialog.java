@@ -26,7 +26,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
 
 import java.util.List;
-import java.util.Random;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
@@ -70,8 +69,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.wicket.util.string.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
@@ -83,8 +80,6 @@ import jakarta.inject.Inject;
 
 public class SignInDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(SignInDialog.class);
-	private static final Random rnd = new Random();
 	private final PasswordTextField passField = new PasswordTextField("pass", Model.of(""));
 	private final RequiredTextField<String> loginField = new RequiredTextField<>("login", Model.of(""));
 	private boolean rememberMe = false;
@@ -313,18 +308,8 @@ public class SignInDialog extends Modal<String> {
 				error(getString("error.bad.credentials"));
 				target.add(feedback);
 			}
-			penalty();
+			UserDao.badPwdPenalty();
 			strategy.remove();
-		}
-	}
-
-	public static void penalty() {
-		// add random timeout
-		try {
-			Thread.sleep(6 + rnd.nextLong(10 * 1000L));
-		} catch (InterruptedException e) {
-			log.error("Unexpected exception while sleeping", e);
-			Thread.currentThread().interrupt();
 		}
 	}
 }

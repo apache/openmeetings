@@ -33,7 +33,6 @@ import org.apache.openmeetings.web.common.FormActionsPanel;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.pages.PrivacyPage;
-import org.apache.openmeetings.web.pages.auth.SignInDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -167,7 +166,7 @@ public class EditProfileForm extends Form<User> {
 			String p = passwd.getConvertedInput();
 			if (!Strings.isEmpty(p) && !userDao.verifyPassword(getModelObject().getId(), p)) {
 				error(getString("231"));
-				SignInDialog.penalty();
+				UserDao.badPwdPenalty();
 			}
 		}
 		super.onValidate();

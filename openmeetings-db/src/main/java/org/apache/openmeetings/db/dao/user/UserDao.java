@@ -632,4 +632,13 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				.setParameter("date", new Date(System.currentTimeMillis() - ttl))
 				.getResultList();
 	}
+	public static void badPwdPenalty() {
+		// add random timeout
+		try {
+			Thread.sleep(ICrypt.rnd.get().nextLong(6, 16) * 1_000L);
+		} catch (InterruptedException e) {
+			log.error("Unexpected exception while sleeping", e);
+			Thread.currentThread().interrupt();
+		}
+	}
 }

@@ -23,7 +23,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.web.common.OmModalCloseButton;
-import org.apache.openmeetings.web.pages.auth.SignInDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
@@ -52,7 +51,7 @@ public class ChangePasswordDialog extends Modal<String> {
 			String p = current.getConvertedInput();
 			if (!Strings.isEmpty(p) && !userDao.verifyPassword(getUserId(), p)) {
 				error(getString("231"));
-				SignInDialog.penalty();
+				UserDao.badPwdPenalty();
 			}
 			String p1 = pass.getConvertedInput();
 			if (!Strings.isEmpty(p1) && !p1.equals(pass2.getConvertedInput())) {
