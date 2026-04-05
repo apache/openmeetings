@@ -59,11 +59,34 @@ See the [CHANGELOG.md](/CHANGELOG.md) file for a detailed log.
 
 
 <details>
+	<summary>Release 9.0.0 - Security, SIP and Dark theme.</summary>
+
+9.0.0
+-----
+[Release 9.0.0](https://www.apache.org/dyn/closer.lua/openmeetings/9.0.0), provides following improvements:
+
+IMPORTANT: Java 21 and KMS 7.3.0+ are required
+
+Security:
+* Weak hash functions are dropped
+* 'Remember Me' is more secure
+* All libraries are updated to most recent versions
+
+UI:
+* fabric.js is updated to most recent version
+* Dark theme is added
+* File deletion via trash button click is fixed
+
+***3 security vulnerabilities were addressed***
+
+Some other fixes and improvements, 15 issues were addressed
+</details>
+<details>
 	<summary>Release 8.1.0 - Security updates.</summary>
 
 8.1.0
 -----
-[Release 8.1.0](https://www.apache.org/dyn/closer.lua/openmeetings/8.1.0), provides following improvements:
+[Release 8.1.0](https://www.apache.org/dist/openmeetings/8.1.0), provides following improvements:
 
 Security:
 * All libraries are updated to most recent versions
@@ -92,7 +115,7 @@ UI:
 Some other fixes and improvements, 8 issues were addressed
 </details>
 <details>
-	<summary>Release 7.2.0 - Java 17 and KMS 6.18.0+ required. Includes security, UI, and other improvements.</summary>
+	<summary>Older Releases Details:</summary>
 
 7.2.0
 -----
@@ -111,9 +134,7 @@ UI:
 * Email messages looks better
 
 Some other fixes and improvements, 10 issues were addressed
-</details>
-<details>
-	<summary>Release 7.1.0 - Various security updates and stability fixes.</summary>
+
 
 7.1.0
 -----
@@ -133,9 +154,7 @@ Stability:
 ***3 security vulnerabilities were addressed***
 
 Some other fixes and improvements, 12 issues were addressed
-</details>
-<details>
-	<summary>Older Releases Details:</summary>
+
 
 7.0.0
 -----

@@ -52,6 +52,50 @@
 				Please NOTE: only security issues should be reported to this list.
 			</p>
 		</section>
+		<section name="CVE-2026-33005: Apache OpenMeetings: Insufficient checks in FileWebService">
+			<p>Severity: moderate</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings: from 3.10 before 9.0.0.</p>
+			<p>Description: Improper Handling of Insufficient Privileges vulnerability in Apache OpenMeetings.<br/>
+				<br/>
+				Any registered user can query web service with their credentials and get files/sub-folders of
+				any folder by ID (metadata only NOT contents). Metadata includes id, type, name and some other
+				field. Full list of fields get be checked at FileItemDTO object.<br/>
+				<a href="https://www.cve.org/CVERecord?id=CVE-2026-33005">CVE-2026-33005</a>
+			</p>
+			<p>The issue was fixed in 9.0.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 9.0.0</p>
+			<p>Credit: This issue was identified by 4ra2n (A code security AI agent)</p>
+		</section>
+		<section name="CVE-2026-33266: Apache OpenMeetings: Hardcoded Remember-Me Cookie Encryption Key and Salt">
+			<p>Severity: important</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 6.1.0 before 9.0.0</p>
+			<p>Description: Use of Hard-coded Cryptographic Key vulnerability in Apache OpenMeetings.<br/>
+				<br/>
+				The remember-me cookie encryption key is set to default value in <code>openmeetings.properties</code>
+				and not being auto-rotated. In case OM admin hasn't changed the default encryption key,
+				an attacker who has stolen a cookie from a logged-in user can get full user credentials.<br/>
+				<a href="https://www.cve.org/CVERecord?id=CVE-2026-33266">CVE-2026-33266</a>
+			</p>
+			<p>The issue was fixed in 9.0.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 9.0.0</p>
+			<p>Credit: This issue was identified by 4ra2n (A code security AI agent)</p>
+		</section>
+		<section name="CVE-2026-34020: Apache OpenMeetings: Login Credentials Passed via GET Query Parameters">
+			<p>Severity: moderate</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 3.1.3 before 9.0.0</p>
+			<p>Description: Use of GET Request Method With Sensitive Query Strings vulnerability in Apache OpenMeetings.<br/>
+				<br/>
+				The REST login endpoint uses HTTP GET method with username and password passed as query
+				parameters. Please check references regarding possible impact<br/>
+				<a href="https://www.cve.org/CVERecord?id=CVE-2026-34020">CVE-2026-34020</a>
+			</p>
+			<p>The issue was fixed in 9.0.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 9.0.0</p>
+			<p>Credit: This issue was identified by 4ra2n (A code security AI agent)</p>
+		</section>
 		<section name="CVE-2024-54676: Apache OpenMeetings: Deserialisation of untrusted data in cluster mode">
 			<p>Severity: important</p>
 			<p>Vendor: The Apache Software Foundation</p>
