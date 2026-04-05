@@ -85,19 +85,33 @@ will receive no updates anymore. The website at Apache is the only place that re
 
 <!--
 <card-body>
-	<h4 class="card-title">Version 8.1.0 released!</h4>
+	<h4 class="card-title">Version 9.0.0 released!</h4>
 	<p class="card-text">
-		Release 8.1.0, provides following improvements:<br/>
+		Release 9.0.0, provides following improvements:<br/>
+		<div class="om-callout border-danger">
+			Security vulnerabilities:<br/>
+			<b>CVE-2026-33005: Apache OpenMeetings: Insufficient checks in FileWebService</b><br/>
+			<b>CVE-2026-33266: Apache OpenMeetings: Hardcoded Remember-Me Cookie Encryption Key and Salt</b><br/>
+			<b>CVE-2026-34020: Apache OpenMeetings: Login Credentials Passed via GET Query Parameters</b><br/>
+			were fixed, please check <a href="security.html">Security Page</a><br/>
+		</div>
+		<div class="om-callout border-info">
+			IMPORTANT: Java 21 and KMS 7.3.0+ are required
+		</div>
 		<br/>
 
 		Security:
 		<ul>
+			<li>Weak hash functions are dropped</li>
+			<li>'Remember Me' is more secure</li>
 			<li>All libraries are updated to most recent versions</li>
 		</ul>
 
-		WB:
+		UI:
 		<ul>
-			<li>Whiteboard video player controls are fixed</li>
+			<li>fabric.js is updated to most recent version</li>
+			<li>Dark theme is added</li>
+			<li>File deletion via trash button click is fixed</li>
 		</ul>
 		<br/>
 		<br/>
@@ -105,14 +119,14 @@ will receive no updates anymore. The website at Apache is the only place that re
 		<br/>
 
 		<span>
-			9 issues are fixed please check <br/>
-			<a href="https://www.apache.org/dist/openmeetings/8.1.0/CHANGELOG.md">CHANGELOG</a> and
-			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&version=12355537">Detailed list</a>
+			15 issues are fixed please check <br/>
+			<a href="https://www.apache.org/dist/openmeetings/9.0.0/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&version=12356267">Detailed list</a>
 		</span>
 	</p>
 	<footer>
 		<span> See <a href="downloads.html">Downloads page</a>.</span>
-		<span class="text-info float-right">(2025-09-12)</span>
+		<span class="text-info float-right">(2026-03-31)</span>
 	</footer>
 </card-body>
 -->

@@ -2,6 +2,46 @@
 Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0
 -->
 
+# Release 8.1.0
+
+{{% card class="om-callout border-info" %}}
+
+<!--
+<card-body>
+	<h4 class="card-title">Version 8.1.0 released!</h4>
+	<p class="card-text">
+		Release 8.1.0, provides following improvements:<br/>
+		<br/>
+
+		Security:
+		<ul>
+			<li>All libraries are updated to most recent versions</li>
+		</ul>
+
+		WB:
+		<ul>
+			<li>Whiteboard video player controls are fixed</li>
+		</ul>
+		<br/>
+		<br/>
+		Other fixes and improvements
+		<br/>
+
+		<span>
+			9 issues are fixed please check <br/>
+			<a href="https://www.apache.org/dist/openmeetings/8.1.0/CHANGELOG.md">CHANGELOG</a> and
+			<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&version=12355537">Detailed list</a>
+		</span>
+	</p>
+	<footer>
+		<span> See <a href="https://archive.apache.org/dist/openmeetings/8.1.0">Archived download</a>.</span>
+		<span class="text-info float-right">(2025-09-12)</span>
+	</footer>
+</card-body>
+-->
+
+{{% /card %}}
+
 # Release 8.0.0
 
 {{% card class="om-callout border-info" %}}

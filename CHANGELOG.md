@@ -6,6 +6,36 @@ See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number 
 See https://www.cve.org/CVERecord?id=CVE-* (where * is the number of CVE below)
 
 
+Release Notes - Openmeetings - Version 9.0.0
+================================================================================================================
+
+* Vulnerability
+    * CVE-2026-33005: Apache OpenMeetings: Insufficient checks in FileWebService
+    * CVE-2026-33266: Apache OpenMeetings: Hardcoded Remember-Me Cookie Encryption Key and Salt
+    * CVE-2026-34020: Apache OpenMeetings: Login Credentials Passed via GET Query Parameters
+
+* Bug
+    * [OPENMEETINGS-2801] - Files can't be deleted via UI
+    * [OPENMEETINGS-2802] - Styles at file tree are broken
+    * [OPENMEETINGS-2808] - User login is not being properly escaped during LDAP search
+    * [OPENMEETINGS-2809] - Bug on whiteboard
+    * [OPENMEETINGS-2810] - OM Sip Integration
+    * [OPENMEETINGS-2812] - Insufficient checks in FileWebService
+    * [OPENMEETINGS-2813] - 'Remember Me' encryption key should be rotated
+    * [OPENMEETINGS-2814] - Appointment description should be sanitized
+    * [OPENMEETINGS-2816] - Login Credentials Passed via GET Query Parameters
+
+* Improvement
+    * [OPENMEETINGS-2803] - OM logo need to be updated
+    * [OPENMEETINGS-2804] - Dark mode
+    * [OPENMEETINGS-2805] - OM site need to be updated to work with new plugins
+    * [OPENMEETINGS-2817] - Outdated SHA256 crypt implementation should be dropped
+
+* Task
+    * [OPENMEETINGS-2800] - (9.0.0) Libraries should be updated
+    * [OPENMEETINGS-2806] - (9.0.0) Sonar issues need to be addressed
+
+
 Release Notes - Openmeetings - Version 8.1.0
 ================================================================================================================
 
