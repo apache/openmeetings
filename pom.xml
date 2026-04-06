@@ -80,7 +80,6 @@
 		<jacoco-maven-plugin.versoin>0.8.14</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>3.10</forbiddenapis.version>
 		<frontend-maven-plugin.version>2.0.0</frontend-maven-plugin.version>
-		<swagger-plugin.version>2.2.46</swagger-plugin.version>
 		<plexus-utils.version>4.0.3</plexus-utils.version>
 		<cyclonedx.version>2.9.1</cyclonedx.version>
 		<spdx.version>1.0.3</spdx.version>
@@ -142,7 +141,7 @@
 		<jaxb-runtime.version>4.0.7</jaxb-runtime.version>
 		<jquery-ui-touch-punch.version>0.2.3-2</jquery-ui-touch-punch.version>
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
-		<swagger.version>2.2.45</swagger.version>
+		<swagger.version>2.2.46</swagger.version>
 		<totp.version>1.7.1</totp.version>
 		<owasp-sanitizer.version>20260313.1</owasp-sanitizer.version>
 		<!--  Exclude all generated code  -->
@@ -1703,7 +1702,7 @@
 				<plugin>
 					<groupId>io.swagger.core.v3</groupId>
 					<artifactId>swagger-maven-plugin-jakarta</artifactId>
-					<version>${swagger-plugin.version}</version>
+					<version>${swagger.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.cyclonedx</groupId>
