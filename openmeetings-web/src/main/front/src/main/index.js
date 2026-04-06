@@ -2,7 +2,7 @@
 Wicket.BrowserInfo.collectExtraInfo = function(info) {
 	const l = window.location;
 	info.codebase = l.origin + l.pathname;
-	info.settings = Settings.load();
+	info.settings = JSON.stringify(Settings.load());
 };
 
 function _updateResize() {

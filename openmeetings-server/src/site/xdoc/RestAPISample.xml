@@ -165,7 +165,7 @@ const loginUrl = `${BASE_URL}/hash?secure=${hashResult.message}`
 							<td>
 <source>
 $.ajax({
-  method: "GET",
+  method: "POST",
   url: "services/user/login",
   data: {user: 'admin', pass: '12345'},
   dataType: "json"
