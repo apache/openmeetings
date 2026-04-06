@@ -35,105 +35,23 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>io.openapitools.swagger</groupId>
-				<artifactId>swagger-maven-plugin</artifactId>
+				<groupId>io.swagger.core.v3</groupId>
+				<artifactId>swagger-maven-plugin-jakarta</artifactId>
 				<configuration>
+					<outputFileName>apache-openmeetings-${project.version}-swagger</outputFileName>
+					<outputPath>${project.build.directory}</outputPath>
+					<outputFormat>JSON</outputFormat>
 					<resourcePackages>
-						<resourcePackage>org.apache.openmeetings.webservice</resourcePackage>
+						<package>org.apache.openmeetings.webservice</package>
 					</resourcePackages>
-					<outputDirectory>${basedir}/target/</outputDirectory>
-					<outputFilename>apache-openmeetings-${project.version}-swagger</outputFilename>
-					<outputFormats>JSON,YAML</outputFormats>
-					<prettyPrint>true</prettyPrint>
-					<swaggerConfig>
-						<info>
-							<title>Apache OpenMeetings API</title>
-							<description>
-							<![CDATA[
-								Integration API enables to connect to an OpenMeetings instance, eg for generating users, create links to directly access conference rooms.<br/><br/>
-								<b>It is mainly designed for Server2Server integration, for example to integrate into your website, CMS or 3rd party application</b><br/><br/>
-								For examples how to use the Rest API see <a href="https://openmeetings.apache.org/RestAPISample.html" target="_BLANK">https://openmeetings.apache.org/RestAPISample.html</a>.<br/><br/>
-								Community contributed modules for using this API include for example:
-								<ul>
-									<li><a href="https://openmeetings.apache.org/RestAPISample.html#how-to-integrate-using-nodejs" target="_BLANK"> Node.js module for using API</a></li>
-									<li><a href="https://openmeetings.apache.org/RestAPISample.html#how-to-integrate-using-php-and-composer" target="_BLANK"> PHP composer module for using API</a></li>
-								</ul>
-								Other community plugins using this API for Moodle, SugarCRM, Drupal, Joomla can be found in the Configuration>Plugins section at <a href="https://openmeetings.apache.org" target="_BLANK">https://openmeetings.apache.org</a>
-							]]>
-							</description>
-							<version>${project.version}</version>
-							<contact>
-								<email>dev@openmeetings.apache.org</email>
-								<name>Apache OpenMeetings Rest Examples and Documentation</name>
-								<url>https://openmeetings.apache.org/RestAPISample.html</url>
-							</contact>
-							<license>
-								<url>https://www.apache.org/licenses/LICENSE-2.0</url>
-								<name>The Apache Software License, Version 2.0</name>
-							</license>
-						</info>
-						<tags>
-							<tag>
-								<name>UserService</name>
-								<description>The Service contains methods to login and create hash to directly enter conference rooms, recordings or the application in general</description>
-							</tag>
-							<tag>
-								<name>RoomService</name>
-								<description>RoomService contains methods to manipulate rooms and create invitation hash</description>
-							</tag>
-							<tag>
-								<name>FileService</name>
-								<description>Contains methods to import and upload files into the Files section of the conference room and the personal drive of any USER</description>
-							</tag>
-							<tag>
-								<name>WbService</name>
-								<description>WbService contains methods to manipulate whiteboard contents</description>
-							</tag>
-							<tag>
-								<name>CalendarService</name>
-								<description>CalendarService contains methods to create, edit delete calendar meetings</description>
-							</tag>
-							<tag>
-								<name>GroupService</name>
-								<description>The Service contains methods to login and create hash to directly enter conference rooms, recordings or the application in general</description>
-							</tag>
-							<tag>
-								<name>NetTestService</name>
-								<description>The Service contains methods to trigger a network test</description>
-							</tag>
-							<tag>
-								<name>RecordingService</name>
-								<description>The Service contains methods to work with recordings</description>
-							</tag>
-							<tag>
-								<name>InfoService</name>
-								<description>The Service contains methods to get info about the system</description>
-							</tag>
-							<tag>
-								<name>ErrorService</name>
-								<description>The Service contains methods to get localized errors</description>
-							</tag>
-						</tags>
-						<servers>
-							<server>
-								<description>Your local OpenMeetings Server</description>
-								<url>https://localhost:5443/openmeetings/services</url>
-							</server>
-							<server>
-								<description>Om Demo Server</description>
-								<url>https://om.alteametasoft.com/openmeetings/services</url>
-							</server>
-						</servers>
-					</swaggerConfig>
-					<!--skip>${site.skip}</skip-->
-					<!-- io.openapitools.swagger is broken, please see https://github.com/openapi-tools/swagger-maven-plugin/issues/109
-					Getting weird "Cannot invoke "java.util.Map.size()" because "map" is null" Error !!!!!! -->
-					<skip>true</skip>
+					<prettyPrint>TRUE</prettyPrint>
+					<skip>${site.skip}</skip>
 				</configuration>
 				<executions>
 					<execution>
+						<phase>compile</phase>
 						<goals>
-							<goal>generate</goal>
+							<goal>resolve</goal>
 						</goals>
 					</execution>
 				</executions>

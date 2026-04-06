@@ -80,7 +80,7 @@
 		<jacoco-maven-plugin.versoin>0.8.14</jacoco-maven-plugin.versoin>
 		<forbiddenapis.version>3.10</forbiddenapis.version>
 		<frontend-maven-plugin.version>2.0.0</frontend-maven-plugin.version>
-		<swagger-plugin.version>2.1.6</swagger-plugin.version>
+		<swagger-plugin.version>2.2.46</swagger-plugin.version>
 		<plexus-utils.version>4.0.3</plexus-utils.version>
 		<cyclonedx.version>2.9.1</cyclonedx.version>
 		<spdx.version>1.0.3</spdx.version>
@@ -1701,8 +1701,8 @@
 					</configuration>
 				</plugin>
 				<plugin>
-					<groupId>io.openapitools.swagger</groupId>
-					<artifactId>swagger-maven-plugin</artifactId>
+					<groupId>io.swagger.core.v3</groupId>
+					<artifactId>swagger-maven-plugin-jakarta</artifactId>
 					<version>${swagger-plugin.version}</version>
 				</plugin>
 				<plugin>
