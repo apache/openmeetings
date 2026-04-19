@@ -24,7 +24,7 @@
 		"webpack-merge": "^6.0.1"
 	},
 	"dependencies": {
-		"fabric": "7.2.0",
+		"fabric": "7.3.1",
 		"freeice": "2.2.2",
 		"mathjax-full": "^3.2.2",
 		"nosleep.js": "^0.12.0",
