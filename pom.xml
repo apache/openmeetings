@@ -120,7 +120,7 @@
 		<dom4j.version>2.2.0</dom4j.version>
 		<h2.version>2.4.240</h2.version>
 		<postgresql.version>42.7.10</postgresql.version>
-		<mysql.version>9.6.0</mysql.version>
+		<mysql.version>9.7.0</mysql.version>
 		<mssql.version>13.4.0.jre11</mssql.version>
 		<ojdbc.version>19.30.0.0</ojdbc.version>
 		<xstream.version>1.4.21</xstream.version>
