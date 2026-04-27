@@ -113,7 +113,7 @@
 		<commons-dbcp.version>2.14.0</commons-dbcp.version>
 		<commons-pool2.version>2.13.1</commons-pool2.version>
 		<commons-cli.version>1.11.0</commons-cli.version>
-		<commons-codec.version>1.21.0</commons-codec.version>
+		<commons-codec.version>1.22.0</commons-codec.version>
 		<commons-io.version>2.22.0</commons-io.version>
 		<commons-text.version>1.15.0</commons-text.version>
 		<commons-net.version>3.13.0</commons-net.version>
