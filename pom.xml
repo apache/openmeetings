@@ -119,7 +119,7 @@
 		<commons-net.version>3.13.0</commons-net.version>
 		<dom4j.version>2.2.0</dom4j.version>
 		<h2.version>2.4.240</h2.version>
-		<postgresql.version>42.7.10</postgresql.version>
+		<postgresql.version>42.7.11</postgresql.version>
 		<mysql.version>9.7.0</mysql.version>
 		<mssql.version>13.4.0.jre11</mssql.version>
 		<ojdbc.version>19.30.0.0</ojdbc.version>
