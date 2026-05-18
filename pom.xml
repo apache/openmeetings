@@ -86,7 +86,7 @@
 
 		<!-- dependency versions -->
 		<junit.version>6.0.3</junit.version>
-		<wicket.version>10.8.0</wicket.version>
+		<wicket.version>10.9.0</wicket.version>
 		<wicketstuff.version>10.8.0</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.14</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.20</fullcalendar.version>
