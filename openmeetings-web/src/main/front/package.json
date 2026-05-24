@@ -12,7 +12,7 @@
 	"license": "Apache-2.0",
 	"rat-license": "Licensed under the Apache License, Version 2.0 (the \"License\") http://www.apache.org/licenses/LICENSE-2.0",
 	"devDependencies": {
-		"sass-loader": "^16.0.7",
+		"sass-loader": "^17.0.0",
 		"style-loader": "^4.0.0",
 		"css-loader": "^7.1.4",
 		"ignore-loader": "^0.1.2",
