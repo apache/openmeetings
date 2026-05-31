@@ -89,6 +89,7 @@ import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadWmlDir;
+import static org.apache.openmeetings.util.OmFileHelper.validateLocation;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
@@ -376,19 +377,6 @@ public class BackupImport {
 	private final Map<String, String> fileMap = new HashMap<>();
 	private final Map<String, String> hashMap = new HashMap<>();
 
-	private static File validate(String ename, File intended) throws IOException {
-		final String intendedPath = intended.getCanonicalPath();
-		// for each entry to be extracted
-		File fentry = new File(intended, ename);
-		final String canonicalPath = fentry.getCanonicalPath();
-
-		if (canonicalPath.startsWith(intendedPath)) {
-			return fentry;
-		} else {
-			throw new IllegalStateException("File is outside extraction target directory.");
-		}
-	}
-
 	private static File unzip(InputStream is) throws IOException  {
 		File f = OmFileHelper.getNewDir(OmFileHelper.getUploadImportDir(), randomUUID().toString());
 		log.debug("##### EXTRACTING BACKUP TO: {}", f);
@@ -397,7 +385,7 @@ public class BackupImport {
 			ZipEntry zipentry = null;
 			while ((zipentry = zis.getNextEntry()) != null) {
 				// for each entry to be extracted
-				File fentry = validate(zipentry.getName(), f);
+				File fentry = validateLocation(zipentry.getName(), f);
 				File dir = zipentry.isDirectory() ? fentry : fentry.getParentFile();
 				if (!dir.exists() && !dir.mkdirs()) {
 					log.warn("Failed to create folders: {}", dir);

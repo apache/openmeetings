@@ -26,10 +26,10 @@ import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.VideoSettings.VIDEO_SETTINGS_JS;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
+import static org.apache.openmeetings.util.OmFileHelper.validateLocation;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map.Entry;
@@ -237,7 +237,7 @@ public class RoomPanel extends BasePanel {
 		@Override
 		protected IResourceStream getResourceStream(Attributes attributes) {
 			setFileName(EXTENSION_PDF.equals(ftype) ? "whiteboard.pdf" : "slide.png");
-			return new FileResourceStream(Paths.get(System.getProperty("java.io.tmpdir"), fuid).toFile());
+			return new FileResourceStream(validateLocation(fuid, System.getProperty("java.io.tmpdir")));
 		}
 	}) {
 		private static final long serialVersionUID = 1L;
@@ -246,7 +246,7 @@ public class RoomPanel extends BasePanel {
 		protected void onDownloadCompleted(AjaxRequestTarget target) {
 			super.onDownloadCompleted(target);
 			try {
-				Files.deleteIfExists(Paths.get(System.getProperty("java.io.tmpdir"), fuid));
+				Files.deleteIfExists(validateLocation(fuid, System.getProperty("java.io.tmpdir")).toPath());
 			} catch (Exception e) {
 				log.error("unexcepted error while clean-up", e);
 			}

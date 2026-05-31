@@ -398,4 +398,17 @@ public class OmFileHelper {
 		int dotidx = name.lastIndexOf('.');
 		return dotidx < 0 ? "" : name.substring(dotidx + 1).toLowerCase(Locale.ROOT);
 	}
+
+	public static File validateLocation(String ename, String intended) {
+		return validateLocation(ename, new File(intended));
+	}
+
+	public static File validateLocation(String ename, File intended) {
+		Path base = intended.toPath();
+		Path res = base.resolve(ename).normalize();
+		if (!res.startsWith(base)) {
+			throw new IllegalStateException("File is outside extraction target directory.");
+		}
+		return res.toFile();
+	}
 }
