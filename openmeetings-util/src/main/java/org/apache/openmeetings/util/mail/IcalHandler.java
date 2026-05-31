@@ -65,7 +65,6 @@ import net.fortuna.ical4j.model.property.immutable.ImmutableMethod;
 import net.fortuna.ical4j.model.property.immutable.ImmutableStatus;
 import net.fortuna.ical4j.model.property.immutable.ImmutableTransp;
 import net.fortuna.ical4j.model.property.immutable.ImmutableVersion;
-import net.fortuna.ical4j.validate.ValidationException;
 
 /**
  *
@@ -206,7 +205,7 @@ public class IcalHandler {
 	 * @return - calendar in ICS format as byte[]
 	 * @throws IOException
 	 *             - in case of error during writing to byte array
-	 * @throws ValidationException
+	 * @throws net.fortuna.ical4j.validate.ValidationException
 	 *             - in case of invalid calendar properties
 	 */
 	public byte[] toByteArray() throws IOException {

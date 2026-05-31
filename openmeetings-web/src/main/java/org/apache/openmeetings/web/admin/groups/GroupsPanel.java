@@ -27,7 +27,6 @@ import java.util.Iterator;
 
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.user.Group;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
@@ -44,7 +43,7 @@ import org.apache.wicket.markup.repeater.Item;
 
 /**
  * Modify/ CRUD operations for {@link Group} and
- * {@link GroupUser}
+ * {@link org.apache.openmeetings.db.entity.user.GroupUser}
  *
  * @author swagner
  *

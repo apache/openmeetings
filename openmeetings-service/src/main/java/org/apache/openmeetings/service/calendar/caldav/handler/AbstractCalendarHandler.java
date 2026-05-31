@@ -19,7 +19,6 @@
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -63,7 +62,7 @@ public abstract class AbstractCalendarHandler implements CalendarHandler {
 	}
 
 	/**
-	 * Converts a list of appointments to a {@link HashMap} with the Href as the key
+	 * Converts a list of appointments to a {@link Map} with the Href as the key
 	 * @param appointments Appointments to map
 	 * @return Map of Hrefs to Appointments
 	 */

@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.common;
 import java.io.IOException;
 
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -59,7 +58,7 @@ public abstract class BasePanel extends Panel {
 
 	/**
 	 * Overwrite this method to execute Java code after Panel is loaded by the
-	 * {@link MenuPanel}
+	 * {@link org.apache.openmeetings.web.common.menu.MenuPanel}
 	 *
 	 * @param handler - request handler to update menu
 	 * @return - this for chaining

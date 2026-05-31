@@ -34,7 +34,6 @@ import java.util.Set;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
@@ -274,7 +273,7 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 	 * @param calId Calendar Id of the Calendar Id to which the Appointments belong to.
 	 * @return Returns <code>-1</code> if the there was an error executing the query,
 	 * otherwise returns the number of updated rows.
-	 * as described here {@link Query#executeUpdate()}
+	 * as described here {@link jakarta.persistence.Query.#executeUpdate()}
 	 */
 	public int deletebyCalendar(Long calId) {
 		return em.createNamedQuery("deleteAppointmentsbyCalendar", Appointment.class)
