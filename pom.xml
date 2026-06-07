@@ -124,7 +124,7 @@
 		<mssql.version>13.4.0.jre11</mssql.version>
 		<ojdbc.version>19.30.0.0</ojdbc.version>
 		<xstream.version>1.4.21</xstream.version>
-		<api-all.version>2.1.7</api-all.version>
+		<api-all.version>2.1.8</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
 		<tika-parsers.version>3.3.1</tika-parsers.version>
