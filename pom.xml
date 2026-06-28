@@ -85,7 +85,7 @@
 		<spdx.version>1.0.3</spdx.version>
 
 		<!-- dependency versions -->
-		<junit.version>6.1.0</junit.version>
+		<junit.version>6.1.1</junit.version>
 		<wicket.version>10.9.1</wicket.version>
 		<wicketstuff.version>10.9.2</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.14</wicket-bootstrap.version>
