@@ -82,7 +82,7 @@
 		<frontend-maven-plugin.version>2.0.1</frontend-maven-plugin.version>
 		<plexus-utils.version>4.0.3</plexus-utils.version>
 		<cyclonedx.version>2.9.2</cyclonedx.version>
-		<spdx.version>1.0.3</spdx.version>
+		<spdx.version>1.0.4</spdx.version>
 
 		<!-- dependency versions -->
 		<junit.version>6.1.1</junit.version>
