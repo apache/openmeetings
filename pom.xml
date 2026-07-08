@@ -82,7 +82,7 @@
 		<frontend-maven-plugin.version>2.0.1</frontend-maven-plugin.version>
 		<plexus-utils.version>4.0.3</plexus-utils.version>
 		<cyclonedx.version>2.9.2</cyclonedx.version>
-		<spdx.version>1.0.3</spdx.version>
+		<spdx.version>1.0.4</spdx.version>
 
 		<!-- dependency versions -->
 		<junit.version>6.1.1</junit.version>
@@ -119,7 +119,7 @@
 		<commons-net.version>3.13.0</commons-net.version>
 		<dom4j.version>2.2.0</dom4j.version>
 		<h2.version>2.4.240</h2.version>
-		<postgresql.version>42.7.11</postgresql.version>
+		<postgresql.version>42.7.12</postgresql.version>
 		<mysql.version>9.7.0</mysql.version>
 		<mssql.version>13.4.0.jre11</mssql.version>
 		<ojdbc.version>19.31.0.0</ojdbc.version>
