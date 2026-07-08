@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -37,7 +38,7 @@ class TestDatabaseStructureAppointment extends AbstractOmServerTest {
 	}
 
 	private static Date getDate(int hour, int minute) {
-		return CalendarHelper.getDate(LocalDateTime.of(2008, 8, 17, hour, minute), getTzId());
+		return CalendarHelper.getDate(LocalDateTime.of(2008, Month.AUGUST, 17, hour, minute), getTzId());
 	}
 
 	private void createAppointment(int startHour, int startMinute, int endHour, int endMinute) {
@@ -47,8 +48,8 @@ class TestDatabaseStructureAppointment extends AbstractOmServerTest {
 
 	@Test
 	void testAddingGroup() throws Exception {
-		Date date = CalendarHelper.getDate(LocalDate.of(2008, 8, 17), getTzId());
-		Date date2 = CalendarHelper.getDate(LocalDate.of(2008, 8, 18), getTzId());
+		Date date = CalendarHelper.getDate(LocalDate.of(2008, Month.AUGUST, 17), getTzId());
+		Date date2 = CalendarHelper.getDate(LocalDate.of(2008, Month.AUGUST, 18), getTzId());
 
 		createAppointment(12, 28, 23, 15);
 		createAppointment(1, 1, 3, 52);

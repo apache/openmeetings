@@ -680,7 +680,7 @@ public class BackupImport {
 		//add existent emails from database
 		final Set<String> userEmails = new HashSet<>();
 		final Set<UserKey> userLogins = new HashSet<>();
-		userDao.getAllUsers().stream().forEach(u -> {
+		userDao.getAllUsers().forEach(u -> {
 			if (u.getAddress() != null && !Strings.isEmpty(u.getAddress().getEmail())) {
 				userEmails.add(u.getAddress().getEmail());
 			}

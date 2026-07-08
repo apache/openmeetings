@@ -21,6 +21,7 @@ package org.apache.openmeetings.ws;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
@@ -38,7 +39,7 @@ class TestWebConverters {
 	void testDateConverter() {
 		assertEquals(null, DateParamConverter.get(null), "Null date should be parsed");
 		assertEquals(
-				Date.from(LocalDate.of(2017, 01, 15).atStartOfDay(ZoneId.systemDefault()).toInstant())
+				Date.from(LocalDate.of(2017, Month.JANUARY, 15).atStartOfDay(ZoneId.systemDefault()).toInstant())
 				, DateParamConverter.get("2017-01-15")
 				, "Date should be parsed");
 		assertEquals(
@@ -52,7 +53,7 @@ class TestWebConverters {
 		CalendarParamConverter c = new CalendarParamConverter();
 		assertEquals(null, c.fromString(null), "Null calendar should be parsed");
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(Date.from(LocalDate.of(2017, 01, 15).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		cal.setTime(Date.from(LocalDate.of(2017, Month.JANUARY, 15).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 		assertEquals(cal, c.fromString("2017-01-15"), "Calendar should be parsed");
 	}
 

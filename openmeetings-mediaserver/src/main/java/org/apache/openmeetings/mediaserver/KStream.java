@@ -332,7 +332,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 		// sender candidates
 		if (recv && !candidatesQueue.isEmpty()) {
 				log.trace("addIceCandidate iceCandidate reply from not ready, uid: {}", uid);
-				candidatesQueue.stream().forEach(endpoint::addIceCandidate);
+				candidatesQueue.forEach(endpoint::addIceCandidate);
 				candidatesQueue.clear();
 		}
 	}

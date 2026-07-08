@@ -91,12 +91,10 @@ public class ChatWebSocketHelper {
 
 	public static boolean send(IClusterWsMessage msg) {
 		if (msg instanceof WsMessageChat chatMsg) {
-			if (msg instanceof WsMessageChat2User userMsg) {
-				sendUser(userMsg.getUserId(), userMsg.getChatMessage(), userMsg.getMsg(), false);
-			} else if (msg instanceof WsMessageChat2All allMsg) {
-				sendAll(allMsg.getChatMessage(), allMsg.getMsg(), false);
-			} else {
-				sendRoom(chatMsg.getChatMessage(), chatMsg.getMsg(), false);
+			switch (msg) {
+				case WsMessageChat2User userMsg -> sendUser(userMsg.getUserId(), userMsg.getChatMessage(), userMsg.getMsg(), false);
+				case WsMessageChat2All allMsg -> sendAll(allMsg.getChatMessage(), allMsg.getMsg(), false);
+				default -> sendRoom(chatMsg.getChatMessage(), chatMsg.getMsg(), false);
 			}
 			return true;
 		}

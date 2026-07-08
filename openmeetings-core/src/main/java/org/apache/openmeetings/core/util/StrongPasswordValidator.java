@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isPwdCheckUpper
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.User;
@@ -38,6 +39,8 @@ import org.slf4j.LoggerFactory;
 public class StrongPasswordValidator implements IValidator<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(StrongPasswordValidator.class);
+	private static Pattern DIGITS_PATTERN = Pattern.compile(".*\\d+.*");
+	private static Pattern SPECIAL_PATTERN = Pattern.compile(".*[!@#$%^&*\\]\\[]+.*");
 	private final boolean web;
 	private User u;
 
@@ -51,11 +54,11 @@ public class StrongPasswordValidator implements IValidator<String> {
 	}
 
 	private static boolean noDigit(String password) {
-		return password == null || (isPwdCheckDigit() && !password.matches(".*\\d+.*"));
+		return password == null || (isPwdCheckDigit() && !DIGITS_PATTERN.matcher(password).matches());
 	}
 
 	private static boolean noSymbol(String password) {
-		return password == null || (isPwdCheckSpecial() && !password.matches(".*[!@#$%^&*\\]\\[]+.*"));
+		return password == null || (isPwdCheckSpecial() && !SPECIAL_PATTERN.matcher(password).matches());
 	}
 
 	private static boolean noUpperCase(String password) {

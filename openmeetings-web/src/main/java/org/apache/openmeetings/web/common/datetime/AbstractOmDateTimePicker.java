@@ -42,7 +42,6 @@ public abstract class AbstractOmDateTimePicker<T extends Serializable> extends F
 	private static final long serialVersionUID = 1L;
 	private static final ResourceReference FUNCJS = new JavaScriptResourceReference(AbstractOmDateTimePicker.class, "datepicker-functions.js");
 	private final HiddenField<T> date;
-	private AbstractTempusDominusWithIcon<T> picker;
 	private String markupId;
 
 	AbstractOmDateTimePicker(String id, IModel<T> model) {
@@ -67,7 +66,7 @@ public abstract class AbstractOmDateTimePicker<T extends Serializable> extends F
 						.withTodayIcon(FontAwesome7IconType.calendar_check_s)
 						.withClearIcon(FontAwesome7IconType.eraser_s)
 						.withCloseIcon(FontAwesome7IconType.xmark_s));
-		picker = new AbstractTempusDominusWithIcon<>("picker", new Model<>(), patch(config)) {
+		AbstractTempusDominusWithIcon<T> picker = new AbstractTempusDominusWithIcon<>("picker", new Model<>(), patch(config)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

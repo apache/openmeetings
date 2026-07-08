@@ -34,7 +34,7 @@ import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.string.Strings;
 
 public class OmHelpFormatter extends HelpFormatter {
-	final static String DELIMITER = "---------";
+	static final String DELIMITER = "---------";
 	private final OmTextHelpAppendable omAppendable;
 	private final String shift;
 

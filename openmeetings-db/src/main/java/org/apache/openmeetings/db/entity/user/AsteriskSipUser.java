@@ -33,7 +33,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.SecondaryTable;
-import jakarta.persistence.SecondaryTables;
 import jakarta.persistence.Table;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -43,10 +42,8 @@ import jakarta.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "om_sipuser_auth")
-@SecondaryTables({
-	@SecondaryTable(name = "om_sipuser_aor", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id")),
-	@SecondaryTable(name = "om_sipuser_endpoint", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
-})
+@SecondaryTable(name = "om_sipuser_aor", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
+@SecondaryTable(name = "om_sipuser_endpoint", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
 @XmlRootElement(name = "asterisksipuser")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AsteriskSipUser implements Serializable {

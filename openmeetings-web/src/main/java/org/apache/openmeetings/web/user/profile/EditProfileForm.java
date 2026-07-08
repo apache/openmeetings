@@ -188,7 +188,7 @@ public class EditProfileForm extends Form<User> {
 		if (enabled) {
 			toggleOtp.add(newOkCancelDangerConfirm(this, getString("otp.disable.confirm")));
 		} else {
-			toggleOtp.getBehaviors(ConfirmationBehavior.class).stream().forEach(b -> toggleOtp.remove(b));
+			toggleOtp.getBehaviors(ConfirmationBehavior.class).forEach(b -> toggleOtp.remove(b));
 		}
 		toggleOtp.setLabel(new ResourceModel(enabled ? "otp.disable" : "otp.enable"));
 		toggleOtp.setIconType(enabled ? FontAwesome7IconType.square_check_r : FontAwesome7IconType.square_r);

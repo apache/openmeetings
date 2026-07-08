@@ -196,7 +196,7 @@ class TestFileService extends AbstractWebServiceTest {
 		accessRoomByParentGranted(groupFolder.getId(), 5, u.getLogin(), createPass());
 
 		FileItem roomFolder = prepareGetParent(admin, "Room5", fi -> fi.setRoomId(5L));
-		accessRoomByParentDenied(groupFolder.getId(), 4, ADMIN_USERNAME, USER_PASS);
-		accessRoomByParentGranted(groupFolder.getId(), 5, u.getLogin(), createPass());
+		accessRoomByParentDenied(roomFolder.getId(), 4, ADMIN_USERNAME, USER_PASS);
+		accessRoomByParentGranted(roomFolder.getId(), 5, u.getLogin(), createPass());
 	}
 }

@@ -29,6 +29,7 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.Month;
 
 import jakarta.inject.Inject;
 import jakarta.xml.bind.JAXBContext;
@@ -58,7 +59,7 @@ class TestExport extends AbstractOmServerTest {
 	@Test
 	void exportUser() throws Exception {
 		User u = createUser();
-		u.setAge(LocalDate.of(1977, 11, 13));
+		u.setAge(LocalDate.of(1977, Month.NOVEMBER, 13));
 		Group g = groupDao.get(1L);
 		u.addGroup(g);
 		Class<User> eClazz = User.class;
