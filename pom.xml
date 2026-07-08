@@ -52,7 +52,7 @@
 		<version.maven-project-info-reports-plugin>3.9.0</version.maven-project-info-reports-plugin>
 		<version.maven-jar-plugin>3.5.0</version.maven-jar-plugin>
 		<version.maven-assembly-plugin>3.8.0</version.maven-assembly-plugin>
-		<version.maven-dependency-plugin>3.10.0</version.maven-dependency-plugin>
+		<version.maven-dependency-plugin>3.11.0</version.maven-dependency-plugin>
 		<version.maven-war-plugin>3.5.1</version.maven-war-plugin>
 		<version.maven-clean-plugin>3.5.0</version.maven-clean-plugin>
 		<version.maven-antrun-plugin>3.2.0</version.maven-antrun-plugin>
@@ -119,7 +119,7 @@
 		<commons-net.version>3.13.0</commons-net.version>
 		<dom4j.version>2.2.0</dom4j.version>
 		<h2.version>2.4.240</h2.version>
-		<postgresql.version>42.7.12</postgresql.version>
+		<postgresql.version>42.7.13</postgresql.version>
 		<mysql.version>9.7.0</mysql.version>
 		<mssql.version>13.4.0.jre11</mssql.version>
 		<ojdbc.version>19.31.0.0</ojdbc.version>

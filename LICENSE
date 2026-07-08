@@ -230,7 +230,7 @@ conditions of the following licenses.
 
     BSD-2-Clause
 
-        * PostgreSQL JDBC Driver (org.postgresql:postgresql:42.7.11 - https://jdbc.postgresql.org)
+        * PostgreSQL JDBC Driver (org.postgresql:postgresql:42.7.13 - https://jdbc.postgresql.org)
 
     CC BY 3.0
 
@@ -309,7 +309,7 @@ conditions of the following licenses.
         * Bouncy Castle JavaMail Jakarta S/MIME APIs (org.bouncycastle:bcjmail-jdk18on:1.84 - https://www.bouncycastle.org/download/bouncy-castle-java/)
         * Bouncy Castle PKIX, CMS, EAC, TSP, PKCS, OCSP, CMP, and CRMF APIs (org.bouncycastle:bcpkix-jdk18on:1.84 - https://www.bouncycastle.org/download/bouncy-castle-java/)
         * Bouncy Castle Provider (org.bouncycastle:bcprov-jdk18on:1.84 - https://www.bouncycastle.org/download/bouncy-castle-java/)
-        * Checker Qual (org.checkerframework:checker-qual:3.43.0 - https://checkerframework.org/)
+        * Checker Qual (org.checkerframework:checker-qual:3.55.1 - https://checkerframework.org/)
         * dd-plist (com.googlecode.plist:dd-plist:1.29 - http://www.github.com/3breadt/dd-plist)
         * dev.samstevens.totp:totp (dev.samstevens.totp:totp:1.7.1 - https://github.com/samdjstevens/java-totp/totp)
         * fullcalendar (org.webjars.npm:fullcalendar:6.1.15 - https://www.webjars.org)
