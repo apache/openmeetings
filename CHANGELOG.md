@@ -6,6 +6,24 @@ See https://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number 
 See https://www.cve.org/CVERecord?id=CVE-* (where * is the number of CVE below)
 
 
+Release Notes - Openmeetings - Version 9.1.0
+================================================================================================================
+
+* Vulnerability
+    * CVE-2026-49488: Apache OpenMeetings: Arbitrary File Read
+
+* Bug
+    * [OPENMEETINGS-2821] - WB download service must better check file being downloaded
+
+* Improvement
+    * [OPENMEETINGS-2818] - Swagger generation should be added
+
+* Task
+    * [OPENMEETINGS-2819] - (9.1.0) Libraries should be updated
+    * [OPENMEETINGS-2820] - Default git branches should be protected
+    * [OPENMEETINGS-2823] - (9.1.0) Sonar issues need to be addressed
+
+
 Release Notes - Openmeetings - Version 9.0.0
 ================================================================================================================
 
