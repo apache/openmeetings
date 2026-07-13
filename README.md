@@ -59,11 +59,29 @@ See the [CHANGELOG.md](/CHANGELOG.md) file for a detailed log.
 
 
 <details>
+	<summary>Release 9.1.0 - Security.</summary>
+
+9.1.0
+-----
+[Release 9.1.0](https://www.apache.org/dyn/closer.lua/openmeetings/9.1.0), provides following improvements:
+
+IMPORTANT: Java 21 and KMS 7.3.0+ are required
+
+Security:
+* More security checks in WB download service
+* Default git branches are protected
+* All libraries are updated to most recent versions
+
+***1 security vulnerabilities were addressed***
+
+Some other fixes and improvements, 5 issues were addressed
+</details>
+<details>
 	<summary>Release 9.0.0 - Security, SIP and Dark theme.</summary>
 
 9.0.0
 -----
-[Release 9.0.0](https://www.apache.org/dyn/closer.lua/openmeetings/9.0.0), provides following improvements:
+[Release 9.0.0](https://www.apache.org/dist/openmeetings/9.0.0), provides following improvements:
 
 IMPORTANT: Java 21 and KMS 7.3.0+ are required
 
@@ -97,7 +115,7 @@ WB:
 Some other fixes and improvements, 9 issues were addressed
 </details>
 <details>
-	<summary>Release 8.0.0 - Security updates, switching to Tomcat 11 and Jakarta stack.</summary>
+	<summary>Older Releases Details:</summary>
 
 8.0.0
 -----
@@ -113,9 +131,7 @@ UI:
 ***1 security vulnerability was addressed***
 
 Some other fixes and improvements, 8 issues were addressed
-</details>
-<details>
-	<summary>Older Releases Details:</summary>
+
 
 7.2.0
 -----
