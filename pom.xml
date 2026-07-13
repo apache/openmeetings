@@ -85,13 +85,13 @@
 		<spdx.version>1.0.4</spdx.version>
 
 		<!-- dependency versions -->
-		<junit.version>6.1.1</junit.version>
+		<junit.version>6.1.2</junit.version>
 		<wicket.version>10.9.1</wicket.version>
 		<wicketstuff.version>10.9.2</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.14</wicket-bootstrap.version>
 		<fullcalendar.version>6.1.20</fullcalendar.version>
 		<spring.version>7.0.8</spring.version>
-		<tomcat.version>11.0.23</tomcat.version>
+		<tomcat.version>11.0.24</tomcat.version>
 		<jetty.version>11.0.26</jetty.version>
 		<ical4j.version>4.3.0</ical4j.version>
 		<cxf.version>4.2.2</cxf.version>
@@ -108,7 +108,7 @@
 		<jakarta.annotation.version>3.0.0</jakarta.annotation.version>
 		<jakarta.websocket-api.version>2.2.0</jakarta.websocket-api.version>
 		<jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
-		<asterisk-java.version>3.41.0</asterisk-java.version>
+		<asterisk-java.version>3.42.2</asterisk-java.version>
 		<commons-lang3.version>3.20.0</commons-lang3.version>
 		<commons-dbcp.version>2.14.0</commons-dbcp.version>
 		<commons-pool2.version>2.13.1</commons-pool2.version>
@@ -129,7 +129,7 @@
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
 		<tika-parsers.version>3.3.1</tika-parsers.version>
 		<slf4j.version>2.0.18</slf4j.version>
-		<logback.version>1.5.37</logback.version>
+		<logback.version>1.5.38</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.84</bcprov.version>
 		<mockito.version>5.23.0</mockito.version>
@@ -585,6 +585,11 @@
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-rt-features-logging</artifactId>
 				<version>${cxf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.prometheus</groupId>
+				<artifactId>prometheus-metrics-annotations</artifactId>
+				<version>${io.prometheus.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.prometheus</groupId>

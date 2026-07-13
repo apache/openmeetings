@@ -120,30 +120,25 @@
 						<source>git checkout master</source>
 					</li>
 					<li>Create temporary local branch
-						<source>git checkout -b rel-8.2.0</source>
+						<source>git checkout -b rel-9.2.0</source>
 					</li>
 					<li>Update versions of all modules
-						<source>mvn versions:set -DgenerateBackupPoms=false -DnewVersion=8.2.0</source>
+						<source>mvn versions:set -DgenerateBackupPoms=false -DnewVersion=9.2.0</source>
 					</li>
 					<li>Update final SCM URL located at <code>pom.xml</code> and <code>openmeetings-server/pom.xml</code>
 						<source><![CDATA[
 <scm>
     <url>https://github.com/apache/openmeetings	</url>
 
-    SET https://github.com/apache/openmeetings/tree/8.2.0
+    SET https://github.com/apache/openmeetings/tree/9.2.0
 						]]></source>
-					</li>
-					<li>Add timestamp to parent pom (properties section)
-						<source>
-							<project.build.outputTimestamp>YEAR-MONTH-DAY_OF_MONTHT00:00:00Z</project.build.outputTimestamp>
-						</source>
 					</li>
 					<li>
 						Create a TAG and commit it to the Git<br/>
 						<source>
-git commit -a -m "8.2.0 Release Candidate 1"
-git tag -s 8.2.0-RC1 -m "8.2.0 Release Candidate 1 tag"
-git push origin 8.2.0-RC1
+git commit -a -m "9.2.0 Release Candidate 1"
+git tag -s 9.2.0-RC1 -m "9.2.0 Release Candidate 1 tag"
+git push origin 9.2.0-RC1
 						</source>
 					</li>
 					<li>
@@ -152,7 +147,7 @@ git push origin 8.2.0-RC1
 					</li>
 					<li>Go to: <a href="https://repository.apache.org/#stagingRepositories">Staging Repositories</a></li>
 					<li>Select openmeetings staging repo and Close it with valid message:<br/>
-						for ex. "8.2.0 build was successful"
+						for ex. "9.2.0 build was successful"
 					</li>
 					<li>
 						<p>Run the command: </p>
@@ -166,26 +161,26 @@ git push origin 8.2.0-RC1
 						<p>
 							Commit artifacts you have created with KEYS file to the
 							<code>https://dist.apache.org/repos/dist/dev/openmeetings/</code>
-							Proposed file structure for "Release Candidate 1" of 8.2.0 will be:
+							Proposed file structure for "Release Candidate 1" of 9.2.0 will be:
 						</p>
 						<source>
-8.2.0
-8.2.0/rc1
-8.2.0/rc1/src
-8.2.0/rc1/src/apache-openmeetings-8.2.0-src.zip
-8.2.0/rc1/src/apache-openmeetings-8.2.0-src.tar.gz
-8.2.0/rc1/src/apache-openmeetings-8.2.0-src.zip.sha
-8.2.0/rc1/src/apache-openmeetings-8.2.0-src.zip.asc
-8.2.0/rc1/src/apache-openmeetings-8.2.0-src.tar.gz.sha
-8.2.0/rc1/src/apache-openmeetings-8.2.0-src.tar.gz.asc
-8.2.0/rc1/bin
-8.2.0/rc1/bin/apache-openmeetings-8.2.0.zip
-8.2.0/rc1/bin/apache-openmeetings-8.2.0.tar.gz
-8.2.0/rc1/bin/apache-openmeetings-8.2.0.zip.sha
-8.2.0/rc1/bin/apache-openmeetings-8.2.0.zip.asc
-8.2.0/rc1/bin/apache-openmeetings-8.2.0.tar.gz.sha
-8.2.0/rc1/bin/apache-openmeetings-8.2.0.tar.gz.asc
-8.2.0/rc1/CHANGELOG
+9.2.0
+9.2.0/rc1
+9.2.0/rc1/src
+9.2.0/rc1/src/apache-openmeetings-9.2.0-src.zip
+9.2.0/rc1/src/apache-openmeetings-9.2.0-src.tar.gz
+9.2.0/rc1/src/apache-openmeetings-9.2.0-src.zip.sha
+9.2.0/rc1/src/apache-openmeetings-9.2.0-src.zip.asc
+9.2.0/rc1/src/apache-openmeetings-9.2.0-src.tar.gz.sha
+9.2.0/rc1/src/apache-openmeetings-9.2.0-src.tar.gz.asc
+9.2.0/rc1/bin
+9.2.0/rc1/bin/apache-openmeetings-9.2.0.zip
+9.2.0/rc1/bin/apache-openmeetings-9.2.0.tar.gz
+9.2.0/rc1/bin/apache-openmeetings-9.2.0.zip.sha
+9.2.0/rc1/bin/apache-openmeetings-9.2.0.zip.asc
+9.2.0/rc1/bin/apache-openmeetings-9.2.0.tar.gz.sha
+9.2.0/rc1/bin/apache-openmeetings-9.2.0.tar.gz.asc
+9.2.0/rc1/CHANGELOG
 						</source>
 						<p><b>NOTE</b> KEYS file is located at https://www.apache.org/dist/openmeetings/KEYS and should be just updated</p>
 					</li>
@@ -231,8 +226,8 @@ mvn clean install -Prc,release
 					<li>Go to <a href="https://securesigning.pki.digicert.com/csportal">https://securesigning.pki.digicert.com/csportal</a></li>
 					<li>Select "Signing Sets"</li>
 					<li>Select "Add signing set"</li>
-					<li>Enter "Signing set name" (must include "Apache OpenMeetings" and version) for ex. "Apache OpenMeetings 8.2.0-RELEASE"</li>
-					<li>Enter "Version" for ex. "8.2.0-RELEASE"</li>
+					<li>Enter "Signing set name" (must include "Apache OpenMeetings" and version) for ex. "Apache OpenMeetings 9.2.0-RELEASE"</li>
+					<li>Enter "Version" for ex. "9.2.0-RELEASE"</li>
 					<li>Select "Java Signing Sha256" as "Signing service"</li>
 					<li>Select "Upload files" and add all <b>jar</b> files from <code>target/jnlp</code></li>
 					<li>Select "Sign now"</li>
@@ -280,9 +275,9 @@ for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
 				<p>Release tag based on RCXX should finally be created</p>
 				<source>
 <![CDATA[
-git checkout 8.2.0-RC1
-git tag -s 8.2.0 -m "8.2.0 Release tag"
-git push origin 8.2.0
+git checkout 9.2.0-RC1
+git tag -s 9.2.0 -m "9.2.0 Release tag"
+git push origin 9.2.0
 ]]>
 				</source>
 			</subsection>
@@ -296,7 +291,7 @@ git push origin 8.2.0
 						<ul>
 							<li>Go to: <a href="https://repository.apache.org/#stagingRepositories">Staging Repositories</a></li>
 							<li>Select openmeetings staging repo and Release it with valid message:<br/>
-								for ex. "The VOTE about 8.2.0 release was successful"
+								for ex. "The VOTE about 9.2.0 release was successful"
 							</li>
 						</ul>
 					</li>

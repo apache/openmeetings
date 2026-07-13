@@ -528,6 +528,10 @@
 		</dependency>
 		<dependency>
 			<groupId>io.prometheus</groupId>
+			<artifactId>prometheus-metrics-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.prometheus</groupId>
 			<artifactId>prometheus-metrics-exporter-servlet-jakarta</artifactId>
 		</dependency>
 	</dependencies>

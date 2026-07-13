@@ -52,6 +52,20 @@
 				Please NOTE: only security issues should be reported to this list.
 			</p>
 		</section>
+		<section name="CVE-2026-49488: Apache OpenMeetings: Arbitrary File Read">
+			<p>Severity: critical</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings: from 5.0.0 before 9.1.0.</p>
+			<p>Description: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') vulnerability in Apache OpenMeetings.<br/>
+				<br/>
+				An attacker with moderator rights in any room can read arbitrary files accessible to the OS account running the OM server,
+				including credentials and secrets, via a crafted download request.<br/>
+				<a href="https://www.cve.org/CVERecord?id=CVE-2026-49488">CVE-2026-49488</a>
+			</p>
+			<p>The issue was fixed in 9.1.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 9.1.0</p>
+			<p>Credit: This issue was identified by follycat and Y0n3er</p>
+		</section>
 		<section name="CVE-2026-33005: Apache OpenMeetings: Insufficient checks in FileWebService">
 			<p>Severity: moderate</p>
 			<p>Vendor: The Apache Software Foundation</p>
