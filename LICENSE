@@ -308,7 +308,7 @@ conditions of the following licenses.
         * Bouncy Castle ASN.1 Extension and Utility APIs (org.bouncycastle:bcutil-jdk18on:1.85 - https://www.bouncycastle.org/download/bouncy-castle-java/)
         * Bouncy Castle JavaMail Jakarta S/MIME APIs (org.bouncycastle:bcjmail-jdk18on:1.85 - https://www.bouncycastle.org/download/bouncy-castle-java/)
         * Bouncy Castle PKIX, CMS, EAC, TSP, PKCS, OCSP, CMP, and CRMF APIs (org.bouncycastle:bcpkix-jdk18on:1.85 - https://www.bouncycastle.org/download/bouncy-castle-java/)
-        * Bouncy Castle Provider (org.bouncycastle:bcprov-jdk18on:1.85 - https://www.bouncycastle.org/download/bouncy-castle-java/)
+        * Bouncy Castle Provider (org.bouncycastle:bcprov-jdk18on:1.85.2 - https://www.bouncycastle.org/download/bouncy-castle-java/)
         * Checker Qual (org.checkerframework:checker-qual:3.55.1 - https://checkerframework.org/)
         * dd-plist (com.googlecode.plist:dd-plist:1.29 - http://www.github.com/3breadt/dd-plist)
         * dev.samstevens.totp:totp (dev.samstevens.totp:totp:1.7.1 - https://github.com/samdjstevens/java-totp/totp)
