@@ -30,9 +30,7 @@ import static org.apache.openmeetings.util.process.ProcessResult.ZERO;
 import static org.apache.tika.metadata.HttpHeaders.CONTENT_TYPE;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,9 +48,10 @@ import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
+import org.apache.tika.config.loader.TikaLoader;
+import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.TIFF;
-import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.parser.image.ImageParser;
 import org.slf4j.Logger;
@@ -128,10 +127,10 @@ public class ImageConverter extends BaseConverter {
 		ProcessResult res = new ProcessResult();
 		res.setProcess("get image dimensions :: " + f.getId());
 		final Parser parser = new ImageParser();
-		try (InputStream is = new FileInputStream(img)) {
+		try (TikaInputStream is = TikaInputStream.get(img)) {
 			Metadata metadata = new Metadata();
 			metadata.set(CONTENT_TYPE, mime);
-			parser.parse(is, new DefaultHandler(), metadata, new ParseContext());
+			parser.parse(is, new DefaultHandler(), metadata, TikaLoader.loadDefault().loadParseContext());
 			f.setWidth(Integer.valueOf(metadata.get(TIFF.IMAGE_WIDTH)));
 			f.setHeight(Integer.valueOf(metadata.get(TIFF.IMAGE_LENGTH)));
 			res.setExitCode(ZERO);

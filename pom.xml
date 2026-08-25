@@ -127,7 +127,7 @@
 		<api-all.version>2.1.8</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
-		<tika-parsers.version>3.3.2</tika-parsers.version>
+		<tika-parsers.version>4.0.0</tika-parsers.version>
 		<slf4j.version>2.0.18</slf4j.version>
 		<logback.version>1.6.3</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
@@ -520,12 +520,6 @@
 				<groupId>org.mnode.ical4j</groupId>
 				<artifactId>ical4j</artifactId>
 				<version>${ical4j.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
@@ -719,32 +713,16 @@
 				<groupId>org.apache.tika</groupId>
 				<artifactId>tika-parsers-standard-package</artifactId>
 				<version>${tika-parsers.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>xml-apis</groupId>
-						<artifactId>xml-apis</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>xerces</groupId>
-						<artifactId>xercesImpl</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.logging.log4j</groupId>
-						<artifactId>log4j-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.logging.log4j</groupId>
-						<artifactId>log4j-slf4j-impl</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
+				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.tika</groupId>
 				<artifactId>tika-core</artifactId>
+				<version>${tika-parsers.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tika</groupId>
+				<artifactId>tika-serialization</artifactId>
 				<version>${tika-parsers.version}</version>
 			</dependency>
 			<dependency>
@@ -757,12 +735,6 @@
 				<groupId>org.kurento</groupId>
 				<artifactId>kurento-client</artifactId>
 				<version>${kurento.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.jodconverter</groupId>
@@ -850,12 +822,15 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-dbcp2</artifactId>
 				<version>${commons-dbcp.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
+			</dependency>
+			<dependency>
+				<!-- this way we will exclude this one from dependency tree
+				 logging happen via slf4j
+				 -->
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>[1.0, )</version> <!-- include all possible versions -->
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>

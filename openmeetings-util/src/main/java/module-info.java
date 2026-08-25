@@ -33,6 +33,7 @@ module org.apache.openmeetings.util {
 	requires transitive org.apache.commons.lang3;
 
 	requires org.apache.tika.core;
+	requires org.apache.tika.serialization;
 
 	requires org.apache.wicket.util;
 	requires org.apache.wicket.core;

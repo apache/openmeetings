@@ -38,6 +38,7 @@ module org.apache.openmeetings.core {
 
 	requires org.apache.tika.core;
 	requires org.apache.tika.parser.image;
+	requires org.apache.tika.serialization;
 
 	requires transitive org.apache.openmeetings.db;
 	requires transitive org.apache.openmeetings.util;

@@ -33,8 +33,7 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.tika.config.TikaConfig;
-import org.apache.tika.exception.TikaException;
+import org.apache.tika.config.loader.TikaLoader;
 import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
@@ -58,7 +57,7 @@ public class StoredFile {
 	private static final Set<MediaType> CHART_TYPES = new HashSet<>();
 	private static final Set<MediaType> AS_IS_TYPES = Set.of(MIME_PNG);
 	private static final String ACCEPT_STRING;
-	private static TikaConfig tika;
+	private static TikaLoader tika;
 	static {
 		Set<MediaType> types = new LinkedHashSet<>();
 		types.addAll(CONVERT_TYPES);
@@ -73,12 +72,7 @@ public class StoredFile {
 			sb.append(',').append(mt.toString());
 		}
 		ACCEPT_STRING = sb.toString();
-		try {
-			tika = new TikaConfig();
-		} catch (IOException | TikaException e) {
-			log.error("Unexpected exception while initializing TIKA", e);
-			throw new RuntimeException(e);
-		}
+		tika = TikaLoader.loadDefault();
 	}
 
 	private String name;
@@ -115,7 +109,7 @@ public class StoredFile {
 		Metadata md = new Metadata();
 		md.add(RESOURCE_NAME_KEY, String.format(FILE_NAME_FMT, name, ext));
 		try {
-			mime = tika.getDetector().detect(is == null ? null : TikaInputStream.get(is), md);
+			mime = tika.loadDetectors().detect(is == null ? null : TikaInputStream.get(is), md, tika.loadParseContext());
 		} catch (Throwable e) {
 			mime = null;
 			log.error("Unexpected exception while detecting mime type", e);
