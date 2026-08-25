@@ -19,6 +19,7 @@
 package org.apache.openmeetings.service.calendar.caldav;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.db.util.FormatHelper.sanitize;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.CalendarHelper.getZoneDateTime;
 import static org.apache.openmeetings.util.mail.IcalHandler.TZ_REGISTRY;
@@ -164,7 +165,6 @@ public class IcalUtils {
 		return getDate(event.getProperty(prop).orElse(null));
 	}
 
-	@SuppressWarnings("unchecked")
 	private Date getDate(Property prop) {
 		return prop == null ? null : Date.from(Instant.from(((DateProperty<? extends Temporal>)prop).getDate()));
 	}
@@ -186,7 +186,7 @@ public class IcalUtils {
 
 		event.getProperty(Property.DTSTAMP).ifPresent(dtstamp -> a.setInserted(getDate(dtstamp)));
 		event.getProperty(Property.LAST_MODIFIED).ifPresent(lastmod -> a.setUpdated(getDate(lastmod)));
-		event.getProperty(Property.DESCRIPTION).ifPresent(description -> a.setDescription(description.getValue()));
+		event.getProperty(Property.DESCRIPTION).ifPresent(description -> a.setDescription(sanitize(description.getValue())));
 		event.getProperty(Property.SUMMARY).ifPresent(summary -> a.setTitle(summary.getValue()));
 		event.getProperty(Property.LOCATION).ifPresent(location -> a.setLocation(location.getValue()));
 

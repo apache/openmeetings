@@ -24,6 +24,7 @@ import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.entity.user.User;
+import org.owasp.html.HtmlPolicyBuilder;
 
 public class FormatHelper {
 	private FormatHelper() {}
@@ -55,5 +56,17 @@ public class FormatHelper {
 
 	public static FastDateFormat getDateTimeFormat(User u) {
 		return FastDateFormat.getDateTimeInstance(SHORT, SHORT, getTimeZone(u), LocaleHelper.getLocale(u));
+	}
+
+	public static String sanitize(String str) {
+		return new HtmlPolicyBuilder()
+				.allowCommonInlineFormattingElements()
+				.allowCommonBlockElements()
+				.allowElements("a").allowStandardUrlProtocols()
+				.allowAttributes("href", "target").onElements("a")
+				.allowAttributes("size").onElements("font")
+				.allowAttributes("class", "style").globally()
+				.toFactory()
+				.sanitize(str);
 	}
 }

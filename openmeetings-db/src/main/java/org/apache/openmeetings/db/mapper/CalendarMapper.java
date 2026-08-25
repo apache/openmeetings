@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.mapper;
 
+import static org.apache.openmeetings.db.util.FormatHelper.sanitize;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +32,6 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.util.string.Strings;
-import org.owasp.html.HtmlPolicyBuilder;
-import org.owasp.html.PolicyFactory;
 import org.springframework.stereotype.Component;
 
 import jakarta.inject.Inject;
@@ -48,21 +48,13 @@ public class CalendarMapper {
 	private RoomMapper rMapper;
 
 	public Appointment get(AppointmentDTO dto, User u) {
-		PolicyFactory pf = new HtmlPolicyBuilder()
-				.allowCommonInlineFormattingElements()
-				.allowCommonBlockElements()
-				.allowElements("a").allowStandardUrlProtocols()
-				.allowAttributes("href", "target").onElements("a")
-				.allowAttributes("size").onElements("font")
-				.allowAttributes("class", "style").globally()
-				.toFactory();
 		Appointment a = dto.getId() == null ? new Appointment() : appointmentDao.get(dto.getId());
 		a.setId(dto.getId());
 		a.setTitle(dto.getTitle());
 		a.setLocation(dto.getLocation());
 		a.setStart(dto.getStart().getTime());
 		a.setEnd(dto.getEnd().getTime());
-		a.setDescription(pf.sanitize(dto.getDescription()));
+		a.setDescription(sanitize(dto.getDescription()));
 		a.setOwner(dto.getOwner() == null ? u : userDao.get(dto.getOwner().getId()));
 		a.setInserted(dto.getInserted());
 		a.setUpdated(dto.getUpdated());
