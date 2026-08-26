@@ -148,17 +148,20 @@ public abstract class InvitationForm extends Form<Invitation> {
 		super.onInitialize();
 	}
 
+	private static boolean isGenerateEnabled(Collection<User> recpnts) {
+		return recpnts.size() == 1
+			&& recpnts.stream()
+				.findFirst()
+				.map(u -> getUserId().equals(u.getId()) || User.Type.CONTACT == u.getType())
+				.orElse(false);
+	}
+
 	protected void updateButtons(AjaxRequestTarget target) {
 		Collection<User> recpnts = recipients.getModelObject();
-		boolean generateEnabled = false;
-		if (recpnts.size() == 1) {
-			User u = recpnts.iterator().next();
-			generateEnabled = getUserId().equals(u.getId()) || User.Type.CONTACT == u.getType();
-		}
-		target.add(
-				dialog.getSend().setEnabled(!recpnts.isEmpty())
-				, dialog.getGenerate().setEnabled(generateEnabled)
-				);
+		boolean generateEnabled = isGenerateEnabled(recpnts);
+		target.add(dialog.getSend().setEnabled(!recpnts.isEmpty())
+			, dialog.getGenerate().setEnabled(generateEnabled)
+		);
 	}
 
 	@Override
@@ -227,14 +230,15 @@ public abstract class InvitationForm extends Form<Invitation> {
 
 	public void onClick(AjaxRequestTarget target, Action action) {
 		final String userbaseUrl = WebSession.get().getExtendedProperties().getBaseUrl();
-		if (Action.GENERATE == action) {
-			Invitation i = create(recipients.getModelObject().iterator().next());
+		Collection<User> recpnts = recipients.getModelObject();
+		if (Action.GENERATE == action && isGenerateEnabled(recpnts)) {
+			Invitation i = create(recpnts.iterator().next());
 			setModelObject(i);
 			url.setModelObject(getInvitationLink(i, userbaseUrl));
 			target.add(url);
 		} else {
 			if (Strings.isEmpty(url.getModelObject())) {
-				for (User u : recipients.getModelObject()) {
+				for (User u : recpnts) {
 					Invitation i = create(u);
 					try {
 						inviteManager.sendInvitationLink(i, MessageType.CREATE, subject.getModelObject(), message.getModelObject(), false, userbaseUrl);
