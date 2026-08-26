@@ -46,7 +46,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jakarta.annotation.Nonnull;
@@ -58,23 +57,18 @@ import org.apache.openmeetings.core.sip.SipManager;
 import org.apache.openmeetings.core.util.ChatWebSocketHelper;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Configuration;
-import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomGroup;
-import org.apache.openmeetings.db.entity.user.Group;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.db.manager.RoomManager;
 import org.apache.openmeetings.db.util.ApplicationHelper;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
@@ -206,9 +200,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Inject
 	private WhiteboardManager wbManager;
 	@Inject
-	private AppointmentDao appointmentDao;
-	@Inject
 	private SipManager sipManager;
+	@Inject
+	private RoomManager roomManager;
 	@Value("${remember.me.rotation.days:30}")
 	private int rememberRotationDays;
 
@@ -571,7 +565,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		User u = i.getInvitee();
 		if (r != null) {
 			if ((i.isPasswordProtected() && !r.isOwner(u.getId())) // invitation is password-protected and invitee is not owner
-					|| Type.CONTACT == u.getType() || Type.EXTERNAL == u.getType() || !get().isRoomAllowedToUser(r, u)) // no-access
+					|| Type.CONTACT == u.getType() || Type.EXTERNAL == u.getType() || !get().roomManager.isRoomAllowedToUser(r, u)) // no-access
 			{
 				PageParameters pp = new PageParameters();
 				pp.add(INVITATION_HASH, i.getHash());
@@ -588,49 +582,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			link = urlForPage(HashPage.class, new PageParameters().add(INVITATION_HASH, i.getHash()), baseUrl);
 		}
 		return link;
-	}
-
-	private static boolean checkAppointment(Appointment a, User u) {
-		if (a == null || a.isDeleted()) {
-			return false;
-		}
-		if (a.isOwner(u.getId())) {
-			log.debug("[isRoomAllowedToUser] appointed room, Owner entered");
-			return true;
-		}
-		return a.getMeetingMembers().stream()
-				.map(MeetingMember::getUser)
-				.map(User::getId)
-				.anyMatch(userId -> userId.equals(u.getId()));
-	}
-
-	private static boolean checkGroups(Room r, User u) {
-		if (null == r.getGroups()) { //u.getGroupUsers() can't be null due to user was able to login
-			return false;
-		}
-		Set<Long> roomGroups = r.getGroups().stream()
-				.map(RoomGroup::getGroup)
-				.map(Group::getId)
-				.collect(Collectors.toSet());
-		return u.getGroupUsers().stream()
-				.map(GroupUser::getGroup)
-				.map(Group::getId)
-				.anyMatch(roomGroups::contains);
-	}
-
-	public boolean isRoomAllowedToUser(Room r, User u) {
-		if (r == null) {
-			return false;
-		}
-		if (r.isAppointment()) {
-			Appointment a = appointmentDao.getByRoom(r.getId());
-			return checkAppointment(a, u);
-		}
-		if (r.getIspublic() || r.isOwner(u.getId())) {
-			log.debug("[isRoomAllowedToUser] public ? {} , ownedId ? {} ALLOWED", r.getIspublic(), r.getOwnerId());
-			return true;
-		}
-		return checkGroups(r, u);
 	}
 
 	public static boolean isUrlValid(String url) {

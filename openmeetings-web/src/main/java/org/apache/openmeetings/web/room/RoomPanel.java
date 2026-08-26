@@ -49,11 +49,11 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
+import org.apache.openmeetings.db.manager.RoomManager;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.RoomMessage.Type;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.QuickPollManager;
 import org.apache.openmeetings.web.app.TimerService;
@@ -274,6 +274,8 @@ public class RoomPanel extends BasePanel {
 	private TimerService timerService;
 	@Inject
 	private FileItemDao fileDao;
+	@Inject
+	private RoomManager roomManager;
 
 	public RoomPanel(String id, Room r) {
 		super(id);
@@ -337,7 +339,7 @@ public class RoomPanel extends BasePanel {
 		} else if (r.getId().equals(WebSession.get().getRoomId())) {
 			// secureHash/invitationHash, already checked
 		} else {
-			boolean allowed = Application.get().isRoomAllowedToUser(r, c.getUser());
+			boolean allowed = roomManager.isRoomAllowedToUser(r, c.getUser());
 			String deniedMessage = null;
 			if (r.isAppointment()) {
 				Appointment a = apptDao.getByRoom(r.getId());

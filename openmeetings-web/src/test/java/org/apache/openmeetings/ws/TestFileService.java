@@ -41,6 +41,7 @@ import java.util.function.Consumer;
 import javax.imageio.ImageIO;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
@@ -48,6 +49,7 @@ import org.apache.openmeetings.db.dto.file.FileExplorerObject;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.NonJenkinsTest;
@@ -188,6 +190,9 @@ class TestFileService extends AbstractWebServiceTest {
 		u.addGroup(g);
 		u = createUser(userDao, u);
 
+		RoomDao roomDao = getBean(RoomDao.class);
+		Room myRoom = roomDao.getMyRooms(admin.getId(), "conference", "restricted").get(0);
+		accessRoomByParentDenied(-2l, myRoom.getId(), u.getLogin(), createPass());
 		accessRoomByParentDenied(adminFolder.getId(), 5, u.getLogin(), createPass());
 		accessRoomByParentGranted(adminFolder.getId(), 5, ADMIN_USERNAME, USER_PASS);
 

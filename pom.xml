@@ -35,6 +35,7 @@
 		<project.build.outputTimestamp>2026-07-13T06:45:35Z</project.build.outputTimestamp>
 		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
+		<om.javadoc.skip>false</om.javadoc.skip>
 		<om.notquick.build>true</om.notquick.build>
 		<site.skip>false</site.skip>
 		<logback.console></logback.console>
@@ -1195,6 +1196,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<skip>${om.quick.build}</skip>
+					<skip>${om.javadoc.skip}</skip>
 				</configuration>
 				<executions>
 					<execution>
@@ -1824,6 +1826,7 @@
 				<maven.test.skip>true</maven.test.skip>
 				<site.skip>true</site.skip>
 				<om.quick.build>true</om.quick.build>
+				<om.javadoc.skip>true</om.javadoc.skip>
 				<om.notquick.build>false</om.notquick.build>
 				<wicket.configuration>DEVELOPMENT</wicket.configuration>
 				<src.pack.skip>true</src.pack.skip>

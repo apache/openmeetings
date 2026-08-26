@@ -51,6 +51,7 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.manager.RoomManager;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.openmeetings.webservice.error.InternalServiceException;
@@ -92,6 +93,8 @@ public class FileWebService extends BaseWebService {
 	private FileProcessor fileProcessor;
 	@Inject
 	private GroupUserDao groupUserDao;
+	@Inject
+	private RoomManager roomManager;
 
 	/**
 	 * deletes files or folders based on it id
@@ -335,9 +338,12 @@ public class FileWebService extends BaseWebService {
 					// insufficient rights
 					return false;
 				}
-				if (parentId < 0) {
-					// will get files by room or owner
+				if (parentId == -1) {
+					// will get files by owner
 					return true;
+				} else if (parentId < 0) {
+					// will get files by room
+					return roomManager.isRoomAllowedToUser(roomDao.get(roomId), userDao.get(userId));
 				}
 				BaseFileItem root = fileDao.getRoot(parentId);
 				if (root == null) {
@@ -359,12 +365,10 @@ public class FileWebService extends BaseWebService {
 				return false;
 			}, sd -> {
 			List<FileItem> list;
-			if (parentId < 0) {
-				if (parentId == -1) {
-					list = fileDao.getByOwner(sd.getUserId());
-				} else {
-					list = fileDao.getByRoom(roomId);
-				}
+			if (parentId == -1) {
+				list = fileDao.getByOwner(sd.getUserId());
+			} else if (parentId < 0) {
+				list = fileDao.getByRoom(roomId);
 			} else {
 				list = fileDao.getByParent(parentId);
 			}
