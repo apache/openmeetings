@@ -89,6 +89,7 @@
 							<arguments>run build</arguments>
 							<workingDirectory>src/main/front</workingDirectory>
 							<environmentVariables>
+								<NODE_OPTIONS>--trace-deprecation</NODE_OPTIONS>
 								<outDir>${project.build.directory}/${project.build.finalName}/</outDir>
 							</environmentVariables>
 						</configuration>
