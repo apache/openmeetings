@@ -178,7 +178,8 @@ public class OmFileHelper {
 		if (SIP_USER_ID.equals(userId)) {
 			img = new File(getImagesDir(), SIP_PICTURE_URI);
 		} else if (userId != null) {
-			img = new File(getUploadProfilesUserDir(userId), uri == null ? "" : uri);
+			File dir = getUploadProfilesUserDir(userId);
+			img = validateLocation(uri == null ? "" : uri, dir, false);
 		}
 		if (img == null || !img.exists() || img.isDirectory()) {
 			img = def;
@@ -400,14 +401,22 @@ public class OmFileHelper {
 	}
 
 	public static File validateLocation(String ename, String intended) {
-		return validateLocation(ename, new File(intended));
+		return validateLocation(ename, new File(intended), true);
 	}
 
 	public static File validateLocation(String ename, File intended) {
+		return validateLocation(ename, intended, true);
+	}
+
+	public static File validateLocation(String ename, File intended, boolean fail) {
 		Path base = intended.toPath();
 		Path res = base.resolve(ename).normalize();
 		if (!res.startsWith(base)) {
-			throw new IllegalStateException("File is outside extraction target directory.");
+			if (fail) {
+				throw new IllegalStateException("File is outside extraction target directory.");
+			} else {
+				return null;
+			}
 		}
 		return res.toFile();
 	}
