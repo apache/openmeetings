@@ -61,8 +61,9 @@ public class ChatDao {
 				, start, count).getResultList();
 	}
 
-	public List<ChatMessage> getUser(long userId, long start, long count) {
+	public List<ChatMessage> getUser(long selfId, long userId, long start, long count) {
 		return setLimits(em.createNamedQuery("getChatMessagesByUser", ChatMessage.class)
+					.setParameter("selfId", selfId)
 					.setParameter(PARAM_USER_ID, userId)
 				, start, count).getResultList();
 	}
@@ -110,7 +111,10 @@ public class ChatDao {
 		em.createNamedQuery("deleteChatRoom").setParameter("roomId", roomId).executeUpdate();
 	}
 
-	public void deleteUser(Long userId) {
-		em.createNamedQuery("deleteChatUser").setParameter(PARAM_USER_ID, userId).executeUpdate();
+	public void deleteUser(long selfId, Long userId) {
+		em.createNamedQuery("deleteChatUser")
+			.setParameter("selfId", selfId)
+			.setParameter(PARAM_USER_ID, userId)
+			.executeUpdate();
 	}
 }

@@ -133,7 +133,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 						return true;
 					}, u -> {
 						setFileName(String.format(CHAT_FNAME_TMPL, "user_" + u.getId()));
-						export(chatDao.getUser(u.getId(), 0, Integer.MAX_VALUE), sb);
+						export(chatDao.getUser(getUserId(), u.getId(), 0, Integer.MAX_VALUE), sb);
 						return true;
 					});
 			StringResourceStream srs = new StringResourceStream(sb, "text/csv");
@@ -206,7 +206,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 						}
 						return true;
 					}, u -> {
-						chatDao.deleteUser(u.getId());
+						chatDao.deleteUser(getUserId(), u.getId());
 						WebSocketHelper.sendUser(u.getId(), cleanMsg(scope));
 						return true;
 					});

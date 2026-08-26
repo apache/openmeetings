@@ -128,6 +128,7 @@ public class ChatForm extends Form<Void> {
 								return true;
 							}, u -> {
 								m.setToUser(u);
+								m.setStatus(ChatMessage.Status.OPEN);
 								return true;
 							}))
 					{
