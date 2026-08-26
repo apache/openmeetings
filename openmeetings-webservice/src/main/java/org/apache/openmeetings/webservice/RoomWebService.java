@@ -19,6 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.webservice.Constants.TNS;
+import static org.apache.openmeetings.db.util.FormatHelper.sanitize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -566,7 +567,7 @@ public class RoomWebService extends BaseWebService {
 			if (i != null) {
 				if (sendmail) {
 					try {
-						inviteManager.sendInvitationLink(i, MessageType.CREATE, invite.getSubject(), invite.getMessage(), false, null);
+						inviteManager.sendInvitationLink(i, MessageType.CREATE, invite.getSubject(), sanitize(invite.getMessage()), false, null);
 					} catch (Exception e) {
 						throw new InternalServiceException(e.getMessage());
 					}

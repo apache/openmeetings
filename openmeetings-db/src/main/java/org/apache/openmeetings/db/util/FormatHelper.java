@@ -59,7 +59,7 @@ public class FormatHelper {
 	}
 
 	public static String sanitize(String str) {
-		return new HtmlPolicyBuilder()
+		return str == null ? "" : new HtmlPolicyBuilder()
 				.allowCommonInlineFormattingElements()
 				.allowCommonBlockElements()
 				.allowElements("a").allowStandardUrlProtocols()
