@@ -145,7 +145,7 @@ public class RoomSidebar extends Panel {
 			switch (a) {
 				case KICK:
 					if (self.hasRight(Right.MODERATOR)) {
-						final Client kickedClient = cm.get(uid);
+						final Client kickedClient = cm.getInRoom(uid, room.getRoom().getId());
 						if (kickedClient == null) {
 							return;
 						}
@@ -155,7 +155,7 @@ public class RoomSidebar extends Panel {
 					}
 					break;
 				case MUTE_OTHERS:
-					if (room.getClient().hasRight(Right.MUTE_OTHERS)) {
+					if (self.hasRight(Right.MUTE_OTHERS) && cm.getInRoom(uid, room.getRoom().getId()) != null) {
 						WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), self, RoomMessage.Type.MUTE_OTHERS, uid));
 					}
 					break;
@@ -173,7 +173,7 @@ public class RoomSidebar extends Panel {
 	}
 
 	private void muteRoomAction(String uid, Client self, JSONObject o) {
-		Client c = cm.get(uid);
+		Client c = cm.getInRoom(uid, room.getRoom().getId());
 		if (c == null || !c.has(Client.Activity.AUDIO)) {
 			return;
 		}
@@ -190,18 +190,16 @@ public class RoomSidebar extends Panel {
 		try {
 			Right right = Right.valueOf(o.getString(PARAM_RIGHT));
 			if (self.hasRight(Right.MODERATOR)) {
-				Client client = cm.get(uid);
+				Client client = cm.getInRoom(uid, room.getRoom().getId());
 				if (client == null) {
 					return;
 				}
 				if (client.hasRight(right)) {
 					room.denyRight(client, right);
+				} else if (Right.VIDEO == right) {
+					room.allowRight(client, Right.AUDIO, right);
 				} else {
-					if (Right.VIDEO == right) {
-						room.allowRight(client, Right.AUDIO, right);
-					} else {
-						room.allowRight(client, right);
-					}
+					room.allowRight(client, right);
 				}
 			} else {
 				room.requestRight(right, handler);

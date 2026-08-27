@@ -140,6 +140,14 @@ public class ClientManager implements IClientManager {
 		return uid == null ? null : onlineClients.get(uid);
 	}
 
+	public Client getInRoom(String uid, Long roomId) {
+		if (uid == null || roomId == null) {
+			return null;
+		}
+		Client c = onlineClients.get(uid);
+		return c != null && roomId.equals(c.getRoomId()) ? c : null;
+	}
+
 	@Override
 	public Client getBySid(String sid) {
 		if (sid == null) {
