@@ -25,7 +25,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.*;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.SELF;
 import static org.apache.wicket.csp.CSPDirectiveSrcValue.STRICT_DYNAMIC;
 
-import java.lang.reflect.Constructor;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,7 +49,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.util.DaoHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
-import org.apache.openmeetings.util.crypt.ICrypt;
 import org.apache.wicket.Application;
 import org.apache.wicket.csp.CSPDirective;
 import org.apache.wicket.csp.CSPHeaderConfiguration;
@@ -233,20 +231,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				log.error("An attempt to delete '" + CONFIG_CRYPT + "' is blocked");
 				return entity;
 			}
-			boolean validClass = false;
-			try {
-				Class<?> clazz = Class.forName(value);
-				if (ICrypt.class.isAssignableFrom(clazz)) {
-					Constructor<?> constr = clazz.getDeclaredConstructor();
-					constr.setAccessible(true);
-					Object crypt = constr.newInstance();
-					validClass = crypt instanceof ICrypt;
-				}
-			} catch (Exception e) {
-				// no-op
-			}
-			if (!validClass) {
-				log.error("An attempt to set '" + value + "' as '" + CONFIG_CRYPT + "' is blocked");
+			if (CryptProvider.fromClass(value) == null) {
 				return entity;
 			}
 		}

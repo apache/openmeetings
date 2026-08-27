@@ -18,7 +18,10 @@
  */
 package org.apache.openmeetings.util.crypt;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
+
+import java.lang.reflect.Constructor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,19 +34,30 @@ public class CryptProvider {
 
 	public static synchronized ICrypt get() {
 		if (crypt == null) {
-			String clazz = getCryptClassName();
-			try {
-				log.debug("get:: configKeyCryptClassName: {}", clazz);
-
-				crypt = clazz == null ? null : (ICrypt) Class.forName(clazz).getDeclaredConstructor().newInstance();
-			} catch (Exception err) {
-				log.error("[get]", err);
-			}
+			crypt = fromClass(getCryptClassName());
 		}
 		return crypt;
 	}
 
 	public static synchronized void reset() {
 		crypt = null;
+	}
+
+	public static ICrypt fromClass(String className) {
+		ICrypt inst = null;
+		try {
+			Class<?> clazz = Class.forName(className);
+			if (ICrypt.class.isAssignableFrom(clazz)) {
+				Constructor<?> constr = clazz.getDeclaredConstructor();
+				constr.setAccessible(true);
+				inst = (ICrypt)constr.newInstance();
+			}
+		} catch (Exception e) {
+			// no-op
+		}
+		if (inst == null) {
+			log.error("Error while attempting to get ICrypt from '" + className + "' as '" + CONFIG_CRYPT + "'");
+		}
+		return inst;
 	}
 }
