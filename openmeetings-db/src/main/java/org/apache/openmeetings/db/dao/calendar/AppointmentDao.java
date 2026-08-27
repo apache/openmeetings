@@ -273,7 +273,7 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 	 * @param calId Calendar Id of the Calendar Id to which the Appointments belong to.
 	 * @return Returns <code>-1</code> if the there was an error executing the query,
 	 * otherwise returns the number of updated rows.
-	 * as described here {@link jakarta.persistence.Query.#executeUpdate()}
+	 * as described here {@link jakarta.persistence.Query.executeUpdate()}
 	 */
 	public int deletebyCalendar(Long calId) {
 		return em.createNamedQuery("deleteAppointmentsbyCalendar", Appointment.class)
