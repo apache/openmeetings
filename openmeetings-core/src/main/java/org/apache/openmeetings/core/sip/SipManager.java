@@ -134,7 +134,8 @@ public class SipManager implements ISipManager {
 		}
 	}
 
-	private ManagerResponse exec(ManagerAction action) {
+	// package private for tests
+	ManagerResponse exec(ManagerAction action) {
 		if (factory == null) {
 			log.warn("There is no Asterisk configured");
 			return null;
@@ -236,11 +237,16 @@ public class SipManager implements ISipManager {
 			log.warn("Failed to get SIP number for room: {}", r);
 			return;
 		}
+		String ext = Optional.ofNullable(number).orElse("").lines().findFirst().orElse(null);
+		if (Strings.isEmpty(ext)) {
+			log.warn("Got empty extention number out of '{}'", number);
+			return;
+		}
 
 		OriginateAction oa = new OriginateAction();
 		oa.setChannel(String.format("Local/%s@rooms-originate", sipNumber));
 		oa.setContext("rooms-out");
-		oa.setExten(number);
+		oa.setExten(ext);
 		oa.setPriority(1);
 		oa.setTimeout(managerTimeout);
 
