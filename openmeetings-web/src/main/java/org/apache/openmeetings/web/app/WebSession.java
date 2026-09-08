@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
-import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import static org.apache.openmeetings.web.app.Application.isInvaldSession;
 import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
@@ -77,7 +76,6 @@ import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.UserDashboard;
-import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.injection.Injector;
@@ -177,28 +175,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	@Override
 	public boolean isSignedIn() {
-		if (userId == null) {
-			IAuthenticationStrategy strategy = getAuthenticationStrategy();
-			// get username and password from persistence store
-			String[] data = strategy.load();
-			if (data != null && data.length > 3 && data[2] != null) {
-				Long domainId = null;
-				try {
-					domainId = Long.valueOf(data[3]);
-				} catch (Exception e) {
-					//no-op
-				}
-				// try to sign in the user
-				try {
-					if (!signIn(data[0], data[1], Type.valueOf(data[2]), domainId)) {
-						// the loaded credentials are wrong. erase them.
-						strategy.remove();
-					}
-				} catch (Exception e) {
-					//no-op, bad credentials
-				}
-			}
-		}
 		return userId != null && userId.longValue() > 0;
 	}
 

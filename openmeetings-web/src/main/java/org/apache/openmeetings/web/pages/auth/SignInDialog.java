@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.UserManager.showAuth;
 import static org.apache.openmeetings.web.pages.HashPage.APP_KEY;
 import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
@@ -36,7 +35,6 @@ import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
 import org.apache.openmeetings.web.pages.HashPage;
@@ -52,7 +50,6 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -82,7 +79,6 @@ public class SignInDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
 	private final PasswordTextField passField = new PasswordTextField("pass", Model.of(""));
 	private final RequiredTextField<String> loginField = new RequiredTextField<>("login", Model.of(""));
-	private boolean rememberMe = false;
 	private LdapConfig domain;
 	private NotificationPanel feedback = new NotificationPanel("feedback");
 
@@ -155,7 +151,6 @@ public class SignInDialog extends Modal<String> {
 			credentials.add(new WebMarkupContainer("ldap")
 				.add(new DropDownChoice<>("domain", new PropertyModel<>(SignInDialog.this, "domain")
 						, ldaps, new ChoiceRenderer<>("name", "id"))).setVisible(showLdap));
-			credentials.add(new CheckBox("rememberMe", new PropertyModel<>(SignInDialog.this, "rememberMe")).setOutputMarkupId(true));
 			AjaxButton ab = new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;
 			};
@@ -294,22 +289,14 @@ public class SignInDialog extends Modal<String> {
 
 	// package private for OTP-Dialog
 	void finalStep(boolean signedIn, final Type type, AjaxRequestTarget target) {
-		OmAuthenticationStrategy strategy = getAuthenticationStrategy();
 		if (signedIn) {
 			setResponsePage(Application.get().getHomePage());
-			if (rememberMe) {
-				final String login = getLogin();
-				strategy.save(login, passField.getModelObject(), type, domain.getId());
-			} else {
-				strategy.remove();
-			}
 		} else {
 			if (!hasErrorMessage()) {
 				error(getString("error.bad.credentials"));
 				target.add(feedback);
 			}
 			UserDao.badPwdPenalty();
-			strategy.remove();
 		}
 	}
 }

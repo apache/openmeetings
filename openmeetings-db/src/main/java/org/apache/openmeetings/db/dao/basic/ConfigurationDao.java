@@ -524,7 +524,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadRecordingEnabled();
 		reloadTheme();
 		reloadOtpEnabled();
-		// NOTE 'remember me' settings are not being cached (only required at app start)
 
 		updateCsp();
 	}

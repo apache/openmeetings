@@ -86,7 +86,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REMEMBER_ME_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REMINDER_MESSAGE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REPLY_TO_ORGANIZER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REST_ALLOW_ORIGIN;
@@ -395,13 +394,8 @@ public class ImportInitvalues {
 				+ "United, Yeti", "6.1.0"));
 
 		list.add(new Configuration(CONFIG_OTP_ENABLED, String.valueOf(false), Configuration.Type.BOOL, "Whether or not Time-based One Time Passwords are enabled", "6.3.0"));
-		list.add(initialRememberMeKeyCfg());
 
 		return list;
-	}
-
-	public static Configuration initialRememberMeKeyCfg() {
-		return new Configuration(CONFIG_REMEMBER_ME_KEY, null, Configuration.Type.STRING, "'Remember me' encryption key to crypt user data. Please change this one regularly", "9.0.0");
 	}
 
 	public void loadConfiguration(InstallationConfig cfg) {
