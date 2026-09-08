@@ -344,12 +344,13 @@ public class UserManager implements IUserManager {
 		Map<String, String> params = new HashMap<>();
 		params.put("{$client_id}", s.getClientId());
 		params.put("{$redirect_uri}", getRedirectUri(s));
-		params.put("{$state}", randomUUID().toString());
 		return params;
 	}
 
 	public static void showAuth(final OAuthServer s) {
-		String authUrl = prepareUrl(s.getRequestKeyUrl(), getInitParams(s));
+		final String state = randomUUID().toString();
+		WebSession.get().setOauthState(state);
+		String authUrl = prepareUrl(s.getRequestKeyUrl(), getInitParams(s)) + "&state=" + state;
 		log.debug("redirectUrl={}", authUrl);
 		throw new RedirectToUrlException(authUrl);
 	}

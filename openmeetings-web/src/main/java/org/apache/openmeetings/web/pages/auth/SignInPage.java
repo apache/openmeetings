@@ -119,14 +119,19 @@ public class SignInPage extends BaseInitedPage {
 
 	public SignInPage(PageParameters p) throws InterruptedException {
 		super();
-		WebSession.get().checkToken(p.get(TOKEN_PARAM));
+		WebSession ws = WebSession.get();
+		ws.checkToken(p.get(TOKEN_PARAM));
 		if (WebSession.get().isSignedIn()) {
 			setResponsePage(Application.get().getHomePage());
 		}
-		StringValue oauthid = p.get("oauthid");
-		if (!oauthid.isEmpty()) { // oauth2 login
+		StringValue oauthId = p.get("oauthid");
+		StringValue oauthState = p.get("state");
+		if (!oauthId.isEmpty() && ws.getOauthState() != null && !oauthState.isEmpty()
+				&& ws.getOauthState().equals(oauthState.toString()))
+		{ // oauth2 login
 			try {
-				long serverId = oauthid.toLong(-1);
+				ws.setOauthState(null);
+				long serverId = oauthId.toLong(-1);
 				OAuthServer server = oauthDao.get(serverId);
 				log.debug("OAuthServer={}", server);
 				if (server == null) {
@@ -136,7 +141,7 @@ public class SignInPage extends BaseInitedPage {
 
 				User u = userManager.loginOAuth(p.get("code").toOptionalString(), server);
 
-				if (u != null && WebSession.get().signIn(u)) {
+				if (u != null && ws.signIn(u)) {
 					setResponsePage(Application.get().getHomePage());
 				} else {
 					log.error("Failed to login via OAuth2!");
@@ -150,7 +155,7 @@ public class SignInPage extends BaseInitedPage {
 		StringValue login = pp.getParameterValue("login"), password = pp.getParameterValue("password");
 		if (!login.isEmpty() && !password.isEmpty()) {
 			try {
-				if (WebSession.get().signIn(login.toString(), password.toString(), Type.USER, null)) {
+				if (ws.signIn(login.toString(), password.toString(), Type.USER, null)) {
 					setResponsePage(Application.get().getHomePage());
 				} else {
 					log.error("Failed to login using POST parameters passed");

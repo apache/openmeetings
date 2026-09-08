@@ -519,7 +519,7 @@ public class ImportInitvalues {
 				.setEnabled(false)
 				.setClientId(CLIENT_PLACEHOLDER)
 				.setClientSecret(SECRET_PLACEHOLDER)
-				.setRequestKeyUrl("https://oauth.yandex.ru/authorize?response_type=code&client_id={$client_id}")
+				.setRequestKeyUrl("https://oauth.yandex.ru/authorize?response_type=code&client_id={$client_id}") // &redirect_uri={$redirect_uri} is optional, can be taken from client_id
 				.setRequestTokenUrl("https://oauth.yandex.ru/token")
 				.setRequestTokenMethod(RequestTokenMethod.POST)
 				.setRequestTokenAttributes("grant_type=authorization_code&code={$code}&client_id={$client_id}&client_secret={$client_secret}")

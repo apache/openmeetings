@@ -118,6 +118,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private Long roomId = null;
 	private Long recordingId = null;
 	private boolean kickedByAdmin = false;
+	private String oauthState = null;
 	private ExtendedClientProperties extProps = new ExtendedClientProperties();
 	@Inject
 	private ClientManager cm;
@@ -158,6 +159,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		recordingId = null;
 		tz = null;
 		browserTz = null;
+		oauthState = null;
 		extProps = new ExtendedClientProperties();
 	}
 
@@ -428,6 +430,14 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	public Long getRoomId() {
 		return get().roomId;
+	}
+
+	public String getOauthState() {
+		return oauthState;
+	}
+
+	public void setOauthState(String oauthState) {
+		this.oauthState = oauthState;
 	}
 
 	public Invitation getInvitation() {
