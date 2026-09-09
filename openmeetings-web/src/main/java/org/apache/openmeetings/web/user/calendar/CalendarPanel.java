@@ -47,6 +47,7 @@ import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -63,15 +64,15 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONObject;
 import org.wicketstuff.jquery.core.Options;
-import org.wicketstuff.jquery.ui.calendar6.Calendar;
-import org.wicketstuff.jquery.ui.calendar6.CalendarView;
-import org.wicketstuff.jquery.ui.calendar6.DateTimeDelta;
-import org.wicketstuff.jquery.ui.calendar6.EventSource.GoogleCalendar;
+import org.wicketstuff.jquery.ui.calendar7.Calendar;
+import org.wicketstuff.jquery.ui.calendar7.CalendarView;
+import org.wicketstuff.jquery.ui.calendar7.DateTimeDelta;
+import org.wicketstuff.jquery.ui.calendar7.EventSource.GoogleCalendar;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import jakarta.inject.Inject;
 
@@ -79,7 +80,8 @@ public class CalendarPanel extends UserBasePanel {
 	private static final Logger log = LoggerFactory.getLogger(CalendarPanel.class);
 	private static final long serialVersionUID = 1L;
 	private static final ResourceReference CALJS = new JavaScriptResourceReference(CalendarPanel.class, "calendar-functions.js");
-	private static final ResourceReference BS5_THEME = new WebjarsJavaScriptResourceReference("fullcalendar__bootstrap5/current/index.global.js");
+	private static final ResourceReference BS5_JS = new WebjarsJavaScriptResourceReference("fullcalendar__bootstrap5/current/global.js");
+	private static final ResourceReference BS5_THEME = new WebjarsCssResourceReference("fullcalendar__bootstrap5/current/theme.css");
 	private final AbstractAjaxTimerBehavior refreshTimer = new AbstractAjaxTimerBehavior(Duration.ofSeconds(10)) {
 		private static final long serialVersionUID = 1L;
 
@@ -131,28 +133,48 @@ public class CalendarPanel extends UserBasePanel {
 		Options options = new Options()
 				.set("direction", Options.asString(isRtl ? "rtl" : "ltr"))
 				.set("height", Options.asString("100%"))
-				.set("customButtons", "{gotoBtn: {text: ' ', click: onOmGotoClick}}")
+				.set("buttons", """
+					{
+						gotoBtn: {
+							text: ' ',
+							className: 'fc-gotoBtn-button',
+							click: onOmGotoClick
+						},
+						close: {
+							iconClass: 'bi fa-solid fa-times'
+						},
+						prev: {
+							iconClass: 'bi fa-solid fa-chevron-%1$s'
+						},
+						next: {
+							iconClass: 'bi fa-solid fa-chevron-%2$s'
+						},
+						prevYear: {
+							iconClass: 'bi fa-solid fa-angles-%1$s'
+						},
+						nextYear: {
+							iconClass: 'bi fa-solid fa-angles-%2$s'
+						},
+						month: {
+							text: '%3$s'
+						},
+						week: {
+							text: '%4$s'
+						},
+						day: {
+							text: '%5$s'
+						},
+						today: {
+							text: '%6$s'
+						}
+					}
+					""".formatted(isRtl ? "right" : "left", isRtl ? "left" : "right"
+							, getString("801"), getString("800"), getString("799"), getString("1555")))
 				.set("headerToolbar", "{start: 'prevYear,prev,next,nextYear today,gotoBtn', center: 'title', end: 'dayGridMonth,timeGridWeek,timeGridDay'}")
 				.set("allDaySlot", false)
 				.set("nowIndicator", true)
 				.set("defaultTimedEventDuration", Options.asString("01:00"))
 				.set("selectMirror", true)
-
-				.set("themeSystem", Options.asString("bootstrap5"))
-				.set("buttonIcons", new JSONObject()
-						.put("close", "bi fa-solid fa-times")
-						.put("prev", isRtl ? "bi fa-solid fa-chevron-right" : "bi fa-solid fa-chevron-left")
-						.put("next", isRtl ? "bi fa-solid fa-chevron-left" : "bi fa-solid fa-chevron-right")
-						.put("prevYear", isRtl ? "bi fa-solid fa-angles-right" : "bi fa-solid fa-angles-left")
-						.put("nextYear", isRtl ? "bi fa-solid fa-angles-left" : "bi fa-solid fa-angles-right")
-						.toString())
-				.set("buttonText", new JSONObject()
-						.put("month", getString("801"))
-						.put("week", getString("800"))
-						.put("day", getString("799"))
-						.put("today", getString("1555"))
-						.toString())
-
 				.set("locale", Options.asString(WebSession.get().getLocale().toLanguageTag()));
 
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
@@ -360,8 +382,8 @@ public class CalendarPanel extends UserBasePanel {
 		super.renderHead(response);
 		response.render(JavaScriptHeaderItem.forReference(CALJS));
 		response.render(JavaScriptHeaderItem.forReference(TouchPunchResourceReference.instance()));
-		response.render(JavaScriptHeaderItem.forReference(BS5_THEME));
-		response.render(JavaScriptHeaderItem.forScript("FullCalendar.Bootstrap5.Internal.BootstrapTheme.prototype.rtlIconClasses = null", "fullcalendar-bootstrap-reset-rtl"));
+		response.render(JavaScriptHeaderItem.forReference(BS5_JS));
+		response.render(CssHeaderItem.forReference(BS5_THEME));
 	}
 
 	// Client creation here, because the client is not created until necessary

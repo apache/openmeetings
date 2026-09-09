@@ -45,7 +45,7 @@
 
 		<!-- plugin versions -->
 		<version.maven-javadoc-plugin>3.12.0</version.maven-javadoc-plugin>
-		<version.maven-surefire>3.5.5</version.maven-surefire>
+		<version.maven-surefire>3.6.0</version.maven-surefire>
 		<version.maven-site-plugin>4.0.0-M16</version.maven-site-plugin>
 		<version.maven-enforcer-plugin>3.6.3</version.maven-enforcer-plugin>
 		<version.maven-source-plugin>3.4.0</version.maven-source-plugin>
@@ -88,9 +88,9 @@
 		<!-- dependency versions -->
 		<junit.version>6.1.3</junit.version>
 		<wicket.version>10.11.0</wicket.version>
-		<wicketstuff.version>10.10.0</wicketstuff.version>
+		<wicketstuff.version>10.11.0</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.15</wicket-bootstrap.version>
-		<fullcalendar.version>6.1.20</fullcalendar.version>
+		<fullcalendar.version>7.1.0</fullcalendar.version>
 		<spring.version>7.0.9</spring.version>
 		<tomcat.version>11.0.25</tomcat.version>
 		<jetty.version>11.0.26</jetty.version>
@@ -119,7 +119,7 @@
 		<commons-text.version>1.15.0</commons-text.version>
 		<commons-net.version>3.13.0</commons-net.version>
 		<dom4j.version>2.2.0</dom4j.version>
-		<h2.version>2.4.240</h2.version>
+		<h2.version>2.5.250</h2.version>
 		<postgresql.version>42.7.13</postgresql.version>
 		<mysql.version>26.7.0</mysql.version>
 		<mssql.version>13.4.0.jre11</mssql.version>
@@ -1267,10 +1267,11 @@
 						<source>${javaVersion}</source>
 						<notimestamp>true</notimestamp>
 						<links>
+							<link>https://docs.oracle.com/en/java/javase/21/docs/api/</link>
 							<link>https://openmeetings.apache.org/openmeetings-db/apidocs/</link>
 							<link>https://docs.spring.io/spring-framework/docs/current/javadoc-api/</link>
 							<link>https://jakartaee.github.io/rest/apidocs/3.0.0/</link>
-							<link>https://cxf.apache.org/javadoc/latest-4.0.x/</link>
+							<link>https://cxf.apache.org/javadoc/latest/</link>
 						</links>
 					</configuration>
 				</plugin>
