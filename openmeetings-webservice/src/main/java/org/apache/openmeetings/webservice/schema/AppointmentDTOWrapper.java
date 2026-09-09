@@ -50,19 +50,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 		              "deleted": false,
 		              "email":   "seba.wagner@gmail.com",
 		              "id": 1,
-		              "inserted": {
-		                "date": 29,
-		                "day": 0,
-		                "hours": 10,
-		                "minutes": 59,
-		                "month": 7,
-		                "ownerField": 1,
-		                "seconds": 49,
-		                "time": 1630191589000,
-		                "timezoneOffset": -720,
-		                "year": 121
-		            }
-		          },
+		              "inserted": "2021-09-19T10:59:49+1200"
+		            },
 		            "firstname":   "firstname",
 		            "id": 1,
 		            "languageId": 1,
@@ -74,7 +63,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 		              "DASHBOARD",
 		              "ADMIN",
 		              "LOGIN  "
-		          ],
+		            ],
 		            "timeZoneId":   "Europe/Berlin",
 		            "type":   "USER"
 		        }
@@ -86,19 +75,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 		          "deleted": false,
 		          "email":   "seba.wagner@gmail.com",
 		          "id": 1,
-		          "inserted": {
-		            "date": 29,
-		            "day": 0,
-		            "hours": 10,
-		            "minutes": 59,
-		            "month": 7,
-		            "ownerField": 1,
-		            "seconds": 49,
-		            "time": 1630191589000,
-		            "timezoneOffset": -720,
-		            "year": 121
-		        }
-		      },
+		          "inserted": "2021-09-19T10:59:49+1200"
+		        },
 		        "firstname":   "firstname",
 		        "id": 1,
 		        "languageId": 1,
@@ -110,10 +88,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 		          "DASHBOARD",
 		          "ADMIN",
 		          "LOGIN"
-		      ],
+		        ],
 		        "timeZoneId":   "Europe/Berlin",
 		        "type":   "USER"
-		    },
+		      },
 		      "passwordProtected": false,
 		      "reminder":   "ICAL",
 		      "reminderEmailSend": false,
@@ -136,7 +114,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 		        "type":   "CONFERENCE",
 		        "waitModerator": false,
 		        "waitRecording": false
-		    },
+		      },
 		      "start":   "2021-09-23T11:31:00+1200",
 		      "title":   "New Event"
 		  }

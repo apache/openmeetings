@@ -34,6 +34,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import jakarta.ws.rs.core.Form;
@@ -55,7 +56,6 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.mapper.CalendarMapper;
 import org.apache.openmeetings.util.CalendarHelper;
-import org.apache.openmeetings.webservice.util.AppointmentParamConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -191,6 +191,35 @@ class TestCalendarService extends AbstractWebServiceTest {
 	}
 
 	@Test
+	void testUpdateWrongOwner() throws Exception {
+		JSONObject o1 = createAppointment("SOAP event");
+
+		String sid1 = loginNewUser();
+
+		Response resp1 = getClient(getCalendarUrl())
+				.path("/")
+				.query("sid", sid1)
+				.form(new Form().param("appointment", o1.toString()));
+
+		assertNotNull(resp1, "Valid AppointmentDTO should be returned");
+		assertEquals(Response.Status.OK.getStatusCode(), resp1.getStatus(), "Call should be successful");
+		AppointmentDTO dto = resp1.readEntity(AppointmentDTO.class);
+		assertNotNull(dto, "Valid DTO should be returned");
+		assertNotNull(dto.getId(), "DTO id should be valid");
+
+		JSONObject o2 = dto.toJson();
+		o2.put("title", "hijacked").put("owner", null);
+
+		String sid2 = loginNewUser();
+		Response resp2 = getClient(getCalendarUrl())
+				.path("/")
+				.query("sid", sid2)
+				.form(new Form().param("appointment", o2.toString()));
+		assertNotNull(resp2, "Valid AppointmentDTO should be returned");
+		assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), resp2.getStatus(), "Call should NOT be successful");
+	}
+
+	@Test
 	void testDelete() {
 		ServiceResult sr = login();
 		Response resp = getClient(getCalendarUrl())
@@ -204,9 +233,9 @@ class TestCalendarService extends AbstractWebServiceTest {
 	@Test
 	void testCreateWithOmMm() throws Exception {
 		JSONObject o = createAppointment("test")
-				.put("meetingMembers", new JSONArray()
-						.put(new JSONObject().put("user", new JSONObject()
-								.put("id", 1))));
+				.put("meetingMembers", new JSONArray(List.of(
+						new JSONObject(Map.of("user", new JSONObject(Map.of("id", 1))))
+				)));
 
 		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
@@ -265,7 +294,7 @@ class TestCalendarService extends AbstractWebServiceTest {
 		AppointmentDTO dto = createEventWithGuests(sid);
 
 		//try to change MM list
-		JSONObject o1 = AppointmentParamConverter.json(dto)
+		JSONObject o1 = dto.toJson()
 				.put("meetingMembers", new JSONArray()
 						.put(new JSONObject().put("user", new JSONObject()
 								.put("id", 1))));
@@ -295,7 +324,7 @@ class TestCalendarService extends AbstractWebServiceTest {
 		dto.getMeetingMembers().remove(initialList.size() - 1);
 
 		//try to change MM list
-		JSONObject o = AppointmentParamConverter.json(dto);
+		JSONObject o = dto.toJson();
 		Response resp = getClient(getCalendarUrl())
 				.path("/")
 				.query("sid", sid)

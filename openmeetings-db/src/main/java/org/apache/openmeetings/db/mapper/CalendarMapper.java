@@ -52,8 +52,8 @@ public class CalendarMapper {
 		a.setId(dto.getId());
 		a.setTitle(dto.getTitle());
 		a.setLocation(dto.getLocation());
-		a.setStart(dto.getStart().getTime());
-		a.setEnd(dto.getEnd().getTime());
+		a.setStart(dto.getStart());
+		a.setEnd(dto.getEnd());
 		a.setDescription(sanitize(dto.getDescription()));
 		a.setOwner(dto.getOwner() == null ? u : userDao.get(dto.getOwner().getId()));
 		a.setInserted(dto.getInserted());

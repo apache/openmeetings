@@ -57,7 +57,7 @@ public class AppointmentMessageBodyWriter implements MessageBodyWriter<Appointme
 			throws IOException
 	{
 		Writer writer = new OutputStreamWriter(out, UTF_8);
-		writer.write(new JSONObject().put(ROOT, AppointmentParamConverter.json(t)).toString());
+		writer.write(new JSONObject().put(ROOT, t.toJson()).toString());
 		writer.flush();
 	}
 }

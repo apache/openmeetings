@@ -68,7 +68,7 @@ public class AppointmentListMessageBodyWriter implements MessageBodyWriter<List<
 		Writer writer = new OutputStreamWriter(out, UTF_8);
 		JSONArray rr = new JSONArray();
 		for (AppointmentDTO dto : t) {
-			rr.put(AppointmentParamConverter.json(dto));
+			rr.put(dto.toJson());
 		}
 		writer.write(new JSONObject().put(ROOT, rr).toString());
 		writer.flush();

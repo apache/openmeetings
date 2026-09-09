@@ -24,11 +24,9 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.openmeetings.db.dto.user.UserDTO;
-import org.apache.openmeetings.webservice.util.CalendarParamConverter;
 import org.apache.openmeetings.webservice.util.DateParamConverter;
 import org.junit.jupiter.api.Test;
 
@@ -46,15 +44,6 @@ class TestWebConverters {
 				Date.from(ZonedDateTime.of(2017, 01, 20, 20, 30, 03, 0, ZoneId.of("Europe/Moscow")).toInstant())
 				, DateParamConverter.get("2017-01-20T20:30:03+0300")
 				, "Date should be parsed");
-	}
-
-	@Test
-	void testCalendarConverter() {
-		CalendarParamConverter c = new CalendarParamConverter();
-		assertEquals(null, c.fromString(null), "Null calendar should be parsed");
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(Date.from(LocalDate.of(2017, Month.JANUARY, 15).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-		assertEquals(cal, c.fromString("2017-01-15"), "Calendar should be parsed");
 	}
 
 	@Test

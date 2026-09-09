@@ -292,7 +292,7 @@ public class CalendarWebService extends BaseWebService {
 	@POST
 	@Path("/")
 	@Operation(
-			description = "Create an appointment",
+			description = "Create/update an appointment",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "appointment saved",
 						content = @Content(schema = @Schema(implementation = AppointmentDTOWrapper.class))),
@@ -304,7 +304,6 @@ public class CalendarWebService extends BaseWebService {
 			, @Parameter(required = true, description = "calendar event") @FormParam("appointment") @WebParam(name="appointment") AppointmentDTO appointment
 			) throws ServiceException
 	{
-		//Seems to be create
 		log.debug("save SID: {}", sid);
 
 		return performCall(sid, sd -> {
@@ -313,9 +312,19 @@ public class CalendarWebService extends BaseWebService {
 					log.error("save: not authorized");
 					return false;
 				}
-				return AuthLevelUtil.hasWebServiceLevel(u.getRights())
-						|| appointment.getOwner() == null
-						|| appointment.getOwner().getId().equals(u.getId());
+				// short path
+				if (AuthLevelUtil.hasWebServiceLevel(u.getRights())
+						|| (appointment.getOwner() != null && appointment.getOwner().getId().equals(u.getId()))
+						|| (appointment.getOwner() == null && appointment.getId() == null)
+					)
+				{
+					return true;
+				}
+				if (appointment.getOwner() == null && appointment.getId() != null) {
+					Appointment a = dao.get(appointment.getId());
+					return a.getOwner().getId().equals(u.getId());
+				}
+				return false;
 			}, sd -> {
 				User u = userDao.get(sd.getUserId());
 				Appointment a = calMapper.get(appointment, u);

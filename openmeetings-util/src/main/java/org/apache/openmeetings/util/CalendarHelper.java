@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.util;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -47,8 +47,7 @@ public class CalendarHelper {
 	}
 
 	public static ZonedDateTime getZoneDateTime(Date d, String tzId) {
-		long milli = (d == null ? new Date() : d).getTime();
-		return Instant.ofEpochMilli(milli).atZone(getZoneId(tzId));
+		return ZonedDateTime.ofInstant((d == null ? new Date() : d).toInstant(), getZoneId(tzId));
 	}
 
 	public static LocalDate getDate(Date d, String tzId) {
@@ -57,6 +56,10 @@ public class CalendarHelper {
 
 	public static LocalDateTime getDateTime(Date d, String tzId) {
 		return getZoneDateTime(d == null ? new Date() : d, tzId).toLocalDateTime();
+	}
+
+	public static String getISO(Date d, String tzId) {
+		return d == null ? null : getZoneDateTime(d, tzId).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 	}
 
 	public static String formatMillis(long millis) {

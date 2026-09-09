@@ -125,8 +125,8 @@ public class AppointmentDao implements IDataProviderDao<Appointment>{
 					|| !CS.equals(a0.getTitle(), a.getTitle())
 					|| !CS.equals(a0.getDescription(), a.getDescription())
 					|| !CS.equals(a0.getLocation(), a.getLocation())
-					|| !a0.getStart().getTime().equals(a.getStart())
-					|| !a0.getEnd().getTime().equals(a.getEnd());
+					|| !a0.getStart().equals(a.getStart())
+					|| !a0.getEnd().equals(a.getEnd());
 			List<MeetingMember> mmList = a.getMeetingMembers();
 			if (mmList != null){
 				for (MeetingMember mm : mmList) {

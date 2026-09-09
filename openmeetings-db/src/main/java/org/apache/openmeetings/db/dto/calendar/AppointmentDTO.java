@@ -18,12 +18,12 @@
  */
 package org.apache.openmeetings.db.dto.calendar;
 
+import static org.apache.openmeetings.util.CalendarHelper.getISO;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -34,8 +34,8 @@ import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 @XmlRootElement
@@ -45,8 +45,8 @@ public class AppointmentDTO implements Serializable {
 	private Long id;
 	private String title;
 	private String location;
-	private Calendar start;
-	private Calendar end;
+	private Date start;
+	private Date end;
 	private String description;
 	private UserDTO owner;
 	private Date inserted;
@@ -70,11 +70,8 @@ public class AppointmentDTO implements Serializable {
 		id = a.getId();
 		title = a.getTitle();
 		location = a.getLocation();
-		TimeZone tz = TimezoneUtil.getTimeZone(a.getOwner());
-		start = Calendar.getInstance(tz);
-		start.setTime(a.getStart());
-		end = Calendar.getInstance(tz);
-		end.setTime(a.getEnd());
+		start = a.getStart();
+		end = a.getEnd();
 		description = a.getDescription();
 		owner = new UserDTO(a.getOwner());
 		inserted = a.getInserted();
@@ -118,19 +115,19 @@ public class AppointmentDTO implements Serializable {
 		this.location = location;
 	}
 
-	public Calendar getStart() {
+	public Date getStart() {
 		return start;
 	}
 
-	public void setStart(Calendar start) {
+	public void setStart(Date start) {
 		this.start = start;
 	}
 
-	public Calendar getEnd() {
+	public Date getEnd() {
 		return end;
 	}
 
-	public void setEnd(Calendar end) {
+	public void setEnd(Date end) {
 		this.end = end;
 	}
 
@@ -254,8 +251,26 @@ public class AppointmentDTO implements Serializable {
 		this.password = password;
 	}
 
+	public JSONObject toJson() {
+		JSONObject o = new JSONObject(this)
+			.put("start", getISO(start, owner.getTimeZoneId()))
+			.put("end", getISO(end, owner.getTimeZoneId()))
+			.put("inserted", getISO(inserted, owner.getTimeZoneId()))
+			.put("updated", getISO(updated, owner.getTimeZoneId()));
+		if (meetingMembers != null && !meetingMembers.isEmpty()) {
+			JSONArray arr = new JSONArray();
+			for (MeetingMemberDTO m : meetingMembers) {
+				arr.put(m.toJson());
+			}
+			o.put("meetingMembers", arr);
+		} else {
+			o.remove("meetingMembers");
+		}
+		return o;
+	}
+
 	@Override
 	public String toString() {
-		return new JSONObject(this).toString();
+		return toJson().toString();
 	}
 }

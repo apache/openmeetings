@@ -36,12 +36,8 @@ public class UserParamConverter implements ParamConverter<UserDTO> {
 		return UserDTO.get(o);
 	}
 
-	public static JSONObject json(UserDTO val) {
-		return new JSONObject(val);
-	}
-
 	@Override
 	public String toString(UserDTO val) {
-		return json(val).toString();
+		return val.toJson().toString();
 	}
 }

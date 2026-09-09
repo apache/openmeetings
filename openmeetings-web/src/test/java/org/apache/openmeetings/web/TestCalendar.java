@@ -36,7 +36,7 @@ import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.util.tester.FormTester;
 import org.junit.jupiter.api.Test;
 
-import org.wicketstuff.jquery.ui.calendar6.CalendarView;
+import org.wicketstuff.jquery.ui.calendar7.CalendarView;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 

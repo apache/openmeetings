@@ -70,8 +70,14 @@ public class MeetingMemberDTO implements Serializable {
 		return m;
 	}
 
+	public JSONObject toJson() {
+		return new JSONObject()
+			.put("id", id)
+			.put("user", user.toJson());
+	}
+
 	@Override
 	public String toString() {
-		return new JSONObject(this).toString();
+		return toJson().toString();
 	}
 }

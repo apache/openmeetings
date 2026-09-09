@@ -20,9 +20,6 @@ package org.apache.openmeetings.webservice.util;
 
 import static org.apache.openmeetings.db.util.DtoHelper.optEnum;
 import static org.apache.openmeetings.db.util.DtoHelper.optLong;
-import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT;
-
-import java.util.Date;
 
 import jakarta.ws.rs.ext.ParamConverter;
 
@@ -49,9 +46,8 @@ public class AppointmentParamConverter implements ParamConverter<AppointmentDTO>
 		a.setTitle(o.optString("title"));
 		a.setLocation(o.optString("location"));
 		a.setOwner(UserDTO.get(o.optJSONObject("owner")));
-		String tzId = a.getOwner() == null ? null : a.getOwner().getTimeZoneId();
-		a.setStart(CalendarParamConverter.get(o.optString("start"), tzId));
-		a.setEnd(CalendarParamConverter.get(o.optString("end"), tzId));
+		a.setStart(DateParamConverter.get(o.optString("start")));
+		a.setEnd(DateParamConverter.get(o.optString("end")));
 		a.setDescription(o.optString("description"));
 		a.setInserted(DateParamConverter.get(o.optString("inserted")));
 		a.setUpdated(DateParamConverter.get(o.optString("updated")));
@@ -73,17 +69,8 @@ public class AppointmentParamConverter implements ParamConverter<AppointmentDTO>
 		return a;
 	}
 
-	public static JSONObject json(AppointmentDTO val) {
-		Date i = val.getInserted(), u = val.getUpdated();
-		return new JSONObject(val)
-				.put("start", ISO8601_FULL_FORMAT.format(val.getStart()))
-				.put("end", ISO8601_FULL_FORMAT.format(val.getEnd()))
-				.put("inserted", i == null ? null : ISO8601_FULL_FORMAT.format(i))
-				.put("updated", u == null ? null : ISO8601_FULL_FORMAT.format(u));
-	}
-
 	@Override
 	public String toString(AppointmentDTO val) {
-		return json(val).toString();
+		return val.toString();
 	}
 }

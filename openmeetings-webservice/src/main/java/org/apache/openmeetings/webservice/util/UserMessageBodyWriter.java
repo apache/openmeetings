@@ -57,7 +57,7 @@ public class UserMessageBodyWriter implements MessageBodyWriter<UserDTO> {
 			throws IOException
 	{
 		Writer writer = new OutputStreamWriter(out, UTF_8);
-		writer.write(new JSONObject().put(ROOT, UserParamConverter.json(t)).toString());
+		writer.write(new JSONObject().put(ROOT, t.toJson()).toString());
 		writer.flush();
 	}
 }

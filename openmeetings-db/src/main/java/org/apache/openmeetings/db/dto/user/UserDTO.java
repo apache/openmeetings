@@ -21,6 +21,7 @@ package org.apache.openmeetings.db.dto.user;
 import static org.apache.openmeetings.db.util.DtoHelper.optEnum;
 import static org.apache.openmeetings.db.util.DtoHelper.optEnumList;
 import static org.apache.openmeetings.db.util.DtoHelper.optLong;
+import static org.apache.openmeetings.util.CalendarHelper.getISO;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -217,8 +218,18 @@ public class UserDTO implements Serializable {
 		return u;
 	}
 
+	public JSONObject toJson() {
+		JSONObject u = new JSONObject(this);
+		if (address != null) {
+			JSONObject a = u.getJSONObject("address");
+			a.put("inserted", getISO(address.getInserted(), timeZoneId))
+				.put("updated", getISO(address.getUpdated(), timeZoneId));
+		}
+		return u;
+	}
+
 	@Override
 	public String toString() {
-		return new JSONObject(this).toString();
+		return toJson().toString();
 	}
 }

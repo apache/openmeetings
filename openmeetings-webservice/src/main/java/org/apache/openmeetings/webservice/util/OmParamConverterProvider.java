@@ -20,7 +20,6 @@ package org.apache.openmeetings.webservice.util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.util.Calendar;
 import java.util.Date;
 
 import jakarta.ws.rs.ext.ParamConverter;
@@ -34,9 +33,7 @@ public class OmParamConverterProvider implements ParamConverterProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
-		if (Calendar.class.isAssignableFrom(rawType)) {
-			return (ParamConverter<T>)new CalendarParamConverter();
-		} else if (Date.class.isAssignableFrom(rawType)) {
+		if (Date.class.isAssignableFrom(rawType)) {
 			return (ParamConverter<T>)new DateParamConverter();
 		} else if (AppointmentDTO.class.isAssignableFrom(rawType)) {
 			return (ParamConverter<T>)new AppointmentParamConverter();
