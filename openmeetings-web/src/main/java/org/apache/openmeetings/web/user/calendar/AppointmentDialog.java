@@ -270,8 +270,14 @@ public class AppointmentDialog extends Modal<Appointment> {
 		}
 	}
 
-	public static boolean isOwner(Appointment object) {
-		return object.getOwner() != null && getUserId().equals(object.getOwner().getId());
+	public static boolean isOwner(Appointment a) {
+		return a.getOwner() != null && getUserId().equals(a.getOwner().getId());
+	}
+
+	public static boolean hasAccess(Appointment a) {
+		return isOwner(a)
+			|| a.getMeetingMembers().stream()
+					.anyMatch(m -> getUserId().equals(m.getUser().getId()));
 	}
 
 	private class AppointmentForm extends Form<Appointment> {
@@ -367,7 +373,6 @@ public class AppointmentDialog extends Modal<Appointment> {
 
 		@Override
 		protected void onInitialize() {
-
 			add(feedback.setOutputMarkupId(true));
 			//General
 			add(ownerPanel.add(owner));

@@ -41,8 +41,8 @@ import org.wicketstuff.jquery.ui.calendar7.CalendarView;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 
 class TestCalendar extends AbstractWicketTesterTest {
-	private static final String PATH_APPOINTMENT_DLG = String.format("%s:calendarAppointment", PATH_CHILD);
-	private static final String PATH_APPOINTMENT_DLG_FRM = String.format("%s:appForm", PATH_APPOINTMENT_DLG);
+	private static final String PATH_APPOINTMENT_DLG = PATH_CHILD + ":calendarAppointment";
+	private static final String PATH_APPOINTMENT_DLG_FRM = PATH_APPOINTMENT_DLG + ":appForm";
 
 	@Test
 	void testEventCreate() throws OmException {

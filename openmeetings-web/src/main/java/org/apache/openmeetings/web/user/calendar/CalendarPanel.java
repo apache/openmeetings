@@ -228,6 +228,9 @@ public class CalendarPanel extends UserBasePanel {
 					return;
 				}
 				Appointment a = apptDao.get(Long.valueOf(eventId));
+				if (!AppointmentDialog.hasAccess(a)) {
+					return;
+				}
 				dialog.setModelObjectWithAjaxTarget(a, target);
 
 				dialog.show(target);
