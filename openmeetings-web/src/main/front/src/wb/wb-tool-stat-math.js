@@ -1,69 +1,76 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 
-// Based on this example: https://github.com/mathjax/MathJax-demos-node/blob/master/preload/tex2svg
-const packages = 'base, autoload, require, ams, newcommand, noundefined'.split(/\s*,\s*/);
+// Based on this example https://github.com/mathjax/MathJax-demos-node/blob/4.1.0/mjs/direct/tex2svg
+import {TeX} from '@mathjax/src/js/input/tex.js';
+import {SVG} from '@mathjax/src/js/output/svg.js';
+import {RegisterHTMLHandler} from '@mathjax/src/js/handlers/html.js';
+import {liteAdaptor} from '@mathjax/src/js/adaptors/liteAdaptor.js';
+import {mathjax} from '@mathjax/src/js/mathjax.js';
+import {MathJaxNewcmFont} from '@mathjax/mathjax-newcm-font/js/chtml.js';
+import {AmsConfiguration} from '@mathjax/src/mjs/input/tex/ams/AmsConfiguration.js';
+import {NewcommandConfiguration} from '@mathjax/src/mjs/input/tex/newcommand/NewcommandConfiguration.js';
+import {TextMacrosConfiguration} from '@mathjax/src/mjs/input/tex/textmacros/TextMacrosConfiguration.js';
+import {NoUndefinedConfiguration} from '@mathjax/src/mjs/input/tex/noundefined/NoUndefinedConfiguration.js';
+const FONT_SIZE = 16;
 
-window.MathJax = {
-	options: {}
-	, tex: {
-		packages: packages
-		, noundefined: {
-			color: 'red'
-			, background: ''
-			, size: ''
-		}
-		, formatError(_, error) {
-			throw error;
-		}
-	}
-	, svg: {
-		fontCache: 'local'
-	}
-	, startup: {
-		typeset: false
-	}
-};
+const tex = new TeX({
+	packages: [
+		"base",
+		"ams",
+		"newcommand",
+		"textmacros",
+		"noundefined"
+	],
+	formatError: (jax, err) => {
+		return jax.formatError(err);
+	},
+});
+const svg = new SVG({
+	exFactor: 0.5,
+	displayAlign: "center",
+	displayIndent: "0em",
+	displayOverflow: "overflow",
+	linebreaks: {
+		inline: false,
+	},
+	mathmlSpacing: false,
+	fontCache: "local",
+	useXlink: false,
+});
 
-require('mathjax-full/components/src/startup/lib/startup.js');
-require('mathjax-full/components/src/core/core.js');
-require('mathjax-full/js/adaptors/browserAdaptor');
-require('mathjax-full/components/src/input/tex-base/tex-base.js');
-require('mathjax-full/components/src/input/tex/extensions/all-packages/all-packages.js');
-require('mathjax-full/components/src/input/tex/extensions/noundefined/noundefined');
-require('mathjax-full/components/src/output/svg/svg.js');
-require('mathjax-full/components/src/output/svg/fonts/tex/tex.js');
-require('mathjax-full/components/src/startup/startup.js');
-
-MathJax.loader.preLoad(
-	'core'
-	, 'adaptors/browserAdaptor'
-	, 'input/tex-base'
-	, '[tex]/all-packages'
-	, '[tex]/noundefined'
-	, 'output/svg'
-	, 'output/svg/fonts/tex'
-);
-
-MathJax.config.startup.ready();
+RegisterHTMLHandler(liteAdaptor({fontSize: FONT_SIZE}));
+const mathDoc = mathjax.document('', {
+	InputJax: tex,
+	OutputJax: svg,
+});
 
 import * as fabric from 'fabric';
 
 export class StaticTMath {
 	static create(o, canvas, callback, errCallback) {
-		MathJax.tex2svgPromise(o.formula, {
-			display: false
-			, em: 16 // em-size in pixels
-			, ex: 8 // ex-size in pixels
-			, containerWidth: 80 * 16
-		}).then(node => node.firstChild.outerHTML) // this extrastep is required, fabric seems to break on MathJax nodes
+		mathDoc.convertPromise(o.formula, {
+			display: false,
+			em: FONT_SIZE, // em-size in pixels
+			ex: 8,         // ex-size in pixels
+			containerWidth: 80 * FONT_SIZE,
+		})
+		.then(node => {
+			const adaptor = mathDoc.adaptor;
+			const svg = adaptor.getElement('svg', node);
+			delete svg.styles;
+			delete svg.attributes.style;
+			return adaptor.serializeXML(svg);
+		})
 		.then(fabric.loadSVGFromString)
 		.then(({ objects, options }) => {
-			const opts = $.extend({}, o, options)
-				, obj = objects.length === 1
+			if (objects.length === 0) {
+				return; // nothing to draw
+			}
+			const opts = Object.assign({}, o, options);
+			const obj = objects.length === 1
 					? new fabric.Group(objects, opts)
 					: fabric.util.groupSVGElements(objects, opts);
 			obj.selectable = canvas.selection;
-			obj.type = 'group';
 			if (typeof(callback) === 'function') {
 				callback(obj);
 			}

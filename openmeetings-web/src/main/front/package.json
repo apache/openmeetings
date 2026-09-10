@@ -26,7 +26,8 @@
 	"dependencies": {
 		"fabric": "7.4.0",
 		"freeice": "2.2.2",
-		"mathjax-full": "^3.2.2",
+		"@mathjax/mathjax-newcm-font": "^4.1.0",
+		"@mathjax/src": "^4.1.0",
 		"nosleep.js": "^0.12.0",
 		"ua-parser-js": "^2.0.10",
 		"webrtc-adapter": "^9.0.6"

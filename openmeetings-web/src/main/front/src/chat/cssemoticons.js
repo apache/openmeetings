@@ -83,7 +83,7 @@ module.exports = {
 	, matchers: matchers
 	, defaults: defaults
 	, emoticonize: function(str, options) {
-		const opts = $.extend({}, defaults, options);
+		const opts = Object.assign({}, defaults, options);
 
 		let cssClass = 'css-emoticon';
 		if (opts.animate) {
@@ -97,7 +97,7 @@ module.exports = {
 		return str;
 	}
 	, animate: function(options) {
-		const opts = $.extend({}, defaults, options);
+		const opts = Object.assign({}, defaults, options);
 		// animate emoticons
 		if (opts.animate) {
 			setTimeout(function () {

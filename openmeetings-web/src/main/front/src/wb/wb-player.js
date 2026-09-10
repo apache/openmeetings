@@ -140,7 +140,7 @@ export class Player {
 			};
 			let request;
 
-			const opts = $.extend({
+			const opts = Object.assign({
 				subTargetCheck: true
 				, objectCaching: false
 				, omType: 'Video'
@@ -256,7 +256,7 @@ export class Player {
 	}
 
 	static modify(g, _o) {
-		const opts = $.extend({
+		const opts = Object.assign({
 			angle: 0
 			, left: 10
 			, scaleX: 1
