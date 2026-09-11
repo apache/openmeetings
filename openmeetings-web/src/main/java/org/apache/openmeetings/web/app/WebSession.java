@@ -52,6 +52,7 @@ import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
@@ -196,10 +197,62 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 	}
 
-	public void checkHashes(StringValue secure, StringValue inviteStr) {
-		log.debug("checkHashes, secure: '{}', invitation: '{}'", secure, inviteStr);
+	public Invitation checkInviteHash(StringValue invite, boolean passwordValid) {
+		log.debug("checkInviteHash: invitation: '{}'", invite);
 		try {
-			log.debug("checkHashes, has soap in session ? '{}'", (soap != null));
+			if (invite.isEmpty()) {
+				return invitation; // nothing to check
+			}
+			Invitation local = inviteDao.getByHash(invite.toString(), false);
+			// invitation should be re-checked each time, due to PERIOD invitation can be
+			// 1) not ready
+			// 2) already expired
+			// otherwise already logged-in with the same hash
+			if (local != null && invitation != null
+					&& invitation.getId().equals(local.getId())
+					&& (local.isAllowEntry() || (!local.isAllowEntry() && local.getValid() == Valid.ONE_TIME)))
+			{
+				return invitation; // session invitation is still valid
+			}
+			if (isSignedIn()) {
+				log.debug("invitation: Session is authorized, going to invalidate");
+				invalidateNow();
+			}
+			if (local != null && local.isAllowEntry()) {
+				if (local.isPasswordProtected() && !passwordValid) {
+					// the session will NOT be authorized, we need to check password first
+					return local;
+				}
+				invitation = local;
+				Room r = null;
+				Set<Right> hrights = new HashSet<>();
+				if (invitation.getRoom() != null) {
+					r = invitation.getRoom();
+				} else if (invitation.getAppointment() != null && invitation.getAppointment().getRoom() != null) {
+					r = invitation.getAppointment().getRoom();
+				} else if (invitation.getRecording() != null) {
+					recordingId = invitation.getRecording().getId();
+					inviteDao.markUsed(invitation);
+				}
+				if (r != null) {
+					redirectHash(r, () -> inviteDao.markUsed(invitation));
+					hrights.add(Right.ROOM);
+					roomId = r.getId();
+				}
+				setUser(invitation.getInvitee(), hrights);
+			}
+		} catch (RedirectToUrlException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("Unexpected exception while checking inviteHash", e);
+		}
+		return invitation;
+	}
+
+	public void checkSecureHash(StringValue secure) {
+		log.debug("checkSecureHash: secure: '{}'", secure);
+		try {
+			log.debug("checkSecureHash: has soap in session ? '{}'", (soap != null));
 			if (!secure.isEmpty() && (soap == null || !soap.getHash().equals(secure.toString()))) {
 				// otherwise already logged-in with the same hash
 				if (isSignedIn()) {
@@ -208,38 +261,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				}
 				signIn(secure.toString(), true);
 			}
-			if (!inviteStr.isEmpty()) {
-				// invitation should be re-checked each time, due to PERIOD invitation can be
-				// 1) not ready
-				// 2) already expired
-				// otherwise already logged-in with the same hash
-				if (isSignedIn()) {
-					log.debug("invitation: Session is authorized, going to invalidate");
-					invalidateNow();
-				}
-				invitation = inviteDao.getByHash(inviteStr.toString(), false);
-				Room r = null;
-				if (invitation != null && invitation.isAllowEntry()) {
-					Set<Right> hrights = new HashSet<>();
-					if (invitation.getRoom() != null) {
-						r = invitation.getRoom();
-					} else if (invitation.getAppointment() != null && invitation.getAppointment().getRoom() != null) {
-						r = invitation.getAppointment().getRoom();
-					} else if (invitation.getRecording() != null) {
-						recordingId = invitation.getRecording().getId();
-					}
-					if (r != null) {
-						redirectHash(r, () -> inviteDao.markUsed(invitation));
-						hrights.add(Right.ROOM);
-						roomId = r.getId();
-					}
-					setUser(invitation.getInvitee(), hrights);
-				}
-			}
 		} catch (RedirectToUrlException e) {
 			throw e;
 		} catch (Exception e) {
-			log.error("Unexpected exception while checking hashes", e);
+			log.error("Unexpected exception while checking secureHash", e);
 		}
 	}
 

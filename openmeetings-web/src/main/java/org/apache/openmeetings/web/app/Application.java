@@ -523,15 +523,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		String link = "";
 		Room r = i.getRoom();
 		User u = i.getInvitee();
+		PageParameters pp = new PageParameters();
+		pp.add(INVITATION_HASH, i.getHash());
+		if (u.getLanguageId() > 0) {
+			pp.add("language", u.getLanguageId());
+		}
 		if (r != null) {
 			if ((i.isPasswordProtected() && !r.isOwner(u.getId())) // invitation is password-protected and invitee is not owner
 					|| Type.CONTACT == u.getType() || Type.EXTERNAL == u.getType() || !get().roomManager.isRoomAllowedToUser(r, u)) // no-access
 			{
-				PageParameters pp = new PageParameters();
-				pp.add(INVITATION_HASH, i.getHash());
-				if (u.getLanguageId() > 0) {
-					pp.add("language", u.getLanguageId());
-				}
 				link = urlForPage(HashPage.class, pp, baseUrl);
 			} else {
 				link = getRoomUrlFragment(r.getId()).getLink();
@@ -539,7 +539,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		Recording rec = i.getRecording();
 		if (rec != null) {
-			link = urlForPage(HashPage.class, new PageParameters().add(INVITATION_HASH, i.getHash()), baseUrl);
+			link = urlForPage(HashPage.class, pp, baseUrl);
 		}
 		return link;
 	}

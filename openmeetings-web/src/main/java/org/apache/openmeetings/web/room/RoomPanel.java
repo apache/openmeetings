@@ -671,8 +671,11 @@ public class RoomPanel extends BasePanel {
 
 	public void show(IPartialPageRequestHandler handler) {
 		getMainPanel().getChat().toggle(handler, !r.isHidden(RoomElement.CHAT));
-		handler.add(this.setVisible(true));
-		handler.appendJavaScript("Room.load();");
+		this.setVisible(true);
+		if (handler != null) {
+			handler.add(this);
+			handler.appendJavaScript("Room.load();");
+		}
 	}
 
 	@Override

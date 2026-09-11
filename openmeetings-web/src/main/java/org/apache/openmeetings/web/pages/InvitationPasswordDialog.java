@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -44,10 +45,12 @@ public class InvitationPasswordDialog extends Modal<Invitation> {
 	private final Form<Void> form = new Form<>("form");
 	private final PasswordTextField password = new PasswordTextField("password", Model.of((String)null));
 	private final IUpdatable comp;
+	private final Invitation i;
 
-	public InvitationPasswordDialog(String id, IUpdatable comp) {
+	public InvitationPasswordDialog(String id, Invitation i, IUpdatable comp) {
 		super(id);
 		this.comp = comp;
+		this.i = i;
 	}
 
 	@Override
@@ -61,7 +64,7 @@ public class InvitationPasswordDialog extends Modal<Invitation> {
 
 			@Override
 			public void validate(IValidatable<String> validatable) {
-				if (!CryptProvider.get().verify(validatable.getValue(), WebSession.get().getInvitation().getPassword())) {
+				if (!CryptProvider.get().verify(validatable.getValue(), i.getPassword())) {
 					validatable.error(new ValidationError(getString("error.bad.password")));
 				}
 			}
@@ -97,8 +100,7 @@ public class InvitationPasswordDialog extends Modal<Invitation> {
 			}
 		}); //check
 		super.onInitialize();
-		Invitation i = WebSession.get().getInvitation();
-		show(i != null && i.isPasswordProtected());
+		show(WebSession.get().getInvitation() == null && i != null && i.isPasswordProtected());
 	}
 
 	@Override
@@ -112,6 +114,7 @@ public class InvitationPasswordDialog extends Modal<Invitation> {
 	}
 
 	protected void onSubmit(AjaxRequestTarget target) {
+		WebSession.get().checkInviteHash(StringValue.valueOf(i.getHash()), true);
 		comp.update(target);
 		close(target);
 	}

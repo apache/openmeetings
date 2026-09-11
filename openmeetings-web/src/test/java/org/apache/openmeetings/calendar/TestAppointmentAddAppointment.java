@@ -175,7 +175,7 @@ class TestAppointmentAddAppointment extends AbstractWicketTesterTest {
 
 		WebSession ws = WebSession.get();
 		Appointment a1 = appointmentDao.get(a.getId());
-		ws.checkHashes(StringValue.valueOf(""), StringValue.valueOf(a1.getMeetingMembers().get(0).getInvitation().getHash()));
+		ws.checkInviteHash(StringValue.valueOf(a1.getMeetingMembers().get(0).getInvitation().getHash()), true);
 		assertTrue(ws.isSignedIn(), "Login via secure hash should be successful");
 	}
 

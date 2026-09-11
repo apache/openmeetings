@@ -45,6 +45,7 @@ import org.apache.openmeetings.web.room.VideoSettings;
 import org.apache.openmeetings.web.user.record.VideoInfo;
 import org.apache.openmeetings.web.user.record.VideoPlayer;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
@@ -64,6 +65,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	public static final String APP_TYPE_SETTINGS = "settings";
 	public static final String SWF_KEY = "swf";
 	public static final String PANEL_MAIN = "panel-main";
+	public static final String I_PASS_ID = "i-pass";
 	public static final String PANEL_RECORDING = "panel-recording";
 	public static final String INVITATION_HASH = "invitation";
 	static final String HASH = "secure";
@@ -74,10 +76,12 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	private boolean error = true;
 	private MainPanel mainPanel = null;
 	private RoomPanel roomPanel = null;
+	private WebMarkupContainer passwdDialog = new EmptyPanel(I_PASS_ID);
 	private final StringValue secure;
 	private final StringValue invitation;
 	private final StringValue swf;
 	private final StringValue app;
+	private final long lang;
 
 	@Inject
 	private RoomDao roomDao;
@@ -89,128 +93,144 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		invitation = p.get(INVITATION_HASH);
 		swf = p.get(SWF_KEY);
 		app = swf.isEmpty() ? p.get(APP_KEY) : swf;
+		lang = p.get(LANG).toLong(-1L);
+	}
 
-		WebSession ws = WebSession.get();
-		ws.checkHashes(secure, invitation);
-		long lang = p.get(LANG).toLong(-1L);
+	private void setLanguage() {
 		if (lang > -1) {
+			WebSession ws = WebSession.get();
 			ws.setLanguage(lang);
 			ws.setLocale(LocaleHelper.getLocale(lang));
 		}
 	}
 
-	private void createRoom(Long roomId) {
-		getLoader().setVisible(true);
-		getHeader().setVisible(false);
+	private void createRoom(Long roomId, boolean visible) {
+		if (roomPanel != null) {
+			return; // all done
+		}
+		Room room = roomDao.get(roomId); // this call required to eager-fetch everything
 		// need to re-fetch Room object to initialize all collections
-		Room room = roomDao.get(roomId);
 		if (room != null && !room.isDeleted()) {
+			getLoader().setVisible(true);
+			getHeader().setVisible(false);
 			error = false;
 			roomPanel = new RoomPanel(CHILD_ID, room);
+			roomPanel.setOutputMarkupPlaceholderTag(true).setVisible(visible);
 			mainPanel = new MainPanel(PANEL_MAIN, roomPanel);
 			replace(mainPanel);
 		}
 	}
 
+	private void processApp() {
+		if (APP_TYPE_NETWORK.equals(app.toString())) {
+			replace(new NetTestPanel(PANEL_MAIN).add(AttributeModifier.append("class", "app")));
+			error = false;
+		} else if (APP_TYPE_SETTINGS.equals(app.toString())) {
+			replace(new VideoSettings(PANEL_MAIN)
+				.replace(new OmWebSocketPanel("ws-panel") {
+					private static final long serialVersionUID = 1L;
+					private WsClient c = null;
+
+					@Override
+					protected void onConnect(ConnectedMessage message) {
+						c = new WsClient(message.getSessionId(), message.getKey().hashCode());
+					}
+
+					@Override
+					protected void onConnect(WebSocketRequestHandler handler) {
+						super.onConnect(handler);
+						handler.appendJavaScript(
+								String.format("VideoSettings.init(%s);VideoSettings.open();"
+										, VideoSettings.getInitJson("noclient")
+											.put("infoMsg", getString("close.settings.tab"))));
+					}
+
+					@Override
+					protected IWsClient getWsClient() {
+						return c;
+					}
+				})
+				.add(new OmAjaxClientInfoBehavior()));
+			error = false;
+		}
+	}
+
+	private String processInvitation() {
+		WebSession ws = WebSession.get();
+		Invitation i = ws.checkInviteHash(invitation, false);
+		if (i == null) {
+			return getString("error.hash.invalid");
+		} else if (!i.isAllowEntry()) {
+			FastDateFormat sdf = FormatHelper.getDateTimeFormat(i.getInvitee());
+			return Valid.ONE_TIME == i.getValid()
+					? getString("error.hash.used")
+					: String.format("%s %s - %s, %s", getString("error.hash.period")
+							, sdf.format(i.getValidFrom()), sdf.format(i.getValidTo())
+							, i.getInvitee().getTimeZoneId());
+		} else {
+			passwdDialog = new InvitationPasswordDialog(I_PASS_ID, i, this);
+			Recording rec = i.getRecording();
+			Room r = i.getRoom();
+			error = rec == null && r == null;
+			if (ws.getInvitation() != null && r != null) {
+				createRoom(r.getId(), false);
+			}
+			update(null);
+		}
+		return null;
+	}
+
+	private String processSecure() {
+		WebSession ws = WebSession.get();
+		ws.checkSecureHash(secure);
+		Long recId = getRecordingId(), roomId = ws.getRoomId();
+		if (recId == null && roomId == null) {
+			return getString("1599");
+		}
+		error = false;
+		if (recId != null) {
+			recContainer.setVisible(true);
+			Recording rec = recDao.get(recId);
+			videoInfo.update(null, rec);
+			videoPlayer.update(null, rec);
+		} else {
+			createRoom(roomId, true);
+		}
+		return null;
+	}
+
 	@Override
 	protected void onInitialize() {
+		setLanguage();
 		super.onInitialize();
 
-		WebSession ws = WebSession.get();
 		String errorMsg = getString("invalid.hash");
-		recContainer.setVisible(false);
-		add(new EmptyPanel(PANEL_MAIN).setVisible(false));
-		if (!invitation.isEmpty()) {
-			Invitation i = ws.getInvitation();
-			if (i == null) {
-				errorMsg = getString("error.hash.invalid");
-			} else if (!i.isAllowEntry()) {
-				FastDateFormat sdf = FormatHelper.getDateTimeFormat(i.getInvitee());
-				errorMsg = Valid.ONE_TIME == i.getValid()
-						? getString("error.hash.used")
-						: String.format("%s %s - %s, %s", getString("error.hash.period")
-								, sdf.format(i.getValidFrom()), sdf.format(i.getValidTo())
-								, i.getInvitee().getTimeZoneId());
-			} else {
-				Recording rec = i.getRecording();
-				if (rec != null) {
-					videoInfo.setVisible(!i.isPasswordProtected());
-					videoPlayer.setVisible(!i.isPasswordProtected());
-					if (!i.isPasswordProtected()) {
-						videoInfo.update(null, rec);
-						videoPlayer.update(null, rec);
-					}
-					recContainer.setVisible(true);
-					error = false;
-				}
-				Room r = i.getRoom();
-				if (r != null && !r.isDeleted()) {
-					createRoom(r.getId());
-					if (i.isPasswordProtected() && roomPanel != null) {
-						mainPanel.getChat().setVisible(false);
-						roomPanel.setOutputMarkupPlaceholderTag(true).setVisible(false);
-					}
-				}
-			}
-		} else if (!secure.isEmpty()) {
-			Long recId = getRecordingId(), roomId = ws.getRoomId();
-			if (recId == null && roomId == null) {
-				errorMsg = getString("1599");
-			} else if (recId != null) {
-				recContainer.setVisible(true);
-				Recording rec = recDao.get(recId);
-				videoInfo.update(null, rec);
-				videoPlayer.update(null, rec);
-				error = false;
-			} else {
-				createRoom(roomId);
-			}
-		}
-
+		recContainer
+			.setOutputMarkupPlaceholderTag(true)
+			.setOutputMarkupId(true)
+			.setVisible(false);
+		add(new EmptyPanel(PANEL_MAIN)
+			.setOutputMarkupPlaceholderTag(true)
+			.setOutputMarkupId(true)
+			.setVisible(false));
 		if (!app.isEmpty()) {
-			if (APP_TYPE_NETWORK.equals(app.toString())) {
-				replace(new NetTestPanel(PANEL_MAIN).add(AttributeModifier.append("class", "app")));
-				error = false;
-			}
-			if (APP_TYPE_SETTINGS.equals(app.toString())) {
-				replace(new VideoSettings(PANEL_MAIN)
-					.replace(new OmWebSocketPanel("ws-panel") {
-						private static final long serialVersionUID = 1L;
-						private WsClient c = null;
-
-						@Override
-						protected void onConnect(ConnectedMessage message) {
-							c = new WsClient(message.getSessionId(), message.getKey().hashCode());
-						}
-
-						@Override
-						protected void onConnect(WebSocketRequestHandler handler) {
-							super.onConnect(handler);
-							handler.appendJavaScript(
-									String.format("VideoSettings.init(%s);VideoSettings.open();"
-											, VideoSettings.getInitJson("noclient")
-												.put("infoMsg", getString("close.settings.tab"))));
-						}
-
-						@Override
-						protected IWsClient getWsClient() {
-							return c;
-						}
-					})
-					.add(new OmAjaxClientInfoBehavior()));
-				error = false;
-			}
+			processApp();
+		} else if (!invitation.isEmpty()) {
+			errorMsg = processInvitation();
+		} else if (!secure.isEmpty()) {
+			errorMsg = processSecure();
 		}
-		add(recContainer.add(videoInfo.setOutputMarkupPlaceholderTag(true),
-				videoPlayer.setOutputMarkupPlaceholderTag(true)), new InvitationPasswordDialog("i-pass", this));
-		remove(urlParametersReceivingBehavior);
+
+		add(recContainer.add(videoInfo, videoPlayer), passwdDialog);
 		add(new IconTextModal("access-denied")
 				.withLabel(errorMsg)
 				.withErrorIcon()
 				.addButton(OmModalCloseButton.of("54"))
 				.header(new ResourceModel("invalid.hash"))
 				.show(error)
-				);
+		);
+
+		remove(urlParametersReceivingBehavior);
 	}
 
 	@Override
@@ -221,11 +241,39 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	@Override
 	public void update(AjaxRequestTarget target) {
 		Invitation i = WebSession.get().getInvitation();
-		if (i.getRoom() != null && roomPanel != null) {
-			roomPanel.show(target);
-		} else if (i.getRecording() != null) {
-			target.add(videoInfo.update(target, i.getRecording()).setVisible(true)
-					, videoPlayer.update(target, i.getRecording()).setVisible(true));
+		if (error || i == null) {
+			return;
+		}
+		setLanguage();
+		Recording rec = i.getRecording();
+		if (i.getRoom() != null) {
+			createRoom(i.getRoom().getId(), true);
+			// invitation is in session so we can show the room
+			if (roomPanel.getMainPanel() != null) {
+				// everything was inited
+				roomPanel.show(target);
+			} else {
+				roomPanel.setVisible(true);
+			}
+		} else if (rec != null) {
+			recContainer.setVisible(true);
+			videoInfo.update(target, rec).setVisible(true);
+			videoPlayer.update(target, rec).setVisible(true);
+		}
+		if (target != null) {
+			for (Component comp : new Component[]{getLoader(), getHeader(), mainPanel, roomPanel, recContainer}) {
+				if (comp != null) {
+					target.add(comp);
+				}
+			}
+			target.appendJavaScript("""
+				const elem = document.querySelector('html');
+				Object.entries({
+					'xml:lang': '%1$s',
+					'lang': '%1$s',
+					'dir': '%2$s'
+				}).forEach(kv => elem.setAttribute(kv[0], kv[1]));
+				""".formatted(getLanguageCode(), isRtl() ? "rtl" : "ltr"));
 		}
 	}
 }
