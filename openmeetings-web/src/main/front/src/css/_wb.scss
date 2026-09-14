@@ -6,7 +6,7 @@
 	top: 0;
 	inset-inline-start: calc(var(--sidebar-width) + var(--buffer-size));
 
-	&.droppable-hover {
+	&.ui-droppable-active.ui-droppable-hover {
 		border: 0;
 
 		.wb-area {

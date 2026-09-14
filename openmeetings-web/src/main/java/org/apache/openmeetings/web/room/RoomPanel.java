@@ -308,7 +308,6 @@ public class RoomPanel extends BasePanel {
 				@Override
 				public void onConfigure(JQueryBehavior behavior) {
 					super.onConfigure(behavior);
-					behavior.setOption("hoverClass", Options.asString("droppable-hover"));
 					behavior.setOption("accept", Options.asString(".recorditem, .fileitem, .readonlyitem"));
 				}
 

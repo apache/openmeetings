@@ -72,7 +72,9 @@ export class ToolUtil {
 
 	static filter(_o, props) {
 		return props.reduce(function(result, key) {
-			result[key] = _o[key];
+			if (_o.hasOwnProperty(key)) {
+				result[key] = _o[key];
+			}
 			return result;
 		}, {});
 	}
