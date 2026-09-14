@@ -44,6 +44,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
+import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
@@ -313,15 +314,13 @@ public class CalendarWebService extends BaseWebService {
 					return false;
 				}
 				// short path
-				if (AuthLevelUtil.hasWebServiceLevel(u.getRights())
-						|| (appointment.getOwner() != null && appointment.getOwner().getId().equals(u.getId()))
-						|| (appointment.getOwner() == null && appointment.getId() == null)
-					)
-				{
+				if (AuthLevelUtil.hasWebServiceLevel(u.getRights()) || appointment.getId() == null) {
 					return true;
 				}
-				if (appointment.getOwner() == null && appointment.getId() != null) {
+				if (appointment.getId() != null) {
 					Appointment a = dao.get(appointment.getId());
+					// trust no-one!
+					appointment.setOwner(new UserDTO(a.getOwner()));
 					return a.getOwner().getId().equals(u.getId());
 				}
 				return false;
