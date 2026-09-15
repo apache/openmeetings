@@ -22,6 +22,7 @@ import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +68,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 	private String remoteAddress;
 	private final Set<Right> rights = ConcurrentHashMap.newKeySet();
 	private final Map<String, StreamDesc> streams = new ConcurrentHashMap<>();
+	private final Map<String, Object> props = new HashMap<>();
 	private final Date connectedSince;
 	private int cam = -1;
 	private int mic = -1;
@@ -133,6 +135,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 	public void clear() {
 		rights.clear();
 		streams.clear();
+		props.clear();
 	}
 
 	public boolean hasRight(Right right) {
@@ -397,10 +400,24 @@ public class Client implements IDataProviderEntity, IWsClient {
 					}
 				).forEach(sd -> streams.put(sd.getUid(), sd));
 		}
+		synchronized (props) {
+			Map<String, Object> pp = new HashMap<>(c.props);
+			props.clear();
+			props.putAll(pp);
+		}
 		cam = c.cam;
 		mic = c.mic;
 		width = c.width;
 		height = c.height;
+	}
+
+	public Map<String, Object> getCustomProps() {
+		return props;
+	}
+
+	public long getPropInt64(String name, long def) {
+		Object val = props.get(name);
+		return val instanceof Long l ? l : def;
 	}
 
 	@Override

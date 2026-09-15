@@ -87,15 +87,16 @@ public class RoomFileUploadResourceReference extends UploadResourceReference {
 	protected void processFiles(Client c, List<FileItem> fileItems, String uuid, MultipartServletWebRequest multiPartRequest) {
 		final boolean toWb = multiPartRequest.getPostParameters().getParameterValue(PARAM_TO_WB_NAME).toBoolean(false);
 		final boolean clean = multiPartRequest.getPostParameters().getParameterValue(PARAM_CLEAN_NAME).toBoolean(false);
-		final long lastSelectedId = multiPartRequest.getPostParameters().getParameterValue(PARAM_LAST_SELECTED_ID).toLong(-1L);
-		final long lastSelectedRoom = multiPartRequest.getPostParameters().getParameterValue(PARAM_LAST_SELECTED_ROOM).toLong(-1L);
-		final long lastSelectedOwner = multiPartRequest.getPostParameters().getParameterValue(PARAM_LAST_SELECTED_OWNER).toLong(-1L);
-		final long lastSelectedGroup = multiPartRequest.getPostParameters().getParameterValue(PARAM_LAST_SELECTED_GROUP).toLong(-1L);
 
-		startRunnable(() -> convertAll(c, fileItems, uuid, toWb, clean, lastSelectedId, lastSelectedRoom, lastSelectedOwner, lastSelectedGroup));
+		startRunnable(() -> convertAll(c, fileItems, uuid, toWb, clean));
 	}
 
-	private void convertAll(Client c, List<FileItem> files, String uuid, boolean toWb, boolean clean, long lastSelectedId, long lastSelectedRoom, long lastSelectedOwner, long lastSelectedGroup) {
+	private void convertAll(Client c, List<FileItem> files, String uuid, boolean toWb, boolean clean) {
+		final long lastSelectedId = c.getPropInt64(PARAM_LAST_SELECTED_ID, -1L);
+		final long lastSelectedRoom = c.getPropInt64(PARAM_LAST_SELECTED_ROOM, -1L);
+		final long lastSelectedOwner = c.getPropInt64(PARAM_LAST_SELECTED_OWNER, -1L);
+		final long lastSelectedGroup = c.getPropInt64(PARAM_LAST_SELECTED_GROUP, -1L);
+
 		final BaseFileItem parent = fileDao.get(lastSelectedId);
 		final long langId = getLangId(c);
 		final long totalSize = files.stream().mapToLong(FileItem::getSize).sum();

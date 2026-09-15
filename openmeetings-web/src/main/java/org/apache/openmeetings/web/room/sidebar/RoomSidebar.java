@@ -54,64 +54,69 @@ public class RoomSidebar extends Panel {
 	public static final String PARAM_RIGHT = "right";
 	public static final String PARAM_UID = "uid";
 	public static final String PARAM_SETTINGS = "s";
-	private final RoomPanel room;
-	private UploadDialog upload;
-	private RoomFilePanel roomFiles;
-	private final WebMarkupContainer fileTab = new WebMarkupContainer("file-tab");
 	private boolean showFiles;
-	private VideoSettings settings = new VideoSettings("settings");
-	private ActivitiesPanel activities;
 
 	@Inject
 	private ClientManager cm;
 
-	public RoomSidebar(String id, final RoomPanel room) {
+	public RoomSidebar(String id) {
 		super(id);
-		this.room = room;
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		final RoomPanel room = getRoomPanel();
 		final NameDialog addFolder = new NameDialog("addFolder", getString("712")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				roomFiles.createFolder(target, getModelObject());
+				getFilesPanel().createFolder(target, getModelObject());
 				super.onSubmit(target);
 			}
 		};
-		roomFiles = new RoomFilePanel("tree", room, addFolder);
+		final RoomFilePanel roomFiles = new RoomFilePanel("tree", room, addFolder);
+		final WebMarkupContainer fileTab = new WebMarkupContainer("file-tab");
 		add(fileTab.setVisible(!room.isInterview()), roomFiles.setVisible(!room.isInterview()));
 
-		add(addFolder, settings);
-		add(upload = new UploadDialog("upload", roomFiles));
+		add(addFolder, new VideoSettings("settings"));
+		add(new UploadDialog("upload"));
 		updateShowFiles(null);
-		add(activities = new ActivitiesPanel("activities", room));
+		add(new ActivitiesPanel("activities", room));
 	}
 
 	private void updateShowFiles(IPartialPageRequestHandler handler) {
-		if (room.isInterview()) {
+		final RoomPanel rp = getRoomPanel();
+		if (rp.isInterview()) {
 			return;
 		}
-		showFiles = !room.getRoom().isHidden(RoomElement.FILES) && room.getClient().hasRight(Right.PRESENTER);
-		roomFiles.setReadOnly(!showFiles, handler);
+		showFiles = !rp.getRoom().isHidden(RoomElement.FILES) && rp.getClient().hasRight(Right.PRESENTER);
+		getFilesPanel().setReadOnly(!showFiles, handler);
 	}
 
 	public void update(IPartialPageRequestHandler handler) {
-		if (room.getRoom() == null || room.getClient() == null) {
+		final RoomPanel rp = getRoomPanel();
+		if (rp.getRoom() == null || rp.getClient() == null) {
 			return;
 		}
 		updateShowFiles(handler);
 	}
 
 	public void updateFiles(IPartialPageRequestHandler handler) {
-		roomFiles.update(handler);
+		getFilesPanel().update(handler);
+	}
+
+	RoomPanel getRoomPanel() {
+		return findParent(RoomPanel.class);
 	}
 
 	public RoomFilePanel getFilesPanel() {
-		return roomFiles;
+		return (RoomFilePanel)get("tree");
+	}
+
+	ActivitiesPanel getActivities() {
+		return (ActivitiesPanel)get("activities");
 	}
 
 	public boolean isShowFiles() {
@@ -119,7 +124,7 @@ public class RoomSidebar extends Panel {
 	}
 
 	public void showUpload(IPartialPageRequestHandler handler) {
-		upload.show(handler);
+		((UploadDialog)get("upload")).show(handler);
 	}
 
 	public void setFilesActive(IPartialPageRequestHandler handler) {
@@ -127,11 +132,11 @@ public class RoomSidebar extends Panel {
 	}
 
 	public void addActivity(Activity a, IPartialPageRequestHandler handler) {
-		activities.add(a, handler);
+		getActivities().add(a, handler);
 	}
 
 	public void removeActivity(String uid, IPartialPageRequestHandler handler) {
-		activities.remove(handler, uid);
+		getActivities().remove(handler, uid);
 	}
 
 	public void roomAction(IPartialPageRequestHandler handler, JSONObject o) {
@@ -140,12 +145,13 @@ public class RoomSidebar extends Panel {
 			if (Strings.isEmpty(uid)) {
 				return;
 			}
-			Client self = room.getClient();
+			final RoomPanel rp = getRoomPanel();
+			Client self = rp.getClient();
 			Action a = Action.of(o.getString(PARAM_ACTION));
 			switch (a) {
 				case KICK:
 					if (self.hasRight(Right.MODERATOR)) {
-						final Client kickedClient = cm.getInRoom(uid, room.getRoom().getId());
+						final Client kickedClient = cm.getInRoom(uid, rp.getRoom().getId());
 						if (kickedClient == null) {
 							return;
 						}
@@ -155,8 +161,8 @@ public class RoomSidebar extends Panel {
 					}
 					break;
 				case MUTE_OTHERS:
-					if (self.hasRight(Right.MUTE_OTHERS) && cm.getInRoom(uid, room.getRoom().getId()) != null) {
-						WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), self, RoomMessage.Type.MUTE_OTHERS, uid));
+					if (self.hasRight(Right.MUTE_OTHERS) && cm.getInRoom(uid, rp.getRoom().getId()) != null) {
+						WebSocketHelper.sendRoom(new TextRoomMessage(rp.getRoom().getId(), self, RoomMessage.Type.MUTE_OTHERS, uid));
 					}
 					break;
 				case MUTE:
@@ -173,12 +179,13 @@ public class RoomSidebar extends Panel {
 	}
 
 	private void muteRoomAction(String uid, Client self, JSONObject o) {
-		Client c = cm.getInRoom(uid, room.getRoom().getId());
+		final RoomPanel rp = getRoomPanel();
+		Client c = cm.getInRoom(uid, rp.getRoom().getId());
 		if (c == null || !c.has(Client.Activity.AUDIO)) {
 			return;
 		}
 		if (self.hasRight(Right.MODERATOR) || self.getUid().equals(c.getUid())) {
-			WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), self, RoomMessage.Type.MUTE
+			WebSocketHelper.sendRoom(new TextRoomMessage(rp.getRoom().getId(), self, RoomMessage.Type.MUTE
 					, new JSONObject()
 							.put("sid", self.getSid())
 							.put(PARAM_UID, uid)
@@ -187,22 +194,23 @@ public class RoomSidebar extends Panel {
 	}
 
 	private void toggleRight(IPartialPageRequestHandler handler, Client self, String uid, JSONObject o) {
+		final RoomPanel rp = getRoomPanel();
 		try {
 			Right right = Right.valueOf(o.getString(PARAM_RIGHT));
 			if (self.hasRight(Right.MODERATOR)) {
-				Client client = cm.getInRoom(uid, room.getRoom().getId());
+				Client client = cm.getInRoom(uid, rp.getRoom().getId());
 				if (client == null) {
 					return;
 				}
 				if (client.hasRight(right)) {
-					room.denyRight(client, right);
+					rp.denyRight(client, right);
 				} else if (Right.VIDEO == right) {
-					room.allowRight(client, Right.AUDIO, right);
+					rp.allowRight(client, Right.AUDIO, right);
 				} else {
-					room.allowRight(client, right);
+					rp.allowRight(client, right);
 				}
 			} else {
-				room.requestRight(right, handler);
+				rp.requestRight(right, handler);
 			}
 		} catch (Exception e) {
 			log.error("Unexpected exception while toggle 'right'", e);

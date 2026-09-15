@@ -328,7 +328,7 @@ public class RoomPanel extends BasePanel {
 			room.add(wbArea.add(wb));
 		}
 		room.add(roomEnter);
-		room.add(sidebar = new RoomSidebar("sidebar", this));
+		room.add(sidebar = new RoomSidebar("sidebar"));
 		add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
 		if (r.isClosed()) {
 			room.setVisible(false);

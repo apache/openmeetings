@@ -38,7 +38,6 @@ import jakarta.inject.Inject;
 
 public class RoomFilePanel extends FileTreePanel {
 	private static final long serialVersionUID = 1L;
-	private final RoomPanel room;
 
 	@Inject
 	private FileItemDao fileDao;
@@ -47,14 +46,17 @@ public class RoomFilePanel extends FileTreePanel {
 
 	public RoomFilePanel(String id, RoomPanel room, NameDialog addFolder) {
 		super(id, room.getRoom().getId(), addFolder);
-		this.room = room;
+	}
+
+	RoomPanel getRoomPanel() {
+		return findParent(RoomPanel.class);
 	}
 
 	@Override
 	public void updateSizes() {
 		RecordingContainerData sizeData = recDao.getContainerData(getUserId());
 		long userSize = fileDao.getOwnSize(getUserId());
-		long roomSize = fileDao.getRoomSize(room.getRoom().getId());
+		long roomSize = fileDao.getRoomSize(getRoomPanel().getRoom().getId());
 		if (sizeData != null) {
 			userSize += sizeData.getUserHomeSize();
 			roomSize += sizeData.getPublicFileSize();
@@ -77,6 +79,6 @@ public class RoomFilePanel extends FileTreePanel {
 	protected Component getUpload() {
 		return super.getUpload()
 				.setVisible(true)
-				.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> room.getSidebar().showUpload(target)));
+				.add(AjaxEventBehavior.onEvent(EVT_CLICK, target -> getRoomPanel().getSidebar().showUpload(target)));
 	}
 }

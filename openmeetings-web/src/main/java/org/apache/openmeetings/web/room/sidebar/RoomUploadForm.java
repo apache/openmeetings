@@ -22,51 +22,38 @@ import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceRef
 import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_ID;
 import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_OWNER;
 import static org.apache.openmeetings.web.room.sidebar.RoomFileUploadResourceReference.PARAM_LAST_SELECTED_ROOM;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_VALUE;
 
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.web.common.upload.UploadForm;
-import org.apache.wicket.AttributeModifier;
+import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 public class RoomUploadForm extends UploadForm {
 	private static final long serialVersionUID = 1L;
-	private final WebMarkupContainer lastSelectedId = new WebMarkupContainer("lastSelectedId");
-	private final WebMarkupContainer lastSelectedRoom = new WebMarkupContainer("lastSelectedRoom"); // required for "fake" root
-	private final WebMarkupContainer lastSelectedOwner = new WebMarkupContainer("lastSelectedOwner"); // required for "fake" root
-	private final WebMarkupContainer lastSelectedGroup = new WebMarkupContainer("lastSelectedGroup"); // required for "fake" root
-	private final RoomFilePanel roomFiles;
 
-	public RoomUploadForm(String id, RoomFilePanel roomFiles) {
+	public RoomUploadForm(String id) {
 		super(id, "" + RequestCycle.get().urlFor(new RoomFileUploadResourceReference(), new PageParameters()));
-		this.roomFiles = roomFiles;
-	}
-
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		form.add(lastSelectedId.setMarkupId(PARAM_LAST_SELECTED_ID).setOutputMarkupId(true));
-		form.add(lastSelectedRoom.setMarkupId(PARAM_LAST_SELECTED_ROOM).setOutputMarkupId(true));
-		form.add(lastSelectedOwner.setMarkupId(PARAM_LAST_SELECTED_OWNER).setOutputMarkupId(true));
-		form.add(lastSelectedGroup.setMarkupId(PARAM_LAST_SELECTED_GROUP).setOutputMarkupId(true));
 	}
 
 	@Override
 	public void show(IPartialPageRequestHandler handler) {
-		BaseFileItem last = roomFiles.getLastSelected();
+		final RoomPanel rp = findParent(RoomPanel.class);
+		final BaseFileItem last = rp.getSidebar().getFilesPanel().getLastSelected();
+		Client c = rp.getClient();
+		c.getCustomProps().clear();
 		if (last.getId() == null) {
-			lastSelectedRoom.add(AttributeModifier.replace(ATTR_VALUE, last.getRoomId()));
-			lastSelectedOwner.add(AttributeModifier.replace(ATTR_VALUE, last.getOwnerId()));
-			lastSelectedGroup.add(AttributeModifier.replace(ATTR_VALUE, last.getGroupId()));
+			c.getCustomProps().put(PARAM_LAST_SELECTED_ROOM, last.getRoomId());
+			c.getCustomProps().put(PARAM_LAST_SELECTED_OWNER, last.getOwnerId());
+			c.getCustomProps().put(PARAM_LAST_SELECTED_GROUP, last.getGroupId());
 		} else {
-			lastSelectedId.add(AttributeModifier.replace(ATTR_VALUE, last.getId()));
+			c.getCustomProps().put(PARAM_LAST_SELECTED_ID, last.getId());
 		}
 		super.show(handler);
 	}

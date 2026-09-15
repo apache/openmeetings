@@ -30,11 +30,9 @@ public class UploadDialog extends Modal<String> {
 	private static final long serialVersionUID = 1L;
 	static final String DIALOG_CLASS = "room-file-upload-dlg";
 	private RoomUploadForm wsUpload;
-	private final RoomFilePanel roomFiles;
 
-	public UploadDialog(String id, RoomFilePanel roomFiles) {
+	public UploadDialog(String id) {
 		super(id);
-		this.roomFiles = roomFiles;
 	}
 
 	@Override
@@ -43,7 +41,7 @@ public class UploadDialog extends Modal<String> {
 		setCloseOnEscapeKey(false);
 		setBackdrop(Backdrop.STATIC);
 
-		wsUpload = new RoomUploadForm("wsupload", roomFiles);
+		wsUpload = new RoomUploadForm("wsupload");
 		add(wsUpload);
 		addButton(OmModalCloseButton.of("85"));
 

@@ -73,12 +73,12 @@ public class ActivitiesPanel extends Panel {
 	}
 	private static final FastDateFormat df = FastDateFormat.getInstance("HH:mm:ss");
 	private final Map<String, Activity> activities = new LinkedHashMap<>();
-	private final RoomPanel room;
 	private final AbstractDefaultAjaxBehavior actionBehavior = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
 		private TextRoomMessage getRemoveMsg(String id) {
-			return new TextRoomMessage(room.getRoom().getId(), room.getClient(), RoomMessage.Type.ACTIVITY_REMOVE, id);
+			final RoomPanel rp = getRoomPanel();
+			return new TextRoomMessage(rp.getRoom().getId(), rp.getClient(), RoomMessage.Type.ACTIVITY_REMOVE, id);
 		}
 
 		@Override
@@ -87,11 +87,12 @@ public class ActivitiesPanel extends Panel {
 				return;
 			}
 			try {
+				final RoomPanel rp = getRoomPanel();
 				String id = getRequest().getRequestParameters().getParameterValue(PARAM_ID).toString();
 				long roomId = getRequest().getRequestParameters().getParameterValue(PARAM_ROOM_ID).toLong();
 				Action act = Action.of(getRequest().getRequestParameters().getParameterValue(ACTION));
 				Activity a = activities.get(id);
-				if (a == null || !room.getRoom().getId().equals(roomId)) {
+				if (a == null || !rp.getRoom().getId().equals(roomId)) {
 					log.error("It seems like we are being hacked!!!!");
 					return;
 				}
@@ -100,45 +101,45 @@ public class ActivitiesPanel extends Panel {
 						remove(target, id);
 						break;
 					case DECLINE:
-						if (room.getClient().hasRight(Right.MODERATOR)) {
+						if (rp.getClient().hasRight(Right.MODERATOR)) {
 							sendRoom(getRemoveMsg(id));
 						}
 						break;
 					case ACCEPT:
 						Client client = cm.get(a.getUid());
-						if (room.getClient().hasRight(Right.MODERATOR) && client != null && client.getRoom() != null && roomId == client.getRoom().getId()) {
+						if (rp.getClient().hasRight(Right.MODERATOR) && client != null && client.getRoom() != null && roomId == client.getRoom().getId()) {
 							switch (a.getType()) {
 								case REQ_RIGHT_MODERATOR:
 									sendRoom(getRemoveMsg(id));
-									room.allowRight(client, Right.MODERATOR);
+									rp.allowRight(client, Right.MODERATOR);
 									break;
 								case REQ_RIGHT_AV:
 									sendRoom(getRemoveMsg(id));
-									room.allowRight(client, Right.AUDIO, Right.VIDEO);
+									rp.allowRight(client, Right.AUDIO, Right.VIDEO);
 									break;
 								case REQ_RIGHT_PRESENTER:
 									sendRoom(getRemoveMsg(id));
-									room.allowRight(client, Right.PRESENTER);
+									rp.allowRight(client, Right.PRESENTER);
 									break;
 								case REQ_RIGHT_WB:
 									sendRoom(getRemoveMsg(id));
-									room.allowRight(client, Right.WHITEBOARD);
+									rp.allowRight(client, Right.WHITEBOARD);
 									break;
 								case REQ_RIGHT_SHARE:
 									sendRoom(getRemoveMsg(id));
-									room.allowRight(client, Right.SHARE);
+									rp.allowRight(client, Right.SHARE);
 									break;
 								case REQ_RIGHT_REMOTE:
 									sendRoom(getRemoveMsg(id));
-									room.allowRight(client, Right.REMOTE_CONTROL);
+									rp.allowRight(client, Right.REMOTE_CONTROL);
 									break;
 								case REQ_RIGHT_A:
 									sendRoom(getRemoveMsg(id));
-									room.allowRight(client, Right.AUDIO);
+									rp.allowRight(client, Right.AUDIO);
 									break;
 								case REQ_RIGHT_MUTE_OTHERS:
 									sendRoom(getRemoveMsg(id));
-									room.allowRight(client, Right.MUTE_OTHERS);
+									rp.allowRight(client, Right.MUTE_OTHERS);
 									break;
 								default:
 									break;
@@ -163,15 +164,19 @@ public class ActivitiesPanel extends Panel {
 
 	public ActivitiesPanel(String id, RoomPanel room) {
 		super(id);
-		this.room = room;
 		setVisible(!room.getRoom().isHidden(RoomElement.ACTIVITIES));
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
 		add(actionBehavior);
 	}
 
+	RoomPanel getRoomPanel() {
+		return findParent(RoomPanel.class);
+	}
+
 	private boolean shouldSkip(final boolean self, final Activity a) {
-		return !self && a.getType().isAction() && !room.getClient().hasRight(Right.MODERATOR);
+		final RoomPanel rp = getRoomPanel();
+		return !self && a.getType().isAction() && !rp.getClient().hasRight(Right.MODERATOR);
 	}
 
 	public void add(Activity a, IPartialPageRequestHandler handler) {
@@ -237,11 +242,12 @@ public class ActivitiesPanel extends Panel {
 			.put("action", a.getType().isAction())
 			.put("find", false);
 
+		final RoomPanel rp = getRoomPanel();
 		switch (a.getType()) {
 			case REQ_RIGHT_MODERATOR, REQ_RIGHT_PRESENTER, REQ_RIGHT_WB, REQ_RIGHT_SHARE, REQ_RIGHT_REMOTE
 					, REQ_RIGHT_A, REQ_RIGHT_AV, REQ_RIGHT_MUTE_OTHERS:
-				aobj.put("accept", room.getClient().hasRight(Right.MODERATOR));
-				aobj.put("decline", room.getClient().hasRight(Right.MODERATOR));
+				aobj.put("accept", rp.getClient().hasRight(Right.MODERATOR));
+				aobj.put("decline", rp.getClient().hasRight(Right.MODERATOR));
 				break;
 			case REQ_RIGHT_HAVE_QUESTION:
 				aobj.put("find", !self);

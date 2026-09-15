@@ -83,7 +83,7 @@ public abstract class UploadForm extends Panel {
 
 	public void show(IPartialPageRequestHandler handler) {
 		handler.add(form.setVisible(true));
-		handler.appendJavaScript("Upload.bindUpload(\"" + uploadLocation() + "\", "+ extraBindFunc() + ", " + onCompleteFunc() + ");");
+		handler.appendJavaScript("Upload.bindUpload(\"" + uploadLocation() + "\", " + extraBindFunc() + ", " + onCompleteFunc() + ");");
 	}
 
 	@Override
