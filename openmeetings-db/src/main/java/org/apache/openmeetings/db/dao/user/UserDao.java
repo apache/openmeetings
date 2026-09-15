@@ -632,6 +632,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				.setParameter("date", new Date(System.currentTimeMillis() - ttl))
 				.getResultList();
 	}
+
 	public static void badPwdPenalty() {
 		// add random timeout
 		try {

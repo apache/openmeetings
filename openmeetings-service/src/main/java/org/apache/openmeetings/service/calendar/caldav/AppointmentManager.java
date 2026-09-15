@@ -47,6 +47,7 @@ import org.apache.jackrabbit.webdav.property.DavPropertySet;
 import org.apache.jackrabbit.webdav.xml.DomUtil;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar.SyncType;
@@ -160,6 +161,7 @@ public class AppointmentManager {
 				optionsMethod.reset();
 			}
 		}
+		UserDao.badPwdPenalty(); // random delay in case of unsuccessful test
 		return false;
 	}
 
