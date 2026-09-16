@@ -66,15 +66,15 @@
 		<maven.compiler.target>${javaVersion}</maven.compiler.target>
 
 		<maven-bundle-plugin.version>6.1.2</maven-bundle-plugin.version>
-		<exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
+		<exec-maven-plugin.version>3.6.4</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
 		<license-maven-plugin.version>2.7.1</license-maven-plugin.version>
 		<reflow-maven-skin.version>2.4.1</reflow-maven-skin.version>
 		<reflow-theme>cerulean</reflow-theme>
 		<replacer.version>1.5.3</replacer.version>
-		<xml-maven-plugin.version>1.2.1</xml-maven-plugin.version>
+		<xml-maven-plugin.version>1.2.2</xml-maven-plugin.version>
 		<saxon.version>8.7</saxon.version>
-		<buildnumber-maven-plugin.version>3.3.0</buildnumber-maven-plugin.version>
+		<buildnumber-maven-plugin.version>3.3.1</buildnumber-maven-plugin.version>
 		<keytool-maven-plugin.version>2.0.2</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.1.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
@@ -92,7 +92,7 @@
 		<wicket-bootstrap.version>7.0.15</wicket-bootstrap.version>
 		<fullcalendar.version>7.1.0</fullcalendar.version>
 		<spring.version>7.0.9</spring.version>
-		<tomcat.version>11.0.25</tomcat.version>
+		<tomcat.version>11.0.26</tomcat.version>
 		<jetty.version>11.0.26</jetty.version>
 		<ical4j.version>4.3.0</ical4j.version>
 		<cxf.version>4.2.3</cxf.version>
@@ -132,7 +132,7 @@
 		<slf4j.version>2.0.19</slf4j.version>
 		<logback.version>1.6.3</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
-		<bcprov.version>1.85.2</bcprov.version>
+		<bcprov.version>1.86</bcprov.version>
 		<mockito.version>5.23.0</mockito.version>
 		<quartz.version>2.5.2</quartz.version>
 		<kurento.version>7.3.0</kurento.version>
