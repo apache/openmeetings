@@ -29,7 +29,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 
 @ExtendWith(MockitoExtension.class)
 class TestFileItem {
@@ -83,8 +85,17 @@ class TestFileItem {
 	}
 
 	private void wrapper(Runnable r) {
-		try (MockedStatic<OmFileHelper> theMock = mockStatic(OmFileHelper.class)) {
-			theMock.when(OmFileHelper::getUploadFilesDir).thenReturn(new File("src/test/resources/org/apache/openmeetings/db/entity/file"));
+		try (MockedStatic<OmFileHelper> theMock = mockStatic(OmFileHelper.class, new Answer<File>() {
+			@Override
+			public File answer(InvocationOnMock invocation) throws Throwable {
+				return switch (invocation.getMethod().getName()) {
+					case "getUploadFilesDir" -> new File("src/test/resources/org/apache/openmeetings/db/entity/file");
+					case "getFileSafe" -> new File(invocation.getArgument(0, File.class)
+								, invocation.getArgument(1, String.class) + "." + invocation.getArgument(2, String.class));
+					default -> null;
+				};
+			}
+		})) {
 			r.run();
 		}
 	}
