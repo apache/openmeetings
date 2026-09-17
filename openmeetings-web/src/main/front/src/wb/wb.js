@@ -164,16 +164,16 @@ export class Wb {
 				}});
 			}
 			o.includeDefaultValues = false;
-			if ('activeSelection' === o.type) {
-				o.clone(function(_o) {
+			if ('activeselection' === o.type) {
+				o.clone(extraProps).then((cloned) => {
 					// ungrouping
-					_o.includeDefaultValues = false;
-					const _items = _o.destroy().getObjects();
+					cloned.includeDefaultValues = false;
+					const _items = cloned.removeAll();
 					for (let i = 0; i < _items.length; ++i) {
 						items.push(self._toOmJson(_items[i]));
 					}
 					modifiedAction(items);
-				}, extraProps);
+				});
 			} else {
 				items.push(self._toOmJson(o));
 				modifiedAction(items);

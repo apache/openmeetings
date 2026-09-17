@@ -220,6 +220,7 @@
 	}
 }
 .user-list {
+	--user-pic-size: 80px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	height: calc(100% - var(--room-sidebar-header-height) - var(--buffer-size));
@@ -228,7 +229,7 @@
 		line-height: 18px;
 		height: 18px;
 		padding: 0;
-		padding-inline-start: 64px;
+		padding-inline-start: var(--user-pic-size);
 		margin-inline-end: 20px;
 		overflow: hidden;
 	}
@@ -236,7 +237,7 @@
 		min-height: 90px;
 		padding-inline-start: 5px;
 		padding-top: 5px;
-		background-size: 80px;
+		background-size: var(--user-pic-size);
 		background-repeat: no-repeat;
 		background-position: var(--background-start) 2px;
 		position: relative;

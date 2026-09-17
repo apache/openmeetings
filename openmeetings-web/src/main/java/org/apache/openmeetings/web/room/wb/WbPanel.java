@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room.wb;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_COUNT;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_HEIGHT;
@@ -31,12 +32,15 @@ import static org.apache.openmeetings.db.dto.room.Whiteboard.ITEMS_KEY;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getObjWbJson;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getWbJson;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_SRC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_SRC_UND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
 import static org.apache.wicket.AttributeModifier.append;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.util.Deque;
 import java.util.HashMap;
@@ -311,12 +315,39 @@ public class WbPanel extends AbstractWbPanel {
 		}
 	}
 
+	private static boolean validClipartSrc(String src) {
+		if (src == null) {
+			return false;
+		}
+		URI uri = URI.create(src).normalize();
+		return uri.getScheme() == null && uri.getPath().startsWith("public/cliparts/");
+	}
+
+	private static boolean validCreateObj(JSONObject o) {
+		if (o.has(ATTR_FILE_ID) || o.has(ATTR_FILE_TYPE)) {
+			return false;
+		}
+		if ("image".equalsIgnoreCase(o.getString(ATTR_TYPE))) {
+			String src = o.optString(PARAM_SRC);
+			String _src = o.optString(PARAM_SRC_UND);
+			if (!validClipartSrc(src) || !validClipartSrc(_src)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private void doActionWhiteboard(Client c, WbAction a, JSONObject obj, boolean redo, IPartialPageRequestHandler handler) throws IOException {
 		switch (a) {
 			case CREATE_OBJ:
 			{
 				Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
 				JSONObject o = obj.getJSONObject("obj");
+				if (!validCreateObj(o)) {
+					// unexpected, warn and no-op
+					log.warn("Got CREATE_OBJ message with file, ignoring");
+					return;
+				}
 				wb.put(o.getString("uid"), o);
 				wbm.update(roomId, wb);
 				addUndo(wb.getId(), new UndoObject(a, obj, UndoObject.Type.ADD, o));
@@ -333,14 +364,28 @@ public class WbPanel extends AbstractWbPanel {
 				Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
 				JSONArray arr = obj.getJSONArray("obj");
 				JSONArray undo = new JSONArray();
-				for (int i = 0; i < arr.length(); ++i) {
+				// reverse order to be able to remove
+				for (int i = arr.length() - 1; i > -1; --i) {
 					JSONObject oi = arr.getJSONObject(i);
 					String uid = oi.getString("uid");
 					JSONObject po = wb.get(uid);
-					if (po != null) {
-						undo.put(po);
-						wb.put(uid, oi);
+					if (po == null || BaseFileItem.Type.PRESENTATION.name().equals(po.optString(ATTR_FILE_TYPE))) {
+						// update of non-existing or inapropriate object
+						arr.remove(i);
+						continue;
 					}
+					// restore immutable props
+					oi.put(ATTR_TYPE, po.getString(ATTR_TYPE));
+					if (po.has(ATTR_FILE_ID) || po.has(ATTR_FILE_TYPE)) {
+						oi.put(ATTR_FILE_ID, po.getLong(ATTR_FILE_ID));
+						oi.put(ATTR_FILE_TYPE, po.getString(ATTR_FILE_TYPE));
+						oi.put(ATTR_COUNT, po.getInt(ATTR_COUNT));
+					}
+					if (po.has(ATTR_OMTYPE)) {
+						oi.put(ATTR_OMTYPE, po.getString(ATTR_OMTYPE));
+					}
+					undo.put(po);
+					wb.put(uid, oi);
 				}
 				if (arr.length() != 0) {
 					wbm.update(roomId, wb);
@@ -562,7 +607,7 @@ public class WbPanel extends AbstractWbPanel {
 				JSONObject file = new JSONObject()
 						.put(ATTR_FILE_ID, fi.getId())
 						.put(ATTR_FILE_TYPE, fi.getType().name())
-						.put("count", fi.getCount())
+						.put(ATTR_COUNT, fi.getCount())
 						.put(ATTR_TYPE, "image")
 						.put("left", UPLOAD_WB_LEFT + width / 2)
 						.put("top", UPLOAD_WB_TOP + height / 2)

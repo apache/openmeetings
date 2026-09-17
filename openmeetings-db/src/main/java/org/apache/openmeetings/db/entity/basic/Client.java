@@ -47,7 +47,6 @@ import com.github.openjson.JSONObject;
 public class Client implements IDataProviderEntity, IWsClient {
 	private static final long serialVersionUID = 1L;
 
-
 	public enum Activity {
 		AUDIO //sends Audio to the room
 		, VIDEO //sends Video to the room
@@ -55,10 +54,12 @@ public class Client implements IDataProviderEntity, IWsClient {
 		, SCREEN //screen is shared
 		, RECORD //record in non-interview room
 	}
+
 	public enum StreamType {
 		WEBCAM //sends Audio/Video to the room
 		, SCREEN //send screen sharing
 	}
+
 	private final String sessionId;
 	private final int pageId;
 	private User user;
@@ -111,7 +112,8 @@ public class Client implements IDataProviderEntity, IWsClient {
 	}
 
 	public boolean sameUserId(Long userId) {
-		return getUserId() != null && getUserId().equals(userId);
+		Long id = getUserId();
+		return id != null && id.equals(userId);
 	}
 
 	public String getPictureUri() {

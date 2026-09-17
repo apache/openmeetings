@@ -24,7 +24,7 @@ import static org.apache.openmeetings.util.ImportHelper.getPrivateValue;
 import org.apache.openmeetings.db.entity.user.AsteriskSipUser;
 import org.junit.jupiter.api.Test;
 
-class AsteriskSipUserTest {
+class TestAsteriskSipUser {
 	@Test
 	void testGetFileShouldReturnFirstSlideWithPDF() throws Exception {
 		AsteriskSipUser u = new AsteriskSipUser();

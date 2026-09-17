@@ -50,6 +50,7 @@ public class Whiteboard implements Serializable {
 	public static final String ATTR_OMTYPE = "omType";
 	public static final String ATTR_FILE_ID = "fileId";
 	public static final String ATTR_FILE_TYPE = "fileType";
+	public static final String ATTR_COUNT = "count";
 	public static final String ATTR_SLIDE = "slide";
 	public static final String ATTR_WIDTH = "width";
 	public static final String ATTR_HEIGHT = "height";

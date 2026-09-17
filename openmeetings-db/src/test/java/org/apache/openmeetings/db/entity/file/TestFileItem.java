@@ -32,7 +32,7 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class FileItemTest {
+class TestFileItem {
 	private FileItem fileItem;
 
 	@BeforeEach

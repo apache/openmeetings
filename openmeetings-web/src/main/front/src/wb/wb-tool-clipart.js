@@ -14,8 +14,8 @@ export class Clipart extends WbShape {
 				, opts = {
 					left: self.orig.x
 					, top: self.orig.y
-					, scaleX: 0.
-					, scaleY: 0.
+					, scaleX: 1.
+					, scaleY: 1.
 					, omType: 'Clipart'
 					, _src: imgSrc
 					, opacity: self.opacity
