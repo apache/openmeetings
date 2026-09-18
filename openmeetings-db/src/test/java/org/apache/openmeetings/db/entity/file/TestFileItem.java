@@ -20,22 +20,27 @@ package org.apache.openmeetings.db.entity.file;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mockStatic;
 
 import java.io.File;
 
 import org.apache.openmeetings.util.OmFileHelper;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockedStatic;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 
-@ExtendWith(MockitoExtension.class)
 class TestFileItem {
 	private FileItem fileItem;
+
+	@BeforeAll
+	static void setup() throws Exception {
+		OmFileHelper.setOmHome(new File(".").getCanonicalFile());
+	}
+
+	@AfterAll
+	static void tearDown() {
+		OmFileHelper.setOmHome((File)null);
+	}
 
 	@BeforeEach
 	void createNewStack() {
@@ -84,22 +89,6 @@ class TestFileItem {
 		assertEquals("6594186e-c6bb-49d5-9f66-829e45599aaa.pdf", f.getName());
 	}
 
-	private void wrapper(Runnable r) {
-		try (MockedStatic<OmFileHelper> theMock = mockStatic(OmFileHelper.class, new Answer<File>() {
-			@Override
-			public File answer(InvocationOnMock invocation) throws Throwable {
-				return switch (invocation.getMethod().getName()) {
-					case "getUploadFilesDir" -> new File("org/apache/openmeetings/db/entity/file");
-					case "getFileSafe" -> new File(invocation.getArgument(0, File.class)
-								, invocation.getArgument(1, String.class) + "." + invocation.getArgument(2, String.class));
-					default -> null;
-				};
-			}
-		})) {
-			r.run();
-		}
-	}
-
 	@Test
 	void testGetOriginalWithDOCXWithOriginalName() {
 		// Setup file
@@ -108,12 +97,10 @@ class TestFileItem {
 		fileItem.setName("Sample Document.docx");
 		fileItem.setType(BaseFileItem.Type.PRESENTATION);
 
-		wrapper(() -> {
-			File f = fileItem.getOriginal();
+		File f = fileItem.getOriginal();
 
-			assertTrue(f.getName().endsWith("docx"));
-			assertEquals("d44ab2c5-fd5d-4903-8fa7-292286d72a5f.docx", f.getName());
-		});
+		assertTrue(f.getName().endsWith("docx"));
+		assertEquals("d44ab2c5-fd5d-4903-8fa7-292286d72a5f.docx", f.getName());
 	}
 
 	@Test
@@ -123,12 +110,11 @@ class TestFileItem {
 		fileItem.setHash("d44ab2c5-fd5d-4903-8fa7-292286d72a5f");
 		fileItem.setName("Random Name");
 		fileItem.setType(BaseFileItem.Type.PRESENTATION);
-		wrapper(() -> {
-			File f = fileItem.getOriginal();
 
-			assertTrue(f.getName().endsWith("docx"));
-			assertEquals("d44ab2c5-fd5d-4903-8fa7-292286d72a5f.docx", f.getName());
-		});
+		File f = fileItem.getOriginal();
+
+		assertTrue(f.getName().endsWith("docx"));
+		assertEquals("d44ab2c5-fd5d-4903-8fa7-292286d72a5f.docx", f.getName());
 	}
 
 	@Test
@@ -158,5 +144,4 @@ class TestFileItem {
 		assertTrue(f.getName().endsWith("pdf"));
 		assertEquals("d44ab2c5-fd5d-4903-8fa7-292286d72a5f.pdf", f.getName());
 	}
-
 }
