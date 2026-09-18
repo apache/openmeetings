@@ -89,7 +89,7 @@ class TestFileItem {
 			@Override
 			public File answer(InvocationOnMock invocation) throws Throwable {
 				return switch (invocation.getMethod().getName()) {
-					case "getUploadFilesDir" -> new File("src/test/resources/org/apache/openmeetings/db/entity/file");
+					case "getUploadFilesDir" -> new File("org/apache/openmeetings/db/entity/file");
 					case "getFileSafe" -> new File(invocation.getArgument(0, File.class)
 								, invocation.getArgument(1, String.class) + "." + invocation.getArgument(2, String.class));
 					default -> null;
