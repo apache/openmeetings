@@ -133,7 +133,7 @@
 		<logback.version>1.6.3</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.86</bcprov.version>
-		<mockito.version>5.23.0</mockito.version>
+		<mockito.version>5.24.0</mockito.version>
 		<quartz.version>2.5.2</quartz.version>
 		<kurento.version>7.3.0</kurento.version>
 		<jain-sip.version>1.2.307</jain-sip.version><!-- other versions are broken! -->
