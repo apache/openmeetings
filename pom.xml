@@ -94,7 +94,7 @@
 		<spring.version>7.0.9</spring.version>
 		<tomcat.version>11.0.26</tomcat.version>
 		<jetty.version>11.0.26</jetty.version>
-		<ical4j.version>4.3.0</ical4j.version>
+		<ical4j.version>4.4.0</ical4j.version>
 		<cxf.version>4.2.3</cxf.version>
 		<io.prometheus.version>1.9.0</io.prometheus.version>
 		<aspectjtools.version>1.9.25.1</aspectjtools.version>
@@ -110,7 +110,7 @@
 		<jakarta.websocket-api.version>2.2.0</jakarta.websocket-api.version>
 		<jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
 		<asterisk-java.version>3.42.2</asterisk-java.version>
-		<commons-lang3.version>3.20.0</commons-lang3.version>
+		<commons-lang3.version>3.21.0</commons-lang3.version>
 		<commons-dbcp.version>2.14.0</commons-dbcp.version>
 		<commons-pool2.version>2.13.1</commons-pool2.version>
 		<commons-cli.version>1.11.0</commons-cli.version>
@@ -119,18 +119,18 @@
 		<commons-text.version>1.15.0</commons-text.version>
 		<commons-net.version>3.13.0</commons-net.version>
 		<dom4j.version>2.2.0</dom4j.version>
-		<h2.version>2.5.250</h2.version>
+		<h2.version>2.5.252</h2.version>
 		<postgresql.version>42.7.13</postgresql.version>
 		<mysql.version>26.7.0</mysql.version>
 		<mssql.version>13.6.0.jre11</mssql.version>
 		<ojdbc.version>19.32.0.0</ojdbc.version>
 		<xstream.version>1.4.21</xstream.version>
-		<api-all.version>2.1.8</api-all.version>
+		<api-all.version>2.1.9</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
-		<tika-parsers.version>4.0.0</tika-parsers.version>
+		<tika-parsers.version>4.1.0</tika-parsers.version>
 		<slf4j.version>2.0.20</slf4j.version>
-		<logback.version>1.6.4</logback.version>
+		<logback.version>1.6.5</logback.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov.version>1.86</bcprov.version>
 		<mockito.version>5.24.0</mockito.version>
@@ -144,7 +144,7 @@
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
 		<swagger.version>2.2.55</swagger.version>
 		<totp.version>1.7.1</totp.version>
-		<owasp-sanitizer.version>20260922.1</owasp-sanitizer.version>
+		<owasp-sanitizer.version>20260924.2</owasp-sanitizer.version>
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js, file:**/org/apache/jackrabbit/**</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
