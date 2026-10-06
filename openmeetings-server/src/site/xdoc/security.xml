@@ -21,6 +21,17 @@
 	</properties>
 
 	<body>
+		<section name="Security Model">
+			<ul>
+				<li>All WYSIWYG fields in OM are being sanitized at <code><a href="https://github.com/wicketstuff/core/blob/master/wicketstuff-jquery-ui-parent/wicketstuff-jquery-ui-plugins/src/main/java/org/wicketstuff/jquery/ui/plugins/wysiwyg/WysiwygEditor.java#L122">WysiwygEditor.java</a></code></li>
+				<li>Users with roles <code>ADMIN</code>,
+					<code>ADMIN_CONFIG</code>,
+					<code>ADMIN_CONNECTIONS</code>,
+					<code>ADMIN_BACKUP</code>,
+					<code>SOAP</code> are considered trusted
+				</li>
+			</ul>
+		</section>
 		<section name="Security Vulnerabilities">
 			<p>Please note that binary patches are not produced for individual vulnerabilities. To obtain the
 				binary fix for a particular vulnerability you should upgrade to an Apache OpenMeetings version
