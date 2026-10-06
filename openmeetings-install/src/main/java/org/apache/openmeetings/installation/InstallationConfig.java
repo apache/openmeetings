@@ -56,8 +56,8 @@ public class InstallationConfig implements Serializable {
 
 	private int defaultLangId = 1;
 	private boolean sendEmailAtRegister = false;
-	private String urlFeed = "https://mail-archives.apache.org/mod_mbox/openmeetings-user/?format=atom";
-	private String urlFeed2 = "https://mail-archives.apache.org/mod_mbox/openmeetings-dev/?format=atom";
+	private String urlFeed = "https://lists.apache.org/api/atom?list=user&domain=openmeetings.apache.org";
+	private String urlFeed2 = "https://lists.apache.org/api/atom?list=dev&domain=openmeetings.apache.org";
 	private boolean sendEmailWithVerficationCode = false;
 	private boolean sipEnable = false;
 	private String sipRoomPrefix = "400";

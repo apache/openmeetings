@@ -61,6 +61,7 @@ public class AtomReader {
 			.add(new Field("title"))
 			.add(new Field("link", "link", "href", false))
 			.add(new Field(ATTR_CONTENT, ATTR_CONTENT, true))
+			.add(new Field("summary", ATTR_CONTENT, true))
 			.add(new Field("updated", ATTR_PUBLISHED))
 			.add(new Field(ATTR_PUBLISHED))
 			.add(new Field("author"));
@@ -114,8 +115,8 @@ public class AtomReader {
 						} else if (f != null && evt.isCharacters()) {
 							val.append(escapeXml11(((Characters)evt).getData()));
 						} else if (f != null && evt.isEndElement() && f.getName().equals(((EndElement)evt).getName().getLocalPart())) {
-							if (!obj.has(f.getAlias())) {
-								obj.put(f.getAlias(), val.toString());
+							if (!obj.has(f.getJsonName())) {
+								obj.put(f.getJsonName(), val.toString());
 							}
 							f = null;
 						} else if (evt.isEndElement() && spec.getName().equals(((EndElement)evt).getName().getLocalPart())) {
@@ -165,7 +166,7 @@ public class AtomReader {
 
 	public static class Field {
 		private final String name;
-		private final String alias;
+		private final String jsonName;
 		private final String attr;
 		private final boolean xml;
 
@@ -183,7 +184,7 @@ public class AtomReader {
 
 		public Field(String name, String alias, String attr, boolean xml) {
 			this.name= name;
-			this.alias = alias;
+			this.jsonName = alias;
 			this.attr = attr;
 			this.xml = xml;
 		}
@@ -192,8 +193,8 @@ public class AtomReader {
 			return name;
 		}
 
-		public String getAlias() {
-			return alias;
+		public String getJsonName() {
+			return jsonName;
 		}
 
 		public String getAttr() {

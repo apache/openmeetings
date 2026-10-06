@@ -297,7 +297,7 @@ public class ImportInitvalues {
 
 		list.add(new Configuration(CONFIG_DASHBOARD_SHOW_CHAT, String.valueOf(true), Configuration.Type.BOOL, "Show 'Global Chat' outside the room", VER_1_9));
 
-		list.add(new Configuration(CONFIG_DASHBOARD_SHOW_RSS, String.valueOf(false), Configuration.Type.BOOL, "Show RSS widget on dashboard", VER_1_9));
+		list.add(new Configuration(CONFIG_DASHBOARD_SHOW_RSS, String.valueOf(true), Configuration.Type.BOOL, "Show RSS widget on dashboard", VER_1_9));
 
 		list.add(new Configuration(CONFIG_MAX_UPLOAD_SIZE, String.valueOf(DEFAULT_MAX_UPLOAD_SIZE), Configuration.Type.NUMBER,
 				"Maximum size of upload file (bytes)", VER_1_8));
