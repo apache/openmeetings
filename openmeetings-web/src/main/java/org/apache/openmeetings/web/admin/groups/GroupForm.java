@@ -39,6 +39,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.common.UploadableImagePanel;
+import org.apache.openmeetings.web.util.OmSelect2Choice;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -52,7 +53,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.wicketstuff.select2.Select2Choice;
 
 import jakarta.inject.Inject;
 
@@ -60,7 +60,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 	private static final long serialVersionUID = 1L;
 	private GroupUsersPanel usersPanel;
 	private final WebMarkupContainer groupList;
-	private final Select2Choice<User> userToadd;
+	private OmSelect2Choice<User> userToadd;
 	private final NumberTextField<Integer> maxFilesSize = new NumberTextField<>("maxFilesSize");
 	private final NumberTextField<Integer> maxRecordingsSize = new NumberTextField<>("maxRecordingsSize");
 	private final NumberTextField<Integer> maxRooms = new NumberTextField<>("maxRooms");
@@ -107,11 +107,19 @@ public class GroupForm extends AdminBaseForm<Group> {
 		setMultiPart(true);
 		this.groupList = groupList;
 		setOutputMarkupId(true);
+	}
 
+	static String formatUser(User choice) {
+		return String.format("%s [%s]", choice.getLogin(), choice.getDisplayName());
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		usersPanel = new GroupUsersPanel("users", getGroupId());
 		add(usersPanel);
 
-		add(userToadd = new Select2Choice<>("user2add", Model.of((User)null), new AdminUserChoiceProvider() {
+		add(userToadd = new OmSelect2Choice<>("user2add", Model.of((User)null), new AdminUserChoiceProvider() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -142,15 +150,6 @@ public class GroupForm extends AdminBaseForm<Group> {
 				}
 			}
 		}));
-	}
-
-	static String formatUser(User choice) {
-		return String.format("%s [%s]", choice.getLogin(), choice.getDisplayName());
-	}
-
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
 		final boolean isGroupAdmin = hasGroupAdminLevel(getRights());
 		setNewVisible(!isGroupAdmin);
 		setNewRecordVisible(!isGroupAdmin);

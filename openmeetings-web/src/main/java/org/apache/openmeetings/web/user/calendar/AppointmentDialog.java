@@ -56,6 +56,7 @@ import org.apache.openmeetings.web.common.datetime.OmDateTimePicker;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.OmWysiwygToolbar;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
+import org.apache.openmeetings.web.util.OmSelect2MultiChoice;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.AttributeModifier;
@@ -86,7 +87,6 @@ import org.apache.wicket.model.util.CollectionModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wicketstuff.select2.Select2MultiChoice;
 
 import org.wicketstuff.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
@@ -109,7 +109,7 @@ public class AppointmentDialog extends Modal<Appointment> {
 	private final NotificationPanel feedback = new NotificationPanel("feedback");
 	private final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
 	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.USER));
-	private final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
+	private final OmSelect2MultiChoice<Group> groups = new OmSelect2MultiChoice<>("groups"
 			, new CollectionModel<>(new ArrayList<>())
 			, new GroupChoiceProvider());
 	private final UserMultiChoice attendees = new UserMultiChoice("attendees", new CollectionModel<>(new ArrayList<>()));

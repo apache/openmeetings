@@ -35,6 +35,7 @@ import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.GroupChoiceProvider;
 import org.apache.openmeetings.web.common.InvitationForm;
+import org.apache.openmeetings.web.util.OmSelect2MultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -49,7 +50,6 @@ import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wicketstuff.select2.Select2MultiChoice;
 
 import jakarta.inject.Inject;
 
@@ -59,7 +59,7 @@ public class RoomInvitationForm extends InvitationForm {
 	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.USER));
 	private final Long roomId;
 	private final WebMarkupContainer groupContainer = new WebMarkupContainer("groupContainer");
-	private final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
+	private final OmSelect2MultiChoice<Group> groups = new OmSelect2MultiChoice<>("groups"
 			, new CollectionModel<>(new ArrayList<>())
 			, new GroupChoiceProvider());
 	final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");

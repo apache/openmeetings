@@ -23,11 +23,11 @@ import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.entity.user.User.DISPLAY_NAME_NA;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.web.app.WebSession.getRights;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendRegisterEmail;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.ArrayList;
@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
@@ -48,10 +50,12 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.CommunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.util.DateLabel;
+import org.apache.openmeetings.web.util.OmSelect2MultiChoice;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -73,7 +77,6 @@ import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.Response;
-import org.wicketstuff.select2.Select2MultiChoice;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import jakarta.inject.Inject;
@@ -91,6 +94,7 @@ public class UserForm extends AdminBaseForm<User> {
 	private final WebMarkupContainer listContainer;
 	private final WebMarkupContainer domain = new WebMarkupContainer("domain");
 	private GeneralUserForm generalForm;
+	private OmSelect2MultiChoice<Right> rightsSelect;
 	private final RequiredTextField<String> login = new RequiredTextField<>("login");
 	private StrongPasswordValidator passValidator;
 	private final PasswordTextField password = new PasswordTextField("password", new Model<>());
@@ -143,7 +147,7 @@ public class UserForm extends AdminBaseForm<User> {
 		mainContainer.add(new DateLabel("inserted"));
 		mainContainer.add(new DateLabel("updated"));
 
-		mainContainer.add(new Select2MultiChoice<>("rights", null, new RestrictiveChoiceProvider<Right>() {
+		rightsSelect = new OmSelect2MultiChoice<>("rights", null, new RestrictiveChoiceProvider<Right>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -156,21 +160,37 @@ public class UserForm extends AdminBaseForm<User> {
 				return choice.name();
 			}
 
+			public String getDisabledAttribute() {
+				return "data-disabled";
+			}
+
+			@Override
+			public boolean isDisabled(Right choice) {
+				if (hasAdminLevel(getRights())) {
+					return false;
+				}
+				return choice == null || !choice.isGroupAdminAllowed();
+			}
+
 			@Override
 			public void query(String term, int page, Response<Right> response) {
 				boolean isGroupAdmin = hasGroupAdminLevel(getRights());
-				for (Right r : Right.getAllowed(isGroupAdmin)) {
-					if (Strings.isEmpty(term) || r.name().contains(term)) {
-						response.add(r);
-					}
-				}
+				Right.getAllowed(isGroupAdmin)
+					.filter(r -> Strings.isEmpty(term) || r.name().contains(term))
+					.forEach(r -> response.add(r));
 			}
 
 			@Override
 			public Right fromId(String id) {
 				return Right.valueOf(id);
 			}
-		}));
+		});
+		mainContainer.add(rightsSelect.setLabel(new ResourceModel("881")));
+		rightsSelect.getSettings()
+				.setTemplateSelection("templateSelectionWithDisabled")
+				.setTemplateResult("templateResultWithDisabled")
+				.setDataAdapter("OmWithDisabledAdapter");
+
 		mainContainer.add(new CommunityUserForm("comunity", getModel()));
 		remove(validationBehavior);
 		setNewRecordVisible(true);
@@ -186,15 +206,24 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onModelChanged() {
 		super.onModelChanged();
 		User u = getModelObject();
-		boolean nd = !u.isDeleted();
 		boolean isNew = u.getId() == null;
-		mainContainer.setEnabled(nd);
+		// This form is enabled if:
+		boolean nd = !u.isDeleted(); // user is NOT deleted
+		boolean enabled = nd
+			&& (isAdmin(getRights()) // edited by 'full' admin
+				|| isNew // the user is new
+				// group admin can edit themselves
+				|| WebSession.getUserId().equals(u.getId())
+				// the user is NOT new and has only rights allowed for group admin
+				|| (!isNew && u.getRights().stream().allMatch(Right::isGroupAdminAllowed))
+			);
+		mainContainer.setEnabled(enabled);
 		otpEnabled.setModelObject(u.getOtpSecret() != null)
 				.setEnabled(isOtpEnabled() && u.getOtpSecret() != null); // admin can only disable OTP
-		setSaveVisible(nd);
-		setDelVisible(nd && !isNew);
-		setRestoreVisible(!nd);
-		setPurgeVisible(!isNew);
+		setSaveVisible(enabled);
+		setDelVisible(enabled && !isNew);
+		setRestoreVisible(enabled && !nd);
+		setPurgeVisible(enabled && !isNew);
 		password.setModelObject(null);
 		generalForm.updateModelObject(u, true);
 		passValidator.setUser(u);
@@ -238,14 +267,14 @@ public class UserForm extends AdminBaseForm<User> {
 		}
 	}
 
-	private static boolean checkLevel(Set<User.Right> rights) {
+	private static boolean isAdmin(Set<User.Right> rights) {
 		return hasAdminLevel(rights) || AuthLevelUtil.hasWebServiceLevel(rights);
 	}
 
 	boolean isAdminPassRequired() {
 		User u = getModelObject();
 		User ou = userDao.get(u.getId());
-		return checkLevel(u.getRights()) || (ou != null && checkLevel(ou.getRights()));
+		return isAdmin(u.getRights()) || (ou != null && isAdmin(ou.getRights()));
 	}
 
 	private void purgeUser(AjaxRequestTarget target) {
@@ -360,6 +389,17 @@ public class UserForm extends AdminBaseForm<User> {
 		User u = getModelObject();
 		if (!userDao.checkLogin(login.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
 			error(getString("error.login.inuse"));
+		}
+		if (u.getId() != null && !isAdmin(getRights())) {
+			// group admin, let's check rights modifications
+			Set<Right> originalRights = userDao.get(u.getId()).getRights();
+			Set<Right> currentRights = Set.copyOf(rightsSelect.getConvertedInput());
+			if (Stream.concat(originalRights.stream().filter(Predicate.not(currentRights::contains))
+					, currentRights.stream().filter(Predicate.not(originalRights::contains)))
+				.anyMatch(Predicate.not(Right::isGroupAdminAllowed)))
+			{
+				rightsSelect.error(getString("204") + " " + getString("881"));
+			}
 		}
 		super.onValidate();
 	}

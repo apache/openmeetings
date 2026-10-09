@@ -50,6 +50,8 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.app.ClientManager;
+import org.apache.openmeetings.web.util.OmSelect2Choice;
+import org.apache.openmeetings.web.util.OmSelect2MultiChoice;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -75,8 +77,6 @@ import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
-import org.wicketstuff.select2.Select2Choice;
-import org.wicketstuff.select2.Select2MultiChoice;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.badge.BootstrapBadge;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
@@ -168,7 +168,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		for (Group org : orgList) {
 			orgRooms.add(new RoomGroup(org, getModelObject()));
 		}
-		add(new Select2MultiChoice<>("groups", null, new RestrictiveChoiceProvider<RoomGroup>() {
+		add(new OmSelect2MultiChoice<>("groups", null, new RestrictiveChoiceProvider<RoomGroup>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -215,7 +215,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("allowRecording").setEnabled(isRecordingsEnabled()));
 		add(new CheckBox("chatModerated"));
 
-		add(new Select2MultiChoice<>("hiddenElements", null, new ChoiceProvider<RoomElement>() {
+		add(new OmSelect2MultiChoice<>("hiddenElements", null, new ChoiceProvider<RoomElement>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -250,7 +250,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("filesOpened"));
 
 		// Moderators
-		final Select2Choice<User> moderatorChoice = new Select2Choice<>("moderator2add", moderator2add, new AdminUserChoiceProvider() {
+		final OmSelect2Choice<User> moderatorChoice = new OmSelect2Choice<>("moderator2add", moderator2add, new AdminUserChoiceProvider() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -322,7 +322,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 		// Files
 		Form<Void> filesForm = new Form<>("filesForm");
-		add(filesForm.add(new Select2MultiChoice<>("files2add", files2add, new ChoiceProvider<BaseFileItem>() {
+		add(filesForm.add(new OmSelect2MultiChoice<>("files2add", files2add, new ChoiceProvider<BaseFileItem>() {
 				private static final long serialVersionUID = 1L;
 
 				@Override

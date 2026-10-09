@@ -420,6 +420,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return session.languageId;
 	}
 
+	public static boolean isRtl() {
+		return LabelDao.getLanguage(getLanguage()).isRtl();
+	}
+
 	public static Long getUserId() {
 		checkIsInvalid();
 		return get().userId;

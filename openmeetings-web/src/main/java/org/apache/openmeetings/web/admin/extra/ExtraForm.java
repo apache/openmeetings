@@ -30,6 +30,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.GroupChoiceProvider;
+import org.apache.openmeetings.web.util.OmSelect2MultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
@@ -38,14 +39,13 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.CollectionModel;
-import org.wicketstuff.select2.Select2MultiChoice;
 
 import jakarta.inject.Inject;
 
 public class ExtraForm extends AdminBaseForm<ExtraMenu> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer list;
-	final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
+	final OmSelect2MultiChoice<Group> groups = new OmSelect2MultiChoice<>("groups"
 			, new CollectionModel<>(new ArrayList<>())
 			, new GroupChoiceProvider());
 

@@ -18,14 +18,19 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isDisplayNameEditable;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isDisplayNameEditable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -33,10 +38,15 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.datetime.AjaxOmDatePicker;
 import org.apache.openmeetings.web.util.CountryDropDown;
+import org.apache.openmeetings.web.util.OmSelect2MultiChoice;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.LambdaChoiceRenderer;
@@ -47,9 +57,9 @@ import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.Response;
-import org.wicketstuff.select2.Select2MultiChoice;
 
 import jakarta.inject.Inject;
 
@@ -58,7 +68,54 @@ public class GeneralUserForm extends Form<User> {
 	private final RequiredTextField<String> email = new RequiredTextField<>("address.email");
 	private final List<GroupUser> grpUsers = new ArrayList<>();
 	private final AjaxOmDatePicker bday = new AjaxOmDatePicker("age");
+	private final OmSelect2MultiChoice<GroupUser> groupSelect = new OmSelect2MultiChoice<>("groupUsers", null, new RestrictiveChoiceProvider<GroupUser>() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public String getDisplayValue(GroupUser choice) {
+			return choice.getGroup().getName();
+		}
+
+		@Override
+		public String toId(GroupUser choice) {
+			Long id = choice.getGroup().getId();
+			return id == null ? null : "" + id;
+		}
+
+		public String getDisabledAttribute() {
+			return "data-disabled";
+		}
+
+		@Override
+		public boolean isDisabled(GroupUser choice) {
+			if (hasAdminLevel(getRights())) {
+				return false;
+			}
+			Long id = choice.getGroup().getId();
+			return id != null && !adminGrps.contains(id);
+		}
+
+		@Override
+		public void query(String term, int page, Response<GroupUser> response) {
+			for (GroupUser ou : grpUsers) {
+				if (Strings.isEmpty(term) || ou.getGroup().getName().contains(term)) {
+					response.add(ou);
+				}
+			}
+		}
+
+		@Override
+		public GroupUser fromId(String inId) {
+			Long id = Long.parseLong(inId);
+			User u = GeneralUserForm.this.getModelObject();
+			Group g = groupDao.get(id);
+			GroupUser gu = new GroupUser(g, u);
+			int idx = grpUsers.indexOf(gu);
+			return idx < 0 ? gu : grpUsers.get(idx);
+		}
+	});
 	private final boolean isAdminForm;
+	private final Set<Long> adminGrps;
 
 	@Inject
 	private GroupDao groupDao;
@@ -70,6 +127,11 @@ public class GeneralUserForm extends Form<User> {
 		this.isAdminForm = isAdminForm;
 		updateModelObject(getModelObject(), isAdminForm);
 		setOutputMarkupId(true);
+		adminGrps = userDao.get(WebSession.getUserId()).getGroupUsers().stream()
+				.filter(GroupUser::isModerator)
+				.map(GroupUser::getGroup)
+				.map(Group::getId)
+				.collect(Collectors.toSet());
 	}
 
 	@Override
@@ -94,39 +156,21 @@ public class GeneralUserForm extends Form<User> {
 		add(new TextField<String>("address.town"));
 		add(new CountryDropDown("address.country"));
 		add(new TextArea<String>("address.comment"));
-		add(new Select2MultiChoice<>("groupUsers", null, new RestrictiveChoiceProvider<GroupUser>() {
-			private static final long serialVersionUID = 1L;
+		groupSelect.getSettings()
+				.setTemplateSelection("templateSelectionWithDisabled")
+				.setTemplateResult("templateResultWithDisabled")
+				.setDataAdapter("OmWithDisabledAdapter");
+		add(groupSelect
+				.setLabel(new ResourceModel("161"))
+				.setRequired(isAdminForm && hasGroupAdminLevel(getRights()))
+				.setEnabled(isAdminForm));
+	}
 
-			@Override
-			public String getDisplayValue(GroupUser choice) {
-				return choice.getGroup().getName();
-			}
 
-			@Override
-			public String toId(GroupUser choice) {
-				Long id = choice.getGroup().getId();
-				return id == null ? null : "" + id;
-			}
-
-			@Override
-			public void query(String term, int page, Response<GroupUser> response) {
-				for (GroupUser ou : grpUsers) {
-					if (Strings.isEmpty(term) || ou.getGroup().getName().contains(term)) {
-						response.add(ou);
-					}
-				}
-			}
-
-			@Override
-			public GroupUser fromId(String inId) {
-				Long id = Long.parseLong(inId);
-				User u = GeneralUserForm.this.getModelObject();
-				Group g = groupDao.get(id);
-				GroupUser gu = new GroupUser(g, u);
-				int idx = grpUsers.indexOf(gu);
-				return idx < 0 ? gu : grpUsers.get(idx);
-			}
-		}).setLabel(new ResourceModel("161")).setRequired(isAdminForm && hasGroupAdminLevel(getRights())).setEnabled(isAdminForm));
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(getClass(), "general-user-form.js"), "general-user-form")));
 	}
 
 	public void updateModelObject(User u, boolean isAdminForm) {
@@ -151,6 +195,23 @@ public class GeneralUserForm extends Form<User> {
 		User u = getModelObject();
 		if (!userDao.checkEmail(email.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
 			error(getString("error.email.inuse"));
+		}
+		if (u.getId() != null && isAdminForm && !hasAdminLevel(getRights())) {
+			// group admin, let's check group modifications
+			Set<Long> originalGroups = userDao.get(u.getId()).getGroupUsers().stream()
+				.map(GroupUser::getGroup)
+				.map(Group::getId)
+				.collect(Collectors.toSet());
+			Set<Long> currentGroups = groupSelect.getConvertedInput().stream()
+				.map(GroupUser::getGroup)
+				.map(Group::getId)
+				.collect(Collectors.toSet());
+			if (Stream.concat(originalGroups.stream().filter(Predicate.not(currentGroups::contains))
+					, currentGroups.stream().filter(Predicate.not(originalGroups::contains)))
+				.anyMatch(Predicate.not(adminGrps::contains)))
+			{
+				groupSelect.error(getString("204") + " " + getString("161"));
+			}
 		}
 		super.onValidate();
 	}

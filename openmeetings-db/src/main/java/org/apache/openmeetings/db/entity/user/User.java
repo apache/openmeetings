@@ -205,13 +205,13 @@ public class User extends HistoricalEntity {
 			return groupAdminAllowed;
 		}
 
-		public static List<Right> getAllowed(boolean groupAdmin) {
+		public static Stream<Right> getAllowed(boolean groupAdmin) {
 			Stream<Right> stream = Stream.of(Right.values())
 					.filter(r -> Right.GROUP_ADMIN != r);
 			if (groupAdmin) {
 				stream = stream.filter(Right::isGroupAdminAllowed);
 			}
-			return stream.toList();
+			return stream;
 		}
 	}
 
