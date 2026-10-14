@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rat-config>
+    <!-- Explicitly forbid Alibaba license to catch non-compliant headers during our migration from Alibaba to ASF.
+         We must add this check because an Alibaba license header may contain Apache text and be wrongly marked as approved. -->
+    <families>
+        <family id="OM_MIT" name="MIT"/>
+        <family id="OM_CC_BY_4" name="CC BY 4.0"/>
+        <family id="PD" name="Public Domain"/>
+    </families>
+    <licenses>
+        <license id="OM_MIT" family="OM_MIT" name="Alibaba Group Holding Ltd">
+                                                                <any>
+                                                                        <text>licensed under the MIT</text>
+                                                                        <text>Licensed MIT</text>
+                                                                </any>
+        </license>
+        <license id="OM_CC_BY_4" family="OM_CC_BY_4" name="CC BY 4.0 License">
+            <text>CC BY 4.0 License</text>
+        </license>
+        <license id="PD" family="PD" name="Public Domain">
+            <text>Licensed Public Domain</text>
+        </license>
+    </licenses>
+</rat-config>

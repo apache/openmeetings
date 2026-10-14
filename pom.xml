@@ -1126,6 +1126,7 @@
 				<artifactId>apache-rat-plugin</artifactId>
 				<configuration>
 					<skip>${om.quick.build}</skip>
+                                        <config>${maven.multiModuleProjectDirectory}/.rat-config.xml</config>
 				</configuration>
 				<executions>
 					<execution>
@@ -1439,53 +1440,18 @@
 					<groupId>org.apache.rat</groupId>
 					<artifactId>apache-rat-plugin</artifactId>
 					<configuration>
-						<licenses>
-							<license>
-								<family>OM_MIT</family>
-								<any>
-									<text>licensed under the MIT</text>
-									<text>Licensed MIT</text>
-								</any>
-							</license>
-							<license>
-								<family>OM_CC_BY_4</family>
-								<any>
-									<text>CC BY 4.0 License</text>
-								</any>
-							</license>
-							<license>
-								<family>PD</family>
-								<any>
-									<text>Licensed Public Domain</text>
-								</any>
-							</license>
-						</licenses>
-						<families>
-							<family>
-								<id>OM_MIT</id>
-								<name>MIT</name>
-							</family>
-							<family>
-								<id>OM_CC_BY_4</id>
-								<name>CC BY 4.0</name>
-							</family>
-							<family>
-								<id>PD</id>
-								<name>Public Domain</name>
-							</family>
-						</families>
 						<inputExcludes>
-							<inputExclude>**/*.mp3</inputExclude>
-							<inputExclude>**/*.pdf</inputExclude>
-							<inputExclude>**/localhost.jks</inputExclude>
-							<inputExclude>**/node_modules/**</inputExclude>
-							<inputExclude>**/package-lock.json</inputExclude>
-							<inputExclude>**/target/**</inputExclude>
-							<inputExclude>**/.project</inputExclude>
-							<inputExclude>**/.classpath</inputExclude>
-							<inputExclude>**/.settings/**</inputExclude>
-							<inputExclude>.gitattributes</inputExclude>
-							<inputExclude>/apache-maven-*/bin/m2.conf</inputExclude> <!-- for dependabot -->
+							<exclude>**/*.mp3</exclude>
+							<exclude>**/*.pdf</exclude>
+							<exclude>**/localhost.jks</exclude>
+							<exclude>**/node_modules/**</exclude>
+							<exclude>**/package-lock.json</exclude>
+							<exclude>**/target/**</exclude>
+							<exclude>**/.project</exclude>
+							<exclude>**/.classpath</exclude>
+							<exclude>**/.settings/**</exclude>
+							<exclude>.gitattributes</exclude>
+							<exclude>/apache-maven-*/bin/m2.conf</exclude> <!-- for dependabot -->
 						</inputExcludes>
 						<verbose>true</verbose>
 					</configuration>
