@@ -66,6 +66,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import jakarta.inject.Inject;
 
@@ -78,6 +80,7 @@ import jakarta.inject.Inject;
 @ApplyLdifFiles({"schema/users.ldif"})
 public class TestLdap extends AbstractWicketTesterTest {
 	private static final String CFG_SEARCH_BIND = UUID.randomUUID().toString();
+	private static final String CFG_SIMPLE_BIND = UUID.randomUUID().toString();
 	private static final String BAD_PASSWORD = "bad password";
 	private static final String USER1 = "ldaptest1";
 	private static final String USER2 = "ldaptest2";
@@ -117,18 +120,34 @@ public class TestLdap extends AbstractWicketTesterTest {
 	}
 
 	private void createSbnd() throws FileNotFoundException, IOException {
-		Properties pp = new Properties();
-		pp.putAll(PROPS);
-		pp.put(CONFIGKEY_LDAP_AUTH_TYPE, LdapLoginManager.AuthType.SEARCHANDBIND.name());
-		try (OutputStream out = new FileOutputStream(getLdapConf(CFG_SEARCH_BIND))) {
-			pp.store(out, "");
+		{ // scope
+			Properties pp = new Properties();
+			pp.putAll(PROPS);
+			pp.put(CONFIGKEY_LDAP_AUTH_TYPE, LdapLoginManager.AuthType.SEARCHANDBIND.name());
+			try (OutputStream out = new FileOutputStream(getLdapConf(CFG_SEARCH_BIND))) {
+				pp.store(out, "");
+			}
+			LdapConfig cfg = new LdapConfig();
+			cfg.setName(CFG_SEARCH_BIND);
+			cfg.setActive(true);
+			cfg.setConfigFileName(CFG_SEARCH_BIND);
+			ldapDao.update(cfg, null);
+			CFG_MAP.put(CFG_SEARCH_BIND, cfg);
 		}
-		LdapConfig cfg = new LdapConfig();
-		cfg.setName(CFG_SEARCH_BIND);
-		cfg.setActive(true);
-		cfg.setConfigFileName(CFG_SEARCH_BIND);
-		ldapDao.update(cfg, null);
-		CFG_MAP.put(CFG_SEARCH_BIND, cfg);
+		{ // scope
+			Properties pp = new Properties();
+			pp.putAll(PROPS);
+			pp.put(CONFIGKEY_LDAP_AUTH_TYPE, LdapLoginManager.AuthType.SIMPLEBIND.name());
+			try (OutputStream out = new FileOutputStream(getLdapConf(CFG_SIMPLE_BIND))) {
+				pp.store(out, "");
+			}
+			LdapConfig cfg = new LdapConfig();
+			cfg.setName(CFG_SIMPLE_BIND);
+			cfg.setActive(true);
+			cfg.setConfigFileName(CFG_SIMPLE_BIND);
+			ldapDao.update(cfg, null);
+			CFG_MAP.put(CFG_SIMPLE_BIND, cfg);
+		}
 	}
 
 	@BeforeEach
@@ -185,5 +204,18 @@ public class TestLdap extends AbstractWicketTesterTest {
 	void testSbndSearchHijack() {
 		LdapConfig cfg = CFG_MAP.get(CFG_SEARCH_BIND);
 		assertThrows(OmException.class, () -> WebSession.get().signIn("admin)(|(uid=*", BAD_PASSWORD, User.Type.LDAP, cfg.getId()));
+	}
+
+	@Test
+	void testSimpleBndHijack() {
+		LdapConfig cfg = CFG_MAP.get(CFG_SIMPLE_BIND);
+		assertThrows(OmException.class, () -> WebSession.get().signIn("admin)(|(uid=*", BAD_PASSWORD, User.Type.LDAP, cfg.getId()));
+	}
+
+	@ParameterizedTest
+	@NullAndEmptySource
+	void testSimpleBndNoPaswd(String passwd) {
+		LdapConfig cfg = CFG_MAP.get(CFG_SIMPLE_BIND);
+		assertThrows(OmException.class, () -> WebSession.get().signIn(USER2, passwd, User.Type.LDAP, cfg.getId()));
 	}
 }

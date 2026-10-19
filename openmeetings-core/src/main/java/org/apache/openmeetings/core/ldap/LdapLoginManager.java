@@ -184,7 +184,7 @@ public class LdapLoginManager {
 				entry = search.getValue();
 				break;
 			case SIMPLEBIND:
-				userDn = new Dn(String.format(w.options.userDn, FilterEncoder.encodeFilterValue(login)));
+				userDn = new Dn(String.format(w.options.userDn, Rdn.escapeValue(login)));
 				w.conn.bind(userDn, passwd);
 				break;
 			case NONE:
@@ -235,6 +235,10 @@ public class LdapLoginManager {
 		if (!userDao.validLogin(inLogin)) {
 			log.error("Invalid login provided");
 			return null;
+		}
+		if (passwd == null || passwd.isEmpty()) {
+			log.error("Password is required");
+			throw BAD_CREDENTIALS;
 		}
 
 		User u = null;

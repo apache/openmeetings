@@ -137,7 +137,7 @@ public class SignInDialog extends Modal<String> {
 		@Override
 		protected void onInitialize() {
 			loginField.setLabel(new ResourceModel("114"));
-			passField.setLabel(new ResourceModel("110"));
+			passField.setLabel(new ResourceModel("110")).setRequired(true);
 			super.onInitialize();
 			if (WebSession.get().isSignedIn()) {
 				alreadyLoggedIn();
