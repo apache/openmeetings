@@ -89,7 +89,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 	protected FileItem getFileItem(Attributes attr) {
 		PageParameters params = attr.getParameters();
 		StringValue idStr = params.get("id");
-		String uid = params.get("uid").toString();
+		String sid = params.get("sid").toString();
 		Long id = null;
 		try {
 			id = idStr.toOptionalLong();
@@ -97,7 +97,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 			//no-op expected
 		}
 		WebSession ws = WebSession.get();
-		Client c = cm.get(uid);
+		Client c = cm.getBySid(sid);
 		if (id == null || !ws.isSignedIn() || c == null) {
 			return null;
 		}

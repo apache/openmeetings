@@ -110,7 +110,7 @@ public class WbWebSocketHelper {
 				.add("ruid", ruid)
 				.add("wuid", inFile.optString("uid"));
 		if (c != null) {
-			pp.add("uid", c.getUid());
+			pp.add("sid", c.getSid());
 		}
 		file.put("deleted", !fi.exists());
 		switch (fi.getType()) {
@@ -142,7 +142,7 @@ public class WbWebSocketHelper {
 
 	//This is required cause WebSocketHelper will send message async
 	private static String patchUrl(String url, Client c) {
-		return url + "&uid=" + c.getUid();
+		return url + "&sid=" + c.getSid();
 	}
 
 	private static JSONObject patchUrls(BaseFileItem fi, Client c, JSONObject inFile) {

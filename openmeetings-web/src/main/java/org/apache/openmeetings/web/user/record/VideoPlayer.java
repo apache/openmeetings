@@ -77,7 +77,7 @@ public class VideoPlayer extends Panel {
 				player.replace(mp4Rec);
 				player.setPoster(posterRecRes, pp);
 			} else {
-				pp.add("id", r.getId()).add("uid", findParent(MainPanel.class).getClient().getUid());
+				pp.add("id", r.getId()).add("sid", findParent(MainPanel.class).getClient().getSid());
 				mp4File.setPageParameters(pp);
 				player.replace(mp4File);
 				player.setPoster(posterFileRes, new PageParameters(pp).add("preview", true));
