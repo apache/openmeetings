@@ -1126,7 +1126,7 @@
 				<artifactId>apache-rat-plugin</artifactId>
 				<configuration>
 					<skip>${om.quick.build}</skip>
-                                        <config>${maven.multiModuleProjectDirectory}/.rat-config.xml</config>
+					<config>${project.rootDirectory}/.rat-config.xml</config>
 				</configuration>
 				<executions>
 					<execution>
@@ -1512,7 +1512,7 @@
 										<version>[${javaVersion}.0,)</version>
 									</requireJavaVersion>
 									<requireMavenVersion>
-										<version>3.6.0</version>
+										<version>3.10.0</version>
 									</requireMavenVersion>
 								</rules>
 								<failFast>true</failFast>

@@ -24,7 +24,7 @@ All available mailing lists are listed here:
 
 ### Prerequisites
 Apache OpenMeeting requires the following software to build:
-- [Apache Maven 3.8.7 or later](https://maven.apache.org/)
+- [Apache Maven 3.10.0 or later](https://maven.apache.org/)
 
 Apache OpenMeetings requires the following software to run:
 - [Java SE 21](https://www.oracle.com/java/technologies/downloads/#java21)
