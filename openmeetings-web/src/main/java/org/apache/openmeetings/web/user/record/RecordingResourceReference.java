@@ -64,7 +64,7 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 		PageParameters params = attributes.getParameters();
 		StringValue inId = params.get("id");
 		String ruid = params.get("ruid").toString();
-		String uid = params.get("uid").toString();
+		String sid = params.get("sid").toString();
 		String wbItemId = params.get("wuid").toString();
 		Long id = null;
 		try {
@@ -77,12 +77,12 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 			id = getRecordingId();
 		}
 		if (id != null && ws.isSignedIn()) {
-			return getRecording(id, ruid, uid, wbItemId);
+			return getRecording(id, ruid, sid, wbItemId);
 		}
 		return null;
 	}
 
-	private Recording getRecording(Long id, String ruid, String uid, String wbItemId) {
+	private Recording getRecording(Long id, String ruid, String sid, String wbItemId) {
 		log.debug("Recording with id {} is requested", id);
 		Recording r = recDao.get(id);
 		if (r == null || r.getType() == Type.FOLDER || r.isDeleted()) {
@@ -91,7 +91,10 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 		if (id.equals(getRecordingId())) {
 			return r;
 		}
-		Client c = cm.get(uid);
+		Client c = cm.getBySid(sid);
+		if (c != null && !getUserId().equals(c.getUserId())) {
+			c = null;
+		}
 		if (isAtWb(c, ruid, wbItemId, r.getId())) {
 			return r; // item IS on WB
 		}

@@ -98,7 +98,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 		}
 		WebSession ws = WebSession.get();
 		Client c = cm.getBySid(sid);
-		if (id == null || !ws.isSignedIn() || c == null) {
+		if (id == null || !ws.isSignedIn() || c == null || !getUserId().equals(c.getUserId())) {
 			return null;
 		}
 		FileItem f = (FileItem)fileDao.getAny(id);
