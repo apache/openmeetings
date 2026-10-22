@@ -37,18 +37,37 @@ import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
 
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Set;
 
 public class ProfileImageResourceReference extends ResourceReference {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(ProfileImageResourceReference.class);
+	private static final Set<String> ALLOWED_SCHEMAS = new HashSet<>();
+	private static final URI EMPTY_URI = URI.create("");
 	@Inject
 	private UserDao userDao;
+
+	static {
+		Properties props = new Properties();
+		try (final InputStream is = ProfileImageResourceReference.class.getResourceAsStream("/openmeetings.properties")) {
+			props.load(is);
+		} catch (Exception e) {
+			log.error("Failed to load openmeetings.properties {}", e.getMessage());
+		}
+		String[] schemas = props.getProperty("valid.avatar.schemas", "https").split(",");
+		for (String schema : schemas) {
+			ALLOWED_SCHEMAS.add(schema);
+		}
+	}
 
 	public ProfileImageResourceReference() {
 		super(ProfileImageResourceReference.class, "profile");
@@ -59,24 +78,38 @@ public class ProfileImageResourceReference extends ResourceReference {
 		return getUrl(rc, userDao.get(userId));
 	}
 
-	public static String getUrl(RequestCycle rc, User u) {
-		String uri = u.getPictureUri();
-		if (isRelative(uri)) {
-			File img = OmFileHelper.getUserProfilePicture(u.getId(), uri);
-			uri = rc.urlFor(new ProfileImageResourceReference()
-					, new PageParameters().add("id", u.getId()).add("anticache", img.lastModified())).toString();
-		}
-		return uri;
+	public static PageParameters getImgParams(User u) {
+		return new PageParameters()
+				.add("id", u.getId())
+				.add("anticache", Optional.ofNullable(u.getUpdated())
+						.orElse(u.getInserted()).getTime());
 	}
 
-	private static boolean isRelative(String uri) {
-		boolean relative = true;
+	public static String getUrl(RequestCycle rc, User u) {
+		URI uri = sanitize(u);
+		return !uri.isAbsolute()
+			? rc.urlFor(new ProfileImageResourceReference(), getImgParams(u)).toString()
+			: uri.toString();
+	}
+
+	//package private for testing
+	static URI sanitize(User u) {
+		URI uri = EMPTY_URI;
 		try {
-			relative = !URI.create(uri).isAbsolute();
+			uri = u == null ? EMPTY_URI : URI.create(u.getPictureUri());
+			if (!uri.isAbsolute()) {
+				return uri;
+			}
+			if (!ALLOWED_SCHEMAS.contains(uri.getScheme())) {
+				return EMPTY_URI;
+			}
+			//let's check if we can construct URL out of this
+			URL url = uri.toURL();
+			uri = url.toURI().normalize();
 		} catch (Exception e) {
-			//no-op
+			uri = EMPTY_URI;
 		}
-		return relative;
+		return uri;
 	}
 
 	@Override
@@ -84,7 +117,7 @@ public class ProfileImageResourceReference extends ResourceReference {
 		return new ByteArrayResource(PNG_MIME_TYPE) {
 			private static final long serialVersionUID = 1L;
 			private Long userId = null;
-			private String uri = null;
+			private URI uri = null;
 
 			@Override
 			protected ResourceResponse newResourceResponse(Attributes attributes) {
@@ -93,7 +126,7 @@ public class ProfileImageResourceReference extends ResourceReference {
 					PageParameters params = attributes.getParameters();
 					try {
 						userId = params.get("id").toOptionalLong();
-						uri = SIP_USER_ID.equals(userId) ? null : userDao.get(userId).getPictureUri();
+						uri = sanitize(userDao.get(userId));
 					} catch (Exception e) {
 						// no-op, junk filter
 					}
@@ -109,8 +142,8 @@ public class ProfileImageResourceReference extends ResourceReference {
 
 			@Override
 			protected byte[] getData(Attributes attributes) {
-				if (isRelative(uri)) {
-					File img = OmFileHelper.getUserProfilePicture(userId, uri);
+				if (!uri.isAbsolute()) {
+					File img = OmFileHelper.getUserProfilePicture(userId, uri.toString());
 					try (InputStream is = new FileInputStream(img)) {
 						return IOUtils.toByteArray(is);
 					} catch (Exception e) {

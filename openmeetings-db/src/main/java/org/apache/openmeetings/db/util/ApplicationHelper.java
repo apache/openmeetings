@@ -24,7 +24,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.UUID;
@@ -58,6 +62,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 public class ApplicationHelper {
 	private static final Logger log = LoggerFactory.getLogger(ApplicationHelper.class);
 	private static final Object SYNC_OBJ = new Object();
+	private static final String TEMP_PREFIX = "_OM-temp-test_";
 
 	private ApplicationHelper() {}
 
@@ -68,7 +73,7 @@ public class ApplicationHelper {
 			try {
 				app = (WebApplication)getAppClass().getDeclaredConstructor().newInstance();
 				app.setName(String.format("--%s--", UUID.randomUUID())); //temporary name for temporary application
-				final ServletContext sc = new MockServletContext(app, null);
+				final ServletContext sc = new MockServletContext(app, Files.createTempDirectory(TEMP_PREFIX).toString());
 				XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();
 				xmlContext.setConfigLocation("classpath:applicationContext.xml");
 				xmlContext.setServletContext(sc);
@@ -109,7 +114,7 @@ public class ApplicationHelper {
 					};
 					app.setWicketFilter(filter);
 				}
-			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | InvocationTargetException | NoSuchMethodException e) {
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | InvocationTargetException | NoSuchMethodException | IOException e) {
 				log.error("Failed to create Application");
 			}
 		}
@@ -178,6 +183,14 @@ public class ApplicationHelper {
 
 	public static void destroyApplication() {
 		WebApplication app = (WebApplication)Application.get(getWicketApplicationName());
+		Path root = Paths.get(app.getServletContext().getRealPath("/"));
+		if (root.getFileName().startsWith(TEMP_PREFIX)) {
+			try {
+				Files.deleteIfExists(root);
+			} catch (IOException e) {
+				log.error("Failed to delete temp root");
+			}
+		}
 		WebApplicationContext ctx = getWebApplicationContext(app.getServletContext());
 		app.internalDestroy(); //need to be called too
 		if (ctx != null) {

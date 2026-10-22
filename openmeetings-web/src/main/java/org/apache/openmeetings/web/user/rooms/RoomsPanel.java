@@ -18,18 +18,14 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.UserPanel;
-import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -37,9 +33,6 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.ByteArrayResource;
-
-import org.apache.wicket.util.io.IOUtils;
 
 import jakarta.inject.Inject;
 
@@ -56,8 +49,6 @@ public class RoomsPanel extends UserPanel {
 	private Long roomId = 0L;
 
 	@Inject
-	private UserDao userDao;
-	@Inject
 	private ClientManager cm;
 	@Inject
 	private RoomDao roomDao;
@@ -71,32 +62,9 @@ public class RoomsPanel extends UserPanel {
 			@Override
 			protected void populateItem(final ListItem<Client> item) {
 				Client client = item.getModelObject();
-				final Long userId = client.getUserId();
-				item.add(new Image("clientImage", new ByteArrayResource("image/png") {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected ResourceResponse newResourceResponse(Attributes attributes) {
-						ResourceResponse rr = super.newResourceResponse(attributes);
-						rr.disableCaching();
-						return rr;
-					}
-
-					@Override
-					protected byte[] getData(Attributes attributes) {
-						String uri = null;
-						if (userId != null) {
-							uri = userDao.get(userId > 0 ? userId : -userId).getPictureUri();
-						}
-						File img = OmFileHelper.getUserProfilePicture(userId, uri);
-						try (InputStream is = new FileInputStream(img)) {
-							return IOUtils.toByteArray(is);
-						} catch (Exception e) {
-							//no-op
-						}
-						return null;
-					}
-				}));
+				item.add(new Image("clientImage",
+						new ProfileImageResourceReference(),
+						ProfileImageResourceReference.getImgParams(client.getUser())));
 				item.add(new Label("clientLogin", client.getUser().getLogin()));
 				item.add(new Label("from", client.getConnectedSince()));
 			}

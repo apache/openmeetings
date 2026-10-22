@@ -598,7 +598,10 @@ public class RoomPanel extends BasePanel {
 			return;
 		}
 		if (!curClient.getUid().equals(c.getUid())) {
-			handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.mute('%s', %s);}", obj.getString("uid"), obj.getBoolean("mute")));
+			handler.appendJavaScript(String.format("""
+				if (typeof(VideoManager) !== 'undefined') {
+					VideoManager.mute('%s', %s);
+				}""", obj.getString("uid"), obj.getBoolean("mute")));
 		}
 	}
 
@@ -609,7 +612,10 @@ public class RoomPanel extends BasePanel {
 			// no luck
 			return;
 		}
-		handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.muteOthers('%s');}", uid));
+		handler.appendJavaScript(String.format("""
+			if (typeof(VideoManager) !== 'undefined') {
+				VideoManager.muteOthers('%s');
+			}""", uid));
 	}
 
 	private void onWbPutFile(TextRoomMessage m) {
@@ -629,11 +635,18 @@ public class RoomPanel extends BasePanel {
 		Client curClient = getClient();
 		if (r.isInterview() && curClient.hasRight(Right.MODERATOR)) {
 			if (streamProcessor.isRecording(r.getId())) {
-				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
+				handler.appendJavaScript("""
+					if (typeof(WbArea) === 'object') {
+						WbArea.setRecStarted(true);
+					}""");
 			} else if (streamProcessor.recordingAllowed(getClient())) {
 				boolean hasStreams = cm.streamByRoom(r.getId())
 						.anyMatch(cl -> !cl.getStreams().isEmpty());
-				handler.appendJavaScript(String.format("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(false);WbArea.setRecEnabled(%s);}", hasStreams));
+				handler.appendJavaScript(String.format("""
+					if (typeof(WbArea) === 'object') {
+						WbArea.setRecStarted(false);
+						WbArea.setRecEnabled(%s);
+					}""", hasStreams));
 			}
 		}
 	}
