@@ -97,7 +97,7 @@
 		<ical4j.version>4.4.0</ical4j.version>
 		<cxf.version>4.2.4</cxf.version>
 		<io.prometheus.version>1.10.0</io.prometheus.version>
-		<aspectjtools.version>1.9.25.1</aspectjtools.version>
+		<aspectjtools.version>1.9.26</aspectjtools.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.5.7</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
