@@ -91,7 +91,7 @@
 		<wicketstuff.version>10.12.0-SNAPSHOT</wicketstuff.version>
 		<wicket-bootstrap.version>7.0.15</wicket-bootstrap.version>
 		<fullcalendar.version>7.1.0</fullcalendar.version>
-		<spring.version>7.0.9</spring.version>
+		<spring.version>7.0.10</spring.version>
 		<tomcat.version>11.0.27</tomcat.version>
 		<jetty.version>11.0.26</jetty.version>
 		<ical4j.version>4.4.0</ical4j.version>
