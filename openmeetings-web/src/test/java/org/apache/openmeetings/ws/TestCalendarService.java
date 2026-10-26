@@ -319,7 +319,8 @@ class TestCalendarService extends AbstractWebServiceTest {
 		List<MeetingMemberDTO> initialList = new ArrayList<>(dto.getMeetingMembers());
 		MeetingMemberDao mmDao = getBean(MeetingMemberDao.class);
 		MeetingMember mm = mmDao.get(initialList.get(initialList.size() - 1).getId());
-		Long mmId = mm.getId(), mmUserId = mm.getUser().getId();
+		Long mmId = mm.getId();
+		Long mmUserId = mm.getUser().getId();
 		String hash = mm.getInvitation().getHash();
 		dto.getMeetingMembers().remove(initialList.size() - 1);
 

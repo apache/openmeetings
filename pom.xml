@@ -45,7 +45,7 @@
 
 		<!-- plugin versions -->
 		<version.maven-javadoc-plugin>3.12.0</version.maven-javadoc-plugin>
-		<version.maven-surefire>3.6.0</version.maven-surefire>
+		<surefire.version>3.6.1</surefire.version>
 		<version.maven-site-plugin>4.0.0-M16</version.maven-site-plugin>
 		<version.maven-enforcer-plugin>3.6.3</version.maven-enforcer-plugin>
 		<version.maven-source-plugin>3.4.0</version.maven-source-plugin>
@@ -130,8 +130,7 @@
 		<jackrabbit-webdav.version>2.21.22</jackrabbit-webdav.version>
 		<tika-parsers.version>4.1.0</tika-parsers.version>
 		<slf4j.version>2.0.20</slf4j.version>
-		<logback.version>1.6.5</logback.version>
-		<license.excludedScopes>test</license.excludedScopes>
+		<logback.version>1.6.6</logback.version>
 		<bcprov.version>1.86</bcprov.version>
 		<mockito.version>5.24.0</mockito.version>
 		<quartz.version>2.5.2</quartz.version>
@@ -152,6 +151,7 @@
 		<sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
 		<jacoco.binary.path>${project.basedir}/../target/jacoco.exec</jacoco.binary.path>
 		<excluded.test.groups>heavy-test</excluded.test.groups>
+		<license.excludedScopes>test</license.excludedScopes>
 		<db_user></db_user>
 		<db_pass></db_pass>
 	</properties>
