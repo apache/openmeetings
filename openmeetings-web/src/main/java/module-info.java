@@ -52,8 +52,6 @@ module org.apache.openmeetings.web {
 	requires org.wicketstuff.datastore.hazelcast;
 	requires org.wicketstuff.select2;
 	requires org.wicketstuff.urlfragment;
-	requires org.wicketstuff.jqplot;
-	requires org.wicketstuff.jqplot4j;
 	requires org.wicketstuff.jquery.ui;
 	requires org.wicketstuff.jquery.ui.calendar;
 	requires org.wicketstuff.jquery.ui.core;

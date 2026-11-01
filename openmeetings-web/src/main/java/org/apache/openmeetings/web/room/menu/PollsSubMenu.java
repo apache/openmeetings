@@ -142,7 +142,7 @@ public class PollsSubMenu implements Serializable {
 
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
-				pollResults.updateModel(target, true, room.getClient().hasRight(Room.Right.MODERATOR));
+				pollResults.updateModel(target, room.getClient().hasRight(Room.Right.MODERATOR));
 				pollResults.show(target);
 			}
 		};
@@ -181,7 +181,7 @@ public class PollsSubMenu implements Serializable {
 			vote.show(handler);
 		}
 		if (pollResults.isOpened()) {
-			pollResults.updateModel(handler, false, room.getClient().hasRight(Room.Right.MODERATOR));
+			pollResults.updateModel(handler, room.getClient().hasRight(Room.Right.MODERATOR));
 		}
 	}
 

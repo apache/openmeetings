@@ -26,6 +26,7 @@
 	"dependencies": {
 		"fabric": "7.4.0",
 		"freeice": "2.2.2",
+		"chart.js": "4.6.1",
 		"@mathjax/mathjax-newcm-font": "^4.1.0",
 		"@mathjax/src": "^4.1.0",
 		"nosleep.js": "^0.12.0",

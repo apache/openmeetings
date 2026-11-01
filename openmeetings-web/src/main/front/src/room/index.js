@@ -1,4 +1,5 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+import { OmCharts } from './omcharts'
 
 // Let's re-style jquery-ui dialogs and buttons
 Object.assign($.ui.dialog.prototype.options.classes, {
@@ -19,4 +20,5 @@ Object.assign(window, {
 	, Room: require('./room')
 	, Activities: require('./activities')
 	, UserSettings: require('./user-settings')
+	, OmCharts: OmCharts
 });
