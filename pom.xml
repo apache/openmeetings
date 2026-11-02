@@ -1552,8 +1552,8 @@
 					</dependencies>
 				</plugin>
 				<plugin>
-					<groupId>org.eclipse.jetty.ee11</groupId>
-					<artifactId>jetty-ee11-webapp</artifactId>
+					<groupId>org.eclipse.jetty.ee10</groupId>
+					<artifactId>jetty-ee10-webapp</artifactId>
 					<version>${jetty.version}</version>
 					<configuration>
 						<systemProperties>
