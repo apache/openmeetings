@@ -16,7 +16,7 @@ function __alert(level, msg, autohideAfter) {
 			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="${holder.getAttribute('data-lbl-close')}"></button>
 		</div>`);
 	if (autohideAfter > 0) {
-		setTimeout(() => { bootstrap.Alert.getOrCreateInstance(`#${curId}`).close();}, autohideAfter);
+		setTimeout(() => bootstrap.Alert.getOrCreateInstance(`#${curId}`).close(), autohideAfter);
 	}
 }
 function _error(msg, noAlert) {

@@ -263,7 +263,10 @@ function _askPermission(callback) {
 			class: 'btn btn-sm btn-warning'
 			, label: perm.data('btn-ok')
 			, value: perm.data('btn-ok')
-			, onClick: callback
+			, onClick: function() {
+				callback();
+				$('.sidebar').confirmation('dispose');
+			}
 		}]
 	});
 	$('.sidebar').confirmation('show');

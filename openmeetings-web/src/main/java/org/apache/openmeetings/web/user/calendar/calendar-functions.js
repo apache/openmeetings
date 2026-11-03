@@ -26,7 +26,7 @@ function onOmGotoClick() {
 				, format: 'LLL'
 			}
 		});
-		gotoBtn.datetimepicker.subscribe(tempusDominus.Namespace.events.hide, (e) => {
+		gotoBtn.datetimepicker.subscribe(tempusDominus.Namespace.events.hide, e => {
 			document.querySelector('#calendar').calendar.gotoDate(e.date.startOf('date'));
 		});
 		gotoBtn.datetimepicker.show();

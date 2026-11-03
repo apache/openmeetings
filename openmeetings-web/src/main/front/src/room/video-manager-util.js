@@ -60,10 +60,10 @@ function _clickMuteOthers(uid) {
 }
 
 module.exports = {
-	init: (_share) => {
+	init: _share => {
 		share = _share;
 	}
-	, sendMessage: (_m) => {
+	, sendMessage: _m => {
 		OmUtil.sendMessage(_m, {type: 'kurento'});
 	}
 	, savePod: __savePod

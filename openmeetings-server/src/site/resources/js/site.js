@@ -17,7 +17,7 @@
   under the License.
 
 */
-window.addEventListener("load", (event) => {
+window.addEventListener("load", () => {
 	// "New" markers
 	["Call For Logo", "REST API Swagger"].forEach(
 		topic => document.querySelector(`ul.nav li a[title="${topic}"`)

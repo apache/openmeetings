@@ -4,7 +4,7 @@ const NetTest = (function() {
 		, DELAY = 3000, KB = 1024, MB = KB * KB;
 	let output, lbls, tests, testName, testLabel, testNext, bulk = true;
 
-	const average = (array) => array.reduce((a, b) => a + b) / array.length;
+	const average = array => array.reduce((a, b) => a + b) / array.length;
 
 	function _init(_lbls) {
 		lbls = _lbls;

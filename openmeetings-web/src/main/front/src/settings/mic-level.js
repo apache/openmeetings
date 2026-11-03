@@ -30,7 +30,7 @@ module.exports = class MicLevel {
 				_error(err);
 			}
 		};
-		this.setCanvas = (_cnvs) => {
+		this.setCanvas = _cnvs => {
 			cnvs = _cnvs;
 			const canvas = cnvs[0];
 			canvasCtx = canvas.getContext('2d');

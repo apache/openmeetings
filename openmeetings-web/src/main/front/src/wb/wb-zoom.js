@@ -22,7 +22,7 @@ export class WbZoom {
 			}});
 		}
 
-		this.init = (wbo) => {
+		this.init = wbo => {
 			this.zoom = wbo.zoom;
 			this.zoomMode = wbo.zoomMode;
 		};
@@ -48,7 +48,7 @@ export class WbZoom {
 				zoomBar.find('.doc-group button').prop("disabled", true);
 			}
 		};
-		this.setRole = (role) => {
+		this.setRole = role => {
 			wbEl.find('.wb-zoom').remove();
 			zoomBar = OmUtil.tmpl('#wb-zoom');
 			wbEl.find('.wb-zoom-block').append(zoomBar);

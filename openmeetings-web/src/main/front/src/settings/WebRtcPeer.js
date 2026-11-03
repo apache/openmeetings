@@ -72,7 +72,7 @@ class WebRtcPeer {
 
 		this.pc = new RTCPeerConnection({ iceServers: this.configuration.iceServers });
 
-		this._iceCandidateListener = (event) => {
+		this._iceCandidateListener = event => {
 			if (event.candidate !== null) {
 				// `RTCPeerConnectionIceEvent.candidate` is supposed to be an RTCIceCandidate:
 				// https://w3c.github.io/webrtc-pc/#dom-rtcpeerconnectioniceevent-candidate
@@ -327,7 +327,7 @@ class WebRtcPeer {
 						continue;
 					}
 
-					let tc = this.pc.getTransceivers().find((tc) => tc.receiver.track.kind === kind);
+					let tc = this.pc.getTransceivers().find(tc => tc.receiver.track.kind === kind);
 
 					if (tc) {
 						// Enforce our desired direction.
@@ -339,8 +339,8 @@ class WebRtcPeer {
 
 				this.pc
 					.createAnswer()
-					.then((sdpAnswer) => resolve(sdpAnswer))
-					.catch((error) => reject(error));
+					.then(sdpAnswer => resolve(sdpAnswer))
+					.catch(error => reject(error));
 			} else {
 				// TODO: Delete else branch when all supported browsers are
 				// modern enough to implement the Transceiver methods
@@ -357,8 +357,8 @@ class WebRtcPeer {
 						offerToReceiveVideo: offerVideo
 					};
 					(this.pc).createAnswer(constraints)
-						.then((sdpAnswer) => resolve(sdpAnswer))
-						.catch((error) => reject(error));
+						.then(sdpAnswer => resolve(sdpAnswer))
+						.catch(error => reject(error));
 				}
 			}
 
@@ -383,7 +383,7 @@ class WebRtcPeer {
 						return reject('Local description is not defined');
 					}
 				})
-				.catch((error) => reject(error));
+				.catch(error => reject(error));
 		});
 	}
 
@@ -403,7 +403,7 @@ class WebRtcPeer {
 			}
 			this.setRemoteDescription(offer)
 				.then(() => resolve())
-				.catch((error) => reject(error));
+				.catch(error => reject(error));
 		});
 	}
 
@@ -419,7 +419,7 @@ class WebRtcPeer {
 			this.pc
 				.setLocalDescription(answer)
 				.then(() => resolve())
-				.catch((error) => reject(error));
+				.catch(error => reject(error));
 		});
 	}
 
@@ -441,7 +441,7 @@ class WebRtcPeer {
 				.then(() => {
 					resolve();
 				})
-				.catch((error) => reject(error));
+				.catch(error => reject(error));
 		});
 	}
 
@@ -468,7 +468,7 @@ class WebRtcPeer {
 						this.pc
 							.addIceCandidate(iceCandidate)
 							.then(() => resolve())
-							.catch((error) => reject(error));
+							.catch(error => reject(error));
 					} else {
 						this.iceCandidateList.push(iceCandidate);
 						resolve();

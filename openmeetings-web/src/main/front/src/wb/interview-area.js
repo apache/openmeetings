@@ -16,7 +16,7 @@ export class InterviewWbArea extends WbAreaBase {
 				empt.remove();
 			}
 			const cls = 'pod-area max' +
-				[2, 3, 5, 9, 13, 17, 25, 33].find((el) => {
+				[2, 3, 5, 9, 13, 17, 25, 33].find(el => {
 					return count < el;
 				});
 			pArea.attr('class', cls);
@@ -73,13 +73,13 @@ export class InterviewWbArea extends WbAreaBase {
 			// it seems `super` can't be called from lambda
 			this.wsdestroy();
 		};
-		this.setRecEnabled = (en) => {
+		this.setRecEnabled = en => {
 			if (!_inited) {
 				return;
 			}
 			rec.data('mode', 'rec').button('option', {disabled: !en, icon: 'record'});
 		};
-		this.setRecStarted = (started) => {
+		this.setRecStarted = started => {
 			if (!_inited) {
 				return;
 			}

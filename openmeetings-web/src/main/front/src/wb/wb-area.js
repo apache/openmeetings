@@ -247,12 +247,12 @@ export class DrawWbArea extends WbAreaBase {
 			}
 		}
 
-		this.init = (callback) => {
+		this.init = callback => {
 			// it seems `super` can't be called from lambda
 			this.wsinit();
 			_doInit(callback);
 		};
-		this.setRole = (_role) => {
+		this.setRole = _role => {
 			if (!_inited) {
 				return;
 			}
@@ -295,7 +295,7 @@ export class DrawWbArea extends WbAreaBase {
 			this.wsdestroy();
 			this.removeDeleteHandler();
 		};
-		this.create = (obj) => {
+		this.create = obj => {
 			if (!_inited) {
 				return;
 			}
@@ -338,7 +338,7 @@ export class DrawWbArea extends WbAreaBase {
 			wb.on('remove', wbo.destroy);
 			wb.data(wbo);
 		};
-		this.createWb = (obj) => {
+		this.createWb = obj => {
 			if (!_inited) {
 				return;
 			}
@@ -346,19 +346,19 @@ export class DrawWbArea extends WbAreaBase {
 			_activateTab(obj.wbId);
 			_actionActivateWb(obj.wbId);
 		};
-		this.activateWb = (obj) => {
+		this.activateWb = obj => {
 			if (!_inited) {
 				return;
 			}
 			_activateTab(obj.wbId);
 		};
-		this.renameWb = (obj) => {
+		this.renameWb = obj => {
 			if (!_inited) {
 				return;
 			}
 			_renameTab(obj);
 		};
-		this.removeWb = (obj) => {
+		this.removeWb = obj => {
 			if (!_inited) {
 				return;
 			}
@@ -367,55 +367,55 @@ export class DrawWbArea extends WbAreaBase {
 			_actionActivateWb(obj.prevWbId);
 			__updateTabBarPreNextWhiteboardBTNs();
 		};
-		this.load = (json) => {
+		this.load = json => {
 			if (!_inited) {
 				return;
 			}
 			_getWb(json.wbId).load(json.obj);
 		};
-		this.setSlide = (json) => {
+		this.setSlide = json => {
 			if (!_inited) {
 				return;
 			}
 			_getWb(json.wbId).setSlide(json.slide);
 		};
-		this.createObj = (json) => {
+		this.createObj = json => {
 			if (!_inited) {
 				return;
 			}
 			_getWb(json.wbId).createObj(json.obj);
 		};
-		this.modifyObj = (json) => {
+		this.modifyObj = json => {
 			if (!_inited) {
 				return;
 			}
 			_getWb(json.wbId).modifyObj(json.obj);
 		};
-		this.deleteObj = (json) => {
+		this.deleteObj = json => {
 			if (!_inited) {
 				return;
 			}
 			_getWb(json.wbId).removeObj(json.obj);
 		};
-		this.clearAll = (json) => {
+		this.clearAll = json => {
 			if (!_inited) {
 				return;
 			}
 			_getWb(json.wbId).clearAll();
 		};
-		this.clearSlide = (json) => {
+		this.clearSlide = json => {
 			if (!_inited) {
 				return;
 			}
 			_getWb(json.wbId).clearSlide(json.slide);
 		};
-		this.setSize = (json) => {
+		this.setSize = json => {
 			if (!_inited) {
 				return;
 			}
 			_getWb(json.wbId).setSize(json);
 		};
-		this.download = (fmt) => {
+		this.download = fmt => {
 			if (!_inited) {
 				return;
 			}

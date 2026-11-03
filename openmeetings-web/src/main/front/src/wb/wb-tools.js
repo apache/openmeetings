@@ -300,7 +300,7 @@ export class WbTools {
 			});
 		}
 
-		this.setRole = (role) => {
+		this.setRole = role => {
 			const btn = _getBtn();
 			if (__validBtn(btn)) {
 				btn.data().deactivate();

@@ -165,7 +165,7 @@ export class Wb {
 			}
 			o.includeDefaultValues = false;
 			if ('activeselection' === o.type) {
-				o.clone(extraProps).then((cloned) => {
+				o.clone(extraProps).then(cloned => {
 					// ungrouping
 					cloned.includeDefaultValues = false;
 					const _items = cloned.removeAll();
@@ -307,7 +307,7 @@ export class Wb {
 			}
 		}
 
-		this._toOmJson = (o) => {
+		this._toOmJson = o => {
 			const r = o.toObject(extraProps);
 			switch (o.omType) {
 				case 'Video':
@@ -321,7 +321,7 @@ export class Wb {
 			}
 			return r;
 		};
-		this._findObject = (o) => {
+		this._findObject = o => {
 			let _o = null;
 			const cnvs = canvases[o.slide];
 			if (!!cnvs) {
@@ -334,7 +334,7 @@ export class Wb {
 			}
 			return _o;
 		};
-		this.setRole = (_role) => {
+		this.setRole = _role => {
 			if (role !== _role) {
 				role = _role;
 				const sc = wbEl.find('.scroll-container');
@@ -358,7 +358,7 @@ export class Wb {
 				_setSize();
 			}
 		};
-		this.setSize = (wbo) => {
+		this.setSize = wbo => {
 			this.width = wbo.width;
 			this.height = wbo.height;
 			zoomBar.init(wbo);
@@ -387,7 +387,7 @@ export class Wb {
 				}
 			});
 		};
-		this._doSetSlide = (_sld) => {
+		this._doSetSlide = _sld => {
 			const sld = 1 * _sld;
 			if (sld < 0 || sld > canvases.length - 1) {
 				return;
@@ -399,11 +399,11 @@ export class Wb {
 			}});
 			zoomBar.update(role, canvases.length);
 		};
-		this.setSlide = (_sl) => {
+		this.setSlide = _sl => {
 			self.slide = _sl;
 			self._showCurrentSlide();
 		};
-		this.createObj = (obj) => {
+		this.createObj = obj => {
 			const arr = [], del = [], _arr = Array.isArray(obj) ? obj : [obj];
 			for (let i = 0; i < _arr.length; ++i) {
 				const o = _arr[i];
@@ -440,7 +440,7 @@ export class Wb {
 			}
 		};
 		this.load = this.createObj;
-		this.modifyObj = (obj) => { //TODO need to be unified
+		this.modifyObj = obj => { //TODO need to be unified
 			const arr = [], _arr = Array.isArray(obj) ? obj : [obj];
 			for (let i = 0; i < _arr.length; ++i) {
 				const o = _arr[i];
@@ -487,7 +487,7 @@ export class Wb {
 			canvases[0].clear();
 			zoomBar.update(role, canvases.length);
 		};
-		this.clearSlide = (_sl) => {
+		this.clearSlide = _sl => {
 			if (canvases.length > _sl) {
 				const canvas = canvases[_sl];
 				let arr = canvas.getObjects();
@@ -499,10 +499,10 @@ export class Wb {
 				canvas.requestRenderAll();
 			}
 		};
-		this.getCanvas = (_slide) => {
+		this.getCanvas = _slide => {
 			return canvases[typeof(_slide) === 'number' ? _slide : self.slide];
 		};
-		this.eachCanvas = (func) => {
+		this.eachCanvas = func => {
 			for (let i = 0; i < canvases.length; ++i) {
 				func(canvases[i]);
 			}

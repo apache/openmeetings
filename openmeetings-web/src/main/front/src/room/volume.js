@@ -21,7 +21,7 @@ module.exports = class Volume {
 			}, 3000);
 		}
 
-		this.create = (_video) => {
+		this.create = _video => {
 			video = _video;
 			this.destroy();
 			const uid = video.stream().uid
@@ -69,7 +69,7 @@ module.exports = class Volume {
 			this.mute(muted);
 			return vol;
 		};
-		this.handle = (val) => {
+		this.handle = val => {
 			handleEl.text(val);
 			const vidEl = video.video()
 				, data = vidEl.data();
@@ -89,7 +89,7 @@ module.exports = class Volume {
 				video.handleMicStatus(false);
 			}
 		};
-		this.mute = (mute) => {
+		this.mute = mute => {
 			if (!slider) {
 				return;
 			}

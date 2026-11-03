@@ -4,10 +4,10 @@ module.exports = class RingBuffer {
 		const buffer = [];
 		let pos = 0;
 
-		this.get = (key) => {
+		this.get = key => {
 			return buffer[key];
 		};
-		this.push = (item) => {
+		this.push = item => {
 			buffer[pos] = item;
 			pos = (pos + 1) % length;
 		};

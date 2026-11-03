@@ -42,12 +42,6 @@ module.exports = class Video {
 			}
 		}
 		function _getScreenStream(msg, state, callback) {
-			function __handleScreenError(err) {
-				VideoMgrUtil.sendMessage({id: 'errorSharing'});
-				Sharer.setShareState(Sharer.SHARE_STOPPED);
-				Sharer.setRecState(Sharer.SHARE_STOPPED);
-				OmUtil.error(err);
-			}
 			const b = VideoUtil.browser;
 			let promise, cnts;
 			if (VideoUtil.isEdge() && b.major > 16) {
@@ -60,7 +54,7 @@ module.exports = class Video {
 					video: true
 				};
 				if (VideoUtil.isSafari()) {
-					promise = new Promise((resolve) => {
+					promise = new Promise(resolve => {
 						VideoUtil.askPermission(resolve);
 					}).then(() => navigator.mediaDevices.getDisplayMedia(cnts));
 				} else {
@@ -73,12 +67,18 @@ module.exports = class Video {
 				});
 			}
 			promise.then(stream => {
-				if (!state.disposed) {
-					__createVideo(state);
-					state.stream = stream;
-					callback(msg, state, cnts);
+				if (state.disposed) {
+					throw new Error("MediaStream already disposed");
 				}
-			}).catch(__handleScreenError);
+				__createVideo(state);
+				state.stream = stream;
+				callback(msg, state, cnts);
+			}).catch(err => {
+				VideoMgrUtil.sendMessage({id: 'errorSharing'});
+				Sharer.setShareState(Sharer.SHARE_STOPPED);
+				Sharer.setRecState(Sharer.SHARE_STOPPED);
+				OmUtil.error(err);
+			});
 		}
 		function _getVideoStream(msg, state, callback) {
 			VideoSettings.constraints(sd, function(cnts) {
@@ -674,7 +674,7 @@ module.exports = class Video {
 
 		this.update = _update;
 		this.refresh = _refresh;
-		this.pushToTalk = (enable) => {
+		this.pushToTalk = enable => {
 			const state = __getState();
 			if (__pttEnabled(state)) {
 				state.localStream.getAudioTracks().forEach(track => track.enabled = enable);

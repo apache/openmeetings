@@ -9,7 +9,7 @@ export class Clipart extends WbShape {
 		super(wb, sBtn);
 
 		const self = this;
-		this.createShape = (canvas) => {
+		this.createShape = canvas => {
 			const imgSrc = btn.data('image')
 				, opts = {
 					left: self.orig.x
@@ -31,7 +31,7 @@ export class Clipart extends WbShape {
 					canvas.add(self.obj);
 				});
 			} else {
-				fabric.FabricImage.fromURL(imgSrc).then((img) => {
+				fabric.FabricImage.fromURL(imgSrc).then(img => {
 					self.orig.width = img.width;
 					self.orig.height = img.height;
 					self.obj = img.set(opts);
