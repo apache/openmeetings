@@ -515,7 +515,7 @@ conditions of the following licenses.
         * Openmeetings Webservices (org.apache.openmeetings:openmeetings-webservice:9.2.0-SNAPSHOT - https://openmeetings.apache.org/openmeetings-webservice)
         * org.apiguardian:apiguardian-api (org.apiguardian:apiguardian-api:1.1.2 - https://github.com/apiguardian-team/apiguardian)
         * org.opentest4j:opentest4j (org.opentest4j:opentest4j:1.3.0 - https://github.com/ota4j-team/opentest4j)
-        * OWASP Java HTML Sanitizer (com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20261011.1 - https://github.com/OWASP/java-html-sanitizer)
+        * OWASP Java HTML Sanitizer (com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20261102.2 - https://github.com/OWASP/java-html-sanitizer)
         * parso (com.epam:parso:2.0.14 - https://github.com/epam/parso)
         * PDFBox JBIG2 ImageIO plugin (org.apache.pdfbox:jbig2-imageio:3.0.5 - https://www.apache.org/jbig2-imageio/)
         * picocli (info.picocli:picocli:4.7.7 - https://picocli.info)

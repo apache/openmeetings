@@ -93,7 +93,7 @@
 		<fullcalendar.version>7.1.0</fullcalendar.version>
 		<spring.version>7.0.10</spring.version>
 		<tomcat.version>11.0.27</tomcat.version>
-		<jetty.version>12.1.13</jetty.version>
+		<jetty.version>12.1.14</jetty.version>
 		<ical4j.version>4.4.0</ical4j.version>
 		<cxf.version>4.2.4</cxf.version>
 		<io.prometheus.version>1.10.0</io.prometheus.version>
@@ -143,7 +143,7 @@
 		<apacheds-test-framework.version>2.0.0.AM27</apacheds-test-framework.version>
 		<swagger.version>2.2.55</swagger.version>
 		<totp.version>1.7.1</totp.version>
-		<owasp-sanitizer.version>20261011.1</owasp-sanitizer.version>
+		<owasp-sanitizer.version>20261102.2</owasp-sanitizer.version>
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/jquery-ui.css, file:**/cssemoticons.js, file:**/bootstrap-confirmation.js, file:**/org/apache/jackrabbit/**</sonar.exclusions>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
