@@ -264,7 +264,9 @@ function _askPermission(callback) {
 			, label: perm.data('btn-ok')
 			, value: perm.data('btn-ok')
 			, onClick: function() {
+				console.log("askPermission::onClick, ready to call callback");
 				callback();
+				console.log("askPermission::onClick, disposing confirmation");
 				$('.sidebar').confirmation('dispose');
 			}
 		}]

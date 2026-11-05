@@ -56,7 +56,12 @@ module.exports = class Video {
 				if (VideoUtil.isSafari()) {
 					promise = new Promise(resolve => {
 						VideoUtil.askPermission(resolve);
-					}).then(() => navigator.mediaDevices.getDisplayMedia(cnts));
+					}).then(() => {console.log("Promise resolved ready to getDisplayMedia!"); return navigator.mediaDevices.getDisplayMedia(cnts)
+					//FIXME TODO });
+					}).catch(err => {
+						console.log("Error in the middle!");
+				OmUtil.error(err);
+					})
 				} else {
 					promise = navigator.mediaDevices.getDisplayMedia(cnts);
 				}
@@ -67,6 +72,7 @@ module.exports = class Video {
 				});
 			}
 			promise.then(stream => {
+				console.log("Got stream!!");
 				if (state.disposed) {
 					throw new Error("MediaStream already disposed");
 				}
