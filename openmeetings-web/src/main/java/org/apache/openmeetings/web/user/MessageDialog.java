@@ -271,7 +271,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 	}
 
 	protected void onSend(IPartialPageRequestHandler handler) {
-		// can be overriden
+		// can be overridden
 	}
 
 	@Override
