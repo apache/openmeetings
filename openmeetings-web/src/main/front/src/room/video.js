@@ -42,49 +42,39 @@ module.exports = class Video {
 			}
 		}
 		function _getScreenStream(msg, state, callback) {
-			const b = VideoUtil.browser;
-			let promise, cnts;
-			if (VideoUtil.isEdge() && b.major > 16) {
-				cnts = {
-					video: true
-				};
-				promise = navigator.getDisplayMedia(cnts);
-			} else if (VideoUtil.sharingSupported()) {
-				cnts = {
-					video: true
-				};
-				if (VideoUtil.isSafari()) {
-					promise = new Promise(resolve => {
-						VideoUtil.askPermission(resolve);
-					}).then(() => {console.log("Promise resolved ready to getDisplayMedia!"); return navigator.mediaDevices.getDisplayMedia(cnts)
-					//FIXME TODO });
-					}).catch(err => {
-						console.log("Error in the middle!");
-				OmUtil.error(err);
-					})
-				} else {
-					promise = navigator.mediaDevices.getDisplayMedia(cnts);
-				}
-			} else {
-				promise = new Promise(() => {
-					Sharer.close();
-					throw 'Screen-sharing is not supported in ' + b.name + '[' + b.major + ']';
-				});
-			}
-			promise.then(stream => {
-				console.log("Got stream!!");
-				if (state.disposed) {
-					throw new Error("MediaStream already disposed");
-				}
-				__createVideo(state);
-				state.stream = stream;
-				callback(msg, state, cnts);
-			}).catch(err => {
+			const handleError = err => {
 				VideoMgrUtil.sendMessage({id: 'errorSharing'});
 				Sharer.setShareState(Sharer.SHARE_STOPPED);
 				Sharer.setRecState(Sharer.SHARE_STOPPED);
 				OmUtil.error(err);
-			});
+			};
+			if (!VideoUtil.sharingSupported()) {
+				const b = VideoUtil.browser;
+				Sharer.close();
+				handleError(new Error('Screen-sharing is not supported in ' + b.name + '[' + b.major + ']'));
+				return;
+			}
+			const startCapture = () => {
+				const constraints = { video: true };
+				navigator.mediaDevices.getDisplayMedia(constraints)
+					.then(stream => {
+						console.log(`Got stream!! active ? ${stream.active}`);
+						if (state.disposed) {
+							throw new Error("MediaStream already disposed");
+						}
+						__createVideo(state);
+						state.stream = stream;
+						callback(msg, state, constraints);
+					}).catch(err => {
+						handleError(err);
+					});
+			};
+
+			if (VideoUtil.isSafari()) {
+				VideoUtil.askPermission(startCapture);
+			} else {
+				startCapture();
+			}
 		}
 		function _getVideoStream(msg, state, callback) {
 			VideoSettings.constraints(sd, function(cnts) {
