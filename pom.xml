@@ -123,7 +123,7 @@
 		<postgresql.version>42.7.14</postgresql.version>
 		<mysql.version>26.10.0</mysql.version>
 		<mssql.version>13.6.1.jre11</mssql.version>
-		<ojdbc.version>19.33.0.0</ojdbc.version>
+		<ojdbc.version>23.26.4.0.0</ojdbc.version>
 		<xstream.version>1.4.21</xstream.version>
 		<api-all.version>2.1.9</api-all.version>
 		<caldav4j.version>1.0.5</caldav4j.version>
@@ -869,7 +869,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.oracle.database.jdbc</groupId>
-				<artifactId>ojdbc10</artifactId>
+				<artifactId>ojdbc11</artifactId>
 				<version>${ojdbc.version}</version>
 			</dependency>
 			<dependency>
