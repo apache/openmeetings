@@ -74,7 +74,7 @@
 		<replacer.version>1.5.3</replacer.version>
 		<xml-maven-plugin.version>1.2.2</xml-maven-plugin.version>
 		<saxon.version>8.7</saxon.version>
-		<buildnumber-maven-plugin.version>3.3.1</buildnumber-maven-plugin.version>
+		<buildnumber-maven-plugin.version>3.4.0</buildnumber-maven-plugin.version>
 		<keytool-maven-plugin.version>2.0.2</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.1.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
