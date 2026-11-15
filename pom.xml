@@ -110,7 +110,7 @@
 		<jakarta.websocket-api.version>2.2.0</jakarta.websocket-api.version>
 		<jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
 		<asterisk-java.version>3.42.2</asterisk-java.version>
-		<commons-lang3.version>3.21.0</commons-lang3.version>
+		<commons-lang3.version>3.22.0</commons-lang3.version>
 		<commons-dbcp.version>2.14.0</commons-dbcp.version>
 		<commons-pool2.version>2.13.1</commons-pool2.version>
 		<commons-cli.version>1.11.0</commons-cli.version>
