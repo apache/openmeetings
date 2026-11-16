@@ -75,7 +75,7 @@
 		<xml-maven-plugin.version>1.4.0</xml-maven-plugin.version>
 		<saxon.version>8.7</saxon.version>
 		<buildnumber-maven-plugin.version>3.4.0</buildnumber-maven-plugin.version>
-		<keytool-maven-plugin.version>2.0.2</keytool-maven-plugin.version>
+		<keytool-maven-plugin.version>2.1.0</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>3.1.0</maven-jarsigner-plugin.version>
 		<sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.versoin>0.8.16</jacoco-maven-plugin.versoin>
