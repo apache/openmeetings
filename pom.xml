@@ -93,7 +93,7 @@
 		<fullcalendar.version>7.1.0</fullcalendar.version>
 		<spring.version>7.0.10</spring.version>
 		<tomcat.version>11.0.27</tomcat.version>
-		<jetty.version>12.1.14</jetty.version>
+		<jetty.version>12.1.15</jetty.version>
 		<ical4j.version>4.4.0</ical4j.version>
 		<cxf.version>4.2.4</cxf.version>
 		<io.prometheus.version>1.10.0</io.prometheus.version>
