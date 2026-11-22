@@ -58,7 +58,6 @@ module.exports = class Video {
 				const constraints = { video: true };
 				navigator.mediaDevices.getDisplayMedia(constraints)
 					.then(stream => {
-						console.log(`Got stream!! active ? ${stream.active}`);
 						if (state.disposed) {
 							throw new Error("MediaStream already disposed");
 						}
