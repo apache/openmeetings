@@ -93,11 +93,13 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	@Inject
 	private IApplication app;
 
-	public void updateClusterAddresses(String addresses) throws UnknownHostException {
+	public void updateClusterAddresses(String localAddr, String addresses) throws UnknownHostException {
 		OpenJPAConfiguration cfg = ((OpenJPAEntityManagerSPI)OpenJPAPersistence.cast(em)).getConfiguration();
 		RemoteCommitProvider prov = cfg.getRemoteCommitEventManager().getRemoteCommitProvider();
 		if (prov instanceof TCPRemoteCommitProvider tcpProv) {
+			tcpProv.setBindAddress(localAddr);
 			tcpProv.setAddresses(addresses);
+			tcpProv.endConfiguration();
 		}
 	}
 

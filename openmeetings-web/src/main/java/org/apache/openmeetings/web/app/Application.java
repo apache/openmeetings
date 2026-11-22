@@ -41,6 +41,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jakarta.annotation.Nonnull;
@@ -586,17 +587,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	@Override
 	public void updateJpaAddresses() {
-		StringBuilder sb = new StringBuilder();
-		String delim = "";
-		for (Member m : hazelcast.getCluster().getMembers()) {
-			sb.append(delim).append(m.getAddress().getHost());
-			delim = ";";
-		}
-		if (Strings.isEmpty(delim)) {
-			sb.append("localhost");
-		}
+		String addresses = hazelcast.getCluster().getMembers()
+			.stream()
+			.map(m -> m.getAddress().getHost())
+			.collect(Collectors.joining(";"));
 		try {
-			cfgDao.updateClusterAddresses(sb.toString());
+			String local = hazelcast.getCluster().getLocalMember().getAddress().getInetAddress().getHostAddress();
+			cfgDao.updateClusterAddresses(local, Strings.isEmpty(addresses) ? "127.0.0.1" : addresses);
 		} catch (UnknownHostException e) {
 			log.error("Uexpected exception while updating JPA addresses", e);
 			throw new WicketRuntimeException(e);

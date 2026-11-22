@@ -77,7 +77,7 @@
 			<property name="openjpa.QueryCache" value="true" />
 			<property name="openjpa.jdbc.DBDictionary" value="sqlserver(batchLimit=100,charTypeName=nchar,varcharTypeName=nvarchar,longVarcharTypeName=ntext)" />
 			<property name="openjpa.jdbc.QuerySQLCache" value="false" />
-			<!--property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=127.0.0.1)" /-->
+			<!--property name="openjpa.RemoteCommitProvider" value="tcp(BindAddress=127.0.0.1, Addresses=127.0.0.1, RestrictToPeers=true)" /-->
 		</properties>
 	</persistence-unit>
 </persistence>

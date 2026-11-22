@@ -25,7 +25,13 @@
 			<p>
 				OpenMeetings 2.1 or later is required to use clustering. One database is used for all OpenMeetings
 				servers, so all database tables are shared across OM instances. Certain folders should be shared
-				between all servers to allow access to the files/recording.</p>
+				between all servers to allow access to the files/recording.
+
+			</p>
+			<div class="om-callout border-danger">NOTE: Below is the example configutaion. <br/>
+				All non-public ports <b>SHOULD</b> be closed. Hazelcast/OpenJPA interconnection should be setup using
+				non-public IP addresses (i.e. such network should be available for OM nodes but should be <b>CLOSED</b> for public)
+			</div>
 		</section>
 		<section name="Configuration">
 			<ul>
@@ -81,7 +87,7 @@
 					<li>Add users who can connect to the database remotely</li>
 					<li>Update <code>/opt/om/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</code>
 						set correct server address, login and password. Also uncomment following line:
-						<source><![CDATA[<property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=127.0.0.1)" />]]></source>
+						<source><![CDATA[<property name="openjpa.RemoteCommitProvider" value="tcp(BindAddress=127.0.0.1, Addresses=127.0.0.1, RestrictToPeers=true)" />]]></source>
 					</li>
 					<li>
 						<div class="om-callout border-danger">
@@ -89,6 +95,10 @@
 						</div>
 						<p>Here is an example:</p>
 						<code>JAVA_OPTS="-Dopenjpa.serialization.class.blacklist=* -Dopenjpa.serialization.class.whitelist=[B,java.util,org.apache.openjpa,org.apache.openmeetings.db.entity"</code>
+						<div class="om-callout border-danger">
+							NOTE: Please ensure whitelist only contains necessary classes,
+							JDK serialization data filtering can also be used <a href="https://openjdk.org/jeps/290">https://openjdk.org/jeps/290</a>
+						</div>
 					</li>
 				</ul>
 			</subsection>

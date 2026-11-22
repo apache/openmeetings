@@ -102,7 +102,7 @@
 		<jettison.version>1.5.7</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
-		<openjpa.version>4.1.1</openjpa.version>
+		<openjpa.version>4.2.0</openjpa.version>
 		<jakarta.mail.version>2.0.5</jakarta.mail.version>
 		<jakarta.persistence.version>3.2.0</jakarta.persistence.version>
 		<jakarta.transaction.version>2.0.1</jakarta.transaction.version>
