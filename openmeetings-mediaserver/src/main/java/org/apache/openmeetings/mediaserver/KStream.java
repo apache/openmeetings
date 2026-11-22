@@ -597,7 +597,7 @@ public class KStream extends AbstractStream implements ISipCallbacks {
 	}
 
 	public boolean contains(String uid) {
-		return this.uid.equals(uid) || listeners.containsKey(uid);
+		return uid != null && (this.uid.equals(uid) || listeners.containsKey(uid));
 	}
 
 	@Override

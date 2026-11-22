@@ -44,10 +44,13 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
+import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.manager.RoomManager;
 import org.apache.openmeetings.db.mapper.CalendarMapper;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.InternalServiceException;
@@ -86,6 +89,8 @@ public class CalendarWebService extends BaseWebService {
 	private AppointmentDao dao;
 	@Inject
 	private CalendarMapper calMapper;
+	@Inject
+	private RoomManager manager;
 
 	/**
 	 * Load appointments by a start / end range for the current SID
@@ -313,9 +318,10 @@ public class CalendarWebService extends BaseWebService {
 					log.error("save: not authorized");
 					return false;
 				}
-				// short path
-				if (AuthLevelUtil.hasWebServiceLevel(u.getRights()) || appointment.getId() == null) {
-					return true;
+				RoomDTO room = appointment.getRoom();
+				if (room.getId() != null) {
+					Room r = roomDao.get(room.getId());
+					return manager.isRoomAllowedToUser(r, u);
 				}
 				if (appointment.getId() != null) {
 					Appointment a = dao.get(appointment.getId());
@@ -323,16 +329,20 @@ public class CalendarWebService extends BaseWebService {
 					appointment.setOwner(new UserDTO(a.getOwner()));
 					return a.getOwner().getId().equals(u.getId());
 				}
-				return false;
+				return appointment.getId() == null;
 			}, sd -> {
 				User u = userDao.get(sd.getUserId());
 				Appointment a = calMapper.get(appointment, u);
-				if (a.getRoom().getId() != null) {
-					if (a.getRoom().isAppointment()) {
-						a.getRoom().setIspublic(false);
-					} else {
-						a.setRoom(roomDao.get(a.getRoom().getId()));
+				Room room = a.getRoom();
+				if (room.getId() != null) {
+					Room r = roomDao.get(a.getRoom().getId());
+					if (r.isAppointment()) {
+						r.setIspublic(false);
 					}
+					a.setRoom(r); // trust no-one
+				} else {
+					room.setAppointment(true); // only appointment room can be created
+					room.setIspublic(false);
 				}
 				return new AppointmentDTO(dao.update(a, u.getId()));
 			});

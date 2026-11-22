@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import jakarta.ws.rs.core.Form;
@@ -53,6 +54,7 @@ import org.apache.openmeetings.db.dto.calendar.MeetingMemberDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.mapper.CalendarMapper;
 import org.apache.openmeetings.util.CalendarHelper;
@@ -217,6 +219,78 @@ class TestCalendarService extends AbstractWebServiceTest {
 				.form(new Form().param("appointment", o2.toString()));
 		assertNotNull(resp2, "Valid AppointmentDTO should be returned");
 		assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), resp2.getStatus(), "Call should NOT be successful");
+	}
+
+	@Test
+	void testCreateExistingPublicRoom() throws Exception {
+		final String roomName = "Unique self-descriptive name";
+		final String roomDesc = "Even more descriptive comment";
+		RoomDao roomDao = getBean(RoomDao.class);
+		Room r = new Room();
+		r.setName(roomName);
+		r.setComment(roomDesc);
+		r.setType(Room.Type.PRESENTATION);
+		r.setIspublic(true);
+		r.setCapacity(100);
+		roomDao.update(r, null); // saving our new room
+		assertNotNull(r.getId(), "Room Id");
+
+		JSONObject jsonAppt1 = createAppointment("SOAP event");
+		JSONObject jsonRoom = jsonAppt1.getJSONObject("room");
+		jsonRoom.put("id", r.getId());
+		jsonRoom.put("capacity", 0);
+		jsonRoom.put("hiddenElements", Stream.of(Room.RoomElement.values())
+				.map(Room.RoomElement::name)
+				.collect(Collector.of(JSONArray::new, JSONArray::put, JSONArray::put)));
+		String sid1 = loginNewUser();
+
+		Response resp1 = getClient(getCalendarUrl())
+				.path("/")
+				.query("sid", sid1)
+				.form(new Form().param("appointment", jsonAppt1.toString()));
+
+		assertNotNull(resp1, "Valid AppointmentDTO should be returned");
+		assertEquals(Response.Status.OK.getStatusCode(), resp1.getStatus(), "Call should be successful");
+		AppointmentDTO dto = resp1.readEntity(AppointmentDTO.class);
+		assertNotNull(dto, "Valid DTO should be returned");
+		assertNotNull(dto.getId(), "DTO id should be valid");
+
+		Room r2 = roomDao.get(r.getId());
+		assertEquals(roomName, r2.getName(), "Room name should be preserved");
+	}
+
+	@Test
+	void testCreateExistingGroupRoom() throws Exception {
+		final String roomName = "Unique self-descriptive name";
+		final String roomDesc = "Even more descriptive comment";
+		RoomDao roomDao = getBean(RoomDao.class);
+		Room r = new Room();
+		r.setName(roomName);
+		r.setComment(roomDesc);
+		r.setType(Room.Type.PRESENTATION);
+		r.setIspublic(false);
+		Group g = new Group().setName("TestCalendarService#GroupRoom");
+		getBean(GroupDao.class).update(g, null);
+		r.addGroup(g);
+		r.setCapacity(100);
+		roomDao.update(r, null); // saving our new room
+		assertNotNull(r.getId(), "Room Id");
+
+		JSONObject jsonAppt1 = createAppointment("SOAP event");
+		JSONObject jsonRoom = jsonAppt1.getJSONObject("room");
+		jsonRoom.put("id", r.getId());
+		jsonRoom.put("capacity", 0);
+		jsonRoom.put("hiddenElements", Stream.of(Room.RoomElement.values())
+				.map(Room.RoomElement::name)
+				.collect(Collector.of(JSONArray::new, JSONArray::put, JSONArray::put)));
+		String sid1 = loginNewUser();
+
+		Response resp = getClient(getCalendarUrl())
+				.path("/")
+				.query("sid", sid1)
+				.form(new Form().param("appointment", jsonAppt1.toString()));
+
+		assertNotEquals(Response.Status.OK.getStatusCode(), resp.getStatus(), "Call should NOT be successful");
 	}
 
 	@Test
