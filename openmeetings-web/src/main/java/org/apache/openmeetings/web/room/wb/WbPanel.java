@@ -374,6 +374,10 @@ public class WbPanel extends AbstractWbPanel {
 						arr.remove(i);
 						continue;
 					}
+					// perform object clean-up
+					oi.remove(ATTR_FILE_ID);
+					oi.remove(ATTR_FILE_TYPE);
+					oi.remove(ATTR_COUNT);
 					// restore immutable props
 					oi.put(ATTR_TYPE, po.getString(ATTR_TYPE));
 					if (po.has(ATTR_FILE_ID) || po.has(ATTR_FILE_TYPE)) {
