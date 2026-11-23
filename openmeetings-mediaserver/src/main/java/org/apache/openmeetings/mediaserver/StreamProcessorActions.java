@@ -76,7 +76,7 @@ public class StreamProcessorActions {
 	@TimedApplication
 	protected void addListener(Client c, JSONObject msg) {
 		KStream sender = streamProcessor.getByUid(msg.getString("sender"));
-		if (sender != null) {
+		if (sender != null && sender.getRoomId().equals(c.getRoomId())) {
 			Client sendClient = cm.getBySid(sender.getSid());
 			StreamDesc sd = sendClient.getStream(sender.getUid());
 			if (sd == null) {
