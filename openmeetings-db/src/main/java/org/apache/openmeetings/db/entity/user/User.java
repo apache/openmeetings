@@ -97,22 +97,10 @@ import org.apache.wicket.util.string.Strings;
 })
 @NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.id = :id")
 @NamedQuery(name = "getUsersByIds", query = "select c from User c where c.id IN :ids")
-@NamedQuery(name = "getUserByLogin", query = """
-	SELECT u
-	FROM User u
-	WHERE
-		u.deleted = false
-		AND u.type = :type
-		AND lower(trim(both from u.login)) = :login
-		AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))""")
-@NamedQuery(name = "getUserByEmail", query = """
-	SELECT u
-	FROM User u
-	WHERE
-		u.deleted = false
-		AND u.type = :type
-		AND lower(trim(both from u.address.email)) = :email
-		AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))""")
+@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE " + User.LOGIN_FILTER)
+@NamedQuery(name = "getUserIdByLogin", query = "SELECT u.id FROM User u WHERE " + User.LOGIN_FILTER)
+@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE " + User.EMAIL_FILTER)
+@NamedQuery(name = "getUserIdByEmail", query = "SELECT u.id FROM User u WHERE " + User.EMAIL_FILTER)
 @NamedQuery(name = "getUserByHash",  query = """
 	SELECT u
 	FROM User u
@@ -175,6 +163,18 @@ import org.apache.wicket.util.string.Strings;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class User extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
+	static final String LOGIN_FILTER = """
+		u.deleted = false
+		AND u.type = :type
+		AND lower(trim(both from u.login)) = :login
+		AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))
+	""";
+	static final String EMAIL_FILTER = """
+		u.deleted = false
+		AND u.type = :type
+		AND lower(trim(both from u.address.email)) = :email
+		AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))
+	""";
 	public static final String DISPLAY_NAME_NA = "N/A";
 	public static final int SALUTATION_MR_ID = 1;
 	public static final int SALUTATION_MS_ID = 2;

@@ -124,7 +124,7 @@ class TestJob extends AbstractWicketTesterTest {
 
 		// will check "too-early" branch
 		reminderJob.notifyNewGroupUsers();
-		verify(mailHandler, times(0)).send(anyString(), anyString(), anyString());
+		verify(mailHandler, times(0)).queue(anyString(), anyString(), anyString());
 
 		// will check mail send
 		reminderJob.groupNotifications.put(g.getId(), LocalDateTime.now().minusHours(1).minusMinutes(1));
@@ -133,9 +133,9 @@ class TestJob extends AbstractWicketTesterTest {
 			public Void answer(InvocationOnMock invocation) throws Throwable {
 				return null;
 			}
-		}).when(mailHandler).send(anyString(), anyString(), anyString());
+		}).when(mailHandler).queue(anyString(), anyString(), anyString());
 		reminderJob.notifyNewGroupUsers();
-		verify(mailHandler, times(1)).send(anyString(), anyString(), anyString());
+		verify(mailHandler, times(1)).queue(anyString(), anyString(), anyString());
 
 		// will check no new users
 		reminderJob.groupNotifications.put(g.getId(), LocalDateTime.now().minusHours(1).minusMinutes(1));
@@ -145,6 +145,6 @@ class TestJob extends AbstractWicketTesterTest {
 		u.getGroupUsers().get(0).setInserted(newInserted);
 		userDao.update(u, null);
 		reminderJob.notifyNewGroupUsers();
-		verify(mailHandler, times(1)).send(anyString(), anyString(), anyString());
+		verify(mailHandler, times(1)).queue(anyString(), anyString(), anyString());
 	}
 }

@@ -23,6 +23,7 @@ import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.entity.user.User.DISPLAY_NAME_NA;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
+import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isOtpEnabled;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendRegisterEmail;
@@ -50,6 +51,7 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
+import org.apache.openmeetings.web.app.UserManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.CommunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
@@ -107,7 +109,9 @@ public class UserForm extends AdminBaseForm<User> {
 	@Inject
 	private UserDao userDao;
 	@Inject
-	private EmailManager emainManager;
+	private UserManager userManager;
+	@Inject
+	private EmailManager emailManager;
 	@Inject
 	private LdapConfigDao ldapDao;
 	@Inject
@@ -283,31 +287,49 @@ public class UserForm extends AdminBaseForm<User> {
 	}
 
 	private void saveUser(AjaxRequestTarget target, String pass) {
-		User u = getModelObject();
-		final boolean isNew = u.getId() == null;
-		boolean sendEmailAtRegister = isSendRegisterEmail();
-		if (isNew && sendEmailAtRegister) {
-			u.setActivatehash(randomUUID().toString());
-		}
-		if (isNew && DISPLAY_NAME_NA.equals(u.getDisplayName())) {
-			u.resetDisplayName();
-		}
-		if (Boolean.FALSE.equals(otpEnabled.getModelObject())) {
-			u.setOtpSecret(null);
-			u.setOtpRecoveryCodes(null);
-		}
-		try {
-			u = userDao.update(u, pass, getUserId());
-		} catch (Exception e) {
-			log.error("[onSaveSubmit]: ", e);
-		}
-		if (isNew && sendEmailAtRegister) {
-			String email = u.getAddress().getEmail();
-			emainManager.sendMail(login.getValue(), email, u.getActivatehash(), false, null);
-		}
-		updateForm(target);
-		if (u.getGroupUsers().isEmpty()) {
-			warning.show(target);
+		Object obj = userManager.saveUser(getModelObject(), user -> {
+			// double-checking under the lock
+			// Below 2 checks might fail for users of non-USER type
+			// let's see if there will be errors
+			if (!userDao.checkLogin(user.getLogin(), user.getType(), user.getDomainId(), user.getId())) {
+				return "error.login.inuse";
+			}
+			String email = user.getAddress().getEmail();
+			if (!userDao.checkEmail(email, user.getType(), user.getDomainId(), user.getId())) {
+				return "error.email.inuse";
+			}
+			final boolean isNew = user.getId() == null;
+			boolean sendEmailAtRegister = isSendRegisterEmail();
+			if (isNew && sendEmailAtRegister) {
+				user.setActivatehash(randomUUID().toString());
+			}
+			if (isNew && DISPLAY_NAME_NA.equals(user.getDisplayName())) {
+				user.resetDisplayName();
+			}
+			if (Boolean.FALSE.equals(otpEnabled.getModelObject())) {
+				user.setOtpSecret(null);
+				user.setOtpRecoveryCodes(null);
+			}
+			User u = null;
+			try {
+				u = userDao.update(u, pass, getUserId());
+			} catch (Exception e) {
+				log.error("[onSaveSubmit]: ", e);
+				return UNKNOWN.getKey();
+			}
+			if (isNew && sendEmailAtRegister) {
+				emailManager.queueMail(login.getValue(), email, u.getActivatehash(), false, null);
+			}
+			updateForm(target);
+			if (u.getGroupUsers().isEmpty()) {
+				warning.show(target);
+			}
+			return u;
+		}, UNKNOWN.getKey());
+
+		if (obj instanceof String err) {
+			error(getString(err));
+			target.add(this);
 		}
 	}
 

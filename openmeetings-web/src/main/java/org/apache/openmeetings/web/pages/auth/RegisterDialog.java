@@ -18,13 +18,18 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
+import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterFrontend;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendRegisterEmail;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendVerificationEmail;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Address;
@@ -80,6 +85,8 @@ public class RegisterDialog extends Modal<String> {
 	private IUserManager userManager;
 	@Inject
 	private UserDao userDao;
+	@Inject
+	private GroupDao groupDao;
 
 	public RegisterDialog(String id) {
 		super(id);
@@ -209,6 +216,9 @@ public class RegisterDialog extends Modal<String> {
 
 		@Override
 		protected void onValidate() {
+			if (!isAllowRegisterFrontend()) {
+				error(getString("error.reg.disabled"));
+			}
 			if (passwordField.getConvertedInput() == null
 					|| !passwordField.getConvertedInput().equals(confirmPassword.getConvertedInput())) {
 				error(getString("232"));
@@ -242,8 +252,19 @@ public class RegisterDialog extends Modal<String> {
 			Modal<String> registerInfo = getRegisterInfo();
 			wasRegistered = true;
 			try {
-				Object o = userManager.registerUser(login, password, lastName
-						, firstName, email, country, lang, tzModel.getObject());
+				User u = getNewUserInstance(null);
+				u.setFirstname(firstName);
+				u.setLogin(login);
+				u.setLastname(lastName);
+				u.getAddress().setCountry(country);
+				u.getAddress().setEmail(email);
+				u.setTimeZoneId(getTimeZone(tzModel.getObject()).getID());
+
+				// this is needed cause the language is not a necessary data at registering
+				u.setLanguageId(lang == null || lang.equals(0L) ? 1L : lang.longValue());
+				u.addGroup(groupDao.get(getDefaultGroup()));
+
+				Object o = userManager.registerUser(u, password, null);
 				if (o instanceof String str) {
 					registerInfo.setModelObject(getString(str));
 					target.add(registerInfo.get("content"));

@@ -25,10 +25,6 @@ import org.apache.openmeetings.util.OmException;
 
 //HACK to bypass cross project compilation
 public interface IUserManager {
-	Object registerUser(String login, String userpass, String lastname,
-			String firstname, String email, String country,
-			long languageId, String tzId);
-
 	Object registerUser(User u, String password, String hash) throws OmException;
 
 	Long getLanguage(Locale loc);

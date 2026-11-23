@@ -51,7 +51,7 @@ public class ContactsHelper {
 				subj, message, user, userToAdd, userToAdd, true, contact.getId());
 
 		if (userToAdd.getAddress() != null) {
-			get().getBean(MailHandler.class).send(userToAdd.getAddress().getEmail(), subj, message);
+			get().getBean(MailHandler.class).queue(userToAdd.getAddress().getEmail(), subj, message);
 		}
 
 		return contact;
@@ -84,7 +84,7 @@ public class ContactsHelper {
 			get().getBean(PrivateMessageDao.class).addPrivateMessage(
 					subj, message, contact.getContact(), user, user, false, 0L);
 
-			get().getBean(MailHandler.class).send(user.getAddress().getEmail(), subj, message);
+			get().getBean(MailHandler.class).queue(user.getAddress().getEmail(), subj, message);
 		}
 		return userContactId;
 	}

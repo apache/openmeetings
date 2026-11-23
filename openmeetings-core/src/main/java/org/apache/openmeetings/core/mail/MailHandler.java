@@ -194,50 +194,46 @@ public class MailHandler {
 		return m.getIcs() == null ? appendBody(msg, m) : appendIcsBody(msg, m);
 	}
 
-	public void send(String toEmail, String subj, String message) {
-		send(toEmail, null, subj, message);
+	public void queue(String toEmail, String subj, String message) {
+		queue(toEmail, null, subj, message);
 	}
 
-	public void send(String toEmail, String replyTo, String subj, String message) {
-		send(new MailMessage(toEmail, replyTo, subj, message));
+	public void queue(String toEmail, String replyTo, String subj, String message) {
+		queue(new MailMessage(toEmail, replyTo, subj, message));
 	}
 
-	public void send(MailMessage m) {
-		send(m, false);
+	public void queue(MailMessage m) {
+		m.setStatus(Status.NONE);
+		mailMessageDao.update(m, null);
 	}
 
-	public void send(final MailMessage m, boolean send) {
-		if (send) {
-			if (m.getId() != null) {
-				m.setStatus(Status.SENDING);
-				mailMessageDao.update(m, null);
-			}
-			taskExecutor.execute(() -> {
-				log.debug("Message sending in progress");
-				log.debug("  To: {}", m.getRecipients());
-				log.debug("  Subject: {}", m.getSubject());
-
-				// -- Send the message --
-				try {
-					Transport.send(getMimeMessage(m));
-					m.setLastError("");
-					m.setStatus(Status.DONE);
-				} catch (Exception e) {
-					log.error("Error while sending message", e);
-					m.setErrorCount(m.getErrorCount() + 1);
-					StringWriter sw = new StringWriter();
-					e.printStackTrace(new PrintWriter(sw));
-					m.setLastError(sw.getBuffer().toString());
-					m.setStatus(m.getErrorCount() < MAXIMUM_ERROR_COUNT ? Status.NONE : Status.ERROR);
-				}
-				if (m.getId() != null) {
-					mailMessageDao.update(m, null);
-				}
-			});
-		} else {
-			m.setStatus(Status.NONE);
+	public void send(final MailMessage m) {
+		if (m.getId() != null) {
+			m.setStatus(Status.SENDING);
 			mailMessageDao.update(m, null);
 		}
+		taskExecutor.execute(() -> {
+			log.debug("Message sending in progress");
+			log.debug("  To: {}", m.getRecipients());
+			log.debug("  Subject: {}", m.getSubject());
+
+			// -- Send the message --
+			try {
+				Transport.send(getMimeMessage(m));
+				m.setLastError("");
+				m.setStatus(Status.DONE);
+			} catch (Exception e) {
+				log.error("Error while sending message", e);
+				m.setErrorCount(m.getErrorCount() + 1);
+				StringWriter sw = new StringWriter();
+				e.printStackTrace(new PrintWriter(sw));
+				m.setLastError(sw.getBuffer().toString());
+				m.setStatus(m.getErrorCount() < MAXIMUM_ERROR_COUNT ? Status.NONE : Status.ERROR);
+			}
+			if (m.getId() != null) {
+				mailMessageDao.update(m, null);
+			}
+		});
 	}
 
 	public void resetSendingStatus() {
@@ -257,7 +253,7 @@ public class MailHandler {
 		if (!list.isEmpty()) {
 			log.debug("Number of emails in init queue {}", list.size());
 			while (!list.isEmpty()) {
-				send(list.get(0), true);
+				send(list.get(0));
 				list = mailMessageDao.get(0, 1, MailMessage.Status.NONE);
 			}
 			log.debug("... sendMails done.");

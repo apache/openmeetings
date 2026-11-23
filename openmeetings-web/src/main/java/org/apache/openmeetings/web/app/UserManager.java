@@ -21,15 +21,12 @@ package org.apache.openmeetings.web.app;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
-import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.web.app.Application.urlForPage;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterFrontend;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendVerificationEmail;
 
 import java.io.IOException;
@@ -48,6 +45,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
@@ -71,7 +70,6 @@ import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.crypt.ICrypt;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
-import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.core.util.lang.PropertyResolver;
 import org.apache.wicket.core.util.lang.PropertyResolverConverter;
@@ -84,6 +82,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONObject;
+import com.hazelcast.map.IMap;
 
 import jakarta.inject.Inject;
 
@@ -95,6 +94,8 @@ import jakarta.inject.Inject;
 @Component
 public class UserManager implements IUserManager {
 	private static final Logger log = LoggerFactory.getLogger(UserManager.class);
+	private static final String SAVE_USER_MAP_KEY = "SAVE_USER_MAP_KEY";
+	private static final String SAVE_USER_LOCK = "org.apache.openmeetings.user.save";
 
 	@Inject
 	private ConfigurationDao cfgDao;
@@ -114,106 +115,87 @@ public class UserManager implements IUserManager {
 	}
 
 	/**
-	 * Method to register a new User, User will automatically be added to the
-	 * default user_level(1) new users will be automatically added to the
-	 * Group with the id specified in the configuration value default.group.id
-	 *
-	 * @param login - user login
-	 * @param password - user password
-	 * @param lastname - user last name
-	 * @param firstname - user first name
-	 * @param email - user email
-	 * @param country - user country code
-	 * @param languageId - language id
-	 * @param tzId - the name of the time zone
-	 * @return {@link User} of code of error as {@link String}
-	 */
-	@Override
-	public Object registerUser(String login, String password, String lastname,
-			String firstname, String email, String country, long languageId, String tzId) {
-		try {
-			// Checks if FrontEndUsers can register
-			if (isAllowRegisterFrontend()) {
-				User u = getNewUserInstance(null);
-				u.setFirstname(firstname);
-				u.setLogin(login);
-				u.setLastname(lastname);
-				u.getAddress().setCountry(country);
-				u.getAddress().setEmail(email);
-				u.setTimeZoneId(getTimeZone(tzId).getID());
-
-				// this is needed cause the language is not a necessary data at registering
-				u.setLanguageId(languageId != 0 ? languageId : 1);
-				u.addGroup(groupDao.get(getDefaultGroup()));
-
-				Object user = registerUser(u, password, null);
-
-				if (user instanceof User && sendConfirmation()) {
-					log.debug("User created, confirmation should be sent");
-					return -40L;
-				}
-
-				log.debug("User creation result: {}", user);
-				return user;
-			} else {
-				log.warn("Frontend registering is disabled");
-				return "error.reg.disabled";
-			}
-		} catch (Exception e) {
-			log.error("[registerUser]", e);
-		}
-		return null;
-	}
-
-	/**
 	 * @param u - User with basic parametrs set
 	 * @param password - user password
 	 * @param hash - activation hash
 	 * @return {@link User} of code of error as {@link String}
-	 * @throws OmException in case of any issues with provided data
 	 */
 	@Override
-	public Object registerUser(User u, String password, String hash) throws OmException {
-		// Check for required data
-		String login = u.getLogin();
-		if (!Strings.isEmpty(login) && login.length() >= getMinLoginLength()) {
-			// Check for duplicates
-			boolean checkName = userDao.checkLogin(login, User.Type.USER, null, null);
-			String email = u.getAddress() == null ? null : u.getAddress().getEmail();
-			boolean checkEmail = Strings.isEmpty(email) || userDao.checkEmail(email, User.Type.USER, null, null);
-			if (checkName && checkEmail) {
-				String ahash = Strings.isEmpty(hash) ? randomUUID().toString() : hash;
-				if (Type.EXTERNAL != u.getType() && !Strings.isEmpty(email)) {
-					emailManager.sendMail(login, email, ahash, sendConfirmation(), u.getLanguageId());
-				}
-
-				// If this user needs first to click his E-Mail verification
-				// code then set the status to 0
-				if (sendConfirmation() && u.getRights().contains(Right.LOGIN)) {
-					u.getRights().remove(Right.LOGIN);
-				}
-
-				u.setActivatehash(ahash);
-				if (!Strings.isEmpty(password)) {
-					u.updatePassword(password);
-				}
-				u = userDao.update(u, null);
-				log.debug("Added user-Id {}", u.getId());
-
-				if (u.getId() != null) {
-					return u;
-				}
-			} else {
-				if (!checkName) {
-					return "error.login.inuse";
-				} else {
-					return "error.email.inuse";
-				}
+	public Object registerUser(User u, String password, String hash) {
+		return saveUser(u, user -> {
+			// Check for required data
+			String login = user.getLogin();
+			if (!userDao.validLogin(login)) {
+				return "error.short.login";
 			}
-		} else {
-			return "error.short.login";
+			if (!userDao.checkLogin(login, User.Type.USER, null, null)) {
+				return "error.login.inuse";
+			}
+			String email = user.getAddress() == null ? null : user.getAddress().getEmail();
+			if (Strings.isEmpty(email)) {
+				return "234"; // invalid email
+			}
+			if (!userDao.checkEmail(email, User.Type.USER, null, null)) {
+				return "error.email.inuse";
+			}
+			String ahash = Strings.isEmpty(hash) ? randomUUID().toString() : hash;
+			user.setActivatehash(ahash);
+
+			// If this user needs first to click his E-Mail verification
+			// code then set the status to 0
+			if (sendConfirmation() && user.getRights().contains(Right.LOGIN)) {
+				user.getRights().remove(Right.LOGIN);
+			}
+
+			if (!Strings.isEmpty(password)) {
+				user.updatePassword(password);
+			}
+			User created = userDao.update(user, null);
+			if (created == null || created.getId() == null) {
+				return UNKNOWN.getKey();
+			}
+			if (Type.EXTERNAL != created.getType()) {
+				emailManager.queueMail(login, email, ahash, sendConfirmation(), user.getLanguageId());
+			}
+			log.debug("Added user-Id {}", created.getId());
+			return created;
+		}, UNKNOWN.getKey());
+	}
+
+	/**
+	 * Perform required actions holding cluster wide lock to avoid concurrent related issues
+	 *
+	 * @param u - User object to process
+	 * @param process - Function to be executed with lock
+	 * @param errValue - Value to return in case lock can't be held
+	 * @return - the result of User processing
+	 */
+	public Object saveUser(User u, Function<User, Object> process, Object errValue) {
+		IMap<String, String> lockMap = Application.getHazelcast().getMap(SAVE_USER_MAP_KEY);
+		boolean locked = false;
+		try {
+			locked = lockMap.tryLock(SAVE_USER_LOCK
+				, 10, TimeUnit.SECONDS
+				, 20, TimeUnit.SECONDS // this one should be redundant
+			); // 10 sec should be enough for everything
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			log.error("[saveUser] interrupted while acquiring registration lock", e);
+		} catch (Exception e) {
+			log.error("[saveUser] cannot acquire registration lock", e);
 		}
-		return UNKNOWN.getKey();
+		if (!locked) {
+			return errValue; // no lock - no registration
+		}
+		try {
+			return process.apply(u);
+		} finally {
+			try {
+				lockMap.unlock(SAVE_USER_LOCK);
+			} catch (IllegalMonitorStateException e) {
+				log.warn("[saveUser] registration lock lease expired, nothing to unlock", e);
+			}
+		}
 	}
 
 	/**
@@ -313,31 +295,33 @@ public class UserManager implements IUserManager {
 			log.error("Invalid login, please check parameters");
 			return null;
 		}
-		User u = userDao.getByLogin(user.getLogin(), Type.OAUTH, server.getId());
-		if (!userDao.checkEmail(user.getEmail(), Type.OAUTH, server.getId(), u == null ? null : u.getId())) {
-			log.error("Another user with the same email exists");
-			return null;
-		}
-		// generate random password
-		// check if the user already exists and register new one if it's needed
-		if (u == null) {
-			final User fUser = getNewUserInstance(null);
-			fUser.setType(Type.OAUTH);
-			fUser.getRights().remove(Right.LOGIN);
-			fUser.setDomainId(server.getId());
-			fUser.addGroup(groupDao.get(getDefaultGroup()));
-			for (Map.Entry<String, String> entry : user.getUserData().entrySet()) {
-				final String expression = entry.getKey();
-				PropertyResolver.setValue(expression, fUser, entry.getValue(), new LanguageConverter(expression, fUser, null, null));
+		return (User)saveUser(userDao.getByLogin(user.getLogin(), Type.OAUTH, server.getId()), u -> {
+			if (!userDao.checkEmail(user.getEmail(), Type.OAUTH, server.getId(), u == null ? null : u.getId())) {
+				log.error("Another user with the same email exists");
+				return null;
 			}
-			fUser.setShowContactDataToContacts(true);
-			u = fUser;
-		}
-		u.setLastlogin(new Date());
-		ICrypt crypt = CryptProvider.get();
-		u = userDao.update(u, crypt.randomPassword(25), Long.valueOf(-1));
+			// generate random password
+			// check if the user already exists and register new one if it's needed
+			User omUser = u;
+			if (u == null) {
+				final User fUser = getNewUserInstance(null);
+				fUser.setType(Type.OAUTH);
+				fUser.getRights().remove(Right.LOGIN);
+				fUser.setDomainId(server.getId());
+				fUser.addGroup(groupDao.get(getDefaultGroup()));
+				for (Map.Entry<String, String> entry : user.getUserData().entrySet()) {
+					final String expression = entry.getKey();
+					PropertyResolver.setValue(expression, fUser, entry.getValue(), new LanguageConverter(expression, fUser, null, null));
+				}
+				fUser.setShowContactDataToContacts(true);
+				omUser = fUser;
+			}
+			omUser.setLastlogin(new Date());
+			ICrypt crypt = CryptProvider.get();
+			omUser = userDao.update(omUser, crypt.randomPassword(25), Long.valueOf(-1));
 
-		return u;
+			return omUser;
+		}, null);
 	}
 
 	private static Map<String, String> getInitParams(final OAuthServer s) {

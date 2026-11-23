@@ -91,7 +91,7 @@ public class ReminderJob extends AbstractJob {
 					log.debug("Unable to send expiration email due to recording owner is NULL, {}", rec);
 				} else {
 					SubjectEmailTemplate templ = RecordingExpiringTemplate.get(u, rec, days);
-					mailHandler.send(u.getAddress().getEmail(), templ.getSubject(), templ.getEmail());
+					mailHandler.queue(u.getAddress().getEmail(), templ.getSubject(), templ.getEmail());
 				}
 			} else {
 				log.debug("Recording is too old to send notification, {} days", days);
@@ -152,7 +152,7 @@ public class ReminderJob extends AbstractJob {
 				if (count > 0) {
 					for (User u : groupUserDao.getGroupModerators(g.getId())) {
 						SubjectEmailTemplate templ = NewGroupUsersNotificationTemplate.get(u, g, count);
-						mailHandler.send(u.getAddress().getEmail(), templ.getSubject(), templ.getEmail());
+						mailHandler.queue(u.getAddress().getEmail(), templ.getSubject(), templ.getEmail());
 					}
 				}
 				groupNotifications.put(g.getId(), now);

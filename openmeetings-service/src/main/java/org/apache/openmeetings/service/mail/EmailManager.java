@@ -63,14 +63,14 @@ public class EmailManager {
 	 * @param sendEmailWithVerficationCode - if email with verification code should be sent
 	 * @param langId - language Id
 	 */
-	public void sendMail(String username, String email, String hash, boolean sendEmailWithVerficationCode, Long langId) {
-		log.debug("sendMail:: username = {}, email = {}", username, email);
+	public void queueMail(String username, String email, String hash, boolean sendEmailWithVerficationCode, Long langId) {
+		log.debug("queueMail:: username = {}, email = {}", username, email);
 
 		ensureApplication(langId != null ? langId : getDefaultLang());
 		String link = getApp().urlForActivatePage(new PageParameters().add("u",  hash));
 
 		if (isSendRegisterEmail()) {
-			mailHandler.send(email, getString("512")
+			mailHandler.queue(email, getString("512")
 				, RegisterUserTemplate.getEmail(username, email, sendEmailWithVerficationCode ? link : null));
 		}
 	}

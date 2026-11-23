@@ -134,9 +134,9 @@ public class InvitationManager implements IInvitationManager {
 					.build();
 
 			log.debug("IcalHandler {}", handler);
-			mailHandler.send(new MailMessage(email, replyToEmail, subject, template, handler));
+			mailHandler.queue(new MailMessage(email, replyToEmail, subject, template, handler));
 		} else {
-			mailHandler.send(email, replyToEmail, subject, template);
+			mailHandler.queue(email, replyToEmail, subject, template);
 		}
 	}
 

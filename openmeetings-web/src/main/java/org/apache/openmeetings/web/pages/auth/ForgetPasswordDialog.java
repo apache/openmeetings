@@ -264,7 +264,7 @@ public class ForgetPasswordDialog extends Modal<String> {
 
 			String template = ResetPasswordTemplate.getEmail(resetLink);
 
-			mailHandler.send(email, Application.getString("517"), template); // Application should be used here to fill placeholder
+			mailHandler.queue(email, Application.getString("517"), template); // Application should be used here to fill placeholder
 		}
 	}
 }

@@ -405,8 +405,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 * @return <code>true</code> in case login is allowed
 	 */
 	public boolean checkLogin(String login, Type type, Long domainId, Long id) {
-		User u = getByLogin(login, type, domainId);
-		return u == null || u.getId().equals(id);
+		Long found = getByLogin(Long.class, "getUserIdByLogin", login, type, domainId);
+		return found == null || found.equals(id);
 	}
 
 	/**
@@ -420,8 +420,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 */
 	public boolean checkEmail(String email, Type type, Long domainId, Long id) {
 		log.debug("checkEmail: email = {}, id = {}", email, id);
-		User u = getByEmail(email, type, domainId);
-		return u == null || u.getId().equals(id);
+		Long found = getByEmail(Long.class, "getUserIdByEmail", email, type, domainId);
+		return found == null || found.equals(id);
 	}
 
 	public boolean validLogin(String login) {
@@ -429,9 +429,13 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public User getByLogin(String inLogin, Type type, Long domainId) {
+		return getByLogin(User.class, "getUserByLogin", inLogin, type, domainId);
+	}
+
+	private <T> T getByLogin(Class<T> clazz, String query, String inLogin, Type type, Long domainId) {
 		String login = inLogin == null ? null : inLogin.trim().toLowerCase(Locale.ROOT);
-		return single(fillLazy(em
-				, oem -> oem.createNamedQuery("getUserByLogin", User.class)
+		return only(fillLazy(em
+				, oem -> oem.createNamedQuery(query, clazz)
 					.setParameter("login", login)
 					.setParameter("type", type)
 					.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
@@ -439,13 +443,13 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public User getByEmail(String email) {
-		return getByEmail(email, User.Type.USER, null);
+		return getByEmail(User.class, "getUserByEmail", email, User.Type.USER, null);
 	}
 
-	public User getByEmail(String inEmail, User.Type type, Long domainId) {
+	private <T> T getByEmail(Class<T> clazz, String query, String inEmail, User.Type type, Long domainId) {
 		String email = inEmail == null ? null : inEmail.trim().toLowerCase(Locale.ROOT);
-		return single(fillLazy(em
-				, oem -> oem.createNamedQuery("getUserByEmail", User.class)
+		return only(fillLazy(em
+				, oem -> oem.createNamedQuery(query, clazz)
 					.setParameter(PARAM_EMAIL, email)
 					.setParameter("type", type)
 					.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)

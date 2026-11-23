@@ -196,7 +196,7 @@ public class MessageDialog extends Modal<PrivateMessage> {
 						}
 
 						String subj = p.getSubject() == null ? "" : p.getSubject();
-						handler.send(to.getAddress().getEmail(),
+						handler.queue(to.getAddress().getEmail(),
 								Application.getString("1301", to.getLanguageId()) + subj,
 								(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<[^>]*+>", "")) + aLinkHTML + invitationLink);
 					}
