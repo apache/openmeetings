@@ -312,7 +312,7 @@ public class UserForm extends AdminBaseForm<User> {
 			}
 			User u = null;
 			try {
-				u = userDao.update(u, pass, getUserId());
+				u = userDao.update(user, pass, getUserId());
 			} catch (Exception e) {
 				log.error("[onSaveSubmit]: ", e);
 				return UNKNOWN.getKey();
