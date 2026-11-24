@@ -237,7 +237,7 @@ conditions of the following licenses.
         * commonmark-java core (org.commonmark:commonmark:0.31.0 - https://github.com/commonmark/commonmark-java/commonmark)
         * commonmark-java extension for strikethrough (org.commonmark:commonmark-ext-gfm-strikethrough:0.31.0 - https://github.com/commonmark/commonmark-java/commonmark-ext-gfm-strikethrough)
         * commonmark-java extension for tables (org.commonmark:commonmark-ext-gfm-tables:0.31.0 - https://github.com/commonmark/commonmark-java/commonmark-ext-gfm-tables)
-        * PostgreSQL JDBC Driver (org.postgresql:postgresql:42.7.14 - https://jdbc.postgresql.org)
+        * PostgreSQL JDBC Driver (org.postgresql:postgresql:42.7.15 - https://jdbc.postgresql.org)
 
     CDDL, v1.0, LGPL, v2.1 or later
 
